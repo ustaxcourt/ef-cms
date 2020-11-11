@@ -13,19 +13,23 @@ exports.parseLegacyDocumentsInteractor = async ({
   docketNumber,
 }) => {
   let pdfBuffer;
-  try{
-
-  let { Body: pdfBuffer } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryId,
-    })
-    .promise();
-  } catch(e){
-    throw new Error('Document not found in S3');
+  try {
+    const { Body } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: docketEntryId,
+      })
+      .promise();
+    pdfBuffer = Body;
+  } catch (err) {
+    err.message = `${err.message} docket entry id is ${docketEntryId}`;
+    throw err;
   }
-    console.log(`..........docketEntry with : ${docketEntryId} in ${applicationContext.environment.documentsBucketName} was ${pdfBuffer}`)
+
+  console.log(
+    `..........docketEntry with : ${docketEntryId} in ${applicationContext.environment.documentsBucketName} was ${pdfBuffer}`,
+  );
 
   const caseRecord = await applicationContext
     .getPersistenceGateway()
