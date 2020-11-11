@@ -31,9 +31,11 @@ const applicationContext = {
   getDocumentsBucketName: () => {
     return environment.documentsBucketName;
   },
-  getPersistenceGateway: () => {
-    getCaseByDocketNumber, updateCase, saveDocumentFromLambda;
-  },
+  getPersistenceGateway: () => ({
+    getCaseByDocketNumber,
+    saveDocumentFromLambda,
+    updateCase,
+  }),
   getStorageClient: () => {
     if (!s3Cache) {
       s3Cache = new S3({
