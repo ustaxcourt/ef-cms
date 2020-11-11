@@ -1433,7 +1433,7 @@ module.exports = (appContextUser, requestId) => {
               credentials: new EnvironmentCredentials('AWS'),
               region: environment.region,
             },
-            apiVersion: '7.1',
+            apiVersion: '7.4',
             awsConfig: new AWS.Config({ region: 'us-east-1' }),
             connectionClass: connectionClass,
             host: environment.elasticsearchEndpoint,
