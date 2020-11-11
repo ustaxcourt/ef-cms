@@ -19,6 +19,8 @@ resource "aws_lambda_function" "legacy_documents_migration_lambda" {
   environment {
     variables = {
       //TODO update all var and resource names to be the same
+      DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
+      S3_ENDPOINT                        = "s3.us-east-1.amazonaws.com"
       MIGRATE_LEGACY_DOCUMENTS_QUEUE_URL = aws_sqs_queue.migrate_legacy_documents_queue.id
     }
   }
