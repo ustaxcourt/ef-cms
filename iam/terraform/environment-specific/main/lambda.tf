@@ -119,7 +119,10 @@ resource "aws_iam_role_policy" "lambda_policy" {
         {
             "Effect": "Allow",
             "Action": [
-                "sqs:SendMessage"
+                "sqs:SendMessage",
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes"
             ],
             "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:migrate_legacy_documents_*"
         } 
