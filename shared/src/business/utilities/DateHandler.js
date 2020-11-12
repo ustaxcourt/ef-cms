@@ -31,13 +31,9 @@ const isStringISOFormatted = dateString => {
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {moment} a moment-timezone object
  */
-const prepareDateFromString = (
-  dateString,
-  inputFormat,
-  options = { strict: true },
-) => {
-  if (options.strict && !isStringISOFormatted(dateString)) {
-    return undefined;
+const prepareDateFromString = (dateString, inputFormat) => {
+  if (dateString === undefined) {
+    dateString = createISODateString();
   }
   return moment.tz(dateString, inputFormat, USTC_TZ);
 };
@@ -60,7 +56,7 @@ const createISODateString = (dateString, inputFormat) => {
   if (!dateString) {
     result = moment.tz(USTC_TZ);
   } else {
-    result = prepareDateFromString(dateString, inputFormat);
+    result = prepareDateFromString(dateString, inputFormat, { strict: false });
   }
 
   return result.toISOString();
@@ -174,7 +170,7 @@ const deconstructDate = dateString => {
 };
 
 const getMonthDayYearObj = momentRef => {
-  const momentObj = momentRef || prepareDateFromString();
+  const momentObj = momentRef || prepareDateFromString(createISODateString());
   const result = {
     day: momentObj.format('D'),
     month: momentObj.format('M'),
