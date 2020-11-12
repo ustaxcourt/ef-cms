@@ -37,7 +37,7 @@ describe('Modify Practitioner Contact Information', () => {
   practitionerUpdatesAddress(test);
 
   it('waits for elasticsearch', async () => {
-    await refreshElasticsearchIndex(10000);
+    await refreshElasticsearchIndex(25000);
   });
 
   for (let i = 0; i < 3; i++) {
