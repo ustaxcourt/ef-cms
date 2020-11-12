@@ -1,104 +1,15 @@
 const AWS = require('aws-sdk');
-const {
-  getCaseByDocketNumber,
-} = require('../../../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-const {
-  parseLegacyDocumentsInteractor,
-} = require('../../../../shared/src/business/useCases/migration/parseLegacyDocumentsInteractor');
-const {
-  saveDocumentFromLambda,
-} = require('../../../../shared/src/persistence/s3/saveDocumentFromLambda');
-const {
-  scrapePdfContents,
-} = require('../../../../shared/src/business/utilities/scrapePdfContents');
-import { getUniqueId } from '../../../../shared/src/sharedAppContext';
-import User from '../../../../shared/src/business/entities/User';
-const {
-  updateCase,
-} = require('../../../../shared/src/persistence/dynamo/cases/updateCase');
-
-let s3Cache;
-
-const { DynamoDB, S3, SQS } = AWS;
+const { SQS } = AWS;
 const sqs = () => {
   return new SQS({ region: 'us-east-1' });
 };
+const createApplicationContext = require('../applicationContext');
 
 //00050b17-54ea-4f35-afc7-da242e77d3db
 
-const environment = {
-  documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
-  dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
-  masterDynamoDbEndpoint:
-    process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
-  masterRegion: process.env.MASTER_REGION || 'us-east-1',
-  region: process.env.AWS_REGION || 'us-east-1',
-  s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
-};
-
-const applicationContext = {
-  environment,
-  getDocumentClient: () => {
-    return new DynamoDB.DocumentClient({
-      endpoint: process.env.DYNAMODB_ENDPOINT,
-      region: process.env.AWS_REGION,
-    });
-  },
-  getDocumentsBucketName: () => {
-    return environment.documentsBucketName;
-  },
-  getEnvironment: () => ({
-    dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
-    stage: process.env.STAGE,
-  }),
-  getPdfJs: async () => {
-    const pdfjsLib = require('pdfjs-dist');
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
-
-    return pdfjsLib;
-  },
-  getPersistenceGateway: () => ({
-    getCaseByDocketNumber,
-    saveDocumentFromLambda,
-    updateCase,
-  }),
-  getStorageClient: () => {
-    if (!s3Cache) {
-      s3Cache = new S3({
-        endpoint: environment.s3Endpoint,
-        region: 'us-east-1',
-        s3ForcePathStyle: true,
-      });
-    }
-    return s3Cache;
-  },
-  getUniqueId,
-  getUseCases: () => ({
-    parseLegacyDocumentsInteractor,
-  }),
-  getUtilities: () => ({
-    scrapePdfContents,
-  }),
-};
-
-exports.applicationContext = appContextUser => {
-  let user;
-
-  if (appContextUser) {
-    user = new User(appContextUser);
-  }
-
-  const getCurrentUser = () => {
-    return user;
-  };
-
-  return {
-    ...applicationContext,
-    getCurrentUser,
-  };
-};
-
 exports.handler = async event => {
+  const applicationContext = createApplicationContext({});
+
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
   const { docketEntryId, docketNumber } = JSON.parse(body);
