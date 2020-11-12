@@ -29,8 +29,14 @@ export const socketProvider = ({ socketRouter }) => {
     return new Promise((resolve, reject) => {
       socket = createWebSocketClient(token);
       socket.onmessage = socketRouter(app);
-      socket.onopen = resolve;
       socket.onerror = reject;
+
+      socket.onopen = () => {
+        // the socket needs to be open for a few seconds or it could miss the first message
+        setTimeout(() => {
+          resolve();
+        }, 2000);
+      };
     });
   };
 

@@ -178,7 +178,9 @@ describe('updateSecondaryContactInteractor', () => {
   });
 
   it('throws an error if the case was not found', async () => {
-    mockCase = null;
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
       updateSecondaryContactInteractor({
@@ -190,10 +192,13 @@ describe('updateSecondaryContactInteractor', () => {
   });
 
   it('throws an error if the user making the request is not associated with the case', async () => {
-    mockCase = {
-      ...MOCK_CASE,
+    const mockCaseUnassociated = {
+      ...mockCase,
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCaseUnassociated);
     applicationContext.getUseCases().userIsAssociated.mockReturnValue(false);
 
     await expect(
@@ -297,6 +302,48 @@ describe('updateSecondaryContactInteractor', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should update the contact on the case but not generate a change of address when case is sealed', async () => {
+    const mockCaseWithSealedAddress = {
+      ...mockCase,
+      contactSecondary: {
+        ...mockCase.contactSecondary,
+        isAddressSealed: true,
+      },
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(
+        () => mockCaseWithSealedAddress,
+      );
+
+    await updateSecondaryContactInteractor({
+      applicationContext,
+      contactInfo: {
+        address1: 'nothing',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'secondary@example.com',
+        inCareOf: 'Andy Dwyer',
+        name: 'Secondary Party',
+        phone: '9876543210',
+        postalCode: '12345',
+        state: 'TN',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).not.toHaveBeenCalled();
   });
 });
