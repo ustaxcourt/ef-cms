@@ -8,6 +8,7 @@ import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessions
 import { getUserAction } from '../actions/getUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
+import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
@@ -59,7 +60,7 @@ const goToDashboard = [
       setTrialSessionsAction,
       setCurrentPageAction('DashboardChambers'),
     ],
-    general: [],
+    general: [navigateToSectionDocumentQCAction],
     inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
     irsPractitioner: [
       setDefaultCaseTypeToDisplayAction,
