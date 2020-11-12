@@ -41,6 +41,10 @@ exports.parseLegacyDocumentsInteractor = async ({
   }
 
   const arrayBuffer = new ArrayBuffer(pdfBuffer.length);
+  const view = new Uint8Array(arrayBuffer);
+  for (let i = 0; i < pdfBuffer.length; ++i) {
+    view[i] = pdfBuffer[i];
+  }
 
   const pdfTextContents = await applicationContext
     .getUtilities()
