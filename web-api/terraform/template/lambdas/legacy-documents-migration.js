@@ -1,11 +1,6 @@
-const AWS = require('aws-sdk');
-const { SQS } = AWS;
-const sqs = () => {
-  return new SQS({ region: 'us-east-1' });
-};
 const createApplicationContext = require('../../../src/applicationContext');
 
-//00050b17-54ea-4f35-afc7-da242e77d3db
+//5785083d-facd-430f-8b2f-f858c53acc6e
 
 exports.handler = async event => {
   const applicationContext = createApplicationContext({});
@@ -23,6 +18,8 @@ exports.handler = async event => {
     docketEntryId,
     docketNumber,
   });
+
+  const sqs = applicationContext.getQueueService();
 
   await sqs
     .deleteMessage({
