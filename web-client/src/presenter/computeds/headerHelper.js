@@ -49,7 +49,9 @@ export const headerHelper = (get, applicationContext) => {
     showAccountMenu: isLoggedIn,
     showDocumentQC: applicationContext.getUtilities().isInternalUser(userRole),
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
-    showMessages: applicationContext.getUtilities().isInternalUser(userRole),
+    showMessages:
+      applicationContext.getUtilities().isInternalUser(userRole) &&
+      userRole !== USER_ROLES.general,
     showMyCases:
       applicationContext.getUtilities().isExternalUser(userRole) &&
       user &&

@@ -198,6 +198,9 @@ createManyAccounts "10" "docketclerk" "docket"
 createManyAccounts "10" "petitionsclerk" "petitions" &
 createManyAccounts "10" "trialclerk" "trialClerks" &
 createManyAccounts "30" "petitioner" "petitioner"
+createManyAccounts "2" "floater" "floater"
+createManyAccounts "2" "general" "general"
+createManyAccounts "2" "reportersOffice" "reportersOffice"
 createChambersAccount "ashfordsChambers" "chambers" &
 createChambersAccount "buchsChambers" "chambers" 
 createChambersAccount "cohensChambers" "chambers" &
