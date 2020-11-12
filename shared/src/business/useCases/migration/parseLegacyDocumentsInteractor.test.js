@@ -24,8 +24,8 @@ describe('parseLegacyDocumentsInteractor', () => {
     applicationContext.getUniqueId.mockReturnValue(mockUniqueID);
 
     applicationContext
-      .getUtilities()
-      .scrapePdfContents.mockReturnValue(mockPdfTextContents);
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents.mockReturnValue(mockPdfTextContents);
   });
 
   beforeEach(() => {
@@ -96,7 +96,7 @@ describe('parseLegacyDocumentsInteractor', () => {
     });
 
     expect(
-      applicationContext.getUtilities().scrapePdfContents,
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
     ).toHaveBeenCalled();
   });
 
