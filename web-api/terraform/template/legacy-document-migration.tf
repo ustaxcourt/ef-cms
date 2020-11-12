@@ -25,6 +25,7 @@ resource "aws_lambda_function" "legacy_documents_migration_lambda" {
       MASTER_REGION                      = "us-east-1"
       MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
       DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
+      DYNAMODB_TABLE_NAME                = var.blue_table_name
     }
   }
 }
