@@ -1,4 +1,9 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 import { practitionerViewsCaseDetailNoticeOfChangeOfAddress } from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
@@ -30,6 +35,11 @@ describe('Modify Practitioner Contact Information', () => {
   }
 
   practitionerUpdatesAddress(test);
+
+  it('waits for elasticsearch', async () => {
+    await refreshElasticsearchIndex(10000);
+  });
+
   for (let i = 0; i < 3; i++) {
     practitionerViewsCaseDetailNoticeOfChangeOfAddress(test, i);
   }
