@@ -5,13 +5,13 @@ const {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { Case } = require('../../entities/cases/Case');
 const { clone } = require('lodash');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { WorkItem } = require('../../entities/WorkItem');
 
 exports.generateChangeOfAddress = async ({
