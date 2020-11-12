@@ -21,8 +21,6 @@ describe('Docket Clerk Document QC Journey', () => {
     const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
-
-    console.log('****', test.docketNumber);
   });
 
   loginAs(test, 'docketclerk@example.com');
@@ -36,7 +34,6 @@ describe('Docket Clerk Document QC Journey', () => {
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesDocument(test, 0);
 
-  // docketClerkViewsQCInbox(test, false);
   docketClerkViewsQCInProgress(test, false);
   docketClerkViewsQCOutbox(test, true);
 });

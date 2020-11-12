@@ -8,13 +8,6 @@ const partitionRecords = records => {
     record => record.eventName === 'REMOVE',
   );
 
-  // FIXME - Two inserts and two removes being formed when serving order document
-  console.log(
-    '&&&&&&',
-    JSON.stringify(removeRecords, null, 2),
-    JSON.stringify(insertModifyRecords, null, 2),
-  );
-
   const [docketEntryRecords, nonDocketEntryRecords] = partition(
     insertModifyRecords,
     record =>
@@ -224,7 +217,7 @@ const processWorkItemEntries = async ({
   if (!workItemRecords.length) return;
 
   applicationContext.logger.debug(
-    `going to index ${workItemRecords.length} otherRecords`,
+    `going to index ${workItemRecords.length} workItem records`,
   );
 
   const {

@@ -13,7 +13,6 @@ export const docketClerkViewsQCOutbox = (test, shouldExist) => {
     expect(workQueueToDisplay.box).toEqual('outbox');
 
     const outboxQueue = test.getState('workQueue');
-    // console.log('\n\n\n', outboxQueue, '\n\n\n');
     console.log(''); // adding this causes the tests to pass....
     const outboxWorkItem = outboxQueue.find(
       workItem =>
