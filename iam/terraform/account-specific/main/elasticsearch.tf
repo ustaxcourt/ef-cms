@@ -23,7 +23,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
     tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
   }
 
-  ebs_options{
+  ebs_options {
     ebs_enabled = true
     volume_size = var.es_logs_ebs_volume_size_gb
   }
