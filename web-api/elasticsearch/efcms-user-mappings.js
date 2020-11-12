@@ -1,10 +1,10 @@
 module.exports = {
   properties: {
     'admissionsStatus.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'barNumber.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'contact.M.state.S': {
       type: 'text',
@@ -22,7 +22,7 @@ module.exports = {
       type: 'text',
     },
     'role.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'sk.S': {
       type: 'text',

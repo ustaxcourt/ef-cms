@@ -2,6 +2,7 @@ const AWS = require('aws-sdk');
 const { EnvironmentCredentials } = AWS;
 const connectionClass = require('http-aws-es');
 const elasticsearch = require('elasticsearch');
+const { ELASTICSEARCH_API_VERSION } = require('./elasticsearch-settings');
 // const mappings = require('../elasticsearch/elasticsearch-mappings');
 // const migratedCase = require('./migratedCase.json');
 // const { settings } = require('../elasticsearch/elasticsearch-settings');
@@ -11,7 +12,7 @@ const esClient = new elasticsearch.Client({
     credentials: new EnvironmentCredentials('AWS'),
     region: 'us-east-1',
   },
-  apiVersion: '7.4',
+  apiVersion: ELASTICSEARCH_API_VERSION,
   awsConfig: new AWS.Config({ region: 'us-east-1' }),
   connectionClass: connectionClass,
   host:
