@@ -475,6 +475,7 @@ const ROLES = {
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
   floater: 'floater',
+  general: 'general',
   inactivePractitioner: 'inactivePractitioner',
   irsPractitioner: 'irsPractitioner',
   irsSuperuser: 'irsSuperuser',
@@ -483,6 +484,7 @@ const ROLES = {
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
   privatePractitioner: 'privatePractitioner',
+  reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
 };
 
@@ -753,8 +755,10 @@ const ADMISSIONS_SECTION = 'admissions';
 const CHAMBERS_SECTION = 'chambers';
 const CLERK_OF_COURT_SECTION = 'clerkofcourt';
 const DOCKET_SECTION = 'docket';
+const FLOATER_SECTION = 'floater';
 const IRS_SYSTEM_SECTION = 'irsSystem';
 const PETITIONS_SECTION = 'petitions';
+const REPORTERS_OFFICE_SECTION = 'reportersOffice';
 const TRIAL_CLERKS_SECTION = 'trialClerks';
 
 const JUDGES_CHAMBERS = {
@@ -922,7 +926,9 @@ const SECTIONS = sortBy([
   CHAMBERS_SECTION,
   CLERK_OF_COURT_SECTION,
   DOCKET_SECTION,
+  FLOATER_SECTION,
   PETITIONS_SECTION,
+  REPORTERS_OFFICE_SECTION,
   TRIAL_CLERKS_SECTION,
 ]);
 

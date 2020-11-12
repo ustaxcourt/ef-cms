@@ -38,13 +38,14 @@ const goToDashboard = [
   {
     ...takePathForRoles(
       [
-        USER_ROLES.admin,
         USER_ROLES.adc,
+        USER_ROLES.admin,
         USER_ROLES.admissionsClerk,
         USER_ROLES.clerkOfCourt,
         USER_ROLES.docketClerk,
         USER_ROLES.floater,
         USER_ROLES.petitionsClerk,
+        USER_ROLES.reportersOffice,
         USER_ROLES.trialClerk,
       ],
       proceedToMessages,
@@ -58,6 +59,7 @@ const goToDashboard = [
       setTrialSessionsAction,
       setCurrentPageAction('DashboardChambers'),
     ],
+    general: [],
     inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
     irsPractitioner: [
       setDefaultCaseTypeToDisplayAction,

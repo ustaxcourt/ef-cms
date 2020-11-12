@@ -141,6 +141,7 @@ const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
@@ -274,6 +275,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
+    replaceBracketed: jest.fn().mockImplementation(replaceBracketed),
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
@@ -409,6 +411,14 @@ const createTestApplicationContext = ({ user } = {}) => {
     sendBulkTemplatedEmail: jest.fn(),
   };
 
+  const sendMessageMock = jest.fn().mockReturnValue({
+    promise: () => {},
+  });
+
+  const mockGetQueueService = () => ({
+    sendMessage: sendMessageMock,
+  });
+
   const mockDocumentClient = createMockDocumentClient();
 
   const mockCreateDocketNumberGenerator = {
@@ -485,6 +495,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         return () => null;
       },
     })),
+    getQueueService: mockGetQueueService,
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),

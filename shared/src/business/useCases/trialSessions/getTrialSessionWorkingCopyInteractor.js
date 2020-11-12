@@ -5,8 +5,8 @@ const {
 const {
   TrialSessionWorkingCopy,
 } = require('../../entities/trialSessions/TrialSessionWorkingCopy');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * getTrialSessionWorkingCopyInteractor
@@ -29,7 +29,7 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  const userId = (judgeUser && judgeUser.userId) || user.userId;
+  const chambersUserId = (judgeUser && judgeUser.userId) || user.userId;
 
   let trialSessionWorkingCopyEntity, validRawTrialSessionWorkingCopyEntity;
 
@@ -38,7 +38,7 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
     .getTrialSessionWorkingCopy({
       applicationContext,
       trialSessionId,
-      userId,
+      userId: chambersUserId,
     });
 
   if (trialSessionWorkingCopy) {
@@ -60,13 +60,16 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
     });
 
     const canCreateWorkingCopy =
-      userId === trialSessionEntity.trialClerk.userId ||
-      (judgeUser && judgeUser.userId === trialSessionEntity.judge.userId);
+      (trialSessionEntity.trialClerk &&
+        trialSessionEntity.trialClerk.userId === chambersUserId) ||
+      (judgeUser &&
+        trialSessionEntity.judge &&
+        judgeUser.userId === trialSessionEntity.judge.userId);
 
     if (canCreateWorkingCopy) {
       trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
         trialSessionId: trialSessionId,
-        userId,
+        userId: chambersUserId,
       });
       validRawTrialSessionWorkingCopyEntity = trialSessionWorkingCopyEntity
         .validate()
@@ -77,6 +80,8 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
           applicationContext,
           trialSessionWorkingCopy: validRawTrialSessionWorkingCopyEntity,
         });
+    } else {
+      throw new NotFoundError('Trial session working copy not found');
     }
   }
   return validRawTrialSessionWorkingCopyEntity;
