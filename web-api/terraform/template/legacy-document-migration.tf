@@ -1,4 +1,3 @@
-
 data "archive_file" "legacy_documents_migration_zip" {
   type        = "zip"
   output_path = "${path.module}/lambdas/legacy-documents-migration.js.zip"
