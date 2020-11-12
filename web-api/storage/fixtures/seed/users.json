@@ -555,6 +555,22 @@
     "entityName": "User"
   },
   {
+    "role": "general",
+    "name": "Test General",
+    "section": "general",
+    "userId": "0a03718f-595e-4e2e-bde0-e0b3c3c5ae16",
+    "email": "general@example.com",
+    "entityName": "User"
+  },
+  {
+    "role": "reportersOffice",
+    "name": "Test Reporter's Office",
+    "section": "reportersOffice",
+    "userId": "27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f",
+    "email": "reportersOffice@example.com",
+    "entityName": "User"
+  },
+  {
     "role": "inactivePractitioner",
     "admissionsDate": "2019-03-01T21:40:46.415Z",
     "admissionsStatus": "Inactive",
