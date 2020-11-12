@@ -62,6 +62,8 @@ https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX
 For low priority features, testing will be done on an as-needed basis.
 
 ### Testing After a Major Refactoring
+Before a major refactoring, the team will perform a pre-mortem, which will help guide testing.
+
 | Type          | Used for                                                                                                                 | Automated or Manual  | Test Data Creation                                               | Tool | Responsible | Frequency / Environment |
 |---------------|--------------------------------------------------------------------------------------------------------------------------|----------------------|------------------------------------------------------------------|------|-------------|-------------------------|
 | Full System   | Full testing of all features and workflows                                                                               | Manual               | Test data manually created within a pool of production-like data |      |             | Flexion prod            |
@@ -147,4 +149,4 @@ In addition to testing in Flexion’s environments, we also recommend the follow
 **After every sprint**
 * Test completed user stories
 * Test key features and workflows
-* Establish a cadence for testing low priority features and workflows. There may be features that don’t get used often and we possibly wouldn’t know something is broken. 
+* Establish a cadence for testing low priority features and workflows. There may be features that don’t get used often and we possibly wouldn’t know something is broken.
