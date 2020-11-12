@@ -3,7 +3,7 @@ const { SQS } = AWS;
 const sqs = () => {
   return new SQS({ region: 'us-east-1' });
 };
-const createApplicationContext = require('../applicationContext');
+const createApplicationContext = require('../../../src/applicationContext');
 
 //00050b17-54ea-4f35-afc7-da242e77d3db
 
