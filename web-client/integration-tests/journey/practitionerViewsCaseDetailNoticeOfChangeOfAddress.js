@@ -34,9 +34,7 @@ export const practitionerViewsCaseDetailNoticeOfChangeOfAddress = (
     expect(changeOfAddressDocument.documentTitle).toBe(
       'Notice of Change of Address',
     );
-    expect(changeOfAddressDocument.additionalInfo).toBe(
-      'for Test Private Practitioner',
-    );
+    expect(changeOfAddressDocument.additionalInfo).toBe('for Lilah Gilbert');
     expect(changeOfAddressDocument.filedBy).toBeUndefined();
 
     expect(changeOfAddressDocument).toBeDefined();
