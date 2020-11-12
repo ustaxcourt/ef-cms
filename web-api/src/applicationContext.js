@@ -699,6 +699,9 @@ const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
 const {
+  parseAndScrapePdfContents,
+} = require('../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents');
+const {
   parseLegacyDocumentsInteractor,
 } = require('../../shared/src/business/useCases/migration/parseLegacyDocumentsInteractor');
 const {
@@ -1493,6 +1496,7 @@ module.exports = (appContextUser, requestId) => {
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
         getUnassociatedLeadCase,
+        parseAndScrapePdfContents,
         processUserAssociatedCases,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
