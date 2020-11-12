@@ -7,7 +7,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
   elasticsearch_version = "7.4"
 
   cluster_config {
-    instance_type = "t2.small.elasticsearch"
+    instance_type = var.es_logs_instance_type
     instance_count = var.es_logs_instance_count
   }
 
@@ -25,7 +25,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
 
   ebs_options{
     ebs_enabled = true
-    volume_size = 10
+    volume_size = var.es_logs_ebs_volume_size_gb
   }
 
   snapshot_options {
