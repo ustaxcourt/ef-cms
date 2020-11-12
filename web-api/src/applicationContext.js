@@ -699,6 +699,9 @@ const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
 const {
+  parseLegacyDocumentsInteractor,
+} = require('../../shared/src/business/useCases/migration/parseLegacyDocumentsInteractor');
+const {
   persistUser,
 } = require('../../shared/src/persistence/dynamo/users/persistUser');
 const {
@@ -1602,6 +1605,7 @@ module.exports = (appContextUser, requestId) => {
         opinionPublicSearchInteractor,
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
+        parseLegacyDocumentsInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,
