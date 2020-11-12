@@ -12,6 +12,7 @@ const {
   scrapePdfContents,
 } = require('../../../../shared/src/business/utilities/scrapePdfContents');
 import { getUniqueId } from '../../../../shared/src/sharedAppContext';
+import User from '../../../../shared/src/business/entities/User';
 const {
   updateCase,
 } = require('../../../../shared/src/persistence/dynamo/cases/updateCase');
@@ -22,6 +23,8 @@ const { DynamoDB, S3, SQS } = AWS;
 const sqs = () => {
   return new SQS({ region: 'us-east-1' });
 };
+
+//00050b17-54ea-4f35-afc7-da242e77d3db
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -78,7 +81,22 @@ const applicationContext = {
   }),
 };
 
-exports.applicationContext = applicationContext;
+exports.applicationContext = appContextUser => {
+  let user;
+
+  if (appContextUser) {
+    user = new User(appContextUser);
+  }
+
+  const getCurrentUser = () => {
+    return user;
+  };
+
+  return {
+    ...applicationContext,
+    getCurrentUser,
+  };
+};
 
 exports.handler = async event => {
   const { Records } = event;
