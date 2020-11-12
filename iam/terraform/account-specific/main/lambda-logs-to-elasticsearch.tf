@@ -72,3 +72,10 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   log_group_name  = "/aws/lambda/cognito_authorizer_lambda_${element(var.log_group_environments, count.index)}"
 }
 
+resource "aws_cloudwatch_log_subscription_filter" "migration_lambda_filter" {
+  count           = length(var.log_group_environments)
+  destination_arn = aws_lambda_function.logs_to_es.arn
+  filter_pattern  = ""
+  name            = "migration_${element(var.log_group_environments, count.index)}_lambda_filter"
+  log_group_name  = "/aws/lambda/migration_segments_lambda_${element(var.log_group_environments, count.index)}"
+}
