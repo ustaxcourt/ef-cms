@@ -17,12 +17,12 @@ const {
 } = require('../../../../shared/src/persistence/dynamo/cases/updateCase');
 
 let s3Cache;
-let dynamoClientCache = {};
 
 const { DynamoDB, S3, SQS } = AWS;
 const sqs = () => {
   return new SQS({ region: 'us-east-1' });
 };
+
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
@@ -32,25 +32,22 @@ const environment = {
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
 };
-const getDocumentClient = ({ useMasterRegion = false } = {}) => {
-  const type = useMasterRegion ? 'master' : 'region';
-  if (!dynamoClientCache[type]) {
-    dynamoClientCache[type] = new DynamoDB.DocumentClient({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-    });
-  }
-  return dynamoClientCache[type];
-};
 
 const applicationContext = {
   environment,
-  getDocumentClient,
+  getDocumentClient: () => {
+    return new DynamoDB.DocumentClient({
+      endpoint: process.env.DYNAMODB_ENDPOINT,
+      region: process.env.AWS_REGION,
+    });
+  },
   getDocumentsBucketName: () => {
     return environment.documentsBucketName;
   },
+  getEnvironment: () => ({
+    dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
+    stage: process.env.STAGE,
+  }),
   getPdfJs: async () => {
     const pdfjsLib = require('pdfjs-dist');
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
