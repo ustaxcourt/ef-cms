@@ -140,6 +140,7 @@ const AUTHORIZATION_MAP = {
   clerkofcourt: [...docketClerkPermissions, ...petitionsClerkPermissions],
   docketclerk: docketClerkPermissions,
   floater: allInternalUserPermissions,
+  general: allInternalUserPermissions,
   inactivePractitioner: [],
   irsPractitioner: [
     ROLE_PERMISSIONS.ADVANCED_SEARCH,
@@ -184,6 +185,7 @@ const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.UPLOAD_DOCUMENT,
     ROLE_PERMISSIONS.VIEW_DOCUMENTS,
   ],
+  reportersOffice: allInternalUserPermissions,
   trialclerk: [
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY,

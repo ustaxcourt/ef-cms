@@ -475,6 +475,7 @@ const ROLES = {
   clerkOfCourt: 'clerkofcourt',
   docketClerk: 'docketclerk',
   floater: 'floater',
+  general: 'general',
   inactivePractitioner: 'inactivePractitioner',
   irsPractitioner: 'irsPractitioner',
   irsSuperuser: 'irsSuperuser',
@@ -483,6 +484,7 @@ const ROLES = {
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
   privatePractitioner: 'privatePractitioner',
+  reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
 };
 
