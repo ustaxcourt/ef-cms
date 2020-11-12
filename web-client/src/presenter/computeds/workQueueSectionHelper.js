@@ -11,7 +11,7 @@ export const workQueueSectionHelper = (get, applicationContext) => {
         docket: 'Docket',
         floater: 'Floater',
         petitions: 'Petitions',
-        reportersOffice: "Reporter's Office",
+        reportersOffice: 'Reporter’s Office',
         trialClerks: 'Trial Clerks',
       }[key] || chambersDisplay(key)
     );
