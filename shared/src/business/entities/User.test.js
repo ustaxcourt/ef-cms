@@ -169,5 +169,11 @@ describe('User entity', () => {
     it('should return true when the user role is floater', () => {
       expect(User.isInternalUser(ROLES.floater)).toEqual(true);
     });
+    it('should return true when the user role is general', () => {
+      expect(User.isInternalUser(ROLES.general)).toEqual(true);
+    });
+    it('should return true when the user role is reportersOffice', () => {
+      expect(User.isInternalUser(ROLES.reportersOffice)).toEqual(true);
+    });
   });
 });

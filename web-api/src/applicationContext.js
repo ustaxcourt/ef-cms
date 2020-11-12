@@ -699,6 +699,12 @@ const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
 const {
+  parseAndScrapePdfContents,
+} = require('../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents');
+const {
+  parseLegacyDocumentsInteractor,
+} = require('../../shared/src/business/useCases/migration/parseLegacyDocumentsInteractor');
+const {
   persistUser,
 } = require('../../shared/src/persistence/dynamo/users/persistUser');
 const {
@@ -994,6 +1000,7 @@ const {
   EnvironmentCredentials,
   S3,
   SES,
+  SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -1392,6 +1399,9 @@ module.exports = (appContextUser, requestId) => {
       }
       return new AWS.ApiGatewayManagementApi({
         endpoint,
+        httpOptions: {
+          timeout: 900000, // 15 minutes
+        },
       });
     },
     getNotificationGateway: () => ({
@@ -1420,6 +1430,15 @@ module.exports = (appContextUser, requestId) => {
       // eslint-disable-next-line security/detect-non-literal-require
       const pug = require('p' + 'ug');
       return pug;
+    },
+    getQueueService: () => {
+      if (environment.stage === 'local') {
+        return {
+          sendMessage: () => ({ promise: () => {} }),
+        };
+      } else {
+        return new SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
+      }
     },
     getSearchClient: () => {
       if (!searchClientCache) {
@@ -1477,6 +1496,7 @@ module.exports = (appContextUser, requestId) => {
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
         getUnassociatedLeadCase,
+        parseAndScrapePdfContents,
         processUserAssociatedCases,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
@@ -1589,6 +1609,7 @@ module.exports = (appContextUser, requestId) => {
         opinionPublicSearchInteractor,
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
+        parseLegacyDocumentsInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,

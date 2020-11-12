@@ -263,6 +263,7 @@
         - "admissionsclerk"
         - "docketclerk"
         - "floater"
+        - "general"
         - "inactivePractitioner"
         - "irsPractitioner"
         - "irsSuperuser"
@@ -271,6 +272,7 @@
         - "petitioner"
         - "petitionsclerk"
         - "privatePractitioner"
+        - "reportersOffice"
         - "trialclerk"
         - "irsSystem"
     sentBy: 
@@ -341,6 +343,7 @@
         - "admissionsclerk"
         - "docketclerk"
         - "floater"
+        - "general"
         - "inactivePractitioner"
         - "irsPractitioner"
         - "irsSuperuser"
@@ -349,6 +352,7 @@
         - "petitioner"
         - "petitionsclerk"
         - "privatePractitioner"
+        - "reportersOffice"
         - "trialclerk"
     sentByUserId: 
       type: "string"

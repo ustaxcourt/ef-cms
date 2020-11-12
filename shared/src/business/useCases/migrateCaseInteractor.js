@@ -240,5 +240,28 @@ exports.migrateCaseInteractor = async ({
     });
   }
 
+  const sqs = applicationContext.getQueueService();
+  let promises = [];
+
+  for (const docketEntry of caseToAdd.docketEntries) {
+    if (docketEntry.isFileAttached) {
+      const message = {
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumber: caseToAdd.docketNumber,
+      };
+
+      promises.push(
+        sqs
+          .sendMessage({
+            MessageBody: JSON.stringify(message),
+            QueueUrl: process.env.MIGRATE_LEGACY_DOCUMENTS_QUEUE_URL,
+          })
+          .promise(),
+      );
+    }
+  }
+
+  await Promise.all(promises);
+
   return caseValidatedRaw;
 };
