@@ -551,7 +551,15 @@
     "name": "Test Floater",
     "section": "floater",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
-    "email": "testFloater@example.com",
+    "email": "floater@example.com",
+    "entityName": "User"
+  },
+  {
+    "role": "floater",
+    "name": "Test Floater1",
+    "section": "floater",
+    "userId": "5dffc4d8-423d-4de9-bca0-585c7b6627f7",
+    "email": "floater1@example.com",
     "entityName": "User"
   },
   {
