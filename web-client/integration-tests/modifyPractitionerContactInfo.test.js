@@ -33,12 +33,11 @@ describe('Modify Practitioner Contact Information', () => {
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }
+  it('waits for elasticsearch', async () => {
+    await refreshElasticsearchIndex();
+  });
 
   practitionerUpdatesAddress(test);
-
-  it('waits for elasticsearch', async () => {
-    await refreshElasticsearchIndex(25000);
-  });
 
   for (let i = 0; i < 3; i++) {
     practitionerViewsCaseDetailNoticeOfChangeOfAddress(test, i);
