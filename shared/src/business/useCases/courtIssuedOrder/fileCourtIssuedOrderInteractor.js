@@ -61,24 +61,12 @@ exports.fileCourtIssuedOrderInteractor = async ({
       })
       .promise();
 
-    const arrayBuffer = new ArrayBuffer(pdfBuffer.length);
-    const view = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < pdfBuffer.length; ++i) {
-      view[i] = pdfBuffer[i];
-    }
+    const contents = await applicationContext
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents({ applicationContext, pdfBuffer });
 
-    // TODO: Wait to hear from Jessica on what should happen for PDF scraping failures
-    try {
-      const contents = await applicationContext
-        .getUtilities()
-        .scrapePdfContents({ applicationContext, pdfBuffer: arrayBuffer });
-
-      if (contents) {
-        documentMetadata.documentContents = contents;
-      }
-    } catch (e) {
-      applicationContext.logger.error('Failed to parse PDF', e);
-      throw e;
+    if (contents) {
+      documentMetadata.documentContents = contents;
     }
   }
 
