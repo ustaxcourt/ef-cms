@@ -31,7 +31,14 @@ const isStringISOFormatted = dateString => {
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {moment} a moment-timezone object
  */
-const prepareDateFromString = (dateString, inputFormat) => {
+const prepareDateFromString = (
+  dateString,
+  inputFormat,
+  options = { strict: true },
+) => {
+  if (options.strict && !isStringISOFormatted(dateString)) {
+    return undefined;
+  }
   return moment.tz(dateString, inputFormat, USTC_TZ);
 };
 
