@@ -64,7 +64,15 @@ export const saveCaseDetailInternalEditAction = async ({
             onUploadProgress: progressFunctions[fileKey],
           });
 
-        const { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];
+        let { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];
+
+        if (
+          fileKey === INITIAL_DOCUMENT_TYPES_FILE_MAP.requestForPlaceOfTrial
+        ) {
+          documentTitle = applicationContext
+            .getUtilities()
+            .replaceBracketed(documentTitle, caseToUpdate.preferredTrialCity);
+        }
 
         caseToUpdate.docketEntries.push({
           docketEntryId: newDocketEntryId,
