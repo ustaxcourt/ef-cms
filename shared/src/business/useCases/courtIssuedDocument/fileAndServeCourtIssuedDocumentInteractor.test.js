@@ -3,7 +3,6 @@ const {
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
-  AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
