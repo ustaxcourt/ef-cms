@@ -11,6 +11,7 @@ const {
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   TRANSCRIPT_EVENT_CODE,
 } = require('../../entities/EntityConstants');
 const {
@@ -21,6 +22,10 @@ const {
 } = require('../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { v4: uuidv4 } = require('uuid');
+jest.mock('../../useCaseHelper/saveFileAndGenerateUrl');
+const {
+  saveFileAndGenerateUrl,
+} = require('../../useCaseHelper/saveFileAndGenerateUrl');
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let caseRecord;
@@ -364,12 +369,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
-    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue(caseRecord);
-
+  it('should call updateCaseAutomaticBlock and deleteCaseTrialSortMappingRecords', async () => {
     await fileAndServeCourtIssuedDocumentInteractor({
       applicationContext,
       documentMeta: {
@@ -389,30 +389,32 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
-      automaticBlocked: true,
-      automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-    });
-    expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
     ).toBeCalled();
   });
 
-  it('should return paperServicePdfData when there are paper service parties on the case', async () => {
+  it('should return a pdfUrl when there are paper service parties on the case', async () => {
+    caseRecord.contactPrimary.serviceIndicator =
+      SERVICE_INDICATOR_TYPES.SI_PAPER;
+    saveFileAndGenerateUrl.mockReturnValue({ url: mockPdfUrl });
+
     const result = await fileAndServeCourtIssuedDocumentInteractor({
       applicationContext,
       documentMeta: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+        date: '2019-03-01T21:40:46.415Z',
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order',
         documentType: 'Order',
+        eventCode: 'OD',
+        freeText: 'Dogs',
+        pending: true,
+        serviceStamp: 'Served',
       },
     });
 
-    expect(result.pdfUrl).toBe(mockPdfUrl.url);
+    expect(result.pdfUrl).toBe(mockPdfUrl);
   });
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
@@ -521,9 +523,13 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       await fileAndServeCourtIssuedDocumentInteractor({
         applicationContext,
         documentMeta: {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+          date: '2019-03-01T21:40:46.415Z',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order',
           documentType: 'Order',
+          eventCode: document.eventCode,
+          serviceStamp: 'Served',
         },
       });
 
