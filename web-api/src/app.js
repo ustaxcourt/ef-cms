@@ -92,6 +92,9 @@ const {
   fetchPendingItemsLambda,
 } = require('./pendingItems/fetchPendingItemsLambda');
 const {
+  fileAndServeCourtIssuedDocumentLambda,
+} = require('./cases/fileAndServeCourtIssuedDocumentLambda');
+const {
   fileCorrespondenceDocumentLambda,
 } = require('./correspondence/fileCorrespondenceDocumentLambda');
 const {
@@ -489,6 +492,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.post(
     '/case-documents/:docketNumber/court-issued-docket-entry',
     lambdaWrapper(fileCourtIssuedDocketEntryLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/court-issued-docket-entry-bestest',
+    lambdaWrapper(fileAndServeCourtIssuedDocumentLambda),
   );
   app.post(
     '/case-documents/:docketNumber/correspondence',

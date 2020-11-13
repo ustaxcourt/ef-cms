@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
+import { fileAndServeCourtIssuedDocumentAction } from '../actions/fileAndServeCourtIssuedDocumentAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
@@ -35,12 +36,14 @@ export const serveCourtIssuedDocumentFromDocketEntrySequence = [
     success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
-      isEditingDocketEntryAction,
-      {
-        no: [submitCourtIssuedDocketEntryAction],
-        yes: [updateCourtIssuedDocketEntryAction],
-      },
-      serveCourtIssuedDocumentAction,
+      // isEditingDocketEntryAction,
+      // {
+      //   // goal - don't create user and section inbox records IF serving document anyways
+      //   no: [submitCourtIssuedDocketEntryAction],
+      //   yes: [updateCourtIssuedDocketEntryAction],
+      // },
+      // serveCourtIssuedDocumentAction,
+      fileAndServeCourtIssuedDocumentAction,
       setPdfPreviewUrlAction,
       setAlertSuccessAction,
       clearModalAction,
