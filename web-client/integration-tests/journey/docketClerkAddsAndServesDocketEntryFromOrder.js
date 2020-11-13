@@ -21,7 +21,6 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     );
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
-    test.docketEntryId = docketEntryId;
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -192,6 +191,13 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     expect(test.getState('form.documentType')).toEqual(
       draftOrderDocument.documentType,
     );
+
+    const caseDetail = test.getState('caseDetail');
+    const servedDocketEntry = caseDetail.docketEntries.find(
+      d => d.docketEntryId === docketEntryId,
+    );
+
+    test.docketRecordEntry = servedDocketEntry;
 
     await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
   });

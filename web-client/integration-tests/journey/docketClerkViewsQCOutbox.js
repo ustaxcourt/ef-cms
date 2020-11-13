@@ -13,7 +13,6 @@ export const docketClerkViewsQCOutbox = (test, shouldExist) => {
     expect(workQueueToDisplay.box).toEqual('outbox');
 
     const outboxQueue = test.getState('workQueue');
-    console.log(''); // adding this causes the tests to pass....
     const outboxWorkItem = outboxQueue.find(
       workItem => workItem.docketEntry.docketEntryId === test.docketEntryId,
     );
