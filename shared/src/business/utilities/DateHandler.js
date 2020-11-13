@@ -34,6 +34,8 @@ const isStringISOFormatted = dateString => {
 const prepareDateFromString = (dateString, inputFormat) => {
   if (dateString === undefined) {
     dateString = createISODateString();
+  } else if (!moment.utc(dateString, undefined, true).isValid()) {
+    return;
   }
   return moment.tz(dateString, inputFormat, USTC_TZ);
 };
