@@ -13,17 +13,19 @@ const { search } = require('./searchClient');
  * @returns {*} the result
  */
 exports.getPractitionersByName = async ({ applicationContext, name }) => {
-  const isUserRecord = [
-    { match: { 'pk.S': 'user|' } },
-    { match: { 'sk.S': 'user|' } },
-  ];
+  const isUserRecord = {
+    multi_match: {
+      fields: ['pk.S', 'sk.S'],
+      query: 'user|',
+      type: 'phrase_prefix',
+    },
+  };
   const isPractitionerRole = {
-    bool: {
-      minimum_should_match: 1,
-      should: [
-        { match: { 'role.S': ROLES.inactivePractitioner } },
-        { match: { 'role.S': ROLES.irsPractitioner } },
-        { match: { 'role.S': ROLES.privatePractitioner } },
+    terms: {
+      'role.S': [
+        ROLES.inactivePractitioner,
+        ROLES.irsPractitioner,
+        ROLES.privatePractitioner,
       ],
     },
   };
@@ -37,9 +39,11 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
 
   const query = {
     bool: {
-      must: [...isUserRecord, isPractitionerRole, matchName],
+      must: [isPractitionerRole, isUserRecord, matchName],
     },
   };
+
+  console.log(JSON.stringify(query, null, 2));
 
   const source = ['admissionsStatus', 'barNumber', 'contact', 'name'];
 
