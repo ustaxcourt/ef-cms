@@ -4,8 +4,11 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
-  return it(`Docket Clerk adds a docket entry from the given order ${draftOrderIndex}`, async () => {
+export const docketClerkAddsAndServesDocketEntryFromOrder = (
+  test,
+  draftOrderIndex,
+) => {
+  return it(`Docket Clerk adds and serves a docket entry from the given order ${draftOrderIndex}`, async () => {
     let caseDetailFormatted;
     let nonstandardHelperComputed;
     let addCourtIssuedDocketEntryHelperComputed;
@@ -18,7 +21,6 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
     );
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
-    test.docketEntryId = docketEntryId;
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -190,30 +192,13 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
       draftOrderDocument.documentType,
     );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
-
-    expect(test.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to docket record.',
+    const caseDetail = test.getState('caseDetail');
+    const servedDocketEntry = caseDetail.docketEntries.find(
+      d => d.docketEntryId === docketEntryId,
     );
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    test.docketRecordEntry = servedDocketEntry;
 
-    caseDetailFormatted = await runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
-    const newDocketEntry = caseDetailFormatted.formattedDocketEntries.find(
-      entry => entry.docketEntryId === docketEntryId && entry.isOnDocketRecord,
-    );
-
-    test.docketRecordEntry = newDocketEntry;
-
-    expect(newDocketEntry).toBeTruthy();
-    expect(newDocketEntry.index).toBeFalsy();
+    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
   });
 };
