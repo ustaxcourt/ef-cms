@@ -16,7 +16,7 @@ const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
 const formatRecord = record => {
   const returnData = {};
 
-  Object.keys(record).map(key => {
+  Object.keys(record).forEach(key => {
     if (record[key] === '') {
       delete record[key];
     }
