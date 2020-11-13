@@ -17,3 +17,7 @@ variable "es_instance_type" {
 variable "es_volume_size" {
   type = number
 }
+
+variable "alert_sns_topic_arn" {
+  type = string
+}
