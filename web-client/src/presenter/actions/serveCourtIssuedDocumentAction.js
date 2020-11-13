@@ -16,14 +16,6 @@ export const serveCourtIssuedDocumentAction = async ({
   const docketEntryId = get(state.docketEntryId);
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const wait = time => {
-    return new Promise(resolve => {
-      setTimeout(resolve, time);
-    });
-  };
-
-  await wait(5000);
-
   const result = await applicationContext
     .getUseCases()
     .serveCourtIssuedDocumentInteractor({

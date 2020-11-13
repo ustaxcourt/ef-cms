@@ -16,16 +16,13 @@ const {
 const {
   saveFileAndGenerateUrl,
 } = require('../../useCaseHelper/saveFileAndGenerateUrl');
-const {
-  TRANSCRIPT_EVENT_CODE,
-  UNSERVABLE_EVENT_CODES,
-} = require('../../entities/EntityConstants');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
+const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -34,9 +31,8 @@ const { WorkItem } = require('../../entities/WorkItem');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case containing the document to serve
- * @param {string} providers.docketEntryId the id of the docket entry to serve
- * @returns {object} the updated case after the document was served
+ * @param {string} providers.documentMeta the document metadata
+ * @returns {object} the url of the document that was served
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async ({
   applicationContext,
