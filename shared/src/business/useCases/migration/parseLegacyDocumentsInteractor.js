@@ -48,7 +48,9 @@ exports.parseLegacyDocumentsInteractor = async ({
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
-    document: Buffer.from(JSON.stringify(pdfTextContents)),
+    document: Buffer.from(
+      JSON.stringify({ documentContents: pdfTextContents }),
+    ),
     key: documentContentsId,
   });
 
