@@ -1,8 +1,4 @@
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkAddsNoticeToCase } from './journey/petitionsClerkAddsNoticeToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
