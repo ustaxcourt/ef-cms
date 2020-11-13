@@ -34,8 +34,6 @@ const isStringISOFormatted = dateString => {
 const prepareDateFromString = (dateString, inputFormat) => {
   if (dateString === undefined) {
     dateString = createISODateString();
-  } else if (!moment.utc(dateString, undefined, true).isValid()) {
-    return;
   }
   return moment.tz(dateString, inputFormat, USTC_TZ);
 };
@@ -58,10 +56,10 @@ const createISODateString = (dateString, inputFormat) => {
   if (!dateString) {
     result = moment.tz(USTC_TZ);
   } else {
-    result = prepareDateFromString(dateString, inputFormat, { strict: false });
+    result = prepareDateFromString(dateString, inputFormat);
   }
 
-  return result.toISOString();
+  return result && result.toISOString();
 };
 
 const createEndOfDayISO = ({ day, month, year }) => {
