@@ -10,6 +10,16 @@ if [ -z "$ES_LOGS_INSTANCE_COUNT" ]; then
   exit 1
 fi
 
+if [ -z "$ES_LOGS_INSTANCE_TYPE" ]; then
+  echo "Please export the ES_LOGS_INSTANCE_TYPE variable in your shell"
+  exit 1
+fi
+
+if [ -z "$ES_LOGS_EBS_VOLUME_SIZE_GB" ]; then
+  echo "Please export the ES_LOGS_EBS_VOLUME_SIZE_GB variable in your shell"
+  exit 1
+fi
+
 if [ -z "$COGNITO_SUFFIX" ]; then
   echo "Please export the COGNITO_SUFFIX variable in your shell"
   exit 1
@@ -40,10 +50,12 @@ export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
 export TF_VAR_zone_name="${ZONE_NAME}"
 export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
+export TF_VAR_es_logs_instance_type="${ES_LOGS_INSTANCE_TYPE}"
+export TF_VAR_es_logs_ebs_volume_size_gb="${ES_LOGS_EBS_VOLUME_SIZE_GB}"
 export TF_VAR_cognito_suffix="${COGNITO_SUFFIX}"
-# if [ -z "${LOG_GROUP_ENVIRONMENTS}" ]; then 
-#   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}" 
-# fi
+if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
+  export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
+fi
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform apply -auto-approve
+terraform apply
