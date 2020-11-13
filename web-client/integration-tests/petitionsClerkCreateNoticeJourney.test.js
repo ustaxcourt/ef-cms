@@ -1,4 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
@@ -16,10 +16,11 @@ describe('Petitions Clerk Create Notice Journey', () => {
   });
 
   loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
+  it('Create test case', async () => {
+    const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test);
