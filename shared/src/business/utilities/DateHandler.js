@@ -32,6 +32,9 @@ const isStringISOFormatted = dateString => {
  * @returns {moment} a moment-timezone object
  */
 const prepareDateFromString = (dateString, inputFormat) => {
+  if (dateString === undefined) {
+    dateString = createISODateString();
+  }
   return moment.tz(dateString, inputFormat, USTC_TZ);
 };
 
@@ -56,7 +59,7 @@ const createISODateString = (dateString, inputFormat) => {
     result = prepareDateFromString(dateString, inputFormat);
   }
 
-  return result.toISOString();
+  return result && result.toISOString();
 };
 
 const createEndOfDayISO = ({ day, month, year }) => {
@@ -167,7 +170,7 @@ const deconstructDate = dateString => {
 };
 
 const getMonthDayYearObj = momentRef => {
-  const momentObj = momentRef || prepareDateFromString();
+  const momentObj = momentRef || prepareDateFromString(createISODateString());
   const result = {
     day: momentObj.format('D'),
     month: momentObj.format('M'),
