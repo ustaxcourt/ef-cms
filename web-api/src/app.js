@@ -494,7 +494,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(fileCourtIssuedDocketEntryLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/court-issued-docket-entry-bestest',
+    '/case-documents/:docketNumber/file-and-serve-court-issued-docket-entry',
     lambdaWrapper(fileAndServeCourtIssuedDocumentLambda),
   );
   app.post(

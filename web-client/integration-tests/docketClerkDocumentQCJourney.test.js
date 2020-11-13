@@ -1,6 +1,5 @@
-import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
-import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
@@ -31,8 +30,7 @@ describe('Docket Clerk Document QC Journey', () => {
   });
   docketClerkViewsDraftOrder(test, 0);
   docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesDocument(test, 0);
+  docketClerkAddsAndServesDocketEntryFromOrder(test, 0);
 
   docketClerkViewsQCInProgress(test, false);
   docketClerkViewsQCOutbox(test, true);
