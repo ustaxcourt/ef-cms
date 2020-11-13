@@ -229,7 +229,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'testFloater@example.com');
+  loginAs(test, 'floater@example.com');
   it('allows access to the floater user to view the case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
