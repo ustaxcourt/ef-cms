@@ -49,3 +49,16 @@ resource "aws_elasticsearch_domain" "efcms-search" {
     log_type                 = "ES_APPLICATION_LOGS"
   }
 }
+
+locals {
+  instance_size_in_mb = aws_elasticsearch_domain.efcms-search.ebs_options[0].volume_size * 1000
+}
+
+module "logs_alarms" {
+  source = "github.com/dubiety/terraform-aws-elasticsearch-cloudwatch-sns-alarms.git?ref=v1.0.4"
+  domain_name = aws_elasticsearch_domain.efcms-search.domain_name
+  alarm_name_prefix = "${aws_elasticsearch_domain.efcms-search.domain_name}: "
+  free_storage_space_threshold = local.instance_size_in_mb * 0.25
+  create_sns_topic = false
+  sns_topic = var.alert_sns_topic_arn
+}
