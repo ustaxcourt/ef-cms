@@ -27,41 +27,20 @@ describe('getIndexedCasesForUser', () => {
         .bool.must,
     ).toMatchObject([
       {
-        match: {
+        term: {
           'pk.S': {
-            operator: 'and',
-            query: `user|${mockUserId}`,
+            value: `user|${mockUserId}`,
           },
         },
       },
+      { prefix: { 'sk.S': 'case|' } },
+      { prefix: { 'gsi1pk.S': 'user-case|' } },
       {
-        match: {
-          'sk.S': 'case|',
-        },
-      },
-      {
-        match: {
-          'gsi1pk.S': 'user-case|',
-        },
-      },
-      {
-        bool: {
-          should: [
-            {
-              match: {
-                'status.S': CASE_STATUS_TYPES.new,
-              },
-            },
-            {
-              match: {
-                'status.S': CASE_STATUS_TYPES.jurisdictionRetained,
-              },
-            },
-            {
-              match: {
-                'status.S': CASE_STATUS_TYPES.calendared,
-              },
-            },
+        terms: {
+          'status.S': [
+            CASE_STATUS_TYPES.new,
+            CASE_STATUS_TYPES.jurisdictionRetained,
+            CASE_STATUS_TYPES.calendared,
           ],
         },
       },

@@ -43,8 +43,6 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
     },
   };
 
-  console.log(JSON.stringify(query, null, 2));
-
   const source = ['admissionsStatus', 'barNumber', 'contact', 'name'];
 
   const foundUsers = (
