@@ -39,10 +39,9 @@ exports.fileCourtIssuedOrderInteractor = async ({
       applicationContext,
       docketNumber,
     });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const shouldScrapePDFContents = !documentMetadata.documentContents;
-
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
