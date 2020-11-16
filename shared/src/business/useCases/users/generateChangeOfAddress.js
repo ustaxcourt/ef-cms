@@ -53,7 +53,7 @@ exports.generateChangeOfAddress = async ({
           docketNumber,
         });
 
-      const name = updatedName ? updatedName : user.name;
+      const practitionerName = updatedName || user.name;
 
       let caseEntity = new Case(userCase, { applicationContext });
       const privatePractitioner = caseEntity.privatePractitioners.find(
@@ -62,7 +62,7 @@ exports.generateChangeOfAddress = async ({
       if (privatePractitioner) {
         oldData = clone(privatePractitioner.contact);
         privatePractitioner.contact = contactInfo;
-        privatePractitioner.name = name;
+        privatePractitioner.name = practitionerName;
       }
       const irsPractitioner = caseEntity.irsPractitioners.find(
         practitioner => practitioner.userId === user.userId,
@@ -70,7 +70,7 @@ exports.generateChangeOfAddress = async ({
       if (irsPractitioner) {
         oldData = clone(irsPractitioner.contact);
         irsPractitioner.contact = contactInfo;
-        irsPractitioner.name = name;
+        irsPractitioner.name = practitionerName;
       }
 
       // we do this again so that it will convert '' to null
@@ -80,8 +80,6 @@ exports.generateChangeOfAddress = async ({
       const caseDetail = {
         ...rawCase,
       };
-
-      let docketEntryAdded = false;
 
       const documentType = applicationContext
         .getUtilities()
@@ -106,7 +104,7 @@ exports.generateChangeOfAddress = async ({
             docketNumber: caseDetail.docketNumber,
             docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
             documentTitle: documentType.title,
-            name: `${name} (${user.barNumber})`,
+            name: `${practitionerName} (${user.barNumber})`,
             newData,
             oldData,
           },
@@ -116,7 +114,7 @@ exports.generateChangeOfAddress = async ({
 
       const documentData = {
         addToCoversheet: true,
-        additionalInfo: `for ${name}`,
+        additionalInfo: `for ${practitionerName}`,
         docketEntryId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
         documentTitle: documentType.title,
@@ -132,7 +130,7 @@ exports.generateChangeOfAddress = async ({
       if (user.role === ROLES.privatePractitioner) {
         documentData.privatePractitioners = [
           {
-            name,
+            name: practitionerName,
           },
         ];
       } else if (user.role === ROLES.irsPractitioner) {
@@ -220,20 +218,16 @@ exports.generateChangeOfAddress = async ({
       }
 
       caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
-      docketEntryAdded = true;
+      const validatedRawCase = caseEntity.validate().toRawObject();
 
-      if (docketEntryAdded) {
-        const validatedRawCase = caseEntity.validate().toRawObject();
+      const updatedCase = await applicationContext
+        .getPersistenceGateway()
+        .updateCase({
+          applicationContext,
+          caseToUpdate: validatedRawCase,
+        });
 
-        const updatedCase = await applicationContext
-          .getPersistenceGateway()
-          .updateCase({
-            applicationContext,
-            caseToUpdate: validatedRawCase,
-          });
-
-        updatedCases.push(updatedCase);
-      }
+      updatedCases.push(updatedCase);
     } catch (error) {
       applicationContext.logger.error(error);
       await applicationContext.notifyHoneybadger(error);

@@ -169,11 +169,10 @@ SectionWorkQueueTable.Actions = connect(
           className="usa-select"
           id="options"
           name="options"
-          onChange={event => {
+          onChange={evt => {
             selectAssigneeSequence({
-              assigneeId: event.target.value,
-              assigneeName:
-                event.target.options[event.target.selectedIndex].text,
+              assigneeId: evt.target.value,
+              assigneeName: evt.target.options[evt.target.selectedIndex].text,
             });
             assignSelectedWorkItemsSequence();
           }}
