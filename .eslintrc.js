@@ -76,7 +76,7 @@ module.exports = {
     'jest/no-conditional-expect': 'off',
     'jest/no-export': 'off',
     'jest/no-identical-title': 'off', // todo: warn
-    'jsdoc/check-alignment': 'off', // todo: warn
+    'jsdoc/check-alignment': 'error',
     'jsdoc/check-param-names': 'off', // todo: warn
     'jsdoc/check-tag-names': 'off', // todo: warn
     'jsdoc/check-types': 'off', // todo: warn

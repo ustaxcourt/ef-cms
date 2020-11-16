@@ -1,3 +1,5 @@
+/* eslint complexity: ['warn', { max: 31 }] */
+
 const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
