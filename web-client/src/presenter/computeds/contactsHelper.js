@@ -1,5 +1,3 @@
-/* eslint complexity: ['warn', { max: 2 }] */
-
 import { state } from 'cerebral';
 
 /**
