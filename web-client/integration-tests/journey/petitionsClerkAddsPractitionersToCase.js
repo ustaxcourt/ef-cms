@@ -1,4 +1,5 @@
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -100,6 +101,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       expect(formatted.privatePractitioners[1].formattedName).toEqual(
         `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
       );
+
+      await refreshElasticsearchIndex();
     }
   });
 };

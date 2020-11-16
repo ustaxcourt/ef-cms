@@ -7,7 +7,7 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 describe('checkForReadyForTrialCasesInteractor', () => {
-  let mockCatalogCases;
+  let mockCasesReadyForTrial;
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(
@@ -16,13 +16,13 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getAllCatalogCases.mockImplementation(() => mockCatalogCases);
+      .getReadyForTrialCases.mockImplementation(() => mockCasesReadyForTrial);
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
   });
 
   it('should successfully run without error', async () => {
-    mockCatalogCases = [];
+    mockCasesReadyForTrial = [];
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -34,7 +34,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().getAllCatalogCases,
+      applicationContext.getPersistenceGateway().getReadyForTrialCases,
     ).toBeCalled();
   });
 
@@ -45,7 +45,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    mockCatalogCases = [{ docketNumber: '101-20' }];
+    mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
       checkForReadyForTrialCasesInteractor({
@@ -54,18 +54,18 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     ).resolves.not.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().getAllCatalogCases,
+      applicationContext.getPersistenceGateway().getReadyForTrialCases,
     ).toBeCalled();
   });
 
-  it("should only check cases that are 'general docket not at issue'", async () => {
+  it("should only check cases that are 'general docket - not at issue'", async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    mockCatalogCases = [{ docketNumber: '101-20' }];
+    mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
       checkForReadyForTrialCasesInteractor({
@@ -97,7 +97,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    mockCatalogCases = [{ docketNumber: '101-20' }];
+    mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
       checkForReadyForTrialCasesInteractor({
@@ -126,10 +126,10 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    mockCatalogCases = [{ docketNumber: '101-20' }];
+    mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
     applicationContext
       .getPersistenceGateway()
-      .getAllCatalogCases.mockReturnValue([{ docketNumber: '101-20' }]);
+      .getReadyForTrialCases.mockReturnValue([{ docketNumber: '101-20' }]);
 
     await expect(
       checkForReadyForTrialCasesInteractor({

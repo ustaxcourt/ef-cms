@@ -1,6 +1,7 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkSealsContactInformation } from './journey/docketClerkSealsContactInformation';
+import { docketClerkUpdatesSealedContactAddress } from './journey/docketClerkUpdatesSealedContactAddress';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -186,6 +187,7 @@ describe('Docket Clerk seals a case contact information', () => {
   loginAs(test, 'docketclerk@example.com');
   contactType = 'contactPrimary';
   docketClerkSealsContactInformation(test, contactType);
+  docketClerkUpdatesSealedContactAddress(test, contactType);
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseWithSealedContact(test, contactType);
@@ -193,6 +195,7 @@ describe('Docket Clerk seals a case contact information', () => {
   loginAs(test, 'docketclerk@example.com');
   contactType = 'contactSecondary';
   docketClerkSealsContactInformation(test, contactType);
+  docketClerkUpdatesSealedContactAddress(test, contactType);
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseWithSealedContact(test, contactType);

@@ -1,8 +1,8 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
-  migrateItems: migration0003,
-} = require('./migrations/0003-case-deadline-required-fields');
+  migrateItems: migration0001,
+} = require('./migrations/0001-user-case-add-closed-date');
 const { chunk, isEmpty } = require('lodash');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -22,7 +22,7 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
-  items = await migration0003(items, documentClient, applicationContext);
+  items = await migration0001(items, documentClient, applicationContext);
   return items;
 };
 
