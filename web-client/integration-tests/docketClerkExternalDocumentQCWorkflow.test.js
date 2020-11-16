@@ -139,9 +139,28 @@ describe('Create a work item', () => {
 
     await test.runSequence('completeDocketEntryQCSequence');
 
+    await refreshElasticsearchIndex();
+
+    const documentQCMyInbox = await getFormattedDocumentQCMyInbox(test);
+
+    const foundInMyInbox = documentQCMyInbox.find(workItem => {
+      return workItem.workItemId === decisionWorkItem.workItemId;
+    });
+
+    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
+      test,
+    );
+
+    const foundInSectionInbox = documentQCSectionInbox.find(workItem => {
+      return workItem.workItemId === decisionWorkItem.workItemId;
+    });
+
     const noticeDocketEntry = test
       .getState('caseDetail.docketEntries')
       .find(doc => doc.documentType === 'Notice of Docket Change');
+
+    expect(foundInMyInbox).toBeFalsy();
+    expect(foundInSectionInbox).toBeFalsy();
 
     expect(noticeDocketEntry).toBeTruthy();
     expect(noticeDocketEntry.servedAt).toBeDefined();
