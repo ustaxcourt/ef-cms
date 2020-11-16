@@ -78,8 +78,10 @@ exports.genericHandler = (event, cb, options = {}) => {
           })
         : results;
 
-      if (logResults && applicationContext) {
-        applicationContext.logger.info(logResultsLabel, returnResults);
+      if (options.logResults !== false) {
+        applicationContext.logger.debug('Results:', {
+          results: returnResults,
+        });
       }
 
       return returnResults;
