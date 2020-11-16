@@ -9,7 +9,6 @@ import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAc
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
-import { getIsPendingItemAction } from '../actions/DocketEntry/getIsPendingItemAction';
 import { getIsSavingForLaterAction } from '../actions/DocketEntry/getIsSavingForLaterAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
