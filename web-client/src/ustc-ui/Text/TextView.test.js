@@ -1,10 +1,10 @@
 import { Container } from '@cerebral/react';
-import { Text } from './Text';
+import { TextView } from './TextView';
 import App from 'cerebral';
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
 
-describe('Text Component', () => {
+describe('TextView Component', () => {
   it('should not show the text if no binded property is available', () => {
     const testModule = {
       sequences: {},
@@ -13,7 +13,7 @@ describe('Text Component', () => {
     const app = App(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
-        <Text />
+        <TextView />
       </Container>,
     );
 
@@ -29,7 +29,7 @@ describe('Text Component', () => {
     const app = App(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
-        <Text bind="text" />
+        <TextView bind="text" />
       </Container>,
     );
 
@@ -45,7 +45,7 @@ describe('Text Component', () => {
     const app = App(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
-        <Text bind="text" />
+        <TextView bind="text" />
       </Container>,
     );
 
@@ -61,7 +61,7 @@ describe('Text Component', () => {
     const app = App(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
-        <Text bind="messages.text" />
+        <TextView bind="messages.text" />
       </Container>,
     );
 
@@ -78,7 +78,7 @@ describe('Text Component', () => {
     const app = App(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
-        <Text bind="text" />
+        <TextView bind="text" />
       </Container>,
     );
 
@@ -99,7 +99,7 @@ describe('Text Component', () => {
       const app = App(testModule);
       const testRenderer = TestRenderer.create(
         <Container app={app}>
-          <Text bind="text" />
+          <TextView bind="text" />
         </Container>,
       );
 
