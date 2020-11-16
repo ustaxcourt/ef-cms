@@ -21,6 +21,11 @@ terraform {
   }
 }
 
+data "aws_sns_topic" "system_health_alarms" {
+  // account-level resource
+  name = "system_health_alarms"
+}
+
 module "ef-cms_apis" {
   source                     = "../template/"
   environment                = var.environment
@@ -40,4 +45,5 @@ module "ef-cms_apis" {
   destination_table          = var.destination_table
   disable_emails             = var.disable_emails
   es_volume_size             = var.es_volume_size
+  alert_sns_topic_arn        = data.aws_sns_topic.system_health_alarms.arn
 }

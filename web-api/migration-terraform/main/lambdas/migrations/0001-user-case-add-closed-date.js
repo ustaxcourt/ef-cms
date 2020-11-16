@@ -1,10 +1,10 @@
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
-  CaseDeadline,
-} = require('../../../../../shared/src/business/entities/CaseDeadline');
-const {
-  CHIEF_JUDGE,
+  CASE_STATUS_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
+const {
+  UserCase,
+} = require('../../../../../shared/src/business/entities/UserCase');
 
 const applicationContext = createApplicationContext({});
 
@@ -12,10 +12,11 @@ const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
     if (
-      item.pk.includes('case-deadline|') &&
-      item.sk.includes('case-deadline|')
+      item.pk.includes('user|') &&
+      item.sk.includes('case|') &&
+      item.gsi1pk.includes('user-case|')
     ) {
-      if (!item.associatedJudge) {
+      if (!item.closedDate && item.status === CASE_STATUS_TYPES.closed) {
         const caseRecord = await documentClient
           .get({
             Key: {
@@ -29,21 +30,20 @@ const migrateItems = async (items, documentClient) => {
             return res.Item;
           });
 
-        if (caseRecord && caseRecord.associatedJudge) {
-          item.associatedJudge = caseRecord.associatedJudge;
+        if (caseRecord && caseRecord.docketNumber) {
+          item.closedDate = caseRecord.closedDate;
         } else {
-          item.associatedJudge = CHIEF_JUDGE;
+          throw new Error(`Case record ${item.docketNumber} was not found`);
         }
       }
 
-      // generate sortableDocketNumber in the constructor
-      const updatedDeadline = new CaseDeadline(item, { applicationContext })
+      const updatedUserCase = new UserCase(item, { applicationContext })
         .validate()
         .toRawObject();
 
       itemsAfter.push({
         ...item,
-        ...updatedDeadline,
+        ...updatedUserCase,
       });
     } else {
       itemsAfter.push(item);

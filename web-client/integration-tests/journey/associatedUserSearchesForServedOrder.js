@@ -1,4 +1,8 @@
-export const associatedUserSearchesForServedOrder = (test, options) => {
+export const associatedUserSearchesForServedOrder = (
+  test,
+  options,
+  sealed = false,
+) => {
   return it('associated user searches for served order', async () => {
     test.setState('advancedSearchForm', {
       orderSearch: {
@@ -9,13 +13,17 @@ export const associatedUserSearchesForServedOrder = (test, options) => {
 
     await test.runSequence('submitOrderAdvancedSearchSequence');
 
-    expect(test.getState('searchResults')).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketEntryId:
-            test.draftOrders[options.draftOrderIndex].docketEntryId,
-        }),
-      ]),
-    );
+    if (sealed) {
+      expect(test.getState('searchResults')).toEqual([]);
+    } else {
+      expect(test.getState('searchResults')).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            docketEntryId:
+              test.draftOrders[options.draftOrderIndex].docketEntryId,
+          }),
+        ]),
+      );
+    }
   });
 };

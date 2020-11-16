@@ -2,21 +2,14 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  calculateISODate,
-  createISODateString,
-} = require('../../utilities/DateHandler');
-const {
-  CASE_STATUS_TYPES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+  DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { Case } = require('../../entities/cases/Case');
 const { clone } = require('lodash');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -29,7 +22,7 @@ exports.generateChangeOfAddress = async ({
 }) => {
   const docketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getDocketNumbersByUser({
+    .getCasesByUserId({
       applicationContext,
       userId: user.userId,
     });
@@ -47,12 +40,11 @@ exports.generateChangeOfAddress = async ({
 
   const updatedCases = [];
 
-  for (let docketNumber of docketNumbers) {
+  for (let caseInfo of docketNumbers) {
     try {
+      const { docketNumber } = caseInfo;
       let oldData;
       const newData = contactInfo;
-
-      const name = updatedName || user.name;
 
       const userCase = await applicationContext
         .getPersistenceGateway()
@@ -61,6 +53,8 @@ exports.generateChangeOfAddress = async ({
           docketNumber,
         });
 
+      const practitionerName = updatedName || user.name;
+
       let caseEntity = new Case(userCase, { applicationContext });
       const privatePractitioner = caseEntity.privatePractitioners.find(
         practitioner => practitioner.userId === user.userId,
@@ -68,7 +62,7 @@ exports.generateChangeOfAddress = async ({
       if (privatePractitioner) {
         oldData = clone(privatePractitioner.contact);
         privatePractitioner.contact = contactInfo;
-        privatePractitioner.name = name;
+        privatePractitioner.name = practitionerName;
       }
       const irsPractitioner = caseEntity.irsPractitioners.find(
         practitioner => practitioner.userId === user.userId,
@@ -76,7 +70,7 @@ exports.generateChangeOfAddress = async ({
       if (irsPractitioner) {
         oldData = clone(irsPractitioner.contact);
         irsPractitioner.contact = contactInfo;
-        irsPractitioner.name = name;
+        irsPractitioner.name = practitionerName;
       }
 
       // we do this again so that it will convert '' to null
@@ -87,182 +81,162 @@ exports.generateChangeOfAddress = async ({
         ...rawCase,
       };
 
-      let closedMoreThan6Months;
-      if (caseEntity.status === CASE_STATUS_TYPES.closed) {
-        const maxClosedDate = calculateISODate({
-          dateString: caseEntity.closedDate,
-          howMuch: 6,
-          units: 'months',
-        });
-        const rightNow = createISODateString();
-        closedMoreThan6Months = maxClosedDate <= rightNow;
-      }
-
-      const shouldGenerateNotice =
-        caseEntity.status !== CASE_STATUS_TYPES.closed;
-      const shouldUpdateCase =
-        !closedMoreThan6Months ||
-        caseEntity.status !== CASE_STATUS_TYPES.closed;
       let docketEntryAdded = false;
 
-      if (shouldGenerateNotice) {
-        const documentType = applicationContext
-          .getUtilities()
-          .getDocumentTypeForAddressChange({
+      const documentType = applicationContext
+        .getUtilities()
+        .getDocumentTypeForAddressChange({
+          newData,
+          oldData,
+        });
+
+      if (!documentType) return;
+
+      const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(
+        caseDetail,
+      );
+
+      const changeOfAddressPdf = await applicationContext
+        .getDocumentGenerators()
+        .changeOfAddress({
+          applicationContext,
+          content: {
+            caseCaptionExtension,
+            caseTitle,
+            docketNumber: caseDetail.docketNumber,
+            docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
+            documentTitle: documentType.title,
+            name: `${name} (${user.barNumber})`,
             newData,
             oldData,
-          });
-
-        if (!documentType) return;
-
-        const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(
-          caseDetail,
-        );
-
-        const changeOfAddressPdf = await applicationContext
-          .getDocumentGenerators()
-          .changeOfAddress({
-            applicationContext,
-            content: {
-              caseCaptionExtension,
-              caseTitle,
-              docketNumber: caseDetail.docketNumber,
-              docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
-              documentTitle: documentType.title,
-              name: `${name} (${user.barNumber})`,
-              newData,
-              oldData,
-            },
-          });
-
-        const newDocketEntryId = applicationContext.getUniqueId();
-
-        const documentData = {
-          addToCoversheet: true,
-          additionalInfo: `for ${name}`,
-          docketEntryId: newDocketEntryId,
-          docketNumber: caseEntity.docketNumber,
-          documentTitle: documentType.title,
-          documentType: documentType.title,
-          eventCode: documentType.eventCode,
-          isAutoGenerated: true,
-          isFileAttached: true,
-          isOnDocketRecord: true,
-          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-          userId: user.userId,
-        };
-
-        if (user.role === ROLES.privatePractitioner) {
-          documentData.privatePractitioners = [
-            {
-              name,
-            },
-          ];
-        } else if (user.role === ROLES.irsPractitioner) {
-          documentData.partyIrsPractitioner = true;
-        }
-
-        const changeOfAddressDocketEntry = new DocketEntry(documentData, {
-          applicationContext,
+          },
         });
 
-        const servedParties = aggregatePartiesForService(caseEntity);
-        changeOfAddressDocketEntry.setAsServed(servedParties.all);
+      const newDocketEntryId = applicationContext.getUniqueId();
 
-        caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+      const documentData = {
+        addToCoversheet: true,
+        additionalInfo: `for ${name}`,
+        docketEntryId: newDocketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        documentTitle: documentType.title,
+        documentType: documentType.title,
+        eventCode: documentType.eventCode,
+        isAutoGenerated: true,
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        userId: user.userId,
+      };
 
-        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-          applicationContext,
-          caseEntity,
-          docketEntryId: changeOfAddressDocketEntry.docketEntryId,
-          servedParties,
-        });
-
-        const paperServiceRequested =
-          userCase.contactPrimary.serviceIndicator ===
-            SERVICE_INDICATOR_TYPES.SI_PAPER ||
-          (userCase.contactSecondary &&
-            userCase.contactSecondary.serviceIndicator ===
-              SERVICE_INDICATOR_TYPES.SI_PAPER) ||
-          user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
-
-        let workItem = null;
-
-        if (paperServiceRequested) {
-          workItem = new WorkItem(
-            {
-              assigneeId: null,
-              assigneeName: null,
-              associatedJudge: caseEntity.associatedJudge,
-              caseIsInProgress: caseEntity.inProgress,
-              caseStatus: caseEntity.status,
-              caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-              docketEntry: {
-                ...changeOfAddressDocketEntry.toRawObject(),
-                createdAt: changeOfAddressDocketEntry.createdAt,
-              },
-              docketNumber: caseEntity.docketNumber,
-              docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-              section: DOCKET_SECTION,
-              sentBy: user.name,
-              sentByUserId: user.userId,
-            },
-            { applicationContext },
-          );
-
-          changeOfAddressDocketEntry.setWorkItem(workItem);
-        }
-
-        const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
-          applicationContext,
-          caseEntity,
-          docketEntryEntity: changeOfAddressDocketEntry,
-          pdfData: changeOfAddressPdf,
-        });
-
-        await applicationContext
-          .getPersistenceGateway()
-          .saveDocumentFromLambda({
-            applicationContext,
-            document: changeOfAddressPdfWithCover,
-            key: newDocketEntryId,
-          });
-
-        changeOfAddressDocketEntry.numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({
-            applicationContext,
-            docketEntryId: changeOfAddressDocketEntry.docketEntryId,
-          });
-
-        if (workItem) {
-          await applicationContext
-            .getPersistenceGateway()
-            .saveWorkItemForNonPaper({
-              applicationContext,
-              workItem: workItem.validate().toRawObject(),
-            });
-        }
-
-        caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
-        docketEntryAdded = true;
+      if (user.role === ROLES.privatePractitioner) {
+        documentData.privatePractitioners = [
+          {
+            name,
+          },
+        ];
+      } else if (user.role === ROLES.irsPractitioner) {
+        documentData.partyIrsPractitioner = true;
       }
 
-      if (shouldUpdateCase || docketEntryAdded) {
+      const changeOfAddressDocketEntry = new DocketEntry(documentData, {
+        applicationContext,
+      });
+
+      const servedParties = aggregatePartiesForService(caseEntity);
+      changeOfAddressDocketEntry.setAsServed(servedParties.all);
+
+      caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+        servedParties,
+      });
+
+      const paperServiceRequested =
+        userCase.contactPrimary.serviceIndicator ===
+          SERVICE_INDICATOR_TYPES.SI_PAPER ||
+        (userCase.contactSecondary &&
+          userCase.contactSecondary.serviceIndicator ===
+            SERVICE_INDICATOR_TYPES.SI_PAPER) ||
+        user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
+
+      let workItem = null;
+
+      if (paperServiceRequested) {
+        workItem = new WorkItem(
+          {
+            assigneeId: null,
+            assigneeName: null,
+            associatedJudge: caseEntity.associatedJudge,
+            caseIsInProgress: caseEntity.inProgress,
+            caseStatus: caseEntity.status,
+            caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+            docketEntry: {
+              ...changeOfAddressDocketEntry.toRawObject(),
+              createdAt: changeOfAddressDocketEntry.createdAt,
+            },
+            docketNumber: caseEntity.docketNumber,
+            docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+            section: DOCKET_SECTION,
+            sentBy: user.name,
+            sentByUserId: user.userId,
+          },
+          { applicationContext },
+        );
+
+        changeOfAddressDocketEntry.setWorkItem(workItem);
+      }
+
+      const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
+        applicationContext,
+        caseEntity,
+        docketEntryEntity: changeOfAddressDocketEntry,
+        pdfData: changeOfAddressPdf,
+      });
+
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        applicationContext,
+        document: changeOfAddressPdfWithCover,
+        key: newDocketEntryId,
+      });
+
+      changeOfAddressDocketEntry.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+        });
+
+      if (workItem) {
+        await applicationContext
+          .getPersistenceGateway()
+          .saveWorkItemForNonPaper({
+            applicationContext,
+            workItem: workItem.validate().toRawObject(),
+          });
+      }
+
+      caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
+      docketEntryAdded = true;
+
+      if (docketEntryAdded) {
+        const validatedRawCase = caseEntity.validate().toRawObject();
+
         const updatedCase = await applicationContext
           .getPersistenceGateway()
           .updateCase({
             applicationContext,
-            caseToUpdate: caseEntity.validate().toRawObject(),
+            caseToUpdate: validatedRawCase,
           });
 
-        const updatedCaseRaw = new Case(updatedCase, { applicationContext })
-          .validate()
-          .toRawObject();
-        updatedCases.push(updatedCaseRaw);
+        updatedCases.push(updatedCase);
       }
     } catch (error) {
-      applicationContext.notifyHoneybadger(error);
+      applicationContext.logger.error(error);
+      await applicationContext.notifyHoneybadger(error);
     }
 
     completedCases++;

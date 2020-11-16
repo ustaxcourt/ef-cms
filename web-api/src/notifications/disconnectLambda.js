@@ -17,7 +17,7 @@ exports.disconnectLambda = event =>
           connectionId: event.requestContext.connectionId,
         });
 
-      applicationContext.logger.info(
+      applicationContext.logger.debug(
         'Connection',
         event.requestContext.connectionId,
       );

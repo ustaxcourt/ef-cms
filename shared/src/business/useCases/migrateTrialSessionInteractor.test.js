@@ -28,10 +28,13 @@ describe('migrateTrialSessionInteractor', () => {
     applicationContext.getCurrentUser.mockImplementation(() => adminUser);
 
     applicationContext
-      .getPersistenceGateway()
-      .createTrialSession.mockImplementation(({ trialSessionToCreate }) => {
-        createdTrialSessions.push(trialSessionToCreate);
-      });
+      .getUseCaseHelpers()
+      .createTrialSessionAndWorkingCopy.mockImplementation(
+        ({ trialSessionToCreate }) => {
+          createdTrialSessions.push(trialSessionToCreate);
+        },
+      );
+
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...adminUser,
       section: 'admin',
@@ -88,40 +91,13 @@ describe('migrateTrialSessionInteractor', () => {
   it('should create a trial session successfully', async () => {
     expect(createdTrialSessions.length).toEqual(0);
 
-    const result = await migrateTrialSessionInteractor({
+    await migrateTrialSessionInteractor({
       applicationContext,
       trialSessionMetadata,
     });
 
-    expect(result).toBeDefined();
     expect(
-      applicationContext.getPersistenceGateway().createTrialSession,
+      applicationContext.getUseCaseHelpers().createTrialSessionAndWorkingCopy,
     ).toHaveBeenCalled();
-    expect(createdTrialSessions.length).toEqual(1);
-  });
-
-  describe('validation', () => {
-    it('should fail to migrate a trial session when the trial session metadata is invalid', async () => {
-      await expect(
-        migrateTrialSessionInteractor({
-          applicationContext,
-          trialSessionMetadata: {
-            trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
-          },
-        }),
-      ).rejects.toThrow('The TrialSession entity was invalid');
-    });
-
-    it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
-      await expect(
-        migrateTrialSessionInteractor({
-          applicationContext,
-          trialSessionMetadata: {
-            ...trialSessionMetadata,
-            trialSessionId: undefined,
-          },
-        }),
-      ).rejects.toThrow('must include trialSessionId');
-    });
   });
 });

@@ -1,4 +1,9 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { respondentUpdatesAddress } from './journey/respondentUpdatesAddress';
 import { respondentViewsCaseDetailNoticeOfChangeOfAddress } from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
@@ -28,6 +33,9 @@ describe('Modify Respondent Contact Information', () => {
 
   loginAs(test, 'irsPractitioner@example.com');
   respondentUpdatesAddress(test);
+  it('wait for ES index', async () => {
+    await refreshElasticsearchIndex(8000);
+  });
   for (let i = 0; i < 3; i++) {
     respondentViewsCaseDetailNoticeOfChangeOfAddress(test, i);
   }

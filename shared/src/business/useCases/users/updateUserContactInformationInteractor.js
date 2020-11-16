@@ -132,7 +132,7 @@ exports.updateUserContactInformationInteractor = async ({
       userId,
     });
   } catch (error) {
-    applicationContext.logger.info('Error', error);
+    applicationContext.logger.error(error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {

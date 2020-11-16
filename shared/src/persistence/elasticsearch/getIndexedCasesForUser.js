@@ -1,3 +1,6 @@
+const {
+  CASE_STATUS_TYPES,
+} = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
 /**
@@ -14,44 +17,51 @@ exports.getIndexedCasesForUser = async ({
   statuses,
   userId,
 }) => {
+  const searchParameters = {
+    body: {
+      _source: [
+        'caseCaption',
+        'createdAt',
+        'docketNumber',
+        'docketNumberWithSuffix',
+        'leadDocketNumber',
+        'status',
+        'closedDate',
+      ],
+      query: {
+        bool: {
+          must: [
+            {
+              match: {
+                'pk.S': { operator: 'and', query: `user|${userId}` },
+              },
+            },
+            { match: { 'sk.S': 'case|' } },
+            { match: { 'gsi1pk.S': 'user-case|' } },
+            {
+              bool: {
+                should: statuses.map(status => ({
+                  match: {
+                    'status.S': status,
+                  },
+                })),
+              },
+            },
+          ],
+        },
+      },
+      size: 5000,
+    },
+    index: 'efcms-user-case',
+  };
+
+  if (statuses.length === 1 && statuses[0] === CASE_STATUS_TYPES.closed) {
+    searchParameters.body.sort = [{ 'closedDate.S': { order: 'desc' } }];
+  }
+
   const { results } = await search({
     applicationContext,
-    searchParameters: {
-      body: {
-        _source: [
-          'caseCaption',
-          'createdAt',
-          'docketNumber',
-          'docketNumberWithSuffix',
-          'leadDocketNumber',
-          'status',
-        ],
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  'pk.S': { operator: 'and', query: `user|${userId}` },
-                },
-              },
-              { match: { 'sk.S': 'case|' } },
-              { match: { 'gsi1pk.S': 'user-case|' } },
-              {
-                bool: {
-                  should: statuses.map(status => ({
-                    match: {
-                      'status.S': status,
-                    },
-                  })),
-                },
-              },
-            ],
-          },
-        },
-        size: 5000,
-      },
-      index: 'efcms-user-case',
-    },
+    searchParameters,
   });
 
   return results;
