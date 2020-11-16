@@ -1,4 +1,5 @@
 const {
+  AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
@@ -520,6 +521,76 @@ describe('migrateCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should create a case trial sort mapping record if the case is ready for trial and not blocked', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        blocked: false,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords.mock.calls[0][0],
+    ).toMatchObject({
+      caseSortTags: expect.anything(),
+      docketNumber: '101-00',
+    });
+  });
+
+  it('should not create a case trial sort mapping record if the case is ready for trial and blocked', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        blocked: true,
+        blockedDate: '2019-08-25T05:00:00.000Z',
+        blockedReason: 'because',
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+  });
+
+  it('should not create a case trial sort mapping record if the case is ready for trial and automaticBlocked', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-08-25T05:00:00.000Z',
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+  });
+
+  it('should not create a case trial sort mapping record if the case is not ready for trial', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
   });
 
   describe('contactPrimary account creation', () => {
