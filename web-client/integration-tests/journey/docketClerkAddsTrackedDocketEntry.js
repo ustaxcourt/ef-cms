@@ -91,6 +91,7 @@ export const docketClerkAddsTrackedDocketEntry = (
 
       expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     } else {
+      expect(test.getState('pdfPreviewUrl')).toBeDefined();
       expect(test.getState('currentPage')).toEqual('PrintPaperService');
     }
     expect(test.getState('form')).toEqual({});
