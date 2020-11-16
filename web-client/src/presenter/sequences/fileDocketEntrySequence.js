@@ -61,16 +61,10 @@ const afterEntrySaved = [
   setDocketEntryIdAction,
   getIsSavingForLaterAction,
   {
-    no: [
-      getIsPendingItemAction,
-      {
-        no: [completeDocketEntryQCAction],
-        yes: [],
-      },
-      caseDetailOrPrintPaperService,
-    ],
-    yes: [caseDetailOrPrintPaperService],
+    no: [completeDocketEntryQCAction],
+    yes: [],
   },
+  caseDetailOrPrintPaperService,
 ];
 
 export const fileDocketEntrySequence = [
@@ -110,7 +104,6 @@ export const fileDocketEntrySequence = [
                 error: [openFileUploadErrorModal],
                 success: showProgressSequenceDecorator([
                   saveDocketEntryAction,
-                  closeFileUploadStatusModalAction,
                   afterEntrySaved,
                 ]),
               },
