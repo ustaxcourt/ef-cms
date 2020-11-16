@@ -119,11 +119,11 @@ export const MessageDocument = connect(
                 <Button
                   link
                   icon="pencil-alt"
-                  onClick={() => {
+                  onClick={() =>
                     openConfirmRemoveSignatureModalSequence({
                       docketEntryIdToEdit: viewerDocumentToDisplay.documentId,
-                    });
-                  }}
+                    })
+                  }
                 >
                   Remove Signature
                 </Button>
