@@ -5,7 +5,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SupportingDocuments } from '../FileDocument/SupportingDocuments';
-import { Text } from '../../ustc-ui/Text/Text';
+import { TextView } from '../../ustc-ui/Text/TextView';
 import { WhatCanIIncludeModalOverlay } from '../FileDocument/WhatCanIIncludeModalOverlay';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -203,7 +203,7 @@ export const RequestAccessDocumentForm = connect(
         {requestAccessHelper.documentWithSupportingDocuments && (
           <div>
             <SupportingDocuments />
-            <Text
+            <TextView
               bind="validationErrors.hasSupportingDocuments"
               className="usa-error-message"
             />

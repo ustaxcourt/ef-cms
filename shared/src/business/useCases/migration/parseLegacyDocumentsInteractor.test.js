@@ -114,7 +114,9 @@ describe('parseLegacyDocumentsInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0].document,
-    ).toEqual(Buffer.from(JSON.stringify(mockPdfTextContents)));
+    ).toEqual(
+      Buffer.from(JSON.stringify({ documentContents: mockPdfTextContents })),
+    );
   });
 
   it("should set the docketEntry's documentContentsId to the generated unique ID", async () => {
