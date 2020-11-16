@@ -1699,7 +1699,7 @@ Case.prototype.removeConsolidation = function () {
  * @returns {Case} the lead Case entity
  */
 Case.sortByDocketNumber = function (cases) {
-  const casesOrdered = cases.sort((a, b) => {
+  return cases.sort((a, b) => {
     const aSplit = a.docketNumber.split('-');
     const bSplit = b.docketNumber.split('-');
 
@@ -1711,8 +1711,6 @@ Case.sortByDocketNumber = function (cases) {
       return aSplit[0].localeCompare(bSplit[0]);
     }
   });
-
-  return casesOrdered;
 };
 
 /**

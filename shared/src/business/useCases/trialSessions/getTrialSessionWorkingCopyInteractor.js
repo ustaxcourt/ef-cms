@@ -5,7 +5,8 @@ const {
 const {
   TrialSessionWorkingCopy,
 } = require('../../entities/trialSessions/TrialSessionWorkingCopy');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 /**
  * getTrialSessionWorkingCopyInteractor
@@ -28,18 +29,60 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
+  const chambersUserId = (judgeUser && judgeUser.userId) || user.userId;
+
+  let trialSessionWorkingCopyEntity, validRawTrialSessionWorkingCopyEntity;
+
   const trialSessionWorkingCopy = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionWorkingCopy({
       applicationContext,
       trialSessionId,
-      userId: (judgeUser && judgeUser.userId) || user.userId,
+      userId: chambersUserId,
     });
 
   if (trialSessionWorkingCopy) {
-    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
+    trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
       trialSessionWorkingCopy,
-    ).validate();
-    return trialSessionWorkingCopyEntity.toRawObject();
+    );
+    validRawTrialSessionWorkingCopyEntity = trialSessionWorkingCopyEntity
+      .validate()
+      .toRawObject();
+  } else {
+    const trialSessionDetails = await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById({
+        applicationContext,
+        trialSessionId,
+      });
+    const trialSessionEntity = new TrialSession(trialSessionDetails, {
+      applicationContext,
+    });
+
+    const canCreateWorkingCopy =
+      (trialSessionEntity.trialClerk &&
+        trialSessionEntity.trialClerk.userId === chambersUserId) ||
+      (judgeUser &&
+        trialSessionEntity.judge &&
+        judgeUser.userId === trialSessionEntity.judge.userId);
+
+    if (canCreateWorkingCopy) {
+      trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
+        trialSessionId: trialSessionId,
+        userId: chambersUserId,
+      });
+      validRawTrialSessionWorkingCopyEntity = trialSessionWorkingCopyEntity
+        .validate()
+        .toRawObject();
+      await applicationContext
+        .getPersistenceGateway()
+        .createTrialSessionWorkingCopy({
+          applicationContext,
+          trialSessionWorkingCopy: validRawTrialSessionWorkingCopyEntity,
+        });
+    } else {
+      throw new NotFoundError('Trial session working copy not found');
+    }
   }
+  return validRawTrialSessionWorkingCopyEntity;
 };

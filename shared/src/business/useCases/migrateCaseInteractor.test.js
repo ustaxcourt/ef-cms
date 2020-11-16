@@ -802,4 +802,36 @@ describe('migrateCaseInteractor', () => {
       ).not.toHaveBeenCalled();
     });
   });
+
+  it('should send message to SQS queue for each docket entry that has a file attached', async () => {
+    const caseWithMinuteEntry = {
+      ...caseMetadata,
+      docketEntries: [
+        ...caseMetadata.docketEntries,
+        {
+          createdAt: '2020-06-21T20:49:28.192Z',
+          docketEntryId: '19193715-21a0-43eb-a2d6-4bfc16c0463d',
+          docketNumber: '101-18',
+          documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RQT',
+          filedBy: 'Test Petitioner',
+          filingDate: '2020-03-01T00:01:00.000Z',
+          index: 5,
+          isFileAttached: false,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+    };
+
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: caseWithMinuteEntry,
+    });
+
+    expect(caseWithMinuteEntry.docketEntries.length).toEqual(5);
+    expect(applicationContext.getQueueService().sendMessage).toBeCalledTimes(4);
+  });
 });

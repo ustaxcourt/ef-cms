@@ -24,6 +24,9 @@ module.exports = {
     'caseCaption.S': {
       type: 'text',
     },
+    'closedDate.S': {
+      type: 'date',
+    },
     'contactPrimary.M.contactId.S': {
       type: 'text',
     },
