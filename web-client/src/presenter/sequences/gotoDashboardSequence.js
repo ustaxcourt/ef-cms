@@ -8,6 +8,7 @@ import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessions
 import { getUserAction } from '../actions/getUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
+import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
@@ -38,13 +39,14 @@ const goToDashboard = [
   {
     ...takePathForRoles(
       [
-        USER_ROLES.admin,
         USER_ROLES.adc,
+        USER_ROLES.admin,
         USER_ROLES.admissionsClerk,
         USER_ROLES.clerkOfCourt,
         USER_ROLES.docketClerk,
         USER_ROLES.floater,
         USER_ROLES.petitionsClerk,
+        USER_ROLES.reportersOffice,
         USER_ROLES.trialClerk,
       ],
       proceedToMessages,
@@ -58,6 +60,7 @@ const goToDashboard = [
       setTrialSessionsAction,
       setCurrentPageAction('DashboardChambers'),
     ],
+    general: [navigateToSectionDocumentQCAction],
     inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
     irsPractitioner: [
       setDefaultCaseTypeToDisplayAction,

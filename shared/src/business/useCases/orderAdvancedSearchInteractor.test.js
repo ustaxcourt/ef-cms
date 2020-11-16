@@ -50,6 +50,23 @@ describe('orderAdvancedSearchInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('omits results from sealed cases when the current user is not an internal user', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+    });
+
+    await orderAdvancedSearchInteractor({
+      applicationContext,
+      keyword: 'candy',
+      startDate: '2001-01-01',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].omitSealed,
+    ).toBe(true);
+  });
+
   it('returns results with an authorized user role (petitionsclerk)', async () => {
     const result = await orderAdvancedSearchInteractor({
       applicationContext,
@@ -78,6 +95,11 @@ describe('orderAdvancedSearchInteractor', () => {
         signedJudgeName: 'Guy Fieri',
       },
     ]);
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].omitSealed,
+    ).toBe(false);
   });
 
   it('searches for documents that are of type orders', async () => {

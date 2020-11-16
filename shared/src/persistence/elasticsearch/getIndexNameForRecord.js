@@ -31,6 +31,12 @@ const isRecordOfType = (record, type) => {
   }
 };
 
+/**
+ * getIndexNameForRecord
+ *
+ * @param {object} record the record object
+ * @returns {object} the index the record belongs to
+ */
 exports.getIndexNameForRecord = record => {
   let index = null;
 

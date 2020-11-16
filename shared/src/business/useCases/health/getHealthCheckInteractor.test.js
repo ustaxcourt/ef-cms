@@ -33,6 +33,9 @@ describe('getHealthCheckInteractor', () => {
             }),
           };
         },
+        logger: {
+          error: () => {},
+        },
       },
     });
 
@@ -101,6 +104,9 @@ describe('getHealthCheckInteractor', () => {
             }),
           };
         },
+        logger: {
+          error: () => {},
+        },
       },
     });
     expect(status).toEqual({
@@ -166,6 +172,10 @@ describe('getHealthCheckInteractor', () => {
             return {
               listObjectsV2: listObjectsMock,
             };
+          },
+
+          logger: {
+            error: () => {},
           },
         },
       });
