@@ -290,7 +290,9 @@ exports.processStreamRecordsInteractor = async ({
     const newTime = get(record, NEW_TIME_KEY);
     const oldTime = get(record, OLD_TIME_KEY);
     return (
-      process.env.NODE_ENV !== 'production' || (newTime && newTime !== oldTime)
+      process.env.NODE_ENV !== 'production' ||
+      (newTime && newTime !== oldTime) ||
+      record.eventName === 'REMOVE'
     );
   });
 
@@ -307,17 +309,6 @@ exports.processStreamRecordsInteractor = async ({
   };
 
   try {
-    await processRemoveEntries({
-      applicationContext,
-      removeRecords,
-    }).catch(err => {
-      applicationContext.logger.error("failed to processRemoveEntries',", err);
-      applicationContext.notifyHoneybadger(err, {
-        message: 'failed to processRemoveEntries',
-      });
-      throw err;
-    });
-
     await Promise.all([
       processCaseEntries({
         applicationContext,
@@ -352,6 +343,17 @@ exports.processStreamRecordsInteractor = async ({
         throw err;
       }),
     ]);
+
+    await processRemoveEntries({
+      applicationContext,
+      removeRecords,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processRemoveEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processRemoveEntries',
+      });
+      throw err;
+    });
   } catch (err) {
     applicationContext.logger.error(
       'processStreamRecordsInteractor failed to process the records',
