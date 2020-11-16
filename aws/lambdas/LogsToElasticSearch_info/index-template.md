@@ -27,7 +27,11 @@ PUT _template/cwl
   "index_patterns": ["cwl-*"],
   "mappings": {
     "properties": {
-      "metadata": { "type": "object", "dynamic": false },
+      "metadata": { 
+        "type": "object", 
+        "dynamic": false,
+        "enabled": false
+      },
       "environment": {
         "properties": {
           "color": { "type": "keyword" },

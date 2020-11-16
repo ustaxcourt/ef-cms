@@ -8,6 +8,7 @@ import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialS
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -42,7 +43,13 @@ export const addCaseToTrialSessionSequence = [
         no: [unsetWaitingForResponseAction, showSuccessAlert],
         yes: [
           startWebSocketConnectionAction,
-          setNoticesForCalendaredTrialSessionAction,
+          {
+            error: [
+              unsetWaitingForResponseAction,
+              setShowModalFactoryAction('WebSocketErrorModal'),
+            ],
+            success: [setNoticesForCalendaredTrialSessionAction],
+          },
         ],
       },
     ],

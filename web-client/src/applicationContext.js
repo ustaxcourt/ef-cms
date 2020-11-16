@@ -174,6 +174,7 @@ import { removeCasePendingItemInteractor } from '../../shared/src/proxies/remove
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
+import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
 const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/proxies/documents/removePdfFromDocketEntryProxy');
@@ -630,6 +631,7 @@ const applicationContext = {
       isStringISOFormatted,
       isValidDateString,
       prepareDateFromString,
+      replaceBracketed,
       setServiceIndicatorsForCase,
       sortDocketEntries,
     };
