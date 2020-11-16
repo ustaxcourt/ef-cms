@@ -120,7 +120,7 @@ const isPrivateDocument = function (documentEntity) {
   const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
     documentEntity.documentType,
   );
-  const documentIsStricken = !!document.isStricken;
+  const documentIsStricken = !!documentEntity.isStricken;
 
   const isPublicDocumentType =
     (isOrder || isCourtIssuedDocument) &&
