@@ -14,6 +14,64 @@ const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
+const handleInternalUser = ({
+  docketEntryEntity,
+  isPetitionsClerk,
+  petitionDocketEntry,
+}) => {
+  const selectedIsStin =
+    docketEntryEntity &&
+    docketEntryEntity.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType;
+
+  if (isPetitionsClerk) {
+    if (selectedIsStin && petitionDocketEntry && petitionDocketEntry.servedAt) {
+      throw new UnauthorizedError(
+        'Unauthorized to view case documents at this time.',
+      );
+    }
+  } else {
+    if (selectedIsStin) {
+      throw new UnauthorizedError(
+        'Unauthorized to view case documents at this time.',
+      );
+    }
+  }
+};
+
+const handleIrsSuperUser = ({
+  docketEntryEntity,
+  key,
+  petitionDocketEntry,
+}) => {
+  if (petitionDocketEntry && !petitionDocketEntry.servedAt) {
+    throw new UnauthorizedError(
+      'Unauthorized to view case documents until the petition has been served.',
+    );
+  }
+
+  if (!docketEntryEntity) {
+    throw new NotFoundError(`Docket entry ${key} was not found.`);
+  }
+  if (!docketEntryEntity.isFileAttached) {
+    throw new NotFoundError(
+      `Docket entry ${key} does not have an attached file.`,
+    );
+  }
+};
+
+const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
+  if (!docketEntryEntity.servedAt) {
+    throw new UnauthorizedError('Unauthorized to view document at this time.');
+  } else if (
+    docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
+    !userAssociatedWithCase
+  ) {
+    throw new UnauthorizedError('Unauthorized to view document at this time.');
+  } else if (docketEntryEntity.isStricken) {
+    throw new UnauthorizedError('Unauthorized to view document at this time.');
+  }
+};
+
 /**
  *
  * @param {object} providers the providers object
@@ -50,51 +108,19 @@ exports.getDownloadPolicyUrlInteractor = async ({
   }
 
   const caseEntity = new Case(caseData, { applicationContext });
-
   const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
-
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId: key,
   });
 
   if (isInternalUser) {
-    const selectedIsStin =
-      docketEntryEntity &&
-      docketEntryEntity.documentType ===
-        INITIAL_DOCUMENT_TYPES.stin.documentType;
-
-    if (isPetitionsClerk) {
-      if (
-        selectedIsStin &&
-        petitionDocketEntry &&
-        petitionDocketEntry.servedAt
-      ) {
-        throw new UnauthorizedError(
-          'Unauthorized to view case documents at this time.',
-        );
-      }
-    } else {
-      if (selectedIsStin) {
-        throw new UnauthorizedError(
-          'Unauthorized to view case documents at this time.',
-        );
-      }
-    }
+    handleInternalUser({
+      docketEntryEntity,
+      isPetitionsClerk,
+      petitionDocketEntry,
+    });
   } else if (isIrsSuperuser) {
-    if (petitionDocketEntry && !petitionDocketEntry.servedAt) {
-      throw new UnauthorizedError(
-        'Unauthorized to view case documents until the petition has been served.',
-      );
-    }
-
-    if (!docketEntryEntity) {
-      throw new NotFoundError(`Docket entry ${key} was not found.`);
-    }
-    if (!docketEntryEntity.isFileAttached) {
-      throw new NotFoundError(
-        `Docket entry ${key} does not have an attached file.`,
-      );
-    }
+    handleIrsSuperUser({ docketEntryEntity, key, petitionDocketEntry });
   } else {
     const userAssociatedWithCase = await applicationContext
       .getPersistenceGateway()
@@ -136,22 +162,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
       }
 
       if (docketEntryEntity.isCourtIssued()) {
-        if (!docketEntryEntity.servedAt) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        } else if (
-          docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
-          !userAssociatedWithCase
-        ) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        } else if (docketEntryEntity.isStricken) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        }
+        handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
       } else if (selectedIsStin) {
         throw new UnauthorizedError(
           'Unauthorized to view document at this time.',
