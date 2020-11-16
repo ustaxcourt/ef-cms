@@ -1,5 +1,4 @@
 const { genericHandler } = require('../genericHandler');
-const { publicUser } = require('../../../shared/src/business/entities/User');
 
 /**
  * used for fetching a single case
@@ -18,5 +17,5 @@ exports.getPublicDocumentDownloadUrlLambda = event =>
           ...event.pathParameters,
         });
     },
-    { user: publicUser },
+    { user: {} },
   );

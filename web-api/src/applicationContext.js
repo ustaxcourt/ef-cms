@@ -1242,7 +1242,7 @@ const gatewayMethods = {
   zipDocuments,
 };
 
-module.exports = (appContextUser, requestId) => {
+module.exports = (appContextUser, logger = createLogger()) => {
   let user;
 
   if (appContextUser) {
@@ -1253,13 +1253,13 @@ module.exports = (appContextUser, requestId) => {
     return user;
   };
 
-  const logger = createLogger({
-    environment: {
-      color: environment.currentColor,
-      stage: environment.stage,
-    },
-    requestId,
-  });
+  if (process.env.NODE_ENV === 'production') {
+    const authenticated = user && Object.keys(user).length;
+    logger.defaultMeta = logger.defaultMeta || {};
+    logger.defaultMeta.user = authenticated
+      ? user
+      : { role: 'unauthenticated' };
+  }
 
   return {
     barNumberGenerator,
