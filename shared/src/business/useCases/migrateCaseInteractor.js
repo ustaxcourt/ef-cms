@@ -221,6 +221,20 @@ exports.migrateCaseInteractor = async ({
     caseToCreate: caseValidatedRaw,
   });
 
+  if (
+    caseToAdd.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
+    !caseToAdd.blocked &&
+    !caseToAdd.automaticBlocked
+  ) {
+    await applicationContext
+      .getPersistenceGateway()
+      .createCaseTrialSortMappingRecords({
+        applicationContext,
+        caseSortTags: caseToAdd.generateTrialSortTags(),
+        docketNumber: caseToAdd.docketNumber,
+      });
+  }
+
   for (const correspondenceEntity of caseToAdd.correspondence) {
     applicationContext.logger.debug('updateCaseCorrespondence');
     await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
