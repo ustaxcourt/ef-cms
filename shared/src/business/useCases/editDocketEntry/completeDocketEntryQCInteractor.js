@@ -83,6 +83,7 @@ exports.completeDocketEntryQCInteractor = async ({
     additionalInfo: entryMetadata.additionalInfo,
     additionalInfo2: entryMetadata.additionalInfo2,
     attachments: entryMetadata.attachments,
+    category: entryMetadata.category,
     certificateOfService: entryMetadata.certificateOfService,
     certificateOfServiceDate: entryMetadata.certificateOfServiceDate,
     documentTitle: entryMetadata.documentTitle,
