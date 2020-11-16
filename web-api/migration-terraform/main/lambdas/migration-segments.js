@@ -1,10 +1,12 @@
 const AWS = require('aws-sdk');
+const createApplicationContext = require('../../../src/applicationContext');
 const {
   migrateItems: migration0003,
 } = require('./migrations/0003-case-deadline-required-fields');
 const { chunk, isEmpty } = require('lodash');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
+const applicationContext = createApplicationContext({});
 const dynamodb = new AWS.DynamoDB({
   maxRetries: 10,
   region: 'us-east-1',
@@ -20,7 +22,7 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
-  items = await migration0003(items, documentClient);
+  items = await migration0003(items, documentClient, applicationContext);
   return items;
 };
 
@@ -37,12 +39,20 @@ const reprocessItems = async ({ documentClient, items }) => {
       .promise();
 
     if (!isEmpty(results.UnprocessedItems)) {
-      moreUnprocessedItems.push(results.UnprocessedItems);
+      applicationContext.logger.info(
+        `unable to process ${
+          results.UnprocessedItems.length
+        } items ${results.UnprocessedItems[0].keys().join(',')}`,
+      );
+      moreUnprocessedItems.push(...results.UnprocessedItems);
     }
   }
 
   if (moreUnprocessedItems.length) {
-    await reprocessItems(moreUnprocessedItems);
+    await reprocessItems({
+      documentClient,
+      items: moreUnprocessedItems,
+    });
   }
 };
 
@@ -67,9 +77,14 @@ const processItems = async ({ documentClient, items }) => {
       .promise();
 
     if (!isEmpty(results.UnprocessedItems)) {
+      applicationContext.logger.info(
+        `unable to process ${
+          results.UnprocessedItems.length
+        } items ${results.UnprocessedItems[0].keys().join(',')}`,
+      );
       await reprocessItems({
         documentClient,
-        items: [results.UnprocessedItems],
+        items: results.UnprocessedItems,
       });
     }
   }
