@@ -2,10 +2,10 @@ import React from 'react';
 
 /**
  * Iterates through children that are typically specified as `props.children`,
-but only maps over children that are "valid elements".
-
-The mapFunction provided index will be normalized to the components mapped,
-so an invalid component would not increase the index.
+ * but only maps over children that are "valid elements".
+ *
+ * The mapFunction provided index will be normalized to the components mapped,
+ * so an invalid component would not increase the index.
  *
  * @param {Array} children the html children
  * @param {Function} functionToCall a function to call
