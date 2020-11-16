@@ -29,6 +29,8 @@ export const formattedMessageDetail = (get, applicationContext) => {
   const messageDetail = get(state.messageDetail);
   const caseDetail = get(state.caseDetail);
   const isExpanded = get(state.isExpanded);
+  const user = applicationContext.getCurrentUser();
+  const { USER_ROLES } = applicationContext.getConstants();
 
   const { draftDocuments } = applicationContext
     .getUtilities()
@@ -64,13 +66,15 @@ export const formattedMessageDetail = (get, applicationContext) => {
     });
   }
 
+  const showActionButtons = !isCompleted && user.role !== USER_ROLES.general;
+
   return {
     attachments: formattedMessages[0].attachments,
     currentMessage: formattedMessages[0],
     hasOlderMessages,
     isCompleted,
     olderMessages: formattedMessages.slice(1),
-    showActionButtons: !isCompleted,
+    showActionButtons,
     showOlderMessages: hasOlderMessages && isExpanded,
   };
 };

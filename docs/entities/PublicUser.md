@@ -34,6 +34,7 @@
         - "clerkofcourt"
         - "docketclerk"
         - "floater"
+        - "general"
         - "inactivePractitioner"
         - "irsPractitioner"
         - "irsSuperuser"
@@ -42,6 +43,7 @@
         - "petitioner"
         - "petitionsclerk"
         - "privatePractitioner"
+        - "reportersOffice"
         - "trialclerk"
     judgeFullName: 
       type: "string"
