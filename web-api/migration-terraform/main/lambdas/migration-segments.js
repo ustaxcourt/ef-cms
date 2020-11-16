@@ -27,37 +27,24 @@ const migrateRecords = async ({ documentClient, items }) => {
 };
 
 const reprocessItems = async ({ documentClient, items }) => {
-  const moreUnprocessedItems = [];
+  // items  already been migrated. they simply could not be processed in the batchWrite. Try again recursively
+  const numUnprocessed = items[process.env.DESTINATION_TABLE].PutRequest.length;
+  applicationContext.logger.info(`reprocessing ${numUnprocessed} items`);
+  const results = await documentClient
+    .batchWrite({
+      RequestItems: items,
+    })
+    .promise();
 
-  items = await migrateRecords({ documentClient, items });
-
-  for (let item of items) {
-    const results = await documentClient
-      .batchWrite({
-        RequestItems: item,
-      })
-      .promise();
-
-    if (!isEmpty(results.UnprocessedItems)) {
-      applicationContext.logger.info(
-        `unable to process ${
-          results.UnprocessedItems.length
-        } items ${results.UnprocessedItems[0].keys().join(',')}`,
-      );
-      moreUnprocessedItems.push(...results.UnprocessedItems);
-    }
-  }
-
-  if (moreUnprocessedItems.length) {
+  if (!isEmpty(results.UnprocessedItems)) {
     await reprocessItems({
       documentClient,
-      items: moreUnprocessedItems,
+      items: results.UnprocessedItems,
     });
   }
 };
 
 const processItems = async ({ documentClient, items }) => {
-  // your migration code goes here
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let c of chunks) {
     c = await migrateRecords({ documentClient, items: c });
@@ -77,11 +64,6 @@ const processItems = async ({ documentClient, items }) => {
       .promise();
 
     if (!isEmpty(results.UnprocessedItems)) {
-      applicationContext.logger.info(
-        `unable to process ${
-          results.UnprocessedItems.length
-        } items ${results.UnprocessedItems[0].keys().join(',')}`,
-      );
       await reprocessItems({
         documentClient,
         items: results.UnprocessedItems,
