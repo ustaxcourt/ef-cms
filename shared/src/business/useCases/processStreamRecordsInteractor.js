@@ -322,7 +322,8 @@ exports.processStreamRecordsInteractor = async ({
     });
 
   recordsToProcess = recordsToProcess.filter(record => {
-    if (record.dynamodb.Keys.sk.s.includes('work-item')) {
+    const theSk = get(record, 'record.dynamodb.Keys.sk.S');
+    if (theSk.includes('work-item')) {
       console.log(
         `****** Record event is: ${record.eventName}, pk is ${record.dynamodb.Keys}`,
       );
