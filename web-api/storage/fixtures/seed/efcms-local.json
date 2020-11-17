@@ -2886,7 +2886,7 @@
           "isDraft": false,
           "receivedAt": "2020-09-30T20:25:22.035Z",
           "isOnDocketRecord": true,
-          "signedJudgeName": "Fieri",
+          "signedJudgeName": "Guy S. B. Fieri",
           "createdAt": "2020-09-30T20:25:25.087Z",
           "numberOfPages": 1,
           "scenario": "Type A",
@@ -2918,7 +2918,7 @@
       },
       "receivedAt": "2020-09-30T20:25:22.035Z",
       "isOnDocketRecord": true,
-      "signedJudgeName": "Fieri",
+      "signedJudgeName": "Guy S. B. Fieri",
       "createdAt": "2020-09-30T20:25:25.087Z",
       "numberOfPages": 1,
       "scenario": "Type A",
@@ -11338,6 +11338,6 @@
     "section": "floater",
     "pk": "user|9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
-    "email": "testFloater@example.com"
+    "email": "floater@example.com"
   }
 ]

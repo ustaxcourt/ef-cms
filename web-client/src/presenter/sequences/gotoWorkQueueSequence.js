@@ -26,12 +26,14 @@ const goToWorkQueue = [
       {
         ...takePathForRoles(
           [
-            USER_ROLES.admin,
             USER_ROLES.adc,
+            USER_ROLES.admin,
             USER_ROLES.admissionsClerk,
             USER_ROLES.chambers,
             USER_ROLES.clerkOfCourt,
             USER_ROLES.floater,
+            USER_ROLES.general,
+            USER_ROLES.reportersOffice,
             USER_ROLES.trialClerk,
           ],
           [],

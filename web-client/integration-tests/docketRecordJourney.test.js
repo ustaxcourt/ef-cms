@@ -3,6 +3,7 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketClerkEditsServiceIndicatorForPetitioner';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
@@ -229,8 +230,22 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'testFloater@example.com');
+  loginAs(test, 'floater@example.com');
   it('allows access to the floater user to view the case detail', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+  });
+
+  loginAs(test, 'general@example.com');
+  it('allows access to the general user to view the case detail', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+  });
+
+  loginAs(test, 'reportersOffice@example.com');
+  it('allows access to the reportersOffice user to view the case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -542,6 +557,31 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsTrackedDocketEntry(test, fakeFile);
   it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL)', async () => {
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedCaseDetailForTest(test);
+
+    const entry = formattedDocketEntriesOnDocketRecord.find(
+      docketEntry => docketEntry.eventCode === 'APPL',
+    );
+
+    expect(entry).toMatchObject({
+      createdAtFormatted: expect.anything(),
+      eventCode: 'APPL',
+      index: 5,
+      pending: true,
+    });
+  });
+
+  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
+
+  docketClerkEditsServiceIndicatorForPetitioner(
+    test,
+    SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  );
+
+  docketClerkAddsTrackedDocketEntry(test, fakeFile, true);
+  it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL) on a case with paper service parties', async () => {
     const {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedCaseDetailForTest(test);

@@ -40,21 +40,17 @@ exports.parseLegacyDocumentsInteractor = async ({
     throw new Error('Docket entry not found.');
   }
 
-  const arrayBuffer = new ArrayBuffer(pdfBuffer.length);
-  const view = new Uint8Array(arrayBuffer);
-  for (let i = 0; i < pdfBuffer.length; ++i) {
-    view[i] = pdfBuffer[i];
-  }
-
   const pdfTextContents = await applicationContext
-    .getUtilities()
-    .scrapePdfContents({ applicationContext, pdfBuffer: arrayBuffer });
+    .getUseCaseHelpers()
+    .parseAndScrapePdfContents({ applicationContext, pdfBuffer });
 
   const documentContentsId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
-    document: Buffer.from(JSON.stringify(pdfTextContents)),
+    document: Buffer.from(
+      JSON.stringify({ documentContents: pdfTextContents }),
+    ),
     key: documentContentsId,
   });
 

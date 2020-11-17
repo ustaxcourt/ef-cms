@@ -15,11 +15,18 @@ const partitionRecords = records => {
       record.dynamodb.NewImage.entityName.S === 'DocketEntry',
   );
 
-  const [caseEntityRecords, otherRecords] = partition(
+  const [caseEntityRecords, nonCaseEntityRecords] = partition(
     nonDocketEntryRecords,
     record =>
       record.dynamodb.NewImage.entityName &&
       record.dynamodb.NewImage.entityName.S === 'Case',
+  );
+
+  const [workItemRecords, otherRecords] = partition(
+    nonCaseEntityRecords,
+    record =>
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'WorkItem',
   );
 
   return {
@@ -27,6 +34,7 @@ const partitionRecords = records => {
     docketEntryRecords,
     otherRecords,
     removeRecords,
+    workItemRecords,
   };
 };
 
@@ -202,6 +210,36 @@ const processDocketEntries = async ({
   }
 };
 
+const processWorkItemEntries = async ({
+  applicationContext,
+  workItemRecords,
+}) => {
+  if (!workItemRecords.length) return;
+
+  applicationContext.logger.debug(
+    `going to index ${workItemRecords.length} workItem records`,
+  );
+
+  const {
+    failedRecords,
+  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
+    applicationContext,
+    records: workItemRecords,
+  });
+
+  if (failedRecords.length > 0) {
+    applicationContext.logger.error(
+      'the records that failed to index',
+      failedRecords,
+    );
+    applicationContext.notifyHoneybadger(
+      'the records that failed to index',
+      failedRecords,
+    );
+    throw new Error('failed to index records');
+  }
+};
+
 const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   if (!otherRecords.length) return;
 
@@ -290,7 +328,9 @@ exports.processStreamRecordsInteractor = async ({
     const newTime = get(record, NEW_TIME_KEY);
     const oldTime = get(record, OLD_TIME_KEY);
     return (
-      process.env.NODE_ENV !== 'production' || (newTime && newTime !== oldTime)
+      process.env.NODE_ENV !== 'production' ||
+      (newTime && newTime !== oldTime) ||
+      record.eventName === 'REMOVE'
     );
   });
 
@@ -299,6 +339,7 @@ exports.processStreamRecordsInteractor = async ({
     docketEntryRecords,
     otherRecords,
     removeRecords,
+    workItemRecords,
   } = partitionRecords(recordsToProcess);
 
   const utils = {
@@ -318,40 +359,52 @@ exports.processStreamRecordsInteractor = async ({
       throw err;
     });
 
-    await Promise.all([
-      processCaseEntries({
-        applicationContext,
-        caseEntityRecords,
-        utils,
-      }).catch(err => {
-        applicationContext.logger.error("failed to processCaseEntries',", err);
-        applicationContext.notifyHoneybadger(err, {
-          message: 'failed to processCaseEntries',
-        });
-        throw err;
-      }),
-      processDocketEntries({
-        applicationContext,
-        docketEntryRecords,
-        utils,
-      }).catch(err => {
+    await processCaseEntries({
+      applicationContext,
+      caseEntityRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processCaseEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processCaseEntries',
+      });
+      throw err;
+    });
+
+    await processDocketEntries({
+      applicationContext,
+      docketEntryRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processDocketEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processDocketEntries',
+      });
+      throw err;
+    });
+
+    await processWorkItemEntries({ applicationContext, workItemRecords }).catch(
+      err => {
         applicationContext.logger.error(
-          "failed to processDocketEntries',",
+          "failed to process workItem records',",
           err,
         );
         applicationContext.notifyHoneybadger(err, {
-          message: 'failed to processDocketEntries',
+          message: 'failed to process workItem records',
         });
         throw err;
-      }),
-      processOtherEntries({ applicationContext, otherRecords }).catch(err => {
+      },
+    );
+
+    await processOtherEntries({ applicationContext, otherRecords }).catch(
+      err => {
         applicationContext.logger.error("failed to processOtherEntries',", err);
         applicationContext.notifyHoneybadger(err, {
           message: 'failed to processOtherEntries',
         });
         throw err;
-      }),
-    ]);
+      },
+    );
   } catch (err) {
     applicationContext.logger.error(
       'processStreamRecordsInteractor failed to process the records',

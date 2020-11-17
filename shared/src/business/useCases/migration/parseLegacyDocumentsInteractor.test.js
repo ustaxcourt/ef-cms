@@ -24,8 +24,8 @@ describe('parseLegacyDocumentsInteractor', () => {
     applicationContext.getUniqueId.mockReturnValue(mockUniqueID);
 
     applicationContext
-      .getUtilities()
-      .scrapePdfContents.mockReturnValue(mockPdfTextContents);
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents.mockReturnValue(mockPdfTextContents);
   });
 
   beforeEach(() => {
@@ -96,7 +96,7 @@ describe('parseLegacyDocumentsInteractor', () => {
     });
 
     expect(
-      applicationContext.getUtilities().scrapePdfContents,
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
     ).toHaveBeenCalled();
   });
 
@@ -114,7 +114,9 @@ describe('parseLegacyDocumentsInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0].document,
-    ).toEqual(Buffer.from(JSON.stringify(mockPdfTextContents)));
+    ).toEqual(
+      Buffer.from(JSON.stringify({ documentContents: mockPdfTextContents })),
+    );
   });
 
   it("should set the docketEntry's documentContentsId to the generated unique ID", async () => {

@@ -15,13 +15,13 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:jest/recommended',
     'plugin:jsdoc/recommended',
-    // 'plugin:jsx-a11y/recommended', // todo
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
     'plugin:react/recommended',
     'plugin:security/recommended',
     'prettier/react',
     'prettier/standard',
+    // 'plugin:jsx-a11y/recommended', // todo
   ],
   overrides: [
     {
@@ -68,7 +68,7 @@ module.exports = {
   ],
   rules: {
     'arrow-parens': ['error', 'as-needed'],
-    complexity: ['error', { max: 40 }], // todo: plugin default is 20, try to lower this
+    complexity: ['warn', { max: 25 }], // todo: plugin default is 20; set to 'error'
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
@@ -76,7 +76,7 @@ module.exports = {
     'jest/no-conditional-expect': 'off',
     'jest/no-export': 'off',
     'jest/no-identical-title': 'off', // todo: warn
-    'jsdoc/check-alignment': 'off', // todo: warn
+    'jsdoc/check-alignment': 'error',
     'jsdoc/check-param-names': 'off', // todo: warn
     'jsdoc/check-tag-names': 'off', // todo: warn
     'jsdoc/check-types': 'off', // todo: warn
@@ -111,8 +111,9 @@ module.exports = {
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
-    'no-shadow': ['warn', { builtinGlobals: false }], // TODO: builtinGlobals: true
+    'no-shadow': ['warn', { builtinGlobals: false }],
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'no-unneeded-ternary': ['error', { defaultAssignment: false }],
     'no-var': 'error',
     'no-warning-comments': [
       'error',
@@ -389,7 +390,7 @@ module.exports = {
       },
     },
     react: {
-      version: '16.12.0',
+      version: '17.0.1',
     },
   },
 };
