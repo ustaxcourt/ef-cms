@@ -1,4 +1,5 @@
 const {
+  AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
@@ -522,6 +523,76 @@ describe('migrateCaseInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should create a case trial sort mapping record if the case is ready for trial and not blocked', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        blocked: false,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords.mock.calls[0][0],
+    ).toMatchObject({
+      caseSortTags: expect.anything(),
+      docketNumber: '101-00',
+    });
+  });
+
+  it('should not create a case trial sort mapping record if the case is ready for trial and blocked', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        blocked: true,
+        blockedDate: '2019-08-25T05:00:00.000Z',
+        blockedReason: 'because',
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+  });
+
+  it('should not create a case trial sort mapping record if the case is ready for trial and automaticBlocked', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-08-25T05:00:00.000Z',
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+  });
+
+  it('should not create a case trial sort mapping record if the case is not ready for trial', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+  });
+
   describe('contactPrimary account creation', () => {
     it('should call createUserAccount but not create a user if contactPrimary has e-access and the case status is not closed', async () => {
       applicationContext
@@ -801,5 +872,37 @@ describe('migrateCaseInteractor', () => {
         applicationContext.getPersistenceGateway().associateUserWithCase,
       ).not.toHaveBeenCalled();
     });
+  });
+
+  it('should send message to SQS queue for each docket entry that has a file attached', async () => {
+    const caseWithMinuteEntry = {
+      ...caseMetadata,
+      docketEntries: [
+        ...caseMetadata.docketEntries,
+        {
+          createdAt: '2020-06-21T20:49:28.192Z',
+          docketEntryId: '19193715-21a0-43eb-a2d6-4bfc16c0463d',
+          docketNumber: '101-18',
+          documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RQT',
+          filedBy: 'Test Petitioner',
+          filingDate: '2020-03-01T00:01:00.000Z',
+          index: 5,
+          isFileAttached: false,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+    };
+
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: caseWithMinuteEntry,
+    });
+
+    expect(caseWithMinuteEntry.docketEntries.length).toEqual(5);
+    expect(applicationContext.getQueueService().sendMessage).toBeCalledTimes(4);
   });
 });

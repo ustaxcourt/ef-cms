@@ -7,6 +7,7 @@ describe('lambdaWrapper', () => {
     req = {
       body: 'blank',
       headers: {},
+      setTimeout: jest.fn(),
     };
     res = {
       headers: {},
@@ -163,5 +164,19 @@ describe('lambdaWrapper', () => {
         };
       })(req, res);
     });
+  });
+
+  it('sets request timeout to 20 minutes', async () => {
+    await lambdaWrapper(() => {
+      return {
+        body: 'hello world',
+        headers: {
+          'Content-Type': 'application/pdf',
+        },
+      };
+    })(req, res);
+
+    expect(req.setTimeout).toHaveBeenCalled();
+    expect(req.setTimeout).toHaveBeenCalledWith(20 * 60 * 1000);
   });
 });

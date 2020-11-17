@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const Text = connect(function Text(props) {
+export const TextView = connect(function TextView(props) {
   const { bind, className, get } = props;
 
   let text;

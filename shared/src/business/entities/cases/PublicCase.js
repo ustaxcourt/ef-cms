@@ -109,17 +109,18 @@ joiValidationDecorator(
   {},
 );
 
-const isPrivateDocument = function (document) {
+const isPrivateDocument = function (documentEntity) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
-  const isStipDecision = document.eventCode === STIPULATED_DECISION_EVENT_CODE;
-  const isTranscript = document.eventCode === TRANSCRIPT_EVENT_CODE;
-  const isOrder = orderDocumentTypes.includes(document.documentType);
-  const isDocumentOnDocketRecord = document.isOnDocketRecord;
+  const isStipDecision =
+    documentEntity.eventCode === STIPULATED_DECISION_EVENT_CODE;
+  const isTranscript = documentEntity.eventCode === TRANSCRIPT_EVENT_CODE;
+  const isOrder = orderDocumentTypes.includes(documentEntity.documentType);
+  const isDocumentOnDocketRecord = documentEntity.isOnDocketRecord;
   const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    document.documentType,
+    documentEntity.documentType,
   );
-  const documentIsStricken = !!document.isStricken;
+  const documentIsStricken = !!documentEntity.isStricken;
 
   const isPublicDocumentType =
     (isOrder || isCourtIssuedDocument) &&

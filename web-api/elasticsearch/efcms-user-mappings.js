@@ -1,18 +1,21 @@
 module.exports = {
   properties: {
     'admissionsStatus.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'barNumber.S': {
-      type: 'text',
+      index: false,
+      type: 'keyword',
     },
     'contact.M.state.S': {
+      index: false,
       type: 'text',
     },
     'entityName.S': {
       type: 'text',
     },
     'indexedTimestamp.N': {
+      index: false,
       type: 'text',
     },
     'name.S': {
@@ -22,7 +25,7 @@ module.exports = {
       type: 'text',
     },
     'role.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'sk.S': {
       type: 'text',
