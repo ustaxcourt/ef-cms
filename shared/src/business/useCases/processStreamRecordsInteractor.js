@@ -322,12 +322,9 @@ exports.processStreamRecordsInteractor = async ({
     });
 
   recordsToProcess = recordsToProcess.filter(record => {
-    const theSk = get(record, 'record.dynamodb.Keys.sk.S');
-    if (theSk.includes('work-item')) {
-      console.log(
-        `****** Record event is: ${record.eventName}, pk is ${record.dynamodb.Keys}`,
-      );
-    }
+    console.log(
+      `****** Record event is: ${record.eventName}, pk is ${record.dynamodb.Keys}`,
+    );
 
     // to prevent global tables writing extra data
     const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
