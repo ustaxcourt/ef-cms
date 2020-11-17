@@ -7,7 +7,7 @@ export const supportingDocumentFreeTextTypes = [
   'Unsworn Declaration under Penalty of Perjury in Support',
 ];
 
-export const supportingDocumentsMaxCount = 5;
+export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
 export const fileDocumentHelper = (get, applicationContext) => {
   const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
@@ -124,10 +124,10 @@ const getSupportingDocumentFlags = form => {
     (form.supportingDocuments && form.supportingDocuments.length) || 0;
   const showAddSupportingDocuments =
     !supportingDocumentCount ||
-    supportingDocumentCount < supportingDocumentsMaxCount;
+    supportingDocumentCount < SUPPORTING_DOCUMENTS_MAX_COUNT;
   const showAddSupportingDocumentsLimitReached = !!(
     supportingDocumentCount &&
-    supportingDocumentCount >= supportingDocumentsMaxCount
+    supportingDocumentCount >= SUPPORTING_DOCUMENTS_MAX_COUNT
   );
 
   const secondarySupportingDocumentCount =
@@ -136,12 +136,12 @@ const getSupportingDocumentFlags = form => {
     0;
   const showAddSecondarySupportingDocuments =
     (!secondarySupportingDocumentCount ||
-      secondarySupportingDocumentCount < supportingDocumentsMaxCount) &&
+      secondarySupportingDocumentCount < SUPPORTING_DOCUMENTS_MAX_COUNT) &&
     (form.documentType !== 'Motion for Leave to File' ||
       !!form.secondaryDocumentFile);
   const showAddSecondarySupportingDocumentsLimitReached = !!(
     secondarySupportingDocumentCount &&
-    secondarySupportingDocumentCount >= supportingDocumentsMaxCount
+    secondarySupportingDocumentCount >= SUPPORTING_DOCUMENTS_MAX_COUNT
   );
   return {
     showAddSecondarySupportingDocuments,
@@ -187,7 +187,7 @@ const getPrimarySecondaryDocuments = ({ CATEGORY_MAP, form }) => {
 
   const amendmentEventCodes = ['AMAT', 'ADMT'];
 
-  const thing = {
+  const primarySecondaryDocuments = {
     primaryDocument: {
       showObjection:
         objectionDocumentTypes.includes(form.documentType) ||
@@ -205,8 +205,9 @@ const getPrimarySecondaryDocuments = ({ CATEGORY_MAP, form }) => {
             ))),
     },
   };
-  return thing;
+  return primarySecondaryDocuments;
 };
+
 const getFormattedSelectedCasesAsCase = ({
   applicationContext,
   cases = [],
