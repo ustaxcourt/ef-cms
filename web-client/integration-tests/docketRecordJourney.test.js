@@ -229,8 +229,22 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  loginAs(test, 'testFloater@example.com');
+  loginAs(test, 'floater@example.com');
   it('allows access to the floater user to view the case detail', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+  });
+
+  loginAs(test, 'general@example.com');
+  it('allows access to the general user to view the case detail', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+  });
+
+  loginAs(test, 'reportersOffice@example.com');
+  it('allows access to the reportersOffice user to view the case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });

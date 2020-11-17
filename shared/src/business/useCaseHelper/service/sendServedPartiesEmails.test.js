@@ -208,4 +208,65 @@ describe('sendServedPartiesEmails', () => {
       }),
     ).rejects.toThrow('Cannot serve a docket entry without an index.');
   });
+
+  it('should not include IRS superuser twice in served parties if function is called twice with a servedParties object passed in by reference', async () => {
+    const caseEntity = new Case(
+      {
+        caseCaption: 'A Caption',
+        caseType: CASE_TYPES_MAP.cdp,
+        docketEntries: [
+          {
+            docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+            documentTitle: 'The Document',
+            index: 1,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
+          {
+            docketEntryId: '52020dd3-1d6b-4eb3-8cc9-6635b0bf5656',
+            documentTitle: 'Another Document',
+            index: 2,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
+        ],
+        docketNumber: '123-20',
+        procedureType: 'Regular',
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      { applicationContext },
+    );
+
+    const servedParties = {
+      electronic: [],
+    };
+
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+      servedParties,
+    });
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '52020dd3-1d6b-4eb3-8cc9-6635b0bf5656',
+      servedParties,
+    });
+
+    expect(
+      applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
+        .calls[0][0].destinations,
+    ).toMatchObject([
+      {
+        email: applicationContext.getIrsSuperuserEmail(),
+      },
+    ]);
+    expect(
+      applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
+        .calls[1][0].destinations,
+    ).toMatchObject([
+      {
+        email: applicationContext.getIrsSuperuserEmail(),
+      },
+    ]);
+  });
 });

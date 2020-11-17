@@ -3,6 +3,7 @@ const {
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
+const { cloneDeep } = require('lodash');
 
 exports.sendServedPartiesEmails = async ({
   applicationContext,
@@ -11,6 +12,7 @@ exports.sendServedPartiesEmails = async ({
   servedParties,
 }) => {
   const { caseCaption, docketNumber, docketNumberWithSuffix } = caseEntity;
+  const partiesToServe = cloneDeep(servedParties);
 
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
@@ -33,13 +35,13 @@ exports.sendServedPartiesEmails = async ({
 
   //serve every document on IRS superuser if case has been served to the IRS
   if (caseEntity.status !== CASE_STATUS_TYPES.new) {
-    servedParties.electronic.push({
+    partiesToServe.electronic.push({
       email: applicationContext.getIrsSuperuserEmail(),
       name: 'IRS',
     });
   }
 
-  const destinations = servedParties.electronic.map(party => ({
+  const destinations = partiesToServe.electronic.map(party => ({
     email: party.email,
     templateData: {
       emailContent: reactTemplateGenerator({

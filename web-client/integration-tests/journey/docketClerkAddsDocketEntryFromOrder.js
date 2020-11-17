@@ -211,6 +211,8 @@ export const docketClerkAddsDocketEntryFromOrder = (test, draftOrderIndex) => {
       entry => entry.docketEntryId === docketEntryId && entry.isOnDocketRecord,
     );
 
+    test.docketRecordEntry = newDocketEntry;
+
     expect(newDocketEntry).toBeTruthy();
     expect(newDocketEntry.index).toBeFalsy();
   });
