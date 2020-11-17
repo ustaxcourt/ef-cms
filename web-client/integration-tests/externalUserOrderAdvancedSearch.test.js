@@ -81,10 +81,14 @@ describe('external users perform an advanced search for orders', () => {
   });
 
   loginAs(test, 'privatePractitioner@example.com');
-  associatedUserSearchesForServedOrder(test, {
-    draftOrderIndex: 0,
-    keyword: 'Jiminy Cricket',
-  });
+  associatedUserSearchesForServedOrder(
+    test,
+    {
+      draftOrderIndex: 0,
+      keyword: 'Jiminy Cricket',
+    },
+    true,
+  );
 
   loginAs(test, 'privatePractitioner1@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(test, {
@@ -93,10 +97,14 @@ describe('external users perform an advanced search for orders', () => {
   });
 
   loginAs(test, 'irsPractitioner@example.com');
-  associatedUserSearchesForServedOrder(test, {
-    draftOrderIndex: 0,
-    keyword: 'Jiminy Cricket',
-  });
+  associatedUserSearchesForServedOrder(
+    test,
+    {
+      draftOrderIndex: 0,
+      keyword: 'Jiminy Cricket',
+    },
+    true,
+  );
 
   loginAs(test, 'irsPractitioner2@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(test, {

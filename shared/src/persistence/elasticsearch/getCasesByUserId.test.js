@@ -16,6 +16,9 @@ describe('getCasesByUserId', () => {
     });
 
     expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.size,
+    ).toEqual(5000);
+    expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
     ).toMatchObject({
       bool: {

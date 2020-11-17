@@ -85,6 +85,7 @@ exports.getCasesByUserId = async ({ applicationContext, userId }) => {
             ],
           },
         },
+        size: 5000,
       },
       index: 'efcms-case',
     },

@@ -1,4 +1,9 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 import { practitionerViewsCaseDetailNoticeOfChangeOfAddress } from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
@@ -17,19 +22,23 @@ describe('Modify Practitioner Contact Information', () => {
   test.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
-    loginAs(test, 'privatePractitioner@example.com');
+    loginAs(test, 'privatePractitioner2@example.com');
     it(`login as a practitioner and create case #${i}`, async () => {
       caseDetail = await uploadPetition(
         test,
         {},
-        'privatePractitioner@example.com',
+        'privatePractitioner2@example.com',
       );
       expect(caseDetail.docketNumber).toBeDefined();
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }
+  it('waits for elasticsearch', async () => {
+    await refreshElasticsearchIndex();
+  });
 
   practitionerUpdatesAddress(test);
+
   for (let i = 0; i < 3; i++) {
     practitionerViewsCaseDetailNoticeOfChangeOfAddress(test, i);
   }

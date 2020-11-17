@@ -13,6 +13,8 @@ export const lambdaWrapper = lambda => {
       },
     };
 
+    req.setTimeout(20 * 60 * 1000); // 20 minute timeout (for async lambdas)
+
     if (process.env.USTC_ENV === 'dev') {
       console.log(`${req.method}: ${event.path}`);
     }

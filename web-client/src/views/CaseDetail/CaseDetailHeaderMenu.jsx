@@ -126,23 +126,25 @@ export const CaseDetailHeaderMenu = connect(
                   <hr></hr>
                 </li>
 
-                <li
-                  className="usa-nav__submenu-item row-button"
-                  id="menu-button-add-new-message"
-                  onClick={() => {
-                    resetCaseMenuSequence();
-                    openCreateMessageModalSequence();
-                  }}
-                >
-                  <Icon
-                    aria-label="create message"
-                    className="margin-right-1"
-                    icon="envelope"
-                    size="1x"
-                  />
-                  Message
-                  <hr></hr>
-                </li>
+                {caseDetailHeaderHelper.showCreateMessageButton && (
+                  <li
+                    className="usa-nav__submenu-item row-button"
+                    id="menu-button-add-new-message"
+                    onClick={() => {
+                      resetCaseMenuSequence();
+                      openCreateMessageModalSequence();
+                    }}
+                  >
+                    <Icon
+                      aria-label="create message"
+                      className="margin-right-1"
+                      icon="envelope"
+                      size="1x"
+                    />
+                    Message
+                    <hr></hr>
+                  </li>
+                )}
                 <li
                   className="usa-nav__submenu-item row-button"
                   id="menu-button-add-deadline"

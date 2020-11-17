@@ -121,7 +121,7 @@ export const MessageDocument = connect(
                   icon="pencil-alt"
                   onClick={() =>
                     openConfirmRemoveSignatureModalSequence({
-                      documentIdToEdit: viewerDocumentToDisplay.documentId,
+                      docketEntryIdToEdit: viewerDocumentToDisplay.documentId,
                     })
                   }
                 >

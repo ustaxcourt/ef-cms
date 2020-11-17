@@ -57,7 +57,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "sqs:CreateQueue",
         "sqs:SetQueueAttributes",
         "sqs:SendMessageBatch",
-        "sqs:SendMessage"
+        "sqs:SendMessage",
+        "sqs:DeleteQueue"
       ],
       "Resource": "*"
     },

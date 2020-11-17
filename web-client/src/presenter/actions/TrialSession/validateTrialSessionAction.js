@@ -17,12 +17,10 @@ export const validateTrialSessionAction = ({
   props,
 }) => {
   const startDate = // AAAA-BB-CC
-    (props.computedDate &&
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString(props.computedDate)
-        .toISOString()) ||
-    null;
+    applicationContext
+      .getUtilities()
+      .prepareDateFromString(props.computedDate)
+      ?.toISOString() || null;
 
   const trialSession = omit(
     {
