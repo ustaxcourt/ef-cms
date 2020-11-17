@@ -289,10 +289,7 @@ describe('advancedDocumentSearch', () => {
         bool: {
           should: {
             match: {
-              'judge.S': {
-                operator: 'and',
-                query: 'Guy Fieri',
-              },
+              'judge.S': 'Guy Fieri',
             },
           },
         },
@@ -394,10 +391,7 @@ describe('advancedDocumentSearch', () => {
           bool: {
             should: {
               match: {
-                'judge.S': {
-                  operator: 'and',
-                  query: 'Guy Fieri',
-                },
+                'judge.S': 'Guy Fieri',
               },
             },
           },
@@ -445,10 +439,7 @@ describe('advancedDocumentSearch', () => {
           bool: {
             should: {
               match: {
-                'judge.S': {
-                  operator: 'and',
-                  query: 'Guy Fieri',
-                },
+                'judge.S': 'Guy Fieri',
               },
             },
           },
