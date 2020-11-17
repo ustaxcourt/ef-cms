@@ -322,6 +322,14 @@ exports.processStreamRecordsInteractor = async ({
     });
 
   recordsToProcess = recordsToProcess.filter(record => {
+    if (record.eventName === 'REMOVE') {
+      console.log(
+        `****** Remove Record is: ${JSON.stringify(record, null, 2)}`,
+      );
+    } else {
+      console.log(`****** Event name is: ${record.eventName}`);
+    }
+
     // to prevent global tables writing extra data
     const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
     const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
