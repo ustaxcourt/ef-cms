@@ -28,7 +28,7 @@ const migrateRecords = async ({ documentClient, items }) => {
 
 const reprocessItems = async ({ documentClient, items }) => {
   // items  already been migrated. they simply could not be processed in the batchWrite. Try again recursively
-  const numUnprocessed = items[process.env.DESTINATION_TABLE].PutRequest.length;
+  const numUnprocessed = items[process.env.DESTINATION_TABLE].length;
   applicationContext.logger.info(`reprocessing ${numUnprocessed} items`);
   const results = await documentClient
     .batchWrite({
