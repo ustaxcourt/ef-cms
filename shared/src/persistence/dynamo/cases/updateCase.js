@@ -199,62 +199,70 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       applicationContext,
     });
 
-    for (let mapping of workItemMappings) {
-      const [, workItemId] = mapping.sk.split('|');
-      if (oldCase.status !== caseToUpdate.status) {
-        requests.push(
+    const updateWorkItemRecords = (updatedCase, previousCase, workItemId) => {
+      const workItemRequests = [];
+      if (previousCase.status !== updatedCase.status) {
+        workItemRequests.push(
           updateWorkItemCaseStatus({
             applicationContext,
-            caseStatus: caseToUpdate.status,
+            caseStatus: updatedCase.status,
             workItemId,
           }),
         );
       }
-      if (oldCase.caseCaption !== caseToUpdate.caseCaption) {
-        requests.push(
+      if (previousCase.caseCaption !== updatedCase.caseCaption) {
+        workItemRequests.push(
           updateWorkItemCaseTitle({
             applicationContext,
-            caseTitle: Case.getCaseTitle(caseToUpdate.caseCaption),
+            caseTitle: Case.getCaseTitle(updatedCase.caseCaption),
             workItemId,
           }),
         );
       }
-      if (oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix) {
-        requests.push(
+      if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
+        workItemRequests.push(
           updateWorkItemDocketNumberSuffix({
             applicationContext,
-            docketNumberSuffix: caseToUpdate.docketNumberSuffix || null,
+            docketNumberSuffix: updatedCase.docketNumberSuffix || null,
             workItemId,
           }),
         );
       }
-      if (oldCase.trialDate !== caseToUpdate.trialDate) {
-        requests.push(
+      if (previousCase.trialDate !== updatedCase.trialDate) {
+        workItemRequests.push(
           updateWorkItemTrialDate({
             applicationContext,
-            trialDate: caseToUpdate.trialDate || null,
+            trialDate: updatedCase.trialDate || null,
             workItemId,
           }),
         );
       }
-      if (oldCase.associatedJudge !== caseToUpdate.associatedJudge) {
-        requests.push(
+      if (previousCase.associatedJudge !== updatedCase.associatedJudge) {
+        workItemRequests.push(
           updateWorkItemAssociatedJudge({
             applicationContext,
-            associatedJudge: caseToUpdate.associatedJudge,
+            associatedJudge: updatedCase.associatedJudge,
             workItemId,
           }),
         );
       }
-      if (oldCase.inProgress !== caseToUpdate.inProgress) {
-        requests.push(
+      if (previousCase.inProgress !== updatedCase.inProgress) {
+        workItemRequests.push(
           updateWorkItemCaseIsInProgress({
             applicationContext,
-            caseIsInProgress: caseToUpdate.inProgress,
+            caseIsInProgress: updatedCase.inProgress,
             workItemId,
           }),
         );
       }
+      return workItemRequests;
+    };
+
+    for (let mapping of workItemMappings) {
+      const [, workItemId] = mapping.sk.split('|');
+      requests.push(
+        ...updateWorkItemRecords(caseToUpdate, oldCase, workItemId),
+      );
     }
   }
 
