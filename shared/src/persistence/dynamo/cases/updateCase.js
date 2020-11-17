@@ -260,9 +260,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
 
     for (let mapping of workItemMappings) {
       const [, workItemId] = mapping.sk.split('|');
-      requests.push(
-        ...updateWorkItemRecords(caseToUpdate, oldCase, workItemId),
-      );
+      requests.push(updateWorkItemRecords(caseToUpdate, oldCase, workItemId));
     }
   }
 
