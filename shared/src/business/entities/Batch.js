@@ -31,7 +31,6 @@ Batch.validationName = 'Batch';
  *
  * @param {object} page the page to add
  * @returns {Batch} the batch entity after the page is added
-
  */
 Batch.prototype.addPage = function (page) {
   this.pages.push(page);

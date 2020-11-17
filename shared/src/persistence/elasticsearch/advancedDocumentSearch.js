@@ -104,18 +104,30 @@ exports.advancedDocumentSearch = async ({
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     const judgeField = `${judgeType}.S`;
-    docketEntryQueryParams.push({
-      bool: {
-        should: {
-          match: {
-            [judgeField]: {
-              operator: 'and',
-              query: judgeName,
+    if (judgeType === 'judge') {
+      docketEntryQueryParams.push({
+        bool: {
+          should: {
+            match: {
+              [judgeField]: judgeName,
             },
           },
         },
-      },
-    });
+      });
+    } else if (judgeType === 'signedJudgeName') {
+      docketEntryQueryParams.push({
+        bool: {
+          should: {
+            match: {
+              [judgeField]: {
+                operator: 'and',
+                query: judgeName,
+              },
+            },
+          },
+        },
+      });
+    }
   }
 
   if (opinionType) {

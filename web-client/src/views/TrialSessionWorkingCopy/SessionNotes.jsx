@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { If } from '../../ustc-ui/If/If';
-import { Text } from '../../ustc-ui/Text/Text';
+import { TextView } from '../../ustc-ui/Text/TextView';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
@@ -39,7 +39,7 @@ export const SessionNotes = connect(
                     <h3 className="display-inline">Session Notes</h3>
                     <If bind="trialSessionWorkingCopy.sessionNotes">
                       <div className="margin-top-1  margin-bottom-4">
-                        <Text bind="trialSessionWorkingCopy.sessionNotes" />
+                        <TextView bind="trialSessionWorkingCopy.sessionNotes" />
                       </div>
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">

@@ -328,7 +328,9 @@ exports.processStreamRecordsInteractor = async ({
     const newTime = get(record, NEW_TIME_KEY);
     const oldTime = get(record, OLD_TIME_KEY);
     return (
-      process.env.NODE_ENV !== 'production' || (newTime && newTime !== oldTime)
+      process.env.NODE_ENV !== 'production' ||
+      (newTime && newTime !== oldTime) ||
+      record.eventName === 'REMOVE'
     );
   });
 
@@ -357,33 +359,29 @@ exports.processStreamRecordsInteractor = async ({
       throw err;
     });
 
-    await Promise.all([
-      processCaseEntries({
-        applicationContext,
-        caseEntityRecords,
-        utils,
-      }).catch(err => {
-        applicationContext.logger.error("failed to processCaseEntries',", err);
-        applicationContext.notifyHoneybadger(err, {
-          message: 'failed to processCaseEntries',
-        });
-        throw err;
-      }),
-      processDocketEntries({
-        applicationContext,
-        docketEntryRecords,
-        utils,
-      }).catch(err => {
-        applicationContext.logger.error(
-          "failed to processDocketEntries',",
-          err,
-        );
-        applicationContext.notifyHoneybadger(err, {
-          message: 'failed to processDocketEntries',
-        });
-        throw err;
-      }),
-    ]);
+    await processCaseEntries({
+      applicationContext,
+      caseEntityRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processCaseEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processCaseEntries',
+      });
+      throw err;
+    });
+
+    await processDocketEntries({
+      applicationContext,
+      docketEntryRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processDocketEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processDocketEntries',
+      });
+      throw err;
+    });
 
     await processWorkItemEntries({ applicationContext, workItemRecords }).catch(
       err => {
