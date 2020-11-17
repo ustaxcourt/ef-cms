@@ -1,4 +1,5 @@
 const { createLogger } = require('../../shared/src/utilities/createLogger');
+const { get } = require('lodash');
 const { transports } = require('winston');
 
 const console = () =>
@@ -22,10 +23,9 @@ module.exports = (transport = console()) => (req, res, next) => {
         url: req.url,
       },
       requestId: {
-        apiGateway: (((req.apiGateway || {}).event || {}).requestContext || {})
-          .requestId,
+        apiGateway: get(req, 'apiGateway.event.requestContext.requestId'),
         applicationLoadBalancer: req.get('x-amzn-trace-id'),
-        lambda: ((req.apiGateway || {}).context || {}).awsRequestId,
+        lambda: get(req, 'apiGateway.context.awsRequestId'),
       },
     };
   }
