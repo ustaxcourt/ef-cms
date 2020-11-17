@@ -322,12 +322,10 @@ exports.processStreamRecordsInteractor = async ({
     });
 
   recordsToProcess = recordsToProcess.filter(record => {
-    if (record.eventName === 'REMOVE') {
+    if (record.dynamodb.Keys.sk.s.includes('work-item')) {
       console.log(
-        `****** Remove Record is: ${JSON.stringify(record, null, 2)}`,
+        `****** Record event is: ${record.eventName}, pk is ${record.dynamodb.Keys}`,
       );
-    } else {
-      console.log(`****** Event name is: ${record.eventName}`);
     }
 
     // to prevent global tables writing extra data
