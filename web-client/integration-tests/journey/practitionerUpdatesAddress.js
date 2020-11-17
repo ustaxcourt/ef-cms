@@ -1,3 +1,4 @@
+const faker = require('faker');
 const { refreshElasticsearchIndex } = require('../helpers');
 
 export const practitionerUpdatesAddress = test => {
@@ -15,7 +16,7 @@ export const practitionerUpdatesAddress = test => {
       contact: { address1: expect.anything() },
     });
 
-    test.updatedPractitionerAddress = `UPDATED ADDRESS ${Date.now()}`;
+    test.updatedPractitionerAddress = faker.address.streetAddress(true);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.address1',

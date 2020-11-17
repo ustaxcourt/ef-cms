@@ -30,7 +30,7 @@ exports.createMessageInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MESSAGES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

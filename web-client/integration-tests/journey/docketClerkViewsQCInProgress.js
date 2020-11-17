@@ -1,5 +1,9 @@
+import { refreshElasticsearchIndex } from '../helpers';
+
 export const docketClerkViewsQCInProgress = (test, shouldExist) => {
   return it('Docket clerk views My Document QC - In Progress', async () => {
+    await refreshElasticsearchIndex();
+
     await test.runSequence('gotoWorkQueueSequence');
     expect(test.getState('currentPage')).toEqual('WorkQueue');
     await test.runSequence('chooseWorkQueueSequence', {
@@ -13,7 +17,6 @@ export const docketClerkViewsQCInProgress = (test, shouldExist) => {
     expect(workQueueToDisplay.box).toEqual('inProgress');
 
     const inProgressQueue = test.getState('workQueue');
-    console.log(''); // adding this causes the tests to pass....
     const inProgressWorkItem = inProgressQueue.find(
       workItem =>
         workItem.docketEntry.docketEntryId ===

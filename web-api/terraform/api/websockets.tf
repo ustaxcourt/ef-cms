@@ -19,15 +19,15 @@ resource "aws_apigatewayv2_route" "disconnect" {
 }
 
 resource "aws_lambda_function" "websockets_connect_lambda" {
-  depends_on    = [var.websockets_object]
-  function_name = "websockets_connect_${var.environment}_${var.current_color}"
-  role          = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler       = "websockets.connectHandler"
-  s3_bucket     = var.lambda_bucket_id
-  s3_key        = "websockets_${var.deploying_color}.js.zip"
+  depends_on       = [var.websockets_object]
+  function_name    = "websockets_connect_${var.environment}_${var.current_color}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler          = "websockets.connectHandler"
+  s3_bucket        = var.lambda_bucket_id
+  s3_key           = "websockets_${var.current_color}.js.zip"
   source_code_hash = var.websockets_object_hash
-  timeout     = "29"
-  memory_size = "3008"
+  timeout          = "29"
+  memory_size      = "3008"
 
   runtime = "nodejs12.x"
 
@@ -38,15 +38,15 @@ resource "aws_lambda_function" "websockets_connect_lambda" {
 
 
 resource "aws_lambda_function" "websockets_disconnect_lambda" {
-  depends_on    = [var.websockets_object]
-  function_name = "websockets_disconnect_${var.environment}_${var.current_color}"
-  role          = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler       = "websockets.disconnectHandler"
-  s3_bucket     = var.lambda_bucket_id
-  s3_key        = "websockets_${var.deploying_color}.js.zip"
+  depends_on       = [var.websockets_object]
+  function_name    = "websockets_disconnect_${var.environment}_${var.current_color}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler          = "websockets.disconnectHandler"
+  s3_bucket        = var.lambda_bucket_id
+  s3_key           = "websockets_${var.current_color}.js.zip"
   source_code_hash = var.websockets_object_hash
-  timeout     = "29"
-  memory_size = "3008"
+  timeout          = "29"
+  memory_size      = "3008"
 
   runtime = "nodejs12.x"
 
@@ -94,8 +94,9 @@ resource "aws_lambda_permission" "apigw_disconnect_lambda" {
 }
 
 resource "aws_apigatewayv2_stage" "stage" {
-  api_id = aws_apigatewayv2_api.websocket_api.id
-  name   = var.environment
+  api_id        = aws_apigatewayv2_api.websocket_api.id
+  name          = var.environment
+  deployment_id = aws_apigatewayv2_deployment.websocket_deploy.id
 }
 
 resource "aws_apigatewayv2_deployment" "websocket_deploy" {
