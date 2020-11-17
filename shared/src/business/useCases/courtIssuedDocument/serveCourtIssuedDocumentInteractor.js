@@ -36,12 +36,9 @@ const completeWorkItem = async ({
 
   workItemToUpdate.setAsCompleted({ message: 'completed', user });
 
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-    applicationContext,
-    workItem: workItemToUpdate.validate().toRawObject(),
-  });
+  console.log('**** HERE');
 
-  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
     workItem: workItemToUpdate.validate().toRawObject(),
   });
@@ -219,6 +216,11 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     caseEntity,
     docketEntryId: courtIssuedDocument.docketEntryId,
     servedParties,
+  });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+    applicationContext,
+    workItem: workItemToUpdate.validate().toRawObject(),
   });
 
   if (servedParties.paper.length > 0) {
