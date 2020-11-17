@@ -9,13 +9,22 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   }
 
   if (user.section) {
-    await client.put({
-      Item: {
-        pk: `section|${user.section}`,
-        sk: `user|${userId}`,
-      },
-      applicationContext,
-    });
+    // we never have a need to query users by these sections, and since there are SO many
+    // users in these sections, it locks up the migration.  We should use elasticsearch if we
+    // have a future need to query for users by section
+    if (
+      user.section !== ROLES.privatePractitioner &&
+      user.section !== ROLES.petitioner &&
+      user.section !== ROLES.inactivePractitioner
+    ) {
+      await client.put({
+        Item: {
+          pk: `section|${user.section}`,
+          sk: `user|${userId}`,
+        },
+        applicationContext,
+      });
+    }
 
     if (user.role === ROLES.judge || user.role === ROLES.legacyJudge) {
       await client.put({

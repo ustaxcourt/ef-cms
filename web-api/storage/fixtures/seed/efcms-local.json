@@ -1385,16 +1385,8 @@
     "pk": "case-by-docket-number|102-20"
   },
   {
-    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "section|petitioner"
-  },
-  {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "pk": "inactivePractitioner|Test Inactive Practitioner"
-  },
-  {
-    "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
-    "pk": "section|inactivePractitioner"
   },
   {
     "sk": "user|9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
@@ -7237,7 +7229,7 @@
     "createdAt": "2020-04-14T19:59:46.086Z",
     "entityName": "UserCase",
     "gsi1pk": "user-case|104-20",
-    "caseCaption":  "Hanan Al Hroub, Petitioner",
+    "caseCaption": "Hanan Al Hroub, Petitioner",
     "sk": "case|104-20",
     "docketNumberWithSuffix": "104-20R",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -10175,26 +10167,6 @@
   {
     "sk": "user|dadbad42-18d0-43ec-bafb-654e83405416",
     "pk": "section|legacyJudgesChambers"
-  },
-  {
-    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "section|privatePractitioner"
   },
   {
     "associatedJudge": "Chief Judge",
