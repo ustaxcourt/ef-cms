@@ -1,7 +1,4 @@
-import {
-  applicationContextForClient as applicationContext,
-  applicationContextForClient,
-} from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
@@ -576,9 +573,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     });
   });
 
-  const {
-    SERVICE_INDICATOR_TYPES,
-  } = applicationContextForClient.getConstants();
+  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   docketClerkEditsServiceIndicatorForPetitioner(
     test,
