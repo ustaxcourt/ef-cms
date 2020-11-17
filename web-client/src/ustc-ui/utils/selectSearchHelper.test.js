@@ -22,7 +22,7 @@ describe('getSortedOptions', () => {
     expect(results2).toMatchObject(optionsForDropdown);
   });
 
-  it('returns options sorted with exact match value first, followed by "starts with" matches and then others according to original order', () => {
+  it('returns options sorted with exact match value first, followed by "starts with" matches and then others according to original order even when results are not alphabetical', () => {
     const results = getSortedOptions(optionsForDropdown, 'c');
     expect(results).toMatchObject([
       { label: 'Craps', value: 'C' },

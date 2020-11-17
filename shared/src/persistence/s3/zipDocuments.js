@@ -55,7 +55,6 @@ exports.zipDocuments = ({
       .archive(
         {
           bucket: documentsBucket,
-          debug: true,
           onEntry,
           onProgress,
           region,

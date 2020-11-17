@@ -84,9 +84,6 @@ describe('setFormForCaseAction', () => {
       {
         year: '2012',
       },
-      {
-        lastDateOfPeriod: 'not a date',
-      },
     ];
 
     const result = await runAction(setFormForCaseAction, {
@@ -112,9 +109,6 @@ describe('setFormForCaseAction', () => {
     });
     expect(result.state.form.statistics[1]).toEqual({
       year: '2012',
-    });
-    expect(result.state.form.statistics[2]).toEqual({
-      lastDateOfPeriod: 'not a date',
     });
   });
 });
