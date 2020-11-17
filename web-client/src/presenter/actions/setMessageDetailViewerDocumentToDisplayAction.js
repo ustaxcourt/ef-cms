@@ -67,7 +67,12 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
 
   store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
 
-  if (viewerDocumentToDisplay) {
+  if (
+    viewerDocumentToDisplay &&
+    viewerDocumentToDisplay.documentId &&
+    mostRecentMessage.attachments &&
+    mostRecentMessage.attachments.length
+  ) {
     const formattedAttachment = setAttachmentToDisplay(
       applicationContext,
       viewerDocumentToDisplay,
