@@ -15,6 +15,7 @@ import {
   setupTest,
   uploadExternalDecisionDocument,
   uploadPetition,
+  wait,
 } from './helpers';
 
 const test = setupTest();
@@ -131,6 +132,8 @@ describe('Create a work item', () => {
       docketEntryId: decisionWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
+
+    await wait(1000);
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',

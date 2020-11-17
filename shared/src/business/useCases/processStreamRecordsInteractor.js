@@ -348,33 +348,40 @@ exports.processStreamRecordsInteractor = async ({
   };
 
   try {
-    await Promise.all([
-      processCaseEntries({
-        applicationContext,
-        caseEntityRecords,
-        utils,
-      }).catch(err => {
-        applicationContext.logger.error("failed to processCaseEntries',", err);
-        applicationContext.notifyHoneybadger(err, {
-          message: 'failed to processCaseEntries',
-        });
-        throw err;
-      }),
-      processDocketEntries({
-        applicationContext,
-        docketEntryRecords,
-        utils,
-      }).catch(err => {
-        applicationContext.logger.error(
-          "failed to processDocketEntries',",
-          err,
-        );
-        applicationContext.notifyHoneybadger(err, {
-          message: 'failed to processDocketEntries',
-        });
-        throw err;
-      }),
-    ]);
+    await processRemoveEntries({
+      applicationContext,
+      removeRecords,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processRemoveEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processRemoveEntries',
+      });
+      throw err;
+    });
+
+    await processCaseEntries({
+      applicationContext,
+      caseEntityRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processCaseEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processCaseEntries',
+      });
+      throw err;
+    });
+
+    await processDocketEntries({
+      applicationContext,
+      docketEntryRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processDocketEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processDocketEntries',
+      });
+      throw err;
+    });
 
     await processWorkItemEntries({ applicationContext, workItemRecords }).catch(
       err => {
@@ -398,17 +405,6 @@ exports.processStreamRecordsInteractor = async ({
         throw err;
       },
     );
-
-    await processRemoveEntries({
-      applicationContext,
-      removeRecords,
-    }).catch(err => {
-      applicationContext.logger.error("failed to processRemoveEntries',", err);
-      applicationContext.notifyHoneybadger(err, {
-        message: 'failed to processRemoveEntries',
-      });
-      throw err;
-    });
   } catch (err) {
     applicationContext.logger.error(
       'processStreamRecordsInteractor failed to process the records',
