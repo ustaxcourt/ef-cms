@@ -32,7 +32,7 @@ export const PdfPreview = connect(
   function PdfPreview({ noDocumentText, pdfPreviewUrl }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
-      return noDocumentText ? noDocumentText : '';
+      return noDocumentText || '';
     }
 
     return <PdfPreviewComponent />;

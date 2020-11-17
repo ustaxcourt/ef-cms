@@ -9,7 +9,9 @@ export const workQueueSectionHelper = (get, applicationContext) => {
         chambers: 'Chambers',
         clerkofcourt: 'Clerk of the Court',
         docket: 'Docket',
+        floater: 'Floater',
         petitions: 'Petitions',
+        reportersOffice: 'Reporter’s Office',
         trialClerks: 'Trial Clerks',
       }[key] || chambersDisplay(key)
     );

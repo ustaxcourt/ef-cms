@@ -1,6 +1,5 @@
 const {
   applicationContext,
-  getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
@@ -257,13 +256,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
   });
 
-  it('should parse pdf contents', async () => {
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
-        Body: Buffer.from(getFakeFile()),
-      }),
-    });
-
+  it('should parse and scrape pdf contents', async () => {
     await fileCourtIssuedOrderInteractor({
       applicationContext,
       documentMetadata: {
@@ -277,18 +270,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
-        .pdfBuffer instanceof ArrayBuffer,
-    ).toEqual(true);
-
-    expect(
-      Buffer.from(
-        applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
-          .pdfBuffer,
-      )
-        .toString()
-        .indexOf('%PDF'),
-    ).not.toEqual(-1);
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
+    ).toHaveBeenCalled();
   });
 
   it('should add order document to most recent message if a parentMessageId is passed in', async () => {
@@ -397,8 +380,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
 
   it('should throw an error if fails to parse pdf', async () => {
     applicationContext
-      .getUtilities()
-      .scrapePdfContents.mockImplementation(() => {
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents.mockImplementation(() => {
         throw new Error('error parsing pdf');
       });
 

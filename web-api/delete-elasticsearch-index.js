@@ -4,6 +4,7 @@
     elasticsearchIndexes,
   } = require('./elasticsearch/elasticsearch-indexes');
   AWS.config.region = 'us-east-1';
+  const { ELASTICSEARCH_API_VERSION } = require('./elasticsearch-settings');
 
   const connectionClass = require('http-aws-es');
   const elasticsearch = require('elasticsearch');
@@ -20,7 +21,6 @@
     - elasticsearch.tf
     - delete-elasticsearch-index.js
   */
-  const ELASTICSEARCH_API_VERSION = '7.4';
 
   const environment = {
     elasticsearchEndpoint: process.env.ELASTICSEARCH_ENDPOINT,

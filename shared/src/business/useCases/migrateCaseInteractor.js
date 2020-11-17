@@ -221,6 +221,20 @@ exports.migrateCaseInteractor = async ({
     caseToCreate: caseValidatedRaw,
   });
 
+  if (
+    caseToAdd.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
+    !caseToAdd.blocked &&
+    !caseToAdd.automaticBlocked
+  ) {
+    await applicationContext
+      .getPersistenceGateway()
+      .createCaseTrialSortMappingRecords({
+        applicationContext,
+        caseSortTags: caseToAdd.generateTrialSortTags(),
+        docketNumber: caseToAdd.docketNumber,
+      });
+  }
+
   for (const correspondenceEntity of caseToAdd.correspondence) {
     applicationContext.logger.debug('updateCaseCorrespondence');
     await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
@@ -239,6 +253,29 @@ exports.migrateCaseInteractor = async ({
       caseToUpdate: caseValidatedRaw,
     });
   }
+
+  const sqs = applicationContext.getQueueService();
+  let promises = [];
+
+  for (const docketEntry of caseToAdd.docketEntries) {
+    if (docketEntry.isFileAttached) {
+      const message = {
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumber: caseToAdd.docketNumber,
+      };
+
+      promises.push(
+        sqs
+          .sendMessage({
+            MessageBody: JSON.stringify(message),
+            QueueUrl: process.env.MIGRATE_LEGACY_DOCUMENTS_QUEUE_URL,
+          })
+          .promise(),
+      );
+    }
+  }
+
+  await Promise.all(promises);
 
   return caseValidatedRaw;
 };
