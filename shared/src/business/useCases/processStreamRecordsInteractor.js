@@ -282,6 +282,7 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   });
 
   if (failedRecords.length > 0) {
+    console.log('****** At least one record failed to delete');
     applicationContext.logger.error(
       'the records that failed to delete',
       failedRecords,
@@ -323,7 +324,7 @@ exports.processStreamRecordsInteractor = async ({
 
   recordsToProcess = recordsToProcess.filter(record => {
     console.log(
-      `****** Record event is: ${record.eventName}, pk is ${record.dynamodb.Keys}`,
+      `${record.eventName}, ${JSON.stringify(record.dynamodb.Keys, null, 2)}`,
     );
 
     // to prevent global tables writing extra data
@@ -356,6 +357,8 @@ exports.processStreamRecordsInteractor = async ({
       applicationContext,
       removeRecords,
     }).catch(err => {
+      console.log('******FAILED TO REMOVE', err);
+
       applicationContext.logger.error("failed to processRemoveEntries',", err);
       applicationContext.notifyHoneybadger(err, {
         message: 'failed to processRemoveEntries',
