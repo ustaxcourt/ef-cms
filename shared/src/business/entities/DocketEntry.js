@@ -5,7 +5,7 @@ const {
   EXTERNAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
-  TRACKED_DOCUMENT_TYPES,
+  TRACKED_DOCUMENT_TYPES_EVENT_CODES,
 } = require('./EntityConstants');
 const {
   DOCKET_ENTRY_VALIDATION_RULES,
@@ -166,15 +166,7 @@ DocketEntry.prototype.init = function init(
 };
 
 DocketEntry.isPendingOnCreation = rawDocketEntry => {
-  const isPending = Object.values(TRACKED_DOCUMENT_TYPES).some(trackedType => {
-    return (
-      (rawDocketEntry.category &&
-        trackedType.category === rawDocketEntry.category) ||
-      (rawDocketEntry.eventCode &&
-        trackedType.eventCode === rawDocketEntry.eventCode)
-    );
-  });
-  return isPending;
+  return TRACKED_DOCUMENT_TYPES_EVENT_CODES.includes(rawDocketEntry.eventCode);
 };
 
 joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES);
