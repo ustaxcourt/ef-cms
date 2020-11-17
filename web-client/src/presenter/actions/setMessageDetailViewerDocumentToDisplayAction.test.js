@@ -124,4 +124,31 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
 
     expect(result.state.iframeSrc).toBeUndefined();
   });
+
+  it('does not throw an error when mostRecentMessage does not contain attachments', async () => {
+    const result = await runAction(
+      setMessageDetailViewerDocumentToDisplayAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          mostRecentMessage: { attachments: [] },
+          viewerDocumentToDisplay: { documentId: '1234' },
+        },
+        state: {
+          caseDetail: {
+            archivedCorrespondences: [],
+            archivedDocketEntries: [{ archived: true, docketEntryId: '1234' }],
+            correspondence: [],
+            docketEntries: [],
+            docketNumber: '123-45',
+          },
+          viewerDocumentToDisplay: null,
+        },
+      },
+    );
+
+    expect(result.state.iframeSrc).toBeUndefined();
+  });
 });

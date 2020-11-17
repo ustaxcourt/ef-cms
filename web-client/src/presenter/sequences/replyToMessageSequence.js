@@ -23,6 +23,8 @@ export const replyToMessageSequence = showProgressSequenceDecorator([
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       replyToMessageAction,
+      getMessageThreadAction,
+      setMessageAction,
       getMostRecentMessageInThreadAction,
       setMessageDetailViewerDocumentToDisplayAction,
       stopShowValidationAction,
@@ -31,8 +33,6 @@ export const replyToMessageSequence = showProgressSequenceDecorator([
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,
-      getMessageThreadAction,
-      setMessageAction,
     ]),
   },
 ]);

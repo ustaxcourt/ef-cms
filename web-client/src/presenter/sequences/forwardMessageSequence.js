@@ -23,6 +23,8 @@ export const forwardMessageSequence = showProgressSequenceDecorator([
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       forwardMessageAction,
+      getMessageThreadAction,
+      setMessageAction,
       getMostRecentMessageInThreadAction,
       setMessageDetailViewerDocumentToDisplayAction,
       stopShowValidationAction,
@@ -31,8 +33,6 @@ export const forwardMessageSequence = showProgressSequenceDecorator([
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,
-      getMessageThreadAction,
-      setMessageAction,
     ]),
   },
 ]);

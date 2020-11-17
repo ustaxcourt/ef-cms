@@ -8,6 +8,7 @@ import React from 'react';
 export const ForwardMessageModalDialog = connect(
   {
     constants: state.constants,
+    createMessageModalHelper: state.createMessageModalHelper,
     form: state.modal.form,
     showChambersSelect: state.modal.showChambersSelect,
     updateChambersInCreateMessageModalSequence:
@@ -15,7 +16,6 @@ export const ForwardMessageModalDialog = connect(
     updateModalFormValueSequence: sequences.updateModalFormValueSequence,
     updateSectionInCreateMessageModalSequence:
       sequences.updateSectionInCreateMessageModalSequence,
-    users: state.users,
     validateCreateMessageInModalSequence:
       sequences.validateCreateMessageInModalSequence,
     validationErrors: state.validationErrors,
@@ -23,12 +23,12 @@ export const ForwardMessageModalDialog = connect(
   },
   function ForwardMessageModalDialog({
     constants,
+    createMessageModalHelper,
     form,
     showChambersSelect,
     updateChambersInCreateMessageModalSequence,
     updateModalFormValueSequence,
     updateSectionInCreateMessageModalSequence,
-    users,
     validateCreateMessageInModalSequence,
     validationErrors,
     workQueueSectionHelper,
@@ -116,7 +116,7 @@ export const ForwardMessageModalDialog = connect(
             }}
           >
             <option value="">- Select -</option>
-            {users.map(user => (
+            {createMessageModalHelper.formattedUsers.map(user => (
               <option key={user.userId} value={user.userId}>
                 {user.name}
               </option>

@@ -6,7 +6,6 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
-
  */
 export const setHealthCheckAction = async ({ props, store }) => {
   store.set(state.health, props.health);

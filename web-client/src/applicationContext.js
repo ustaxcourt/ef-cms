@@ -15,6 +15,7 @@ import {
   compareISODateStrings,
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
+import { isCodeEnabled } from '../../codeToggles';
 const {
   filterQcItemsByAssociatedJudge,
 } = require('../../shared/src/business/utilities/filterQcItemsByAssociatedJudge');
@@ -639,6 +640,7 @@ const applicationContext = {
     };
   },
   initHoneybadger,
+  isCodeEnabled,
   notifyHoneybadger: async (message, context) => {
     const honeybadger = await initHoneybadger();
 

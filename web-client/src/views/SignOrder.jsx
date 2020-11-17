@@ -43,7 +43,7 @@ export const SignOrder = connect(
         return;
       }
       const canvas = canvasRef.current;
-      const context = canvas.getContext('2d');
+      const canvasContext = canvas.getContext('2d');
 
       pdfObj
         .getPage(pageNumber)
@@ -54,7 +54,7 @@ export const SignOrder = connect(
           canvas.width = viewport.width;
 
           const renderContext = {
-            canvasContext: context,
+            canvasContext,
             viewport: viewport,
           };
           return page.render(renderContext);
@@ -82,7 +82,7 @@ export const SignOrder = connect(
       start();
     };
 
-    const stop = (canvasEl, sigEl, x, y, scale = 1) => {
+    const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
       setSignatureData({
         signatureApplied: true,
         signatureData: { scale, x, y },
@@ -124,7 +124,7 @@ export const SignOrder = connect(
       };
 
       canvasEl.onmousedown = () => {
-        stop(canvasEl, sigEl, x, y);
+        stopCanvasEvents(canvasEl, sigEl, x, y);
       };
 
       // sometimes the cursor falls on top of the signature
