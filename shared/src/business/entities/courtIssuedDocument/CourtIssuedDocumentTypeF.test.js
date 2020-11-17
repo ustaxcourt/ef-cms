@@ -4,10 +4,10 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 describe('CourtIssuedDocumentTypeF', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const document = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory.get({
         scenario: 'Type F',
       });
-      expect(document.getFormattedValidationErrors()).toEqual({
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
         judge: VALIDATION_ERROR_MESSAGES.judge,
@@ -16,7 +16,7 @@ describe('CourtIssuedDocumentTypeF', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const document = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
@@ -24,7 +24,7 @@ describe('CourtIssuedDocumentTypeF', () => {
         scenario: 'Type F',
         trialLocation: 'Seattle, Washington',
       });
-      expect(document.getFormattedValidationErrors()).toEqual(null);
+      expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
     });
   });
 

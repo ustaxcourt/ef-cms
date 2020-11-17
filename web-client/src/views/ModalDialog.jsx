@@ -47,31 +47,31 @@ export const ModalDialog = ({
     }
   };
 
-  const runCancelSequence = event => {
-    event.stopPropagation();
+  const runCancelSequence = evt => {
+    evt.stopPropagation();
     cancelSequence.call();
   };
 
-  const runConfirmSequence = event => {
-    event.stopPropagation();
+  const runConfirmSequence = evt => {
+    evt.stopPropagation();
     confirmSequence.call();
   };
 
-  const keydownTriggered = event => {
-    if (event.keyCode === 27) {
-      return blurDialog(event);
+  const keydownTriggered = evt => {
+    if (evt.keyCode === 27) {
+      return blurDialog(evt);
     }
   };
 
-  const touchmoveTriggered = event => {
-    return event.preventDefault();
+  const touchmoveTriggered = evt => {
+    return evt.preventDefault();
   };
 
-  const blurDialog = event => {
+  const blurDialog = evt => {
     if (preventCancelOnBlur) {
       return;
     }
-    return runCancelSequence(event);
+    return runCancelSequence(evt);
   };
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export const ModalDialog = ({
             aria-modal="true"
             className={classNames('modal-dialog padding-205', className)}
             role="status"
-            onClick={event => event.stopPropagation()}
+            onClick={evt => evt.stopPropagation()}
           >
             <div className="modal-header grid-container padding-x-0">
               <div className="grid-row">

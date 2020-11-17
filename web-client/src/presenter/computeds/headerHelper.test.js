@@ -53,13 +53,19 @@ describe('headerHelper', () => {
       expect(result.showDocumentQC).toBeTruthy();
     });
   });
-  it('should show messages for internal users', () => {
+  it('should show messages for internal users without the general role', () => {
     internal.forEach(role => {
       const result = runCompute(headerHelper, {
         state: getBaseState({ role }),
       });
       expect(result.showMessages).toBeTruthy();
     });
+  });
+  it('should not show messages for internal users with the general role', () => {
+    const result = runCompute(headerHelper, {
+      state: getBaseState({ role: ROLES.general }),
+    });
+    expect(result.showMessages).toBeFalsy();
   });
   it('should show trial sessions for internal users', () => {
     internal.forEach(role => {

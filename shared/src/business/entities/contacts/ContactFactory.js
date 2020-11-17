@@ -48,28 +48,28 @@ ContactFactory.getValidationRules = contactType => {
   let results = joi;
 
   for (const partyType in PARTY_TYPES) {
-    const constructor = ContactFactory.getContactConstructors({
+    const contactConstructor = ContactFactory.getContactConstructors({
       partyType: PARTY_TYPES[partyType],
     })[contactType];
 
-    if (constructor) {
+    if (contactConstructor) {
       results = results.when('partyType', {
         is: PARTY_TYPES[partyType],
         then: joi
           .alternatives(
-            constructor({
+            contactConstructor({
               countryType: COUNTRY_TYPES.DOMESTIC,
               isPaper: true,
             }).VALIDATION_RULES,
-            constructor({
+            contactConstructor({
               countryType: COUNTRY_TYPES.INTERNATIONAL,
               isPaper: true,
             }).VALIDATION_RULES,
-            constructor({
+            contactConstructor({
               countryType: COUNTRY_TYPES.DOMESTIC,
               isPaper: false,
             }).VALIDATION_RULES,
-            constructor({
+            contactConstructor({
               countryType: COUNTRY_TYPES.INTERNATIONAL,
               isPaper: false,
             }).VALIDATION_RULES,

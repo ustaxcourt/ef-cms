@@ -68,12 +68,15 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const petitionIsServed =
     petitionDocketEntry && !!petitionDocketEntry.servedAt;
 
+  const showCreateMessageButton = user.role !== USER_ROLES.general;
+
   return {
     hidePublicCaseInformation: !isExternalUser,
     showAddCorrespondenceButton,
     showAddDocketEntryButton,
     showCaseDetailHeaderMenu,
     showConsolidatedCaseIcon,
+    showCreateMessageButton,
     showCreateOrderButton,
     showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
     showExternalButtons: isExternalUser && petitionIsServed,
