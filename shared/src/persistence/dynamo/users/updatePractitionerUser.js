@@ -19,7 +19,8 @@ exports.updateUserRecords = async ({
   if (
     updatedUser.section !== ROLES.privatePractitioner &&
     updatedUser.section !== ROLES.petitioner &&
-    updatedUser.section !== ROLES.inactivePractitioner
+    updatedUser.section !== ROLES.inactivePractitioner &&
+    updatedUser.section !== ROLES.irsPractitioner
   ) {
     await client.put({
       Item: {
