@@ -18,6 +18,7 @@ const {
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
   UNIQUE_OTHER_FILER_TYPE,
@@ -1861,6 +1862,23 @@ Case.prototype.deleteStatistic = function (statisticId) {
   }
 
   return this;
+};
+
+Case.prototype.hasPartyWithPaperService = function () {
+  return (
+    this.contactPrimary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER ||
+    (this.contactSecondary &&
+      this.contactSecondary.serviceIndicator ===
+        SERVICE_INDICATOR_TYPES.SI_PAPER) ||
+    (this.privatePractitioners &&
+      this.privatePractitioners.find(
+        pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+      )) ||
+    (this.irsPractitioners &&
+      this.irsPractitioners.find(
+        ip => ip.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+      ))
+  );
 };
 
 module.exports = {
