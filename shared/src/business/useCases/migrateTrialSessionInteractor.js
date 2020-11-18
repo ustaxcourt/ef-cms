@@ -40,12 +40,10 @@ exports.migrateTrialSessionInteractor = async ({
     },
   );
 
-  const trialSessionValidatedRaw = trialSessionToAdd.validate().toRawObject();
-
-  await applicationContext.getPersistenceGateway().createTrialSession({
-    applicationContext,
-    trialSession: trialSessionValidatedRaw,
-  });
-
-  return trialSessionValidatedRaw;
+  return await applicationContext
+    .getUseCaseHelpers()
+    .createTrialSessionAndWorkingCopy({
+      applicationContext,
+      trialSessionToAdd,
+    });
 };

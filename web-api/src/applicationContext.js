@@ -178,6 +178,9 @@ const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
+  createTrialSessionAndWorkingCopy,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/createTrialSessionAndWorkingCopy');
+const {
   createTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
 const {
@@ -274,6 +277,9 @@ const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
+  fileAndServeCourtIssuedDocumentInteractor,
+} = require('../../shared/src/business/useCases/courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
+const {
   fileCorrespondenceDocumentInteractor,
 } = require('../../shared/src/business/useCases/correspondence/fileCorrespondenceDocumentInteractor');
 const {
@@ -347,9 +353,6 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
-  getAllCatalogCases,
-} = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
-const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
 const {
@@ -394,6 +397,9 @@ const {
 const {
   getCasesByLeadDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber');
+const {
+  getCasesByUserId,
+} = require('../../shared/src/persistence/elasticsearch/getCasesByUserId');
 const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
@@ -555,6 +561,9 @@ const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor');
 const {
+  getReadyForTrialCases,
+} = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
+const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
 const {
@@ -692,6 +701,12 @@ const {
 const {
   orderPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/orderPublicSearchInteractor');
+const {
+  parseAndScrapePdfContents,
+} = require('../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents');
+const {
+  parseLegacyDocumentsInteractor,
+} = require('../../shared/src/business/useCases/migration/parseLegacyDocumentsInteractor');
 const {
   persistUser,
 } = require('../../shared/src/persistence/dynamo/users/persistUser');
@@ -988,6 +1003,7 @@ const {
   EnvironmentCredentials,
   S3,
   SES,
+  SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -1170,7 +1186,6 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getAllCatalogCases,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1179,6 +1194,7 @@ const gatewayMethods = {
   getCaseInventoryReport,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
+  getCasesByUserId,
   getClientId,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
@@ -1200,6 +1216,7 @@ const gatewayMethods = {
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
+  getReadyForTrialCases,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
@@ -1225,7 +1242,7 @@ const gatewayMethods = {
   zipDocuments,
 };
 
-module.exports = (appContextUser, requestId) => {
+module.exports = (appContextUser, logger = createLogger()) => {
   let user;
 
   if (appContextUser) {
@@ -1236,7 +1253,13 @@ module.exports = (appContextUser, requestId) => {
     return user;
   };
 
-  const logger = createLogger({ requestId });
+  if (process.env.NODE_ENV === 'production') {
+    const authenticated = user && Object.keys(user).length;
+    logger.defaultMeta = logger.defaultMeta || {};
+    logger.defaultMeta.user = authenticated
+      ? user
+      : { role: 'unauthenticated' };
+  }
 
   return {
     barNumberGenerator,
@@ -1385,6 +1408,9 @@ module.exports = (appContextUser, requestId) => {
       }
       return new AWS.ApiGatewayManagementApi({
         endpoint,
+        httpOptions: {
+          timeout: 900000, // 15 minutes
+        },
       });
     },
     getNotificationGateway: () => ({
@@ -1414,6 +1440,15 @@ module.exports = (appContextUser, requestId) => {
       const pug = require('p' + 'ug');
       return pug;
     },
+    getQueueService: () => {
+      if (environment.stage === 'local') {
+        return {
+          sendMessage: () => ({ promise: () => {} }),
+        };
+      } else {
+        return new SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
+      }
+    },
     getSearchClient: () => {
       if (!searchClientCache) {
         if (environment.stage === 'local') {
@@ -1426,7 +1461,7 @@ module.exports = (appContextUser, requestId) => {
               credentials: new EnvironmentCredentials('AWS'),
               region: environment.region,
             },
-            apiVersion: '7.1',
+            apiVersion: '7.4',
             awsConfig: new AWS.Config({ region: 'us-east-1' }),
             connectionClass: connectionClass,
             host: environment.elasticsearchEndpoint,
@@ -1462,6 +1497,7 @@ module.exports = (appContextUser, requestId) => {
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
+        createTrialSessionAndWorkingCopy,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
@@ -1469,6 +1505,7 @@ module.exports = (appContextUser, requestId) => {
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
         getUnassociatedLeadCase,
+        parseAndScrapePdfContents,
         processUserAssociatedCases,
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
@@ -1512,6 +1549,7 @@ module.exports = (appContextUser, requestId) => {
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
         fetchPendingItemsInteractor,
+        fileAndServeCourtIssuedDocumentInteractor,
         fileCorrespondenceDocumentInteractor,
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
@@ -1581,6 +1619,7 @@ module.exports = (appContextUser, requestId) => {
         opinionPublicSearchInteractor,
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
+        parseLegacyDocumentsInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,

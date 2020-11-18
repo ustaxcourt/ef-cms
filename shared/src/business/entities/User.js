@@ -166,8 +166,10 @@ User.isInternalUser = function (role) {
     ROLES.clerkOfCourt,
     ROLES.docketClerk,
     ROLES.floater,
+    ROLES.general,
     ROLES.judge,
     ROLES.petitionsClerk,
+    ROLES.reportersOffice,
     ROLES.trialClerk,
   ];
   return internalRoles.includes(role);

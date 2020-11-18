@@ -552,12 +552,12 @@ export const wait = time => {
   });
 };
 
-export const refreshElasticsearchIndex = async () => {
+export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
   await axios.post('http://localhost:9200/_refresh');
   await axios.post('http://localhost:9200/_flush');
-  return await wait(2000);
+  return await wait(time);
 };
 
 export const base64ToUInt8Array = b64 => {

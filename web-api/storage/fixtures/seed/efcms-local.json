@@ -1114,7 +1114,7 @@
     "sortableDocketNumber": 20000104,
     "mailingDate": "04/12/2020",
     "noticeOfTrialDate": "2020-04-14T19:59:46.087Z",
-    "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "San Francisco, California",
@@ -7234,6 +7234,18 @@
     "status": "New"
   },
   {
+    "createdAt": "2020-04-14T19:59:46.086Z",
+    "entityName": "UserCase",
+    "gsi1pk": "user-case|104-20",
+    "caseCaption":  "Hanan Al Hroub, Petitioner",
+    "sk": "case|104-20",
+    "docketNumberWithSuffix": "104-20R",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "104-20",
+    "status": "Closed",
+    "closedDate": "2020-04-14T03:01:50.746Z"
+  },
+  {
     "role": "petitioner",
     "address2": "Hanover, MI 49241",
     "phone": "517-563-1536",
@@ -11326,6 +11338,6 @@
     "section": "floater",
     "pk": "user|9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
-    "email": "testFloater@example.com"
+    "email": "floater@example.com"
   }
 ]

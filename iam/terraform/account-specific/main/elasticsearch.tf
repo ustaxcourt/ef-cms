@@ -7,7 +7,7 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
   elasticsearch_version = "7.4"
 
   cluster_config {
-    instance_type = "t2.small.elasticsearch"
+    instance_type = var.es_logs_instance_type
     instance_count = var.es_logs_instance_count
   }
 
@@ -23,9 +23,9 @@ resource "aws_elasticsearch_domain" "efcms-logs" {
     tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
   }
 
-  ebs_options{
+  ebs_options {
     ebs_enabled = true
-    volume_size = 10
+    volume_size = var.es_logs_ebs_volume_size_gb
   }
 
   snapshot_options {
@@ -141,4 +141,17 @@ resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
   roles = {
     "authenticated" = aws_iam_role.log_viewers_auth.arn
   }
+}
+
+locals {
+  instance_size_in_mb = aws_elasticsearch_domain.efcms-logs.ebs_options[0].volume_size * 1000
+}
+
+module "logs_alarms" {
+  source = "github.com/dubiety/terraform-aws-elasticsearch-cloudwatch-sns-alarms.git?ref=v1.0.4"
+  domain_name = aws_elasticsearch_domain.efcms-logs.domain_name
+  alarm_name_prefix = "${aws_elasticsearch_domain.efcms-logs.domain_name}: "
+  free_storage_space_threshold = local.instance_size_in_mb * 0.25
+  create_sns_topic = false
+  sns_topic = aws_sns_topic.system_health_alarms.arn
 }

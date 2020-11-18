@@ -103,5 +103,35 @@
         - 
           tags: 
             - "Restricted"
+    closedDate: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "status"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - "Closed"
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
 
  ```
