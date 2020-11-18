@@ -596,6 +596,29 @@ describe('migrateCaseInteractor', () => {
     ).not.toBeCalled();
   });
 
+  it('should not create a case trial sort mapping record if the case is missing a preferredTrialCity', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata: {
+        ...caseMetadata,
+        preferredTrialCity: null,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+
+    const loggerCalls = applicationContext.logger.info.mock.calls;
+
+    expect(loggerCalls.length).toBeGreaterThan(0);
+    expect(loggerCalls[0][0]).toContain(
+      'ready for trial but missing trial city',
+    );
+  });
+
   describe('contactPrimary account creation', () => {
     it('should call createUserAccount but not create a user if contactPrimary has e-access and the case status is not closed', async () => {
       applicationContext
