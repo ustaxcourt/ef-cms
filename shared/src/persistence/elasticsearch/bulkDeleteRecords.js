@@ -30,7 +30,7 @@ exports.bulkDeleteRecords = async ({ applicationContext, records }) => {
   if (body.length) {
     const response = await searchClient.bulk({
       body,
-      refresh: false,
+      refresh: true,
     });
 
     console.log(
