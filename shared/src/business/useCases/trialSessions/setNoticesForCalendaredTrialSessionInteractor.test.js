@@ -229,16 +229,20 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
 
     expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toMatchObject({
+      date: '2025-12-01T00:00:00.000Z',
       index: expect.anything(),
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages: 999,
+      trialLocation: 'Birmingham, Alabama',
     });
     expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toMatchObject({
+      date: '2025-12-01T00:00:00.000Z',
       index: expect.anything(),
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages: 999,
+      trialLocation: 'Birmingham, Alabama',
     });
   });
 
