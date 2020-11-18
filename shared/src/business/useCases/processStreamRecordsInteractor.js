@@ -326,6 +326,7 @@ exports.processStreamRecordsInteractor = async ({
     // to prevent global tables writing extra data
     const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
     const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
+    const IS_DELETING_KEY = 'dynamodb.NewImage.aws:rep:deleting.BOOL';
 
     const oldImage = get(record, 'dynamodb.OldImage');
     const newImage = get(record, 'dynamodb.NewImage');
@@ -340,10 +341,13 @@ exports.processStreamRecordsInteractor = async ({
 
     const newTime = get(record, NEW_TIME_KEY);
     const oldTime = get(record, OLD_TIME_KEY);
+    const isDeleting = get(record, IS_DELETING_KEY);
+
     return (
-      process.env.NODE_ENV !== 'production' ||
-      (newTime && newTime !== oldTime) ||
-      record.eventName === 'REMOVE'
+      (process.env.NODE_ENV !== 'production' ||
+        (newTime && newTime !== oldTime) ||
+        record.eventName === 'REMOVE') &&
+      !isDeleting
     );
   });
 
