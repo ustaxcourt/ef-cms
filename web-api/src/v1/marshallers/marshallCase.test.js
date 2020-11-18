@@ -79,4 +79,9 @@ describe('marshallCase', () => {
     expect(marshalled.practitioners).toBeDefined();
     expect(marshalled.respondents).toBeDefined();
   });
+
+  it('does not require any attributes to be set', () => {
+    const marshalled = marshallCase({});
+    expect(marshalled).toBeDefined();
+  });
 });

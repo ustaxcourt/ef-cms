@@ -20,13 +20,13 @@ const REQUEST_EVENT = {
 };
 
 const createSilentAppContext = user => {
-  const applicationContext = createApplicationContext(user);
-  applicationContext.environment.dynamoDbTableName = 'mocked';
-
-  applicationContext.logger = {
+  const applicationContext = createApplicationContext(user, {
+    debug: jest.fn(),
     error: jest.fn(),
     info: jest.fn(),
-  };
+  });
+
+  applicationContext.environment.dynamoDbTableName = 'mocked';
 
   return applicationContext;
 };
@@ -43,8 +43,7 @@ describe('getCaseLambda', () => {
 
   // the 401 case is handled by API Gateway, and as such isn’t tested here.
 
-  // Currently returns a 500 instead of a 404; bug https://github.com/flexion/ef-cms/issues/6853
-  it.skip('returns 404 when the user is not authorized and the case is not found', async () => {
+  it('returns 404 when the user is not authorized and the case is not found', async () => {
     const user = { role: 'roleWithNoPermissions' };
     const applicationContext = createSilentAppContext(user);
 
@@ -106,8 +105,7 @@ describe('getCaseLambda', () => {
     expect(JSON.parse(response.body).userId).toBeUndefined();
   });
 
-  // Currently returns a 500 instead of a 404; bug https://github.com/flexion/ef-cms/issues/6853
-  it.skip('returns 404 when the docket number isn’t found', async () => {
+  it('returns 404 when the docket number isn’t found', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
 

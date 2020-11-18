@@ -16,9 +16,6 @@ exports.getPublicJudgesLambda = event => {
           applicationContext,
         });
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );
 };

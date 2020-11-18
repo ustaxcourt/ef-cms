@@ -7,14 +7,8 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.virusScanPdfLambda = event =>
-  genericHandler(
-    event,
-    async () => {
-      return {
-        message: 'skipping clamav virus scan',
-      };
-    },
-    {
-      logEvent: true,
-    },
-  );
+  genericHandler(event, async () => {
+    return {
+      message: 'skipping clamav virus scan',
+    };
+  });
