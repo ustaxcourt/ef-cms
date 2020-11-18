@@ -15,8 +15,5 @@ exports.getPublicCaseLambda = event =>
         docketNumber: event.pathParameters.docketNumber,
       });
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );

@@ -1,7 +1,8 @@
+const colorize = require('logform/colorize');
 const combine = require('logform/combine');
+const errors = require('logform/errors');
 const json = require('logform/json');
 const printf = require('logform/printf');
-const timestamp = require('logform/timestamp');
 const {
   config,
   createLogger: createWinstonLogger,
@@ -12,34 +13,41 @@ const { cloneDeep, unset } = require('lodash');
 
 const redact = format(logEntry => {
   const copy = cloneDeep(logEntry);
-  ['token', 'headers.authorization'].forEach(k => unset(copy, k));
+  ['user.token', 'request.headers.authorization'].forEach(k => unset(copy, k));
   return copy;
 });
 
-const nonProductionFormatters = [
-  combine(
-    timestamp(),
-    printf(
-      info =>
-        `${info.timestamp} ${info.level}: ${info.message} ${JSON.stringify(
-          info,
-          null,
-          2,
-        )}`,
-    ),
-  ),
-];
+const console = () => new transports.Console();
 
-exports.createLogger = defaultMeta =>
-  createWinstonLogger({
-    defaultMeta,
-    format: combine(
-      redact(),
-      ...(process.env.NODE_ENV === 'production'
-        ? [json()]
-        : nonProductionFormatters),
-    ),
+exports.createLogger = (transport = console()) => {
+  const options = {
+    defaultMeta: {},
     level: process.env.LOG_LEVEL || 'debug',
     levels: config.syslog.levels,
-    transports: [new transports.Console()],
-  });
+    transports: [transport],
+  };
+
+  const formatters = [errors({ stack: true }), redact()];
+
+  if (process.env.NODE_ENV === 'production') {
+    options.format = combine(...formatters, json());
+  } else {
+    options.format = combine(
+      ...formatters,
+      colorize(),
+      printf(info => {
+        const metadata = Object.assign({}, info, {
+          level: undefined,
+          message: undefined,
+        });
+
+        const stringified = JSON.stringify(metadata, null, 2);
+        const lines = stringified === '{}' ? [] : stringified.split('\n');
+
+        return [`${info.level}:\t${info.message}`, ...lines].join('\n  ');
+      }),
+    );
+  }
+
+  return createWinstonLogger(options);
+};
