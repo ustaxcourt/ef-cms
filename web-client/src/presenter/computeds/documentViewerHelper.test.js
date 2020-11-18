@@ -295,6 +295,60 @@ describe('documentViewerHelper', () => {
 
       expect(result.showNotServed).toEqual(false);
     });
+
+    it('should be false when the document is a legacy served document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                isLegacyServed: true,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showNotServed).toEqual(false);
+    });
+
+    it('should be true when the document is not a legacy served document and has no servedAt date', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                isLegacyServed: false,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showNotServed).toEqual(true);
+    });
   });
 
   describe('showServeCourtIssuedDocumentButton', () => {
@@ -405,6 +459,60 @@ describe('documentViewerHelper', () => {
 
       expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
     });
+
+    it('should be false when the document is a legacy served document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                isLegacyServed: true,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
+    });
+
+    it('should be true when the document is not a legacy served document and has no servedAt date', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                isLegacyServed: false,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(true);
+    });
   });
 
   describe('showServePaperFiledDocumentButton', () => {
@@ -513,6 +621,60 @@ describe('documentViewerHelper', () => {
       });
 
       expect(result.showServePaperFiledDocumentButton).toEqual(false);
+    });
+
+    it('should be false when the document is a legacy served document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Entry of Appearance',
+                documentType: 'Entry of Appearance',
+                eventCode: 'EA',
+                isLegacyServed: true,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toEqual(false);
+    });
+
+    it('should be true when the document is not a legacy served document and has no servedAt date', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Entry of Appearance',
+                documentType: 'Entry of Appearance',
+                eventCode: 'EA',
+                isLegacyServed: false,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toEqual(true);
     });
   });
 
