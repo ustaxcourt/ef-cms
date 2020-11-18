@@ -37,17 +37,16 @@ export const PublicFilingsAndProceedings = connect(
         <span
           className={classNames(entry.isStricken && 'stricken-docket-record')}
         >
-          {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
-        </span>
+          <span>
+            {entry.showDocumentDescriptionWithoutLink &&
+              entry.descriptionDisplay}
+          </span>
 
-        <span
-          className={classNames(entry.isStricken && 'stricken-docket-record')}
-        >
-          {entry.signatory}
-        </span>
+          <span>{entry.signatory}</span>
 
-        <span className="filings-and-proceedings">
-          {entry.filingsAndProceedingsWithAdditionalInfo}
+          <span className="filings-and-proceedings">
+            {entry.filingsAndProceedingsWithAdditionalInfo}
+          </span>
         </span>
 
         {entry.isStricken && <span> (STRICKEN)</span>}
