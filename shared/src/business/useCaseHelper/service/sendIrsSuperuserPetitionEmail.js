@@ -29,7 +29,10 @@ exports.sendIrsSuperuserPetitionEmail = async ({
 
   privatePractitioners.forEach(practitioner => {
     const representingFormatted = [];
-    const { representingPrimary, representingSecondary } = practitioner;
+    const representingPrimary = practitioner.getRepresentingPrimary(caseEntity);
+    const representingSecondary = practitioner.getRepresentingSecondary(
+      caseEntity,
+    );
 
     if (representingPrimary) {
       representingFormatted.push(contactPrimary.name);

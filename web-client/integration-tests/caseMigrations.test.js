@@ -176,7 +176,10 @@ const otherPetitionersCase = {
       email: 'someone@example.com',
       hasEAccess: true,
       name: 'Keelie Bruce',
-      representing: ['dd0ac156-aa2d-46e7-8b5a-902f1d16f199'],
+      representing: [
+        'dd0ac156-aa2d-46e7-8b5a-902f1d16f199',
+        '76a6050f-a423-47bb-943b-a5661fe08a6b',
+      ],
       role: 'privatePractitioner',
       secondaryName: 'Logan Fields',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,

@@ -7,7 +7,6 @@ const {
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
   isAuthorized,
@@ -137,24 +136,6 @@ const createWorkItemForChange = async ({
     applicationContext,
     workItem: workItem.validate().toRawObject(),
   });
-};
-
-const caseEntityPartyWithPaperService = caseEntity => {
-  return (
-    caseEntity.contactPrimary.serviceIndicator ===
-      SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (caseEntity.contactSecondary &&
-      caseEntity.contactSecondary.serviceIndicator ===
-        SERVICE_INDICATOR_TYPES.SI_PAPER) ||
-    (caseEntity.privatePractitioners &&
-      caseEntity.privatePractitioners.find(
-        pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-      )) ||
-    (caseEntity.irsPractitioners &&
-      caseEntity.irsPractitioners.find(
-        ip => ip.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-      ))
-  );
 };
 
 const generatePaperServicePdf = async ({
@@ -338,7 +319,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const partyWithPaperService = caseEntityPartyWithPaperService(caseEntity);
+  const partyWithPaperService = caseEntity.hasPartyWithPaperService();
 
   let primaryChangeDocs;
   let secondaryChangeDocs;
@@ -362,6 +343,30 @@ exports.updatePetitionerInformationInteractor = async ({
         servedParties,
         user,
       });
+
+      let privatePractitionersRepresentingPrimaryContact = false;
+      for (const privatePractitioner of caseEntity.privatePractitioners) {
+        const practitionerRepresentingPrimary = privatePractitioner.getRepresentingPrimary(
+          caseEntity,
+        );
+        if (practitionerRepresentingPrimary) {
+          privatePractitionersRepresentingPrimaryContact = true;
+          break;
+        }
+      }
+
+      if (
+        !privatePractitionersRepresentingPrimaryContact ||
+        partyWithPaperService
+      ) {
+        await createWorkItemForChange({
+          applicationContext,
+          caseEntity,
+          changeOfAddressDocketEntry:
+            primaryChangeDocs.changeOfAddressDocketEntry,
+          user,
+        });
+      }
     }
     if (secondaryChange) {
       secondaryChangeDocs = await createDocketEntryAndWorkItem({
@@ -377,6 +382,30 @@ exports.updatePetitionerInformationInteractor = async ({
         servedParties,
         user,
       });
+
+      let privatePractitionersRepresentingSecondaryContact = false;
+      for (const privatePractitioner of caseEntity.privatePractitioners) {
+        const practitionerRepresentingSecondary = privatePractitioner.getRepresentingSecondary(
+          caseEntity,
+        );
+        if (practitionerRepresentingSecondary) {
+          privatePractitionersRepresentingSecondaryContact = true;
+          break;
+        }
+      }
+
+      if (
+        !privatePractitionersRepresentingSecondaryContact ||
+        partyWithPaperService
+      ) {
+        await createWorkItemForChange({
+          applicationContext,
+          caseEntity,
+          changeOfAddressDocketEntry:
+            secondaryChangeDocs.changeOfAddressDocketEntry,
+          user,
+        });
+      }
     }
 
     if (servedParties.paper.length > 0) {

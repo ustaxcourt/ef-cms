@@ -21,6 +21,9 @@ jest.mock(
 );
 
 describe('sendIrsSuperuserPetitionEmail', () => {
+  const PRIMARY_CONTACT_ID = '679088cf-c125-444a-bfe4-936971050e5a';
+  const SECONDARY_CONTACT_ID = 'a2b2be88-1270-40fd-8a67-f61d1bd0c8d7';
+
   beforeAll(() => {
     applicationContext.getIrsSuperuserEmail.mockReturnValue('irs@example.com');
   });
@@ -70,9 +73,11 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         caseCaption: 'A Caption',
         caseType: CASE_TYPES_MAP.cdp,
         contactPrimary: {
+          contactId: PRIMARY_CONTACT_ID,
           name: 'Joe Exotic',
         },
         contactSecondary: {
+          contactId: SECONDARY_CONTACT_ID,
           name: 'Carol Baskin',
         },
         docketEntries: [
@@ -90,10 +95,10 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
-            representingPrimary: true,
+            representing: [PRIMARY_CONTACT_ID],
           },
           {
-            representingSecondary: true,
+            representing: [SECONDARY_CONTACT_ID],
           },
         ],
         procedureType: 'Regular',
@@ -117,9 +122,11 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       {
         caseCaption: 'A Caption',
         contactPrimary: {
+          contactId: PRIMARY_CONTACT_ID,
           name: 'Joe Exotic',
         },
         contactSecondary: {
+          contactId: SECONDARY_CONTACT_ID,
           name: 'Carol Baskin',
         },
         docketEntries: [
@@ -137,11 +144,10 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
-            representingPrimary: true,
+            representing: [PRIMARY_CONTACT_ID],
           },
           {
-            representingPrimary: true,
-            representingSecondary: true,
+            representing: [PRIMARY_CONTACT_ID, SECONDARY_CONTACT_ID],
           },
         ],
       },
@@ -159,11 +165,9 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     expect(practitioners).toMatchObject([
       {
         representingFormatted: 'Joe Exotic',
-        representingPrimary: true,
       },
       {
         representingFormatted: 'Joe Exotic, Carol Baskin',
-        representingPrimary: true,
       },
     ]);
   });
