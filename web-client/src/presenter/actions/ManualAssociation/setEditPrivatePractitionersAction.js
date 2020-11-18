@@ -11,6 +11,19 @@ import { state } from 'cerebral';
  * @returns {Promise<*>} the promise of the completed action
  */
 export const setEditPrivatePractitionersAction = async ({ get, store }) => {
-  const privatePractitioners = get(state.caseDetail.privatePractitioners);
-  store.set(state.modal.privatePractitioners, cloneDeep(privatePractitioners));
+  const caseDetail = get(state.caseDetail);
+  const modalPrivatePractitioners = cloneDeep(caseDetail.privatePractitioners);
+
+  modalPrivatePractitioners.map(privatePractitioner => {
+    privatePractitioner.representingPrimary = !!privatePractitioner.representing.find(
+      r => r === caseDetail.contactPrimary.contactId,
+    );
+    privatePractitioner.representingSecondary =
+      !!caseDetail.contactSecondary &&
+      !!privatePractitioner.representing.find(
+        r => r === caseDetail.contactSecondary.contactId,
+      );
+  });
+
+  store.set(state.modal.privatePractitioners, modalPrivatePractitioners);
 };

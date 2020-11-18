@@ -233,7 +233,7 @@ describe('migrateCaseInteractor', () => {
               contact: { address1: '123 Main St' },
               email: 'practitioner2@example.com',
               name: 'Saul Goodman',
-              representingPrimary: true,
+              representing: ['6c3365b5-790f-4668-b6ad-3127b339dd9b'],
               role: 'privatePractitioner',
             },
           ],
@@ -249,7 +249,10 @@ describe('migrateCaseInteractor', () => {
       expect(
         applicationContext.getPersistenceGateway().createCase.mock.calls[0][0]
           .caseToCreate.privatePractitioners[0],
-      ).toMatchObject({ ...practitionerData, representingPrimary: true });
+      ).toMatchObject({
+        ...practitionerData,
+        representing: ['6c3365b5-790f-4668-b6ad-3127b339dd9b'],
+      });
     });
 
     it('throws a validation error if the privatePractitioner is not found in the database and valid data is not sent', async () => {

@@ -185,10 +185,9 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.privatePractitioners[0].representingPrimary).toEqual(true);
-    expect(
-      result.privatePractitioners[0].representingSecondary,
-    ).toBeUndefined();
+    expect(result.privatePractitioners[0].representing).toEqual([
+      result.contactPrimary.contactId,
+    ]);
     expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
@@ -248,8 +247,10 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(result.privatePractitioners[0].representingPrimary).toEqual(true);
-    expect(result.privatePractitioners[0].representingSecondary).toEqual(true);
+    expect(result.privatePractitioners[0].representing).toEqual([
+      result.contactPrimary.contactId,
+      result.contactSecondary.contactId,
+    ]);
     expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
