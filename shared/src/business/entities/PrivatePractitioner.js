@@ -27,8 +27,6 @@ PrivatePractitioner.prototype.init = function init(rawUser) {
   this.barNumber = rawUser.barNumber;
   this.firmName = rawUser.firmName;
   this.representing = rawUser.representing || [];
-  this.representingPrimary = rawUser.representingPrimary;
-  this.representingSecondary = rawUser.representingSecondary;
   this.serviceIndicator =
     rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 };
@@ -56,8 +54,6 @@ PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
     .items(JoiValidationConstants.UUID)
     .optional()
     .description('List of contact IDs of contacts'),
-  representingPrimary: joi.boolean().optional(),
-  representingSecondary: joi.boolean().optional(),
   role: JoiValidationConstants.STRING.required().valid(
     ROLES.privatePractitioner,
   ),
@@ -73,6 +69,21 @@ joiValidationDecorator(
   PrivatePractitioner.VALIDATION_RULES,
   {},
 );
+
+PrivatePractitioner.prototype.getRepresentingPrimary = function getRepresentingPrimary(
+  caseEntity,
+) {
+  return this.representing.find(r => r === caseEntity.contactPrimary.contactId);
+};
+
+PrivatePractitioner.prototype.getRepresentingSecondary = function getRepresentingSecondary(
+  caseEntity,
+) {
+  return (
+    caseEntity.contactSecondary &&
+    this.representing.find(r => r === caseEntity.contactSecondary.contactId)
+  );
+};
 
 module.exports = {
   PrivatePractitioner: validEntityDecorator(PrivatePractitioner),

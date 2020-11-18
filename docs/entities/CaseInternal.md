@@ -1754,6 +1754,7 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Determines if the docket entry should be displayed in the Pending Report."
             previousDocument: 
               type: "object"
               flags: 
