@@ -20,13 +20,13 @@ const REQUEST_EVENT = {
 };
 
 const createSilentAppContext = user => {
-  const applicationContext = createApplicationContext(user);
-  applicationContext.environment.dynamoDbTableName = 'mocked';
-
-  applicationContext.logger = {
+  const applicationContext = createApplicationContext(user, {
+    debug: jest.fn(),
     error: jest.fn(),
     info: jest.fn(),
-  };
+  });
+
+  applicationContext.environment.dynamoDbTableName = 'mocked';
 
   return applicationContext;
 };
