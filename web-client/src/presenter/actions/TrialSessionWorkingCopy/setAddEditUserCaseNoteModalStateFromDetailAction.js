@@ -19,7 +19,7 @@ export const setAddEditUserCaseNoteModalStateFromDetailAction = ({
   const { caseCaption, docketNumber, docketNumberWithSuffix } = get(
     state.caseDetail,
   );
-  const notes = get(state.caseDetail.judgesNote.notes);
+  const notes = get(state.judgesNote.notes);
   const caseTitle = applicationContext.getCaseTitle(caseCaption || '');
   const notesLabel =
     currentUser.role === USER_ROLES.trialClerk ? 'Notes' : 'Judge’s notes';
