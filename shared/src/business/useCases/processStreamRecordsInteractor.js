@@ -329,14 +329,13 @@ exports.processStreamRecordsInteractor = async ({
     const IS_DELETING_KEY = 'dynamodb.NewImage.aws:rep:deleting.BOOL';
 
     const oldImage = get(record, 'dynamodb.OldImage');
-    const newImage = get(record, 'dynamodb.NewImage');
 
     console.log(
-      `${record.eventName}, ${JSON.stringify(
-        oldImage,
-        null,
-        2,
-      )}, ${JSON.stringify(newImage, null, 2)}`,
+      `${record.eventName}, ${isDeleting},  ${(oldImage.pk, oldImage.sk)}`,
+      (process.env.NODE_ENV !== 'production' ||
+        (newTime && newTime !== oldTime) ||
+        record.eventName === 'REMOVE') &&
+        !isDeleting,
     );
 
     const newTime = get(record, NEW_TIME_KEY);
