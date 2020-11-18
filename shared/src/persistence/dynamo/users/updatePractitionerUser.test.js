@@ -43,14 +43,6 @@ describe('updatePractitionerUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
-        pk: 'section|inactivePractitioner',
-        sk: `user|${userId}`,
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[1][0],
-    ).toMatchObject({
-      Item: {
         pk: `user|${userId}`,
         sk: `user|${userId}`,
         ...updatedUser,
@@ -74,7 +66,7 @@ describe('updatePractitionerUser', () => {
       },
     });
     expect(
-      applicationContext.getDocumentClient().put.mock.calls[2][0],
+      applicationContext.getDocumentClient().put.mock.calls[1][0],
     ).toMatchObject({
       Item: {
         pk: 'inactivePractitioner|Test Private Practitioner',
@@ -82,7 +74,7 @@ describe('updatePractitionerUser', () => {
       },
     });
     expect(
-      applicationContext.getDocumentClient().put.mock.calls[3][0],
+      applicationContext.getDocumentClient().put.mock.calls[2][0],
     ).toMatchObject({
       Item: {
         pk: 'inactivePractitioner|PT1234',
