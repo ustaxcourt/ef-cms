@@ -160,7 +160,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should add eligible for trial case records to returned array for a case in ready for trial status WITH found eligible for trial records', async () => {
+  it('should NOT add eligible for trial case records to returned array for a case in ready for trial status WITH found eligible for trial records', async () => {
     documentClient.query = jest
       .fn()
       .mockReturnValueOnce({
@@ -190,6 +190,36 @@ describe('migrateItems', () => {
     const mockCase = {
       ...MOCK_CASE,
       pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: `case|${MOCK_CASE.docketNumber}`,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    };
+
+    const results = await migrateItems([mockCase], documentClient);
+
+    expect(results).toEqual([mockCase]);
+  });
+
+  it('should NOT add eligible for trial case records to returned array for a case in ready for trial status without a preferredTrialCity', async () => {
+    documentClient.query = jest
+      .fn()
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Items: [],
+        }),
+      })
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Items: [
+            { ...mockCaseRecords[0], preferredTrialCity: undefined },
+            ...mockCaseRecords.slice(1, 0),
+          ],
+        }),
+      });
+
+    const mockCase = {
+      ...MOCK_CASE,
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      preferredTrialCity: undefined,
       sk: `case|${MOCK_CASE.docketNumber}`,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     };

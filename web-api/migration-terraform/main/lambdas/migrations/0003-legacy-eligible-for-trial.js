@@ -58,20 +58,22 @@ const migrateItems = async (items, documentClient) => {
           applicationContext,
         }).validate();
 
-        const { hybrid, nonHybrid } = caseEntity.generateTrialSortTags();
+        if (caseEntity.preferredTrialCity) {
+          const { hybrid, nonHybrid } = caseEntity.generateTrialSortTags();
 
-        itemsAfter.push({
-          docketNumber: item.docketNumber,
-          gsi1pk: `eligible-for-trial-case-catalog|${item.docketNumber}`,
-          pk: 'eligible-for-trial-case-catalog',
-          sk: nonHybrid,
-        });
-        itemsAfter.push({
-          docketNumber: item.docketNumber,
-          gsi1pk: `eligible-for-trial-case-catalog|${item.docketNumber}`,
-          pk: 'eligible-for-trial-case-catalog',
-          sk: hybrid,
-        });
+          itemsAfter.push({
+            docketNumber: item.docketNumber,
+            gsi1pk: `eligible-for-trial-case-catalog|${item.docketNumber}`,
+            pk: 'eligible-for-trial-case-catalog',
+            sk: nonHybrid,
+          });
+          itemsAfter.push({
+            docketNumber: item.docketNumber,
+            gsi1pk: `eligible-for-trial-case-catalog|${item.docketNumber}`,
+            pk: 'eligible-for-trial-case-catalog',
+            sk: hybrid,
+          });
+        }
       }
     }
   }
