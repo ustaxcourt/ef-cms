@@ -15,7 +15,8 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
     if (
       user.section !== ROLES.privatePractitioner &&
       user.section !== ROLES.petitioner &&
-      user.section !== ROLES.inactivePractitioner
+      user.section !== ROLES.inactivePractitioner &&
+      user.section !== ROLES.irsPractitioner
     ) {
       await client.put({
         Item: {
