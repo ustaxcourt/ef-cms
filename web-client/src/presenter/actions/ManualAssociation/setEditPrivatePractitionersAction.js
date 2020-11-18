@@ -14,7 +14,7 @@ export const setEditPrivatePractitionersAction = async ({ get, store }) => {
   const caseDetail = get(state.caseDetail);
   const modalPrivatePractitioners = cloneDeep(caseDetail.privatePractitioners);
 
-  modalPrivatePractitioners.map(privatePractitioner => {
+  modalPrivatePractitioners.forEach(privatePractitioner => {
     privatePractitioner.representingPrimary = !!privatePractitioner.representing.find(
       r => r === caseDetail.contactPrimary.contactId,
     );
