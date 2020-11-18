@@ -127,9 +127,6 @@ const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
-  createCaseCatalogRecord,
-} = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
-const {
   createCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline');
 const {
@@ -1125,7 +1122,6 @@ const gatewayMethods = {
     bulkDeleteRecords,
     bulkIndexRecords,
     createCase,
-    createCaseCatalogRecord,
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createMessage,
