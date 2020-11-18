@@ -323,13 +323,21 @@ exports.processStreamRecordsInteractor = async ({
     });
 
   recordsToProcess = recordsToProcess.filter(record => {
-    console.log(
-      `${record.eventName}, ${JSON.stringify(record.dynamodb.Keys, null, 2)}`,
-    );
-
     // to prevent global tables writing extra data
     const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
     const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
+
+    const oldImage = get(record, 'dynamodb.OldImage');
+    const newImage = get(record, 'dynamodb.NewImage');
+
+    console.log(
+      `${record.eventName}, ${JSON.stringify(
+        oldImage,
+        null,
+        2,
+      )}, ${JSON.stringify(newImage, null, 2)}`,
+    );
+
     const newTime = get(record, NEW_TIME_KEY);
     const oldTime = get(record, OLD_TIME_KEY);
     return (
