@@ -1,4 +1,3 @@
-const createApplicationContext = require('../applicationContext');
 const { genericHandler } = require('../genericHandler');
 
 /**
@@ -8,20 +7,15 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.getPublicDocumentDownloadUrlLambda = event =>
-  genericHandler(event, async () => {
-    const applicationContext = createApplicationContext({});
-    try {
-      const results = await applicationContext
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      return await applicationContext
         .getUseCases()
         .getPublicDownloadPolicyUrlInteractor({
           applicationContext,
           ...event.pathParameters,
         });
-      applicationContext.logger.debug('Results', results);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      await applicationContext.notifyHoneybadger(e);
-      throw e;
-    }
-  });
+    },
+    { user: {} },
+  );

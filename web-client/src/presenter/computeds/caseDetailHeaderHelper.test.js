@@ -521,4 +521,40 @@ describe('caseDetailHeaderHelper', () => {
     });
     expect(result.showNewTabLink).toBe(false);
   });
+
+  it('should set showCreateMessageButton to false when the user role is General', () => {
+    const user = {
+      role: ROLES.general,
+      userId: 'e7c05404-cfd3-45e2-bc6b-c8aeb8ed869e',
+    };
+
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [] },
+        currentPage: 'CaseDetailInternal',
+        form: {},
+      },
+    });
+
+    expect(result.showCreateMessageButton).toBe(false);
+  });
+
+  it('should set showCreateMessageButton to true when the user role is NOT General', () => {
+    const user = {
+      role: ROLES.petitionsClerk,
+      userId: '08f9464a-6eb4-4d58-bf38-5276fe9a5911',
+    };
+
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [] },
+        currentPage: 'CaseDetailInternal',
+        form: {},
+      },
+    });
+
+    expect(result.showCreateMessageButton).toBe(true);
+  });
 });

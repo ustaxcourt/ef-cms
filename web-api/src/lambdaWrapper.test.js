@@ -7,6 +7,8 @@ describe('lambdaWrapper', () => {
     req = {
       body: 'blank',
       headers: {},
+      locals: {},
+      setTimeout: jest.fn(),
     };
     res = {
       headers: {},
@@ -104,64 +106,17 @@ describe('lambdaWrapper', () => {
     );
   });
 
-  describe('request IDs', () => {
-    it('passes request IDs to event if set', async () => {
-      // set by aws-serverless-express.eventContext()
-      req.apiGateway = {
-        context: {
-          awsRequestId: 'c840522b-1e43-4d03-995c-014d199fa237',
-        },
-        event: {
-          requestContext: {
-            requestId: '11ff704e-b35b-4472-8280-29be3fb957ca',
-          },
+  it('sets request timeout to 20 minutes', async () => {
+    await lambdaWrapper(() => {
+      return {
+        body: 'hello world',
+        headers: {
+          'Content-Type': 'application/pdf',
         },
       };
+    })(req, res);
 
-      req.headers = {
-        'x-amzn-trace-id': 'Root=1-5fa1efc9-164cfd9602fe2b523bf82292;Sampled=0',
-      };
-
-      await lambdaWrapper(event => {
-        expect(event.requestId).toBeDefined();
-        expect(event.requestId.apiGateway).toBe(
-          '11ff704e-b35b-4472-8280-29be3fb957ca',
-        );
-        expect(event.requestId.applicationLoadBalancer).toBe(
-          'Root=1-5fa1efc9-164cfd9602fe2b523bf82292;Sampled=0',
-        );
-        expect(event.requestId.lambda).toBe(
-          'c840522b-1e43-4d03-995c-014d199fa237',
-        );
-
-        return {
-          body: null,
-          headers: {},
-        };
-      })(req, res);
-    });
-
-    it('doesn’t choke if request IDs are missing', async () => {
-      req.apiGateway = {
-        context: {},
-        event: {
-          requestContext: {},
-        },
-      };
-
-      req.headers = {};
-
-      await lambdaWrapper(event => {
-        expect(event.requestId).toBeDefined();
-        expect(event.requestId.apiGateway).not.toBeDefined();
-        expect(event.requestId.applicationLoadBalancer).not.toBeDefined();
-        expect(event.requestId.lambda).not.toBeDefined();
-
-        return {
-          body: null,
-          headers: {},
-        };
-      })(req, res);
-    });
+    expect(req.setTimeout).toHaveBeenCalled();
+    expect(req.setTimeout).toHaveBeenCalledWith(20 * 60 * 1000);
   });
 });
