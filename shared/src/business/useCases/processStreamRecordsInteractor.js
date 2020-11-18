@@ -2,6 +2,24 @@ const AWS = require('aws-sdk');
 const { flattenDeep, get, partition } = require('lodash');
 const { omit } = require('lodash');
 
+const filterRecords = record => {
+  // to prevent global tables writing extra data
+  const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
+  const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
+  const IS_DELETING_KEY = 'dynamodb.NewImage.aws:rep:deleting.BOOL';
+
+  const newTime = get(record, NEW_TIME_KEY);
+  const oldTime = get(record, OLD_TIME_KEY);
+  const isDeleting = get(record, IS_DELETING_KEY);
+
+  return (
+    (process.env.NODE_ENV !== 'production' ||
+      (newTime && newTime !== oldTime) ||
+      record.eventName === 'REMOVE') &&
+    !isDeleting
+  );
+};
+
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
     records,
@@ -282,7 +300,6 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   });
 
   if (failedRecords.length > 0) {
-    console.log('****** At least one record failed to delete');
     applicationContext.logger.error(
       'the records that failed to delete',
       failedRecords,
@@ -322,33 +339,7 @@ exports.processStreamRecordsInteractor = async ({
       useTempBucket: false,
     });
 
-  recordsToProcess = recordsToProcess.filter(record => {
-    // to prevent global tables writing extra data
-    const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
-    const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
-    const IS_DELETING_KEY = 'dynamodb.NewImage.aws:rep:deleting.BOOL';
-
-    const oldImage = get(record, 'dynamodb.OldImage');
-
-    console.log(
-      `${record.eventName}, ${isDeleting},  ${(oldImage.pk, oldImage.sk)}`,
-      (process.env.NODE_ENV !== 'production' ||
-        (newTime && newTime !== oldTime) ||
-        record.eventName === 'REMOVE') &&
-        !isDeleting,
-    );
-
-    const newTime = get(record, NEW_TIME_KEY);
-    const oldTime = get(record, OLD_TIME_KEY);
-    const isDeleting = get(record, IS_DELETING_KEY);
-
-    return (
-      (process.env.NODE_ENV !== 'production' ||
-        (newTime && newTime !== oldTime) ||
-        record.eventName === 'REMOVE') &&
-      !isDeleting
-    );
-  });
+  recordsToProcess = recordsToProcess.filter(filterRecords);
 
   const {
     caseEntityRecords,
@@ -368,8 +359,6 @@ exports.processStreamRecordsInteractor = async ({
       applicationContext,
       removeRecords,
     }).catch(err => {
-      console.log('******FAILED TO REMOVE', err);
-
       applicationContext.logger.error("failed to processRemoveEntries',", err);
       applicationContext.notifyHoneybadger(err, {
         message: 'failed to processRemoveEntries',
@@ -433,6 +422,7 @@ exports.processStreamRecordsInteractor = async ({
   }
 };
 
+exports.filterRecords = filterRecords;
 exports.partitionRecords = partitionRecords;
 exports.processCaseEntries = processCaseEntries;
 exports.processDocketEntries = processDocketEntries;
