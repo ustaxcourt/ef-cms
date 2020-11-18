@@ -35,7 +35,6 @@ const migrateItems = async (items, documentClient) => {
         } else {
           throw new Error(`Case record ${item.docketNumber} was not found`);
         }
-        console.log('updated practitioner', item);
         const updatedPrivatePractitioner = new PrivatePractitioner(item)
           .validate()
           .toRawObject();
