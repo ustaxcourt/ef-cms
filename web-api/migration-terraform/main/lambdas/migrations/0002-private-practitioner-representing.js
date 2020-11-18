@@ -26,11 +26,21 @@ const migrateItems = async (items, documentClient) => {
         if (caseRecord && caseRecord.docketNumber) {
           if (item.representingPrimary) {
             const primaryContactId = caseRecord.contactPrimary.contactId;
-            item.representing.push(primaryContactId);
+            const primaryContactAlreadyInRepresenting = item.representing.find(
+              r => r === primaryContactId,
+            );
+            if (!primaryContactAlreadyInRepresenting) {
+              item.representing.push(primaryContactId);
+            }
           }
           if (item.representingSecondary) {
             const secondaryContactId = caseRecord.contactSecondary.contactId;
-            item.representing.push(secondaryContactId);
+            const secondaryContactAlreadyInRepresenting = item.representing.find(
+              r => r === secondaryContactId,
+            );
+            if (!secondaryContactAlreadyInRepresenting) {
+              item.representing.push(secondaryContactId);
+            }
           }
         } else {
           throw new Error(`Case record ${item.docketNumber} was not found`);

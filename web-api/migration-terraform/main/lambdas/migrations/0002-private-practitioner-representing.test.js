@@ -120,6 +120,23 @@ describe('migrateItems', () => {
     });
   });
 
+  it('should not add primary or secondary contact id to representing array if they are already present', async () => {
+    const items = [
+      {
+        ...mockPrivatePractitionerCaseRecord,
+        representing: [PRIMARY_CONTACT_ID, SECONDARY_CONTACT_ID],
+        representingPrimary: true,
+        representingSecondary: true,
+      },
+    ];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0]).toMatchObject({
+      representing: [PRIMARY_CONTACT_ID, SECONDARY_CONTACT_ID],
+    });
+  });
+
   it('should not modify the record if representingPrimary and representingSecondary are false', async () => {
     const items = [
       {
