@@ -2,6 +2,9 @@ const AWS = require('aws-sdk');
 const {
   migrateItems: migration0001,
 } = require('./migrations/0001-user-case-add-closed-date');
+const {
+  migrateItems: migration0002,
+} = require('./migrations/0002-private-practitioner-representing');
 const { chunk, isEmpty } = require('lodash');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -21,6 +24,7 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0001(items, documentClient);
+  items = await migration0002(items, documentClient);
   return items;
 };
 

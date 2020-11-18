@@ -21,11 +21,18 @@ const setServiceIndicatorsForCase = caseDetail => {
   // privatePractitioners
   if (privatePractitioners && privatePractitioners.length) {
     privatePractitioners.forEach(practitioner => {
-      if (practitioner.representingPrimary) {
+      const representingPrimary = practitioner.representing.find(
+        r => r === contactPrimary.contactId,
+      );
+      const representingSecondary =
+        contactSecondary &&
+        practitioner.representing.find(r => r === contactSecondary.contactId);
+
+      if (representingPrimary) {
         hasPrimaryPractitioner = true;
       }
 
-      if (practitioner.representingSecondary) {
+      if (representingSecondary) {
         hasSecondaryPractitioner = true;
       }
     });
