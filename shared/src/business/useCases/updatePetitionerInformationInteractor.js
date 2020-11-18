@@ -327,16 +327,10 @@ exports.updatePetitionerInformationInteractor = async ({
     const partyWithPaperService = caseEntity.hasPartyWithPaperService();
 
     if (primaryChange) {
-      let privatePractitionersRepresentingContact = false;
-      for (const privatePractitioner of caseEntity.privatePractitioners) {
-        const practitionerRepresentingPrimary = privatePractitioner.getRepresentingPrimary(
-          caseEntity,
-        );
-        if (practitionerRepresentingPrimary) {
-          privatePractitionersRepresentingContact = true;
-          break;
-        }
-      }
+      const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
+        privatePractitioner =>
+          privatePractitioner.getRepresentingPrimary(caseEntity),
+      );
 
       primaryChangeDocs = await createDocketEntryAndWorkItem({
         applicationContext,
@@ -352,16 +346,10 @@ exports.updatePetitionerInformationInteractor = async ({
     }
 
     if (secondaryChange) {
-      let privatePractitionersRepresentingContact = false;
-      for (const privatePractitioner of caseEntity.privatePractitioners) {
-        const practitionerRepresentingSecondary = privatePractitioner.getRepresentingSecondary(
-          caseEntity,
-        );
-        if (practitionerRepresentingSecondary) {
-          privatePractitionersRepresentingContact = true;
-          break;
-        }
-      }
+      const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
+        privatePractitioner =>
+          privatePractitioner.getRepresentingSecondary(caseEntity),
+      );
 
       secondaryChangeDocs = await createDocketEntryAndWorkItem({
         applicationContext,
