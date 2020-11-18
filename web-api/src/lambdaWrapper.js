@@ -5,24 +5,16 @@ export const lambdaWrapper = lambda => {
       path: req.path,
       pathParameters: req.params,
       queryStringParameters: req.query,
-      requestId: {
-        apiGateway: (((req.apiGateway || {}).event || {}).requestContext || {})
-          .requestId,
-        applicationLoadBalancer: req.headers['x-amzn-trace-id'],
-        lambda: ((req.apiGateway || {}).context || {}).awsRequestId,
-      },
     };
 
     req.setTimeout(20 * 60 * 1000); // 20 minute timeout (for async lambdas)
 
-    if (process.env.USTC_ENV === 'dev') {
-      console.log(`${req.method}: ${event.path}`);
-    }
-
     const response = await lambda({
       ...event,
       body: JSON.stringify(req.body),
+      logger: req.locals.logger,
     });
+
     res.status(response.statusCode);
 
     res.set({
