@@ -116,5 +116,45 @@ describe('getShowNotServedForDocument', () => {
 
       expect(showNotServed).toEqual(false);
     });
+
+    it('should return true when the document is a legacy document that has not been served and has no servedAt', () => {
+      const showNotServed = getShowNotServedForDocument({
+        UNSERVABLE_EVENT_CODES,
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId,
+              documentTitle: 'Some Stuff',
+              documentType: 'Order',
+              eventCode: 'O',
+              isLegacyServed: false,
+            },
+          ],
+        },
+        docketEntryId,
+      });
+
+      expect(showNotServed).toEqual(true);
+    });
+
+    it('should return false when the document is a legacy document that has been served', () => {
+      const showNotServed = getShowNotServedForDocument({
+        UNSERVABLE_EVENT_CODES,
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId,
+              documentTitle: 'Some Stuff',
+              documentType: 'Order',
+              eventCode: 'O',
+              isLegacyServed: true,
+            },
+          ],
+        },
+        docketEntryId,
+      });
+
+      expect(showNotServed).toEqual(false);
+    });
   });
 });
