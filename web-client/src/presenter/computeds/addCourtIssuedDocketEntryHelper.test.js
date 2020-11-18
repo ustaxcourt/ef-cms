@@ -38,7 +38,10 @@ const state = {
     contactSecondary: { name: 'Timon' },
     docketEntries: [{ docketEntryId: '123' }],
     irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
-    privatePractitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
+    privatePractitioners: [
+      { name: 'Scar', representing: [] },
+      { name: 'Zazu', representing: [] },
+    ],
   },
   docketEntryId: '123',
   form: {

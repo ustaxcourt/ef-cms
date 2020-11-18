@@ -207,10 +207,7 @@ const createDocketEntryAndWorkItem = async ({
     user,
   });
 
-  if (
-    privatePractitionersRepresentingContact.length === 0 ||
-    partyWithPaperService
-  ) {
+  if (!privatePractitionersRepresentingContact || partyWithPaperService) {
     await createWorkItemForChange({
       applicationContext,
       caseEntity,
@@ -319,8 +316,6 @@ exports.updatePetitionerInformationInteractor = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const partyWithPaperService = caseEntity.hasPartyWithPaperService();
-
   let primaryChangeDocs;
   let secondaryChangeDocs;
   let paperServicePdfUrl;
@@ -329,7 +324,20 @@ exports.updatePetitionerInformationInteractor = async ({
     (primaryChange && !caseEntity.contactPrimary.isAddressSealed) ||
     (secondaryChange && !caseEntity.contactSecondary.isAddressSealed)
   ) {
+    const partyWithPaperService = caseEntity.hasPartyWithPaperService();
+
     if (primaryChange) {
+      let privatePractitionersRepresentingContact = false;
+      for (const privatePractitioner of caseEntity.privatePractitioners) {
+        const practitionerRepresentingPrimary = privatePractitioner.getRepresentingPrimary(
+          caseEntity,
+        );
+        if (practitionerRepresentingPrimary) {
+          privatePractitionersRepresentingContact = true;
+          break;
+        }
+      }
+
       primaryChangeDocs = await createDocketEntryAndWorkItem({
         applicationContext,
         caseEntity,
@@ -337,75 +345,35 @@ exports.updatePetitionerInformationInteractor = async ({
         editableFields: primaryEditableFields,
         oldCaseContact: oldCase.contactPrimary,
         partyWithPaperService,
-        privatePractitionersRepresentingContact: caseEntity.privatePractitioners.filter(
-          practitioner => practitioner.representingPrimary,
-        ),
+        privatePractitionersRepresentingContact,
         servedParties,
         user,
       });
-
-      let privatePractitionersRepresentingPrimaryContact = false;
-      for (const privatePractitioner of caseEntity.privatePractitioners) {
-        const practitionerRepresentingPrimary = privatePractitioner.getRepresentingPrimary(
-          caseEntity,
-        );
-        if (practitionerRepresentingPrimary) {
-          privatePractitionersRepresentingPrimaryContact = true;
-          break;
-        }
-      }
-
-      if (
-        !privatePractitionersRepresentingPrimaryContact ||
-        partyWithPaperService
-      ) {
-        await createWorkItemForChange({
-          applicationContext,
-          caseEntity,
-          changeOfAddressDocketEntry:
-            primaryChangeDocs.changeOfAddressDocketEntry,
-          user,
-        });
-      }
     }
-    if (secondaryChange) {
-      secondaryChangeDocs = await createDocketEntryAndWorkItem({
-        applicationContext,
-        caseEntity,
-        change: secondaryChange,
-        editableFields: secondaryEditableFields,
-        oldCaseContact: oldCase.contactSecondary || {},
-        partyWithPaperService,
-        privatePractitionersRepresentingContact: caseEntity.privatePractitioners.filter(
-          practitioner => practitioner.representingSecondary,
-        ),
-        servedParties,
-        user,
-      });
 
-      let privatePractitionersRepresentingSecondaryContact = false;
+    if (secondaryChange) {
+      let privatePractitionersRepresentingContact = false;
       for (const privatePractitioner of caseEntity.privatePractitioners) {
         const practitionerRepresentingSecondary = privatePractitioner.getRepresentingSecondary(
           caseEntity,
         );
         if (practitionerRepresentingSecondary) {
-          privatePractitionersRepresentingSecondaryContact = true;
+          privatePractitionersRepresentingContact = true;
           break;
         }
       }
 
-      if (
-        !privatePractitionersRepresentingSecondaryContact ||
-        partyWithPaperService
-      ) {
-        await createWorkItemForChange({
-          applicationContext,
-          caseEntity,
-          changeOfAddressDocketEntry:
-            secondaryChangeDocs.changeOfAddressDocketEntry,
-          user,
-        });
-      }
+      secondaryChangeDocs = await createDocketEntryAndWorkItem({
+        applicationContext,
+        caseEntity,
+        change: secondaryChange,
+        editableFields: secondaryEditableFields,
+        oldCaseContact: oldCase.contactSecondary,
+        partyWithPaperService,
+        privatePractitionersRepresentingContact,
+        servedParties,
+        user,
+      });
     }
 
     if (servedParties.paper.length > 0) {

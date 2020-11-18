@@ -456,7 +456,12 @@ describe('update petitioner contact information on a case', () => {
           title: 'Executor',
         },
         partyType: PARTY_TYPES.petitioner,
-        privatePractitioners: [],
+        privatePractitioners: [
+          {
+            ...basePractitioner,
+            representing: ['6c5b79e0-2429-4ebc-8e9c-483d0282d4e0'],
+          },
+        ],
       };
 
       const result = await updatePetitionerInformationInteractor({
@@ -502,7 +507,12 @@ describe('update petitioner contact information on a case', () => {
           title: 'Executor',
         },
         partyType: PARTY_TYPES.petitionerSpouse,
-        privatePractitioners: [],
+        privatePractitioners: [
+          {
+            ...basePractitioner,
+            representing: ['51c088b0-808e-4189-bb99-e76546befbfe'],
+          },
+        ],
       };
 
       const result = await updatePetitionerInformationInteractor({
