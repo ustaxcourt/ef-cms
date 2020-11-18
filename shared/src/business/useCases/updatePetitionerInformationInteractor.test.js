@@ -32,11 +32,15 @@ describe('update petitioner contact information on a case', () => {
     barNumber: 'PT1234',
     email: 'practitioner1@example.com',
     name: 'Test Practitioner',
-    representingPrimary: true,
+    representing: [MOCK_CASE.contactPrimary.contactId],
     role: ROLES.privatePractitioner,
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     userId: '898bbe4b-84ee-40a1-ad05-a1e2e8484c72',
   };
+
+  const PRIMARY_CONTACT_ID = '661beb76-f9f3-40db-af3e-60ab5c9287f6';
+  const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
+
   beforeAll(() => {
     addCoverToPdf.mockResolvedValue({
       pdfData: testPdfDoc,
@@ -452,7 +456,12 @@ describe('update petitioner contact information on a case', () => {
           title: 'Executor',
         },
         partyType: PARTY_TYPES.petitioner,
-        privatePractitioners: [],
+        privatePractitioners: [
+          {
+            ...basePractitioner,
+            representing: ['6c5b79e0-2429-4ebc-8e9c-483d0282d4e0'],
+          },
+        ],
       };
 
       const result = await updatePetitionerInformationInteractor({
@@ -498,7 +507,12 @@ describe('update petitioner contact information on a case', () => {
           title: 'Executor',
         },
         partyType: PARTY_TYPES.petitionerSpouse,
-        privatePractitioners: [],
+        privatePractitioners: [
+          {
+            ...basePractitioner,
+            representing: ['51c088b0-808e-4189-bb99-e76546befbfe'],
+          },
+        ],
       };
 
       const result = await updatePetitionerInformationInteractor({
@@ -537,6 +551,7 @@ describe('update petitioner contact information on a case', () => {
         contactPrimary: {
           address1: '789 Division St',
           city: 'Somewhere',
+          contactId: PRIMARY_CONTACT_ID,
           countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Petitioner',
           phone: '1234567',
@@ -547,7 +562,7 @@ describe('update petitioner contact information on a case', () => {
         },
         partyType: PARTY_TYPES.petitioner,
         privatePractitioners: [
-          { ...basePractitioner, representingPrimary: true },
+          { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
         ],
       };
 
@@ -587,6 +602,7 @@ describe('update petitioner contact information on a case', () => {
         contactSecondary: {
           address1: '789 Division St',
           city: 'Somewhere',
+          contactId: SECONDARY_CONTACT_ID,
           countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Secondary Petitioner',
           phone: '1234567',
@@ -597,7 +613,7 @@ describe('update petitioner contact information on a case', () => {
         },
         partyType: PARTY_TYPES.petitionerSpouse,
         privatePractitioners: [
-          { ...basePractitioner, representingSecondary: true },
+          { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
         ],
       };
 
@@ -637,6 +653,7 @@ describe('update petitioner contact information on a case', () => {
         contactPrimary: {
           address1: '789 Division St',
           city: 'Somewhere',
+          contactId: PRIMARY_CONTACT_ID,
           countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Petitioner',
           phone: '1234567',
@@ -646,7 +663,7 @@ describe('update petitioner contact information on a case', () => {
         },
         partyType: PARTY_TYPES.petitioner,
         privatePractitioners: [
-          { ...basePractitioner, representingPrimary: true },
+          { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
         ],
       };
 
@@ -687,6 +704,7 @@ describe('update petitioner contact information on a case', () => {
         contactSecondary: {
           address1: '789 Division St',
           city: 'Somewhere',
+          contactId: SECONDARY_CONTACT_ID,
           countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Secondary Petitioner',
           phone: '1234567',
@@ -696,7 +714,7 @@ describe('update petitioner contact information on a case', () => {
         },
         partyType: PARTY_TYPES.petitionerSpouse,
         privatePractitioners: [
-          { ...basePractitioner, representingSecondary: true },
+          { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
         ],
       };
 
@@ -738,6 +756,7 @@ describe('update petitioner contact information on a case', () => {
         contactSecondary: {
           address1: '789 Division St',
           city: 'Somewhere',
+          contactId: SECONDARY_CONTACT_ID,
           countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Secondary Petitioner',
           phone: '1234567',
@@ -749,7 +768,7 @@ describe('update petitioner contact information on a case', () => {
         privatePractitioners: [
           {
             ...basePractitioner,
-            representingSecondary: true,
+            representing: [SECONDARY_CONTACT_ID],
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
@@ -793,6 +812,7 @@ describe('update petitioner contact information on a case', () => {
         contactSecondary: {
           address1: '789 Division St',
           city: 'Somewhere',
+          contactId: SECONDARY_CONTACT_ID,
           countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Secondary Petitioner',
           phone: '1234567',
@@ -805,7 +825,6 @@ describe('update petitioner contact information on a case', () => {
             barNumber: 'PT1234',
             email: 'practitioner1@example.com',
             name: 'Test IRS Practitioner',
-            representingPrimary: true,
             role: ROLES.irsPractitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
             userId: '899bbe4b-84ee-40a1-ad05-a1e2e8484c72',
@@ -815,7 +834,7 @@ describe('update petitioner contact information on a case', () => {
         privatePractitioners: [
           {
             ...basePractitioner,
-            representingSecondary: true,
+            representing: [SECONDARY_CONTACT_ID],
           },
         ],
       };
