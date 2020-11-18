@@ -1385,16 +1385,8 @@
     "pk": "case-by-docket-number|102-20"
   },
   {
-    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "section|petitioner"
-  },
-  {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "pk": "inactivePractitioner|Test Inactive Practitioner"
-  },
-  {
-    "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
-    "pk": "section|inactivePractitioner"
   },
   {
     "sk": "user|9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
@@ -1414,92 +1406,6 @@
   {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "pk": "inactivePractitioner|IP1111"
-  },
-  {
-    "sk": "case-46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case-491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case-5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case-6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|101-19",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|102-19",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|102-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|103-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|104-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|105-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|106-19",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|107-19",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|117-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|120-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|121-20",
-    "docketNumber": "121-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|122-20",
-    "docketNumber": "122-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|123-20",
-    "docketNumber": "123-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|124-20",
-    "docketNumber": "124-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|125-20",
-    "docketNumber": "125-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|126-20",
-    "docketNumber": "126-20",
-    "pk": "catalog"
   },
   {
     "sk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
@@ -5177,26 +5083,6 @@
     "pk": "irsPractitioner|RT6789"
   },
   {
-    "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
-    "pk": "section|irsPractitioner"
-  },
-  {
-    "sk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "section|irsPractitioner"
-  },
-  {
-    "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
-    "pk": "section|irsPractitioner"
-  },
-  {
-    "sk": "user|5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
-    "pk": "section|irsPractitioner"
-  },
-  {
-    "sk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
-    "pk": "section|irsPractitioner"
-  },
-  {
     "sk": "case|101-20",
     "pk": "case-by-docket-number|101-20"
   },
@@ -7237,7 +7123,7 @@
     "createdAt": "2020-04-14T19:59:46.086Z",
     "entityName": "UserCase",
     "gsi1pk": "user-case|104-20",
-    "caseCaption":  "Hanan Al Hroub, Petitioner",
+    "caseCaption": "Hanan Al Hroub, Petitioner",
     "sk": "case|104-20",
     "docketNumberWithSuffix": "104-20R",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -10175,26 +10061,6 @@
   {
     "sk": "user|dadbad42-18d0-43ec-bafb-654e83405416",
     "pk": "section|legacyJudgesChambers"
-  },
-  {
-    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "section|privatePractitioner"
   },
   {
     "associatedJudge": "Chief Judge",

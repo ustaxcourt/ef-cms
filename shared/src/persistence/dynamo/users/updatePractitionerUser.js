@@ -1,5 +1,6 @@
 const client = require('../../dynamodbClientService');
 const { getUserById } = require('./getUserById');
+const { ROLES } = require('../../../business/entities/EntityConstants');
 
 exports.updateUserRecords = async ({
   applicationContext,
@@ -15,13 +16,20 @@ exports.updateUserRecords = async ({
     },
   });
 
-  await client.put({
-    Item: {
-      pk: `section|${updatedUser.section}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
+  if (
+    updatedUser.section !== ROLES.privatePractitioner &&
+    updatedUser.section !== ROLES.petitioner &&
+    updatedUser.section !== ROLES.inactivePractitioner &&
+    updatedUser.section !== ROLES.irsPractitioner
+  ) {
+    await client.put({
+      Item: {
+        pk: `section|${updatedUser.section}`,
+        sk: `user|${userId}`,
+      },
+      applicationContext,
+    });
+  }
 
   await client.put({
     Item: {
