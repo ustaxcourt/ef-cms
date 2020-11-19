@@ -29,6 +29,10 @@ const findStandingPretrialDocument = caseRecord => {
 };
 
 const MOCK_TRIAL = {
+  judge: {
+    name: 'Judge Mary Kate and Ashley',
+    userId: '410e4ade-6ad5-4fc4-8741-3f8352c72a0c',
+  },
   maxCases: 100,
   sessionType: 'Regular',
   startDate: '2025-12-01T00:00:00.000Z',
@@ -404,7 +408,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeDefined();
   });
 
-  it('Should generate a Standing Pretrial Order for REGULAR cases', async () => {
+  it('Should generate a signed Standing Pretrial Order for REGULAR cases', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       docketNumber: '102-20', // MOCK_CASE with procedureType: 'Regular'
@@ -414,6 +418,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
     ).toHaveBeenCalled();
+    expect(findStandingPretrialDocument(calendaredCases[0])).toMatchObject({
+      signedByUserId: MOCK_TRIAL.judge.userId,
+      signedJudgeName: MOCK_TRIAL.judge.name,
+    });
   });
 
   it('Should generate a Standing Pretrial Notice for SMALL cases', async () => {
