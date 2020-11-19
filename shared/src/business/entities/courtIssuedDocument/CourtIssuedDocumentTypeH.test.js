@@ -3,13 +3,24 @@ const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeH', () => {
+  describe('constructor', () => {
+    it('should set attachments to false when no value is provided', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        date: '2019-04-10T04:00:00.000Z',
+        documentTitle: 'Transcript of [anything] on [date]',
+        documentType: 'Transcript',
+        freeText: 'Some free text',
+        scenario: 'Type H',
+      });
+      expect(documentInstance.attachments).toBe(false);
+    });
+  });
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
         scenario: 'Type H',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        attachments: VALIDATION_ERROR_MESSAGES.attachments,
         date: VALIDATION_ERROR_MESSAGES.date[2],
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
         freeText: VALIDATION_ERROR_MESSAGES.freeText,

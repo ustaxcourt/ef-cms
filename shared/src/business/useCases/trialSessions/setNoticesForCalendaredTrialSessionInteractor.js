@@ -186,6 +186,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const standingPretrialDocketEntry = new DocketEntry(
       {
+        attachments: false,
         description: standingPretrialDocumentTitle,
         docketEntryId: newStandingPretrialDocketEntryId,
         documentTitle: standingPretrialDocumentTitle,
@@ -194,6 +195,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        signedAt: applicationContext.getUtilities().createISODateString(),
+        signedByUserId: trialSessionEntity.judge.userId,
+        signedJudgeName: trialSessionEntity.judge.name,
         userId: user.userId,
       },
       { applicationContext },
