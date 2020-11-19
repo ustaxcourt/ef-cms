@@ -1,4 +1,4 @@
-const { isCodeEnabled } = require('../../../../codeToggles');
+const { isCodeEnabled } = require('../../../codeToggles');
 
 export const judgeViewsNotesFromCaseDetail = test => {
   return it('Judge views added notes from case detail', async () => {
