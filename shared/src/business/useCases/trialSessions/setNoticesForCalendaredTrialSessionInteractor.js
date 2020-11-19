@@ -147,8 +147,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     // Standing Pretrial Notice/Order
     let standingPretrialFile;
-    let standingPretrialDocumentTitle;
-    let standingPretrialDocumentEventCode;
 
     if (procedureType === 'Small') {
       // Generate Standing Pretrial Notice
@@ -188,8 +186,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
-        // signedAt - like notice of trial
+        signedAt: applicationContext.getUtilities().createISODateString(),
+        userId: user.userId, // The signature is in the template of the document being generated
       },
       { applicationContext },
     );
