@@ -2,14 +2,16 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { get } = require('lodash');
 const { transports } = require('winston');
 
+let cache;
 const console = () =>
-  new transports.Console({
+  cache ||
+  (cache = new transports.Console({
     handleExceptions: true,
     handleRejections: true,
-  });
+  }));
 
 module.exports = (transport = console()) => (req, res, next) => {
-  const logger = createLogger(transport);
+  const logger = createLogger({ transports: [transport] });
 
   if (process.env.NODE_ENV === 'production') {
     logger.defaultMeta = {
