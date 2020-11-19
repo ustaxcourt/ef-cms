@@ -86,7 +86,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             }}
           />
         </FormGroup>
-
+        {console.log(form)}
         {form.eventCode && <CourtIssuedNonstandardForm />}
 
         <FormGroup errorText={validationErrors.attachments}>
