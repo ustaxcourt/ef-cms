@@ -94,7 +94,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             <legend className="usa-legend">Inclusions</legend>
             <div className="usa-checkbox">
               <input
-                checked={form.attachments || false}
+                checked={form.attachments}
                 className="usa-checkbox__input"
                 id="attachments"
                 name="attachments"
