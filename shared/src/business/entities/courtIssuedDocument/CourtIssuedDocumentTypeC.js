@@ -16,7 +16,7 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
  */
 function CourtIssuedDocumentTypeC() {}
 CourtIssuedDocumentTypeC.prototype.init = function init(rawProps) {
-  this.attachments = rawProps.attachments;
+  this.attachments = rawProps.attachments || false;
   this.documentTitle = rawProps.documentTitle;
   this.docketNumbers = rawProps.docketNumbers;
   this.documentType = rawProps.documentType;
