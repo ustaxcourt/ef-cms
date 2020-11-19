@@ -1311,6 +1311,10 @@ Case.prototype.generateTrialSortTags = function () {
     receivedAt,
   } = this;
 
+  if (!preferredTrialCity) {
+    return null;
+  }
+
   const caseProcedureSymbol =
     procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
 
