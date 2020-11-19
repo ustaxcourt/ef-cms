@@ -35,6 +35,13 @@ describe('getDocumentQCInboxForSection', () => {
                     'sk.S': 'work-item|',
                   },
                 },
+                {
+                  term: {
+                    'section.S': {
+                      value: 'docket',
+                    },
+                  },
+                },
               ],
               must_not: {
                 exists: {
