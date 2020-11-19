@@ -25,20 +25,23 @@ const migrateItems = async (items, documentClient) => {
 
         if (caseRecord && caseRecord.docketNumber) {
           if (item.representingPrimary) {
-            const primaryContactId = caseRecord.contactPrimary.contactId;
+            const primaryContactId =
+              caseRecord.contactPrimary && caseRecord.contactPrimary.contactId;
             const primaryContactAlreadyInRepresenting = item.representing.find(
               r => r === primaryContactId,
             );
-            if (!primaryContactAlreadyInRepresenting) {
+            if (primaryContactId && !primaryContactAlreadyInRepresenting) {
               item.representing.push(primaryContactId);
             }
           }
           if (item.representingSecondary) {
-            const secondaryContactId = caseRecord.contactSecondary.contactId;
+            const secondaryContactId =
+              caseRecord.contactSecondary &&
+              caseRecord.contactSecondary.contactId;
             const secondaryContactAlreadyInRepresenting = item.representing.find(
               r => r === secondaryContactId,
             );
-            if (!secondaryContactAlreadyInRepresenting) {
+            if (secondaryContactId && !secondaryContactAlreadyInRepresenting) {
               item.representing.push(secondaryContactId);
             }
           }
