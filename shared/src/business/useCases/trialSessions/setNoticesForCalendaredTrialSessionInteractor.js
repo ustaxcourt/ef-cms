@@ -195,7 +195,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         signedAt: applicationContext.getUtilities().createISODateString(),
-        userId: user.userId, // The signature is in the template of the document being generated
+        signedByUserId: trialSessionEntity.judge.userId,
+        signedJudgeName: trialSessionEntity.judge.name,
+        userId: user.userId,
       },
       { applicationContext },
     );
