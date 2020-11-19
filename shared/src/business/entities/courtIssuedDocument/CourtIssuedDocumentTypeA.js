@@ -19,7 +19,7 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  */
 function CourtIssuedDocumentTypeA() {}
 CourtIssuedDocumentTypeA.prototype.init = function init(rawProps) {
-  this.attachments = rawProps.attachments || false;
+  this.attachments = rawProps.attachments;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
   this.freeText = rawProps.freeText;

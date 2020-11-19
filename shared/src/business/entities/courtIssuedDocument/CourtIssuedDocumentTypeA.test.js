@@ -3,19 +3,6 @@ const { describe } = require('@jest/globals');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeA', () => {
-  describe('constructor', () => {
-    it('should set attachments to false when no value is provided', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
-        documentTitle: '[Anything]',
-        documentType: 'Order',
-        freeText: 'Some free text',
-        scenario: 'Type A',
-        serviceStamp: 'Served',
-      });
-      expect(documentInstance.attachments).toBe(false);
-    });
-  });
-
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({

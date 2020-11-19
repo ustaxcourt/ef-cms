@@ -186,6 +186,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const standingPretrialDocketEntry = new DocketEntry(
       {
+        attachments: false,
         description: standingPretrialDocumentTitle,
         docketEntryId: newStandingPretrialDocketEntryId,
         documentTitle: standingPretrialDocumentTitle,
