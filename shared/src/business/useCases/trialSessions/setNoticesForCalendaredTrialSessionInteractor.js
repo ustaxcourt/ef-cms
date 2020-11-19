@@ -159,9 +159,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           docketNumber: caseEntity.docketNumber,
           trialSessionId: trialSessionEntity.trialSessionId,
         });
-
-      standingPretrialDocumentTitle = STANDING_PRETRIAL_NOTICE.documentType;
-      standingPretrialDocumentEventCode = STANDING_PRETRIAL_NOTICE.eventCode;
     } else {
       // Generate Standing Pretrial Order
       standingPretrialFile = await applicationContext
@@ -171,9 +168,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           docketNumber: caseEntity.docketNumber,
           trialSessionId: trialSessionEntity.trialSessionId,
         });
-
-      standingPretrialDocumentTitle = STANDING_PRETRIAL_ORDER.documentType;
-      standingPretrialDocumentEventCode = STANDING_PRETRIAL_ORDER.eventCode;
     }
 
     const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
@@ -186,14 +180,15 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const standingPretrialDocketEntry = new DocketEntry(
       {
-        description: standingPretrialDocumentTitle,
+        description: STANDING_PRETRIAL_NOTICE.documentType,
         docketEntryId: newStandingPretrialDocketEntryId,
-        documentTitle: standingPretrialDocumentTitle,
-        documentType: standingPretrialDocumentTitle,
-        eventCode: standingPretrialDocumentEventCode,
+        documentTitle: STANDING_PRETRIAL_NOTICE.documentType,
+        documentType: STANDING_PRETRIAL_NOTICE.documentType,
+        eventCode: STANDING_PRETRIAL_NOTICE.eventCode,
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        // trialLoca,
         userId: user.userId,
       },
       { applicationContext },
