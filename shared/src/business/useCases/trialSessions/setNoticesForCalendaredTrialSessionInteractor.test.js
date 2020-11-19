@@ -419,6 +419,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
     ).toHaveBeenCalled();
     expect(findStandingPretrialDocument(calendaredCases[0])).toMatchObject({
+      attachments: false,
       signedByUserId: MOCK_TRIAL.judge.userId,
       signedJudgeName: MOCK_TRIAL.judge.name,
     });
