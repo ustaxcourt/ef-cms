@@ -52,11 +52,11 @@ const reprocessItems = async ({ documentClient, items }) => {
 };
 
 const processItems = async ({ documentClient, items }) => {
+  items = await migrateRecords({ documentClient, items });
+
   // your migration code goes here
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let c of chunks) {
-    c = await migrateRecords({ documentClient, items: c });
-
     const results = await documentClient
       .batchWrite({
         RequestItems: {

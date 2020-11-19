@@ -170,4 +170,52 @@ describe('migrateItems', () => {
       representing: [SECONDARY_CONTACT_ID],
     });
   });
+
+  it('should not throw an error if representingPrimary is true but the case does not have a contactPrimary contactId', async () => {
+    const items = [
+      {
+        ...mockPrivatePractitionerCaseRecord,
+        representingPrimary: true,
+        representingSecondary: false,
+      },
+    ];
+
+    documentClient = {
+      get: () => ({
+        promise: async () => ({
+          Item: { ...mockCase, contactPrimary: {} },
+        }),
+      }),
+    };
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0]).toMatchObject({
+      representing: [],
+    });
+  });
+
+  it('should not throw an error if representingSecondary is true but the case does not have a contactSecondary contactId', async () => {
+    const items = [
+      {
+        ...mockPrivatePractitionerCaseRecord,
+        representingPrimary: false,
+        representingSecondary: true,
+      },
+    ];
+
+    documentClient = {
+      get: () => ({
+        promise: async () => ({
+          Item: { ...mockCase, contactSecondary: {} },
+        }),
+      }),
+    };
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0]).toMatchObject({
+      representing: [],
+    });
+  });
 });
