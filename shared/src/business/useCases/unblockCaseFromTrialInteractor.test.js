@@ -2,6 +2,7 @@ const {
   unblockCaseFromTrialInteractor,
 } = require('./unblockCaseFromTrialInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { ROLES } = require('../entities/EntityConstants');
 
@@ -13,7 +14,12 @@ describe('unblockCaseFromTrialInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        }),
+      );
 
     const result = await unblockCaseFromTrialInteractor({
       applicationContext,
