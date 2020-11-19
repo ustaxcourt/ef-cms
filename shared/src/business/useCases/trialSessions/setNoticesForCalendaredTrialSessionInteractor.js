@@ -189,6 +189,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
+        // signedAt - like notice of trial
       },
       { applicationContext },
     );
