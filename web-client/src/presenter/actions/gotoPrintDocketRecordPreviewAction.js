@@ -15,16 +15,16 @@ export const gotoPrintDocketRecordPreviewAction = async ({
 }) => {
   const { openNewTab = false, openNewView = true } = props;
 
-  if (openNewView) {
-    await router.route(
-      `/case-detail/${get(
-        state.caseDetail.docketNumber,
-      )}/printable-docket-record`,
-    );
-  }
+  // if (openNewView) {
+  await router.route(
+    `/case-detail/${get(
+      state.caseDetail.docketNumber,
+    )}/printable-docket-record`,
+  );
+  // }
 
-  if (openNewTab) {
-    const pdfPreviewUrl = get(state.pdfPreviewUrl);
-    router.openInNewTab(pdfPreviewUrl);
-  }
+  // if (openNewTab) {
+  //   const pdfPreviewUrl = get(state.pdfPreviewUrl);
+  //   router.openInNewTab(pdfPreviewUrl);
+  // }
 };
