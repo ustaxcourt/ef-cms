@@ -147,6 +147,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     // Standing Pretrial Notice/Order
     let standingPretrialFile;
+    let standingPretrialDocumentTitle;
+    let standingPretrialDocumentEventCode;
 
     if (procedureType === 'Small') {
       // Generate Standing Pretrial Notice
@@ -157,6 +159,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           docketNumber: caseEntity.docketNumber,
           trialSessionId: trialSessionEntity.trialSessionId,
         });
+
+      standingPretrialDocumentTitle = STANDING_PRETRIAL_NOTICE.documentType;
+      standingPretrialDocumentEventCode = STANDING_PRETRIAL_NOTICE.eventCode;
     } else {
       // Generate Standing Pretrial Order
       standingPretrialFile = await applicationContext
@@ -166,6 +171,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           docketNumber: caseEntity.docketNumber,
           trialSessionId: trialSessionEntity.trialSessionId,
         });
+
+      standingPretrialDocumentTitle = STANDING_PRETRIAL_ORDER.documentType;
+      standingPretrialDocumentEventCode = STANDING_PRETRIAL_ORDER.eventCode;
     }
 
     const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
@@ -178,11 +186,11 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const standingPretrialDocketEntry = new DocketEntry(
       {
-        description: STANDING_PRETRIAL_NOTICE.documentType,
+        description: standingPretrialDocumentTitle,
         docketEntryId: newStandingPretrialDocketEntryId,
-        documentTitle: STANDING_PRETRIAL_NOTICE.documentType,
-        documentType: STANDING_PRETRIAL_NOTICE.documentType,
-        eventCode: STANDING_PRETRIAL_NOTICE.eventCode,
+        documentTitle: standingPretrialDocumentTitle,
+        documentType: standingPretrialDocumentTitle,
+        eventCode: standingPretrialDocumentEventCode,
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
