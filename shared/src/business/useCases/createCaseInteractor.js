@@ -94,12 +94,15 @@ exports.createCaseInteractor = async ({
         userId: user.userId,
       });
 
-    practitionerUser.representingPrimary = true;
+    practitionerUser.representing = [petitionEntity.contactPrimary.contactId];
+
     if (
       petitionMetadata.contactSecondary &&
       petitionMetadata.contactSecondary.name
     ) {
-      practitionerUser.representingSecondary = true;
+      practitionerUser.representing.push(
+        petitionEntity.contactSecondary.contactId,
+      );
     }
 
     privatePractitioners = [practitionerUser];

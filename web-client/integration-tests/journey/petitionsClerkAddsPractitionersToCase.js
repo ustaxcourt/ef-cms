@@ -46,8 +46,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
 
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
     expect(
-      test.getState('caseDetail.privatePractitioners.0.representingPrimary'),
-    ).toEqual(true);
+      test.getState('caseDetail.privatePractitioners.0.representing'),
+    ).toEqual([test.getState('caseDetail.contactPrimary.contactId')]);
     expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
       practitionerMatch.name,
     );
@@ -85,10 +85,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
         2,
       );
       expect(
-        test.getState(
-          'caseDetail.privatePractitioners.1.representingSecondary',
-        ),
-      ).toEqual(true);
+        test.getState('caseDetail.privatePractitioners.1.representing'),
+      ).toEqual([test.getState('caseDetail.contactSecondary.contactId')]);
       expect(test.getState('caseDetail.privatePractitioners.1.name')).toEqual(
         practitionerMatch.name,
       );
