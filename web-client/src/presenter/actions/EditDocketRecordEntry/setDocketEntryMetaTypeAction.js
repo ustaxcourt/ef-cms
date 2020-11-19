@@ -25,6 +25,8 @@ export const setDocketEntryMetaTypeAction = ({
   const isCourtIssuedDocument =
     hasDocument && COURT_ISSUED_EVENT_CODES_MAP.includes(eventCode);
 
+  console.log('****', eventCode, hasDocument, isCourtIssuedDocument);
+
   let editType;
 
   if (!hasDocument) {

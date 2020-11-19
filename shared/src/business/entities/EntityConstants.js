@@ -361,7 +361,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   standingPretrialOrder: {
     documentTitle: 'Standing Pretrial Order',
     documentType: 'Standing Pretrial Order',
-    eventCode: 'SPTO',
+    eventCode: 'SPOS',
   },
 };
 

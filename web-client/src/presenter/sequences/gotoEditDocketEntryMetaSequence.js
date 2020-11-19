@@ -31,6 +31,9 @@ export const gotoEditDocketEntryMeta = [
   chooseMetaTypePathAction,
   {
     courtIssued: [
+      () => {
+        console.log('hi hi hi');
+      },
       initCourtIssuedOrderFormPropsFromEventCodeAction,
       getUsersInSectionAction({ section: 'judge' }),
       getFilterCurrentJudgeUsersAction,
