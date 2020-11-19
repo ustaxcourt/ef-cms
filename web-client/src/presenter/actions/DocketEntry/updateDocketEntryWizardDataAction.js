@@ -47,7 +47,7 @@ export const updateDocketEntryWizardDataAction = ({
         applicationContext,
         eventCode: props.value,
         formProperties: get(state.form),
-        propertyList: ['category', 'scenario'],
+        propertyList: ['category', 'documentType', 'scenario'],
       });
       store.set(state.form, form);
       break;
