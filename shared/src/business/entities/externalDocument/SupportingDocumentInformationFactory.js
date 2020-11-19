@@ -31,7 +31,7 @@ SupportingDocumentInformationFactory.get = (
    */
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawProps) {
-    this.attachments = rawProps.attachments;
+    this.attachments = rawProps.attachments || false;
     this.certificateOfService = rawProps.certificateOfService;
     this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
     this.supportingDocument = rawProps.supportingDocument;
