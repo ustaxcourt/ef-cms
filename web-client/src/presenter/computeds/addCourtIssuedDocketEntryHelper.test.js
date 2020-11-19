@@ -1,55 +1,62 @@
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const { USER_ROLES } = applicationContext.getConstants();
-
-let user = {
-  role: USER_ROLES.docketClerk,
-};
-
-const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
-  addCourtIssuedDocketEntryHelperComputed,
-  {
-    ...applicationContext,
-    getConstants: () => {
-      return {
-        COURT_ISSUED_EVENT_CODES: [
-          { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
-          { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
-          { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
-        ],
-        EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
-        UNSERVABLE_EVENT_CODES: ['RUHROH'],
-        USER_ROLES: {
-          petitionsClerk: USER_ROLES.petitionsClerk,
-        },
-      };
-    },
-    getCurrentUser: () => user,
-  },
-);
-
-const state = {
-  caseDetail: {
-    contactPrimary: { name: 'Banzai' },
-    contactSecondary: { name: 'Timon' },
-    docketEntries: [{ docketEntryId: '123' }],
-    irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
-    privatePractitioners: [
-      { name: 'Scar', representing: [] },
-      { name: 'Zazu', representing: [] },
-    ],
-  },
-  docketEntryId: '123',
-  form: {
-    generatedDocumentTitle: 'Circle of Life',
-  },
-};
-
 describe('addCourtIssuedDocketEntryHelper', () => {
+  const {
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  let user = {
+    role: USER_ROLES.docketClerk,
+  };
+  let mockConstants = {
+    COURT_ISSUED_EVENT_CODES: [
+      { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
+      { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
+      { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
+    ],
+    EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
+    UNSERVABLE_EVENT_CODES: ['RUHROH'],
+    USER_ROLES: {
+      petitionsClerk: USER_ROLES.petitionsClerk,
+    },
+  };
+
+  const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
+    addCourtIssuedDocketEntryHelperComputed,
+    {
+      ...applicationContext,
+    },
+  );
+
+  const state = {
+    caseDetail: {
+      contactPrimary: { name: 'Banzai' },
+      contactSecondary: { name: 'Timon' },
+      docketEntries: [{ docketEntryId: '123' }],
+      irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
+      privatePractitioners: [
+        { name: 'Scar', representing: [] },
+        { name: 'Zazu', representing: [] },
+      ],
+    },
+    docketEntryId: '123',
+    form: {
+      generatedDocumentTitle: 'Circle of Life',
+    },
+  };
+
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+
+    applicationContext.getConstants.mockImplementation(() => mockConstants);
+  });
+
   it('should calculate document types based on constants in applicationContext', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.documentTypes).toEqual([
@@ -193,6 +200,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     });
     expect(result.showSaveAndServeButton).toEqual(false);
   });
+
   it('should return showSaveAndServeButton true if eventCode is NOT found in unservable event codes list', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
@@ -212,5 +220,33 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       },
     });
     expect(result.showSaveAndServeButton).toEqual(true);
+  });
+
+  it('should set showDocumentTypeDropdown to false when form.documentType is NODC', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        docketEntryId: '123',
+        form: {
+          eventCode: 'NODC',
+        },
+      },
+    });
+
+    expect(result.showDocumentTypeDropdown).toBeFalsy();
+  });
+
+  it('should set showDocumentTypeDropdown to true when form.documentType is NOT NODC', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        docketEntryId: '123',
+        form: {
+          eventCode: 'O',
+        },
+      },
+    });
+
+    expect(result.showDocumentTypeDropdown).toBeTruthy();
   });
 });
