@@ -35,7 +35,6 @@ export const EditDocketEntryMetaFormDocument = connect(
   }) {
     return (
       <div className="blue-container">
-        {console.log(form)}
         <FormGroup errorText={validationErrors.lodged}>
           <fieldset className="usa-fieldset">
             <legend className="usa-legend">Filing status</legend>

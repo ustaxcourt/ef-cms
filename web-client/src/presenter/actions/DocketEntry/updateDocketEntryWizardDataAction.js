@@ -40,7 +40,7 @@ export const updateDocketEntryWizardDataAction = ({
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
   let form;
   let supporting = get(state.screenMetadata.supporting);
-
+  console.log('-----before', get(state.form.documentType));
   switch (props.key) {
     case 'initEventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
@@ -58,6 +58,8 @@ export const updateDocketEntryWizardDataAction = ({
       store.unset(state.form.certificateOfServiceYear);
       break;
     case 'eventCode':
+      console.log('-----', get(state.form.documentType));
+
       form = setDocumentPropsFromFormAndBaseDocument({
         applicationContext,
         eventCode: props.value,

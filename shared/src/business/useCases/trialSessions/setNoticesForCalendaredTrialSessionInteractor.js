@@ -188,7 +188,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        // trialLoca,
         userId: user.userId,
       },
       { applicationContext },
