@@ -1747,6 +1747,7 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Determines if the docket entry should be displayed in the Pending Report."
             previousDocument: 
               type: "object"
               flags: 
@@ -5500,6 +5501,7 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Determines if the docket entry should be displayed in the Pending Report."
             previousDocument: 
               type: "object"
               flags: 
@@ -71301,14 +71303,6 @@
                         options: 
                           version: 
                             - "uuidv4"
-            representingPrimary: 
-              type: "boolean"
-              flags: 
-                presence: "optional"
-            representingSecondary: 
-              type: "boolean"
-              flags: 
-                presence: "optional"
             role: 
               type: "string"
               flags: 

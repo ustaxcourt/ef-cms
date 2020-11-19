@@ -7,7 +7,6 @@ const {
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
   isAuthorized,
@@ -139,24 +138,6 @@ const createWorkItemForChange = async ({
   });
 };
 
-const caseEntityPartyWithPaperService = caseEntity => {
-  return (
-    caseEntity.contactPrimary.serviceIndicator ===
-      SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (caseEntity.contactSecondary &&
-      caseEntity.contactSecondary.serviceIndicator ===
-        SERVICE_INDICATOR_TYPES.SI_PAPER) ||
-    (caseEntity.privatePractitioners &&
-      caseEntity.privatePractitioners.find(
-        pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-      )) ||
-    (caseEntity.irsPractitioners &&
-      caseEntity.irsPractitioners.find(
-        ip => ip.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-      ))
-  );
-};
-
 const generatePaperServicePdf = async ({
   applicationContext,
   caseEntity,
@@ -226,10 +207,7 @@ const createDocketEntryAndWorkItem = async ({
     user,
   });
 
-  if (
-    privatePractitionersRepresentingContact.length === 0 ||
-    partyWithPaperService
-  ) {
+  if (!privatePractitionersRepresentingContact || partyWithPaperService) {
     await createWorkItemForChange({
       applicationContext,
       caseEntity,
@@ -338,8 +316,6 @@ exports.updatePetitionerInformationInteractor = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const partyWithPaperService = caseEntityPartyWithPaperService(caseEntity);
-
   let primaryChangeDocs;
   let secondaryChangeDocs;
   let paperServicePdfUrl;
@@ -348,7 +324,14 @@ exports.updatePetitionerInformationInteractor = async ({
     (primaryChange && !caseEntity.contactPrimary.isAddressSealed) ||
     (secondaryChange && !caseEntity.contactSecondary.isAddressSealed)
   ) {
+    const partyWithPaperService = caseEntity.hasPartyWithPaperService();
+
     if (primaryChange) {
+      const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
+        privatePractitioner =>
+          privatePractitioner.getRepresentingPrimary(caseEntity),
+      );
+
       primaryChangeDocs = await createDocketEntryAndWorkItem({
         applicationContext,
         caseEntity,
@@ -356,24 +339,26 @@ exports.updatePetitionerInformationInteractor = async ({
         editableFields: primaryEditableFields,
         oldCaseContact: oldCase.contactPrimary,
         partyWithPaperService,
-        privatePractitionersRepresentingContact: caseEntity.privatePractitioners.filter(
-          practitioner => practitioner.representingPrimary,
-        ),
+        privatePractitionersRepresentingContact,
         servedParties,
         user,
       });
     }
+
     if (secondaryChange) {
+      const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
+        privatePractitioner =>
+          privatePractitioner.getRepresentingSecondary(caseEntity),
+      );
+
       secondaryChangeDocs = await createDocketEntryAndWorkItem({
         applicationContext,
         caseEntity,
         change: secondaryChange,
         editableFields: secondaryEditableFields,
-        oldCaseContact: oldCase.contactSecondary || {},
+        oldCaseContact: oldCase.contactSecondary,
         partyWithPaperService,
-        privatePractitionersRepresentingContact: caseEntity.privatePractitioners.filter(
-          practitioner => practitioner.representingSecondary,
-        ),
+        privatePractitionersRepresentingContact,
         servedParties,
         user,
       });

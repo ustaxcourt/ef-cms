@@ -120,6 +120,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocketEntry = new DocketEntry(
       {
+        date: trialSessionEntity.startDate,
         docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
         documentTitle: noticeOfTrialDocumentTitle,
         documentType: NOTICE_OF_TRIAL.documentType,
@@ -128,6 +129,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
+        trialLocation: trialSessionEntity.trialLocation,
         userId: user.userId,
       },
       { applicationContext },

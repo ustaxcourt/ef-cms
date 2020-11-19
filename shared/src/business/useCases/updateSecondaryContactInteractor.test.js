@@ -17,6 +17,7 @@ describe('updateSecondaryContactInteractor', () => {
   const mockContactSecondary = {
     address1: 'nothing',
     city: 'Somewhere',
+    contactId: '988e7470-fb47-4014-bda6-bf3ed87a20b8',
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'secondary@example.com',
     name: 'Secondary Party',
@@ -150,7 +151,7 @@ describe('updateSecondaryContactInteractor', () => {
           {
             barNumber: '1111',
             name: 'Bob Practitioner',
-            representingSecondary: true,
+            representing: [mockCase.contactSecondary.contactId],
             role: ROLES.privatePractitioner,
             userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
           },

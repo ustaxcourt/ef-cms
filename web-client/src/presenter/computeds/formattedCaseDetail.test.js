@@ -284,8 +284,10 @@ describe('formattedCaseDetail', () => {
       correspondence: [],
       docketEntries: complexDocketEntries,
       hasVerifiedIrsNotice: false,
+      otherFilers: [],
+      otherPetitioners: [],
       petitioners: [{ name: 'bob' }],
-      privatePractitioners: [{ name: 'Test Practitioner' }],
+      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -498,8 +500,10 @@ describe('formattedCaseDetail', () => {
           lodged: false,
         },
       ],
+      otherFilers: [],
+      otherPetitioners: [],
       petitioners: [{ name: 'bob' }],
-      privatePractitioners: [{ name: 'Test Practitioner' }],
+      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
 
     const result = runCompute(formattedCaseDetail, {
@@ -758,7 +762,11 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
+        otherFilers: [],
+        otherPetitioners: [],
+        privatePractitioners: [
+          { barNumber: '9999', name: 'Jackie Chan', representing: [] },
+        ],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -777,7 +785,9 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        privatePractitioners: [{ name: 'Jackie Chan' }],
+        otherFilers: [],
+        otherPetitioners: [],
+        privatePractitioners: [{ name: 'Jackie Chan', representing: [] }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
