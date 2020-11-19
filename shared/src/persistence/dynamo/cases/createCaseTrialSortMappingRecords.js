@@ -13,6 +13,8 @@ exports.createCaseTrialSortMappingRecords = async ({
   caseSortTags,
   docketNumber,
 }) => {
+  if (!caseSortTags) return;
+
   const { hybrid, nonHybrid } = caseSortTags;
 
   await put({
