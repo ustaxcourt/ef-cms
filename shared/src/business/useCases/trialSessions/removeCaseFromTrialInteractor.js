@@ -66,13 +66,15 @@ exports.removeCaseFromTrialInteractor = async ({
     highPriority: false,
   });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .createCaseTrialSortMappingRecords({
-      applicationContext,
-      caseSortTags: caseEntity.generateTrialSortTags(),
-      docketNumber: caseEntity.docketNumber,
-    });
+  if (caseEntity.isReadyForTrial()) {
+    await applicationContext
+      .getPersistenceGateway()
+      .createCaseTrialSortMappingRecords({
+        applicationContext,
+        caseSortTags: caseEntity.generateTrialSortTags(),
+        docketNumber: caseEntity.docketNumber,
+      });
+  }
 
   await applicationContext
     .getUseCaseHelpers()

@@ -12,7 +12,12 @@ describe('prioritizeCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        }),
+      );
 
     const result = await prioritizeCaseInteractor({
       applicationContext,

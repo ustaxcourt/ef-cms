@@ -227,7 +227,7 @@ exports.migrateCaseInteractor = async ({
     !caseToAdd.automaticBlocked;
 
   if (shouldCreateCaseTrialSortMappingRecords) {
-    if (caseToAdd.preferredTrialCity) {
+    if (caseToAdd.isReadyForTrial()) {
       await applicationContext
         .getPersistenceGateway()
         .createCaseTrialSortMappingRecords({
