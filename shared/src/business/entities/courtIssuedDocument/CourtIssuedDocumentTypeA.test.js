@@ -1,5 +1,4 @@
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { describe } = require('@jest/globals');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeA', () => {
