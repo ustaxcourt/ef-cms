@@ -60,7 +60,7 @@ export const setDocketEntryMetaFormForEditAction = ({
       ),
       ...deconstructDateWrapper(documentDetail.date),
     });
-
+    //not always init event code
     return {
       key: 'initEventCode',
       value: documentDetail.eventCode,
