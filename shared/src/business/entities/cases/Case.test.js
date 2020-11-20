@@ -2484,7 +2484,7 @@ describe('Case entity', () => {
         {
           privatePractitioners: [
             new PrivatePractitioner({
-              representingPrimary: true,
+              representing: ['182e1a2c-0252-4d76-8590-593324efaee3'],
               userId: 'privatePractitioner',
             }),
           ],
@@ -2495,17 +2495,15 @@ describe('Case entity', () => {
       );
 
       expect(caseToVerify.privatePractitioners).not.toBeNull();
-      expect(
-        caseToVerify.privatePractitioners[0].representingPrimary,
-      ).toBeTruthy();
+      expect(caseToVerify.privatePractitioners[0].representing).toEqual([
+        '182e1a2c-0252-4d76-8590-593324efaee3',
+      ]);
 
       caseToVerify.updatePrivatePractitioner({
-        representingPrimary: false,
+        representing: [],
         userId: 'privatePractitioner',
       });
-      expect(
-        caseToVerify.privatePractitioners[0].representingPrimary,
-      ).toBeFalsy();
+      expect(caseToVerify.privatePractitioners[0].representing).toEqual([]);
     });
   });
 
@@ -4049,6 +4047,95 @@ describe('Case entity', () => {
         expect(myCase.judgeUserId).toBeUndefined();
         expect(myCase.getFormattedValidationErrors()).toEqual(null);
       });
+    });
+  });
+
+  describe('hasPartyWithPaperService', () => {
+    it('should return true if contactPrimary service indicator is paper', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {
+            ...MOCK_CASE.contactPrimary,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        },
+        { applicationContext },
+      );
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeTruthy();
+    });
+
+    it('should return true if contactSecondary service indicator is paper', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {
+            ...MOCK_CASE.contactPrimary,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+          contactSecondary: {
+            ...MOCK_CASE.contactPrimary,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+          partyType: PARTY_TYPES.petitionerSpouse,
+        },
+        { applicationContext },
+      );
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeTruthy();
+    });
+
+    it('should return true if any privatePractitioner has paper service indicator', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          privatePractitioners: [
+            {
+              name: 'Bob Barker',
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+              userId: '919b8ead-d8ec-487d-a0c0-4e136a566f74',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeTruthy();
+    });
+
+    it('should return true if any irsPractitioner has paper service indicator', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [
+            {
+              name: 'Bob Barker',
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+              userId: '919b8ead-d8ec-487d-a0c0-4e136a566f74',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeTruthy();
+    });
+
+    it('should return false if no contacts or practitioners have paper service indicator', () => {
+      const myCase = new Case(MOCK_CASE, { applicationContext });
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeFalsy();
     });
   });
 });

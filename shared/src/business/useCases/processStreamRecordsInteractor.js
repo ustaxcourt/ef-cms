@@ -2,6 +2,24 @@ const AWS = require('aws-sdk');
 const { flattenDeep, get, partition } = require('lodash');
 const { omit } = require('lodash');
 
+const filterRecords = record => {
+  // to prevent global tables writing extra data
+  const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
+  const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
+  const IS_DELETING_KEY = 'dynamodb.NewImage.aws:rep:deleting.BOOL';
+
+  const newTime = get(record, NEW_TIME_KEY);
+  const oldTime = get(record, OLD_TIME_KEY);
+  const isDeleting = get(record, IS_DELETING_KEY);
+
+  return (
+    (process.env.NODE_ENV !== 'production' ||
+      (newTime && newTime !== oldTime) ||
+      record.eventName === 'REMOVE') &&
+    !isDeleting
+  );
+};
+
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
     records,
@@ -321,16 +339,7 @@ exports.processStreamRecordsInteractor = async ({
       useTempBucket: false,
     });
 
-  recordsToProcess = recordsToProcess.filter(record => {
-    // to prevent global tables writing extra data
-    const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
-    const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
-    const newTime = get(record, NEW_TIME_KEY);
-    const oldTime = get(record, OLD_TIME_KEY);
-    return (
-      process.env.NODE_ENV !== 'production' || (newTime && newTime !== oldTime)
-    );
-  });
+  recordsToProcess = recordsToProcess.filter(filterRecords);
 
   const {
     caseEntityRecords,
@@ -357,33 +366,29 @@ exports.processStreamRecordsInteractor = async ({
       throw err;
     });
 
-    await Promise.all([
-      processCaseEntries({
-        applicationContext,
-        caseEntityRecords,
-        utils,
-      }).catch(err => {
-        applicationContext.logger.error("failed to processCaseEntries',", err);
-        applicationContext.notifyHoneybadger(err, {
-          message: 'failed to processCaseEntries',
-        });
-        throw err;
-      }),
-      processDocketEntries({
-        applicationContext,
-        docketEntryRecords,
-        utils,
-      }).catch(err => {
-        applicationContext.logger.error(
-          "failed to processDocketEntries',",
-          err,
-        );
-        applicationContext.notifyHoneybadger(err, {
-          message: 'failed to processDocketEntries',
-        });
-        throw err;
-      }),
-    ]);
+    await processCaseEntries({
+      applicationContext,
+      caseEntityRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processCaseEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processCaseEntries',
+      });
+      throw err;
+    });
+
+    await processDocketEntries({
+      applicationContext,
+      docketEntryRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error("failed to processDocketEntries',", err);
+      applicationContext.notifyHoneybadger(err, {
+        message: 'failed to processDocketEntries',
+      });
+      throw err;
+    });
 
     await processWorkItemEntries({ applicationContext, workItemRecords }).catch(
       err => {
@@ -417,6 +422,7 @@ exports.processStreamRecordsInteractor = async ({
   }
 };
 
+exports.filterRecords = filterRecords;
 exports.partitionRecords = partitionRecords;
 exports.processCaseEntries = processCaseEntries;
 exports.processDocketEntries = processDocketEntries;

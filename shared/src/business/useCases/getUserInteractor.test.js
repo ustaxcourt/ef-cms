@@ -92,8 +92,6 @@ describe('getUserInteractor', () => {
       email: undefined,
       isUpdatingInformation: undefined,
       representing: [],
-      representingPrimary: undefined,
-      representingSecondary: undefined,
       token: undefined,
     });
   });

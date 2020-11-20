@@ -225,7 +225,12 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .boolean()
     .optional()
     .description('Use the secondary contact to compose the filedBy text.'),
-  pending: joi.boolean().optional(),
+  pending: joi
+    .boolean()
+    .optional()
+    .description(
+      'Determines if the docket entry should be displayed in the Pending Report.',
+    ),
   previousDocument: joi
     .object()
     .keys({
