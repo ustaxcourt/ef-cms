@@ -5,7 +5,9 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {Function} providers.props used for getting docketNumber and docketEntryId
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.props used for getting docketNumber and docketEntryId
+ * @param {object} providers.store the cerebral store
  * @returns {Promise<object>} pdf file object for preview
  */
 export const getPDFForPreviewAction = async ({
