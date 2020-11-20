@@ -13,13 +13,13 @@ const REQUEST_EVENT = {
 };
 
 const createSilentAppContext = user => {
-  const applicationContext = createApplicationContext(user);
-  applicationContext.environment.dynamoDbTableName = 'mocked';
-
-  applicationContext.logger = {
+  const applicationContext = createApplicationContext(user, {
+    debug: jest.fn(),
     error: jest.fn(),
     info: jest.fn(),
-  };
+  });
+
+  applicationContext.environment.dynamoDbTableName = 'mocked';
 
   return applicationContext;
 };
@@ -49,8 +49,7 @@ describe('getDocumentDownloadUrlLambda', () => {
     expect(JSON.parse(response.body)).toHaveProperty('message', 'Unauthorized');
   });
 
-  // currently returns 200; bug https://github.com/flexion/ef-cms/issues/6854
-  it.skip('returns 404 when the docket number isn’t found', async () => {
+  it('returns 404 when the docket number isn’t found', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
     const request = Object.assign({}, REQUEST_EVENT, {
@@ -92,9 +91,8 @@ describe('getDocumentDownloadUrlLambda', () => {
     );
   });
 
-  // currently returns 200; bug https://github.com/flexion/ef-cms/issues/6854
-  it.skip('returns 404 when the entity GUID isn’t found', async () => {
-    const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
+  it('returns 404 when the entity GUID isn’t found', async () => {
+    const user = MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'];
     const applicationContext = createSilentAppContext(user);
     const request = Object.assign({}, REQUEST_EVENT, {
       pathParameters: {
