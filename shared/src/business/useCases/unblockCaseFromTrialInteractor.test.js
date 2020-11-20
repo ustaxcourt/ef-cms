@@ -51,4 +51,31 @@ describe('unblockCaseFromTrialInteractor', () => {
       }),
     ).rejects.toThrow('Unauthorized');
   });
+
+  it('should not create the trial sort mapping record if the case has no trial city', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          preferredTrialCity: null,
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        }),
+      );
+
+    await unblockCaseFromTrialInteractor({
+      applicationContext,
+      docketNumber: '123-45',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
+  });
 });

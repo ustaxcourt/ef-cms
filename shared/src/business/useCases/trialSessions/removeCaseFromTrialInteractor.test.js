@@ -215,4 +215,30 @@ describe('remove case from trial session', () => {
       highPriority: false,
     });
   });
+
+  it('should not call createCaseTrialSortMappingRecords if case is missing trial city', async () => {
+    mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: true };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        associatedJudge: 'someone',
+        preferredTrialCity: null,
+        trialLocation: 'Boise, Idaho',
+        trialSessionId: 'abcd',
+      });
+
+    await removeCaseFromTrialInteractor({
+      applicationContext,
+      disposition: 'because',
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+  });
 });

@@ -143,4 +143,34 @@ describe('deleteTrialSessionInteractor', () => {
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
+
+  it('should not call createCaseTrialSortMappingRecords if the case has no trial city', async () => {
+    user = new User({
+      name: 'Docket Clerk',
+      role: ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    mockTrialSession = {
+      ...MOCK_TRIAL,
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        preferredTrialCity: null,
+      });
+
+    await deleteTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+  });
 });

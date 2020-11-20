@@ -31,12 +31,11 @@ describe('prioritizeCaseInteractor', () => {
     });
     expect(
       applicationContext.getPersistenceGateway()
-        .updateHighPriorityCaseTrialSortMappingRecords,
+        .updateCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .updateHighPriorityCaseTrialSortMappingRecords.mock.calls[0][0]
-        .docketNumber,
+        .updateCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
   });
 
@@ -93,5 +92,26 @@ describe('prioritizeCaseInteractor', () => {
         reason: 'just because',
       }),
     ).rejects.toThrow('Cannot set a blocked case as high priority');
+  });
+
+  it('should not call updateCaseTrialSortMappingRecords if the case is missing a trial city', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          preferredTrialCity: null,
+        }),
+      );
+
+    await prioritizeCaseInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+      reason: 'just because',
+    });
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
   });
 });

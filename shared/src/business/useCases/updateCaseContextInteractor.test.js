@@ -155,4 +155,26 @@ describe('updateCaseContextInteractor', () => {
 
     expect(result.caseCaption).toEqual('The new case caption');
   });
+
+  it('should not call createCaseTrialSortMappingRecords if the case is missing a trial city', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          preferredTrialCity: null,
+        }),
+      );
+
+    await updateCaseContextInteractor({
+      applicationContext,
+      caseCaption: 'The new case caption',
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+  });
 });
