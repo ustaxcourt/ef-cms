@@ -15,8 +15,5 @@ exports.casePublicSearchLambda = event =>
         ...event.queryStringParameters,
       });
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );
