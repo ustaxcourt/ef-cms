@@ -3,28 +3,30 @@ const {
   fakeData,
 } = require('../../test/createTestApplicationContext');
 const {
-  NOTICE_OF_TRIAL,
-  STANDING_PRETRIAL_NOTICE,
-  STANDING_PRETRIAL_ORDER,
-} = require('../../entities/EntityConstants');
-const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
+const {
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
   return caseRecord.docketEntries.find(
-    document => document.documentType === NOTICE_OF_TRIAL.documentType,
+    document =>
+      document.documentType ===
+      SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
   );
 };
 
 const findStandingPretrialDocument = caseRecord => {
   return caseRecord.docketEntries.find(
     document =>
-      document.documentType === STANDING_PRETRIAL_NOTICE.documentType ||
-      document.documentType === STANDING_PRETRIAL_ORDER.documentType,
+      document.documentType ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice.documentType ||
+      document.documentType ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.documentType,
   );
 };
 
@@ -224,7 +226,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketEntries.find(
-        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
+        entry =>
+          entry.documentType ===
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
       );
     };
 
@@ -382,7 +386,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketEntries.find(
-        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
+        entry =>
+          entry.documentType ===
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
       );
     };
 
