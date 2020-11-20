@@ -12,7 +12,6 @@ export const setCaseOnFormUsingStateAction = async ({ get, store }) => {
   const caseDetail = get(state.caseDetail);
 
   store.set(state.form, caseDetail);
-  console.log(get(state.form));
 
   return { caseDetail };
 };
