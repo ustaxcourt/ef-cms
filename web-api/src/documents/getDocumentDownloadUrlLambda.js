@@ -1,6 +1,4 @@
-const createApplicationContext = require('../applicationContext');
 const { genericHandler } = require('../genericHandler');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 /**
  * used for getting the download policy which is needed for users to download files directly from S3 via the UI
@@ -9,22 +7,11 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.getDocumentDownloadUrlLambda = event =>
-  genericHandler(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    try {
-      const results = await applicationContext
-        .getUseCases()
-        .getDownloadPolicyUrlInteractor({
-          applicationContext,
-          ...event.pathParameters,
-        });
-      applicationContext.logger.debug('User', user);
-      applicationContext.logger.debug('Results', results);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      await applicationContext.notifyHoneybadger(e);
-      throw e;
-    }
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext
+      .getUseCases()
+      .getDownloadPolicyUrlInteractor({
+        applicationContext,
+        ...event.pathParameters,
+      });
   });
