@@ -396,7 +396,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseTrialSortMappingRecords: jest.fn(),
-    updateHighPriorityCaseTrialSortMappingRecords: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
