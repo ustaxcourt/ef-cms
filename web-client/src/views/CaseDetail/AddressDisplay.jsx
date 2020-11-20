@@ -39,21 +39,17 @@ export const AddressDisplay = connect(
           {nameOverride || contact.name}{' '}
           {contact.barNumber && `(${contact.barNumber})`}
           <br />
-          {contact.firmName && contact.firmName}
+          {contact.firmName}
           <br />
-          {contact.secondaryName && (
-            <span>
-              <br />
-              c/o {contact.secondaryName}
-              {contact.title && <span>, {contact.title}</span>}
-            </span>
-          )}
-          {contact.inCareOf && (
-            <span>
-              <br />
-              c/o {contact.inCareOf}
-              {contact.title && <span>, {contact.title}</span>}
-            </span>
+          {[contact.secondaryName, contact.inCareOf].map(
+            (contactName, idx) =>
+              contactName && (
+                <span key={`co-${idx}`}>
+                  <br />
+                  c/o {contactName}
+                  {contact.title && <span>, {contact.title}</span>}
+                </span>
+              ),
           )}
         </p>
         {!contact.sealedAndUnavailable && (
@@ -65,14 +61,13 @@ export const AddressDisplay = connect(
                 'sealed-address',
             )}
           >
-            {contact.address1 && (
-              <span className="address-line">{contact.address1}</span>
-            )}
-            {contact.address2 && (
-              <span className="address-line">{contact.address2}</span>
-            )}
-            {contact.address3 && (
-              <span className="address-line">{contact.address3}</span>
+            {[contact.address1, contact.address2, contact.address3].map(
+              (addr, idx) =>
+                addr && (
+                  <span className="address-line" key={`addr-${idx}`}>
+                    {addr}
+                  </span>
+                ),
             )}
             <span className="address-line">
               {contact.city && `${contact.city}, `}
