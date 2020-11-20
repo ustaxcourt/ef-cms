@@ -229,7 +229,15 @@ exports.migrateCaseInteractor = async ({
         caseSortTags: caseToAdd.generateTrialSortTags(),
         docketNumber: caseToAdd.docketNumber,
       });
-  } else {
+  }
+
+  const readyForTrialButMissingTrialCity =
+    caseToAdd.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
+    !caseToAdd.blocked &&
+    !caseToAdd.automaticBlocked &&
+    !caseToAdd.preferredTrialCity;
+
+  if (readyForTrialButMissingTrialCity) {
     applicationContext.logger.info(
       `Case ${caseToAdd.docketNumber} ready for trial but missing trial city`,
     );
