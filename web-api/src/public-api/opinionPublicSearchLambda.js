@@ -17,8 +17,5 @@ exports.opinionPublicSearchLambda = event =>
           ...event.queryStringParameters,
         });
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );
