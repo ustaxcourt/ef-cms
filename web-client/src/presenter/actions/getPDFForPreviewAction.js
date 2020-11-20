@@ -10,6 +10,7 @@ import { state } from 'cerebral';
  */
 export const getPDFForPreviewAction = async ({
   applicationContext,
+  get,
   props,
   store,
 }) => {
@@ -17,7 +18,8 @@ export const getPDFForPreviewAction = async ({
   if (props.file.name) {
     return props;
   }
-  const { docketEntryId, docketNumber } = props.file;
+  const { docketEntryId } = props.file;
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const pdfObj = await applicationContext
     .getUseCases()
