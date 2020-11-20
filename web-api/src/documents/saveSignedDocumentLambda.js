@@ -7,24 +7,16 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.saveSignedDocumentLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const {
-        body,
-        pathParameters: { docketEntryId: originalDocketEntryId, docketNumber },
-      } = event;
+  genericHandler(event, async ({ applicationContext }) => {
+    const {
+      body,
+      pathParameters: { docketEntryId: originalDocketEntryId, docketNumber },
+    } = event;
 
-      return await applicationContext
-        .getUseCases()
-        .saveSignedDocumentInteractor({
-          applicationContext,
-          docketNumber,
-          originalDocketEntryId,
-          ...JSON.parse(body),
-        });
-    },
-    {
-      logEvent: true,
-    },
-  );
+    return await applicationContext.getUseCases().saveSignedDocumentInteractor({
+      applicationContext,
+      docketNumber,
+      originalDocketEntryId,
+      ...JSON.parse(body),
+    });
+  });
