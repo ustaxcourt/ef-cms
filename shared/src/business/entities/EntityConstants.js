@@ -341,6 +341,12 @@ const MINUTE_ENTRIES_MAP = {
     eventCode: 'RQT',
   },
 };
+const sptoDocument = COURT_ISSUED_EVENT_CODES.find(
+  doc => doc.eventCode === 'SPTO',
+);
+const sptnDocument = COURT_ISSUED_EVENT_CODES.find(
+  doc => doc.eventCode === 'SPTN',
+);
 
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfDocketChange: {
@@ -354,14 +360,14 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'NTD',
   },
   standingPretrialNotice: {
-    documentTitle: 'Standing Pretrial Notice',
-    documentType: 'Standing Pretrial Notice',
-    eventCode: 'SPTN',
+    documentTitle: sptnDocument.documentTitle,
+    documentType: sptnDocument.documentType,
+    eventCode: sptnDocument.eventCode,
   },
   standingPretrialOrder: {
-    documentTitle: 'Standing Pretrial Order',
-    documentType: 'Standing Pretrial Order',
-    eventCode: 'SPOS',
+    documentTitle: sptoDocument.documentTitle,
+    documentType: sptoDocument.documentType,
+    eventCode: sptoDocument.eventCode,
   },
 };
 
