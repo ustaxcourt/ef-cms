@@ -15,5 +15,5 @@ exports.addCoversheetLambda = event =>
         ...event.pathParameters,
       });
     },
-    { logEvent: true, logResults: false },
+    { logResults: false },
   );

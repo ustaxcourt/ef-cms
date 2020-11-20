@@ -7,17 +7,11 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.removeSignatureFromDocumentLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      return await applicationContext
-        .getUseCases()
-        .removeSignatureFromDocumentInteractor({
-          applicationContext,
-          ...event.pathParameters,
-        });
-    },
-    {
-      logEvent: true,
-    },
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    return await applicationContext
+      .getUseCases()
+      .removeSignatureFromDocumentInteractor({
+        applicationContext,
+        ...event.pathParameters,
+      });
+  });
