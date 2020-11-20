@@ -6,6 +6,17 @@ const {
 } = require('./ExternalDocumentInformationFactory');
 
 describe('SupportingDocumentInformationFactory', () => {
+  describe('constructor', () => {
+    it('should set attachments to false when no value is provided', () => {
+      const documentInstance = SupportingDocumentInformationFactory.get({
+        certificateOfService: false,
+        supportingDocument: 'Brief in Support',
+        supportingDocumentFile: {},
+      });
+      expect(documentInstance.attachments).toBe(false);
+    });
+  });
+
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const extDoc = SupportingDocumentInformationFactory.get(
@@ -13,7 +24,6 @@ describe('SupportingDocumentInformationFactory', () => {
         VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        attachments: VALIDATION_ERROR_MESSAGES.attachments,
         certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
         supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
       });

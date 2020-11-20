@@ -6,13 +6,25 @@ const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeE', () => {
+  describe('constructor', () => {
+    it('should set attachments to false when no value is provided', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        date: '2025-04-10T04:00:00.000Z',
+        documentTitle:
+          'Order time is extended to [Date] for petr(s) to pay the filing fee',
+        documentType:
+          'Order time is extended for petr(s) to pay the filing fee',
+        scenario: 'Type E',
+      });
+      expect(documentInstance.attachments).toBe(false);
+    });
+  });
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
         scenario: 'Type E',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        attachments: VALIDATION_ERROR_MESSAGES.attachments,
         date: VALIDATION_ERROR_MESSAGES.date[2],
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });

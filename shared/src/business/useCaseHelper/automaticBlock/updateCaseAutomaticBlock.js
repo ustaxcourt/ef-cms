@@ -1,5 +1,3 @@
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-
 /**
  * updateCaseAutomaticBlock
  *
@@ -29,10 +27,7 @@ exports.updateCaseAutomaticBlock = async ({
           applicationContext,
           docketNumber: caseEntity.docketNumber,
         });
-    } else if (
-      caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
-      !caseEntity.blocked
-    ) {
+    } else if (caseEntity.isReadyForTrial()) {
       await applicationContext
         .getPersistenceGateway()
         .createCaseTrialSortMappingRecords({
