@@ -7,3 +7,4 @@ const toggles = {
 };
 
 export const isCodeEnabled = issueNumber => toggles[issueNumber];
+export const isCodeDisabled = issueNumber => !toggles[issueNumber];
