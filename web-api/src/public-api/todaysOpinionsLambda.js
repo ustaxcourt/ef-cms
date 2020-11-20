@@ -16,8 +16,5 @@ exports.todaysOpinionsLambda = event =>
           applicationContext,
         });
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );
