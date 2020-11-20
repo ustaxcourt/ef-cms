@@ -342,6 +342,13 @@ const MINUTE_ENTRIES_MAP = {
   },
 };
 
+const sptoDocument = COURT_ISSUED_EVENT_CODES.find(
+  doc => doc.eventCode === 'SPTO',
+);
+const sptnDocument = COURT_ISSUED_EVENT_CODES.find(
+  doc => doc.eventCode === 'SPTN',
+);
+
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
@@ -354,24 +361,16 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'NTD',
   },
   standingPretrialNotice: {
-    documentTitle: 'Standing Pretrial Notice',
-    documentType: 'Standing Pretrial Notice',
-    eventCode: 'SPTN',
+    documentTitle: sptnDocument.documentTitle,
+    documentType: sptnDocument.documentType,
+    eventCode: sptnDocument.eventCode,
   },
   standingPretrialOrder: {
-    documentTitle: 'Standing Pretrial Order',
-    documentType: 'Standing Pretrial Order',
-    eventCode: 'SPTO',
+    documentTitle: sptoDocument.documentTitle,
+    documentType: sptoDocument.documentType,
+    eventCode: sptoDocument.eventCode,
   },
 };
-
-const NOTICE_OF_DOCKET_CHANGE =
-  SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange;
-const NOTICE_OF_TRIAL = SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial;
-const STANDING_PRETRIAL_NOTICE =
-  SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice;
-const STANDING_PRETRIAL_ORDER =
-  SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder;
 
 const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
@@ -1120,8 +1119,6 @@ module.exports = deepFreeze({
   MAX_FILE_SIZE_MB,
   MAX_SEARCH_RESULTS: 200,
   MINUTE_ENTRIES_MAP,
-  NOTICE_OF_DOCKET_CHANGE,
-  NOTICE_OF_TRIAL,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   OBJECTIONS_OPTIONS,
@@ -1150,8 +1147,6 @@ module.exports = deepFreeze({
   SESSION_TERMS,
   SESSION_TYPES,
   SIGNED_DOCUMENT_TYPES,
-  STANDING_PRETRIAL_NOTICE,
-  STANDING_PRETRIAL_ORDER,
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,

@@ -40,7 +40,6 @@ export const updateDocketEntryWizardDataAction = ({
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
   let form;
   let supporting = get(state.screenMetadata.supporting);
-
   switch (props.key) {
     case 'initEventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
