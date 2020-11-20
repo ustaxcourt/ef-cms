@@ -86,7 +86,7 @@ exports.updateCaseContextInteractor = async ({
         });
     }
 
-    if (caseStatus === CASE_STATUS_TYPES.generalDocketReadyForTrial) {
+    if (newCase.isReadyForTrial()) {
       await applicationContext
         .getPersistenceGateway()
         .createCaseTrialSortMappingRecords({

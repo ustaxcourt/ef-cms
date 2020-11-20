@@ -52,11 +52,18 @@ exports.associatePrivatePractitionerToCase = async ({
 
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+    const representing = [];
+    if (representingPrimary) {
+      representing.push(caseEntity.contactPrimary.contactId);
+    }
+    if (representingSecondary) {
+      representing.push(caseEntity.contactSecondary.contactId);
+    }
+
     caseEntity.attachPrivatePractitioner(
       new PrivatePractitioner({
         ...user,
-        representingPrimary,
-        representingSecondary,
+        representing,
         serviceIndicator,
       }),
     );

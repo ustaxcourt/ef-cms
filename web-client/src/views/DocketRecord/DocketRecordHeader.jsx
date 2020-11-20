@@ -9,24 +9,15 @@ export const DocketRecordHeader = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableDocketRecordSequence:
       sequences.navigateToPrintableDocketRecordSequence,
-    printDocketRecordSequence: sequences.printDocketRecordSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   function DocketRecordHeader({
     formattedCaseDetail,
     navigateToPrintableDocketRecordSequence,
-    printDocketRecordSequence,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) {
-    const openDocketRecordPrintPreview = (options = {}) => {
-      updateSessionMetadataSequence({
-        key: `docketRecordSort.${formattedCaseDetail.docketNumber}`,
-        value: 'byDate',
-      });
-      printDocketRecordSequence(options);
-    };
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
@@ -90,9 +81,8 @@ export const DocketRecordHeader = connect(
               aria-hidden="true"
               icon="print"
               onClick={() => {
-                openDocketRecordPrintPreview({
-                  openNewTab: true,
-                  openNewView: false,
+                navigateToPrintableDocketRecordSequence({
+                  docketNumber: formattedCaseDetail.docketNumber,
                 });
               }}
             >
