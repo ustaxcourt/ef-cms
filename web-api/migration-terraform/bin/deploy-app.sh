@@ -27,13 +27,11 @@ fi
 
 npm run build:assets
 
-set -e
+# exit on any failure
+set -eo pipefail
 pushd ../main/lambdas
 npx parcel build migration-segments.js migration.js --target node --bundle-node-modules --no-minify --no-cache --no-source-maps
 popd
-
-# exit on any failure
-set -eo pipefail
 
 # get the stream arn
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
