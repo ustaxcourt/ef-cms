@@ -6,7 +6,7 @@ import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/complet
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
-import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
 import { getIsSavingForLaterAction } from '../actions/DocketEntry/getIsSavingForLaterAction';
@@ -86,7 +86,7 @@ export const fileDocketEntrySequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
-          generateTitleAction,
+          generateTitleForPaperFilingAction,
           stopShowValidationAction,
           clearAlertsAction,
           isFileAttachedAction,
