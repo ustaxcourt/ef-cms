@@ -18,18 +18,7 @@ describe('updateCaseTrialSortMappingRecords', () => {
     client.delete = jest.fn().mockReturnValue(null);
   });
 
-  it('should not update mapping records if sort tags have not changed', async () => {
-    client.query = jest.fn().mockReturnValue([{ sk: 'abc' }, { sk: '123' }]);
-
-    await updateCaseTrialSortMappingRecords({
-      applicationContext,
-      caseSortTags,
-      docketNumber,
-    });
-    expect(client.put).not.toBeCalled();
-  });
-
-  it('should not attempt to put new records if no old mapping records were found', async () => {
+  it('should attempt to put new records if no old mapping records were found', async () => {
     client.query = jest.fn().mockReturnValue([]);
 
     await updateCaseTrialSortMappingRecords({
@@ -37,7 +26,7 @@ describe('updateCaseTrialSortMappingRecords', () => {
       caseSortTags,
       docketNumber,
     });
-    expect(client.put).not.toBeCalled();
+    expect(client.put).toBeCalled();
   });
 
   it('should update mapping records if sort tags have changed', async () => {

@@ -1,12 +1,11 @@
 const {
-  CASE_STATUS_TYPES,
-  MINUTE_ENTRIES_MAP,
-  PAYMENT_STATUS,
-} = require('../entities/EntityConstants');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  MINUTE_ENTRIES_MAP,
+  PAYMENT_STATUS,
+} = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -104,15 +103,14 @@ exports.updatePetitionDetailsInteractor = async ({
   }
 
   if (
-    newCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
+    newCase.isReadyForTrial() &&
     oldCase.preferredTrialCity !== newCase.preferredTrialCity
   ) {
-    const caseSortTags = newCase.generateTrialSortTags();
     await applicationContext
       .getPersistenceGateway()
       .updateCaseTrialSortMappingRecords({
         applicationContext,
-        caseSortTags,
+        caseSortTags: newCase.generateTrialSortTags(),
         docketNumber: newCase.validate().toRawObject().docketNumber,
       });
   }

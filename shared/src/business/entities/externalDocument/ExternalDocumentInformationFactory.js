@@ -111,7 +111,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
    */
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawProps) {
-    this.attachments = rawProps.attachments;
+    this.attachments = rawProps.attachments || false;
     this.casesParties = rawProps.casesParties;
     this.certificateOfService = rawProps.certificateOfService;
     this.certificateOfServiceDate = rawProps.certificateOfServiceDate;

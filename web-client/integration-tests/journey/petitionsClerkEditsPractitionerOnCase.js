@@ -44,10 +44,10 @@ export const petitionsClerkEditsPractitionerOnCase = test => {
 
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(2);
     expect(
-      test.getState('caseDetail.privatePractitioners.1.representingPrimary'),
-    ).toEqual(true);
-    expect(
-      test.getState('caseDetail.privatePractitioners.1.representingSecondary'),
-    ).toEqual(true);
+      test.getState('caseDetail.privatePractitioners.1.representing'),
+    ).toEqual([
+      test.getState('caseDetail.contactPrimary.contactId'),
+      test.getState('caseDetail.contactSecondary.contactId'),
+    ]);
   });
 };

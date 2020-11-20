@@ -5,8 +5,12 @@ describe('aggregatePartiesForService', () => {
   let mockCase;
   let irsPractitioners;
 
+  const PRIMARY_CONTACT_ID = 'c344c39f-6086-484b-998c-e93e9c7dcff5';
+  const SECONDARY_CONTACT_ID = '09ecdf10-359c-4694-a5a8-d15d56796ce1';
+
   beforeEach(() => {
     const contactPrimary = {
+      contactId: PRIMARY_CONTACT_ID,
       email: 'contactprimary@example.com',
       name: 'Contact Primary',
     };
@@ -14,6 +18,7 @@ describe('aggregatePartiesForService', () => {
     const contactSecondary = {
       address1: 'Test Address',
       city: 'Testville',
+      contactId: SECONDARY_CONTACT_ID,
       name: 'Contact Secondary',
       state: 'CA',
     };
@@ -35,12 +40,14 @@ describe('aggregatePartiesForService', () => {
       {
         email: 'practitionerone@example.com',
         name: 'Practitioner One',
+        representing: [],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'p1',
       },
       {
         email: 'practitionertwo@example.com',
         name: 'Practitioner Two',
+        representing: [],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'p2',
       },
@@ -126,7 +133,7 @@ describe('aggregatePartiesForService', () => {
   });
 
   it('should not serve the primary contact electronically or by paper if represented by counsel, but should serve the secondary contact by paper', async () => {
-    mockCase.privatePractitioners[0].representingPrimary = true;
+    mockCase.privatePractitioners[0].representing = [PRIMARY_CONTACT_ID];
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({

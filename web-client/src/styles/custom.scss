@@ -1539,6 +1539,7 @@ button.change-scanner-button {
 
 .document-viewer--documents {
   height: 1000px;
+  overflow-y: scroll;
 
   iframe {
     border: none;

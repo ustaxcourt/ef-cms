@@ -19,7 +19,11 @@ export const getShowNotServedForDocument = ({
       draftDocuments &&
       !!draftDocuments.find(draft => draft.docketEntryId === docketEntryId);
 
-    showNotServed = !isUnservable && !caseDocument.servedAt && !isDraftDocument;
+    showNotServed =
+      !isUnservable &&
+      !caseDocument.servedAt &&
+      !caseDocument.isLegacyServed &&
+      !isDraftDocument;
   }
 
   return showNotServed;

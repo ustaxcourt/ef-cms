@@ -19,6 +19,13 @@ exports.getDocumentQCInboxForSection = async ({
                 'sk.S': 'work-item|',
               },
             },
+            {
+              term: {
+                'section.S': {
+                  value: section,
+                },
+              },
+            },
           ],
           must_not: {
             exists: {
