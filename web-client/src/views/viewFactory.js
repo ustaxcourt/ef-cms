@@ -2,9 +2,9 @@ import { Button } from '../ustc-ui/Button/Button';
 import { CaseNotes } from './CaseDetail/CaseNotes';
 import { ErrorNotification } from './ErrorNotification';
 
-import { CaseNotes as CaseNotes6979 } from './CaseDetail/CaseNotes.6979';
+import { CaseNotes as CaseNotesOld } from './CaseDetail/CaseNotes.old';
 
-import { isCodeEnabled } from '../../../codeToggles';
+import { isCodeDisabled } from '../../../codeToggles';
 
 // TODO: Gradually add more views as needed
 const views = {
@@ -13,8 +13,8 @@ const views = {
   ErrorNotification,
 };
 
-if (isCodeEnabled(6979)) {
-  views.CaseNotes = CaseNotes6979;
+if (isCodeDisabled(6979)) {
+  views.CaseNotes = CaseNotesOld;
 }
 
 export const getView = viewName => views[viewName];

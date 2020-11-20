@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setAddEditUserCaseNoteModalStateFromDetailAction } from './setAddEditUserCaseNoteModalStateFromDetailAction.6979';
+import { setAddEditUserCaseNoteModalStateFromDetailAction } from './setAddEditUserCaseNoteModalStateFromDetailAction.old';
 
 describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
   presenter.providers.applicationContext = applicationContext;
@@ -24,8 +24,8 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
             caseCaption: 'Sisqo, Petitioner',
             docketNumber: '101-19',
             docketNumberWithSuffix: '101-19L',
+            judgesNote: { notes: 'i got some notes' },
           },
-          judgesNote: { notes: 'i got some notes' },
         },
       },
     );
@@ -53,8 +53,8 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
           caseDetail: {
             docketNumber: '101-19',
             docketNumberWithSuffix: '101-19',
+            judgesNote: { notes: 'i got some notes' },
           },
-          judgesNote: { notes: 'i got some notes' },
         },
       },
     );

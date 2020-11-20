@@ -1,10 +1,10 @@
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 
-import { setAddEditUserCaseNoteModalStateFromDetailAction as setAddEditUserCaseNoteModalStateFromDetailAction6979 } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction.6979';
-import { setJudgesCaseNoteOnCaseDetailAction as setJudgesCaseNoteOnCaseDetailAction6979 } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction.6979';
+import { setAddEditUserCaseNoteModalStateFromDetailAction as setAddEditUserCaseNoteModalStateFromDetailActionOld } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction.old';
+import { setJudgesCaseNoteOnCaseDetailAction as setJudgesCaseNoteOnCaseDetailActionOld } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction.old';
 
-import { isCodeEnabled } from '../../../../codeToggles';
+import { isCodeDisabled } from '../../../../codeToggles';
 
 // TODO: Gradually add more actions as needed
 const actions = {
@@ -12,9 +12,9 @@ const actions = {
   setJudgesCaseNoteOnCaseDetailAction,
 };
 
-if (isCodeEnabled(6979)) {
-  actions.setAddEditUserCaseNoteModalStateFromDetailAction = setAddEditUserCaseNoteModalStateFromDetailAction6979;
-  actions.setJudgesCaseNoteOnCaseDetailAction = setJudgesCaseNoteOnCaseDetailAction6979;
+if (isCodeDisabled(6979)) {
+  actions.setAddEditUserCaseNoteModalStateFromDetailAction = setAddEditUserCaseNoteModalStateFromDetailActionOld;
+  actions.setJudgesCaseNoteOnCaseDetailAction = setJudgesCaseNoteOnCaseDetailActionOld;
 }
 
 export const getAction = actionName => actions[actionName];
