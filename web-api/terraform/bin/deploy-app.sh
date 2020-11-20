@@ -51,13 +51,14 @@ fi
 
 npm run build:assets
 
+# exit on any failure
+set -eo pipefail
 # build the cognito authorizer, api, and api-public with parcel
 pushd ../template/lambdas
 npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-minify
 popd
 
-# exit on any failure
-set -eo pipefail
+
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
