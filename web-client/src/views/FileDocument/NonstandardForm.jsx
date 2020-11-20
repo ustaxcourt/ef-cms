@@ -83,6 +83,8 @@ export const NonstandardForm = connect(
           </FormGroup>
         )}
 
+        {console.log('****', form)}
+
         {helper[level].previousDocumentSelectLabel && (
           <FormGroup
             errorText={validationErrors && validationErrors.previousDocument}
