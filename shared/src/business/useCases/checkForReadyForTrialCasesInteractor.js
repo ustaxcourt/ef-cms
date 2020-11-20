@@ -23,13 +23,15 @@ exports.checkForReadyForTrialCasesInteractor = async ({
       caseToUpdate: caseEntity.toRawObject(),
     });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-        docketNumber: caseEntity.docketNumber,
-      });
+    if (caseEntity.isReadyForTrial()) {
+      await applicationContext
+        .getPersistenceGateway()
+        .createCaseTrialSortMappingRecords({
+          applicationContext,
+          caseSortTags: caseEntity.generateTrialSortTags(),
+          docketNumber: caseEntity.docketNumber,
+        });
+    }
   };
 
   const updatedCases = [];

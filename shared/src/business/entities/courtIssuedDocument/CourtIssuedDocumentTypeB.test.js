@@ -2,13 +2,24 @@ const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeB', () => {
+  describe('constructor', () => {
+    it('should set attachments to false when no value is provided', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
+        documentType: 'Order that case is assigned',
+        freeText: 'Some free text',
+        judge: 'Judge Colvin',
+        scenario: 'Type B',
+      });
+      expect(documentInstance.attachments).toBe(false);
+    });
+  });
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
         scenario: 'Type B',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        attachments: VALIDATION_ERROR_MESSAGES.attachments,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
         judge: VALIDATION_ERROR_MESSAGES.judge,
       });

@@ -3,10 +3,13 @@ import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
 let baseCaseDetail;
 
+const PRIMARY_CONTACT_ID = '0f9a8128-53fb-416c-98b5-91c077511ee4';
+const SECONDARY_CONTACT_ID = '7682af03-7123-4f1b-bcc9-f62714fd2084';
+
 const basePractitioner = {
   email: 'practitioner1@example.com',
   name: 'Test Practitioner',
-  representingPrimary: true,
+  representing: [],
   role: ROLES.privatePractitioner,
   serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
 };
@@ -24,6 +27,7 @@ describe('setServiceIndicatorsForCases', () => {
   beforeEach(() => {
     baseCaseDetail = {
       contactPrimary: {
+        contactId: PRIMARY_CONTACT_ID,
         email: 'petitioner@example.com',
         name: 'Test Petitioner',
       },
@@ -75,7 +79,9 @@ describe('setServiceIndicatorsForCases', () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
-      privatePractitioners: [{ ...basePractitioner }],
+      privatePractitioners: [
+        { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
+      ],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
@@ -89,7 +95,9 @@ describe('setServiceIndicatorsForCases', () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: false,
-      privatePractitioners: [{ ...basePractitioner }],
+      privatePractitioners: [
+        { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
+      ],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
@@ -136,10 +144,11 @@ describe('setServiceIndicatorsForCases', () => {
     const caseDetail = {
       ...baseCaseDetail,
       contactSecondary: {
+        contactId: SECONDARY_CONTACT_ID,
         name: 'Test Petitioner2',
       },
       privatePractitioners: [
-        { ...basePractitioner, representingSecondary: true },
+        { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
       ],
     };
 

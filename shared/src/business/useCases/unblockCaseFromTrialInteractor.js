@@ -34,13 +34,15 @@ exports.unblockCaseFromTrialInteractor = async ({
 
   caseEntity.unsetAsBlocked();
 
-  await applicationContext
-    .getPersistenceGateway()
-    .createCaseTrialSortMappingRecords({
-      applicationContext,
-      caseSortTags: caseEntity.generateTrialSortTags(),
-      docketNumber: caseEntity.docketNumber,
-    });
+  if (caseEntity.isReadyForTrial()) {
+    await applicationContext
+      .getPersistenceGateway()
+      .createCaseTrialSortMappingRecords({
+        applicationContext,
+        caseSortTags: caseEntity.generateTrialSortTags(),
+        docketNumber: caseEntity.docketNumber,
+      });
+  }
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()
