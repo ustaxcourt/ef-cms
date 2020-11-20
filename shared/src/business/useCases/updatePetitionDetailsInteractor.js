@@ -102,6 +102,7 @@ exports.updatePetitionDetailsInteractor = async ({
     }
   }
 
+  console.log('newCase.isReadyForTrial()', newCase.isReadyForTrial());
   if (
     newCase.isReadyForTrial() &&
     oldCase.preferredTrialCity !== newCase.preferredTrialCity

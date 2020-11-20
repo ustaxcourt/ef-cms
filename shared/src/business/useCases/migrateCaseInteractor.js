@@ -221,25 +221,18 @@ exports.migrateCaseInteractor = async ({
     caseToCreate: caseValidatedRaw,
   });
 
-  const shouldCreateCaseTrialSortMappingRecords =
-    caseToAdd.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
-    !caseToAdd.blocked &&
-    !caseToAdd.automaticBlocked;
-
-  if (shouldCreateCaseTrialSortMappingRecords) {
-    if (caseToAdd.isReadyForTrial()) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: caseToAdd.generateTrialSortTags(),
-          docketNumber: caseToAdd.docketNumber,
-        });
-    } else {
-      applicationContext.logger.info(
-        `Case ${caseToAdd.docketNumber} ready for trial but missing trial city`,
-      );
-    }
+  if (caseToAdd.isReadyForTrial()) {
+    await applicationContext
+      .getPersistenceGateway()
+      .createCaseTrialSortMappingRecords({
+        applicationContext,
+        caseSortTags: caseToAdd.generateTrialSortTags(),
+        docketNumber: caseToAdd.docketNumber,
+      });
+  } else {
+    applicationContext.logger.info(
+      `Case ${caseToAdd.docketNumber} ready for trial but missing trial city`,
+    );
   }
 
   for (const correspondenceEntity of caseToAdd.correspondence) {
