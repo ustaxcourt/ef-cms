@@ -1426,7 +1426,12 @@ Case.prototype.isCalendared = function () {
  * @returns {boolean} if the case is calendared
  */
 Case.prototype.isReadyForTrial = function () {
-  return this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial;
+  return (
+    this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
+    this.preferredTrialCity &&
+    !this.blocked &&
+    !this.automaticBlocked
+  );
 };
 
 /**

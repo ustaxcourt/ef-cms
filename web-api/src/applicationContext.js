@@ -900,9 +900,6 @@ const {
   updateDocketEntryProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
 const {
-  updateHighPriorityCaseTrialSortMappingRecords,
-} = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
-const {
   updateInitialFilingDocuments,
 } = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
 const {
@@ -1153,7 +1150,6 @@ const gatewayMethods = {
     updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
-    updateHighPriorityCaseTrialSortMappingRecords,
     updateMessage,
     updatePractitionerUser,
     updateTrialSession,
