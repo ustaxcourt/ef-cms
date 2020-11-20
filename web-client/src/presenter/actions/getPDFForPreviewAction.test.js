@@ -27,13 +27,17 @@ describe('getPDFForPreviewAction', () => {
   });
 
   it('returns results from loadPDFForPreviewInteractor if provided a docketNumber and docketEntryId', async () => {
-    const props = { file: { docketEntryId: '456', docketNumber: '123-20' } };
+    const props = { file: { docketEntryId: '456' } };
     await runAction(getPDFForPreviewAction, {
       modules: {
         presenter,
       },
       props,
-      state: {},
+      state: {
+        caseDetail: {
+          docketNumber: '123-20',
+        },
+      },
     });
     expect(
       applicationContext.getUseCases().loadPDFForPreviewInteractor,
