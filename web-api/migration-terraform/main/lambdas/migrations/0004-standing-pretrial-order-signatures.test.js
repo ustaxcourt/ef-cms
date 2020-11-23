@@ -245,4 +245,29 @@ describe('migrateItems', () => {
       'The DocketEntry entity was invalid. {"signedByUserId":"\'signedByUserId\' must be a valid GUID"}',
     );
   });
+
+  it("should use docketNumber from docket entry's pk to retrieve case record", async () => {
+    documentClient.get = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Item: {},
+      }),
+    });
+
+    const DOCKET_NUMBER = '109-20';
+    const mockDocketEntry = {
+      pk: `case|${DOCKET_NUMBER}`,
+      sk: 'docket-entry|4ed22b10-4bc5-4d49-b6f6-8cb448280e16',
+      ...MOCK_CASE.docketEntries[0],
+      docketNumber: undefined,
+      eventCode: 'SPOS',
+      signedAt: '2020-07-06T17:06:04.552Z',
+    };
+
+    await migrateItems([mockDocketEntry], documentClient);
+
+    expect(documentClient.get.mock.calls[0][0].Key).toMatchObject({
+      pk: `case|${DOCKET_NUMBER}`,
+      sk: `case|${DOCKET_NUMBER}`,
+    });
+  });
 });
