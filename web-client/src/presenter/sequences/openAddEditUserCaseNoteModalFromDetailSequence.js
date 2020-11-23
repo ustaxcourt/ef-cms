@@ -1,11 +1,7 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
-import { getAction } from '../actions/actionFactory';
-
-const setAddEditUserCaseNoteModalStateFromDetailAction = getAction(
-  'setAddEditUserCaseNoteModalStateFromDetailAction',
-);
+import { setAddEditUserCaseNoteModalStateFromDetailAction } from '../actions/actionFactory';
 
 export const openAddEditUserCaseNoteModalFromDetailSequence = [
   clearModalStateAction,

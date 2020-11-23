@@ -17,4 +17,4 @@ if (isCodeDisabled(6979)) {
   actions.setJudgesCaseNoteOnCaseDetailAction = setJudgesCaseNoteOnCaseDetailActionOld;
 }
 
-export const getAction = actionName => actions[actionName];
+export { actions };
