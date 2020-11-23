@@ -263,9 +263,6 @@ const {
 } = require('../../shared/src/business/utilities/documentUrlTranslator');
 const {
   fetchPendingItems,
-} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
-const {
-  fetchPendingItems: fetchPendingItemsPersistence,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
 const {
   fetchPendingItemsByDocketNumber,
@@ -1133,7 +1130,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     createUser,
     createUserInboxRecord,
-    fetchPendingItems: fetchPendingItemsPersistence,
+    fetchPendingItems,
     getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
@@ -1494,7 +1491,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         createTrialSessionAndWorkingCopy,
-        fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,

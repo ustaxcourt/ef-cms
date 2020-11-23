@@ -14,7 +14,7 @@ describe('fetchPendingItemsInteractor', () => {
         userId: 'petitionsclerk',
       };
     },
-    getUseCaseHelpers: () => ({
+    getPersistenceGateway: () => ({
       fetchPendingItems: searchSpy,
     }),
   };
