@@ -353,6 +353,9 @@ const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
 const {
+  getBlockedCases: getBlockedCasesOld,
+} = require('../../shared/src/persistence/elasticsearch/getBlockedCases.old');
+const {
   getBlockedCasesInteractor,
 } = require('../../shared/src/business/useCases/getBlockedCasesInteractor');
 const {
@@ -985,6 +988,7 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
+const { isCodeDisabled } = require('../../codeToggles');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
 
@@ -1233,6 +1237,10 @@ const gatewayMethods = {
   verifyPendingCaseForUser,
   zipDocuments,
 };
+
+if (isCodeDisabled(7137)) {
+  gatewayMethods.getBlockedCases = getBlockedCasesOld;
+}
 
 module.exports = (appContextUser, logger = createLogger()) => {
   let user;
