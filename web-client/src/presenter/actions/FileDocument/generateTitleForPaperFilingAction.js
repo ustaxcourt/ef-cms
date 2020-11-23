@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -12,7 +13,7 @@ export const generateTitleForPaperFilingAction = ({
   get,
   store,
 }) => {
-  const documentMetadata = get(state.form);
+  const documentMetadata = cloneDeep(get(state.form));
 
   const { INTERNAL_DOCUMENTS_ARRAY } = applicationContext.getConstants();
 
