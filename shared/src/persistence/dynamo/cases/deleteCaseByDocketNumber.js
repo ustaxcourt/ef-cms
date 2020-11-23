@@ -64,6 +64,19 @@ exports.deleteCaseByDocketNumber = async ({
         );
       });
     }
+
+    // ====== DEADLINES ====== //
+    if (sk.includes('case-deadline|')) {
+      requests.push(
+        client.delete({
+          applicationContext,
+          key: {
+            pk: sk,
+            sk: sk,
+          },
+        }),
+      );
+    }
   });
 
   const [results] = await Promise.all(requests);
