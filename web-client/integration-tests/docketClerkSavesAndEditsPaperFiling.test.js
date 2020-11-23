@@ -1,5 +1,5 @@
 import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
-import { docketClerkEditsPaperFiledDocketEntry } from './journey/docketClerkEditsPaperFiledDocketEntry';
+import { docketClerkEditsPaperFiledDocketEntryFromQC } from './journey/docketClerkEditsPaperFiledDocketEntryFromQC';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
@@ -14,5 +14,5 @@ describe('Docket clerk saves and then edits a paper filing', () => {
 
   loginAs(test, 'docketclerk1@example.com');
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater(test, fakeFile);
-  docketClerkEditsPaperFiledDocketEntry(test);
+  docketClerkEditsPaperFiledDocketEntryFromQC(test);
 });
