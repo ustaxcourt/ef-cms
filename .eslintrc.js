@@ -160,6 +160,7 @@ module.exports = {
       },
     ],
     'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'warn',
     'require-atomic-updates': 'off',
     'security/detect-child-process': 'off',
     'security/detect-non-literal-fs-filename': 'off',
