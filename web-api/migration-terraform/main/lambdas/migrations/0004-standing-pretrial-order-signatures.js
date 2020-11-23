@@ -19,11 +19,13 @@ const migrateItems = async (items, documentClient) => {
         item.eventCode === 'SPOS'
       ) {
         if (!item.signedAt || !item.signedJudgeName || !item.signedByUserId) {
+          const docketNumber = item.pk.split('|')[1];
+
           const caseRecord = await documentClient
             .get({
               Key: {
-                pk: `case|${item.docketNumber}`,
-                sk: `case|${item.docketNumber}`,
+                pk: `case|${docketNumber}`,
+                sk: `case|${docketNumber}`,
               },
               TableName: process.env.SOURCE_TABLE,
             })
