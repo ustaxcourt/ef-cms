@@ -34,7 +34,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     role: ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
-  // const mockPdfTextContents = 'Gotta have my bowl, gotta have cereal';
 
   const mockUserId = applicationContext.getUniqueId();
   const mockPdfUrl = 'www.example.com';
@@ -44,6 +43,19 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     sentBy: mockUser.name,
     sentByUserId: mockUser.userId,
     workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
+  };
+
+  const mockDocketEntryWithWorkItem = {
+    docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+    docketNumber: '45678-18',
+    documentTitle: 'Order',
+    documentType: 'Order',
+    eventCode: 'O',
+    signedAt: '2019-03-01T21:40:46.415Z',
+    signedByUserId: mockUserId,
+    signedJudgeName: 'Dredd',
+    userId: mockUserId,
+    workItem: mockWorkItem,
   };
 
   const dynamicallyGeneratedDocketEntries = [];
@@ -131,17 +143,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           filedBy: 'Test Petitioner',
           userId: mockUserId,
         },
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-          docketNumber: '45678-18',
-          documentTitle: 'Order',
-          documentType: 'Order',
-          eventCode: 'O',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-          userId: mockUserId,
-        },
+        mockDocketEntryWithWorkItem,
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: '45678-18',
@@ -515,6 +517,23 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     expect(newlyFiledDocument).toMatchObject({
       isDraft: false,
     });
+  });
+
+  it("should delete the work item from the user's inbox when a work item previously existed on the docket entry", async () => {
+    await fileAndServeCourtIssuedDocumentInteractor({
+      applicationContext,
+      documentMeta: {
+        docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: mockDocketEntryWithWorkItem.documentTitle,
+        documentType: mockDocketEntryWithWorkItem.documentType,
+        eventCode: mockDocketEntryWithWorkItem.eventCode,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toHaveBeenCalled();
   });
 
   docketEntriesWithCaseClosingEventCodes.forEach(document => {

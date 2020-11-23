@@ -16,7 +16,6 @@ describe('validateExternalDocumentInformationInteractor', () => {
     });
 
     expect(errors).toEqual({
-      attachments: VALIDATION_ERROR_MESSAGES.attachments,
       certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
       hasSupportingDocuments: VALIDATION_ERROR_MESSAGES.hasSupportingDocuments,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
