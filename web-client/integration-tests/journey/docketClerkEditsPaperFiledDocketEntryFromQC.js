@@ -1,3 +1,5 @@
+const { isCodeEnabled } = require('../../../codeToggles');
+
 export const docketClerkEditsPaperFiledDocketEntryFromQC = test => {
   return it('Docket clerk edits paper-filed docket entry from QC', async () => {
     await test.runSequence('gotoCompleteDocketEntrySequence', {
@@ -14,8 +16,14 @@ export const docketClerkEditsPaperFiledDocketEntryFromQC = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('form.documentTitle')).toEqual(
-      'Motion for Leave to File Answer',
-    );
+    if (isCodeEnabled(6916)) {
+      expect(test.getState('form.documentTitle')).toEqual(
+        'Motion for Leave to File Answer',
+      );
+    } else {
+      expect(test.getState('form.documentTitle')).toEqual(
+        'Motion for Leave to File Application for Waiver of Filing Fee and Affidavit',
+      );
+    }
   });
 };
