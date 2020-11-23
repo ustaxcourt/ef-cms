@@ -129,6 +129,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       'Your entry has been added to docket record.',
     );
 
+    expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('form')).toEqual({});
   });
