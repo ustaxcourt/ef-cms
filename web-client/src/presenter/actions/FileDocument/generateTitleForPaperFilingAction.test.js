@@ -33,4 +33,27 @@ describe('generateTitleForPaperFilingAction', () => {
       documentTitle: '[First, Second, etc. ] Amended [Document Name]',
     });
   });
+
+  it('should not overwrite original documentTitle if a matching document is not found in the internal documents array', async () => {
+    await runAction(generateTitleForPaperFilingAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          documentTitle: 'Order to do something',
+          documentType: 'Order',
+          eventCode: 'O',
+          freeText: 'to do something',
+        },
+      },
+    });
+
+    expect(generateDocumentTitleInteractor.mock.calls.length).toEqual(1);
+    expect(
+      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata,
+    ).toMatchObject({
+      documentTitle: 'Order to do something',
+    });
+  });
 });
