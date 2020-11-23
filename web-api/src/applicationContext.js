@@ -1182,7 +1182,7 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getBlockedCases,
+  getBlockedCases: isCodeDisabled(7137) ? getBlockedCasesOld : getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
   getCaseDeadlinesByDateRange,
@@ -1237,10 +1237,6 @@ const gatewayMethods = {
   verifyPendingCaseForUser,
   zipDocuments,
 };
-
-if (isCodeDisabled(7137)) {
-  gatewayMethods.getBlockedCases = getBlockedCasesOld;
-}
 
 module.exports = (appContextUser, logger = createLogger()) => {
   let user;
