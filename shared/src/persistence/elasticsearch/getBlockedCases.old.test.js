@@ -1,7 +1,7 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
-const { getBlockedCases } = require('./getBlockedCases');
+const { getBlockedCases } = require('./getBlockedCases.old');
 jest.mock('./searchClient');
 const { search } = require('./searchClient');
 
