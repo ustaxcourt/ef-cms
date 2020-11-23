@@ -4,9 +4,10 @@ const toggles = {
   6916: true,
   6921: true,
   6929: true,
+  6936: true,
   6979: true,
   7072: true,
 };
 
-export const isCodeEnabled = issueNumber => toggles[issueNumber];
-export const isCodeDisabled = issueNumber => !toggles[issueNumber];
+exports.isCodeEnabled = issueNumber => toggles[issueNumber];
+exports.isCodeDisabled = issueNumber => !toggles[issueNumber];
