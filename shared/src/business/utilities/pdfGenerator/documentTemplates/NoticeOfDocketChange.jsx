@@ -38,7 +38,8 @@ export const NoticeOfDocketChange = ({
           )}
           {showPartiesChange && (
             <span id="changed-filing-parties">
-              &quot;{filingParties.before}&quot; has been changed to &quot;
+              The filing party/parties has been changed from &quot;
+              {filingParties.before}&quot; to &quot;
               {filingParties.after}
               &quot;.
             </span>
