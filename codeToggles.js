@@ -2,11 +2,10 @@
 // TODO: move to a modifiable location such as S3 or DynamoDB
 const toggles = {
   6921: true,
+  6929: true,
+  6979: true,
   7072: true,
 };
 
-const isCodeEnabled = issueNumber => {
-  return toggles[issueNumber];
-};
-
-module.exports.isCodeEnabled = isCodeEnabled;
+export const isCodeEnabled = issueNumber => toggles[issueNumber];
+export const isCodeDisabled = issueNumber => !toggles[issueNumber];
