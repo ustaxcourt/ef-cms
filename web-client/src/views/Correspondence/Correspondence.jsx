@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CorrespondenceHeader } from './CorrespondenceHeader';
 import { CorrespondenceViewerCorrespondence } from './CorrespondenceViewerCorrespondence';
 import { DeleteCorrespondenceModal } from './DeleteCorrespondenceModal';
@@ -41,43 +42,61 @@ export const Correspondence = connect(
         {formattedCaseDetail.correspondence.length > 0 && (
           <div className="grid-row grid-gap-5">
             <div className="grid-col-4">
-              <div className="border border-base-lighter">
-                <table className="document-viewer usa-table case-detail docket-record responsive-table row-border-only">
-                  <thead>
-                    <tr>
-                      <th className="small">Date</th>
-                      <th>Correspondence Description</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {formattedCaseDetail.correspondence.map(
-                      (correspondence, idx) => {
-                        return (
-                          <tr
+              <div className="border border-base-lighter document-viewer--documents document-viewer--documents-list-container">
+                <div className="grid-row padding-left-205 grid-header">
+                  <div className="grid-col-3">Date</div>
+                  <div className="grid-col-5">Correspondence Description</div>
+                  <div className="grid-col-2"></div>
+                </div>
+                <div className="document-viewer--documents-list">
+                  {formattedCaseDetail.correspondence.map(correspondence => {
+                    const isActive =
+                      viewerCorrespondenceToDisplay &&
+                      viewerCorrespondenceToDisplay.correspondenceId ===
+                        correspondence.correspondenceId;
+                    return (
+                      <Button
+                        className={classNames(
+                          'usa-button--unstyled attachment-viewer-button',
+                          isActive && 'active',
+                        )}
+                        isActive={isActive}
+                        key={correspondence.correspondenceId}
+                        onClick={() => {
+                          setViewerCorrespondenceToDisplaySequence({
+                            viewerCorrespondenceToDisplay: correspondence,
+                          });
+                        }}
+                      >
+                        <div className="grid-row margin-left-205">
+                          <div className="grid-col-2 text-align-center">
+                            {correspondence.formattedFilingDate}
+                          </div>
+                          <div
                             className={classNames(
-                              'row-button',
-                              viewerCorrespondenceToDisplay &&
-                                viewerCorrespondenceToDisplay.correspondenceId ===
-                                  correspondence.correspondenceId &&
-                                'active',
+                              'grid-col-3',
+                              correspondence.isStricken &&
+                                'stricken-docket-record',
                             )}
-                            key={idx}
-                            onClick={() => {
-                              setViewerCorrespondenceToDisplaySequence({
-                                viewerCorrespondenceToDisplay: correspondence,
-                              });
-                            }}
                           >
-                            <td className="small">
-                              {correspondence.formattedFilingDate}
-                            </td>
-                            <td>{correspondence.documentTitle}</td>
-                          </tr>
-                        );
-                      },
-                    )}
-                  </tbody>
-                </table>
+                            {correspondence.createdAtFormatted}
+                          </div>
+                          <div className="grid-col-5">
+                            {correspondence.documentTitle}
+                            {correspondence.isStricken && ' (STRICKEN)'}
+                          </div>
+                          <div className="grid-col-2 padding-left-105">
+                            {correspondence.showNotServed && (
+                              <span className="text-semibold not-served">
+                                Not served
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </Button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
