@@ -3,7 +3,6 @@ import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailPendingReportList } from './CaseDetailPendingReportList';
 import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseInformationInternal';
-import { CaseNotes } from '../viewFactory';
 import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DocumentViewer } from '../DocketRecord/DocumentViewer';
@@ -22,8 +21,11 @@ import { Statistics } from './Statistics';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
+import { getView } from '../viewFactory';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+
+const CaseNotes = getView('CaseNotes');
 
 export const CaseDetailInternal = connect(
   {
