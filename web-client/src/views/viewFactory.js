@@ -17,4 +17,4 @@ if (isCodeDisabled(6979)) {
   views.CaseNotes = CaseNotesOld;
 }
 
-export { views };
+export const getView = viewName => views[viewName];
