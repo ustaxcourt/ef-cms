@@ -8,5 +8,5 @@ const toggles = {
   7137: true,
 };
 
-export const isCodeEnabled = issueNumber => toggles[issueNumber];
-export const isCodeDisabled = issueNumber => !toggles[issueNumber];
+exports.isCodeEnabled = issueNumber => toggles[issueNumber];
+exports.isCodeDisabled = issueNumber => !toggles[issueNumber];
