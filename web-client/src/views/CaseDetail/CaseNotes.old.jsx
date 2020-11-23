@@ -11,7 +11,6 @@ export const CaseNotes = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
-    judgesNote: state.judgesNote,
     openAddEditCaseNoteModalSequence:
       sequences.openAddEditCaseNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence:
@@ -25,7 +24,6 @@ export const CaseNotes = connect(
   function CaseNotes({
     caseDetail,
     caseDetailHelper,
-    judgesNote,
     openAddEditCaseNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence,
@@ -77,9 +75,7 @@ export const CaseNotes = connect(
                             icon="trash"
                             id="delete-procedural-note-button"
                             onClick={() => {
-                              openDeleteCaseNoteConfirmModalSequence({
-                                docketNumber: caseDetail.docketNumber,
-                              });
+                              openDeleteCaseNoteConfirmModalSequence();
                             }}
                           >
                             Delete Note
@@ -94,7 +90,8 @@ export const CaseNotes = connect(
                 <div className="tablet:grid-col-6">
                   <div className="card height-full">
                     <div className="content-wrapper">
-                      {(!judgesNote || !judgesNote.notes) && (
+                      {(!caseDetail.judgesNote ||
+                        !caseDetail.judgesNote.notes) && (
                         <Button
                           link
                           className="float-right margin-right-0 margin-top-1 padding-0"
@@ -110,9 +107,9 @@ export const CaseNotes = connect(
                       )}
                       <h3 className="underlined">Judge’s Notes</h3>
                       <div className="margin-top-1  margin-bottom-4">
-                        <TextView bind="judgesNote.notes" />
+                        <TextView bind="caseDetail.judgesNote.notes" />
                       </div>
-                      {judgesNote && judgesNote.notes && (
+                      {caseDetail.judgesNote && caseDetail.judgesNote.notes && (
                         <div className="grid-row">
                           <div className="tablet:grid-col-6">
                             <Button
