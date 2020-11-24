@@ -44,6 +44,7 @@ import {
   formattedClosedCases,
   formattedOpenCases,
 } from './computeds/formattedCaseDetail';
+import { formattedCaseDetail as formattedCaseDetailOld } from './computeds/formattedCaseDetail.old';
 import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedDocument } from './computeds/formattedDocument';
@@ -56,6 +57,7 @@ import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
+import { isCodeEnabled } from '../../../codeToggles';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
@@ -136,7 +138,9 @@ const helpers = {
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingPartiesFormHelper,
-  formattedCaseDetail,
+  formattedCaseDetail: isCodeEnabled(6868)
+    ? formattedCaseDetail
+    : formattedCaseDetailOld,
   formattedCaseMessages,
   formattedClosedCases,
   formattedDashboardTrialSessions,
