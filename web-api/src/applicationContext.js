@@ -340,6 +340,9 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
+  generatePrintablePendingReportInteractor: generatePrintablePendingReportInteractorOld,
+} = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor.old');
+const {
   generateStandingPretrialNoticeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialNoticeInteractor');
 const {
@@ -1565,7 +1568,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generatePdfFromHtmlInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
-        generatePrintablePendingReportInteractor,
+        generatePrintablePendingReportInteractor: isCodeEnabled(7134)
+          ? generatePrintablePendingReportInteractor
+          : generatePrintablePendingReportInteractorOld,
         generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
