@@ -80,6 +80,7 @@ exports.advancedDocumentSearch = async ({
       },
       parent_type: 'case',
       query: { bool: { must_not: caseMustNot } },
+      score: true,
     },
   };
 
