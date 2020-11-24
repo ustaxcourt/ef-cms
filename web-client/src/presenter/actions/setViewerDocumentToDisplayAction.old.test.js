@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setViewerDocumentToDisplayAction } from './setViewerDocumentToDisplayAction';
+import { setViewerDocumentToDisplayAction } from './setViewerDocumentToDisplayAction.old';
 
 describe('setViewerDocumentToDisplayAction', () => {
   beforeAll(() => {
@@ -13,7 +13,7 @@ describe('setViewerDocumentToDisplayAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets the viewerDocumentToDisplay from props on state, sets the docketEntryId from props on state, and sets the iframeSrc url from the return from the use case', async () => {
+  it('sets the viewerDocumentToDisplay from props on state and sets the iframeSrc url from the return from the use case', async () => {
     const result = await runAction(setViewerDocumentToDisplayAction, {
       modules: {
         presenter,
@@ -33,11 +33,10 @@ describe('setViewerDocumentToDisplayAction', () => {
     expect(result.state.viewerDocumentToDisplay).toEqual({
       docketEntryId: '1234',
     });
-    expect(result.state.docketEntryId).toEqual('1234');
     expect(result.state.iframeSrc).toEqual('www.example.com');
   });
 
-  it('does not set iframeSrc if props.viewerDocumentToDisplay is null', async () => {
+  it('does not set docketEntryId or iframeSrc if props.viewerDocumentToDisplay is null', async () => {
     const result = await runAction(setViewerDocumentToDisplayAction, {
       modules: {
         presenter,
@@ -54,6 +53,7 @@ describe('setViewerDocumentToDisplayAction', () => {
       },
     });
 
+    expect(result.state.docketEntryId).toBeUndefined();
     expect(result.state.iframeSrc).toBeUndefined();
   });
 });

@@ -6,7 +6,6 @@ import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/complet
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
-import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
 import { getIsSavingForLaterAction } from '../actions/DocketEntry/getIsSavingForLaterAction';
@@ -32,6 +31,12 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
+
+import { getAction } from '../actions/actionFactory';
+
+const generateTitleForPaperFilingAction = getAction(
+  'generateTitleForPaperFilingAction',
+);
 
 const gotoCaseDetail = [
   getDocketEntryAlertSuccessAction,
@@ -86,7 +91,7 @@ export const fileDocketEntrySequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
-          generateTitleAction,
+          generateTitleForPaperFilingAction,
           stopShowValidationAction,
           clearAlertsAction,
           isFileAttachedAction,
