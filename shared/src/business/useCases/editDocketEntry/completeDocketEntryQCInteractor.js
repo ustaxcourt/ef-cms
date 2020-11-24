@@ -7,7 +7,7 @@ const {
 const {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_RELATIONSHIPS,
-  NOTICE_OF_DOCKET_CHANGE,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   DOCKET_SECTION,
@@ -293,10 +293,10 @@ exports.completeDocketEntryQCInteractor = async ({
 
     let noticeUpdatedDocketEntry = new DocketEntry(
       {
-        ...NOTICE_OF_DOCKET_CHANGE,
+        ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
         docketEntryId: noticeDocketEntryId,
         documentTitle: replaceBracketed(
-          NOTICE_OF_DOCKET_CHANGE.documentTitle,
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
           docketChangeInfo.docketEntryIndex,
         ),
         isFileAttached: true,

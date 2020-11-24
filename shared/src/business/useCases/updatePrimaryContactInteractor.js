@@ -121,11 +121,18 @@ exports.updatePrimaryContactInteractor = async ({
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    const privatePractitionersRepresentingPrimaryContact = caseEntity.privatePractitioners.filter(
-      d => d.representingPrimary,
-    );
+    let privatePractitionersRepresentingPrimaryContact = false;
+    for (const privatePractitioner of caseEntity.privatePractitioners) {
+      const practitionerRepresentingPrimary = privatePractitioner.getRepresentingPrimary(
+        caseEntity,
+      );
+      if (practitionerRepresentingPrimary) {
+        privatePractitionersRepresentingPrimaryContact = true;
+        break;
+      }
+    }
 
-    if (privatePractitionersRepresentingPrimaryContact.length === 0) {
+    if (!privatePractitionersRepresentingPrimaryContact) {
       const workItem = new WorkItem(
         {
           assigneeId: null,

@@ -27,37 +27,44 @@ describe('getIndexedCasesForUser', () => {
         .bool.must,
     ).toMatchObject([
       {
-        term: {
+        match: {
           'pk.S': {
-            value: `user|${mockUserId}`,
+            operator: 'and',
+            query: `user|${mockUserId}`,
           },
         },
       },
-      { prefix: { 'sk.S': 'case|' } },
-      { prefix: { 'gsi1pk.S': 'user-case|' } },
       {
-        terms: {
-          'status.S': [
-            CASE_STATUS_TYPES.new,
-            CASE_STATUS_TYPES.jurisdictionRetained,
-            CASE_STATUS_TYPES.calendared,
+        match: {
+          'sk.S': 'case|',
+        },
+      },
+      {
+        match: {
+          'gsi1pk.S': 'user-case|',
+        },
+      },
+      {
+        bool: {
+          should: [
+            {
+              match: {
+                'status.S': CASE_STATUS_TYPES.new,
+              },
+            },
+            {
+              match: {
+                'status.S': CASE_STATUS_TYPES.jurisdictionRetained,
+              },
+            },
+            {
+              match: {
+                'status.S': CASE_STATUS_TYPES.calendared,
+              },
+            },
           ],
         },
       },
     ]);
-  });
-
-  it('should include sort in search call when statuses contains only closed', async () => {
-    const mockUserId = '123';
-
-    await getIndexedCasesForUser({
-      applicationContext,
-      statuses: [CASE_STATUS_TYPES.closed],
-      userId: mockUserId,
-    });
-
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.sort,
-    ).toEqual([{ 'closedDate.S': { order: 'desc' } }]);
   });
 });

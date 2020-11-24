@@ -30,7 +30,7 @@ SecondaryDocumentInformationFactory.get = (
    */
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawProps) {
-    this.attachments = rawProps.attachments;
+    this.attachments = rawProps.attachments || false;
     this.category = rawProps.category;
     this.certificateOfService = rawProps.certificateOfService;
     this.certificateOfServiceDate = rawProps.certificateOfServiceDate;

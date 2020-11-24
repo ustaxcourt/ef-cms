@@ -127,9 +127,6 @@ const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
-  createCaseCatalogRecord,
-} = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
-const {
   createCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline');
 const {
@@ -903,9 +900,6 @@ const {
   updateDocketEntryProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
 const {
-  updateHighPriorityCaseTrialSortMappingRecords,
-} = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
-const {
   updateInitialFilingDocuments,
 } = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
 const {
@@ -1125,7 +1119,6 @@ const gatewayMethods = {
     bulkDeleteRecords,
     bulkIndexRecords,
     createCase,
-    createCaseCatalogRecord,
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createMessage,
@@ -1157,7 +1150,6 @@ const gatewayMethods = {
     updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
-    updateHighPriorityCaseTrialSortMappingRecords,
     updateMessage,
     updatePractitionerUser,
     updateTrialSession,

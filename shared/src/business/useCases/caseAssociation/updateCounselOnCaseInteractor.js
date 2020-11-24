@@ -54,7 +54,16 @@ exports.updateCounselOnCaseInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
+    const representing = [];
+    if (editableFields.representingPrimary) {
+      representing.push(caseEntity.contactPrimary.contactId);
+    }
+    if (editableFields.representingSecondary) {
+      representing.push(caseEntity.contactSecondary.contactId);
+    }
+
     caseEntity.updatePrivatePractitioner({
+      representing,
       userId,
       ...editableFields,
     });

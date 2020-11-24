@@ -142,7 +142,7 @@ describe('update primary contact on a case', () => {
           {
             barNumber: '1111',
             name: 'Bob Practitioner',
-            representingPrimary: true,
+            representing: [MOCK_CASE.contactPrimary.contactId],
             role: ROLES.privatePractitioner,
             userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
           },
@@ -154,6 +154,7 @@ describe('update primary contact on a case', () => {
       contactInfo: {
         address1: '453 Electric Ave',
         city: 'Philadelphia',
+        contactId: MOCK_CASE.contactPrimary.contactId,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner',
         name: 'Bill Burr',

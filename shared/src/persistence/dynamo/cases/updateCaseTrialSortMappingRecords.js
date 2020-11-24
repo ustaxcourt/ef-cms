@@ -32,34 +32,30 @@ exports.updateCaseTrialSortMappingRecords = async ({
     applicationContext,
   });
 
-  if (
-    oldSortRecords.length &&
-    oldSortRecords[0].sk !== hybrid &&
-    oldSortRecords[0].sk !== nonHybrid
-  ) {
+  if (oldSortRecords.length) {
     await deleteCaseTrialSortMappingRecords({
       applicationContext,
       docketNumber,
     });
-
-    await client.put({
-      Item: {
-        docketNumber,
-        gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
-        pk: 'eligible-for-trial-case-catalog',
-        sk: nonHybrid,
-      },
-      applicationContext,
-    });
-
-    await client.put({
-      Item: {
-        docketNumber,
-        gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
-        pk: 'eligible-for-trial-case-catalog',
-        sk: hybrid,
-      },
-      applicationContext,
-    });
   }
+
+  await client.put({
+    Item: {
+      docketNumber,
+      gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
+      pk: 'eligible-for-trial-case-catalog',
+      sk: nonHybrid,
+    },
+    applicationContext,
+  });
+
+  await client.put({
+    Item: {
+      docketNumber,
+      gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
+      pk: 'eligible-for-trial-case-catalog',
+      sk: hybrid,
+    },
+    applicationContext,
+  });
 };

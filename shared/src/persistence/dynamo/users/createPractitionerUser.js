@@ -10,14 +10,6 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 
   await client.put({
     Item: {
-      pk: `section|${user.section}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-
-  await client.put({
-    Item: {
       pk: `user|${userId}`,
       sk: `user|${userId}`,
       ...user,
