@@ -82,6 +82,7 @@ import { startCaseInternalContactsHelper } from './computeds/startCaseInternalCo
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
+import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
@@ -177,6 +178,7 @@ const helpers = {
   startCaseInternalHelper,
   statisticsFormHelper,
   statisticsHelper,
+  templateHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,
@@ -249,7 +251,6 @@ export const baseState = {
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
-    showBetaBar: true,
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
