@@ -526,6 +526,7 @@
         - "Simultaneous Sur-Reply Memorandum Brief"
         - "Standing Pretrial Notice"
         - "Standing Pretrial Order"
+        - "Standing Pretrial Order for Small Case"
         - "Statement"
         - "Statement of Redacted Information"
         - "Statement of Taxpayer Identification"
@@ -1653,6 +1654,7 @@
       type: "boolean"
       flags: 
         presence: "optional"
+        description: "Determines if the docket entry should be displayed in the Pending Report."
     previousDocument: 
       type: "object"
       flags: 
@@ -2014,6 +2016,7 @@
             - "Simultaneous Sur-Reply Memorandum Brief"
             - "Standing Pretrial Notice"
             - "Standing Pretrial Order"
+            - "Standing Pretrial Order for Small Case"
             - "Statement"
             - "Statement of Redacted Information"
             - "Statement of Taxpayer Identification"
@@ -2529,6 +2532,7 @@
             - "Simultaneous Sur-Reply Memorandum Brief"
             - "Standing Pretrial Notice"
             - "Standing Pretrial Order"
+            - "Standing Pretrial Order for Small Case"
             - "Statement"
             - "Statement of Redacted Information"
             - "Statement of Taxpayer Identification"
@@ -3115,6 +3119,7 @@
                     - "O"
                     - "OAJ"
                     - "SPOS"
+                    - "SPTO"
                     - "OAL"
                     - "OAP"
                     - "OAPF"
@@ -3217,6 +3222,7 @@
                     - "O"
                     - "OAJ"
                     - "SPOS"
+                    - "SPTO"
                     - "OAL"
                     - "OAP"
                     - "OAPF"

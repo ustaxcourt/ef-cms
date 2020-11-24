@@ -147,4 +147,31 @@ describe('updateCaseAutomaticBlock', () => {
         .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
   });
+
+  it('does not call createCaseTrialSortMappingRecords if the case has no trial city', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        preferredTrialCity: null,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    await updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
+  });
 });

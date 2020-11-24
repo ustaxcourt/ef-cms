@@ -228,7 +228,6 @@ import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSess
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
-import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
@@ -670,7 +669,6 @@ export const presenter = {
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
-    printDocketRecordSequence,
     printTrialCalendarSequence,
     prioritizeCaseSequence,
     redirectToLoginSequence,

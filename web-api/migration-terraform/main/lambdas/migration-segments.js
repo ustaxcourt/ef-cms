@@ -3,6 +3,12 @@ const createApplicationContext = require('../../../src/applicationContext');
 const {
   migrateItems: migration0001,
 } = require('./migrations/0001-user-case-add-closed-date');
+const {
+  migrateItems: migration0002,
+} = require('./migrations/0002-private-practitioner-representing');
+const {
+  migrateItems: migration0003,
+} = require('./migrations/0003-legacy-eligible-for-trial');
 const { chunk, isEmpty } = require('lodash');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -22,12 +28,14 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
-  items = await migration0001(items, documentClient, applicationContext);
+  items = await migration0001(items, documentClient);
+  items = await migration0002(items, documentClient);
+  items = await migration0003(items, documentClient);
   return items;
 };
 
 const reprocessItems = async ({ documentClient, items }) => {
-  // items  already been migrated. they simply could not be processed in the batchWrite. Try again recursively
+  // items already been migrated. they simply could not be processed in the batchWrite. Try again recursively
   const numUnprocessed = items[process.env.DESTINATION_TABLE].length;
   applicationContext.logger.info(`reprocessing ${numUnprocessed} items`);
   const results = await documentClient
@@ -35,7 +43,6 @@ const reprocessItems = async ({ documentClient, items }) => {
       RequestItems: items,
     })
     .promise();
-
   if (!isEmpty(results.UnprocessedItems)) {
     await reprocessItems({
       documentClient,
@@ -45,10 +52,11 @@ const reprocessItems = async ({ documentClient, items }) => {
 };
 
 const processItems = async ({ documentClient, items }) => {
+  items = await migrateRecords({ documentClient, items });
+
+  // your migration code goes here
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let c of chunks) {
-    c = await migrateRecords({ documentClient, items: c });
-
     const results = await documentClient
       .batchWrite({
         RequestItems: {

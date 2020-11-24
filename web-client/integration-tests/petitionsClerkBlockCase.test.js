@@ -68,12 +68,14 @@ describe('Blocking a Case', () => {
     expect(test.getState('blockedCases')).toMatchObject([
       {
         automaticBlocked: true,
-        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
         blocked: false,
         docketNumber: test.docketNumber,
       },
     ]);
   });
+
+  petitionsClerkRemovesPendingItemFromCase(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 0);
   petitionsClerkDeletesCaseDeadline(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
