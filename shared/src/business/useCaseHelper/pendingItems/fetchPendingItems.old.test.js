@@ -1,7 +1,7 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { fetchPendingItems } = require('./fetchPendingItems');
+const { fetchPendingItems } = require('./fetchPendingItems.old');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('fetchPendingItems', () => {

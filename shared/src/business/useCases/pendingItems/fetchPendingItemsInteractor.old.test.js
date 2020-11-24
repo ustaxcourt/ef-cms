@@ -3,7 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   fetchPendingItemsInteractor,
-} = require('./fetchPendingItemsInteractor');
+} = require('./fetchPendingItemsInteractor.old');
 const { ROLES } = require('../../entities/EntityConstants');
 
 describe('fetchPendingItemsInteractor', () => {
@@ -41,10 +41,10 @@ describe('fetchPendingItemsInteractor', () => {
     ).rejects.toThrow('judge is required');
   });
 
-  it('should call fetchPendingItems from persistence and return the results', async () => {
+  it('should call fetchPendingItems from useCaseHelpers and return the results', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .fetchPendingItems.mockReturnValue([
+      .getUseCaseHelpers()
+      .fetchPendingItemsOld.mockReturnValue([
         { docketEntryId: 'def', docketNumber: '101-20', pending: true },
         { docketEntryId: 'abc', docketNumber: '201-20', pending: true },
       ]);
@@ -55,7 +55,7 @@ describe('fetchPendingItemsInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().fetchPendingItems,
+      applicationContext.getUseCaseHelpers().fetchPendingItemsOld,
     ).toHaveBeenCalled();
     expect(results).toEqual([
       { docketEntryId: 'def', docketNumber: '101-20', pending: true },
