@@ -1,5 +1,4 @@
 const createApplicationContext = require('../../../../src/applicationContext');
-
 const {
   CASE_STATUS_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
