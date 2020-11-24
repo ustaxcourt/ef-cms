@@ -142,6 +142,7 @@ describe('advancedDocumentSearch', () => {
         },
         parent_type: 'case',
         query,
+        score: true,
       },
     };
   };
