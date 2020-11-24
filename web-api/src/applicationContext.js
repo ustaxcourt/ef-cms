@@ -274,6 +274,9 @@ const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
+  fetchPendingItemsInteractor: fetchPendingItemsInteractorOld,
+} = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor.old');
+const {
   fileAndServeCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
 const {
@@ -988,7 +991,7 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
-const { isCodeDisabled } = require('../../codeToggles');
+const { isCodeDisabled, isCodeEnabled } = require('../../codeToggles');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
 
@@ -1494,8 +1497,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         createTrialSessionAndWorkingCopy,
-        fetchPendingItems: fetchPendingItemsOld,
+        fetchPendingItems,
         fetchPendingItemsByDocketNumber,
+        fetchPendingItemsOld,
         formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
@@ -1544,7 +1548,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         deleteDeficiencyStatisticInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
-        fetchPendingItemsInteractor,
+        fetchPendingItemsInteractor: isCodeEnabled(7134)
+          ? fetchPendingItemsInteractor
+          : fetchPendingItemsInteractorOld,
         fileAndServeCourtIssuedDocumentInteractor,
         fileCorrespondenceDocumentInteractor,
         fileCourtIssuedDocketEntryInteractor,
