@@ -8,7 +8,12 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
     'docketNumberSuffix',
     'status',
   ];
-  const docketEntrySource = ['documentType', 'documentTitle', 'receivedAt'];
+  const docketEntrySource = [
+    'docketEntryId',
+    'documentType',
+    'documentTitle',
+    'receivedAt',
+  ];
 
   const { PENDING_ITEMS_PAGE_SIZE } = applicationContext.getConstants();
 
