@@ -1,4 +1,5 @@
 import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
+import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
 import {
   fakeFile,
   loginAs,
@@ -8,6 +9,7 @@ import {
   uploadProposedStipulatedDecision,
   viewCaseDetail,
 } from './helpers';
+import { formatDateString } from '../../shared/src/business/utilities/DateHandler';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -134,5 +136,47 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(
       test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
     ).toEqual('documentView');
+  });
+
+  const mockDayReceived = 30;
+  const mockMonthReceived = '04';
+  const mockYearReceived = 2001;
+
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes({
+    dayReceived: mockDayReceived,
+    fakeFile,
+    monthReceived: mockMonthReceived,
+    test,
+    yearReceived: mockYearReceived,
+  });
+  it('docket clerk checks pending items count has increased and views pending document', async () => {
+    await refreshElasticsearchIndex();
+
+    await test.runSequence('gotoPendingReportSequence');
+
+    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+      judge: 'Chief Judge',
+    });
+
+    const caseReceivedAtDate = test.getState('caseDetail.receivedAt');
+    const pendingItems = test.getState('pendingReports.pendingItems');
+    const answerPendingItem = pendingItems.find(
+      item => item.documentTitle === 'Answer',
+    );
+    const answerPendingReceivedAtFormatted = formatDateString(
+      answerPendingItem.receivedAt,
+      'MMDDYYYY',
+    );
+    const caseReceivedAtFormatted = formatDateString(
+      caseReceivedAtDate,
+      'MMDDYYYY',
+    );
+
+    expect(answerPendingReceivedAtFormatted).not.toEqual(
+      caseReceivedAtFormatted,
+    );
+    expect(answerPendingReceivedAtFormatted).toEqual(
+      `${mockMonthReceived}/${mockDayReceived}/${mockYearReceived}`,
+    );
   });
 });
