@@ -75,6 +75,7 @@
     "json2yaml": "^1.1.0",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.4",
+    "lambdafs": "^2.0.0",
     "lint-staged": "^10.5.2",
     "lodash": "^4.17.20",
     "logform": "^2.2.0",
