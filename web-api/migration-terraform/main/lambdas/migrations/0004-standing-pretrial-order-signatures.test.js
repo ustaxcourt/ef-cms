@@ -127,6 +127,86 @@ describe('migrateItems', () => {
     ]);
   });
 
+  it('should add signedAt and default signedJudgeName and signedByUserId to docket entries that are Standing Pretrial Orders lacking signature data WITH a found trial session but WITHOUT a judge', async () => {
+    const MOCK_TRIAL = {
+      maxCases: 100,
+      sessionType: 'Regular',
+      startDate: '2025-12-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+      trialSessionId: '3f20a89b-56eb-4f06-9faf-2184cb479330',
+    };
+
+    documentClient.get = jest
+      .fn()
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Item: { ...MOCK_CASE, trialSessionId: MOCK_TRIAL.trialSessionId },
+        }),
+      })
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Item: MOCK_TRIAL,
+        }),
+      });
+
+    const mockDocketEntry = {
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: `docket-entry|${MOCK_CASE.docketNumber}`,
+      ...MOCK_CASE.docketEntries[0],
+      eventCode:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
+      signedAt: '2020-07-06T17:06:04.552Z',
+    };
+
+    const results = await migrateItems([mockDocketEntry], documentClient);
+
+    expect(results).toMatchObject([
+      {
+        ...mockDocketEntry,
+        signedByUserId: '60f2059d-3831-4ed1-b93b-8c8beec478a4',
+        signedJudgeName: CHIEF_JUDGE,
+      },
+    ]);
+  });
+
+  it('should add signedAt and default signedJudgeName and signedByUserId to docket entries that are Standing Pretrial Orders lacking signature data without a found trial session', async () => {
+    const MOCK_TRIAL = {};
+
+    documentClient.get = jest
+      .fn()
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Item: { ...MOCK_CASE, trialSessionId: MOCK_TRIAL.trialSessionId },
+        }),
+      })
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Item: MOCK_TRIAL,
+        }),
+      });
+
+    const mockDocketEntry = {
+      pk: `case|${MOCK_CASE.docketNumber}`,
+      sk: `docket-entry|${MOCK_CASE.docketNumber}`,
+      ...MOCK_CASE.docketEntries[0],
+      eventCode:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
+      signedAt: '2020-07-06T17:06:04.552Z',
+    };
+
+    const results = await migrateItems([mockDocketEntry], documentClient);
+
+    expect(results).toMatchObject([
+      {
+        ...mockDocketEntry,
+        signedByUserId: '60f2059d-3831-4ed1-b93b-8c8beec478a4',
+        signedJudgeName: CHIEF_JUDGE,
+      },
+    ]);
+  });
+
   it('should add signedAt, signedJudgeName, and signedByUserId to docket entries that are Standing Pretrial Order for Small Case lacking signature data', async () => {
     const MOCK_TRIAL = {
       judge: {
@@ -244,5 +324,30 @@ describe('migrateItems', () => {
     ).rejects.toThrow(
       'The DocketEntry entity was invalid. {"signedByUserId":"\'signedByUserId\' must be a valid GUID"}',
     );
+  });
+
+  it("should use docketNumber from docket entry's pk to retrieve case record", async () => {
+    documentClient.get = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Item: {},
+      }),
+    });
+
+    const DOCKET_NUMBER = '109-20';
+    const mockDocketEntry = {
+      pk: `case|${DOCKET_NUMBER}`,
+      sk: 'docket-entry|4ed22b10-4bc5-4d49-b6f6-8cb448280e16',
+      ...MOCK_CASE.docketEntries[0],
+      docketNumber: undefined,
+      eventCode: 'SPOS',
+      signedAt: '2020-07-06T17:06:04.552Z',
+    };
+
+    await migrateItems([mockDocketEntry], documentClient);
+
+    expect(documentClient.get.mock.calls[0][0].Key).toMatchObject({
+      pk: `case|${DOCKET_NUMBER}`,
+      sk: `case|${DOCKET_NUMBER}`,
+    });
   });
 });
