@@ -4,7 +4,7 @@ export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
   createdDocketNumberIndex,
 ) => {
   return it('respondent views case detail notice of change of address', async () => {
-    await refreshElasticsearchIndex(5000);
+    await refreshElasticsearchIndex();
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
     });

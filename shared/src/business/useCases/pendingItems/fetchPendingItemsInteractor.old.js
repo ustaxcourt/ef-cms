@@ -29,6 +29,6 @@ exports.fetchPendingItemsInteractor = async ({
   }
 
   return await applicationContext
-    .getPersistenceGateway()
-    .fetchPendingItems({ applicationContext, judge, page });
+    .getUseCaseHelpers()
+    .fetchPendingItemsOld({ applicationContext, judge, page });
 };
