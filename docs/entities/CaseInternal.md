@@ -2174,7 +2174,7 @@
               type: "string"
               flags: 
                 only: true
-                presence: "optional"
+                presence: "required"
               rules: 
                 - 
                   name: "min"
