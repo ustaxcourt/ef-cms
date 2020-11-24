@@ -252,7 +252,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description('Practitioner names to be used to compose the filedBy text.'),
   processingStatus: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
-  ).optional(),
+  ).required(),
   qcAt: JoiValidationConstants.ISO_DATE.optional(),
   qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
