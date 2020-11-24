@@ -546,6 +546,9 @@ const {
   getPractitionersByName,
 } = require('../../shared/src/persistence/elasticsearch/getPractitionersByName');
 const {
+  getPractitionersByName: getPractitionersByNameOld,
+} = require('../../shared/src/persistence/elasticsearch/getPractitionersByName.old');
+const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
 const {
@@ -988,7 +991,7 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
-const { isCodeDisabled } = require('../../codeToggles');
+const { isCodeDisabled, isCodeEnabled } = require('../../codeToggles');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
 
@@ -1210,7 +1213,9 @@ const gatewayMethods = {
   getMessageThreadByParentId,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
-  getPractitionersByName,
+  getPractitionersByName: isCodeEnabled(7136)
+    ? getPractitionersByName
+    : getPractitionersByNameOld,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getSectionInboxMessages,
