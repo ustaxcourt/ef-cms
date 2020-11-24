@@ -1,7 +1,6 @@
 /**
  * fetchPendingItems
  *
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.judge the optional judge filter
