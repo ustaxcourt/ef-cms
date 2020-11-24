@@ -5,6 +5,7 @@ import { menuHelper } from './computeds/menuHelper';
 import { publicAlertHelper } from './computeds/public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
+import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/public/todaysOpinionsHelper';
 
 const helpers = {
@@ -15,6 +16,7 @@ const helpers = {
   menuHelper,
   publicCaseDetailHeaderHelper,
   publicCaseDetailHelper,
+  templateHelper,
   todaysOpinionsHelper,
 };
 
