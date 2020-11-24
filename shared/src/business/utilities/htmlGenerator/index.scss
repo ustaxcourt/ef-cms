@@ -225,6 +225,12 @@ th {
   padding: 10px;
 }
 
+.internal-card-content {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+}
+
 // TODO: Refactor these in favor of "cards"
 .info-box {
   border: 1px solid #ccc;
