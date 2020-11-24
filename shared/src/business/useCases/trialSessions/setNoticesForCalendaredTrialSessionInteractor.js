@@ -3,9 +3,7 @@ const {
 } = require('../../utilities/aggregatePartiesForService');
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  NOTICE_OF_TRIAL,
-  STANDING_PRETRIAL_NOTICE,
-  STANDING_PRETRIAL_ORDER,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -120,14 +118,17 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const noticeOfTrialDocketEntry = new DocketEntry(
       {
+        date: trialSessionEntity.startDate,
         docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
         documentTitle: noticeOfTrialDocumentTitle,
-        documentType: NOTICE_OF_TRIAL.documentType,
-        eventCode: NOTICE_OF_TRIAL.eventCode,
+        documentType:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
+        eventCode: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.eventCode,
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
+        trialLocation: trialSessionEntity.trialLocation,
         userId: user.userId,
       },
       { applicationContext },
@@ -158,8 +159,10 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           trialSessionId: trialSessionEntity.trialSessionId,
         });
 
-      standingPretrialDocumentTitle = STANDING_PRETRIAL_NOTICE.documentType;
-      standingPretrialDocumentEventCode = STANDING_PRETRIAL_NOTICE.eventCode;
+      standingPretrialDocumentTitle =
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice.documentType;
+      standingPretrialDocumentEventCode =
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice.eventCode;
     } else {
       // Generate Standing Pretrial Order
       standingPretrialFile = await applicationContext
@@ -170,8 +173,10 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
           trialSessionId: trialSessionEntity.trialSessionId,
         });
 
-      standingPretrialDocumentTitle = STANDING_PRETRIAL_ORDER.documentType;
-      standingPretrialDocumentEventCode = STANDING_PRETRIAL_ORDER.eventCode;
+      standingPretrialDocumentTitle =
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.documentType;
+      standingPretrialDocumentEventCode =
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode;
     }
 
     const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
@@ -184,6 +189,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const standingPretrialDocketEntry = new DocketEntry(
       {
+        attachments: false,
         description: standingPretrialDocumentTitle,
         docketEntryId: newStandingPretrialDocketEntryId,
         documentTitle: standingPretrialDocumentTitle,
@@ -192,6 +198,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        signedAt: applicationContext.getUtilities().createISODateString(),
+        signedByUserId: trialSessionEntity.judge.userId,
+        signedJudgeName: trialSessionEntity.judge.name,
         userId: user.userId,
       },
       { applicationContext },

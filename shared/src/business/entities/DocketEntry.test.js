@@ -57,8 +57,8 @@ describe('DocketEntry entity', () => {
       expect(DocketEntry.isPendingOnCreation).not.toHaveBeenCalled();
     });
 
-    it('sets pending to false for non-matching event code and category', () => {
-      const raw1 = { category: 'Ice Hockey', eventCode: 'ABC' };
+    it('sets pending to false for non-matching event code', () => {
+      const raw1 = { eventCode: 'ABC' };
       const doc1 = new DocketEntry(raw1, { applicationContext });
       expect(doc1.pending).toBe(false);
 
@@ -71,11 +71,11 @@ describe('DocketEntry entity', () => {
       expect(DocketEntry.isPendingOnCreation).toHaveBeenCalled();
     });
 
-    it('sets pending to true for known list of matching events or categories', () => {
+    it('sets pending to true for known list of matching event codes', () => {
       const raw1 = {
         category: 'Motion',
         documentType: 'some kind of motion',
-        eventCode: 'FOO',
+        eventCode: 'M006',
       };
       const doc1 = new DocketEntry(raw1, { applicationContext });
       expect(doc1.pending).toBeTruthy();

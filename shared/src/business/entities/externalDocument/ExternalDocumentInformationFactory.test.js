@@ -42,6 +42,15 @@ describe('ExternalDocumentInformationFactory', () => {
       expect(errors().certificateOfService).toEqual(undefined);
     });
 
+    it('should set a default value for attachments when a value has not been provided', () => {
+      baseDoc.certificateOfService = false;
+      baseDoc.primaryDocumentFile = {};
+      baseDoc.partyIrsPractitioner = true;
+      baseDoc.hasSupportingDocuments = false;
+      baseDoc.attachments = undefined;
+      expect(errors()).toBe(null);
+    });
+
     describe('Has Certificate of Service', () => {
       beforeEach(() => {
         baseDoc.certificateOfService = true;
@@ -67,9 +76,6 @@ describe('ExternalDocumentInformationFactory', () => {
     });
 
     it('should require attachments radio be selected', () => {
-      expect(errors().attachments).toEqual(
-        VALIDATION_ERROR_MESSAGES.attachments,
-      );
       baseDoc.attachments = false;
       expect(errors().attachments).toEqual(undefined);
     });

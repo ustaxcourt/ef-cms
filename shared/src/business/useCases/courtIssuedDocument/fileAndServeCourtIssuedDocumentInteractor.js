@@ -114,7 +114,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
 
   docketEntryEntity.setAsServed(servedParties.all);
 
-  const workItem = new WorkItem(
+  const servedDocketEntryWorkItem = new WorkItem(
     {
       assigneeId: null,
       assigneeName: null,
@@ -137,11 +137,18 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
     { applicationContext },
   );
 
-  workItem.setAsCompleted({ message: 'completed', user });
-  docketEntryEntity.setWorkItem(workItem);
+  if (docketEntry.workItem) {
+    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+      applicationContext,
+      workItem: docketEntry.workItem,
+    });
+  }
+
+  servedDocketEntryWorkItem.setAsCompleted({ message: 'completed', user });
+  docketEntryEntity.setWorkItem(servedDocketEntryWorkItem);
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  workItem.assignToUser({
+  servedDocketEntryWorkItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
     section: user.section,
@@ -154,7 +161,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
     applicationContext,
     section: user.section,
     userId: user.userId,
-    workItem: workItem.validate().toRawObject(),
+    workItem: servedDocketEntryWorkItem.validate().toRawObject(),
   });
 
   // SERVE

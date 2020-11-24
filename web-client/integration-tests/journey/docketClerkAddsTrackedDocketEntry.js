@@ -1,6 +1,10 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 
-export const docketClerkAddsTrackedDocketEntry = (test, fakeFile) => {
+export const docketClerkAddsTrackedDocketEntry = (
+  test,
+  fakeFile,
+  paperServiceRequested = false,
+) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
   return it('Docketclerk adds tracked paper filing', async () => {
@@ -80,11 +84,16 @@ export const docketClerkAddsTrackedDocketEntry = (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to docket record.',
-    );
+    if (!paperServiceRequested) {
+      expect(test.getState('alertSuccess').message).toEqual(
+        'Your entry has been added to docket record.',
+      );
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+      expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    } else {
+      expect(test.getState('pdfPreviewUrl')).toBeDefined();
+      expect(test.getState('currentPage')).toEqual('PrintPaperService');
+    }
     expect(test.getState('form')).toEqual({});
 
     expect(test.getState('caseDetail.hasPendingItems')).toEqual(true);
