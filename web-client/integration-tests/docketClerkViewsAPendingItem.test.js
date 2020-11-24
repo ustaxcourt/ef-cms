@@ -113,6 +113,15 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       test.getState('pendingReports.pendingItems') || []
     ).length;
 
+    console.log();
+    console.log();
+
+    const caseReceivedAtDate = test.getState('caseDetail.receivedAt');
+    const firstPendingItemReceivedAtDate = test.getState(
+      'pendingReports.pendingItems[0].receivedAt',
+    );
+    expect(caseReceivedAtDate).not.toEqual(firstPendingItemReceivedAtDate);
+
     expect(currentPendingItemsCount).toBeGreaterThan(pendingItemsCount);
 
     await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
