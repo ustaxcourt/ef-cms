@@ -268,6 +268,9 @@ const {
   fetchPendingItems: fetchPendingItemsOld,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems.old');
 const {
+  fetchPendingItems: fetchPendingItemsPersistence,
+} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems.old');
+const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
 const {
@@ -1142,7 +1145,9 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     createUser,
     createUserInboxRecord,
-    fetchPendingItems,
+    fetchPendingItems: isCodeEnabled(7134)
+      ? fetchPendingItems
+      : fetchPendingItemsPersistence,
     getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
