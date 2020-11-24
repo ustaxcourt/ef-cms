@@ -47,6 +47,9 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
+  advancedDocumentSearchOld,
+} = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch.old');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -988,7 +991,7 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
-const { isCodeDisabled } = require('../../codeToggles');
+const { isCodeDisabled, isCodeEnabled } = require('../../codeToggles');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
 
@@ -1164,7 +1167,9 @@ const gatewayMethods = {
     updateWorkItemInCase,
   }),
   // methods below are not known to create "entity" records
-  advancedDocumentSearch,
+  advancedDocumentSearch: isCodeEnabled(7029)
+    ? advancedDocumentSearch
+    : advancedDocumentSearchOld,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   deleteCaseByDocketNumber,
