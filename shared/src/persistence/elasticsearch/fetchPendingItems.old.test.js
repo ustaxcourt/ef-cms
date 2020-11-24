@@ -1,18 +1,19 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
-const { fetchPendingItems } = require('./fetchPendingItems');
+const { fetchPendingItems } = require('./fetchPendingItems.old');
 jest.mock('./searchClient');
 const { search } = require('./searchClient');
 
 describe('fetchPendingItems', () => {
-  it('returns results from a query without judge', async () => {
+  it('returns results a query without judge', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 2 });
-    const { foundDocuments, total } = await fetchPendingItems({
+
+    const { results, total } = await fetchPendingItems({
       applicationContext,
     });
 
-    expect(foundDocuments).toMatchObject(['some', 'matches']);
+    expect(results).toMatchObject(['some', 'matches']);
     expect(total).toBe(2);
     expect(search).toHaveBeenCalledTimes(1);
     const searchQuery =
@@ -20,14 +21,15 @@ describe('fetchPendingItems', () => {
     expect(searchQuery.length).toBe(5);
   });
 
-  it('returns results from a query with a judge', async () => {
+  it('returns results a query with a judge', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 2 });
-    const { foundDocuments, total } = await fetchPendingItems({
+
+    const { results, total } = await fetchPendingItems({
       applicationContext,
       judge: 'Dredd',
     });
 
-    expect(foundDocuments).toMatchObject(['some', 'matches']);
+    expect(results).toMatchObject(['some', 'matches']);
     expect(total).toBe(2);
     expect(search).toHaveBeenCalledTimes(1);
     const searchQuery =

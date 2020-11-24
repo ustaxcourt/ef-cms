@@ -7,7 +7,7 @@ const {
 } = require('../../entities/EntityConstants');
 const {
   generatePrintablePendingReportInteractor,
-} = require('./generatePrintablePendingReportInteractor');
+} = require('./generatePrintablePendingReportInteractor.old');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('generatePrintablePendingReportInteractor', () => {
@@ -37,8 +37,8 @@ describe('generatePrintablePendingReportInteractor', () => {
     });
 
     applicationContext
-      .getPersistenceGateway()
-      .fetchPendingItems.mockReturnValue({
+      .getUseCaseHelpers()
+      .fetchPendingItemsOld.mockReturnValue({
         foundDocuments: mockFoundDocuments,
       });
 
@@ -82,13 +82,13 @@ describe('generatePrintablePendingReportInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should call fetchPendingItems from persistence and return the results', async () => {
+  it('should call fetchPendingItems from useCaseHelpers and return the results', async () => {
     const results = await generatePrintablePendingReportInteractor({
       applicationContext,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().fetchPendingItems,
+      applicationContext.getUseCaseHelpers().fetchPendingItemsOld,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().pendingReport,
