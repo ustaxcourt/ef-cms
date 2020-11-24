@@ -906,6 +906,9 @@ const {
   updateInitialFilingDocuments,
 } = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
 const {
+  updateInitialFilingDocumentsOld,
+} = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments.old');
+const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
 const {
@@ -988,7 +991,7 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
-const { isCodeDisabled } = require('../../codeToggles');
+const { isCodeDisabled, isCodeEnabled } = require('../../codeToggles');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
 
@@ -1507,7 +1510,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAutomaticBlock,
-        updateInitialFilingDocuments,
+        updateInitialFilingDocuments: isCodeEnabled(6933)
+          ? updateInitialFilingDocuments
+          : updateInitialFilingDocumentsOld,
       };
     },
     getUseCases: () => {
