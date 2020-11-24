@@ -7,6 +7,7 @@ const {
   manuallyAddCaseToNewTrialSession,
   removeCaseFromTrialSession,
   setCaseAsHighPriority,
+  setCaseAsReadyForTrial,
   unblockCaseFromTrial,
 } = require('../../support/pages/case-detail');
 const {
@@ -54,7 +55,8 @@ const createRandomContact = () => ({
   state: faker.address.stateAbbr(),
 });
 
-let token = null;
+let petitionsClerkToken = null;
+let docketClerkToken = null;
 const testData = {
   preferredTrialCity: 'Cheyenne, Wyoming',
   trialSessionIds: [],
@@ -65,15 +67,20 @@ const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 describe('Petitions Clerk', () => {
   before(async () => {
-    const result = await getUserToken(
+    let result = await getUserToken(
       'petitionsclerk1@example.com',
       DEFAULT_ACCOUNT_PASS,
     );
-    token = result.AuthenticationResult.IdToken;
+    petitionsClerkToken = result.AuthenticationResult.IdToken;
+    result = await getUserToken(
+      'docketclerk1@example.com',
+      DEFAULT_ACCOUNT_PASS,
+    );
+    docketClerkToken = result.AuthenticationResult.IdToken;
   });
 
-  it('should be able to login', () => {
-    login(token);
+  it('should be able to login as petitions clerk', () => {
+    login(petitionsClerkToken);
   });
 
   describe('create cases via migration', () => {
@@ -170,9 +177,18 @@ describe('Petitions Clerk', () => {
       unblockCaseFromTrial();
     });
 
+    it('login as docket clerk', () => {
+      login(docketClerkToken);
+    });
+
     it('set second case as High Priority for a trial session', () => {
       goToCaseOverview(secondDocketNumber);
+      setCaseAsReadyForTrial(secondDocketNumber);
       setCaseAsHighPriority();
+    });
+
+    it('login as petitions clerk', () => {
+      login(petitionsClerkToken);
     });
 
     it('complete QC of eligible (second) case and set calendar for second trial session', () => {
