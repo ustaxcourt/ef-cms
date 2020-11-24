@@ -47,7 +47,7 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
-  advancedDocumentSearchOld,
+  advancedDocumentSearch: advancedDocumentSearchOld,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch.old');
 const {
   appendPaperServiceAddressPageToPdf,
