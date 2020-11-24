@@ -52,8 +52,6 @@ const addNewInitialFilingToCase = ({
 
   const documentToAdd = new DocketEntry(documentMeta, { applicationContext });
 
-  console.log('adding document', documentToAdd.docketEntryId);
-
   caseEntity.addDocketEntry(documentToAdd);
 };
 
@@ -62,7 +60,6 @@ const deleteInitialFilingFromCase = async ({
   caseEntity,
   originalCaseDocument,
 }) => {
-  console.log('deleting', originalCaseDocument.docketEntryId);
   caseEntity.deleteDocketEntryById({
     docketEntryId: originalCaseDocument.docketEntryId,
   });
