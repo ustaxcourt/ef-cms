@@ -34,15 +34,16 @@ export const NoticeOfDocketChange = ({
               className="internal-card-content"
               id="changed-filings-and-proceedings"
             >
-              &quot;Entry of Appearance for Petr. Edward Reyes&quot; has been
-              changed to &quot; Entry of Appearance for Petr. Edward Reyes and
-              then &quot;.
+              &quot;{filingsAndProceedings.before}&quot; has been changed to
+              &quot;
+              {filingsAndProceedings.after}&quot;.
             </div>
           )}
           {showPartiesChange && (
             <div className="internal-card-content" id="changed-filing-parties">
-              The filing party/parties has been changed from &quot; Petr. Edward
-              Reyes&quot; to &quot; Resp & Petrs. Edward Reyes & Angela Pitts
+              The filing party/parties has been changed from &quot;
+              {filingParties.before}&quot; to &quot;
+              {filingParties.after}
               &quot;.
             </div>
           )}
