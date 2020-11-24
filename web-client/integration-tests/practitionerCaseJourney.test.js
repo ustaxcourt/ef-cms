@@ -1,5 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  fakeFile,
+  getFormattedDocumentQCSectionInbox,
+  loginAs,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
@@ -29,6 +35,25 @@ describe('Practitioner requests access to case', () => {
   loginAs(test, 'privatePractitioner@example.com');
   practitionerCreatesNewCase(test, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(test);
+
+  // verify petition filed by private practitioner can be found in petitions Section Document QC
+  loginAs(test, 'petitionsclerk@example.com');
+  it('Petitions clerk views Section Document QC', async () => {
+    await test.runSequence('navigateToPathSequence', {
+      path: '/document-qc/section/inbox',
+    });
+    const workQueueToDisplay = test.getState('workQueueToDisplay');
+
+    expect(workQueueToDisplay.queue).toEqual('section');
+    expect(workQueueToDisplay.box).toEqual('inbox');
+
+    const inbox = await getFormattedDocumentQCSectionInbox(test);
+    const found = inbox.find(
+      workItem => workItem.docketNumber === test.docketNumber,
+    );
+
+    expect(found).toBeTruthy();
+  });
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to

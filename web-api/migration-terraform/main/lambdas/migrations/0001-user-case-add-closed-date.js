@@ -1,3 +1,4 @@
+const createApplicationContext = require('../../../../src/applicationContext');
 const {
   CASE_STATUS_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
@@ -5,7 +6,9 @@ const {
   UserCase,
 } = require('../../../../../shared/src/business/entities/UserCase');
 
-const migrateItems = async (items, documentClient, applicationContext) => {
+const applicationContext = createApplicationContext({});
+
+const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
     if (

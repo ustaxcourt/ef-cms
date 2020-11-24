@@ -3,32 +3,38 @@ const {
   fakeData,
 } = require('../../test/createTestApplicationContext');
 const {
-  NOTICE_OF_TRIAL,
-  STANDING_PRETRIAL_NOTICE,
-  STANDING_PRETRIAL_ORDER,
-} = require('../../entities/EntityConstants');
-const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
+const {
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
   return caseRecord.docketEntries.find(
-    document => document.documentType === NOTICE_OF_TRIAL.documentType,
+    document =>
+      document.documentType ===
+      SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
   );
 };
 
 const findStandingPretrialDocument = caseRecord => {
   return caseRecord.docketEntries.find(
     document =>
-      document.documentType === STANDING_PRETRIAL_NOTICE.documentType ||
-      document.documentType === STANDING_PRETRIAL_ORDER.documentType,
+      document.documentType ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice.documentType ||
+      document.documentType ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.documentType,
   );
 };
 
 const MOCK_TRIAL = {
+  judge: {
+    name: 'Judge Mary Kate and Ashley',
+    userId: '410e4ade-6ad5-4fc4-8741-3f8352c72a0c',
+  },
   maxCases: 100,
   sessionType: 'Regular',
   startDate: '2025-12-01T00:00:00.000Z',
@@ -220,7 +226,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketEntries.find(
-        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
+        entry =>
+          entry.documentType ===
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
       );
     };
 
@@ -229,16 +237,20 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
 
     expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toMatchObject({
+      date: '2025-12-01T00:00:00.000Z',
       index: expect.anything(),
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages: 999,
+      trialLocation: 'Birmingham, Alabama',
     });
     expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toMatchObject({
+      date: '2025-12-01T00:00:00.000Z',
       index: expect.anything(),
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages: 999,
+      trialLocation: 'Birmingham, Alabama',
     });
   });
 
@@ -374,7 +386,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketEntries.find(
-        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
+        entry =>
+          entry.documentType ===
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
       );
     };
 
@@ -400,7 +414,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeDefined();
   });
 
-  it('Should generate a Standing Pretrial Order for REGULAR cases', async () => {
+  it('Should generate a signed Standing Pretrial Order for REGULAR cases', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       docketNumber: '102-20', // MOCK_CASE with procedureType: 'Regular'
@@ -410,6 +424,11 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
     ).toHaveBeenCalled();
+    expect(findStandingPretrialDocument(calendaredCases[0])).toMatchObject({
+      attachments: false,
+      signedByUserId: MOCK_TRIAL.judge.userId,
+      signedJudgeName: MOCK_TRIAL.judge.name,
+    });
   });
 
   it('Should generate a Standing Pretrial Notice for SMALL cases', async () => {

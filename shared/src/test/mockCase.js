@@ -33,7 +33,7 @@ exports.MOCK_CASE = {
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.new,
-  userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  userId: '76a6050f-a423-47bb-943b-a5661fe08a6b',
 };
 
 exports.MOCK_CASE_WITHOUT_PENDING = {
