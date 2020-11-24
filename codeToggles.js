@@ -1,6 +1,7 @@
 // This file is a map of github issue numbers with booleans
 // TODO: move to a modifiable location such as S3 or DynamoDB
 const toggles = {
+  6868: true,
   6916: true,
   6921: true,
   6929: true,
