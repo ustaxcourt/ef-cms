@@ -263,16 +263,19 @@ const {
 } = require('../../shared/src/business/utilities/documentUrlTranslator');
 const {
   fetchPendingItems,
-} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
-const {
-  fetchPendingItems: fetchPendingItemsPersistence,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
+const {
+  fetchPendingItems: fetchPendingItemsOld,
+} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems.old');
 const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
 const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
+const {
+  fetchPendingItemsInteractor: fetchPendingItemsInteractorOld,
+} = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor.old');
 const {
   fileAndServeCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
@@ -336,6 +339,9 @@ const {
 const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
+const {
+  generatePrintablePendingReportInteractor: generatePrintablePendingReportInteractorOld,
+} = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor.old');
 const {
   generateStandingPretrialNoticeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialNoticeInteractor');
@@ -1136,7 +1142,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     createUser,
     createUserInboxRecord,
-    fetchPendingItems: fetchPendingItemsPersistence,
+    fetchPendingItems,
     getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
@@ -1499,6 +1505,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         createTrialSessionAndWorkingCopy,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
+        fetchPendingItemsOld,
         formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
@@ -1549,7 +1556,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         deleteDeficiencyStatisticInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
-        fetchPendingItemsInteractor,
+        fetchPendingItemsInteractor: isCodeEnabled(7134)
+          ? fetchPendingItemsInteractor
+          : fetchPendingItemsInteractorOld,
         fileAndServeCourtIssuedDocumentInteractor,
         fileCorrespondenceDocumentInteractor,
         fileCourtIssuedDocketEntryInteractor,
@@ -1564,7 +1573,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generatePdfFromHtmlInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
-        generatePrintablePendingReportInteractor,
+        generatePrintablePendingReportInteractor: isCodeEnabled(7134)
+          ? generatePrintablePendingReportInteractor
+          : generatePrintablePendingReportInteractorOld,
         generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
