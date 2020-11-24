@@ -13,35 +13,42 @@ const { search } = require('./searchClient');
  * @returns {*} the result
  */
 exports.getPractitionersByName = async ({ applicationContext, name }) => {
+  const searchParameters = {
+    body: {
+      _source: ['admissionsStatus', 'barNumber', 'contact', 'name'],
+      query: {
+        bool: {
+          must: [
+            { match: { 'pk.S': 'user|' } },
+            { match: { 'sk.S': 'user|' } },
+            {
+              simple_query_string: {
+                default_operator: 'and',
+                fields: ['name.S'],
+                query: name,
+              },
+            },
+            {
+              bool: {
+                should: [
+                  { match: { 'role.S': ROLES.irsPractitioner } },
+                  { match: { 'role.S': ROLES.privatePractitioner } },
+                  { match: { 'role.S': ROLES.inactivePractitioner } },
+                ],
+              },
+            },
+          ],
+        },
+      },
+
+      size: MAX_SEARCH_RESULTS,
+    },
+    index: 'efcms-user',
+  };
+
   const { results } = await search({
     applicationContext,
-    searchParameters: {
-      body: {
-        _source: ['admissionsStatus', 'barNumber', 'contact', 'name'],
-        query: {
-          bool: {
-            must: [
-              { match: { 'pk.S': 'user|' } },
-              { match: { 'sk.S': 'user|' } },
-              {
-                simple_query_string: {
-                  default_operator: 'and',
-                  fields: ['name.S'],
-                  query: name,
-                },
-              },
-            ],
-            should: [
-              { match: { 'role.S': ROLES.irsPractitioner } },
-              { match: { 'role.S': ROLES.privatePractitioner } },
-              { match: { 'role.S': ROLES.inactivePractitioner } },
-            ],
-          },
-        },
-        size: MAX_SEARCH_RESULTS,
-      },
-      index: 'efcms-user',
-    },
+    searchParameters,
   });
 
   return results;
