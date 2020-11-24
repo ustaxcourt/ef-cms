@@ -4,7 +4,7 @@ import {
   formattedClosedCases as formattedClosedCasesComputed,
   formattedOpenCases as formattedOpenCasesComputed,
   getShowDocumentViewerLink,
-} from './formattedCaseDetail';
+} from './formattedCaseDetail.old';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
