@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { isCodeDisabled } = require('../../../../../codeToggles.js');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -36,11 +37,19 @@ exports.generatePrintablePendingReportInteractor = async ({
       .getUseCaseHelpers()
       .fetchPendingItemsByDocketNumber({ applicationContext, docketNumber });
   } else {
-    pendingDocuments = (
-      await applicationContext
-        .getPersistenceGateway()
-        .fetchPendingItems({ applicationContext, judge })
-    ).foundDocuments;
+    if (isCodeDisabled(7134)) {
+      pendingDocuments = (
+        await applicationContext
+          .getUseCaseHelpers()
+          .fetchPendingItems({ applicationContext, judge })
+      ).foundDocuments;
+    } else {
+      pendingDocuments = (
+        await applicationContext
+          .getPersistenceGateway()
+          .fetchPendingItems({ applicationContext, judge })
+      ).foundDocuments;
+    }
   }
 
   const formattedPendingItems = pendingDocuments.map(pendingItem => ({

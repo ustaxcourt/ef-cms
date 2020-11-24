@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { isCodeDisabled } = require('../../../../../codeToggles.js');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -26,6 +27,12 @@ exports.fetchPendingItemsInteractor = async ({
 
   if (!judge) {
     throw new Error('judge is required');
+  }
+
+  if (isCodeDisabled(7134)) {
+    return await applicationContext
+      .getUseCaseHelpers()
+      .fetchPendingItems({ applicationContext, judge, page });
   }
 
   return await applicationContext
