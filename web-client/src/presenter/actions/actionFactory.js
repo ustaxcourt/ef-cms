@@ -1,8 +1,10 @@
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction';
+import { setViewerDocumentToDisplayAction } from './setViewerDocumentToDisplayAction';
 
 import { setAddEditUserCaseNoteModalStateFromDetailAction as setAddEditUserCaseNoteModalStateFromDetailActionOld } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction.old';
 import { setJudgesCaseNoteOnCaseDetailAction as setJudgesCaseNoteOnCaseDetailActionOld } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction.old';
+import { setViewerDocumentToDisplayAction as setViewerDocumentToDisplayActionOld } from './setViewerDocumentToDisplayAction.old';
 
 import { generateTitleAction } from './FileDocument/generateTitleAction';
 import { generateTitleForPaperFilingAction } from './FileDocument/generateTitleForPaperFilingAction';
@@ -14,6 +16,7 @@ const actions = {
   generateTitleForPaperFilingAction,
   setAddEditUserCaseNoteModalStateFromDetailAction,
   setJudgesCaseNoteOnCaseDetailAction,
+  setViewerDocumentToDisplayAction,
 };
 
 if (isCodeDisabled(6979)) {
@@ -23,6 +26,10 @@ if (isCodeDisabled(6979)) {
 
 if (isCodeDisabled(6916)) {
   actions.generateTitleForPaperFilingAction = generateTitleAction;
+}
+
+if (isCodeDisabled(6938)) {
+  actions.setViewerDocumentToDisplayAction = setViewerDocumentToDisplayActionOld;
 }
 
 export const getAction = actionName => actions[actionName];
