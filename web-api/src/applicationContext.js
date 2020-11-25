@@ -47,6 +47,9 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
+  advancedDocumentSearch: advancedDocumentSearchOld,
+} = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch.old');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -1178,7 +1181,9 @@ const gatewayMethods = {
     updateWorkItemInCase,
   }),
   // methods below are not known to create "entity" records
-  advancedDocumentSearch,
+  advancedDocumentSearch: isCodeEnabled(7029)
+    ? advancedDocumentSearch
+    : advancedDocumentSearchOld,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   deleteCaseByDocketNumber,
