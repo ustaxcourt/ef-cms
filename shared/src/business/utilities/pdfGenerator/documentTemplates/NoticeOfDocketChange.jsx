@@ -30,18 +30,22 @@ export const NoticeOfDocketChange = ({
         </div>
         <div className="card-content">
           {showFilingsAndProceedingsChange && (
-            <span id="changed-filings-and-proceedings">
+            <div
+              className="internal-card-content"
+              id="changed-filings-and-proceedings"
+            >
               &quot;{filingsAndProceedings.before}&quot; has been changed to
               &quot;
               {filingsAndProceedings.after}&quot;.
-            </span>
+            </div>
           )}
           {showPartiesChange && (
-            <span id="changed-filing-parties">
-              &quot;{filingParties.before}&quot; has been changed to &quot;
+            <div className="internal-card-content" id="changed-filing-parties">
+              The filing party/parties has been changed from &quot;
+              {filingParties.before}&quot; to &quot;
               {filingParties.after}
               &quot;.
-            </span>
+            </div>
           )}
         </div>
       </div>

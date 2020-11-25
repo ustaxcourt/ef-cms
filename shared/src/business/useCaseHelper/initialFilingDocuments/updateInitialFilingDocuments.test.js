@@ -2,14 +2,16 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../../../business/entities/EntityConstants');
+} = require('../../entities/EntityConstants');
 const {
   updateInitialFilingDocuments,
 } = require('./updateInitialFilingDocuments');
-const { Case } = require('../../../business/entities/cases/Case');
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 
 describe('addNewInitialFilingToCase', () => {
   const mockRQT = {
@@ -19,6 +21,11 @@ describe('addNewInitialFilingToCase', () => {
     filedBy: 'Test Petitioner',
     userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
   };
+  const mockPetition = MOCK_DOCUMENTS.find(
+    mockDocument =>
+      mockDocument.documentType ===
+      INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
 
   let mockOriginalCase;
   let mockCaseToUpdate;
@@ -33,7 +40,7 @@ describe('addNewInitialFilingToCase', () => {
 
   it('should add a new initial filing document to the case when the document does not exist on the original case', async () => {
     mockOriginalCase = new Case(
-      { ...MOCK_CASE, docketEntries: [] },
+      { ...MOCK_CASE, docketEntries: [mockPetition] },
       { applicationContext },
     );
 
@@ -53,11 +60,12 @@ describe('addNewInitialFilingToCase', () => {
       d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(rqtFile).toBeDefined();
+    expect(rqtFile.index).toBeDefined();
   });
 
   it('should set isFileAttached and isPaper to true', async () => {
     mockOriginalCase = new Case(
-      { ...MOCK_CASE, docketEntries: [] },
+      { ...MOCK_CASE, docketEntries: [mockPetition] },
       { applicationContext },
     );
 
@@ -91,7 +99,7 @@ describe('addNewInitialFilingToCase', () => {
           postalCode: '12345',
           state: 'TX',
         },
-        docketEntries: [],
+        docketEntries: [mockPetition],
         partyType: PARTY_TYPES.petitionerSpouse,
       },
       { applicationContext },
@@ -156,6 +164,7 @@ describe('addNewInitialFilingToCase', () => {
     const mockNewRQT = {
       ...mockRQT,
       docketEntryId: applicationContext.getUniqueId(),
+      isOnDocketRecord: true,
     };
     mockCaseToUpdate = {
       ...MOCK_CASE,
@@ -177,5 +186,6 @@ describe('addNewInitialFilingToCase', () => {
       d => d.docketEntryId === mockNewRQT.docketEntryId,
     );
     expect(newRqtFile).toBeDefined();
+    expect(newRqtFile.index).toBeDefined();
   });
 });
