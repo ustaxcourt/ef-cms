@@ -447,7 +447,7 @@ export const presenter = {
   ],
   providers: {},
   sequences: {
-    addCaseToTrialSessionSequence: isCodeEnabled(6505)
+    addCaseToTrialSessionSequence: isCodeEnabled(6506)
       ? addCaseToTrialSessionSequence
       : addCaseToTrialSessionSequenceOld,
     addPenaltyInputSequence,

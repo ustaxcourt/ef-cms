@@ -28,12 +28,13 @@ export const addCaseToTrialSessionSequence = [
   {
     error: [setValidationErrorsAction],
     success: [
-      showProgressSequenceDecorator,
-      setWaitingForResponseAction,
-      clearModalAction,
-      addCaseToTrialSessionAction,
-      unsetWaitingForResponseAction,
-      showSuccessAlert,
+      showProgressSequenceDecorator([
+        setWaitingForResponseAction,
+        clearModalAction,
+        addCaseToTrialSessionAction,
+        unsetWaitingForResponseAction,
+        showSuccessAlert,
+      ]),
     ],
   },
 ];
