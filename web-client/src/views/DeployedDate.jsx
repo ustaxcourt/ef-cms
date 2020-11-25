@@ -17,12 +17,7 @@ export const DeployedDate = connect(
     return (
       <>
         {showDeployedDate && displayDate && (
-          <div
-            className="grid-container position-fixed bottomn-0 right-0"
-            id="react-deployed-date"
-          >
-            {displayDate}
-          </div>
+          <div id="react-deployed-date">{displayDate}</div>
         )}
       </>
     );
