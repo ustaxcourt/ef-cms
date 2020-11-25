@@ -22,10 +22,6 @@ describe('parseLegacyDocumentsInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     applicationContext.getUniqueId.mockReturnValue(mockUniqueID);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .parseAndScrapePdfContents.mockReturnValue(mockPdfTextContents);
   });
 
   beforeEach(() => {
@@ -34,6 +30,11 @@ describe('parseLegacyDocumentsInteractor', () => {
         Body: Buffer.from(getFakeFile()),
       }),
     });
+    applicationContext
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents.mockImplementation(() =>
+        Promise.resolve(mockPdfTextContents),
+      );
   });
 
   it('should retrieve the docketEntry document from s3 using the provided docketEntryId', async () => {
@@ -62,7 +63,9 @@ describe('parseLegacyDocumentsInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: mockDocketNumber,
       }),
-    ).rejects.toThrow('Docket entry document not found in S3.');
+    ).rejects.toThrow(
+      `Docket entry document not found in S3. ${mockDocketNumber} ${mockDocketEntryId}`,
+    );
   });
 
   it('should retrieve the case from persistence using the provided docketNumber', async () => {
@@ -85,7 +88,7 @@ describe('parseLegacyDocumentsInteractor', () => {
         docketEntryId: 'abc-123',
         docketNumber: mockDocketNumber,
       }),
-    ).rejects.toThrow('Docket entry not found.');
+    ).rejects.toThrow('Docket entry not found. 101-20 abc-123');
   });
 
   it('should get the text content from the document retrieved from s3', async () => {
@@ -98,6 +101,26 @@ describe('parseLegacyDocumentsInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
     ).toHaveBeenCalled();
+  });
+
+  it('should throw a helpful error if the document processing fails', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents.mockImplementation(() => {
+        throw new Error('Process killed');
+      });
+
+    await expect(
+      parseLegacyDocumentsInteractor({
+        applicationContext,
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockDocketNumber,
+      }),
+    ).rejects.toThrow(
+      'Error scraping PDF contents. 101-20 ' +
+        mockDocketEntryId +
+        '; Process killed',
+    );
   });
 
   it('should save the text content from the document to s3', async () => {

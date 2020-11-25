@@ -12,8 +12,8 @@ resource "aws_lambda_function" "legacy_documents_migration_lambda" {
   source_code_hash = data.archive_file.legacy_documents_migration_zip.output_base64sha256
 
   runtime     = "nodejs12.x"
-  timeout     = "60"
-  memory_size = "768"
+  timeout     = "900"
+  memory_size = "3008"
 
   environment {
     variables = {
