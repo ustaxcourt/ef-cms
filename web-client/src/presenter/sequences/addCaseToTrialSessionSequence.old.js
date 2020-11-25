@@ -48,7 +48,6 @@ export const addCaseToTrialSessionSequence = [
               unsetWaitingForResponseAction,
               setShowModalFactoryAction('WebSocketErrorModal'),
             ],
-            //old code
             success: [setNoticesForCalendaredTrialSessionAction],
           },
         ],

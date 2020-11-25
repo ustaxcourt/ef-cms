@@ -1,4 +1,4 @@
-import { wait } from '../helpers';
+import { refreshElasticsearchIndex } from '../helpers';
 
 export const petitionsClerkManuallyAddsCaseToCalendaredTrialSession = (
   test,
@@ -24,7 +24,7 @@ export const petitionsClerkManuallyAddsCaseToCalendaredTrialSession = (
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
-    await wait(1000);
+    await refreshElasticsearchIndex();
 
     expect(test.getState('caseDetail.trialDate')).toBeDefined();
   });
