@@ -14,6 +14,7 @@ const toggles = {
   7134: true,
   7136: true,
   7137: true,
+  7164: true,
 };
 
 exports.isCodeEnabled = issueNumber => toggles[issueNumber];
