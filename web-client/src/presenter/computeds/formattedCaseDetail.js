@@ -1,3 +1,4 @@
+import { isCodeEnabled } from '../../../../codeToggles';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -203,10 +204,14 @@ export const formattedCaseDetail = (get, applicationContext) => {
       !permissions.UPDATE_CASE &&
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-    formattedResult.showNotServed =
-      !formattedResult.isUnservable &&
-      entry.isNotServedDocument &&
-      !entry.isMinuteEntry;
+    if (isCodeEnabled(7164)) {
+      formattedResult.showNotServed = entry.isNotServedDocument;
+    } else {
+      formattedResult.showNotServed =
+        !formattedResult.isUnservable &&
+        entry.isNotServedDocument &&
+        !entry.isMinuteEntry;
+    }
     formattedResult.showServed = entry.isStatusServed;
 
     const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
@@ -244,8 +249,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
       userPermissions: permissions,
     });
 
-    formattedResult.showDocumentDescriptionWithoutLink =
-      !showDocumentLinks && !formattedResult.showDocumentProcessing;
+    if (isCodeEnabled(6868)) {
+      formattedResult.showDocumentDescriptionWithoutLink =
+        !showDocumentLinks && !formattedResult.showDocumentProcessing;
+    } else {
+      formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
+    }
 
     return formattedResult;
   });
