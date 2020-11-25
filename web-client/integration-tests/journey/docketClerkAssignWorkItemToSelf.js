@@ -1,4 +1,5 @@
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -6,6 +7,8 @@ const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export const docketClerkAssignWorkItemToSelf = test => {
   return it('Docket clerk assigns the selected work items to self', async () => {
+    await refreshElasticsearchIndex();
+
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
@@ -19,6 +22,8 @@ export const docketClerkAssignWorkItemToSelf = test => {
     const selectedWorkItem = workQueueFormatted.find(
       workItem => workItem.docketNumber === test.docketNumber,
     );
+
+    test.docketEntryId = selectedWorkItem.docketEntry.docketEntryId;
 
     expect(selectedWorkItem).toMatchObject({
       assigneeId: null,
