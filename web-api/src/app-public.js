@@ -2,6 +2,7 @@ const awsServerlessExpressMiddleware = require('aws-serverless-express/middlewar
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
 
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
   return next();
 });
 app.use(awsServerlessExpressMiddleware.eventContext());
+app.use(logger());
 
 const {
   casePublicSearchLambda,

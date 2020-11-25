@@ -8,7 +8,7 @@ const token =
 
 const MOCK_EVENT = {
   headers: {
-    Authorization: `Bearer ${token}`,
+    authorization: `Bearer ${token}`,
   },
 };
 
@@ -18,7 +18,6 @@ const MOCK_USER = {
 };
 
 let logged = [];
-let lastLoggedValue;
 
 // Suppress console output in test runner (RAE SAID THIS WOULD BE COOL)
 console.error = () => null;
@@ -39,12 +38,10 @@ function MockEntity(raw, { filtered = false }) {
 
 describe('genericHandler', () => {
   beforeEach(() => {
-    lastLoggedValue = null;
     logged = [];
 
-    applicationContext.logger.info.mockImplementation((label, value) => {
+    applicationContext.logger.debug.mockImplementation(label => {
       logged.push(label);
-      lastLoggedValue = value;
     });
     applicationContext.getEntityByName.mockImplementation(() => MockEntity);
   });
@@ -103,7 +100,7 @@ describe('genericHandler', () => {
     expect(setUser).toEqual(MOCK_USER);
   });
 
-  it('should log `user` and `results` and `event` by default', async () => {
+  it('should log `request` and `results` by default', async () => {
     const callback = () => null;
 
     await genericHandler(MOCK_EVENT, callback, {
@@ -111,60 +108,8 @@ describe('genericHandler', () => {
       user: MOCK_USER,
     });
 
-    expect(logged.includes('User')).toBeTruthy();
-    expect(logged.includes('Results')).toBeTruthy();
-    expect(logged.includes('Event')).toBeTruthy();
-  });
-
-  it('can optionally disable logging of `user`, `results`, and `event`', async () => {
-    const callback = () => null;
-
-    await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
-      logEvent: false,
-      logResults: false,
-      logUser: false,
-      user: MOCK_USER,
-    });
-
-    expect(logged.includes('User')).toBeFalsy();
-    expect(logged.includes('Results')).toBeFalsy();
-    expect(logged.includes('Event')).toBeFalsy();
-  });
-
-  it('can use a custom label for logged `user`, `results`, and `event` data', async () => {
-    const callback = () => null;
-
-    await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
-      logEvent: true,
-      logEventLabel: 'The thing that happened',
-      logResultsLabel: 'The stuff that came out',
-      logUserLabel: 'Who did the thing',
-      user: MOCK_USER,
-    });
-
-    expect(logged.includes('User')).toBeFalsy();
-    expect(logged.includes('Results')).toBeFalsy();
-    expect(logged.includes('Event')).toBeFalsy();
-
-    expect(logged.includes('The thing that happened')).toBeTruthy();
-    expect(logged.includes('The stuff that came out')).toBeTruthy();
-    expect(logged.includes('Who did the thing')).toBeTruthy();
-  });
-
-  it('logs the user as Public User when isPublicUser is true and logUser is not false (default is true)', async () => {
-    const callback = () => null;
-
-    await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
-      isPublicUser: true,
-      logResults: false, // by default, this is true - setting to false so only the user is logged (defaults to true)
-      user: {},
-    });
-
-    expect(logged.includes('User')).toBeTruthy();
-    expect(lastLoggedValue).toEqual('Public User');
+    expect(logged).toContain('Request:');
+    expect(logged).toContain('Results:');
   });
 
   it('returns the results of a successful execution', async () => {
@@ -178,23 +123,6 @@ describe('genericHandler', () => {
     });
 
     expect(JSON.parse(result.body)).toEqual('some data');
-  });
-
-  it('returns the results of a successful execution without attempting to filter if skipFiltering is true', async () => {
-    const callback = () => {
-      return Promise.resolve({ data: 'some data', entityName: 'Case' });
-    };
-
-    const result = await genericHandler(MOCK_EVENT, callback, {
-      applicationContext,
-      skipFiltering: true,
-      user: MOCK_USER,
-    });
-
-    expect(JSON.parse(result.body)).toEqual({
-      data: 'some data',
-      entityName: 'Case',
-    });
   });
 
   it('returns the results of a successful execution and filters via entity constructor if the return data contains entityName', async () => {

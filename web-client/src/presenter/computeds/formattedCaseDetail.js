@@ -244,7 +244,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
       userPermissions: permissions,
     });
 
-    formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
+    formattedResult.showDocumentDescriptionWithoutLink =
+      !showDocumentLinks && !formattedResult.showDocumentProcessing;
 
     return formattedResult;
   });

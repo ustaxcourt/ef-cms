@@ -7,22 +7,14 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.strikeDocketEntryLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const {
-        pathParameters: { docketEntryId, docketNumber },
-      } = event;
+  genericHandler(event, async ({ applicationContext }) => {
+    const {
+      pathParameters: { docketEntryId, docketNumber },
+    } = event;
 
-      return await applicationContext
-        .getUseCases()
-        .strikeDocketEntryInteractor({
-          applicationContext,
-          docketEntryId,
-          docketNumber,
-        });
-    },
-    {
-      logEvent: true,
-    },
-  );
+    return await applicationContext.getUseCases().strikeDocketEntryInteractor({
+      applicationContext,
+      docketEntryId,
+      docketNumber,
+    });
+  });

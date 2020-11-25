@@ -45,41 +45,26 @@ exports.genericHandler = (event, cb, options = {}) => {
     const user = options.user || getUserFromAuthHeader(event);
     const applicationContext =
       options.applicationContext ||
-      createApplicationContext(user, event.requestId);
-    const {
-      isPublicUser,
-      logEvent = true,
-      logEventLabel = 'Event',
-      logResults = true,
-      logResultsLabel = 'Results',
-      logUser = true,
-      logUserLabel = 'User',
-      skipFiltering,
-    } = options;
+      createApplicationContext(user, event.logger);
+
+    delete event.logger;
 
     try {
-      if (logEvent && applicationContext) {
-        applicationContext.logger.info(logEventLabel, event);
-      }
-
-      if (logUser && applicationContext) {
-        let userToLog = user;
-        if (isPublicUser) {
-          userToLog = 'Public User';
-        }
-        applicationContext.logger.info(logUserLabel, userToLog);
-      }
+      applicationContext.logger.debug('Request:', {
+        request: event,
+        user,
+      });
 
       const results = await cb({ applicationContext, user });
 
-      const returnResults = !skipFiltering
-        ? exports.dataSecurityFilter(results, {
-            applicationContext,
-          })
-        : results;
+      const returnResults = exports.dataSecurityFilter(results, {
+        applicationContext,
+      });
 
-      if (logResults && applicationContext) {
-        applicationContext.logger.info(logResultsLabel, returnResults);
+      if (options.logResults !== false) {
+        applicationContext.logger.debug('Results:', {
+          results: returnResults,
+        });
       }
 
       return returnResults;
