@@ -6,6 +6,7 @@ const toggles = {
   6921: true,
   6929: true,
   6933: true,
+  6934: true,
   6936: true,
   6938: true,
   6979: true,
