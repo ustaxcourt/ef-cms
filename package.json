@@ -217,7 +217,7 @@
     "start:client": "FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev parcel --no-hmr --no-cache --no-source-maps web-client/src/index.pug",
     "start:madge": "node ./graph-generators/index.js",
     "start:migration": "node ./web-api/send-migration-segment-messages.js",
-    "start:public:ci": "npm run clean:public && CI=true USTC_ENV=dev parcel --port 5678 -d dist-public --no-cache --no-source-maps web-client/src/index-public.pug",
+    "start:public:ci": "npm run clean:public && CI=true USTC_ENV=dev parcel --port 5678 -d dist-public --no-hmr --no-cache --no-source-maps web-client/src/index-public.pug",
     "start:public": "npm run clean:public && USTC_ENV=dev parcel --port 5678 -d dist-public --no-cache --no-source-maps web-client/src/index-public.pug",
     "start:s3rver": "s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9000 --configure-bucket $DOCUMENTS_BUCKET_NAME web-api/cors-policy.xml --configure-bucket $TEMP_DOCUMENTS_BUCKET_NAME web-api/cors-policy.xml",
     "switch-colors": "./web-client/switch-colors.sh",
