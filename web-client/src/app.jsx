@@ -1,6 +1,5 @@
 import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
-import { DeployedDate } from './views/DeployedDate';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import {
   back,
@@ -261,7 +260,6 @@ const app = {
         <IdleActivityMonitor />
         <AppComponent />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-        <DeployedDate />
       </Container>,
       document.querySelector('#app'),
     );
