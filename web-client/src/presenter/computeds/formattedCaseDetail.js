@@ -40,6 +40,7 @@ export const getShowDocumentViewerLink = ({
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
+  isHiddenToPublic,
   isInitialDocument,
   isServed,
   isStipDecision,
@@ -49,11 +50,11 @@ export const getShowDocumentViewerLink = ({
   userHasNoAccessToDocument,
 }) => {
   if (!hasDocument) return false;
+  if (!userHasAccessToCase && isHiddenToPublic) return false;
 
   if (isExternalUser) {
     if (isStricken) return false;
     if (userHasNoAccessToDocument) return false;
-
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
       if (!isServed) return false;
@@ -76,6 +77,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
@@ -217,6 +219,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
       hasDocument: entry.isFileAttached,
       isCourtIssuedDocument: entry.isCourtIssuedDocument,
       isExternalUser,
+      isHiddenToPublic: EVENT_CODES_NOT_VISIBLE_TO_PUBLIC.includes(
+        entry.eventCode,
+      ),
       isInitialDocument,
       isServed: !!entry.servedAt,
       isStipDecision: entry.isStipDecision,
