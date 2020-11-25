@@ -51,7 +51,7 @@ exports.parseLegacyDocumentsInteractor = async ({
       .parseAndScrapePdfContents({ applicationContext, pdfBuffer });
   } catch (err) {
     throw new Error(
-      `Error scraping PDF contents ${docketNumber} ${docketEntryId}; ${err.message}`,
+      `Error scraping PDF contents. ${docketNumber} ${docketEntryId}; ${err.message}`,
     );
   }
 
