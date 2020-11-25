@@ -72,11 +72,10 @@ exports.parseLegacyDocumentsInteractor = async ({
     );
   }
 
+  // This appears to be unused?
   foundDocketEntry.documentContentsId = documentContentsId;
 
   // ... unless somehow it makes it into caseEntity by reference?
-  // This is the only operation that performs a DDB write.
-  // What has changed about the caseEntity to make this be onerous?
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
