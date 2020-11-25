@@ -558,6 +558,9 @@ const {
   getPractitionersByName,
 } = require('../../shared/src/persistence/elasticsearch/getPractitionersByName');
 const {
+  getPractitionersByName: getPractitionersByNameOld,
+} = require('../../shared/src/persistence/elasticsearch/getPractitionersByName.old');
+const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
 const {
@@ -1229,7 +1232,9 @@ const gatewayMethods = {
   getMessageThreadByParentId,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
-  getPractitionersByName,
+  getPractitionersByName: isCodeEnabled(7136)
+    ? getPractitionersByName
+    : getPractitionersByNameOld,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getSectionInboxMessages,
