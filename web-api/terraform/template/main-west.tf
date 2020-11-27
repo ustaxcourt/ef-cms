@@ -161,6 +161,7 @@ resource "aws_api_gateway_domain_name" "public_api_custom_main_west" {
   regional_certificate_arn = aws_acm_certificate.api_gateway_cert_west.arn
   domain_name              = "public-api.${var.dns_domain}"
   security_policy          = "TLS_1_2"
+  provider                 = aws.us-west-1
   endpoint_configuration {
     types = ["REGIONAL"]
   }
@@ -198,7 +199,7 @@ resource "aws_route53_record" "api_route53_main_west_regional_record" {
 
 
 resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
-  name           = aws_api_gateway_domain_name.api_custom_main_west.domain_name
+  name           = aws_api_gateway_domain_name.public_api_custom_main_west.domain_name
   type           = "A"
   zone_id        = data.aws_route53_zone.zone.id
   set_identifier = "public_api_main_us_west_1"
@@ -211,7 +212,7 @@ resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
   }
 
   latency_routing_policy {
-    region = "us-east-1"
+    region = "us-west-1"
   }
 }
 

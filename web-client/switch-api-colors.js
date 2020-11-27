@@ -24,19 +24,19 @@ const run = async () => {
     const { items } = await apigateway.getRestApis({ limit: 500 }).promise();
 
     const apiGatewayRecord = items.find(
-      record => record.name === `gateway_api_public_${ENV}_${DEPLOYING_COLOR}`,
+      record => record.name === `gateway_api_${ENV}_${DEPLOYING_COLOR}`,
     );
 
     apigateway.deleteBasePathMapping(
       {
         basePath: '(none)',
-        domainName: `public-api.${EFCMS_DOMAIN}`,
+        domainName: `api.${EFCMS_DOMAIN}`,
       },
       () => {
         console.log('Successfully deleted base path mapping'); // successful response
         apigateway.createBasePathMapping(
           {
-            domainName: `public-api.${EFCMS_DOMAIN}`,
+            domainName: `api.${EFCMS_DOMAIN}`,
             restApiId: apiGatewayRecord.id,
             stage: ENV,
           },
