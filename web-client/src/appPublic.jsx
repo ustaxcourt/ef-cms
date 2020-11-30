@@ -1,6 +1,5 @@
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
-import { DeployedDate } from './views/DeployedDate';
 import {
   back,
   createObjectURL,
@@ -84,7 +83,6 @@ const appPublic = {
       <Container app={cerebralApp}>
         <AppComponentPublic />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-        <DeployedDate />
       </Container>,
       document.querySelector('#app-public'),
     );

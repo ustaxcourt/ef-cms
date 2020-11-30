@@ -9,11 +9,22 @@ const templateHelper = withAppContextDecorator(
 );
 
 describe('templateHelper', () => {
+  let initialState;
+  beforeAll(() => {
+    initialState = {
+      state: {
+        header: {
+          showBetaBar: true, // set the default state
+        },
+      },
+    };
+  });
+
   it('returns showBetaBar false if the current stage is prod', () => {
     applicationContext.getEnvironment.mockReturnValue({
       stage: 'prod',
     });
-    const result = runCompute(templateHelper, {});
+    const result = runCompute(templateHelper, initialState);
     expect(result.showBetaBar).toBeFalsy();
   });
 
@@ -21,7 +32,7 @@ describe('templateHelper', () => {
     applicationContext.getEnvironment.mockReturnValue({
       stage: 'local',
     });
-    const result = runCompute(templateHelper, {});
+    const result = runCompute(templateHelper, initialState);
     expect(result.showBetaBar).toBeTruthy();
   });
 
@@ -29,7 +40,7 @@ describe('templateHelper', () => {
     applicationContext.getEnvironment.mockReturnValue({
       stage: 'prod',
     });
-    const result = runCompute(templateHelper, {});
+    const result = runCompute(templateHelper, initialState);
     expect(result.showDeployedDate).toBeFalsy();
   });
 
@@ -37,7 +48,7 @@ describe('templateHelper', () => {
     applicationContext.getEnvironment.mockReturnValue({
       stage: 'local',
     });
-    const result = runCompute(templateHelper, {});
+    const result = runCompute(templateHelper, initialState);
     expect(result.showDeployedDate).toBeTruthy();
   });
 });
