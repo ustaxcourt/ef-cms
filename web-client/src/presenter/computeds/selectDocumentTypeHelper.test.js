@@ -1,7 +1,4 @@
-import {
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
-  INITIAL_DOCUMENT_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import {
@@ -10,38 +7,22 @@ import {
 } from './selectDocumentTypeHelper';
 
 describe('selectDocumentTypeHelper', () => {
-  // const CATEGORY_MAP = cloneDeep(DOCUMENT_EXTERNAL_CATEGORIES_MAP); // end-around deep-freeze of constants for purposes of test
-
-  // external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
-  // CATEGORY_MAP['Miscellaneous'].push({
-  //   category: 'Miscellaneous',
-  //   documentTitle: '[First, Second, etc.] Something to [anything]',
-  //   documentType: 'Something [anything]',
-  //   eventCode: 'ABCD',
-  //   labelFreeText: 'What is this something for?',
-  //   labelFreeText2: '',
-  //   labelPreviousDocument: '',
-  //   ordinalField: 'What iteration is this filing?',
-  //   scenario: 'Nonstandard I',
-  // });
-
-  // CATEGORY_MAP['Decision'].push({
-  //   category: 'Decision',
-  //   documentTitle: 'Stipulated Decision Entered [judge] [anything]',
-  //   documentType: 'Stipulated Decision',
-  //   eventCode: 'SDEC',
-  //   labelFreeText: "Judge's Name",
-  //   labelFreeText2: 'Decision Notes',
-  //   labelPreviousDocument: '',
-  //   ordinalField: '',
-  //   scenario: 'Nonstandard J',
-  // });
-
-  // const state = {
-  //   caseDetail: MOCK_CASE,
-  // };
-
   describe('getOptionsForCategory', () => {
+    const mockSelectedDocketEntryId = MOCK_CASE.docketEntries.find(
+      d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
+    ).docketEntryId;
+
+    it('should return an empty object if categoryInformation is undefined', () => {
+      const result = getOptionsForCategory({
+        applicationContext,
+        caseDetail: MOCK_CASE,
+        categoryInformation: undefined,
+        selectedDocketEntryId: undefined,
+      });
+
+      expect(result).toEqual({});
+    });
+
     it('should return correct data for Standard document scenario', () => {
       const mockCategoryInformation = {
         scenario: 'Standard',
@@ -60,9 +41,6 @@ describe('selectDocumentTypeHelper', () => {
     });
 
     it('should return correct data for Nonstandard A document scenario', () => {
-      const mockSelectedDocketEntryId = MOCK_CASE.docketEntries.find(
-        d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
-      ).docketEntryId;
       const mockCategoryInformation = {
         labelPreviousDocument: 'Which document are you objecting to?',
         scenario: 'Nonstandard A',
@@ -106,12 +84,106 @@ describe('selectDocumentTypeHelper', () => {
 
     it('should return correct data for Nonstandard C document scenario', () => {
       const mockCategoryInformation = {
-        labelFreeText: 'What is this statement for?',
-        scenario: 'Nonstandard B',
+        labelFreeText: 'Who signed this?',
+        labelPreviousDocument:
+          'Which document is this affidavit in support of?',
+        scenario: 'Nonstandard C',
       };
-      state.form = {
-        category: 'Supporting Document',
-        documentType: 'Affidavit in Support',
+
+      const result = getOptionsForCategory({
+        applicationContext,
+        caseDetail: MOCK_CASE,
+        categoryInformation: mockCategoryInformation,
+        selectedDocketEntryId: mockSelectedDocketEntryId,
+      });
+
+      expect(result).toEqual({
+        previousDocumentSelectLabel:
+          'Which document is this affidavit in support of?',
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+          d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        ),
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: 'Who signed this?',
+      });
+    });
+
+    it('should return correct data for Nonstandard D document scenario', () => {
+      const mockCategoryInformation = {
+        labelFreeText: 'Date of service',
+        labelPreviousDocument:
+          'Which document is this Certificate of Service for?',
+        scenario: 'Nonstandard D',
+      };
+
+      const result = getOptionsForCategory({
+        applicationContext,
+        caseDetail: MOCK_CASE,
+        categoryInformation: mockCategoryInformation,
+        selectedDocketEntryId: mockSelectedDocketEntryId,
+      });
+
+      expect(result).toEqual({
+        previousDocumentSelectLabel:
+          'Which document is this Certificate of Service for?',
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+          d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        ),
+        showDateFields: true,
+        showNonstandardForm: true,
+        textInputLabel: 'Date of service',
+      });
+    });
+
+    it('should return correct data for Nonstandard E document scenario', () => {
+      const mockCategoryInformation = {
+        labelFreeText: 'Requested location',
+        scenario: 'Nonstandard E',
+      };
+
+      const result = getOptionsForCategory({
+        applicationContext,
+        caseDetail: MOCK_CASE,
+        categoryInformation: mockCategoryInformation,
+        selectedDocketEntryId: undefined,
+      });
+
+      expect(result).toMatchObject({
+        showNonstandardForm: true,
+        showTrialLocationSelect: true,
+        textInputLabel: 'Requested location',
+      });
+    });
+
+    it('should return correct data for Nonstandard F document scenario', () => {
+      const mockCategoryInformation = {
+        labelPreviousDocument: 'Which document is this a supplement to?',
+        ordinalField: 'What iteration is this filing?',
+        scenario: 'Nonstandard F',
+      };
+
+      const result = getOptionsForCategory({
+        applicationContext,
+        caseDetail: MOCK_CASE,
+        categoryInformation: mockCategoryInformation,
+        selectedDocketEntryId: mockSelectedDocketEntryId,
+      });
+
+      expect(result).toEqual({
+        ordinalField: 'What iteration is this filing?',
+        previousDocumentSelectLabel: 'Which document is this a supplement to?',
+        previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
+          d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        ),
+        showNonstandardForm: true,
+      });
+    });
+
+    it('should return correct data for Nonstandard G document scenario', () => {
+      const mockCategoryInformation = {
+        ordinalField: 'What iteration is this filing?',
+        scenario: 'Nonstandard G',
       };
 
       const result = getOptionsForCategory({
@@ -122,225 +194,75 @@ describe('selectDocumentTypeHelper', () => {
       });
 
       expect(result).toEqual({
-        primary: {
-          previousDocumentSelectLabel:
-            'Which document is this affidavit in support of?',
-          previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
-            d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
-          ),
-          showNonstandardForm: true,
-          showTextInput: true,
-          textInputLabel: 'Who signed this?',
-        },
+        ordinalField: 'What iteration is this filing?',
+        showNonstandardForm: true,
       });
     });
 
-    // it('should return correct data for Nonstandard D document scenario', () => {
-    //   state.form = {
-    //     category: 'Miscellaneous',
-    //     documentType: 'Certificate of Service',
-    //   };
+    it('should return correct data for Nonstandard H document scenario', () => {
+      const mockCategoryInformation = {
+        scenario: 'Nonstandard H',
+      };
 
-    //   const result = getOptionsForCategory({
-    //     applicationContext,
-    //     caseDetail,
-    //     categoryInformation,
-    //     selectedDocketEntryId,
-    //   });
+      const result = getOptionsForCategory({
+        applicationContext,
+        caseDetail: MOCK_CASE,
+        categoryInformation: mockCategoryInformation,
+        selectedDocketEntryId: undefined,
+      });
 
-    //   expect(result).toEqual({
-    //     primary: {
-    //       previousDocumentSelectLabel:
-    //         'Which document is this Certificate of Service for?',
-    //       previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
-    //         d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
-    //       ),
-    //       showDateFields: true,
-    //       showNonstandardForm: true,
-    //       textInputLabel: 'Date of service',
-    //     },
-    //   });
-    // });
+      expect(result).toEqual({
+        showNonstandardForm: true,
+        showSecondaryDocumentSelect: true,
+      });
+    });
 
-    // it('should return correct data for Nonstandard E document scenario', () => {
-    //   state.form = {
-    //     category: 'Motion',
-    //     documentType:
-    //       'Motion to Change Place of Submission of Declaratory Judgment Case',
-    //   };
+    it('should return correct data for Nonstandard I document scenario', () => {
+      // we do not currently have any Nonstandard I documents (this is mocked out at the
+      // top of the file) - leaving this test here in case we add Nonstandard I docs later
+      const mockCategoryInformation = {
+        labelFreeText: 'What is this something for?',
+        ordinalField: 'What iteration is this filing?',
+        scenario: 'Nonstandard I',
+      };
 
-    //   const result = getOptionsForCategory({
-    //     applicationContext,
-    //     caseDetail,
-    //     categoryInformation,
-    //     selectedDocketEntryId,
-    //   });
+      const result = getOptionsForCategory({
+        applicationContext,
+        caseDetail: MOCK_CASE,
+        categoryInformation: mockCategoryInformation,
+        selectedDocketEntryId: undefined,
+      });
 
-    //   expect(result).toMatchObject({
-    //     primary: {
-    //       showNonstandardForm: true,
-    //       showTrialLocationSelect: true,
-    //       textInputLabel: 'Requested location',
-    //     },
-    //   });
-    // });
+      expect(result).toEqual({
+        ordinalField: 'What iteration is this filing?',
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: 'What is this something for?',
+      });
+    });
 
-    // it('should return correct data for Nonstandard F document scenario', () => {
-    //   state.form = {
-    //     category: 'Supplement',
-    //     documentType: 'Supplement',
-    //   };
+    it('should return correct data for Nonstandard J document scenario', () => {
+      const mockCategoryInformation = {
+        labelFreeText: "Judge's Name",
+        labelFreeText2: 'Decision Notes',
+        scenario: 'Nonstandard J',
+      };
 
-    //   const result = getOptionsForCategory({
-    //     applicationContext,
-    //     caseDetail,
-    //     categoryInformation,
-    //     selectedDocketEntryId,
-    //   });
+      const result = getOptionsForCategory({
+        applicationContext,
+        caseDetail: MOCK_CASE,
+        categoryInformation: mockCategoryInformation,
+        selectedDocketEntryId: undefined,
+      });
 
-    //   expect(result).toEqual({
-    //     primary: {
-    //       ordinalField: 'What iteration is this filing?',
-    //       previousDocumentSelectLabel:
-    //         'Which document is this a supplement to?',
-    //       previouslyFiledDocuments: MOCK_CASE.docketEntries.filter(
-    //         d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
-    //       ),
-    //       showNonstandardForm: true,
-    //     },
-    //   });
-    // });
-
-    // it('should return correct data for Nonstandard G document scenario', () => {
-    //   state.form = {
-    //     category: 'Stipulation',
-    //     documentType: 'Stipulation of Facts',
-    //   };
-
-    //   const result = getOptionsForCategory({
-    //     applicationContext,
-    //     caseDetail,
-    //     categoryInformation,
-    //     selectedDocketEntryId,
-    //   });
-
-    //   expect(result).toEqual({
-    //     primary: {
-    //       ordinalField: 'What iteration is this filing?',
-    //       showNonstandardForm: true,
-    //     },
-    //   });
-    // });
-
-    // it('should return correct data for Nonstandard H document scenario', () => {
-    //   state.form = {
-    //     category: 'Motion',
-    //     documentType: 'Motion for Leave to File',
-    //   };
-
-    //   const result = getOptionsForCategory({
-    //     applicationContext,
-    //     caseDetail,
-    //     categoryInformation,
-    //     selectedDocketEntryId,
-    //   });
-
-    //   expect(result).toEqual({
-    //     filteredSecondaryDocumentTypes: [],
-    //     primary: {
-    //       showNonstandardForm: true,
-    //       showSecondaryDocumentSelect: true,
-    //     },
-    //   });
-    // });
-
-    // it('should return correct data for Nonstandard I document scenario', () => {
-    //   // we do not currently have any Nonstandard I documents (this is mocked out at the
-    //   // top of the file) - leaving this test here in case we add Nonstandard I docs later
-    //   state.form = {
-    //     category: 'Miscellaneous',
-    //     documentType: 'Something [anything]',
-    //   };
-
-    //   const result = getOptionsForCategory({
-    //     applicationContext,
-    //     caseDetail,
-    //     categoryInformation,
-    //     selectedDocketEntryId,
-    //   });
-
-    //   expect(result).toEqual({
-    //     primary: {
-    //       ordinalField: 'What iteration is this filing?',
-    //       showNonstandardForm: true,
-    //       showTextInput: true,
-    //       textInputLabel: 'What is this something for?',
-    //     },
-    //   });
-    // });
-
-    // it('should return correct data for Nonstandard J document scenario', () => {
-    //   state.form = {
-    //     category: 'Decision',
-    //     documentType: 'Stipulated Decision',
-    //   };
-
-    //   const result = getOptionsForCategory({
-    //     applicationContext,
-    //     caseDetail,
-    //     categoryInformation,
-    //     selectedDocketEntryId,
-    //   });
-
-    //   expect(result).toEqual({
-    //     primary: {
-    //       showNonstandardForm: true,
-    //       showTextInput: true,
-    //       showTextInput2: true,
-    //       textInputLabel: "Judge's Name",
-    //       textInputLabel2: 'Decision Notes',
-    //     },
-    //   });
-    // });
-
-    // it('should return correct data for a secondary document', () => {
-    //   state.form = {
-    //     category: 'Motion',
-    //     documentType: 'Motion for Leave to File',
-    //     secondaryDocument: {
-    //       category: 'Answer (filed by respondent only)',
-    //       documentType: 'Answer',
-    //     },
-    //   };
-
-    //   const result = getOptionsForCategory({
-    //     applicationContext,
-    //     caseDetail,
-    //     categoryInformation,
-    //     selectedDocketEntryId,
-    //   });
-
-    //   expect(result.filteredSecondaryDocumentTypes.length).toBeGreaterThan(0);
-    //   expect(result.secondary.showNonstandardForm).toBeFalsy();
-    // });
-
-    // it('should return correct data for a secondary document with no category or documentType selected', () => {
-    //   state.form = {
-    //     category: 'Motion',
-    //     documentType: 'Motion for Leave to File',
-    //     secondaryDocument: { something: true },
-    //   };
-
-    //   const result = getOptionsForCategory({
-    //     applicationContext,
-    //     caseDetail,
-    //     categoryInformation,
-    //     selectedDocketEntryId,
-    //   });
-
-    //   expect(result.filteredSecondaryDocumentTypes.length).toEqual(0);
-    //   expect(result.secondary).toBeUndefined();
-    // });
+      expect(result).toEqual({
+        showNonstandardForm: true,
+        showTextInput: true,
+        showTextInput2: true,
+        textInputLabel: "Judge's Name",
+        textInputLabel2: 'Decision Notes',
+      });
+    });
   });
 
   describe('getPreviouslyFiledDocuments', () => {
