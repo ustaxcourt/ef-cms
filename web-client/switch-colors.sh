@@ -23,6 +23,7 @@ aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1
 node ./web-client/switch-public-ui-colors.js
 node ./web-client/switch-ui-colors.js
 node ./web-client/switch-api-colors.js
+node ./web-client/switch-public-api-colors.js
 
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"'$DEPLOYING_COLOR'"}}'
 
