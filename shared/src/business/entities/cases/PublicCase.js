@@ -22,6 +22,7 @@ const {
 } = require('./PublicDocketEntry.old');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { isCodeEnabled } = require('../../../../../codeToggles');
+const { isSealedCase } = require('./Case');
 const { map } = require('lodash');
 const { PublicContact } = require('./PublicContact');
 
@@ -46,9 +47,10 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
   this.hasIrsPractitioner =
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
-  this.isSealed = !!rawCase.sealedDate; // if true only return docket number with suffix
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
+
+  this.isSealed = isSealedCase(rawCase);
 
   this.contactPrimary = rawCase.contactPrimary
     ? new PublicContact(rawCase.contactPrimary)

@@ -1,6 +1,6 @@
 const joi = require('joi');
 const { InvalidEntityError } = require('../errors/errors');
-const { isEmpty, pick } = require('lodash');
+const { isEmpty } = require('lodash');
 
 const setIsValidated = obj => {
   Object.defineProperty(obj, 'isValidated', {
@@ -195,17 +195,11 @@ exports.joiValidationDecorator = function (
         });
         return transformed;
       };
-
+      const validationErrors = this.getValidationErrors();
       throw new InvalidEntityError(
         entityConstructor.validationName,
-        JSON.stringify(
-          stringifyTransform(pick(this, helpfulKeys)),
-          (key, value) =>
-            this.hasOwnProperty(key) && typeof value === 'undefined'
-              ? '<undefined>'
-              : value,
-        ),
-        JSON.stringify(stringifyTransform(this.getValidationErrors())),
+        JSON.stringify(stringifyTransform(validationErrors)),
+        validationErrors,
       );
     }
     setIsValidated(this);
