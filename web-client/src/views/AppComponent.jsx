@@ -58,6 +58,7 @@ import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
+import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
@@ -139,6 +140,7 @@ const pages = {
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
+  Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
   SecondaryContactEdit,

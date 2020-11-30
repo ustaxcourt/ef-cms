@@ -53,6 +53,11 @@ const router = {
       app.getSequence('gotoPublicSearchSequence')();
     });
 
+    route('/privacy', () => {
+      setPageTitle('Privacy');
+      return app.getSequence('gotoPrivacySequence')();
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({

@@ -14,6 +14,7 @@ import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons/faLongArrowAltUp';
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
@@ -51,6 +52,7 @@ const appPublic = {
     library.add(
       faFileAltSolid,
       faLock,
+      faLongArrowAltUp,
       faPrint,
       faSearch,
       faSync,

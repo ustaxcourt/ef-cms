@@ -1135,6 +1135,11 @@ const router = {
       }
     });
 
+    registerRoute('/privacy', () => {
+      setPageTitle('Privacy');
+      return app.getSequence('gotoPrivacySequence')();
+    });
+
     registerRoute(
       '..',
       () => {
