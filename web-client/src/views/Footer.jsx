@@ -18,7 +18,13 @@ export const Footer = () => (
                   // eslint-disable-next-line react/jsx-no-target-blank
                   target="_blank"
                 >
-                  [ICN] Return to top
+                  <Icon
+                    aria-label="retun to top"
+                    className="margin-right-1"
+                    icon={['fas', 'long-arrow-alt-up']}
+                    size="1x"
+                  />{' '}
+                  Return to top
                 </a>
               </li>
               <li className="usa-footer__primary-content">
@@ -61,7 +67,7 @@ export const Footer = () => (
       <div className="grid-container">
         <div className="grid-row">
           <div className="grid-col-4 footer-left">
-            <div className="grid-row grid-gap-2 usa-footer__logo">
+            <div className="grid-row grid-gap-1 usa-footer__logo">
               <div className="">
                 <div className="usa-logo">
                   <a href="/">

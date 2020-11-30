@@ -1678,6 +1678,18 @@ button.change-scanner-button {
     margin-left: 0;
   }
 
+  @media only screen and (max-width: $large-screen - 1) {
+    .usa-footer__secondary-section {
+      h3.usa-footer__logo-heading {
+        font-size: 16px;
+      }
+    }
+
+    .usa-logo {
+      max-width: 45px;
+    }
+  }
+
   @media only screen and (max-width: 820px) {
     .usa-footer__secondary-section {
       .footer-left,
@@ -1685,10 +1697,22 @@ button.change-scanner-button {
         width: 100%;
         margin-bottom: 10px;
       }
+
+      h3.usa-footer__logo-heading {
+        font-size: 18px;
+      }
+    }
+
+    .usa-logo {
+      max-width: 60px;
     }
   }
 
   @media only screen and (max-width: $medium-screen - 1) {
+    .usa-footer__primary-container {
+      padding: 0;
+    }
+
     .usa-footer__primary-section {
       height: auto;
     }
@@ -1696,9 +1720,17 @@ button.change-scanner-button {
     #footer-links {
       width: 100%;
 
+      .grid-row.grid-gap {
+        margin-right: 0;
+        margin-left: 0;
+      }
+
       li {
-        &:nth-child(2) {
-          margin-left: 10px;
+        border-top: 1px solid #dcdee0;
+        margin-left: 0;
+        a {
+          padding-right: 1em;
+          padding-left: 1em;
         }
       }
     }
