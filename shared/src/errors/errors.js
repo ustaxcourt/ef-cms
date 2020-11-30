@@ -113,16 +113,13 @@ module.exports.InvalidEntityError = class InvalidEntityError extends (
    */
   constructor(
     validationName,
-    entityIds = '',
     message = 'entity is invalid or invalid for operation',
+    validationObject = {},
   ) {
-    super(`The ${validationName} entity was invalid.`);
+    super(`The ${validationName} entity was invalid. ${message}`);
     Object.defineProperties(this, {
       details: {
-        value: message,
-      },
-      entityIds: {
-        value: entityIds,
+        value: validationObject,
       },
     });
   }

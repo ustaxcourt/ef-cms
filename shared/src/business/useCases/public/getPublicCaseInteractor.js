@@ -2,7 +2,7 @@ const {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
 } = require('../../utilities/caseFilter');
-const { Case } = require('../../entities/cases/Case');
+const { Case, isSealedCase } = require('../../entities/cases/Case');
 const { NotFoundError } = require('../../../errors/errors');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
@@ -18,7 +18,7 @@ exports.getPublicCaseInteractor = async ({
   applicationContext,
   docketNumber,
 }) => {
-  const rawCaseRecord = await applicationContext
+  let rawCaseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
@@ -31,17 +31,14 @@ exports.getPublicCaseInteractor = async ({
     throw error;
   }
 
-  let caseRecord = rawCaseRecord;
-  if (rawCaseRecord.sealedDate) {
-    caseRecord = caseSealedFormatter(caseRecord);
+  if (isSealedCase(rawCaseRecord)) {
+    rawCaseRecord = caseSealedFormatter(rawCaseRecord);
   }
-  caseRecord = caseContactAddressSealedFormatter(caseRecord, {});
+  rawCaseRecord = caseContactAddressSealedFormatter(rawCaseRecord, {});
 
-  const publicCaseDetail = new PublicCase(caseRecord, {
+  const publicCaseDetail = new PublicCase(rawCaseRecord, {
     applicationContext,
-  })
-    .validate()
-    .toRawObject();
+  });
 
-  return publicCaseDetail;
+  return publicCaseDetail.validate().toRawObject();
 };

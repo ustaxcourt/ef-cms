@@ -75,6 +75,7 @@ describe('getPublicCaseInteractor', () => {
 
     expect(result).toMatchObject({
       docketNumber,
+      isSealed: true,
     });
   });
 
