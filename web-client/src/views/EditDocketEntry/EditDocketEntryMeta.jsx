@@ -15,16 +15,17 @@ import React from 'react';
 
 export const EditDocketEntryMeta = connect(
   {
-    cancelSequence: sequences.formCancelToggleCancelSequence,
     editType: state.screenMetadata.editType,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
-    submitSequence: sequences.submitEditDocketEntryMetaSequence,
+    submitEditDocketEntryMetaSequence:
+      sequences.submitEditDocketEntryMetaSequence,
   },
   function EditDocketEntryMeta({
-    cancelSequence,
     editType,
+    formCancelToggleCancelSequence,
     showModal,
-    submitSequence,
+    submitEditDocketEntryMetaSequence,
   }) {
     return (
       <>
@@ -77,7 +78,7 @@ export const EditDocketEntryMeta = connect(
               <div className="margin-top-3">
                 <Button
                   onClick={() => {
-                    submitSequence();
+                    submitEditDocketEntryMetaSequence();
                   }}
                 >
                   Save
@@ -86,7 +87,7 @@ export const EditDocketEntryMeta = connect(
                 <Button
                   link
                   onClick={() => {
-                    cancelSequence();
+                    formCancelToggleCancelSequence();
                   }}
                 >
                   Cancel
