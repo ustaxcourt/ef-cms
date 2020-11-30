@@ -48,7 +48,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(test);
 
   docketClerkNavigatesToEditDocketEntryMeta(test, 3);
-  docketClerkEditsDocketEntryMeta(test);
+  docketClerkEditsDocketEntryMeta(test, 3);
   docketClerkVerifiesDocketEntryMetaUpdates(test, 3);
   docketClerkNavigatesToEditDocketEntryMeta(test, 3);
   docketClerkVerifiesDocketEntryMetaUpdatesInEditForm(test);
@@ -62,7 +62,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesDocument(test, 0);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 4);
-  docketClerkEditsDocketEntryMetaCourtIssued(test);
+  docketClerkEditsDocketEntryMetaCourtIssued(test, 4);
   docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates(test, 4);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 4);
   docketClerkVerifiesEditCourtIssuedNonstandardFields(test);
