@@ -1140,6 +1140,11 @@ const router = {
       return app.getSequence('gotoPrivacySequence')();
     });
 
+    registerRoute('/contact', () => {
+      setPageTitle('Contact');
+      return app.getSequence('gotoContactSequence')();
+    });
+
     registerRoute(
       '..',
       () => {
