@@ -195,9 +195,6 @@ describe('Joi Validation Decorator', () => {
       error = e;
     }
     expect(error).toBeDefined();
-    expect(error.message).toContain("'somethingId' is required");
-    expect(error.message).toContain('"somethingId":"<undefined>"');
-    expect(error.message).toContain('"docketNumber":"123-20"');
   });
 
   it('should have access to the schema without instantiating the entity', () => {

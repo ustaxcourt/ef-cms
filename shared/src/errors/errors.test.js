@@ -85,6 +85,13 @@ describe('InvalidEntityError', () => {
       'The TestEntity entity was invalid. entity is invalid or invalid for operation. 123',
     );
   });
+
+  it('should set the message which includes the entityName and default messages', () => {
+    const error = new InvalidEntityError('TestEntity');
+    expect(error.message).toEqual(
+      'The TestEntity entity was invalid. entity is invalid or invalid for operation. ',
+    );
+  });
 });
 
 describe('UnsanitizedEntityError', () => {
