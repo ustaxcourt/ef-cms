@@ -1,7 +1,30 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { DeployedDate } from './DeployedDate';
 import { Icon } from '../ustc-ui/Icon/Icon';
 import React from 'react';
 import seal from '../images/ustc_seal.svg';
+
+const ScrollToTopButton = () => {
+  return (
+    <Button
+      link
+      className="usa-footer__primary-link inline-block text-left margin-top-1"
+      overrideMargin={true}
+      onClick={e => {
+        e.preventDefault();
+        window.scrollTo(0, 0);
+      }}
+    >
+      <Icon
+        aria-label="retun to top"
+        className="margin-right-1"
+        icon={['fas', 'long-arrow-alt-up']}
+        size="1x"
+      />{' '}
+      Return to top
+    </Button>
+  );
+};
 
 export const Footer = () => (
   <footer className="usa-footer usa-footer--slim" id="app-footer">
@@ -10,22 +33,9 @@ export const Footer = () => (
       <div className="usa-footer__primary-container grid-row">
         <div className="grid-col-9" id="footer-links">
           <nav aria-label="Footer navigation" className="usa-footer__nav">
-            <ul className="grid-row grid-gap" id="footer-links">
+            <ul className="grid-row grid-gap">
               <li className="usa-footer__primary-content show-on-mobile">
-                <a
-                  className="usa-footer__primary-link"
-                  href="#top"
-                  // eslint-disable-next-line react/jsx-no-target-blank
-                  target="_blank"
-                >
-                  <Icon
-                    aria-label="retun to top"
-                    className="margin-right-1"
-                    icon={['fas', 'long-arrow-alt-up']}
-                    size="1x"
-                  />{' '}
-                  Return to top
-                </a>
+                <ScrollToTopButton />
               </li>
               <li className="usa-footer__primary-content">
                 <a
@@ -51,15 +61,7 @@ export const Footer = () => (
           </nav>
         </div>
         <div className="grid-col-3 hide-on-mobile text-right">
-          <a className="usa-footer__primary-link" href="#top">
-            <Icon
-              aria-label="retun to top"
-              className="margin-right-1"
-              icon={['fas', 'long-arrow-alt-up']}
-              size="1x"
-            />
-            Return to top
-          </a>
+          <ScrollToTopButton />
         </div>
       </div>
     </div>
