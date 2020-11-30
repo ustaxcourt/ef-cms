@@ -1,3 +1,8 @@
+import {
+  getDefaultAttachmentViewerDocumentToDisplayAction,
+  getDefaultAttachmentViewerDocumentToDisplayAction as getDefaultAttachmentViewerDocumentToDisplayActionOld,
+} from './getDefaultAttachmentViewerDocumentToDisplayAction';
+
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setViewerDocumentToDisplayAction } from './setViewerDocumentToDisplayAction';
@@ -14,6 +19,7 @@ import { isCodeDisabled } from '../../../../codeToggles';
 // TODO: Gradually add more actions as needed
 const actions = {
   generateTitleForPaperFilingAction,
+  getDefaultAttachmentViewerDocumentToDisplayAction,
   setAddEditUserCaseNoteModalStateFromDetailAction,
   setJudgesCaseNoteOnCaseDetailAction,
   setViewerDocumentToDisplayAction,
@@ -30,6 +36,10 @@ if (isCodeDisabled(6916)) {
 
 if (isCodeDisabled(6938)) {
   actions.setViewerDocumentToDisplayAction = setViewerDocumentToDisplayActionOld;
+}
+
+if (isCodeDisabled(7015)) {
+  actions.getDefaultAttachmentViewerDocumentToDisplayAction = getDefaultAttachmentViewerDocumentToDisplayActionOld;
 }
 
 export const getAction = actionName => actions[actionName];
