@@ -916,6 +916,9 @@ const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
+  updateDocketEntryMetaInteractor: updateDocketEntryMetaInteractorOld,
+} = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor.old');
+const {
   updateDocketEntryProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
 const {
@@ -1676,7 +1679,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateCourtIssuedOrderInteractor,
         updateDeficiencyStatisticInteractor,
         updateDocketEntryInteractor,
-        updateDocketEntryMetaInteractor,
+        updateDocketEntryMetaInteractor: isCodeEnabled(7178)
+          ? updateDocketEntryMetaInteractor
+          : updateDocketEntryMetaInteractorOld,
         updateOtherStatisticsInteractor,
         updatePetitionDetailsInteractor,
         updatePetitionerInformationInteractor,
