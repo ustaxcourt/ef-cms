@@ -55,7 +55,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = ({
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: 'A',
+      value: 'EVID',
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -75,5 +75,9 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = ({
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('form')).toEqual({});
+
+    test.docketEntryId = test
+      .getState('caseDetail.docketEntries')
+      .find(doc => doc.eventCode === 'EVID').docketEntryId;
   });
 };

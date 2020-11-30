@@ -27,11 +27,14 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     entries => (categoryInformation = find(entries, { eventCode: eventCode })),
   );
 
-  const optionsForCategory = getOptionsForCategory(
+  const selectedDocketEntryId = get(state.docketEntryId);
+
+  const optionsForCategory = getOptionsForCategory({
     applicationContext,
     caseDetail,
     categoryInformation,
-  );
+    selectedDocketEntryId,
+  });
 
   const strickenAtFormatted = applicationContext
     .getUtilities()

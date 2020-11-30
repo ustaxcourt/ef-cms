@@ -14,6 +14,7 @@ const getDateISO = () => new Date().toISOString();
 describe('formattedCaseDetail', () => {
   let globalUser;
   const {
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
     DOCUMENT_RELATIONSHIPS,
     JUDGES_CHAMBERS,
     OBJECTIONS_OPTIONS_MAP,
@@ -1555,6 +1556,67 @@ describe('formattedCaseDetail', () => {
     });
   });
 
+  it('should not show the link to an unassociated external user for a pending paper filed document', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...simpleDocketEntries[0],
+              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+            },
+          ],
+        },
+        permissions: {
+          CREATE_ORDER_DOCKET_ENTRY: false,
+          DOCKET_ENTRY: false,
+          UPDATE_CASE: false,
+        },
+        validationErrors: {},
+      },
+    });
+
+    expect(
+      result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+    ).toEqual(false);
+    expect(result.formattedDocketEntries[0].showDocumentProcessing).toEqual(
+      true,
+    );
+  });
+
+  it('should not show the link to an unassociated external user for a complete paper filed document', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...simpleDocketEntries[0],
+              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+            },
+          ],
+        },
+        permissions: {
+          CREATE_ORDER_DOCKET_ENTRY: false,
+          DOCKET_ENTRY: false,
+          UPDATE_CASE: false,
+        },
+        screenMetadata: {
+          isAssociated: false,
+        },
+        validationErrors: {},
+      },
+    });
+
+    expect(
+      result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+    ).toEqual(true);
+    expect(result.formattedDocketEntries[0].showDocumentProcessing).toEqual(
+      false,
+    );
+  });
+
   describe('stricken docket record', () => {
     let caseDetail;
 
@@ -1581,6 +1643,7 @@ describe('formattedCaseDetail', () => {
             isOnDocketRecord: true,
             isStricken: true,
             numberOfPages: 24,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
           {
             description: 'Filing Fee Paid',
@@ -2005,6 +2068,30 @@ describe('formattedCaseDetail', () => {
           isUnservable: false,
           userHasAccessToCase: true,
           userHasNoAccessToDocument: false,
+        },
+        output: true,
+      },
+      {
+        // User is external, with no access to case, document link is not publicly visible
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isHiddenToPublic: true,
+          isUnservable: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        // User is external, with access to case, document link is visible
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isHiddenToPublic: true,
+          isUnservable: true,
+          userHasAccessToCase: true,
         },
         output: true,
       },

@@ -141,7 +141,7 @@ module.exports = {
           type: 'keyword',
         },
       },
-      type: 'text',
+      type: 'integer',
     },
     'status.S': {
       type: 'text',
