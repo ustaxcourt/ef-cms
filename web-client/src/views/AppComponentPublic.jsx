@@ -4,6 +4,7 @@ import { HeaderPublic } from './Header/HeaderPublic';
 import { HealthCheck } from './Health/HealthCheck';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
+import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
@@ -17,6 +18,7 @@ const pages = {
   Error,
   HealthCheck,
   Interstitial,
+  Privacy,
   PublicCaseDetail,
   PublicPrintableDocketRecord,
   PublicSearch,
