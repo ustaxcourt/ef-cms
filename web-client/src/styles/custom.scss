@@ -1729,8 +1729,8 @@ button.change-scanner-button {
         border-top: 1px solid #dcdee0;
         margin-left: 0;
         a {
-          padding-right: 1em;
-          padding-left: 1em;
+          padding-right: 0.5em;
+          padding-left: 0.5em;
         }
       }
     }
@@ -1740,4 +1740,12 @@ button.change-scanner-button {
       width: 100%;
     }
   }
+}
+
+.display-flex {
+  display: flex;
+}
+
+.dark-icon {
+  color: color($theme-color-primary-darker);
 }

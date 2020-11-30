@@ -1,3 +1,4 @@
+import { Contact } from './Contact';
 import { Error } from './Error';
 import { Footer } from './Footer';
 import { HeaderPublic } from './Header/HeaderPublic';
@@ -15,6 +16,7 @@ import { state } from 'cerebral';
 import React, { useEffect } from 'react';
 
 const pages = {
+  Contact,
   Error,
   HealthCheck,
   Interstitial,
