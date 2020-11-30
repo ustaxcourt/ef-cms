@@ -5,6 +5,10 @@ body.no-scroll {
   touch-action: none;
 }
 
+#app {
+  background-color: $color-white;
+}
+
 hr {
   z-index: 1;
   display: block;
@@ -1607,4 +1611,142 @@ button.change-scanner-button {
 .font-sans-pro {
   font-family: $font-source-sans;
   font-size: 17px;
+}
+
+#react-deployed-date {
+  text-align: right;
+}
+
+#app-footer {
+  width: 100%;
+
+  .usa-footer__primary-container {
+    max-width: 1440px;
+  }
+
+  .usa-footer__nav {
+    padding-right: 0;
+    padding-left: 0;
+
+    .usa-link--external::after {
+      background-size: 112%;
+    }
+  }
+
+  .usa-footer__primary-section {
+    height: 50px;
+  }
+
+  .usa-footer__secondary-section {
+    background-color: color($theme-color-primary-darker);
+    color: $color-white;
+
+    .grid-container {
+      max-width: 1440px;
+    }
+
+    h3.usa-footer__logo-heading {
+      font-family: $font-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+
+  #footer-links {
+    li {
+      margin-left: 10px;
+
+      &:nth-child(2) {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .usa-footer__primary-link {
+    color: color($theme-color-primary);
+    font-family: $font-source-sans;
+    font-size: 17px;
+    font-weight: $font-normal;
+    text-decoration: underline;
+  }
+
+  .usa-logo {
+    display: inline-block;
+    max-width: 60px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+  }
+
+  @media only screen and (max-width: $large-screen - 1) {
+    .usa-footer__secondary-section {
+      h3.usa-footer__logo-heading {
+        font-size: 16px;
+      }
+    }
+
+    .usa-logo {
+      max-width: 45px;
+    }
+  }
+
+  @media only screen and (max-width: 820px) {
+    .usa-footer__secondary-section {
+      .footer-left,
+      .footer-right {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      h3.usa-footer__logo-heading {
+        font-size: 18px;
+      }
+    }
+
+    .usa-logo {
+      max-width: 60px;
+    }
+  }
+
+  @media only screen and (max-width: $medium-screen - 1) {
+    .usa-footer__primary-container {
+      padding: 0;
+    }
+
+    .usa-footer__primary-section {
+      height: auto;
+    }
+
+    #footer-links {
+      width: 100%;
+
+      .grid-row.grid-gap {
+        margin-right: 0;
+        margin-left: 0;
+      }
+
+      li {
+        border-top: 1px solid #dcdee0;
+        margin-left: 0;
+        a,
+        button {
+          padding-right: 0.5em;
+          padding-left: 0.5em;
+        }
+      }
+    }
+
+    .usa-footer__primary-content {
+      display: block;
+      width: 100%;
+    }
+  }
+}
+
+.display-flex {
+  display: flex;
+}
+
+.dark-icon {
+  color: color($theme-color-primary-darker);
 }

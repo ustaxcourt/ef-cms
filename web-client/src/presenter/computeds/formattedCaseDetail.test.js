@@ -2071,6 +2071,30 @@ describe('formattedCaseDetail', () => {
         },
         output: true,
       },
+      {
+        // User is external, with no access to case, document link is not publicly visible
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isHiddenToPublic: true,
+          isUnservable: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        // User is external, with access to case, document link is visible
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isHiddenToPublic: true,
+          isUnservable: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
     ];
 
     tests.forEach(({ inputs, output }) => {
