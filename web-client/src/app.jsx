@@ -62,6 +62,7 @@ import { faLaptop } from '@fortawesome/free-solid-svg-icons/faLaptop';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons/faLongArrowAltUp';
 import { faMailBulk } from '@fortawesome/free-solid-svg-icons/faMailBulk';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons/faMinusCircle';
@@ -200,6 +201,7 @@ const app = {
       faLink,
       faListUl,
       faLock,
+      faLongArrowAltUp,
       faMailBulk,
       faMinus,
       faMinusCircle,
