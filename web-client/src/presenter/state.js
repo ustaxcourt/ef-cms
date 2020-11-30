@@ -251,6 +251,7 @@ export const baseState = {
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
+    showBetaBar: true, // default state
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },

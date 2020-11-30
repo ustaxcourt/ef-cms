@@ -31,7 +31,7 @@ export const state = {
   currentPage: 'Interstitial',
   header: {
     searchTerm: '',
-    showBetaBar: true,
+    showBetaBar: true, // default state
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
