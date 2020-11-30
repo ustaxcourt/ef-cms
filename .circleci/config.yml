@@ -25,7 +25,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Lint
           command: npm run lint
@@ -77,7 +76,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Shared - Test
           command: npm run test:shared:ci
@@ -122,7 +120,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit:ci
@@ -166,7 +163,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -270,7 +266,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -332,7 +327,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -392,7 +386,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -456,7 +449,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -785,7 +777,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -821,7 +812,6 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
