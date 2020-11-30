@@ -526,6 +526,9 @@ const applicationContext = {
     return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
+  getEnvironment: () => ({
+    stage: process.env.STAGE || 'local',
+  }),
   getError: e => {
     return ErrorFactory.getError(e);
   },
