@@ -24,6 +24,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         freeText: 'some free text',
         index: 1,
         partyPrimary: true,
+        pending: false,
         servedAt: '2019-01-01T00:01:00.000Z',
         servedParties: [{ name: 'Some Party' }],
         userId: mockUserId,
@@ -373,5 +374,39 @@ describe('updateDocketEntryMetaInteractor', () => {
         docketNumber: '101-20',
       }),
     ).resolves.not.toThrow();
+  });
+
+  it('should update the document pending status', async () => {
+    const result = await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[0],
+        pending: true,
+      },
+      docketNumber: '101-20',
+    });
+
+    const updatedDocketEntry = result.docketEntries.find(
+      record => record.index === 1,
+    );
+    const updatedDocument = result.docketEntries.find(
+      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
+    );
+    expect(updatedDocument.pending).toBeTruthy();
+  });
+
+  it('should update the automatic blocked status of the case', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[0],
+        pending: true,
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
+    ).toHaveBeenCalled();
   });
 });
