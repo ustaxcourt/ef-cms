@@ -382,8 +382,6 @@ const EVENT_CODES_NOT_VISIBLE_TO_PUBLIC = [
   ...Object.keys(EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP),
 ];
 
-console.log('ev', EVENT_CODES_NOT_VISIBLE_TO_PUBLIC);
-
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
