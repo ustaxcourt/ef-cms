@@ -30,7 +30,5 @@ export const tryCatchDecorator = useCases => {
     };
   }
 
-  Object.keys(useCases).forEach(key => {
-    useCases[key] = decorate(useCases[key]);
-  });
+  useCases.map(useCase => decorate(useCase));
 };
