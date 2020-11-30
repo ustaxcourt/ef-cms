@@ -22,7 +22,7 @@ export const Privacy = connect(
             </div>
           </div>
         </div>
-        <section className="grid-container">
+        <section className="grid-container margin-bottom-5">
           <p>
             DAWSON is a U.S. Tax Court federal government system, for official
             use by U.S. government employees, petitioners, practitioners, and
