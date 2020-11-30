@@ -1,4 +1,13 @@
-export const docketClerkEditsDocketEntryMeta = test => {
+import { AUTOMATIC_BLOCKED_REASONS } from '../../../shared/src/business/entities/EntityConstants';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
+
+export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
   return it('docket clerk edits docket entry meta', async () => {
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
@@ -47,6 +56,11 @@ export const docketClerkEditsDocketEntryMeta = test => {
       value: true,
     });
 
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'pending',
+      value: true,
+    });
+
     await test.runSequence('submitEditDocketEntryMetaSequence', {
       docketNumber: test.docketNumber,
     });
@@ -69,5 +83,30 @@ export const docketClerkEditsDocketEntryMeta = test => {
     expect(test.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
+
+    expect(test.getState('caseDetail.automaticBlocked')).toEqual(true);
+    expect(test.getState('caseDetail.automaticBlockedReason')).toEqual(
+      AUTOMATIC_BLOCKED_REASONS.pending,
+    );
+    expect(test.getState('caseDetail.hasPendingItems')).toEqual(true);
+    const docketEntries = test.getState('caseDetail.docketEntries');
+    const pendingDocketEntry = docketEntries.find(
+      d => d.index === docketRecordIndex,
+    );
+    expect(pendingDocketEntry.pending).toEqual(true);
+
+    const caseDetailFormatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(
+      caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: pendingDocketEntry.docketEntryId,
+        }),
+      ]),
+    );
   });
 };

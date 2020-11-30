@@ -253,6 +253,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             </fieldset>
           </FormGroup>
         )}
+        <hr />
         <div className="usa-form-group">
           <fieldset className="usa-fieldset">
             <legend className="usa-legend">Track document?</legend>
