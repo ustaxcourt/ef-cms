@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { messageDocumentHelper as messageDocumentHeperComputed } from './messageDocumentHelper.old';
+import { messageDocumentHelper as messageDocumentHeperComputed } from './messageDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 const { USER_ROLES } = applicationContext.getConstants();
