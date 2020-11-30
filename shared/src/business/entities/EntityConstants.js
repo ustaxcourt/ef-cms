@@ -349,6 +349,39 @@ const sptnDocument = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPTN',
 );
 
+const EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP = {
+  TRAN: {
+    eventCode: 'TRAN',
+    timePeriodDays: 90,
+  },
+  CTRA: {
+    eventCode: 'CTRA',
+    timePeriodDays: 90,
+  },
+  RTRA: {
+    eventCode: 'RTRA',
+    timePeriodDays: 90,
+  },
+};
+
+const EVENT_CODES_NOT_VISIBLE_TO_PUBLIC = [
+  'SDEC',
+  'NOT',
+  'FTRL',
+  'HEAR',
+  'NTD',
+  'PTRL',
+  'TRL',
+  'ROA',
+  'MISC',
+  'HE',
+  'TE',
+  'USCA',
+  'ES',
+  'RM',
+  ...Object.keys(EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP),
+];
+
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
@@ -1105,6 +1138,8 @@ module.exports = deepFreeze({
   DOCUMENT_RELATIONSHIPS,
   EMPLOYER_OPTIONS,
   ESTATE_TYPES,
+  EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
+  EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP,
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,

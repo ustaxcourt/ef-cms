@@ -11,6 +11,7 @@ import {
 } from './helpers';
 import { formatDateString } from '../../shared/src/business/utilities/DateHandler';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { isCodeEnabled } from '../../codeToggles';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -115,9 +116,6 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       test.getState('pendingReports.pendingItems') || []
     ).length;
 
-    console.log();
-    console.log();
-
     const caseReceivedAtDate = test.getState('caseDetail.receivedAt');
     const firstPendingItemReceivedAtDate = test.getState(
       'pendingReports.pendingItems[0].receivedAt',
@@ -149,7 +147,8 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     test,
     yearReceived: mockYearReceived,
   });
-  it('docket clerk checks pending items count has increased and views pending document', async () => {
+
+  it('docket clerk views pending report items', async () => {
     await refreshElasticsearchIndex();
 
     await test.runSequence('gotoPendingReportSequence');
@@ -160,23 +159,28 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     const caseReceivedAtDate = test.getState('caseDetail.receivedAt');
     const pendingItems = test.getState('pendingReports.pendingItems');
-    const answerPendingItem = pendingItems.find(
-      item => item.documentTitle === 'Answer',
-    );
-    const answerPendingReceivedAtFormatted = formatDateString(
-      answerPendingItem.receivedAt,
-      'MMDDYYYY',
-    );
-    const caseReceivedAtFormatted = formatDateString(
-      caseReceivedAtDate,
-      'MMDDYYYY',
+    const pendingItem = pendingItems.find(
+      item => item.docketEntryId === test.docketEntryId,
     );
 
-    expect(answerPendingReceivedAtFormatted).not.toEqual(
-      caseReceivedAtFormatted,
-    );
-    expect(answerPendingReceivedAtFormatted).toEqual(
-      `${mockMonthReceived}/${mockDayReceived}/${mockYearReceived}`,
-    );
+    expect(pendingItem).toBeDefined();
+
+    if (isCodeEnabled(7134)) {
+      const answerPendingReceivedAtFormatted = formatDateString(
+        pendingItem.receivedAt,
+        'MMDDYYYY',
+      );
+      const caseReceivedAtFormatted = formatDateString(
+        caseReceivedAtDate,
+        'MMDDYYYY',
+      );
+
+      expect(answerPendingReceivedAtFormatted).not.toEqual(
+        caseReceivedAtFormatted,
+      );
+      expect(answerPendingReceivedAtFormatted).toEqual(
+        `${mockMonthReceived}/${mockDayReceived}/${mockYearReceived}`,
+      );
+    }
   });
 });

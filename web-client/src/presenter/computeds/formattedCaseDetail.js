@@ -1,3 +1,4 @@
+import { isCodeEnabled } from '../../../../codeToggles';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -40,6 +41,7 @@ export const getShowDocumentViewerLink = ({
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
+  isHiddenToPublic,
   isInitialDocument,
   isServed,
   isStipDecision,
@@ -49,11 +51,11 @@ export const getShowDocumentViewerLink = ({
   userHasNoAccessToDocument,
 }) => {
   if (!hasDocument) return false;
+  if (!userHasAccessToCase && isHiddenToPublic) return false;
 
   if (isExternalUser) {
     if (isStricken) return false;
     if (userHasNoAccessToDocument) return false;
-
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
       if (!isServed) return false;
@@ -76,6 +78,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
@@ -203,10 +206,14 @@ export const formattedCaseDetail = (get, applicationContext) => {
       !permissions.UPDATE_CASE &&
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-    formattedResult.showNotServed =
-      !formattedResult.isUnservable &&
-      entry.isNotServedDocument &&
-      !entry.isMinuteEntry;
+    if (isCodeEnabled(7164)) {
+      formattedResult.showNotServed = entry.isNotServedDocument;
+    } else {
+      formattedResult.showNotServed =
+        !formattedResult.isUnservable &&
+        entry.isNotServedDocument &&
+        !entry.isMinuteEntry;
+    }
     formattedResult.showServed = entry.isStatusServed;
 
     const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
@@ -217,6 +224,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
       hasDocument: entry.isFileAttached,
       isCourtIssuedDocument: entry.isCourtIssuedDocument,
       isExternalUser,
+      isHiddenToPublic: EVENT_CODES_NOT_VISIBLE_TO_PUBLIC.includes(
+        entry.eventCode,
+      ),
       isInitialDocument,
       isServed: !!entry.servedAt,
       isStipDecision: entry.isStipDecision,
@@ -244,7 +254,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
       userPermissions: permissions,
     });
 
-    formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
+    if (isCodeEnabled(6868)) {
+      formattedResult.showDocumentDescriptionWithoutLink =
+        !showDocumentLinks && !formattedResult.showDocumentProcessing;
+    } else {
+      formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
+    }
 
     return formattedResult;
   });

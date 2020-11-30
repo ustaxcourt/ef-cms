@@ -47,6 +47,9 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
+  advancedDocumentSearch: advancedDocumentSearchOld,
+} = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch.old');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -267,6 +270,9 @@ const {
 const {
   fetchPendingItems: fetchPendingItemsOld,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems.old');
+const {
+  fetchPendingItems: fetchPendingItemsPersistence,
+} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems.old');
 const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
@@ -551,6 +557,9 @@ const {
 const {
   getPractitionersByName,
 } = require('../../shared/src/persistence/elasticsearch/getPractitionersByName');
+const {
+  getPractitionersByName: getPractitionersByNameOld,
+} = require('../../shared/src/persistence/elasticsearch/getPractitionersByName.old');
 const {
   getPractitionersByNameInteractor,
 } = require('../../shared/src/business/useCases/practitioners/getPractitionersByNameInteractor');
@@ -1142,7 +1151,9 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     createUser,
     createUserInboxRecord,
-    fetchPendingItems,
+    fetchPendingItems: isCodeEnabled(7134)
+      ? fetchPendingItems
+      : fetchPendingItemsPersistence,
     getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
@@ -1173,7 +1184,9 @@ const gatewayMethods = {
     updateWorkItemInCase,
   }),
   // methods below are not known to create "entity" records
-  advancedDocumentSearch,
+  advancedDocumentSearch: isCodeEnabled(7029)
+    ? advancedDocumentSearch
+    : advancedDocumentSearchOld,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   deleteCaseByDocketNumber,
@@ -1219,7 +1232,9 @@ const gatewayMethods = {
   getMessageThreadByParentId,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
-  getPractitionersByName,
+  getPractitionersByName: isCodeEnabled(7136)
+    ? getPractitionersByName
+    : getPractitionersByNameOld,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getSectionInboxMessages,

@@ -168,6 +168,7 @@ export const getWorkItemDocumentLink = ({
   const qcWorkItemsUntouched =
     !isInProgress &&
     formattedDocketEntry &&
+    !result.isRead &&
     !result.completedAt &&
     !result.isCourtIssuedDocument;
 
