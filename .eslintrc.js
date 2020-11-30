@@ -72,7 +72,7 @@ module.exports = {
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
-    'jest/expect-expect': 'warn',
+    'jest/expect-expect': 'off',
     'jest/no-conditional-expect': 'off',
     'jest/no-export': 'off',
     'jest/no-identical-title': 'off', // todo: warn
