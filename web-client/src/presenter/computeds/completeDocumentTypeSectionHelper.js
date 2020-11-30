@@ -32,11 +32,14 @@ export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
     CATEGORY_MAP[selectedDocumentCategory] || []
   ).find(entry => entry.documentType === selectedDocumentType);
 
-  returnData.primary = getOptionsForCategory(
+  const selectedDocketEntryId = get(state.docketEntryId);
+
+  returnData.primary = getOptionsForCategory({
     applicationContext,
     caseDetail,
     categoryInformation,
-  );
+    selectedDocketEntryId,
+  });
   if (returnData.primary.showSecondaryDocumentSelect) {
     returnData.secondary = {};
     returnData.primary.showSecondaryDocumentSelect = false;
@@ -51,11 +54,12 @@ export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
         selectedSecondaryDocumentCategory
       ].find(entry => entry.documentType === selectedSecondaryDocumentType);
 
-      returnData.secondary = getOptionsForCategory(
+      returnData.secondary = getOptionsForCategory({
         applicationContext,
         caseDetail,
-        secondaryCategoryInformation,
-      );
+        categoryInformation: secondaryCategoryInformation,
+        selectedDocketEntryId,
+      });
     }
   }
 
