@@ -113,6 +113,9 @@ const applicationContextPublic = {
   getCognitoLoginUrl,
   getConstants: () => frozenConstants,
   getCurrentUserToken: () => null,
+  getEnvironment: () => ({
+    stage: process.env.STAGE || 'local',
+  }),
   getHttpClient: () => axios,
   getLogger: () => ({
     error: () => {
