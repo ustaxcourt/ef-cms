@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const sass = require('sass');
 const {
   addressLabelCoverSheet,
   caseInventoryReport,
@@ -53,8 +54,7 @@ describe('documentGenerators', () => {
       );
 
       applicationContext.getNodeSass.mockImplementation(() => {
-        // eslint-disable-next-line security/detect-non-literal-require
-        return require('node-' + 'sass');
+        return sass;
       });
 
       applicationContext.getPug.mockImplementation(() => {
