@@ -308,9 +308,7 @@ export const baseState = {
   sessionMetadata: {
     docketRecordSort: [],
   },
-
   showValidation: false,
-
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
