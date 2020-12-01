@@ -2,6 +2,7 @@
 // TODO: move to a modifiable location such as S3 or DynamoDB
 const toggles = {
   6506: true,
+  6841: true,
   6868: true,
   6915: true,
   6916: true,
