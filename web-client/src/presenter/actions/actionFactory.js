@@ -2,7 +2,7 @@ import { getDefaultAttachmentViewerDocumentToDisplayAction } from './getDefaultA
 import { getDefaultAttachmentViewerDocumentToDisplayAction as getDefaultAttachmentViewerDocumentToDisplayActionOld } from './getDefaultAttachmentViewerDocumentToDisplayAction.old';
 
 import { openCaseDocumentDownloadUrlAction } from './openCaseDocumentDownloadUrlAction';
-import { getDefaultAttachmentViewerDocumentToDisplayAction as openCaseDocumentDownloadUrlActionOld } from './openCaseDocumentDownloadUrlAction.old';
+import { openCaseDocumentDownloadUrlAction as openCaseDocumentDownloadUrlActionOld } from './openCaseDocumentDownloadUrlAction.old';
 
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction';
