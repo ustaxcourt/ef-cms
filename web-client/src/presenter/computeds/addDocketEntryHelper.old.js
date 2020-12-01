@@ -2,7 +2,7 @@ import { find, orderBy } from 'lodash';
 import {
   getOptionsForCategory,
   getPreviouslyFiledDocuments,
-} from './selectDocumentTypeHelper';
+} from './selectDocumentTypeHelper.old';
 import { state } from 'cerebral';
 import { supportingDocumentFreeTextTypes } from './fileDocumentHelper';
 

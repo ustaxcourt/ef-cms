@@ -1,5 +1,5 @@
 import { find } from 'lodash';
-import { getOptionsForCategory } from './selectDocumentTypeHelper';
+import { getOptionsForCategory } from './selectDocumentTypeHelper.old';
 import { state } from 'cerebral';
 
 export const editDocketEntryMetaHelper = (get, applicationContext) => {
