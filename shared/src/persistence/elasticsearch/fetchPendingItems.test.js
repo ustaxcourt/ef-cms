@@ -36,4 +36,32 @@ describe('fetchPendingItems', () => {
       match_phrase: { 'associatedJudge.S': 'Dredd' },
     });
   });
+
+  it('queries documents with a defined servedAt field or isLegacyServed field true', async () => {
+    search.mockReturnValue({ results: ['some', 'matches'], total: 2 });
+    await fetchPendingItems({
+      applicationContext,
+      judge: 'Dredd',
+    });
+
+    const searchQuery =
+      search.mock.calls[0][0].searchParameters.body.query.bool.must;
+    expect(searchQuery[2]).toMatchObject({
+      bool: {
+        minimum_should_match: 1,
+        should: [
+          {
+            exists: {
+              field: 'servedAt',
+            },
+          },
+          {
+            term: {
+              'isLegacyServed.BOOL': true,
+            },
+          },
+        ],
+      },
+    });
+  });
 });
