@@ -78,6 +78,7 @@ import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
+import { selectDocumentTypeHelper as selectDocumentTypeHelperOld } from './computeds/selectDocumentTypeHelper.old';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
@@ -177,6 +178,9 @@ const helpers = {
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
+  selectDocumentTypeHelper: isCodeEnabled(6915)
+    ? undefined
+    : selectDocumentTypeHelperOld,
   showAppTimeoutModalHelper,
   startCaseHelper,
   startCaseInternalContactsHelper,
@@ -307,9 +311,7 @@ export const baseState = {
   sessionMetadata: {
     docketRecordSort: [],
   },
-
   showValidation: false,
-
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
