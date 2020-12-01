@@ -1,6 +1,16 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkEditsDocketEntryMetaCourtIssued = test => {
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
+
+export const docketClerkEditsDocketEntryMetaCourtIssued = (
+  test,
+  docketRecordIndex,
+) => {
   return it('docket clerk edits docket entry meta for a court-issued document', async () => {
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
@@ -47,6 +57,11 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = test => {
       value: '2020',
     });
 
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'pending',
+      value: true,
+    });
+
     await test.runSequence('submitEditDocketEntryMetaSequence', {
       docketNumber: test.docketNumber,
     });
@@ -69,5 +84,25 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = test => {
     expect(test.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
+
+    const docketEntries = test.getState('caseDetail.docketEntries');
+    const pendingDocketEntry = docketEntries.find(
+      d => d.index === docketRecordIndex,
+    );
+    expect(pendingDocketEntry.pending).toEqual(true);
+
+    const caseDetailFormatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(
+      caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: pendingDocketEntry.docketEntryId,
+        }),
+      ]),
+    );
   });
 };
