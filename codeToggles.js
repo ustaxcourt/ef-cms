@@ -13,6 +13,7 @@ const toggles = {
   6979: true,
   7029: true,
   7072: true,
+  7080: true,
   7134: true,
   7136: true,
   7137: true,
