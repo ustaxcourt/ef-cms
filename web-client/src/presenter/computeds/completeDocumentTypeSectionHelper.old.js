@@ -2,7 +2,7 @@ import {
   getDocumentTypesForSelect,
   getSortFunction,
 } from './internalTypesHelper';
-import { getOptionsForCategory } from './selectDocumentTypeHelper';
+import { getOptionsForCategory } from './selectDocumentTypeHelper.old';
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
