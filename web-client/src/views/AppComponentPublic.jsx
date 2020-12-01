@@ -47,6 +47,10 @@ export const AppComponentPublic = connect(
 
     useEffect(() => {
       focusMain();
+      if (!featureShowFooter) {
+        const templateDateElement = document.getElementById('last-deployed');
+        templateDateElement.classList.remove('hide');
+      }
     });
 
     const CurrentPage = pages[currentPage];
