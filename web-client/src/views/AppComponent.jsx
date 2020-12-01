@@ -213,8 +213,8 @@ export const AppComponent = connect(
           {zipInProgress && <BatchDownloadProgress />}
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
-        <Footer />
         <Loading />
+        <Footer />
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
         )}
