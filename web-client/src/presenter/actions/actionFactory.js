@@ -1,7 +1,5 @@
-import {
-  getDefaultAttachmentViewerDocumentToDisplayAction,
-  getDefaultAttachmentViewerDocumentToDisplayAction as getDefaultAttachmentViewerDocumentToDisplayActionOld,
-} from './getDefaultAttachmentViewerDocumentToDisplayAction.old';
+import { getDefaultAttachmentViewerDocumentToDisplayAction } from './getDefaultAttachmentViewerDocumentToDisplayAction';
+import { getDefaultAttachmentViewerDocumentToDisplayAction as getDefaultAttachmentViewerDocumentToDisplayActionOld } from './getDefaultAttachmentViewerDocumentToDisplayAction.old';
 
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction';
