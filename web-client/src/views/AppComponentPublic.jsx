@@ -11,6 +11,7 @@ import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecor
 import { PublicSearch } from './Public/PublicSearch';
 import { TodaysOpinions } from './Public/TodaysOpinions';
 import { UsaBanner } from './UsaBanner';
+import { applicationContextPublic } from '../applicationContextPublic';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -26,6 +27,8 @@ const pages = {
   PublicSearch,
   TodaysOpinions,
 };
+
+const featureShowFooter = applicationContextPublic.isCodeEnabled(7142);
 
 /**
  * Root application component for the public site
@@ -63,8 +66,9 @@ export const AppComponentPublic = connect(
         <main id="main-content" role="main">
           <CurrentPage />
         </main>
-        <Footer />
         <Loading />
+
+        {featureShowFooter && <Footer />}
       </React.Fragment>
     );
   },

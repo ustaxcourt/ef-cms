@@ -167,6 +167,8 @@ if (applicationContext.isCodeEnabled(6921)) {
   pages.DashboardJudge = DashboardJudge6921;
 }
 
+const featureShowFooter = applicationContext.isCodeEnabled(7142);
+
 /**
  * Root application component
  */
@@ -214,7 +216,9 @@ export const AppComponent = connect(
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
         <Loading />
-        <Footer />
+
+        {featureShowFooter && <Footer />}
+
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
         )}
