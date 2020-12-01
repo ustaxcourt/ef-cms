@@ -30,6 +30,13 @@ echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
 echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 
+tf_version=$(terraform --version)
+
+if [[ ${tf_version} != *"0.12.28"* ]]; then
+  echo "Please set your terraform version to 0.12.28 before deploying."
+  exit 1
+fi
+
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
