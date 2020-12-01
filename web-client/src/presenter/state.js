@@ -61,6 +61,7 @@ import { isCodeEnabled } from '../../../codeToggles';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
+import { messageDocumentHelper as messageDocumentHelperOld } from './computeds/messageDocumentHelper.old';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
@@ -157,7 +158,9 @@ const helpers = {
   internalTypesHelper,
   loadingHelper,
   menuHelper,
-  messageDocumentHelper,
+  messageDocumentHelper: isCodeEnabled(7022)
+    ? messageDocumentHelper
+    : messageDocumentHelperOld,
   messageModalHelper,
   messagesHelper,
   orderTypesHelper,
