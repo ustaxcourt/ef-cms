@@ -14,6 +14,7 @@ import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
 import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
+import { Contact } from './Contact';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
@@ -58,6 +59,7 @@ import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
+import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
@@ -99,6 +101,7 @@ const pages = {
   CaseDetailInternal,
   CaseInventoryReport,
   CaseSearchNoMatches,
+  Contact,
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,
@@ -139,6 +142,7 @@ const pages = {
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
+  Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
   SecondaryContactEdit,

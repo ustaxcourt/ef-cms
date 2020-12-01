@@ -1,4 +1,4 @@
-import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
+import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor.old';
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -374,39 +374,5 @@ describe('updateDocketEntryMetaInteractor', () => {
         docketNumber: '101-20',
       }),
     ).resolves.not.toThrow();
-  });
-
-  it('should update the document pending status', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
-      docketEntryMeta: {
-        ...docketEntries[0],
-        pending: true,
-      },
-      docketNumber: '101-20',
-    });
-
-    const updatedDocketEntry = result.docketEntries.find(
-      record => record.index === 1,
-    );
-    const updatedDocument = result.docketEntries.find(
-      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
-    );
-    expect(updatedDocument.pending).toBeTruthy();
-  });
-
-  it('should update the automatic blocked status of the case', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
-      docketEntryMeta: {
-        ...docketEntries[0],
-        pending: true,
-      },
-      docketNumber: '101-20',
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
-    ).toHaveBeenCalled();
   });
 });

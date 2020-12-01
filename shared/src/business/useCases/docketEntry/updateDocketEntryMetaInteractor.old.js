@@ -68,7 +68,6 @@ exports.updateDocketEntryMetaInteractor = async ({
     partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
     partyPrimary: docketEntryMeta.partyPrimary,
     partySecondary: docketEntryMeta.partySecondary,
-    pending: docketEntryMeta.pending,
     scenario: docketEntryMeta.scenario,
     servedAt: docketEntryMeta.servedAt,
     servedPartiesCode: docketEntryMeta.servedPartiesCode,
@@ -102,10 +101,6 @@ exports.updateDocketEntryMetaInteractor = async ({
     );
 
     caseEntity.updateDocketEntry(docketEntryEntity);
-
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
     if (shouldGenerateCoversheet) {
       await applicationContext.getPersistenceGateway().updateDocketEntry({

@@ -1,9 +1,11 @@
+import { Contact } from './Contact';
 import { Error } from './Error';
 import { Footer } from './Footer';
 import { HeaderPublic } from './Header/HeaderPublic';
 import { HealthCheck } from './Health/HealthCheck';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
+import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
@@ -14,9 +16,11 @@ import { state } from 'cerebral';
 import React, { useEffect } from 'react';
 
 const pages = {
+  Contact,
   Error,
   HealthCheck,
   Interstitial,
+  Privacy,
   PublicCaseDetail,
   PublicPrintableDocketRecord,
   PublicSearch,

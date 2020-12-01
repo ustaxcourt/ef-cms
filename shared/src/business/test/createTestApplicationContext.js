@@ -477,6 +477,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
+    getEnvironment: jest.fn(),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
