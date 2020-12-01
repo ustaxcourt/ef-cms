@@ -1,7 +1,7 @@
 import {
   getDefaultAttachmentViewerDocumentToDisplayAction,
   getDefaultAttachmentViewerDocumentToDisplayAction as getDefaultAttachmentViewerDocumentToDisplayActionOld,
-} from './getDefaultAttachmentViewerDocumentToDisplayAction';
+} from './getDefaultAttachmentViewerDocumentToDisplayAction.old';
 
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction';
