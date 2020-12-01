@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { openCaseDocumentDownloadUrlAction } from './openCaseDocumentDownloadUrlAction';
+import { openCaseDocumentDownloadUrlAction } from './openCaseDocumentDownloadUrlAction.old';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
@@ -43,7 +43,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
   });
 
-  it('sets window.location.href', async () => {
+  it('sets window.location.href for mobile', async () => {
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
