@@ -1,3 +1,4 @@
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
@@ -2664,6 +2665,68 @@ describe('formattedCaseDetail', () => {
           isOnDocketRecord: true,
           pending: true,
         },
+      ]);
+    });
+
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending', async () => {
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[2],
+            docketEntryId: '999999',
+            isLegacyServed: true,
+            isOnDocketRecord: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
+        { docketEntryId: '999999' },
+      ]);
+    });
+
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', async () => {
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[2],
+            docketEntryId: '999999',
+            isLegacyServed: false,
+            isOnDocketRecord: true,
+            pending: true,
+            servedAt: '2019-08-25T05:00:00.000Z',
+            servedParties: [
+              {
+                name: 'Bernard Lowe',
+              },
+              {
+                name: 'IRS',
+                role: 'irsSuperuser',
+              },
+            ],
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
+        { docketEntryId: '999999' },
       ]);
     });
   });

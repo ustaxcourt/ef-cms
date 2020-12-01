@@ -269,7 +269,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && d.servedAt,
+    d => d.pending && (d.servedAt || d.isLegacyServed),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(

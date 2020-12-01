@@ -252,7 +252,9 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   }
 
   this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending && docketEntry.servedAt,
+    docketEntry =>
+      docketEntry.pending &&
+      (docketEntry.servedAt || docketEntry.isLegacyServed),
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
@@ -824,7 +826,9 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 
 Case.prototype.doesHavePendingItems = function () {
   return this.docketEntries.some(
-    docketEntry => docketEntry.pending && docketEntry.servedAt,
+    docketEntry =>
+      docketEntry.pending &&
+      (docketEntry.servedAt || docketEntry.isLegacyServed),
   );
 };
 

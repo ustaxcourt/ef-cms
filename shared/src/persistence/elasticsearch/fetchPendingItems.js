@@ -44,8 +44,16 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
             { match: { 'pk.S': 'case|' } },
             { match: { 'sk.S': 'docket-entry|' } },
             {
-              exists: {
-                field: 'servedAt',
+              bool: {
+                minimum_should_match: 1,
+                should: [
+                  {
+                    exists: {
+                      field: 'servedAt',
+                    },
+                  },
+                  { term: { 'isLegacyServed.BOOL': true } },
+                ],
               },
             },
             { term: { 'pending.BOOL': true } },
