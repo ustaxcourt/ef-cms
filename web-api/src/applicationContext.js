@@ -732,6 +732,9 @@ const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
 const {
+  prioritizeCaseInteractor: prioritizeCaseInteractorOld,
+} = require('../../shared/src/business/useCases/prioritizeCaseInteractor.old');
+const {
   PrivatePractitioner,
 } = require('../../shared/src/business/entities/PrivatePractitioner');
 const {
@@ -932,6 +935,9 @@ const {
 const {
   updatePetitionDetailsInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor');
+const {
+  updatePetitionDetailsInteractor: updatePetitionDetailsInteractorOld,
+} = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor.old');
 const {
   updatePetitionerInformationInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionerInformationInteractor');
@@ -1647,7 +1653,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
         parseLegacyDocumentsInteractor,
-        prioritizeCaseInteractor,
+        prioritizeCaseInteractor: isCodeEnabled(7080)
+          ? prioritizeCaseInteractor
+          : prioritizeCaseInteractorOld,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
@@ -1685,7 +1693,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateDocketEntryInteractor,
         updateDocketEntryMetaInteractor,
         updateOtherStatisticsInteractor,
-        updatePetitionDetailsInteractor,
+        updatePetitionDetailsInteractor: isCodeEnabled(7080)
+          ? updatePetitionDetailsInteractor
+          : updatePetitionDetailsInteractorOld,
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
         updatePrimaryContactInteractor,
