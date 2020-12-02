@@ -19,6 +19,7 @@ describe('addNewInitialFilingToCase', () => {
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
     filedBy: 'Test Petitioner',
+    isOnDocketRecord: true,
     userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
   };
   const mockPetition = MOCK_DOCUMENTS.find(
@@ -164,7 +165,6 @@ describe('addNewInitialFilingToCase', () => {
     const mockNewRQT = {
       ...mockRQT,
       docketEntryId: applicationContext.getUniqueId(),
-      isOnDocketRecord: true,
     };
     mockCaseToUpdate = {
       ...MOCK_CASE,
