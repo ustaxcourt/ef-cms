@@ -52,7 +52,8 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     });
 
     await test.runSequence('gotoPendingReportSequence');
-    pendingItemsCount = (test.getState('pendingItems') || []).length;
+    pendingItemsCount = (test.getState('pendingReport.pendingItems') || [])
+      .length;
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
@@ -73,12 +74,13 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     await test.runSequence('gotoPendingReportSequence');
 
-    await test.runSequence('fetchPendingItemsSequence', {
+    await test.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: 'Chief Judge',
     });
 
-    const currentPendingItemsCount = (test.getState('pendingItems') || [])
-      .length;
+    const currentPendingItemsCount = (
+      test.getState('pendingReport.pendingItems') || []
+    ).length;
 
     expect(currentPendingItemsCount).toEqual(pendingItemsCount);
   });
