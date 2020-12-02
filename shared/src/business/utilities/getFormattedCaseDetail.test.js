@@ -1,3 +1,4 @@
+jest.mock('../../../../codeToggles');
 const {
   applicationContext,
 } = require('../../../../web-client/src/applicationContext');
@@ -22,6 +23,7 @@ const {
   TRANSCRIPT_AGE_DAYS_MIN,
 } = require('./getFormattedCaseDetail');
 const { calculateISODate, createISODateString } = require('./DateHandler');
+const { isCodeEnabled } = require('../../../../codeToggles');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 applicationContext.getCurrentUser = () =>
@@ -46,6 +48,7 @@ describe('formatCase', () => {
     mockCaseDetail = {
       ...mockCaseDetailBase,
     };
+    isCodeEnabled.mockReturnValue(true);
   });
 
   it('should return an empty object if caseDetail is empty', () => {
@@ -160,6 +163,42 @@ describe('formatCase', () => {
     expect(result.formattedDocketEntries[1].isUnservable).toBeTruthy();
   });
 
+  if (isCodeEnabled(7164)) {
+    it('should compute isNotServedDocument', () => {
+      let result;
+      result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries: [
+          {
+            isLegacyServed: undefined,
+            isMinuteEntry: undefined,
+            servedAt: undefined,
+          },
+          {
+            isLegacyServed: true,
+            isMinuteEntry: undefined,
+            servedAt: undefined,
+          },
+          {
+            isLegacyServed: undefined,
+            isMinuteEntry: true,
+            servedAt: undefined,
+          },
+          {
+            isLegacyServed: undefined,
+            isMinuteEntry: undefined,
+            servedAt: createISODateString(),
+          },
+        ],
+      });
+
+      expect(result.formattedDocketEntries[0].isNotServedDocument).toBe(true);
+      expect(result.formattedDocketEntries[1].isNotServedDocument).toBe(false);
+      expect(result.formattedDocketEntries[2].isNotServedDocument).toBe(false);
+      expect(result.formattedDocketEntries[3].isNotServedDocument).toBe(false);
+    });
+  }
+
   it('should format the filing date of all correspondence documents', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
@@ -176,7 +215,7 @@ describe('formatCase', () => {
   });
 
   it('should format docket entries from documents', () => {
-    const documents = [
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: '123',
@@ -187,8 +226,7 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
 
     expect(result.formattedDocketEntries[0]).toHaveProperty(
@@ -198,7 +236,7 @@ describe('formatCase', () => {
   });
 
   it('should format docket entries and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
-    const documents = [
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
@@ -211,8 +249,7 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
 
     expect(result).toHaveProperty('formattedDocketEntries');
@@ -220,7 +257,7 @@ describe('formatCase', () => {
   });
 
   it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
-    const documents = [
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
@@ -236,8 +273,7 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
 
     expect(result).toHaveProperty('formattedDocketEntries');
@@ -245,7 +281,7 @@ describe('formatCase', () => {
   });
 
   it('should return docket entries with pending and served documents for pendingItemsDocketEntries', () => {
-    const documents = [
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
@@ -277,8 +313,7 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
 
     expect(result.pendingItemsDocketEntries).toMatchObject([
@@ -286,6 +321,56 @@ describe('formatCase', () => {
         index: '1',
       },
     ]);
+  });
+
+  it('should return docket entries with pending and isLegacyServed for pendingItemsDocketEntries if 7198 is toggled on', () => {
+    const docketEntries = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+        documentType: 'Administrative Record',
+        filingDate: getDateISO(),
+        index: '1',
+        isLegacyServed: true,
+        isOnDocketRecord: true,
+        pending: true,
+      },
+    ];
+
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries,
+    });
+
+    expect(result.pendingItemsDocketEntries).toMatchObject([
+      {
+        index: '1',
+      },
+    ]);
+  });
+
+  it('should NOT return docket entries with pending and isLegacyServed for pendingItemsDocketEntries if 7198 is toggled off', () => {
+    isCodeEnabled.mockReturnValue(false);
+
+    const docketEntries = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+        documentType: 'Administrative Record',
+        filingDate: getDateISO(),
+        index: '1',
+        isLegacyServed: true,
+        isOnDocketRecord: true,
+        pending: true,
+      },
+    ];
+
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries,
+    });
+
+    expect(result.pendingItemsDocketEntries).toMatchObject([]);
   });
 
   it('should return an empty array for formattedDocketEntries and pendingItemsDocketEntries if docketRecord does not exist', () => {
