@@ -1,6 +1,6 @@
 resource "aws_sqs_queue" "migrate_legacy_documents_queue" {
   name                       = "migrate_legacy_documents_queue_${var.environment}"
-  visibility_timeout_seconds = "70"
+  visibility_timeout_seconds = "930"
 
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.migrate_legacy_documents_dl_queue.arn
