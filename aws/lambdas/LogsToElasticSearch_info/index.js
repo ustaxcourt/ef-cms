@@ -116,7 +116,21 @@ const tryParse = message => {
  * @returns {Object} entry split into known keys and ignored metadata
  */
 const splitMetadata = entry => {
-  const indexedKeys = ['environment', 'level', 'message', 'requestId'];
+  // If the log entry has a metadata key, consider it already split.
+  if (entry.metadata) {
+    const { metadata } = entry;
+    delete entry.metadata;
+    return { entry, metadata };
+  }
+
+  const indexedKeys = [
+    'environment',
+    'level',
+    'message',
+    'requestId',
+    'request',
+    'response',
+  ];
   const keys = Object.keys(entry);
 
   return keys.reduce(
