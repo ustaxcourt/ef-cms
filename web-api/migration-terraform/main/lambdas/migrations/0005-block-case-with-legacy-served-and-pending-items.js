@@ -1,29 +1,30 @@
+const Case = require('../../../../../shared/src/business/entities/cases/Case');
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
-  CHIEF_JUDGE,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../../../../shared/src/business/entities/EntityConstants');
+  aggregateCaseItems,
+} = require('../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems');
 const {
-  DocketEntry,
-} = require('../../../../../shared/src/business/entities/DocketEntry');
+  AUTOMATIC_BLOCKED_REASONS,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
+const { createISODateString } = require('../../utilities/DateHandler');
 
 const applicationContext = createApplicationContext({});
 
 const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
-    // if item is a case
-    if (item.pk.includes('case|') && item.sk.includes('case|')) {
-      // if it has a docketEntry item.pending AND item.isLegacyServed
-      const docketEntries = await documentClient
+    if (
+      item.pk.includes('case|') &&
+      item.sk.includes('case|') &&
+      !item.trialDate
+    ) {
+      const fullCase = await documentClient
         .query({
           ExpressionAttributeNames: {
             '#pk': 'pk',
-            '#sk': 'sk',
           },
           ExpressionAttributeValues: {
             ':pk': `case|${item.docketNumber}`,
-            ':sk': 'docket-entry|',
           },
           KeyConditionExpression: '#pk = :pk',
           TableName: process.env.SOURCE_TABLE,
@@ -32,10 +33,36 @@ const migrateItems = async (items, documentClient) => {
         .then(res => {
           return res.Items;
         });
+      const caseRecord = aggregateCaseItems(fullCase);
 
-      // docketEntries.some (pending === true and isLegacyServed === true)
-      // call updateCaseAutomaticBlocked
-      // save the case and stuff
+      const shouldBlockCase = caseRecord.docketEntries.some(
+        entry => entry.pending && entry.isLegacyServed,
+      );
+
+      if (shouldBlockCase) {
+        item.automaticBlocked = true;
+        item.automaticBlockedDate = createISODateString();
+
+        if (item.automaticBlockedReason === AUTOMATIC_BLOCKED_REASONS.dueDate) {
+          item.automaticBlockedReason =
+            AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
+        } else {
+          item.automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
+        }
+
+        new Case(
+          { ...caseRecord, ...item },
+          {
+            applicationContext,
+          },
+        ).validate();
+
+        itemsAfter.push(item);
+      } else {
+        itemsAfter.push(item);
+      }
+    } else {
+      itemsAfter.push(item);
     }
   }
 };

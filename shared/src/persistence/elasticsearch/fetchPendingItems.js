@@ -48,7 +48,6 @@ exports.fetchPendingItems = async ({
           must: [
             { match: { 'pk.S': 'case|' } },
             { match: { 'sk.S': 'docket-entry|' } },
-
             { term: { 'pending.BOOL': true } },
             hasParentParam,
           ],
