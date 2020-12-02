@@ -268,9 +268,15 @@ export const formattedCaseDetail = (get, applicationContext) => {
     d => d.isOnDocketRecord,
   );
 
-  result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && (d.servedAt || d.isLegacyServed),
-  );
+  if (isCodeEnabled(7198)) {
+    result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
+      d => d.pending && (d.servedAt || d.isLegacyServed),
+    );
+  } else {
+    result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
+      d => d.pending && d.servedAt,
+    );
+  }
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
     draftDocument => {

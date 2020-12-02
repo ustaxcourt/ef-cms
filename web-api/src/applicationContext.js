@@ -275,6 +275,9 @@ const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
 const {
+  fetchPendingItemsByDocketNumber: fetchPendingItemsByDocketNumberOld,
+} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber.old');
+const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
@@ -1516,7 +1519,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         countPagesInDocument,
         createTrialSessionAndWorkingCopy,
         fetchPendingItems,
-        fetchPendingItemsByDocketNumber,
+        fetchPendingItemsByDocketNumber: isCodeEnabled(7198)
+          ? fetchPendingItemsByDocketNumber
+          : fetchPendingItemsByDocketNumberOld,
         fetchPendingItemsOld,
         formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
