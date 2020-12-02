@@ -17,14 +17,13 @@ const redact = format(logEntry => {
   return copy;
 });
 
-const console = () => new transports.Console();
-
-exports.createLogger = (transport = console()) => {
+exports.createLogger = opts => {
   const options = {
     defaultMeta: {},
     level: process.env.LOG_LEVEL || 'debug',
     levels: config.syslog.levels,
-    transports: [transport],
+    transports: [new transports.Console()],
+    ...opts,
   };
 
   const formatters = [errors({ stack: true }), redact()];
