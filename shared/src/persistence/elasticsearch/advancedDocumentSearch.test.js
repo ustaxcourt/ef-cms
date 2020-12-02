@@ -95,6 +95,7 @@ describe('advancedDocumentSearch', () => {
 
   const getKeywordQueryParams = keyword => ({
     simple_query_string: {
+      default_operator: 'and',
       fields: ['documentContents.S', 'documentTitle.S'],
       query: keyword,
     },
@@ -114,6 +115,7 @@ describe('advancedDocumentSearch', () => {
     if (caseTitleOrPetitioner) {
       query.bool.must = {
         simple_query_string: {
+          default_operator: 'and',
           fields: [
             'caseCaption.S',
             'contactPrimary.M.name.S',
@@ -140,6 +142,7 @@ describe('advancedDocumentSearch', () => {
         },
         parent_type: 'case',
         query,
+        score: true,
       },
     };
   };

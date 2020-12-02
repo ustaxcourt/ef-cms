@@ -1,21 +1,31 @@
 const { search } = require('./searchClient');
 
-exports.fetchPendingItems = async ({
-  applicationContext,
-  judge,
-  page,
-  source,
-}) => {
+exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
+  const caseSource = [
+    'associatedJudge',
+    'caseCaption',
+    'docketNumber',
+    'docketNumberSuffix',
+    'status',
+  ];
+  const docketEntrySource = [
+    'docketEntryId',
+    'documentType',
+    'documentTitle',
+    'receivedAt',
+  ];
+
   const { PENDING_ITEMS_PAGE_SIZE } = applicationContext.getConstants();
 
   const size = page ? PENDING_ITEMS_PAGE_SIZE : 5000;
+
   const from = page ? page * size : undefined;
 
   const hasParentParam = {
     has_parent: {
       inner_hits: {
         _source: {
-          includes: source,
+          includes: caseSource,
         },
         name: 'case-mappings',
       },
@@ -26,7 +36,7 @@ exports.fetchPendingItems = async ({
 
   const searchParameters = {
     body: {
-      _source: source,
+      _source: docketEntrySource,
       from,
       query: {
         bool: {
@@ -65,5 +75,5 @@ exports.fetchPendingItems = async ({
     searchParameters,
   });
 
-  return { results, total };
+  return { foundDocuments: results, total };
 };

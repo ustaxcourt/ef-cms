@@ -1,5 +1,10 @@
 import { getDefaultDocketViewerDocumentToDisplayAction } from '../../actions/getDefaultDocketViewerDocumentToDisplayAction';
-import { setViewerDocumentToDisplayAction } from '../../actions/setViewerDocumentToDisplayAction';
+
+import { getAction } from '../../actions/actionFactory';
+
+const setViewerDocumentToDisplayAction = getAction(
+  'setViewerDocumentToDisplayAction',
+);
 
 export const loadDefaultDocketViewerDocumentToDisplaySequence = [
   getDefaultDocketViewerDocumentToDisplayAction,
