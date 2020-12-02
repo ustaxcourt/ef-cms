@@ -2,14 +2,20 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  casePublicSearchInteractor,
+  isCaseVisibleToPublic,
+} = require('./casePublicSearchInteractor');
+const {
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
 } = require('../../entities/EntityConstants');
-const { casePublicSearchInteractor } = require('./casePublicSearchInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('casePublicSearchInteractor', () => {
   beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .casePublicSearch.mockReturnValue([]);
@@ -65,5 +71,57 @@ describe('casePublicSearchInteractor', () => {
         receivedAt: '2019-03-01T21:40:46.415Z',
       },
     ]);
+  });
+
+  it('strips out all sealed cases', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({ sealedDate: 'some date' });
+    applicationContext
+      .getPersistenceGateway()
+      .casePublicSearch.mockReturnValue([
+        {
+          caseCaption: 'Test Case Caption One',
+          contactPrimary: MOCK_CASE.contactPrimary,
+          docketNumber: '123-19',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          hasIrsPractitioner: false,
+          partyType: PARTY_TYPES.petitioner,
+          receivedAt: '2019-03-01T21:40:46.415Z',
+        },
+      ]);
+
+    const results = await casePublicSearchInteractor({
+      applicationContext,
+      petitionerName: 'test person',
+    });
+
+    expect(results.length).toEqual(0);
+  });
+});
+
+describe('isCaseVisibleToPublic', () => {
+  let mockCase = { ...MOCK_CASE };
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+  });
+
+  it('returns complete case details if case is not sealed', async () => {
+    const results = await isCaseVisibleToPublic({
+      applicationContext,
+      docketNumber: '1234-56',
+    });
+    expect(results).toBeTruthy();
+  });
+
+  it('returns undefined if the case is sealed', async () => {
+    mockCase.sealedDate = 'some date';
+    const results = await isCaseVisibleToPublic({
+      applicationContext,
+      docketNumber: '1234-56',
+    });
+    expect(results).toBeFalsy();
   });
 });
