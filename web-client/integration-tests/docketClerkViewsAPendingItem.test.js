@@ -136,17 +136,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     ).toEqual('documentView');
   });
 
-  const mockDayReceived = 30;
-  const mockMonthReceived = '04';
-  const mockYearReceived = 2001;
-
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes({
-    dayReceived: mockDayReceived,
-    fakeFile,
-    monthReceived: mockMonthReceived,
-    test,
-    yearReceived: mockYearReceived,
-  });
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(test, fakeFile);
 
   it('docket clerk views pending report items', async () => {
     await refreshElasticsearchIndex();
@@ -178,9 +168,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       expect(answerPendingReceivedAtFormatted).not.toEqual(
         caseReceivedAtFormatted,
       );
-      expect(answerPendingReceivedAtFormatted).toEqual(
-        `${mockMonthReceived}/${mockDayReceived}/${mockYearReceived}`,
-      );
+      expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
     }
   });
 });
