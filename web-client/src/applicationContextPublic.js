@@ -38,6 +38,7 @@ import { getJudgeLastName } from '../../shared/src/business/utilities/getFormatt
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
+import { isCodeEnabled } from '../../codeToggles';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -148,6 +149,7 @@ const applicationContextPublic = {
     };
   },
   initHoneybadger,
+  isCodeEnabled,
   notifyHoneybadger: async (message, context) => {
     const honeybadger = await initHoneybadger();
 

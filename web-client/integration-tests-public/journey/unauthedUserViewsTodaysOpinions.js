@@ -1,3 +1,4 @@
+import { isCodeEnabled } from '../../../codeToggles';
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
 export const unauthedUserViewsTodaysOpinions = (test, testClient) => {
@@ -21,8 +22,13 @@ export const unauthedUserViewsTodaysOpinions = (test, testClient) => {
       isPublic: true,
     });
 
-    // this value is set in the mocked out window.open method in helpers.js
-    expect(testClient.getState('openedUrl')).toBeDefined();
-    testClient.setState('openedUrl', undefined);
+    if (isCodeEnabled(6841)) {
+      expect(window.location.href).toContain(testClient.docketEntryId);
+      window.location.href = undefined;
+    } else {
+      // this value is set in the mocked out window.open method in helpers.js
+      expect(testClient.getState('openedUrl')).toBeDefined();
+      testClient.setState('openedUrl', undefined);
+    }
   });
 };
