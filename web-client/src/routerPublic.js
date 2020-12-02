@@ -1,3 +1,4 @@
+import { isCodeEnabled } from '../../codeToggles';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
 
@@ -53,15 +54,17 @@ const router = {
       app.getSequence('gotoPublicSearchSequence')();
     });
 
-    route('/privacy', () => {
-      setPageTitle('Privacy');
-      return app.getSequence('gotoPrivacySequence')();
-    });
+    if (isCodeEnabled(7142)) {
+      route('/privacy', () => {
+        setPageTitle('Privacy');
+        return app.getSequence('gotoPrivacySequence')();
+      });
 
-    route('/contact', () => {
-      setPageTitle('Contact');
-      return app.getSequence('gotoContactSequence')();
-    });
+      route('/contact', () => {
+        setPageTitle('Contact');
+        return app.getSequence('gotoContactSequence')();
+      });
+    }
 
     route('..', () => {
       setPageTitle('Error');

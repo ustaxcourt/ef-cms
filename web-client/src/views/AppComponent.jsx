@@ -167,6 +167,8 @@ if (applicationContext.isCodeEnabled(6921)) {
   pages.DashboardJudge = DashboardJudge6921;
 }
 
+const featureShowFooter = applicationContext.isCodeEnabled(7142);
+
 /**
  * Root application component
  */
@@ -193,6 +195,10 @@ export const AppComponent = connect(
 
     useEffect(() => {
       focusMain();
+      if (!featureShowFooter) {
+        const templateDateElement = document.getElementById('last-deployed');
+        templateDateElement.classList.remove('hide');
+      }
     }, [currentPage]);
 
     const CurrentPage = pages[currentPage];
@@ -213,8 +219,10 @@ export const AppComponent = connect(
           {zipInProgress && <BatchDownloadProgress />}
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
-        <Footer />
         <Loading />
+
+        {featureShowFooter && <Footer />}
+
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
         )}
