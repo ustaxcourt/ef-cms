@@ -26,6 +26,49 @@ describe('migrateItems', () => {
     mockCase = JSON.parse(JSON.stringify(mockCaseData));
   });
 
+  it('should only mutate case records', async () => {
+    const contactPrimary = {
+      hasEAccess: true,
+      serviceIndicator: undefined,
+    };
+
+    const caseRecords = [
+      {
+        contactPrimary,
+        pk: 'case|101-20',
+        sk: 'case|101-20',
+      },
+      {
+        contactPrimary,
+        pk: 'case|102-20',
+        sk: 'case|102-20',
+      },
+    ];
+
+    const nonCaseRecords = [
+      {
+        contactPrimary, // this would not normally be here - proving only case records will be migrated
+        pk: 'docketEntry|123',
+        sk: 'docketEntry|123',
+      },
+      {
+        contactPrimary, // this would not normally be here - proving only case records will be migrated
+        pk: 'case|101-20',
+        sk: 'user|123',
+      },
+    ];
+
+    const results = await migrateItems(
+      [...caseRecords, ...nonCaseRecords],
+      documentClient,
+    );
+
+    expect(results).toEqual([
+      expect.objectContaining(caseRecords[0]),
+      expect.objectContaining(caseRecords[1]),
+    ]);
+  });
+
   it('should set the serviceIndicator for contactPrimary', async () => {
     const results = await migrateItems([{ ...mockCase }], documentClient);
 
