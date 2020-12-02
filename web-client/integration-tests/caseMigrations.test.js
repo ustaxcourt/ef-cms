@@ -371,7 +371,7 @@ describe('Case migration journey', () => {
     await test.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: CHIEF_JUDGE,
     });
-    const pendingItems = test.getState('pendingReport.pendingItems');
+    const pendingItems = test.getState('pendingReports.pendingItems');
     expect(pendingItems.length).toBeGreaterThan(0);
     const pendingItemsForThisCase = pendingItems.filter(
       item => item.docketNumber === legacyServedDocumentCase.docketNumber,
@@ -379,13 +379,19 @@ describe('Case migration journey', () => {
 
     expect(pendingItemsForThisCase).toMatchObject([
       {
+        associatedJudge: 'Chief Judge',
+        caseCaption: 'The Sixth Migrated Case',
+        docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '156-21',
+        docketNumberSuffix: null,
+        documentTitle: 'Proposed Stipulated Decision',
+        documentType: 'Proposed Stipulated Decision',
+        status: 'New',
+      },
+      {
         docketEntryId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
         documentTitle: 'Answer',
         documentType: 'Answer',
-        eventCode: 'A',
-        isLegacyServed: true,
-        isOnDocketRecord: true,
-        pending: true,
       },
     ]);
   });
