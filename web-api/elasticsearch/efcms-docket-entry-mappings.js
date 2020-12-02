@@ -56,6 +56,9 @@ module.exports = {
     'irsPractitioners.L.M.userId.S': {
       type: 'text',
     },
+    'isLegacyServed.BOOL': {
+      type: 'boolean',
+    },
     'isSealed.BOOL': {
       type: 'boolean',
     },
