@@ -22,6 +22,7 @@ describe('migrateItems', () => {
 
   let mockCaseItem;
   let mockCaseRecords;
+  let mockEligibleForTrialItem;
   let documentClient;
 
   beforeEach(() => {
@@ -44,6 +45,11 @@ describe('migrateItems', () => {
         userId: '8bbfcd5a-b02b-4983-8e9c-6cc50d3d566c',
       },
     ];
+    mockEligibleForTrialItem = {
+      gsi1pk: 'eligible-for-trial-case-catalog|101-20',
+      pk: 'eligible-for-trial-case-catalog',
+      sk: 'nonHybrid',
+    };
 
     documentClient = {
       query: () => ({
@@ -57,10 +63,8 @@ describe('migrateItems', () => {
   it('should return and not modify records that are NOT a case', async () => {
     const items = [
       {
-        gsi1pk:
-          'eligible-for-trial-case-catalog|1d99457e-e4f4-44fe-8fcc-fd8b0f60d34b',
-        pk: 'eligible-for-trial-case-catalog',
-        sk: 'eligible-for-trial-case-catalog',
+        pk: 'user|6d74eadc-0181-4ff5-826c-305200e8733d',
+        sk: 'user|6d74eadc-0181-4ff5-826c-305200e8733d',
       },
     ];
 
@@ -69,10 +73,8 @@ describe('migrateItems', () => {
     expect(results).toEqual(
       expect.arrayContaining([
         {
-          gsi1pk:
-            'eligible-for-trial-case-catalog|1d99457e-e4f4-44fe-8fcc-fd8b0f60d34b',
-          pk: 'eligible-for-trial-case-catalog',
-          sk: 'eligible-for-trial-case-catalog',
+          pk: 'user|6d74eadc-0181-4ff5-826c-305200e8733d',
+          sk: 'user|6d74eadc-0181-4ff5-826c-305200e8733d',
         },
       ]),
     );
@@ -192,5 +194,39 @@ describe('migrateItems', () => {
         documentClient,
       ),
     ).rejects.toThrow('The Case entity was invalid.');
+  });
+
+  describe('eligible for trial records', () => {
+    it('should return and not modify eligible for trial records for cases that do not have any docket entries that are both pending and isLegacyServed', async () => {
+      documentClient.query = jest.fn().mockReturnValueOnce({
+        promise: async () => ({
+          Items: mockCaseRecords,
+        }),
+      });
+
+      const results = await migrateItems(
+        [mockEligibleForTrialItem],
+        documentClient,
+      );
+
+      expect(results).toEqual([mockEligibleForTrialItem]);
+    });
+
+    it('should NOT return eligible for trial records for cases that have docket entries that are pending and isLegacyServe', async () => {
+      mockCaseRecords.push(docketEntryWithPendingAndLegacyServed);
+
+      documentClient.query = jest.fn().mockReturnValueOnce({
+        promise: async () => ({
+          Items: mockCaseRecords,
+        }),
+      });
+
+      const results = await migrateItems(
+        [mockEligibleForTrialItem],
+        documentClient,
+      );
+
+      expect(results).toEqual([]);
+    });
   });
 });
