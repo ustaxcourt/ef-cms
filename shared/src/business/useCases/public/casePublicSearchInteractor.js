@@ -1,3 +1,4 @@
+const { filterForPublic } = require('./publicHelpers');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
 /**
@@ -25,5 +26,12 @@ exports.casePublicSearchInteractor = async ({
       yearFiledMin,
     });
 
-  return PublicCase.validateRawCollection(foundCases, { applicationContext });
+  const unsealedFoundCases = await filterForPublic({
+    applicationContext,
+    foundCases,
+  });
+
+  return PublicCase.validateRawCollection(unsealedFoundCases, {
+    applicationContext,
+  });
 };
