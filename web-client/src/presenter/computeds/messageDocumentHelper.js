@@ -65,6 +65,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     .isInternalUser(user.role);
 
   const hasDocketEntryPermission = permissions.CREATE_ORDER_DOCKET_ENTRY;
+  const hasEditCorrespondencePermission = permissions.CASE_CORRESPONDENCE;
 
   const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
@@ -83,7 +84,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
     caseDocument.isDraft &&
     !isNotice &&
     !isStipulatedDecision;
-  const showEditButtonForCorrespondenceDocument = isCorrespondence;
+  const showEditButtonForCorrespondenceDocument =
+    isCorrespondence && hasEditCorrespondencePermission;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned && !documentIsArchived;

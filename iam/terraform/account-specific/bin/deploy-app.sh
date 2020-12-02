@@ -25,6 +25,13 @@ if [ -z "$COGNITO_SUFFIX" ]; then
   exit 1
 fi
 
+tf_version=$(terraform --version)
+
+if [[ ${tf_version} != *"0.12.28"* ]]; then
+  echo "Please set your terraform version to 0.12.28 before deploying."
+  exit 1
+fi
+
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="permissions-account.tfstate"
 LOCK_TABLE=efcms-terraform-lock

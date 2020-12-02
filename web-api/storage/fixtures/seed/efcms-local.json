@@ -381,9 +381,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -5243,10 +5241,28 @@
     "documentTitle": "Statement of Taxpayer Identification"
   },
   {
+    "caseOrder": [],
+    "gsi1pk": "trial-session-catalog",
+    "trialLocation": "Lubbock, Texas",
+    "createdAt": "2020-10-25T05:00:00.000Z",
+    "sk": "trial-session|a1b04943-8ea8-422b-8990-dec3ca644c83",
+    "sessionType": "Hybrid",
+    "termYear": "2020",
+    "startTime": "15:00",
+    "term": "Fall",
+    "pk": "trial-session|a1b04943-8ea8-422b-8990-dec3ca644c83",
+    "judge": {
+      "name": "Buch",
+      "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
+    },
+    "startDate": "2030-11-25T05:00:00.000Z",
+    "maxCases": 125,
+    "trialSessionId": "a1b04943-8ea8-422b-8990-dec3ca644c83",
+    "isCalendared": false
+  },
+  {
     "role": "privatePractitioner",
-    "representing": [
-      "28cae029-bae2-4eef-ac54-878fbbab65e3"
-    ],
+    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -6828,9 +6844,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -10272,9 +10286,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
