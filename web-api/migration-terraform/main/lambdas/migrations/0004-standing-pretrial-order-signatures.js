@@ -34,10 +34,11 @@ const migrateItems = async (items, documentClient) => {
               return res.Item;
             });
 
+          item.signedAt = applicationContext
+            .getUtilities()
+            .createISODateString();
+
           if (!caseRecord.trialSessionId) {
-            item.signedAt = applicationContext
-              .getUtilities()
-              .createISODateString();
             item.signedJudgeName = CHIEF_JUDGE;
             // Hard code signedByUserId as it's not really used for anything but
             // is required when signedJudgeName has a value
@@ -56,11 +57,15 @@ const migrateItems = async (items, documentClient) => {
                 return res.Item;
               });
 
-            item.signedAt = applicationContext
-              .getUtilities()
-              .createISODateString();
-            item.signedJudgeName = trialSession.judge.name;
-            item.signedByUserId = trialSession.judge.userId;
+            if (trialSession && trialSession.judge) {
+              item.signedJudgeName = trialSession.judge.name;
+              item.signedByUserId = trialSession.judge.userId;
+            } else {
+              item.signedJudgeName = CHIEF_JUDGE;
+              // Hard code signedByUserId as it's not really used for anything but
+              // is required when signedJudgeName has a value
+              item.signedByUserId = '60f2059d-3831-4ed1-b93b-8c8beec478a4';
+            }
           }
 
           const updatedDocketEntry = new DocketEntry(item, {
