@@ -1,3 +1,4 @@
+jest.mock('../../../../../codeToggles');
 const {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
@@ -27,6 +28,7 @@ const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { IrsPractitioner } = require('../IrsPractitioner');
+const { isCodeEnabled } = require('../../../../../codeToggles');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { prepareDateFromString } = require('../../utilities/DateHandler');
@@ -35,6 +37,10 @@ const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
 
 describe('Case entity', () => {
+  beforeEach(() => {
+    isCodeEnabled.mockReturnValue(true);
+  });
+
   it('should throw an error if app context is not passed in', () => {
     expect(() => new Case({}, {})).toThrow();
   });
@@ -2951,6 +2957,52 @@ describe('Case entity', () => {
 
       expect(caseToUpdate.hasPendingItems).toEqual(true);
       expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
+    });
+
+    it('should show the case as having pending items if 7198 is toggled on and isLegacyServed is true', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            isLegacyServed: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      };
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(true);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
+    });
+
+    it('should not show the case as having pending items if 7198 is toggled off and isLegacyServed is true', () => {
+      isCodeEnabled.mockReturnValue(false);
+
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            isLegacyServed: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      };
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(false);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
     });
   });
 

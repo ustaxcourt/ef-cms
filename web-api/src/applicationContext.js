@@ -7,7 +7,6 @@ const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases
 const elasticsearch = require('elasticsearch');
 const Honeybadger = require('honeybadger');
 const pdfLib = require('pdf-lib');
-const sass = require('sass');
 const util = require('util');
 const {
   addCaseToTrialSessionInteractor,
@@ -272,11 +271,11 @@ const {
   fetchPendingItems: fetchPendingItemsOld,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems.old');
 const {
-  fetchPendingItems: fetchPendingItemsPersistence,
-} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems.old');
-const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
+const {
+  fetchPendingItemsByDocketNumber: fetchPendingItemsByDocketNumberOld,
+} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber.old');
 const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
@@ -1164,9 +1163,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     createUser,
     createUserInboxRecord,
-    fetchPendingItems: isCodeEnabled(7134)
-      ? fetchPendingItems
-      : fetchPendingItemsPersistence,
+    fetchPendingItems,
     getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
@@ -1427,7 +1424,15 @@ module.exports = (appContextUser, logger = createLogger()) => {
       migrateTrialSessionInteractor,
     }),
     getNodeSass: () => {
-      return sass;
+      // Notice: this require is here to only have the lambdas that need it call it.
+      // This dependency is only available on lambdas with the 'puppeteer' layer,
+      // which means including it globally causes the other lambdas to fail.
+      // This also needs to have the string split to cause parcel to NOT bundle this dependency,
+      // which is wanted as bundling would have the dependency to not be searched for
+      // and found at the layer level and would cause issues.
+      // eslint-disable-next-line security/detect-non-literal-require
+      const nodeSass = require('node-' + 'sass');
+      return nodeSass;
     },
     getNotificationClient: ({ endpoint }) => {
       if (endpoint.indexOf('localhost') !== -1) {
@@ -1526,7 +1531,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         countPagesInDocument,
         createTrialSessionAndWorkingCopy,
         fetchPendingItems,
-        fetchPendingItemsByDocketNumber,
+        fetchPendingItemsByDocketNumber: isCodeEnabled(7198)
+          ? fetchPendingItemsByDocketNumber
+          : fetchPendingItemsByDocketNumberOld,
         fetchPendingItemsOld,
         formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
