@@ -352,6 +352,42 @@ describe('Case migration journey', () => {
     });
     expect(formattedCase.formattedDocketEntries[1].showNotServed).toBe(false);
     expect(formattedCase.formattedDocketEntries[1].isInProgress).toBe(false);
+
+    expect(
+      formattedCase.formattedPendingDocketEntriesOnDocketRecord,
+    ).toMatchObject([
+      {
+        docketEntryId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
+        documentTitle: 'Answer',
+        documentType: 'Answer',
+        eventCode: 'A',
+        isLegacyServed: true,
+        isOnDocketRecord: true,
+        pending: true,
+      },
+    ]);
+
+    await test.runSequence('gotoPendingReportSequence');
+    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+      judge: CHIEF_JUDGE,
+    });
+    const pendingItems = test.getState('pendingReport.pendingItems');
+    expect(pendingItems.length).toBeGreaterThan(0);
+    const pendingItemsForThisCase = pendingItems.filter(
+      item => item.docketNumber === legacyServedDocumentCase.docketNumber,
+    );
+
+    expect(pendingItemsForThisCase).toMatchObject([
+      {
+        docketEntryId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
+        documentTitle: 'Answer',
+        documentType: 'Answer',
+        eventCode: 'A',
+        isLegacyServed: true,
+        isOnDocketRecord: true,
+        pending: true,
+      },
+    ]);
   });
 
   loginAs(test, 'privatePractitioner@example.com');
