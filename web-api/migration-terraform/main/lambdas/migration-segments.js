@@ -12,7 +12,12 @@ const {
 const {
   migrateItems: migration0004,
 } = require('./migrations/0004-standing-pretrial-order-signatures');
+const {
+  migrateItems: migration0005,
+} = require('./migrations/0005-block-case-with-legacy-served-and-pending-items');
 const { chunk, isEmpty } = require('lodash');
+const { isCodeEnabled } = require('../../../../codeToggles');
+
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
 const applicationContext = createApplicationContext({});
@@ -35,6 +40,11 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0002(items, documentClient);
   items = await migration0003(items, documentClient);
   items = await migration0004(items, documentClient);
+
+  if (isCodeEnabled(7198)) {
+    items = await migration0005(items, documentClient);
+  }
+
   return items;
 };
 
