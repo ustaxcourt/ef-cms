@@ -73,17 +73,28 @@ describe('UnprocessableEntityError', () => {
 
 describe('InvalidEntityError', () => {
   it('should set the message which includes the entityName and failing ids', () => {
-    const error = new InvalidEntityError('TestEntity', 123, 'Test message');
+    const error = new InvalidEntityError('TestEntity', 'Test message', {
+      someObject: 'yep',
+    });
     expect(error.message).toEqual(
-      'The TestEntity entity was invalid. Test message. 123',
+      'The TestEntity entity was invalid. Test message',
     );
+    expect(error.details).toEqual({ someObject: 'yep' });
   });
 
   it('should set a default error message if one is not passed in', () => {
     const error = new InvalidEntityError('TestEntity', 123);
+    expect(error.message).toEqual('The TestEntity entity was invalid. 123');
+  });
+
+  it('should set the message which includes the entityName and default messages', () => {
+    const error = new InvalidEntityError('TestEntity', undefined, {
+      foo: true,
+    });
     expect(error.message).toEqual(
-      'The TestEntity entity was invalid. entity is invalid or invalid for operation. 123',
+      'The TestEntity entity was invalid. entity is invalid or invalid for operation',
     );
+    expect(error.details.foo).toBe(true);
   });
 });
 
