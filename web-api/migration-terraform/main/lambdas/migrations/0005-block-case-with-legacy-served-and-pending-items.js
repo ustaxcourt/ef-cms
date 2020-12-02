@@ -1,4 +1,3 @@
-const Case = require('../../../../../shared/src/business/entities/cases/Case');
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
   aggregateCaseItems,
@@ -6,7 +5,13 @@ const {
 const {
   AUTOMATIC_BLOCKED_REASONS,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { createISODateString } = require('../../utilities/DateHandler');
+const {
+  Case,
+} = require('../../../../../shared/src/business/entities/cases/Case');
+const {
+  createISODateString,
+} = require('../../../../../shared/src/business/utilities/DateHandler');
+const { cloneDeep } = require('lodash');
 
 const applicationContext = createApplicationContext({});
 
@@ -33,6 +38,7 @@ const migrateItems = async (items, documentClient) => {
         .then(res => {
           return res.Items;
         });
+
       const caseRecord = aggregateCaseItems(fullCase);
 
       const shouldBlockCase = caseRecord.docketEntries.some(
@@ -40,24 +46,29 @@ const migrateItems = async (items, documentClient) => {
       );
 
       if (shouldBlockCase) {
-        item.automaticBlocked = true;
-        item.automaticBlockedDate = createISODateString();
+        let itemToModify = cloneDeep(item);
+        itemToModify.automaticBlocked = true;
+        itemToModify.automaticBlockedDate = createISODateString();
 
-        if (item.automaticBlockedReason === AUTOMATIC_BLOCKED_REASONS.dueDate) {
-          item.automaticBlockedReason =
+        if (
+          itemToModify.automaticBlockedReason ===
+          AUTOMATIC_BLOCKED_REASONS.dueDate
+        ) {
+          itemToModify.automaticBlockedReason =
             AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
         } else {
-          item.automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
+          itemToModify.automaticBlockedReason =
+            AUTOMATIC_BLOCKED_REASONS.pending;
         }
 
         new Case(
-          { ...caseRecord, ...item },
+          { ...caseRecord, ...itemToModify },
           {
             applicationContext,
           },
         ).validate();
 
-        itemsAfter.push(item);
+        itemsAfter.push(itemToModify);
       } else {
         itemsAfter.push(item);
       }
@@ -65,6 +76,7 @@ const migrateItems = async (items, documentClient) => {
       itemsAfter.push(item);
     }
   }
+  return itemsAfter;
 };
 
 exports.migrateItems = migrateItems;

@@ -1,13 +1,50 @@
 const {
   AUTOMATIC_BLOCKED_REASONS,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { migrateItems } = require('./0004-standing-pretrial-order-signatures');
+const {
+  migrateItems,
+} = require('./0005-block-case-with-legacy-served-and-pending-items');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
+  const docketEntryWithPendingAndLegacyServed = {
+    archived: false,
+    docketEntryId: '83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
+    documentType: 'Answer',
+    eventCode: 'A',
+    filedBy: 'Test Petitioner',
+    isLegacyServed: true,
+    pending: true,
+    pk: 'case|123-20',
+    sk: 'docket-entry|124',
+    userId: '8bbfcd5a-b02b-4983-8e9c-6cc50d3d566c',
+  };
+
+  let mockCaseItem;
+  let mockCaseRecords;
   let documentClient;
 
   beforeEach(() => {
+    mockCaseItem = {
+      ...MOCK_CASE,
+      automaticBlockedDate: undefined,
+      pk: 'case|999-99',
+      sk: 'case|999-99',
+    };
+    mockCaseRecords = [
+      mockCaseItem,
+      {
+        archived: false,
+        docketEntryId: '83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        pk: 'case|123-20',
+        sk: 'docket-entry|124',
+        userId: '8bbfcd5a-b02b-4983-8e9c-6cc50d3d566c',
+      },
+    ];
+
     documentClient = {
       query: () => ({
         promise: async () => ({
@@ -25,10 +62,6 @@ describe('migrateItems', () => {
         pk: 'eligible-for-trial-case-catalog',
         sk: 'eligible-for-trial-case-catalog',
       },
-      {
-        pk: 'case|123-20',
-        sk: 'case|123-20',
-      },
     ];
 
     const results = await migrateItems(items, documentClient);
@@ -41,172 +74,123 @@ describe('migrateItems', () => {
           pk: 'eligible-for-trial-case-catalog',
           sk: 'eligible-for-trial-case-catalog',
         },
-        {
-          pk: 'case|123-20',
-          sk: 'case|123-20',
-        },
       ]),
     );
   });
 
   it('should return and not modify case records that have a trial date', async () => {
-    const mockDocketEntry = {
-      pk: `case|${MOCK_CASE.docketNumber}`,
-      sk: `docket-entry|${MOCK_CASE.docketNumber}`,
-      ...MOCK_CASE.docketEntries[0],
-    };
+    const items = [
+      {
+        pk: 'case|999-99',
+        sk: 'case|999-99',
+        trialDate: '01/01/2020',
+      },
+    ];
 
-    const results = await migrateItems([mockDocketEntry], documentClient);
+    const results = await migrateItems(items, documentClient);
 
-    expect(results).toEqual([mockDocketEntry]);
+    expect(results).toEqual(
+      expect.arrayContaining([
+        {
+          pk: 'case|999-99',
+          sk: 'case|999-99',
+          trialDate: '01/01/2020',
+        },
+      ]),
+    );
   });
 
   it('should return and not modify case records that do not have any docket entries that are both pending and isLegacyServed', async () => {
-    const mockDocketEntry = {
-      pk: `case|${MOCK_CASE.docketNumber}`,
-      sk: `docket-entry|${MOCK_CASE.docketNumber}`,
-      ...MOCK_CASE.docketEntries[0],
-      eventCode:
-        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
-      signedAt: '2020-07-06T17:06:04.552Z',
-      signedByUserId: 'f3de692c-0979-4023-a4af-ec36abe3ce60',
-      signedJudgeName: 'Michael Scott',
-    };
+    documentClient.query = jest.fn().mockReturnValueOnce({
+      promise: async () => ({
+        Items: mockCaseRecords,
+      }),
+    });
 
-    const results = await migrateItems([mockDocketEntry], documentClient);
+    const results = await migrateItems([mockCaseItem], documentClient);
 
-    expect(results).toEqual([mockDocketEntry]);
+    expect(results).toEqual([mockCaseItem]);
   });
 
   it('should set automaticBlocked and automaticBlockedDate on case records that have at least one docket entry where pending and isLegacyServed are true', async () => {
-    const MOCK_TRIAL = {
-      judge: {
-        name: 'Michael Scott',
-        userId: 'da64ccd0-1d2b-4e2c-889c-3b01aeaed702',
-      },
-      maxCases: 100,
-      sessionType: 'Regular',
-      startDate: '2025-12-01T00:00:00.000Z',
-      term: 'Fall',
-      termYear: '2025',
-      trialLocation: 'Birmingham, Alabama',
-      trialSessionId: '3f20a89b-56eb-4f06-9faf-2184cb479330',
-    };
+    mockCaseRecords.push(docketEntryWithPendingAndLegacyServed);
 
-    documentClient.get = jest
-      .fn()
-      .mockReturnValueOnce({
-        promise: async () => ({
-          Item: { ...MOCK_CASE, trialSessionId: MOCK_TRIAL.trialSessionId },
-        }),
-      })
-      .mockReturnValueOnce({
-        promise: async () => ({
-          Item: MOCK_TRIAL,
-        }),
-      });
+    documentClient.query = jest.fn().mockReturnValueOnce({
+      promise: async () => ({
+        Items: mockCaseRecords,
+      }),
+    });
 
-    const mockDocketEntry = {
-      pk: `case|${MOCK_CASE.docketNumber}`,
-      sk: `docket-entry|${MOCK_CASE.docketNumber}`,
-      ...MOCK_CASE.docketEntries[0],
-      eventCode:
-        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
-      signedAt: '2020-07-06T17:06:04.552Z',
-    };
+    const results = await migrateItems([mockCaseItem], documentClient);
 
-    const results = await migrateItems([mockDocketEntry], documentClient);
-
-    expect(results).toMatchObject([
+    expect(results).toEqual([
       {
-        ...mockDocketEntry,
-        signedByUserId: MOCK_TRIAL.judge.userId,
-        signedJudgeName: MOCK_TRIAL.judge.name,
+        ...mockCaseItem,
+        automaticBlocked: true,
+        automaticBlockedDate: expect.anything(),
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
       },
     ]);
   });
 
   describe('automaticBlockedReason', () => {
     it('should be pendingAndDueDate when the case record is already blocked for dueDate', async () => {
-      const MOCK_TRIAL = {
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-12-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-        trialSessionId: '3f20a89b-56eb-4f06-9faf-2184cb479330',
-      };
+      mockCaseItem.automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
+      mockCaseRecords.push(docketEntryWithPendingAndLegacyServed);
 
-      documentClient.get = jest
-        .fn()
-        .mockReturnValueOnce({
-          promise: async () => ({
-            Item: { ...MOCK_CASE, trialSessionId: MOCK_TRIAL.trialSessionId },
-          }),
-        })
-        .mockReturnValueOnce({
-          promise: async () => ({
-            Item: MOCK_TRIAL,
-          }),
-        });
+      documentClient.query = jest.fn().mockReturnValueOnce({
+        promise: async () => ({
+          Items: mockCaseRecords,
+        }),
+      });
 
-      const mockDocketEntry = {
-        pk: `case|${MOCK_CASE.docketNumber}`,
-        sk: `docket-entry|${MOCK_CASE.docketNumber}`,
-        ...MOCK_CASE.docketEntries[0],
-        eventCode:
-          SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
-        signedAt: '2020-07-06T17:06:04.552Z',
-      };
+      const results = await migrateItems([mockCaseItem], documentClient);
 
-      const results = await migrateItems([mockDocketEntry], documentClient);
-
-      expect(results).toMatchObject([
+      expect(results).toEqual([
         {
-          ...mockDocketEntry,
-          signedByUserId: '60f2059d-3831-4ed1-b93b-8c8beec478a4',
-          signedJudgeName: CHIEF_JUDGE,
+          ...mockCaseItem,
+          automaticBlocked: true,
+          automaticBlockedDate: expect.anything(),
+          automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
         },
       ]);
     });
 
     it('should be pending when the case record is not already blocked for any reason', async () => {
-      const MOCK_TRIAL = {};
+      mockCaseRecords.push(docketEntryWithPendingAndLegacyServed);
 
-      documentClient.get = jest
-        .fn()
-        .mockReturnValueOnce({
-          promise: async () => ({
-            Item: { ...MOCK_CASE, trialSessionId: MOCK_TRIAL.trialSessionId },
-          }),
-        })
-        .mockReturnValueOnce({
-          promise: async () => ({
-            Item: MOCK_TRIAL,
-          }),
-        });
+      documentClient.query = jest.fn().mockReturnValueOnce({
+        promise: async () => ({
+          Items: mockCaseRecords,
+        }),
+      });
 
-      const mockDocketEntry = {
-        pk: `case|${MOCK_CASE.docketNumber}`,
-        sk: `docket-entry|${MOCK_CASE.docketNumber}`,
-        ...MOCK_CASE.docketEntries[0],
-        eventCode:
-          SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
-        signedAt: '2020-07-06T17:06:04.552Z',
-      };
-
-      const results = await migrateItems([mockDocketEntry], documentClient);
+      const results = await migrateItems([mockCaseItem], documentClient);
 
       expect(results).toMatchObject([
         {
-          ...mockDocketEntry,
-          signedByUserId: '60f2059d-3831-4ed1-b93b-8c8beec478a4',
-          signedJudgeName: CHIEF_JUDGE,
+          automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         },
       ]);
     });
   });
 
-  it('should validate the modified case record', () => {});
+  it('should validate the modified case record', async () => {
+    documentClient.query = jest.fn().mockReturnValueOnce({
+      promise: async () => ({
+        Items: [
+          mockCaseRecords[1],
+          { ...mockCaseRecords[0], docketNumber: undefined },
+          docketEntryWithPendingAndLegacyServed,
+        ],
+      }),
+    });
+
+    await expect(
+      migrateItems(
+        [{ ...mockCaseItem, docketNumber: undefined }],
+        documentClient,
+      ),
+    ).rejects.toThrow('The Case entity was invalid.');
+  });
 });
