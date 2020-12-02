@@ -72,6 +72,37 @@ const migrateItems = async (items, documentClient) => {
       } else {
         itemsAfter.push(item);
       }
+    } else if (
+      item.gsi1pk &&
+      item.gsi1pk.startsWith('eligible-for-trial-case-catalog')
+    ) {
+      const docketNumber = item.gsi1pk.split('|')[1];
+
+      const fullCase = await documentClient
+        .query({
+          ExpressionAttributeNames: {
+            '#pk': 'pk',
+          },
+          ExpressionAttributeValues: {
+            ':pk': `case|${docketNumber}`,
+          },
+          KeyConditionExpression: '#pk = :pk',
+          TableName: process.env.SOURCE_TABLE,
+        })
+        .promise()
+        .then(res => {
+          return res.Items;
+        });
+
+      const caseRecord = aggregateCaseItems(fullCase);
+
+      const shouldBlockCase = caseRecord.docketEntries.some(
+        entry => entry.pending && entry.isLegacyServed,
+      );
+
+      if (!shouldBlockCase) {
+        itemsAfter.push(item);
+      }
     } else {
       itemsAfter.push(item);
     }
