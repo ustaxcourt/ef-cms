@@ -14,6 +14,7 @@ exports.parseLegacyDocumentsInteractor = async ({
 }) => {
   let pdfBuffer;
   try {
+    // Finding the PDF in the S3 Bucket
     const { Body } = await applicationContext
       .getStorageClient()
       .getObject({
@@ -23,9 +24,12 @@ exports.parseLegacyDocumentsInteractor = async ({
       .promise();
     pdfBuffer = Body;
   } catch (err) {
-    throw new Error('Docket entry document not found in S3.');
+    throw new Error(
+      `Docket entry document not found in S3. ${docketNumber} ${docketEntryId}`,
+    );
   }
 
+  // Gets the case by Docket Number, to find the Docket Entry
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -33,29 +37,45 @@ exports.parseLegacyDocumentsInteractor = async ({
       docketNumber,
     });
   const caseEntity = new Case(caseRecord, { applicationContext });
-
   const foundDocketEntry = caseEntity.getDocketEntryById({ docketEntryId });
 
   if (!foundDocketEntry) {
-    throw new Error('Docket entry not found.');
+    throw new Error(`Docket entry not found. ${docketNumber} ${docketEntryId}`);
   }
 
-  const pdfTextContents = await applicationContext
-    .getUseCaseHelpers()
-    .parseAndScrapePdfContents({ applicationContext, pdfBuffer });
+  // Scrape the contents of the PDF
+  let pdfTextContents;
+  try {
+    pdfTextContents = await applicationContext
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents({ applicationContext, pdfBuffer });
+  } catch (err) {
+    throw new Error(
+      `Error scraping PDF contents. ${docketNumber} ${docketEntryId}; ${err.message}`,
+    );
+  }
 
   const documentContentsId = applicationContext.getUniqueId();
 
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: Buffer.from(
-      JSON.stringify({ documentContents: pdfTextContents }),
-    ),
-    key: documentContentsId,
-  });
+  try {
+    // Save text contents to JSON file in S3
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: Buffer.from(
+        JSON.stringify({ documentContents: pdfTextContents }),
+      ),
+      key: documentContentsId,
+    });
+  } catch (err) {
+    throw new Error(
+      `Error Saving contents to S3: ${docketNumber} ${docketEntryId}; ${err.message}`,
+    );
+  }
 
+  // This appears to be unused?
   foundDocketEntry.documentContentsId = documentContentsId;
 
+  // ... unless somehow it makes it into caseEntity by reference?
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),

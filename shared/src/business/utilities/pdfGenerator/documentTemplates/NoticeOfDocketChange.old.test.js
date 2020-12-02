@@ -1,6 +1,6 @@
 const React = require('react');
 const { mount, shallow } = require('enzyme');
-const { NoticeOfDocketChange } = require('./NoticeOfDocketChange.jsx');
+const { NoticeOfDocketChange } = require('./NoticeOfDocketChange.old.jsx');
 
 describe('NoticeOfDocketChange', () => {
   let options;
@@ -101,7 +101,7 @@ describe('NoticeOfDocketChange', () => {
     );
 
     expect(wrapper.find('#changed-filing-parties').text()).toEqual(
-      `The filing party/parties has been changed from "${filingParties.before}" to "${filingParties.after}".`,
+      `"${filingParties.before}" has been changed to "${filingParties.after}".`,
     );
   });
 

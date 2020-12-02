@@ -1,14 +1,13 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
-const { getBlockedCases } = require('./getBlockedCases');
+const { getBlockedCases } = require('./getBlockedCases.old');
 jest.mock('./searchClient');
 const { search } = require('./searchClient');
 
 describe('getBlockedCases', () => {
   it('returns results when searching with a trialLocation', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
-
     const results = await getBlockedCases({
       applicationContext,
       trialLocation: 'Memphis, TN',
@@ -19,7 +18,7 @@ describe('getBlockedCases', () => {
     const searchQuery =
       search.mock.calls[0][0].searchParameters.body.query.bool.must;
     expect(searchQuery[0]).toMatchObject({
-      match_phrase: { 'preferredTrialCity.S': 'Memphis, TN' },
+      match: { 'preferredTrialCity.S': 'Memphis, TN' },
     });
   });
 });
