@@ -2,6 +2,8 @@ import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprioritizesCase';
+import { petitionsClerkVerifyEligibleCase } from './journey/petitionsClerkVerifyEligibleCase';
+import { petitionsClerkVerifyNotEligibleCase } from './journey/petitionsClerkVerifyNotEligibleCase';
 
 const test = setupTest();
 
@@ -11,7 +13,9 @@ describe('Prioritize a Case', () => {
   });
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile, 'Jackson, Mississippi');
+  petitionsClerkCreatesNewCase(test, fakeFile, 'Lubbock, Texas');
   petitionsClerkPrioritizesCase(test);
+  petitionsClerkVerifyEligibleCase(test);
   petitionsClerkUnprioritizesCase(test);
+  petitionsClerkVerifyNotEligibleCase(test);
 });

@@ -5,8 +5,16 @@ body.no-scroll {
   touch-action: none;
 }
 
-#app {
+#app,
+#app-public {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
   background-color: $color-white;
+}
+
+#main-content {
+  flex: 1;
 }
 
 hr {
