@@ -71,7 +71,7 @@ describe('opinionPublicSearchInteractor', () => {
     expect(result).toEqual(mockOpinionSearchResult);
   });
 
-  it('filters out results belonging to sealed cases', async () => {
+  it('does NOT filter out opinion results belonging to sealed cases', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
@@ -80,6 +80,6 @@ describe('opinionPublicSearchInteractor', () => {
       keyword: 'fish',
       startDate: '2001-01-01',
     });
-    expect(results.length).toBe(0);
+    expect(results.length).toBe(1);
   });
 });
