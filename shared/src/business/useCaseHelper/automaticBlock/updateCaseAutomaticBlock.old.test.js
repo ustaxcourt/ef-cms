@@ -11,7 +11,7 @@ const {
 } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { updateCaseAutomaticBlock } = require('./updateCaseAutomaticBlock');
+const { updateCaseAutomaticBlock } = require('./updateCaseAutomaticBlock.old');
 
 describe('updateCaseAutomaticBlock', () => {
   beforeEach(() => {
@@ -77,39 +77,7 @@ describe('updateCaseAutomaticBlock', () => {
       ]);
 
     const caseEntity = new Case(
-      {
-        ...MOCK_CASE_WITHOUT_PENDING,
-        highPriority: false,
-        trialDate: '2021-03-01T21:40:46.415Z',
-      },
-      {
-        applicationContext,
-      },
-    );
-    const updatedCase = await updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity,
-    });
-
-    expect(updatedCase.automaticBlocked).toBeFalsy();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords when the case is marked as high priority', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        { deadline: 'something' },
-      ]);
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE_WITHOUT_PENDING,
-        highPriority: true,
-        trialDate: undefined,
-      },
+      { ...MOCK_CASE_WITHOUT_PENDING, trialDate: '2021-03-01T21:40:46.415Z' },
       {
         applicationContext,
       },

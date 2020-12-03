@@ -7,7 +7,6 @@ import React from 'react';
 
 export const PendingReportList = connect(
   {
-    fetchPendingItemsSequence: sequences.fetchPendingItemsSequence,
     formattedPendingItems: state.formattedPendingItems,
     loadMorePendingItemsSequence: sequences.loadMorePendingItemsSequence,
     pendingReportListHelper: state.pendingReportListHelper,
