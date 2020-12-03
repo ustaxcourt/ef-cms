@@ -2,13 +2,10 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  casePublicSearchInteractor,
-  isCaseVisibleToPublic,
-} = require('./casePublicSearchInteractor');
-const {
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
 } = require('../../entities/EntityConstants');
+const { casePublicSearchInteractor } = require('./casePublicSearchInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('casePublicSearchInteractor', () => {
@@ -97,31 +94,5 @@ describe('casePublicSearchInteractor', () => {
     });
 
     expect(results.length).toEqual(0);
-  });
-});
-
-describe('isCaseVisibleToPublic', () => {
-  let mockCase = { ...MOCK_CASE };
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
-  });
-
-  it('returns complete case details if case is not sealed', async () => {
-    const results = await isCaseVisibleToPublic({
-      applicationContext,
-      docketNumber: '1234-56',
-    });
-    expect(results).toBeTruthy();
-  });
-
-  it('returns undefined if the case is sealed', async () => {
-    mockCase.sealedDate = 'some date';
-    const results = await isCaseVisibleToPublic({
-      applicationContext,
-      docketNumber: '1234-56',
-    });
-    expect(results).toBeFalsy();
   });
 });
