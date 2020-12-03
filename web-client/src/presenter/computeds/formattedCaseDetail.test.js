@@ -1737,15 +1737,29 @@ describe('formattedCaseDetail', () => {
       );
     });
 
-    it('should not show the link to an external user when the document has isLegacySealed true', () => {
+    it('should not show the link to an associated external user when the document has isLegacySealed true', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionerUser),
-          caseDetail,
+          caseDetail: {
+            docketEntries: [
+              {
+                ...caseDetail.docketEntries[0],
+                isLegacySealed: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+                isStricken: false,
+                servedAt: '2020-01-23T21:44:54.034Z',
+              },
+            ],
+          },
           permissions: {
             CREATE_ORDER_DOCKET_ENTRY: false,
             DOCKET_ENTRY: false,
             UPDATE_CASE: false,
+          },
+          screenMetadata: {
+            isAssociated: true,
           },
           validationErrors: {},
         },
