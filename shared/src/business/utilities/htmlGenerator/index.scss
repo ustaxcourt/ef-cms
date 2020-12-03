@@ -275,6 +275,15 @@ th {
   line-height: 13px;
 }
 
+.stricken-docket-record {
+  text-decoration: line-through;
+
+  &.usa-button,
+  &.view-pdf-link {
+    text-decoration: underline line-through;
+  }
+}
+
 .us-tax-court-seal {
   width: 50px;
   height: 50px;
