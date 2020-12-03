@@ -174,22 +174,6 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).toContain('The Republic of Texas');
   });
 
-  it('displays a stricken date and description fields for docket entries that are stricken', () => {
-    entries[0].isStricken = true;
-
-    const wrapper = mount(
-      <DocketRecord
-        caseDetail={caseDetail}
-        countryTypes={COUNTRY_TYPES}
-        entries={entries}
-        options={options}
-      />,
-    );
-
-    const docketRecord = wrapper.find('#documents');
-    expect(docketRecord.find('.stricken-docket-record').length).toEqual(2);
-  });
-
   it('renders party info in care of if present', () => {
     contactPrimary.inCareOf = 'Test Care Of';
     const wrapper = mount(
