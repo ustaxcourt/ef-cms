@@ -4,6 +4,8 @@ import {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP,
+  EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
@@ -36,6 +38,7 @@ import { getJudgeLastName } from '../../shared/src/business/utilities/getFormatt
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
+import { isCodeEnabled } from '../../codeToggles';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -91,6 +94,8 @@ const frozenConstants = deepFreeze({
   COUNTRY_TYPES: COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP,
+  EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
@@ -109,6 +114,9 @@ const applicationContextPublic = {
   getCognitoLoginUrl,
   getConstants: () => frozenConstants,
   getCurrentUserToken: () => null,
+  getEnvironment: () => ({
+    stage: process.env.STAGE || 'local',
+  }),
   getHttpClient: () => axios,
   getLogger: () => ({
     error: () => {
@@ -141,6 +149,7 @@ const applicationContextPublic = {
     };
   },
   initHoneybadger,
+  isCodeEnabled,
   notifyHoneybadger: async (message, context) => {
     const honeybadger = await initHoneybadger();
 

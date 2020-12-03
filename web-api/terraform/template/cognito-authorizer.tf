@@ -17,6 +17,9 @@ resource "aws_lambda_function" "cognito_authorizer_lambda" {
     variables = {
       USER_POOL_ID_MAIN = aws_cognito_user_pool.pool.id
       USER_POOL_ID_IRS  = aws_cognito_user_pool.irs_pool.id
+      NODE_ENV          = "production"
+      LOG_LEVEL         = "info"
+      STAGE             = var.environment
     }
   }
 }

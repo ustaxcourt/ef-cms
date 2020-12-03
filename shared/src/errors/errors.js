@@ -3,9 +3,7 @@
  *
  * @type {module.NotFoundError}
  */
-module.exports.NotFoundError = class NotFoundError extends (
-  Error
-) {
+module.exports.NotFoundError = class NotFoundError extends Error {
   /**
    * constructor
    *
@@ -23,9 +21,7 @@ module.exports.NotFoundError = class NotFoundError extends (
  *
  * @type {module.UnknownUserError}
  */
-module.exports.UnknownUserError = class UnknownUserError extends (
-  Error
-) {
+module.exports.UnknownUserError = class UnknownUserError extends Error {
   /**
    * constructor
    *
@@ -43,9 +39,7 @@ module.exports.UnknownUserError = class UnknownUserError extends (
  *
  * @type {module.UnauthorizedError}
  */
-module.exports.UnauthorizedError = class UnauthorizedError extends (
-  Error
-) {
+module.exports.UnauthorizedError = class UnauthorizedError extends Error {
   /**
    * constructor
    *
@@ -103,9 +97,7 @@ module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends (
  *
  * @type {module.InvalidEntityError}
  */
-module.exports.InvalidEntityError = class InvalidEntityError extends (
-  Error
-) {
+module.exports.InvalidEntityError = class InvalidEntityError extends Error {
   /**
    * constructor
    *

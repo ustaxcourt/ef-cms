@@ -15,6 +15,7 @@ module.exports = {
     '!src/index.prod.js',
     '!src/index-public.dev.js',
     '!src/index-public.prod.js',
+    '!src/presenter/state.js',
   ],
   coverageDirectory: './coverage',
   globals: {
