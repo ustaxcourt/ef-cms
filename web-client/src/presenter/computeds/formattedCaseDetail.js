@@ -43,6 +43,7 @@ export const getShowDocumentViewerLink = ({
   isExternalUser,
   isHiddenToPublic,
   isInitialDocument,
+  isLegacySealed,
   isServed,
   isStipDecision,
   isStricken,
@@ -55,6 +56,7 @@ export const getShowDocumentViewerLink = ({
 
   if (isExternalUser) {
     if (isStricken) return false;
+    if (isLegacySealed) return false;
     if (userHasNoAccessToDocument) return false;
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
@@ -221,6 +223,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         entry.eventCode,
       ),
       isInitialDocument,
+      isLegacySealed: entry.isLegacySealed,
       isServed: !!entry.servedAt,
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
