@@ -30,7 +30,6 @@ exports.opinionPublicSearchInteractor = async ({
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  // use integration test to verify opinions in sealed cases ARE returned
   return await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
