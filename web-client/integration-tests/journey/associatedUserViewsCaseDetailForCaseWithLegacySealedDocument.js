@@ -25,6 +25,7 @@ export const associatedUserViewsCaseDetailForCaseWithLegacySealedDocument = test
       contactId: expect.anything(),
       name: expect.anything(),
     });
+    expect(test.getState('screenMetadata.isAssociated')).toBeTruthy();
 
     await expect(
       test.runSequence('openCaseDocumentDownloadUrlSequence', {
