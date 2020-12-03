@@ -1,12 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
-export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = ({
-  dayReceived,
-  fakeFile,
-  monthReceived,
+export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
   test,
-  yearReceived,
-}) => {
+  fakeFile,
+) => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
   return it('Docketclerk adds paper filed docket entry and serves', async () => {
@@ -25,17 +22,17 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = ({
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
-      value: monthReceived,
+      value: 4,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
-      value: dayReceived,
+      value: 30,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
-      value: yearReceived,
+      value: 2001,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {

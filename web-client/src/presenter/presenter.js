@@ -79,7 +79,6 @@ import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMess
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
-import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileDocketEntrySequence } from './sequences/fileDocketEntrySequence';
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
@@ -525,7 +524,6 @@ export const presenter = {
     dismissModalSequence,
     editCorrespondenceDocumentSequence,
     editUploadCourtIssuedDocumentSequence,
-    fetchPendingItemsSequence,
     fetchUserNotificationsSequence,
     fileDocketEntrySequence,
     filterCaseDeadlinesByJudgeSequence,
