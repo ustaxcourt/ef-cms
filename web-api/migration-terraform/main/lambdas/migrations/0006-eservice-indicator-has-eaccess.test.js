@@ -1,7 +1,7 @@
 const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { migrateItems } = require('./0005-eservice-indicator-has-eaccess');
+const { migrateItems } = require('./0006-eservice-indicator-has-eaccess');
 
 describe('migrateItems', () => {
   let documentClient;
