@@ -1656,7 +1656,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
         parseLegacyDocumentsInteractor,
-        prioritizeCaseInteractor: isCodeEnabled(7080)
+        prioritizeCaseInteractor: isCodeEnabled(7166)
           ? prioritizeCaseInteractor
           : prioritizeCaseInteractorOld,
         processStreamRecordsInteractor,
@@ -1698,7 +1698,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           ? updateDocketEntryMetaInteractor
           : updateDocketEntryMetaInteractorOld,
         updateOtherStatisticsInteractor,
-        updatePetitionDetailsInteractor: isCodeEnabled(7080)
+        updatePetitionDetailsInteractor: isCodeEnabled(7166)
           ? updatePetitionDetailsInteractor
           : updatePetitionDetailsInteractorOld,
         updatePetitionerInformationInteractor,
