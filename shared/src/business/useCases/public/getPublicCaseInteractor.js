@@ -30,10 +30,11 @@ exports.getPublicCaseInteractor = async ({
     error.skipLogging = true;
     throw error;
   }
-
+  rawCaseRecord.isSealed = isSealedCase(rawCaseRecord);
   if (isSealedCase(rawCaseRecord)) {
     rawCaseRecord = caseSealedFormatter(rawCaseRecord);
   }
+
   rawCaseRecord = caseContactAddressSealedFormatter(rawCaseRecord, {});
 
   const publicCaseDetail = new PublicCase(rawCaseRecord, {

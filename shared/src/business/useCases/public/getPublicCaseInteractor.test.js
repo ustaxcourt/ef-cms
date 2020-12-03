@@ -13,6 +13,14 @@ const mockCase = {
   partyType: PARTY_TYPES.petitioner,
 };
 
+const sealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
+sealedDocketEntries[0].isLegacySealed = true;
+
+const sealedContactPrimary = cloneDeep({
+  ...MOCK_CASE.contactPrimary,
+  isSealed: true,
+});
+
 const mockCases = {
   '102-20': {
     contactPrimary: MOCK_CASE.contactPrimary,
@@ -21,7 +29,18 @@ const mockCases = {
     partyType: PARTY_TYPES.petitioner,
     sealedDate: '2020-01-02T03:04:05.007Z',
   },
-  '123-45': mockCase,
+  '120-20': {
+    ...cloneDeep(mockCase),
+    docketEntries: sealedDocketEntries,
+    docketNumber: '120-20',
+  },
+  '123-45': cloneDeep(mockCase),
+  '188-88': {
+    contactPrimary: sealedContactPrimary,
+    docketNumber: '188-88',
+    irsPractitioners: [],
+    partyType: PARTY_TYPES.petitioner,
+  },
 };
 
 describe('getPublicCaseInteractor', () => {
@@ -79,13 +98,21 @@ describe('getPublicCaseInteractor', () => {
     });
   });
 
-  it('should return minimal information when the requested case contact address has been sealed', async () => {
-    const docketNumber = '102-20';
-    mockCases[docketNumber] = cloneDeep({
-      ...mockCases['102-20'],
-      sealedDate: undefined,
+  it('should return minimal information when the requested case has a sealed docket entry', async () => {
+    const docketNumber = '120-20';
+    const result = await getPublicCaseInteractor({
+      applicationContext,
+      docketNumber,
     });
-    mockCases[docketNumber].contactPrimary.isAddressSealed = true;
+
+    expect(result).toMatchObject({
+      docketNumber,
+      isSealed: true,
+    });
+  });
+
+  it('should return minimal information when the requested case contact address has been sealed', async () => {
+    const docketNumber = '188-88';
 
     const result = await getPublicCaseInteractor({
       applicationContext,
