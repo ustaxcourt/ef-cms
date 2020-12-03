@@ -81,8 +81,15 @@ export const FilingsAndProceedings = connect(
                 <span aria-hidden="true">Processing</span>
               </span>
             )}
-            {entry.descriptionDisplay}{' '}
-            {!entry.addToCoversheet && entry.additionalInfoDisplay}
+            <span
+              className={classNames(
+                entry.isStricken && 'stricken-docket-record',
+                'margin-right-05',
+              )}
+            >
+              {entry.descriptionDisplay}{' '}
+              {!entry.addToCoversheet && entry.additionalInfoDisplay}
+            </span>
           </>
         )}
 
