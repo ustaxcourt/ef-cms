@@ -78,7 +78,7 @@ const getSealedCase = async ({
   const isAuthorizedToViewSealedCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-    caseRecord.userId,
+    caseRecord.contactPrimary.contactId,
   );
 
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
@@ -139,7 +139,7 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
   const isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
-    caseRecord.userId,
+    caseRecord.contactPrimary.contactId,
   );
   const isAssociatedWithCase = isAssociatedUser({
     caseRaw: caseRecord,
