@@ -29,8 +29,11 @@ const migrateItems = async items => {
       }
 
       itemsAfter.push(item);
+    } else {
+      itemsAfter.push(item);
     }
   }
+
   return itemsAfter;
 };
 
