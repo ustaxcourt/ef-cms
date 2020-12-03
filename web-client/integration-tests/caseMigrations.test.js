@@ -178,7 +178,7 @@ const otherPetitionersCase = {
       name: 'Keelie Bruce',
       representing: [
         'dd0ac156-aa2d-46e7-8b5a-902f1d16f199',
-        '76a6050f-a423-47bb-943b-a5661fe08a6b',
+        '7805d1ab-18d0-43ec-bafb-654e83405416',
       ],
       role: 'privatePractitioner',
       secondaryName: 'Logan Fields',
