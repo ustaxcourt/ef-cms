@@ -1,4 +1,9 @@
 const {
+  Case,
+  isAssociatedUser,
+  isSealedCase,
+} = require('../entities/cases/Case');
+const {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
 } = require('../utilities/caseFilter');
@@ -6,7 +11,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case, isAssociatedUser } = require('../entities/cases/Case');
 const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
@@ -143,7 +147,8 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
   });
 
   let caseDetailRaw;
-  if (caseRecord.sealedDate) {
+  caseRecord.isSealed = isSealedCase(caseRecord);
+  if (isSealedCase(caseRecord)) {
     caseDetailRaw = await getSealedCase({
       applicationContext,
       caseRecord,
