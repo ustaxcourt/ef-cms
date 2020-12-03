@@ -163,41 +163,39 @@ describe('formatCase', () => {
     expect(result.formattedDocketEntries[1].isUnservable).toBeTruthy();
   });
 
-  if (isCodeEnabled(7164)) {
-    it('should compute isNotServedDocument', () => {
-      let result;
-      result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        docketEntries: [
-          {
-            isLegacyServed: undefined,
-            isMinuteEntry: undefined,
-            servedAt: undefined,
-          },
-          {
-            isLegacyServed: true,
-            isMinuteEntry: undefined,
-            servedAt: undefined,
-          },
-          {
-            isLegacyServed: undefined,
-            isMinuteEntry: true,
-            servedAt: undefined,
-          },
-          {
-            isLegacyServed: undefined,
-            isMinuteEntry: undefined,
-            servedAt: createISODateString(),
-          },
-        ],
-      });
-
-      expect(result.formattedDocketEntries[0].isNotServedDocument).toBe(true);
-      expect(result.formattedDocketEntries[1].isNotServedDocument).toBe(false);
-      expect(result.formattedDocketEntries[2].isNotServedDocument).toBe(false);
-      expect(result.formattedDocketEntries[3].isNotServedDocument).toBe(false);
+  it('should compute isNotServedDocument', () => {
+    let result;
+    result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries: [
+        {
+          isLegacyServed: undefined,
+          isMinuteEntry: undefined,
+          servedAt: undefined,
+        },
+        {
+          isLegacyServed: true,
+          isMinuteEntry: undefined,
+          servedAt: undefined,
+        },
+        {
+          isLegacyServed: undefined,
+          isMinuteEntry: true,
+          servedAt: undefined,
+        },
+        {
+          isLegacyServed: undefined,
+          isMinuteEntry: undefined,
+          servedAt: createISODateString(),
+        },
+      ],
     });
-  }
+
+    expect(result.formattedDocketEntries[0].isNotServedDocument).toBe(true);
+    expect(result.formattedDocketEntries[1].isNotServedDocument).toBe(false);
+    expect(result.formattedDocketEntries[2].isNotServedDocument).toBe(false);
+    expect(result.formattedDocketEntries[3].isNotServedDocument).toBe(false);
+  });
 
   it('should format the filing date of all correspondence documents', () => {
     const result = formatCase(applicationContext, {
