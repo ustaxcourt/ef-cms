@@ -8,6 +8,13 @@ Use plain language for error messages, alerts, and instructions so users can cle
 
 # Style Guide
 
+## Visual Design and Components
+The complete [USTC UI Design Kit](https://www.figma.com/file/5dTOjitRz6cFmDfQW2RU5p/USTC-UI-Design-Kit?node-id=0%3A1) is available as a Figma file
+
+* Generally follows the UI patterns and components established in the [U.S. Web Design System (USWDS) version 2](https://designsystem.digital.gov/) with some exceptions and additions
+
+## Language and Writing Guidelines
+
 - Generally follows AP style
 - Use Title case for headers (all)
 - (**Exception**) - Use sentence case for headers in page-level success/alert/error messages.
@@ -23,9 +30,6 @@ Use plain language for error messages, alerts, and instructions so users can cle
 - Time displayed as 3:45 pm ET
 - Error messages should be clear directions/verb phrases of what the user needs to do e.g., "Enter state" or "Select trial city" without periods at the end
 
-# Printable PDFs
-
-* Styles for Headers, Body Content, and Footers for Printable PDFs - https://www.figma.com/file/IKowSi04TMyGF0bpcKMaGm/USTC-Web-Style-Guide?node-id=0%3A1
 
 # Success and error messages
 
