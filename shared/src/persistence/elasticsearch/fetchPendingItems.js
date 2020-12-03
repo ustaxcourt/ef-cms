@@ -58,6 +58,18 @@ exports.fetchPendingItems = async ({
     index: 'efcms-docket-entry',
   };
 
+  if (judge) {
+    hasParentParam.has_parent.query = {
+      bool: {
+        must: [
+          {
+            match_phrase: { 'associatedJudge.S': judge },
+          },
+        ],
+      },
+    };
+  }
+
   if (isCodeEnabled(7198)) {
     const matchingOnServedAtOrLegacyServed = {
       bool: {
@@ -84,18 +96,6 @@ exports.fetchPendingItems = async ({
     };
 
     searchParameters.body.query.bool.must.push(matchingOnServedAt);
-  }
-
-  if (judge) {
-    hasParentParam.has_parent.query = {
-      bool: {
-        must: [
-          {
-            match_phrase: { 'associatedJudge.S': judge },
-          },
-        ],
-      },
-    };
   }
 
   const { results, total } = await search({
