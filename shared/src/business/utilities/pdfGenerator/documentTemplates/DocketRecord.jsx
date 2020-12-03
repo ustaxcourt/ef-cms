@@ -1,3 +1,4 @@
+const classNames = require('classnames');
 const React = require('react');
 const {
   CompressedDocketHeader,
@@ -94,8 +95,16 @@ const RecordDescription = ({ entry }) => {
 
   return (
     <>
-      <strong>{entry.descriptionDisplay}</strong>
-      {additionalDescription}
+      <span
+        className={classNames(
+          'filings-and-proceedings',
+          entry.isStricken && 'stricken-docket-record',
+        )}
+      >
+        <strong>{entry.descriptionDisplay}</strong>
+        {additionalDescription}
+      </span>
+      {entry.isStricken && <span> (STRICKEN)</span>}
     </>
   );
 };
@@ -213,7 +222,13 @@ export const DocketRecord = ({
               return (
                 <tr key={entry.index}>
                   <td>{entry.index}</td>
-                  <td>{entry.createdAtFormatted || ''}</td>
+                  <td
+                    className={classNames(
+                      entry.isStricken && 'stricken-docket-record',
+                    )}
+                  >
+                    {entry.createdAtFormatted || ''}
+                  </td>
                   <td>{entry.eventCode || ''}</td>
                   <td className="filings-and-proceedings">
                     <RecordDescription entry={entry} />
