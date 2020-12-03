@@ -1,12 +1,24 @@
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
+
 export const unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument = test => {
   return it('unassociated user views case detail for a case with a legacy sealed document', async () => {
-    await expect(
-      test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: test.docketNumber,
-      }),
-    ).rejects.toThrow();
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
 
-    // try and get documentDownloadUrl, should throw an error
+    const formattedCase = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(formattedCase.docketEntries).toEqual([]);
+    expect(formattedCase.contactPrimary).toEqual({ showEAccessFlag: false });
+
     await expect(
       test.runSequence('openCaseDocumentDownloadUrlSequence', {
         docketEntryId: test.docketEntryId,
