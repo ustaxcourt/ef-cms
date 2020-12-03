@@ -1,8 +1,4 @@
-import { getAction } from '../actions/actionFactory';
-
-const openCaseDocumentDownloadUrlAction = getAction(
-  'openCaseDocumentDownloadUrlAction',
-);
+import { openCaseDocumentDownloadUrlAction } from '../actions/openCaseDocumentDownloadUrlAction';
 
 export const openCaseDocumentDownloadUrlSequence = [
   openCaseDocumentDownloadUrlAction,

@@ -1,24 +1,20 @@
 const { isCodeEnabled } = require('../../../../codeToggles');
 const { search } = require('./searchClient');
 
-exports.fetchPendingItems = async ({
-  applicationContext,
-  judge,
-  page,
-  source,
-}) => {
-  const caseSource = isCodeEnabled(7134)
-    ? [
-        'associatedJudge',
-        'caseCaption',
-        'docketNumber',
-        'docketNumberSuffix',
-        'status',
-      ]
-    : source;
-  const docketEntrySource = isCodeEnabled(7134)
-    ? ['docketEntryId', 'documentType', 'documentTitle', 'receivedAt']
-    : source;
+exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
+  const caseSource = [
+    'associatedJudge',
+    'caseCaption',
+    'docketNumber',
+    'docketNumberSuffix',
+    'status',
+  ];
+  const docketEntrySource = [
+    'docketEntryId',
+    'documentType',
+    'documentTitle',
+    'receivedAt',
+  ];
 
   const { PENDING_ITEMS_PAGE_SIZE } = applicationContext.getConstants();
 
@@ -58,6 +54,18 @@ exports.fetchPendingItems = async ({
     index: 'efcms-docket-entry',
   };
 
+  if (judge) {
+    hasParentParam.has_parent.query = {
+      bool: {
+        must: [
+          {
+            match_phrase: { 'associatedJudge.S': judge },
+          },
+        ],
+      },
+    };
+  }
+
   if (isCodeEnabled(7198)) {
     const matchingOnServedAtOrLegacyServed = {
       bool: {
@@ -86,28 +94,10 @@ exports.fetchPendingItems = async ({
     searchParameters.body.query.bool.must.push(matchingOnServedAt);
   }
 
-  if (judge) {
-    hasParentParam.has_parent.query = {
-      bool: {
-        must: [
-          {
-            match_phrase: { 'associatedJudge.S': judge },
-          },
-        ],
-      },
-    };
-  }
-
   const { results, total } = await search({
     applicationContext,
     searchParameters,
   });
 
-  let result = { results, total };
-
-  if (isCodeEnabled(7134)) {
-    result = { foundDocuments: results, total };
-  }
-
-  return result;
+  return { foundDocuments: results, total };
 };

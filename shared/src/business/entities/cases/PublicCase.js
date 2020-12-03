@@ -14,21 +14,11 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  PublicDocketEntry: PublicDocketEntryNew,
-} = require('./PublicDocketEntry');
-const {
-  PublicDocketEntry: PublicDocketEntryOld,
-} = require('./PublicDocketEntry.old');
 const { compareStrings } = require('../../utilities/sortFunctions');
-const { isCodeEnabled } = require('../../../../../codeToggles');
 const { isSealedCase } = require('./Case');
 const { map } = require('lodash');
 const { PublicContact } = require('./PublicContact');
-
-const PublicDocketEntry = isCodeEnabled(7164)
-  ? PublicDocketEntryNew
-  : PublicDocketEntryOld;
+const { PublicDocketEntry } = require('./PublicDocketEntry');
 
 /**
  * Public Case Entity

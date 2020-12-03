@@ -3,6 +3,7 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const { fetchPendingItems } = require('./fetchPendingItems');
 jest.mock('./searchClient');
+const { isCodeEnabled } = require('../../../../codeToggles');
 const { search } = require('./searchClient');
 
 describe('fetchPendingItems', () => {
@@ -47,22 +48,25 @@ describe('fetchPendingItems', () => {
 
     const searchQuery =
       search.mock.calls[0][0].searchParameters.body.query.bool.must;
-    expect(searchQuery[4]).toMatchObject({
-      bool: {
-        minimum_should_match: 1,
-        should: [
-          {
-            exists: {
-              field: 'servedAt',
+
+    if (isCodeEnabled(7198)) {
+      expect(searchQuery[4]).toMatchObject({
+        bool: {
+          minimum_should_match: 1,
+          should: [
+            {
+              exists: {
+                field: 'servedAt',
+              },
             },
-          },
-          {
-            term: {
-              'isLegacyServed.BOOL': true,
+            {
+              term: {
+                'isLegacyServed.BOOL': true,
+              },
             },
-          },
-        ],
-      },
-    });
+          ],
+        },
+      });
+    }
   });
 });

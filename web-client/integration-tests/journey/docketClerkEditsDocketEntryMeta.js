@@ -1,5 +1,6 @@
 import { AUTOMATIC_BLOCKED_REASONS } from '../../../shared/src/business/entities/EntityConstants';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { isCodeEnabled } from '../../../codeToggles';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -23,7 +24,7 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'filingDate',
-      value: '2020-01-04',
+      value: '2020-01-04T05:00:00.000Z',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
@@ -56,10 +57,12 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
       value: true,
     });
 
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'pending',
-      value: true,
-    });
+    if (isCodeEnabled(7178)) {
+      await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+        key: 'pending',
+        value: true,
+      });
+    }
 
     await test.runSequence('submitEditDocketEntryMetaSequence', {
       docketNumber: test.docketNumber,
@@ -84,29 +87,32 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
       message: 'Docket entry changes saved.',
     });
 
-    expect(test.getState('caseDetail.automaticBlocked')).toEqual(true);
-    expect(test.getState('caseDetail.automaticBlockedReason')).toEqual(
-      AUTOMATIC_BLOCKED_REASONS.pending,
-    );
-    expect(test.getState('caseDetail.hasPendingItems')).toEqual(true);
-    const docketEntries = test.getState('caseDetail.docketEntries');
-    const pendingDocketEntry = docketEntries.find(
-      d => d.index === docketRecordIndex,
-    );
-    expect(pendingDocketEntry.pending).toEqual(true);
+    if (isCodeEnabled(7178)) {
+      expect(test.getState('caseDetail.automaticBlocked')).toEqual(true);
+      expect(test.getState('caseDetail.automaticBlockedReason')).toEqual(
+        AUTOMATIC_BLOCKED_REASONS.pending,
+      );
+      expect(test.getState('caseDetail.hasPendingItems')).toEqual(true);
+      const docketEntries = test.getState('caseDetail.docketEntries');
+      const pendingDocketEntry = docketEntries.find(
+        d => d.index === docketRecordIndex,
+      );
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
+      expect(pendingDocketEntry.pending).toEqual(true);
 
-    expect(
-      caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
-    ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketEntryId: pendingDocketEntry.docketEntryId,
-        }),
-      ]),
-    );
+      const caseDetailFormatted = runCompute(formattedCaseDetail, {
+        state: test.getState(),
+      });
+
+      expect(
+        caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            docketEntryId: pendingDocketEntry.docketEntryId,
+          }),
+        ]),
+      );
+    }
   });
 };

@@ -27,6 +27,9 @@ const {
   DocketRecord,
 } = require('../pdfGenerator/documentTemplates/DocketRecord.jsx');
 const {
+  DocketRecord: DocketRecordOld,
+} = require('../pdfGenerator/documentTemplates/DocketRecord.old.jsx');
+const {
   NoticeOfDocketChange,
 } = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
 const {
@@ -74,7 +77,7 @@ const {
 
 const React = require('react');
 const ReactDOM = require('react-dom/server');
-const { isCodeDisabled } = require('../../../../../codeToggles.js');
+const { isCodeEnabled } = require('../../../../../codeToggles.js');
 
 const components = {
   AddressLabelCoverSheet,
@@ -83,9 +86,11 @@ const components = {
   CoverSheet,
   DatePrintedFooter,
   DateServedFooter,
-  DocketRecord,
+  DocketRecord: isCodeEnabled(7184) ? DocketRecord : DocketRecordOld,
   DocumentService,
-  NoticeOfDocketChange,
+  NoticeOfDocketChange: isCodeEnabled(6936)
+    ? NoticeOfDocketChange
+    : NoticeOfDocketChangeOld,
   NoticeOfReceiptOfPetition,
   NoticeOfTrialIssued,
   Order,
@@ -99,10 +104,6 @@ const components = {
   TrialCalendar,
   TrialSessionPlanningReport,
 };
-
-if (isCodeDisabled(6936)) {
-  components.NoticeOfDocketChange = NoticeOfDocketChangeOld;
-}
 
 const reactTemplateGenerator = ({ componentName, data = {} }) => {
   const componentTemplate = ReactDOM.renderToString(
