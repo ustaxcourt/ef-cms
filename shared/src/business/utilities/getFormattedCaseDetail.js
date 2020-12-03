@@ -119,16 +119,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
       !formattedEntry.servedAt &&
       !formattedEntry.isUnservable);
 
-  if (isCodeEnabled(7164)) {
-    formattedEntry.isNotServedDocument =
-      !formattedEntry.servedAt &&
-      !formattedEntry.isLegacyServed &&
-      !formattedEntry.isUnservable &&
-      !formattedEntry.isMinuteEntry;
-  } else {
-    formattedEntry.isNotServedDocument =
-      !formattedEntry.servedAt && !formattedEntry.isLegacyServed;
-  }
+  formattedEntry.isNotServedDocument =
+    !formattedEntry.servedAt &&
+    !formattedEntry.isLegacyServed &&
+    !formattedEntry.isUnservable &&
+    !formattedEntry.isMinuteEntry;
 
   formattedEntry.isTranscript =
     formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
