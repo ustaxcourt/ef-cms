@@ -118,6 +118,15 @@ export const DocketRecordOverlay = connect(
                 <FontAwesomeIcon icon={['fas', 'file-pdf']} />
                 View PDF
               </Button>
+              {entry.isLegacySealed && (
+                <p className="sealed-address">
+                  <FontAwesomeIcon
+                    className="margin-right-1"
+                    icon={['fas', 'lock']}
+                  />
+                  Document is sealed
+                </p>
+              )}
               <p className="semi-bold label margin-top-3">Date</p>
               <p className="margin-top-0">{entry.createdAtFormatted}</p>
               <p className="semi-bold label margin-top-3">Pages</p>

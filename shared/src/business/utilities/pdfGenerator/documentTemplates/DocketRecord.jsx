@@ -209,6 +209,7 @@ export const DocketRecord = ({
             <th>No.</th>
             <th>Date</th>
             <th>Event</th>
+            <th></th>
             <th>Filings and proceedings</th>
             <th>Filed by</th>
             <th>Action</th>
@@ -230,6 +231,9 @@ export const DocketRecord = ({
                     {entry.createdAtFormatted || ''}
                   </td>
                   <td>{entry.eventCode || ''}</td>
+                  <td className="padding-top-1">
+                    {entry.isLegacySealed && <div className="sealed-icon" />}
+                  </td>
                   <td className="filings-and-proceedings">
                     <RecordDescription entry={entry} />
                   </td>

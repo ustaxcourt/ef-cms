@@ -20,15 +20,55 @@ export const DocketRecord = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     showModal: state.modal.showModal,
   },
+
   function DocketRecord({
     docketRecordHelper,
     formattedCaseDetail,
     showModal,
   }) {
+    const getIcon = entry => {
+      if (entry.isLegacySealed) {
+        return (
+          <FontAwesomeIcon
+            className="sealed-address"
+            icon={['fas', 'lock']}
+            title="is legacy sealed"
+          />
+        );
+      }
+
+      // we only care to show the lock icon for external users,
+      // so we check if hideIcons is true AFTER we renter the lock icon
+      if (entry.hideIcons) return;
+
+      if (entry.isPaper) {
+        return <FontAwesomeIcon icon={['fas', 'file-alt']} title="is paper" />;
+      }
+
+      if (entry.isInProgress) {
+        return (
+          <FontAwesomeIcon icon={['fas', 'thumbtack']} title="in progress" />
+        );
+      }
+
+      if (entry.qcWorkItemsUntouched && !entry.isInProgress) {
+        return <FontAwesomeIcon icon={['fa', 'star']} title="is untouched" />;
+      }
+
+      if (entry.showLoadingIcon) {
+        return (
+          <FontAwesomeIcon
+            className="fa-spin spinner"
+            icon="spinner"
+            title="is loading"
+          />
+        );
+      }
+    };
+
     return (
       <>
         <DocketRecordHeader />
-
         <table
           aria-label="docket record"
           className="usa-table case-detail docket-record responsive-table row-border-only"
@@ -80,43 +120,8 @@ export const DocketRecord = connect(
                     <td className="center-column hide-on-mobile">
                       {entry.eventCode}
                     </td>
-                    <td
-                      aria-hidden="true"
-                      className="filing-type-icon hide-on-mobile"
-                    >
-                      {!entry.hideIcons && (
-                        <>
-                          {entry.isPaper && (
-                            <FontAwesomeIcon
-                              icon={['fas', 'file-alt']}
-                              title="is paper"
-                            />
-                          )}
-
-                          {entry.isInProgress && (
-                            <FontAwesomeIcon
-                              icon={['fas', 'thumbtack']}
-                              title="in progress"
-                            />
-                          )}
-
-                          {entry.qcWorkItemsUntouched &&
-                            !entry.isInProgress && (
-                              <FontAwesomeIcon
-                                icon={['fa', 'star']}
-                                title="is untouched"
-                              />
-                            )}
-
-                          {entry.showLoadingIcon && (
-                            <FontAwesomeIcon
-                              className="fa-spin spinner"
-                              icon="spinner"
-                              title="is loading"
-                            />
-                          )}
-                        </>
-                      )}
+                    <td aria-hidden="true" className="filing-type-icon">
+                      {getIcon(entry)}
                     </td>
                     <td>
                       <FilingsAndProceedings
@@ -129,7 +134,7 @@ export const DocketRecord = connect(
                     </td>
                     <td className="hide-on-mobile">{entry.filedBy}</td>
                     <td className="hide-on-mobile">{entry.action}</td>
-                    <td>
+                    <td className="hide-on-mobile">
                       {entry.showNotServed && (
                         <span className="text-semibold not-served">
                           Not served
