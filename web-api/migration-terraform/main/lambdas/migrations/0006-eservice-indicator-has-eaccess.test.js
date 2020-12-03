@@ -47,12 +47,12 @@ describe('migrateItems', () => {
 
     const nonCaseRecords = [
       {
-        contactPrimary, // this would not normally be here - proving only case records will be migrated
+        contactPrimary, // this would not normally be here - proving only case records will be altered
         pk: 'docketEntry|123',
         sk: 'docketEntry|123',
       },
       {
-        contactPrimary, // this would not normally be here - proving only case records will be migrated
+        contactPrimary, // this would not normally be here - proving only case records will be altered
         pk: 'case|101-20',
         sk: 'user|123',
       },
@@ -64,8 +64,15 @@ describe('migrateItems', () => {
     );
 
     expect(results).toEqual([
-      expect.objectContaining(caseRecords[0]),
+      expect.objectContaining({
+        ...caseRecords[0],
+        contactPrimary: expect.objectContaining({
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        }),
+      }),
       expect.objectContaining(caseRecords[1]),
+      expect.objectContaining(nonCaseRecords[0]),
+      expect.objectContaining(nonCaseRecords[1]),
     ]);
   });
 
