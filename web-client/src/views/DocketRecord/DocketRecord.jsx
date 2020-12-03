@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
+import { DocketRecord as DocketRecordOld } from './DocketRecord.old';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings as FilingsAndProceedingsNew } from '../DocketRecord/FilingsAndProceedings';
 import { FilingsAndProceedings as FilingsAndProceedingsOld } from '../DocketRecord/FilingsAndProceedings.old';
@@ -14,156 +15,172 @@ const FilingsAndProceedings = isCodeEnabled(7184)
   ? FilingsAndProceedingsNew
   : FilingsAndProceedingsOld;
 
-export const DocketRecord = connect(
-  {
-    docketRecordHelper: state.docketRecordHelper,
-    formattedCaseDetail: state.formattedCaseDetail,
-    showModal: state.modal.showModal,
-  },
-  function DocketRecord({
-    docketRecordHelper,
-    formattedCaseDetail,
-    showModal,
-  }) {
-    return (
-      <>
-        <DocketRecordHeader />
+export const DocketRecord = isCodeEnabled(7199)
+  ? connect(
+      {
+        docketRecordHelper: state.docketRecordHelper,
+        formattedCaseDetail: state.formattedCaseDetail,
+        showModal: state.modal.showModal,
+      },
 
-        <table
-          aria-label="docket record"
-          className="usa-table case-detail docket-record responsive-table row-border-only"
-        >
-          <thead>
-            <tr>
-              <th className="center-column">
-                <span>
-                  <span className="usa-sr-only">Number</span>
-                  <span aria-hidden="true">No.</span>
-                </span>
-              </th>
-              <th>Date</th>
-              <th className="center-column">Event</th>
-              <th aria-hidden="true" className="icon-column" />
-              <th>Filings and Proceedings</th>
-              <th>Pages</th>
-              <th>Filed By</th>
-              <th>Action</th>
-              <th>Served</th>
-              <th className="center-column">Parties</th>
-              {docketRecordHelper.showEditDocketRecordEntry && <th>&nbsp;</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {formattedCaseDetail.formattedDocketEntriesOnDocketRecord.map(
-              (entry, arrayIndex) => {
-                return (
-                  <tr
-                    className={classNames(
-                      entry.isInProgress && 'in-progress',
-                      entry.qcWorkItemsUntouched && 'qc-untouched',
-                    )}
-                    key={arrayIndex}
-                  >
-                    <td className="center-column hide-on-mobile">
-                      {entry.index}
-                    </td>
-                    <td>
-                      <span
+      function DocketRecord({
+        docketRecordHelper,
+        formattedCaseDetail,
+        showModal,
+      }) {
+        const getIcon = entry => {
+          if (entry.isLegacySealed) {
+            return (
+              <FontAwesomeIcon
+                className="sealed-address"
+                icon={['fas', 'lock']}
+                title="is legacy sealed"
+              />
+            );
+          }
+
+          // we only care to show the lock icon for external users,
+          // so we check if hideIcons is true AFTER we renter the lock icon
+          if (entry.hideIcons) return;
+
+          if (entry.isPaper) {
+            return (
+              <FontAwesomeIcon icon={['fas', 'file-alt']} title="is paper" />
+            );
+          }
+
+          if (entry.isInProgress) {
+            return (
+              <FontAwesomeIcon
+                icon={['fas', 'thumbtack']}
+                title="in progress"
+              />
+            );
+          }
+
+          if (entry.qcWorkItemsUntouched && !entry.isInProgress) {
+            return (
+              <FontAwesomeIcon icon={['fa', 'star']} title="is untouched" />
+            );
+          }
+
+          if (entry.showLoadingIcon) {
+            return (
+              <FontAwesomeIcon
+                className="fa-spin spinner"
+                icon="spinner"
+                title="is loading"
+              />
+            );
+          }
+        };
+
+        return (
+          <>
+            <DocketRecordHeader />
+            <table
+              aria-label="docket record"
+              className="usa-table case-detail docket-record responsive-table row-border-only"
+            >
+              <thead>
+                <tr>
+                  <th className="center-column">
+                    <span>
+                      <span className="usa-sr-only">Number</span>
+                      <span aria-hidden="true">No.</span>
+                    </span>
+                  </th>
+                  <th>Date</th>
+                  <th className="center-column">Event</th>
+                  <th aria-hidden="true" className="icon-column" />
+                  <th>Filings and Proceedings</th>
+                  <th>Pages</th>
+                  <th>Filed By</th>
+                  <th>Action</th>
+                  <th>Served</th>
+                  <th className="center-column">Parties</th>
+                  {docketRecordHelper.showEditDocketRecordEntry && (
+                    <th>&nbsp;</th>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {formattedCaseDetail.formattedDocketEntriesOnDocketRecord.map(
+                  (entry, arrayIndex) => {
+                    return (
+                      <tr
                         className={classNames(
-                          entry.isStricken && 'stricken-docket-record',
-                          'no-wrap',
+                          entry.isInProgress && 'in-progress',
+                          entry.qcWorkItemsUntouched && 'qc-untouched',
                         )}
+                        key={arrayIndex}
                       >
-                        {entry.createdAtFormatted}
-                      </span>
-                    </td>
-                    <td className="center-column hide-on-mobile">
-                      {entry.eventCode}
-                    </td>
-                    <td
-                      aria-hidden="true"
-                      className="filing-type-icon hide-on-mobile"
-                    >
-                      {!entry.hideIcons && (
-                        <>
-                          {entry.isPaper && (
-                            <FontAwesomeIcon
-                              icon={['fas', 'file-alt']}
-                              title="is paper"
-                            />
-                          )}
-
-                          {entry.isInProgress && (
-                            <FontAwesomeIcon
-                              icon={['fas', 'thumbtack']}
-                              title="in progress"
-                            />
-                          )}
-
-                          {entry.qcWorkItemsUntouched &&
-                            !entry.isInProgress && (
-                              <FontAwesomeIcon
-                                icon={['fa', 'star']}
-                                title="is untouched"
-                              />
+                        <td className="center-column hide-on-mobile">
+                          {entry.index}
+                        </td>
+                        <td>
+                          <span
+                            className={classNames(
+                              entry.isStricken && 'stricken-docket-record',
+                              'no-wrap',
                             )}
-
-                          {entry.showLoadingIcon && (
-                            <FontAwesomeIcon
-                              className="fa-spin spinner"
-                              icon="spinner"
-                              title="is loading"
-                            />
-                          )}
-                        </>
-                      )}
-                    </td>
-                    <td>
-                      <FilingsAndProceedings
-                        arrayIndex={arrayIndex}
-                        entry={entry}
-                      />
-                    </td>
-                    <td className="hide-on-mobile number-of-pages">
-                      {entry.numberOfPages}
-                    </td>
-                    <td className="hide-on-mobile">{entry.filedBy}</td>
-                    <td className="hide-on-mobile">{entry.action}</td>
-                    <td>
-                      {entry.showNotServed && (
-                        <span className="text-semibold not-served">
-                          Not served
-                        </span>
-                      )}
-                      {entry.showServed && (
-                        <span>{entry.servedAtFormatted}</span>
-                      )}
-                    </td>
-                    <td className="center-column hide-on-mobile">
-                      <span className="responsive-label">Parties</span>
-                      {entry.showServed && entry.servedPartiesCode}
-                    </td>
-                    {docketRecordHelper.showEditDocketRecordEntry && (
-                      <td>
-                        {entry.showEditDocketRecordEntry && (
-                          <Button
-                            link
-                            href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit-meta`}
-                            icon="edit"
                           >
-                            Edit
-                          </Button>
+                            {entry.createdAtFormatted}
+                          </span>
+                        </td>
+                        <td className="center-column hide-on-mobile">
+                          {entry.eventCode}
+                        </td>
+                        <td aria-hidden="true" className="filing-type-icon">
+                          {getIcon(entry)}
+                        </td>
+                        <td>
+                          <FilingsAndProceedings
+                            arrayIndex={arrayIndex}
+                            entry={entry}
+                          />
+                        </td>
+                        <td className="hide-on-mobile number-of-pages">
+                          {entry.numberOfPages}
+                        </td>
+                        <td className="hide-on-mobile">{entry.filedBy}</td>
+                        <td className="hide-on-mobile">{entry.action}</td>
+                        <td className="hide-on-mobile">
+                          {entry.showNotServed && (
+                            <span className="text-semibold not-served">
+                              Not served
+                            </span>
+                          )}
+                          {entry.showServed && (
+                            <span>{entry.servedAtFormatted}</span>
+                          )}
+                        </td>
+                        <td className="center-column hide-on-mobile">
+                          <span className="responsive-label">Parties</span>
+                          {entry.showServed && entry.servedPartiesCode}
+                        </td>
+                        {docketRecordHelper.showEditDocketRecordEntry && (
+                          <td>
+                            {entry.showEditDocketRecordEntry && (
+                              <Button
+                                link
+                                href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit-meta`}
+                                icon="edit"
+                              >
+                                Edit
+                              </Button>
+                            )}
+                          </td>
                         )}
-                      </td>
-                    )}
-                  </tr>
-                );
-              },
-            )}
-          </tbody>
-        </table>
-        {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
-      </>
-    );
-  },
-);
+                      </tr>
+                    );
+                  },
+                )}
+              </tbody>
+            </table>
+            {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
+          </>
+        );
+      },
+    )
+  : DocketRecordOld;

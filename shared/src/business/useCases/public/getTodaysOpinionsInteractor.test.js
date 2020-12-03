@@ -72,4 +72,16 @@ describe('getTodaysOpinionsInteractor', () => {
       startDate: currentDateStart,
     });
   });
+
+  it('should NOT filter out opinion documents belonging to sealed cases', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
+    const results = await getTodaysOpinionsInteractor({
+      applicationContext,
+      keyword: 'fish',
+      startDate: '2001-01-01',
+    });
+    expect(results.length).toBe(1);
+  });
 });

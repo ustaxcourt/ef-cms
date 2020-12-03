@@ -5,6 +5,7 @@ import {
 } from '../entities/EntityConstants';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { cloneDeep } = require('lodash');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 const mockId = '12345';
@@ -159,6 +160,8 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'], //privatePractitioner
     );
+    const sealedDocketEntries = cloneDeep(caseDetail.docketEntries);
+    sealedDocketEntries[0].isSealed = true;
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
@@ -166,8 +169,8 @@ describe('generateDocketRecordPdfInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...caseDetail,
+        docketEntries: sealedDocketEntries,
         privatePractitioners: [],
-        sealedDate: '2019-08-25T05:00:00.000Z',
       });
 
     await expect(

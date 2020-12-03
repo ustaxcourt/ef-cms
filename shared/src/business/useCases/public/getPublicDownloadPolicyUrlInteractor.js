@@ -1,4 +1,4 @@
-const { Case } = require('../../entities/cases/Case');
+const { Case, isSealedCase } = require('../../entities/cases/Case');
 const { isPrivateDocument } = require('../../entities/cases/PublicCase');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
@@ -57,7 +57,7 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
   );
 
   // opinion documents are public even in sealed cases
-  if (caseEntity.isSealed && !isOpinionDocument) {
+  if (isSealedCase(caseEntity) && !isOpinionDocument) {
     throw new UnauthorizedError(
       'Unauthorized to access documents in a sealed case',
     );
