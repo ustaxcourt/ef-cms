@@ -37,7 +37,6 @@ describe('External user views legacy sealed documents', () => {
     test.docketNumber = `${docketNumberPrefix}-${docketNumberYear}`;
     test.docketEntryId = 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0';
 
-    // migrate a case with isLegacySealed: true on a docket entry
     caseWithEAccess = {
       ...MOCK_CASE,
       associatedJudge: CHIEF_JUDGE,
@@ -83,32 +82,25 @@ describe('External user views legacy sealed documents', () => {
     );
   });
 
-  // login as an unassociated petitioner
   loginAs(test, 'petitioner2@example.com');
   unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
 
-  // login as an unassociated respondent
   loginAs(test, 'irsPractitioner@example.com');
   unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
 
-  // login as an unassociated practitioner
   loginAs(test, 'privatePractitioner@example.com');
   unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
 
-  // login as petitionsclerk
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkAddsPractitionersToCase(test, true);
   petitionsClerkAddsRespondentsToCase(test, true);
 
-  // login as an associated petitioner
   loginAs(test, 'petitioner@example.com');
   associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
 
-  // login as an associated respondent
   loginAs(test, 'irsPractitioner@example.com');
   associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
 
-  // login as an associated practitioner
   loginAs(test, 'privatePractitioner@example.com');
   associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
 });

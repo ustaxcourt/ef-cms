@@ -12,16 +12,20 @@ export const associatedUserViewsCaseDetailForCaseWithLegacySealedDocument = test
       docketNumber: test.docketNumber,
     });
 
-    // check for no link on the docket record
     const formattedCase = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
     const legacySealedDocketEntry = formattedCase.formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === test.docketEntryId,
     );
-    expect(legacySealedDocketEntry.showLinkToDocument).toBeFalsy();
 
-    // try and get documentDownloadUrl, should throw an error
+    expect(legacySealedDocketEntry.showLinkToDocument).toBeFalsy();
+    expect(formattedCase.contactPrimary).toMatchObject({
+      address1: expect.anything(),
+      contactId: expect.anything(),
+      name: expect.anything(),
+    });
+
     await expect(
       test.runSequence('openCaseDocumentDownloadUrlSequence', {
         docketEntryId: test.docketEntryId,
