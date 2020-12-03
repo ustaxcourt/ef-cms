@@ -2,6 +2,7 @@ const {
   getDownloadPolicyUrlInteractor,
 } = require('./getDownloadPolicyUrlInteractor');
 const {
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
@@ -329,6 +330,77 @@ describe('getDownloadPolicyUrlInteractor', () => {
             )[0],
             documentType: 'Stipulated Decision',
             eventCode: STIPULATED_DECISION_EVENT_CODE,
+            isOnDocketRecord: true,
+            servedAt: new Date().toISOString(),
+          },
+        ],
+      });
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time');
+  });
+
+  it('throws an error for a privatePractitioner who is associated with the case and is viewing a isLegacySealed document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+      userId: 'privatePractitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            ...mockCase.docketEntries.filter(
+              d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            )[0],
+            documentType:
+              NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
+            eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
+            isLegacySealed: true,
+            isOnDocketRecord: true,
+            servedAt: new Date().toISOString(),
+          },
+        ],
+      });
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time');
+  });
+
+  it('throws an error for a petitioner who is associated with the case and is viewing a isLegacySealed document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            ...mockCase.docketEntries.filter(
+              d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            )[0],
+            documentType: 'Order', // This is from courtIssuedEventCodes.json
+            eventCode: 'O',
+            isLegacySealed: true,
             isOnDocketRecord: true,
             servedAt: new Date().toISOString(),
           },
