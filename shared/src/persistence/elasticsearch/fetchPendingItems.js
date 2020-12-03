@@ -1,24 +1,20 @@
 const { isCodeEnabled } = require('../../../../codeToggles');
 const { search } = require('./searchClient');
 
-exports.fetchPendingItems = async ({
-  applicationContext,
-  judge,
-  page,
-  source,
-}) => {
-  const caseSource = isCodeEnabled(7134)
-    ? [
-        'associatedJudge',
-        'caseCaption',
-        'docketNumber',
-        'docketNumberSuffix',
-        'status',
-      ]
-    : source;
-  const docketEntrySource = isCodeEnabled(7134)
-    ? ['docketEntryId', 'documentType', 'documentTitle', 'receivedAt']
-    : source;
+exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
+  const caseSource = [
+    'associatedJudge',
+    'caseCaption',
+    'docketNumber',
+    'docketNumberSuffix',
+    'status',
+  ];
+  const docketEntrySource = [
+    'docketEntryId',
+    'documentType',
+    'documentTitle',
+    'receivedAt',
+  ];
 
   const { PENDING_ITEMS_PAGE_SIZE } = applicationContext.getConstants();
 
@@ -103,11 +99,5 @@ exports.fetchPendingItems = async ({
     searchParameters,
   });
 
-  let result = { results, total };
-
-  if (isCodeEnabled(7134)) {
-    result = { foundDocuments: results, total };
-  }
-
-  return result;
+  return { foundDocuments: results, total };
 };

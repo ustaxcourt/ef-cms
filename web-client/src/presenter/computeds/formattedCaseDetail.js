@@ -208,14 +208,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       !permissions.UPDATE_CASE &&
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-    if (isCodeEnabled(7164)) {
-      formattedResult.showNotServed = entry.isNotServedDocument;
-    } else {
-      formattedResult.showNotServed =
-        !formattedResult.isUnservable &&
-        entry.isNotServedDocument &&
-        !entry.isMinuteEntry;
-    }
+    formattedResult.showNotServed = entry.isNotServedDocument;
     formattedResult.showServed = entry.isStatusServed;
 
     const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
@@ -257,12 +250,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
       userPermissions: permissions,
     });
 
-    if (isCodeEnabled(6868)) {
-      formattedResult.showDocumentDescriptionWithoutLink =
-        !showDocumentLinks && !formattedResult.showDocumentProcessing;
-    } else {
-      formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
-    }
+    formattedResult.showDocumentDescriptionWithoutLink =
+      !showDocumentLinks && !formattedResult.showDocumentProcessing;
 
     return formattedResult;
   });
