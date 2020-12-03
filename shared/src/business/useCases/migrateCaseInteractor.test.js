@@ -5,6 +5,7 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
@@ -695,6 +696,18 @@ describe('migrateCaseInteractor', () => {
           userId: expect.anything(),
         },
       });
+      expect(
+        applicationContext.getPersistenceGateway().createCase.mock.calls[0][0],
+      ).toEqual(
+        expect.objectContaining({
+          caseToCreate: expect.objectContaining({
+            contactPrimary: expect.objectContaining({
+              name: caseMetadata.contactPrimary.name,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            }),
+          }),
+        }),
+      );
       expect(
         applicationContext.getPersistenceGateway().associateUserWithCase.mock
           .calls[0][0],
