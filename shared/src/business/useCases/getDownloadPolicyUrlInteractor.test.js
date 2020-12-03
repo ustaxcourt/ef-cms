@@ -365,6 +365,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
             documentType:
               NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
             eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
+            isLegacySealed: true,
             isOnDocketRecord: true,
             servedAt: new Date().toISOString(),
           },
@@ -397,9 +398,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
             ...mockCase.docketEntries.filter(
               d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
             )[0],
-            documentType:
-              NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
-            eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
+            documentType: 'Order', // This is from courtIssuedEventCodes.json
+            eventCode: 'O',
+            isLegacySealed: true,
             isOnDocketRecord: true,
             servedAt: new Date().toISOString(),
           },
