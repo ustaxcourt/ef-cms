@@ -28,7 +28,7 @@ exports.casePublicSearchInteractor = async ({
 
   const unsealedFoundCases = await filterForPublic({
     applicationContext,
-    foundCases,
+    unfiltered: foundCases,
   });
 
   return PublicCase.validateRawCollection(unsealedFoundCases, {
