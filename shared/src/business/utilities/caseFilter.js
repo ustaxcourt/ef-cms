@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { cloneDeep, pick } = require('lodash');
-const { isAssociatedUser } = require('../entities/cases/Case');
+const { isAssociatedUser, isSealedCase } = require('../entities/cases/Case');
 const CASE_ATTRIBUTE_WHITELIST = [
   'docketNumber',
   'docketNumberSuffix',
@@ -67,7 +67,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
 
 const caseSearchFilter = (cases, currentUser) => {
   const caseSearchFilterConditionals = caseRaw =>
-    !caseRaw.sealedDate ||
+    !isSealedCase(caseRaw) ||
     isAssociatedUser({ caseRaw, user: currentUser }) ||
     isAuthorized(
       currentUser,
