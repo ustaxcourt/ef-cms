@@ -1,5 +1,4 @@
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { isCodeEnabled } from '../../../codeToggles';
 import { refreshElasticsearchIndex, viewCaseDetail } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -41,9 +40,7 @@ export const docketClerkViewsCaseDetailDocumentView = test => {
 
     test.docketEntryId = formatted.pendingItemsDocketEntries[0].docketEntryId;
 
-    if (isCodeEnabled(6938)) {
-      expect(test.getState('docketEntryId')).toEqual(test.docketEntryId);
-    }
+    expect(test.getState('docketEntryId')).toEqual(test.docketEntryId);
 
     expect(
       test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
