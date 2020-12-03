@@ -271,11 +271,11 @@ const {
   fetchPendingItems: fetchPendingItemsOld,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems.old');
 const {
-  fetchPendingItems: fetchPendingItemsPersistence,
-} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems.old');
-const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
+const {
+  fetchPendingItemsByDocketNumber: fetchPendingItemsByDocketNumberOld,
+} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber.old');
 const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
@@ -732,6 +732,9 @@ const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
 const {
+  prioritizeCaseInteractor: prioritizeCaseInteractorOld,
+} = require('../../shared/src/business/useCases/prioritizeCaseInteractor.old');
+const {
   PrivatePractitioner,
 } = require('../../shared/src/business/entities/PrivatePractitioner');
 const {
@@ -915,6 +918,9 @@ const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
+  updateDocketEntryMetaInteractor: updateDocketEntryMetaInteractorOld,
+} = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor.old');
+const {
   updateDocketEntryProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
 const {
@@ -932,6 +938,9 @@ const {
 const {
   updatePetitionDetailsInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor');
+const {
+  updatePetitionDetailsInteractor: updatePetitionDetailsInteractorOld,
+} = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor.old');
 const {
   updatePetitionerInformationInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionerInformationInteractor');
@@ -1151,9 +1160,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     createUser,
     createUserInboxRecord,
-    fetchPendingItems: isCodeEnabled(7134)
-      ? fetchPendingItems
-      : fetchPendingItemsPersistence,
+    fetchPendingItems,
     getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
@@ -1519,7 +1526,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         countPagesInDocument,
         createTrialSessionAndWorkingCopy,
         fetchPendingItems,
-        fetchPendingItemsByDocketNumber,
+        fetchPendingItemsByDocketNumber: isCodeEnabled(7198)
+          ? fetchPendingItemsByDocketNumber
+          : fetchPendingItemsByDocketNumberOld,
         fetchPendingItemsOld,
         formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
@@ -1647,7 +1656,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
         parseLegacyDocumentsInteractor,
-        prioritizeCaseInteractor,
+        prioritizeCaseInteractor: isCodeEnabled(7080)
+          ? prioritizeCaseInteractor
+          : prioritizeCaseInteractorOld,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
@@ -1683,9 +1694,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateCourtIssuedOrderInteractor,
         updateDeficiencyStatisticInteractor,
         updateDocketEntryInteractor,
-        updateDocketEntryMetaInteractor,
+        updateDocketEntryMetaInteractor: isCodeEnabled(7178)
+          ? updateDocketEntryMetaInteractor
+          : updateDocketEntryMetaInteractorOld,
         updateOtherStatisticsInteractor,
-        updatePetitionDetailsInteractor,
+        updatePetitionDetailsInteractor: isCodeEnabled(7080)
+          ? updatePetitionDetailsInteractor
+          : updatePetitionDetailsInteractorOld,
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
         updatePrimaryContactInteractor,

@@ -1,3 +1,5 @@
+jest.mock('../../../../codeToggles');
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
@@ -6,6 +8,7 @@ import {
   getShowDocumentViewerLink,
 } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { isCodeEnabled } from '../../../../codeToggles';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -215,6 +218,10 @@ describe('formattedCaseDetail', () => {
       servedAt: '2019-06-19T17:29:13.120Z',
     },
   ];
+
+  beforeEach(() => {
+    isCodeEnabled.mockReturnValue(true);
+  });
 
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedCaseDetail, {
@@ -2071,6 +2078,30 @@ describe('formattedCaseDetail', () => {
         },
         output: true,
       },
+      {
+        // User is external, with no access to case, document link is not publicly visible
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isHiddenToPublic: true,
+          isUnservable: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        // User is external, with access to case, document link is visible
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isHiddenToPublic: true,
+          isUnservable: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
     ];
 
     tests.forEach(({ inputs, output }) => {
@@ -2640,6 +2671,98 @@ describe('formattedCaseDetail', () => {
           isOnDocketRecord: true,
           pending: true,
         },
+      ]);
+    });
+
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending and 7198 is toggled on', async () => {
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[2],
+            docketEntryId: '999999',
+            isLegacyServed: true,
+            isOnDocketRecord: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
+        { docketEntryId: '999999' },
+      ]);
+    });
+
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending and 7198 is toggled off', async () => {
+      isCodeEnabled.mockReturnValue(false);
+
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[2],
+            docketEntryId: '999999',
+            isLegacyServed: true,
+            isOnDocketRecord: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      };
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject(
+        [],
+      );
+    });
+
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', async () => {
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[2],
+            docketEntryId: '999999',
+            isLegacyServed: false,
+            isOnDocketRecord: true,
+            pending: true,
+            servedAt: '2019-08-25T05:00:00.000Z',
+            servedParties: [
+              {
+                name: 'Bernard Lowe',
+              },
+              {
+                name: 'IRS',
+                role: 'irsSuperuser',
+              },
+            ],
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
+        { docketEntryId: '999999' },
       ]);
     });
   });

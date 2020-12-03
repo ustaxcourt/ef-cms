@@ -37,7 +37,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const originalDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
@@ -68,6 +68,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
     partyPrimary: docketEntryMeta.partyPrimary,
     partySecondary: docketEntryMeta.partySecondary,
+    pending: docketEntryMeta.pending,
     scenario: docketEntryMeta.scenario,
     servedAt: docketEntryMeta.servedAt,
     servedPartiesCode: docketEntryMeta.servedPartiesCode,
@@ -101,6 +102,10 @@ exports.updateDocketEntryMetaInteractor = async ({
     );
 
     caseEntity.updateDocketEntry(docketEntryEntity);
+
+    caseEntity = await applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
     if (shouldGenerateCoversheet) {
       await applicationContext.getPersistenceGateway().updateDocketEntry({
