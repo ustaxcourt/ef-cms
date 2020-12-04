@@ -43,7 +43,9 @@ export const AppComponentPublic = connect(
       focusMain();
     });
 
-    useScript('https://lynmjtcq5px1.statuspage.io/embed/script.js');
+    if (!process.env.CI) {
+      useScript('https://lynmjtcq5px1.statuspage.io/embed/script.js');
+    }
 
     const CurrentPage = pages[currentPage];
 
