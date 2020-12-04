@@ -25,44 +25,19 @@ const aggregateCommonQueryParams = ({
   const nonExactMatchesQuery = [];
 
   if (petitionerName) {
-    const petitionerNameArray = petitionerName.toLowerCase().split(' ');
     exactMatchesQuery.push({
       bool: {
-        should: [
+        must: [
           {
-            bool: {
-              minimum_should_match: petitionerNameArray.length,
-              should: petitionerNameArray.map(word => {
-                return {
-                  term: {
-                    'contactPrimary.M.name.S': word,
-                  },
-                };
-              }),
-            },
-          },
-          {
-            bool: {
-              minimum_should_match: petitionerNameArray.length,
-              should: petitionerNameArray.map(word => {
-                return {
-                  term: {
-                    'contactPrimary.M.secondaryName.S': word,
-                  },
-                };
-              }),
-            },
-          },
-          {
-            bool: {
-              minimum_should_match: petitionerNameArray.length,
-              should: petitionerNameArray.map(word => {
-                return {
-                  term: {
-                    'contactSecondary.M.name.S': word,
-                  },
-                };
-              }),
+            simple_query_string: {
+              default_operator: 'and',
+              fields: [
+                'contactPrimary.M.name.S',
+                'contactPrimary.M.secondaryName.S',
+                'contactSecondary.M.name.S',
+              ],
+              flags: 'AND|PHRASE|PREFIX',
+              query: petitionerName,
             },
           },
         ],

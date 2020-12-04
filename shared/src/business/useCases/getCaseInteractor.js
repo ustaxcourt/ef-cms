@@ -1,4 +1,9 @@
 const {
+  Case,
+  isAssociatedUser,
+  isSealedCase,
+} = require('../entities/cases/Case');
+const {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
 } = require('../utilities/caseFilter');
@@ -6,7 +11,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case, isAssociatedUser } = require('../entities/cases/Case');
 const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
@@ -74,7 +78,7 @@ const getSealedCase = async ({
   const isAuthorizedToViewSealedCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-    caseRecord.userId,
+    caseRecord.contactPrimary.contactId,
   );
 
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
@@ -135,7 +139,7 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
   const isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
-    caseRecord.userId,
+    caseRecord.contactPrimary.contactId,
   );
   const isAssociatedWithCase = isAssociatedUser({
     caseRaw: caseRecord,
@@ -143,7 +147,8 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
   });
 
   let caseDetailRaw;
-  if (caseRecord.sealedDate) {
+  caseRecord.isSealed = isSealedCase(caseRecord);
+  if (isSealedCase(caseRecord)) {
     caseDetailRaw = await getSealedCase({
       applicationContext,
       caseRecord,

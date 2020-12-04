@@ -5,7 +5,6 @@ import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError'
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
-import { addCaseToTrialSessionSequence as addCaseToTrialSessionSequenceOld } from './sequences/addCaseToTrialSessionSequence.old';
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
@@ -153,7 +152,6 @@ import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCou
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
-import { isCodeEnabled } from '../../../codeToggles';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
@@ -448,9 +446,7 @@ export const presenter = {
   ],
   providers: {},
   sequences: {
-    addCaseToTrialSessionSequence: isCodeEnabled(6506)
-      ? addCaseToTrialSessionSequence
-      : addCaseToTrialSessionSequenceOld,
+    addCaseToTrialSessionSequence,
     addPenaltyInputSequence,
     addStatisticToFormSequence,
     addSupportingDocumentToFormSequence,

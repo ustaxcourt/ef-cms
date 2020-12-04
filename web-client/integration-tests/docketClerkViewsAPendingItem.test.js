@@ -11,7 +11,6 @@ import {
 } from './helpers';
 import { formatDateString } from '../../shared/src/business/utilities/DateHandler';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-import { isCodeEnabled } from '../../codeToggles';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -162,20 +161,18 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     expect(pendingItem).toBeDefined();
 
-    if (isCodeEnabled(7134)) {
-      const answerPendingReceivedAtFormatted = formatDateString(
-        pendingItem.receivedAt,
-        'MMDDYYYY',
-      );
-      const caseReceivedAtFormatted = formatDateString(
-        caseReceivedAtDate,
-        'MMDDYYYY',
-      );
+    const answerPendingReceivedAtFormatted = formatDateString(
+      pendingItem.receivedAt,
+      'MMDDYYYY',
+    );
+    const caseReceivedAtFormatted = formatDateString(
+      caseReceivedAtDate,
+      'MMDDYYYY',
+    );
 
-      expect(answerPendingReceivedAtFormatted).not.toEqual(
-        caseReceivedAtFormatted,
-      );
-      expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
-    }
+    expect(answerPendingReceivedAtFormatted).not.toEqual(
+      caseReceivedAtFormatted,
+    );
+    expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
   });
 });
