@@ -265,9 +265,6 @@ const {
   fetchPendingItems,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
 const {
-  fetchPendingItems: fetchPendingItemsOld,
-} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems.old');
-const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
 const {
@@ -1492,7 +1489,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         createTrialSessionAndWorkingCopy,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
-        fetchPendingItemsOld,
         formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
