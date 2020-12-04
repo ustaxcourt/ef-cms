@@ -1,7 +1,3 @@
-import {
-  OPINION_EVENT_CODES,
-  ORDER_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
 import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from 'cerebral';
@@ -31,7 +27,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
 
     paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
       searchResult =>
-        formatDocumentSearchResultRecord(get, searchResult, advancedSearchTab, {
+        formatDocumentSearchResultRecord(searchResult, advancedSearchTab, {
           applicationContext,
         }),
     );
@@ -52,11 +48,15 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
 };
 
 export const formatDocumentSearchResultRecord = (
-  get,
   result,
   advancedSearchTab,
   { applicationContext },
 ) => {
+  const {
+    OPINION_EVENT_CODES,
+    ORDER_EVENT_CODES,
+  } = applicationContext.getConstants();
+
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
