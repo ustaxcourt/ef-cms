@@ -1,15 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmRemoveCaseDetailPendingItemModal } from './ConfirmRemoveCaseDetailPendingItemModal';
-import { FilingsAndProceedings as FilingsAndProceedingsNew } from '../DocketRecord/FilingsAndProceedings';
-import { FilingsAndProceedings as FilingsAndProceedingsOld } from '../DocketRecord/FilingsAndProceedings.old';
+import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { connect } from '@cerebral/react';
-import { isCodeEnabled } from '../../../../codeToggles';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-const FilingsAndProceedings = isCodeEnabled(7184)
-  ? FilingsAndProceedingsNew
-  : FilingsAndProceedingsOld;
 
 export const CaseDetailPendingReportList = connect(
   {

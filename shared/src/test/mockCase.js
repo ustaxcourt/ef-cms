@@ -13,7 +13,7 @@ exports.MOCK_CASE = {
   contactPrimary: {
     address1: '123 Main St',
     city: 'Somewhere',
-    contactId: '76a6050f-a423-47bb-943b-a5661fe08a6b',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'petitioner@example.com',
     name: 'Test Petitioner',
@@ -33,7 +33,7 @@ exports.MOCK_CASE = {
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.new,
-  userId: '76a6050f-a423-47bb-943b-a5661fe08a6b',
+  userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
 exports.MOCK_CASE_WITHOUT_PENDING = {
@@ -42,7 +42,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   contactPrimary: {
     address1: '123 Main St',
     city: 'Somewhere',
-    contactId: '76a6050f-a423-47bb-943b-a5661fe08a6b',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'petitioner@example.com',
     name: 'Test Petitioner',
@@ -89,7 +89,7 @@ exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
   contactPrimary: {
     address1: '123 Main St',
     city: 'Somewhere',
-    contactId: '76a6050f-a423-47bb-943b-a5661fe08a6b',
+    contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'petitioner@example.com',
     name: 'Test Petitioner',

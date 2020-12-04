@@ -53,15 +53,12 @@ import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
-import { formattedWorkQueue as formattedWorkQueueOld } from './computeds/formattedWorkQueue.old';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
-import { isCodeEnabled } from '../../../codeToggles';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
-import { messageDocumentHelper as messageDocumentHelperOld } from './computeds/messageDocumentHelper.old';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
@@ -78,7 +75,6 @@ import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
-import { selectDocumentTypeHelper as selectDocumentTypeHelperOld } from './computeds/selectDocumentTypeHelper.old';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
@@ -151,17 +147,13 @@ const helpers = {
   formattedPendingItems,
   formattedTrialSessionDetails,
   formattedTrialSessions,
-  formattedWorkQueue: isCodeEnabled(6934)
-    ? formattedWorkQueue
-    : formattedWorkQueueOld,
+  formattedWorkQueue,
   getTrialCityName,
   headerHelper,
   internalTypesHelper,
   loadingHelper,
   menuHelper,
-  messageDocumentHelper: isCodeEnabled(7022)
-    ? messageDocumentHelper
-    : messageDocumentHelperOld,
+  messageDocumentHelper,
   messageModalHelper,
   messagesHelper,
   orderTypesHelper,
@@ -178,9 +170,6 @@ const helpers = {
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
-  selectDocumentTypeHelper: isCodeEnabled(6915)
-    ? undefined
-    : selectDocumentTypeHelperOld,
   showAppTimeoutModalHelper,
   startCaseHelper,
   startCaseInternalContactsHelper,

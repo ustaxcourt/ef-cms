@@ -52,7 +52,6 @@ const { Correspondence } = require('../Correspondence');
 const { DocketEntry } = require('../DocketEntry');
 const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
-const { isCodeEnabled } = require('../../../../../codeToggles');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { User } = require('../User');
@@ -252,17 +251,11 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
-  if (isCodeEnabled(7198)) {
-    this.hasPendingItems = this.docketEntries.some(
-      docketEntry =>
-        docketEntry.pending &&
-        (docketEntry.servedAt || docketEntry.isLegacyServed),
-    );
-  } else {
-    this.hasPendingItems = this.docketEntries.some(
-      docketEntry => docketEntry.pending && docketEntry.servedAt,
-    );
-  }
+  this.hasPendingItems = this.docketEntries.some(
+    docketEntry =>
+      docketEntry.pending &&
+      (docketEntry.servedAt || docketEntry.isLegacyServed),
+  );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
 
@@ -283,11 +276,7 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
       )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
-    this.isSealed =
-      !!rawCase.sealedDate ||
-      this.docketEntries.some(
-        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-      );
+    this.isSealed = isSealedCase(rawCase);
 
     if (
       filtered &&
@@ -832,17 +821,11 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  if (isCodeEnabled(7198)) {
-    return this.docketEntries.some(
-      docketEntry =>
-        docketEntry.pending &&
-        (docketEntry.servedAt || docketEntry.isLegacyServed),
-    );
-  } else {
-    return this.docketEntries.some(
-      docketEntry => docketEntry.pending && docketEntry.servedAt,
-    );
-  }
+  return this.docketEntries.some(
+    docketEntry =>
+      docketEntry.pending &&
+      (docketEntry.servedAt || docketEntry.isLegacyServed),
+  );
 };
 
 /**
@@ -1903,8 +1886,20 @@ Case.prototype.hasPartyWithPaperService = function () {
   );
 };
 
+const isSealedCase = rawCase => {
+  const isSealed =
+    rawCase.isSealed ||
+    !!rawCase.sealedDate ||
+    (Array.isArray(rawCase.docketEntries) &&
+      rawCase.docketEntries.some(
+        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+      ));
+  return isSealed;
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
   getPetitionDocketEntryFromDocketEntries,
   isAssociatedUser,
+  isSealedCase,
 };
