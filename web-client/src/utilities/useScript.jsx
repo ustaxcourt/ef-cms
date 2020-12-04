@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 /**
  * Simple hook that allows you to embed a third-party JavaScript when a component references this hook.
