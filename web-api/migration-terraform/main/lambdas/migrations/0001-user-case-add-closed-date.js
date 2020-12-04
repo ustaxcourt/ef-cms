@@ -14,6 +14,7 @@ const migrateItems = async (items, documentClient) => {
     if (
       item.pk.includes('user|') &&
       item.sk.includes('case|') &&
+      item.gsi1pk &&
       item.gsi1pk.includes('user-case|')
     ) {
       if (!item.closedDate && item.status === CASE_STATUS_TYPES.closed) {
