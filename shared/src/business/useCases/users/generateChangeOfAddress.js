@@ -44,7 +44,6 @@ exports.generateChangeOfAddress = async ({
   for (let caseInfo of docketNumbers) {
     try {
       const { docketNumber } = caseInfo;
-      let oldData;
       const newData = contactInfo;
 
       const userCase = await applicationContext
@@ -67,7 +66,7 @@ exports.generateChangeOfAddress = async ({
         );
       }
 
-      oldData = clone(practitionerObject.contact);
+      const oldData = clone(practitionerObject.contact);
 
       // This updates the case by reference!
       practitionerObject.contact = contactInfo;
