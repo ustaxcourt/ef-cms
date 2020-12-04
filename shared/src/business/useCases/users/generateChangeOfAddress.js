@@ -61,8 +61,11 @@ exports.generateChangeOfAddress = async ({
         .concat(caseEntity.irsPractitioners)
         .find(practitioner => practitioner.userId === user.userId);
 
-      if (!practitionerObject)
-        throw new Error('Practitioner not found on case', user);
+      if (!practitionerObject) {
+        throw new Error(
+          `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
+        );
+      }
 
       oldData = clone(practitionerObject.contact);
 
@@ -117,7 +120,16 @@ exports.generateChangeOfAddress = async ({
 /**
  * This function isolates task of generating the Docket Entry in addition to
  * serving it to other parties on the case
- * @param {*} param0
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseEntity the instantiated Case class
+ * @param {object} providers.newData the new practitioner contact information
+ * @param {object} providers.oldData the old practitioner contact information (for comparison)
+ * @param {object} providers.practitionerName the name of the practitioner
+ * @param {object} providers.user the user object that includes userId, barNumber etc.
+ * @param {object} providers.userCase the application context
+ * @returns {Promise<User[]>} the internal users
  */
 const generateAndServeDocketEntry = async ({
   applicationContext,
