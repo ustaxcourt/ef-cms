@@ -15,6 +15,7 @@ const {
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
+const { isCodeEnabled } = require('../../../../codeToggles');
 const { ROLES } = require('../entities/EntityConstants');
 
 const getServedPartiesCode = servedParties => {
@@ -118,8 +119,16 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
       !formattedEntry.servedAt &&
       !formattedEntry.isUnservable);
 
-  formattedEntry.isNotServedDocument =
-    !formattedEntry.servedAt && !formattedEntry.isLegacyServed;
+  if (isCodeEnabled(7164)) {
+    formattedEntry.isNotServedDocument =
+      !formattedEntry.servedAt &&
+      !formattedEntry.isLegacyServed &&
+      !formattedEntry.isUnservable &&
+      !formattedEntry.isMinuteEntry;
+  } else {
+    formattedEntry.isNotServedDocument =
+      !formattedEntry.servedAt && !formattedEntry.isLegacyServed;
+  }
 
   formattedEntry.isTranscript =
     formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;

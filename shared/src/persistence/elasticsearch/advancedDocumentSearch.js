@@ -58,6 +58,7 @@ exports.advancedDocumentSearch = async ({
   if (keyword) {
     docketEntryQueryParams.push({
       simple_query_string: {
+        default_operator: 'and',
         fields: ['documentContents.S', 'documentTitle.S'],
         query: keyword,
       },
@@ -79,6 +80,7 @@ exports.advancedDocumentSearch = async ({
       },
       parent_type: 'case',
       query: { bool: { must_not: caseMustNot } },
+      score: true,
     },
   };
 
@@ -89,6 +91,8 @@ exports.advancedDocumentSearch = async ({
   } else if (caseTitleOrPetitioner) {
     caseQueryParams.has_parent.query.bool.must = {
       simple_query_string: {
+        default_operator: 'and',
+
         fields: [
           'caseCaption.S',
           'contactPrimary.M.name.S',
