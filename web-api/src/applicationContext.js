@@ -7,6 +7,7 @@ const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases
 const elasticsearch = require('elasticsearch');
 const Honeybadger = require('honeybadger');
 const pdfLib = require('pdf-lib');
+const sass = require('sass');
 const util = require('util');
 const {
   addCaseToTrialSessionInteractor,
@@ -1394,15 +1395,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       migrateTrialSessionInteractor,
     }),
     getNodeSass: () => {
-      // Notice: this require is here to only have the lambdas that need it call it.
-      // This dependency is only available on lambdas with the 'puppeteer' layer,
-      // which means including it globally causes the other lambdas to fail.
-      // This also needs to have the string split to cause parcel to NOT bundle this dependency,
-      // which is wanted as bundling would have the dependency to not be searched for
-      // and found at the layer level and would cause issues.
-      // eslint-disable-next-line security/detect-non-literal-require
-      const nodeSass = require('node-' + 'sass');
-      return nodeSass;
+      return sass;
     },
     getNotificationClient: ({ endpoint }) => {
       if (endpoint.indexOf('localhost') !== -1) {
