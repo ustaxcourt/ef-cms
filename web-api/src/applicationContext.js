@@ -271,9 +271,6 @@ const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
 const {
-  fetchPendingItemsByDocketNumber: fetchPendingItemsByDocketNumberOld,
-} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber.old');
-const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
@@ -900,9 +897,6 @@ const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
-  updateDocketEntryMetaInteractor: updateDocketEntryMetaInteractorOld,
-} = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor.old');
-const {
   updateDocketEntryProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
 const {
@@ -917,9 +911,6 @@ const {
 const {
   updatePetitionDetailsInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor');
-const {
-  updatePetitionDetailsInteractor: updatePetitionDetailsInteractorOld,
-} = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor.old');
 const {
   updatePetitionerInformationInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionerInformationInteractor');
@@ -994,7 +985,6 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
-const { isCodeEnabled } = require('../../codeToggles');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
 
@@ -1501,9 +1491,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         countPagesInDocument,
         createTrialSessionAndWorkingCopy,
         fetchPendingItems,
-        fetchPendingItemsByDocketNumber: isCodeEnabled(7198)
-          ? fetchPendingItemsByDocketNumber
-          : fetchPendingItemsByDocketNumberOld,
+        fetchPendingItemsByDocketNumber,
         fetchPendingItemsOld,
         formatAndSortConsolidatedCases,
         generateCaseInventoryReportPdf,
@@ -1661,13 +1649,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateCourtIssuedOrderInteractor,
         updateDeficiencyStatisticInteractor,
         updateDocketEntryInteractor,
-        updateDocketEntryMetaInteractor: isCodeEnabled(7178)
-          ? updateDocketEntryMetaInteractor
-          : updateDocketEntryMetaInteractorOld,
+        updateDocketEntryMetaInteractor,
         updateOtherStatisticsInteractor,
-        updatePetitionDetailsInteractor: isCodeEnabled(7080)
-          ? updatePetitionDetailsInteractor
-          : updatePetitionDetailsInteractorOld,
+        updatePetitionDetailsInteractor,
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
         updatePrimaryContactInteractor,

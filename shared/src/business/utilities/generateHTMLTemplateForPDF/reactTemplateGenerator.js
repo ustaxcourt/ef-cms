@@ -27,14 +27,8 @@ const {
   DocketRecord,
 } = require('../pdfGenerator/documentTemplates/DocketRecord.jsx');
 const {
-  DocketRecord: DocketRecordOld,
-} = require('../pdfGenerator/documentTemplates/DocketRecord.old.jsx');
-const {
   NoticeOfDocketChange,
 } = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
-const {
-  NoticeOfDocketChange: NoticeOfDocketChangeOld,
-} = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.old.jsx');
 const {
   NoticeOfReceiptOfPetition,
 } = require('../pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition.jsx');
@@ -77,7 +71,6 @@ const {
 
 const React = require('react');
 const ReactDOM = require('react-dom/server');
-const { isCodeEnabled } = require('../../../../../codeToggles.js');
 
 const components = {
   AddressLabelCoverSheet,
@@ -86,11 +79,9 @@ const components = {
   CoverSheet,
   DatePrintedFooter,
   DateServedFooter,
-  DocketRecord: isCodeEnabled(7184) ? DocketRecord : DocketRecordOld,
+  DocketRecord,
   DocumentService,
-  NoticeOfDocketChange: isCodeEnabled(6936)
-    ? NoticeOfDocketChange
-    : NoticeOfDocketChangeOld,
+  NoticeOfDocketChange,
   NoticeOfReceiptOfPetition,
   NoticeOfTrialIssued,
   Order,

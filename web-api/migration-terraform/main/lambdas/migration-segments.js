@@ -19,7 +19,6 @@ const {
   migrateItems: migration0006,
 } = require('./migrations/0006-eservice-indicator-has-eaccess');
 const { chunk, isEmpty } = require('lodash');
-const { isCodeEnabled } = require('../../../../codeToggles');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -43,11 +42,8 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0002(items, documentClient);
   items = await migration0003(items, documentClient);
   items = await migration0004(items, documentClient);
+  items = await migration0005(items, documentClient);
   items = await migration0006(items, documentClient);
-
-  if (isCodeEnabled(7198)) {
-    items = await migration0005(items, documentClient);
-  }
 
   return items;
 };
