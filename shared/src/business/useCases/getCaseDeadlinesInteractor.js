@@ -84,6 +84,7 @@ exports.getCaseDeadlinesInteractor = async ({
       'caseCaption',
       'docketNumber',
       'docketNumberSuffix',
+      'docketNumberWithSuffix',
     ]),
   }));
 

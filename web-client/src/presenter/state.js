@@ -53,9 +53,11 @@ import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
+import { formattedWorkQueue as formattedWorkQueueOld } from './computeds/formattedWorkQueue.old';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
+import { isCodeEnabled } from '../../../codeToggles';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
@@ -147,7 +149,9 @@ const helpers = {
   formattedPendingItems,
   formattedTrialSessionDetails,
   formattedTrialSessions,
-  formattedWorkQueue,
+  formattedWorkQueue: isCodeEnabled(6934)
+    ? formattedWorkQueue
+    : formattedWorkQueueOld,
   getTrialCityName,
   headerHelper,
   internalTypesHelper,

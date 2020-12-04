@@ -25,9 +25,10 @@ exports.serveCaseToIrs = () => {
 };
 
 exports.closeScannerSetupDialog = () => {
-  cy.get('div.dynamsoft-backdrop').should('exist');
-
-  cy.get('div.dynamsoft-dialog-close').click();
-
-  cy.get('div.dynamsoft-backdrop').should('not.exist');
+  cy.get('body').then(body => {
+    if (body.find('div.dynamsoft-backdrop').length > 0) {
+      cy.get('div.dynamsoft-dialog-close').click();
+      cy.get('div.dynamsoft-backdrop').should('not.exist');
+    }
+  });
 };
