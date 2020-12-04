@@ -25,10 +25,10 @@ export const DocumentSearchResults = connect(
             <h1 className="margin-top-4">
               ({advancedDocumentSearchHelper.searchResultsCount}) Results
             </h1>
-            {advancedDocumentSearchHelper.showMaxResultsMessage && (
+            {advancedDocumentSearchHelper.showManyResultsMessage && (
               <WarningNotificationComponent
                 alertWarning={{
-                  message: `Your search has more than ${advancedDocumentSearchHelper.maxResults} results.  Refine your search for more accurate results.`,
+                  message: `Your search has returned over ${advancedDocumentSearchHelper.manyResults} matches.  Refine your search for more accurate results.`,
                 }}
                 dismissable={false}
               />
