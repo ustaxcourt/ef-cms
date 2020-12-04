@@ -1,4 +1,4 @@
-const { isCodeEnabled } = require('../../../codeToggles');
+import { isCodeEnabled } from '../../../codeToggles';
 
 export const docketClerkEditsPaperFiledDocketEntryFromQC = test => {
   return it('Docket clerk edits paper-filed docket entry from QC', async () => {

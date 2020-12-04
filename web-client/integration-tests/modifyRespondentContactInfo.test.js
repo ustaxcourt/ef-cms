@@ -31,12 +31,17 @@ describe('Modify Respondent Contact Information', () => {
     petitionsClerkAddsRespondentsToCase(test);
   }
 
+  it('wait for ES index', async () => {
+    // waiting for the respondent to be associated with the newly created cases
+    await refreshElasticsearchIndex();
+  });
+
   loginAs(test, 'irsPractitioner@example.com');
   respondentUpdatesAddress(test);
 
   it('wait for ES index', async () => {
     // waiting for the associated cases to be updated, and THEN an index
-    await refreshElasticsearchIndex(15000);
+    await refreshElasticsearchIndex();
   });
 
   for (let i = 0; i < 3; i++) {
