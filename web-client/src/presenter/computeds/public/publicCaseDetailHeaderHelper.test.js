@@ -13,7 +13,7 @@ describe('publicCaseDetailHeaderHelper', () => {
     };
   });
 
-  it('should return case detail helper information', () => {
+  it('should return an empty string for caseCaption when it is undefined', () => {
     const stateWithoutCaseCaption = {
       caseDetail: {
         caseCaption: undefined,
@@ -29,7 +29,7 @@ describe('publicCaseDetailHeaderHelper', () => {
     expect(result.caseCaption).toBe('');
   });
 
-  it('should return an empty string for caseCaption when it is undefined', () => {
+  it('should return case detail helper information', () => {
     const result = runCompute(publicCaseDetailHeaderHelper, { state });
 
     expect(result).toMatchObject({
