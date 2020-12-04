@@ -156,7 +156,7 @@ describe('getCaseByDocketNumber', () => {
     });
   });
 
-  it('should return default object if nothing is returned from the client query request', async () => {
+  it('should return default object if an empty array is returned from the client query request', async () => {
     applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => Promise.resolve({ Items: [] }),
     });
@@ -174,5 +174,18 @@ describe('getCaseByDocketNumber', () => {
       irsPractitioners: [],
       privatePractitioners: [],
     });
+  });
+
+  it('should return null if undefined is returned from the client query request', async () => {
+    applicationContext.getDocumentClient().query.mockReturnValue({
+      promise: async () => Promise.resolve({ Items: undefined }),
+    });
+
+    const result = await getFullCaseByDocketNumber({
+      applicationContext,
+      docketNumber: '123-20',
+    });
+
+    expect(result).toEqual(null);
   });
 });
