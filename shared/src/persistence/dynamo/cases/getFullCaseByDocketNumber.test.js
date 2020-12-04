@@ -175,17 +175,4 @@ describe('getCaseByDocketNumber', () => {
       privatePractitioners: [],
     });
   });
-
-  it('should return null if undefined is returned from the client query request', async () => {
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: async () => Promise.resolve({ Items: undefined }),
-    });
-
-    const result = await getFullCaseByDocketNumber({
-      applicationContext,
-      docketNumber: '123-20',
-    });
-
-    expect(result).toEqual(null);
-  });
 });
