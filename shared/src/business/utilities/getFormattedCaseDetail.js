@@ -15,7 +15,6 @@ const {
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { isCodeEnabled } = require('../../../../codeToggles');
 const { ROLES } = require('../entities/EntityConstants');
 
 const getServedPartiesCode = servedParties => {
@@ -314,15 +313,9 @@ const formatCase = (applicationContext, caseDetail) => {
     // establish an initial sort by ascending index
     result.formattedDocketEntries.sort(byIndexSortFunction);
 
-    if (isCodeEnabled(7198)) {
-      result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-        entry => entry.pending && (entry.servedAt || entry.isLegacyServed),
-      );
-    } else {
-      result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-        entry => entry.pending && entry.servedAt,
-      );
-    }
+    result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
+      entry => entry.pending && (entry.servedAt || entry.isLegacyServed),
+    );
   }
 
   if (result.correspondence && result.correspondence.length) {
