@@ -11,6 +11,7 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
   const source = [
     'associatedJudge',
     'caseCaption',
+    'docketEntryId',
     'docketNumber',
     'docketNumberSuffix',
     'status',

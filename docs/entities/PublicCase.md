@@ -782,6 +782,10 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+            isLegacyServed: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
             isMinuteEntry: 
               type: "boolean"
               flags: 

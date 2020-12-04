@@ -11,50 +11,40 @@ const {
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('generatePrintablePendingReportInteractor', () => {
+  let mockUser;
+
+  const mockFoundDocuments = [
+    {
+      associatedJudge: 'Judge Colvin',
+      caseCaption: 'Test Caption, Petitioner',
+      docketNumber: '123-45',
+      documentTitle: 'Test Document Title',
+      receivedAt: '2020-01-01T12:00:00.000Z',
+    },
+    {
+      associatedJudge: 'Judge Buch',
+      caseCaption: 'Test Caption Two, Petitioner(s)',
+      docketNumber: '234-56',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      documentType: 'Test Document Type',
+      receivedAt: '2020-02-02T12:00:00.000Z',
+    },
+  ];
+
   beforeAll(() => {
     applicationContext.getStorageClient.mockReturnValue({
       upload: jest.fn((params, callback) => callback()),
     });
 
-    applicationContext.getUseCaseHelpers().fetchPendingItems.mockReturnValue({
-      foundDocuments: [
-        {
-          associatedJudge: 'Judge Colvin',
-          caseCaption: 'Test Caption, Petitioner',
-          docketNumber: '123-45',
-          documentTitle: 'Test Document Title',
-          receivedAt: '2020-01-01T12:00:00.000Z',
-        },
-        {
-          associatedJudge: 'Judge Buch',
-          caseCaption: 'Test Caption Two, Petitioner(s)',
-          docketNumber: '234-56',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          documentType: 'Test Document Type',
-          receivedAt: '2020-02-02T12:00:00.000Z',
-        },
-      ],
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .fetchPendingItems.mockReturnValue({
+        foundDocuments: mockFoundDocuments,
+      });
 
     applicationContext
       .getUseCaseHelpers()
-      .fetchPendingItemsByDocketNumber.mockReturnValue([
-        {
-          associatedJudge: 'Judge Colvin',
-          caseCaption: 'Test Caption, Petitioner',
-          docketNumber: '123-45',
-          documentTitle: 'Test Document Title',
-          receivedAt: '2020-01-01T12:00:00.000Z',
-        },
-        {
-          associatedJudge: 'Judge Buch',
-          caseCaption: 'Test Caption Two, Petitioner(s)',
-          docketNumber: '234-56',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          documentType: 'Test Document Type',
-          receivedAt: '2020-02-02T12:00:00.000Z',
-        },
-      ]);
+      .fetchPendingItemsByDocketNumber.mockReturnValue(mockFoundDocuments);
 
     applicationContext
       .getPersistenceGateway()
@@ -62,10 +52,12 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   beforeEach(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
+    mockUser = {
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
-    });
+    };
+
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -76,34 +68,31 @@ describe('generatePrintablePendingReportInteractor', () => {
     applicationContext.getDocumentGenerators().pendingReport.mockReset();
   });
 
-  it('should throw an unauthorized error if the user does not have access', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
+  it('should throw an unauthorized error when the user does not have access', async () => {
+    mockUser = {
       role: ROLES.petitioner,
       userId: 'petitioner',
-    });
+    };
 
-    let error;
-    try {
-      await generatePrintablePendingReportInteractor({
+    await expect(
+      generatePrintablePendingReportInteractor({
         applicationContext,
         judge: 'Colvin',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).not.toBeNull();
-    expect(error.message).toContain('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
-  it('calls the function to fetch pending items and returns result', async () => {
+  it('should call fetchPendingItems from persistence and return the results', async () => {
     const results = await generatePrintablePendingReportInteractor({
       applicationContext,
     });
 
     expect(
+      applicationContext.getPersistenceGateway().fetchPendingItems,
+    ).toHaveBeenCalled();
+    expect(
       applicationContext.getDocumentGenerators().pendingReport,
     ).toHaveBeenCalled();
-
     expect(results).toEqual('https://example.com');
   });
 
@@ -115,7 +104,6 @@ describe('generatePrintablePendingReportInteractor', () => {
     const {
       pendingItems,
     } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
-
     expect(pendingItems).toMatchObject([
       {
         associatedJudge: 'Judge Colvin',
@@ -142,7 +130,6 @@ describe('generatePrintablePendingReportInteractor', () => {
     const {
       subtitle,
     } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
-
     expect(subtitle).toEqual('All Judges');
   });
 
@@ -155,7 +142,6 @@ describe('generatePrintablePendingReportInteractor', () => {
     const {
       subtitle,
     } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
-
     expect(subtitle).toEqual('Judge Colvin');
   });
 
@@ -183,7 +169,6 @@ describe('generatePrintablePendingReportInteractor', () => {
     const {
       subtitle,
     } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
-
     expect(subtitle).toEqual(`Docket ${MOCK_CASE.docketNumber}W`);
   });
 
