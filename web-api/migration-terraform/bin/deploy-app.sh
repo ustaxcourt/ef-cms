@@ -3,7 +3,7 @@
 ENVIRONMENT=$1
 
 [ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as a command line argument 1" && exit 1
-[ -z "${SOURCE_TABLE}" ] && echo "You set SOURCE_TABLE as an environment variable" && exit 1
+[ -z "${SOURCE_TABLE}" ] && echo "You must set SOURCE_TABLE as an environment variable" && exit 1
 [ -z "${DESTINATION_TABLE}" ] && echo "You set DESTINATION_TABLE as an environment variable" && exit 1
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
