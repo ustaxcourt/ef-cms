@@ -1,4 +1,3 @@
-const { isCodeEnabled } = require('../../../../codeToggles');
 const { search } = require('./searchClient');
 
 exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
@@ -66,33 +65,21 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
     };
   }
 
-  if (isCodeEnabled(7198)) {
-    const matchingOnServedAtOrLegacyServed = {
-      bool: {
-        minimum_should_match: 1,
-        should: [
-          {
-            exists: {
-              field: 'servedAt',
-            },
+  const matchingOnServedAtOrLegacyServed = {
+    bool: {
+      minimum_should_match: 1,
+      should: [
+        {
+          exists: {
+            field: 'servedAt',
           },
-          { term: { 'isLegacyServed.BOOL': true } },
-        ],
-      },
-    };
+        },
+        { term: { 'isLegacyServed.BOOL': true } },
+      ],
+    },
+  };
 
-    searchParameters.body.query.bool.must.push(
-      matchingOnServedAtOrLegacyServed,
-    );
-  } else {
-    const matchingOnServedAt = {
-      exists: {
-        field: 'servedAt',
-      },
-    };
-
-    searchParameters.body.query.bool.must.push(matchingOnServedAt);
-  }
+  searchParameters.body.query.bool.must.push(matchingOnServedAtOrLegacyServed);
 
   const { results, total } = await search({
     applicationContext,

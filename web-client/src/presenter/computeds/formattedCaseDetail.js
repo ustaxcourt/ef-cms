@@ -1,4 +1,3 @@
-import { isCodeEnabled } from '../../../../codeToggles';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -260,15 +259,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
     d => d.isOnDocketRecord,
   );
 
-  if (isCodeEnabled(7198)) {
-    result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-      d => d.pending && (d.servedAt || d.isLegacyServed),
-    );
-  } else {
-    result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-      d => d.pending && d.servedAt,
-    );
-  }
+  result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
+    d => d.pending && (d.servedAt || d.isLegacyServed),
+  );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
     draftDocument => {

@@ -1,4 +1,3 @@
-jest.mock('../../../../codeToggles');
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -8,7 +7,6 @@ import {
   getShowDocumentViewerLink,
 } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { isCodeEnabled } from '../../../../codeToggles';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -218,10 +216,6 @@ describe('formattedCaseDetail', () => {
       servedAt: '2019-06-19T17:29:13.120Z',
     },
   ];
-
-  beforeEach(() => {
-    isCodeEnabled.mockReturnValue(true);
-  });
 
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedCaseDetail, {
@@ -2714,7 +2708,7 @@ describe('formattedCaseDetail', () => {
       ]);
     });
 
-    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending and 7198 is toggled on', async () => {
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending', async () => {
       const caseDetail = {
         ...MOCK_CASE,
         docketEntries: [
@@ -2739,36 +2733,6 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
         { docketEntryId: '999999' },
       ]);
-    });
-
-    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending and 7198 is toggled off', async () => {
-      isCodeEnabled.mockReturnValue(false);
-
-      const caseDetail = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_CASE.docketEntries[2],
-            docketEntryId: '999999',
-            isLegacyServed: true,
-            isOnDocketRecord: true,
-            pending: true,
-            servedAt: undefined,
-            servedParties: undefined,
-          },
-        ],
-      };
-
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          ...getBaseState(petitionsClerkUser),
-        },
-      });
-
-      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject(
-        [],
-      );
     });
 
     it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', async () => {
