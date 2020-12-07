@@ -130,6 +130,7 @@ const splitMetadata = entry => {
     'requestId',
     'request',
     'response',
+    'user',
   ];
   const keys = Object.keys(entry);
 
