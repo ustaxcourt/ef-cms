@@ -415,7 +415,7 @@ Case.VALIDATION_RULES = {
     .when('status', {
       is: CASE_STATUS_TYPES.calendared,
       otherwise: joi.optional(),
-      then: joi.optional().valid(false),
+      then: joi.valid(false),
     })
     .description(
       'Temporarily blocked from trial due to a pending item or due date.',
@@ -444,7 +444,7 @@ Case.VALIDATION_RULES = {
     .when('status', {
       is: CASE_STATUS_TYPES.calendared,
       otherwise: joi.optional(),
-      then: joi.optional().valid(false),
+      then: joi.valid(false),
     })
     .description('Temporarily blocked from trial.'),
   blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
