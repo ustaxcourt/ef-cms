@@ -1,19 +1,24 @@
+const { isCodeEnabled } = require('../../../../codeToggles');
 const { search } = require('./searchClient');
 
-exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
-  const caseSource = [
-    'associatedJudge',
-    'caseCaption',
-    'docketNumber',
-    'docketNumberSuffix',
-    'status',
-  ];
-  const docketEntrySource = [
-    'docketEntryId',
-    'documentType',
-    'documentTitle',
-    'receivedAt',
-  ];
+exports.fetchPendingItems = async ({
+  applicationContext,
+  judge,
+  page,
+  source,
+}) => {
+  const caseSource = isCodeEnabled(7134)
+    ? [
+        'associatedJudge',
+        'caseCaption',
+        'docketNumber',
+        'docketNumberSuffix',
+        'status',
+      ]
+    : source;
+  const docketEntrySource = isCodeEnabled(7134)
+    ? ['docketEntryId', 'documentType', 'documentTitle', 'receivedAt']
+    : source;
 
   const { PENDING_ITEMS_PAGE_SIZE } = applicationContext.getConstants();
 
@@ -43,11 +48,7 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
           must: [
             { match: { 'pk.S': 'case|' } },
             { match: { 'sk.S': 'docket-entry|' } },
-            {
-              exists: {
-                field: 'servedAt',
-              },
-            },
+
             { term: { 'pending.BOOL': true } },
             hasParentParam,
           ],
@@ -70,10 +71,44 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
     };
   }
 
+  if (isCodeEnabled(7198)) {
+    const matchingOnServedAtOrLegacyServed = {
+      bool: {
+        minimum_should_match: 1,
+        should: [
+          {
+            exists: {
+              field: 'servedAt',
+            },
+          },
+          { term: { 'isLegacyServed.BOOL': true } },
+        ],
+      },
+    };
+
+    searchParameters.body.query.bool.must.push(
+      matchingOnServedAtOrLegacyServed,
+    );
+  } else {
+    const matchingOnServedAt = {
+      exists: {
+        field: 'servedAt',
+      },
+    };
+
+    searchParameters.body.query.bool.must.push(matchingOnServedAt);
+  }
+
   const { results, total } = await search({
     applicationContext,
     searchParameters,
   });
 
-  return { foundDocuments: results, total };
+  let result = { results, total };
+
+  if (isCodeEnabled(7134)) {
+    result = { foundDocuments: results, total };
+  }
+
+  return result;
 };

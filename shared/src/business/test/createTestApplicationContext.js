@@ -106,6 +106,7 @@ const {
 const {
   incrementCounter,
 } = require('../../persistence/dynamo/helpers/incrementCounter');
+import { isCodeEnabled } from '../../../../codeToggles';
 const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
@@ -424,6 +425,20 @@ const createTestApplicationContext = ({ user } = {}) => {
     createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
   };
 
+  const mockedCodeToggles = {};
+
+  const setMockedCodeToggles = (issueNumber, value) => {
+    mockedCodeToggles[issueNumber] = value;
+  };
+
+  const mockIsCodeEnabled = issueNumber => {
+    if (mockedCodeToggles && mockedCodeToggles.hasOwnProperty(issueNumber)) {
+      return mockedCodeToggles[issueNumber];
+    } else {
+      return isCodeEnabled(issueNumber);
+    }
+  };
+
   const applicationContext = {
     ...sharedAppContext,
     barNumberGenerator: {
@@ -477,6 +492,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
+    getEnvironment: jest.fn(),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
@@ -508,6 +524,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
     initHoneybadger: appContextProxy(),
+    isCodeEnabled: jest.fn().mockImplementation(mockIsCodeEnabled),
     logger: {
       debug: jest.fn(),
       error: jest.fn(),
@@ -516,6 +533,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     notifyHoneybadger: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
+    setMockedCodeToggles,
   };
   return applicationContext;
 };

@@ -14,5 +14,6 @@
   "viewportWidth": 1200,
   "viewportHeight": 900,
   "retries": 3,
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "experimentalNetworkStubbing": true
 }

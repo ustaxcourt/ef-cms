@@ -2,11 +2,12 @@ import { getDefaultAttachmentViewerDocumentToDisplayAction } from './getDefaultA
 import { runAction } from 'cerebral/test';
 
 describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
-  it('returns state.viewerDocumentToDisplay when it is defined', async () => {
+  it('returns state.viewerDocumentToDisplay when it is defined and props.documentId is defined', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
         props: {
+          documentId: '9999',
           mostRecentMessage: {
             attachments: [{ documentId: '1234' }, { documentId: '2345' }],
           },
@@ -18,6 +19,26 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     );
     expect(result.output).toEqual({
       viewerDocumentToDisplay: { documentId: '9999' },
+    });
+  });
+
+  it('does NOT return state.viewerDocumentToDisplay when it is defined and props.documentId does not match', async () => {
+    const result = await runAction(
+      getDefaultAttachmentViewerDocumentToDisplayAction,
+      {
+        props: {
+          documentId: '1234',
+          mostRecentMessage: {
+            attachments: [{ documentId: '1234' }, { documentId: '2345' }],
+          },
+        },
+        state: {
+          viewerDocumentToDisplay: { documentId: '9999' },
+        },
+      },
+    );
+    expect(result.output).toEqual({
+      viewerDocumentToDisplay: { documentId: '1234' },
     });
   });
 

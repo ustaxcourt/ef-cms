@@ -4,6 +4,7 @@ export const clearUserAction = async ({ applicationContext, store }) => {
   store.unset(state.user);
   store.unset(state.token);
   store.unset(state.permissions);
+
   await applicationContext.getUseCases().removeItemInteractor({
     applicationContext,
     key: 'user',
@@ -12,5 +13,6 @@ export const clearUserAction = async ({ applicationContext, store }) => {
     applicationContext,
     key: 'token',
   });
+
   applicationContext.setCurrentUser(null);
 };
