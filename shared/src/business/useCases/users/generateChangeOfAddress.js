@@ -2,6 +2,11 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  calculateISODate,
+  dateStringsCompared,
+} = require('../../utilities/DateHandler');
+const {
+  CASE_STATUS_TYPES,
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
@@ -75,7 +80,16 @@ exports.generateChangeOfAddress = async ({
       // we do this again so that it will convert '' to null
       caseEntity = new Case(caseEntity, { applicationContext });
 
-      if (!bypassDocketEntry) {
+      const maxClosedDate = calculateISODate({
+        howMuch: -6,
+        units: 'months',
+      });
+      const isClosed = caseEntity.status === CASE_STATUS_TYPES.closed;
+      const isRecent =
+        caseEntity.closedDate &&
+        dateStringsCompared(caseEntity.closedDate, maxClosedDate) >= 0;
+
+      if (!bypassDocketEntry && (!isClosed || isRecent)) {
         await generateAndServeDocketEntry({
           applicationContext,
           caseEntity,

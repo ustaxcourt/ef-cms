@@ -2,9 +2,11 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
+const { calculateISODate } = require('../../utilities/DateHandler');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
 const { MOCK_CASE } = require('../../../test/mockCase');
 jest.mock('../addCoversheetInteractor', () => ({
@@ -712,6 +714,117 @@ describe('generateChangeOfAddress', () => {
     expect(
       applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
     ).not.toHaveBeenCalled();
+    expect(cases).toMatchObject([
+      expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
+    ]);
+    // We still want to update our case!
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+  });
+
+  it('should not create a docket entry, work item, or serve anything if the case is closed more than six months ago, but it should still update the case', async () => {
+    mockCaseWithPrivatePractitioner.status = CASE_STATUS_TYPES.closed;
+    mockCaseWithPrivatePractitioner.closedDate = '1999-11-11T22:22:22.021Z';
+
+    const cases = await generateChangeOfAddress({
+      applicationContext,
+      contactInfo: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      user: {
+        barNumber: 'PT5432',
+        contact: {
+          address1: '234 Main St!',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        email: 'privatePractitioner1',
+        name: 'Test Private Practitioner',
+        representingPrimary: true,
+        role: ROLES.privatePractitioner,
+        section: 'privatePractitioner',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
+      },
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).not.toHaveBeenCalled();
+    expect(cases).toMatchObject([
+      expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
+    ]);
+    // We still want to update our case!
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+  });
+
+  it('should create a docket entry, work item, and serve it if the case is closed less than six months ago, and it should still update the case', async () => {
+    mockCaseWithPrivatePractitioner.status = CASE_STATUS_TYPES.closed;
+    mockCaseWithPrivatePractitioner.closedDate = calculateISODate({
+      howMuch: -1,
+      units: 'months',
+    });
+
+    const cases = await generateChangeOfAddress({
+      applicationContext,
+      contactInfo: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      user: {
+        barNumber: 'PT5432',
+        contact: {
+          address1: '234 Main St!',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        email: 'privatePractitioner1',
+        name: 'Test Private Practitioner',
+        representingPrimary: true,
+        role: ROLES.privatePractitioner,
+        section: 'privatePractitioner',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
+      },
+    });
+
+    const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
+      entry => entry.documentTitle.includes('Notice of Change'),
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).toHaveBeenCalled();
+    expect(docketEntryForNoticeOfChangeOfAddress).toBeDefined();
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
