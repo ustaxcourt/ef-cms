@@ -61,8 +61,6 @@ exports.formattedTrialSessionDetails = ({
 }) => {
   if (!trialSession) return undefined;
 
-  console.log(trialSession.eligibleCases);
-
   trialSession.formattedEligibleCases = (trialSession.eligibleCases || [])
     .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
     .sort(exports.compareTrialSessionEligibleCases);
