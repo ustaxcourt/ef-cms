@@ -52,7 +52,6 @@ const { Correspondence } = require('../Correspondence');
 const { DocketEntry } = require('../DocketEntry');
 const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
-const { isCodeEnabled } = require('../../../../../codeToggles');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { User } = require('../User');
@@ -252,17 +251,11 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
-  if (isCodeEnabled(7198)) {
-    this.hasPendingItems = this.docketEntries.some(
-      docketEntry =>
-        docketEntry.pending &&
-        (docketEntry.servedAt || docketEntry.isLegacyServed),
-    );
-  } else {
-    this.hasPendingItems = this.docketEntries.some(
-      docketEntry => docketEntry.pending && docketEntry.servedAt,
-    );
-  }
+  this.hasPendingItems = this.docketEntries.some(
+    docketEntry =>
+      docketEntry.pending &&
+      (docketEntry.servedAt || docketEntry.isLegacyServed),
+  );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
 
@@ -828,17 +821,11 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  if (isCodeEnabled(7198)) {
-    return this.docketEntries.some(
-      docketEntry =>
-        docketEntry.pending &&
-        (docketEntry.servedAt || docketEntry.isLegacyServed),
-    );
-  } else {
-    return this.docketEntries.some(
-      docketEntry => docketEntry.pending && docketEntry.servedAt,
-    );
-  }
+  return this.docketEntries.some(
+    docketEntry =>
+      docketEntry.pending &&
+      (docketEntry.servedAt || docketEntry.isLegacyServed),
+  );
 };
 
 /**

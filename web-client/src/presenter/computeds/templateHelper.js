@@ -7,13 +7,8 @@ export const templateHelper = (get, applicationContext) => {
   let showBetaBar;
   let showDeployedDate;
 
-  if (applicationContext.isCodeEnabled(7142)) {
-    showBetaBar = !isProduction && initialBetaBarState;
-    showDeployedDate = !isProduction;
-  } else {
-    showBetaBar = initialBetaBarState;
-    showDeployedDate = true;
-  }
+  showBetaBar = !isProduction && initialBetaBarState;
+  showDeployedDate = !isProduction;
 
   return {
     showBetaBar,

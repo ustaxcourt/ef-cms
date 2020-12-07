@@ -1,5 +1,3 @@
-import { isCodeEnabled } from '../../../../../../codeToggles.js';
-
 const classNames = require('classnames');
 const React = require('react');
 const {
@@ -211,7 +209,7 @@ export const DocketRecord = ({
             <th>No.</th>
             <th>Date</th>
             <th>Event</th>
-            {isCodeEnabled(7199) && <th></th>}
+            <th></th>
             <th>Filings and proceedings</th>
             <th>Filed by</th>
             <th>Action</th>
@@ -233,11 +231,9 @@ export const DocketRecord = ({
                     {entry.createdAtFormatted || ''}
                   </td>
                   <td>{entry.eventCode || ''}</td>
-                  {isCodeEnabled(7199) && (
-                    <td className="padding-top-1">
-                      {entry.isLegacySealed && <div className="sealed-icon" />}
-                    </td>
-                  )}
+                  <td className="padding-top-1">
+                    {entry.isLegacySealed && <div className="sealed-icon" />}
+                  </td>
                   <td className="filings-and-proceedings">
                     <RecordDescription entry={entry} />
                   </td>
