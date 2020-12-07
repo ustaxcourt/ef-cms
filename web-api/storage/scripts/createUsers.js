@@ -4,6 +4,9 @@ const {
   createUserRecords,
 } = require('../../../shared/src/persistence/dynamo/users/createUser.js');
 const {
+  createUserRecords: createPetitionerUserRecords,
+} = require('../../../shared/src/persistence/dynamo/users/createMigratedPetitionerUser.js');
+const {
   createUserRecords: createPractitionerUserRecords,
 } = require('../../../shared/src/persistence/dynamo/users/createPractitionerUser.js');
 const {
@@ -50,6 +53,20 @@ module.exports.createUsers = async () => {
           usersByEmail[userCreated.email] = userCreated;
         });
       }
+
+      if (userRecord.role === ROLES.petitioner) {
+        return createPetitionerUserRecords({
+          applicationContext,
+          user: omit(userRecord, EXCLUDE_PROPS),
+          userId,
+        }).then(userCreated => {
+          if (usersByEmail[userCreated.email]) {
+            throw new Error('User already exists');
+          }
+          usersByEmail[userCreated.email] = userCreated;
+        });
+      }
+
       return createUserRecords({
         applicationContext,
         user: omit(userRecord, EXCLUDE_PROPS),
