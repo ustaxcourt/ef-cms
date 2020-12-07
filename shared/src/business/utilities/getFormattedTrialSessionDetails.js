@@ -26,7 +26,11 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
 };
 
 exports.compareTrialSessionEligibleCases = (a, b) => {
-  if (a.isHighPriority && !b.isHighPriority) {
+  if (a.isManuallyAdded && !b.isManuallyAdded) {
+    return -1;
+  } else if (!a.isManuallyAdded && b.isManuallyAdded) {
+    return 1;
+  } else if (a.isHighPriority && !b.isHighPriority) {
     return -1;
   } else if (!a.isHighPriority && b.isHighPriority) {
     return 1;
@@ -56,6 +60,8 @@ exports.formattedTrialSessionDetails = ({
   trialSession,
 }) => {
   if (!trialSession) return undefined;
+
+  console.log(trialSession.eligibleCases);
 
   trialSession.formattedEligibleCases = (trialSession.eligibleCases || [])
     .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
