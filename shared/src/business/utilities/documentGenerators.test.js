@@ -30,6 +30,7 @@ const {
 } = require('../useCases/generatePdfFromHtmlInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getChromiumBrowser } = require('./getChromiumBrowser');
+const { sass } = require('sass');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -53,8 +54,7 @@ describe('documentGenerators', () => {
       );
 
       applicationContext.getNodeSass.mockImplementation(() => {
-        // eslint-disable-next-line security/detect-non-literal-require
-        return require('node-' + 'sass');
+        return sass;
       });
 
       applicationContext.getPug.mockImplementation(() => {
