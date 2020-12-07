@@ -46,6 +46,12 @@ describe('External user views legacy sealed documents', () => {
         email: 'petitioner@example.com',
         hasEAccess: true,
       },
+      contactSecondary: {
+        ...MOCK_CASE.contactPrimary,
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+        email: 'petitioner2@example.com',
+        hasEAccess: true,
+      },
       docketEntries: [
         ...MOCK_CASE.docketEntries,
         {
@@ -70,6 +76,7 @@ describe('External user views legacy sealed documents', () => {
         },
       ],
       docketNumber: test.docketNumber,
+      partyType: 'Petitioner & spouse',
       preferredTrialCity: 'Washington, District of Columbia',
       status: STATUS_TYPES.new,
     };
@@ -83,7 +90,7 @@ describe('External user views legacy sealed documents', () => {
   });
 
   loginAs(test, 'petitioner2@example.com');
-  unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
+  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
 
   loginAs(test, 'irsPractitioner@example.com');
   unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
