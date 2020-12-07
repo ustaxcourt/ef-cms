@@ -84,12 +84,12 @@ exports.generateChangeOfAddress = async ({
         howMuch: -6,
         units: 'months',
       });
-      const isClosed = caseEntity.status === CASE_STATUS_TYPES.closed;
+      const isOpen = caseEntity.status !== CASE_STATUS_TYPES.closed;
       const isRecent =
         caseEntity.closedDate &&
         dateStringsCompared(caseEntity.closedDate, maxClosedDate) >= 0;
 
-      if (!bypassDocketEntry && (!isClosed || isRecent)) {
+      if (!bypassDocketEntry && (isOpen || isRecent)) {
         await generateAndServeDocketEntry({
           applicationContext,
           caseEntity,
