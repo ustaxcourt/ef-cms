@@ -34,7 +34,6 @@ describe('petitions clerk sets a trial session calendar', () => {
     timeout: 2000,
   });
   const trialLocation = `Denver, Colorado, ${Date.now()}`;
-  console.log('trial location is', trialLocation);
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,
