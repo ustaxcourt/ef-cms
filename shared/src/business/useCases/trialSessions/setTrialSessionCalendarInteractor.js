@@ -2,6 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
+} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -89,7 +92,8 @@ exports.setTrialSessionCalendarInteractor = async ({
     }
   });
 
-  let eligibleCasesLimit = trialSessionEntity.maxCases;
+  let eligibleCasesLimit =
+    trialSessionEntity.maxCases + TRIAL_SESSION_ELIGIBLE_CASES_BUFFER;
 
   if (manuallyAddedQcCompleteCases.length > 0) {
     eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
