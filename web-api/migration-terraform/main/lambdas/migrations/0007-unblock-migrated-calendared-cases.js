@@ -1,4 +1,3 @@
-const cloneDeep = require('lodash');
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
   aggregateCaseItems,
@@ -9,6 +8,7 @@ const {
 const {
   CASE_STATUS_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
+const { cloneDeep } = require('lodash');
 const applicationContext = createApplicationContext({});
 
 const migrateItems = async (items, documentClient) => {
@@ -38,25 +38,21 @@ const migrateItems = async (items, documentClient) => {
 
       const caseRecord = aggregateCaseItems(fullCase);
       const itemToModify = cloneDeep(item);
-      console.log('....', itemToModify.automaticBlocked);
 
       if (itemToModify.automaticBlocked) {
-        console.log('....222');
-        itemToModify.automaticBlocked = false;
-        console.log(itemToModify.automaticBlocked);
-        delete itemToModify.automaticBlockedDate;
-        console.log('wtf?????', itemToModify.automaticBlocked);
-        delete itemToModify.automaticBlockedReason;
+        itemToModify.automaticBlocked = undefined;
+        itemToModify.automaticBlockedDate = undefined;
+        itemToModify.automaticBlockedReason = undefined;
       }
 
       if (itemToModify.blocked) {
-        itemToModify.blocked = false;
-        delete itemToModify.blockedDate;
-        delete itemToModify.blockedReason;
+        itemToModify.blocked = undefined;
+        itemToModify.blockedDate = undefined;
+        itemToModify.blockedReason = undefined;
       }
 
       new Case(
-        { ...itemToModify, ...caseRecord },
+        { ...caseRecord, ...itemToModify },
         {
           applicationContext,
         },
