@@ -38,9 +38,13 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
+  console.log('about to run migration 001');
   items = await migration0001(items, documentClient);
+  console.log('about to run migration 002');
   items = await migration0002(items, documentClient);
+  console.log('about to run migration 003');
   items = await migration0003(items, documentClient);
+  console.log('about to run migration 004');
   items = await migration0004(items, documentClient);
   items = await migration0005(items, documentClient);
   items = await migration0006(items, documentClient);
