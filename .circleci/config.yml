@@ -953,7 +953,7 @@ workflows:
                 - experimental3
       - smoketests:
           requires:
-            - deploy
+            - migrate
           filters:
             branches:
               only:
