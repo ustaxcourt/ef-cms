@@ -2701,7 +2701,7 @@ describe('formattedCaseDetail', () => {
       ]);
     });
 
-    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending and 7198 is toggled off', async () => {
+    it('should NOT add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending and 7198 is toggled off', async () => {
       isCodeEnabled.mockReturnValue(false);
 
       const caseDetail = {
@@ -2726,9 +2726,7 @@ describe('formattedCaseDetail', () => {
         },
       });
 
-      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject(
-        [],
-      );
+      expect(result.formattedPendingDocketEntriesOnDocketRecord.length).toBe(0);
     });
 
     it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', async () => {
