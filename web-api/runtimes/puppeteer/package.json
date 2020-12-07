@@ -17,7 +17,7 @@
     "npm-force-resolutions": "0.0.3",
     "pug": "^3.0.0",
     "puppeteer-core": "^5.5.0",
-    "sass": "^1.29.0"
+    "node-sass": "^5.0.0"
   },
   "resolutions": {
     "bl": "^4.0.3",
