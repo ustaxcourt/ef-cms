@@ -4070,6 +4070,90 @@ describe('Case entity', () => {
         expect(myCase.getFormattedValidationErrors()).toEqual(null);
       });
     });
+
+    describe('blocked/automatic blocked status validation for calendared cases', () => {
+      const mockTrialSessionId = '9e29b116-58a0-40f5-afe6-e3a0ba4f226a';
+
+      it('fails validation when the case status is calendared and automaticBlocked is true', () => {
+        let blockedCalendaredCase = {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+          automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+          status: CASE_STATUS_TYPES.calendared,
+          trialSessionId: mockTrialSessionId,
+        };
+        const myCase = new Case(blockedCalendaredCase, { applicationContext });
+        expect(myCase.getFormattedValidationErrors()).toEqual({
+          automaticBlocked: '"automaticBlocked" must be [false]',
+        });
+      });
+
+      it('fails validation when the case status is calendared and blocked is true', () => {
+        let blockedCalendaredCase = {
+          ...MOCK_CASE,
+          blocked: true,
+          blockedDate: '2019-03-01T21:42:29.073Z',
+          blockedReason: 'A reason',
+          status: CASE_STATUS_TYPES.calendared,
+          trialSessionId: mockTrialSessionId,
+        };
+        const myCase = new Case(blockedCalendaredCase, { applicationContext });
+        expect(myCase.getFormattedValidationErrors()).toEqual({
+          blocked: '"blocked" must be [false]',
+        });
+      });
+
+      it('passes validation when the case status is calendared and automaticBlocked is false', () => {
+        let calendaredCase = {
+          ...MOCK_CASE,
+          automaticBlocked: false,
+          status: CASE_STATUS_TYPES.calendared,
+          trialSessionId: mockTrialSessionId,
+        };
+        const myCase = new Case(calendaredCase, { applicationContext });
+        expect(myCase.getFormattedValidationErrors()).toBe(null);
+      });
+
+      it('passes validation when the case status is calendared and blocked is false', () => {
+        let calendaredCase = {
+          ...MOCK_CASE,
+          blocked: false,
+          status: CASE_STATUS_TYPES.calendared,
+          trialSessionId: mockTrialSessionId,
+        };
+        const myCase = new Case(calendaredCase, { applicationContext });
+        expect(myCase.getFormattedValidationErrors()).toBe(null);
+      });
+
+      it('passes validation when the case status is not calendared and automaticBlocked is true', () => {
+        let blockedNewCase = {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+          automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+          status: CASE_STATUS_TYPES.new,
+          trialSessionId: mockTrialSessionId,
+        };
+        const myCase = new Case(blockedNewCase, { applicationContext });
+        expect(myCase.getFormattedValidationErrors()).toBe(null);
+      });
+
+      it('passes validation when the case status is not calendared and blocked is true', () => {
+        let blockedReadyForTrialCase = {
+          ...MOCK_CASE,
+          blocked: true,
+          blockedDate: '2019-03-01T21:42:29.073Z',
+          blockedReason: 'A reason',
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+          trialSessionId: mockTrialSessionId,
+        };
+        const myCase = new Case(blockedReadyForTrialCase, {
+          applicationContext,
+        });
+        expect(myCase.getFormattedValidationErrors()).toBe(null);
+      });
+    });
   });
 
   describe('hasPartyWithPaperService', () => {
