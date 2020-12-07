@@ -1,4 +1,7 @@
-import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
+import {
+  advancedSearchHelper as advancedSearchHelperComputed,
+  paginationHelper,
+} from './advancedSearchHelper';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -435,5 +438,13 @@ describe('advancedSearchHelper', () => {
       { barNumber: '1111' },
       { barNumber: '2222' },
     ]);
+  });
+
+  describe('paginationHelper', () => {
+    it('should return an empty object when searchResults are undefined', () => {
+      const result = paginationHelper(undefined, 1, 25);
+
+      expect(result).toEqual({});
+    });
   });
 });
