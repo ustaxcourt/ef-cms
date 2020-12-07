@@ -30,6 +30,13 @@ echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
 echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 
+tf_version=$(terraform --version)
+
+if [[ ${tf_version} != *"0.12.28"* ]]; then
+  echo "Please set your terraform version to 0.12.28 before deploying."
+  exit 1
+fi
+
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
@@ -55,7 +62,7 @@ npm run build:assets
 set -eo pipefail
 # build the cognito authorizer, api, and api-public with parcel
 pushd ../template/lambdas
-npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-minify
+npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-minify --no-source-maps
 popd
 
 

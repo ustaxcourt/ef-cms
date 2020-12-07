@@ -1,3 +1,9 @@
+import { getDefaultAttachmentViewerDocumentToDisplayAction } from './getDefaultAttachmentViewerDocumentToDisplayAction';
+import { getDefaultAttachmentViewerDocumentToDisplayAction as getDefaultAttachmentViewerDocumentToDisplayActionOld } from './getDefaultAttachmentViewerDocumentToDisplayAction.old';
+
+import { openCaseDocumentDownloadUrlAction } from './openCaseDocumentDownloadUrlAction';
+import { openCaseDocumentDownloadUrlAction as openCaseDocumentDownloadUrlActionOld } from './openCaseDocumentDownloadUrlAction.old';
+
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './TrialSessionWorkingCopy/setAddEditUserCaseNoteModalStateFromDetailAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from './TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setViewerDocumentToDisplayAction } from './setViewerDocumentToDisplayAction';
@@ -14,6 +20,8 @@ import { isCodeDisabled } from '../../../../codeToggles';
 // TODO: Gradually add more actions as needed
 const actions = {
   generateTitleForPaperFilingAction,
+  getDefaultAttachmentViewerDocumentToDisplayAction,
+  openCaseDocumentDownloadUrlAction,
   setAddEditUserCaseNoteModalStateFromDetailAction,
   setJudgesCaseNoteOnCaseDetailAction,
   setViewerDocumentToDisplayAction,
@@ -30,6 +38,14 @@ if (isCodeDisabled(6916)) {
 
 if (isCodeDisabled(6938)) {
   actions.setViewerDocumentToDisplayAction = setViewerDocumentToDisplayActionOld;
+}
+
+if (isCodeDisabled(7015)) {
+  actions.getDefaultAttachmentViewerDocumentToDisplayAction = getDefaultAttachmentViewerDocumentToDisplayActionOld;
+}
+
+if (isCodeDisabled(6841)) {
+  actions.openCaseDocumentDownloadUrlAction = openCaseDocumentDownloadUrlActionOld;
 }
 
 export const getAction = actionName => actions[actionName];

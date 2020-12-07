@@ -141,6 +141,8 @@ module.exports = {
           type: 'keyword',
         },
       },
+      // TODO: enable for 7080
+      // type: 'integer',
       type: 'text',
     },
     'status.S': {

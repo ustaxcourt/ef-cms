@@ -11,12 +11,18 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
   props,
 }) => {
   const viewerDocumentToDisplayFromState = get(state.viewerDocumentToDisplay);
+  const { documentId, mostRecentMessage } = props;
 
-  if (viewerDocumentToDisplayFromState) {
+  const existingDocumentId = viewerDocumentToDisplayFromState?.documentId;
+
+  if (
+    viewerDocumentToDisplayFromState &&
+    (!existingDocumentId ||
+      (existingDocumentId && existingDocumentId === documentId))
+  ) {
     return { viewerDocumentToDisplay: viewerDocumentToDisplayFromState };
   }
 
-  const { documentId, mostRecentMessage } = props;
   const { attachments } = mostRecentMessage;
   let viewerDocumentToDisplay = null;
 
