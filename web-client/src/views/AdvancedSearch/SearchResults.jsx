@@ -16,17 +16,17 @@ export const SearchResults = connect(
       <div aria-live="polite">
         {advancedSearchHelper.showSearchResults && (
           <>
-            <h1 className="margin-top-4">
-              ({advancedSearchHelper.searchResultsCount}) Results
-            </h1>
-            {advancedSearchHelper.showManyResultsMessage && (
-              <WarningNotificationComponent
-                alertWarning={{
-                  message: `Your search has returned over ${advancedSearchHelper.manyResults} matches.  Refine your search for more accurate results.`,
-                }}
-                dismissable={false}
-              />
-            )}
+            <h1 className="margin-top-4">Search Results</h1>
+            {advancedSearchHelper.showManyResultsMessage ||
+              (true && (
+                <WarningNotificationComponent
+                  alertWarning={{
+                    message:
+                      'Your search has a high number of matching results. Refine your search for more accurate results.',
+                  }}
+                  dismissable={false}
+                />
+              ))}
 
             <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
