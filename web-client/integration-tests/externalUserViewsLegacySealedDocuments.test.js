@@ -92,6 +92,9 @@ describe('External user views legacy sealed documents', () => {
   loginAs(test, 'petitioner2@example.com');
   associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
 
+  loginAs(test, 'petitioner3@example.com');
+  unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
+
   loginAs(test, 'irsPractitioner@example.com');
   unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
 
