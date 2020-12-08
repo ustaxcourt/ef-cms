@@ -8,8 +8,8 @@ const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
     if (
-      item.pk.includes('case-deadline|') &&
-      item.sk.includes('case-deadline|')
+      item.pk.startsWith('case-deadline|') &&
+      item.sk.startsWith('case-deadline|')
     ) {
       const caseRecord = await documentClient
         .get({
