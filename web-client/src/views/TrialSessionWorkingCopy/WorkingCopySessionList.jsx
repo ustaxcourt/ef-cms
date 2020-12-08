@@ -21,8 +21,6 @@ export const WorkingCopySessionList = connect(
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
-    trialSession: state.trialSession,
-    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
@@ -34,8 +32,6 @@ export const WorkingCopySessionList = connect(
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
-    trialSession,
-    trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper,
     trialStatusOptions,
   }) {
@@ -173,9 +169,7 @@ export const WorkingCopySessionList = connect(
                     )}
                   </td>
                 </tr>
-                {trialSession.caseOrder.find(
-                  c => c.docketNumber === item.docketNumber,
-                ).calendarNotes && (
+                {item.calendarNotes && (
                   <tr className="notes-row">
                     <td></td>
                     <td></td>
@@ -183,11 +177,7 @@ export const WorkingCopySessionList = connect(
                       <span className="text-bold margin-right-1">
                         Calendar notes:
                       </span>
-                      {
-                        trialSession.caseOrder.find(
-                          c => c.docketNumber === item.docketNumber,
-                        ).calendarNotes
-                      }
+                      {item.calendarNotes}
                     </td>
                     <td></td>
                   </tr>
@@ -216,7 +206,7 @@ export const WorkingCopySessionList = connect(
                         Delete Note
                       </Button>
                     </td>
-                    <td>
+                    <td className="no-wrap text-align-right">
                       <Button
                         link
                         icon="edit"
