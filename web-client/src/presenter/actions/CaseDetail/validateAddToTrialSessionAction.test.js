@@ -30,7 +30,7 @@ describe('validateAddToTrialSessionAction', () => {
     expect(errorStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error with and error message and not call path.success if trialSessionId is not on state.modal', async () => {
+  it('should call path.error with an error message and not call path.success if trialSessionId is not on state.modal', async () => {
     await runAction(validateAddToTrialSessionAction, {
       modules: {
         presenter,
