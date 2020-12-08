@@ -159,22 +159,20 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: '0898d5c3-2948-4924-b28b-d5c1451c80de',
-          },
-          contactSecondary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: '754a3191-884f-42f0-ad2c-e6c706685299',
-          },
-          docketNumber: '101-00',
-          partyType: PARTY_TYPES.petitionerSpouse,
-          userId: '320fce0e-b050-4e04-8720-db25da3ca598',
-        }),
-      );
+      .getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          contactId: '0898d5c3-2948-4924-b28b-d5c1451c80de',
+        },
+        contactSecondary: {
+          ...MOCK_CASE.contactPrimary,
+          contactId: '754a3191-884f-42f0-ad2c-e6c706685299',
+        },
+        docketNumber: '101-00',
+        partyType: PARTY_TYPES.petitionerSpouse,
+        userId: '320fce0e-b050-4e04-8720-db25da3ca598',
+      });
 
     const result = await getCaseInteractor({
       applicationContext,
