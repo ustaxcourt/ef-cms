@@ -1,4 +1,4 @@
-const awsServerlessExpress = require('aws-serverless-express');
+const awsServerlessExpress = require('@vendia/serverless-express');
 const { app } = require('../../../src/app-public');
 const server = awsServerlessExpress.createServer(app);
 
