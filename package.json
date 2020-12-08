@@ -96,7 +96,7 @@
     "pdfjs-dist": "2.3.200",
     "pixelmatch": "^5.2.1",
     "pngjs": "^6.0.0",
-    "postcss": "^8.1.14",
+    "postcss": "^8.2.0",
     "prettier": "^2.2.1",
     "prop-types": "^15.7.2",
     "pug": "^3.0.0",
