@@ -19,7 +19,9 @@ exports.addCaseToTrialSessionInteractor = async ({
   applicationContext,
   docketNumber,
   trialSessionId,
+  trialSessionNote,
 }) => {
+  console.log('HERE trialSessionNote', trialSessionNote);
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)) {

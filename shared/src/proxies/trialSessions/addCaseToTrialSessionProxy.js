@@ -13,10 +13,11 @@ exports.addCaseToTrialSessionInteractor = ({
   applicationContext,
   docketNumber,
   trialSessionId,
+  trialSessionNote,
 }) => {
   return post({
     applicationContext,
-    body: {},
+    body: { trialSessionNote },
     endpoint: `/trial-sessions/${trialSessionId}/cases/${docketNumber}`,
   });
 };
