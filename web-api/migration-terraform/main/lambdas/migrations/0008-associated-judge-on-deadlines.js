@@ -1,8 +1,5 @@
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
-  CASE_STATUS_TYPES,
-} = require('../../../../../shared/src/business/entities/EntityConstants');
-const {
   CaseDeadline,
 } = require('../../../../../shared/src/business/entities/CaseDeadline');
 const applicationContext = createApplicationContext({});
@@ -27,10 +24,7 @@ const migrateItems = async (items, documentClient) => {
           return res.Item;
         });
 
-      if (
-        caseRecord.status === CASE_STATUS_TYPES.calendared &&
-        caseRecord.associatedJudge !== item.associatedJudge
-      ) {
+      if (caseRecord.associatedJudge !== item.associatedJudge) {
         item.associatedJudge = caseRecord.associatedJudge;
       }
 
