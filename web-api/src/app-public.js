@@ -1,4 +1,4 @@
-const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
+const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middleware');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');

@@ -18,6 +18,9 @@ const {
 const {
   migrateItems: migration0006,
 } = require('./migrations/0006-eservice-indicator-has-eaccess');
+const {
+  migrateItems: migration0007,
+} = require('./migrations/0007-unblock-migrated-calendared-cases');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -48,6 +51,7 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0004(items, documentClient);
   items = await migration0005(items, documentClient);
   items = await migration0006(items, documentClient);
+  items = await migration0007(items, documentClient);
 
   return items;
 };

@@ -412,6 +412,11 @@ Case.VALIDATION_RULES = {
   automaticBlocked: joi
     .boolean()
     .optional()
+    .when('status', {
+      is: CASE_STATUS_TYPES.calendared,
+      otherwise: joi.optional(),
+      then: joi.invalid(true),
+    })
     .description(
       'Temporarily blocked from trial due to a pending item or due date.',
     ),
@@ -436,6 +441,11 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .meta({ tags: ['Restricted'] })
+    .when('status', {
+      is: CASE_STATUS_TYPES.calendared,
+      otherwise: joi.optional(),
+      then: joi.invalid(true),
+    })
     .description('Temporarily blocked from trial.'),
   blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
     is: true,

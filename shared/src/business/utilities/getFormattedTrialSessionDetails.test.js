@@ -236,6 +236,50 @@ describe('formattedTrialSessionDetails', () => {
         },
       ]);
     });
+
+    it('compares eligible trial session cases sorting manually added cases first', () => {
+      const formattedEligibleCases = [
+        {
+          docketNumber: '101-19',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '101-19',
+        },
+        {
+          docketNumber: '102-19',
+          docketNumberSuffix: 'P',
+          docketNumberWithSuffix: '102-19P',
+          isHighPriority: true,
+        },
+        {
+          docketNumber: '103-19',
+          docketNumberSuffix: 'P',
+          docketNumberWithSuffix: '103-19P',
+          isManuallyAdded: true,
+        },
+      ];
+      const result = formattedEligibleCases.sort(
+        compareTrialSessionEligibleCases,
+      );
+      expect(result).toMatchObject([
+        {
+          docketNumber: '103-19',
+          docketNumberSuffix: 'P',
+          docketNumberWithSuffix: '103-19P',
+          isManuallyAdded: true,
+        },
+        {
+          docketNumber: '102-19',
+          docketNumberSuffix: 'P',
+          docketNumberWithSuffix: '102-19P',
+          isHighPriority: true,
+        },
+        {
+          docketNumber: '101-19',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '101-19',
+        },
+      ]);
+    });
   });
 
   it('formats docket numbers with suffixes and case caption names without postfix on eligible cases', () => {
