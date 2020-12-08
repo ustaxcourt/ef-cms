@@ -372,6 +372,7 @@ const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
+const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
 const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
@@ -887,6 +888,10 @@ app.get(
   app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
   app.put('/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
+  app.post(
+    '/trial-sessions/:trialSessionId/set-hearing/:docketNumber',
+    lambdaWrapper(setForHearingLambda),
+  );
 }
 
 /**

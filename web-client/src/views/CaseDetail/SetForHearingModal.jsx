@@ -8,19 +8,19 @@ import React from 'react';
 
 export const SetForHearingModal = connect(
   {
-    addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.setForHearingSequence,
     modal: state.modal,
+    setForHearingModalHelper: state.setForHearingModalHelper,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateSetForHearingSequence: sequences.validateSetForHearingSequence,
     validationErrors: state.validationErrors,
   },
   function SetForHearingModal({
-    addToTrialSessionModalHelper,
     cancelSequence,
     confirmSequence,
     modal,
+    setForHearingModalHelper,
     updateModalValueSequence,
     validateSetForHearingSequence,
     validationErrors,
@@ -99,7 +99,7 @@ export const SetForHearingModal = connect(
             >
               <option value="">- Select -</option>
               {!modal.showAllLocations &&
-                addToTrialSessionModalHelper.trialSessionsFormatted.map(
+                setForHearingModalHelper.trialSessionsFormatted.map(
                   trialSession => (
                     <option
                       key={trialSession.trialSessionId}
@@ -110,10 +110,10 @@ export const SetForHearingModal = connect(
                   ),
                 )}
               {modal.showAllLocations &&
-                addToTrialSessionModalHelper.trialSessionStatesSorted.map(
+                setForHearingModalHelper.trialSessionStatesSorted.map(
                   (stateName, idx) => (
                     <optgroup key={idx} label={stateName}>
-                      {addToTrialSessionModalHelper.trialSessionsFormattedByState[
+                      {setForHearingModalHelper.trialSessionsFormattedByState[
                         stateName
                       ].map(trialSession => (
                         <option
@@ -151,7 +151,7 @@ export const SetForHearingModal = connect(
               />
             </fieldset>
           </FormGroup>
-          {addToTrialSessionModalHelper.showSessionNotSetAlert && (
+          {setForHearingModalHelper.showSessionNotSetAlert && (
             <Hint>
               This trial session has not been set. This case will be added to
               the eligible cases for this session and prioritized when the
