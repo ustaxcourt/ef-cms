@@ -138,7 +138,7 @@ export const AddToTrialModal = connect(
             </Hint>
           )}
 
-          <FormGroup>
+          <FormGroup errorText={validationErrors.calendarNotes}>
             <label className="usa-label" htmlFor="trial-session-note">
               Add note <span className="usa-hint">(optional)</span>
             </label>
@@ -146,6 +146,9 @@ export const AddToTrialModal = connect(
               bind="modal.calendarNotes"
               id="trial-session-note"
               name="calendarNotes"
+              onChange={() => {
+                validateAddToTrialSequence();
+              }}
             ></BindedTextarea>
           </FormGroup>
         </div>

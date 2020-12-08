@@ -538,6 +538,9 @@
                   name: "max"
                   args: 
                     limit: 200
+              allow: 
+                - ""
+                - null
             docketNumber: 
               type: "string"
               flags: 
