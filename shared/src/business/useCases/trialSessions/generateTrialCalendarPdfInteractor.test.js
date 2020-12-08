@@ -32,6 +32,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
       .getTrialSessionById.mockReturnValue({
         address1: '123 Some Street',
         address2: 'Suite B',
+        caseOrder: [],
         city: US_STATES.NY,
         courtReporter: 'Lois Lane',
         courthouseName: 'Test Courthouse',
@@ -107,5 +108,47 @@ describe('generateTrialCalendarPdfInteractor', () => {
     });
 
     expect(result.url).toBe(mockPdfUrl.url);
+  });
+
+  it('should set calendarNotes for each case in trialSession.caseOrder when the case has calendarNotes', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        address1: '123 Some Street',
+        address2: 'Suite B',
+        caseOrder: [
+          { calendarNotes: 'this is a test', docketNumber: '102-19' },
+        ],
+        city: US_STATES.NY,
+        courtReporter: 'Lois Lane',
+        courthouseName: 'Test Courthouse',
+        irsCalendarAdministrator: 'iCalRS Admin',
+        judge: { name: 'Joseph Dredd' },
+        notes:
+          'The one with the velour shirt is definitely looking at me funny.',
+        sessionType: 'Hybrid',
+        startDate: '2019-12-02T05:00:00.000Z',
+        startTime: '09:00',
+        state: 'NY',
+        term: 'Fall',
+        termYear: '2019',
+        trialClerk: 'Clerky McGee',
+        trialLocation: 'New York City, New York',
+        zip: '10108',
+      });
+
+    await generateTrialCalendarPdfInteractor({
+      applicationContext,
+      content: {
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    });
+
+    const caseWithCalendarNotes = applicationContext
+      .getDocumentGenerators()
+      .trialCalendar.mock.calls[0][0].data.cases.find(
+        c => c.docketNumber === '102-19',
+      );
+    expect(caseWithCalendarNotes.calendarNotes).toBe('this is a test');
   });
 });
