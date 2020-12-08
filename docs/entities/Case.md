@@ -3534,163 +3534,6 @@
         - 
           tags: 
             - "Restricted"
-    automaticBlocked: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-        description: "Temporarily blocked from trial due to a pending item or due date."
-    automaticBlockedDate: 
-      type: "date"
-      flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "automaticBlocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    automaticBlockedReason: 
-      type: "string"
-      flags: 
-        only: true
-        description: "The reason the case was automatically blocked from trial."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-      allow: 
-        - "Due Date"
-        - "Pending Item"
-        - "Pending Item and Due Date"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "automaticBlocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    blocked: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-        description: "Temporarily blocked from trial."
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-    blockedDate: 
-      type: "date"
-      flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "blocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    blockedReason: 
-      type: "string"
-      flags: 
-        description: "Open text field for describing reason for blocking this case from trial."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 250
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "blocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
     caseCaption: 
       type: "string"
       flags: 
@@ -71669,6 +71512,207 @@
         - 
           tags: 
             - "Restricted"
+    automaticBlocked: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Temporarily blocked from trial due to a pending item or due date."
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "status"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - "Calendared"
+          then: 
+            type: "any"
+            invalid: 
+              - true
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+    automaticBlockedDate: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "automaticBlocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    automaticBlockedReason: 
+      type: "string"
+      flags: 
+        only: true
+        description: "The reason the case was automatically blocked from trial."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "Due Date"
+        - "Pending Item"
+        - "Pending Item and Due Date"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "automaticBlocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    blocked: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Temporarily blocked from trial."
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "status"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - "Calendared"
+          then: 
+            type: "any"
+            invalid: 
+              - true
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+    blockedDate: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "blocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    blockedReason: 
+      type: "string"
+      flags: 
+        description: "Open text field for describing reason for blocking this case from trial."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 250
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "blocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
     closedDate: 
       type: "date"
       flags: 

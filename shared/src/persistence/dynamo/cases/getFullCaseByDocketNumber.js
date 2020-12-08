@@ -25,9 +25,5 @@ exports.getFullCaseByDocketNumber = async ({
     applicationContext,
   });
 
-  if (!caseItems) {
-    return null;
-  }
-
   return aggregateCaseItems(caseItems);
 };
