@@ -46,7 +46,7 @@ export const IndividualWorkQueueInProgress = connect(
                   <td className="message-queue-row message-queue-case-title">
                     {item.caseTitle}
                   </td>
-                  <td className="message-queue-row message-queue-document">
+                  <td className="message-queue-row max-width-25">
                     <div className="message-document-title">
                       <a className="case-link" href={item.editLink}>
                         {item.docketEntry.documentTitle ||
