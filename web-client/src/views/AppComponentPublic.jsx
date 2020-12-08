@@ -13,6 +13,7 @@ import { TodaysOpinions } from './Public/TodaysOpinions';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
+import { useScript } from '../utilities/useScript';
 import React, { useEffect } from 'react';
 
 const pages = {
@@ -45,6 +46,10 @@ export const AppComponentPublic = connect(
     useEffect(() => {
       focusMain();
     });
+
+    if (!process.env.CI) {
+      useScript('https://lynmjtcq5px1.statuspage.io/embed/script.js');
+    }
 
     const CurrentPage = pages[currentPage];
 
