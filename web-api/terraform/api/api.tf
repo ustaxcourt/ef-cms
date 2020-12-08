@@ -326,3 +326,14 @@ resource "aws_api_gateway_base_path_mapping" "api_mapping" {
   stage_name  = aws_api_gateway_stage.api_stage.stage_name
   domain_name = aws_api_gateway_domain_name.api_custom.domain_name
 }
+
+resource "aws_api_gateway_method_settings" "api_default" {
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+  stage_name  = aws_api_gateway_stage.api_stage.stage_name
+  method_path = "*/*"
+
+  settings {
+    throttling_burst_limit = 5000
+    throttling_rate_limit = 10000
+  }
+}
