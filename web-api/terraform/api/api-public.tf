@@ -159,3 +159,14 @@ resource "aws_api_gateway_base_path_mapping" "api_public_mapping" {
   stage_name  = aws_api_gateway_deployment.api_public_deployment.stage_name
   domain_name = aws_api_gateway_domain_name.api_public_custom.domain_name
 }
+
+resource "aws_api_gateway_method_settings" "api_public_default" {
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api_public.id
+  stage_name  = aws_api_gateway_deployment.api_public_deployment.stage_name
+  method_path = "*/*"
+
+  settings {
+    throttling_burst_limit = 5000
+    throttling_rate_limit = 10000
+  }
+}
