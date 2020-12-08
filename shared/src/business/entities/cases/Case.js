@@ -163,8 +163,8 @@ Case.prototype.init = function init(
   }
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
-  this.assignHearings({ applicationContext, filtered, rawCase });
-  this.assignContacts({ applicationContext, rawCase });
+  this.assignHearings({ applicationContext, rawCase });
+  this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
 };
