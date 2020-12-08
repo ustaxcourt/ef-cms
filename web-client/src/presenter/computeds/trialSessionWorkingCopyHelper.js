@@ -65,11 +65,25 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
 
   const formattedCasesByDocketRecord = makeMap(formattedCases, 'docketNumber');
 
-  const userNotesByDocketNumber = {};
-
   Object.keys(userNotes).forEach(docketNumber => {
     if (userNotes[docketNumber]) {
-      userNotesByDocketNumber[docketNumber] = userNotes[docketNumber].notes;
+      const caseToUpdate = formattedCases.find(
+        aCase => aCase.docketNumber === docketNumber,
+      );
+      if (caseToUpdate) {
+        caseToUpdate.userNotes = userNotes[docketNumber].notes;
+      }
+    }
+  });
+
+  trialSession.caseOrder.forEach(aCase => {
+    if (aCase.calendarNotes) {
+      const caseToUpdate = formattedCases.find(
+        theCase => theCase.docketNumber === aCase.docketNumber,
+      );
+      if (caseToUpdate) {
+        caseToUpdate.calendarNotes = aCase.calendarNotes;
+      }
     }
   });
 
@@ -79,6 +93,5 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     formattedCasesByDocketRecord,
     title: trialSession.title || 'Birmingham, Alabama',
     trialStatusOptions,
-    userNotesByDocketNumber,
   };
 };
