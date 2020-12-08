@@ -48,32 +48,13 @@ describe('migrateItems', () => {
     );
   });
 
-  it('should return and NOT modify case deadline records when the case the deadline is associated with is NOT calendared', async () => {
+  it('should set the case deadline associatedJudge to the associatedJudge on the case when they do NOT match', async () => {
     const items = [mockCaseDeadline];
     documentClient.get = jest.fn().mockReturnValue({
       promise: async () => ({
         Item: {
           ...MOCK_CASE,
           associatedJudge: 'Michael Scott',
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-      }),
-    });
-
-    const results = await migrateItems(items, documentClient);
-
-    expect(results.length).toBe(1);
-    expect(results[0].associatedJudge).toBe('Carol Stills');
-  });
-
-  it('should set the case deadline associatedJudge to the associatedJudge on the case when they do NOT match and the case is calendared', async () => {
-    const items = [mockCaseDeadline];
-    documentClient.get = jest.fn().mockReturnValue({
-      promise: async () => ({
-        Item: {
-          ...MOCK_CASE,
-          associatedJudge: 'Michael Scott',
-          status: CASE_STATUS_TYPES.calendared,
         },
       }),
     });
@@ -82,6 +63,23 @@ describe('migrateItems', () => {
 
     expect(results.length).toBe(1);
     expect(results[0].associatedJudge).toBe('Michael Scott');
+  });
+
+  it('should NOT modify the case deadline associatedJudge when it matches the case associatedJudge', async () => {
+    const items = [mockCaseDeadline];
+    documentClient.get = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Item: {
+          ...MOCK_CASE,
+          associatedJudge: mockCaseDeadline.associatedJudge,
+        },
+      }),
+    });
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results.length).toBe(1);
+    expect(results[0].associatedJudge).toBe(mockCaseDeadline.associatedJudge);
   });
 
   it('should validate the modified case deadline entity', async () => {
