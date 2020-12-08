@@ -160,7 +160,7 @@ describe('advancedSearchHelper', () => {
       showNoMatches: false,
       showSearchResults: true,
     });
-    expect(result.showMaxResultsMessage).toBeFalsy();
+    expect(result.showManyResultsMessage).toBeFalsy();
   });
 
   it('formats search results for a case search', () => {
@@ -269,8 +269,8 @@ describe('advancedSearchHelper', () => {
         ],
       },
     });
-    expect(result.showMaxResultsMessage).toBe(true);
-    expect(result.maxResults).toBeDefined();
+    expect(result.showManyResultsMessage).toBe(true);
+    expect(result.manyResults).toBeDefined();
   });
 
   it('only returns formatted results that should be currently shown based on form.currentPage for a case search', () => {
