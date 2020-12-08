@@ -8,14 +8,24 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {object} the alertSuccess and updated caseDetail object
  */
-// export const setForHearingAction = async ({ applicationContext, get }) => {
-export const setForHearingAction = async ({ get }) => {
+export const setForHearingAction = async ({ applicationContext, get }) => {
   const { docketNumber } = get(state.caseDetail);
-  const { trialSessionId } = get(state.modal);
+  const { note, trialSessionId } = get(state.modal);
+
+  const alertSuccess = { message: 'Case set for hearing.' };
+
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .setForHearingInteractor({
+      applicationContext,
+      docketNumber,
+      note,
+      trialSessionId,
+    });
 
   return {
-    // alertSuccess,
-    // caseDetail,
+    alertSuccess,
+    caseDetail,
     docketNumber,
     trialSessionId,
   };
