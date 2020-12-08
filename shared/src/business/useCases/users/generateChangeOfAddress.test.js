@@ -652,4 +652,72 @@ describe('generateChangeOfAddress', () => {
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
   });
+
+  it('should not create a docket entry, work item, or serve anything if the bypassDocketEntry flag is true', async () => {
+    const mockPaperServiceCase = {
+      ...mockCaseWithPrivatePractitioner,
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      },
+      contactSecondary: {
+        ...MOCK_CASE.contactSecondary,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
+
+    const cases = await generateChangeOfAddress({
+      applicationContext,
+      bypassDocketEntry: true,
+      contactInfo: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      user: {
+        barNumber: 'PT5432',
+        contact: {
+          address1: '234 Main St!',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        email: 'privatePractitioner1',
+        name: 'Test Private Practitioner',
+        representingPrimary: true,
+        role: ROLES.privatePractitioner,
+        section: 'privatePractitioner',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
+      },
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).not.toHaveBeenCalled();
+    expect(cases).toMatchObject([
+      expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
+    ]);
+    // We still want to update our case!
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+  });
 });
