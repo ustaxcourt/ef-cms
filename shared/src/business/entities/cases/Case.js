@@ -54,6 +54,7 @@ const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 Case.VALIDATION_ERROR_MESSAGES = {
@@ -162,7 +163,8 @@ Case.prototype.init = function init(
   }
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
-  this.assignContacts({ applicationContext, filtered, rawCase });
+  this.assignHearings({ applicationContext, filtered, rawCase });
+  this.assignContacts({ applicationContext, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
 };
@@ -290,6 +292,19 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
     }
   } else {
     this.docketEntries = [];
+  }
+};
+
+Case.prototype.assignHearings = function assignHearings({
+  applicationContext,
+  rawCase,
+}) {
+  if (Array.isArray(rawCase.hearings)) {
+    this.hearings = rawCase.hearings
+      .map(hearing => new TrialSession(hearing, { applicationContext }))
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+  } else {
+    this.hearings = [];
   }
 };
 

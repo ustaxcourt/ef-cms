@@ -135,6 +135,40 @@ describe('Case entity', () => {
     });
   });
 
+  describe('hearings', () => {
+    it('sets associated hearings on the case hearings array', () => {
+      const mockhearing = {
+        maxCases: 100,
+        sessionType: 'Regular',
+        startDate: '2025-03-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialLocation: 'Birmingham, Alabama',
+      };
+
+      const newCase = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [mockhearing],
+        },
+        { applicationContext },
+      );
+
+      expect(newCase.hearings).toEqual([expect.objectContaining(mockhearing)]);
+    });
+
+    it('sets the case hearings property to an empty object if none are provided', () => {
+      const newCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+
+      expect(newCase.hearings).toEqual([]);
+    });
+  });
+
   describe('adding and removing practitioners', () => {
     let myCase;
     beforeEach(() => {
