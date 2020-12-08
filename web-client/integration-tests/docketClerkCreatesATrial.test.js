@@ -10,7 +10,11 @@ describe('Docket Clerk Creates A Trial', () => {
     jest.setTimeout(30000);
   });
   loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test);
-  docketClerkViewsTrialSessionList(test);
+  docketClerkCreatesATrialSession(test, {
+    trialLocation: 'Peoria, Illinois',
+  });
+  docketClerkViewsTrialSessionList(test, {
+    trialLocation: 'Peoria, Illinois',
+  });
   docketClerkEditsTrialSession(test);
 });
