@@ -17,16 +17,15 @@ export const SearchResults = connect(
         {advancedSearchHelper.showSearchResults && (
           <>
             <h1 className="margin-top-4">Search Results</h1>
-            {advancedSearchHelper.showManyResultsMessage ||
-              (true && (
-                <WarningNotificationComponent
-                  alertWarning={{
-                    message:
-                      'Your search has a high number of matching results. Refine your search for more accurate results.',
-                  }}
-                  dismissable={false}
-                />
-              ))}
+            {advancedSearchHelper.showManyResultsMessage && (
+              <WarningNotificationComponent
+                alertWarning={{
+                  message:
+                    'Your search has a high number of matching results. Refine your search for more accurate results.',
+                }}
+                dismissable={false}
+              />
+            )}
 
             <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
