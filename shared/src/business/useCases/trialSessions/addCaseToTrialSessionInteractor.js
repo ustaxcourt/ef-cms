@@ -11,17 +11,17 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {string} providers.calendarNotes notes on why the case was added to the trial session
  * @param {string} providers.trialSessionId the id of the trial session
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
  */
 exports.addCaseToTrialSessionInteractor = async ({
   applicationContext,
+  calendarNotes,
   docketNumber,
   trialSessionId,
-  trialSessionNote,
 }) => {
-  console.log('HERE trialSessionNote', trialSessionNote);
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)) {
@@ -58,7 +58,7 @@ exports.addCaseToTrialSessionInteractor = async ({
 
   trialSessionEntity
     .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-    .manuallyAddCaseToCalendar(caseEntity);
+    .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
