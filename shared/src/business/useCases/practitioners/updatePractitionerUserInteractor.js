@@ -18,6 +18,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.updatePractitionerUserInteractor = async ({
   applicationContext,
   barNumber,
+  bypassDocketEntry,
   user,
 }) => {
   const requestUser = applicationContext.getCurrentUser();
@@ -43,6 +44,7 @@ exports.updatePractitionerUserInteractor = async ({
 
   await generateChangeOfAddress({
     applicationContext,
+    bypassDocketEntry,
     contactInfo: validatedUserData.contact,
     updatedName: validatedUserData.name,
     user: oldUserInfo,
