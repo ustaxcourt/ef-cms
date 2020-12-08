@@ -17,8 +17,6 @@ export const validateAddToTrialSessionAction = ({ get, path }) => {
     errors.trialSessionId = 'Select a Trial Session';
   }
 
-  console.log(calendarNotes);
-
   if (calendarNotes && calendarNotes.length > 200) {
     errors.calendarNotes = 'The length of the note must not be over 200';
   }

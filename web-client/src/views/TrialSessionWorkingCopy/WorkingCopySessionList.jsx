@@ -206,7 +206,7 @@ export const WorkingCopySessionList = connect(
                         Delete Note
                       </Button>
                     </td>
-                    <td>
+                    <td className="no-wrap text-align-right">
                       <Button
                         link
                         icon="edit"
