@@ -143,9 +143,9 @@ export const AddToTrialModal = connect(
               Add note <span className="usa-hint">(optional)</span>
             </label>
             <BindedTextarea
-              bind="modal.trialSessionNote"
+              bind="modal.calendarNotes"
               id="trial-session-note"
-              name="trialSessionNote"
+              name="calendarNotes"
             ></BindedTextarea>
           </FormGroup>
         </div>
