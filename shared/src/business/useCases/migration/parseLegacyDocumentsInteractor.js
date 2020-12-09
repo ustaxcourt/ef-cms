@@ -74,8 +74,10 @@ exports.parseLegacyDocumentsInteractor = async ({
 
   foundDocketEntry.documentContentsId = documentContentsId;
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    docketEntryId: foundDocketEntry.docketEntryId,
+    docketNumber: caseEntity.docketNumber,
+    document: foundDocketEntry,
   });
 };
