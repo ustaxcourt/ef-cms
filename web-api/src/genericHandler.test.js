@@ -192,11 +192,13 @@ describe('genericHandler', () => {
           public: 'public',
         },
       ];
+
       const result = dataSecurityFilter(data, { applicationContext });
+
       expect(result).toEqual([{ public: 'public' }, { public: 'public' }]);
     });
 
-    it('returns array data after passing through entity constructor if entityName is present on array element', () => {
+    it('returns array data without passing through entity constructor if entityName is present on array element but entity cannot be retrieved by name', () => {
       applicationContext.getEntityByName.mockImplementation(() => null);
       const data = [
         {
@@ -210,7 +212,9 @@ describe('genericHandler', () => {
           public: 'public',
         },
       ];
+
       const result = dataSecurityFilter(data, { applicationContext });
+
       expect(result).toEqual([
         {
           entityName: 'MockEntity2',

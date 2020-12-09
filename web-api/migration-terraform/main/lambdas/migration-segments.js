@@ -24,6 +24,9 @@ const {
 const {
   migrateItems: migration0008,
 } = require('./migrations/0008-associated-judge-on-deadlines');
+const {
+  migrateItems: migration0009,
+} = require('./migrations/0009-remove-blocked-cases-from-eligible-for-trial-record');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -56,6 +59,7 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0006(items, documentClient);
   items = await migration0007(items, documentClient);
   items = await migration0008(items, documentClient);
+  items = await migration0009(items, documentClient);
 
   return items;
 };

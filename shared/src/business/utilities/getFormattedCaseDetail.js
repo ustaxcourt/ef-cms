@@ -67,25 +67,52 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
   return result;
 };
 
+const computeIsInProgress = ({ formattedEntry }) => {
+  return (
+    (!formattedEntry.isCourtIssuedDocument &&
+      formattedEntry.isFileAttached === false &&
+      !formattedEntry.isMinuteEntry &&
+      !formattedEntry.isUnservable) ||
+    (formattedEntry.isFileAttached === true &&
+      !formattedEntry.servedAt &&
+      !formattedEntry.isUnservable)
+  );
+};
+
+const computeIsNotServedDocument = ({ formattedEntry }) => {
+  return (
+    !formattedEntry.servedAt &&
+    !formattedEntry.isLegacyServed &&
+    !formattedEntry.isUnservable &&
+    !formattedEntry.isMinuteEntry
+  );
+};
+
 const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
 
-  formattedEntry.servedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(formattedEntry.servedAt, 'MMDDYY');
+  const { formatDateString } = applicationContext.getUtilities();
 
-  formattedEntry.signedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(formattedEntry.signedAt, 'MMDDYY');
+  formattedEntry.servedAtFormatted = formatDateString(
+    formattedEntry.servedAt,
+    'MMDDYY',
+  );
 
-  formattedEntry.signedAtFormattedTZ = applicationContext
-    .getUtilities()
-    .formatDateString(formattedEntry.signedAt, 'DATE_TIME_TZ');
+  formattedEntry.signedAtFormatted = formatDateString(
+    formattedEntry.signedAt,
+    'MMDDYY',
+  );
+
+  formattedEntry.signedAtFormattedTZ = formatDateString(
+    formattedEntry.signedAt,
+    'DATE_TIME_TZ',
+  );
 
   if (formattedEntry.certificateOfServiceDate) {
-    formattedEntry.certificateOfServiceDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.certificateOfServiceDate, 'MMDDYY');
+    formattedEntry.certificateOfServiceDateFormatted = formatDateString(
+      formattedEntry.certificateOfServiceDate,
+      'MMDDYY',
+    );
   }
   if (formattedEntry.lodged) {
     formattedEntry.eventCode = 'MISCL';
@@ -109,20 +136,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     UNSERVABLE_EVENT_CODES.includes(formattedEntry.eventCode) ||
     formattedEntry.isLegacyServed;
 
-  formattedEntry.isInProgress =
-    (!formattedEntry.isCourtIssuedDocument &&
-      formattedEntry.isFileAttached === false &&
-      !formattedEntry.isMinuteEntry &&
-      !formattedEntry.isUnservable) ||
-    (formattedEntry.isFileAttached === true &&
-      !formattedEntry.servedAt &&
-      !formattedEntry.isUnservable);
+  formattedEntry.isInProgress = computeIsInProgress({ formattedEntry });
 
-  formattedEntry.isNotServedDocument =
-    !formattedEntry.servedAt &&
-    !formattedEntry.isLegacyServed &&
-    !formattedEntry.isUnservable &&
-    !formattedEntry.isMinuteEntry;
+  formattedEntry.isNotServedDocument = computeIsNotServedDocument({
+    formattedEntry,
+  });
 
   formattedEntry.isTranscript =
     formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
