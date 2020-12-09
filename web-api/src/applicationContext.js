@@ -22,6 +22,9 @@ const {
   addDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
+  addHearingToCase,
+} = require('../../shared/src/persistence/dynamo/trialSessions/addHearingToCase');
+const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -1111,6 +1114,7 @@ const isValidatedDecorator = persistenceGatewayMethods => {
 
 const gatewayMethods = {
   ...isValidatedDecorator({
+    addHearingToCase,
     addWorkItemToSectionInbox,
     associateUserWithCase,
     associateUserWithCasePending,
