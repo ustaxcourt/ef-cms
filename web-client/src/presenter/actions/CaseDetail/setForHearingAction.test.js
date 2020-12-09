@@ -21,7 +21,7 @@ describe('setForHearingAction', () => {
           docketNumber: '123-45',
         },
         modal: {
-          note: 'note',
+          calendarNotes: 'calendarNotes',
           trialSessionId: '234',
         },
       },
@@ -33,8 +33,8 @@ describe('setForHearingAction', () => {
     expect(
       applicationContext.getUseCases().setForHearingInteractor.mock.calls[0][0],
     ).toMatchObject({
+      calendarNotes: 'calendarNotes',
       docketNumber: '123-45',
-      note: 'note',
       trialSessionId: '234',
     });
     expect(result.output).toHaveProperty('alertSuccess');

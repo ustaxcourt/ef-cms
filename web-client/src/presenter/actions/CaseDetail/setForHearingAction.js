@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  */
 export const setForHearingAction = async ({ applicationContext, get }) => {
   const { docketNumber } = get(state.caseDetail);
-  const { note, trialSessionId } = get(state.modal);
+  const { calendarNotes, trialSessionId } = get(state.modal);
 
   const alertSuccess = { message: 'Case set for hearing.' };
 
@@ -18,8 +18,8 @@ export const setForHearingAction = async ({ applicationContext, get }) => {
     .getUseCases()
     .setForHearingInteractor({
       applicationContext,
+      calendarNotes,
       docketNumber,
-      note,
       trialSessionId,
     });
 

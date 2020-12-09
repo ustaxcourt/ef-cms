@@ -3,17 +3,23 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const AddToTrialModal = connect(
   {
-    addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
+    addToTrialSessionModalHelper: props.modalHelper
+      ? props.modalHelper
+      : state.addToTrialSessionModalHelper,
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.addCaseToTrialSessionSequence,
+    confirmSequence: props.confirmSequence
+      ? props.confirmSequence
+      : sequences.addCaseToTrialSessionSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateAddToTrialSequence: sequences.validateAddToTrialSessionSequence,
+    validateAddToTrialSequence: props.validateSequence
+      ? props.validateSequence
+      : sequences.validateAddToTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
   function AddToTrialModal({
