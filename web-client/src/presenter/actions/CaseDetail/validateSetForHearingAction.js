@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * validate the add to trial session form
+ * validate the set for hearing form
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting state.modal.trialSessionId
@@ -19,6 +19,10 @@ export const validateSetForHearingAction = ({ get, path }) => {
 
   if (!calendarNotes) {
     errors.calendarNotes = 'Add a note.';
+  }
+
+  if (calendarNotes && calendarNotes.length > 200) {
+    errors.calendarNotes = 'The length of the note must not be over 200';
   }
 
   if (isEmpty(errors)) {
