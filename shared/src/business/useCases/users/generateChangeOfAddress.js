@@ -19,12 +19,29 @@ const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { WorkItem } = require('../../entities/WorkItem');
 
+/**
+ * Update an address on a case. This performs a search to get all of the cases associated with the user,
+ * and then one by one determines whether or not it needs to generate a docket entry. Only open cases and
+ * cases closed within the last six months should get a docket entry.
+ *
+ * @param {object}  providers the providers object
+ * @param {object}  providers.applicationContext the application context
+ * @param {boolean} providers.bypassDocketEntry whether or not we should create a docket entry for this operation
+ * @param {object}  providers.contactInfo the updated contact information
+ * @param {string}  providers.requestUserId the userId making the request to which to send websocket messages
+ * @param {string}  providers.updatedName the name of the updated individual
+ * @param {object}  providers.user the user whose address is getting updated
+ * @param {string}  providers.websocketMessagePrefix is it the `user` or an `admin` performing this action?
+ * @returns {Promise<Case[]>} the cases that were updated
+ */
 exports.generateChangeOfAddress = async ({
   applicationContext,
   bypassDocketEntry = false,
   contactInfo,
+  requestUserId,
   updatedName,
   user,
+  websocketMessagePrefix = 'user',
 }) => {
   const docketNumbers = await applicationContext
     .getPersistenceGateway()
@@ -37,11 +54,11 @@ exports.generateChangeOfAddress = async ({
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: 'user_contact_update_progress',
+      action: `${websocketMessagePrefix}_contact_update_progress`,
       completedCases,
       totalCases: docketNumbers.length,
     },
-    userId: user.userId,
+    userId: requestUserId || user.userId,
   });
 
   const updatedCases = [];
@@ -119,11 +136,11 @@ exports.generateChangeOfAddress = async ({
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
-        action: 'user_contact_update_progress',
+        action: `${websocketMessagePrefix}_contact_update_progress`,
         completedCases,
         totalCases: docketNumbers.length,
       },
-      userId: user.userId,
+      userId: requestUserId || user.userId,
     });
   }
 
