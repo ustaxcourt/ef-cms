@@ -7,9 +7,34 @@ const {
 } = require('./updatePractitionerUser');
 const { ROLES } = require('../../../business/entities/EntityConstants');
 
-const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-
 describe('updatePractitionerUser', () => {
+  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+
+  it('should log an error', async () => {
+    applicationContext.getDocumentClient().get.mockReturnValue({
+      promise: async () => ({
+        Item: {
+          barNumber: 'PT1234',
+          name: 'Test Practitioner',
+          role: ROLES.inactivePractitioner,
+          section: 'inactivePractitioner',
+        },
+      }),
+    });
+    const updatedUser = {
+      barNumber: 'PT1234',
+      name: 'Test Practitioner',
+      role: ROLES.inactivePractitioner,
+      section: 'inactivePractitioner',
+    };
+
+    await updatePractitionerUser({
+      applicationContext,
+      user: updatedUser,
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+  });
   it('should not log an error', async () => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: () => null,
@@ -37,32 +62,6 @@ describe('updatePractitionerUser', () => {
     });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
-  });
-
-  it('should log an error', async () => {
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: async () => ({
-        Item: {
-          barNumber: 'PT1234',
-          name: 'Test Practitioner',
-          role: ROLES.inactivePractitioner,
-          section: 'inactivePractitioner',
-        },
-      }),
-    });
-    const updatedUser = {
-      barNumber: 'PT1234',
-      name: 'Test Practitioner',
-      role: ROLES.inactivePractitioner,
-      section: 'inactivePractitioner',
-    };
-
-    await updatePractitionerUser({
-      applicationContext,
-      user: updatedUser,
-    });
-
-    expect(applicationContext.logger.error).toHaveBeenCalled();
   });
 
   it('attempts to update a private practitioner user to inactivePractitioner', async () => {
