@@ -5,7 +5,10 @@ const {
   CHIEF_JUDGE,
   ROLES,
 } = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+const {
+  MOCK_CASE,
+  MOCK_CASE_WITH_TRIAL_SESSION,
+} = require('../../../test/mockCase');
 
 describe('addCaseToTrialSessionInteractor', () => {
   let mockCurrentUser;
@@ -132,5 +135,94 @@ describe('addCaseToTrialSessionInteractor', () => {
       highPriority: true,
       trialDate: '2025-12-01T00:00:00.000Z',
     });
+  });
+
+  it('throws an error if the case is not calendared', async () => {
+    mockCase = {
+      ...MOCK_CASE_WITH_TRIAL_SESSION,
+      status: CASE_STATUS_TYPES.new,
+    };
+
+    await expect(
+      addCaseToTrialSessionInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        isHearing: true,
+        trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
+      }),
+    ).rejects.toThrow('The Case must be calendared to add a hearing');
+  });
+
+  it('successfully adds the trial session hearing', async () => {
+    mockCase = {
+      ...MOCK_CASE_WITH_TRIAL_SESSION,
+    };
+
+    applicationContext.getUniqueId.mockReturnValue(
+      '8675309b-18d0-43ec-bafb-654e83405411',
+    );
+
+    await addCaseToTrialSessionInteractor({
+      applicationContext,
+      docketNumber: mockCase.docketNumber,
+      isHearing: true,
+      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().addHearingToCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().addHearingToCase.mock
+        .calls[0][0],
+    ).toEqual(
+      expect.objectContaining({
+        applicationContext: expect.anything(),
+        docketNumber: mockCase.docketNumber,
+        trialSession: expect.objectContaining({
+          trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+        }),
+      }),
+    );
+  });
+
+  it('successfully adds the trial session hearing with calendarNotes', async () => {
+    mockCase = {
+      ...MOCK_CASE_WITH_TRIAL_SESSION,
+    };
+
+    applicationContext.getUniqueId.mockReturnValue(
+      '8675309b-18d0-43ec-bafb-654e83405411',
+    );
+
+    await addCaseToTrialSessionInteractor({
+      applicationContext,
+      calendarNotes: 'this is a calendarNote',
+      docketNumber: mockCase.docketNumber,
+      isHearing: true,
+      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().addHearingToCase,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().addHearingToCase.mock
+        .calls[0][0],
+    ).toEqual(
+      expect.objectContaining({
+        applicationContext: expect.anything(),
+        docketNumber: mockCase.docketNumber,
+        trialSession: expect.objectContaining({
+          caseOrder: expect.arrayContaining([
+            expect.objectContaining({
+              calendarNotes: 'this is a calendarNote',
+              docketNumber: mockCase.docketNumber,
+            }),
+          ]),
+          trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+        }),
+      }),
+    );
   });
 });
