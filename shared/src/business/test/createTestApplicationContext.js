@@ -340,6 +340,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetPersistenceGateway = appContextProxy({
+    addHearingToCase: jest.fn(),
     addWorkItemToSectionInbox,
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
