@@ -43,33 +43,12 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
   });
 
-  it('calls window.open with a blank tab for non-mobile', async () => {
+  it('sets window.location.href', async () => {
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
         docketEntryId: 'docket-entry-id-123',
         docketNumber: '123-20',
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().getDocumentDownloadUrlInteractor,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketNumber: '123-20',
-        key: 'docket-entry-id-123',
-      }),
-    );
-    expect(window.open).toHaveBeenCalledWith('http://example.com', '_blank');
-  });
-
-  it('calls window.open (opens new tab on mobile) and sets window.location.href for mobile', async () => {
-    await runAction(openCaseDocumentDownloadUrlAction, {
-      modules: { presenter },
-      props: {
-        docketEntryId: 'docket-entry-id-123',
-        docketNumber: '123-20',
-        isMobile: true,
       },
     });
 

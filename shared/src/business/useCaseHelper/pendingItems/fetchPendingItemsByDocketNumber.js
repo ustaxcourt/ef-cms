@@ -31,7 +31,7 @@ exports.fetchPendingItemsByDocketNumber = async ({
   let foundDocuments = [];
 
   docketEntries.forEach(document => {
-    if (document.pending && document.servedAt) {
+    if (document.pending && (document.servedAt || document.isLegacyServed)) {
       foundDocuments.push({
         ...omit(
           new DocketEntry(
