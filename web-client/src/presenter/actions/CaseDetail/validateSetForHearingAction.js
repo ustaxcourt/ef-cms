@@ -10,15 +10,15 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateSetForHearingAction = ({ get, path }) => {
-  const { note, trialSessionId } = get(state.modal);
+  const { calendarNotes, trialSessionId } = get(state.modal);
 
   let errors = {};
   if (!trialSessionId) {
     errors.trialSessionId = 'Select a Trial Session';
   }
 
-  if (!note) {
-    errors.note = 'Add a note.';
+  if (!calendarNotes) {
+    errors.calendarNotes = 'Add a note.';
   }
 
   if (isEmpty(errors)) {
