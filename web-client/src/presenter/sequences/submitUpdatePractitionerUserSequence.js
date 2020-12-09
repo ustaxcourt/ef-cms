@@ -5,9 +5,13 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePractitionerUserAction } from '../actions/updatePractitionerUserAction';
 import { validateAddPractitionerAction } from '../actions/validateAddPractitionerAction';
 
@@ -20,14 +24,24 @@ export const submitUpdatePractitionerUserSequence = [
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
       setCurrentPageAction('Interstitial'),
-      updatePractitionerUserAction,
+      setWaitingForResponseAction,
+      startWebSocketConnectionAction,
       {
-        error: [],
+        error: [
+          unsetWaitingForResponseAction,
+          setShowModalFactoryAction('WebSocketErrorModal'),
+        ],
         success: [
-          setPractitionerDetailAction,
-          setAlertSuccessAction,
-          setSaveAlertsForNavigationAction,
-          navigateToPractitionerDetailAction,
+          updatePractitionerUserAction,
+          {
+            error: [],
+            success: [
+              setPractitionerDetailAction,
+              setAlertSuccessAction,
+              setSaveAlertsForNavigationAction,
+              navigateToPractitionerDetailAction,
+            ],
+          },
         ],
       },
     ],
