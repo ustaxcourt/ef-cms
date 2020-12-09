@@ -115,6 +115,31 @@ describe('addCaseToTrialSessionInteractor', () => {
     });
   });
 
+  it('should add calendarNotes for the case to the trial session', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL,
+      caseOrder: [{ docketNumber: '123-45' }],
+      isCalendared: true,
+    };
+    applicationContext.getUniqueId.mockReturnValue(
+      '8675309b-18d0-43ec-bafb-654e83405411',
+    );
+
+    await addCaseToTrialSessionInteractor({
+      applicationContext,
+      calendarNotes: 'Test',
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+    });
+
+    const caseWithCalendarNotes = applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mock.calls[0][0].trialSessionToUpdate.caseOrder.find(
+        c => c.docketNumber === MOCK_CASE.docketNumber,
+      );
+    expect(caseWithCalendarNotes.calendarNotes).toBe('Test');
+  });
+
   it('sets work items to high priority if the trial session is calendared', async () => {
     mockTrialSession = {
       ...MOCK_TRIAL,

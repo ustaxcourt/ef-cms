@@ -1,6 +1,5 @@
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '../../src/presenter/computeds/formattedTrialSessionDetails';
 import { runCompute } from 'cerebral/test';
-import { wait } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedTrialSessionDetails = withAppContextDecorator(
@@ -21,16 +20,11 @@ export const docketClerkEditsTrialSession = test => {
 
     await test.runSequence('updateTrialSessionSequence');
 
-    await wait(1000);
-
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
-    });
+    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
 
     const formatted = runCompute(formattedTrialSessionDetails, {
       state: test.getState(),
     });
-    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
 
     expect(formatted.notes).toEqual('hello');
   });

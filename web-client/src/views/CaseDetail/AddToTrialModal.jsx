@@ -1,4 +1,5 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { ModalDialog } from '../ModalDialog';
@@ -134,6 +135,7 @@ export const AddToTrialModal = connect(
                 )}
             </BindedSelect>
           </FormGroup>
+
           {addToTrialSessionModalHelper.showSessionNotSetAlert && (
             <Hint>
               This trial session has not been set. This case will be added to
@@ -141,6 +143,20 @@ export const AddToTrialModal = connect(
               calendar is set.{' '}
             </Hint>
           )}
+
+          <FormGroup errorText={validationErrors.calendarNotes}>
+            <label className="usa-label" htmlFor="trial-session-note">
+              Add note <span className="usa-hint">(optional)</span>
+            </label>
+            <BindedTextarea
+              bind="modal.calendarNotes"
+              id="trial-session-note"
+              name="calendarNotes"
+              onChange={() => {
+                validateAddToTrialSequence();
+              }}
+            ></BindedTextarea>
+          </FormGroup>
         </div>
       </ModalDialog>
     );

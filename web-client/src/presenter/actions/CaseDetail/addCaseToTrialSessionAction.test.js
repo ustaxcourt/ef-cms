@@ -4,14 +4,14 @@ import { applicationContextForClient as applicationContext } from '../../../../.
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
-applicationContext
-  .getUseCases()
-  .addCaseToTrialSessionInteractor.mockReturnValue(MOCK_CASE);
-
 describe('addCaseToTrialSessionAction', () => {
-  it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.docketNumber and state.modal.trialSessionId and return alertSuccess and the caseDetail returned from the use case', async () => {
+  presenter.providers.applicationContext = applicationContext;
+
+  applicationContext
+    .getUseCases()
+    .addCaseToTrialSessionInteractor.mockReturnValue(MOCK_CASE);
+
+  it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.docketNumber, state.modal.trialSessionId, and state.modal.calendarNotes and return alertSuccess and the caseDetail returned from the use case', async () => {
     const result = await runAction(addCaseToTrialSessionAction, {
       modules: {
         presenter,
@@ -21,6 +21,7 @@ describe('addCaseToTrialSessionAction', () => {
           docketNumber: '123-45',
         },
         modal: {
+          calendarNotes: 'Test',
           trialSessionId: '234',
         },
       },
@@ -33,6 +34,7 @@ describe('addCaseToTrialSessionAction', () => {
       applicationContext.getUseCases().addCaseToTrialSessionInteractor.mock
         .calls[0][0],
     ).toMatchObject({
+      calendarNotes: 'Test',
       docketNumber: '123-45',
       trialSessionId: '234',
     });

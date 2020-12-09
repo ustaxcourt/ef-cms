@@ -212,9 +212,33 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      trialSession.manuallyAddCaseToCalendar({ docketNumber: '123-45' });
+      const mockCaseEntity = { docketNumber: '123-45' };
+      trialSession.manuallyAddCaseToCalendar({ caseEntity: mockCaseEntity });
 
       expect(trialSession.caseOrder[0]).toEqual({
+        docketNumber: '123-45',
+        isManuallyAdded: true,
+      });
+    });
+
+    it('should add case to calendar and include calendarNotes when they are provided', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionType: 'Hybrid',
+        },
+        {
+          applicationContext,
+        },
+      );
+      const mockCaseEntity = { docketNumber: '123-45' };
+      trialSession.manuallyAddCaseToCalendar({
+        calendarNotes: 'Test',
+        caseEntity: mockCaseEntity,
+      });
+
+      expect(trialSession.caseOrder[0]).toEqual({
+        calendarNotes: 'Test',
         docketNumber: '123-45',
         isManuallyAdded: true,
       });
