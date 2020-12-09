@@ -10,11 +10,15 @@ exports.setForHearingLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { docketNumber, trialSessionId } =
       event.pathParameters || event.path || {};
+    const { calendarNotes } = JSON.parse(event.body);
 
-    return await applicationContext.getUseCases().setForHearingInteractor({
-      applicationContext,
-      docketNumber,
-      note: JSON.parse(event.body),
-      trialSessionId,
-    });
+    return await applicationContext
+      .getUseCases()
+      .addCaseToTrialSessionInteractor({
+        applicationContext,
+        calendarNotes,
+        docketNumber,
+        isHearing: true,
+        trialSessionId,
+      });
   });
