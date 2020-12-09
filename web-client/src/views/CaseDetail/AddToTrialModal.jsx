@@ -9,21 +9,20 @@ import React from 'react';
 
 export const AddToTrialModal = connect(
   {
-    addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.addCaseToTrialSessionSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateAddToTrialSequence: sequences.validateAddToTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
   function AddToTrialModal({
-    addToTrialSessionModalHelper,
     cancelSequence,
     confirmSequence,
+    isNoteRequired = false,
     modal,
+    modalHelper,
+    modalTitle,
     updateModalValueSequence,
-    validateAddToTrialSequence,
+    validateSequence,
     validationErrors,
   }) {
     return (
@@ -33,7 +32,7 @@ export const AddToTrialModal = connect(
         className=""
         confirmLabel="Add Case"
         confirmSequence={confirmSequence}
-        title="Add to Trial Session"
+        title={modalTitle}
       >
         <div className="margin-bottom-4" id="add-to-trial-session-modal">
           <div className="usa-form-group">
@@ -95,42 +94,38 @@ export const AddToTrialModal = connect(
               id="trial-session"
               name="trialSessionId"
               onChange={() => {
-                validateAddToTrialSequence();
+                validateSequence();
               }}
             >
               <option value="">- Select -</option>
               {!modal.showAllLocations &&
-                addToTrialSessionModalHelper.trialSessionsFormatted.map(
-                  trialSession => (
-                    <option
-                      key={trialSession.trialSessionId}
-                      value={trialSession.trialSessionId}
-                    >
-                      {trialSession.optionText}
-                    </option>
-                  ),
-                )}
+                modalHelper.trialSessionsFormatted.map(trialSession => (
+                  <option
+                    key={trialSession.trialSessionId}
+                    value={trialSession.trialSessionId}
+                  >
+                    {trialSession.optionText}
+                  </option>
+                ))}
               {modal.showAllLocations &&
-                addToTrialSessionModalHelper.trialSessionStatesSorted.map(
-                  (stateName, idx) => (
-                    <optgroup key={idx} label={stateName}>
-                      {addToTrialSessionModalHelper.trialSessionsFormattedByState[
-                        stateName
-                      ].map(trialSession => (
+                modalHelper.trialSessionStatesSorted.map((stateName, idx) => (
+                  <optgroup key={idx} label={stateName}>
+                    {modalHelper.trialSessionsFormattedByState[stateName].map(
+                      trialSession => (
                         <option
                           key={trialSession.trialSessionId}
                           value={trialSession.trialSessionId}
                         >
                           {trialSession.optionText}
                         </option>
-                      ))}
-                    </optgroup>
-                  ),
-                )}
+                      ),
+                    )}
+                  </optgroup>
+                ))}
             </BindedSelect>
           </FormGroup>
 
-          {addToTrialSessionModalHelper.showSessionNotSetAlert && (
+          {modalHelper.showSessionNotSetAlert && (
             <Hint>
               This trial session has not been set. This case will be added to
               the eligible cases for this session and prioritized when the
@@ -140,14 +135,16 @@ export const AddToTrialModal = connect(
 
           <FormGroup errorText={validationErrors.calendarNotes}>
             <label className="usa-label" htmlFor="trial-session-note">
-              Add note <span className="usa-hint">(optional)</span>
+              Add note{' '}
+              {!isNoteRequired && <span className="usa-hint">(optional)</span>}
             </label>
             <BindedTextarea
               bind="modal.calendarNotes"
               id="trial-session-note"
               name="calendarNotes"
+              required={isNoteRequired}
               onChange={() => {
-                validateAddToTrialSequence();
+                validateSequence();
               }}
             ></BindedTextarea>
           </FormGroup>

@@ -4,6 +4,7 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
+import { SetForHearingModal } from './SetForHearingModal';
 import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -86,8 +87,10 @@ const TrialInformation = ({
   openBlockFromTrialModalSequence,
   openPrioritizeCaseModalSequence,
   openRemoveFromTrialSessionModalSequence,
+  openSetForHearingModalSequence,
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
+  showModal,
   trialSessionJudge,
 }) => (
   <React.Fragment>
@@ -162,6 +165,18 @@ const TrialInformation = ({
             icon="check-circle"
             size="1x"
           />
+          <Button
+            link
+            aria-label="set hearing for trial sessions"
+            className="margin-right-0 margin-top-1 padding-0 float-right"
+            icon="plus-circle"
+            onClick={() => {
+              openSetForHearingModalSequence();
+            }}
+          >
+            Set for Hearing
+          </Button>
+          {showModal === 'SetForHearingModal' && <SetForHearingModal />}
         </h3>
         <div className="grid-row">
           <table className="usa-table ustc-table trial-list">
@@ -401,12 +416,14 @@ export const CaseInformationInternal = connect(
     openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
+    openSetForHearingModalSequence: sequences.openSetForHearingModalSequence,
     openUnblockFromTrialModalSequence:
       sequences.openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence:
       sequences.openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
+    showModal: state.modal.showModal,
     trialSessionJudge: state.trialSessionJudge,
   },
 
@@ -421,10 +438,12 @@ export const CaseInformationInternal = connect(
     openCleanModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
+    openSetForHearingModalSequence,
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
+    showModal,
     trialSessionJudge,
   }) {
     return (
@@ -499,11 +518,15 @@ export const CaseInformationInternal = connect(
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }
+                    openCleanModalSequence={openCleanModalSequence}
                     openPrioritizeCaseModalSequence={
                       openPrioritizeCaseModalSequence
                     }
                     openRemoveFromTrialSessionModalSequence={
                       openRemoveFromTrialSessionModalSequence
+                    }
+                    openSetForHearingModalSequence={
+                      openSetForHearingModalSequence
                     }
                     openUnblockFromTrialModalSequence={
                       openUnblockFromTrialModalSequence
@@ -511,6 +534,7 @@ export const CaseInformationInternal = connect(
                     openUnprioritizeCaseModalSequence={
                       openUnprioritizeCaseModalSequence
                     }
+                    showModal={showModal}
                     trialSessionJudge={trialSessionJudge}
                   />
                 </div>

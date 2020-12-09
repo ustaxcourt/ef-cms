@@ -7,7 +7,7 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * addCaseToTrialSessionInteractor
+ * setForHearingInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -16,7 +16,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
  */
-exports.addCaseToTrialSessionInteractor = async ({
+exports.setForHearingInteractor = async ({
   applicationContext,
   calendarNotes,
   docketNumber,
@@ -24,7 +24,7 @@ exports.addCaseToTrialSessionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.SET_FOR_HEARING)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -48,47 +48,27 @@ exports.addCaseToTrialSessionInteractor = async ({
     applicationContext,
   });
 
-  if (caseEntity.isCalendared()) {
-    throw new Error('The case is already calendared');
-  }
-
-  if (trialSessionEntity.isCaseAlreadyCalendared(caseEntity)) {
-    throw new Error('The case is already part of this trial session.');
+  if (!caseEntity.isCalendared()) {
+    throw new Error('The Case must be calendared to add a hearing');
   }
 
   trialSessionEntity
     .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
     .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
 
-  caseEntity.setAsCalendared(trialSessionEntity);
-
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteCaseTrialSortMappingRecords({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
-
-  if (trialSessionEntity.isCalendared) {
-    await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-      highPriority: true,
-      trialDate: caseEntity.trialDate,
-    });
-  }
-
-  const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-
-  await applicationContext.getPersistenceGateway().updateTrialSession({
+  await applicationContext.getPersistenceGateway().addHearingToCase({
     applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    docketNumber,
+    trialSession: trialSessionEntity.validate().toRawObject(),
   });
 
-  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
+  // retrieve the case again since we've added the mapped hearing record :)
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  return updatedCase;
 };
