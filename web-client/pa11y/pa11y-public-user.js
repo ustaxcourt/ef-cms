@@ -53,4 +53,6 @@ module.exports = [
   },
   'http://localhost:5678/todays-opinions',
   'http://localhost:5678/health',
+  'http://localhost:5678/contact',
+  'http://localhost:5678/privacy',
 ];

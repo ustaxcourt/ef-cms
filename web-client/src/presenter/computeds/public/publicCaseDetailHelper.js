@@ -4,6 +4,7 @@ import { state } from 'cerebral';
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
   } = applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
 
@@ -38,6 +39,19 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo2}`;
       }
 
+      const canDisplayDocumentLink =
+        record.isCourtIssuedDocument &&
+        !record.isNotServedDocument &&
+        !record.isStricken &&
+        !record.isTranscript &&
+        !record.isStipDecision &&
+        !EVENT_CODES_NOT_VISIBLE_TO_PUBLIC.includes(record.eventCode);
+
+      const showDocumentDescriptionWithoutLink = !canDisplayDocumentLink;
+      const showLinkToDocument =
+        canDisplayDocumentLink &&
+        record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
+
       return {
         action: record.action,
         createdAtFormatted: record.createdAtFormatted,
@@ -54,20 +68,8 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         numberOfPages: record.numberOfPages || 0,
         servedAtFormatted: record.servedAtFormatted,
         servedPartiesCode: record.servedPartiesCode,
-        showDocumentDescriptionWithoutLink:
-          record.isStricken ||
-          !record.isCourtIssuedDocument ||
-          record.isNotServedDocument ||
-          record.isTranscript ||
-          record.isStipDecision,
-        showLinkToDocument:
-          record.processingStatus ===
-            DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
-          record.isCourtIssuedDocument &&
-          !record.isNotServedDocument &&
-          !record.isStricken &&
-          !record.isTranscript &&
-          !record.isStipDecision,
+        showDocumentDescriptionWithoutLink,
+        showLinkToDocument,
         showNotServed: record.isNotServedDocument,
         showServed: record.isStatusServed,
         signatory: record.signatory,

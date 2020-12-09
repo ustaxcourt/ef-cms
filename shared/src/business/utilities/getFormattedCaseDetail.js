@@ -319,9 +319,15 @@ const formatCase = (applicationContext, caseDetail) => {
     // establish an initial sort by ascending index
     result.formattedDocketEntries.sort(byIndexSortFunction);
 
-    result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-      entry => entry.pending && entry.servedAt,
-    );
+    if (isCodeEnabled(7198)) {
+      result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
+        entry => entry.pending && (entry.servedAt || entry.isLegacyServed),
+      );
+    } else {
+      result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
+        entry => entry.pending && entry.servedAt,
+      );
+    }
   }
 
   if (result.correspondence && result.correspondence.length) {

@@ -1,4 +1,5 @@
 import { forEach, set } from 'lodash';
+import { isCodeEnabled } from '../../codeToggles';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
@@ -1134,6 +1135,18 @@ const router = {
         return app.getSequence('gotoLoginSequence')();
       }
     });
+
+    if (isCodeEnabled(7142)) {
+      registerRoute('/privacy', () => {
+        setPageTitle('Privacy');
+        return app.getSequence('gotoPrivacySequence')();
+      });
+
+      registerRoute('/contact', () => {
+        setPageTitle('Contact');
+        return app.getSequence('gotoContactSequence')();
+      });
+    }
 
     registerRoute(
       '..',
