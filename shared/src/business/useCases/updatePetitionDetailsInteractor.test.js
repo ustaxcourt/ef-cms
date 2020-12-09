@@ -125,6 +125,32 @@ describe('updatePetitionDetailsInteractor', () => {
     expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
   });
 
+  it('should call updateCaseTrialSortMappingRecords if the updated case is high priority and preferred trial city has been changed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(generalDocketReadyForTrialCase);
+
+    const result = await updatePetitionDetailsInteractor({
+      applicationContext,
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+        highPriority: true,
+        preferredTrialCity: 'Cheyenne, Wyoming',
+        status: CASE_STATUS_TYPES.rule155,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
+    expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
+  });
+
   it('should call updateCase with the updated case payment information (when waived) and return the updated case', async () => {
     const result = await updatePetitionDetailsInteractor({
       applicationContext,

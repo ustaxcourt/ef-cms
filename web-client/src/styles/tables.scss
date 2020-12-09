@@ -629,3 +629,25 @@ table.case-list tbody tr:nth-child(even) td {
   background-color: color($theme-color-base-lightest);
   font-weight: $font-semibold;
 }
+
+.trial-list {
+  tbody tr:first-child td {
+    padding-top: 9px;
+    padding-bottom: 0;
+  }
+
+  tbody tr:nth-child(2) td {
+    padding-top: 0px;
+    padding-bottom: 7px;
+    font-size: 15px;
+  }
+
+  tr:hover:not(.no-blue-hover) {
+    background: none;
+    box-shadow: none;
+  }
+
+  tr td .usa-button.ustc-button--unstyled {
+    padding-top: 0;
+  }
+}

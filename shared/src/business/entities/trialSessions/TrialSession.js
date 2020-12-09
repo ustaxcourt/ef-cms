@@ -174,7 +174,9 @@ joiValidationDecorator(
     ...TrialSession.validationRules.COMMON,
     caseOrder: joi.array().items(
       joi.object().keys({
-        calendarNotes: joi.string().optional().max(200),
+        calendarNotes: JoiValidationConstants.STRING.max(200)
+          .optional()
+          .allow('', null), // 7120 - TODO required when added to hearing
         disposition: JoiValidationConstants.STRING.max(100).when(
           'removedFromTrial',
           {
@@ -270,12 +272,16 @@ TrialSession.prototype.addCaseToCalendar = function (caseEntity) {
  * @param {string} calendarNotes calendar notes for the case
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.manuallyAddCaseToCalendar = function (
-  caseEntity,
+TrialSession.prototype.manuallyAddCaseToCalendar = function ({
   calendarNotes,
-) {
+  caseEntity,
+}) {
   const { docketNumber } = caseEntity;
-  this.caseOrder.push({ calendarNotes, docketNumber, isManuallyAdded: true });
+  this.caseOrder.push({
+    calendarNotes,
+    docketNumber,
+    isManuallyAdded: true,
+  });
   return this;
 };
 

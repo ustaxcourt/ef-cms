@@ -105,25 +105,43 @@ const TrialInformation = ({
           />
         </h3>
         <div className="grid-row">
-          <div className="grid-col-4">
-            <p className="label">Place of trial</p>
-            <p>{caseDetail.formattedPreferredTrialCity}</p>
-          </div>
-          <div className="grid-col-4">
-            <p className="label">Trial date</p>
-            <p>{caseDetail.formattedTrialDate}</p>
-          </div>
-          <div className="grid-col-4">
-            <p className="label">Trial judge</p>
-            <p>{caseDetail.formattedAssociatedJudge}</p>
-          </div>
+          <table className="usa-table ustc-table trial-list">
+            <thead>
+              <tr>
+                <th>Place of Trial</th>
+                <th>Trial date</th>
+                <th>Judge</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody className="hoverable">
+              <tr>
+                <td>{caseDetail.formattedPreferredTrialCity}</td>
+                <td>{caseDetail.formattedTrialDate}</td>
+                <td>{caseDetail.formattedAssociatedJudge}</td>
+                <td>
+                  <Button
+                    link
+                    className="red-warning"
+                    icon="trash"
+                    id="remove-from-trial-session-btn"
+                    onClick={() => {
+                      openRemoveFromTrialSessionModalSequence();
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </td>
+              </tr>
+              {caseDetail.highPriorityReason && (
+                <tr>
+                  <td colSpan="4">{caseDetail.highPriorityReason}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-        <div className="grid-row">
-          <div className="grid-col-4">
-            <p className="label">Reason</p>
-            <p>{caseDetail.highPriorityReason}</p>
-          </div>
-        </div>
+
         <Button
           link
           className="red-warning"
@@ -161,40 +179,53 @@ const TrialInformation = ({
           {showModal === 'SetForHearingModal' && <SetForHearingModal />}
         </h3>
         <div className="grid-row">
-          <div className="grid-col-4">
-            <p className="label">Place of trial</p>
-            <p>
-              <a
-                href={
-                  caseDetail.userIsAssignedToSession
-                    ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
-                    : `/trial-session-detail/${caseDetail.trialSessionId}`
-                }
-              >
-                {caseDetail.formattedTrialCity}
-              </a>
-            </p>
-          </div>
-          <div className="grid-col-4">
-            <p className="label">Trial date</p>
-            <p>{caseDetail.formattedTrialDate}</p>
-          </div>
-          <div className="grid-col-4">
-            <p className="label">Trial judge</p>
-            <p>{caseDetail.formattedAssociatedJudge}</p>
-          </div>
+          <table className="usa-table ustc-table trial-list">
+            <thead>
+              <tr>
+                <th>Place of Trial</th>
+                <th>Trial date</th>
+                <th>Judge</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody className="hoverable">
+              <tr>
+                <td>
+                  <a
+                    href={
+                      caseDetail.userIsAssignedToSession
+                        ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
+                        : `/trial-session-detail/${caseDetail.trialSessionId}`
+                    }
+                  >
+                    {caseDetail.formattedTrialCity}
+                  </a>
+                </td>
+                <td>{caseDetail.formattedTrialDate}</td>
+                <td>{caseDetail.formattedAssociatedJudge}</td>
+                <td>
+                  <Button
+                    link
+                    className="red-warning"
+                    icon="trash"
+                    id="remove-from-trial-session-btn"
+                    onClick={() => {
+                      openRemoveFromTrialSessionModalSequence();
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </td>
+              </tr>
+              {/* TODO trial session note */}
+              {true === false && (
+                <tr>
+                  <td colSpan="4">{/* note */}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-        <Button
-          link
-          className="red-warning"
-          icon="trash"
-          id="remove-from-trial-session-btn"
-          onClick={() => {
-            openRemoveFromTrialSessionModalSequence();
-          }}
-        >
-          Remove From Trial Session
-        </Button>
       </>
     )}
     {caseDetail.showBlockedFromTrial && (
@@ -319,40 +350,53 @@ const TrialInformation = ({
       <>
         <h3 className="underlined">Trial - Scheduled</h3>
         <div className="grid-row">
-          <div className="grid-col-4">
-            <p className="label">Place of trial</p>
-            <p>
-              <a
-                href={
-                  caseDetail.userIsAssignedToSession
-                    ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
-                    : `/trial-session-detail/${caseDetail.trialSessionId}`
-                }
-              >
-                {caseDetail.formattedTrialCity}
-              </a>
-            </p>
-          </div>
-          <div className="grid-col-4">
-            <p className="label">Trial date</p>
-            <p>{caseDetail.formattedTrialDate}</p>
-          </div>
-          <div className="grid-col-4">
-            <p className="label">Trial judge</p>
-            <p>{trialSessionJudge.name}</p>
-          </div>
+          <table className="usa-table ustc-table trial-list">
+            <thead>
+              <tr>
+                <th>Place of Trial</th>
+                <th>Trial date</th>
+                <th>Judge</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody className="hoverable">
+              <tr>
+                <td>
+                  <a
+                    href={
+                      caseDetail.userIsAssignedToSession
+                        ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
+                        : `/trial-session-detail/${caseDetail.trialSessionId}`
+                    }
+                  >
+                    {caseDetail.formattedTrialCity}
+                  </a>
+                </td>
+                <td>{caseDetail.formattedTrialDate}</td>
+                <td>{trialSessionJudge.name}</td>
+                <td>
+                  <Button
+                    link
+                    className="red-warning"
+                    icon="trash"
+                    id="remove-from-trial-session-btn"
+                    onClick={() => {
+                      openRemoveFromTrialSessionModalSequence();
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </td>
+              </tr>
+              {/* TODO trial session note */}
+              {true === false && (
+                <tr>
+                  <td colSpan="4">{/* note */}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-        <Button
-          link
-          className="red-warning"
-          icon="trash"
-          id="remove-from-trial-session-btn"
-          onClick={() => {
-            openRemoveFromTrialSessionModalSequence();
-          }}
-        >
-          Remove From Trial Session
-        </Button>
       </>
     )}
   </React.Fragment>

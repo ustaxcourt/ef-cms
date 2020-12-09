@@ -63,7 +63,7 @@ exports.addCaseToTrialSessionInteractor = async ({
 
     trialSessionEntity
       .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-      .manuallyAddCaseToCalendar(caseEntity, calendarNotes);
+      .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
 
     caseEntity.setAsCalendared(trialSessionEntity);
 
@@ -96,7 +96,7 @@ exports.addCaseToTrialSessionInteractor = async ({
 
     trialSessionEntity
       .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-      .manuallyAddCaseToCalendar(caseEntity, calendarNotes);
+      .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
 
     await applicationContext.getPersistenceGateway().addHearingToCase({
       applicationContext,
