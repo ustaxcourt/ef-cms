@@ -4,34 +4,43 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const AddToTrialModal = connect(
   {
-    addToTrialSessionModalHelper: props.modalHelper
-      ? props.modalHelper
-      : state.addToTrialSessionModalHelper,
+    addCaseToTrialSessionSequence: sequences.addCaseToTrialSessionSequence,
+    addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: props.confirmSequence
-      ? props.confirmSequence
-      : sequences.addCaseToTrialSessionSequence,
     modal: state.modal,
+    setForHearingSequence: sequences.setForHearingSequence,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateAddToTrialSequence: props.validateSequence
-      ? props.validateSequence
-      : sequences.validateAddToTrialSessionSequence,
+    validateAddToTrialSequence: sequences.validateAddToTrialSessionSequence,
+    validateSetForHearingSequence: sequences.validateSetForHearingSequence,
     validationErrors: state.validationErrors,
   },
   function AddToTrialModal({
+    addCaseToTrialSessionSequence,
     addToTrialSessionModalHelper,
     cancelSequence,
-    confirmSequence,
+    isHearing,
     modal,
+    setForHearingSequence,
     updateModalValueSequence,
     validateAddToTrialSequence,
+    validateSetForHearingSequence,
     validationErrors,
   }) {
+    let confirmSequence = addCaseToTrialSessionSequence;
+    let validateSequence = validateAddToTrialSequence;
+    let modalTitle = 'Add to Trial Session';
+
+    if (isHearing) {
+      confirmSequence = setForHearingSequence;
+      validateSequence = validateSetForHearingSequence;
+      modalTitle = 'Set for Hearing';
+    }
+
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -39,7 +48,7 @@ export const AddToTrialModal = connect(
         className=""
         confirmLabel="Add Case"
         confirmSequence={confirmSequence}
-        title="Add to Trial Session"
+        title={modalTitle}
       >
         <div className="margin-bottom-4" id="add-to-trial-session-modal">
           <div className="usa-form-group">
@@ -101,7 +110,7 @@ export const AddToTrialModal = connect(
               id="trial-session"
               name="trialSessionId"
               onChange={() => {
-                validateAddToTrialSequence();
+                validateSequence();
               }}
             >
               <option value="">- Select -</option>
@@ -146,14 +155,16 @@ export const AddToTrialModal = connect(
 
           <FormGroup errorText={validationErrors.calendarNotes}>
             <label className="usa-label" htmlFor="trial-session-note">
-              Add note <span className="usa-hint">(optional)</span>
+              Add note{' '}
+              {!isHearing && <span className="usa-hint">(optional)</span>}
             </label>
             <BindedTextarea
               bind="modal.calendarNotes"
               id="trial-session-note"
               name="calendarNotes"
+              required={isHearing}
               onChange={() => {
-                validateAddToTrialSequence();
+                validateSequence();
               }}
             ></BindedTextarea>
           </FormGroup>
