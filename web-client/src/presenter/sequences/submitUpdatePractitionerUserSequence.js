@@ -1,8 +1,10 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { navigateToPractitionerDetailAction } from '../actions/navigateToPractitionerDetailAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -35,7 +37,9 @@ export const submitUpdatePractitionerUserSequence = [
             error: [],
             success: [
               setPractitionerDetailAction,
+              setSaveAlertsForNavigationAction,
               navigateToPractitionerDetailAction,
+              setAlertSuccessAction,
             ],
           },
         ],
