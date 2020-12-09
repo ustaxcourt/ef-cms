@@ -269,6 +269,7 @@ TrialSession.prototype.addCaseToCalendar = function (caseEntity) {
  * manually add case to calendar
  *
  * @param {object} caseEntity the case entity to add to the calendar
+ * @param {string} calendarNotes calendar notes for the case
  * @returns {TrialSession} the trial session entity
  */
 TrialSession.prototype.manuallyAddCaseToCalendar = function ({
