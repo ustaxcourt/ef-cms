@@ -209,14 +209,14 @@ const legacyServedDocumentCase = {
       index: 4,
       isLegacyServed: true,
       isOnDocketRecord: true,
+      pending: true,
       processingStatus: 'complete',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     },
   ],
   docketNumber: '156-21',
   preferredTrialCity: 'Washington, District of Columbia',
-  status: STATUS_TYPES.calendared,
-  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+  status: STATUS_TYPES.new,
 };
 
 const caseWithEAccess = {
