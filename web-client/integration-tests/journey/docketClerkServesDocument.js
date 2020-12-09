@@ -1,4 +1,5 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -29,5 +30,7 @@ export const docketClerkServesDocument = (test, draftOrderIndex) => {
     await test.runSequence('openConfirmInitiateServiceModalSequence');
 
     await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
+
+    await refreshElasticsearchIndex();
   });
 };

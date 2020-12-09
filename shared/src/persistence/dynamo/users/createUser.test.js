@@ -300,17 +300,20 @@ describe('createUser', () => {
     it('does not persist mapping records for practitioner without barNumber', async () => {
       await createUserRecords({
         applicationContext,
-        user: privatePractitionerUser,
+        user: privatePractitionerUserWithoutBarNumber,
         userId,
       });
 
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        1,
+      );
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUser,
+          ...privatePractitionerUserWithoutBarNumber,
         },
       });
     });
@@ -348,27 +351,6 @@ describe('createUser', () => {
         Item: {
           pk: 'privatePractitioner|PT1234',
           sk: `user|${userId}`,
-        },
-      });
-    });
-
-    it('does not persist mapping records for practitioner without barNumber', async () => {
-      await createUserRecords({
-        applicationContext,
-        user: privatePractitionerUserWithoutBarNumber,
-        userId,
-      });
-
-      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
-        1,
-      );
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls[0][0],
-      ).toMatchObject({
-        Item: {
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
-          ...privatePractitionerUserWithoutBarNumber,
         },
       });
     });

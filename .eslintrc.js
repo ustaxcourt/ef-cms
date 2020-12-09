@@ -68,7 +68,7 @@ module.exports = {
   ],
   rules: {
     'arrow-parens': ['error', 'as-needed'],
-    complexity: ['warn', { max: 25 }], // todo: plugin default is 20; set to 'error'
+    complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
