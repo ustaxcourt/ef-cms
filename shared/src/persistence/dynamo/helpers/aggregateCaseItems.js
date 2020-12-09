@@ -19,28 +19,39 @@ exports.aggregateCaseItems = caseAndCaseItems => {
   const documents = caseAndCaseItems.filter(
     item => item.sk.startsWith('docket-entry|') && !item.archived,
   );
+
+  const hearings = caseAndCaseItems.filter(item =>
+    item.sk.startsWith('hearing|'),
+  );
+
   const archivedDocketEntries = caseAndCaseItems.filter(
     item => item.sk.startsWith('docket-entry|') && item.archived,
   );
+
   const privatePractitioners = caseAndCaseItems.filter(item =>
     item.sk.startsWith('privatePractitioner|'),
   );
+
   const irsPractitioners = caseAndCaseItems.filter(item =>
     item.sk.startsWith('irsPractitioner|'),
   );
+
   const correspondences = caseAndCaseItems.filter(
     item => item.sk.startsWith('correspondence|') && !item.archived,
   );
+
   const archivedCorrespondences = caseAndCaseItems.filter(
     item => item.sk.startsWith('correspondence|') && item.archived,
   );
 
   const sortedDocuments = sortBy(documents, 'createdAt');
+
   const sortedArchivedDocketEntries = sortBy(
     archivedDocketEntries,
     'createdAt',
   );
   const sortedCorrespondences = sortBy(correspondences, 'filingDate');
+
   const sortedArchivedCorrespondences = sortBy(
     archivedCorrespondences,
     'filingDate',
@@ -53,7 +64,10 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     associatedJudge: getAssociatedJudge(theCase, caseAndCaseItems),
     correspondence: sortedCorrespondences,
     docketEntries: sortedDocuments,
+    hearings,
     irsPractitioners,
     privatePractitioners,
   };
 };
+
+exports.getAssociatedJudge = getAssociatedJudge;
