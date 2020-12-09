@@ -14,6 +14,7 @@ import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
 import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
+import { Contact } from './Contact';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
@@ -58,6 +59,7 @@ import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
+import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
@@ -99,6 +101,7 @@ const pages = {
   CaseDetailInternal,
   CaseInventoryReport,
   CaseSearchNoMatches,
+  Contact,
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,
@@ -139,6 +142,7 @@ const pages = {
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
+  Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
   SecondaryContactEdit,
@@ -162,6 +166,8 @@ const pages = {
 if (applicationContext.isCodeEnabled(6921)) {
   pages.DashboardJudge = DashboardJudge6921;
 }
+
+const featureShowFooter = applicationContext.isCodeEnabled(7142);
 
 /**
  * Root application component
@@ -189,6 +195,10 @@ export const AppComponent = connect(
 
     useEffect(() => {
       focusMain();
+      if (!featureShowFooter) {
+        const templateDateElement = document.getElementById('last-deployed');
+        templateDateElement.classList.remove('hide');
+      }
     }, [currentPage]);
 
     const CurrentPage = pages[currentPage];
@@ -209,8 +219,10 @@ export const AppComponent = connect(
           {zipInProgress && <BatchDownloadProgress />}
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
-        <Footer />
         <Loading />
+
+        {featureShowFooter && <Footer />}
+
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
         )}

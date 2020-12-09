@@ -1,3 +1,4 @@
+jest.mock('../../../../../codeToggles');
 const {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
@@ -27,6 +28,7 @@ const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { IrsPractitioner } = require('../IrsPractitioner');
+const { isCodeEnabled } = require('../../../../../codeToggles');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { prepareDateFromString } = require('../../utilities/DateHandler');
@@ -35,6 +37,10 @@ const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
 
 describe('Case entity', () => {
+  beforeEach(() => {
+    isCodeEnabled.mockReturnValue(true);
+  });
+
   it('should throw an error if app context is not passed in', () => {
     expect(() => new Case({}, {})).toThrow();
   });
@@ -2952,6 +2958,52 @@ describe('Case entity', () => {
       expect(caseToUpdate.hasPendingItems).toEqual(true);
       expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
     });
+
+    it('should show the case as having pending items if 7198 is toggled on and isLegacyServed is true', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            isLegacyServed: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      };
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(true);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
+    });
+
+    it('should not show the case as having pending items if 7198 is toggled off and isLegacyServed is true', () => {
+      isCodeEnabled.mockReturnValue(false);
+
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            isLegacyServed: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      };
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(false);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
+    });
   });
 
   describe('setCaseStatus', () => {
@@ -4138,4 +4190,18 @@ describe('Case entity', () => {
       expect(hasPartyWithPaperService).toBeFalsy();
     });
   });
+
+  // TODO: enable for issue 7080
+  // describe('getSortableDocketNumber', () => {
+  //   it('should sort in the correct order', () => {
+  //     const numbers = [
+  //       Case.getSortableDocketNumber('19844-12'),
+  //       Case.getSortableDocketNumber('5520-08'),
+  //       Case.getSortableDocketNumber('1773-11'),
+  //       Case.getSortableDocketNumber('5242-10'),
+  //       Case.getSortableDocketNumber('1144-05'),
+  //     ].sort((a, b) => a - b);
+  //     expect(numbers).toEqual([5001144, 8005520, 10005242, 11001773, 12019844]);
+  //   });
+  // });
 });
