@@ -41,7 +41,7 @@ export const Address = connect(
             }
           >
             <label className="usa-label" htmlFor={`${type}.city`}>
-              Mobile City
+              City
             </label>
             <input
               autoCapitalize="none"
