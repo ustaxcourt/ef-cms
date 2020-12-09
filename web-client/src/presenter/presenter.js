@@ -9,6 +9,10 @@ import { addCaseToTrialSessionSequence as addCaseToTrialSessionSequenceOld } fro
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
+import { adminContactUpdateCompleteSequence } from './sequences/adminContactUpdateCompleteSequence';
+import { adminContactUpdateErrorSequence } from './sequences/adminContactUpdateErrorSequence';
+import { adminContactUpdateInitialUpdateCompleteSequence } from './sequences/adminContactUpdateInitialUpdateCompleteSequence';
+import { adminContactUpdateProgressSequence } from './sequences/adminContactUpdateProgressSequence';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
 import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSequence';
@@ -455,6 +459,10 @@ export const presenter = {
     addPenaltyInputSequence,
     addStatisticToFormSequence,
     addSupportingDocumentToFormSequence,
+    adminContactUpdateCompleteSequence,
+    adminContactUpdateErrorSequence,
+    adminContactUpdateInitialUpdateCompleteSequence,
+    adminContactUpdateProgressSequence,
     advancedSearchTabChangeSequence,
     archiveDraftDocumentModalSequence,
     archiveDraftDocumentSequence,
