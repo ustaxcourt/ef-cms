@@ -36,6 +36,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
   this.caseOrder = (rawSession.caseOrder || []).map(caseOrder => ({
+    calendarNotes: caseOrder.calendarNotes,
     disposition: caseOrder.disposition,
     docketNumber: caseOrder.docketNumber,
     isManuallyAdded: caseOrder.isManuallyAdded,
@@ -173,6 +174,7 @@ joiValidationDecorator(
     ...TrialSession.validationRules.COMMON,
     caseOrder: joi.array().items(
       joi.object().keys({
+        calendarNotes: joi.string().optional().max(200),
         disposition: JoiValidationConstants.STRING.max(100).when(
           'removedFromTrial',
           {
@@ -265,11 +267,15 @@ TrialSession.prototype.addCaseToCalendar = function (caseEntity) {
  * manually add case to calendar
  *
  * @param {object} caseEntity the case entity to add to the calendar
+ * @param {string} calendarNotes calendar notes for the case
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.manuallyAddCaseToCalendar = function (caseEntity) {
+TrialSession.prototype.manuallyAddCaseToCalendar = function (
+  caseEntity,
+  calendarNotes,
+) {
   const { docketNumber } = caseEntity;
-  this.caseOrder.push({ docketNumber, isManuallyAdded: true });
+  this.caseOrder.push({ calendarNotes, docketNumber, isManuallyAdded: true });
   return this;
 };
 
