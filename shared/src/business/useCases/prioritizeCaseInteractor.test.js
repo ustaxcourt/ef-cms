@@ -39,6 +39,32 @@ describe('prioritizeCaseInteractor', () => {
     ).toEqual(MOCK_CASE.docketNumber);
   });
 
+  it('should update trial sort mapping records when status is other than "General Docket - At Issue (Ready for Trial)"', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.rule155,
+        }),
+      );
+
+    await prioritizeCaseInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+      reason: 'just because',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
+  });
+
   it('should throw an unauthorized error if the user has no access to prioritize cases', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
