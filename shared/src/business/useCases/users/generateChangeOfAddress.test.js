@@ -777,11 +777,27 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should create a docket entry, work item, and serve it if the case is closed less than six months ago, and it should still update the case', async () => {
-    mockCaseWithPrivatePractitioner.status = CASE_STATUS_TYPES.closed;
-    mockCaseWithPrivatePractitioner.closedDate = calculateISODate({
-      howMuch: -1,
-      units: 'months',
-    });
+    const mockPaperServiceCase = {
+      ...mockCaseWithPrivatePractitioner,
+      closedDate: calculateISODate({
+        howMuch: -1,
+        units: 'months',
+      }),
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      },
+      contactSecondary: {
+        ...MOCK_CASE.contactSecondary,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      status: CASE_STATUS_TYPES.closed,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -825,6 +841,9 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress).toBeDefined();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+    ).toHaveBeenCalled();
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
