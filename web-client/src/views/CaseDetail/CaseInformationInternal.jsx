@@ -177,7 +177,6 @@ const TrialInformation = ({
             Set for Hearing
           </Button>
           {showModal === 'SetForHearingModal' && <SetForHearingModal />}
-          {showModal === 'SetForHearingModal' && console.log('showing modal')}
         </h3>
         <div className="grid-row">
           <table className="usa-table ustc-table trial-list">
