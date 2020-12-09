@@ -24,6 +24,9 @@ const {
 const {
   migrateItems: migration0008,
 } = require('./migrations/0008-associated-judge-on-deadlines');
+const {
+  migrateItems: migration0009,
+} = require('./migrations/0009-remove-blocked-cases-from-eligible-for-trial-record');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -44,18 +47,15 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
-  console.log('about to run migration 001');
   items = await migration0001(items, documentClient);
-  console.log('about to run migration 002');
   items = await migration0002(items, documentClient);
-  console.log('about to run migration 003');
   items = await migration0003(items, documentClient);
-  console.log('about to run migration 004');
   items = await migration0004(items, documentClient);
   items = await migration0005(items, documentClient);
   items = await migration0006(items, documentClient);
   items = await migration0007(items, documentClient);
   items = await migration0008(items, documentClient);
+  items = await migration0009(items, documentClient);
 
   return items;
 };
