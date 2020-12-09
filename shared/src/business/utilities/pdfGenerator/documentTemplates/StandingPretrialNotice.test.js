@@ -61,27 +61,13 @@ describe('StandingPretrialNotice', () => {
     );
 
     const trialInformation = wrapper.find('#trial-information');
+    const optionalAddress = wrapper.find('.address-optional');
 
     expect(trialInformation.text()).toContain(trialInfo.courthouseName);
     expect(trialInformation.text()).toContain(trialInfo.address1);
     expect(trialInformation.text()).toContain(trialInfo.city);
     expect(trialInformation.text()).toContain(trialInfo.state);
     expect(trialInformation.text()).toContain(trialInfo.postalCode);
-  });
-
-  it('renders the trial location information', () => {
-    const wrapper = shallow(
-      <StandingPretrialNotice options={options} trialInfo={trialInfo} />,
-    );
-
-    const trialLocation = wrapper.find('#trial-location');
-
-    expect(trialLocation.text()).toContain(trialInfo.address1);
-    expect(trialLocation.text()).toContain(trialInfo.city);
-    expect(trialLocation.text()).toContain(trialInfo.state);
-    expect(trialLocation.text()).toContain(trialInfo.postalCode);
-
-    const optionalAddress = wrapper.find('.address-optional');
     expect(optionalAddress.length).toEqual(0);
   });
 
