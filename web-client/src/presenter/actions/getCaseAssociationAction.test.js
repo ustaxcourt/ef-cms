@@ -183,6 +183,9 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
+          contactPrimary: {
+            contactId: '456',
+          },
           userId: '123',
         },
       },
