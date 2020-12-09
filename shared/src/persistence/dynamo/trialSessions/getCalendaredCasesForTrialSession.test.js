@@ -65,6 +65,7 @@ describe('getCalendaredCasesForTrialSession', () => {
           },
         ],
         docketNumber: MOCK_CASE.docketNumber,
+        hearings: [],
         irsPractitioners: [
           {
             pk: `case|${MOCK_CASE.docketNumber}`,
