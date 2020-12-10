@@ -71,6 +71,26 @@ export const DashboardPetitioner = connect(
                 </div>
               </div>
               <div className="card">
+                <div className="content-wrapper gray">
+                  <h3>Free Taxpayer Help</h3>
+                  <hr />
+                  <p>
+                    You may be eligible for additional assistance and advice
+                    through a tax clinic or pro-bono program.
+                  </p>
+                  <p>
+                    <a
+                      className="usa-link--external"
+                      href="https://ustaxcourt.gov/clinics.html"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      View Information on Clinics & Pro Bono Programs
+                    </a>
+                  </p>
+                </div>
+              </div>
+              <div className="card">
                 {dashboardExternalHelper.showWhatToExpect && (
                   <div className="content-wrapper gray">
                     <h3>Other Filing Options</h3>

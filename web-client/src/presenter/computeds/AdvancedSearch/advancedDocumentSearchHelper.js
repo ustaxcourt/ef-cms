@@ -12,6 +12,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   const isPublic = get(state.isPublic);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
+  const MANY_RESULTS = applicationContext.getConstants().MAX_SEARCH_RESULTS / 2;
 
   let showSealedIcon = true;
   let documentTypeVerbiage = capitalize(advancedSearchTab);
@@ -36,17 +37,16 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     );
   }
 
-  const showMaxResultsMessage = !!(
-    searchResults &&
-    searchResults.length >= applicationContext.getConstants().MAX_SEARCH_RESULTS
+  const showManyResultsMessage = !!(
+    searchResults && searchResults.length >= MANY_RESULTS
   );
 
   return {
     ...paginatedResults,
     documentTypeVerbiage,
     isPublic,
-    maxResults: applicationContext.getConstants().MAX_SEARCH_RESULTS,
-    showMaxResultsMessage,
+    manyResults: MANY_RESULTS, // e.g. if max=200, many=100
+    showManyResultsMessage,
     showSealedIcon,
   };
 };

@@ -2,7 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
+const { Case, isSealedCase } = require('../entities/cases/Case');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
@@ -42,8 +42,8 @@ exports.generateDocketRecordPdfInteractor = async ({
     });
 
   let caseEntity;
-  if (caseSource.sealedDate) {
-    if (user && user.userId) {
+  if (isSealedCase(caseSource)) {
+    if (user.userId) {
       const isAuthorizedToViewSealedCase = isAuthorized(
         user,
         ROLE_PERMISSIONS.VIEW_SEALED_CASE,

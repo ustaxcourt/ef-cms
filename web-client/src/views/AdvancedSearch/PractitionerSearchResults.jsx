@@ -20,10 +20,10 @@ export const PractitionerSearchResults = connect(
             <h1 className="margin-top-4">
               ({advancedSearchHelper.searchResultsCount}) Results
             </h1>
-            {advancedSearchHelper.showMaxResultsMessage && (
+            {advancedSearchHelper.showManyResultsMessage && (
               <WarningNotificationComponent
                 alertWarning={{
-                  message: `Your search has more than ${advancedSearchHelper.maxResults} results.  Refine your search for more accurate results.`,
+                  message: `Your search has returned over ${advancedSearchHelper.manyResults} matches.  Refine your search for more accurate results.`,
                 }}
                 dismissable={false}
               />

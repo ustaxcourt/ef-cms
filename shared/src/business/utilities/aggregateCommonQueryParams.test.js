@@ -37,56 +37,17 @@ describe('aggregateCommonQueryParams', () => {
       exactMatchesQuery: [
         {
           bool: {
-            should: [
+            must: [
               {
-                bool: {
-                  minimum_should_match: 2,
-                  should: [
-                    {
-                      term: {
-                        'contactPrimary.M.name.S': 'test',
-                      },
-                    },
-                    {
-                      term: {
-                        'contactPrimary.M.name.S': 'search',
-                      },
-                    },
+                simple_query_string: {
+                  default_operator: 'and',
+                  fields: [
+                    'contactPrimary.M.name.S',
+                    'contactPrimary.M.secondaryName.S',
+                    'contactSecondary.M.name.S',
                   ],
-                },
-              },
-              {
-                bool: {
-                  minimum_should_match: 2,
-                  should: [
-                    {
-                      term: {
-                        'contactPrimary.M.secondaryName.S': 'test',
-                      },
-                    },
-                    {
-                      term: {
-                        'contactPrimary.M.secondaryName.S': 'search',
-                      },
-                    },
-                  ],
-                },
-              },
-              {
-                bool: {
-                  minimum_should_match: 2,
-                  should: [
-                    {
-                      term: {
-                        'contactSecondary.M.name.S': 'test',
-                      },
-                    },
-                    {
-                      term: {
-                        'contactSecondary.M.name.S': 'search',
-                      },
-                    },
-                  ],
+                  flags: 'AND|PHRASE|PREFIX',
+                  query: 'Test Search',
                 },
               },
             ],
