@@ -150,15 +150,13 @@ describe('parseLegacyDocumentsInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries,
+      applicationContext.getPersistenceGateway().updateDocketEntry.mock
+        .calls[0][0].document,
     ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketEntryId: mockDocketEntryId,
-          documentContentsId: mockUniqueID,
-        }),
-      ]),
+      expect.objectContaining({
+        docketEntryId: mockDocketEntryId,
+        documentContentsId: mockUniqueID,
+      }),
     );
   });
 });
