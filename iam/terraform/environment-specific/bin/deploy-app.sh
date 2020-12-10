@@ -17,6 +17,13 @@ if [ -z "$ZONE_NAME" ]; then
   exit 1
 fi
 
+tf_version=$(terraform --version)
+
+if [[ ${tf_version} != *"0.12.28"* ]]; then
+  echo "Please set your terraform version to 0.12.28 before deploying."
+  exit 1
+fi
+
 # Each $ENV will have its own terraform deploy bucket (i.e. "exp1.ustc-case-mgmt.flexion.us")
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="permissions-${ENVIRONMENT}.tfstate"

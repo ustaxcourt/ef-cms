@@ -27,8 +27,8 @@ PUT _template/cwl
   "index_patterns": ["cwl-*"],
   "mappings": {
     "properties": {
-      "metadata": { 
-        "type": "object", 
+      "metadata": {
+        "type": "object",
         "dynamic": false,
         "enabled": false
       },
@@ -39,14 +39,58 @@ PUT _template/cwl
         }
       },
       "level": { "type": "keyword" },
-      "logGroup": { "type": "text" },
-      "logStream": { "type": "text" },
+      "logGroup": { "type": "keyword" },
+      "logStream": { "type": "keyword" },
       "message": { "type": "text" },
       "requestId": {
         "properties": {
           "apiGateway": { "type": "keyword" },
           "applicationLoadBalancer": { "type": "keyword" },
-          "lambda": { "type": "keyword" }
+          "lambda": { "type": "keyword" },
+          "authorizer": { "type": "keyword" }
+        }
+      },
+      "request": {
+        "properties": {
+          "method": { "type": "keyword" },
+          "url": { "type": "keyword" },
+          "headers": {
+            "type": "object",
+            "dynamic": true
+          }
+        }
+      },
+      "user": {
+        "properties": {
+          "email": { "type": "keyword" },
+          "name": { "type": "text" },
+          "role": { "type": "keyword" },
+          "userId": { "type": "keyword" }
+        }
+      },
+      "response": {
+        "properties": {
+          "responseTimeMs": {
+            "type": "integer",
+            "ignore_malformed": true
+          },
+          "statusCode": {
+            "type": "integer",
+            "ignore_malformed": true
+          }
+        }
+      },
+      "authorizer": {
+        "properties": {
+          "error": { "type": "text" },
+          "responseTimeMs": {
+            "type": "integer",
+            "ignore_malformed": true
+          },
+          "statusCode": {
+            "type": "integer",
+            "ignore_malformed": true
+          }
         }
       },
       "timestamp": { "type": "date" }

@@ -21,6 +21,16 @@ export const PublicCaseDetail = connect(
             </section>
           </>
         )}
+
+        {formattedCaseDetail.isCaseSealed && (
+          <>
+            <div className="grid-container">
+              <p className="margin-top-5 margin-bottom-5">
+                This case is sealed and not accessible to the public.
+              </p>
+            </div>
+          </>
+        )}
       </>
     );
   },
