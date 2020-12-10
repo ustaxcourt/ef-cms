@@ -32,7 +32,7 @@ const getMemoized = moize({
   updateExpire: true,
 })(get);
 
-exports.get = getMemoized;
+exports.get = process.env.CI ? get : getMemoized;
 
 /**
  *
