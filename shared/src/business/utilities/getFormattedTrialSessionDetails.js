@@ -34,6 +34,10 @@ exports.compareTrialSessionEligibleCases = (a, b) => {
     return -1;
   } else if (!a.isHighPriority && b.isHighPriority) {
     return 1;
+  } else if (a.highPriority && !b.highPriority) {
+    return -1;
+  } else if (!a.highPriority && b.highPriority) {
+    return 1;
   } else {
     return exports.compareCasesByDocketNumber(a, b);
   }
