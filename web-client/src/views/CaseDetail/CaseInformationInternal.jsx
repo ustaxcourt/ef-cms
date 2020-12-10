@@ -111,10 +111,9 @@ const DisplayHearings = ({ hearings, removeHearingSequence }) => {
               </Button>
             </td>
           </tr>
-          {/* TODO trial session note */}
-          {true === false && (
+          {hearing.calendarNotes && (
             <tr>
-              <td colSpan="4">{/* note */}</td>
+              <td colSpan="4">{hearing.calendarNotes}</td>
             </tr>
           )}
         </tbody>
@@ -265,10 +264,9 @@ const TrialInformation = ({
                   </Button>
                 </td>
               </tr>
-              {/* TODO trial session note */}
-              {true === false && (
+              {caseDetail.trialSessionNotes && (
                 <tr>
-                  <td colSpan="4">{/* note */}</td>
+                  <td colSpan="4">{caseDetail.trialSessionNotes}</td>
                 </tr>
               )}
             </tbody>
@@ -440,10 +438,9 @@ const TrialInformation = ({
                   </Button>
                 </td>
               </tr>
-              {/* TODO trial session note */}
-              {true === false && (
+              {caseDetail.trialSessionNotes && (
                 <tr>
-                  <td colSpan="4">{/* note */}</td>
+                  <td colSpan="4">{caseDetail.trialSessionNotes}</td>
                 </tr>
               )}
             </tbody>
