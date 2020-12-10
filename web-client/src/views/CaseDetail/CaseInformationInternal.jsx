@@ -88,8 +88,13 @@ const DisplayHearings = ({ hearings, removeHearingSequence }) => {
         <tbody className="hoverable" key={hearing.trialSessionId}>
           <tr>
             <td>
-              {/* TODO: working copy link */}
-              <a href={`/trial-session-detail/${hearing.trialSessionId}`}>
+              <a
+                href={
+                  hearing.userIsAssignedToSession
+                    ? `/trial-session-working-copy/${hearing.trialSessionId}`
+                    : `/trial-session-detail/${hearing.trialSessionId}`
+                }
+              >
                 {hearing.formattedTrialCity}
               </a>
             </td>
