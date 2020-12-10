@@ -1,7 +1,9 @@
 const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
+const { cloneDeep } = require('lodash');
 const { migrateItems } = require('./0006-eservice-indicator-has-eaccess');
+const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
   let documentClient;
@@ -10,42 +12,51 @@ describe('migrateItems', () => {
   const SECONDARY_CONTACT_ID = 'bf99085c-ece1-4e34-a3b1-3b10669c4793';
 
   let mockCase;
+  let caseRecords;
+  let nonCaseRecords;
+
+  let contactPrimary = {
+    ...MOCK_CASE.contactPrimary,
+    contactId: PRIMARY_CONTACT_ID,
+    hasEAccess: true,
+    serviceIndicator: undefined,
+  };
+
+  let contactSecondary = {
+    ...MOCK_CASE.contactSecondary,
+    contactId: SECONDARY_CONTACT_ID,
+  };
+
   let mockCaseData = {
-    contactPrimary: {
-      contactId: PRIMARY_CONTACT_ID,
-      hasEAccess: true,
-    },
-    contactSecondary: { contactId: SECONDARY_CONTACT_ID },
+    ...MOCK_CASE,
+    contactPrimary,
+    contactSecondary,
     docketNumber: '123-20',
     pk: 'case|123-20',
     sk: 'case|123-20',
   };
 
   beforeEach(() => {
-    // bypassing obj reference shenanigans
-    mockCase = JSON.parse(JSON.stringify(mockCaseData));
-  });
+    mockCase = cloneDeep(mockCaseData);
 
-  it('should only mutate case records', async () => {
-    const contactPrimary = {
-      hasEAccess: true,
-      serviceIndicator: undefined,
-    };
-
-    const caseRecords = [
+    caseRecords = cloneDeep([
       {
+        ...mockCase,
         contactPrimary,
+        docketNumber: '101-20',
         pk: 'case|101-20',
         sk: 'case|101-20',
       },
       {
+        ...mockCase,
         contactPrimary,
+        docketNumber: '102-20',
         pk: 'case|102-20',
         sk: 'case|102-20',
       },
-    ];
+    ]);
 
-    const nonCaseRecords = [
+    nonCaseRecords = cloneDeep([
       {
         contactPrimary, // this would not normally be here - proving only case records will be altered
         pk: 'docketEntry|123',
@@ -56,8 +67,10 @@ describe('migrateItems', () => {
         pk: 'case|101-20',
         sk: 'user|123',
       },
-    ];
+    ]);
+  });
 
+  it('should only mutate case records', async () => {
     const results = await migrateItems(
       [...caseRecords, ...nonCaseRecords],
       documentClient,
