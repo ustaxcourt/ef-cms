@@ -7,7 +7,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
 
-describe('docket clerk edits a petition payment fee', () => {
+describe('petitions clerk edits a petition payment fee', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
   });
@@ -21,9 +21,9 @@ describe('docket clerk edits a petition payment fee', () => {
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(test, 'petitionsclerk@example.com');
 
-  it('login as the docketclerk and edit the case petition payment fee', async () => {
+  it('login as the petitions clerk and edit the case petition payment fee', async () => {
     await test.runSequence('gotoEditPetitionDetailsSequence', {
       docketNumber: caseDetail.docketNumber,
     });

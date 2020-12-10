@@ -165,7 +165,7 @@ describe('fileDocketEntryInteractor', () => {
     ).toBeCalled();
   });
 
-  it('add documents and workItem to inbox if saving for later if a document is attached', async () => {
+  it('add documents and workItem to inbox when NOT saving for later if a document is attached', async () => {
     await fileDocketEntryInteractor({
       applicationContext,
       documentMetadata: {
