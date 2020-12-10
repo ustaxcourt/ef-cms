@@ -71,7 +71,7 @@ describe('sealCaseContactAddressInteractor', () => {
 
     const result = await sealCaseContactAddressInteractor({
       applicationContext,
-      contactId: '76a6050f-a423-47bb-943b-a5661fe08a6b', // contactPrimary
+      contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
       docketNumber: MOCK_CASE.docketNumber,
     });
     expect(
