@@ -2,7 +2,6 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { navigateToPractitionerDetailAction } from '../actions/navigateToPractitionerDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -31,7 +30,6 @@ export const submitUpdatePractitionerUserSequence = [
           setShowModalFactoryAction('WebSocketErrorModal'),
         ],
         success: [
-          setCurrentPageAction('Interstitial'),
           updatePractitionerUserAction,
           {
             error: [],
