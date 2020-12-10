@@ -312,7 +312,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   });
 
   if (result.hearings && result.hearings.length) {
-    result.hearings.map(hearing => {
+    result.hearings.forEach(hearing => {
       hearing.calendarNotes = getCalendarNoteForTrialSession({
         caseDocketNumber: caseDetail.docketNumber,
         trialSessionId: hearing.trialSessionId,
@@ -324,8 +324,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
         get,
         trialSessionId: hearing.trialSessionId,
       });
-
-      return hearing;
     });
   }
 
