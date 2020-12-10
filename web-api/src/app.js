@@ -782,7 +782,7 @@ app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
     lambdaWrapper(getPractitionerByBarNumberLambda),
   );
   app.put(
-    '/practitioners/:barNumber',
+    '/async/practitioners/:barNumber',
     lambdaWrapper(updatePractitionerUserLambda),
   );
   app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));

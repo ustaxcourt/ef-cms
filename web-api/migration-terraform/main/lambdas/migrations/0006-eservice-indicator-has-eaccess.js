@@ -1,6 +1,12 @@
+const createApplicationContext = require('../../../../src/applicationContext');
+const {
+  Case,
+} = require('../../../../../shared/src/business/entities/cases/Case');
 const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
+
+const applicationContext = createApplicationContext({});
 
 const migrateItems = async items => {
   const itemsAfter = [];
@@ -28,7 +34,10 @@ const migrateItems = async items => {
           SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
       }
 
-      itemsAfter.push(item);
+      const updatedCase = new Case(item, { applicationContext }).validate()
+        .toRawObject;
+
+      itemsAfter.push({ ...item, updatedCase });
     } else {
       itemsAfter.push(item);
     }
