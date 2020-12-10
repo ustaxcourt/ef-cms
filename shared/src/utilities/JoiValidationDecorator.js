@@ -177,12 +177,6 @@ exports.joiValidationDecorator = function (
 
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
-      const helpfulKeys = Object.keys(this).filter(key => key.endsWith('Id'));
-      helpfulKeys.push(
-        'docketNumber',
-        ...Object.keys(this.getFormattedValidationErrors()),
-      );
-
       const stringifyTransform = obj => {
         if (!obj) return obj;
         const transformed = {};

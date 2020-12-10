@@ -55,7 +55,9 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0003(items, documentClient);
   console.log('about to run migration 004');
   items = await migration0004(items, documentClient);
+  console.log('about to run migration 005');
   items = await migration0005(items, documentClient);
+  console.log('about to run migration 006');
   items = await migration0006(items, documentClient);
   items = await migration0007(items, documentClient);
   items = await migration0008(items, documentClient);
