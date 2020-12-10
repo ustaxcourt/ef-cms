@@ -19,9 +19,9 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
     DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
     DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
   ];
-  caseItem.isHighPriority = highPrioritySuffixes.includes(
-    caseItem.docketNumberSuffix,
-  );
+  caseItem.isHighPriority =
+    highPrioritySuffixes.includes(caseItem.docketNumberSuffix) ||
+    caseItem.highPriority === true;
   return caseItem;
 };
 
