@@ -1,10 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
-import { EditDocketEntryMetaFormCourtIssued as EditDocketEntryMetaFormCourtIssuedNew } from './EditDocketEntryMetaFormCourtIssued';
-import { EditDocketEntryMetaFormCourtIssued as EditDocketEntryMetaFormCourtIssuedOld } from './EditDocketEntryMetaFormCourtIssued.old';
-import { EditDocketEntryMetaFormDocument as EditDocketEntryMetaFormDocumentNew } from './EditDocketEntryMetaFormDocument';
-import { EditDocketEntryMetaFormDocument as EditDocketEntryMetaFormDocumentOld } from './EditDocketEntryMetaFormDocument.old';
+import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormCourtIssued';
+import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
 import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
 import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
@@ -12,17 +10,8 @@ import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { isCodeEnabled } from '../../../../codeToggles';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-const EditDocketEntryMetaFormDocument = isCodeEnabled(7178)
-  ? EditDocketEntryMetaFormDocumentNew
-  : EditDocketEntryMetaFormDocumentOld;
-
-const EditDocketEntryMetaFormCourtIssued = isCodeEnabled(7178)
-  ? EditDocketEntryMetaFormCourtIssuedNew
-  : EditDocketEntryMetaFormCourtIssuedOld;
 
 export const EditDocketEntryMeta = connect(
   {

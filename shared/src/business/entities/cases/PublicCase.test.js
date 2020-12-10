@@ -3850,4 +3850,47 @@ describe('PublicCase', () => {
     }
     expect(error).not.toBeDefined();
   });
+
+  it('should consider a public case to be sealed and valid when it has minimal information', () => {
+    const entity = new PublicCase(
+      {
+        docketNumber: '17000-15',
+        docketNumberSuffix: 'W',
+        sealedDate: 'some date',
+      },
+      {},
+    );
+    expect(entity.isSealed).toBe(true);
+
+    let error;
+    try {
+      entity.validate();
+    } catch (err) {
+      error = err;
+    }
+    expect(error).not.toBeDefined();
+  });
+
+  it('should consider a public case to be sealed and not valid if there exists a sealed docket entry on the docket record', () => {
+    const entity = new PublicCase(
+      {
+        docketEntries: [{ isOnDocketRecord: true, isSealed: true }],
+        docketNumber: '17000-15',
+      },
+      {},
+    );
+    expect(entity.isSealed).toBe(true);
+    expect(entity.docketEntries.length).toBe(1);
+
+    let error;
+    try {
+      entity.validate();
+    } catch (err) {
+      error = err;
+    }
+    expect(error.details).toMatchObject({
+      docketEntries: expect.anything(),
+      isSealed: expect.anything(),
+    });
+  });
 });

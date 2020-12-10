@@ -9,6 +9,10 @@ const formattedCaseDetail = withAppContextDecorator(
 
 export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
   return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     const practitionerBarNumber = test.barNumber || 'PT1234';
 
     expect(test.getState('caseDetail.privatePractitioners')).toEqual([]);

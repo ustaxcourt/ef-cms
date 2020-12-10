@@ -30,9 +30,13 @@ exports.unprioritizeCaseInteractor = async ({
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   caseEntity.unsetAsHighPriority();
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
   if (caseEntity.isReadyForTrial()) {
     await applicationContext

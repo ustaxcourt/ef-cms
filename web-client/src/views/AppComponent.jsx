@@ -22,7 +22,6 @@ import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
-import { DashboardJudge as DashboardJudge6921 } from './Dashboards/DashboardJudge.6921';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
@@ -81,7 +80,6 @@ import { UserContactEdit } from './UserContactEdit';
 import { UserContactEditProgress } from './UserContactEditProgress';
 import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
-import { applicationContext } from '../applicationContext';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -163,12 +161,6 @@ const pages = {
   WorkQueue,
 };
 
-if (applicationContext.isCodeEnabled(6921)) {
-  pages.DashboardJudge = DashboardJudge6921;
-}
-
-const featureShowFooter = applicationContext.isCodeEnabled(7142);
-
 /**
  * Root application component
  */
@@ -195,10 +187,6 @@ export const AppComponent = connect(
 
     useEffect(() => {
       focusMain();
-      if (!featureShowFooter) {
-        const templateDateElement = document.getElementById('last-deployed');
-        templateDateElement.classList.remove('hide');
-      }
     }, [currentPage]);
 
     const CurrentPage = pages[currentPage];
@@ -221,7 +209,7 @@ export const AppComponent = connect(
         </main>
         <Loading />
 
-        {featureShowFooter && <Footer />}
+        <Footer />
 
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />

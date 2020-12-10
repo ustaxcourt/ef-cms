@@ -11,7 +11,6 @@ import {
 } from './helpers';
 import { formatDateString } from '../../shared/src/business/utilities/DateHandler';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-import { isCodeEnabled } from '../../codeToggles';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -52,7 +51,13 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     });
 
     await test.runSequence('gotoPendingReportSequence');
-    pendingItemsCount = (test.getState('pendingItems') || []).length;
+
+    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+      judge: 'Chief Judge',
+    });
+
+    pendingItemsCount = (test.getState('pendingReports.pendingItems') || [])
+      .length;
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
@@ -73,12 +78,13 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     await test.runSequence('gotoPendingReportSequence');
 
-    await test.runSequence('fetchPendingItemsSequence', {
+    await test.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: 'Chief Judge',
     });
 
-    const currentPendingItemsCount = (test.getState('pendingItems') || [])
-      .length;
+    const currentPendingItemsCount = (
+      test.getState('pendingReports.pendingItems') || []
+    ).length;
 
     expect(currentPendingItemsCount).toEqual(pendingItemsCount);
   });
@@ -136,17 +142,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     ).toEqual('documentView');
   });
 
-  const mockDayReceived = 30;
-  const mockMonthReceived = '04';
-  const mockYearReceived = 2001;
-
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes({
-    dayReceived: mockDayReceived,
-    fakeFile,
-    monthReceived: mockMonthReceived,
-    test,
-    yearReceived: mockYearReceived,
-  });
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(test, fakeFile);
 
   it('docket clerk views pending report items', async () => {
     await refreshElasticsearchIndex();
@@ -165,22 +161,18 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     expect(pendingItem).toBeDefined();
 
-    if (isCodeEnabled(7134)) {
-      const answerPendingReceivedAtFormatted = formatDateString(
-        pendingItem.receivedAt,
-        'MMDDYYYY',
-      );
-      const caseReceivedAtFormatted = formatDateString(
-        caseReceivedAtDate,
-        'MMDDYYYY',
-      );
+    const answerPendingReceivedAtFormatted = formatDateString(
+      pendingItem.receivedAt,
+      'MMDDYYYY',
+    );
+    const caseReceivedAtFormatted = formatDateString(
+      caseReceivedAtDate,
+      'MMDDYYYY',
+    );
 
-      expect(answerPendingReceivedAtFormatted).not.toEqual(
-        caseReceivedAtFormatted,
-      );
-      expect(answerPendingReceivedAtFormatted).toEqual(
-        `${mockMonthReceived}/${mockDayReceived}/${mockYearReceived}`,
-      );
-    }
+    expect(answerPendingReceivedAtFormatted).not.toEqual(
+      caseReceivedAtFormatted,
+    );
+    expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
   });
 });

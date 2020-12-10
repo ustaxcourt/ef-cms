@@ -1,4 +1,3 @@
-import { isCodeEnabled } from '../../../../codeToggles';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -43,6 +42,7 @@ export const getShowDocumentViewerLink = ({
   isExternalUser,
   isHiddenToPublic,
   isInitialDocument,
+  isLegacySealed,
   isServed,
   isStipDecision,
   isStricken,
@@ -55,6 +55,7 @@ export const getShowDocumentViewerLink = ({
 
   if (isExternalUser) {
     if (isStricken) return false;
+    if (isLegacySealed) return false;
     if (userHasNoAccessToDocument) return false;
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
@@ -206,14 +207,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       !permissions.UPDATE_CASE &&
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-    if (isCodeEnabled(7164)) {
-      formattedResult.showNotServed = entry.isNotServedDocument;
-    } else {
-      formattedResult.showNotServed =
-        !formattedResult.isUnservable &&
-        entry.isNotServedDocument &&
-        !entry.isMinuteEntry;
-    }
+    formattedResult.showNotServed = entry.isNotServedDocument;
     formattedResult.showServed = entry.isStatusServed;
 
     const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
@@ -228,6 +222,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         entry.eventCode,
       ),
       isInitialDocument,
+      isLegacySealed: entry.isLegacySealed,
       isServed: !!entry.servedAt,
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
@@ -254,12 +249,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
       userPermissions: permissions,
     });
 
-    if (isCodeEnabled(6868)) {
-      formattedResult.showDocumentDescriptionWithoutLink =
-        !showDocumentLinks && !formattedResult.showDocumentProcessing;
-    } else {
-      formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
-    }
+    formattedResult.showDocumentDescriptionWithoutLink =
+      !showDocumentLinks && !formattedResult.showDocumentProcessing;
 
     return formattedResult;
   });
@@ -268,15 +259,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
     d => d.isOnDocketRecord,
   );
 
-  if (isCodeEnabled(7198)) {
-    result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-      d => d.pending && (d.servedAt || d.isLegacyServed),
-    );
-  } else {
-    result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-      d => d.pending && d.servedAt,
-    );
-  }
+  result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
+    d => d.pending && (d.servedAt || d.isLegacyServed),
+  );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
     draftDocument => {
