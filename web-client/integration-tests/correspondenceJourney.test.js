@@ -1,6 +1,6 @@
 import { docketClerkCreatesMessageWithCorrespondence } from './journey/docketClerkCreatesMessageWithCorrespondence';
 import { docketClerkDeletesCorrespondence } from './journey/docketClerkDeletesCorrespondence';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { userAddsCorrespondence } from './journey/userAddsCorrespondence';
 import { userDeletesCorrespondence } from './journey/userDeletesCorrespondence';
 import { userEditsCorrespondence } from './journey/userEditsCorrespondence';
