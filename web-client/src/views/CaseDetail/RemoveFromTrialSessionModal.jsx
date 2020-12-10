@@ -1,3 +1,4 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
@@ -9,6 +10,7 @@ export const RemoveFromTrialSessionModal = connect(
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.removeCaseFromTrialSequence,
     modal: state.modal,
+    removeFromTrialSessionModalHelper: state.removeFromTrialSessionModalHelper,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateRemoveFromTrialSessionSequence:
       sequences.validateRemoveFromTrialSessionSequence,
@@ -18,6 +20,7 @@ export const RemoveFromTrialSessionModal = connect(
     cancelSequence,
     confirmSequence,
     modal,
+    removeFromTrialSessionModalHelper,
     updateModalValueSequence,
     validateRemoveFromTrialSessionSequence,
     validationErrors,
@@ -58,6 +61,59 @@ export const RemoveFromTrialSessionModal = connect(
                 }}
               />
             </fieldset>
+          </FormGroup>
+        </div>
+
+        <div className="margin-bottom-4">
+          <FormGroup errorText={validationErrors.caseStatus}>
+            <label className="usa-label" htmlFor="caseStatus">
+              Case status{' '}
+            </label>
+            <BindedSelect
+              bind="modal.caseStatus"
+              className="case-status"
+              id="case-status"
+              name="caseStatus"
+              onChange={() => {
+                validateRemoveFromTrialSessionSequence();
+              }}
+            >
+              {removeFromTrialSessionModalHelper.caseStatusOptions.map(
+                status => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ),
+              )}
+            </BindedSelect>
+          </FormGroup>
+        </div>
+
+        <div className="margin-bottom-4">
+          <FormGroup errorText={validationErrors.associatedJudge}>
+            <label className="usa-label" htmlFor="caseStatus">
+              Associated Judge{' '}
+              {!removeFromTrialSessionModalHelper.associatedJudgeRequired && (
+                <span className="usa-hint">(optional)</span>
+              )}
+            </label>
+            <input
+              className="usa-input"
+              id="associatedJudge"
+              name="associatedJudge"
+              required={
+                removeFromTrialSessionModalHelper.associatedJudgeRequired
+              }
+              type="text"
+              value={modal.documentTitle || ''}
+              onChange={e => {
+                updateModalValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                validateRemoveFromTrialSessionSequence();
+              }}
+            />
           </FormGroup>
         </div>
       </ModalDialog>
