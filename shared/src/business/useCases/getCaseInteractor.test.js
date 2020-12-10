@@ -244,6 +244,8 @@ describe('getCaseInteractor', () => {
 
   describe('sealed cases', () => {
     beforeAll(() => {
+      const sealedDocketEntries = cloneDeep(docketEntries);
+      sealedDocketEntries[0].isSealed = true;
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(
@@ -252,7 +254,7 @@ describe('getCaseInteractor', () => {
             caseCaption: 'a case caption',
             caseType: CASE_TYPES_MAP.other,
             createdAt: new Date().toISOString(),
-            docketEntries,
+            docketEntries: sealedDocketEntries,
             docketNumber: '101-18',
             irsPractitioners: [
               {
@@ -272,7 +274,6 @@ describe('getCaseInteractor', () => {
               },
             ],
             procedureType: 'Regular',
-            sealedDate: new Date().toISOString(),
           }),
         );
     });

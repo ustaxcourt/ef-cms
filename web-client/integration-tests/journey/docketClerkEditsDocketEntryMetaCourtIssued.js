@@ -1,6 +1,5 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { isCodeEnabled } from '../../../codeToggles';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -58,12 +57,10 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
       value: '2020',
     });
 
-    if (isCodeEnabled(7178)) {
-      await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-        key: 'pending',
-        value: true,
-      });
-    }
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'pending',
+      value: true,
+    });
 
     await test.runSequence('submitEditDocketEntryMetaSequence', {
       docketNumber: test.docketNumber,
@@ -88,27 +85,25 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
       message: 'Docket entry changes saved.',
     });
 
-    if (isCodeEnabled(7178)) {
-      const docketEntries = test.getState('caseDetail.docketEntries');
-      const pendingDocketEntry = docketEntries.find(
-        d => d.index === docketRecordIndex,
-      );
+    const docketEntries = test.getState('caseDetail.docketEntries');
+    const pendingDocketEntry = docketEntries.find(
+      d => d.index === docketRecordIndex,
+    );
 
-      expect(pendingDocketEntry.pending).toEqual(true);
+    expect(pendingDocketEntry.pending).toEqual(true);
 
-      const caseDetailFormatted = runCompute(formattedCaseDetail, {
-        state: test.getState(),
-      });
+    const caseDetailFormatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
 
-      expect(
-        caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
-      ).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            docketEntryId: pendingDocketEntry.docketEntryId,
-          }),
-        ]),
-      );
-    }
+    expect(
+      caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: pendingDocketEntry.docketEntryId,
+        }),
+      ]),
+    );
   });
 };

@@ -140,7 +140,7 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return that petitioner is associated', async () => {
+  it('should return that petitioner is associated when the contactPrimaryId is equal to currentUser.userId', async () => {
     applicationContext
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
@@ -155,7 +155,9 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          userId: '123',
+          contactPrimary: {
+            contactId: '123',
+          },
         },
       },
     });
@@ -181,6 +183,9 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
+          contactPrimary: {
+            contactId: '456',
+          },
           userId: '123',
         },
       },

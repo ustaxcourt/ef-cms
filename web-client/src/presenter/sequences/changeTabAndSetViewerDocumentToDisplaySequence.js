@@ -1,11 +1,6 @@
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
-
-import { getAction } from '../actions/actionFactory';
-
-const setViewerDocumentToDisplayAction = getAction(
-  'setViewerDocumentToDisplayAction',
-);
+import { setViewerDocumentToDisplayAction } from '../actions/setViewerDocumentToDisplayAction';
 
 export const changeTabAndSetViewerDocumentToDisplaySequence = [
   setDefaultCaseDetailTabAction,

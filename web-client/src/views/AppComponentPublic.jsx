@@ -11,7 +11,6 @@ import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecor
 import { PublicSearch } from './Public/PublicSearch';
 import { TodaysOpinions } from './Public/TodaysOpinions';
 import { UsaBanner } from './UsaBanner';
-import { applicationContextPublic } from '../applicationContextPublic';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import { useScript } from '../utilities/useScript';
@@ -28,8 +27,6 @@ const pages = {
   PublicSearch,
   TodaysOpinions,
 };
-
-const featureShowFooter = applicationContextPublic.isCodeEnabled(7142);
 
 /**
  * Root application component for the public site
@@ -48,10 +45,6 @@ export const AppComponentPublic = connect(
 
     useEffect(() => {
       focusMain();
-      if (!featureShowFooter) {
-        const templateDateElement = document.getElementById('last-deployed');
-        templateDateElement.classList.remove('hide');
-      }
     });
 
     if (!process.env.CI) {
@@ -77,7 +70,7 @@ export const AppComponentPublic = connect(
         </main>
         <Loading />
 
-        {featureShowFooter && <Footer />}
+        <Footer />
       </React.Fragment>
     );
   },
