@@ -1,9 +1,9 @@
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const RemoveFromTrialSessionModal = connect(
   {
@@ -69,12 +69,19 @@ export const RemoveFromTrialSessionModal = connect(
             <label className="usa-label" htmlFor="caseStatus">
               Case status{' '}
             </label>
-            <BindedSelect
-              bind="modal.caseStatus"
-              className="case-status"
+            <select
+              className={classNames(
+                'usa-select',
+                validationErrors.term && 'usa-select--error',
+              )}
               id="case-status"
               name="caseStatus"
-              onChange={() => {
+              value={removeFromTrialSessionModalHelper.defaultCaseStatus}
+              onChange={e => {
+                updateModalValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
                 validateRemoveFromTrialSessionSequence();
               }}
             >
@@ -85,7 +92,7 @@ export const RemoveFromTrialSessionModal = connect(
                   </option>
                 ),
               )}
-            </BindedSelect>
+            </select>
           </FormGroup>
         </div>
 
@@ -105,7 +112,7 @@ export const RemoveFromTrialSessionModal = connect(
                 removeFromTrialSessionModalHelper.associatedJudgeRequired
               }
               type="text"
-              value={modal.documentTitle || ''}
+              value={modal.associatedJudge || ''}
               onChange={e => {
                 updateModalValueSequence({
                   key: e.target.name,
