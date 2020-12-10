@@ -31,8 +31,10 @@ const getUserIsAssignedToSession = ({ currentUser, get, trialSessionId }) => {
   const isTrialClerkUserAssigned =
     session?.trialClerk?.userId === currentUser.userId;
 
-  return (
-    isJudgeUserAssigned || isTrialClerkUserAssigned || isChambersUserAssigned
+  return !!(
+    isJudgeUserAssigned ||
+    isTrialClerkUserAssigned ||
+    isChambersUserAssigned
   );
 };
 
