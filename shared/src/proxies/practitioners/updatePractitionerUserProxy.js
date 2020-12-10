@@ -17,6 +17,6 @@ exports.updatePractitionerUserInteractor = ({
   return put({
     applicationContext,
     body: { user },
-    endpoint: `/practitioners/${barNumber}`,
+    endpoint: `/async/practitioners/${barNumber}`,
   });
 };

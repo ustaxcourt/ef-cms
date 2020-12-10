@@ -74,6 +74,14 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
   }
 };
 
+const getUserRoles = user => {
+  return {
+    isInternalUser: User.isInternalUser(user.role),
+    isIrsSuperuser: user.role === ROLES.irsSuperuser,
+    isPetitionsClerk: user.role === ROLES.petitionsClerk,
+  };
+};
+
 /**
  *
  * @param {object} providers the providers object
@@ -93,10 +101,9 @@ exports.getDownloadPolicyUrlInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const isInternalUser = User.isInternalUser(user && user.role);
-  const isIrsSuperuser = user && user.role && user.role === ROLES.irsSuperuser;
-  const isPetitionsClerk =
-    user && user.role && user.role === ROLES.petitionsClerk;
+  const { isInternalUser, isIrsSuperuser, isPetitionsClerk } = getUserRoles(
+    user,
+  );
 
   const caseData = await applicationContext
     .getPersistenceGateway()
