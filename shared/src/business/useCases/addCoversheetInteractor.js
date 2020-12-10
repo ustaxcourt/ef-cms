@@ -4,6 +4,19 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { omit } = require('lodash');
 
+const formatDateReceived = ({
+  applicationContext,
+  docketEntryEntity,
+  isPaper,
+}) => {
+  const formatString = isPaper ? 'MMDDYY' : 'MM/DD/YY hh:mm a';
+  return docketEntryEntity.createdAt
+    ? applicationContext
+        .getUtilities()
+        .formatDateString(docketEntryEntity.createdAt, formatString)
+    : '';
+};
+
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
  *
@@ -23,38 +36,21 @@ exports.generateCoverSheetData = ({
 }) => {
   const isLodged = docketEntryEntity.lodged;
   const { certificateOfService, isPaper } = docketEntryEntity;
+  const { formatDateString } = applicationContext.getUtilities();
 
-  const dateServedFormatted =
-    (docketEntryEntity.servedAt &&
-      applicationContext
-        .getUtilities()
-        .formatDateString(docketEntryEntity.servedAt, 'MMDDYY')) ||
-    '';
+  const dateServedFormatted = docketEntryEntity.servedAt
+    ? formatDateString(docketEntryEntity.servedAt, 'MMDDYY')
+    : '';
 
-  let dateReceivedFormatted;
+  let dateReceivedFormatted = formatDateReceived({
+    applicationContext,
+    docketEntryEntity,
+    isPaper,
+  });
 
-  if (isPaper) {
-    dateReceivedFormatted =
-      (docketEntryEntity.createdAt &&
-        applicationContext
-          .getUtilities()
-          .formatDateString(docketEntryEntity.createdAt, 'MMDDYY')) ||
-      '';
-  } else {
-    dateReceivedFormatted =
-      (docketEntryEntity.createdAt &&
-        applicationContext
-          .getUtilities()
-          .formatDateString(docketEntryEntity.createdAt, 'MM/DD/YY hh:mm a')) ||
-      '';
-  }
-
-  const dateFiledFormatted =
-    (docketEntryEntity.filingDate &&
-      applicationContext
-        .getUtilities()
-        .formatDateString(docketEntryEntity.filingDate, 'MMDDYY')) ||
-    '';
+  const dateFiledFormatted = docketEntryEntity.filingDate
+    ? formatDateString(docketEntryEntity.filingDate, 'MMDDYY')
+    : '';
 
   const caseCaptionToUse = useInitialData
     ? caseEntity.initialCaption
