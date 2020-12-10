@@ -178,7 +178,7 @@ const otherPetitionersCase = {
       name: 'Keelie Bruce',
       representing: [
         'dd0ac156-aa2d-46e7-8b5a-902f1d16f199',
-        '76a6050f-a423-47bb-943b-a5661fe08a6b',
+        '7805d1ab-18d0-43ec-bafb-654e83405416',
       ],
       role: 'privatePractitioner',
       secondaryName: 'Logan Fields',
@@ -352,6 +352,48 @@ describe('Case migration journey', () => {
     });
     expect(formattedCase.formattedDocketEntries[1].showNotServed).toBe(false);
     expect(formattedCase.formattedDocketEntries[1].isInProgress).toBe(false);
+
+    expect(
+      formattedCase.formattedPendingDocketEntriesOnDocketRecord,
+    ).toMatchObject([
+      {
+        docketEntryId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
+        documentTitle: 'Answer',
+        documentType: 'Answer',
+        eventCode: 'A',
+        isLegacyServed: true,
+        isOnDocketRecord: true,
+        pending: true,
+      },
+    ]);
+
+    await test.runSequence('gotoPendingReportSequence');
+    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+      judge: CHIEF_JUDGE,
+    });
+    const pendingItems = test.getState('pendingReports.pendingItems');
+    expect(pendingItems.length).toBeGreaterThan(0);
+    const pendingItemsForThisCase = pendingItems.filter(
+      item => item.docketNumber === legacyServedDocumentCase.docketNumber,
+    );
+
+    expect(pendingItemsForThisCase).toMatchObject([
+      {
+        associatedJudge: 'Chief Judge',
+        caseCaption: 'The Sixth Migrated Case',
+        docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '156-21',
+        docketNumberSuffix: null,
+        documentTitle: 'Proposed Stipulated Decision',
+        documentType: 'Proposed Stipulated Decision',
+        status: 'New',
+      },
+      {
+        docketEntryId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
+        documentTitle: 'Answer',
+        documentType: 'Answer',
+      },
+    ]);
   });
 
   loginAs(test, 'privatePractitioner@example.com');
