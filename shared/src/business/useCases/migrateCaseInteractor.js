@@ -67,6 +67,133 @@ const createUserAccount = async ({
 
 exports.createUserAccount = createUserAccount;
 
+const deleteExistingCase = async ({ applicationContext, docketNumber }) => {
+  const formattedDocketNumber = Case.formatDocketNumber(docketNumber);
+
+  applicationContext.logger.debug('fetching case to delete');
+  const caseToDelete = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: formattedDocketNumber,
+    });
+  applicationContext.logger.debug('received case to delete', caseToDelete);
+
+  if (caseToDelete) {
+    applicationContext.logger.debug('deleting case');
+    await Promise.all([
+      applicationContext.getPersistenceGateway().deleteCaseByDocketNumber({
+        applicationContext,
+        docketNumber: formattedDocketNumber,
+      }),
+    ]);
+  }
+};
+
+const associatePractitionerWithCase = async ({
+  applicationContext,
+  casePractitioner,
+  caseToAdd,
+}) => {
+  applicationContext.logger.debug('fetch practitioner');
+
+  const practitioner = await applicationContext
+    .getPersistenceGateway()
+    .getPractitionerByBarNumber({
+      applicationContext,
+      barNumber: casePractitioner.barNumber,
+    });
+
+  if (practitioner) {
+    casePractitioner.contact = practitioner.contact;
+    casePractitioner.email = practitioner.email;
+    casePractitioner.name = practitioner.name;
+    casePractitioner.userId = practitioner.userId;
+
+    const userCaseEntity = new UserCase(caseToAdd);
+
+    applicationContext.logger.debug('associate user with case');
+
+    await applicationContext.getPersistenceGateway().associateUserWithCase({
+      applicationContext,
+      docketNumber: caseToAdd.docketNumber,
+      userCase: userCaseEntity.validate().toRawObject(),
+      userId: practitioner.userId,
+    });
+  } else {
+    casePractitioner.userId = applicationContext.getUniqueId();
+  }
+};
+
+const associateCaseWithTrialSession = async ({
+  applicationContext,
+  caseToAdd,
+}) => {
+  const trialSessionData = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId: caseToAdd.trialSessionId,
+    });
+
+  applicationContext.logger.debug('get trial session', trialSessionData);
+
+  if (!trialSessionData) {
+    throw new Error(
+      `Trial Session not found with id ${caseToAdd.trialSessionId}`,
+    );
+  }
+
+  const trialSessionEntity = new TrialSession(trialSessionData, {
+    applicationContext,
+  });
+
+  trialSessionEntity.addCaseToCalendar(caseToAdd);
+  applicationContext.logger.debug('update trial session');
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
+
+  caseToAdd.setAsCalendared(trialSessionEntity);
+};
+
+/**
+ * createUserAccountsWhenNeeded
+ *
+ * @param {object} providers.caseToAdd the case reference which will be updated
+ */
+const createUserAccountsWhenNeeded = async ({
+  applicationContext,
+  caseToAdd,
+}) => {
+  const contactTypes = ['contactPrimary', 'contactSecondary'];
+
+  for (const contactType of contactTypes) {
+    if (caseToAdd[contactType]) {
+      const shouldCreateUserAccount =
+        !!caseToAdd[contactType].hasEAccess &&
+        caseToAdd.status !== CASE_STATUS_TYPES.closed;
+
+      if (shouldCreateUserAccount) {
+        applicationContext.logger.debug('create user account');
+        caseToAdd[contactType].serviceIndicator =
+          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+
+        caseToAdd = await createUserAccount({
+          applicationContext,
+          caseEntity: caseToAdd,
+          contactData: caseToAdd[contactType],
+          contactType,
+        });
+      } else {
+        caseToAdd[contactType].hasEAccess = false;
+      }
+    }
+  }
+};
+
 /**
  *
  * @param {object} providers the providers object
@@ -97,25 +224,10 @@ exports.migrateCaseInteractor = async ({
   applicationContext.logger.debug('received user', user);
 
   if (caseMetadata && caseMetadata.docketNumber) {
-    const docketNumber = Case.formatDocketNumber(caseMetadata.docketNumber);
-
-    applicationContext.logger.debug('fetching case to delete');
-    const caseToDelete = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-    applicationContext.logger.debug('received case to delete', caseToDelete);
-
-    if (caseToDelete) {
-      applicationContext.logger.debug('deleting case');
-      await Promise.all([
-        applicationContext
-          .getPersistenceGateway()
-          .deleteCaseByDocketNumber({ applicationContext, docketNumber }),
-      ]);
-    }
+    await deleteExistingCase({
+      applicationContext,
+      docketNumber: caseMetadata.docketNumber,
+    });
   }
 
   let caseToAdd = new Case(
@@ -132,92 +244,23 @@ exports.migrateCaseInteractor = async ({
     ...caseToAdd.privatePractitioners,
     ...caseToAdd.irsPractitioners,
   ]) {
-    applicationContext.logger.debug('fetch practitioner');
-
-    const practitioner = await applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber({
-        applicationContext,
-        barNumber: casePractitioner.barNumber,
-      });
-
-    if (practitioner) {
-      casePractitioner.contact = practitioner.contact;
-      casePractitioner.email = practitioner.email;
-      casePractitioner.name = practitioner.name;
-      casePractitioner.userId = practitioner.userId;
-
-      const userCaseEntity = new UserCase(caseToAdd);
-
-      applicationContext.logger.debug('associate user with case');
-
-      await applicationContext.getPersistenceGateway().associateUserWithCase({
-        applicationContext,
-        docketNumber: caseToAdd.docketNumber,
-        userCase: userCaseEntity.validate().toRawObject(),
-        userId: practitioner.userId,
-      });
-    } else {
-      casePractitioner.userId = applicationContext.getUniqueId();
-    }
+    await associatePractitionerWithCase({
+      applicationContext,
+      casePractitioner,
+      caseToAdd,
+    });
   }
 
   if (caseToAdd.trialSessionId) {
-    const trialSessionData = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
-        applicationContext,
-        trialSessionId: caseToAdd.trialSessionId,
-      });
-
-    applicationContext.logger.debug('get trial session', trialSessionData);
-
-    if (!trialSessionData) {
-      throw new Error(
-        `Trial Session not found with id ${caseToAdd.trialSessionId}`,
-      );
-    }
-
-    const trialSessionEntity = new TrialSession(trialSessionData, {
-      applicationContext,
-    });
-
-    trialSessionEntity.addCaseToCalendar(caseToAdd);
-    applicationContext.logger.debug('update trial session');
-
-    await applicationContext.getPersistenceGateway().updateTrialSession({
-      applicationContext,
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-    });
-
-    caseToAdd.setAsCalendared(trialSessionEntity);
+    await associateCaseWithTrialSession({ applicationContext, caseToAdd });
   }
 
   caseToAdd.validateForMigration();
 
-  const contactTypes = ['contactPrimary', 'contactSecondary'];
-
-  for (const contactType of contactTypes) {
-    if (caseToAdd[contactType]) {
-      const shouldCreateUserAccount =
-        !!caseToAdd[contactType].hasEAccess &&
-        caseToAdd.status !== CASE_STATUS_TYPES.closed;
-      if (shouldCreateUserAccount) {
-        applicationContext.logger.debug('create user account');
-        caseToAdd[contactType].serviceIndicator =
-          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-
-        caseToAdd = await createUserAccount({
-          applicationContext,
-          caseEntity: caseToAdd,
-          contactData: caseToAdd[contactType],
-          contactType,
-        });
-      } else {
-        caseToAdd[contactType].hasEAccess = false;
-      }
-    }
-  }
+  await createUserAccountsWhenNeeded({
+    applicationContext,
+    caseToAdd,
+  });
 
   const caseValidatedRaw = caseToAdd.validateForMigration().toRawObject();
 

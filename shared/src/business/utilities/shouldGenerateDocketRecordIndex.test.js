@@ -210,29 +210,6 @@ describe('shouldGenerateDocketRecordIndex', () => {
   });
 
   it('returns true for minute entries', () => {
-    const caseDetail = {
-      docketEntries: [
-        {
-          docketEntryId: '123',
-          isPaper: true,
-        },
-      ],
-    };
-    const docketEntry = {
-      docketEntryId: '123',
-      documentType: 'Filing Fee Paid',
-      eventCode: 'FEE',
-    };
-
-    const result = shouldGenerateDocketRecordIndex({
-      caseDetail,
-      docketEntry,
-    });
-
-    expect(result).toEqual(true);
-  });
-
-  it('returns true for minute entries', () => {
     const caseDetail = { docketEntries: [] };
     const docketEntry = {
       docketEntryId: '123',
