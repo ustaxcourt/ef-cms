@@ -133,6 +133,7 @@ const AUTHORIZATION_MAP = {
   admissionsclerk: [
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER,
+    ROLE_PERMISSIONS.CASE_CORRESPONDENCE,
   ],
   chambers: [
     ...allInternalUserPermissions,
