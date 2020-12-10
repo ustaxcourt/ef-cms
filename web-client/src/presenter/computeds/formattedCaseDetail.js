@@ -316,7 +316,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
         trialSessionId: hearing.trialSessionId,
         trialSessions: allTrialSessions,
       });
-      return hearing;
     });
   }
 
