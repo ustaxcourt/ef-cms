@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -9,14 +10,27 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateRemoveFromTrialSessionAction = ({ get, path }) => {
-  const { disposition } = get(state.modal);
+  const { associatedJudge, caseStatus, disposition } = get(state.modal);
 
-  let errors = null;
+  let errors = {};
   if (!disposition) {
-    errors = { disposition: 'Enter a disposition' };
+    errors.disposition = 'Enter a disposition';
   }
 
-  if (!errors) {
+  if (!caseStatus) {
+    errors.caseStatus = 'Enter a case status';
+  }
+
+  if (!associatedJudge) {
+    errors.associatedJudge = 'Enter an associated judge';
+  }
+
+  if (associatedJudge && associatedJudge.length > 50) {
+    errors.associatedJudge =
+      'The length of the associated judge must not be over 50';
+  }
+
+  if (isEmpty(errors)) {
     return path.success();
   } else {
     return path.error({ errors });
