@@ -185,6 +185,12 @@ describe('formattedTrialSessionDetails', () => {
         caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT },
       }).isHighPriority,
     ).toBe(true);
+    expect(
+      formatCase({
+        applicationContext,
+        caseItem: { highPriority: true },
+      }).isHighPriority,
+    ).toBe(true);
   });
   describe('comparing eligible cases', () => {
     it('prioritizes L and P', () => {
