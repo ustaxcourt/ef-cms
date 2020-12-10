@@ -42,12 +42,30 @@ exports.updatePractitionerUserInteractor = async ({
     .validate()
     .toRawObject();
 
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'admin_contact_initial_update_complete',
+    },
+    userId: requestUser.userId,
+  });
+
   await generateChangeOfAddress({
     applicationContext,
     bypassDocketEntry,
     contactInfo: validatedUserData.contact,
+    requestUserId: requestUser.userId,
     updatedName: validatedUserData.name,
     user: oldUserInfo,
+    websocketMessagePrefix: 'admin',
+  });
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'admin_contact_full_update_complete',
+    },
+    userId: requestUser.userId,
   });
 
   const updatedUser = await applicationContext
