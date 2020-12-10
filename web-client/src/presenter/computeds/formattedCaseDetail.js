@@ -275,6 +275,51 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.consolidatedCases = result.consolidatedCases || [];
 
+  const allTrialSessions = get(state.trialSessions);
+
+  const getCalendarNoteForTrialSession = ({
+    caseDocketNumber,
+    trialSessionId,
+    trialSessions,
+  }) => {
+    let note;
+
+    if (!trialSessions || !trialSessions.length) {
+      return note;
+    }
+
+    const foundTrialSession = trialSessions.find(
+      session => session.trialSessionId === trialSessionId,
+    );
+
+    if (foundTrialSession && foundTrialSession.caseOrder) {
+      const trialSessionCase = foundTrialSession.caseOrder.find(
+        sessionCase => sessionCase.docketNumber === caseDocketNumber,
+      );
+
+      note = trialSessionCase && trialSessionCase.calendarNotes;
+    }
+
+    return note;
+  };
+
+  result.trialSessionNotes = getCalendarNoteForTrialSession({
+    caseDocketNumber: caseDetail.docketNumber,
+    trialSessionId: caseDetail.trialSessionId,
+    trialSessions: allTrialSessions,
+  });
+
+  if (result.hearings && result.hearings.length) {
+    result.hearings.map(hearing => {
+      hearing.calendarNotes = getCalendarNoteForTrialSession({
+        caseDocketNumber: caseDetail.docketNumber,
+        trialSessionId: hearing.trialSessionId,
+        trialSessions: allTrialSessions,
+      });
+      return hearing;
+    });
+  }
+
   result.userIsAssignedToSession = getUserIsAssignedToSession({
     currentUser: user,
     get,
