@@ -51,7 +51,7 @@ exports.getCaseInventoryReport = async ({
         },
       },
       size,
-      sort: [{ 'sortableDocketNumber.N.keyword': { order: 'asc' } }],
+      sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
       track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
     },
     index: 'efcms-case',

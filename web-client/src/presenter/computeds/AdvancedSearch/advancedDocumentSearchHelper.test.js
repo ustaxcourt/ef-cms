@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedDocumentSearchHelper', () => {
   const pageSizeOverride = 5;
-  const maxResultsOverride = 3;
+  const manyResultsOverride = 4;
 
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
@@ -17,7 +17,7 @@ describe('advancedDocumentSearchHelper', () => {
         return {
           ...applicationContext.getConstants(),
           CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
-          MAX_SEARCH_RESULTS: maxResultsOverride,
+          MAX_SEARCH_RESULTS: manyResultsOverride,
         };
       },
     },
@@ -40,8 +40,8 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Opinion Type',
       isPublic: true,
-      maxResults: maxResultsOverride,
-      showMaxResultsMessage: false,
+      manyResults: manyResultsOverride / 2,
+      showManyResultsMessage: false,
       showSealedIcon: false,
     });
   });
@@ -63,8 +63,8 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Order',
       isPublic: true,
-      maxResults: maxResultsOverride,
-      showMaxResultsMessage: false,
+      manyResults: manyResultsOverride / 2,
+      showManyResultsMessage: false,
       showSealedIcon: true,
     });
   });
@@ -142,16 +142,16 @@ describe('advancedDocumentSearchHelper', () => {
     });
 
     expect(result).toMatchObject({
-      maxResults: maxResultsOverride,
+      manyResults: manyResultsOverride / 2,
       searchResultsCount: 1,
       showLoadMore: false,
-      showMaxResultsMessage: false,
+      showManyResultsMessage: false,
       showNoMatches: false,
       showSearchResults: true,
     });
   });
 
-  it('returns showMaxResultsMessage true if maximum number of results has been reached', () => {
+  it('returns showManyResultsMessage true if maximum number of results has been reached', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
@@ -201,10 +201,10 @@ describe('advancedDocumentSearchHelper', () => {
     });
 
     expect(result).toMatchObject({
-      maxResults: maxResultsOverride,
+      manyResults: manyResultsOverride / 2,
       searchResultsCount: 4,
       showLoadMore: false,
-      showMaxResultsMessage: true,
+      showManyResultsMessage: true,
       showNoMatches: false,
       showSearchResults: true,
     });

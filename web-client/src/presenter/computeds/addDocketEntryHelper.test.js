@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { addDocketEntryHelper as addDocketEntryHelperComputed } from './addDocketEntryHelper.old';
+import { addDocketEntryHelper as addDocketEntryHelperComputed } from './addDocketEntryHelper';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';

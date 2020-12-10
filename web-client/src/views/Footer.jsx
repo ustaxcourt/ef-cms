@@ -18,7 +18,7 @@ const ScrollToTopButton = () => {
       }}
     >
       <Icon
-        aria-label="retun to top"
+        aria-label="return to top"
         className="margin-right-1"
         icon={['fas', 'long-arrow-alt-up']}
         size="1x"
