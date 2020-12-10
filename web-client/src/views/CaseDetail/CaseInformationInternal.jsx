@@ -81,6 +81,50 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
   </React.Fragment>
 );
 
+const DisplayHearings = ({ hearings, removeHearingSequence }) => {
+  if (hearings && hearings.length) {
+    return hearings.map(hearing => {
+      return (
+        <tbody className="hoverable" key={hearing.trialSessionId}>
+          <tr>
+            <td>
+              {/* TODO: working copy link */}
+              <a href={`/trial-session-detail/${hearing.trialSessionId}`}>
+                {hearing.formattedTrialCity}
+              </a>
+            </td>
+            <td>{hearing.formattedTrialDate}</td>
+            <td>{hearing.formattedAssociatedJudge}</td>
+            <td>
+              <Button
+                link
+                className="red-warning"
+                icon="trash"
+                id="remove-from-trial-session-btn"
+                onClick={() => {
+                  removeHearingSequence({
+                    trialSessionId: hearing.trialSessionId,
+                  });
+                }}
+              >
+                Remove
+              </Button>
+            </td>
+          </tr>
+          {/* TODO trial session note */}
+          {true === false && (
+            <tr>
+              <td colSpan="4">{/* note */}</td>
+            </tr>
+          )}
+        </tbody>
+      );
+    });
+  } else {
+    return null;
+  }
+};
+
 const TrialInformation = ({
   caseDetail,
   openAddToTrialModalSequence,
@@ -139,6 +183,10 @@ const TrialInformation = ({
                 </tr>
               )}
             </tbody>
+            <DisplayHearings
+              hearings={caseDetail.hearings}
+              removeHearingSequence={openRemoveFromTrialSessionModalSequence}
+            />
           </table>
         </div>
 
@@ -224,6 +272,10 @@ const TrialInformation = ({
                 </tr>
               )}
             </tbody>
+            <DisplayHearings
+              hearings={caseDetail.hearings}
+              removeHearingSequence={openRemoveFromTrialSessionModalSequence}
+            />
           </table>
         </div>
       </>
@@ -395,6 +447,10 @@ const TrialInformation = ({
                 </tr>
               )}
             </tbody>
+            <DisplayHearings
+              hearings={caseDetail.hearings}
+              removeHearingSequence={openRemoveFromTrialSessionModalSequence}
+            />
           </table>
         </div>
       </>
