@@ -14,11 +14,11 @@ export const formattedClosedCases = (get, applicationContext) => {
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
-const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
+const getUserIsAssignedToSession = ({ currentUser, get, trialSessionId }) => {
   const sessions = get(state.trialSessions);
   let session;
   if (sessions) {
-    session = sessions.find(s => s.trialSessionId === result.trialSessionId);
+    session = sessions.find(s => s.trialSessionId === trialSessionId);
   }
 
   const judge = get(state.judgeUser);
@@ -316,6 +316,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
         trialSessionId: hearing.trialSessionId,
         trialSessions: allTrialSessions,
       });
+
+      hearing.userIsAssignedToSession = getUserIsAssignedToSession({
+        currentUser: user,
+        get,
+        trialSessionId: hearing.trialSessionId,
+      });
+
       return hearing;
     });
   }
@@ -323,7 +330,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   result.userIsAssignedToSession = getUserIsAssignedToSession({
     currentUser: user,
     get,
-    result,
+    trialSessionId: caseDetail.trialSessionId,
   });
 
   result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;
