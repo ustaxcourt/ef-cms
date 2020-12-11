@@ -72,12 +72,12 @@ exports.parseLegacyDocumentsInteractor = async ({
     );
   }
 
-  // This appears to be unused?
   foundDocketEntry.documentContentsId = documentContentsId;
 
-  // ... unless somehow it makes it into caseEntity by reference?
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    docketEntryId: foundDocketEntry.docketEntryId,
+    docketNumber: caseEntity.docketNumber,
+    document: foundDocketEntry,
   });
 };

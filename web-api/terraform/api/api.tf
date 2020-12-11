@@ -200,12 +200,67 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_authorizer.custom_authorizer
   ]
   rest_api_id       = aws_api_gateway_rest_api.gateway_for_api.id
-  stage_name        = var.environment
-  stage_description = "Deployed at ${timestamp()}"
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_api_gateway_stage" "api_stage" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  stage_name    = var.environment
+  description   = "Deployed at ${timestamp()}"
+  deployment_id = aws_api_gateway_deployment.api_deployment.id
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_stage_logs.arn
+
+    format = jsonencode({
+      level = "info"
+      message = "API Gateway Access Log"
+
+      environment = {
+        stage = var.environment
+        color = var.current_color
+      }
+
+      requestId = {
+        apiGateway = "$context.requestId"
+        lambda = "$context.integration.requestId"
+        authorizer = "$context.authorizer.requestId"
+      }
+
+      request = {
+        headers = {
+          x-forwarded-for = "$context.identity.sourceIp"
+          user-agent = "$context.identity.userAgent"
+        }
+        method = "$context.httpMethod"
+      }
+
+      authorizer = {
+        error = "$context.authorizer.error"
+        responseTimeMs = "$context.authorizer.integrationLatency"
+        statusCode = "$context.authorizer.status"
+      }
+
+      response = {
+        responseTimeMs = "$context.responseLatency"
+        responseLength = "$context.responseLength"
+        statusCode = "$context.status"
+      }
+
+      metadata = {
+        apiId = "$context.apiId"
+        resourcePath = "$context.resourcePath"
+        resourceId = "$context.resourceId"
+      }
+    })
+  }
+}
+
+resource "aws_cloudwatch_log_group" "api_stage_logs" {
+  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api.name}"
 }
 
 resource "aws_acm_certificate" "api_gateway_cert" {
@@ -268,6 +323,17 @@ resource "aws_route53_record" "api_route53_regional_record" {
 
 resource "aws_api_gateway_base_path_mapping" "api_mapping" {
   api_id      = aws_api_gateway_rest_api.gateway_for_api.id
-  stage_name  = aws_api_gateway_deployment.api_deployment.stage_name
+  stage_name  = aws_api_gateway_stage.api_stage.stage_name
   domain_name = aws_api_gateway_domain_name.api_custom.domain_name
+}
+
+resource "aws_api_gateway_method_settings" "api_default" {
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+  stage_name  = aws_api_gateway_stage.api_stage.stage_name
+  method_path = "*/*"
+
+  settings {
+    throttling_burst_limit = 5000
+    throttling_rate_limit = 10000
+  }
 }

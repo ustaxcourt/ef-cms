@@ -636,7 +636,7 @@ describe('messageDocumentHelper', () => {
   });
 
   describe('showEditCorrespondenceButton', () => {
-    it('return showEditCorrespondenceButton true for a correspondence document', () => {
+    it('returns true for a correspondence document when the user has permission to edit', () => {
       applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
       const result = runCompute(messageDocumentHelper, {
@@ -657,7 +657,31 @@ describe('messageDocumentHelper', () => {
         },
       });
 
-      expect(result.showEditCorrespondenceButton).toEqual(true);
+      expect(result.showEditCorrespondenceButton).toBeTruthy();
+    });
+
+    it('returns false for a correspondence document when the user does not have permission to edit', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+            correspondence: [
+              {
+                correspondenceId: '567',
+                documentTitle: 'Test Correspondence',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            documentId: '567',
+          },
+        },
+      });
+
+      expect(result.showEditCorrespondenceButton).toBeFalsy();
     });
 
     it('return showEditCorrespondenceButton false for a non-correspondence document', () => {

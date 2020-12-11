@@ -1,11 +1,12 @@
 const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const {
+  CASE_STATUS_TYPES,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
 } = require('../entities/EntityConstants');
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -103,8 +104,12 @@ exports.updatePetitionDetailsInteractor = async ({
   }
 
   if (
-    newCase.isReadyForTrial() &&
-    oldCase.preferredTrialCity !== newCase.preferredTrialCity
+    oldCase.preferredTrialCity !== newCase.preferredTrialCity &&
+    (newCase.highPriority ||
+      newCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
+    newCase.preferredTrialCity &&
+    !newCase.blocked &&
+    !newCase.automaticBlocked
   ) {
     await applicationContext
       .getPersistenceGateway()

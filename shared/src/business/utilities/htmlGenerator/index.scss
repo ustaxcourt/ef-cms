@@ -20,6 +20,10 @@ h2 {
   text-align: center;
 }
 
+.padding-top-1 {
+  padding-top: 12px;
+}
+
 p.heading-address {
   width: 100%;
   font-size: 12px;
@@ -225,6 +229,12 @@ th {
   padding: 10px;
 }
 
+.internal-card-content {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+}
+
 // TODO: Refactor these in favor of "cards"
 .info-box {
   border: 1px solid #ccc;
@@ -267,6 +277,15 @@ th {
   font-family: 'nimbus_roman', serif;
   font-size: 14px;
   line-height: 13px;
+}
+
+.stricken-docket-record {
+  text-decoration: line-through;
+
+  &.usa-button,
+  &.view-pdf-link {
+    text-decoration: underline line-through;
+  }
 }
 
 .us-tax-court-seal {

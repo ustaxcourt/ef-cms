@@ -252,7 +252,9 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   }
 
   this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending && docketEntry.servedAt,
+    docketEntry =>
+      docketEntry.pending &&
+      (docketEntry.servedAt || docketEntry.isLegacyServed),
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
@@ -274,11 +276,7 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
       )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
-    this.isSealed =
-      !!rawCase.sealedDate ||
-      this.docketEntries.some(
-        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-      );
+    this.isSealed = isSealedCase(rawCase);
 
     if (
       filtered &&
@@ -824,7 +822,9 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 
 Case.prototype.doesHavePendingItems = function () {
   return this.docketEntries.some(
-    docketEntry => docketEntry.pending && docketEntry.servedAt,
+    docketEntry =>
+      docketEntry.pending &&
+      (docketEntry.servedAt || docketEntry.isLegacyServed),
   );
 };
 
@@ -1886,8 +1886,20 @@ Case.prototype.hasPartyWithPaperService = function () {
   );
 };
 
+const isSealedCase = rawCase => {
+  const isSealed =
+    rawCase.isSealed ||
+    !!rawCase.sealedDate ||
+    (Array.isArray(rawCase.docketEntries) &&
+      rawCase.docketEntries.some(
+        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+      ));
+  return isSealed;
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
   getPetitionDocketEntryFromDocketEntries,
   isAssociatedUser,
+  isSealedCase,
 };

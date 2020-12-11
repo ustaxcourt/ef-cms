@@ -38,7 +38,7 @@ exports.generatePrintablePendingReportInteractor = async ({
   } else {
     pendingDocuments = (
       await applicationContext
-        .getUseCaseHelpers()
+        .getPersistenceGateway()
         .fetchPendingItems({ applicationContext, judge })
     ).foundDocuments;
   }

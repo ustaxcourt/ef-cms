@@ -263,9 +263,6 @@ const {
 } = require('../../shared/src/business/utilities/documentUrlTranslator');
 const {
   fetchPendingItems,
-} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
-const {
-  fetchPendingItems: fetchPendingItemsPersistence,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
 const {
   fetchPendingItemsByDocketNumber,
@@ -352,9 +349,6 @@ const {
 const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
-const {
-  getBlockedCases: getBlockedCasesOld,
-} = require('../../shared/src/persistence/elasticsearch/getBlockedCases.old');
 const {
   getBlockedCasesInteractor,
 } = require('../../shared/src/business/useCases/getBlockedCasesInteractor');
@@ -988,7 +982,6 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
-const { isCodeDisabled } = require('../../codeToggles');
 const { User } = require('../../shared/src/business/entities/User');
 const { v4: uuidv4 } = require('uuid');
 
@@ -1133,7 +1126,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     createUser,
     createUserInboxRecord,
-    fetchPendingItems: fetchPendingItemsPersistence,
+    fetchPendingItems,
     getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
@@ -1182,7 +1175,7 @@ const gatewayMethods = {
   deleteUserOutboxRecord,
   deleteWorkItemFromInbox,
   deleteWorkItemFromSection,
-  getBlockedCases: isCodeDisabled(7137) ? getBlockedCasesOld : getBlockedCases,
+  getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
   getCaseDeadlinesByDateRange,

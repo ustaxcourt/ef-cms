@@ -8,6 +8,10 @@ import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSession
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
+import { adminContactUpdateCompleteSequence } from './sequences/adminContactUpdateCompleteSequence';
+import { adminContactUpdateErrorSequence } from './sequences/adminContactUpdateErrorSequence';
+import { adminContactUpdateInitialUpdateCompleteSequence } from './sequences/adminContactUpdateInitialUpdateCompleteSequence';
+import { adminContactUpdateProgressSequence } from './sequences/adminContactUpdateProgressSequence';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
 import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSequence';
@@ -78,7 +82,6 @@ import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMess
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
-import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileDocketEntrySequence } from './sequences/fileDocketEntrySequence';
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
@@ -104,6 +107,7 @@ import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoCompleteDocketEntrySequence } from './sequences/gotoCompleteDocketEntrySequence';
+import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoCreatePractitionerUserSequence } from './sequences/gotoCreatePractitionerUserSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
@@ -136,6 +140,7 @@ import { gotoPrintableCaseInventoryReportSequence } from './sequences/gotoPrinta
 import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
 import { gotoPrintablePendingReportForCaseSequence } from './sequences/gotoPrintablePendingReportForCaseSequence';
 import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
+import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
 import { gotoSecondaryContactEditSequence } from './sequences/gotoSecondaryContactEditSequence';
@@ -449,6 +454,10 @@ export const presenter = {
     addPenaltyInputSequence,
     addStatisticToFormSequence,
     addSupportingDocumentToFormSequence,
+    adminContactUpdateCompleteSequence,
+    adminContactUpdateErrorSequence,
+    adminContactUpdateInitialUpdateCompleteSequence,
+    adminContactUpdateProgressSequence,
     advancedSearchTabChangeSequence,
     archiveDraftDocumentModalSequence,
     archiveDraftDocumentSequence,
@@ -519,7 +528,6 @@ export const presenter = {
     dismissModalSequence,
     editCorrespondenceDocumentSequence,
     editUploadCourtIssuedDocumentSequence,
-    fetchPendingItemsSequence,
     fetchUserNotificationsSequence,
     fileDocketEntrySequence,
     filterCaseDeadlinesByJudgeSequence,
@@ -545,6 +553,7 @@ export const presenter = {
     gotoCaseInventoryReportSequence,
     gotoCaseSearchNoMatchesSequence,
     gotoCompleteDocketEntrySequence,
+    gotoContactSequence,
     gotoCreateOrderSequence,
     gotoCreatePractitionerUserSequence,
     gotoDashboardSequence,
@@ -577,6 +586,7 @@ export const presenter = {
     gotoPrintableDocketRecordSequence,
     gotoPrintablePendingReportForCaseSequence,
     gotoPrintablePendingReportSequence,
+    gotoPrivacySequence,
     gotoRequestAccessSequence,
     gotoReviewSavedPetitionSequence,
     gotoSecondaryContactEditSequence,

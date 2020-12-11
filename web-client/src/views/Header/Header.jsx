@@ -163,7 +163,7 @@ export const Header = connect(
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
-    showBetaBar: state.header.showBetaBar,
+    showBetaBar: state.templateHelper.showBetaBar,
     showMobileMenu: state.header.showMobileMenu,
     signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,

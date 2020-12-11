@@ -40,6 +40,8 @@ export const docketClerkViewsCaseDetailDocumentView = test => {
 
     test.docketEntryId = formatted.pendingItemsDocketEntries[0].docketEntryId;
 
+    expect(test.getState('docketEntryId')).toEqual(test.docketEntryId);
+
     expect(
       test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
     ).toEqual('documentView');

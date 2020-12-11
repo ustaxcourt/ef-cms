@@ -14,6 +14,7 @@ import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
 import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
+import { Contact } from './Contact';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
@@ -21,7 +22,6 @@ import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
-import { DashboardJudge as DashboardJudge6921 } from './Dashboards/DashboardJudge.6921';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
@@ -58,6 +58,7 @@ import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
+import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
@@ -79,7 +80,6 @@ import { UserContactEdit } from './UserContactEdit';
 import { UserContactEditProgress } from './UserContactEditProgress';
 import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
-import { applicationContext } from '../applicationContext';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -99,6 +99,7 @@ const pages = {
   CaseDetailInternal,
   CaseInventoryReport,
   CaseSearchNoMatches,
+  Contact,
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,
@@ -139,6 +140,7 @@ const pages = {
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
+  Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
   SecondaryContactEdit,
@@ -158,10 +160,6 @@ const pages = {
   UserContactEditProgress,
   WorkQueue,
 };
-
-if (applicationContext.isCodeEnabled(6921)) {
-  pages.DashboardJudge = DashboardJudge6921;
-}
 
 /**
  * Root application component
@@ -209,8 +207,10 @@ export const AppComponent = connect(
           {zipInProgress && <BatchDownloadProgress />}
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
-        <Footer />
         <Loading />
+
+        <Footer />
+
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
         )}

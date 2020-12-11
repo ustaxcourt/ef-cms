@@ -15,7 +15,6 @@ import {
   compareISODateStrings,
   compareStrings,
 } from '../../shared/src/business/utilities/sortFunctions';
-import { isCodeEnabled } from '../../codeToggles';
 const {
   filterQcItemsByAssociatedJudge,
 } = require('../../shared/src/business/utilities/filterQcItemsByAssociatedJudge');
@@ -526,6 +525,9 @@ const applicationContext = {
     return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
+  getEnvironment: () => ({
+    stage: process.env.STAGE || 'local',
+  }),
   getError: e => {
     return ErrorFactory.getError(e);
   },
@@ -640,7 +642,6 @@ const applicationContext = {
     };
   },
   initHoneybadger,
-  isCodeEnabled,
   notifyHoneybadger: async (message, context) => {
     const honeybadger = await initHoneybadger();
 

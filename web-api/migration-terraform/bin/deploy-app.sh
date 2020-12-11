@@ -3,13 +3,20 @@
 ENVIRONMENT=$1
 
 [ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as a command line argument 1" && exit 1
-[ -z "${SOURCE_TABLE}" ] && echo "You set SOURCE_TABLE as an environment variable" && exit 1
+[ -z "${SOURCE_TABLE}" ] && echo "You must set SOURCE_TABLE as an environment variable" && exit 1
 [ -z "${DESTINATION_TABLE}" ] && echo "You set DESTINATION_TABLE as an environment variable" && exit 1
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="migrations-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
+
+tf_version=$(terraform --version)
+
+if [[ ${tf_version} != *"0.12.28"* ]]; then
+  echo "Please set your terraform version to 0.12.28 before deploying."
+  exit 1
+fi
 
 rm -rf .terraform
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"

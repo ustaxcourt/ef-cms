@@ -104,7 +104,7 @@ describe('createTrialSessionAndWorkingCopy', () => {
           trialSessionToAdd: omit(trialSessionToAdd, 'trialSessionId'),
         }),
       ).rejects.toThrow(
-        'The TrialSessionWorkingCopy entity was invalid. {"trialSessionId":"\'trialSessionId\' is required"}. {"trialSessionId":"<undefined>","userId":"d90e7b8c-c8a1-4b96-9b30-70bd47b63df0"}',
+        'The TrialSessionWorkingCopy entity was invalid. {"trialSessionId":"\'trialSessionId\' is required"}',
       );
     });
   });

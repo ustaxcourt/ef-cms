@@ -40,7 +40,9 @@ export const getShowDocumentViewerLink = ({
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
+  isHiddenToPublic,
   isInitialDocument,
+  isLegacySealed,
   isServed,
   isStipDecision,
   isStricken,
@@ -49,11 +51,12 @@ export const getShowDocumentViewerLink = ({
   userHasNoAccessToDocument,
 }) => {
   if (!hasDocument) return false;
+  if (!userHasAccessToCase && isHiddenToPublic) return false;
 
   if (isExternalUser) {
     if (isStricken) return false;
+    if (isLegacySealed) return false;
     if (userHasNoAccessToDocument) return false;
-
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
       if (!isServed) return false;
@@ -76,6 +79,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
@@ -203,10 +207,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       !permissions.UPDATE_CASE &&
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-    formattedResult.showNotServed =
-      !formattedResult.isUnservable &&
-      entry.isNotServedDocument &&
-      !entry.isMinuteEntry;
+    formattedResult.showNotServed = entry.isNotServedDocument;
     formattedResult.showServed = entry.isStatusServed;
 
     const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
@@ -217,7 +218,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
       hasDocument: entry.isFileAttached,
       isCourtIssuedDocument: entry.isCourtIssuedDocument,
       isExternalUser,
+      isHiddenToPublic: EVENT_CODES_NOT_VISIBLE_TO_PUBLIC.includes(
+        entry.eventCode,
+      ),
       isInitialDocument,
+      isLegacySealed: entry.isLegacySealed,
       isServed: !!entry.servedAt,
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
@@ -244,7 +249,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
       userPermissions: permissions,
     });
 
-    formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
+    formattedResult.showDocumentDescriptionWithoutLink =
+      !showDocumentLinks && !formattedResult.showDocumentProcessing;
 
     return formattedResult;
   });
@@ -254,7 +260,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && d.servedAt,
+    d => d.pending && (d.servedAt || d.isLegacyServed),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
