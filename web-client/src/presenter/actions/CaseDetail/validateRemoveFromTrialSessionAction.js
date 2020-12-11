@@ -5,12 +5,20 @@ import { state } from 'cerebral';
  * validate the remove from trial session form
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context for getting constants
  * @param {Function} providers.get the cerebral get function used for getting state.modal
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateRemoveFromTrialSessionAction = ({ get, path }) => {
+export const validateRemoveFromTrialSessionAction = ({
+  applicationContext,
+  get,
+  path,
+}) => {
   const { associatedJudge, caseStatus, disposition } = get(state.modal);
+  const {
+    STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  } = applicationContext.getConstants();
 
   let errors = {};
   if (!disposition) {
@@ -21,13 +29,11 @@ export const validateRemoveFromTrialSessionAction = ({ get, path }) => {
     errors.caseStatus = 'Enter a case status';
   }
 
-  if (!associatedJudge) {
-    errors.associatedJudge = 'Enter an associated judge';
-  }
-
-  if (associatedJudge && associatedJudge.length > 50) {
-    errors.associatedJudge =
-      'The length of the associated judge must not be over 50';
+  if (
+    STATUS_TYPES_WITH_ASSOCIATED_JUDGE.includes(caseStatus) &&
+    !associatedJudge
+  ) {
+    errors.associatedJudge = 'Select an associated judge';
   }
 
   if (isEmpty(errors)) {

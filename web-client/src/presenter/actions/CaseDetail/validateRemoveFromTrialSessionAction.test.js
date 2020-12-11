@@ -1,6 +1,9 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateRemoveFromTrialSessionAction } from './validateRemoveFromTrialSessionAction';
+
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('validateRemoveFromTrialSessionAction', () => {
   let successStub;
@@ -75,29 +78,6 @@ describe('validateRemoveFromTrialSessionAction', () => {
     expect(successStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error with and error message and not call path.success if the length of state.modal.associatedJudge is over 50', async () => {
-    await runAction(validateRemoveFromTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        modal: {
-          ...mockState,
-          associatedJudge: '0'.repeat(51),
-        },
-      },
-    });
-
-    expect(errorStub).toHaveBeenCalled();
-    expect(errorStub.mock.calls[0][0]).toEqual({
-      errors: {
-        associatedJudge:
-          'The length of the associated judge must not be over 50',
-      },
-    });
-    expect(successStub).not.toHaveBeenCalled();
-  });
-
   it('should call path.error with and error message and not call path.success if state.modal.associatedJudge is required', async () => {
     await runAction(validateRemoveFromTrialSessionAction, {
       modules: {
@@ -107,6 +87,7 @@ describe('validateRemoveFromTrialSessionAction', () => {
         modal: {
           ...mockState,
           associatedJudge: undefined,
+          caseStatus: 'Submitted',
         },
       },
     });
@@ -114,7 +95,7 @@ describe('validateRemoveFromTrialSessionAction', () => {
     expect(errorStub).toHaveBeenCalled();
     expect(errorStub.mock.calls[0][0]).toEqual({
       errors: {
-        associatedJudge: 'Enter an associated judge',
+        associatedJudge: 'Select an associated judge',
       },
     });
     expect(successStub).not.toHaveBeenCalled();
