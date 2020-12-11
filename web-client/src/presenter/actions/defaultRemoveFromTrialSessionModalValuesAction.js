@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -14,7 +15,7 @@ export const defaultRemoveFromTrialSessionModalValuesAction = ({
 }) => {
   const { trialSessionId } = props;
   const caseDetail = get(state.caseDetail);
-  let { associatedJudge, status } = caseDetail;
+  let { associatedJudge, status } = cloneDeep(caseDetail);
 
   store.set(state.modal.caseStatus, status);
   store.set(state.modal.associatedJudge, associatedJudge);
