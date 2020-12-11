@@ -75,7 +75,7 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showExternalButtons).toEqual(false);
   });
 
-  it('should set showExternalButtons false if user is an external user and the petition document on the case is not yet served', () => {
+  it('should set showExternalButtons false if user is an external user and the case does not have any served docket entries', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
@@ -96,7 +96,7 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showExternalButtons).toEqual(false);
   });
 
-  it('should set showExternalButtons true if user is an external user and the petition document on the case is served', () => {
+  it('should set showExternalButtons true if user is an external user and the case has served docket entries', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
@@ -108,6 +108,27 @@ describe('caseDetailHeaderHelper', () => {
           docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: true,
+        },
+      },
+    });
+    expect(result.showExternalButtons).toEqual(true);
+  });
+
+  it('should set showExternalButtons true if user is an external user and the case has isLegacyServed docket entries', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
         },
         currentPage: 'CaseDetail',
         form: {},
