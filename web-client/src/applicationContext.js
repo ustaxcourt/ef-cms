@@ -1,16 +1,15 @@
 import {
+  Case,
+  caseHasServedDocketEntries,
+} from '../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { ErrorFactory } from './presenter/errors/ErrorFactory';
+import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
-
-import {
-  Case,
-  getPetitionDocketEntryFromDocketEntries,
-} from '../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
-import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
   compareISODateStrings,
   compareStrings,
@@ -597,6 +596,7 @@ const applicationContext = {
     return {
       aggregatePartiesForService,
       calculateISODate,
+      caseHasServedDocketEntries,
       checkDate,
       compareCasesByDocketNumber,
       compareISODateStrings,
@@ -626,7 +626,6 @@ const applicationContext = {
       getFormattedCaseDetail,
       getJudgeLastName,
       getMonthDayYearObj,
-      getPetitionDocketEntryFromDocketEntries,
       getServedPartiesCode,
       getTrialSessionStatus,
       getWorkQueueFilters,
