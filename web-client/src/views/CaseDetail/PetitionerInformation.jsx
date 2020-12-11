@@ -136,6 +136,7 @@ const PetitionerInformation = connect(
                     <address aria-labelledby="secondary-label">
                       <AddressDisplay
                         contact={formattedCaseDetail.contactSecondary}
+                        showEmail={true}
                         showSealAddressLink={
                           caseInformationHelper.showSealAddressLink
                         }

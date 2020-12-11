@@ -1,4 +1,3 @@
-jest.mock('../../../../codeToggles');
 const {
   applicationContext,
 } = require('../../../../web-client/src/applicationContext');
@@ -23,7 +22,6 @@ const {
   TRANSCRIPT_AGE_DAYS_MIN,
 } = require('./getFormattedCaseDetail');
 const { calculateISODate, createISODateString } = require('./DateHandler');
-const { isCodeEnabled } = require('../../../../codeToggles');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
 applicationContext.getCurrentUser = () =>
@@ -48,7 +46,6 @@ describe('formatCase', () => {
     mockCaseDetail = {
       ...mockCaseDetailBase,
     };
-    isCodeEnabled.mockReturnValue(true);
   });
 
   it('should return an empty object if caseDetail is empty', () => {
@@ -163,41 +160,39 @@ describe('formatCase', () => {
     expect(result.formattedDocketEntries[1].isUnservable).toBeTruthy();
   });
 
-  if (isCodeEnabled(7164)) {
-    it('should compute isNotServedDocument', () => {
-      let result;
-      result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        docketEntries: [
-          {
-            isLegacyServed: undefined,
-            isMinuteEntry: undefined,
-            servedAt: undefined,
-          },
-          {
-            isLegacyServed: true,
-            isMinuteEntry: undefined,
-            servedAt: undefined,
-          },
-          {
-            isLegacyServed: undefined,
-            isMinuteEntry: true,
-            servedAt: undefined,
-          },
-          {
-            isLegacyServed: undefined,
-            isMinuteEntry: undefined,
-            servedAt: createISODateString(),
-          },
-        ],
-      });
-
-      expect(result.formattedDocketEntries[0].isNotServedDocument).toBe(true);
-      expect(result.formattedDocketEntries[1].isNotServedDocument).toBe(false);
-      expect(result.formattedDocketEntries[2].isNotServedDocument).toBe(false);
-      expect(result.formattedDocketEntries[3].isNotServedDocument).toBe(false);
+  it('should compute isNotServedDocument', () => {
+    let result;
+    result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries: [
+        {
+          isLegacyServed: undefined,
+          isMinuteEntry: undefined,
+          servedAt: undefined,
+        },
+        {
+          isLegacyServed: true,
+          isMinuteEntry: undefined,
+          servedAt: undefined,
+        },
+        {
+          isLegacyServed: undefined,
+          isMinuteEntry: true,
+          servedAt: undefined,
+        },
+        {
+          isLegacyServed: undefined,
+          isMinuteEntry: undefined,
+          servedAt: createISODateString(),
+        },
+      ],
     });
-  }
+
+    expect(result.formattedDocketEntries[0].isNotServedDocument).toBe(true);
+    expect(result.formattedDocketEntries[1].isNotServedDocument).toBe(false);
+    expect(result.formattedDocketEntries[2].isNotServedDocument).toBe(false);
+    expect(result.formattedDocketEntries[3].isNotServedDocument).toBe(false);
+  });
 
   it('should format the filing date of all correspondence documents', () => {
     const result = formatCase(applicationContext, {
@@ -323,7 +318,7 @@ describe('formatCase', () => {
     ]);
   });
 
-  it('should return docket entries with pending and isLegacyServed for pendingItemsDocketEntries if 7198 is toggled on', () => {
+  it('should return docket entries with pending and isLegacyServed for pendingItemsDocketEntries', () => {
     const docketEntries = [
       {
         createdAt: getDateISO(),
@@ -347,30 +342,6 @@ describe('formatCase', () => {
         index: '1',
       },
     ]);
-  });
-
-  it('should NOT return docket entries with pending and isLegacyServed for pendingItemsDocketEntries if 7198 is toggled off', () => {
-    isCodeEnabled.mockReturnValue(false);
-
-    const docketEntries = [
-      {
-        createdAt: getDateISO(),
-        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-        documentType: 'Administrative Record',
-        filingDate: getDateISO(),
-        index: '1',
-        isLegacyServed: true,
-        isOnDocketRecord: true,
-        pending: true,
-      },
-    ];
-
-    const result = formatCase(applicationContext, {
-      ...mockCaseDetail,
-      docketEntries,
-    });
-
-    expect(result.pendingItemsDocketEntries).toMatchObject([]);
   });
 
   it('should return an empty array for formattedDocketEntries and pendingItemsDocketEntries if docketRecord does not exist', () => {

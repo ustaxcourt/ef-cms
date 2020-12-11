@@ -1,4 +1,4 @@
-const { Case } = require('../../entities/cases/Case');
+const { Case, isSealedCase } = require('../../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
@@ -29,7 +29,7 @@ exports.getCaseForPublicDocketSearchInteractor = async ({
 
   let caseDetailRaw;
 
-  if (caseRecord.sealedDate || caseRecord.isSealed) {
+  if (isSealedCase(caseRecord)) {
     const error = new UnauthorizedError(`Case ${docketNumber} is sealed.`);
     error.skipLogging = true;
     throw error;
