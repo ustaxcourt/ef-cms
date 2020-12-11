@@ -19,9 +19,9 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
     DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
     DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
   ];
-  caseItem.isHighPriority =
-    highPrioritySuffixes.includes(caseItem.docketNumberSuffix) ||
-    caseItem.highPriority === true;
+  caseItem.isHighPriority = highPrioritySuffixes.includes(
+    caseItem.docketNumberSuffix,
+  );
   return caseItem;
 };
 
@@ -29,6 +29,10 @@ exports.compareTrialSessionEligibleCases = (a, b) => {
   if (a.isManuallyAdded && !b.isManuallyAdded) {
     return -1;
   } else if (!a.isManuallyAdded && b.isManuallyAdded) {
+    return 1;
+  } else if (a.highPriority && !b.highPriority) {
+    return -1;
+  } else if (!a.highPriority && b.highPriority) {
     return 1;
   } else if (a.isHighPriority && !b.isHighPriority) {
     return -1;
