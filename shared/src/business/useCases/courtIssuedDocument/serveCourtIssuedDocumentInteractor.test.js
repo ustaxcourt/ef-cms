@@ -403,23 +403,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId', async () => {
-    extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
-      docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
-      docketNumber: '101-20',
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-  });
-
-  it('should remove the case from the trial session if the case has a trialSessionId', async () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({

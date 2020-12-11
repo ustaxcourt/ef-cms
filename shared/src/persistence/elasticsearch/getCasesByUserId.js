@@ -1,9 +1,5 @@
 const {
-  calculateISODate,
-  createISODateString,
-} = require('../../business/utilities/DateHandler');
-const {
-  CASE_STATUS_TYPES,
+  MAX_ELASTICSEARCH_PAGINATION,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
@@ -18,78 +14,46 @@ const { search } = require('./searchClient');
 exports.getCasesByUserId = async ({ applicationContext, userId }) => {
   const source = ['docketNumber'];
 
-  const currentDate = createISODateString();
-  const maxClosedDate = calculateISODate({
-    dateString: currentDate,
-    howMuch: -6,
-    units: 'months',
-  });
-
-  const { results } = await search({
+  const { results, total } = await search({
     applicationContext,
     searchParameters: {
       body: {
         _source: source,
         query: {
           bool: {
-            minimum_should_match: 1,
-            should: [
+            must: [
+              { match: { 'pk.S': 'case|' } },
+              { match: { 'sk.S': 'case|' } },
               {
-                bool: {
-                  must: [
-                    { match: { 'pk.S': 'case|' } },
-                    { match: { 'sk.S': 'case|' } },
-                    {
-                      query_string: {
-                        fields: [
-                          'privatePractitioners.L.M.userId.S',
-                          'irsPractitioners.L.M.userId.S',
-                          'userId.S',
-                        ],
-                        query: `"${userId}"`,
-                      },
-                    },
-                    { match: { 'status.S': CASE_STATUS_TYPES.closed } },
-                    {
-                      range: {
-                        'closedDate.S': {
-                          format: 'strict_date_time',
-                          gte: maxClosedDate,
-                        },
-                      },
-                    },
+                query_string: {
+                  fields: [
+                    'privatePractitioners.L.M.userId.S',
+                    'irsPractitioners.L.M.userId.S',
+                    'userId.S',
                   ],
-                },
-              },
-              {
-                bool: {
-                  must: [
-                    { match: { 'pk.S': 'case|' } },
-                    { match: { 'sk.S': 'case|' } },
-                    {
-                      query_string: {
-                        fields: [
-                          'privatePractitioners.L.M.userId.S',
-                          'irsPractitioners.L.M.userId.S',
-                          'userId.S',
-                        ],
-                        query: `"${userId}"`,
-                      },
-                    },
-                  ],
-                  must_not: {
-                    match: { 'status.S': CASE_STATUS_TYPES.closed },
-                  },
+                  query: `"${userId}"`,
                 },
               },
             ],
           },
         },
-        size: 5000,
+        size: 10000,
       },
       index: 'efcms-case',
     },
   });
 
+  // Cannot use from and size to paginate through a result with more than 10,000 hits
+  // https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html
+  if (total > MAX_ELASTICSEARCH_PAGINATION) {
+    applicationContext.logger.warn(
+      `Search for cases associated with user|${userId} returned ${total} hits; cannot paginate`,
+      { userId },
+    );
+  }
+
+  applicationContext.logger.info(
+    `Found ${results.length} cases associated with user|${userId}`,
+  );
   return results;
 };
