@@ -1104,7 +1104,7 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  describe('getCalendarNoteForTrialSession', () => {
+  describe('getCalendarDetailsForTrialSession', () => {
     it('adds the calendarNotes from the trialSession caseOrder if a trialSessionId is set on the case', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
@@ -1140,7 +1140,7 @@ describe('formattedCaseDetail', () => {
       expect(result.trialSessionNotes).toEqual('Test notes');
     });
 
-    it('adds calendarNotes from trialSessions to case hearings', () => {
+    it('adds calendarNotes and addedToSessionAt fields from trialSessions to case hearings', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
@@ -1177,6 +1177,7 @@ describe('formattedCaseDetail', () => {
             {
               caseOrder: [
                 {
+                  addedToSessionAt: '2019-01-01T17:29:13.122Z',
                   calendarNotes: 'Hearing notes one.',
                   docketNumber: '123-45',
                 },
@@ -1186,6 +1187,7 @@ describe('formattedCaseDetail', () => {
             {
               caseOrder: [
                 {
+                  addedToSessionAt: '2019-01-02T17:29:13.122Z',
                   calendarNotes: 'Hearing notes two.',
                   docketNumber: '123-45',
                 },
@@ -1199,10 +1201,12 @@ describe('formattedCaseDetail', () => {
 
       expect(result.hearings).toMatchObject([
         {
+          addedToSessionAt: '2019-01-01T17:29:13.122Z',
           calendarNotes: 'Hearing notes one.',
           trialSessionId: '234',
         },
         {
+          addedToSessionAt: '2019-01-02T17:29:13.122Z',
           calendarNotes: 'Hearing notes two.',
           trialSessionId: '345',
         },
