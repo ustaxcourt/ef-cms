@@ -67,15 +67,20 @@ export const RemoveFromTrialSessionModal = connect(
         {removeFromTrialSessionModalHelper.showCaseStatusDropdown && (
           <div className="margin-bottom-4">
             <FormGroup errorText={validationErrors.caseStatus}>
-              <label className="usa-label" htmlFor="caseStatus">
+              <label
+                className="usa-label"
+                htmlFor="caseStatus"
+                id="case-status"
+              >
                 Case status{' '}
               </label>
               <select
+                aria-labelledby="case-status"
                 className={classNames(
                   'usa-select',
                   validationErrors.caseStatus && 'usa-select--error',
                 )}
-                id="case-status"
+                id="Status"
                 name="caseStatus"
                 value={removeFromTrialSessionModalHelper.defaultCaseStatus}
                 onChange={e => {
