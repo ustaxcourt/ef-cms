@@ -1,8 +1,8 @@
 import { fakeFile1 } from '../helpers';
 import axios from 'axios';
 
-export const docketClerkEditsCorrespondence = test =>
-  it('docketclerk edits the documentTitle for a correspondence', async () => {
+export const userEditsCorrespondence = (test, user) =>
+  it(`${user} edits the documentTitle for a correspondence`, async () => {
     const { docketNumber } = test.getState('caseDetail');
     let docketEntryId = test.getState('docketEntryId');
 
