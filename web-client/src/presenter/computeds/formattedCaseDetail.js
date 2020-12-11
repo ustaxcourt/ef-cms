@@ -332,6 +332,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
         trialSessionId: hearing.trialSessionId,
       });
     });
+
+    result.hearings.sort((a, b) => {
+      return applicationContext
+        .getUtilities()
+        .compareISODateStrings(a.addedToSessionAt, b.addedToSessionAt);
+    });
   }
 
   result.userIsAssignedToSession = getUserIsAssignedToSession({
