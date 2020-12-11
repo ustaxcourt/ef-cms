@@ -60,7 +60,7 @@ const handleIrsSuperUser = ({
 };
 
 const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
-  if (!docketEntryEntity.servedAt) {
+  if (!docketEntryEntity.servedAt && !docketEntryEntity.isLegacyServed) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   } else if (
     docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
