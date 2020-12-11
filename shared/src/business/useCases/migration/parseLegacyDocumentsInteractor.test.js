@@ -130,14 +130,12 @@ describe('parseLegacyDocumentsInteractor', () => {
       docketNumber: mockDocketNumber,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[0][0].key,
-    ).toEqual(mockUniqueID);
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[0][0].document,
-    ).toEqual(
+    const saveParams = applicationContext.getPersistenceGateway()
+      .saveDocumentFromLambda.mock.calls[0][0];
+
+    expect(saveParams.key).toEqual(mockUniqueID);
+    expect(saveParams.contentType).toEqual('application/json');
+    expect(saveParams.document).toEqual(
       Buffer.from(JSON.stringify({ documentContents: mockPdfTextContents })),
     );
   });
