@@ -174,7 +174,9 @@ const TrialInformation = ({
                     icon="trash"
                     id="remove-from-trial-session-btn"
                     onClick={() => {
-                      openRemoveFromTrialSessionModalSequence();
+                      openRemoveFromTrialSessionModalSequence({
+                        trialSessionId: caseDetail.trialSessionId,
+                      });
                     }}
                   >
                     Remove
@@ -262,7 +264,9 @@ const TrialInformation = ({
                     icon="trash"
                     id="remove-from-trial-session-btn"
                     onClick={() => {
-                      openRemoveFromTrialSessionModalSequence();
+                      openRemoveFromTrialSessionModalSequence({
+                        trialSessionId: caseDetail.trialSessionId,
+                      });
                     }}
                   >
                     Remove
