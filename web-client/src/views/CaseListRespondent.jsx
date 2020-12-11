@@ -165,7 +165,7 @@ export const CaseListRespondent = connect(
                   openTab,
                 )}
             </div>
-            <div className="grid-row">
+            <div className="grid-row display-block">
               {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}
               <MyContactInformation />
             </div>

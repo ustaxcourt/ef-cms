@@ -21,8 +21,7 @@ export const unauthedUserViewsTodaysOpinions = (test, testClient) => {
       isPublic: true,
     });
 
-    // this value is set in the mocked out window.open method in helpers.js
-    expect(testClient.getState('openedUrl')).toBeDefined();
-    testClient.setState('openedUrl', undefined);
+    expect(window.location.href).toContain(testClient.docketEntryId);
+    window.location.href = undefined;
   });
 };

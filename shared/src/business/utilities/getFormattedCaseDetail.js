@@ -119,7 +119,10 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
       !formattedEntry.isUnservable);
 
   formattedEntry.isNotServedDocument =
-    !formattedEntry.servedAt && !formattedEntry.isLegacyServed;
+    !formattedEntry.servedAt &&
+    !formattedEntry.isLegacyServed &&
+    !formattedEntry.isUnservable &&
+    !formattedEntry.isMinuteEntry;
 
   formattedEntry.isTranscript =
     formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
@@ -311,7 +314,7 @@ const formatCase = (applicationContext, caseDetail) => {
     result.formattedDocketEntries.sort(byIndexSortFunction);
 
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-      entry => entry.pending && entry.servedAt,
+      entry => entry.pending && (entry.servedAt || entry.isLegacyServed),
     );
   }
 

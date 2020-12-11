@@ -1,4 +1,7 @@
 const faker = require('faker');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../../shared/src/business/entities/EntityConstants');
 
 faker.seed(faker.random.number());
 
@@ -151,4 +154,12 @@ exports.setCaseAsHighPriority = () => {
   cy.get('.modal-button-confirm').click();
   cy.get('.modal-dialog').should('not.exist');
   cy.contains('High Priority').should('exist');
+};
+
+exports.setCaseAsReadyForTrial = () => {
+  cy.get('#menu-edit-case-context-button').click();
+  cy.get('#caseStatus').select(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+  cy.get('.modal-button-confirm').click();
+  cy.get('.modal-dialog').should('not.exist');
+  cy.contains(CASE_STATUS_TYPES.generalDocketReadyForTrial).should('exist');
 };

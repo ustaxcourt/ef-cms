@@ -1,9 +1,12 @@
 const {
+  CASE_STATUS_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
@@ -201,6 +204,9 @@ exports.migrateCaseInteractor = async ({
         caseToAdd.status !== CASE_STATUS_TYPES.closed;
       if (shouldCreateUserAccount) {
         applicationContext.logger.debug('create user account');
+        caseToAdd[contactType].serviceIndicator =
+          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+
         caseToAdd = await createUserAccount({
           applicationContext,
           caseEntity: caseToAdd,

@@ -25,9 +25,15 @@ exports.serveCaseToIrs = () => {
 };
 
 exports.closeScannerSetupDialog = () => {
-  cy.get('div.dynamsoft-backdrop').should('exist');
-
-  cy.get('div.dynamsoft-dialog-close').click();
-
-  cy.get('div.dynamsoft-backdrop').should('not.exist');
+  cy.server();
+  cy.route2('webtwain.install.js').as('getDynamsoft');
+  cy.wait('@getDynamsoft');
+  // the dynamsoft popup doesn't show immediately after the last script has been downloaded
+  cy.wait(2000); // eslint-disable-line cypress/no-unnecessary-waiting
+  cy.get('body').then(body => {
+    if (body.find('div.dynamsoft-backdrop').length > 0) {
+      cy.get('div.dynamsoft-dialog-close').click();
+      cy.get('div.dynamsoft-backdrop').should('not.exist');
+    }
+  });
 };

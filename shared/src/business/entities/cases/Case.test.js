@@ -23,7 +23,7 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
-const { Case, isAssociatedUser } = require('./Case');
+const { Case, isAssociatedUser, isSealedCase } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { IrsPractitioner } = require('../IrsPractitioner');
@@ -2952,6 +2952,28 @@ describe('Case entity', () => {
       expect(caseToUpdate.hasPendingItems).toEqual(true);
       expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
     });
+
+    it('should show the case as having pending items if isLegacyServed is true', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            isLegacyServed: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      };
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(true);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
+    });
   });
 
   describe('setCaseStatus', () => {
@@ -4136,6 +4158,53 @@ describe('Case entity', () => {
       const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
 
       expect(hasPartyWithPaperService).toBeFalsy();
+    });
+  });
+
+  describe('getSortableDocketNumber', () => {
+    it('should sort in the correct order', () => {
+      const numbers = [
+        Case.getSortableDocketNumber('19844-12'),
+        Case.getSortableDocketNumber('5520-08'),
+        Case.getSortableDocketNumber('1773-11'),
+        Case.getSortableDocketNumber('5242-10'),
+        Case.getSortableDocketNumber('1144-05'),
+      ].sort((a, b) => a - b);
+      expect(numbers).toEqual([5001144, 8005520, 10005242, 11001773, 12019844]);
+    });
+  });
+
+  describe('isSealedCase', () => {
+    it('returns false for objects without any truthy sealed attributes', () => {
+      const result = isSealedCase({
+        docketEntries: [],
+        isSealed: false,
+        name: 'Johnny Appleseed',
+        sealedDate: false,
+      });
+      expect(result).toBe(false);
+    });
+    it('returns true if the object has truthy values for isSealed or isSealedDate', () => {
+      expect(isSealedCase({ isSealed: true })).toBe(true);
+      expect(isSealedCase({ sealedDate: new Date().toISOString() })).toBe(true);
+    });
+    it('returns true if the object has a docket entry with truthy values for isSealed or isLegacySealed', () => {
+      expect(
+        isSealedCase({
+          docketEntries: [{ isSealed: true }],
+          isSealed: false,
+          name: 'Johnny Appleseed',
+          sealedDate: false,
+        }),
+      ).toBe(true);
+      expect(
+        isSealedCase({
+          docketEntries: [{ isLegacySealed: true }],
+          isSealed: false,
+          name: 'Johnny Appleseed',
+          sealedDate: false,
+        }),
+      ).toBe(true);
     });
   });
 });

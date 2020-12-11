@@ -19,8 +19,9 @@ resource "aws_lambda_function" "migration_lambda" {
   environment {
     variables = {
       ACCOUNT_ID        = data.aws_caller_identity.current.account_id
-      ENVIRONMENT       = var.environment
       DESTINATION_TABLE = var.destination_table
+      ENVIRONMENT       = var.environment
+      NODE_ENV          = "production"
     }
   }
 }
