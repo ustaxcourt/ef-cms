@@ -1,10 +1,15 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { defaultRemoveFromTrialSessionModalValuesAction } from '../actions/defaultRemoveFromTrialSessionModalValuesAction';
+import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
+import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
+import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 
 export const openRemoveFromTrialSessionModalSequence = [
   clearModalStateAction,
-  set(state.modal.trialSessionId, props.trialSessionId),
+  defaultRemoveFromTrialSessionModalValuesAction,
+  getUsersInSectionAction({ section: 'judge' }),
+  getFilterCurrentJudgeUsersAction,
+  setUsersByKeyAction('modal.judges'),
   setShowModalFactoryAction('RemoveFromTrialSessionModal'),
 ];

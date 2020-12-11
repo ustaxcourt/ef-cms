@@ -64,65 +64,73 @@ export const RemoveFromTrialSessionModal = connect(
           </FormGroup>
         </div>
 
-        <div className="margin-bottom-4">
-          <FormGroup errorText={validationErrors.caseStatus}>
-            <label className="usa-label" htmlFor="caseStatus">
-              Case status{' '}
-            </label>
-            <select
-              className={classNames(
-                'usa-select',
-                validationErrors.term && 'usa-select--error',
-              )}
-              id="case-status"
-              name="caseStatus"
-              value={removeFromTrialSessionModalHelper.defaultCaseStatus}
-              onChange={e => {
-                updateModalValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                validateRemoveFromTrialSessionSequence();
-              }}
-            >
-              {removeFromTrialSessionModalHelper.caseStatusOptions.map(
-                status => (
-                  <option key={status} value={status}>
-                    {status}
-                  </option>
-                ),
-              )}
-            </select>
-          </FormGroup>
-        </div>
+        {removeFromTrialSessionModalHelper.showCaseStatusDropdown && (
+          <div className="margin-bottom-4">
+            <FormGroup errorText={validationErrors.caseStatus}>
+              <label className="usa-label" htmlFor="caseStatus">
+                Case status{' '}
+              </label>
+              <select
+                className={classNames(
+                  'usa-select',
+                  validationErrors.caseStatus && 'usa-select--error',
+                )}
+                id="case-status"
+                name="caseStatus"
+                value={removeFromTrialSessionModalHelper.defaultCaseStatus}
+                onChange={e => {
+                  updateModalValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateRemoveFromTrialSessionSequence();
+                }}
+              >
+                {removeFromTrialSessionModalHelper.caseStatusOptions.map(
+                  status => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ),
+                )}
+              </select>
+            </FormGroup>
+          </div>
+        )}
 
-        <div className="margin-bottom-4">
-          <FormGroup errorText={validationErrors.associatedJudge}>
-            <label className="usa-label" htmlFor="caseStatus">
-              Associated Judge{' '}
-              {!removeFromTrialSessionModalHelper.associatedJudgeRequired && (
-                <span className="usa-hint">(optional)</span>
-              )}
-            </label>
-            <input
-              className="usa-input"
-              id="associatedJudge"
-              name="associatedJudge"
-              required={
-                removeFromTrialSessionModalHelper.associatedJudgeRequired
-              }
-              type="text"
-              value={modal.associatedJudge || ''}
-              onChange={e => {
-                updateModalValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                validateRemoveFromTrialSessionSequence();
-              }}
-            />
-          </FormGroup>
-        </div>
+        {removeFromTrialSessionModalHelper.showAssociatedJudgeDropdown && (
+          <div className="margin-bottom-4">
+            <FormGroup errorText={validationErrors.associatedJudge}>
+              <label className="usa-label" htmlFor="associated-judge">
+                Associated Judge
+              </label>
+              <select
+                className={classNames(
+                  'usa-select',
+                  validationErrors.associatedJudge && 'usa-select--error',
+                )}
+                id="associated-judge"
+                name="associatedJudge"
+                value={modal.associatedJudge}
+                onChange={e => {
+                  updateModalValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateRemoveFromTrialSessionSequence();
+                }}
+              >
+                <option value="">- Select -</option>
+                <option value="Chief Judge">Chief Judge</option>
+                {modal.judges.map(judgeUser => (
+                  <option key={judgeUser.userId} value={judgeUser.name}>
+                    {judgeUser.name}
+                  </option>
+                ))}
+              </select>
+            </FormGroup>
+          </div>
+        )}
       </ModalDialog>
     );
   },
