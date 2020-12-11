@@ -3296,5 +3296,225 @@ describe('formattedCaseDetail', () => {
 
       expect(result.userIsAssignedToSession).toBeFalsy();
     });
+
+    describe('hearings - userIsAssignedToSession', () => {
+      it("should be true when the hearing's trial session judge is the currently logged in user", () => {
+        const mockTrialSessionId = applicationContext.getUniqueId();
+
+        const result = runCompute(formattedCaseDetail, {
+          state: {
+            caseDetail: {
+              ...caseDetail,
+              hearings: [
+                {
+                  judge: {
+                    userId: judgeUser.userId,
+                  },
+                  trialSessionId: '123',
+                },
+                {
+                  judge: {
+                    userId: 'some_other_id',
+                  },
+                  trialSessionId: '234',
+                },
+              ],
+              trialSessionId: mockTrialSessionId,
+            },
+            ...getBaseState(judgeUser),
+            trialSessions: [
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialSessionId: mockTrialSessionId,
+              },
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialSessionId: '123',
+              },
+              {
+                judge: {
+                  userId: 'some_other_id',
+                },
+                trialSessionId: '234',
+              },
+            ],
+          },
+        });
+
+        expect(result.hearings).toMatchObject([
+          {
+            judge: {
+              userId: judgeUser.userId,
+            },
+            trialSessionId: '123',
+            userIsAssignedToSession: true,
+          },
+          {
+            judge: {
+              userId: 'some_other_id',
+            },
+            trialSessionId: '234',
+            userIsAssignedToSession: false,
+          },
+        ]);
+      });
+
+      it('should be true when the current user is a chambers user for the judge assigned to a hearing the case is scheduled for', () => {
+        const mockTrialSessionId = applicationContext.getUniqueId();
+
+        const result = runCompute(formattedCaseDetail, {
+          state: {
+            caseDetail: {
+              ...caseDetail,
+              hearings: [
+                {
+                  judge: {
+                    userId: judgeUser.userId,
+                  },
+                  trialSessionId: '123',
+                },
+                {
+                  judge: {
+                    userId: 'some_other_id',
+                  },
+                  trialSessionId: '234',
+                },
+              ],
+            },
+            judgeUser: {
+              section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+              userId: judgeUser.userId,
+            },
+            ...getBaseState(chambersUser),
+            trialSessions: [
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialSessionId: mockTrialSessionId,
+              },
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialSessionId: '123',
+              },
+              {
+                judge: {
+                  userId: 'some_other_id',
+                },
+                trialSessionId: '234',
+              },
+            ],
+          },
+        });
+
+        expect(result.hearings).toMatchObject([
+          {
+            judge: {
+              userId: judgeUser.userId,
+            },
+            trialSessionId: '123',
+            userIsAssignedToSession: true,
+          },
+          {
+            judge: {
+              userId: 'some_other_id',
+            },
+            trialSessionId: '234',
+            userIsAssignedToSession: false,
+          },
+        ]);
+      });
+
+      it('should be true when the current user is the trial clerk assigned to a hearing the case is scheduled for', () => {
+        const mockTrialSessionId = applicationContext.getUniqueId();
+
+        const result = runCompute(formattedCaseDetail, {
+          state: {
+            caseDetail: {
+              ...caseDetail,
+              hearings: [
+                {
+                  judge: {
+                    userId: judgeUser.userId,
+                  },
+                  trialClerk: {
+                    userId: 'some_other_id',
+                  },
+                  trialSessionId: '123',
+                },
+                {
+                  judge: {
+                    userId: 'some_other_id',
+                  },
+                  trialClerk: {
+                    userId: trialClerkUser.userId,
+                  },
+                  trialSessionId: '234',
+                },
+              ],
+            },
+            ...getBaseState(trialClerkUser),
+            trialSessions: [
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialClerk: {
+                  userId: trialClerkUser.userId,
+                },
+                trialSessionId: mockTrialSessionId,
+              },
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialClerk: {
+                  userId: 'some_other_id',
+                },
+                trialSessionId: '123',
+              },
+              {
+                judge: {
+                  userId: 'some_other_id',
+                },
+                trialClerk: {
+                  userId: trialClerkUser.userId,
+                },
+                trialSessionId: '234',
+              },
+            ],
+          },
+        });
+
+        expect(result.hearings).toMatchObject([
+          {
+            judge: {
+              userId: judgeUser.userId,
+            },
+            trialClerk: {
+              userId: 'some_other_id',
+            },
+            trialSessionId: '123',
+            userIsAssignedToSession: false,
+          },
+          {
+            judge: {
+              userId: 'some_other_id',
+            },
+            trialClerk: {
+              userId: trialClerkUser.userId,
+            },
+            trialSessionId: '234',
+            userIsAssignedToSession: true,
+          },
+        ]);
+      });
+    });
   });
 });
