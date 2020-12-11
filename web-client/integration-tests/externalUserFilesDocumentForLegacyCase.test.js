@@ -1,22 +1,14 @@
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
-import { caseDetailHelper as caseDetailHelperComputed } from '../src/presenter/computeds/caseDetailHelper';
+import { associatedExternalUserViewsCaseDetailForOwnedCase } from './journey/associatedExternalUserViewsCaseDetailForOwnedCase.js';
+import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase.js';
 import {
   fakeFile,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
 } from './helpers';
-import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase.js';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
 import axios from 'axios';
-
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderHelperComputed,
-);
 
 const test = setupTest();
 
@@ -32,7 +24,9 @@ const axiosInstance = axios.create({
 
 const {
   CHIEF_JUDGE,
+  COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  SERVICE_INDICATOR_TYPES,
   STATUS_TYPES,
 } = applicationContext.getConstants();
 
@@ -65,7 +59,52 @@ const caseWithEAccess = {
     },
   ],
   docketNumber: '999-15',
+  irsPractitioners: [
+    {
+      barNumber: 'RT6789',
+      contact: {
+        address1: '982 Oak Boulevard',
+        address2: 'Maxime dolorum quae ',
+        address3: 'Ut numquam ducimus ',
+        city: 'Placeat sed dolorum',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (785) 771-2329',
+        postalCode: '17860',
+        state: 'LA',
+      },
+      email: 'someone@example.com',
+      hasEAccess: true,
+      name: 'Keelie Bruce',
+      role: 'irsPractitioner',
+      secondaryName: 'Logan Fields',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+    },
+  ],
   preferredTrialCity: 'Washington, District of Columbia',
+  privatePractitioners: [
+    {
+      barNumber: 'PT1234',
+      contact: {
+        address1: '982 Oak Boulevard',
+        address2: 'Maxime dolorum quae ',
+        address3: 'Ut numquam ducimus ',
+        barNumber: 'PT1234',
+        city: 'Placeat sed dolorum',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (785) 771-2329',
+        postalCode: '17860',
+        state: 'LA',
+      },
+      email: 'someone@example.com',
+      hasEAccess: true,
+      name: 'Keelie Bruce',
+      representing: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
+      role: 'privatePractitioner',
+      secondaryName: 'Logan Fields',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+      userId: 'd2161b1e-7b85-4f33-b1cc-ff11bca2f819',
+    },
+  ],
   status: STATUS_TYPES.calendared,
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
@@ -86,31 +125,14 @@ describe('external user files a document for their legacy case', () => {
   });
 
   loginAs(test, 'petitioner@example.com');
+  associatedExternalUserViewsCaseDetailForOwnedCase(test);
+  externalUserFilesDocumentForOwnedCase(test, fakeFile);
 
-  it('user with e-access should be able to file a document in their case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+  loginAs(test, 'privatePractitioner@example.com');
+  associatedExternalUserViewsCaseDetailForOwnedCase(test);
+  externalUserFilesDocumentForOwnedCase(test, fakeFile);
 
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showPetitionProcessingAlert).toBeFalsy();
-
-    const headerHelper = runCompute(caseDetailHeaderHelper, {
-      state: test.getState(),
-    });
-    expect(headerHelper.showExternalButtons).toBeTruthy();
-  });
-
-  petitionerFilesADocumentForCase(test, fakeFile);
-  it('petitioner verifies the document was added to the docket record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
-    expect(test.getState('caseDetail.docketEntries').length).toEqual(2);
-  });
+  loginAs(test, 'irsPractitioner@example.com');
+  associatedExternalUserViewsCaseDetailForOwnedCase(test);
+  externalUserFilesDocumentForOwnedCase(test, fakeFile);
 });
