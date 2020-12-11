@@ -79,6 +79,7 @@
     "lodash": "^4.17.20",
     "logform": "^2.2.0",
     "madge": "^3.12.0",
+    "moize": "^5.4.7",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.32",
     "nodemon": "^2.0.6",
