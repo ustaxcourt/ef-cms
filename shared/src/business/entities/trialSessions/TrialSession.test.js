@@ -202,6 +202,8 @@ describe('TrialSession entity', () => {
   });
 
   describe('manuallyAddCaseToCalendar', () => {
+    const dateRegex = /^\d*-\d*-\d*T\d*:\d*:\d*.\d*Z$/g;
+
     it('should add case to calendar of valid trial session when provided a raw case entity with a docketNumber', () => {
       const trialSession = new TrialSession(
         {
@@ -216,6 +218,7 @@ describe('TrialSession entity', () => {
       trialSession.manuallyAddCaseToCalendar({ caseEntity: mockCaseEntity });
 
       expect(trialSession.caseOrder[0]).toEqual({
+        addedToSessionAt: expect.stringMatching(dateRegex),
         docketNumber: '123-45',
         isManuallyAdded: true,
       });
@@ -238,6 +241,7 @@ describe('TrialSession entity', () => {
       });
 
       expect(trialSession.caseOrder[0]).toEqual({
+        addedToSessionAt: expect.stringMatching(dateRegex),
         calendarNotes: 'Test',
         docketNumber: '123-45',
         isManuallyAdded: true,

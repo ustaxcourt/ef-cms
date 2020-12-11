@@ -1104,7 +1104,7 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  describe('getCalendarNoteForTrialSession', () => {
+  describe('getCalendarDetailsForTrialSession', () => {
     it('adds the calendarNotes from the trialSession caseOrder if a trialSessionId is set on the case', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
@@ -1140,7 +1140,7 @@ describe('formattedCaseDetail', () => {
       expect(result.trialSessionNotes).toEqual('Test notes');
     });
 
-    it('adds calendarNotes from trialSessions to case hearings', () => {
+    it('adds calendarNotes and addedToSessionAt fields from trialSessions to case hearings', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
         contactPrimary: {},
@@ -1177,6 +1177,7 @@ describe('formattedCaseDetail', () => {
             {
               caseOrder: [
                 {
+                  addedToSessionAt: '2019-01-01T17:29:13.122Z',
                   calendarNotes: 'Hearing notes one.',
                   docketNumber: '123-45',
                 },
@@ -1186,6 +1187,7 @@ describe('formattedCaseDetail', () => {
             {
               caseOrder: [
                 {
+                  addedToSessionAt: '2019-01-02T17:29:13.122Z',
                   calendarNotes: 'Hearing notes two.',
                   docketNumber: '123-45',
                 },
@@ -1199,10 +1201,12 @@ describe('formattedCaseDetail', () => {
 
       expect(result.hearings).toMatchObject([
         {
+          addedToSessionAt: '2019-01-01T17:29:13.122Z',
           calendarNotes: 'Hearing notes one.',
           trialSessionId: '234',
         },
         {
+          addedToSessionAt: '2019-01-02T17:29:13.122Z',
           calendarNotes: 'Hearing notes two.',
           trialSessionId: '345',
         },
@@ -3515,6 +3519,90 @@ describe('formattedCaseDetail', () => {
           },
         ]);
       });
+    });
+  });
+
+  it('should sort hearings by the addedToSessionAt field', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail: {
+          ...MOCK_CASE,
+          docketNumber: '123-45',
+          hearings: [
+            {
+              trialSessionId: '234',
+            },
+            {
+              trialSessionId: '123',
+            },
+            {
+              trialSessionId: '345',
+            },
+          ],
+        },
+        ...getBaseState(docketClerkUser),
+        trialSessionId: '987',
+        trialSessions: [
+          {
+            caseOrder: [
+              {
+                addedToSessionAt: '2019-04-19T17:29:13.120Z',
+                calendarNotes: 'SECOND',
+                docketNumber: '123-45',
+              },
+            ],
+            trialSessionId: '234',
+          },
+          {
+            caseOrder: [
+              {
+                addedToSessionAt: '2018-04-19T17:29:13.120Z',
+                calendarNotes: 'FIRST',
+                docketNumber: '123-45',
+              },
+            ],
+            trialSessionId: '123',
+          },
+          {
+            caseOrder: [
+              {
+                addedToSessionAt: '2020-04-19T17:29:13.120Z',
+                calendarNotes: 'THIRD',
+                docketNumber: '123-45',
+              },
+            ],
+            trialSessionId: '345',
+          },
+          {
+            caseOrder: [
+              {
+                addedToSessionAt: '2018-05-19T17:29:13.120Z',
+                calendarNotes: 'CASE TRIAL SESSION',
+                docketNumber: '123-45',
+              },
+            ],
+            trialSessionId: '987',
+          },
+        ],
+      },
+    });
+
+    expect(result.hearings[0]).toMatchObject({
+      addedToSessionAt: '2018-04-19T17:29:13.120Z',
+      calendarNotes: 'FIRST',
+      trialSessionId: '123',
+    });
+
+    expect(result.hearings[1]).toMatchObject({
+      addedToSessionAt: '2019-04-19T17:29:13.120Z',
+      calendarNotes: 'SECOND',
+      trialSessionId: '234',
+    });
+
+    expect(result.hearings[2]).toMatchObject({
+      addedToSessionAt: '2020-04-19T17:29:13.120Z',
+      calendarNotes: 'THIRD',
+      trialSessionId: '345',
     });
   });
 });

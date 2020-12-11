@@ -349,10 +349,6 @@ const formatTrialSessionScheduling = ({
         }),
       );
     });
-
-    // TODO: currently sorting by createdAt, but need to sort by when
-    // the session was associated with a case (will come from new entity)
-    formattedCase.hearings.sort((a, b) => a.createdAt > b.createdAt);
   }
 };
 
