@@ -279,15 +279,16 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   const allTrialSessions = get(state.trialSessions);
 
-  const getCalendarNoteForTrialSession = ({
+  const getCalendarDetailsForTrialSession = ({
     caseDocketNumber,
     trialSessionId,
     trialSessions,
   }) => {
     let note;
+    let addedAt;
 
     if (!trialSessions || !trialSessions.length) {
-      return note;
+      return { addedAt, note };
     }
 
     const foundTrialSession = trialSessions.find(
@@ -300,30 +301,42 @@ export const formattedCaseDetail = (get, applicationContext) => {
       );
 
       note = trialSessionCase && trialSessionCase.calendarNotes;
+      addedAt = trialSessionCase && trialSessionCase.addedToSessionAt;
     }
 
-    return note;
+    return { addedAt, note };
   };
 
-  result.trialSessionNotes = getCalendarNoteForTrialSession({
+  const { note: trialSessionNotes } = getCalendarDetailsForTrialSession({
     caseDocketNumber: caseDetail.docketNumber,
     trialSessionId: caseDetail.trialSessionId,
     trialSessions: allTrialSessions,
   });
 
+  result.trialSessionNotes = trialSessionNotes;
+
   if (result.hearings && result.hearings.length) {
     result.hearings.forEach(hearing => {
-      hearing.calendarNotes = getCalendarNoteForTrialSession({
+      const { addedAt, note } = getCalendarDetailsForTrialSession({
         caseDocketNumber: caseDetail.docketNumber,
         trialSessionId: hearing.trialSessionId,
         trialSessions: allTrialSessions,
       });
+
+      hearing.calendarNotes = note;
+      hearing.addedToSessionAt = addedAt;
 
       hearing.userIsAssignedToSession = getUserIsAssignedToSession({
         currentUser: user,
         get,
         trialSessionId: hearing.trialSessionId,
       });
+    });
+
+    result.hearings.sort((a, b) => {
+      return applicationContext
+        .getUtilities()
+        .compareISODateStrings(a.addedToSessionAt, b.addedToSessionAt);
     });
   }
 

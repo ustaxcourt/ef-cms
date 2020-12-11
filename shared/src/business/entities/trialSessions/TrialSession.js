@@ -278,6 +278,7 @@ TrialSession.prototype.manuallyAddCaseToCalendar = function ({
 }) {
   const { docketNumber } = caseEntity;
   this.caseOrder.push({
+    addedToSessionAt: createISODateString(),
     calendarNotes,
     docketNumber,
     isManuallyAdded: true,
