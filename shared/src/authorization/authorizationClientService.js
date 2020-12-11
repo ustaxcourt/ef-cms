@@ -135,6 +135,7 @@ const AUTHORIZATION_MAP = {
   admissionsclerk: [
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER,
+    ROLE_PERMISSIONS.CASE_CORRESPONDENCE,
   ],
   chambers: [
     ...allInternalUserPermissions,
@@ -145,9 +146,9 @@ const AUTHORIZATION_MAP = {
   clerkofcourt: [...docketClerkPermissions, ...petitionsClerkPermissions],
   docketclerk: docketClerkPermissions,
   floater: allInternalUserPermissions,
-  general: allInternalUserPermissions.filter(
-    p => p !== ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES,
-  ),
+  general: allInternalUserPermissions
+    .filter(p => p !== ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)
+    .concat(ROLE_PERMISSIONS.CASE_CORRESPONDENCE),
   inactivePractitioner: [],
   irsPractitioner: [
     ROLE_PERMISSIONS.ADVANCED_SEARCH,
