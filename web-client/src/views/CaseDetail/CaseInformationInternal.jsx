@@ -81,52 +81,52 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
   </React.Fragment>
 );
 
-const DisplayHearings = ({ hearings, removeHearingSequence }) => {
-  if (hearings && hearings.length) {
-    return hearings.map(hearing => {
-      return (
-        <tbody className="hoverable" key={hearing.trialSessionId}>
-          <tr>
-            <td>
-              <a
-                href={
-                  hearing.userIsAssignedToSession
-                    ? `/trial-session-working-copy/${hearing.trialSessionId}`
-                    : `/trial-session-detail/${hearing.trialSessionId}`
-                }
-              >
-                {hearing.formattedTrialCity}
-              </a>
-            </td>
-            <td>{hearing.formattedTrialDate}</td>
-            <td>{hearing.formattedAssociatedJudge}</td>
-            <td>
-              <Button
-                link
-                className="red-warning"
-                icon="trash"
-                id="remove-from-trial-session-btn"
-                onClick={() => {
-                  removeHearingSequence({
-                    trialSessionId: hearing.trialSessionId,
-                  });
-                }}
-              >
-                Remove
-              </Button>
-            </td>
-          </tr>
-          {hearing.calendarNotes && (
-            <tr>
-              <td colSpan="4">{hearing.calendarNotes}</td>
-            </tr>
-          )}
-        </tbody>
-      );
-    });
-  } else {
-    return null;
-  }
+const DisplayHearings = ({
+  caseDetailHelper,
+  hearings,
+  removeHearingSequence,
+}) => {
+  return hearings.map(hearing => (
+    <tbody className="hoverable" key={hearing.trialSessionId}>
+      <tr>
+        <td>
+          <a
+            href={
+              hearing.userIsAssignedToSession
+                ? `/trial-session-working-copy/${hearing.trialSessionId}`
+                : `/trial-session-detail/${hearing.trialSessionId}`
+            }
+          >
+            {hearing.formattedTrialCity}
+          </a>
+        </td>
+        <td>{hearing.formattedTrialDate}</td>
+        <td>{hearing.formattedAssociatedJudge}</td>
+        {caseDetailHelper.showAddRemoveFromHearingButtons && (
+          <td>
+            <Button
+              link
+              className="red-warning"
+              icon="trash"
+              id="remove-from-trial-session-btn"
+              onClick={() => {
+                removeHearingSequence({
+                  trialSessionId: hearing.trialSessionId,
+                });
+              }}
+            >
+              Remove
+            </Button>
+          </td>
+        )}
+      </tr>
+      {hearing.calendarNotes && (
+        <tr>
+          <td colSpan="4">{hearing.calendarNotes}</td>
+        </tr>
+      )}
+    </tbody>
+  ));
 };
 
 const TrialInformation = ({
@@ -634,17 +634,19 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Hearings
-                    <Button
-                      link
-                      aria-label="set hearing for trial sessions"
-                      className="margin-right-0 margin-top-1 padding-0 float-right"
-                      icon="plus-circle"
-                      onClick={() => {
-                        openSetForHearingModalSequence();
-                      }}
-                    >
-                      Set for Hearing
-                    </Button>
+                    {caseDetailHelper.showAddRemoveFromHearingButtons && (
+                      <Button
+                        link
+                        aria-label="set hearing for trial sessions"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="plus-circle"
+                        onClick={() => {
+                          openSetForHearingModalSequence();
+                        }}
+                      >
+                        Set for Hearing
+                      </Button>
+                    )}
                     {showModal === 'SetForHearingModal' && (
                       <SetForHearingModal />
                     )}
@@ -660,6 +662,7 @@ export const CaseInformationInternal = connect(
                         </tr>
                       </thead>
                       <DisplayHearings
+                        caseDetailHelper={caseDetailHelper}
                         hearings={formattedCaseDetail.hearings}
                         removeHearingSequence={
                           openRemoveFromTrialSessionModalSequence
