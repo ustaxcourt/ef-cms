@@ -6,7 +6,11 @@ const {
   STATUS_TYPES,
 } = applicationContext.getConstants();
 
-export const petitionsClerkBlocksCase = (test, trialLocation, overrides) => {
+export const petitionsClerkBlocksCase = (
+  test,
+  trialLocation,
+  overrides = {},
+) => {
   return it('Petitions clerk blocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
