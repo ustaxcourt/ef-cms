@@ -35,7 +35,7 @@
 
 ### Set Case for Hearing
 * Any case can be set for hearing, regardless of case status, or if there is a "Blocked from Trial" flag on the case
-* Setting a case for hearing is completely separate from setting a case for trail, marking a case as high priority , or blocking a case from trial
+* Setting a case for hearing is completely separate from setting a case for trial, marking a case as high priority , or blocking a case from trial
 
 * Cases can only be set for hearing on an Open trial session
 * Adding a case for he does not change the case status or the associated judge. The case remains "Calendared" with the trial judge of the first session as the associated judge
