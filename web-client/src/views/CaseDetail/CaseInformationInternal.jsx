@@ -135,10 +135,8 @@ const TrialInformation = ({
   openBlockFromTrialModalSequence,
   openPrioritizeCaseModalSequence,
   openRemoveFromTrialSessionModalSequence,
-  openSetForHearingModalSequence,
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
-  showModal,
   trialSessionJudge,
 }) => (
   <React.Fragment>
@@ -189,10 +187,6 @@ const TrialInformation = ({
                 </tr>
               )}
             </tbody>
-            <DisplayHearings
-              hearings={caseDetail.hearings}
-              removeHearingSequence={openRemoveFromTrialSessionModalSequence}
-            />
           </table>
         </div>
 
@@ -219,18 +213,6 @@ const TrialInformation = ({
             icon="check-circle"
             size="1x"
           />
-          <Button
-            link
-            aria-label="set hearing for trial sessions"
-            className="margin-right-0 margin-top-1 padding-0 float-right"
-            icon="plus-circle"
-            onClick={() => {
-              openSetForHearingModalSequence();
-            }}
-          >
-            Set for Hearing
-          </Button>
-          {showModal === 'SetForHearingModal' && <SetForHearingModal />}
         </h3>
         <div className="grid-row">
           <table className="usa-table ustc-table trial-list">
@@ -279,10 +261,6 @@ const TrialInformation = ({
                 </tr>
               )}
             </tbody>
-            <DisplayHearings
-              hearings={caseDetail.hearings}
-              removeHearingSequence={openRemoveFromTrialSessionModalSequence}
-            />
           </table>
         </div>
       </>
@@ -453,10 +431,6 @@ const TrialInformation = ({
                 </tr>
               )}
             </tbody>
-            <DisplayHearings
-              hearings={caseDetail.hearings}
-              removeHearingSequence={openRemoveFromTrialSessionModalSequence}
-            />
           </table>
         </div>
       </>
@@ -587,16 +561,12 @@ export const CaseInformationInternal = connect(
                     openRemoveFromTrialSessionModalSequence={
                       openRemoveFromTrialSessionModalSequence
                     }
-                    openSetForHearingModalSequence={
-                      openSetForHearingModalSequence
-                    }
                     openUnblockFromTrialModalSequence={
                       openUnblockFromTrialModalSequence
                     }
                     openUnprioritizeCaseModalSequence={
                       openUnprioritizeCaseModalSequence
                     }
-                    showModal={showModal}
                     trialSessionJudge={trialSessionJudge}
                   />
                 </div>
@@ -656,6 +626,45 @@ export const CaseInformationInternal = connect(
                   {!formattedCaseDetail.canConsolidate && (
                     <p>This case is not eligible for consolidation.</p>
                   )}
+                </div>
+              </div>
+            </div>
+            <div className="tablet:grid-col-6">
+              <div className="card height-full">
+                <div className="content-wrapper">
+                  <h3 className="underlined">
+                    Hearings
+                    <Button
+                      link
+                      aria-label="set hearing for trial sessions"
+                      className="margin-right-0 margin-top-1 padding-0 float-right"
+                      icon="plus-circle"
+                      onClick={() => {
+                        openSetForHearingModalSequence();
+                      }}
+                    >
+                      Set for Hearing
+                    </Button>
+                    {showModal === 'SetForHearingModal' && (
+                      <SetForHearingModal />
+                    )}
+                  </h3>
+                  <table className="usa-table ustc-table trial-list">
+                    <thead>
+                      <tr>
+                        <th>Place of Trial</th>
+                        <th>Trial date</th>
+                        <th>Judge</th>
+                        <th>&nbsp;</th>
+                      </tr>
+                    </thead>
+                    <DisplayHearings
+                      hearings={formattedCaseDetail.hearings}
+                      removeHearingSequence={
+                        openRemoveFromTrialSessionModalSequence
+                      }
+                    />
+                  </table>
                 </div>
               </div>
             </div>
