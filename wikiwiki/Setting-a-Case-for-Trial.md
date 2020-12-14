@@ -30,3 +30,15 @@
 * User manually sets case as "high priority"
 * If a trial session with status New exists for the requested trial location, case is added with priority to the Eligible List for the next available trial session
 * If no trial session with status New exists for the requested trial location, case will be added to eligible case list when the trial session is created
+<<<<<<< Updated upstream
+=======
+
+### Set Case for Hearing
+* Any case can be set for hearing, regardless of case status, or if there is a "Blocked from Trial" flag on the case
+* Setting a case for hearing is completely separate from setting a case for trail, marking a case as high priority , or blocking a case from trial
+
+* Cases can only be set for hearing on an Open trial session
+* Adding a case for he does not change the case status or the associated judge. The case remains "Calendared" with the trial judge of the first session as the associated judge
+* Other than the case status and judge, the case behaves the same way on the subsequent trial sessions as it does on the first trial session. Case appears on the Trial Session Detail and the Working Copy
+* A "Calendar Note" is required when setting a case for hearing so the judge is aware why the case was added. This note displays on the Case Detail > Trial Information card, the Trial Session Detail screen, the Working Copy, and the Printable Trial Session PDF.
+>>>>>>> Stashed changes
