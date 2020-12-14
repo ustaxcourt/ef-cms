@@ -1881,6 +1881,80 @@ describe('formattedCaseDetail', () => {
       );
     });
 
+    it('should show the link to an associated external user when the document has isLegacyServed true and servedAt undefined', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...caseDetail.docketEntries[0],
+                isLegacyServed: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+                isStricken: false,
+              },
+            ],
+          },
+          permissions: {
+            CREATE_ORDER_DOCKET_ENTRY: false,
+            DOCKET_ENTRY: false,
+            UPDATE_CASE: false,
+          },
+          screenMetadata: {
+            isAssociated: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].isLegacyServed).toBeTruthy();
+      expect(
+        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+      ).toEqual(false);
+      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(true);
+      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
+        false,
+      );
+    });
+
+    it('should NOT show the link to an associated external user when the document has isLegacyServed undefined and servedAt undefined', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...caseDetail.docketEntries[0],
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+                isStricken: false,
+              },
+            ],
+          },
+          permissions: {
+            CREATE_ORDER_DOCKET_ENTRY: false,
+            DOCKET_ENTRY: false,
+            UPDATE_CASE: false,
+          },
+          screenMetadata: {
+            isAssociated: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+      ).toEqual(true);
+      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
+        false,
+      );
+      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
+        false,
+      );
+    });
+
     it('should show the link to an internal user for a document with a stricken docket record', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
