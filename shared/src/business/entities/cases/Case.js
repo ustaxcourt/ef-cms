@@ -282,7 +282,7 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
       filtered &&
       applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
       (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
-        getPetitionDocketEntryFromDocketEntries(this.docketEntries).servedAt)
+        this.getPetitionDocketEntry().servedAt)
     ) {
       this.docketEntries = this.docketEntries.filter(
         d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -1174,15 +1174,11 @@ Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
   return this;
 };
 
-const getPetitionDocketEntryFromDocketEntries = function (docketEntries) {
-  return docketEntries.find(
+Case.prototype.getPetitionDocketEntry = function () {
+  return this.docketEntries.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-};
-
-Case.prototype.getPetitionDocketEntry = function () {
-  return getPetitionDocketEntryFromDocketEntries(this.docketEntries);
 };
 
 Case.prototype.getIrsSendDate = function () {
@@ -1907,9 +1903,15 @@ const isSealedCase = rawCase => {
   return isSealed;
 };
 
+const caseHasServedDocketEntries = rawCase => {
+  return !!rawCase.docketEntries.some(
+    docketEntry => !!docketEntry.servedAt || docketEntry.isLegacyServed,
+  );
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
-  getPetitionDocketEntryFromDocketEntries,
+  caseHasServedDocketEntries,
   isAssociatedUser,
   isSealedCase,
 };
