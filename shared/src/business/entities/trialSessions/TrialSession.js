@@ -36,6 +36,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
   this.caseOrder = (rawSession.caseOrder || []).map(caseOrder => ({
+    addedToSessionAt: caseOrder.addedToSessionAt,
     calendarNotes: caseOrder.calendarNotes,
     disposition: caseOrder.disposition,
     docketNumber: caseOrder.docketNumber,
