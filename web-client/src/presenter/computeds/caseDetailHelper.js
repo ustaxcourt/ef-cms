@@ -94,8 +94,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       isExternalUser &&
       user.role !== USER_ROLES.irsPractitioner &&
       user.role !== USER_ROLES.irsSuperuser,
-    showHearingsTableContents:
-      caseDetail.hearings && caseDetail.hearings.length,
     showJudgesNotes,
     showPetitionProcessingAlert: isExternalUser && !caseHasServedDocketEntries,
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
