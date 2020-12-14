@@ -225,7 +225,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       ),
       isInitialDocument,
       isLegacySealed: entry.isLegacySealed,
-      isServed: !!entry.servedAt,
+      isServed: !!entry.servedAt || !!entry.isLegacyServed,
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
