@@ -39,6 +39,7 @@ export const EligibleCases = connect(
               <th>Petitioner Counsel</th>
               <th>Respondent Counsel</th>
               <th>Case Type</th>
+              <th>Calendar Notes</th>
               {trialSessionDetailsHelper.showQcComplete && (
                 <th>QC Complete?</th>
               )}
@@ -68,6 +69,9 @@ export const EligibleCases = connect(
                 </td>
                 <td>{item.respondent}</td>
                 <td>{item.caseType}</td>
+                <td>
+                  <div>{item.calendarNotes}</div>
+                </td>
                 {trialSessionDetailsHelper.showQcComplete && (
                   <td>
                     <div className="text-center">
