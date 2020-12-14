@@ -583,6 +583,7 @@ jobs:
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" \
              -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
+             -e "CLIENT_STAGE=${CLIENT_STAGE}" \
              -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
              -e "CURRENT_COLOR=${CURRENT_COLOR}" \
              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
@@ -596,6 +597,7 @@ jobs:
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
+             -e "CLIENT_STAGE=${CLIENT_STAGE}" \
              -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
              -e "CURRENT_COLOR=${CURRENT_COLOR}" \
              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
