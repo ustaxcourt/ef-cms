@@ -86,10 +86,10 @@ describe('setForHearingInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().addHearingToCase,
+      applicationContext.getPersistenceGateway().addCaseToHearing,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().addHearingToCase.mock
+      applicationContext.getPersistenceGateway().addCaseToHearing.mock
         .calls[0][0],
     ).toEqual(
       expect.objectContaining({
@@ -120,10 +120,10 @@ describe('setForHearingInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().addHearingToCase,
+      applicationContext.getPersistenceGateway().addCaseToHearing,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().addHearingToCase.mock
+      applicationContext.getPersistenceGateway().addCaseToHearing.mock
         .calls[0][0],
     ).toEqual(
       expect.objectContaining({

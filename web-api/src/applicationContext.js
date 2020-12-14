@@ -10,6 +10,9 @@ const pdfLib = require('pdf-lib');
 const sass = require('sass');
 const util = require('util');
 const {
+  addCaseToHearing,
+} = require('../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing');
+const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
 const {
@@ -21,9 +24,6 @@ const {
 const {
   addDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
-const {
-  addHearingToCase,
-} = require('../../shared/src/persistence/dynamo/trialSessions/addHearingToCase');
 const {
   addressLabelCoverSheet,
   caseInventoryReport,
@@ -1117,7 +1117,7 @@ const isValidatedDecorator = persistenceGatewayMethods => {
 
 const gatewayMethods = {
   ...isValidatedDecorator({
-    addHearingToCase,
+    addCaseToHearing,
     addWorkItemToSectionInbox,
     associateUserWithCase,
     associateUserWithCasePending,

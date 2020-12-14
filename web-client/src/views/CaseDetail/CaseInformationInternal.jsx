@@ -634,17 +634,19 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Hearings
-                    <Button
-                      link
-                      aria-label="set hearing for trial sessions"
-                      className="margin-right-0 margin-top-1 padding-0 float-right"
-                      icon="plus-circle"
-                      onClick={() => {
-                        openSetForHearingModalSequence();
-                      }}
-                    >
-                      Set for Hearing
-                    </Button>
+                    {formattedCaseDetail.showTrialCalendared && (
+                      <Button
+                        link
+                        aria-label="set hearing for trial sessions"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="plus-circle"
+                        onClick={() => {
+                          openSetForHearingModalSequence();
+                        }}
+                      >
+                        Set for Hearing
+                      </Button>
+                    )}
                     {showModal === 'SetForHearingModal' && (
                       <SetForHearingModal />
                     )}
