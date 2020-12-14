@@ -22,5 +22,8 @@ export const docketClerkViewsTrialSessionList = (test, overrides = {}) => {
       trialLocation: overrides.trialLocation || 'Seattle, Washington',
     });
     test.trialSessionId = trialSession && trialSession.trialSessionId;
+    if (test.createdTrialSessions) {
+      test.createdTrialSessions.push(test.trialSessionId);
+    }
   });
 };
