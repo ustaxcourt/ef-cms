@@ -88,6 +88,7 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `IRS_SUPERUSER_EMAIL_PROD` | Email address used to serve all new petitions to the IRS for PROD |
   | `DEFAULT_ACCOUNT_PASS` | Default password for all test accounts and some password resets |
   | `STATUSPAGE_DNS_RECORD` | DNS record for Statuspage of CNAME `status.${EFCMS_DOMAIN}` (optional) |
+  | `CLIENT_STAGE` | The `process.env.STAGE` for the React application |
 
 - Run a build in CircleCI.
   - The build may fail the first time, as provisioning new security certificates can take some time (and cause a timeout). See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to common problems.
