@@ -177,7 +177,7 @@ joiValidationDecorator(
       joi.object().keys({
         calendarNotes: JoiValidationConstants.STRING.max(200)
           .optional()
-          .allow('', null), // 7120 - TODO required when added to hearing
+          .allow('', null),
         disposition: JoiValidationConstants.STRING.max(100).when(
           'removedFromTrial',
           {
