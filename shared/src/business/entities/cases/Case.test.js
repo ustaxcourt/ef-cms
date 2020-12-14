@@ -688,6 +688,23 @@ describe('Case entity', () => {
       expect(myCase.entityName).toEqual('Case');
     });
 
+    it('creates a valid case without a petition docket entry and does not throw an error', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.petitionsClerk,
+      });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          docketEntries: [MOCK_CASE.docketEntries[1]],
+        },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
     it('Creates a valid case from an already existing case json', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
