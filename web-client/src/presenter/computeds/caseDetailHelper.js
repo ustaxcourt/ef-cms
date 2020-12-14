@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
@@ -77,6 +78,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     hasIrsPractitioners,
     hasPrivatePractitioners,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
+    showAddRemoveFromHearingButtons: permissions.SET_FOR_HEARING,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
@@ -92,6 +94,8 @@ export const caseDetailHelper = (get, applicationContext) => {
       isExternalUser &&
       user.role !== USER_ROLES.irsPractitioner &&
       user.role !== USER_ROLES.irsSuperuser,
+    showHearingsTableContents:
+      caseDetail.hearings && caseDetail.hearings.length,
     showJudgesNotes,
     showPetitionProcessingAlert: isExternalUser && !caseHasServedDocketEntries,
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
