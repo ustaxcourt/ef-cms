@@ -18,6 +18,15 @@ const {
 const {
   migrateItems: migration0006,
 } = require('./migrations/0006-eservice-indicator-has-eaccess');
+const {
+  migrateItems: migration0007,
+} = require('./migrations/0007-unblock-migrated-calendared-cases');
+const {
+  migrateItems: migration0008,
+} = require('./migrations/0008-associated-judge-on-deadlines');
+const {
+  migrateItems: migration0009,
+} = require('./migrations/0009-remove-blocked-cases-from-eligible-for-trial-record');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -38,18 +47,21 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
-  console.log('about to run migration 001');
+  applicationContext.logger.info('about to run migration 001');
   items = await migration0001(items, documentClient);
-  console.log('about to run migration 002');
+  applicationContext.logger.info('about to run migration 002');
   items = await migration0002(items, documentClient);
-  console.log('about to run migration 003');
+  applicationContext.logger.info('about to run migration 003');
   items = await migration0003(items, documentClient);
-  console.log('about to run migration 004');
+  applicationContext.logger.info('about to run migration 004');
   items = await migration0004(items, documentClient);
-  console.log('about to run migration 005');
+  applicationContext.logger.info('about to run migration 005');
   items = await migration0005(items, documentClient);
-  console.log('about to run migration 006');
+  applicationContext.logger.info('about to run migration 006');
   items = await migration0006(items, documentClient);
+  items = await migration0007(items, documentClient);
+  items = await migration0008(items, documentClient);
+  items = await migration0009(items, documentClient);
 
   return items;
 };
@@ -72,7 +84,12 @@ const reprocessItems = async ({ documentClient, items }) => {
 };
 
 const processItems = async ({ documentClient, items }) => {
-  items = await migrateRecords({ documentClient, items });
+  try {
+    items = await migrateRecords({ documentClient, items });
+  } catch (err) {
+    applicationContext.logger.error('Error migrating records', err);
+    throw err;
+  }
 
   // your migration code goes here
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
@@ -117,7 +134,9 @@ const scanTableSegment = async (segment, totalSegments) => {
       })
       .promise()
       .then(async results => {
-        console.log('got some results', results.Items.length);
+        applicationContext.logger.info(
+          `${segment}/${totalSegments} got ${results.Items.length} results`,
+        );
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         await processItems({
@@ -133,9 +152,12 @@ exports.handler = async event => {
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);
 
-  console.log(`about to process ${segment} of ${totalSegments}`);
+  applicationContext.logger.info(
+    `about to process ${segment} of ${totalSegments}`,
+  );
 
   await scanTableSegment(segment, totalSegments);
+  applicationContext.logger.info(`finishing ${segment} of ${totalSegments}`);
   await sqs
     .deleteMessage({
       QueueUrl: process.env.SEGMENTS_QUEUE_URL,

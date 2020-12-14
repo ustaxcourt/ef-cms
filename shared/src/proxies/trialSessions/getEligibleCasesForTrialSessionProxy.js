@@ -15,19 +15,5 @@ exports.getEligibleCasesForTrialSessionInteractor = ({
   return get({
     applicationContext,
     endpoint: `/trial-sessions/${trialSessionId}/eligible-cases`,
-    params: {
-      fields: [
-        'isManuallyAdded',
-        'caseCaption',
-        'privatePractitioners',
-        'irsPractitioners',
-        'caseType',
-        'qcCompleteForTrial',
-        'docketNumber',
-        'docketNumberSuffix',
-        'removedFromTrialDate',
-        'removedFromTrial',
-      ].join(','),
-    },
   });
 };

@@ -68,6 +68,20 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     ).resolves.not.toThrow();
   });
 
+  it('should call getEligibleCasesForTrialSession with correct limit', async () => {
+    await getEligibleCasesForTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
+        .mock.calls[0][0],
+    ).toMatchObject({
+      limit: 150, // max cases + buffer
+    });
+  });
+
   it('should return cases that are set for this session even if uncalendared', async () => {
     mockTrial = {
       ...MOCK_TRIAL,

@@ -66,5 +66,56 @@ describe('getIndexedCasesForUser', () => {
         },
       },
     ]);
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.sort,
+    ).toBeUndefined();
+  });
+
+  it('should search for closed cases', async () => {
+    const mockUserId = '123';
+
+    await getIndexedCasesForUser({
+      applicationContext,
+      statuses: [CASE_STATUS_TYPES.closed],
+      userId: mockUserId,
+    });
+
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.must,
+    ).toMatchObject([
+      {
+        match: {
+          'pk.S': {
+            operator: 'and',
+            query: `user|${mockUserId}`,
+          },
+        },
+      },
+      {
+        match: {
+          'sk.S': 'case|',
+        },
+      },
+      {
+        match: {
+          'gsi1pk.S': 'user-case|',
+        },
+      },
+      {
+        bool: {
+          should: [
+            {
+              match: {
+                'status.S': CASE_STATUS_TYPES.closed,
+              },
+            },
+          ],
+        },
+      },
+    ]);
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.sort,
+    ).toEqual([{ 'closedDate.S': { order: 'desc' } }]);
   });
 });
