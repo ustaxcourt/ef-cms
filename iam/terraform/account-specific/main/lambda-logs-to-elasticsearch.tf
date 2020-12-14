@@ -48,6 +48,22 @@ resource "aws_cloudwatch_log_subscription_filter" "api_filter_green" {
   log_group_name  = "/aws/lambda/api_${element(var.log_group_environments, count.index)}_green"
 }
 
+resource "aws_cloudwatch_log_subscription_filter" "api_async_filter_blue" {
+  count           = length(var.log_group_environments)
+  destination_arn = aws_lambda_function.logs_to_es.arn
+  filter_pattern  = ""
+  name            = "api_async_${element(var.log_group_environments, count.index)}_lambda_filter"
+  log_group_name  = "/aws/lambda/api_async_${element(var.log_group_environments, count.index)}_blue"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "api_async_filter_green" {
+  count           = length(var.log_group_environments)
+  destination_arn = aws_lambda_function.logs_to_es.arn
+  filter_pattern  = ""
+  name            = "api_async_${element(var.log_group_environments, count.index)}_lambda_filter"
+  log_group_name  = "/aws/lambda/api_async_${element(var.log_group_environments, count.index)}_green"
+}
+
 resource "aws_cloudwatch_log_subscription_filter" "streams_filter_blue" {
   count           = length(var.log_group_environments)
   destination_arn = aws_lambda_function.logs_to_es.arn
