@@ -40,7 +40,6 @@ describe('getHealthCheckInteractor', () => {
     });
 
     expect(status).toEqual({
-      clamAV: false,
       cognito: true,
       dynamo: {
         efcms: true,
@@ -110,7 +109,6 @@ describe('getHealthCheckInteractor', () => {
       },
     });
     expect(status).toEqual({
-      clamAV: false,
       cognito: false,
       dynamo: {
         efcms: false,
