@@ -38,6 +38,6 @@
 * Setting a case for hearing is completely separate from setting a case for trial, marking a case as high priority , or blocking a case from trial
 
 * Cases can only be set for hearing on an Open trial session
-* Adding a case for he does not change the case status or the associated judge. The case remains "Calendared" with the trial judge of the first session as the associated judge
+* Adding a case for hearing does not change the case status or the associated judge. The case remains "Calendared" with the trial judge of the first session as the associated judge
 * Other than the case status and judge, the case behaves the same way on the subsequent trial sessions as it does on the first trial session. Case appears on the Trial Session Detail and the Working Copy
 * A "Calendar Note" is required when setting a case for hearing so the judge is aware why the case was added. This note displays on the Case Detail > Trial Information card, the Trial Session Detail screen, the Working Copy, and the Printable Trial Session PDF.
