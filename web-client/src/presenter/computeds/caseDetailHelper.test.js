@@ -525,7 +525,7 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should not show petition processing alert if user is an external user and the petition is served', () => {
+  it('should not show petition processing alert if user is an external user and the case contains a served docket entry', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
@@ -545,7 +545,25 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should show petition processing alert if user is an external user and the petition is not served', () => {
+  it('should not show petition processing alert if user is an external user and the case contains an isLegacyServed docket entry', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
+        },
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showPetitionProcessingAlert).toEqual(false);
+  });
+
+  it('should show petition processing alert if user is an external user and the case does not contain any served docket entries', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
