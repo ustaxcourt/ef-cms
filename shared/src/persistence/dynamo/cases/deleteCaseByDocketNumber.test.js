@@ -15,6 +15,13 @@ describe('deleteCaseByDocketNumber', () => {
       { pk: 'case|102-20', sk: 'work-item|1234-1451-234-1234-1234' }, // work-item 1
       { pk: 'case|102-20', sk: 'work-item|2234-1451-234-1234-1234' }, // work-item 2
     ],
+    'case|103-20': [
+      { pk: 'case|103-20', sk: 'case|103-20' },
+      {
+        pk: 'case|102-20',
+        sk: 'case-deadline|144f89b6-850a-4fc7-b989-462d36fb62a0',
+      },
+    ],
   };
 
   const workItemRecords = {
@@ -185,6 +192,45 @@ describe('deleteCaseByDocketNumber', () => {
         {
           Key: workItemRecords['work-item|2234-1451-234-1234-1234'][1],
           TableName: 'efcms-local',
+        },
+      ],
+    ]);
+  });
+
+  it('fetches and deletes related case deadline records', async () => {
+    await deleteCaseByDocketNumber({
+      applicationContext,
+      docketNumber: '103-20',
+    });
+
+    expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledTimes(
+      3,
+    );
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls,
+    ).toMatchObject([
+      [
+        {
+          Key: {
+            pk: 'case|103-20',
+            sk: 'case|103-20',
+          },
+        },
+      ],
+      [
+        {
+          Key: {
+            pk: 'case|103-20',
+            sk: 'case-deadline|144f89b6-850a-4fc7-b989-462d36fb62a0',
+          },
+        },
+      ],
+      [
+        {
+          Key: {
+            pk: 'case-deadline|144f89b6-850a-4fc7-b989-462d36fb62a0',
+            sk: 'case-deadline|144f89b6-850a-4fc7-b989-462d36fb62a0',
+          },
         },
       ],
     ]);

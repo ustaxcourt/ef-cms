@@ -1,7 +1,7 @@
 import { fakeFile } from '../helpers';
 
-export const docketClerkAddsCorrespondence = (test, correspondenceTitle) =>
-  it('docketclerk adds correspondence to case', async () => {
+export const userAddsCorrespondence = (test, correspondenceTitle, user) =>
+  it(`${user} adds correspondence to case`, async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'documentTitle',
       value: correspondenceTitle,

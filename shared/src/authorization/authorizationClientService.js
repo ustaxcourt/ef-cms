@@ -110,6 +110,7 @@ const petitionsClerkPermissions = [
   ROLE_PERMISSIONS.ASSIGN_WORK_ITEM,
   ROLE_PERMISSIONS.CASE_CORRESPONDENCE,
   ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY,
+  ROLE_PERMISSIONS.EDIT_PETITION_DETAILS,
   ROLE_PERMISSIONS.SERVE_DOCUMENT,
   ROLE_PERMISSIONS.SERVE_PETITION,
   ROLE_PERMISSIONS.QC_PETITION,
@@ -132,6 +133,7 @@ const AUTHORIZATION_MAP = {
   admissionsclerk: [
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER,
+    ROLE_PERMISSIONS.CASE_CORRESPONDENCE,
   ],
   chambers: [
     ...allInternalUserPermissions,
@@ -142,9 +144,9 @@ const AUTHORIZATION_MAP = {
   clerkofcourt: [...docketClerkPermissions, ...petitionsClerkPermissions],
   docketclerk: docketClerkPermissions,
   floater: allInternalUserPermissions,
-  general: allInternalUserPermissions.filter(
-    p => p !== ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES,
-  ),
+  general: allInternalUserPermissions
+    .filter(p => p !== ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)
+    .concat(ROLE_PERMISSIONS.CASE_CORRESPONDENCE),
   inactivePractitioner: [],
   irsPractitioner: [
     ROLE_PERMISSIONS.ADVANCED_SEARCH,

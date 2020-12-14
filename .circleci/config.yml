@@ -25,7 +25,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Lint
           command: npm run lint
@@ -77,7 +77,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Shared - Test
           command: npm run test:shared:ci
@@ -122,7 +122,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Web Client - Unit Test
           command: npm run build:assets && CI=false npm run test:client:unit:ci
@@ -166,7 +166,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -270,7 +270,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -332,7 +332,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -392,7 +392,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -456,7 +456,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -583,6 +583,7 @@ jobs:
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "CIRCLE_HONEYBADGER_API_KEY=${CIRCLE_HONEYBADGER_API_KEY}" \
              -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
+             -e "CLIENT_STAGE=${CLIENT_STAGE}" \
              -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
              -e "CURRENT_COLOR=${CURRENT_COLOR}" \
              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
@@ -596,6 +597,7 @@ jobs:
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
+             -e "CLIENT_STAGE=${CLIENT_STAGE}" \
              -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
              -e "CURRENT_COLOR=${CURRENT_COLOR}" \
              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
@@ -785,7 +787,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -821,7 +823,7 @@ jobs:
           command: |
             npm set progress=false
             npm ci
-            npm rebuild node-sass
+            npm rebuild
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
