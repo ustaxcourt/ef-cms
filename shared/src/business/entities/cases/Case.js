@@ -1548,6 +1548,31 @@ Case.prototype.removeFromTrial = function () {
 };
 
 /**
+ * check to see if trialSessionId is a hearing
+ *
+ * @param {string} trialSessionId trial session id to check
+ * @returns {boolean} whether or not the trial session id associated is a hearing or not
+ */
+Case.prototype.isHearing = function (trialSessionId) {
+  return this.hearings.some(
+    trialSession => trialSession.trialSessionId === trialSessionId,
+  );
+};
+
+/**
+ * removes a hearing from the case.hearings array
+ *
+ * @param {string} trialSessionId trial session id associated with hearing to remove
+ */
+Case.prototype.removeFromHearing = function (trialSessionId) {
+  const removeIndex = this.hearings
+    .map(trialSession => trialSession.trialSessionId)
+    .indexOf(trialSessionId);
+
+  this.hearings.splice(removeIndex, 1);
+};
+
+/**
  * remove case from trial with optional associated judge
  *
  * @param {string} associatedJudge (optional) the associated judge for the case
