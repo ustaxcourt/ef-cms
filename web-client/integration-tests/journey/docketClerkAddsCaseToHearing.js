@@ -6,7 +6,10 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkAddsCaseToHearing = test => {
+export const docketClerkAddsCaseToHearing = (
+  test,
+  notes = 'test note for hearing',
+) => {
   return it('docket clerk adds case to hearing', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -26,7 +29,7 @@ export const docketClerkAddsCaseToHearing = test => {
 
     await test.runSequence('updateModalValueSequence', {
       key: 'calendarNotes',
-      value: 'test note for hearing',
+      value: notes,
     });
 
     await test.runSequence('setForHearingSequence');
@@ -38,7 +41,7 @@ export const docketClerkAddsCaseToHearing = test => {
     expect(formattedCase.hearings).toMatchObject([
       {
         addedToSessionAt: expect.anything(),
-        calendarNotes: 'test note for hearing',
+        calendarNotes: notes,
         trialSessionId: test.createdTrialSessions[1],
       },
     ]);

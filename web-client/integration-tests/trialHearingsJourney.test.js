@@ -3,6 +3,10 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkManuallyAddsCaseToTrialSessionWithNote } from './journey/docketClerkManuallyAddsCaseToTrialSessionWithNote';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
+import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
+import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
+import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
+
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
@@ -46,9 +50,52 @@ describe('trial hearings journey', () => {
     const caseDetail = await uploadPetition(test, overrides1);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
+    test.createdCases.push(test.docketNumber);
   });
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkManuallyAddsCaseToTrialSessionWithNote(test);
-  docketClerkAddsCaseToHearing(test);
+  docketClerkAddsCaseToHearing(test, 'Test hearing note one.');
+  docketClerkViewsNewTrialSession(test, true, 'Test hearing note one.');
+
+  loginAs(test, 'judgeCohen@example.com');
+  judgeViewsTrialSessionWorkingCopy(test, true, 'Test hearing note one.');
+
+  loginAs(test, 'petitioner@example.com');
+  it('create case 2', async () => {
+    const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+    test.createdCases.push(test.docketNumber);
+  });
+
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkPrioritizesCase(test);
+
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkAddsCaseToHearing(test, 'Test hearing note two.');
+  docketClerkViewsNewTrialSession(test, true, 'Test hearing note two.');
+
+  loginAs(test, 'petitioner@example.com');
+  it('create case 3', async () => {
+    const caseDetail = await uploadPetition(test, {
+      preferredTrialCity: trialLocation1,
+    });
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+    test.createdCases.push(test.docketNumber);
+  });
+
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkBlocksCase(test, trialLocation1, {
+    caseCaption: 'Mona Schultz, Petitioner',
+    caseStatus: 'New',
+    docketNumberSuffix: 'L',
+  });
+
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkAddsCaseToHearing(test, 'Test hearing note three.');
+  docketClerkViewsNewTrialSession(test, true, 'Test hearing note three.');
+
+  // TODO 7120 - Remove
 });
