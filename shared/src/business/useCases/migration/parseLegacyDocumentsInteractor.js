@@ -61,6 +61,7 @@ exports.parseLegacyDocumentsInteractor = async ({
     // Save text contents to JSON file in S3
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
+      contentType: 'application/json',
       document: Buffer.from(
         JSON.stringify({ documentContents: pdfTextContents }),
       ),
