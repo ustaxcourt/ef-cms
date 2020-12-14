@@ -238,8 +238,8 @@ export const Address = connect(
           />
         </div>
 
-        <NonMobileCityAndState />
-        <MobileCityAndState />
+        {NonMobileCityAndState()}
+        {MobileCityAndState()}
 
         <FormGroup
           errorText={

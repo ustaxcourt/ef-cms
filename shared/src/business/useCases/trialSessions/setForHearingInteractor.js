@@ -48,8 +48,16 @@ exports.setForHearingInteractor = async ({
     applicationContext,
   });
 
-  if (!caseEntity.isCalendared()) {
-    throw new Error('The Case must be calendared to add a hearing');
+  const existingTrialSessionIds = [];
+  if (caseEntity.trialSessionId) {
+    existingTrialSessionIds.push(caseEntity.trialSessionId);
+    caseEntity.hearings.forEach(_trialSession => {
+      existingTrialSessionIds.push(_trialSession.trialSessionId);
+    });
+  }
+
+  if (existingTrialSessionIds.includes(trialSessionId)) {
+    throw new Error('That Hearing is already assigned to the Case');
   }
 
   trialSessionEntity

@@ -40,7 +40,11 @@ const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
   });
 };
 
-export const trialSessionsModalHelper = (get, applicationContext) => {
+export const trialSessionsModalHelper = (
+  get,
+  applicationContext,
+  excludedTrialSessionIds,
+) => {
   const caseDetail = get(state.caseDetail);
   const { showAllLocations, trialSessionId, trialSessions } = get(state.modal);
 
@@ -56,6 +60,13 @@ export const trialSessionsModalHelper = (get, applicationContext) => {
       trialSessionsFormatted,
       applicationContext,
     );
+
+    if (excludedTrialSessionIds) {
+      trialSessionsFormatted = trialSessionsFormatted.filter(
+        trialSession =>
+          !excludedTrialSessionIds.includes(trialSession.trialSessionId),
+      );
+    }
 
     if (showAllLocations) {
       trialSessionsFormatted.forEach(

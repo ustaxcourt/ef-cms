@@ -284,7 +284,7 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
       filtered &&
       applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
       (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
-        this.getPetitionDocketEntry().servedAt)
+        this.getIrsSendDate())
     ) {
       this.docketEntries = this.docketEntries.filter(
         d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,

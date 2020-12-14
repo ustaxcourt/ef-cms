@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { setForHearingModalHelper as setForHearingModalHelperComputed } from './setForHearingModalHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -7,6 +8,8 @@ const setForHearingModalHelper = withAppContextDecorator(
 );
 
 describe('set for hearing modal helper', () => {
+  const { US_STATES } = applicationContext.getConstants();
+
   const trialSessions = [
     {
       sessionType: 'Small',
@@ -71,5 +74,48 @@ describe('set for hearing modal helper', () => {
         expect.objectContaining({ trialSessionId: '1337' }),
       ]),
     });
+  });
+
+  it('should exclude the trial session and hearings that are already assigned to the case', () => {
+    const result = runCompute(setForHearingModalHelper, {
+      state: {
+        caseDetail: {
+          hearings: [{ trialSessionId: '2' }],
+          preferredTrialCity: 'Birmingham, Alabama',
+          trialSessionId: '1',
+        },
+        form: {},
+        modal: {
+          showAllLocations: true,
+          trialSessions,
+        },
+      },
+    });
+
+    expect(result.showSessionNotSetAlert).toBeFalsy();
+    expect(result.trialSessionsFormatted).toBeFalsy();
+    expect(result.trialSessionsFormattedByState).toMatchObject({
+      Alabama: [
+        {
+          optionText: 'Birmingham, Alabama 01/01/19 (SP)',
+          trialLocationState: US_STATES.AL,
+          trialSessionId: '3',
+        },
+        {
+          optionText: 'Mobile, Alabama 12/01/18 (M/H)',
+          trialSessionId: '5',
+        },
+      ],
+      Idaho: [
+        {
+          optionText: 'Boise, Idaho 05/01/19 (S)',
+          trialSessionId: '4',
+        },
+      ],
+    });
+    expect(result.trialSessionStatesSorted).toEqual([
+      US_STATES.AL,
+      US_STATES.ID,
+    ]);
   });
 });

@@ -4,7 +4,7 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
 } = require('../../../test/mockCase');
-const { CASE_STATUS_TYPES, ROLES } = require('../../entities/EntityConstants');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('setForHearingInteractor', () => {
   let mockCurrentUser;
@@ -57,7 +57,6 @@ describe('setForHearingInteractor', () => {
   it('throws an error if the case is not calendared', async () => {
     mockCase = {
       ...MOCK_CASE_WITH_TRIAL_SESSION,
-      status: CASE_STATUS_TYPES.new,
     };
 
     await expect(
@@ -65,9 +64,9 @@ describe('setForHearingInteractor', () => {
         applicationContext,
         docketNumber: mockCase.docketNumber,
         isHearing: true,
-        trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
+        trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
       }),
-    ).rejects.toThrow('The Case must be calendared to add a hearing');
+    ).rejects.toThrow('That Hearing is already assigned to the Case');
   });
 
   it('successfully adds the trial session hearing', async () => {
