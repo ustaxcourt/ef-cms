@@ -11,17 +11,24 @@ exports.handler = async event => {
     `About to process legacy document for case:${docketNumber}, docketEntryId: ${docketEntryId}`,
   );
 
-  await applicationContext.getUseCases().parseLegacyDocumentsInteractor({
-    applicationContext,
-    docketEntryId,
-    docketNumber,
-  });
+  try {
+    await applicationContext.getUseCases().parseLegacyDocumentsInteractor({
+      applicationContext,
+      docketEntryId,
+      docketNumber,
+    });
 
-  const sqs = applicationContext.getQueueService();
-  await sqs
-    .deleteMessage({
-      QueueUrl: process.env.MIGRATE_LEGACY_DOCUMENTS_QUEUE_URL,
-      ReceiptHandle: receiptHandle,
-    })
-    .promise();
+    const sqs = applicationContext.getQueueService();
+    await sqs
+      .deleteMessage({
+        QueueUrl: process.env.MIGRATE_LEGACY_DOCUMENTS_QUEUE_URL,
+        ReceiptHandle: receiptHandle,
+      })
+      .promise();
+  } catch (err) {
+    applicationContext.logger.error(
+      `Failed processing legacy document ${docketNumber}, ${docketEntryId}: ${err.message}`,
+      err,
+    );
+  }
 };

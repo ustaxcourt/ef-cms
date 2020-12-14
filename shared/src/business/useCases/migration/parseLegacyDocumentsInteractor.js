@@ -86,4 +86,7 @@ exports.parseLegacyDocumentsInteractor = async ({
     docketNumber: caseEntity.docketNumber,
     document: validatedDocketEntry,
   });
+  applicationContext.logger.info(
+    `Successfully scraped ${docketNumber}: ${docketEntryId}`,
+  );
 };
