@@ -6,16 +6,7 @@ const {
   STATUS_TYPES,
 } = applicationContext.getConstants();
 
-export const petitionsClerkBlocksCase = (
-  test,
-  trialLocation,
-  overrides = {
-    caseCaption:
-      'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
-    caseStatus: STATUS_TYPES.generalDocketReadyForTrial,
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-  },
-) => {
+export const petitionsClerkBlocksCase = (test, trialLocation, overrides) => {
   return it('Petitions clerk blocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -56,10 +47,14 @@ export const petitionsClerkBlocksCase = (
           blocked: true,
           blockedDate: expect.anything(),
           blockedReason: 'just because',
-          caseCaption: overrides.caseCaption,
+          caseCaption:
+            overrides.caseCaption ||
+            'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
           docketNumber: test.docketNumber,
-          docketNumberSuffix: overrides.docketNumberSuffix,
-          status: overrides.caseStatus,
+          docketNumberSuffix:
+            overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.SMALL,
+          status:
+            overrides.caseStatus || STATUS_TYPES.generalDocketReadyForTrial,
         }),
       ]),
     );
