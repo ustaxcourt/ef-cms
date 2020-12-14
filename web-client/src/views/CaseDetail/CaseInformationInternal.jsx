@@ -649,22 +649,27 @@ export const CaseInformationInternal = connect(
                       <SetForHearingModal />
                     )}
                   </h3>
-                  <table className="usa-table ustc-table trial-list">
-                    <thead>
-                      <tr>
-                        <th>Place of Trial</th>
-                        <th>Trial date</th>
-                        <th>Judge</th>
-                        <th>&nbsp;</th>
-                      </tr>
-                    </thead>
-                    <DisplayHearings
-                      hearings={formattedCaseDetail.hearings}
-                      removeHearingSequence={
-                        openRemoveFromTrialSessionModalSequence
-                      }
-                    />
-                  </table>
+                  {caseInformationHelper.showHearingsTable && (
+                    <table className="usa-table ustc-table trial-list">
+                      <thead>
+                        <tr>
+                          <th>Place of Trial</th>
+                          <th>Trial date</th>
+                          <th>Judge</th>
+                          <th>&nbsp;</th>
+                        </tr>
+                      </thead>
+                      <DisplayHearings
+                        hearings={formattedCaseDetail.hearings}
+                        removeHearingSequence={
+                          openRemoveFromTrialSessionModalSequence
+                        }
+                      />
+                    </table>
+                  )}
+                  {!caseInformationHelper.showHearingsTable && (
+                    <p>There are no hearings set for this case.</p>
+                  )}
                 </div>
               </div>
             </div>

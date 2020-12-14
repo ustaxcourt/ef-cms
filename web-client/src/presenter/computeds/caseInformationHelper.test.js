@@ -25,6 +25,40 @@ describe('case information helper', () => {
     expect(result.showAddCounsel).toEqual(true);
   });
 
+  it('should show hearings table if there are hearings on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseInformationHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          hearings: [{ trialSessionId: 'trial-id-123' }],
+        },
+        form: {},
+      },
+    });
+    expect(result.showHearingsTable).toEqual(true);
+  });
+
+  it('should not show hearings table if there are no hearings on the case', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseInformationHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          hearings: [],
+        },
+        form: {},
+      },
+    });
+    expect(result.showHearingsTable).toEqual(false);
+  });
+
   it('should not show add counsel section if user is an external user', () => {
     const user = {
       role: ROLES.privatePractitioner,
