@@ -56,7 +56,7 @@ exports.setForHearingInteractor = async ({
     .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
     .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
 
-  await applicationContext.getPersistenceGateway().addHearingToCase({
+  await applicationContext.getPersistenceGateway().addCaseToHearing({
     applicationContext,
     docketNumber,
     trialSession: trialSessionEntity.validate().toRawObject(),
