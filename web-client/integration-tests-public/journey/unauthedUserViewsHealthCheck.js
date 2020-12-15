@@ -4,7 +4,6 @@ export const unauthedUserViewsHealthCheck = test => {
 
     expect(test.getState('health')).toEqual(
       expect.objectContaining({
-        clamAV: expect.anything(),
         cognito: expect.anything(),
         dynamo: expect.objectContaining({
           efcms: expect.anything(),
