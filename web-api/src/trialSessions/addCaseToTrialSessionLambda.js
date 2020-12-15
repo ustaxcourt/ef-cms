@@ -16,5 +16,6 @@ exports.addCaseToTrialSessionLambda = event =>
         applicationContext,
         docketNumber,
         trialSessionId,
+        ...JSON.parse(event.body),
       });
   });

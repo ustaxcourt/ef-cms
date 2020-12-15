@@ -30,13 +30,6 @@ const TRIAL_SESSION = {
 };
 
 describe('trial session working copy computed', () => {
-  it('computes defaults with no data', () => {
-    const result = runCompute(trialSessionWorkingCopyHelper, {
-      state: {},
-    });
-    expect(result.title).toBeDefined();
-  });
-
   describe('sorting', () => {
     it('sorts calendared cases by docket number', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
@@ -50,12 +43,14 @@ describe('trial session working copy computed', () => {
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {},
             filters: { statusUnassigned: true },
             sort: 'docket',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -80,12 +75,14 @@ describe('trial session working copy computed', () => {
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {},
             filters: { statusUnassigned: true },
             sort: 'docket',
             sortOrder: 'desc',
+            userNotes: {},
           },
         },
       });
@@ -125,12 +122,14 @@ describe('trial session working copy computed', () => {
                 docketNumber: '90-07',
               },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {},
             filters: { statusUnassigned: true },
             sort: 'practitioner',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -158,10 +157,12 @@ describe('trial session working copy computed', () => {
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             sort: 'practitioner',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -181,6 +182,7 @@ describe('trial session working copy computed', () => {
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {
@@ -192,6 +194,7 @@ describe('trial session working copy computed', () => {
             filters: { aBasisReached: true },
             sort: 'docket',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -209,6 +212,7 @@ describe('trial session working copy computed', () => {
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {
@@ -220,6 +224,7 @@ describe('trial session working copy computed', () => {
             filters: { dismissed: true },
             sort: 'docket',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -243,6 +248,7 @@ describe('trial session working copy computed', () => {
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {
@@ -258,6 +264,7 @@ describe('trial session working copy computed', () => {
             },
             sort: 'docket',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -280,6 +287,7 @@ describe('trial session working copy computed', () => {
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {
@@ -289,6 +297,7 @@ describe('trial session working copy computed', () => {
             filters: { statusUnassigned: true },
             sort: 'docket',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -312,12 +321,14 @@ describe('trial session working copy computed', () => {
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {},
             filters: { statusUnassigned: false },
             sort: 'docket',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -337,12 +348,14 @@ describe('trial session working copy computed', () => {
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {},
             filters: { statusUnassigned: true },
             sort: 'docket',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -384,12 +397,14 @@ describe('trial session working copy computed', () => {
                 status: CASE_STATUS_TYPES.closed,
               },
             ],
+            caseOrder: [],
           },
           trialSessionWorkingCopy: {
             caseMetadata: {},
             filters: { statusUnassigned: true },
             sort: 'docket',
             sortOrder: 'asc',
+            userNotes: {},
           },
         },
       });
@@ -414,12 +429,14 @@ describe('trial session working copy computed', () => {
             { ...MOCK_CASE, docketNumber: '500-17' },
             { ...MOCK_CASE, docketNumber: '90-07' },
           ],
+          caseOrder: [],
         },
         trialSessionWorkingCopy: {
           caseMetadata: {},
           filters: { statusUnassigned: true },
           sort: 'docket',
           sortOrder: 'asc',
+          userNotes: {},
         },
       },
     });
@@ -431,5 +448,46 @@ describe('trial session working copy computed', () => {
       '5000-17': {},
     });
     expect(result.casesShownCount).toEqual(5);
+  });
+
+  it('return the cases mapped by docket number', () => {
+    let result = runCompute(trialSessionWorkingCopyHelper, {
+      state: {
+        constants: {
+          STATUS_TYPES,
+          TRIAL_STATUS_TYPES,
+        },
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [
+            MOCK_CASE,
+            { ...MOCK_CASE, docketNumber: '102-19' },
+            { ...MOCK_CASE, docketNumber: '5000-17' },
+            { ...MOCK_CASE, docketNumber: '500-17' },
+            { ...MOCK_CASE, docketNumber: '90-07' },
+          ],
+          caseOrder: [
+            {
+              calendarNotes: 'this is a test note',
+              docketNumber: '102-19',
+            },
+          ],
+        },
+        trialSessionWorkingCopy: {
+          caseMetadata: {},
+          filters: { statusUnassigned: true },
+          sort: 'docket',
+          sortOrder: 'asc',
+          userNotes: {
+            '102-19': 'hello world',
+          },
+        },
+      },
+    });
+    expect(
+      result.formattedCases.find(
+        ({ docketNumber }) => docketNumber === '102-19',
+      ).calendarNotes,
+    ).toEqual('this is a test note');
   });
 });

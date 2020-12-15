@@ -3,9 +3,11 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
+import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -32,6 +34,8 @@ export const addCaseToTrialSessionSequence = [
         setWaitingForResponseAction,
         clearModalAction,
         addCaseToTrialSessionAction,
+        getTrialSessionsAction,
+        setTrialSessionsAction,
         unsetWaitingForResponseAction,
         showSuccessAlert,
       ]),
