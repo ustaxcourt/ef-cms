@@ -16,18 +16,12 @@ export const removeFromTrialSessionModalHelper = (get, applicationContext) => {
 
   const isFirstTrialSession = trialSessionId === caseDetail.trialSessionId;
 
-  let defaultCaseStatus = caseDetail.status;
-  if (isFirstTrialSession) {
-    defaultCaseStatus = STATUS_TYPES.generalDocketReadyForTrial;
-  }
-
   const isCalendared = caseDetail.status === STATUS_TYPES.calendared;
   const showCaseStatusDropdown = !isCalendared || isFirstTrialSession;
 
   return {
     associatedJudgeRequired,
     caseStatusOptions: STATUS_TYPES_MANUAL_UPDATE,
-    defaultCaseStatus,
     showAssociatedJudgeDropdown: associatedJudgeRequired,
     showCaseStatusDropdown,
   };
