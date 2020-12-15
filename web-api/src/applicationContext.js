@@ -10,6 +10,9 @@ const pdfLib = require('pdf-lib');
 const sass = require('sass');
 const util = require('util');
 const {
+  addCaseToHearing,
+} = require('../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing');
+const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
 const {
@@ -808,6 +811,9 @@ const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
+  setForHearingInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
+const {
   setMessageAsRead,
 } = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
 const {
@@ -957,9 +963,6 @@ const {
 const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
-const {
-  userIsAssociated,
-} = require('../../shared/src/business/useCases/caseAssociation/userIsAssociatedInteractor');
 const {
   validatePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
@@ -1111,6 +1114,7 @@ const isValidatedDecorator = persistenceGatewayMethods => {
 
 const gatewayMethods = {
   ...isValidatedDecorator({
+    addCaseToHearing,
     addWorkItemToSectionInbox,
     associateUserWithCase,
     associateUserWithCasePending,
@@ -1619,6 +1623,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         serveExternallyFiledDocumentInteractor,
+        setForHearingInteractor,
         setMessageAsReadInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
@@ -1650,7 +1655,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateTrialSessionWorkingCopyInteractor,
         updateUserCaseNoteInteractor,
         updateUserContactInformationInteractor,
-        userIsAssociated,
         validatePdfInteractor,
         verifyPendingCaseForUserInteractor,
         virusScanPdfInteractor: args =>
