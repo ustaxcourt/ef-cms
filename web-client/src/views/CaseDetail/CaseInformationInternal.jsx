@@ -165,21 +165,7 @@ const TrialInformation = ({
                 <td>{caseDetail.formattedPreferredTrialCity}</td>
                 <td>{caseDetail.formattedTrialDate}</td>
                 <td>{caseDetail.formattedAssociatedJudge}</td>
-                <td>
-                  <Button
-                    link
-                    className="red-warning"
-                    icon="trash"
-                    id="remove-from-trial-session-btn"
-                    onClick={() => {
-                      openRemoveFromTrialSessionModalSequence({
-                        trialSessionId: caseDetail.trialSessionId,
-                      });
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </td>
+                <td>&nbsp;</td>
               </tr>
               {caseDetail.highPriorityReason && (
                 <tr>
