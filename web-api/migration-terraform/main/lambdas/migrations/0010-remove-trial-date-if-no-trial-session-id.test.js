@@ -1,5 +1,6 @@
 const {
   AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   PARTY_TYPES,
@@ -36,6 +37,7 @@ describe('migrateItems', () => {
     procedureType: PROCEDURE_TYPES[0],
     sk: 'case|999-99',
     sortableDocketNumber: 999,
+    status: CASE_STATUS_TYPES.new,
     trialDate: '2019-03-01T21:42:29.073Z',
     userId: mockUserId,
   };
@@ -98,7 +100,31 @@ describe('migrateItems', () => {
       ...mockNonBlockedCase,
       pk: 'case|999-99',
       sk: 'case|999-99',
-      trialDate: '2019-03-01T21:42:29.073Z',
+      trialDate: '2020-12-25T21:42:29.073Z',
+      trialSessionId: mockTrialSessionId,
+    };
+
+    const items = [mockNonBlockedCaseWithTrialDateAndTrialSessionId];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(
+          mockNonBlockedCaseWithTrialDateAndTrialSessionId,
+        ),
+      ]),
+    );
+  });
+
+  it('should return and not modify case records that have a trial date and a trialSessionId and are calendared', async () => {
+    const mockTrialSessionId = '2129e02c-4122-4368-a888-b3b18196c687';
+    const mockNonBlockedCaseWithTrialDateAndTrialSessionId = {
+      ...mockNonBlockedCase,
+      pk: 'case|999-99',
+      sk: 'case|999-99',
+      status: CASE_STATUS_TYPES.calendared,
+      trialDate: '2020-12-25T21:42:29.073Z',
       trialSessionId: mockTrialSessionId,
     };
 
@@ -131,14 +157,13 @@ describe('migrateItems', () => {
     );
   });
 
-  it('should remove trialDate from a case records when the trialDate occurs before November 20, 2020', async () => {
-    const mockTrialSessionId = '2129e02c-4122-4368-a888-b3b18196c687';
+  it('should remove trialDate from a case records when the trialDate occurs before November 20, 2020 and trialSessionId is undefined', async () => {
     const mockNonBlockedCaseWithTrialDateAndTrialSessionId = {
       ...mockNonBlockedCase,
       pk: 'case|999-99',
       sk: 'case|999-99',
       trialDate: '2019-03-01T21:42:29.073Z',
-      trialSessionId: mockTrialSessionId,
+      trialSessionId: undefined,
     };
 
     const items = [mockNonBlockedCaseWithTrialDateAndTrialSessionId];

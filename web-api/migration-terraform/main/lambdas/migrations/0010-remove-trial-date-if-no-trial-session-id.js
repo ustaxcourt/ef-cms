@@ -5,6 +5,9 @@ const {
 const {
   Case,
 } = require('../../../../../shared/src/business/entities/cases/Case');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
 const applicationContext = createApplicationContext({});
 
 const migrateItems = async (items, documentClient) => {
@@ -13,7 +16,8 @@ const migrateItems = async (items, documentClient) => {
     if (
       item.pk.startsWith('case|') &&
       item.sk.startsWith('case|') &&
-      item.trialDate
+      item.trialDate &&
+      item.status !== CASE_STATUS_TYPES.calendared
     ) {
       const trialDateCutoff = '2020-11-20T00:00:00.000Z';
       if (item.trialDate < trialDateCutoff) {
