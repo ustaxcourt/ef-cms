@@ -14,11 +14,11 @@ export const formattedClosedCases = (get, applicationContext) => {
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
-const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
+const getUserIsAssignedToSession = ({ currentUser, get, trialSessionId }) => {
   const sessions = get(state.trialSessions);
   let session;
   if (sessions) {
-    session = sessions.find(s => s.trialSessionId === result.trialSessionId);
+    session = sessions.find(s => s.trialSessionId === trialSessionId);
   }
 
   const judge = get(state.judgeUser);
@@ -31,8 +31,10 @@ const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
   const isTrialClerkUserAssigned =
     session?.trialClerk?.userId === currentUser.userId;
 
-  return (
-    isJudgeUserAssigned || isTrialClerkUserAssigned || isChambersUserAssigned
+  return !!(
+    isJudgeUserAssigned ||
+    isTrialClerkUserAssigned ||
+    isChambersUserAssigned
   );
 };
 
@@ -223,7 +225,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       ),
       isInitialDocument,
       isLegacySealed: entry.isLegacySealed,
-      isServed: !!entry.servedAt,
+      isServed: !!entry.servedAt || !!entry.isLegacyServed,
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
@@ -275,10 +277,73 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.consolidatedCases = result.consolidatedCases || [];
 
+  const allTrialSessions = get(state.trialSessions);
+
+  const getCalendarDetailsForTrialSession = ({
+    caseDocketNumber,
+    trialSessionId,
+    trialSessions,
+  }) => {
+    let note;
+    let addedAt;
+
+    if (!trialSessions || !trialSessions.length) {
+      return { addedAt, note };
+    }
+
+    const foundTrialSession = trialSessions.find(
+      session => session.trialSessionId === trialSessionId,
+    );
+
+    if (foundTrialSession && foundTrialSession.caseOrder) {
+      const trialSessionCase = foundTrialSession.caseOrder.find(
+        sessionCase => sessionCase.docketNumber === caseDocketNumber,
+      );
+
+      note = trialSessionCase && trialSessionCase.calendarNotes;
+      addedAt = trialSessionCase && trialSessionCase.addedToSessionAt;
+    }
+
+    return { addedAt, note };
+  };
+
+  const { note: trialSessionNotes } = getCalendarDetailsForTrialSession({
+    caseDocketNumber: caseDetail.docketNumber,
+    trialSessionId: caseDetail.trialSessionId,
+    trialSessions: allTrialSessions,
+  });
+
+  result.trialSessionNotes = trialSessionNotes;
+
+  if (result.hearings && result.hearings.length) {
+    result.hearings.forEach(hearing => {
+      const { addedAt, note } = getCalendarDetailsForTrialSession({
+        caseDocketNumber: caseDetail.docketNumber,
+        trialSessionId: hearing.trialSessionId,
+        trialSessions: allTrialSessions,
+      });
+
+      hearing.calendarNotes = note;
+      hearing.addedToSessionAt = addedAt;
+
+      hearing.userIsAssignedToSession = getUserIsAssignedToSession({
+        currentUser: user,
+        get,
+        trialSessionId: hearing.trialSessionId,
+      });
+    });
+
+    result.hearings.sort((a, b) => {
+      return applicationContext
+        .getUtilities()
+        .compareISODateStrings(a.addedToSessionAt, b.addedToSessionAt);
+    });
+  }
+
   result.userIsAssignedToSession = getUserIsAssignedToSession({
     currentUser: user,
     get,
-    result,
+    trialSessionId: caseDetail.trialSessionId,
   });
 
   result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;

@@ -90,6 +90,7 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
             <th>Case Title</th>
             <th>Petitioner Counsel</th>
             <th>Respondent Counsel</th>
+            <th>Calendar Notes</th>
           </tr>
         </thead>
         <tbody>
@@ -111,6 +112,7 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
                         <div key={idx}>{counsel}</div>
                       ))}
                   </td>
+                  <td>{caseDetail.calendarNotes}</td>
                 </tr>
               );
             })}

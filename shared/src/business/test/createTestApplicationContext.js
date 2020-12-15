@@ -18,10 +18,6 @@ const {
   bulkIndexRecords,
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
-  Case,
-  getPetitionDocketEntryFromDocketEntries,
-} = require('../entities/cases/Case');
-const {
   compareCasesByDocketNumber,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
@@ -133,6 +129,7 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { Case, caseHasServedDocketEntries } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { fakeData, getFakeFile, testPdfDoc } = require('./getFakeFile');
@@ -198,6 +195,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
+    caseHasServedDocketEntries: jest
+      .fn()
+      .mockImplementation(caseHasServedDocketEntries),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     compareCasesByDocketNumber: jest
       .fn()
@@ -259,9 +259,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getMonthDayYearObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearObj),
-    getPetitionDocketEntryFromDocketEntries: jest
-      .fn()
-      .mockImplementation(getPetitionDocketEntryFromDocketEntries),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
@@ -340,6 +337,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetPersistenceGateway = appContextProxy({
+    addCaseToHearing: jest.fn(),
     addWorkItemToSectionInbox,
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),

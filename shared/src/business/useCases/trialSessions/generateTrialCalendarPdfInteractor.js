@@ -56,6 +56,17 @@ exports.generateTrialCalendarPdfInteractor = async ({
       };
     });
 
+  formattedTrialSession.caseOrder.forEach(aCase => {
+    if (aCase.calendarNotes) {
+      const caseToUpdate = formattedOpenCases.find(
+        theCase => theCase.docketNumber === aCase.docketNumber,
+      );
+      if (caseToUpdate) {
+        caseToUpdate.calendarNotes = aCase.calendarNotes;
+      }
+    }
+  });
+
   const {
     formattedCourtReporter,
     formattedIrsCalendarAdministrator,
