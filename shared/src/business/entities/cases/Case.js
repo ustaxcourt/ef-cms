@@ -730,7 +730,6 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
-
   trialDate: joi
     .alternatives()
     .conditional('trialSessionId', {
@@ -752,7 +751,7 @@ Case.VALIDATION_RULES = {
   trialSessionId: joi
     .when('status', {
       is: CASE_STATUS_TYPES.calendared,
-      otherwise: JoiValidationConstants.UUID.optional().when('trialDate', {
+      otherwise: joi.when('trialDate', {
         is: joi.exist().not(null),
         otherwise: JoiValidationConstants.UUID.optional(),
         then: JoiValidationConstants.UUID.required(),
