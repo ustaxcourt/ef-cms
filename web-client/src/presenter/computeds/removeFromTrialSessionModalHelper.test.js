@@ -43,30 +43,6 @@ describe('removeFromTrialSessionModalHelper', () => {
     expect(result.associatedJudgeRequired).toEqual(false);
   });
 
-  it('uses current case status for defaultCaseStatus', () => {
-    const result = runCompute(removeFromTrialSessionModalHelper, {
-      state: {
-        ...state,
-      },
-    });
-
-    expect(result.defaultCaseStatus).toEqual('Calendared');
-  });
-
-  it('uses General Docket, Ready for Trial for defaultCaseStatus when the trialSessionId being removed is attached to the case', () => {
-    state.modal.trialSessionId = 'abc-123';
-
-    const result = runCompute(removeFromTrialSessionModalHelper, {
-      state: {
-        ...state,
-      },
-    });
-
-    expect(result.defaultCaseStatus).toEqual(
-      CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    );
-  });
-
   it('shows case status dropdown when a hearing is going to be removed and the case is NOT calendared', () => {
     state.modal.trialSessionId = 'abc-124';
 
