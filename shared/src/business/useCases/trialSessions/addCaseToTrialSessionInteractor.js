@@ -11,12 +11,14 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {string} providers.calendarNotes notes for why the trial session/hearing was added
  * @param {string} providers.trialSessionId the id of the trial session
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
  */
 exports.addCaseToTrialSessionInteractor = async ({
   applicationContext,
+  calendarNotes,
   docketNumber,
   trialSessionId,
 }) => {
@@ -56,7 +58,7 @@ exports.addCaseToTrialSessionInteractor = async ({
 
   trialSessionEntity
     .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-    .manuallyAddCaseToCalendar(caseEntity);
+    .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
@@ -76,17 +78,17 @@ exports.addCaseToTrialSessionInteractor = async ({
     });
   }
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-  });
-
   const updatedCase = await applicationContext
     .getPersistenceGateway()
     .updateCase({
       applicationContext,
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
