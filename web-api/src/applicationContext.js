@@ -964,9 +964,6 @@ const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
 const {
-  userIsAssociated,
-} = require('../../shared/src/business/useCases/caseAssociation/userIsAssociatedInteractor');
-const {
   validatePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
 const {
@@ -1658,7 +1655,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateTrialSessionWorkingCopyInteractor,
         updateUserCaseNoteInteractor,
         updateUserContactInformationInteractor,
-        userIsAssociated,
         validatePdfInteractor,
         verifyPendingCaseForUserInteractor,
         virusScanPdfInteractor: args =>
