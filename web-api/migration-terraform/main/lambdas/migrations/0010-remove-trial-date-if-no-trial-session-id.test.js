@@ -11,6 +11,34 @@ const {
 describe('migrateItems', () => {
   let documentClient;
 
+  const mockUserId = 'a21f3ea9-0f94-4b9c-bc39-98e1ab539b44';
+
+  // we are defining a case as opposed to using MOCK_CASE as we are trying to represent the case
+  // item being checked in the migration script, NOT a full case record
+  const mockNonBlockedCase = {
+    caseCaption: 'A caption',
+    caseType: CASE_TYPES_MAP.deficiency,
+    contactPrimary: {
+      address1: '876 12th Ave',
+      city: 'Nashville',
+      contactId: mockUserId,
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      name: 'Jimmy Dean',
+      phone: '1234567890',
+      postalCode: '05198',
+      secondaryName: 'Jimmy Dean',
+      state: 'AK',
+    },
+    docketNumber: '999-99',
+    partyType: PARTY_TYPES.petitioner,
+    pk: 'case|999-99',
+    procedureType: PROCEDURE_TYPES[0],
+    sk: 'case|999-99',
+    sortableDocketNumber: 999,
+    trialDate: '2019-03-01T21:42:29.073Z',
+    userId: mockUserId,
+  };
+
   beforeEach(() => {
     documentClient = {
       get: () => ({
@@ -42,66 +70,46 @@ describe('migrateItems', () => {
   });
 
   it('should return and not modify case records that do not have a trial date', async () => {
-    const mockNonBlockedCase = {
+    const mockNonBlockedCaseWithoutTrialDate = {
       pk: 'case|999-99',
       sk: 'case|999-99',
     };
 
-    const items = [mockNonBlockedCase];
+    const items = [mockNonBlockedCaseWithoutTrialDate];
 
     const results = await migrateItems(items, documentClient);
 
     expect(results).toEqual(
-      expect.arrayContaining([expect.objectContaining(mockNonBlockedCase)]),
+      expect.arrayContaining([
+        expect.objectContaining(mockNonBlockedCaseWithoutTrialDate),
+      ]),
     );
   });
 
   it('should return and not modify case records that have a trial date and a trialSessionId', async () => {
     const mockTrialSessionId = '2129e02c-4122-4368-a888-b3b18196c687';
-    const mockNonBlockedCase = {
+    const mockNonBlockedCaseWithTrialDateAndTrialSessionId = {
+      ...mockNonBlockedCase,
       pk: 'case|999-99',
       sk: 'case|999-99',
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: mockTrialSessionId,
     };
 
-    const items = [mockNonBlockedCase];
+    const items = [mockNonBlockedCaseWithTrialDateAndTrialSessionId];
 
     const results = await migrateItems(items, documentClient);
 
     expect(results).toEqual(
-      expect.arrayContaining([expect.objectContaining(mockNonBlockedCase)]),
+      expect.arrayContaining([
+        expect.objectContaining(
+          mockNonBlockedCaseWithTrialDateAndTrialSessionId,
+        ),
+      ]),
     );
   });
 
   it('should remove trialDate from case records that have a trialDate and no trialSessionId', async () => {
-    const mockUserId = 'a21f3ea9-0f94-4b9c-bc39-98e1ab539b44';
-    // we are defining a case as opposed to using MOCK_CASE as we are trying to represent the case
-    // item being checked in the migration script, NOT a full case record
-    const mockNonBlockedCase = {
-      caseCaption: 'A caption',
-      caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '876 12th Ave',
-        city: 'Nashville',
-        contactId: mockUserId,
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Jimmy Dean',
-        phone: '1234567890',
-        postalCode: '05198',
-        secondaryName: 'Jimmy Dean',
-        state: 'AK',
-      },
-      docketNumber: '999-99',
-      partyType: PARTY_TYPES.petitioner,
-      pk: 'case|999-99',
-      procedureType: PROCEDURE_TYPES[0],
-      sk: 'case|999-99',
-      sortableDocketNumber: 999,
-      trialDate: '2019-03-01T21:42:29.073Z',
-      userId: mockUserId,
-    };
-
     const items = [mockNonBlockedCase];
 
     const results = await migrateItems(items, documentClient);
@@ -116,4 +124,6 @@ describe('migrateItems', () => {
       ]),
     );
   });
+
+  it('should remove trialDate from a case records when the trialDate occurs before November 20, 2020', async () => {});
 });
