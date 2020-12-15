@@ -1,4 +1,5 @@
 const { Case } = require('../../entities/cases/Case');
+const { DocketEntry } = require('../../entities/DocketEntry');
 
 /**
  *
@@ -75,10 +76,17 @@ exports.parseLegacyDocumentsInteractor = async ({
 
   foundDocketEntry.documentContentsId = documentContentsId;
 
+  const validatedDocketEntry = new DocketEntry(foundDocketEntry, {
+    applicationContext,
+  }).validate();
+
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
     docketEntryId: foundDocketEntry.docketEntryId,
     docketNumber: caseEntity.docketNumber,
-    document: foundDocketEntry,
+    document: validatedDocketEntry,
   });
+  applicationContext.logger.info(
+    `Successfully scraped ${docketNumber}: ${docketEntryId}`,
+  );
 };

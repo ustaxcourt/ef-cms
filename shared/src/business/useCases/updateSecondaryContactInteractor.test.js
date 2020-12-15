@@ -25,19 +25,22 @@ describe('updateSecondaryContactInteractor', () => {
     postalCode: '12345',
     state: 'TN',
   };
+
   let mockCase = {
     ...MOCK_CASE,
     contactSecondary: mockContactSecondary,
     partyType: PARTY_TYPES.petitionerSpouse,
   };
 
-  let mockUser = new User({
-    name: 'bob',
-    role: ROLES.petitioner,
-    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  });
+  let mockUser;
 
   beforeEach(() => {
+    mockUser = new User({
+      name: 'bob',
+      role: ROLES.petitioner,
+      userId: MOCK_CASE.contactPrimary.contactId,
+    });
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
@@ -52,7 +55,7 @@ describe('updateSecondaryContactInteractor', () => {
       .generatePdfFromHtmlInteractor.mockReturnValue(fakeData);
     applicationContext.getUseCases().userIsAssociated.mockReturnValue(true);
 
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
 
     applicationContext.getUtilities().getAddressPhoneDiff.mockReturnValue({
       address1: {
@@ -193,14 +196,10 @@ describe('updateSecondaryContactInteractor', () => {
   });
 
   it('throws an error if the user making the request is not associated with the case', async () => {
-    const mockCaseUnassociated = {
-      ...mockCase,
-      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+    mockUser = {
+      ...mockUser,
+      userId: 'de300c01-f6ff-4843-a72f-ee7cd2521237',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCaseUnassociated);
-    applicationContext.getUseCases().userIsAssociated.mockReturnValue(false);
 
     await expect(
       updateSecondaryContactInteractor({
