@@ -9,15 +9,17 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for setting showModal
  */
 export const defaultRemoveFromTrialSessionModalValuesAction = ({
+  applicationContext,
   get,
   props,
   store,
 }) => {
-  const { trialSessionId } = props;
-  const caseDetail = get(state.caseDetail);
-  let { associatedJudge, status } = cloneDeep(caseDetail);
+  const { STATUS_TYPES } = applicationContext.getConstants();
 
-  store.set(state.modal.caseStatus, status);
+  const { trialSessionId } = props;
+  const associatedJudge = cloneDeep(get(state.caseDetail.associatedJudge));
+
   store.set(state.modal.associatedJudge, associatedJudge);
   store.set(state.modal.trialSessionId, trialSessionId);
+  store.set(state.modal.caseStatus, STATUS_TYPES.generalDocketReadyForTrial);
 };
