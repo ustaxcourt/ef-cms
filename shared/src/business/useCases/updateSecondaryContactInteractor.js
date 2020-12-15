@@ -62,7 +62,6 @@ exports.updateSecondaryContactInteractor = async ({
   );
 
   const userIsAssociated = caseEntity.isAssociatedUser({
-    caseRaw: caseToUpdate,
     user,
   });
 

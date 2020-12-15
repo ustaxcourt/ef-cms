@@ -5,16 +5,21 @@ const {
 const {
   updatePrimaryContactInteractor,
 } = require('./updatePrimaryContactInteractor');
-const { Case } = require('../entities/cases/Case');
 const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
 describe('update primary contact on a case', () => {
   let mockCase;
+  let mockUser;
 
   beforeEach(() => {
-    mockCase = new Case(MOCK_CASE, { applicationContext });
+    mockCase = MOCK_CASE;
+    mockUser = new User({
+      name: 'bob',
+      role: ROLES.petitioner,
+      userId: MOCK_CASE.contactPrimary.contactId,
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -28,13 +33,7 @@ describe('update primary contact on a case', () => {
       .getDocumentGenerators()
       .changeOfAddress.mockReturnValue(fakeData);
 
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitioner,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
 
     applicationContext
       .getChromiumBrowser()
@@ -184,14 +183,10 @@ describe('update primary contact on a case', () => {
   });
 
   it('throws an error if the user making the request is not associated with the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue({
-        ...MOCK_CASE,
-        userId: '123',
-      });
-
-    applicationContext.getUseCases().userIsAssociated.mockReturnValue(false);
+    mockUser = {
+      ...mockUser,
+      userId: 'de300c01-f6ff-4843-a72f-ee7cd2521237',
+    };
 
     await expect(
       updatePrimaryContactInteractor({

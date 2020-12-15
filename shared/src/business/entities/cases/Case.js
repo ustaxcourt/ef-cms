@@ -1384,7 +1384,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
  *
  * @param {object} arguments arguments
  * @param {object} arguments.caseRaw raw case details
- * @param {string} arguments.userId id of the user account
+ * @param {string} arguments.user the user account
  * @returns {boolean} if the case is associated
  */
 const isAssociatedUser = function ({ caseRaw, user }) {
@@ -1415,6 +1415,16 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Determines if provided user is associated with the case
+ *
+ * @param {object} arguments.user the user account
+ * @returns {boolean} true if the user provided is associated with the case, false otherwise
+ */
+Case.prototype.isAssociatedUser = function ({ user }) {
+  return isAssociatedUser({ caseRaw: this, user });
 };
 
 /**
