@@ -5,6 +5,7 @@ const {
 const {
   updatePrimaryContactInteractor,
 } = require('./updatePrimaryContactInteractor');
+const { Case } = require('../entities/cases/Case');
 const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
@@ -13,7 +14,7 @@ describe('update primary contact on a case', () => {
   let mockCase;
 
   beforeEach(() => {
-    mockCase = MOCK_CASE;
+    mockCase = new Case(MOCK_CASE, { applicationContext });
 
     applicationContext
       .getPersistenceGateway()
@@ -26,8 +27,6 @@ describe('update primary contact on a case', () => {
     applicationContext
       .getDocumentGenerators()
       .changeOfAddress.mockReturnValue(fakeData);
-
-    applicationContext.getUseCases().userIsAssociated.mockReturnValue(true);
 
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
