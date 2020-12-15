@@ -18,21 +18,16 @@ exports.advancedDocumentSearch = async ({
 }) => {
   const sourceFields = [
     'caseCaption',
-    'contactPrimary',
-    'contactSecondary',
     'docketEntryId',
     'docketNumber',
-    'docketNumberSuffix',
     'docketNumberWithSuffix',
-    'documentContents',
     'documentTitle',
     'documentType',
     'eventCode',
     'filingDate',
-    'irsPractitioners',
     'isSealed',
+    'isStricken',
     'numberOfPages',
-    'privatePractitioners',
     'sealedDate',
     judgeType,
   ];
