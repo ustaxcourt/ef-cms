@@ -28,12 +28,19 @@ exports.getPractitionersByNameInteractor = async ({
     throw new Error('Name must be provided to search');
   }
 
-  const foundUsers = applicationContext
+  const foundUsers = await applicationContext
     .getPersistenceGateway()
     .getPractitionersByName({
       applicationContext,
       name,
     });
 
-  return foundUsers;
+  return foundUsers.map(foundUser => ({
+    admissionsStatus: foundUser.admissionsStatus,
+    barNumber: foundUser.barNumber,
+    contact: {
+      state: foundUser.contact.state,
+    },
+    name: foundUser.name,
+  }));
 };
