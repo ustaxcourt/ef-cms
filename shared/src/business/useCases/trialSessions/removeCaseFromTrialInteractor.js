@@ -58,27 +58,31 @@ exports.removeCaseFromTrialInteractor = async ({
 
   const caseEntity = new Case(myCase, { applicationContext });
 
-  caseEntity.removeFromTrial();
+  if (!caseEntity.isHearing(trialSessionId)) {
+    caseEntity.removeFromTrial();
 
-  await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-    applicationContext,
-    docketNumber: caseEntity.docketNumber,
-    highPriority: false,
-  });
+    await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+      applicationContext,
+      docketNumber: caseEntity.docketNumber,
+      highPriority: false,
+    });
 
-  if (caseEntity.isReadyForTrial()) {
+    if (caseEntity.isReadyForTrial()) {
+      await applicationContext
+        .getPersistenceGateway()
+        .createCaseTrialSortMappingRecords({
+          applicationContext,
+          caseSortTags: caseEntity.generateTrialSortTags(),
+          docketNumber: caseEntity.docketNumber,
+        });
+    }
+
     await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-        docketNumber: caseEntity.docketNumber,
-      });
+      .getUseCaseHelpers()
+      .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+  } else {
+    caseEntity.removeFromHearing(trialSessionId);
   }
-
-  await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()

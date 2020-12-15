@@ -8,7 +8,6 @@ describe('Health check', () => {
       method: 'GET',
       url: `https://public-api-${DEPLOYING_COLOR}.${domain}/public-api/health`,
     }).should(response => {
-      expect(response.body.clamAV).to.be.false;
       expect(response.body.cognito).to.be.true;
       expect(response.body.dynamo.efcms).to.be.true;
       expect(response.body.dynamo.efcmsDeploy).to.be.true;

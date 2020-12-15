@@ -199,3 +199,33 @@ resource "aws_route53_health_check" "ui_health_check" {
   failure_threshold = "2"
   request_interval  = "30"
 }
+
+resource "aws_cloudwatch_metric_alarm" "status_health_check" {
+  alarm_name          = "${var.dns_domain} health check endpoint"
+  namespace           = "AWS/Route53"
+  metric_name         = "HealthCheckStatus"
+  comparison_operator = "LessThanThreshold"
+  statistic           = "Minimum"
+  threshold           = "1"
+  evaluation_periods  = "2"
+  period              = "60"
+
+  dimensions = {
+    HealthCheckId = aws_route53_health_check.status_health_check.id
+  }
+
+  alarm_actions = [data.aws_sns_topic.system_health_alarms.arn]
+  insufficient_data_actions = [data.aws_sns_topic.system_health_alarms.arn]
+  ok_actions = [data.aws_sns_topic.system_health_alarms.arn]
+}
+
+resource "aws_route53_health_check" "status_health_check" {
+  fqdn               = "public-api.${var.dns_domain}"
+  port               = 443
+  type               = "HTTPS_STR_MATCH"
+  resource_path      = "/public-api/health"
+  failure_threshold  = "2"
+  request_interval   = "30"
+  invert_healthcheck = true
+  search_string      = "false" # Search for any JSON property returning "false"
+}
