@@ -10,10 +10,12 @@ const migrateItems = async items => {
     if (
       item.pk.startsWith('case|') &&
       item.sk.startsWith('case|') &&
-      item.trialDate &&
-      !item.trialSessionId
+      item.trialDate
     ) {
-      item.trialDate = undefined;
+      //fixme
+      //or if trial date is before november 20, 2020
+
+      //if (trialDate < createISODateString('')) item.trialDate = undefined;
 
       new Case(
         { ...item },
@@ -21,6 +23,9 @@ const migrateItems = async items => {
           applicationContext,
         },
       ).validate();
+
+      //fixme
+      //if it has no pending items, due dates or is not manually blocked - then unblock it
 
       itemsAfter.push(item);
     } else {
