@@ -1,3 +1,4 @@
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { set } from 'cerebral/factories';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -8,6 +9,7 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const openAddToTrialModalSequence = showProgressSequenceDecorator([
   stopShowValidationAction,
+  clearAlertsAction,
   getTrialSessionsAction,
   setTrialSessionsOnModalAction,
   set(state.modal.showAllLocations, false),

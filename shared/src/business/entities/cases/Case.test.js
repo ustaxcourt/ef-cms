@@ -20,10 +20,15 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  Case,
+  caseHasServedDocketEntries,
+  isAssociatedUser,
+  isSealedCase,
+} = require('./Case');
+const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
-const { Case, isAssociatedUser, isSealedCase } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { IrsPractitioner } = require('../IrsPractitioner');
@@ -132,6 +137,40 @@ describe('Case entity', () => {
 
     it('should set archivedDocketEntries to an empty list when a value is not provided and the user is an internal user', () => {
       expect(myCase.archivedDocketEntries).toEqual([]);
+    });
+  });
+
+  describe('hearings', () => {
+    it('sets associated hearings on the case hearings array', () => {
+      const mockhearing = {
+        maxCases: 100,
+        sessionType: 'Regular',
+        startDate: '2025-03-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialLocation: 'Birmingham, Alabama',
+      };
+
+      const newCase = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [mockhearing],
+        },
+        { applicationContext },
+      );
+
+      expect(newCase.hearings).toEqual([expect.objectContaining(mockhearing)]);
+    });
+
+    it('sets the case hearings property to an empty object if none are provided', () => {
+      const newCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+
+      expect(newCase.hearings).toEqual([]);
     });
   });
 
@@ -647,6 +686,23 @@ describe('Case entity', () => {
       );
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.entityName).toEqual('Case');
+    });
+
+    it('creates a valid case without a petition docket entry and does not throw an error', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.petitionsClerk,
+      });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          docketEntries: [MOCK_CASE.docketEntries[1]],
+        },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
     });
 
     it('Creates a valid case from an already existing case json', () => {
@@ -4281,10 +4337,12 @@ describe('Case entity', () => {
       });
       expect(result).toBe(false);
     });
+
     it('returns true if the object has truthy values for isSealed or isSealedDate', () => {
       expect(isSealedCase({ isSealed: true })).toBe(true);
       expect(isSealedCase({ sealedDate: new Date().toISOString() })).toBe(true);
     });
+
     it('returns true if the object has a docket entry with truthy values for isSealed or isLegacySealed', () => {
       expect(
         isSealedCase({
@@ -4302,6 +4360,130 @@ describe('Case entity', () => {
           sealedDate: false,
         }),
       ).toBe(true);
+    });
+  });
+
+  describe('caseHasServedDocketEntries', () => {
+    it('should return true if the case has any docket entry with isLegacyServed set to true', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [{ isLegacyServed: true }],
+        }),
+      ).toBeTruthy();
+    });
+
+    it('should return true if the case has any docket entry with servedAt defined', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [{ servedAt: '2019-08-25T05:00:00.000Z' }],
+        }),
+      ).toBeTruthy();
+    });
+
+    it('should return false if the case does not have any docket entries with isLegacyServed set to true or servedAt', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [{ isLegacyServed: false }],
+        }),
+      ).toBeFalsy();
+    });
+
+    it('should return false if the case does not have any docket entries', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [],
+        }),
+      ).toBeFalsy();
+    });
+  });
+
+  describe('removeFromHearing', () => {
+    it('removes the hearing from the case', () => {
+      const trialSessionHearing = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [trialSessionHearing],
+        },
+        {
+          applicationContext,
+        },
+      );
+      caseToUpdate.removeFromHearing(trialSessionHearing.trialSessionId);
+
+      expect(caseToUpdate.hearings).toEqual([]);
+    });
+  });
+
+  describe('isHearing', () => {
+    it('checks if the given trialSessionId is a hearing (true)', () => {
+      const trialSessionHearing = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [trialSessionHearing],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(
+        caseToUpdate.isHearing(trialSessionHearing.trialSessionId),
+      ).toEqual(true);
+    });
+
+    it('checks if the given trialSessionId is a hearing (false)', () => {
+      const trialSessionHearing = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      caseToUpdate.setAsCalendared(trialSessionHearing);
+
+      expect(
+        caseToUpdate.isHearing(trialSessionHearing.trialSessionId),
+      ).toEqual(false);
     });
   });
 });

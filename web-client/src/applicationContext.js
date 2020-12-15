@@ -1,16 +1,15 @@
 import {
+  Case,
+  caseHasServedDocketEntries,
+} from '../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { ErrorFactory } from './presenter/errors/ErrorFactory';
+import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
-
-import {
-  Case,
-  getPetitionDocketEntryFromDocketEntries,
-} from '../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
-import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
   compareISODateStrings,
   compareStrings,
@@ -190,6 +189,7 @@ import { sealCaseInteractor } from '../../shared/src/proxies/sealCaseProxy';
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
+import { setForHearingInteractor } from '../../shared/src/proxies/trialSessions/setForHearingProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { setMessageAsReadInteractor } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
@@ -402,6 +402,7 @@ const allUseCases = {
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
+  setForHearingInteractor,
   setItemInteractor,
   setMessageAsReadInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
@@ -597,6 +598,7 @@ const applicationContext = {
     return {
       aggregatePartiesForService,
       calculateISODate,
+      caseHasServedDocketEntries,
       checkDate,
       compareCasesByDocketNumber,
       compareISODateStrings,
@@ -626,7 +628,6 @@ const applicationContext = {
       getFormattedCaseDetail,
       getJudgeLastName,
       getMonthDayYearObj,
-      getPetitionDocketEntryFromDocketEntries,
       getServedPartiesCode,
       getTrialSessionStatus,
       getWorkQueueFilters,

@@ -163,12 +163,6 @@ const getEmailServiceStatus = async ({ applicationContext }) => {
   }
 };
 
-const getClamAVStatus = async () => {
-  // eslint-disable-next-line spellcheck/spell-checker
-  // TODO - implement once #6282 (Implement ClamAV Fargate Solution) has been completed
-  return false;
-};
-
 /**
  * getHealthCheckInteractor
  *
@@ -195,12 +189,7 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
     applicationContext,
   });
 
-  const clamAVStatus = await getClamAVStatus({
-    applicationContext,
-  });
-
   return {
-    clamAV: clamAVStatus,
     cognito: cognitoStatus,
     dynamo: {
       efcms: dynamoStatus,

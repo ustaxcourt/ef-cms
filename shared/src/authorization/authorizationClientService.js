@@ -41,6 +41,7 @@ const ROLE_PERMISSIONS = {
   SEND_RECEIVE_MESSAGES: 'SEND_RECEIVE_MESSAGES',
   SERVE_DOCUMENT: 'SERVE_DOCUMENT',
   SERVE_PETITION: 'SERVE_PETITION',
+  SET_FOR_HEARING: 'SET_FOR_HEARING',
   SET_TRIAL_SESSION_CALENDAR: 'SET_TRIAL_SESSION_CALENDAR',
   START_PAPER_CASE: 'START_PAPER_CASE',
   TRIAL_SESSION_QC_COMPLETE: 'TRIAL_SESSION_QC_COMPLETE',
@@ -102,6 +103,7 @@ const docketClerkPermissions = [
   ROLE_PERMISSIONS.SERVE_DOCUMENT,
   ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT,
   ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
+  ROLE_PERMISSIONS.SET_FOR_HEARING,
 ];
 
 const petitionsClerkPermissions = [
@@ -133,6 +135,7 @@ const AUTHORIZATION_MAP = {
   admissionsclerk: [
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER,
+    ROLE_PERMISSIONS.CASE_CORRESPONDENCE,
   ],
   chambers: [
     ...allInternalUserPermissions,
@@ -143,9 +146,9 @@ const AUTHORIZATION_MAP = {
   clerkofcourt: [...docketClerkPermissions, ...petitionsClerkPermissions],
   docketclerk: docketClerkPermissions,
   floater: allInternalUserPermissions,
-  general: allInternalUserPermissions.filter(
-    p => p !== ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES,
-  ),
+  general: allInternalUserPermissions
+    .filter(p => p !== ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)
+    .concat(ROLE_PERMISSIONS.CASE_CORRESPONDENCE),
   inactivePractitioner: [],
   irsPractitioner: [
     ROLE_PERMISSIONS.ADVANCED_SEARCH,

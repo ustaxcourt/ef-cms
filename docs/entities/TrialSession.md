@@ -525,6 +525,22 @@
         - 
           type: "object"
           keys: 
+            calendarNotes: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "max"
+                  args: 
+                    limit: 200
+              allow: 
+                - ""
+                - null
             docketNumber: 
               type: "string"
               flags: 

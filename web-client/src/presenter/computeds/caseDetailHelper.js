@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
@@ -60,11 +61,9 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
-  const petitionDocketEntry = applicationContext
+  const caseHasServedDocketEntries = applicationContext
     .getUtilities()
-    .getPetitionDocketEntryFromDocketEntries(caseDetail.docketEntries);
-  const petitionIsServed =
-    petitionDocketEntry && !!petitionDocketEntry.servedAt;
+    .caseHasServedDocketEntries(caseDetail);
 
   const hasPrivatePractitioners =
     !!caseDetail.privatePractitioners &&
@@ -79,6 +78,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     hasIrsPractitioners,
     hasPrivatePractitioners,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
+    showAddRemoveFromHearingButtons: permissions.SET_FOR_HEARING,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
@@ -95,7 +95,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       user.role !== USER_ROLES.irsPractitioner &&
       user.role !== USER_ROLES.irsSuperuser,
     showJudgesNotes,
-    showPetitionProcessingAlert: isExternalUser && !petitionIsServed,
+    showPetitionProcessingAlert: isExternalUser && !caseHasServedDocketEntries,
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,

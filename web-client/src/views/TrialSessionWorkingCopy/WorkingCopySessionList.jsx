@@ -2,7 +2,6 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { If } from '../../ustc-ui/If/If';
 import { TextView } from '../../ustc-ui/Text/TextView';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
@@ -15,7 +14,6 @@ export const WorkingCopySessionList = connect(
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
     casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
-    formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
     openAddEditUserCaseNoteModalFromListSequence:
       sequences.openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence:
@@ -23,17 +21,18 @@ export const WorkingCopySessionList = connect(
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
+    trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
   function WorkingCopySessionList({
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
-    formattedCases,
     openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
+    trialSessionWorkingCopyHelper,
     trialStatusOptions,
   }) {
     return (
@@ -52,7 +51,7 @@ export const WorkingCopySessionList = connect(
               >
                 <Button
                   link
-                  className="sortable-header-button"
+                  className="sortable-header-button margin-right-0"
                   onClick={() => {
                     toggleWorkingCopySortSequence({
                       sort: 'docket',
@@ -77,7 +76,7 @@ export const WorkingCopySessionList = connect(
               <th className="no-wrap">
                 <Button
                   link
-                  className="sortable-header-button"
+                  className="sortable-header-button margin-right-0"
                   onClick={() => {
                     toggleWorkingCopySortSequence({
                       sort: 'practitioner',
@@ -103,7 +102,7 @@ export const WorkingCopySessionList = connect(
               </th>
             </tr>
           </thead>
-          {formattedCases.map(item => {
+          {trialSessionWorkingCopyHelper.formattedCases.map(item => {
             return (
               <tbody className="hoverable" key={item.docketNumber}>
                 <tr className="vertical-align-middle-row">
@@ -120,7 +119,7 @@ export const WorkingCopySessionList = connect(
                       </span>
                     )}
                   </td>
-                  <td>{item.caseTitle}</td>
+                  <td className="minw-80">{item.caseTitle}</td>
                   <td>
                     {item.privatePractitioners.map(practitioner => (
                       <div key={practitioner.userId}>{practitioner.name}</div>
@@ -152,10 +151,7 @@ export const WorkingCopySessionList = connect(
                     </BindedSelect>
                   </td>
                   <td className="no-wrap">
-                    <If
-                      not
-                      bind={`trialSessionWorkingCopy.userNotes.${item.docketNumber}.notes`}
-                    >
+                    {!item.userNotes && (
                       <Button
                         link
                         className="margin-top-1"
@@ -170,17 +166,28 @@ export const WorkingCopySessionList = connect(
                       >
                         Add Note
                       </Button>
-                    </If>
+                    )}
                   </td>
                 </tr>
-                <If
-                  bind={`trialSessionWorkingCopy.userNotes.${item.docketNumber}.notes`}
-                >
+                {item.calendarNotes && (
                   <tr className="notes-row">
-                    <td className="text-right font-body-2xs">
-                      <strong>Notes:</strong>
+                    <td></td>
+                    <td></td>
+                    <td className="font-body-2xs no-wrap" colSpan="4">
+                      <span className="text-bold margin-right-1">
+                        Calendar notes:
+                      </span>
+                      {item.calendarNotes}
                     </td>
-                    <td className="font-body-2xs" colSpan="4">
+                    <td></td>
+                  </tr>
+                )}
+                {item.userNotes && (
+                  <tr className="notes-row">
+                    <td></td>
+                    <td></td>
+                    <td className="font-body-2xs" colSpan="3">
+                      <span className="text-bold margin-right-1">Notes:</span>
                       <TextView
                         bind={`trialSessionWorkingCopy.userNotes.${item.docketNumber}.notes`}
                       />
@@ -213,7 +220,7 @@ export const WorkingCopySessionList = connect(
                       </Button>
                     </td>
                   </tr>
-                </If>
+                )}
               </tbody>
             );
           })}

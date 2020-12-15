@@ -54,6 +54,7 @@ const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 Case.VALIDATION_ERROR_MESSAGES = {
@@ -162,6 +163,7 @@ Case.prototype.init = function init(
   }
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
+  this.assignHearings({ applicationContext, rawCase });
   this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
@@ -282,7 +284,7 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
       filtered &&
       applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
       (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
-        getPetitionDocketEntryFromDocketEntries(this.docketEntries).servedAt)
+        this.getIrsSendDate())
     ) {
       this.docketEntries = this.docketEntries.filter(
         d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -290,6 +292,19 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
     }
   } else {
     this.docketEntries = [];
+  }
+};
+
+Case.prototype.assignHearings = function assignHearings({
+  applicationContext,
+  rawCase,
+}) {
+  if (Array.isArray(rawCase.hearings)) {
+    this.hearings = rawCase.hearings
+      .map(hearing => new TrialSession(hearing, { applicationContext }))
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+  } else {
+    this.hearings = [];
   }
 };
 
@@ -1174,15 +1189,11 @@ Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
   return this;
 };
 
-const getPetitionDocketEntryFromDocketEntries = function (docketEntries) {
-  return docketEntries.find(
+Case.prototype.getPetitionDocketEntry = function () {
+  return this.docketEntries.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-};
-
-Case.prototype.getPetitionDocketEntry = function () {
-  return getPetitionDocketEntryFromDocketEntries(this.docketEntries);
 };
 
 Case.prototype.getIrsSendDate = function () {
@@ -1388,7 +1399,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
  *
  * @param {object} arguments arguments
  * @param {object} arguments.caseRaw raw case details
- * @param {string} arguments.userId id of the user account
+ * @param {string} arguments.user the user account
  * @returns {boolean} if the case is associated
  */
 const isAssociatedUser = function ({ caseRaw, user }) {
@@ -1419,6 +1430,16 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Determines if provided user is associated with the case
+ *
+ * @param {object} arguments.user the user account
+ * @returns {boolean} true if the user provided is associated with the case, false otherwise
+ */
+Case.prototype.isAssociatedUser = function ({ user }) {
+  return isAssociatedUser({ caseRaw: this, user });
 };
 
 /**
@@ -1534,6 +1555,31 @@ Case.prototype.removeFromTrial = function () {
   this.trialSessionId = undefined;
   this.trialTime = undefined;
   return this;
+};
+
+/**
+ * check to see if trialSessionId is a hearing
+ *
+ * @param {string} trialSessionId trial session id to check
+ * @returns {boolean} whether or not the trial session id associated is a hearing or not
+ */
+Case.prototype.isHearing = function (trialSessionId) {
+  return this.hearings.some(
+    trialSession => trialSession.trialSessionId === trialSessionId,
+  );
+};
+
+/**
+ * removes a hearing from the case.hearings array
+ *
+ * @param {string} trialSessionId trial session id associated with hearing to remove
+ */
+Case.prototype.removeFromHearing = function (trialSessionId) {
+  const removeIndex = this.hearings
+    .map(trialSession => trialSession.trialSessionId)
+    .indexOf(trialSessionId);
+
+  this.hearings.splice(removeIndex, 1);
 };
 
 /**
@@ -1907,9 +1953,15 @@ const isSealedCase = rawCase => {
   return isSealed;
 };
 
+const caseHasServedDocketEntries = rawCase => {
+  return !!rawCase.docketEntries.some(
+    docketEntry => !!docketEntry.servedAt || docketEntry.isLegacyServed,
+  );
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
-  getPetitionDocketEntryFromDocketEntries,
+  caseHasServedDocketEntries,
   isAssociatedUser,
   isSealedCase,
 };

@@ -12,8 +12,17 @@ export const removeCaseFromTrialAction = async ({
   applicationContext,
   get,
 }) => {
-  const { docketNumber, trialSessionId } = get(state.caseDetail);
-  const { disposition } = get(state.modal);
+  let trialSessionId;
+  const { docketNumber, trialSessionId: stateTrialSessionId } = get(
+    state.caseDetail,
+  );
+  const { disposition, trialSessionId: modalTrialSessionId } = get(state.modal);
+
+  if (modalTrialSessionId) {
+    trialSessionId = modalTrialSessionId;
+  } else {
+    trialSessionId = stateTrialSessionId;
+  }
 
   const caseDetail = await applicationContext
     .getUseCases()
