@@ -87,7 +87,10 @@ describe('set for hearing modal helper', () => {
         form: {},
         modal: {
           showAllLocations: true,
-          trialSessions,
+          trialSessions: trialSessions.map(trialSession => ({
+            ...trialSession,
+            isCalendared: true,
+          })),
         },
       },
     });
@@ -117,5 +120,27 @@ describe('set for hearing modal helper', () => {
       US_STATES.AL,
       US_STATES.ID,
     ]);
+  });
+
+  it('should exclude all trial sessions that are not open', () => {
+    const result = runCompute(setForHearingModalHelper, {
+      state: {
+        caseDetail: {
+          hearings: [{ trialSessionId: '2' }],
+          preferredTrialCity: 'Birmingham, Alabama',
+          trialSessionId: '1',
+        },
+        form: {},
+        modal: {
+          showAllLocations: true,
+          trialSessions,
+        },
+      },
+    });
+
+    expect(result.showSessionNotSetAlert).toBeFalsy();
+    expect(result.trialSessionsFormatted).toBeFalsy();
+    expect(result.trialSessionsFormattedByState).toEqual({});
+    expect(result.trialSessionStatesSorted).toEqual([]);
   });
 });

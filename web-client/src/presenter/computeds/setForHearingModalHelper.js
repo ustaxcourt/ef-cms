@@ -4,27 +4,24 @@ import { trialSessionsModalHelper } from './addToTrialSessionModalHelper';
 export const setForHearingModalHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
-  let assignedTrialSessionIds = [];
+  let excludedTrialSessionIds = [];
 
   if (caseDetail.trialSessionId) {
-    assignedTrialSessionIds.push(caseDetail.trialSessionId);
+    excludedTrialSessionIds.push(caseDetail.trialSessionId);
     caseDetail.hearings.forEach(trialSession => {
-      assignedTrialSessionIds.push(trialSession.trialSessionId);
+      excludedTrialSessionIds.push(trialSession.trialSessionId);
     });
   }
 
-  let { trialSessionsFormatted, ...helperProps } = trialSessionsModalHelper(
-    get,
-    applicationContext,
-    assignedTrialSessionIds,
-  );
+  const trialSessionsFilter = trialSession =>
+    SESSION_STATUS_GROUPS.open === trialSession.computedStatus;
 
-  if (trialSessionsFormatted) {
-    trialSessionsFormatted = trialSessionsFormatted.filter(
-      trialSession =>
-        SESSION_STATUS_GROUPS.open === trialSession.computedStatus,
-    );
-  }
+  let { trialSessionsFormatted, ...helperProps } = trialSessionsModalHelper({
+    applicationContext,
+    excludedTrialSessionIds,
+    get,
+    trialSessionsFilter,
+  });
 
   return {
     ...helperProps,
