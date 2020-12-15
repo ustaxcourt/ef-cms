@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Arguments
-#   - $1 - the environment to clear
-#   - $2 - the aws account id
-
 # This script assumes you have already created the necessary roles and policies to 
 # allow ES to backup & restore into an s3 bucket
 
