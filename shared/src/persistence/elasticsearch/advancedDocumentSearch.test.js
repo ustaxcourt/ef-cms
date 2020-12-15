@@ -6,6 +6,8 @@ const { advancedDocumentSearch } = require('./advancedDocumentSearch');
 const getSource = judge => ({
   includes: [
     'caseCaption',
+    'contactPrimary',
+    'contactSecondary',
     'docketEntryId',
     'docketNumber',
     'docketNumberWithSuffix',
@@ -13,9 +15,11 @@ const getSource = judge => ({
     'documentType',
     'eventCode',
     'filingDate',
+    'irsPractitioners',
     'isSealed',
     'isStricken',
     'numberOfPages',
+    'privatePractitioners',
     'sealedDate',
     judge,
   ],
