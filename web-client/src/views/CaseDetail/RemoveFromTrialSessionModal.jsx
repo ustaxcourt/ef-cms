@@ -82,7 +82,7 @@ export const RemoveFromTrialSessionModal = connect(
                 )}
                 id="Status"
                 name="caseStatus"
-                value={removeFromTrialSessionModalHelper.defaultCaseStatus}
+                value={modal.caseStatus}
                 onChange={e => {
                   updateModalValueSequence({
                     key: e.target.name,
