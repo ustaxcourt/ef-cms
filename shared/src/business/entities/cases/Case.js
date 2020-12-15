@@ -54,6 +54,7 @@ const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 Case.VALIDATION_ERROR_MESSAGES = {
@@ -162,6 +163,7 @@ Case.prototype.init = function init(
   }
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
+  this.assignHearings({ applicationContext, rawCase });
   this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
@@ -290,6 +292,19 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
     }
   } else {
     this.docketEntries = [];
+  }
+};
+
+Case.prototype.assignHearings = function assignHearings({
+  applicationContext,
+  rawCase,
+}) {
+  if (Array.isArray(rawCase.hearings)) {
+    this.hearings = rawCase.hearings
+      .map(hearing => new TrialSession(hearing, { applicationContext }))
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+  } else {
+    this.hearings = [];
   }
 };
 
@@ -1530,6 +1545,31 @@ Case.prototype.removeFromTrial = function () {
   this.trialSessionId = undefined;
   this.trialTime = undefined;
   return this;
+};
+
+/**
+ * check to see if trialSessionId is a hearing
+ *
+ * @param {string} trialSessionId trial session id to check
+ * @returns {boolean} whether or not the trial session id associated is a hearing or not
+ */
+Case.prototype.isHearing = function (trialSessionId) {
+  return this.hearings.some(
+    trialSession => trialSession.trialSessionId === trialSessionId,
+  );
+};
+
+/**
+ * removes a hearing from the case.hearings array
+ *
+ * @param {string} trialSessionId trial session id associated with hearing to remove
+ */
+Case.prototype.removeFromHearing = function (trialSessionId) {
+  const removeIndex = this.hearings
+    .map(trialSession => trialSession.trialSessionId)
+    .indexOf(trialSessionId);
+
+  this.hearings.splice(removeIndex, 1);
 };
 
 /**

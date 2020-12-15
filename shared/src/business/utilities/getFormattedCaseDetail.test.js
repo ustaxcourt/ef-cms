@@ -595,6 +595,49 @@ describe('formatCase', () => {
     expect(result).not.toHaveProperty('showNotScheduled');
   });
 
+  it('should format hearing details if the case has associated hearings', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      hearings: [
+        {
+          judge: {
+            name: 'Judge Dredd',
+          },
+          startDate: '2011-11-11',
+          startTime: '10:00',
+          trialLocation: 'Megacity One',
+        },
+      ],
+      status: CASE_STATUS_TYPES.calendared,
+      trialDate: '2011-11-11',
+      trialLocation: 'Boise, Idaho',
+      trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+    });
+
+    expect(result).toMatchObject({
+      formattedAssociatedJudge: 'Not assigned',
+      formattedTrialCity: 'Boise, Idaho',
+      formattedTrialDate: '11/11/11',
+      hearings: [
+        {
+          formattedAssociatedJudge: 'Judge Dredd',
+          formattedTrialCity: 'Megacity One',
+          formattedTrialDate: '11/11/11 10:00 am',
+          judge: {
+            name: 'Judge Dredd',
+          },
+          startDate: '2011-11-11',
+          startTime: '10:00',
+          trialLocation: 'Megacity One',
+        },
+      ],
+      showTrialCalendared: true,
+    });
+    expect(result).not.toHaveProperty('showBlockedFromTrial');
+    expect(result).not.toHaveProperty('showNotScheduled');
+    expect(result).not.toHaveProperty('showScheduled');
+  });
+
   it('should format trial details with incomplete trial information', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
