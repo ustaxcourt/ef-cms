@@ -80,7 +80,7 @@ describe('updateCaseAutomaticBlock', () => {
       {
         ...MOCK_CASE_WITHOUT_PENDING,
         highPriority: false,
-        trialDate: '2021-03-01T21:40:46.415Z',
+        status: CASE_STATUS_TYPES.calendared,
       },
       {
         applicationContext,
@@ -108,7 +108,7 @@ describe('updateCaseAutomaticBlock', () => {
       {
         ...MOCK_CASE_WITHOUT_PENDING,
         highPriority: true,
-        trialDate: undefined,
+        status: CASE_STATUS_TYPES.new,
       },
       {
         applicationContext,

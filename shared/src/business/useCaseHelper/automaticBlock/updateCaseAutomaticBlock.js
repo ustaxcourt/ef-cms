@@ -1,3 +1,5 @@
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
+
 /**
  * updateCaseAutomaticBlock
  *
@@ -10,9 +12,10 @@ exports.updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
 }) => {
-  //fixme
-  //check for calendared status instead of trial date
-  if (!caseEntity.trialDate && !caseEntity.highPriority) {
+  if (
+    caseEntity.status !== CASE_STATUS_TYPES.calendared &&
+    !caseEntity.highPriority
+  ) {
     const caseDeadlines = await applicationContext
       .getPersistenceGateway()
       .getCaseDeadlinesByDocketNumber({
