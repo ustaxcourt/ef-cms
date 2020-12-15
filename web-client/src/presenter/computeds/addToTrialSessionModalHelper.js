@@ -40,11 +40,12 @@ const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
   });
 };
 
-export const trialSessionsModalHelper = (
-  get,
+export const trialSessionsModalHelper = ({
   applicationContext,
   excludedTrialSessionIds,
-) => {
+  get,
+  trialSessionsFilter,
+}) => {
   const caseDetail = get(state.caseDetail);
   const { showAllLocations, trialSessionId, trialSessions } = get(state.modal);
 
@@ -60,6 +61,12 @@ export const trialSessionsModalHelper = (
       trialSessionsFormatted,
       applicationContext,
     );
+
+    if (trialSessionsFilter) {
+      trialSessionsFormatted = trialSessionsFormatted.filter(
+        trialSessionsFilter,
+      );
+    }
 
     if (excludedTrialSessionIds) {
       trialSessionsFormatted = trialSessionsFormatted.filter(
@@ -121,10 +128,16 @@ export const trialSessionsModalHelper = (
 
 export const addToTrialSessionModalHelper = (get, applicationContext) => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
-  let { trialSessionsFormatted, ...helperProps } = trialSessionsModalHelper(
-    get,
+  const trialSessionsFilter = trialSession =>
+    [SESSION_STATUS_GROUPS.new, SESSION_STATUS_GROUPS.open].includes(
+      trialSession.computedStatus,
+    );
+
+  let { trialSessionsFormatted, ...helperProps } = trialSessionsModalHelper({
     applicationContext,
-  );
+    get,
+    trialSessionsFilter,
+  });
 
   if (trialSessionsFormatted) {
     trialSessionsFormatted = trialSessionsFormatted.filter(trialSession =>
