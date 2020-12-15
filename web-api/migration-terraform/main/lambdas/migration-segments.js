@@ -50,6 +50,9 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
+  // migration 10 is at the top because it is fixing invalid case data; if one of the other migrations
+  // that also validates the case runs before it, the data would be invalid because this migration had
+  // not been run yet
   items = await migration0010(items, documentClient);
   applicationContext.logger.info('about to run migration 001');
   items = await migration0001(items, documentClient);
