@@ -59,9 +59,10 @@ exports.updatePrimaryContactInteractor = async ({
     { applicationContext },
   );
 
-  const userIsAssociated = applicationContext
-    .getUseCases()
-    .userIsAssociated({ applicationContext, caseDetail: caseToUpdate, user });
+  const userIsAssociated = caseEntity.isAssociatedUser({
+    caseRaw: caseToUpdate,
+    user,
+  });
 
   if (!userIsAssociated) {
     throw new UnauthorizedError('Unauthorized for update case contact');
