@@ -10,6 +10,8 @@ exports.updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
 }) => {
+  //fixme
+  //check for calendared status instead of trial date
   if (!caseEntity.trialDate && !caseEntity.highPriority) {
     const caseDeadlines = await applicationContext
       .getPersistenceGateway()

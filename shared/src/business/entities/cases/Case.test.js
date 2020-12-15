@@ -3540,6 +3540,11 @@ describe('Case entity', () => {
     });
   });
 
+  //fixme
+  describe('trialDate and trialSessionId validation', () => {
+    it('fails validation when trialSessionId is defined and trialDate is undefined', () => {});
+  });
+
   describe('setNoticeOfTrialDate', () => {
     it('should set noticeOfTrialDate on the given case', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
