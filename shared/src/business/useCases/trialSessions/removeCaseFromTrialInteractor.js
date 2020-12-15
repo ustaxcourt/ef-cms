@@ -18,6 +18,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.removeCaseFromTrialInteractor = async ({
   applicationContext,
+  associatedJudge,
+  caseStatus,
   disposition,
   docketNumber,
   trialSessionId,
@@ -59,7 +61,7 @@ exports.removeCaseFromTrialInteractor = async ({
   const caseEntity = new Case(myCase, { applicationContext });
 
   if (!caseEntity.isHearing(trialSessionId)) {
-    caseEntity.removeFromTrial();
+    caseEntity.removeFromTrial(caseStatus, associatedJudge);
 
     await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
       applicationContext,

@@ -16,7 +16,12 @@ export const removeCaseFromTrialAction = async ({
   const { docketNumber, trialSessionId: stateTrialSessionId } = get(
     state.caseDetail,
   );
-  const { disposition, trialSessionId: modalTrialSessionId } = get(state.modal);
+  const {
+    associatedJudge,
+    caseStatus,
+    disposition,
+    trialSessionId: modalTrialSessionId,
+  } = get(state.modal);
 
   if (modalTrialSessionId) {
     trialSessionId = modalTrialSessionId;
@@ -28,6 +33,8 @@ export const removeCaseFromTrialAction = async ({
     .getUseCases()
     .removeCaseFromTrialInteractor({
       applicationContext,
+      associatedJudge,
+      caseStatus,
       disposition,
       docketNumber,
       trialSessionId,
