@@ -730,8 +730,14 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
-  trialDate: JoiValidationConstants.ISO_DATE.optional()
-    .allow(null)
+
+  trialDate: joi
+    .alternatives()
+    .conditional('trialSessionId', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.ISO_DATE.optional().allow(null),
+      then: JoiValidationConstants.ISO_DATE.required(),
+    })
     .description('When this case goes to trial.'),
   trialLocation: joi
     .alternatives()
@@ -743,13 +749,19 @@ Case.VALIDATION_RULES = {
     .description(
       'Where this case goes to trial. This may be different that the preferred trial location.',
     ),
-  trialSessionId: JoiValidationConstants.UUID.when('status', {
-    is: CASE_STATUS_TYPES.calendared,
-    otherwise: joi.optional(),
-    then: joi.required(),
-  }).description(
-    'The unique ID of the trial session associated with this case.',
-  ),
+  trialSessionId: joi
+    .when('status', {
+      is: CASE_STATUS_TYPES.calendared,
+      otherwise: JoiValidationConstants.UUID.optional().when('trialDate', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.UUID.optional(),
+        then: JoiValidationConstants.UUID.required(),
+      }),
+      then: JoiValidationConstants.UUID.required(),
+    })
+    .description(
+      'The unique ID of the trial session associated with this case.',
+    ),
   trialTime: JoiValidationConstants.STRING.pattern(PATTERNS['H:MM'])
     .optional()
     .description('Time of day when this case goes to trial.'),
