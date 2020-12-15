@@ -1537,9 +1537,11 @@ Case.prototype.unsetAsHighPriority = function () {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function () {
-  this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
-  this.associatedJudge = CHIEF_JUDGE;
+Case.prototype.removeFromTrial = function (caseStatus, associatedJudge) {
+  this.setAssociatedJudge(associatedJudge || CHIEF_JUDGE);
+  this.setCaseStatus(
+    caseStatus || CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  );
   this.trialDate = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
