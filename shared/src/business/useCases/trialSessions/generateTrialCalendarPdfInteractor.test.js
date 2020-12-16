@@ -14,11 +14,20 @@ describe('generateTrialCalendarPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([
-        { ...MOCK_CASE, docketNumberWithSuffix: '101-18' },
-        { ...MOCK_CASE, docketNumberWithSuffix: '102-19' },
         {
           ...MOCK_CASE,
-          docketNumberWithSuffix: '123-20',
+          docketNumber: '101-18',
+          docketNumberWithSuffix: '101-18',
+        },
+        {
+          ...MOCK_CASE,
+          docketNumber: '102-19',
+          docketNumberWithSuffix: '102-19W',
+        },
+        {
+          ...MOCK_CASE,
+          docketNumber: '123-20',
+          docketNumberWithSuffix: '123-20W',
           removedFromTrial: true,
         },
       ]);
@@ -32,7 +41,9 @@ describe('generateTrialCalendarPdfInteractor', () => {
       .getTrialSessionById.mockReturnValue({
         address1: '123 Some Street',
         address2: 'Suite B',
-        caseOrder: [],
+        caseOrder: [
+          { calendarNotes: 'Calendar notes.', docketNumber: '123-20' },
+        ],
         city: US_STATES.NY,
         courtReporter: 'Lois Lane',
         courthouseName: 'Test Courthouse',
