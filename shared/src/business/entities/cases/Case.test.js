@@ -2869,6 +2869,80 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialSessionId).toBeFalsy();
       expect(caseToUpdate.trialTime).toBeFalsy();
     });
+
+    it('sets the case status to the given case status when provided', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrial(CASE_STATUS_TYPES.cav);
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
+      expect(caseToUpdate.associatedJudge).toEqual('Chief Judge');
+    });
+
+    it('sets the case status along with the associated judge when provided', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrial(CASE_STATUS_TYPES.cav, 'Judge Dredd');
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Dredd');
+    });
   });
 
   describe('removeFromTrialWithAssociatedJudge', () => {

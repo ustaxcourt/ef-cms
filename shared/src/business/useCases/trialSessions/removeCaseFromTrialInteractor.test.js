@@ -301,4 +301,20 @@ describe('remove case from trial session', () => {
       hearings: [],
     });
   });
+
+  it('sets the associatedJudge and caseStatus when provided', async () => {
+    mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: true };
+
+    const result = await removeCaseFromTrialInteractor({
+      applicationContext,
+      associatedJudge: 'Judge Dredd',
+      caseStatus: CASE_STATUS_TYPES.cav,
+      disposition: 'because',
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+    });
+
+    expect(result.associatedJudge).toEqual('Judge Dredd');
+    expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
+  });
 });
