@@ -27,6 +27,9 @@ const {
 const {
   migrateItems: migration0009,
 } = require('./migrations/0009-remove-blocked-cases-from-eligible-for-trial-record');
+const {
+  migrateItems: migration0010,
+} = require('./migrations/0010-remove-trial-date-if-no-trial-session-id');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -47,6 +50,10 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 const migrateRecords = async ({ documentClient, items }) => {
+  // migration 10 is at the top because it is fixing invalid case data; if one of the other migrations
+  // that also validates the case runs before it, the data would be invalid because this migration had
+  // not been run yet
+  items = await migration0010(items, documentClient);
   applicationContext.logger.info('about to run migration 001');
   items = await migration0001(items, documentClient);
   applicationContext.logger.info('about to run migration 002');

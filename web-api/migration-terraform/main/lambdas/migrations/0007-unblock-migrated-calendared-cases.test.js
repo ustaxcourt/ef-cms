@@ -115,6 +115,7 @@ describe('migrateItems', () => {
     mockCaseItem.automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
     mockCaseItem.status = CASE_STATUS_TYPES.calendared;
     mockCaseItem.trialSessionId = mockTrialSessionId;
+    mockCaseItem.trialDate = '2019-03-01T21:42:29.073Z';
 
     documentClient.query = jest.fn().mockReturnValueOnce({
       promise: async () => ({
@@ -144,6 +145,7 @@ describe('migrateItems', () => {
     mockCaseItem.blockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
     mockCaseItem.status = CASE_STATUS_TYPES.calendared;
     mockCaseItem.trialSessionId = mockTrialSessionId;
+    mockCaseItem.trialDate = '2019-03-01T21:42:29.073Z';
 
     documentClient.query = jest.fn().mockReturnValueOnce({
       promise: async () => ({

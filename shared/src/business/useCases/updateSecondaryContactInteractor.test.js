@@ -53,7 +53,6 @@ describe('updateSecondaryContactInteractor', () => {
     applicationContext
       .getUseCases()
       .generatePdfFromHtmlInteractor.mockReturnValue(fakeData);
-    applicationContext.getUseCases().userIsAssociated.mockReturnValue(true);
 
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
 
