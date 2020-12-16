@@ -69,6 +69,20 @@ const getCaseAndDocumentContents = async ({
   return caseDetailRaw;
 };
 
+const isAuthorizedForContact = ({
+  contact,
+  currentUser,
+  defaultValue,
+  permission,
+}) => {
+  return !!(
+    defaultValue ||
+    (contact && isAuthorized(currentUser, permission, contact.contactId))
+  );
+};
+
+exports.isAuthorizedForContact = isAuthorizedForContact;
+
 const getSealedCase = async ({
   applicationContext,
   caseRecord,
@@ -82,15 +96,12 @@ const getSealedCase = async ({
   );
 
   // check secondary contact if existent
-  if (caseRecord.contactSecondary) {
-    isAuthorizedToViewSealedCase =
-      isAuthorizedToViewSealedCase ||
-      isAuthorized(
-        currentUser,
-        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-        caseRecord.contactSecondary.contactId,
-      );
-  }
+  isAuthorizedToViewSealedCase = isAuthorizedForContact({
+    contact: caseRecord.contactSecondary,
+    currentUser,
+    defaultValue: isAuthorizedToViewSealedCase,
+    permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+  });
 
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
     return await getCaseAndDocumentContents({
@@ -154,15 +165,12 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
   );
 
   // check secondary contact if existent
-  if (caseRecord.contactSecondary) {
-    isAuthorizedToGetCase =
-      isAuthorizedToGetCase ||
-      isAuthorized(
-        currentUser,
-        ROLE_PERMISSIONS.GET_CASE,
-        caseRecord.contactSecondary.contactId,
-      );
-  }
+  isAuthorizedToGetCase = isAuthorizedForContact({
+    contact: caseRecord.contactSecondary,
+    currentUser,
+    defaultValue: isAuthorizedToGetCase,
+    permission: ROLE_PERMISSIONS.GET_CASE,
+  });
 
   const isAssociatedWithCase = isAssociatedUser({
     caseRaw: caseRecord,
