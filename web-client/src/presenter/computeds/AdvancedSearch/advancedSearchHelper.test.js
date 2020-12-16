@@ -419,7 +419,7 @@ describe('advancedSearchHelper', () => {
     ]);
   });
 
-  it.only('does not attempt to format results but only returns results that should be currently shown based on form.currentPage for a practitioner search', () => {
+  it('does not attempt to format results but only returns results that should be currently shown based on form.currentPage for a practitioner search', () => {
     pageSizeOverride = 1;
 
     let result = runCompute(advancedSearchHelper, {

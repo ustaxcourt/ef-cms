@@ -13,7 +13,7 @@ export const admissionsClerkSearchesForPractitionerByBarNumber = test => {
     ).toEqual({});
     expect(
       test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`),
-    ).toBeUndefined();
+    ).toEqual([]);
 
     await test.runSequence('submitPractitionerBarNumberSearchSequence');
     expect(test.getState('validationErrors.barNumber')).toBeDefined();
