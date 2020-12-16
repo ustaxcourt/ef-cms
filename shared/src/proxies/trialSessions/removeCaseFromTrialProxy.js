@@ -12,13 +12,15 @@ const { put } = require('../requests');
  */
 exports.removeCaseFromTrialInteractor = ({
   applicationContext,
+  associatedJudge,
+  caseStatus,
   disposition,
   docketNumber,
   trialSessionId,
 }) => {
   return put({
     applicationContext,
-    body: { disposition },
+    body: { associatedJudge, caseStatus, disposition },
     endpoint: `/trial-sessions/${trialSessionId}/remove-case/${docketNumber}`,
   });
 };
