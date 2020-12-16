@@ -316,7 +316,7 @@ export const uploadPetition = async (
 
   const petitionMetadata = {
     caseType: overrides.caseType || CASE_TYPES_MAP.cdp,
-    contactPrimary: {
+    contactPrimary: overrides.contactPrimary || {
       address1: '734 Cowley Parkway',
       address2: 'Cum aut velit volupt',
       address3: 'Et sunt veritatis ei',
@@ -363,19 +363,6 @@ export const uploadPetition = async (
   return response.data;
 };
 
-export const loginAs = (test, user) => {
-  // eslint-disable-next-line jest/expect-expect
-  return it(`login as ${user}`, async () => {
-    await test.runSequence('updateFormValueSequence', {
-      key: 'name',
-      value: user,
-    });
-
-    await test.runSequence('submitLoginSequence', {
-      path: '/',
-    });
-  });
-};
 
 export const setupTest = ({ useCases = {} } = {}) => {
   let test;
