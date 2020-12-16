@@ -1535,6 +1535,8 @@ Case.prototype.unsetAsHighPriority = function () {
 /**
  * remove case from trial, setting case status to generalDocketReadyForTrial
  *
+ * @param {string} caseStatus optional case status to set the case to
+ * @param {string} associatedJudge optional associatedJudge to set on the case
  * @returns {Case} the updated case entity
  */
 Case.prototype.removeFromTrial = function (caseStatus, associatedJudge) {
