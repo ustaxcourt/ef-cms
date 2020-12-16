@@ -8,6 +8,8 @@ describe('setPractitionerResultsAction', () => {
       state: {},
     });
 
-    expect(result.state.searchResults).toEqual([{ barNumber: '1111' }]);
+    expect(result.state.searchResults.practitioner).toEqual([
+      { barNumber: '1111' },
+    ]);
   });
 });

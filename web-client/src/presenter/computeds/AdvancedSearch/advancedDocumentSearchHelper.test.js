@@ -80,11 +80,9 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
-        },
-        searchResults: [],
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.OPINION,
+        searchResults: { opinion: [], order: [] },
       },
     });
 
@@ -99,11 +97,9 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
-        },
-        searchResults: [],
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.OPINION,
+        searchResults: { opinion: [], order: [] },
       },
     });
 
@@ -114,12 +110,10 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
-        },
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.OPINION,
         isPublic: true,
-        searchResults: [],
+        searchResults: { opinion: [], order: [] },
       },
     });
 
@@ -130,21 +124,21 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.ORDER,
+        searchResults: {
+          order: [
+            {
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+          ],
         },
-        searchResults: [
-          {
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-        ],
       },
     });
 
@@ -162,48 +156,48 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+        advancedSearchTab: applicationContext.getConstants()
+          .ADVANCED_SEARCH_TABS.ORDER,
+        searchResults: {
+          order: [
+            {
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              docketNumber: '102-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              docketNumber: '103-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              docketNumber: '104-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+          ],
         },
-        searchResults: [
-          {
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            docketNumber: '102-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            docketNumber: '103-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            docketNumber: '104-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-        ],
       },
     });
 
@@ -223,35 +217,33 @@ describe('advancedDocumentSearchHelper', () => {
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab: applicationContext.getConstants()
           .ADVANCED_SEARCH_TABS.ORDER,
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+        searchResults: {
+          order: [
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              docketNumberWithSuffix: '101-19Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              eventCode: 'O',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '102-19',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+              docketNumberWithSuffix: '102-19P',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order for Stuff',
+              documentType: 'OAPF - Order for Amended Petition and Filing Fee',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Cohen',
+            },
+          ],
         },
-        searchResults: [
-          {
-            caseCaption: 'Test Petitioner, Petitioner',
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            docketNumberWithSuffix: '101-19Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            eventCode: 'O',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            caseCaption: 'Test Petitioner, Petitioner',
-            docketNumber: '102-19',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
-            docketNumberWithSuffix: '102-19P',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order for Stuff',
-            documentType: 'OAPF - Order for Amended Petition and Filing Fee',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Cohen',
-          },
-        ],
       },
     });
 
@@ -288,36 +280,34 @@ describe('advancedDocumentSearchHelper', () => {
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab: applicationContext.getConstants()
           .ADVANCED_SEARCH_TABS.OPINION,
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+        searchResults: {
+          opinion: [
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              docketNumberWithSuffix: '101-19Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'My Opinion',
+              documentType: 'T.C. Opinion',
+              eventCode: 'TCOP',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '102-19',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+              docketNumberWithSuffix: '102-19P',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Opinion for Stuff',
+              documentType: 'Summary Opinion',
+              eventCode: 'SOP',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Cohen',
+            },
+          ],
         },
-        searchResults: [
-          {
-            caseCaption: 'Test Petitioner, Petitioner',
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            docketNumberWithSuffix: '101-19Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'My Opinion',
-            documentType: 'T.C. Opinion',
-            eventCode: 'TCOP',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            caseCaption: 'Test Petitioner, Petitioner',
-            docketNumber: '102-19',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
-            docketNumberWithSuffix: '102-19P',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Opinion for Stuff',
-            documentType: 'Summary Opinion',
-            eventCode: 'SOP',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Cohen',
-          },
-        ],
       },
     });
 
@@ -354,23 +344,21 @@ describe('advancedDocumentSearchHelper', () => {
       state: {
         advancedSearchTab: applicationContext.getConstants()
           .ADVANCED_SEARCH_TABS.OPINION,
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
-        },
         isPublic: true,
-        searchResults: [
-          {
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            isSealed: true,
-            judge: 'Judge Buch',
-          },
-        ],
+        searchResults: {
+          opinion: [
+            {
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Opinion',
+              documentType: 'Memorandum Opinion',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              isSealed: true,
+              judge: 'Judge Buch',
+            },
+          ],
+        },
       },
     });
 
