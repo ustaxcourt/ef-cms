@@ -1,3 +1,4 @@
+import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../helpers';
 
 export const unassociatedUserAdvancedSearchForSealedCase = test => {
@@ -16,7 +17,7 @@ export const unassociatedUserAdvancedSearchForSealedCase = test => {
 
     expect(
       test
-        .getState('searchResults')
+        .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(result => result.docketNumber === test.docketNumber),
     ).toBeUndefined();
   });
