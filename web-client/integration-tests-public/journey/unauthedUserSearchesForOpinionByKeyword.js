@@ -5,6 +5,8 @@ export const unauthedUserSearchesForOpinionByKeyword = test => {
   return it('Search for opinion by keyword', async () => {
     await refreshElasticsearchIndex();
 
+    test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
+
     test.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'osteodontolignikeratic',
