@@ -72,13 +72,17 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
       test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`)
         .length,
     ).toBeGreaterThan(0);
-    expect(test.getState('searchResults.0.name')).toEqual(
-      `joe ${test.currentTimestamp} exotic tiger king`,
-    );
+    expect(
+      test.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.name`,
+      ),
+    ).toEqual(`joe ${test.currentTimestamp} exotic tiger king`);
     const currentTwoDigitYear = formatNow('YY');
-    expect(test.getState('searchResults.0.barNumber')).toContain(
-      `EJ${currentTwoDigitYear}`,
-    );
+    expect(
+      test.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.barNumber`,
+      ),
+    ).toContain(`EJ${currentTwoDigitYear}`);
 
     // no matches
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
