@@ -2,11 +2,12 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
+} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
-
-const ELIGIBLE_CASES_BUFFER = 50;
 
 /**
  * get eligible cases for trial session
@@ -57,7 +58,7 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
       applicationContext,
       limit:
         trialSessionEntity.maxCases +
-        ELIGIBLE_CASES_BUFFER -
+        TRIAL_SESSION_ELIGIBLE_CASES_BUFFER -
         calendaredCases.length,
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });

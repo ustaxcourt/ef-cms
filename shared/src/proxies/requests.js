@@ -1,3 +1,5 @@
+const moize = require('moize').default;
+
 /**
  *
  * get
@@ -8,9 +10,9 @@
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-exports.get = ({ applicationContext, endpoint, params }) => {
+const get = async ({ applicationContext, endpoint, params }) => {
   const token = applicationContext.getCurrentUserToken();
-  return applicationContext
+  return await applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
       headers: {
@@ -20,6 +22,17 @@ exports.get = ({ applicationContext, endpoint, params }) => {
     })
     .then(response => response.data);
 };
+
+const getMemoized = moize({
+  equals(cacheKeyArgument, keyArgument) {
+    return cacheKeyArgument.endpoint === keyArgument.endpoint;
+  },
+  isPromise: true,
+  maxAge: 5 * 1000, // five seconds
+  updateExpire: true,
+})(get);
+
+exports.get = process.env.CI ? get : getMemoized;
 
 /**
  *
@@ -31,14 +44,15 @@ exports.get = ({ applicationContext, endpoint, params }) => {
  * @param {string} providers.endpoint the endpoint to call
  * @returns {Promise<*>} the response data
  */
-exports.post = ({
+exports.post = async ({
   applicationContext,
   body,
   endpoint,
   headers = {},
   options = {},
-}) =>
-  applicationContext
+}) => {
+  getMemoized.clear();
+  return await applicationContext
     .getHttpClient()
     .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
       headers: {
@@ -48,6 +62,7 @@ exports.post = ({
       ...options,
     })
     .then(response => response.data);
+};
 
 /**
  *
@@ -59,8 +74,9 @@ exports.post = ({
  * @param {string} providers.endpoint the endpoint to call
  * @returns {Promise<*>} the response data
  */
-exports.put = ({ applicationContext, body, endpoint }) =>
-  applicationContext
+exports.put = async ({ applicationContext, body, endpoint }) => {
+  getMemoized.clear();
+  return await applicationContext
     .getHttpClient()
     .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
       headers: {
@@ -68,7 +84,7 @@ exports.put = ({ applicationContext, body, endpoint }) =>
       },
     })
     .then(response => response.data);
-
+};
 /**
  *
  * remove
@@ -79,8 +95,9 @@ exports.put = ({ applicationContext, body, endpoint }) =>
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-exports.remove = ({ applicationContext, endpoint, params }) =>
-  applicationContext
+exports.remove = async ({ applicationContext, endpoint, params }) => {
+  getMemoized.clear();
+  return await applicationContext
     .getHttpClient()
     .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
       headers: {
@@ -89,3 +106,4 @@ exports.remove = ({ applicationContext, endpoint, params }) =>
       params,
     })
     .then(response => response.data);
+};

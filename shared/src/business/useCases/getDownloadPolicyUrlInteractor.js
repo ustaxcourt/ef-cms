@@ -60,7 +60,7 @@ const handleIrsSuperUser = ({
 };
 
 const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
-  if (!docketEntryEntity.servedAt) {
+  if (!docketEntryEntity.servedAt && !docketEntryEntity.isLegacyServed) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   } else if (
     docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
@@ -72,6 +72,14 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
   } else if (docketEntryEntity.isLegacySealed) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   }
+};
+
+const getUserRoles = user => {
+  return {
+    isInternalUser: User.isInternalUser(user.role),
+    isIrsSuperuser: user.role === ROLES.irsSuperuser,
+    isPetitionsClerk: user.role === ROLES.petitionsClerk,
+  };
 };
 
 /**
@@ -93,10 +101,9 @@ exports.getDownloadPolicyUrlInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const isInternalUser = User.isInternalUser(user && user.role);
-  const isIrsSuperuser = user && user.role && user.role === ROLES.irsSuperuser;
-  const isPetitionsClerk =
-    user && user.role && user.role === ROLES.petitionsClerk;
+  const { isInternalUser, isIrsSuperuser, isPetitionsClerk } = getUserRoles(
+    user,
+  );
 
   const caseData = await applicationContext
     .getPersistenceGateway()

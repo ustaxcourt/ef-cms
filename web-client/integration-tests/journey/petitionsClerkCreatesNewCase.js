@@ -217,5 +217,8 @@ export const petitionsClerkCreatesNewCase = (
     expect(test.getState('caseDetail.preferredTrialCity')).toEqual(
       trialLocation,
     );
+    if (test.casesReadyForTrial) {
+      test.casesReadyForTrial.push(test.docketNumber);
+    }
   });
 };

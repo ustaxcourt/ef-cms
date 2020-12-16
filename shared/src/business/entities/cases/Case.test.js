@@ -20,10 +20,15 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  Case,
+  caseHasServedDocketEntries,
+  isAssociatedUser,
+  isSealedCase,
+} = require('./Case');
+const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
-const { Case, isAssociatedUser, isSealedCase } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { IrsPractitioner } = require('../IrsPractitioner');
@@ -647,6 +652,23 @@ describe('Case entity', () => {
       );
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.entityName).toEqual('Case');
+    });
+
+    it('creates a valid case without a petition docket entry and does not throw an error', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.petitionsClerk,
+      });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          docketEntries: [MOCK_CASE.docketEntries[1]],
+        },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
     });
 
     it('Creates a valid case from an already existing case json', () => {
@@ -4072,6 +4094,103 @@ describe('Case entity', () => {
     });
   });
 
+  describe('blocked/automatic blocked status validation for calendared cases', () => {
+    const mockTrialSessionId = '9e29b116-58a0-40f5-afe6-e3a0ba4f226a';
+
+    it('fails validation when the case status is calendared and automaticBlocked is true', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+        status: CASE_STATUS_TYPES.calendared,
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toEqual({
+        automaticBlocked: '"automaticBlocked" contains an invalid value',
+      });
+    });
+
+    it('passes validation when the case status is calendared and automaticBlocked is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        automaticBlocked: undefined,
+        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+        status: CASE_STATUS_TYPES.calendared,
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+
+    it('fails validation when the case status is calendared and blocked is true', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        blocked: true,
+        blockedDate: '2019-03-01T21:42:29.073Z',
+        blockedReason: 'A reason',
+        status: CASE_STATUS_TYPES.calendared,
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toEqual({
+        blocked: '"blocked" contains an invalid value',
+      });
+    });
+
+    it('passes validation when the case status is calendared and automaticBlocked is false', () => {
+      let calendaredCase = {
+        ...MOCK_CASE,
+        automaticBlocked: false,
+        status: CASE_STATUS_TYPES.calendared,
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(calendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+
+    it('passes validation when the case status is calendared and blocked is false', () => {
+      let calendaredCase = {
+        ...MOCK_CASE,
+        blocked: false,
+        status: CASE_STATUS_TYPES.calendared,
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(calendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+
+    it('passes validation when the case status is not calendared and automaticBlocked is true', () => {
+      let blockedNewCase = {
+        ...MOCK_CASE,
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+        status: CASE_STATUS_TYPES.new,
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(blockedNewCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+
+    it('passes validation when the case status is not calendared and blocked is true', () => {
+      let blockedReadyForTrialCase = {
+        ...MOCK_CASE,
+        blocked: true,
+        blockedDate: '2019-03-01T21:42:29.073Z',
+        blockedReason: 'A reason',
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(blockedReadyForTrialCase, {
+        applicationContext,
+      });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+  });
+
   describe('hasPartyWithPaperService', () => {
     it('should return true if contactPrimary service indicator is paper', () => {
       const myCase = new Case(
@@ -4184,10 +4303,12 @@ describe('Case entity', () => {
       });
       expect(result).toBe(false);
     });
+
     it('returns true if the object has truthy values for isSealed or isSealedDate', () => {
       expect(isSealedCase({ isSealed: true })).toBe(true);
       expect(isSealedCase({ sealedDate: new Date().toISOString() })).toBe(true);
     });
+
     it('returns true if the object has a docket entry with truthy values for isSealed or isLegacySealed', () => {
       expect(
         isSealedCase({
@@ -4205,6 +4326,40 @@ describe('Case entity', () => {
           sealedDate: false,
         }),
       ).toBe(true);
+    });
+  });
+
+  describe('caseHasServedDocketEntries', () => {
+    it('should return true if the case has any docket entry with isLegacyServed set to true', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [{ isLegacyServed: true }],
+        }),
+      ).toBeTruthy();
+    });
+
+    it('should return true if the case has any docket entry with servedAt defined', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [{ servedAt: '2019-08-25T05:00:00.000Z' }],
+        }),
+      ).toBeTruthy();
+    });
+
+    it('should return false if the case does not have any docket entries with isLegacyServed set to true or servedAt', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [{ isLegacyServed: false }],
+        }),
+      ).toBeFalsy();
+    });
+
+    it('should return false if the case does not have any docket entries', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [],
+        }),
+      ).toBeFalsy();
     });
   });
 });

@@ -256,6 +256,52 @@ describe('processStreamRecordsInteractor', () => {
         },
       ]);
     });
+
+    it('does nothing when no other records are found', async () => {
+      await processRemoveEntries({
+        applicationContext,
+        removeRecords: [],
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('attempts to bulk delete the records passed in', async () => {
+      await processRemoveEntries({
+        applicationContext,
+        removeRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: {
+                  S: 'case|abc',
+                },
+                sk: {
+                  S: 'docket-entry|123',
+                },
+              },
+              NewImage: null,
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkDeleteRecords.mock
+          .calls[0][0].records,
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'case|abc' }, sk: { S: 'docket-entry|123' } },
+            NewImage: null,
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
+    });
   });
 
   describe('processCaseEntries', () => {
@@ -620,54 +666,6 @@ describe('processStreamRecordsInteractor', () => {
               sk: { S: otherEntryData.sk },
             },
             NewImage: otherEntryDataMarshalled,
-          },
-          eventName: 'MODIFY',
-        },
-      ]);
-    });
-  });
-
-  describe('processRemoveEntries', () => {
-    it('does nothing when no other records are found', async () => {
-      await processRemoveEntries({
-        applicationContext,
-        removeRecords: [],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('attempts to bulk delete the records passed in', async () => {
-      await processRemoveEntries({
-        applicationContext,
-        removeRecords: [
-          {
-            dynamodb: {
-              Keys: {
-                pk: {
-                  S: 'case|abc',
-                },
-                sk: {
-                  S: 'docket-entry|123',
-                },
-              },
-              NewImage: null,
-            },
-            eventName: 'MODIFY',
-          },
-        ],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkDeleteRecords.mock
-          .calls[0][0].records,
-      ).toEqual([
-        {
-          dynamodb: {
-            Keys: { pk: { S: 'case|abc' }, sk: { S: 'docket-entry|123' } },
-            NewImage: null,
           },
           eventName: 'MODIFY',
         },
