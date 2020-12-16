@@ -83,7 +83,7 @@ exports.handler = async (event, context) => {
   try {
     keys = await getKeysForIssuer(iss);
   } catch (error) {
-    logger.warn(
+    logger.warning(
       'Could not fetch keys for token issuer, considering request unauthorized',
       error,
     );
@@ -94,7 +94,7 @@ exports.handler = async (event, context) => {
   const key = keys.find(k => k.kid === kid);
 
   if (!key) {
-    logger.warn(
+    logger.warning(
       'The key used to sign the authorization token was not found in the user pool’s keys, considering request unauthorized',
       {
         issuer: iss,
@@ -110,7 +110,7 @@ exports.handler = async (event, context) => {
   try {
     payload = await verify(key, token);
   } catch (error) {
-    logger.warn(
+    logger.warning(
       'The token is not valid, considering request unauthorized',
       error,
     );
