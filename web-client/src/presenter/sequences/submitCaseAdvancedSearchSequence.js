@@ -25,7 +25,8 @@ export const submitCaseAdvancedSearchSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       submitCaseAdvancedSearchAction,
-      set(state.searchResults, props.searchResults),
+      //fixme, move to an action
+      set(state.searchResults.case, props.searchResults),
     ]),
   },
 ];
