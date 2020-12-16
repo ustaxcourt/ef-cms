@@ -40,7 +40,7 @@ describe('docket clerk opinion advanced search', () => {
       await test.runSequence('submitOpinionAdvancedSearchSequence');
 
       expect(test.getState('validationErrors')).toEqual({});
-      expect(test.getState('searchResults')).toEqual([]);
+      expect(test.getState('searchResults.opinion')).toEqual([]);
     });
 
     it('search for an opinion type that is not present in any served opinion', async () => {
@@ -55,7 +55,7 @@ describe('docket clerk opinion advanced search', () => {
       await test.runSequence('submitOpinionAdvancedSearchSequence');
 
       expect(test.getState('validationErrors')).toEqual({});
-      expect(test.getState('searchResults')).toEqual([]);
+      expect(test.getState('searchResults.opinion')).toEqual([]);
     });
   });
 
@@ -70,7 +70,7 @@ describe('docket clerk opinion advanced search', () => {
 
       await test.runSequence('submitOpinionAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual(
+      expect(test.getState('searchResults.opinion')).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
@@ -92,7 +92,7 @@ describe('docket clerk opinion advanced search', () => {
 
       await test.runSequence('submitOpinionAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual(
+      expect(test.getState('searchResults.opinion')).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
@@ -113,7 +113,7 @@ describe('docket clerk opinion advanced search', () => {
 
       await test.runSequence('submitOpinionAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual(
+      expect(test.getState('searchResults.opinion')).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             numberOfPages: 1,
