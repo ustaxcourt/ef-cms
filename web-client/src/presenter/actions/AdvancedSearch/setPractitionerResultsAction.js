@@ -7,5 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setPractitionerResultsAction = async ({ props, store }) => {
-  store.set(state.searchResults, props.practitioners);
+  // fixme, use tab set in state
+  store.set(state.searchResults.practitioner, props.practitioners);
 };

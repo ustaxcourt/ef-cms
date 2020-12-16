@@ -23,7 +23,8 @@ export const submitPublicOpinionAdvancedSearchSequence = [
     success: showProgressSequenceDecorator([
       clearAlertsAction,
       submitPublicOpinionAdvancedSearchAction,
-      set(state.searchResults, props.searchResults),
+      // fixme, move to an action
+      set(state.searchResults.opinion, props.searchResults),
     ]),
   },
 ];

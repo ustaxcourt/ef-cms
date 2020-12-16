@@ -23,7 +23,8 @@ export const submitOrderAdvancedSearchSequence = [
     success: showProgressSequenceDecorator([
       clearAlertsAction,
       submitOrderAdvancedSearchAction,
-      set(state.searchResults, props.searchResults),
+      // fixme, move to an action
+      set(state.searchResults.order, props.searchResults),
     ]),
   },
 ];

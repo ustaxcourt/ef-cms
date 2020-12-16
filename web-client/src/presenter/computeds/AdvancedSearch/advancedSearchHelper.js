@@ -38,8 +38,8 @@ export const advancedSearchHelper = (get, applicationContext) => {
     CASE_SEARCH_PAGE_SIZE,
     COUNTRY_TYPES,
   } = applicationContext.getConstants();
-  const searchResults = get(state.searchResults);
   const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
+  const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
   const result = {
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
