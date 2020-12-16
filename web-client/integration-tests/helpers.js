@@ -363,6 +363,19 @@ export const uploadPetition = async (
   return response.data;
 };
 
+export const loginAs = (test, user) => {
+  // eslint-disable-next-line jest/expect-expect
+  return it(`login as ${user}`, async () => {
+    await test.runSequence('updateFormValueSequence', {
+      key: 'name',
+      value: user,
+    });
+
+    await test.runSequence('submitLoginSequence', {
+      path: '/',
+    });
+  });
+};
 
 export const setupTest = ({ useCases = {} } = {}) => {
   let test;
