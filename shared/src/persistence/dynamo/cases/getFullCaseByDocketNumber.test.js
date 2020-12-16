@@ -156,7 +156,7 @@ describe('getCaseByDocketNumber', () => {
     });
   });
 
-  it('should return default object if nothing is returned from the client query request', async () => {
+  it('should return default object if an empty array is returned from the client query request', async () => {
     applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => Promise.resolve({ Items: [] }),
     });

@@ -279,6 +279,39 @@ describe('getDownloadPolicyUrlInteractor', () => {
     ).rejects.toThrow('Unauthorized to view document at this time');
   });
 
+  it('does NOT throw an error for a privatePractitioner who is not associated with the case and viewing a legacy served court issued document', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+      userId: 'privatePractitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            ...mockCase.docketEntries.filter(
+              d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            )[0],
+            documentType: 'Order that case is assigned',
+            isLegacyServed: true,
+            servedAt: undefined,
+          },
+        ],
+      });
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).toBeDefined();
+  });
+
   it('throws an error for a petitioner who is associated with the case and viewing an unserved court issued document', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,

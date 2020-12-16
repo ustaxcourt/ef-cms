@@ -55,7 +55,7 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     await wait(1000); // we need to wait for some reason
 
     if (overrides.hasPaper) {
-      expect(test.getState('currentPage')).toEqual('PrintPaperService');
+      expect(test.getState('currentPage')).toEqual('PrintPaperTrialNotices');
       expect(test.getState('alertWarning')).toEqual({
         message: 'Print and mail all paper service documents now.',
       });
