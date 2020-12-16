@@ -1,3 +1,5 @@
+import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
+
 export const unassociatedUserSearchesForServedOrderInSealedCase = (
   test,
   options,
@@ -11,7 +13,9 @@ export const unassociatedUserSearchesForServedOrderInSealedCase = (
 
     await test.runSequence('submitOrderAdvancedSearchSequence');
 
-    expect(test.getState('searchResults')).not.toEqual(
+    expect(
+      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId:

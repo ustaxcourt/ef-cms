@@ -8,6 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setAdvancedSearchResultsAction = async ({ get, props, store }) => {
-  const tabName = get(state.advancedSearchTab);
+  const tabName = get(state.advancedSearchTab) || 'case';
   store.set(state.searchResults[tabName], props.searchResults);
 };
