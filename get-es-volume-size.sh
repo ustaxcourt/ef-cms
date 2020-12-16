@@ -25,15 +25,15 @@ elif [[ $BRANCH == 'irs' ]] ; then
 elif [[ $BRANCH == 'staging' ]] ; then
   echo "10"
 elif [[ $BRANCH == 'test' ]] ; then
-  echo "100"
+  echo "350"
 elif [[ $BRANCH == 'migration' ]] ; then
-  echo "100"
+  echo "350"
 elif [[ $BRANCH == 'master' ]] ; then
   echo "100"
 elif [[ $BRANCH == 'dawson' ]] ; then
   echo "100"
 elif [[ $BRANCH == 'prod' ]] ; then
-  echo "100"
+  echo "350"
 else
   exit 1;
 fi
