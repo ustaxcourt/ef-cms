@@ -14,6 +14,6 @@ export const hasPractitionerDetailAction = ({ path, props }) => {
   if (!isEmpty(practitionerDetail)) {
     return path.success();
   } else {
-    return path.noResults({ practitioners: [] });
+    return path.noResults({ searchResults: [] });
   }
 };
