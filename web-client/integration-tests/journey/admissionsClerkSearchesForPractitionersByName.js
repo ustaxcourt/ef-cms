@@ -1,3 +1,4 @@
+import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { advancedSearchHelper } from '../../src/presenter/computeds/AdvancedSearch/advancedSearchHelper';
 import { formatNow } from '../../../shared/src/business/utilities/DateHandler';
 import { refreshElasticsearchIndex } from '../helpers';
@@ -10,18 +11,16 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
 
     await refreshElasticsearchIndex();
 
-    // simulate switching to the Practitioner tab
-    await test.runSequence('cerebralBindSimpleSetStateSequence', {
-      key: 'advancedSearchTab',
-      value: 'practitioner',
-    });
+    test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.PRACTITIONER);
 
     await test.runSequence('advancedSearchTabChangeSequence');
 
     expect(
       test.getState('advancedSearchForm.practitionerSearchByName'),
     ).toEqual({});
-    expect(test.getState('searchResults')).toBeUndefined();
+    expect(
+      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`),
+    ).toBeUndefined();
 
     await test.runSequence('submitPractitionerNameSearchSequence');
     expect(test.getState('validationErrors.practitionerName')).toBeDefined();
@@ -36,7 +35,10 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
     await test.runSequence('submitPractitionerNameSearchSequence');
     expect(test.getState('validationErrors.practitionerName')).toBeUndefined();
 
-    expect(test.getState('searchResults').length).toBeGreaterThan(0);
+    expect(
+      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`)
+        .length,
+    ).toBeGreaterThan(0);
     let helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
       state: test.getState(),
     });
@@ -53,7 +55,9 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
     expect(
       test.getState('advancedSearchForm.practitionerSearchByName'),
     ).toEqual({});
-    expect(test.getState('searchResults')).toBeUndefined();
+    expect(
+      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`),
+    ).toBeUndefined();
 
     // exact match
     await test.runSequence('updateAdvancedSearchFormValueSequence', {
@@ -64,7 +68,10 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
 
     await test.runSequence('submitPractitionerNameSearchSequence');
 
-    expect(test.getState('searchResults').length).toBeGreaterThan(0);
+    expect(
+      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`)
+        .length,
+    ).toBeGreaterThan(0);
     expect(test.getState('searchResults.0.name')).toEqual(
       `joe ${test.currentTimestamp} exotic tiger king`,
     );
@@ -82,7 +89,10 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
 
     await test.runSequence('submitPractitionerNameSearchSequence');
 
-    expect(test.getState('searchResults').length).toEqual(0);
+    expect(
+      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`)
+        .length,
+    ).toEqual(0);
 
     helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
       state: test.getState(),

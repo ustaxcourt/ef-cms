@@ -1,3 +1,4 @@
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
@@ -433,7 +434,7 @@ describe('Case migration journey', () => {
 
     expect(
       test
-        .getState('searchResults')
+        .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(
           result =>
             result.contactPrimary.name ===
@@ -486,7 +487,7 @@ describe('Case migration journey', () => {
 
     expect(
       test
-        .getState('searchResults')
+        .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(
           result =>
             result.contactPrimary.name ===
@@ -508,7 +509,7 @@ describe('Case migration journey', () => {
 
     expect(
       test
-        .getState('searchResults')
+        .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(
           result =>
             result.contactPrimary.name ===
