@@ -5,6 +5,8 @@ export const unassociatedUserSearchesForServedOrderInSealedCase = (
   options,
 ) => {
   return it('unassociated user searches for served order in a sealed case', async () => {
+    test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
     test.setState('advancedSearchForm', {
       orderSearch: {
         keyword: options.keyword,
