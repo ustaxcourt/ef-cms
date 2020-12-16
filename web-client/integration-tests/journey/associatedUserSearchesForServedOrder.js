@@ -6,6 +6,7 @@ export const associatedUserSearchesForServedOrder = (
   sealed = false,
 ) => {
   return it('associated user searches for served order', async () => {
+    test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
     test.setState('advancedSearchForm', {
       orderSearch: {
         keyword: options.keyword,

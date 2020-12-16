@@ -15,7 +15,7 @@ export const unauthedUserSearchesByDocketNumber = (test, params) => {
     });
     await test.runSequence('submitPublicCaseDocketNumberSearchSequence', {});
     searchResults = test.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`);
-    expect(searchResults).toBeUndefined();
+    expect(searchResults).toEqual([]);
     expect(test.currentRouteUrl.indexOf('/case-detail')).toEqual(-1);
 
     await test.runSequence('clearAdvancedSearchFormSequence', {
