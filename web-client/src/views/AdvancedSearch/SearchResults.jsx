@@ -24,6 +24,7 @@ export const SearchResults = connect(
                     'Your search has a high number of matching results. Refine your search for more accurate results.',
                 }}
                 dismissable={false}
+                scrollToTop={false}
               />
             )}
 

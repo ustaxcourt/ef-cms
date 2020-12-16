@@ -8,6 +8,7 @@ export const WarningNotificationComponent = function WarningNotificationComponen
   alertWarning,
   dismissable = true,
   dismissAlertSequence,
+  scrollToTop = true,
 }) {
   const notificationRef = useRef(null);
   const isMessageOnly =
@@ -15,7 +16,7 @@ export const WarningNotificationComponent = function WarningNotificationComponen
 
   useEffect(() => {
     const notification = notificationRef.current;
-    if (notification) {
+    if (notification && scrollToTop) {
       window.scrollTo(0, 0);
     }
   });
