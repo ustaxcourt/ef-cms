@@ -25,6 +25,7 @@ export const PractitionerSearchResults = connect(
                     'Your search has a high number of matching results. Refine your search for more accurate results.',
                 }}
                 dismissable={false}
+                scrollToTop={false}
               />
             )}
             <table className="usa-table search-results docket-record responsive-table row-border-only">
