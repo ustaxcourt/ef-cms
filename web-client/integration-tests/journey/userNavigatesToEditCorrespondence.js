@@ -1,8 +1,9 @@
-export const docketClerkNavigatesToEditCorrespondence = (
+export const userNavigatesToEditCorrespondence = (
   test,
   correspondenceTitle,
+  user,
 ) =>
-  it('docketclerk navigates to edit correspondence', async () => {
+  it(`${user} navigates to edit correspondence`, async () => {
     test.correspondenceDocument = test
       .getState('caseDetail.correspondence')
       .find(
