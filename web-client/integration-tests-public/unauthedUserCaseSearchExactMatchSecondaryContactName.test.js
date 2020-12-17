@@ -148,7 +148,9 @@ describe(`Create and serve a case for Bobby ${lastName}`, () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(nameToSearchFor),
+        contactPrimary: getContactPrimary(),
+        contactSecondary: getContactSecondary(nameToSearchFor),
+        partyType: 'Petitioner & spouse',
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -177,7 +179,9 @@ describe(`Create and serve a case for Bobby ${lastName}sy`, () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(nameToSearchFor),
+        contactPrimary: getContactPrimary(),
+        contactSecondary: getContactSecondary(nameToSearchFor),
+        partyType: 'Petitioner & spouse',
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
