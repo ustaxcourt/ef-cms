@@ -445,3 +445,19 @@ Follow these steps for creating the end of sprint PRs for the court.
 The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
 
 https://squizlabs.github.io/HTML_CodeSniffer/
+
+## To query elasticsearch locally, run this docker container
+
+docker run -p 3030:3030 -d appbaseio/mirage
+
+open your browser to http://localhost:3030
+
+update your .elasticsearch/config/elasticsearch.yml to have the following pasted at the bottom:
+
+```
+http.port: 9200
+http.cors.allow-origin: "/.*/"
+http.cors.enabled: true
+http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type, Content-Length, Authorization
+http.cors.allow-credentials: true
+```
