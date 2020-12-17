@@ -116,6 +116,7 @@ describe('Petitions Clerk', () => {
           method: 'POST',
           url: `${migrateRestApi}/migrate/case`,
         });
+        console.log('DOCKET NUMBNER', firstDocketNumber, secondDocketNumber);
       });
     });
   });
