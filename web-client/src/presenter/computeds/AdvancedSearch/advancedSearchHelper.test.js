@@ -1,4 +1,7 @@
-import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
+import {
+  advancedSearchHelper as advancedSearchHelperComputed,
+  paginationHelper,
+} from './advancedSearchHelper';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -157,7 +160,7 @@ describe('advancedSearchHelper', () => {
       showNoMatches: false,
       showSearchResults: true,
     });
-    expect(result.showMaxResultsMessage).toBeFalsy();
+    expect(result.showManyResultsMessage).toBeFalsy();
   });
 
   it('formats search results for a case search', () => {
@@ -266,8 +269,8 @@ describe('advancedSearchHelper', () => {
         ],
       },
     });
-    expect(result.showMaxResultsMessage).toBe(true);
-    expect(result.maxResults).toBeDefined();
+    expect(result.showManyResultsMessage).toBe(true);
+    expect(result.manyResults).toBeDefined();
   });
 
   it('only returns formatted results that should be currently shown based on form.currentPage for a case search', () => {
@@ -435,5 +438,13 @@ describe('advancedSearchHelper', () => {
       { barNumber: '1111' },
       { barNumber: '2222' },
     ]);
+  });
+
+  describe('paginationHelper', () => {
+    it('should return an empty object when searchResults are undefined', () => {
+      const result = paginationHelper(undefined, 1, 25);
+
+      expect(result).toEqual({});
+    });
   });
 });

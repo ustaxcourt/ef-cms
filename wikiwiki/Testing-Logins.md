@@ -28,11 +28,11 @@ admissionsclerk1@example.com – admissionsclerk5@example.com
 adc1@example.com – adc5@example.com
 
 ### Judge & Chambers
-jashford@example.com
+judge.ashford@example.com
 ashfordsChambers1@example.com - ashfordsChambers5@example.com
-jbuch@example.com
+judge.buch@example.com
 buchsChambers1@example.com - buchsChambers5@example.com
-jcohen@example.com
+judge.cohen@example.com
 cohensChambers1@example.com – cohensChambers5@example.com
 
 ### Clerk of the Court

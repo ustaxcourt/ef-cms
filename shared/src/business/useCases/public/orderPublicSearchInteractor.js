@@ -1,3 +1,6 @@
+const {
+  PublicDocumentSearchResult,
+} = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 const { filterForPublic } = require('./publicHelpers');
 const { ORDER_EVENT_CODES } = require('../../entities/EntityConstants');
@@ -44,5 +47,7 @@ exports.orderPublicSearchInteractor = async ({
     unfiltered: foundDocuments,
   });
 
-  return filteredResults;
+  return PublicDocumentSearchResult.validateRawCollection(filteredResults, {
+    applicationContext,
+  });
 };

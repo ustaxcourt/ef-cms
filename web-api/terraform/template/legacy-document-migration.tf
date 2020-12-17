@@ -26,6 +26,7 @@ resource "aws_lambda_function" "legacy_documents_migration_lambda" {
       DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
       STAGE                              = var.environment
       DYNAMODB_TABLE_NAME                = var.destination_table
+      NODE_ENV                           = "production"
     }
   }
 }

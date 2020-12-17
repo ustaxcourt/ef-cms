@@ -16,12 +16,16 @@ export const PDFPreviewButton = connect(
     file,
     openPdfPreviewModalSequence,
     pdfPreviewModalHelper,
+    shouldAbbreviateTitle = true,
+    shouldWrapText = false,
     showModal,
     title,
   }) {
     const modalId = `PDFPreviewModal-${title}`;
     const fullTitle = file.name || file.documentType || title;
     const abbrevTitle = getStringAbbreviation(fullTitle, 50);
+    const displayTitle = shouldAbbreviateTitle ? abbrevTitle : fullTitle;
+
     return (
       <>
         <Button
@@ -29,12 +33,13 @@ export const PDFPreviewButton = connect(
           className="pdf-preview-btn padding-0"
           icon={['fas', 'file-pdf']}
           iconColor="blue"
+          shouldWrapText={shouldWrapText}
           title={fullTitle}
           onClick={() => {
             return openPdfPreviewModalSequence({ file, modalId });
           }}
         >
-          {abbrevTitle}
+          {displayTitle}
         </Button>
         {showModal == modalId &&
           (pdfPreviewModalHelper.displayErrorText ? (

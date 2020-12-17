@@ -41,12 +41,14 @@ describe('getPractitionersByNameInteractor', () => {
       .getPractitionersByName.mockReturnValue([
         {
           barNumber: 'PT1234',
+          contact: { flavor: 'bbq', state: 'WI' },
           name: 'Test Practitioner1',
           role: ROLES.irsPractitioner,
           userId: '8190d648-e643-4964-988e-141e4e0db861',
         },
         {
           barNumber: 'PT5432',
+          contact: { favoriteColor: 'chartreuse', state: 'WI' },
           name: 'Test Practitioner2',
           role: ROLES.privatePractitioner,
           userId: '12d5bb3a-e867-4066-bda5-2f178a76191f',
@@ -61,15 +63,13 @@ describe('getPractitionersByNameInteractor', () => {
     expect(results).toMatchObject([
       {
         barNumber: 'PT1234',
+        contact: { state: 'WI' },
         name: 'Test Practitioner1',
-        role: ROLES.irsPractitioner,
-        userId: '8190d648-e643-4964-988e-141e4e0db861',
       },
       {
         barNumber: 'PT5432',
+        contact: { state: 'WI' },
         name: 'Test Practitioner2',
-        role: ROLES.privatePractitioner,
-        userId: '12d5bb3a-e867-4066-bda5-2f178a76191f',
       },
     ]);
   });
