@@ -18,7 +18,17 @@ testClient.draftOrders = [];
 
 // exact match on contactPrimary.name
 
-const getContactPrimary = name => ({
+const getContactPrimary = () => ({
+  address1: '734 Cowley Parkway',
+  city: 'Somewhere',
+  countryType: COUNTRY_TYPES.DOMESTIC,
+  name: 'Zach Evans',
+  phone: '+1 (884) 358-9729',
+  postalCode: '77546',
+  state: 'CT',
+});
+
+const getContactSecondary = name => ({
   address1: '734 Cowley Parkway',
   city: 'Somewhere',
   countryType: COUNTRY_TYPES.DOMESTIC,
@@ -32,7 +42,7 @@ const lastName = faker.name.lastName();
 
 const createdDocketNumbers = [];
 
-// add a case with the contactPrimary.name of "Bob Jones"
+// add a case with the contactSecondary.name of "Bob Jones"
 describe(`Create and serve a case for Bob ${lastName}`, () => {
   describe(`Petitioner creates case for Bob ${lastName}`, () => {
     const nameToSearchFor = `Bob ${lastName}`;
@@ -45,7 +55,9 @@ describe(`Create and serve a case for Bob ${lastName}`, () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(nameToSearchFor),
+        contactPrimary: getContactPrimary(),
+        contactSecondary: getContactSecondary(nameToSearchFor),
+        partyType: 'Petitioner & spouse',
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -74,7 +86,9 @@ describe(`Create and serve a case for ${lastName} Bob`, () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(nameToSearchFor),
+        contactPrimary: getContactPrimary(),
+        contactSecondary: getContactSecondary(nameToSearchFor),
+        partyType: 'Petitioner & spouse',
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -103,7 +117,9 @@ describe(`Create and serve a case for Bob Smith ${lastName}`, () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(nameToSearchFor),
+        contactPrimary: getContactPrimary(),
+        contactSecondary: getContactSecondary(nameToSearchFor),
+        partyType: 'Petitioner & spouse',
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -188,12 +204,16 @@ describe('Petitioner searches for exact name match', () => {
       petitionerName: `Bob ${lastName}`,
     };
 
+    console.log('queryParams', queryParams);
+
     test.setState('advancedSearchForm.caseSearchByName', queryParams);
     await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
 
     const searchResults = test.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
+
+    console.log('searchResults', searchResults);
 
     expect(searchResults.length).toBe(3);
     // expect Bob Jones is first
