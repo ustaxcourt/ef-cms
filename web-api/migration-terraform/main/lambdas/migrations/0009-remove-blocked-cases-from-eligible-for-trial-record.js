@@ -20,6 +20,7 @@ const migrateItems = async (items, documentClient) => {
         });
 
       if (
+        caseRecord.docketNumber &&
         !caseRecord.automaticBlocked &&
         !caseRecord.blocked &&
         !caseRecord.status !== CASE_STATUS_TYPES.calendared
