@@ -18,6 +18,15 @@ const {
 const {
   migrateItems: migration0006,
 } = require('./migrations/0006-eservice-indicator-has-eaccess');
+const {
+  migrateItems: migration0007,
+} = require('./migrations/0007-unblock-migrated-calendared-cases');
+const {
+  migrateItems: migration0008,
+} = require('./migrations/0008-associated-judge-on-deadlines');
+const {
+  migrateItems: migration0009,
+} = require('./migrations/0009-remove-blocked-cases-from-eligible-for-trial-record');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -50,6 +59,9 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0005(items, documentClient);
   applicationContext.logger.info('about to run migration 006');
   items = await migration0006(items, documentClient);
+  items = await migration0007(items, documentClient);
+  items = await migration0008(items, documentClient);
+  items = await migration0009(items, documentClient);
 
   return items;
 };

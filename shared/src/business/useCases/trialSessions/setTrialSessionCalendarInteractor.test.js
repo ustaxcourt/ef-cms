@@ -181,4 +181,48 @@ describe('setTrialSessionCalendarInteractor', () => {
       trialDate: '2025-12-01T00:00:00.000Z',
     });
   });
+
+  it('should call getEligibleCasesForTrialSession with correct limit when no cases have been manually added and QCed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([]);
+
+    await setTrialSessionCalendarInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
+        .mock.calls[0][0],
+    ).toMatchObject({
+      limit: 150, // max cases + buffer
+    });
+  });
+
+  it('should call getEligibleCasesForTrialSession with correct limit when 1 case has been manually added and QCed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          docketNumber: '102-19',
+          qcCompleteForTrial: {
+            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+          },
+        },
+      ]);
+
+    await setTrialSessionCalendarInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
+        .mock.calls[0][0],
+    ).toMatchObject({
+      limit: 149, // max cases + buffer - manually added case
+    });
+  });
 });

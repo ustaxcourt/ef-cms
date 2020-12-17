@@ -66,4 +66,18 @@ describe('fetchPendingItems', () => {
       },
     });
   });
+
+  it('uses page passed in to calculate `size` and `from` values for query', async () => {
+    applicationContext.getConstants.mockReturnValue({
+      PENDING_ITEMS_PAGE_SIZE: 2,
+    });
+
+    await fetchPendingItems({
+      applicationContext,
+      page: 2,
+    });
+
+    expect(search.mock.calls[0][0].searchParameters.body.from).toBe(4);
+    expect(search.mock.calls[0][0].searchParameters.body.size).toBe(2);
+  });
 });

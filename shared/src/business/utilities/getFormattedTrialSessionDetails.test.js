@@ -163,7 +163,7 @@ describe('formattedTrialSessionDetails', () => {
   it('formatCase identifies Small Lien/Levy, Lien/Levy, and Passport as high priority', () => {
     expect(
       formatCase({ applicationContext, caseItem: { docketNumberSuffix: 'W' } })
-        .isHighPriority,
+        .isDocketSuffixHighPriority,
     ).toBe(false);
     expect(
       formatCase({
@@ -171,19 +171,19 @@ describe('formattedTrialSessionDetails', () => {
         caseItem: {
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
         },
-      }).isHighPriority,
+      }).isDocketSuffixHighPriority,
     ).toBe(true);
     expect(
       formatCase({
         applicationContext,
         caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY },
-      }).isHighPriority,
+      }).isDocketSuffixHighPriority,
     ).toBe(true);
     expect(
       formatCase({
         applicationContext,
         caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT },
-      }).isHighPriority,
+      }).isDocketSuffixHighPriority,
     ).toBe(true);
   });
   describe('comparing eligible cases', () => {
@@ -193,13 +193,13 @@ describe('formattedTrialSessionDetails', () => {
           docketNumber: '101-19',
           docketNumberSuffix: '',
           docketNumberWithSuffix: '101-19',
-          isHighPriority: false,
+          isDocketSuffixHighPriority: false,
         },
         {
           docketNumber: '101-19',
           docketNumberSuffix: 'P',
           docketNumberWithSuffix: '101-19P',
-          isHighPriority: true,
+          isDocketSuffixHighPriority: true,
         },
       );
       expect(result).toBe(1);
@@ -216,7 +216,7 @@ describe('formattedTrialSessionDetails', () => {
           docketNumber: '101-19',
           docketNumberSuffix: 'P',
           docketNumberWithSuffix: '101-19P',
-          isHighPriority: true,
+          isDocketSuffixHighPriority: true,
         },
       ];
       const result = formattedEligibleCases.sort(
@@ -227,7 +227,7 @@ describe('formattedTrialSessionDetails', () => {
           docketNumber: '101-19',
           docketNumberSuffix: 'P',
           docketNumberWithSuffix: '101-19P',
-          isHighPriority: true,
+          isDocketSuffixHighPriority: true,
         },
         {
           docketNumber: '101-19',
@@ -235,6 +235,65 @@ describe('formattedTrialSessionDetails', () => {
           docketNumberWithSuffix: '101-19',
         },
       ]);
+    });
+
+    it('compares eligible trial session cases sorting manually added cases first', () => {
+      const formattedEligibleCases = [
+        {
+          // should be last
+          docketNumber: '105-19',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '105-19',
+        },
+        {
+          // should be 3rd
+          docketNumber: '101-19',
+          docketNumberSuffix: 'L',
+          docketNumberWithSuffix: '101-19L',
+        },
+        {
+          // should be 1st
+          docketNumber: '103-19',
+          docketNumberSuffix: 'P',
+          docketNumberWithSuffix: '103-19P',
+          isManuallyAdded: true,
+        },
+        {
+          // should be 2nd
+          docketNumber: '104-19',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '104-19',
+          highPriority: true,
+        },
+      ];
+      const result = formattedEligibleCases.sort(
+        compareTrialSessionEligibleCases,
+      );
+      expect(result[0]).toMatchObject({
+        docketNumber: '103-19',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '103-19P',
+        isManuallyAdded: true,
+      });
+      expect(result[1]).toMatchObject({
+        // should be 2nd
+        docketNumber: '104-19',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '104-19',
+        highPriority: true,
+      });
+      expect(result[2]).toMatchObject({
+        // should be 3rd
+        docketNumber: '101-19',
+        docketNumberSuffix: 'L',
+        docketNumberWithSuffix: '101-19L',
+      });
+      expect(result[3]).toMatchObject({
+        // should be last
+        docketNumber: '105-19',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '105-19',
+      });
     });
   });
 
@@ -279,7 +338,7 @@ describe('formattedTrialSessionDetails', () => {
       docketNumber: '799-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
       docketNumberWithSuffix: '799-19L',
-      isHighPriority: true,
+      isDocketSuffixHighPriority: true,
     });
 
     expect(result.formattedEligibleCases[1]).toMatchObject({
@@ -287,7 +346,7 @@ describe('formattedTrialSessionDetails', () => {
       docketNumber: '122-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
       docketNumberWithSuffix: '122-20P',
-      isHighPriority: true,
+      isDocketSuffixHighPriority: true,
     });
 
     expect(result.formattedEligibleCases[2]).toMatchObject({
