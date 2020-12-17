@@ -2,6 +2,9 @@ const {
   DocumentSearch,
 } = require('../../business/entities/documents/DocumentSearch');
 const {
+  InternalDocumentSearchResult,
+} = require('../entities/documents/InternalDocumentSearchResult');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -60,5 +63,7 @@ exports.orderAdvancedSearchInteractor = async ({
 
   const filteredResults = caseSearchFilter(results, authorizedUser);
 
-  return filteredResults;
+  return InternalDocumentSearchResult.validateRawCollection(filteredResults, {
+    applicationContext,
+  });
 };
