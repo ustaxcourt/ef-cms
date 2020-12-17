@@ -10,6 +10,7 @@ data "null_data_source" "locals" {
     USER_POOL_ID                       = aws_cognito_user_pool.pool.id
     USER_POOL_IRS_ID                   = aws_cognito_user_pool.irs_pool.id
     NODE_ENV                           = "production"
+    BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
     EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
     EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
     EMAIL_SERVED_PETITION_TEMPLATE     = "petition_served_${var.environment}"
