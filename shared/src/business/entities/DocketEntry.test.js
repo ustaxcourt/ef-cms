@@ -1638,23 +1638,15 @@ describe('DocketEntry entity', () => {
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          documentTitle: 'Entry of Appearance',
-          documentType: 'Entry of Appearance',
-        },
-        { applicationContext },
-      );
-      expect(docketEntry.isAutoServed()).toBeTruthy();
-    });
-
-    it('should return true if the documentType is a practitioner association document and the documentTitle does not contain Simultaneous', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Notice of Election to Participate',
           documentType: 'Notice of Election to Participate',
         },
         { applicationContext },
       );
+      expect(docketEntry.isAutoServed()).toBeTruthy();
+
+      docketEntry.documentTitle = 'Entry of Appearance';
+      docketEntry.documentType = 'Entry of Appearance';
       expect(docketEntry.isAutoServed()).toBeTruthy();
 
       docketEntry.documentTitle = 'Notice of Election to Intervene';

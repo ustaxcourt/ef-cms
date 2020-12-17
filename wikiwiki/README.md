@@ -38,7 +38,7 @@
   * [Docket Record](./Docket-Record.md)
   * [Statistics](./Statistics.md)
   * [Drafts](./Drafts.md)
-  * [Sealed Cases](./Sealed-Cases.md)
+  * [Sealed Cases and Documents](./Sealed-Cases-Documents.md)
   * [Correspondence](./Correspondence.md)
   * [Consolidated Cases](./Consolidated-Cases.md)
   * [Case Information](./Case-Information.md)

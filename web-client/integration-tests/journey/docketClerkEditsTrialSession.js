@@ -20,14 +20,11 @@ export const docketClerkEditsTrialSession = test => {
 
     await test.runSequence('updateTrialSessionSequence');
 
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
-    });
+    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
 
     const formatted = runCompute(formattedTrialSessionDetails, {
       state: test.getState(),
     });
-    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
 
     expect(formatted.notes).toEqual('hello');
   });
