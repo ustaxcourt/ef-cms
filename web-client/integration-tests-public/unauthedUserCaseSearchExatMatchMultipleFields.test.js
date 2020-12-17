@@ -14,14 +14,26 @@ const test = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
-const updatedLastName = faker.name.lastName();
+const nameToSearchFor = `${faker.name.firstName()} ${faker.name.lastName()}`;
+
 const createdDocketNumbers = [];
 
-const getContactPrimary = () => ({
+const getContactPrimary = ({ name, secondaryName }) => ({
   address1: '734 Cowley Parkway',
   city: 'Somewhere',
   countryType: COUNTRY_TYPES.DOMESTIC,
-  name: 'Rick Alex',
+  name: name || 'Rick Alex',
+  phone: '+1 (884) 358-9729',
+  postalCode: '77546',
+  secondaryName: secondaryName || 'Ricky Other',
+  state: 'CT',
+});
+
+const getContactSecondary = ({ name }) => ({
+  address1: '734 Cowley Parkway',
+  city: 'Somewhere',
+  countryType: COUNTRY_TYPES.DOMESTIC,
+  name: name || 'Frank Alan',
   phone: '+1 (884) 358-9729',
   postalCode: '77546',
   state: 'CT',
@@ -47,10 +59,8 @@ const updateCaseCaption = async (docketNumber, caseCaption) => {
   });
 };
 
-describe('Create and serve a case for Rick Alex', () => {
-  describe('Petitioner creates case for Rick Alex', () => {
-    const nameToSearchFor = `Rupert ${updatedLastName}`;
-
+describe('Create and serve a case to test contactPrimary.name', () => {
+  describe('Petitioner creates case', () => {
     beforeAll(() => {
       jest.setTimeout(10000);
     });
@@ -59,7 +69,7 @@ describe('Create and serve a case for Rick Alex', () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(),
+        contactPrimary: getContactPrimary({ name: nameToSearchFor }),
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -68,8 +78,10 @@ describe('Create and serve a case for Rick Alex', () => {
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
-    const newCaseCaption = `${nameToSearchFor}, Petitioner`;
-    updateCaseCaption(test.docketNumber, newCaseCaption);
+    updateCaseCaption(
+      test.docketNumber,
+      'Something other than the petitioner, Petitioner',
+    ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
 
   describe('Petitions clerk serves case to IRS', () => {
@@ -78,10 +90,8 @@ describe('Create and serve a case for Rick Alex', () => {
   });
 });
 
-describe('Create and serve a case for Rick Alex', () => {
-  describe('Petitioner creates case for Rick Alex', () => {
-    const nameToSearchFor = `${updatedLastName} Rupert`;
-
+describe('Create and serve a case to test contactPrimary.secondaryName', () => {
+  describe('Petitioner creates case', () => {
     beforeAll(() => {
       jest.setTimeout(10000);
     });
@@ -90,7 +100,7 @@ describe('Create and serve a case for Rick Alex', () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(),
+        contactPrimary: getContactPrimary({ secondaryName: nameToSearchFor }),
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -99,8 +109,10 @@ describe('Create and serve a case for Rick Alex', () => {
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
-    const newCaseCaption = `${nameToSearchFor}, Petitioner`;
-    updateCaseCaption(test.docketNumber, newCaseCaption);
+    updateCaseCaption(
+      test.docketNumber,
+      'Something other than the petitioner, Petitioner',
+    ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
 
   describe('Petitions clerk serves case to IRS', () => {
@@ -109,10 +121,8 @@ describe('Create and serve a case for Rick Alex', () => {
   });
 });
 
-describe('Create and serve a case for Rick Alex', () => {
-  describe('Petitioner creates case for Rick Alex', () => {
-    const nameToSearchFor = `Rupert Federico ${updatedLastName}`;
-
+describe('Create and serve a case to test contactSecondary.name', () => {
+  describe('Petitioner creates case', () => {
     beforeAll(() => {
       jest.setTimeout(10000);
     });
@@ -121,7 +131,9 @@ describe('Create and serve a case for Rick Alex', () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(),
+        contactPrimary: getContactPrimary({}),
+        contactSecondary: getContactSecondary({ name: nameToSearchFor }),
+        partyType: 'Petitioner & spouse',
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -130,8 +142,10 @@ describe('Create and serve a case for Rick Alex', () => {
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
-    const newCaseCaption = `${nameToSearchFor}, Petitioner`;
-    updateCaseCaption(test.docketNumber, newCaseCaption);
+    updateCaseCaption(
+      test.docketNumber,
+      'Something other than the petitioner, Petitioner',
+    ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
 
   describe('Petitions clerk serves case to IRS', () => {
@@ -140,10 +154,8 @@ describe('Create and serve a case for Rick Alex', () => {
   });
 });
 
-describe('Create and serve a case for name: Rick Alex', () => {
-  describe('Petitioner creates case for name: Rick Alex', () => {
-    const nameToSearchFor = `Ruperto ${updatedLastName}`;
-
+describe('Create and serve a case to test caseCaption', () => {
+  describe('Petitioner creates case', () => {
     beforeAll(() => {
       jest.setTimeout(10000);
     });
@@ -152,38 +164,7 @@ describe('Create and serve a case for name: Rick Alex', () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(nameToSearchFor),
-      });
-
-      expect(caseDetail.docketNumber).toBeDefined();
-      test.docketNumber = caseDetail.docketNumber;
-      testClient.docketNumber = caseDetail.docketNumber;
-      createdDocketNumbers.push(caseDetail.docketNumber);
-    });
-
-    const newCaseCaption = `${nameToSearchFor}, Petitioner`;
-    updateCaseCaption(test.docketNumber, newCaseCaption);
-  });
-
-  describe('Petitions clerk serves case to IRS', () => {
-    loginAs(testClient, 'petitionsclerk@example.com');
-    petitionsClerkServesElectronicCaseToIrs(testClient);
-  });
-});
-
-describe('Create and serve a case for name: Rick Alex', () => {
-  describe('Petitioner creates case for name: Rick Alex', () => {
-    const nameToSearchFor = `Rupert ${updatedLastName}y`;
-
-    beforeAll(() => {
-      jest.setTimeout(10000);
-    });
-
-    loginAs(testClient, 'petitioner@example.com');
-
-    it('Create case', async () => {
-      const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(nameToSearchFor),
+        contactPrimary: getContactPrimary({}),
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
@@ -209,7 +190,7 @@ describe('Petitioner searches for exact name match', () => {
     const queryParams = {
       countryType: COUNTRY_TYPES.DOMESTIC,
       currentPage: 1,
-      petitionerName: `Rupert ${updatedLastName}`,
+      petitionerName: nameToSearchFor,
     };
 
     test.setState('advancedSearchForm.caseSearchByName', queryParams);
@@ -219,7 +200,7 @@ describe('Petitioner searches for exact name match', () => {
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 
-    expect(searchResults.length).toBe(3);
+    expect(searchResults.length).toBe(4);
 
     expect(searchResults[0]).toMatchObject({
       docketNumber: createdDocketNumbers[0],
@@ -231,6 +212,10 @@ describe('Petitioner searches for exact name match', () => {
 
     expect(searchResults[2]).toMatchObject({
       docketNumber: createdDocketNumbers[2],
+    });
+
+    expect(searchResults[3]).toMatchObject({
+      docketNumber: createdDocketNumbers[3],
     });
   });
 });

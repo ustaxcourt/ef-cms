@@ -32,10 +32,10 @@ const aggregateCommonQueryParams = ({
             simple_query_string: {
               default_operator: 'and',
               fields: [
-                'contactPrimary.M.name.S',
-                'contactPrimary.M.secondaryName.S',
-                'contactSecondary.M.name.S',
-                'caseCaption.S',
+                'contactPrimary.M.name.S^3',
+                'contactPrimary.M.secondaryName.S^2',
+                'contactSecondary.M.name.S^1',
+                'caseCaption.S^0',
               ],
               flags: 'AND|PHRASE|PREFIX',
               query: petitionerName,
