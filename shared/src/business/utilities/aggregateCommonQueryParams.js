@@ -35,24 +35,13 @@ const aggregateCommonQueryParams = ({
                 'contactPrimary.M.name.S',
                 'contactPrimary.M.secondaryName.S',
                 'contactSecondary.M.name.S',
+                'caseCaption.S',
               ],
               flags: 'AND|PHRASE|PREFIX',
               query: petitionerName,
             },
           },
         ],
-      },
-    });
-
-    nonExactMatchesQuery.push({
-      query_string: {
-        fields: [
-          'contactPrimary.M.name.S',
-          'contactPrimary.M.secondaryName.S',
-          'contactSecondary.M.name.S',
-          'caseCaption.S',
-        ],
-        query: `*${petitionerName}*`,
       },
     });
   }
