@@ -18,10 +18,8 @@ describe('opinionAdvancedSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
+          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
           docketNumber: '103-19',
-          docketNumberSuffix: 'AAA',
-          documentContents:
-            'Everyone knows that Reeses Outrageous bars are the best candy',
           documentTitle: 'T.C. Opinion for More Candy',
           documentType: 'T.C. Opinion',
           eventCode: 'TCOP',
@@ -29,9 +27,8 @@ describe('opinionAdvancedSearchInteractor', () => {
         },
         {
           caseCaption: 'Samson Workman, Petitioner',
+          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
           docketNumber: '103-19',
-          docketNumberSuffix: 'AAA',
-          documentContents: 'KitKats are inferior candies',
           documentTitle: 'Summary Opinion for KitKats',
           documentType: 'Summary Opinion',
           eventCode: 'SOP',
@@ -62,10 +59,8 @@ describe('opinionAdvancedSearchInteractor', () => {
     expect(result).toMatchObject([
       {
         caseCaption: 'Samson Workman, Petitioner',
+        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
         docketNumber: '103-19',
-        docketNumberSuffix: 'AAA',
-        documentContents:
-          'Everyone knows that Reeses Outrageous bars are the best candy',
         documentTitle: 'T.C. Opinion for More Candy',
         documentType: 'T.C. Opinion',
         eventCode: 'TCOP',
@@ -73,9 +68,8 @@ describe('opinionAdvancedSearchInteractor', () => {
       },
       {
         caseCaption: 'Samson Workman, Petitioner',
+        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
         docketNumber: '103-19',
-        docketNumberSuffix: 'AAA',
-        documentContents: 'KitKats are inferior candies',
         documentTitle: 'Summary Opinion for KitKats',
         documentType: 'Summary Opinion',
         eventCode: 'SOP',
