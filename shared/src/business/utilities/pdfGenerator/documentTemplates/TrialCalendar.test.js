@@ -11,7 +11,8 @@ describe('TrialCalendar', () => {
       {
         calendarNotes: 'Set for hearing',
         caseTitle: 'Test Petitioner',
-        docketNumber: '123-45S',
+        docketNumber: '123-45',
+        docketNumberWithSuffix: '123-45S',
         petitionerCounsel: ['Ben Matlock', 'Atticus Finch'],
         respondentCounsel: ['Sonny Crockett', 'Ricardo Tubbs'],
       },
