@@ -22,9 +22,10 @@ const getContactPrimary = name => ({
   address1: '734 Cowley Parkway',
   city: 'Somewhere',
   countryType: COUNTRY_TYPES.DOMESTIC,
-  name,
+  name: 'Rick Alex',
   phone: '+1 (884) 358-9729',
   postalCode: '77546',
+  secondaryName: name,
   state: 'CT',
 });
 
