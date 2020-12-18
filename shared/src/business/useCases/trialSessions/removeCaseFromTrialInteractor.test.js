@@ -241,4 +241,81 @@ describe('remove case from trial session', () => {
         .createCaseTrialSortMappingRecords,
     ).not.toBeCalled();
   });
+
+  it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, and updateCase persistence methods with correct parameters for a non-calendared hearing', async () => {
+    mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: false };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        associatedJudge: 'someone',
+        hearings: [mockTrialSession],
+        trialDate: '2019-08-25T05:00:00.000Z',
+        trialLocation: 'Boise, Idaho',
+        trialSessionId: MOCK_CASE.userId,
+      });
+
+    await removeCaseFromTrialInteractor({
+      applicationContext,
+      disposition: 'because',
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById.mock
+        .calls[0][0].trialSessionId,
+    ).toEqual(MOCK_TRIAL_SESSION.trialSessionId);
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession.mock
+        .calls[0][0].trialSessionToUpdate,
+    ).toMatchObject({
+      ...MOCK_TRIAL_SESSION,
+      caseOrder: [{ docketNumber: '123-45' }],
+    });
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+        .calls[0][0].docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
+    ).not.toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate,
+    ).toMatchObject({
+      docketNumber: MOCK_CASE.docketNumber,
+      hearings: [],
+    });
+  });
+
+  it('sets the associatedJudge and caseStatus when provided', async () => {
+    mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: true };
+
+    const result = await removeCaseFromTrialInteractor({
+      applicationContext,
+      associatedJudge: 'Judge Dredd',
+      caseStatus: CASE_STATUS_TYPES.cav,
+      disposition: 'because',
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+    });
+
+    expect(result.associatedJudge).toEqual('Judge Dredd');
+    expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
+  });
 });

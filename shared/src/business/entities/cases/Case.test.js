@@ -140,6 +140,40 @@ describe('Case entity', () => {
     });
   });
 
+  describe('hearings', () => {
+    it('sets associated hearings on the case hearings array', () => {
+      const mockhearing = {
+        maxCases: 100,
+        sessionType: 'Regular',
+        startDate: '2025-03-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialLocation: 'Birmingham, Alabama',
+      };
+
+      const newCase = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [mockhearing],
+        },
+        { applicationContext },
+      );
+
+      expect(newCase.hearings).toEqual([expect.objectContaining(mockhearing)]);
+    });
+
+    it('sets the case hearings property to an empty object if none are provided', () => {
+      const newCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+
+      expect(newCase.hearings).toEqual([]);
+    });
+  });
+
   describe('adding and removing practitioners', () => {
     let myCase;
     beforeEach(() => {
@@ -2835,6 +2869,80 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialSessionId).toBeFalsy();
       expect(caseToUpdate.trialTime).toBeFalsy();
     });
+
+    it('sets the case status to the given case status when provided', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrial(CASE_STATUS_TYPES.cav);
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
+      expect(caseToUpdate.associatedJudge).toEqual('Chief Judge');
+    });
+
+    it('sets the case status along with the associated judge when provided', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrial(CASE_STATUS_TYPES.cav, 'Judge Dredd');
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Dredd');
+    });
   });
 
   describe('removeFromTrialWithAssociatedJudge', () => {
@@ -3506,6 +3614,53 @@ describe('Case entity', () => {
     });
   });
 
+  describe('trialDate and trialSessionId validation', () => {
+    it('should fail validation when trialSessionId is defined and trialDate is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        trialSessionId: '0762e545-8cbc-4a18-ab7a-27d205c83f60',
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toEqual({
+        trialDate: '"trialDate" is required',
+      });
+    });
+
+    it('should fail validation when case status is calendared, trialDate is defined and trialSessionId is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:40:46.415Z',
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toEqual({
+        trialSessionId: '"trialSessionId" is required',
+      });
+    });
+
+    it('should pass validation when case status is not calendared, trialDate is undefined and trialSessionId is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.new,
+        trialDate: undefined,
+        trialSessionId: undefined,
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+
+    it('should pass validation when case status is calendared, trialDate is defined and trialSessionId is defined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:40:46.415Z',
+        trialSessionId: '0762e545-8cbc-4a18-ab7a-27d205c83f60',
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+  });
+
   describe('setNoticeOfTrialDate', () => {
     it('should set noticeOfTrialDate on the given case', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
@@ -4104,6 +4259,7 @@ describe('Case entity', () => {
         automaticBlockedDate: '2019-03-01T21:42:29.073Z',
         automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedCalendaredCase, { applicationContext });
@@ -4119,6 +4275,7 @@ describe('Case entity', () => {
         automaticBlockedDate: '2019-03-01T21:42:29.073Z',
         automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedCalendaredCase, { applicationContext });
@@ -4132,6 +4289,7 @@ describe('Case entity', () => {
         blockedDate: '2019-03-01T21:42:29.073Z',
         blockedReason: 'A reason',
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedCalendaredCase, { applicationContext });
@@ -4145,6 +4303,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         automaticBlocked: false,
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(calendaredCase, { applicationContext });
@@ -4156,6 +4315,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         blocked: false,
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(calendaredCase, { applicationContext });
@@ -4169,6 +4329,7 @@ describe('Case entity', () => {
         automaticBlockedDate: '2019-03-01T21:42:29.073Z',
         automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         status: CASE_STATUS_TYPES.new,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedNewCase, { applicationContext });
@@ -4182,6 +4343,7 @@ describe('Case entity', () => {
         blockedDate: '2019-03-01T21:42:29.073Z',
         blockedReason: 'A reason',
         status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedReadyForTrialCase, {
@@ -4360,6 +4522,96 @@ describe('Case entity', () => {
           docketEntries: [],
         }),
       ).toBeFalsy();
+    });
+  });
+
+  describe('removeFromHearing', () => {
+    it('removes the hearing from the case', () => {
+      const trialSessionHearing = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [trialSessionHearing],
+        },
+        {
+          applicationContext,
+        },
+      );
+      caseToUpdate.removeFromHearing(trialSessionHearing.trialSessionId);
+
+      expect(caseToUpdate.hearings).toEqual([]);
+    });
+  });
+
+  describe('isHearing', () => {
+    it('checks if the given trialSessionId is a hearing (true)', () => {
+      const trialSessionHearing = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [trialSessionHearing],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(
+        caseToUpdate.isHearing(trialSessionHearing.trialSessionId),
+      ).toEqual(true);
+    });
+
+    it('checks if the given trialSessionId is a hearing (false)', () => {
+      const trialSessionHearing = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      caseToUpdate.setAsCalendared(trialSessionHearing);
+
+      expect(
+        caseToUpdate.isHearing(trialSessionHearing.trialSessionId),
+      ).toEqual(false);
     });
   });
 });

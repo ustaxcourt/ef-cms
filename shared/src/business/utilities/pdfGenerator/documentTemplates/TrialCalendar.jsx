@@ -90,14 +90,15 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
             <th>Case Title</th>
             <th>Petitioner Counsel</th>
             <th>Respondent Counsel</th>
+            <th>Calendar Notes</th>
           </tr>
         </thead>
         <tbody>
           {cases &&
             cases.map(caseDetail => {
               return (
-                <tr key={caseDetail.docketNumber}>
-                  <td>{caseDetail.docketNumber}</td>
+                <tr key={caseDetail.docketNumberWithSuffix}>
+                  <td>{caseDetail.docketNumberWithSuffix}</td>
                   <td>{caseDetail.caseTitle}</td>
                   <td>
                     {caseDetail.petitionerCounsel &&
@@ -111,6 +112,7 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
                         <div key={idx}>{counsel}</div>
                       ))}
                   </td>
+                  <td>{caseDetail.calendarNotes}</td>
                 </tr>
               );
             })}

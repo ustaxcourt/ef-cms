@@ -4,9 +4,9 @@ import { state } from 'cerebral';
 
 export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
-  const searchResults = get(state.searchResults);
   const isPublic = get(state.isPublic);
   const advancedSearchTab = get(state.advancedSearchTab);
+  const searchResults = get(state.searchResults[advancedSearchTab]);
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
   const MANY_RESULTS = applicationContext.getConstants().MAX_SEARCH_RESULTS / 2;
 
