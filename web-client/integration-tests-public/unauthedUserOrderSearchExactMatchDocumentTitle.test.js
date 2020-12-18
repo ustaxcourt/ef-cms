@@ -116,7 +116,7 @@ describe(`Create and serve a case with an order with a similar but not exact key
 });
 
 describe('Unauthed user searches for exact keyword', () => {
-  it('searches for an order by keyword', async () => {
+  it('user navigates to public site', async () => {
     await refreshElasticsearchIndex();
     await testPublic.runSequence('navigateToPublicSiteSequence', {});
 
@@ -125,10 +125,54 @@ describe('Unauthed user searches for exact keyword', () => {
     expect(testPublic.currentRouteUrl).toEqual(
       applicationContext.getPublicSiteUrl(),
     );
+  });
 
+  it('searches for an order by keyword', async () => {
     testPublic.setState('advancedSearchForm', {
       orderSearch: {
         keyword: documentTitleKeyword,
+      },
+    });
+
+    await testPublic.runSequence('submitPublicOrderAdvancedSearchSequence');
+
+    const searchResults = testPublic.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toMatchObject([
+      {
+        docketNumber: createdDocketNumbers[0],
+        documentTitle: documentTitleKeyword,
+      },
+    ]);
+
+    const nonExactResult = searchResults.find(
+      record => record.documentTitle === nonExactDocumentTitleKeyword,
+    );
+    expect(nonExactResult).toBeFalsy(); // non exact result not returned
+  });
+
+  it('searches for an order by partial keyword', async () => {
+    testPublic.setState('advancedSearchForm', {
+      orderSearch: {
+        keyword: 'Sun',
+      },
+    });
+
+    await testPublic.runSequence('submitPublicOrderAdvancedSearchSequence');
+
+    const searchResults = testPublic.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toMatchObject([]);
+  });
+
+  it('searches for an order with special characters', async () => {
+    testPublic.setState('advancedSearchForm', {
+      orderSearch: {
+        keyword: `${documentTitleKeyword}!^&*`,
       },
     });
 
