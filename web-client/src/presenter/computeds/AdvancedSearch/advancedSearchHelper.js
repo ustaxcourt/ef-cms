@@ -65,7 +65,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
     const MANY_RESULTS =
       applicationContext.getConstants().MAX_SEARCH_RESULTS / 2;
 
-    const showManyResultsMessage = searchResults.length === MANY_RESULTS;
+    const showManyResultsMessage = searchResults.length >= MANY_RESULTS;
 
     Object.assign(result, {
       ...paginatedResults,
