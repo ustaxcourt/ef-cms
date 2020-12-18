@@ -20,6 +20,8 @@ import classNames from 'classnames';
 
 export const CaseDetailHeaderMenu = connect(
   {
+    addCaseToTrialSessionSequence: sequences.addCaseToTrialSessionSequence,
+    addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     caseDetail: state.caseDetail,
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     isCaseDetailMenuOpen: state.menuHelper.isCaseDetailMenuOpen,
@@ -36,8 +38,12 @@ export const CaseDetailHeaderMenu = connect(
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
     showModal: state.modal.showModal,
     toggleMenuSequence: sequences.toggleMenuSequence,
+    validateAddToTrialSessionSequence:
+      sequences.validateAddToTrialSessionSequence,
   },
   function CaseDetailHeaderMenu({
+    addCaseToTrialSessionSequence,
+    addToTrialSessionModalHelper,
     caseDetail,
     caseDetailHeaderHelper,
     isCaseDetailMenuOpen,
@@ -50,6 +56,7 @@ export const CaseDetailHeaderMenu = connect(
     resetCaseMenuSequence,
     showModal,
     toggleMenuSequence,
+    validateAddToTrialSessionSequence,
   }) {
     const menuRef = useRef(null);
     const keydown = event => {
@@ -277,7 +284,14 @@ export const CaseDetailHeaderMenu = connect(
         {showModal === 'AddEditCaseNoteModal' && (
           <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteSequence" />
         )}
-        {showModal === 'AddToTrialModal' && <AddToTrialModal />}
+        {showModal === 'AddToTrialModal' && (
+          <AddToTrialModal
+            confirmSequence={addCaseToTrialSessionSequence}
+            modalHelper={addToTrialSessionModalHelper}
+            modalTitle="Add to Trial Session"
+            validateSequence={validateAddToTrialSessionSequence}
+          />
+        )}
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
         {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
         {showModal === 'PrioritizeCaseModal' && <PrioritizeCaseModal />}

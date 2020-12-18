@@ -9,8 +9,10 @@ describe('TrialCalendar', () => {
   beforeAll(() => {
     cases = [
       {
+        calendarNotes: 'Set for hearing',
         caseTitle: 'Test Petitioner',
-        docketNumber: '123-45S',
+        docketNumber: '123-45',
+        docketNumberWithSuffix: '123-45S',
         petitionerCounsel: ['Ben Matlock', 'Atticus Finch'],
         respondentCounsel: ['Sonny Crockett', 'Ricardo Tubbs'],
       },
@@ -123,5 +125,6 @@ describe('TrialCalendar', () => {
     expect(tableData.find('tr').at(0).text()).toContain('Atticus Finch');
     expect(tableData.find('tr').at(0).text()).toContain('Sonny Crockett');
     expect(tableData.find('tr').at(0).text()).toContain('Ricardo Tubbs');
+    expect(tableData.find('tr').at(0).text()).toContain('Set for hearing');
   });
 });
