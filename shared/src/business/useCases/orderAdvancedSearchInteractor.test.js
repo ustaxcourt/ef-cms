@@ -18,6 +18,7 @@ describe('orderAdvancedSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
+          docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
           docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents:
@@ -28,6 +29,7 @@ describe('orderAdvancedSearchInteractor', () => {
         },
         {
           caseCaption: 'Samson Workman, Petitioner',
+          docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
           docketNumber: '103-19',
           docketNumberSuffix: 'AAA',
           documentContents: 'KitKats are inferior candies',
@@ -78,9 +80,6 @@ describe('orderAdvancedSearchInteractor', () => {
       {
         caseCaption: 'Samson Workman, Petitioner',
         docketNumber: '103-19',
-        docketNumberSuffix: 'AAA',
-        documentContents:
-          'Everyone knows that Reeses Outrageous bars are the best candy',
         documentTitle: 'Order for More Candy',
         eventCode: 'ODD',
         signedJudgeName: 'Guy Fieri',
@@ -88,8 +87,6 @@ describe('orderAdvancedSearchInteractor', () => {
       {
         caseCaption: 'Samson Workman, Petitioner',
         docketNumber: '103-19',
-        docketNumberSuffix: 'AAA',
-        documentContents: 'KitKats are inferior candies',
         documentTitle: 'Order for KitKats',
         eventCode: 'ODD',
         signedJudgeName: 'Guy Fieri',

@@ -1,3 +1,6 @@
+const {
+  PublicDocumentSearchResult,
+} = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
@@ -30,7 +33,7 @@ exports.opinionPublicSearchInteractor = async ({
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  return await applicationContext
+  const results = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -38,4 +41,8 @@ exports.opinionPublicSearchInteractor = async ({
       documentEventCodes: OPINION_EVENT_CODES,
       judgeType: 'judge',
     });
+
+  return PublicDocumentSearchResult.validateRawCollection(results, {
+    applicationContext,
+  });
 };
