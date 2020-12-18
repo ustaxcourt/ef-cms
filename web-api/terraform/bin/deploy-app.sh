@@ -14,7 +14,6 @@ ENVIRONMENT=$1
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
-[ -z "${BOUNCED_EMAIL_RECIPIENT}" ] && echo "You must have BOUNCED_EMAIL_RECIPIENT set in your environment" && exit 1
 
 
 echo "Running terraform with the following environment configs:"
