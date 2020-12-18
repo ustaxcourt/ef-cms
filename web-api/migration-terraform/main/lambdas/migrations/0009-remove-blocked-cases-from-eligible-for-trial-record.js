@@ -23,7 +23,7 @@ const migrateItems = async (items, documentClient) => {
         caseRecord.docketNumber &&
         !caseRecord.automaticBlocked &&
         !caseRecord.blocked &&
-        !caseRecord.status !== CASE_STATUS_TYPES.calendared
+        caseRecord.status !== CASE_STATUS_TYPES.calendared
       ) {
         itemsAfter.push(item);
       }
