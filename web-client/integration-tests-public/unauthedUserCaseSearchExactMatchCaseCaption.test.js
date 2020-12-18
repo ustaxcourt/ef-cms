@@ -17,16 +17,6 @@ const { COUNTRY_TYPES } = applicationContext.getConstants();
 const updatedLastName = faker.name.lastName();
 const createdDocketNumbers = [];
 
-const getContactPrimary = () => ({
-  address1: '734 Cowley Parkway',
-  city: 'Somewhere',
-  countryType: COUNTRY_TYPES.DOMESTIC,
-  name: 'Rick Alex',
-  phone: '+1 (884) 358-9729',
-  postalCode: '77546',
-  state: 'CT',
-});
-
 const updateCaseCaption = async (docketNumber, caseCaption) => {
   loginAs(testClient, 'docketclerk@example.com');
 
@@ -71,9 +61,7 @@ function createCaseWithCaption(captionString) {
       loginAs(testClient, 'petitioner@example.com');
 
       it('Creates the case', async () => {
-        const caseDetail = await uploadPetition(testClient, {
-          contactPrimary: getContactPrimary(),
-        });
+        const caseDetail = await uploadPetition(testClient);
 
         expect(caseDetail.docketNumber).toBeDefined();
         test.docketNumber = caseDetail.docketNumber;

@@ -323,7 +323,7 @@ export const uploadPetition = async (
       city: 'Et id aut est velit',
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: user.email,
-      name: 'Mona Schultz',
+      name: overrides.contactPrimaryName || 'Mona Schultz',
       phone: '+1 (884) 358-9729',
       postalCode: '77546',
       state: 'CT',
