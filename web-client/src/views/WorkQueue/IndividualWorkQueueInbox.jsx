@@ -64,7 +64,7 @@ export const IndividualWorkQueueInbox = connect(
                       />
                     )}
                   </td>
-                  <td className="message-queue-row message-queue-document">
+                  <td className="message-queue-row max-width-25">
                     <div className="message-document-title">
                       <a
                         className={

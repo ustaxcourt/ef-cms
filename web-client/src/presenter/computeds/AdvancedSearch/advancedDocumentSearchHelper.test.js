@@ -1,4 +1,7 @@
-import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
+import {
+  advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
+  formatDocumentSearchResultRecord,
+} from './advancedDocumentSearchHelper';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
@@ -7,7 +10,11 @@ describe('advancedDocumentSearchHelper', () => {
   const pageSizeOverride = 5;
   const manyResultsOverride = 4;
 
-  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+  const {
+    DOCKET_NUMBER_SUFFIXES,
+    OPINION_EVENT_CODES,
+    ORDER_EVENT_CODES,
+  } = applicationContext.getConstants();
 
   const advancedDocumentSearchHelper = withAppContextDecorator(
     advancedDocumentSearchHelperComputed,
@@ -370,6 +377,61 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toMatchObject({
       searchResultsCount: 1,
       showSealedIcon: false,
+    });
+  });
+
+  describe('formatDocumentSearchResultRecord', () => {
+    it('sets formattedJudgeName to empty string when the search result is an opinion that does not have a judge', () => {
+      const mockResult = {
+        eventCode: OPINION_EVENT_CODES[0],
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedJudgeName).toEqual('');
+    });
+
+    it('sets formattedJudgeName to the judge last name when the search result is an opinion that has a judge', () => {
+      const mockJudgeName = 'Michael G. Scott';
+      const mockResult = {
+        eventCode: OPINION_EVENT_CODES[0],
+        judge: mockJudgeName,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedJudgeName).toEqual('Scott');
+    });
+
+    it('sets formattedSignedJudgeName to an empty string when the search result is an order that does NOT have a signedJudgeName', () => {
+      const mockResult = {
+        eventCode: ORDER_EVENT_CODES[0],
+        signedJudgeName: undefined,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedSignedJudgeName).toEqual('');
+    });
+
+    it('sets formattedSignedJudgeName to the judge last name when the search result is an order that has a signedJudgeName', () => {
+      const mockJudgeName = 'Michael G. Scott';
+      const mockResult = {
+        eventCode: ORDER_EVENT_CODES[0],
+        signedJudgeName: mockJudgeName,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedSignedJudgeName).toEqual('Scott');
     });
   });
 });

@@ -22,13 +22,12 @@ export const DocumentSearchResults = connect(
       <div aria-live="polite">
         {advancedDocumentSearchHelper.showSearchResults && (
           <>
-            <h1 className="margin-top-4">
-              ({advancedDocumentSearchHelper.searchResultsCount}) Results
-            </h1>
+            <h1 className="margin-top-4">Search Results</h1>
             {advancedDocumentSearchHelper.showManyResultsMessage && (
               <WarningNotificationComponent
                 alertWarning={{
-                  message: `Your search has returned over ${advancedDocumentSearchHelper.manyResults} matches.  Refine your search for more accurate results.`,
+                  message:
+                    'Your search has a high number of matching results. Refine your search for more accurate results.',
                 }}
                 dismissable={false}
               />

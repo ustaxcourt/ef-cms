@@ -37,6 +37,7 @@ exports.handler = (event, context, callback) => {
   const localUrl = 'https://127.0.0.1:*';
   const localWebsocketUrl = 'ws://127.0.0.1:*';
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
+  const statuspageUrl = 'https://lynmjtcq5px1.statuspage.io';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
     `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${honeybadgerApiUrl}`,
@@ -44,11 +45,11 @@ exports.handler = (event, context, callback) => {
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
     `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
-    `script-src 'self' 'unsafe-inline' ${dynamsoftUrl} resource://pdf.js`,
+    `script-src 'self' 'unsafe-inline' ${dynamsoftUrl} ${statuspageUrl} resource://pdf.js`,
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrl}`,
     `img-src ${applicationUrl} ${subdomainsUrl} data:`,
     `font-src ${applicationUrl} ${subdomainsUrl}`,
-    `frame-src ${s3Url} ${subdomainsUrl} blob: data:`,
+    `frame-src ${s3Url} ${subdomainsUrl} ${statuspageUrl} blob: data:`,
     "frame-ancestors 'none'",
   ];
   headers['content-security-policy'] = [

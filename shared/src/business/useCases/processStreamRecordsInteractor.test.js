@@ -256,6 +256,52 @@ describe('processStreamRecordsInteractor', () => {
         },
       ]);
     });
+
+    it('does nothing when no other records are found', async () => {
+      await processRemoveEntries({
+        applicationContext,
+        removeRecords: [],
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('attempts to bulk delete the records passed in', async () => {
+      await processRemoveEntries({
+        applicationContext,
+        removeRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: {
+                  S: 'case|abc',
+                },
+                sk: {
+                  S: 'docket-entry|123',
+                },
+              },
+              NewImage: null,
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkDeleteRecords.mock
+          .calls[0][0].records,
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'case|abc' }, sk: { S: 'docket-entry|123' } },
+            NewImage: null,
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
+    });
   });
 
   describe('processCaseEntries', () => {
@@ -514,9 +560,10 @@ describe('processStreamRecordsInteractor', () => {
       ]);
     });
 
-    it('fetches the document from persistence if the entry has a documentContentsId', async () => {
+    it('fetches the document from persistence if the entry is an opinion and has a documentContentsId', async () => {
       docketEntryData.documentContentsId = '123';
       docketEntryDataMarshalled.documentContentsId = { S: '123' };
+      docketEntryDataMarshalled.eventCode = { S: 'TCOP' };
 
       await processDocketEntries({
         applicationContext,
@@ -536,6 +583,110 @@ describe('processStreamRecordsInteractor', () => {
       });
 
       expect(mockGetDocument).toHaveBeenCalled();
+
+      const docketEntryCase = {
+        ...caseDataMarshalled,
+      };
+      delete docketEntryCase.docketEntries;
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+          .calls[0][0].records,
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: {
+              pk: { S: docketEntryData.pk },
+              sk: { S: docketEntryData.sk },
+            },
+            NewImage: {
+              ...docketEntryDataMarshalled,
+              case_relations: {
+                name: 'document',
+                parent: 'case|123_case|123|mapping',
+              },
+            },
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
+    });
+
+    it('fetches the document from persistence if the entry is an order and has a documentContentsId', async () => {
+      docketEntryData.documentContentsId = '123';
+      docketEntryDataMarshalled.documentContentsId = { S: '123' };
+      docketEntryDataMarshalled.eventCode = { S: 'OAJ' };
+
+      await processDocketEntries({
+        applicationContext,
+        docketEntryRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: docketEntryData.pk },
+                sk: { S: docketEntryData.sk },
+              },
+              NewImage: docketEntryDataMarshalled,
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+        utils,
+      });
+
+      expect(mockGetDocument).toHaveBeenCalled();
+
+      const docketEntryCase = {
+        ...caseDataMarshalled,
+      };
+      delete docketEntryCase.docketEntries;
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+          .calls[0][0].records,
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: {
+              pk: { S: docketEntryData.pk },
+              sk: { S: docketEntryData.sk },
+            },
+            NewImage: {
+              ...docketEntryDataMarshalled,
+              case_relations: {
+                name: 'document',
+                parent: 'case|123_case|123|mapping',
+              },
+            },
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
+    });
+
+    it('does NOT index the contents of a document if it is not an order or an opinion', async () => {
+      docketEntryData.documentContentsId = '123';
+      docketEntryDataMarshalled.documentContentsId = { S: '123' };
+      docketEntryDataMarshalled.eventCode = { S: 'APW' };
+
+      await processDocketEntries({
+        applicationContext,
+        docketEntryRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: docketEntryData.pk },
+                sk: { S: docketEntryData.sk },
+              },
+              NewImage: docketEntryDataMarshalled,
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+        utils,
+      });
+
+      expect(mockGetDocument).not.toHaveBeenCalled();
 
       const docketEntryCase = {
         ...caseDataMarshalled,
@@ -620,54 +771,6 @@ describe('processStreamRecordsInteractor', () => {
               sk: { S: otherEntryData.sk },
             },
             NewImage: otherEntryDataMarshalled,
-          },
-          eventName: 'MODIFY',
-        },
-      ]);
-    });
-  });
-
-  describe('processRemoveEntries', () => {
-    it('does nothing when no other records are found', async () => {
-      await processRemoveEntries({
-        applicationContext,
-        removeRecords: [],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('attempts to bulk delete the records passed in', async () => {
-      await processRemoveEntries({
-        applicationContext,
-        removeRecords: [
-          {
-            dynamodb: {
-              Keys: {
-                pk: {
-                  S: 'case|abc',
-                },
-                sk: {
-                  S: 'docket-entry|123',
-                },
-              },
-              NewImage: null,
-            },
-            eventName: 'MODIFY',
-          },
-        ],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkDeleteRecords.mock
-          .calls[0][0].records,
-      ).toEqual([
-        {
-          dynamodb: {
-            Keys: { pk: { S: 'case|abc' }, sk: { S: 'docket-entry|123' } },
-            NewImage: null,
           },
           eventName: 'MODIFY',
         },
