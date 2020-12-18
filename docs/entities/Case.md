@@ -71744,15 +71744,36 @@
             allow: 
               - null
     trialDate: 
-      type: "date"
+      type: "alternatives"
       flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-        presence: "optional"
         description: "When this case goes to trial."
-      allow: 
-        - null
+      matches: 
+        - 
+          ref: 
+            path: 
+              - "trialSessionId"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
+              presence: "required"
+          otherwise: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
+              presence: "optional"
+            allow: 
+              - null
     trialLocation: 
       type: "alternatives"
       flags: 
@@ -71891,20 +71912,48 @@
                     version: 
                       - "uuidv4"
           otherwise: 
-            type: "string"
-            flags: 
-              presence: "optional"
-            rules: 
+            type: "any"
+            whens: 
               - 
-                name: "min"
-                args: 
-                  limit: 1
-              - 
-                name: "guid"
-                args: 
-                  options: 
-                    version: 
-                      - "uuidv4"
+                ref: 
+                  path: 
+                    - "trialDate"
+                is: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                  invalid: 
+                    - null
+                then: 
+                  type: "string"
+                  flags: 
+                    presence: "required"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
+                      name: "guid"
+                      args: 
+                        options: 
+                          version: 
+                            - "uuidv4"
+                otherwise: 
+                  type: "string"
+                  flags: 
+                    presence: "optional"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
+                      name: "guid"
+                      args: 
+                        options: 
+                          version: 
+                            - "uuidv4"
     trialTime: 
       type: "string"
       flags: 
