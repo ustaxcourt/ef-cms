@@ -32,6 +32,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
       MASTER_REGION                  = "us-east-1"
       STAGE                          = var.environment
       NODE_ENV                       = "production"
+      BOUNCED_EMAIL_RECIPIENT        = var.bounced_email_recipient
       EMAIL_SOURCE                   = "noreply@${var.dns_domain}"
       EMAIL_DOCUMENT_SERVED_TEMPLATE = "document_served_${var.environment}"
       EMAIL_SERVED_PETITION_TEMPLATE = "petition_served_${var.environment}"
