@@ -152,7 +152,7 @@ describe('Create and serve a case for name: Rick Alex', () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(nameToSearchFor),
+        contactPrimary: getContactPrimary(),
       });
 
       expect(caseDetail.docketNumber).toBeDefined();

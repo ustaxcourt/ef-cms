@@ -14,7 +14,9 @@ const test = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
-const nameToSearchFor = `${faker.name.firstName()} ${faker.name.lastName()}`;
+const [firstName, lastName] = [faker.name.firstName(), faker.name.lastName()];
+
+const nameToSearchFor = `${firstName} ${lastName}`;
 
 const createdDocketNumbers = [];
 
@@ -183,10 +185,41 @@ describe('Create and serve a case to test caseCaption', () => {
   });
 });
 
+describe('Create and serve a case to test contactPrimary.name with terms out of order that shows last in search results', () => {
+  describe('Petitioner creates case', () => {
+    beforeAll(() => {
+      jest.setTimeout(10000);
+    });
+
+    loginAs(testClient, 'petitioner@example.com');
+
+    it('Create case', async () => {
+      const caseDetail = await uploadPetition(testClient, {
+        contactPrimary: getContactPrimary({ name: `${lastName} ${firstName}` }),
+      });
+
+      expect(caseDetail.docketNumber).toBeDefined();
+      test.docketNumber = caseDetail.docketNumber;
+      testClient.docketNumber = caseDetail.docketNumber;
+      createdDocketNumbers.push(caseDetail.docketNumber);
+    });
+
+    updateCaseCaption(
+      test.docketNumber,
+      'Something other than the petitioner, Petitioner',
+    ); // This is to ensure the results are based solely on the contact information, and not caseCaption
+  });
+
+  describe('Petitions clerk serves case to IRS', () => {
+    loginAs(testClient, 'petitionsclerk@example.com');
+    petitionsClerkServesElectronicCaseToIrs(testClient);
+  });
+});
+
 describe('Petitioner searches for exact name match', () => {
   unauthedUserNavigatesToPublicSite(test);
 
-  it('returns search results we expect in the correct order', async () => {
+  it(`returns search results we expect in the correct order when searching for "${firstName} ${lastName}"`, async () => {
     const queryParams = {
       countryType: COUNTRY_TYPES.DOMESTIC,
       currentPage: 1,
@@ -200,7 +233,9 @@ describe('Petitioner searches for exact name match', () => {
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 
-    expect(searchResults.length).toBe(4);
+    console.log(JSON.stringify(createdDocketNumbers, null, 2));
+
+    expect(searchResults.length).toBe(createdDocketNumbers.length);
 
     expect(searchResults[0]).toMatchObject({
       docketNumber: createdDocketNumbers[0],
@@ -216,6 +251,10 @@ describe('Petitioner searches for exact name match', () => {
 
     expect(searchResults[3]).toMatchObject({
       docketNumber: createdDocketNumbers[3],
+    });
+
+    expect(searchResults[4]).toMatchObject({
+      docketNumber: createdDocketNumbers[4],
     });
   });
 });

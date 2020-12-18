@@ -1,5 +1,10 @@
 const { CASE_SEARCH_MIN_YEAR } = require('../entities/EntityConstants');
 
+const makeSimpleQuerySafe = text => {
+  const nonWordCharacters = /\W+/gims;
+  return text.replace(nonWordCharacters, ' ').trim();
+};
+
 /**
  * aggregateCommonQueryParams
  *
@@ -25,26 +30,55 @@ const aggregateCommonQueryParams = ({
   const nonExactMatchesQuery = [];
 
   if (petitionerName) {
+    const simplePetitionerQuery = makeSimpleQuerySafe(petitionerName);
     exactMatchesQuery.push({
       bool: {
-        must: [
+        should: [
           {
             simple_query_string: {
+              boost: 2,
               default_operator: 'and',
               fields: [
                 'contactPrimary.M.name.S^3',
                 'contactPrimary.M.secondaryName.S^2',
                 'contactSecondary.M.name.S^1',
-                'caseCaption.S^0',
+                'caseCaption.S',
               ],
               flags: 'AND|PHRASE|PREFIX',
-              query: petitionerName,
+              query: `"${simplePetitionerQuery}"`, // match complete phrase
+            },
+          },
+          {
+            simple_query_string: {
+              boost: 1,
+              default_operator: 'and',
+              fields: [
+                'contactPrimary.M.name.S^3',
+                'contactPrimary.M.secondaryName.S^2',
+                'contactSecondary.M.name.S^1',
+                'caseCaption.S',
+              ],
+              flags: 'AND|PHRASE|PREFIX',
+              query: simplePetitionerQuery, // match all terms in any order
             },
           },
         ],
       },
     });
+    nonExactMatchesQuery.push({
+      simple_query_string: {
+        default_operator: 'or', // any subset of all terms
+        fields: [
+          'contactPrimary.M.name.S^3',
+          'contactPrimary.M.secondaryName.S^2',
+          'contactSecondary.M.name.S^1',
+          'caseCaption.S^0',
+        ],
+        query: simplePetitionerQuery,
+      },
+    });
   }
+
   if (countryType) {
     commonQuery.push({
       bool: {
@@ -97,10 +131,7 @@ const aggregateCommonQueryParams = ({
     });
   }
 
-  commonQuery.push(
-    { match: { 'pk.S': 'case|' } },
-    { match: { 'sk.S': 'case|' } },
-  );
+  commonQuery.push({ match: { 'entityName.S': 'Case' } });
 
   return {
     commonQuery,
