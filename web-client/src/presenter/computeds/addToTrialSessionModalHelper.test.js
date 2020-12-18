@@ -57,6 +57,56 @@ describe('add to trial session modal helper', () => {
     expect(result.trialSessionsFormattedByState).toBeFalsy();
   });
 
+  it('should filter out hearings that case is already scheduled for', () => {
+    const result = runCompute(addToTrialSessionModalHelper, {
+      state: {
+        caseDetail: {
+          hearings: [
+            {
+              trialSessionId: '6',
+            },
+          ],
+          preferredTrialCity: 'Birmingham, Alabama',
+        },
+        form: {},
+        modal: {
+          showAllLocations: true,
+          trialSessions: [
+            ...trialSessions,
+            {
+              trialLocation: 'Nashville, Tennessee',
+              trialSessionId: '6',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.trialSessionsFormattedByState).toMatchObject({
+      Alabama: [
+        {
+          trialSessionId: '3',
+        },
+        {
+          trialSessionId: '1',
+        },
+        {
+          trialSessionId: '2',
+        },
+        {
+          trialSessionId: '5',
+        },
+      ],
+      Idaho: [
+        {
+          trialSessionId: '4',
+        },
+      ],
+    });
+
+    expect(result.trialSessionStatesSorted.includes('Tennessee')).toBeFalsy();
+  });
+
   it('should filter out trial sessions that are closed', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {

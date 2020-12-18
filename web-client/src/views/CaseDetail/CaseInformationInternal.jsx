@@ -4,6 +4,7 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
+import { SetForHearingModal } from './SetForHearingModal';
 import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -80,6 +81,54 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
   </React.Fragment>
 );
 
+const DisplayHearings = ({
+  caseDetailHelper,
+  hearings,
+  removeHearingSequence,
+}) => {
+  return hearings.map(hearing => (
+    <tbody className="hoverable" key={hearing.trialSessionId}>
+      <tr>
+        <td>
+          <a
+            href={
+              hearing.userIsAssignedToSession
+                ? `/trial-session-working-copy/${hearing.trialSessionId}`
+                : `/trial-session-detail/${hearing.trialSessionId}`
+            }
+          >
+            {hearing.formattedTrialCity}
+          </a>
+        </td>
+        <td>{hearing.formattedTrialDate}</td>
+        <td>{hearing.formattedAssociatedJudge}</td>
+        {caseDetailHelper.showAddRemoveFromHearingButtons && (
+          <td>
+            <Button
+              link
+              className="red-warning"
+              icon="trash"
+              id="remove-from-trial-session-btn"
+              onClick={() => {
+                removeHearingSequence({
+                  trialSessionId: hearing.trialSessionId,
+                });
+              }}
+            >
+              Remove
+            </Button>
+          </td>
+        )}
+      </tr>
+      {hearing.calendarNotes && (
+        <tr>
+          <td colSpan="4">{hearing.calendarNotes}</td>
+        </tr>
+      )}
+    </tbody>
+  ));
+};
+
 const TrialInformation = ({
   caseDetail,
   openAddToTrialModalSequence,
@@ -116,19 +165,7 @@ const TrialInformation = ({
                 <td>{caseDetail.formattedPreferredTrialCity}</td>
                 <td>{caseDetail.formattedTrialDate}</td>
                 <td>{caseDetail.formattedAssociatedJudge}</td>
-                <td>
-                  <Button
-                    link
-                    className="red-warning"
-                    icon="trash"
-                    id="remove-from-trial-session-btn"
-                    onClick={() => {
-                      openRemoveFromTrialSessionModalSequence();
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </td>
+                <td>&nbsp;</td>
               </tr>
               {caseDetail.highPriorityReason && (
                 <tr>
@@ -195,17 +232,18 @@ const TrialInformation = ({
                     icon="trash"
                     id="remove-from-trial-session-btn"
                     onClick={() => {
-                      openRemoveFromTrialSessionModalSequence();
+                      openRemoveFromTrialSessionModalSequence({
+                        trialSessionId: caseDetail.trialSessionId,
+                      });
                     }}
                   >
                     Remove
                   </Button>
                 </td>
               </tr>
-              {/* TODO trial session note */}
-              {true === false && (
+              {caseDetail.trialSessionNotes && (
                 <tr>
-                  <td colSpan="4">{/* note */}</td>
+                  <td colSpan="4">{caseDetail.trialSessionNotes}</td>
                 </tr>
               )}
             </tbody>
@@ -373,10 +411,9 @@ const TrialInformation = ({
                   </Button>
                 </td>
               </tr>
-              {/* TODO trial session note */}
-              {true === false && (
+              {caseDetail.trialSessionNotes && (
                 <tr>
-                  <td colSpan="4">{/* note */}</td>
+                  <td colSpan="4">{caseDetail.trialSessionNotes}</td>
                 </tr>
               )}
             </tbody>
@@ -401,12 +438,14 @@ export const CaseInformationInternal = connect(
     openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
+    openSetForHearingModalSequence: sequences.openSetForHearingModalSequence,
     openUnblockFromTrialModalSequence:
       sequences.openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence:
       sequences.openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
+    showModal: state.modal.showModal,
     trialSessionJudge: state.trialSessionJudge,
   },
 
@@ -421,10 +460,12 @@ export const CaseInformationInternal = connect(
     openCleanModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
+    openSetForHearingModalSequence,
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
+    showModal,
     trialSessionJudge,
   }) {
     return (
@@ -499,6 +540,7 @@ export const CaseInformationInternal = connect(
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }
+                    openCleanModalSequence={openCleanModalSequence}
                     openPrioritizeCaseModalSequence={
                       openPrioritizeCaseModalSequence
                     }
@@ -569,6 +611,53 @@ export const CaseInformationInternal = connect(
                     )}
                   {!formattedCaseDetail.canConsolidate && (
                     <p>This case is not eligible for consolidation.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="tablet:grid-col-6">
+              <div className="card height-full">
+                <div className="content-wrapper">
+                  <h3 className="underlined">
+                    Hearings
+                    {caseDetailHelper.showAddRemoveFromHearingButtons && (
+                      <Button
+                        link
+                        aria-label="set hearing for trial sessions"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="plus-circle"
+                        onClick={() => {
+                          openSetForHearingModalSequence();
+                        }}
+                      >
+                        Set for Hearing
+                      </Button>
+                    )}
+                    {showModal === 'SetForHearingModal' && (
+                      <SetForHearingModal />
+                    )}
+                  </h3>
+                  {caseInformationHelper.showHearingsTable && (
+                    <table className="usa-table ustc-table trial-list">
+                      <thead>
+                        <tr>
+                          <th>Place of Trial</th>
+                          <th>Trial date</th>
+                          <th>Judge</th>
+                          <th>&nbsp;</th>
+                        </tr>
+                      </thead>
+                      <DisplayHearings
+                        caseDetailHelper={caseDetailHelper}
+                        hearings={formattedCaseDetail.hearings}
+                        removeHearingSequence={
+                          openRemoveFromTrialSessionModalSequence
+                        }
+                      />
+                    </table>
+                  )}
+                  {!caseInformationHelper.showHearingsTable && (
+                    <p>There are no hearings set for this case.</p>
                   )}
                 </div>
               </div>

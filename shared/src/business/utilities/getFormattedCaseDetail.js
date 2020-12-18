@@ -236,6 +236,49 @@ const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
 };
 
 /**
+ * formats trial session fields for display
+ *
+ * @returns formatted trial session fields
+ */
+
+const formattedTrialSessionDetails = ({
+  applicationContext,
+  judgeName,
+  trialDate,
+  trialLocation,
+  trialTime,
+}) => {
+  let formattedTrialCity;
+  let formattedAssociatedJudge;
+  let formattedTrialDate;
+
+  formattedTrialCity = trialLocation || 'Not assigned';
+  formattedAssociatedJudge = judgeName || 'Not assigned';
+
+  if (!trialDate) {
+    formattedTrialDate = 'Not scheduled';
+  } else if (trialTime) {
+    formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(trialDate, 'YYYY-MM-DD');
+    formattedTrialDate += `T${trialTime}:00`;
+    formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedTrialDate, 'DATE_TIME');
+  } else {
+    formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(trialDate, 'MMDDYY');
+  }
+
+  return {
+    formattedAssociatedJudge,
+    formattedTrialCity,
+    formattedTrialDate,
+  };
+};
+
+/**
  * sets formatted values reflecting the trial scheduling status
  * of the given case. Modify the formattedCase argument by reference.
  */
@@ -254,27 +297,19 @@ const formatTrialSessionScheduling = ({
     } else {
       formattedCase.showScheduled = true;
     }
-    formattedCase.formattedTrialCity =
-      formattedCase.trialLocation || 'Not assigned';
-    formattedCase.formattedAssociatedJudge =
-      formattedCase.associatedJudge || 'Not assigned';
-    if (formattedCase.trialDate) {
-      if (formattedCase.trialTime) {
-        formattedCase.formattedTrialDate = applicationContext
-          .getUtilities()
-          .formatDateString(formattedCase.trialDate, 'YYYY-MM-DD');
-        formattedCase.formattedTrialDate += `T${formattedCase.trialTime}:00`;
-        formattedCase.formattedTrialDate = applicationContext
-          .getUtilities()
-          .formatDateString(formattedCase.formattedTrialDate, 'DATE_TIME');
-      } else {
-        formattedCase.formattedTrialDate = applicationContext
-          .getUtilities()
-          .formatDateString(formattedCase.trialDate, 'MMDDYY');
-      }
-    } else {
-      formattedCase.formattedTrialDate = 'Not scheduled';
-    }
+
+    Object.assign(
+      formattedCase,
+      formattedTrialSessionDetails({
+        applicationContext,
+        judgeName: formattedCase.associatedJudge,
+        trialDate: formattedCase.trialDate,
+        trialLocation: formattedCase.trialLocation,
+        trialTime: formattedCase.trialTime,
+      }),
+    );
+
+    // TODO: get trial session note
   } else if (formattedCase.blocked || formattedCase.automaticBlocked) {
     formattedCase.showBlockedFromTrial = true;
     if (formattedCase.blocked) {
@@ -296,6 +331,22 @@ const formatTrialSessionScheduling = ({
     formattedCase.showPrioritized = true;
   } else {
     formattedCase.showNotScheduled = true;
+  }
+
+  // Format hearings
+  if (formattedCase.hearings && formattedCase.hearings.length) {
+    formattedCase.hearings.forEach(hearing => {
+      Object.assign(
+        hearing,
+        formattedTrialSessionDetails({
+          applicationContext,
+          judgeName: hearing.judge && hearing.judge.name,
+          trialDate: hearing.startDate,
+          trialLocation: hearing.trialLocation,
+          trialTime: hearing.startTime,
+        }),
+      );
+    });
   }
 };
 

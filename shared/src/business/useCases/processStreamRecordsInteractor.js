@@ -2,6 +2,11 @@ const AWS = require('aws-sdk');
 const { flattenDeep, get, partition } = require('lodash');
 const { omit } = require('lodash');
 
+const {
+  OPINION_EVENT_CODES,
+  ORDER_EVENT_CODES,
+} = require('../entities/EntityConstants');
+
 const filterRecords = record => {
   // to prevent global tables writing extra data
   const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
@@ -166,7 +171,11 @@ const processDocketEntries = async ({
         record.dynamodb.NewImage,
       );
 
-      if (fullDocketEntry.documentContentsId) {
+      const isSearchable =
+        OPINION_EVENT_CODES.includes(fullDocketEntry.eventCode) ||
+        ORDER_EVENT_CODES.includes(fullDocketEntry.eventCode);
+
+      if (isSearchable && fullDocketEntry.documentContentsId) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
         try {
           const buffer = await utils.getDocument({
