@@ -94,8 +94,25 @@ describe(`Petitioner searches for partial name match ${searchTerm}`, () => {
     );
 
     expect(searchResults.length).toBe(3);
-    expect(searchResults[0].contactPrimary.name).toBe(caseNamesToCreate[0]);
-    expect(searchResults[1].contactPrimary.name).toBe(caseNamesToCreate[1]);
-    expect(searchResults[2].contactPrimary.name).toBe(caseNamesToCreate[2]);
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          contactPrimary: expect.objectContaining({
+            name: caseNamesToCreate[0],
+          }),
+        }),
+        expect.objectContaining({
+          contactPrimary: expect.objectContaining({
+            name: caseNamesToCreate[1],
+          }),
+        }),
+        expect.objectContaining({
+          contactPrimary: expect.objectContaining({
+            name: caseNamesToCreate[2],
+          }),
+        }),
+      ]),
+    );
   });
 });
