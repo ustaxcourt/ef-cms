@@ -1,14 +1,14 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
-// const {
-//   migrateItems: migration0007,
-// } = require('./migrations/0007-unblock-migrated-calendared-cases');
-// const {
-//   migrateItems: migration0008,
-// } = require('./migrations/0008-associated-judge-on-deadlines');
-// const {
-//   migrateItems: migration0009,
-// } = require('./migrations/0009-remove-blocked-cases-from-eligible-for-trial-record');
+const {
+  migrateItems: migration0007,
+} = require('./migrations/0007-unblock-migrated-calendared-cases');
+const {
+  migrateItems: migration0008,
+} = require('./migrations/0008-associated-judge-on-deadlines');
+const {
+  migrateItems: migration0009,
+} = require('./migrations/0009-remove-blocked-cases-from-eligible-for-trial-record');
 const {
   migrateItems: migration0010,
 } = require('./migrations/0010-remove-trial-date-if-no-trial-session-id');
@@ -37,12 +37,12 @@ const migrateRecords = async ({ documentClient, items }) => {
   // not been run yet
   applicationContext.logger.info('about to run migration 0010');
   items = await migration0010(items, documentClient);
-  // applicationContext.logger.info('about to run migration 007');
-  // items = await migration0007(items, documentClient);
-  // applicationContext.logger.info('about to run migration 008');
-  // items = await migration0008(items, documentClient);
-  // applicationContext.logger.info('about to run migration 009');
-  // items = await migration0009(items, documentClient);
+  applicationContext.logger.info('about to run migration 007');
+  items = await migration0007(items, documentClient);
+  applicationContext.logger.info('about to run migration 008');
+  items = await migration0008(items, documentClient);
+  applicationContext.logger.info('about to run migration 009');
+  items = await migration0009(items, documentClient);
 
   return items;
 };

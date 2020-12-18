@@ -730,14 +730,13 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
-  trialDate: JoiValidationConstants.ISO_DATE.optional()
-    .allow(null)
-    // .alternatives()
-    // .conditional('trialSessionId', {
-    //   is: joi.exist().not(null),
-    //   otherwise: JoiValidationConstants.ISO_DATE.optional().allow(null),
-    //   then: JoiValidationConstants.ISO_DATE.required(),
-    // })
+  trialDate: joi
+    .alternatives()
+    .conditional('trialSessionId', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.ISO_DATE.optional().allow(null),
+      then: JoiValidationConstants.ISO_DATE.required(),
+    })
     .description('When this case goes to trial.'),
   trialLocation: joi
     .alternatives()
@@ -752,12 +751,11 @@ Case.VALIDATION_RULES = {
   trialSessionId: joi
     .when('status', {
       is: CASE_STATUS_TYPES.calendared,
-      // otherwise: joi.when('trialDate', {
-      //   is: joi.exist().not(null),
-      //   otherwise: JoiValidationConstants.UUID.optional(),
-      //   then: JoiValidationConstants.UUID.required(),
-      // }),
-      otherwise: JoiValidationConstants.UUID.optional(),
+      otherwise: joi.when('trialDate', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.UUID.optional(),
+        then: JoiValidationConstants.UUID.required(),
+      }),
       then: JoiValidationConstants.UUID.required(),
     })
     .description(

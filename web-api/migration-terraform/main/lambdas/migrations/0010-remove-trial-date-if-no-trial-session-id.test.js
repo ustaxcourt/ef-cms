@@ -223,6 +223,46 @@ describe('migrateItems', () => {
     );
   });
 
+  it('should set docketEntries to undefined when the record is a case with a trialDate that is NOT calendared', async () => {
+    const mockCaseWithDocketEntries = {
+      ...mockNonBlockedCase,
+      automaticBlocked: true,
+      automaticBlockedDate: '2019-08-25T05:00:00.000Z',
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+      docketEntries: [{}, {}],
+      pk: 'case|999-99',
+      sk: 'case|999-99',
+      trialDate: '2019-03-01T21:42:29.073Z',
+    };
+
+    const items = [mockCaseWithDocketEntries];
+
+    documentClient.query = jest
+      .fn()
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Items: [mockCaseWithDocketEntries],
+        }),
+      })
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Items: [],
+        }),
+      });
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntries: undefined,
+          pk: 'case|999-99',
+          sk: 'case|999-99',
+        }),
+      ]),
+    );
+  });
+
   it('should NOT remove automaticBlock from case if the trial date is past the trial date cutoff and the case has a trialSessionId', async () => {
     const mockBlockedCaseWithTrialDateAndTrialSessionId = {
       ...mockNonBlockedCase,
