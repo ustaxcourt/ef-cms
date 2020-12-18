@@ -13,19 +13,16 @@ describe('orderPublicSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue([
         {
           caseCaption: 'Samson Workman, Petitioner',
+          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
           docketNumber: '103-19',
-          docketNumberSuffix: 'AAA',
-          documentContents:
-            'Everyone knows that Reeses Outrageous bars are the best candy',
           documentTitle: 'Order for More Candy',
           eventCode: 'ODD',
           signedJudgeName: 'Guy Fieri',
         },
         {
           caseCaption: 'Samson Workman, Petitioner',
+          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
           docketNumber: '103-19',
-          docketNumberSuffix: 'AAA',
-          documentContents: 'KitKats are inferior candies',
           documentTitle: 'Order for KitKats',
           eventCode: 'ODD',
           signedJudgeName: 'Guy Fieri',
@@ -50,25 +47,46 @@ describe('orderPublicSearchInteractor', () => {
     expect(result).toMatchObject([
       {
         caseCaption: 'Samson Workman, Petitioner',
+        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
         docketNumber: '103-19',
-        docketNumberSuffix: 'AAA',
-        documentContents:
-          'Everyone knows that Reeses Outrageous bars are the best candy',
         documentTitle: 'Order for More Candy',
         eventCode: 'ODD',
         signedJudgeName: 'Guy Fieri',
       },
       {
         caseCaption: 'Samson Workman, Petitioner',
+        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
         docketNumber: '103-19',
-        docketNumberSuffix: 'AAA',
-        documentContents: 'KitKats are inferior candies',
         documentTitle: 'Order for KitKats',
         eventCode: 'ODD',
         signedJudgeName: 'Guy Fieri',
       },
     ]);
   });
+
+  it('throws an error if the search results do not validate', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue([
+        {
+          caseCaption: 'Samson Workman, Petitioner',
+          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+          docketNumber: '103-19',
+          documentTitle: 'Order for KitKats',
+          eventCode: 'ODD',
+          numberOfPages: 'green',
+          signedJudgeName: 'Guy Fieri',
+        },
+      ]);
+    await expect(
+      orderPublicSearchInteractor({
+        applicationContext,
+        keyword: 'fish',
+        startDate: '2001-01-01',
+      }),
+    ).rejects.toThrow('entity was invalid');
+  });
+
   it('filters out results belonging to sealed cases', async () => {
     applicationContext
       .getPersistenceGateway()

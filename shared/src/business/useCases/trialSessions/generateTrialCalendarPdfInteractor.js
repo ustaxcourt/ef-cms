@@ -46,7 +46,8 @@ exports.generateTrialCalendarPdfInteractor = async ({
     .map(openCase => {
       return {
         caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
-        docketNumber: openCase.docketNumberWithSuffix,
+        docketNumber: openCase.docketNumber,
+        docketNumberWithSuffix: openCase.docketNumberWithSuffix,
         petitionerCounsel: (openCase.privatePractitioners || []).map(
           getPractitionerName,
         ),
@@ -55,6 +56,17 @@ exports.generateTrialCalendarPdfInteractor = async ({
         ),
       };
     });
+
+  formattedTrialSession.caseOrder.forEach(aCase => {
+    if (aCase.calendarNotes) {
+      const caseToUpdate = formattedOpenCases.find(
+        theCase => theCase.docketNumber === aCase.docketNumber,
+      );
+      if (caseToUpdate) {
+        caseToUpdate.calendarNotes = aCase.calendarNotes;
+      }
+    }
+  });
 
   const {
     formattedCourtReporter,

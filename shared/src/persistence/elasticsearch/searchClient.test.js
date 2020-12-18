@@ -145,6 +145,7 @@ describe('searchClient', () => {
     expect(results).toMatchObject({
       results: [
         {
+          _score: expect.anything(),
           caseCaption: 'Eve Brewer, Petitioner',
           contactPrimary: {
             address1: '67 Oak Parkway',
