@@ -79,3 +79,7 @@ variable "log_level" {
 variable "alert_sns_topic_arn" {
   type = string
 }
+
+variable "bounced_email_recipient" {
+  type = string
+}
