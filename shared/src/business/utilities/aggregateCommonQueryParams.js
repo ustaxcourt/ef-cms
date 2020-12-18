@@ -31,34 +31,31 @@ const aggregateCommonQueryParams = ({
 
   if (petitionerName) {
     const simplePetitionerQuery = makeSimpleQuerySafe(petitionerName);
+    const simpleQuery = {
+      default_operator: 'and',
+      fields: [
+        'contactPrimary.M.name.S^4',
+        'contactPrimary.M.secondaryName.S^3',
+        'contactSecondary.M.name.S^2',
+        'caseCaption.S^0.2',
+      ],
+      flags: 'AND|PHRASE|PREFIX',
+    };
+
     exactMatchesQuery.push({
       bool: {
         should: [
           {
             simple_query_string: {
+              ...simpleQuery,
               boost: 20,
-              default_operator: 'and',
-              fields: [
-                'contactPrimary.M.name.S^4',
-                'contactPrimary.M.secondaryName.S^3',
-                'contactSecondary.M.name.S^2',
-                'caseCaption.S^0.2',
-              ],
-              flags: 'AND|PHRASE|PREFIX',
               query: `"${simplePetitionerQuery}"`, // match complete phrase
             },
           },
           {
             simple_query_string: {
+              ...simpleQuery,
               boost: 0.5,
-              default_operator: 'and',
-              fields: [
-                'contactPrimary.M.name.S^4',
-                'contactPrimary.M.secondaryName.S^3',
-                'contactSecondary.M.name.S^2',
-                'caseCaption.S^0.2',
-              ],
-              flags: 'AND|PHRASE|PREFIX',
               query: simplePetitionerQuery, // match all terms in any order
             },
           },
@@ -69,10 +66,10 @@ const aggregateCommonQueryParams = ({
       simple_query_string: {
         default_operator: 'or', // any subset of all terms
         fields: [
-          'contactPrimary.M.name.S^3',
-          'contactPrimary.M.secondaryName.S^2',
+          'contactPrimary.M.name.S^5',
+          'contactPrimary.M.secondaryName.S^3',
           'contactSecondary.M.name.S^1',
-          'caseCaption.S^0',
+          'caseCaption.S',
         ],
         query: simplePetitionerQuery,
       },

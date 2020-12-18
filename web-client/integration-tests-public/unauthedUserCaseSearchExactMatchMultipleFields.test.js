@@ -133,7 +133,6 @@ describe('Create and serve a case to test contactSecondary.name', () => {
 
     it('Create case', async () => {
       const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary({}),
         contactSecondary: getContactSecondary({ name: nameToSearchFor }),
         partyType: 'Petitioner & spouse',
       });
@@ -165,9 +164,7 @@ describe('Create and serve a case to test caseCaption', () => {
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
-      const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary({}),
-      });
+      const caseDetail = await uploadPetition(testClient);
 
       expect(caseDetail.docketNumber).toBeDefined();
       test.docketNumber = caseDetail.docketNumber;
@@ -232,8 +229,6 @@ describe('Petitioner searches for exact name match', () => {
     const searchResults = test.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
-
-    console.log(JSON.stringify(createdDocketNumbers, null, 2));
 
     expect(searchResults.length).toBe(createdDocketNumbers.length);
 

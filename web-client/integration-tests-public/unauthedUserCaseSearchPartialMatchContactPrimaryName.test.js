@@ -76,7 +76,7 @@ function createCase(name) {
   });
 }
 
-describe(`Petitioner searches for partial name match ${searchTerm}`, () => {
+describe.skip(`Petitioner searches for partial name match ${searchTerm}`, () => {
   unauthedUserNavigatesToPublicSite(test);
 
   it('returns search results we expect in the correct order', async () => {
