@@ -39,6 +39,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
+  this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
 
