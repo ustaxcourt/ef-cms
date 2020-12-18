@@ -99,7 +99,6 @@ const {
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
   casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
-  casePublicSearchPartialMatch: casePublicSearchPartialMatchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
@@ -1166,7 +1165,6 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
-  casePublicSearchPartialMatch: casePublicSearchPartialMatchPersistence,
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,

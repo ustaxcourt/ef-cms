@@ -36,13 +36,13 @@ const aggregateCommonQueryParams = ({
         should: [
           {
             simple_query_string: {
-              boost: 2,
+              boost: 20,
               default_operator: 'and',
               fields: [
-                'contactPrimary.M.name.S^3',
-                'contactPrimary.M.secondaryName.S^2',
-                'contactSecondary.M.name.S^1',
-                'caseCaption.S',
+                'contactPrimary.M.name.S^4',
+                'contactPrimary.M.secondaryName.S^3',
+                'contactSecondary.M.name.S^2',
+                'caseCaption.S^0.2',
               ],
               flags: 'AND|PHRASE|PREFIX',
               query: `"${simplePetitionerQuery}"`, // match complete phrase
@@ -50,13 +50,13 @@ const aggregateCommonQueryParams = ({
           },
           {
             simple_query_string: {
-              boost: 1,
+              boost: 0.5,
               default_operator: 'and',
               fields: [
-                'contactPrimary.M.name.S^3',
-                'contactPrimary.M.secondaryName.S^2',
-                'contactSecondary.M.name.S^1',
-                'caseCaption.S',
+                'contactPrimary.M.name.S^4',
+                'contactPrimary.M.secondaryName.S^3',
+                'contactSecondary.M.name.S^2',
+                'caseCaption.S^0.2',
               ],
               flags: 'AND|PHRASE|PREFIX',
               query: simplePetitionerQuery, // match all terms in any order
