@@ -16,8 +16,7 @@ const { COUNTRY_TYPES } = applicationContext.getConstants();
 
 testClient.draftOrders = [];
 
-// exact match on contactPrimary.name
-
+// exact match on contactPrimary.secondaryName
 const baseContactPrimary = {
   address1: '734 Cowley Parkway',
   city: 'Somewhere',
