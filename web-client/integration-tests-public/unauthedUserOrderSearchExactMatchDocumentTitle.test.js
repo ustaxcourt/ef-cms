@@ -18,10 +18,9 @@ const testPublic = setupTest();
 const testClient = setupTestClient();
 
 testClient.draftOrders = [];
-const { COUNTRY_TYPES } = applicationContext.getConstants();
-
 const createdDocketNumbers = [];
 
+const { COUNTRY_TYPES } = applicationContext.getConstants();
 const getContactPrimary = () => ({
   address1: '734 Cowley Parkway',
   city: 'Somewhere',
@@ -33,8 +32,9 @@ const getContactPrimary = () => ({
 });
 
 const documentTitleKeyword = `Sunglasses_${new Date().getTime()}`;
+const nonExactDocumentTitleKeyword = `${documentTitleKeyword}y`;
 
-describe('Create and serve a case with an order for exact keyword', () => {
+describe(`Create and serve a case with an order with exact keyword (${documentTitleKeyword})`, () => {
   describe('Petitioner creates case', () => {
     beforeAll(() => {
       jest.setTimeout(10000);
@@ -48,7 +48,6 @@ describe('Create and serve a case with an order for exact keyword', () => {
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
-      testClient.docketNumber = caseDetail.docketNumber;
       testClient.docketNumber = caseDetail.docketNumber;
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
@@ -72,14 +71,44 @@ describe('Create and serve a case with an order for exact keyword', () => {
     docketClerkSignsOrder(testClient, 0);
     docketClerkAddsDocketEntryFromOrder(testClient, 0);
     docketClerkServesDocument(testClient, 0);
+  });
+});
+
+describe(`Create and serve a case with an order with a similar but not exact keyword (${nonExactDocumentTitleKeyword})`, () => {
+  describe('Petitioner creates case', () => {
+    beforeAll(() => {
+      jest.setTimeout(10000);
+    });
+
+    loginAs(testClient, 'petitioner@example.com');
+
+    it('Create case', async () => {
+      const caseDetail = await uploadPetition(testClient, {
+        contactPrimary: getContactPrimary(),
+      });
+
+      expect(caseDetail.docketNumber).toBeDefined();
+      testClient.docketNumber = caseDetail.docketNumber;
+      createdDocketNumbers.push(caseDetail.docketNumber);
+    });
+  });
+
+  describe('Petitions clerk serves case to IRS', () => {
+    loginAs(testClient, 'petitionsclerk@example.com');
+    petitionsClerkServesElectronicCaseToIrs(testClient);
+  });
+
+  describe('Docket clerk creates an order on the case', () => {
+    loginAs(testClient, 'docketclerk@example.com');
 
     docketClerkCreatesAnOrder(testClient, {
       documentContents: 'pigeon',
-      documentTitle: 'Sunglassesy',
+      documentTitle: nonExactDocumentTitleKeyword,
       eventCode: 'O',
       expectedDocumentType: 'Order',
       signedAtFormatted: '01/02/2020',
     });
+
     docketClerkSignsOrder(testClient, 1);
     docketClerkAddsDocketEntryFromOrder(testClient, 1);
     docketClerkServesDocument(testClient, 1);
@@ -111,8 +140,14 @@ describe('Unauthed user searches for exact keyword', () => {
 
     expect(searchResults).toMatchObject([
       {
+        docketNumber: createdDocketNumbers[0],
         documentTitle: documentTitleKeyword,
       },
     ]);
+
+    const nonExactResult = searchResults.find(
+      record => record.documentTitle === nonExactDocumentTitleKeyword,
+    );
+    expect(nonExactResult).toBeFalsy(); // non exact result not returned
   });
 });
