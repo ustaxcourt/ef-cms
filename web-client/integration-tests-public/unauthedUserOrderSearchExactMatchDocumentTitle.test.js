@@ -12,24 +12,12 @@ import {
 } from '../integration-tests/helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { setupTest } from './helpers';
-//import faker from 'faker';
 
 const testPublic = setupTest();
 const testClient = setupTestClient();
 
 testClient.draftOrders = [];
 const createdDocketNumbers = [];
-
-const { COUNTRY_TYPES } = applicationContext.getConstants();
-const getContactPrimary = () => ({
-  address1: '734 Cowley Parkway',
-  city: 'Somewhere',
-  countryType: COUNTRY_TYPES.DOMESTIC,
-  name: 'Rick Alex',
-  phone: '+1 (884) 358-9729',
-  postalCode: '77546',
-  state: 'CT',
-});
 
 const documentTitleKeyword = `Sunglasses_${new Date().getTime()}`;
 const nonExactDocumentTitleKeyword = `${documentTitleKeyword}y`;
@@ -43,9 +31,7 @@ describe(`Create and serve a case with an order with exact keyword (${documentTi
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
-      const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(),
-      });
+      const caseDetail = await uploadPetition(testClient);
 
       expect(caseDetail.docketNumber).toBeDefined();
       testClient.docketNumber = caseDetail.docketNumber;
@@ -58,7 +44,7 @@ describe(`Create and serve a case with an order with exact keyword (${documentTi
     petitionsClerkServesElectronicCaseToIrs(testClient);
   });
 
-  describe('Docket clerk creates an order on the case', () => {
+  describe('Docket clerk creates the first order on the case', () => {
     loginAs(testClient, 'docketclerk@example.com');
 
     docketClerkCreatesAnOrder(testClient, {
@@ -72,33 +58,8 @@ describe(`Create and serve a case with an order with exact keyword (${documentTi
     docketClerkAddsDocketEntryFromOrder(testClient, 0);
     docketClerkServesDocument(testClient, 0);
   });
-});
 
-describe(`Create and serve a case with an order with a similar but not exact keyword (${nonExactDocumentTitleKeyword})`, () => {
-  describe('Petitioner creates case', () => {
-    beforeAll(() => {
-      jest.setTimeout(10000);
-    });
-
-    loginAs(testClient, 'petitioner@example.com');
-
-    it('Create case', async () => {
-      const caseDetail = await uploadPetition(testClient, {
-        contactPrimary: getContactPrimary(),
-      });
-
-      expect(caseDetail.docketNumber).toBeDefined();
-      testClient.docketNumber = caseDetail.docketNumber;
-      createdDocketNumbers.push(caseDetail.docketNumber);
-    });
-  });
-
-  describe('Petitions clerk serves case to IRS', () => {
-    loginAs(testClient, 'petitionsclerk@example.com');
-    petitionsClerkServesElectronicCaseToIrs(testClient);
-  });
-
-  describe('Docket clerk creates an order on the case', () => {
+  describe('Docket clerk creates the second order on the case', () => {
     loginAs(testClient, 'docketclerk@example.com');
 
     docketClerkCreatesAnOrder(testClient, {
