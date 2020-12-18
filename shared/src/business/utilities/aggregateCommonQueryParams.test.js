@@ -12,10 +12,7 @@ describe('aggregateCommonQueryParams', () => {
     const result = aggregateCommonQueryParams({}, {});
 
     expect(result).toMatchObject({
-      commonQuery: [
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
-      ],
+      commonQuery: [{ match: { 'entityName.S': 'Case' } }],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
     });
@@ -30,10 +27,7 @@ describe('aggregateCommonQueryParams', () => {
     const result = aggregateCommonQueryParams(queryParams);
 
     expect(result).toMatchObject({
-      commonQuery: [
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
-      ],
+      commonQuery: [{ match: { 'entityName.S': 'Case' } }],
       exactMatchesQuery: [
         {
           bool: {
@@ -96,8 +90,7 @@ describe('aggregateCommonQueryParams', () => {
             ],
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -130,8 +123,7 @@ describe('aggregateCommonQueryParams', () => {
             ],
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -157,8 +149,7 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -183,8 +174,7 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -209,8 +199,7 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
