@@ -6,9 +6,6 @@ const elasticsearch = require('elasticsearch');
 const {
   ELASTICSEARCH_API_VERSION,
 } = require('../elasticsearch/elasticsearch-settings');
-// const mappings = require('../elasticsearch/elasticsearch-mappings');
-// const migratedCase = require('./migratedCase.json');
-// const { settings } = require('../elasticsearch/elasticsearch-settings');
 
 const esClient = new elasticsearch.Client({
   amazonES: {
@@ -19,38 +16,215 @@ const esClient = new elasticsearch.Client({
   awsConfig: new AWS.Config({ region: 'us-east-1' }),
   connectionClass: connectionClass,
   host:
-    'https://search-efcms-search-prod-alpha-uxekmvwjhblksyin6ndohlaazq.us-east-1.es.amazonaws.com/',
+    'https://search-efcms-search-prod-beta-a7ipygzclmf7xol2u7udchjjie.us-east-1.es.amazonaws.com/',
   log: 'warning',
   port: 443,
   protocol: 'https',
 });
 
 (async () => {
+  const otherQuery = {
+    body: {
+      _source: [
+        'caseCaption',
+        'contactPrimary',
+        'contactSecondary',
+        'docketNumber',
+        'docketNumberSuffix',
+        'docketNumberWithSuffix',
+        'irsPractitioners',
+        'partyType',
+        'receivedAt',
+        'sealedDate',
+      ],
+      query: {
+        bool: {
+          must: [
+            {
+              simple_query_string: {
+                default_operator: 'and',
+                fields: [
+                  'contactPrimary.M.name.S',
+                  'contactPrimary.M.secondaryName.S',
+                  'contactSecondary.M.name.S',
+                ],
+                flags: 'AND|PHRASE|PREFIX',
+                query: 'knight stephanie bilbo',
+              },
+            },
+            {
+              match: {
+                'entityName.S': 'Case',
+              },
+            },
+          ],
+          must_not: {
+            exists: {
+              field: 'sealedDate',
+            },
+          },
+        },
+      },
+      size: 5,
+    },
+    index: 'efcms-case',
+  };
+  const searchString = 'knight stephanie';
+  const otherQuery2 = {
+    body: {
+      _source: [
+        'caseCaption',
+        'contactPrimary',
+        'contactSecondary',
+        'docketNumber',
+        'docketNumberSuffix',
+        'docketNumberWithSuffix',
+        'irsPractitioners',
+        'partyType',
+        'receivedAt',
+        'sealedDate',
+      ],
+      min_score: 0.5, //
+      query: {
+        bool: {
+          must: [
+            {
+              match: {
+                'entityName.S': 'Case',
+              },
+            },
+          ],
+          must_not: {
+            exists: {
+              field: 'sealedDate',
+            },
+          },
+          should: [
+            {
+              simple_query_string: {
+                boost: 5,
+                default_operator: 'and',
+                fields: [
+                  'contactPrimary.M.name.S^3',
+                  'contactPrimary.M.secondaryName.S^2',
+                  'contactSecondary.M.name.S^1',
+                  'caseCaption.S',
+                ],
+                flags: 'AND|PHRASE|PREFIX',
+                query: `"${searchString}"`, // perfect, exact phrase match
+              },
+            },
+            {
+              simple_query_string: {
+                boost: 1,
+                default_operator: 'and',
+                fields: [
+                  'contactPrimary.M.name.S^3',
+                  'contactPrimary.M.secondaryName.S^2',
+                  'contactSecondary.M.name.S^1',
+                  'caseCaption.S',
+                ],
+                flags: 'AND|PHRASE|PREFIX',
+                query: searchString, // must match all terms in any order
+              },
+              // OR...
+              // {
+              //   query_string: {
+              //     fields: [
+              //       'contactPrimary.M.name.S^3',
+              //       'contactPrimary.M.secondaryName.S^2',
+              //       'contactSecondary.M.name.S^1',
+              //       'caseCaption.S',
+              //     ],
+              //     query: "*word* *word2* *word3*",
+              //   },
+            },
+          ],
+        },
+      },
+      size: 10,
+    },
+    index: 'efcms-case',
+  };
   const orderQuery = {
     body: {
       _source: [
         'caseCaption',
         'contactPrimary',
         'contactSecondary',
-        'docketEntryId',
         'docketNumber',
         'docketNumberSuffix',
         'docketNumberWithSuffix',
-        'documentContents',
-        'documentTitle',
-        'documentType',
-        'eventCode',
-        'filingDate',
         'irsPractitioners',
-        'isSealed',
-        'numberOfPages',
-        'privatePractitioners',
+        'partyType',
+        'receivedAt',
         'sealedDate',
-        'signedJudgeName',
       ],
       query: {
         bool: {
           must: [
+            {
+              simple_query_string: {
+                default_operator: 'and',
+                fields: [
+                  'contactPrimary.M.name.S',
+                  'contactPrimary.M.secondaryName.S',
+                  'contactSecondary.M.name.S',
+                ],
+                flags: 'AND|PHRASE|PREFIX',
+                query: 'stephanie murrin',
+              },
+            },
+            {
+              match: {
+                'pk.S': 'case}',
+              },
+            },
+            {
+              match: {
+                'sk.S': 'case}',
+              },
+            },
+          ],
+          must_not: {
+            exists: {
+              field: 'sealedDate',
+            },
+          },
+        },
+      },
+      size: 20,
+    },
+    index: 'efcms-case',
+  };
+  const murrinquery = {
+    body: {
+      _source: [
+        'caseCaption',
+        'contactPrimary',
+        'contactSecondary',
+        'docketNumber',
+        'docketNumberSuffix',
+        'docketNumberWithSuffix',
+        'irsPractitioners',
+        'partyType',
+        'receivedAt',
+        'sealedDate',
+      ],
+      query: {
+        bool: {
+          must: [
+            {
+              query_string: {
+                fields: [
+                  'contactPrimary.M.name.S',
+                  'contactPrimary.M.secondaryName.S',
+                  'contactSecondary.M.name.S',
+                  'caseCaption.S',
+                ],
+                query: '*stephanie murrin*',
+              },
+            },
             {
               match: {
                 'pk.S': 'case|',
@@ -58,335 +232,56 @@ const esClient = new elasticsearch.Client({
             },
             {
               match: {
-                'sk.S': 'docket-entry|',
-              },
-            },
-            {
-              exists: {
-                field: 'servedAt',
-              },
-            },
-            {
-              bool: {
-                must_not: [
-                  {
-                    term: {
-                      'isStricken.BOOL': true,
-                    },
-                  },
-                ],
-                should: [
-                  {
-                    match: {
-                      'eventCode.S': 'O',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OAJ',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'SPOS',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'SPTO',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OAL',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OAP',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OAPF',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OAR',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OAS',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OASL',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OAW',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OAX',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OCA',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OD',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'ODD',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'ODP',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'ODR',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'ODS',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'ODSL',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'ODW',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'ODX',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OF',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OFAB',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OFFX',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OFWD',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OFX',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OIP',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OJR',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OODS',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OPFX',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OPX',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'ORAP',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OROP',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OSC',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OSCP',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OST',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OSUB',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'OAD',
-                    },
-                  },
-                  {
-                    match: {
-                      'eventCode.S': 'ODJ',
-                    },
-                  },
-                ],
-              },
-            },
-            {
-              simple_query_string: {
-                fields: ['documentContents.S', 'documentTitle.S'],
-                query: 'order',
-              },
-            },
-            {
-              has_parent: {
-                inner_hits: {
-                  _source: {
-                    includes: [
-                      'caseCaption',
-                      'contactPrimary',
-                      'contactSecondary',
-                      'docketEntryId',
-                      'docketNumber',
-                      'docketNumberSuffix',
-                      'docketNumberWithSuffix',
-                      'documentContents',
-                      'documentTitle',
-                      'documentType',
-                      'eventCode',
-                      'filingDate',
-                      'irsPractitioners',
-                      'isSealed',
-                      'numberOfPages',
-                      'privatePractitioners',
-                      'sealedDate',
-                      'signedJudgeName',
-                    ],
-                  },
-                  name: 'case-mappings',
-                },
-                parent_type: 'case',
-                query: {
-                  bool: {
-                    must: {
-                      simple_query_string: {
-                        fields: [
-                          'caseCaption.S',
-                          'contactPrimary.M.name.S',
-                          'contactSecondary.M.name.S',
-                        ],
-                        // user input: robert zimmerman
-                        query: '("robert zimmerman") | (robert + zimmerman)',
-                      },
-                    },
-                    must_not: [
-                      {
-                        term: {
-                          'isSealed.BOOL': true,
-                        },
-                      },
-                    ],
-                  },
-                },
+                'sk.S': 'case|',
               },
             },
           ],
+          must_not: {
+            exists: {
+              field: 'sealedDate',
+            },
+          },
         },
       },
       size: 10,
     },
-    index: 'efcms-docket-entry',
+    index: 'efcms-case',
   };
-  let results = await esClient.search(orderQuery);
+
+  let results = await esClient.search(otherQuery2);
 
   const hits = get(results, 'hits.hits');
-  const caseMap = {};
-
   const formatHit = hit => {
-    const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
-      hit['_source'],
-    );
-
-    if (
-      hit['_index'] === 'efcms-docket-entry' &&
-      hit.inner_hits &&
-      hit.inner_hits['case-mappings']
-    ) {
-      const casePk = hit['_id'].split('_')[0];
-      const docketNumber = casePk.replace('case|', ''); // TODO figure out why docket number isn't always on a DocketEntry
-
-      let foundCase = caseMap[docketNumber];
-
-      if (!foundCase) {
-        hit.inner_hits['case-mappings'].hits.hits.some(innerHit => {
-          const innerHitDocketNumber = innerHit['_source'].docketNumber.S;
-          caseMap[innerHitDocketNumber] = innerHit['_source'];
-
-          if (innerHitDocketNumber === docketNumber) {
-            foundCase = innerHit['_source'];
-            return true;
-          }
-        });
-      }
-
-      if (foundCase) {
-        return {
-          ...sourceUnmarshalled,
-          ...AWS.DynamoDB.Converter.unmarshall(foundCase),
-        };
-      } else {
-        return sourceUnmarshalled;
-      }
-    } else {
-      return sourceUnmarshalled;
-    }
+    return {
+      ...AWS.DynamoDB.Converter.unmarshall(hit['_source']),
+      score: hit['_score'],
+    };
   };
 
   if (hits && hits.length > 0) {
-    results = hits.map(formatHit).map(hit => pick(hit, ['caseCaption']));
+    results = hits
+      .map(formatHit)
+      .map(hit =>
+        pick(hit, [
+          'score',
+          'caseCaption',
+          'docketNumberWithSuffix',
+          'contactPrimary.name',
+          'contactPrimary.secondaryName',
+          'contactSecondary.name',
+        ]),
+      );
   }
-
   console.log(JSON.stringify(results, null, 2));
 })();
+
+/*
+
+* Exact matches = exact words in the exact order 
+			   OR = exact word in any order
+
+* If there are no exact matches, inform the user 
+* If there are no exact matches, user can perform a partial match search 
+* Partial match = any words in any order
+
+*/
