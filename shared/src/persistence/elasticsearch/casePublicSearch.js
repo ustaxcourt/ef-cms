@@ -54,72 +54,13 @@ exports.casePublicSearchExactMatch = async ({
     },
   };
 
-  console.log(JSON.stringify(query, null, 2));
-
   ({ results } = await search({
     applicationContext,
     searchParameters: {
       body: {
         _source: sourceFields,
-        min_score: 0.5,
+        min_score: 0.1,
         query,
-        size: MAX_SEARCH_RESULTS,
-      },
-      index: 'efcms-case',
-    },
-  }));
-
-  return results;
-};
-
-exports.casePublicSearchPartialMatch = async ({
-  applicationContext,
-  countryType,
-  petitionerName,
-  petitionerState,
-  yearFiledMax,
-  yearFiledMin,
-}) => {
-  // TO DO
-  const { commonQuery, nonExactMatchesQuery } = aggregateCommonQueryParams({
-    applicationContext,
-    countryType,
-    petitionerName,
-    petitionerState,
-    yearFiledMax,
-    yearFiledMin,
-  });
-
-  const sourceFields = [
-    'caseCaption',
-    'contactPrimary',
-    'contactSecondary',
-    'docketNumber',
-    'docketNumberSuffix',
-    'docketNumberWithSuffix',
-    'irsPractitioners',
-    'partyType',
-    'receivedAt',
-    'sealedDate',
-  ];
-
-  let results;
-
-  ({ results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: sourceFields,
-        query: {
-          bool: {
-            must: [...nonExactMatchesQuery, ...commonQuery],
-            must_not: {
-              exists: {
-                field: 'sealedDate',
-              },
-            },
-          },
-        },
         size: MAX_SEARCH_RESULTS,
       },
       index: 'efcms-case',
