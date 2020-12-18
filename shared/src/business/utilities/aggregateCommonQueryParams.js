@@ -1,5 +1,10 @@
 const { CASE_SEARCH_MIN_YEAR } = require('../entities/EntityConstants');
 
+const makeSimpleQuerySafe = text => {
+  const nonWordCharacters = /\W+/gims;
+  return text.replace(nonWordCharacters, ' ').trim();
+};
+
 /**
  * aggregateCommonQueryParams
  *
@@ -25,37 +30,52 @@ const aggregateCommonQueryParams = ({
   const nonExactMatchesQuery = [];
 
   if (petitionerName) {
+    const simplePetitionerQuery = makeSimpleQuerySafe(petitionerName);
+    const simpleQuery = {
+      default_operator: 'and',
+      fields: [
+        'contactPrimary.M.name.S^4',
+        'contactPrimary.M.secondaryName.S^3',
+        'contactSecondary.M.name.S^2',
+        'caseCaption.S^0.2',
+      ],
+      flags: 'AND|PHRASE|PREFIX',
+    };
+
     exactMatchesQuery.push({
       bool: {
-        must: [
+        should: [
           {
             simple_query_string: {
-              default_operator: 'and',
-              fields: [
-                'contactPrimary.M.name.S',
-                'contactPrimary.M.secondaryName.S',
-                'contactSecondary.M.name.S',
-              ],
-              flags: 'AND|PHRASE|PREFIX',
-              query: petitionerName,
+              ...simpleQuery,
+              boost: 20,
+              query: `"${simplePetitionerQuery}"`, // match complete phrase
+            },
+          },
+          {
+            simple_query_string: {
+              ...simpleQuery,
+              boost: 0.5,
+              query: simplePetitionerQuery, // match all terms in any order
             },
           },
         ],
       },
     });
-
     nonExactMatchesQuery.push({
-      query_string: {
+      simple_query_string: {
+        default_operator: 'or', // any subset of all terms
         fields: [
-          'contactPrimary.M.name.S',
-          'contactPrimary.M.secondaryName.S',
-          'contactSecondary.M.name.S',
+          'contactPrimary.M.name.S^5',
+          'contactPrimary.M.secondaryName.S^3',
+          'contactSecondary.M.name.S^1',
           'caseCaption.S',
         ],
-        query: `*${petitionerName}*`,
+        query: simplePetitionerQuery,
       },
     });
   }
+
   if (countryType) {
     commonQuery.push({
       bool: {
@@ -108,10 +128,7 @@ const aggregateCommonQueryParams = ({
     });
   }
 
-  commonQuery.push(
-    { match: { 'pk.S': 'case|' } },
-    { match: { 'sk.S': 'case|' } },
-  );
+  commonQuery.push({ match: { 'entityName.S': 'Case' } });
 
   return {
     commonQuery,
