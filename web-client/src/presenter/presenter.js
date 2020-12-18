@@ -228,6 +228,7 @@ import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveF
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
+import { openSetForHearingModalSequence } from './sequences/openSetForHearingModalSequence';
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
@@ -276,6 +277,7 @@ import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequ
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
+import { setForHearingSequence } from './sequences/setForHearingSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
@@ -427,6 +429,7 @@ import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCa
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
 import { validateSecondaryContactSequence } from './sequences/validateSecondaryContactSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
+import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
@@ -674,6 +677,7 @@ export const presenter = {
     openReplyToMessageModalSequence,
     openSealAddressModalSequence,
     openSetCalendarModalSequence,
+    openSetForHearingModalSequence,
     openStrikeDocketEntryModalSequence,
     openTrialSessionPlanningModalSequence,
     openUnblockFromTrialModalSequence,
@@ -721,6 +725,7 @@ export const presenter = {
     setDocumentForPreviewSequence,
     setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
+    setForHearingSequence,
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setMessageDetailViewerDocumentToDisplaySequence,
@@ -871,6 +876,7 @@ export const presenter = {
     validateRemoveFromTrialSessionSequence,
     validateSecondaryContactSequence,
     validateSelectDocumentTypeSequence,
+    validateSetForHearingSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionPlanningSequence,
     validateTrialSessionSequence,

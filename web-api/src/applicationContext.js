@@ -10,6 +10,9 @@ const pdfLib = require('pdf-lib');
 const sass = require('sass');
 const util = require('util');
 const {
+  addCaseToHearing,
+} = require('../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing');
+const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
 const {
@@ -808,6 +811,9 @@ const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
+  setForHearingInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
+const {
   setMessageAsRead,
 } = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
 const {
@@ -1111,6 +1117,7 @@ const isValidatedDecorator = persistenceGatewayMethods => {
 
 const gatewayMethods = {
   ...isValidatedDecorator({
+    addCaseToHearing,
     addWorkItemToSectionInbox,
     associateUserWithCase,
     associateUserWithCasePending,
@@ -1619,6 +1626,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         serveExternallyFiledDocumentInteractor,
+        setForHearingInteractor,
         setMessageAsReadInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,

@@ -35,6 +35,31 @@ describe('removeCaseFromTrialAction', () => {
     });
   });
 
+  it('should call removeCaseFromTrialInteractor with case docketNumber and trialSessionId from state.modal', async () => {
+    await runAction(removeCaseFromTrialAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
+        modal: {
+          disposition: mockDisposition,
+          trialSessionId: mockTrialSessionId,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().removeCaseFromTrialInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
+      docketNumber: mockDocketNumber,
+      trialSessionId: mockTrialSessionId,
+    });
+  });
+
   it('should return an alertSuccess and caseDetail', async () => {
     const result = await runAction(removeCaseFromTrialAction, {
       modules: {
