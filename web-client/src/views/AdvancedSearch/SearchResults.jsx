@@ -17,7 +17,7 @@ export const SearchResults = connect(
       <div aria-live="polite">
         {advancedSearchHelper.showSearchResults && (
           <>
-            {!advancedSearchHelper.showManyResultsMessage && (
+            {advancedSearchHelper.showManyResultsMessage && (
               <div className="margin-top-4">
                 <WarningNotificationComponent
                   alertWarning={{
