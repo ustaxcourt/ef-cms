@@ -82,7 +82,7 @@ describe('Create and serve a case to test contactPrimary.name', () => {
 
     updateCaseCaption(
       test.docketNumber,
-      'Something other than the petitioner, Petitioner',
+      'Best match on contact primary name, Petitioner',
     ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
 
@@ -113,7 +113,7 @@ describe('Create and serve a case to test contactPrimary.secondaryName', () => {
 
     updateCaseCaption(
       test.docketNumber,
-      'Something other than the petitioner, Petitioner',
+      "second-best match on contact primary's secondary name, Petitioner",
     ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
 
@@ -146,7 +146,7 @@ describe('Create and serve a case to test contactSecondary.name', () => {
 
     updateCaseCaption(
       test.docketNumber,
-      'Something other than the petitioner, Petitioner',
+      'third-best match on contactSecondary.name, Petitioner',
     ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
 
@@ -175,7 +175,7 @@ describe('Create and serve a case to test caseCaption', () => {
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
-    const newCaseCaption = `${nameToSearchFor}, Petitioner`;
+    const newCaseCaption = `${nameToSearchFor}, name on caseCaption, fourth-best match, Petitioner`;
     updateCaseCaption(test.docketNumber, newCaseCaption);
   });
 
@@ -206,7 +206,7 @@ describe('Create and serve a case to test contactPrimary.name with terms out of 
 
     updateCaseCaption(
       test.docketNumber,
-      'Something other than the petitioner, Petitioner',
+      'fifth-best match of out-of-order terms on contactPrimary.name, Petitioner',
     ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
 

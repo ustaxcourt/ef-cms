@@ -69,9 +69,6 @@ exports.casePublicSearchExactMatch = async ({
     },
   }));
 
-  // results not coming back in expected order just yet...
-  console.log(JSON.stringify(results, null, 2));
-
   return results;
 };
 
