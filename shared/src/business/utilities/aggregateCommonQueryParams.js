@@ -139,4 +139,5 @@ const aggregateCommonQueryParams = ({
 
 module.exports = {
   aggregateCommonQueryParams,
+  makeSimpleQuerySafe,
 };
