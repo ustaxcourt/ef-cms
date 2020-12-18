@@ -142,7 +142,7 @@ describe('migrateItems', () => {
   });
 
   it('should remove trialDate from case records that have a trialDate and no trialSessionId', async () => {
-    const items = [mockNonBlockedCase];
+    const items = [{ ...mockNonBlockedCase }];
 
     const results = await migrateItems(items, documentClient);
 
