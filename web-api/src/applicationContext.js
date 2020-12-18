@@ -98,7 +98,8 @@ const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
-  casePublicSearch: casePublicSearchPersistence,
+  casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  casePublicSearchPartialMatch: casePublicSearchPartialMatchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
@@ -1164,7 +1165,8 @@ const gatewayMethods = {
   // methods below are not known to create "entity" records
   advancedDocumentSearch,
   caseAdvancedSearch,
-  casePublicSearch: casePublicSearchPersistence,
+  casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  casePublicSearchPartialMatch: casePublicSearchPartialMatchPersistence,
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
