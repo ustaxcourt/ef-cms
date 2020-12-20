@@ -137,6 +137,28 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     },
   );
 
+  const oldHearings = oldCase.hearings.map(trialSession =>
+    omit(trialSession, ['pk', 'sk']),
+  );
+
+  const { removed: deletedHearings } = diff(
+    oldHearings,
+    caseToUpdate.hearings,
+    'trialSessionId',
+  );
+
+  deletedHearings.forEach(hearing => {
+    requests.push(
+      client.delete({
+        applicationContext,
+        key: {
+          pk: `case|${caseToUpdate.docketNumber}`,
+          sk: `hearing|${hearing.trialSessionId}`,
+        },
+      }),
+    );
+  });
+
   const oldPrivatePractitioners = oldCase.privatePractitioners.map(
     privatePractitioner => omit(privatePractitioner, ['pk', 'sk']),
   );

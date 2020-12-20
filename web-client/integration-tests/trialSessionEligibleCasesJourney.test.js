@@ -334,7 +334,12 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('removeCaseFromTrialSequence');
 
       expect(test.getState('validationErrors')).toEqual({
+        caseStatus: 'Enter a case status',
         disposition: 'Enter a disposition',
+      });
+
+      await test.runSequence('openRemoveFromTrialSessionModalSequence', {
+        trialSessionId: test.trialSessionId,
       });
 
       await test.runSequence('updateModalValueSequence', {
@@ -343,6 +348,8 @@ describe('Trial Session Eligible Cases Journey', () => {
       });
 
       await test.runSequence('removeCaseFromTrialSequence');
+
+      expect(test.getState('validationErrors')).toEqual({});
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
@@ -368,6 +375,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         STATUS_TYPES.calendared,
       );
 
+      await test.runSequence('openAddToTrialModalSequence');
       await test.runSequence('addCaseToTrialSessionSequence');
       await wait(1000);
 
@@ -375,10 +383,13 @@ describe('Trial Session Eligible Cases Journey', () => {
         trialSessionId: 'Select a Trial Session',
       });
 
+      await test.runSequence('openAddToTrialModalSequence');
       test.setState('modal.trialSessionId', test.trialSessionId);
 
       await test.runSequence('addCaseToTrialSessionSequence');
       await wait(1000); // we need to wait for some reason
+
+      expect(test.getState('validationErrors')).toEqual({});
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],

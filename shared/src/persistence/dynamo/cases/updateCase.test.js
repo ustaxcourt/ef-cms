@@ -144,6 +144,25 @@ describe('updateCase', () => {
     });
   }
 
+  /**
+   * Adds mock hearings to test fixture
+   */
+  function addHearing() {
+    caseQueryMockData.push({
+      ...{
+        maxCases: 100,
+        sessionType: 'Regular',
+        startDate: '3000-03-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '3000',
+        trialLocation: 'Birmingham, Alabama',
+        trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
+      },
+      pk: 'case|101-18',
+      sk: 'hearing|a-document-id-123',
+    });
+  }
+
   it('updates case', async () => {
     await updateCase({
       applicationContext,
@@ -903,6 +922,34 @@ describe('updateCase', () => {
         pk: 'user|123',
         sk: 'case|101-18',
       });
+    });
+  });
+
+  describe('hearings', () => {
+    it('removes hearing from case if the updated case has none and the old case has one', async () => {
+      addHearing();
+
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          hearings: [],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(applicationContext.getDocumentClient().delete).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().delete,
+      ).toHaveBeenCalledWith(
+        expect.objectContaining({
+          Key: {
+            pk: 'case|101-18',
+            sk: 'hearing|208a959f-9526-4db5-b262-e58c476a4604',
+          },
+        }),
+      );
     });
   });
 });

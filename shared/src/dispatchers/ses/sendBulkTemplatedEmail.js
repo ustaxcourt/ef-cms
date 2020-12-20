@@ -38,6 +38,8 @@ exports.sendBulkTemplatedEmail = async ({
         },
         ReplacementTemplateData: JSON.stringify(destination.templateData),
       })),
+      ReturnPath:
+        process.env.BOUNCED_EMAIL_RECIPIENT || process.env.EMAIL_SOURCE,
       Source: process.env.EMAIL_SOURCE,
       Template: templateName,
     };
@@ -48,7 +50,7 @@ exports.sendBulkTemplatedEmail = async ({
 
     applicationContext.logger.info('Bulk Email Response', response);
   } catch (err) {
-    applicationContext.logger.error(err);
+    applicationContext.logger.error(`Error sending email: ${err.message}`, err);
     await applicationContext.notifyHoneybadger(err);
   }
 };
