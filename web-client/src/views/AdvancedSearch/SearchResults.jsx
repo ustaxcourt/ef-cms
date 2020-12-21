@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
@@ -16,17 +17,28 @@ export const SearchResults = connect(
       <div aria-live="polite">
         {advancedSearchHelper.showSearchResults && (
           <>
-            <h1 className="margin-top-4">Search Results</h1>
             {advancedSearchHelper.showManyResultsMessage && (
-              <WarningNotificationComponent
-                alertWarning={{
-                  message:
-                    'Your search has a high number of matching results. Refine your search for more accurate results.',
-                }}
-                dismissable={false}
-                scrollToTop={false}
-              />
+              <div className="margin-top-4">
+                <WarningNotificationComponent
+                  alertWarning={{
+                    message:
+                      'Narrow your search by adding search terms or excluding partial matches.',
+                    title: 'Displaying the first 100 matches of your search.',
+                  }}
+                  dismissable={false}
+                  messageNotBold={true}
+                  scrollToTop={false}
+                />
+              </div>
             )}
+            <div className="grid-row">
+              <div className="tablet:grid-col-10">
+                <h1 className="margin-top-1">Results</h1>
+              </div>
+              <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
+                {advancedSearchHelper.numberOfResults} match(es) shown
+              </div>
+            </div>
 
             <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
@@ -101,7 +113,14 @@ export const SearchResults = connect(
         {advancedSearchHelper.showNoMatches && (
           <div id="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
-            <p>Check your search terms and try again.</p>
+            <Hint wider>
+              Tips for improving your search:
+              <ul className="usa-list">
+                <li>Try alternate spellings for your search terms</li>
+                <li>Use more general search terms</li>
+                <li>Use fewer search terms to broaden your search</li>
+              </ul>
+            </Hint>
           </div>
         )}
       </div>

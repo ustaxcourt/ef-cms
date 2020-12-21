@@ -1,4 +1,7 @@
 const {
+  makeSimpleQuerySafe,
+} = require('../../business/utilities/aggregateCommonQueryParams');
+const {
   MAX_SEARCH_RESULTS,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
@@ -59,7 +62,7 @@ exports.advancedDocumentSearch = async ({
       simple_query_string: {
         default_operator: 'and',
         fields: ['documentContents.S', 'documentTitle.S'],
-        query: keyword,
+        query: makeSimpleQuerySafe(keyword),
       },
     });
   }

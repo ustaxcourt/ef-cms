@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
+
 const {
   migrateItems: migration0007,
 } = require('./migrations/0007-unblock-migrated-calendared-cases');

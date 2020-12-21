@@ -35,7 +35,6 @@ const aggregateCommonQueryParams = ({
       default_operator: 'and',
       fields: [
         'contactPrimary.M.name.S^4',
-        'contactPrimary.M.secondaryName.S^3',
         'contactSecondary.M.name.S^2',
         'caseCaption.S^0.2',
       ],
@@ -67,7 +66,6 @@ const aggregateCommonQueryParams = ({
         default_operator: 'or', // any subset of all terms
         fields: [
           'contactPrimary.M.name.S^5',
-          'contactPrimary.M.secondaryName.S^3',
           'contactSecondary.M.name.S^1',
           'caseCaption.S',
         ],
@@ -139,4 +137,5 @@ const aggregateCommonQueryParams = ({
 
 module.exports = {
   aggregateCommonQueryParams,
+  makeSimpleQuerySafe,
 };
