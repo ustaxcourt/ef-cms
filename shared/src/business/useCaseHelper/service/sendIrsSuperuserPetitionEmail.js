@@ -101,4 +101,10 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     destinations: [destination],
     templateName: process.env.EMAIL_SERVED_PETITION_TEMPLATE,
   });
+
+  applicationContext.logger.info('served a petition', {
+    destination,
+    docketEntryId,
+    docketNumber,
+  });
 };
