@@ -34,6 +34,7 @@ CourtIssuedDocumentTypeF.schema = {
   documentTitle: JoiValidationConstants.STRING.optional(),
   documentType: JoiValidationConstants.STRING.required(),
   judge: JoiValidationConstants.STRING.required(),
+  judgeWithtitle: JoiValidationConstants.STRING.optional(),
   trialLocation: JoiValidationConstants.STRING.required(),
 };
 
