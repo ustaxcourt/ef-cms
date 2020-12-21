@@ -22,7 +22,8 @@ const createdDocketNumbers = [];
 const documentTitleKeyword = `Sunglasses_${new Date().getTime()}`;
 const nonExactDocumentTitleKeyword = `${documentTitleKeyword}y`;
 
-describe(`Create and serve a case with an order with exact keyword (${documentTitleKeyword})`, () => {
+// Temporarily disabled for story 7387
+describe.skip(`Create and serve a case with an order with exact keyword (${documentTitleKeyword})`, () => {
   describe('Petitioner creates case', () => {
     beforeAll(() => {
       jest.setTimeout(10000);
@@ -76,7 +77,8 @@ describe(`Create and serve a case with an order with exact keyword (${documentTi
   });
 });
 
-describe('Unauthed user searches for exact keyword', () => {
+// Temporarily disabled for story 7387
+describe.skip('Unauthed user searches for exact keyword', () => {
   it('user navigates to public site', async () => {
     await refreshElasticsearchIndex();
     await testPublic.runSequence('navigateToPublicSiteSequence', {});
