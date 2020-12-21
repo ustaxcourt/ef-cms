@@ -41,6 +41,7 @@ export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT 
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_destination_table="efcms-${ENVIRONMENT}"
+export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 
 export TF_VAR_my_s3_state_bucket=$BUCKET
 export TF_VAR_my_s3_state_key=$KEY
