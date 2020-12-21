@@ -78,11 +78,19 @@ exports.filePetitionInteractor = async ({
     stinFileUpload,
   ]);
 
-  return await applicationContext.getUseCases().createCaseInteractor({
-    applicationContext,
-    ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
-    petitionFileId: await petitionFileUpload,
-    petitionMetadata,
-    stinFileId: await stinFileUpload,
-  });
+  const stinFileId = await stinFileUpload;
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .createCaseInteractor({
+      applicationContext,
+      ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
+      petitionFileId: await petitionFileUpload,
+      petitionMetadata,
+      stinFileId: await stinFileUpload,
+    });
+
+  return {
+    caseDetail,
+    stinFileId,
+  };
 };
