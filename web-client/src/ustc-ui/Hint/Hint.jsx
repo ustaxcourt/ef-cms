@@ -6,8 +6,6 @@ import classNames from 'classnames';
 export const Hint = connect(function Hint(props) {
   const { children, className, exclamation, fullWidth, wider } = props;
 
-  console.log('exclamation', exclamation);
-
   return (
     <div
       className={classNames(
