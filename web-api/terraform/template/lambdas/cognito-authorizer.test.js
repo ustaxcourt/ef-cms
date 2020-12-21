@@ -3,6 +3,12 @@ jest.mock('../../../../shared/src/utilities/createLogger', () => {
   return { createLogger: jest.fn() };
 });
 
+const { createLogger: actualCreateLogger } = jest.requireActual(
+  '../../../../shared/src/utilities/createLogger',
+);
+const fs = require('fs');
+const { transports } = require('winston');
+
 const axios = require('axios');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
@@ -12,7 +18,7 @@ const {
 const { handler } = require('./cognito-authorizer');
 
 describe('cognito-authorizer', () => {
-  let event, context, logger;
+  let event, context, transport;
 
   beforeEach(() => {
     jest.spyOn(axios, 'get').mockImplementation(() => {});
@@ -29,8 +35,14 @@ describe('cognito-authorizer', () => {
       }
     });
     jest.spyOn(jwk, 'verify').mockImplementation(() => {});
-    logger = { info: jest.fn(), warn: jest.fn() };
-    createLogger.mockImplementation(() => logger);
+    transport = new transports.Stream({
+      stream: fs.createWriteStream('/dev/null'),
+    });
+    jest.spyOn(transport, 'log').mockImplementation(() => {});
+    createLogger.mockImplementation(opts => {
+      opts.transports = [transport];
+      return actualCreateLogger(opts);
+    });
 
     event = {
       authorizationToken: 'Bearer tokenValue',
@@ -53,8 +65,12 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(logger.info).toHaveBeenCalledWith(
-      expect.stringContaining('No authorizationToken found'),
+    expect(transport.log).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: expect.stringContaining('info'),
+        message: expect.stringContaining('No authorizationToken found'),
+      }),
+      expect.any(Function),
     );
   });
 
@@ -65,9 +81,15 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(logger.warn).toHaveBeenCalledWith(
-      expect.stringContaining('Could not fetch keys for token issuer'),
-      expect.any(Error),
+    expect(transport.log).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: expect.stringContaining('warning'),
+        message: expect.stringContaining(
+          'Could not fetch keys for token issuer',
+        ),
+        stack: expect.stringContaining('Error: any error'),
+      }),
+      expect.any(Function),
     );
   });
 
@@ -78,9 +100,15 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(logger.warn).toHaveBeenCalledWith(
-      expect.stringContaining('Could not fetch keys for token issuer'),
-      expect.any(Error),
+    expect(transport.log).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: expect.stringContaining('warning'),
+        message: expect.stringContaining(
+          'Could not fetch keys for token issuer',
+        ),
+        stack: expect.any(String),
+      }),
+      expect.any(Function),
     );
   });
 
@@ -93,13 +121,17 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(logger.warn).toHaveBeenCalledWith(
-      expect.stringContaining('was not found in the user pool’s keys'),
+    expect(transport.log).toHaveBeenCalledWith(
       expect.objectContaining({
         issuer: expect.any(String),
         keys: expect.any(Array),
+        level: expect.stringContaining('warning'),
+        message: expect.stringContaining(
+          'was not found in the user pool’s keys',
+        ),
         requestedKeyId: 'key-identifier',
       }),
+      expect.any(Function),
     );
   });
 
@@ -129,9 +161,13 @@ describe('cognito-authorizer', () => {
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
-    expect(logger.warn).toHaveBeenCalledWith(
-      expect.stringContaining('token is not valid'),
-      expect.any(Error),
+    expect(transport.log).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: expect.stringContaining('warning'),
+        message: expect.stringContaining('token is not valid'),
+        stack: expect.stringContaining('Error: verification failed'),
+      }),
+      expect.any(Function),
     );
   });
 
@@ -178,9 +214,13 @@ describe('cognito-authorizer', () => {
       }),
     );
 
-    expect(logger.info).toHaveBeenCalledWith(
-      expect.stringContaining('Request authorized'),
-      expect.any(Object),
+    expect(transport.log).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: expect.stringContaining('info'),
+        message: expect.stringContaining('Request authorized'),
+        metadata: expect.objectContaining({ policy }),
+      }),
+      expect.any(Function),
     );
   });
 

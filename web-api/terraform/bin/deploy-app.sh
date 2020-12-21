@@ -29,6 +29,7 @@ echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
 echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
 echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
+echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
 
 tf_version=$(terraform --version)
 
@@ -103,6 +104,7 @@ export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_disable_emails=$DISABLE_EMAILS
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
+export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan
