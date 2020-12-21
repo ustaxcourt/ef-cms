@@ -16,7 +16,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { remove } = require('lodash');
+const { isEmpty, remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.addDocketEntryForPaymentStatus = ({
@@ -246,7 +246,14 @@ exports.serveCaseToIrsInteractor = async ({
         : '',
   };
 
-  const pdfData = await applicationContext
+  const petitionerAddressesDiffer = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: caseEntityToUpdate.contactPrimary,
+      oldData: caseEntityToUpdate.contactSecondary,
+    });
+
+  let pdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
@@ -267,6 +274,53 @@ exports.serveCaseToIrsInteractor = async ({
           ),
       },
     });
+
+  let secondaryAddress;
+  let secondaryPdfData;
+
+  if (!isEmpty(petitionerAddressesDiffer)) {
+    secondaryAddress = {
+      ...caseEntityToUpdate.contactSecondary,
+      countryName:
+        caseEntityToUpdate.contactSecondary.countryType !==
+        COUNTRY_TYPES.DOMESTIC
+          ? caseEntityToUpdate.contactSecondary.country
+          : '',
+    };
+
+    secondaryPdfData = await applicationContext
+      .getDocumentGenerators()
+      .noticeOfReceiptOfPetition({
+        applicationContext,
+        data: {
+          address: secondaryAddress,
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+          preferredTrialCity,
+          receivedAtFormatted: applicationContext
+            .getUtilities()
+            .formatDateString(receivedAt, 'MMMM D, YYYY'),
+          servedDate: applicationContext
+            .getUtilities()
+            .formatDateString(
+              caseEntityToUpdate.getIrsSendDate(),
+              'MMMM D, YYYY',
+            ),
+        },
+      });
+
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const pdfDoc = await PDFDocument.load(pdfData);
+    const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
+    const coverPageDocumentPages = await pdfDoc.copyPages(
+      secondaryPdfDoc,
+      secondaryPdfDoc.getPageIndices(),
+    );
+    pdfDoc.insertPage(1, coverPageDocumentPages[0]);
+
+    pdfData = await pdfDoc.save();
+  }
 
   const caseConfirmationPdfName = caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
 
