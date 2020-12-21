@@ -69,6 +69,7 @@ module.exports = {
   rules: {
     'arrow-parens': ['error', 'as-needed'],
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
+    'eol-last': ['error', 'always'],
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
@@ -112,6 +113,7 @@ module.exports = {
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
     'no-shadow': ['warn', { builtinGlobals: false }],
+    'no-trailing-spaces': 'error',
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-unneeded-ternary': ['error', { defaultAssignment: false }],
     'no-var': 'error',
