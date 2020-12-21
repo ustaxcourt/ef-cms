@@ -31,12 +31,13 @@ const lastName = faker.name.lastName();
 
 const createdDocketNumbers = [];
 
+const searchTerm = `d'Artagnan ${lastName}`;
 const primaryContactNames = [
-  `Bob ${lastName}`,
-  `${lastName} Bob`,
-  `Bob Smith ${lastName}`,
-  `Bobby ${lastName}`,
-  `Bobby ${lastName}sy`,
+  `d'Artagnan ${lastName}`,
+  `${lastName} d'Artagnan`,
+  `d'Artagnan Smith ${lastName}`,
+  `d'Artagnanby ${lastName}`,
+  `d'Artagnanby ${lastName}sy`,
 ];
 
 primaryContactNames.forEach(createCaseUsingPrimaryContactName);
@@ -78,7 +79,7 @@ describe('Petitioner searches for exact name match', () => {
     const queryParams = {
       countryType: COUNTRY_TYPES.DOMESTIC,
       currentPage: 1,
-      petitionerName: `Bob ${lastName}`,
+      petitionerName: searchTerm,
     };
 
     test.setState('advancedSearchForm.caseSearchByName', queryParams);
