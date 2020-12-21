@@ -41,7 +41,12 @@ PUT _template/cwl
       "level": { "type": "keyword" },
       "logGroup": { "type": "keyword" },
       "logStream": { "type": "keyword" },
-      "message": { "type": "text" },
+      "message": {
+        "type": "text",
+        "fields": {
+          "raw": { "type": "keyword" }
+        }
+      },
       "requestId": {
         "properties": {
           "apiGateway": { "type": "keyword" },
