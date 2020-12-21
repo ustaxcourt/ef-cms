@@ -1,9 +1,3 @@
-// get all records
-// filter out docketEntry records that match Type B and Type F event codes (get list of event codes for this first)
-// fetch judge by name
-// set judge name with title on documentMeta and regen doc title with document factory
-// validate().toRawObject()
-// return for persistence
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
   COURT_ISSUED_EVENT_CODES,
