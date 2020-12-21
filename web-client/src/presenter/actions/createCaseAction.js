@@ -38,35 +38,44 @@ export const createCaseAction = async ({
     store,
   );
 
-  let caseDetail;
-
+  let filePetitionResult;
   try {
-    caseDetail = await applicationContext.getUseCases().filePetitionInteractor({
-      applicationContext,
-      ownershipDisclosureFile,
-      ownershipDisclosureUploadProgress: progressFunctions.ownership,
-      petitionFile,
-      petitionMetadata: form,
-      petitionUploadProgress: progressFunctions.petition,
-      stinFile,
-      stinUploadProgress: progressFunctions.stin,
-    });
+    filePetitionResult = await applicationContext
+      .getUseCases()
+      .filePetitionInteractor({
+        applicationContext,
+        ownershipDisclosureFile,
+        ownershipDisclosureUploadProgress: progressFunctions.ownership,
+        petitionFile,
+        petitionMetadata: form,
+        petitionUploadProgress: progressFunctions.petition,
+        stinFile,
+        stinUploadProgress: progressFunctions.stin,
+      });
   } catch (err) {
     return path.error();
   }
+  const { caseDetail, stinFileId } = filePetitionResult;
 
-  const addCoversheet = docketEntry => {
+  const addCoversheet = docketEntryId => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
+      docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
   };
-  await Promise.all(
-    [...caseDetail.docketEntries.filter(d => d.isFileAttached)].map(
-      addCoversheet,
-    ),
+
+  const documentsThatNeedCoverSheet = caseDetail.docketEntries
+    .filter(d => d.isFileAttached)
+    .map(d => d.docketEntryId);
+
+  documentsThatNeedCoverSheet.push(stinFileId);
+  console.log(
+    'we are about to attach some rad coversheets!',
+    documentsThatNeedCoverSheet,
   );
+
+  await Promise.all(documentsThatNeedCoverSheet.map(addCoversheet));
 
   return path.success({
     caseDetail,
