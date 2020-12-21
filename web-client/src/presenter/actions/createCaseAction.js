@@ -69,11 +69,8 @@ export const createCaseAction = async ({
     .filter(d => d.isFileAttached)
     .map(d => d.docketEntryId);
 
+  // for security reasons, the STIN is not in the API response, but we already know the docketEntryId
   documentsThatNeedCoverSheet.push(stinFileId);
-  console.log(
-    'we are about to attach some rad coversheets!',
-    documentsThatNeedCoverSheet,
-  );
 
   await Promise.all(documentsThatNeedCoverSheet.map(addCoversheet));
 
