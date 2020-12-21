@@ -73,13 +73,23 @@ export const AdvancedSearch = connect(
               />
               <SearchResults />
             </Tab>
-            <Tab id="tab-order" tabName={searchTabs.ORDER} title="Order">
+            <Tab
+              disabled
+              id="tab-order"
+              tabName={searchTabs.ORDER}
+              title="Order (Coming Soon)"
+            >
               <OrderSearchForm
                 submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
               />
               <DocumentSearchResults />
             </Tab>
-            <Tab id="tab-opinion" tabName={searchTabs.OPINION} title="Opinion">
+            <Tab
+              disabled
+              id="tab-opinion"
+              tabName={searchTabs.OPINION}
+              title="Opinion (Coming Soon)"
+            >
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
                   submitOpinionAdvancedSearchSequence
