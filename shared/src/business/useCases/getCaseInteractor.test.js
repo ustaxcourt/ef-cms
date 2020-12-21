@@ -1,14 +1,21 @@
 const {
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
+
+const {
   CASE_TYPES_MAP,
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
 const {
+  getCaseInteractor,
+  isAuthorizedForContact,
+} = require('./getCaseInteractor');
+const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getCaseInteractor } = require('./getCaseInteractor');
 const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
 
@@ -199,7 +206,7 @@ describe('getCaseInteractor', () => {
         .getCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
     });
 
-    it(`allows unfiltered view of sealed contact addresses when role is ${ROLES.docket_clerk}`, async () => {
+    it(`allows unfiltered view of sealed contact addresses when role is ${ROLES.docketClerk}`, async () => {
       applicationContext.getCurrentUser.mockReturnValue({
         name: 'Security Officer Worf',
         role: ROLES.docketClerk,
@@ -401,6 +408,57 @@ describe('getCaseInteractor', () => {
 
       expect(result.contactPrimary.address1).toBeDefined();
       expect(result.contactPrimary.phone).toBeDefined();
+    });
+  });
+
+  describe('isAuthorizedForContact', () => {
+    let currentUser;
+    let contact;
+
+    beforeEach(() => {
+      currentUser = {
+        userId: '123',
+      };
+      contact = {
+        contactId: currentUser.userId,
+      };
+    });
+
+    it('returns false if the default value is false and the user is not authorized', () => {
+      const result = isAuthorizedForContact({
+        contact: {
+          contactId: 'not_the_current_user',
+        },
+        currentUser,
+        defaultValue: false,
+        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+      });
+
+      expect(result).toEqual(false);
+    });
+
+    it('returns true if the default value is true and the user is not authorized', () => {
+      const result = isAuthorizedForContact({
+        contact: {
+          contactId: 'not_the_current_user',
+        },
+        currentUser,
+        defaultValue: true,
+        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+      });
+
+      expect(result).toEqual(true);
+    });
+
+    it('returns true if the default value is false and the user is authorized', () => {
+      const result = isAuthorizedForContact({
+        contact,
+        currentUser,
+        defaultValue: false,
+        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+      });
+
+      expect(result).toEqual(true);
     });
   });
 });
