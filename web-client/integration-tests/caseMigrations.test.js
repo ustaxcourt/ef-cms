@@ -198,7 +198,7 @@ const otherPetitionersCase = {
 const proposedStipDecisionLegacyServed = {
   createdAt: '2018-11-21T20:49:28.192Z',
   docketEntryId: '4070e75c-bfd6-4c25-b822-0f980a6d29fc',
-  docketNumber: '101-18',
+  docketNumber: '156-21',
   documentTitle: 'Proposed Stipulated Decision',
   documentType: 'Proposed Stipulated Decision',
   eventCode: 'PSDE',
@@ -206,6 +206,7 @@ const proposedStipDecisionLegacyServed = {
   index: 6,
   isFileAttached: true,
   isLegacyServed: true,
+  isOnDocketRecord: true,
   processingStatus: 'pending',
   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
 };
@@ -385,6 +386,12 @@ describe('Case migration journey', () => {
         isLegacyServed: true,
         isOnDocketRecord: true,
         pending: true,
+      },
+      {
+        docketEntryId: '4070e75c-bfd6-4c25-b822-0f980a6d29fc',
+        docketNumber: '156-21',
+        documentTitle: 'Proposed Stipulated Decision',
+        documentType: 'Proposed Stipulated Decision',
       },
     ]);
 
