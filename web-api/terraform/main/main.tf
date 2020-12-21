@@ -46,4 +46,5 @@ module "ef-cms_apis" {
   disable_emails             = var.disable_emails
   es_volume_size             = var.es_volume_size
   alert_sns_topic_arn        = data.aws_sns_topic.system_health_alarms.arn
+  bounced_email_recipient    = var.bounced_email_recipient
 }
