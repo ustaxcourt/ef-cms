@@ -13,6 +13,9 @@ const {
 const {
   migrateItems: migration0010,
 } = require('./migrations/0010-remove-trial-date-if-no-trial-session-id');
+const {
+  migrateItems: migration0011,
+} = require('./migrations/0011-remove-incorrect-counsel');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -44,6 +47,7 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0008(items, documentClient);
   applicationContext.logger.info('about to run migration 009');
   items = await migration0009(items, documentClient);
+  items = await migration0011(items, documentClient);
 
   return items;
 };
