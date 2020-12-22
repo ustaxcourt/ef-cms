@@ -1,4 +1,5 @@
 const { filterForPublic } = require('./publicHelpers');
+const { MAX_SEARCH_RESULTS } = require('../../entities/EntityConstants');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
 /**
@@ -31,7 +32,7 @@ exports.casePublicSearchInteractor = async ({
       applicationContext,
       unfiltered: foundCases,
     })
-  ).slice(0, 100);
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return PublicCase.validateRawCollection(unsealedFoundCases, {
     applicationContext,
