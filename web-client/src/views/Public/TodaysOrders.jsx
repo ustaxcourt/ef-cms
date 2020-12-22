@@ -7,11 +7,13 @@ import React from 'react';
 
 export const TodaysOrders = connect(
   {
+    loadMoreTodaysOrdersSequence: sequences.loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     todaysOrdersHelper: state.todaysOrdersHelper,
   },
   function TodaysOrders({
+    loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence,
     todaysOrdersHelper,
   }) {
@@ -85,6 +87,15 @@ export const TodaysOrders = connect(
                 ))}
               </tbody>
             </table>
+          )}
+          {todaysOrdersHelper.showLoadMoreButton && (
+            <Button
+              secondary
+              aria-label={'load more results'}
+              onClick={() => loadMoreTodaysOrdersSequence()}
+            >
+              Load More
+            </Button>
           )}
         </section>
       </>

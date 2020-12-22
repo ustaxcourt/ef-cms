@@ -13,11 +13,13 @@ exports.advancedDocumentSearch = async ({
   docketNumber,
   documentEventCodes,
   endDate,
+  from = 0,
   judge,
   judgeType,
   keyword,
   omitSealed,
   opinionType,
+  overrideResultSize,
   startDate,
 }) => {
   const sourceFields = [
@@ -173,6 +175,7 @@ exports.advancedDocumentSearch = async ({
   const documentQuery = {
     body: {
       _source: sourceFields,
+      from,
       query: {
         bool: {
           must: [
@@ -187,14 +190,14 @@ exports.advancedDocumentSearch = async ({
           ],
         },
       },
-      size: MAX_SEARCH_CLIENT_RESULTS,
+      size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
     },
     index: 'efcms-docket-entry',
   };
 
-  const { results } = await search({
+  const { results, total } = await search({
     applicationContext,
     searchParameters: documentQuery,
   });
-  return results;
+  return { results, totalCount: total };
 };
