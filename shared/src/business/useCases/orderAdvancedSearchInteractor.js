@@ -9,6 +9,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const {
+  MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
 } = require('../../business/entities/EntityConstants');
 const { caseSearchFilter } = require('../utilities/caseFilter');
@@ -61,7 +62,10 @@ exports.orderAdvancedSearchInteractor = async ({
       ...rawSearch,
     });
 
-  const filteredResults = caseSearchFilter(results, authorizedUser);
+  const filteredResults = caseSearchFilter(results, authorizedUser).slice(
+    0,
+    MAX_SEARCH_RESULTS,
+  );
 
   return InternalDocumentSearchResult.validateRawCollection(filteredResults, {
     applicationContext,
