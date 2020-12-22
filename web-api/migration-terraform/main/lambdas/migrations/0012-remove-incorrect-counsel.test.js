@@ -1,4 +1,4 @@
-const { migrateItems } = require('./0011-remove-incorrect-counsel');
+const { migrateItems } = require('./0012-remove-incorrect-counsel');
 
 describe('migrateItems', () => {
   let documentClient;
