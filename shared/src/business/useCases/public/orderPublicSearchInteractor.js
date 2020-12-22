@@ -1,4 +1,5 @@
 const {
+  MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
   ORDER_JUDGE_FIELD,
 } = require('../../entities/EntityConstants');
@@ -45,10 +46,12 @@ exports.orderPublicSearchInteractor = async ({
       omitSealed: true,
     });
 
-  const filteredResults = await filterForPublic({
-    applicationContext,
-    unfiltered: foundDocuments,
-  });
+  const filteredResults = (
+    await filterForPublic({
+      applicationContext,
+      unfiltered: foundDocuments,
+    })
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return PublicDocumentSearchResult.validateRawCollection(filteredResults, {
     applicationContext,
