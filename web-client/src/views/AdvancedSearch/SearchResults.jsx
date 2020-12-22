@@ -9,10 +9,15 @@ import React from 'react';
 
 export const SearchResults = connect(
   {
+    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedSearchHelper: state.advancedSearchHelper,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
-  function SearchResults({ advancedSearchHelper, showMoreResultsSequence }) {
+  function SearchResults({
+    advancedSearchHelper,
+    MAX_SEARCH_RESULTS,
+    showMoreResultsSequence,
+  }) {
     return (
       <div aria-live="polite">
         {advancedSearchHelper.showSearchResults && (
@@ -22,7 +27,7 @@ export const SearchResults = connect(
                 <WarningNotificationComponent
                   alertWarning={{
                     message: 'Narrow your search by adding search terms.',
-                    title: 'Displaying the first 100 matches of your search.',
+                    title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
                   }}
                   dismissable={false}
                   messageNotBold={true}
