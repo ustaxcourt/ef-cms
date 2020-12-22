@@ -67,7 +67,11 @@ export const EligibleCases = connect(
                     <div key={practitioner.userId}>{practitioner.name}</div>
                   ))}
                 </td>
-                <td>{item.respondent}</td>
+                <td>
+                  {item.irsPractitioners.map(practitioner => (
+                    <div key={practitioner.userId}>{practitioner.name}</div>
+                  ))}
+                </td>
                 <td>{item.caseType}</td>
                 <td>
                   <div>{item.calendarNotes}</div>
