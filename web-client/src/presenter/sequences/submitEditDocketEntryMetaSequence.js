@@ -5,6 +5,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
@@ -33,6 +34,7 @@ export const submitEditDocketEntryMetaSequence = [
   chooseMetaTypePathAction,
   {
     courtIssued: [
+      computeJudgeNameWithTitleAction,
       generateCourtIssuedDocumentTitleAction,
       setupUploadMetadataAction,
     ],
