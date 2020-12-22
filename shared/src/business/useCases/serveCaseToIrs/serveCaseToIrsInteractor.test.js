@@ -7,11 +7,13 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -205,6 +207,52 @@ describe('serveCaseToIrsInteractor', () => {
       replaceCoversheet: true,
       useInitialData: true,
     });
+  });
+
+  it.only('should generate another notice of receipt of petition when contactSecondary.address is different from contactPrimary.address', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        address1: '123 Side St',
+        city: 'Somewhere Else',
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner@example.com',
+        name: 'Test Petitioner Secondary',
+        phone: '1234547',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      isPaper: false,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+    expect(
+      applicationContext.getUtilities().getAddressPhoneDiff,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.address,
+    ).toEqual({});
   });
 
   it('should generate a notice of receipt of petition document and upload it to s3', async () => {

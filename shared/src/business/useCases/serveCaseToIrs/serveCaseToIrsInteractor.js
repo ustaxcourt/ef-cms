@@ -246,13 +246,6 @@ exports.serveCaseToIrsInteractor = async ({
         : '',
   };
 
-  const petitionerAddressesDiffer = applicationContext
-    .getUtilities()
-    .getAddressPhoneDiff({
-      newData: caseEntityToUpdate.contactPrimary,
-      oldData: caseEntityToUpdate.contactSecondary,
-    });
-
   let pdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
@@ -273,6 +266,13 @@ exports.serveCaseToIrsInteractor = async ({
             'MMMM D, YYYY',
           ),
       },
+    });
+
+  const petitionerAddressesDiffer = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: caseEntityToUpdate.contactPrimary,
+      oldData: caseEntityToUpdate.contactSecondary,
     });
 
   let secondaryAddress;
@@ -317,7 +317,7 @@ exports.serveCaseToIrsInteractor = async ({
       secondaryPdfDoc,
       secondaryPdfDoc.getPageIndices(),
     );
-    pdfDoc.insertPage(1, coverPageDocumentPages[0]);
+    pdfDoc.insertPage(0, coverPageDocumentPages[0]);
 
     pdfData = await pdfDoc.save();
   }
@@ -329,7 +329,7 @@ exports.serveCaseToIrsInteractor = async ({
     const s3Client = applicationContext.getStorageClient();
 
     const params = {
-      Body: pdfData,
+      Body: Buffer.from(pdfData),
       Bucket: documentsBucket,
       ContentType: 'application/pdf',
       Key: caseConfirmationPdfName,
