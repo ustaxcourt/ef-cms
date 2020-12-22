@@ -44,6 +44,7 @@ export const state = {
     waitingForResponseRequests: 0,
   },
   todaysOpinions: [],
+  todaysOrders: [],
   user: {},
   validationErrors: {},
 };

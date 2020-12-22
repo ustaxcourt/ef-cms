@@ -18,5 +18,7 @@ export const todaysOrdersHelper = (get, applicationContext) => {
       .getJudgeLastName(order.signedJudgeName),
   }));
 
-  return { formattedCurrentDate, formattedOrders };
+  const hasResults = formattedOrders.length > 0;
+
+  return { formattedCurrentDate, formattedOrders, hasResults };
 };
