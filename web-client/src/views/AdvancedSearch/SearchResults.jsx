@@ -21,8 +21,7 @@ export const SearchResults = connect(
               <div className="margin-top-4">
                 <WarningNotificationComponent
                   alertWarning={{
-                    message:
-                      'Narrow your search by adding search terms or excluding partial matches.',
+                    message: 'Narrow your search by adding search terms.',
                     title: 'Displaying the first 100 matches of your search.',
                   }}
                   dismissable={false}
