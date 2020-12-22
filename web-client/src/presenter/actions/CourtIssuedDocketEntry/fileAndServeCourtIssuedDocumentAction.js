@@ -11,16 +11,13 @@ import { state } from 'cerebral';
 export const fileAndServeCourtIssuedDocumentAction = async ({
   applicationContext,
   get,
-  props,
 }) => {
   const docketEntryId = get(state.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
-  const { computedDate } = props;
 
   const documentMeta = {
     ...form,
-    date: computedDate,
     docketEntryId,
     docketNumber,
   };
