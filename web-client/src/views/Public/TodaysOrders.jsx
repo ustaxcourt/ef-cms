@@ -25,7 +25,7 @@ export const TodaysOrders = connect(
             {todaysOrdersHelper.formattedCurrentDate}
           </h1>
 
-          <div className="grid-row">
+          <div className="grid-row margin-bottom-105">
             <div className="tablet:grid-col-10">
               <p>Note: Orders in sealed cases will not be displayed.</p>
             </div>
@@ -107,7 +107,7 @@ export const TodaysOrders = connect(
                   <tbody>
                     {todaysOrdersHelper.formattedOrders.map((order, idx) => (
                       <tr key={idx}>
-                        <td className="padding-5">
+                        <td className="padding-5 margin-top-2">
                           <CaseLink formattedCase={order} />
                         </td>
                         <td className="padding-5">{order.caseCaption}</td>
@@ -131,7 +131,7 @@ export const TodaysOrders = connect(
                         <td className="padding-5">
                           Pages {order.numberOfPages}
                         </td>
-                        <td className="padding-5">
+                        <td className="padding-5 margin-bottom-2">
                           Judge {order.formattedJudgeName}
                         </td>
                       </tr>
