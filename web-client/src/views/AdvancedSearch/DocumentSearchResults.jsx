@@ -8,6 +8,7 @@ import React from 'react';
 
 export const DocumentSearchResults = connect(
   {
+    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
@@ -15,6 +16,7 @@ export const DocumentSearchResults = connect(
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
+    MAX_SEARCH_RESULTS,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
   }) {
@@ -27,7 +29,7 @@ export const DocumentSearchResults = connect(
               <WarningNotificationComponent
                 alertWarning={{
                   message: 'Narrow your search by adding search terms.',
-                  title: 'Displaying the first 100 matches of your search.',
+                  title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
                 }}
                 dismissable={false}
                 scrollToTop={false}
