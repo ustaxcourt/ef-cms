@@ -1,4 +1,5 @@
 const {
+  MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
   ROLES,
 } = require('../../business/entities/EntityConstants');
@@ -97,6 +98,29 @@ describe('orderAdvancedSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0].omitSealed,
     ).toBe(false);
+  });
+
+  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+      caseCaption: 'Samson Workman, Petitioner',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+      docketNumber: '103-19',
+      documentTitle: 'T.C. Opinion for More Candy',
+      documentType: 'T.C. Opinion',
+      eventCode: 'TCOP',
+      signedJudgeName: 'Guy Fieri',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue(maxPlusOneResults);
+
+    const results = await orderAdvancedSearchInteractor({
+      applicationContext,
+      keyword: 'keyword',
+      petitionerName: 'test person',
+    });
+
+    expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('searches for documents that are of type orders', async () => {
