@@ -20,19 +20,23 @@ export const TodaysOrders = connect(
         <BigHeader text="Today’s Orders" />
 
         <section className="usa-section grid-container todays-orders">
-          <h1>{todaysOrdersHelper.formattedCurrentDate}</h1>
+          <h1 className="margin-bottom-0">
+            {todaysOrdersHelper.formattedCurrentDate}
+          </h1>
 
           <div className="grid-row">
             <div className="tablet:grid-col-10">
               <p>Note: Orders in sealed cases will not be displayed.</p>
             </div>
-            <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
-              {todaysOrdersHelper.formattedOrders.length} Order(s)
-            </div>
+            {todaysOrdersHelper.formattedOrders.length > 0 && (
+              <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
+                {todaysOrdersHelper.formattedOrders.length} Order(s)
+              </div>
+            )}
           </div>
 
           {todaysOrdersHelper.formattedOrders.length === 0 && (
-            <h3>There are no orders today.</h3>
+            <h3>No orders have been issued today.</h3>
           )}
 
           {todaysOrdersHelper.formattedOrders.length > 0 && (
