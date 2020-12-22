@@ -28,18 +28,18 @@ export const TodaysOrders = connect(
             <div className="tablet:grid-col-10">
               <p>Note: Orders in sealed cases will not be displayed.</p>
             </div>
-            {todaysOrdersHelper.formattedOrders.length > 0 && (
+            {todaysOrdersHelper.hasResults && (
               <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
                 {todaysOrdersHelper.formattedOrders.length} Order(s)
               </div>
             )}
           </div>
 
-          {todaysOrdersHelper.formattedOrders.length === 0 && (
+          {!todaysOrdersHelper.hasResults && (
             <h3>No orders have been issued today.</h3>
           )}
 
-          {todaysOrdersHelper.formattedOrders.length > 0 && (
+          {todaysOrdersHelper.hasResults && (
             <table
               aria-label="todays orders"
               className="usa-table gray-header todays-orders responsive-table row-border-only"
