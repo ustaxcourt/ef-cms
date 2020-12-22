@@ -77,7 +77,7 @@ describe('Docket clerk creates and serves an order (should be viewable to the pu
   docketClerkServesDocument(testClient, 1);
 });
 
-describe('Docket clerk creates and serves a transcript (should not be viewable to the public)', () => {
+describe('Docket clerk creates a transcript but does not serve it (transcripts are unservable, should not be viewable to the public)', () => {
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order of Dismissal',
@@ -89,7 +89,6 @@ describe('Docket clerk creates and serves a transcript (should not be viewable t
     month: '01',
     year: '2019',
   });
-  docketClerkServesDocument(testClient, 2);
 });
 
 describe('Docket clerk creates and serves a Stipulated Decision (should not be viewable to the public)', () => {

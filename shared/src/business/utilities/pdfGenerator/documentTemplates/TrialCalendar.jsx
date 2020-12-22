@@ -2,7 +2,7 @@ const React = require('react');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 const { ReportsHeader } = require('../components/ReportsHeader.jsx');
 
-export const TrialCalendar = ({ cases, sessionDetail }) => {
+export const TrialCalendar = ({ cases = [], sessionDetail }) => {
   return (
     <>
       <PrimaryHeader />
@@ -94,28 +94,33 @@ export const TrialCalendar = ({ cases, sessionDetail }) => {
           </tr>
         </thead>
         <tbody>
-          {cases &&
-            cases.map(caseDetail => {
-              return (
-                <tr key={caseDetail.docketNumberWithSuffix}>
-                  <td>{caseDetail.docketNumberWithSuffix}</td>
-                  <td>{caseDetail.caseTitle}</td>
-                  <td>
-                    {caseDetail.petitionerCounsel &&
-                      caseDetail.petitionerCounsel.map((counsel, idx) => (
-                        <div key={idx}>{counsel}</div>
-                      ))}
-                  </td>
-                  <td>
-                    {caseDetail.respondentCounsel &&
-                      caseDetail.respondentCounsel.map((counsel, idx) => (
-                        <div key={idx}>{counsel}</div>
-                      ))}
-                  </td>
-                  <td>{caseDetail.calendarNotes}</td>
-                </tr>
-              );
-            })}
+          {cases.map((caseDetail, index) => (
+            <tr key={`${caseDetail.docketNumberWithSuffix}-${index}`}>
+              <td>{caseDetail.docketNumberWithSuffix}</td>
+              <td>{caseDetail.caseTitle}</td>
+              <td>
+                {caseDetail.petitionerCounsel &&
+                  caseDetail.petitionerCounsel.map((counsel, idx) => (
+                    <div
+                      key={`counsel-${caseDetail.docketNumberWithSuffix}-${idx}`}
+                    >
+                      {counsel}
+                    </div>
+                  ))}
+              </td>
+              <td>
+                {caseDetail.respondentCounsel &&
+                  caseDetail.respondentCounsel.map((counsel, idx) => (
+                    <div
+                      key={`rcounsel-${caseDetail.docketNumberWithSuffix}-${idx}`}
+                    >
+                      {counsel}
+                    </div>
+                  ))}
+              </td>
+              <td>{caseDetail.calendarNotes}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
