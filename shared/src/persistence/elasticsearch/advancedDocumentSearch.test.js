@@ -193,6 +193,20 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
+  it('does a search for keyword with special characters removed', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: orderEventCodes,
+      keyword: 'Guy Fieri$^!(',
+    });
+
+    expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
+      ...orderQueryParams,
+      getKeywordQueryParams('Guy Fieri'),
+      getCaseMappingQueryParams(), // match all parents
+    ]);
+  });
+
   it('does a search for a signed judge when the judgeType is signed judge', async () => {
     await advancedDocumentSearch({
       applicationContext,
@@ -276,7 +290,7 @@ describe('advancedDocumentSearch', () => {
     );
   });
 
-  it('does a search for a judge when the judgeType is  judge', async () => {
+  it('does a search for a judge when the judgeType is judge', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
