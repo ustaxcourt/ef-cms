@@ -50,7 +50,7 @@ export const unauthedUserViewsCaseDetail = test => {
         hasDocument: true,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
-        showServed: true,
+        showServed: false,
       },
       {
         descriptionDisplay:
