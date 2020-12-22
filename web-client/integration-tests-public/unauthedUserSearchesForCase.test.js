@@ -89,7 +89,7 @@ describe('Docket clerk creates and serves a transcript (should not be viewable t
     month: '01',
     year: '2019',
   });
-  docketClerkServesDocument(testClient, 2);
+  // docketClerkServesDocument(testClient, 2);
 });
 
 describe('Docket clerk creates and serves a Stipulated Decision (should not be viewable to the public)', () => {
