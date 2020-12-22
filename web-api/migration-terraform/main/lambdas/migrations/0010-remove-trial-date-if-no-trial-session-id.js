@@ -77,6 +77,12 @@ const migrateItems = async (items, documentClient) => {
         }
       }
 
+      // There are case records in dynamo that have docketEntries, this is
+      // either a result of an old migration that saved docketEntries
+      // improperly on the case or old data that has never been migrated
+      // to remove that property.
+      item.docketEntries = undefined;
+
       new Case(
         { ...item },
         {

@@ -255,22 +255,20 @@ const formattedTrialSessionDetails = ({
   formattedTrialCity = trialLocation || 'Not assigned';
   formattedAssociatedJudge = judgeName || 'Not assigned';
 
-  if (trialDate) {
-    if (trialTime) {
-      formattedTrialDate = applicationContext
-        .getUtilities()
-        .formatDateString(trialDate, 'YYYY-MM-DD');
-      formattedTrialDate += `T${trialTime}:00`;
-      formattedTrialDate = applicationContext
-        .getUtilities()
-        .formatDateString(formattedTrialDate, 'DATE_TIME');
-    } else {
-      formattedTrialDate = applicationContext
-        .getUtilities()
-        .formatDateString(trialDate, 'MMDDYY');
-    }
-  } else {
+  if (!trialDate) {
     formattedTrialDate = 'Not scheduled';
+  } else if (trialTime) {
+    formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(trialDate, 'YYYY-MM-DD');
+    formattedTrialDate += `T${trialTime}:00`;
+    formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedTrialDate, 'DATE_TIME');
+  } else {
+    formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(trialDate, 'MMDDYY');
   }
 
   return {

@@ -2,6 +2,7 @@ import { chooseMetaTypePathAction } from '../actions/EditDocketRecordEntry/choos
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/generateTitlePreviewAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -35,6 +36,7 @@ export const gotoEditDocketEntryMeta = [
       getUsersInSectionAction({ section: 'judge' }),
       getFilterCurrentJudgeUsersAction,
       setUsersByKeyAction('judges'),
+      computeJudgeNameWithTitleAction,
       generateCourtIssuedDocumentTitleAction,
     ],
     document: [updateDocketEntryWizardDataAction, generateTitlePreviewAction],

@@ -504,6 +504,7 @@ jobs:
             echo "export DESTINATION_TABLE=$(./get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export BOUNCED_EMAIL_RECIPIENT=$(./get-bounced-email-recipient.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -549,6 +550,7 @@ jobs:
              -e "ZONE_NAME=${ZONE_NAME}" \
              -e "DISABLE_EMAILS=${DISABLE_EMAILS}" \
              -e "ES_VOLUME_SIZE=${ES_VOLUME_SIZE}" \
+             -e "BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'

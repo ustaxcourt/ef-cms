@@ -26,10 +26,12 @@ exports.casePublicSearchInteractor = async ({
       yearFiledMin,
     });
 
-  const unsealedFoundCases = await filterForPublic({
-    applicationContext,
-    unfiltered: foundCases,
-  });
+  const unsealedFoundCases = (
+    await filterForPublic({
+      applicationContext,
+      unfiltered: foundCases,
+    })
+  ).slice(0, 100);
 
   return PublicCase.validateRawCollection(unsealedFoundCases, {
     applicationContext,
