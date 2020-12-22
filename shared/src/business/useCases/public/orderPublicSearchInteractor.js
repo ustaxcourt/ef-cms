@@ -1,6 +1,7 @@
 const {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
+  ORDER_JUDGE_FIELD,
 } = require('../../entities/EntityConstants');
 const {
   PublicDocumentSearchResult,
@@ -41,7 +42,7 @@ exports.orderPublicSearchInteractor = async ({
       applicationContext,
       ...rawSearch,
       documentEventCodes: ORDER_EVENT_CODES,
-      judgeType: 'signedJudgeName',
+      judgeType: ORDER_JUDGE_FIELD,
       omitSealed: true,
     });
 
