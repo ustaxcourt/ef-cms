@@ -22,6 +22,9 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     docketNumber,
   };
 
+  console.log(get(state.judgeWithTitle));
+  console.log('documentMeta for the thing', documentMeta);
+
   const result = await applicationContext
     .getUseCases()
     .fileAndServeCourtIssuedDocumentInteractor({
