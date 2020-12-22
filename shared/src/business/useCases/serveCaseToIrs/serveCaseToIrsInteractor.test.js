@@ -209,7 +209,7 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
-  it.only('should generate another notice of receipt of petition when contactSecondary.address is different from contactPrimary.address', async () => {
+  it('should generate a second notice of receipt of petition when contactSecondary.address is different from contactPrimary.address', async () => {
     mockCase = {
       ...MOCK_CASE,
       contactSecondary: {
@@ -225,6 +225,7 @@ describe('serveCaseToIrsInteractor', () => {
         title: 'Executor',
       },
       isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
@@ -252,7 +253,46 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
         .calls[1][0].data.address,
-    ).toEqual({});
+    ).toMatchObject({
+      address1: '123 Side St',
+      name: 'Test Petitioner Secondary',
+    });
+  });
+
+  it('should NOT generate a second notice of receipt of petition when contactSecondary.address is NOT different from contactPrimary.address', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...MOCK_CASE.contactPrimary,
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+    expect(
+      applicationContext.getUtilities().getAddressPhoneDiff,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
   });
 
   it('should generate a notice of receipt of petition document and upload it to s3', async () => {
