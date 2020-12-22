@@ -577,6 +577,9 @@ const {
   getTodaysOpinionsInteractor,
 } = require('../../shared/src/business/useCases/public/getTodaysOpinionsInteractor');
 const {
+  getTodaysOrdersInteractor,
+} = require('../../shared/src/business/useCases/public/getTodaysOrdersInteractor');
+const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
 const {
@@ -1589,6 +1592,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,
         getTodaysOpinionsInteractor,
+        getTodaysOrdersInteractor,
         getTrialSessionDetailsInteractor,
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,

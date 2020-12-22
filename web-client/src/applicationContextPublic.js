@@ -40,6 +40,7 @@ import { getJudgeLastName } from '../../shared/src/business/utilities/getFormatt
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
+import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -64,6 +65,7 @@ const allUseCases = {
   getHealthCheckInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
+  getTodaysOrdersInteractor,
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
   validateCaseAdvancedSearchInteractor,
