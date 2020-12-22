@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { MAX_SEARCH_RESULTS } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -28,12 +29,12 @@ exports.getPractitionersByNameInteractor = async ({
     throw new Error('Name must be provided to search');
   }
 
-  const foundUsers = await applicationContext
-    .getPersistenceGateway()
-    .getPractitionersByName({
+  const foundUsers = (
+    await applicationContext.getPersistenceGateway().getPractitionersByName({
       applicationContext,
       name,
-    });
+    })
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return foundUsers.map(foundUser => ({
     admissionsStatus: foundUser.admissionsStatus,
