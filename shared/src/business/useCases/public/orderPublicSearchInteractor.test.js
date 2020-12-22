@@ -2,9 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  MAX_SEARCH_RESULTS,
+  ORDER_EVENT_CODES,
+} = require('../../entities/EntityConstants');
+const {
   orderPublicSearchInteractor,
 } = require('./orderPublicSearchInteractor');
-const { ORDER_EVENT_CODES } = require('../../entities/EntityConstants');
 
 describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
@@ -62,6 +65,29 @@ describe('orderPublicSearchInteractor', () => {
         signedJudgeName: 'Guy Fieri',
       },
     ]);
+  });
+
+  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+      caseCaption: 'Samson Workman, Petitioner',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+      docketNumber: '103-19',
+      documentTitle: 'Order for More Candy',
+      documentType: 'Order',
+      eventCode: 'O',
+      signedJudgeName: 'Guy Fieri',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue(maxPlusOneResults);
+
+    const results = await orderPublicSearchInteractor({
+      applicationContext,
+      keyword: 'fish',
+      startDate: '2001-01-01',
+    });
+
+    expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('throws an error if the search results do not validate', async () => {
