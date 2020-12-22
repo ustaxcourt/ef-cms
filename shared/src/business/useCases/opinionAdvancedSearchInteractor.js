@@ -50,7 +50,7 @@ exports.opinionAdvancedSearchInteractor = async ({
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const results = (
+  const { results } = (
     await applicationContext.getPersistenceGateway().advancedDocumentSearch({
       applicationContext,
       documentEventCodes: OPINION_EVENT_CODES,

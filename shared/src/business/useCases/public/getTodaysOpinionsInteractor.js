@@ -18,13 +18,14 @@ exports.getTodaysOpinionsInteractor = async ({ applicationContext }) => {
   const currentDateStart = createStartOfDayISO({ day, month, year });
   const currentDateEnd = createEndOfDayISO({ day, month, year });
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: OPINION_EVENT_CODES,
-      endDate: currentDateEnd,
-      judgeType: 'judge',
-      startDate: currentDateStart,
-    });
+  const {
+    results,
+  } = await applicationContext.getPersistenceGateway().advancedDocumentSearch({
+    applicationContext,
+    documentEventCodes: OPINION_EVENT_CODES,
+    endDate: currentDateEnd,
+    judgeType: 'judge',
+    startDate: currentDateStart,
+  });
+  return results;
 };
