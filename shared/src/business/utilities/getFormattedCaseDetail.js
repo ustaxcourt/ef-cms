@@ -505,6 +505,8 @@ const formatCase = (applicationContext, caseDetail) => {
   result.canConsolidate = caseEntity.canConsolidate();
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
+  result.showPrintConfirmationLink =
+    result.irsSendDate && !result.docketEntries.some(d => d.isLegacy);
 
   if (result.consolidatedCases) {
     result.consolidatedCases = result.consolidatedCases.map(
