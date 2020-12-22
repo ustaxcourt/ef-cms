@@ -5,31 +5,40 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const TodaysOpinions = connect(
+export const TodaysOrders = connect(
   {
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
-    todaysOpinionsHelper: state.todaysOpinionsHelper,
+    todaysOrdersHelper: state.todaysOrdersHelper,
   },
-  function TodaysOpinions({
+  function TodaysOrders({
     openCaseDocumentDownloadUrlSequence,
-    todaysOpinionsHelper,
+    todaysOrdersHelper,
   }) {
     return (
       <>
-        <BigHeader text="Today’s Opinions" />
+        <BigHeader text="Today’s Orders" />
 
-        <section className="usa-section grid-container todays-opinions">
-          <h1>{todaysOpinionsHelper.formattedCurrentDate}</h1>
+        <section className="usa-section grid-container todays-orders">
+          <h1>{todaysOrdersHelper.formattedCurrentDate}</h1>
 
-          {todaysOpinionsHelper.formattedOpinions.length === 0 && (
-            <p>There are no opinions today.</p>
+          <div className="grid-row">
+            <div className="tablet:grid-col-10">
+              <p>Note: Orders in sealed cases will not be displayed.</p>
+            </div>
+            <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
+              {todaysOrdersHelper.formattedOrders.length} Order(s)
+            </div>
+          </div>
+
+          {todaysOrdersHelper.formattedOrders.length === 0 && (
+            <h3>There are no orders today.</h3>
           )}
 
-          {todaysOpinionsHelper.formattedOpinions.length > 0 && (
+          {todaysOrdersHelper.formattedOrders.length > 0 && (
             <table
-              aria-label="todays opinions"
-              className="usa-table gray-header todays-opinions responsive-table row-border-only"
+              aria-label="todays orders"
+              className="usa-table gray-header todays-orders responsive-table row-border-only"
             >
               <thead>
                 <tr>
@@ -37,39 +46,37 @@ export const TodaysOpinions = connect(
                   <th aria-hidden="true" />
                   <th aria-label="Docket Number">Docket No.</th>
                   <th>Case Title</th>
-                  <th>Opinion Type</th>
+                  <th>Order Type</th>
                   <th>Pages</th>
-                  <th>Date</th>
                   <th>Judge</th>
                 </tr>
               </thead>
               <tbody>
-                {todaysOpinionsHelper.formattedOpinions.map((opinion, idx) => (
+                {todaysOrdersHelper.formattedOrders.map((order, idx) => (
                   <tr key={idx}>
                     <td className="center-column">{idx + 1}</td>
                     <td aria-hidden="true"></td>
                     <td>
-                      <CaseLink formattedCase={opinion} />
+                      <CaseLink formattedCase={order} />
                     </td>
-                    <td>{opinion.caseCaption}</td>
+                    <td>{order.caseCaption}</td>
                     <td>
                       <Button
                         link
-                        aria-label={`View PDF: ${opinion.descriptionDisplay}`}
+                        aria-label={`View PDF: ${order.descriptionDisplay}`}
                         onClick={() => {
                           openCaseDocumentDownloadUrlSequence({
-                            docketEntryId: opinion.docketEntryId,
-                            docketNumber: opinion.docketNumber,
+                            docketEntryId: order.docketEntryId,
+                            docketNumber: order.docketNumber,
                             isPublic: true,
                           });
                         }}
                       >
-                        {opinion.documentType}
+                        {order.documentType}
                       </Button>
                     </td>
-                    <td>{opinion.numberOfPages}</td>
-                    <td>{opinion.formattedFilingDate}</td>
-                    <td>{opinion.formattedJudgeName}</td>
+                    <td>{order.numberOfPages}</td>
+                    <td>{order.formattedJudgeName}</td>
                   </tr>
                 ))}
               </tbody>
