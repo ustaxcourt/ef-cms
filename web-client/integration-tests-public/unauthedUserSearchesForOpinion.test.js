@@ -7,7 +7,8 @@ import { unauthedUserSearchesForOpinionByKeyword } from './journey/unauthedUserS
 const test = setupTest();
 const testClient = setupTestClient();
 
-describe('Unauthed user searches for an opinion by keyword', () => {
+// Temporarily disabled for story 7387
+describe.skip('Unauthed user searches for an opinion by keyword', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserInvalidSearchForOpinion(test);
   unauthedUserSearchesForOpinionByKeyword(test, testClient);

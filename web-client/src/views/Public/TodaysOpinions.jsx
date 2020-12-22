@@ -29,7 +29,7 @@ export const TodaysOpinions = connect(
           {todaysOpinionsHelper.formattedOpinions.length > 0 && (
             <table
               aria-label="todays opinions"
-              className="usa-table todays-opinions responsive-table row-border-only"
+              className="usa-table gray-header todays-opinions responsive-table row-border-only"
             >
               <thead>
                 <tr>

@@ -18,6 +18,8 @@ const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
 const SERVED_PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
+const ORDER_JUDGE_FIELD = 'signedJudgeName';
+
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
@@ -205,6 +207,9 @@ const SCENARIOS = [
   'Nonstandard F',
   'Nonstandard G',
   'Nonstandard H',
+  'Nonstandard I',
+  'Nonstandard J',
+  'Nonstandard K',
   'Type A',
   'Type B',
   'Type C',
@@ -1164,7 +1169,8 @@ module.exports = deepFreeze({
   MAX_ELASTICSEARCH_PAGINATION: 10000,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
-  MAX_SEARCH_RESULTS: 200,
+  MAX_SEARCH_CLIENT_RESULTS: 200,
+  MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
   MINUTE_ENTRIES_MAP,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
@@ -1176,6 +1182,7 @@ module.exports = deepFreeze({
   ORDER_TYPES,
   OTHER_FILER_TYPES,
   OTHER_TYPES,
+  ORDER_JUDGE_FIELD,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PETITIONS_SECTION,

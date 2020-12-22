@@ -88,6 +88,7 @@ const {
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
   CASE_STATUS_TYPES,
+  MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   SESSION_STATUS_GROUPS,
 } = require('../../shared/src/business/entities/EntityConstants');
@@ -576,6 +577,9 @@ const {
 const {
   getTodaysOpinionsInteractor,
 } = require('../../shared/src/business/useCases/public/getTodaysOpinionsInteractor');
+const {
+  getTodaysOrdersInteractor,
+} = require('../../shared/src/business/useCases/public/getTodaysOrdersInteractor');
 const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
@@ -1295,6 +1299,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
+      MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
         status => status !== CASE_STATUS_TYPES.closed,
@@ -1589,6 +1594,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,
         getTodaysOpinionsInteractor,
+        getTodaysOrdersInteractor,
         getTrialSessionDetailsInteractor,
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,

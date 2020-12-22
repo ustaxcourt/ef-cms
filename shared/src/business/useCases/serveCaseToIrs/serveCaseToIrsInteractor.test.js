@@ -7,11 +7,13 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -205,6 +207,92 @@ describe('serveCaseToIrsInteractor', () => {
       replaceCoversheet: true,
       useInitialData: true,
     });
+  });
+
+  it('should generate a second notice of receipt of petition when contactSecondary.address is different from contactPrimary.address', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        address1: '123 Side St',
+        city: 'Somewhere Else',
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner@example.com',
+        name: 'Test Petitioner Secondary',
+        phone: '1234547',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+    expect(
+      applicationContext.getUtilities().getAddressPhoneDiff,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition.mock
+        .calls[1][0].data.address,
+    ).toMatchObject({
+      address1: '123 Side St',
+      name: 'Test Petitioner Secondary',
+    });
+  });
+
+  it('should NOT generate a second notice of receipt of petition when contactSecondary.address is NOT different from contactPrimary.address', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...MOCK_CASE.contactPrimary,
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+    expect(
+      applicationContext.getUtilities().getAddressPhoneDiff,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
   });
 
   it('should generate a notice of receipt of petition document and upload it to s3', async () => {

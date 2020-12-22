@@ -37,7 +37,7 @@ export const AddressLabel = ({
       <div>
         {city}, {state} {postalCode}
       </div>
-      {!address3 && <div>{countryName}</div>}
+      <div>{countryName}</div>
     </div>
   );
 };

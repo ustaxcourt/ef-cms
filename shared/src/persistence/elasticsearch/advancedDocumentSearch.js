@@ -1,5 +1,6 @@
 const {
-  MAX_SEARCH_RESULTS,
+  MAX_SEARCH_CLIENT_RESULTS,
+  ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const {
   removeAdvancedSyntaxSymbols,
@@ -120,7 +121,7 @@ exports.advancedDocumentSearch = async ({
           },
         },
       });
-    } else if (judgeType === 'signedJudgeName') {
+    } else if (judgeType === ORDER_JUDGE_FIELD) {
       docketEntryQueryParams.push({
         bool: {
           should: {
@@ -186,7 +187,7 @@ exports.advancedDocumentSearch = async ({
           ],
         },
       },
-      size: MAX_SEARCH_RESULTS,
+      size: MAX_SEARCH_CLIENT_RESULTS,
     },
     index: 'efcms-docket-entry',
   };
