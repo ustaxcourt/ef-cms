@@ -10,6 +10,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const {
   ORDER_EVENT_CODES,
+  ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { caseSearchFilter } = require('../utilities/caseFilter');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -56,7 +57,7 @@ exports.orderAdvancedSearchInteractor = async ({
     .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: ORDER_EVENT_CODES,
-      judgeType: 'signedJudgeName',
+      judgeType: ORDER_JUDGE_FIELD,
       omitSealed,
       ...rawSearch,
     });

@@ -3,6 +3,7 @@ const {
 } = require('../../business/utilities/aggregateCommonQueryParams');
 const {
   MAX_SEARCH_RESULTS,
+  ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
@@ -120,7 +121,7 @@ exports.advancedDocumentSearch = async ({
           },
         },
       });
-    } else if (judgeType === 'signedJudgeName') {
+    } else if (judgeType === ORDER_JUDGE_FIELD) {
       docketEntryQueryParams.push({
         bool: {
           should: {

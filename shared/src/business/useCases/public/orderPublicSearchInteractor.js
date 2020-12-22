@@ -1,9 +1,12 @@
 const {
+  ORDER_EVENT_CODES,
+  ORDER_JUDGE_FIELD,
+} = require('../../entities/EntityConstants');
+const {
   PublicDocumentSearchResult,
 } = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 const { filterForPublic } = require('./publicHelpers');
-const { ORDER_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * orderPublicSearchInteractor
@@ -38,7 +41,7 @@ exports.orderPublicSearchInteractor = async ({
       applicationContext,
       ...rawSearch,
       documentEventCodes: ORDER_EVENT_CODES,
-      judgeType: 'signedJudgeName',
+      judgeType: ORDER_JUDGE_FIELD,
       omitSealed: true,
     });
 
