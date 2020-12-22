@@ -36,6 +36,7 @@ CourtIssuedDocumentTypeB.schema = {
   documentType: JoiValidationConstants.STRING.required(),
   freeText: JoiValidationConstants.STRING.optional(),
   judge: JoiValidationConstants.STRING.required(),
+  judgeWithTitle: JoiValidationConstants.STRING.optional(),
 };
 
 joiValidationDecorator(
