@@ -1,5 +1,5 @@
 const {
-  MAX_SEARCH_RESULTS,
+  MAX_SEARCH_CLIENT_RESULTS,
   ROLES,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
@@ -41,7 +41,7 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
         },
       },
 
-      size: MAX_SEARCH_RESULTS,
+      size: MAX_SEARCH_CLIENT_RESULTS,
     },
     index: 'efcms-user',
   };
