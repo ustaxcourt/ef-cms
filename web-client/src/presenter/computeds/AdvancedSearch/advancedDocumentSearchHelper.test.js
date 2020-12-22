@@ -47,7 +47,7 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Opinion Type',
       isPublic: true,
-      manyResults: manyResultsOverride / 2,
+      manyResults: manyResultsOverride,
       showManyResultsMessage: false,
       showSealedIcon: false,
     });
@@ -70,7 +70,7 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Order',
       isPublic: true,
-      manyResults: manyResultsOverride / 2,
+      manyResults: manyResultsOverride,
       showManyResultsMessage: false,
       showSealedIcon: true,
     });
@@ -143,7 +143,7 @@ describe('advancedDocumentSearchHelper', () => {
     });
 
     expect(result).toMatchObject({
-      manyResults: manyResultsOverride / 2,
+      manyResults: manyResultsOverride,
       searchResultsCount: 1,
       showLoadMore: false,
       showManyResultsMessage: false,
@@ -202,7 +202,7 @@ describe('advancedDocumentSearchHelper', () => {
     });
 
     expect(result).toMatchObject({
-      manyResults: manyResultsOverride / 2,
+      manyResults: manyResultsOverride,
       searchResultsCount: 4,
       showLoadMore: false,
       showManyResultsMessage: true,

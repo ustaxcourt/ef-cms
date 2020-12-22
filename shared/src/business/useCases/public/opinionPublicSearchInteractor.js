@@ -1,8 +1,11 @@
 const {
+  MAX_SEARCH_RESULTS,
+  OPINION_EVENT_CODES,
+} = require('../../entities/EntityConstants');
+const {
   PublicDocumentSearchResult,
 } = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
-const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * opinionPublicSearchInteractor
@@ -33,14 +36,14 @@ exports.opinionPublicSearchInteractor = async ({
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const results = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
+  const results = (
+    await applicationContext.getPersistenceGateway().advancedDocumentSearch({
       applicationContext,
       ...rawSearch,
       documentEventCodes: OPINION_EVENT_CODES,
       judgeType: 'judge',
-    });
+    })
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return PublicDocumentSearchResult.validateRawCollection(results, {
     applicationContext,
