@@ -263,6 +263,27 @@ describe('selectDocumentTypeHelper', () => {
         textInputLabel2: 'Decision Notes',
       });
     });
+
+    it('should return correct data for Nonstandard K document scenario', () => {
+      const mockCategoryInformation = {
+        labelFreeText: 'Some Great Notes',
+        ordinalField: 'What iteration is this filing?',
+        scenario: 'Nonstandard K',
+      };
+
+      const result = getOptionsForCategory({
+        applicationContext,
+        caseDetail: MOCK_CASE,
+        categoryInformation: mockCategoryInformation,
+      });
+
+      expect(result).toEqual({
+        ordinalField: 'What iteration is this filing?',
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: 'Some Great Notes',
+      });
+    });
   });
 
   describe('getPreviouslyFiledDocuments', () => {
