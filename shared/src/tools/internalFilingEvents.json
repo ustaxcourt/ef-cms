@@ -3010,11 +3010,11 @@
       "documentType": "Supplement To [anything]",
       "category": "Supplement",
       "eventCode": "SPMT",
-      "scenario": "Nonstandard B",
+      "scenario": "Nonstandard K",
       "labelPreviousDocument": "",
       "labelFreeText": "What is this supplement for?",
       "labelFreeText2": "",
-      "ordinalField": ""
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
@@ -3032,11 +3032,11 @@
       "documentType": "Supplemental [anything]",
       "category": "Supplement",
       "eventCode": "SATL",
-      "scenario": "Nonstandard B",
+      "scenario": "Nonstandard K",
       "labelPreviousDocument": "",
       "labelFreeText": "What is this supplemental for?",
       "labelFreeText2": "",
-      "ordinalField": ""
+      "ordinalField": "What Iteration Is this filing?"
     }
   ],
   "Supporting Document": [
