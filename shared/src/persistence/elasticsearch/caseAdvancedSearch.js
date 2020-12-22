@@ -2,7 +2,7 @@ const {
   aggregateCommonQueryParams,
 } = require('../../business/utilities/aggregateCommonQueryParams');
 const {
-  MAX_SEARCH_RESULTS,
+  MAX_SEARCH_CLIENT_RESULTS,
 } = require('../../business/entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { search } = require('./searchClient');
@@ -44,7 +44,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
             must: [...exactMatchesQuery, ...commonQuery],
           },
         },
-        size: MAX_SEARCH_RESULTS,
+        size: MAX_SEARCH_CLIENT_RESULTS,
       },
       index: 'efcms-case',
     },
@@ -61,7 +61,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
               must: [...nonExactMatchesQuery, ...commonQuery],
             },
           },
-          size: MAX_SEARCH_RESULTS,
+          size: MAX_SEARCH_CLIENT_RESULTS,
         },
         index: 'efcms-case',
       },

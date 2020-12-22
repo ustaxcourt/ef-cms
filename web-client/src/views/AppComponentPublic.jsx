@@ -10,6 +10,7 @@ import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
 import { TodaysOpinions } from './Public/TodaysOpinions';
+import { TodaysOrders } from './Public/TodaysOrders';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -26,6 +27,7 @@ const pages = {
   PublicPrintableDocketRecord,
   PublicSearch,
   TodaysOpinions,
+  TodaysOrders,
 };
 
 /**
