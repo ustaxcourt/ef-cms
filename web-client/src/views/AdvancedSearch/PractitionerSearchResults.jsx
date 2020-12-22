@@ -21,8 +21,8 @@ export const PractitionerSearchResults = connect(
             {advancedSearchHelper.showManyResultsMessage && (
               <WarningNotificationComponent
                 alertWarning={{
-                  message:
-                    'Your search has a high number of matching results. Refine your search for more accurate results.',
+                  message: 'Narrow your search by adding search terms.',
+                  title: 'Displaying the first 100 matches of your search.',
                 }}
                 dismissable={false}
                 scrollToTop={false}
