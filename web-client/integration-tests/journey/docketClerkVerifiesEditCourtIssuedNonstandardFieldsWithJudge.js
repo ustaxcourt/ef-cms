@@ -3,6 +3,6 @@ export const docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge = test
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
     expect(test.getState('form.freeText')).toEqual('for Something');
-    expect(test.getState('form.judge')).toEqual('Judge Buch');
+    expect(test.getState('form.judge')).toEqual('Buch');
   });
 };
