@@ -1,8 +1,10 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
+import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { fileAndServeCourtIssuedDocumentAction } from '../actions/CourtIssuedDocketEntry/fileAndServeCourtIssuedDocumentAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
+import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
@@ -32,6 +34,8 @@ export const serveCourtIssuedDocumentFromDocketEntrySequence = [
     success: showProgressSequenceDecorator([
       stopShowValidationAction,
       clearAlertsAction,
+      computeJudgeNameWithTitleAction,
+      generateCourtIssuedDocumentTitleAction,
       fileAndServeCourtIssuedDocumentAction,
       setPdfPreviewUrlAction,
       setAlertSuccessAction,
