@@ -18,6 +18,8 @@ const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
 const SERVED_PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
+const ORDER_JUDGE_FIELD = 'signedJudgeName';
+
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
@@ -1176,6 +1178,7 @@ module.exports = deepFreeze({
   ORDER_TYPES,
   OTHER_FILER_TYPES,
   OTHER_TYPES,
+  ORDER_JUDGE_FIELD,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PETITIONS_SECTION,

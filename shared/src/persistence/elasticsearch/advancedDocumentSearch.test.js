@@ -1,8 +1,10 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
+const {
+  ORDER_JUDGE_FIELD,
+} = require('../../business/entities/EntityConstants');
 const { advancedDocumentSearch } = require('./advancedDocumentSearch');
-
 const getSource = judge => ({
   includes: [
     'caseCaption',
@@ -212,12 +214,12 @@ describe('advancedDocumentSearch', () => {
       applicationContext,
       documentEventCodes: orderEventCodes,
       judge: 'Judge Guy Fieri',
-      judgeType: 'signedJudgeName',
+      judgeType: ORDER_JUDGE_FIELD,
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
       ...orderQueryParams,
-      getCaseMappingQueryParams(null, 'signedJudgeName'), // match all parents
+      getCaseMappingQueryParams(null, ORDER_JUDGE_FIELD), // match all parents
       {
         bool: {
           should: {
@@ -318,12 +320,12 @@ describe('advancedDocumentSearch', () => {
       applicationContext,
       docketNumber: '101-20',
       documentEventCodes: orderEventCodes,
-      judgeType: 'signedJudgeName',
+      judgeType: ORDER_JUDGE_FIELD,
     });
 
     expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
       ...orderQueryParams,
-      getCaseMappingQueryParams(null, 'signedJudgeName', '101-20'), // match all parents
+      getCaseMappingQueryParams(null, ORDER_JUDGE_FIELD, '101-20'), // match all parents
     ]);
   });
 
@@ -419,12 +421,12 @@ describe('advancedDocumentSearch', () => {
         applicationContext,
         documentEventCodes: opinionEventCodes,
         judge: 'Legacy Guy Fieri',
-        judgeType: 'signedJudgeName',
+        judgeType: ORDER_JUDGE_FIELD,
       });
 
       expect(searchStub.mock.calls[0][0].body.query.bool.must).toEqual([
         ...opinionQueryParams,
-        getCaseMappingQueryParams(null, 'signedJudgeName'), // match all parents
+        getCaseMappingQueryParams(null, ORDER_JUDGE_FIELD), // match all parents
         {
           bool: {
             should: {

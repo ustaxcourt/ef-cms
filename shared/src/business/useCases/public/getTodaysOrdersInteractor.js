@@ -4,7 +4,10 @@ const {
   createStartOfDayISO,
   deconstructDate,
 } = require('../../utilities/DateHandler');
-const { ORDER_EVENT_CODES } = require('../../entities/EntityConstants');
+const {
+  ORDER_EVENT_CODES,
+  ORDER_JUDGE_FIELD,
+} = require('../../entities/EntityConstants');
 
 /**
  * getTodaysOrdersInteractor
@@ -24,7 +27,7 @@ exports.getTodaysOrdersInteractor = async ({ applicationContext }) => {
       applicationContext,
       documentEventCodes: ORDER_EVENT_CODES,
       endDate: currentDateEnd,
-      judgeType: 'signedJudgeName', // Fixme - refactor to entityconstants
+      judgeType: ORDER_JUDGE_FIELD,
       omitSealed: true,
       startDate: currentDateStart,
     });
