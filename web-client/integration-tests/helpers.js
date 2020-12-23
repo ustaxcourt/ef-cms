@@ -316,7 +316,7 @@ export const uploadPetition = async (
 
   const petitionMetadata = {
     caseType: overrides.caseType || CASE_TYPES_MAP.cdp,
-    contactPrimary: {
+    contactPrimary: overrides.contactPrimary || {
       address1: '734 Cowley Parkway',
       address2: 'Cum aut velit volupt',
       address3: 'Et sunt veritatis ei',

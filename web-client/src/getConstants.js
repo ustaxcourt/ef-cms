@@ -1,6 +1,7 @@
 import {
   ADC_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
+  ADVANCED_SEARCH_TABS,
   BUSINESS_TYPES,
   CASE_CAPTION_POSTFIX,
   CASE_INVENTORY_PAGE_SIZE,
@@ -84,13 +85,6 @@ import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationCl
 import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 const MINUTES = 60 * 1000;
-
-const ADVANCED_SEARCH_TABS = {
-  CASE: 'case',
-  OPINION: 'opinion',
-  ORDER: 'order',
-  PRACTITIONER: 'practitioner',
-};
 
 const EXTERNAL_USER_DASHBOARD_TABS = {
   CLOSED: 'Closed',

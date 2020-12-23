@@ -1,3 +1,4 @@
+import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../helpers';
 
 export const irsSuperuserAdvancedSearchForCaseDocketNumber = test => {
@@ -18,7 +19,7 @@ export const irsSuperuserAdvancedSearchForCaseDocketNumber = test => {
 
     expect(
       test
-        .getState('searchResults')
+        .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(result => result.docketNumber === test.docketNumber),
     ).toBeDefined();
   });

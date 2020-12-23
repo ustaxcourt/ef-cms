@@ -38,8 +38,8 @@ export const advancedSearchHelper = (get, applicationContext) => {
     CASE_SEARCH_PAGE_SIZE,
     COUNTRY_TYPES,
   } = applicationContext.getConstants();
-  const searchResults = get(state.searchResults);
   const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
+  const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
   const result = {
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
@@ -62,14 +62,13 @@ export const advancedSearchHelper = (get, applicationContext) => {
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }
 
-    const MANY_RESULTS =
-      applicationContext.getConstants().MAX_SEARCH_RESULTS / 2;
+    const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
 
-    const showManyResultsMessage = searchResults.length >= MANY_RESULTS;
+    const showManyResultsMessage = searchResults.length >= MAX_SEARCH_RESULTS;
 
     Object.assign(result, {
       ...paginatedResults,
-      manyResults: MANY_RESULTS,
+      manyResults: MAX_SEARCH_RESULTS,
       showManyResultsMessage,
     });
   }
@@ -83,6 +82,7 @@ export const paginationHelper = (searchResults, currentPage, pageSize) => {
   }
 
   return {
+    numberOfResults: searchResults.length,
     searchResults: searchResults.slice(0, currentPage * pageSize),
     searchResultsCount: searchResults.length,
     showLoadMore: searchResults.length > currentPage * pageSize,
