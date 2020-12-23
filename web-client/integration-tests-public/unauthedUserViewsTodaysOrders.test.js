@@ -33,7 +33,7 @@ describe('Unauthed user views todays orders', () => {
 
   loginAs(testClient, 'docketclerk@example.com');
   const uniqueDocumentTitle = 'Order to do something' + Date.now();
-  test.documentTitle = uniqueDocumentTitle;
+  test.documentTitle1 = uniqueDocumentTitle;
 
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: uniqueDocumentTitle,
@@ -44,6 +44,19 @@ describe('Unauthed user views todays orders', () => {
   docketClerkSignsOrder(testClient, 0);
   docketClerkAddsDocketEntryFromOrder(testClient, 0);
   docketClerkServesDocument(testClient, 0);
+
+  const uniqueDocumentTitle2 =
+    'Order to do something a second time' + Date.now();
+  test.documentTitle2 = uniqueDocumentTitle2;
+  docketClerkCreatesAnOrder(testClient, {
+    documentTitle: uniqueDocumentTitle2,
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkViewsDraftOrder(testClient, 1);
+  docketClerkSignsOrder(testClient, 1);
+  docketClerkAddsDocketEntryFromOrder(testClient, 1);
+  docketClerkServesDocument(testClient, 1);
 
   unauthedUserViewsTodaysOrders(test, testClient);
 
