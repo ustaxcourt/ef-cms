@@ -28,9 +28,6 @@ const {
 const {
   ExternalDocumentNonStandardJ,
 } = require('./ExternalDocumentNonStandardJ');
-const {
-  ExternalDocumentNonStandardK,
-} = require('./ExternalDocumentNonStandardK');
 const { ExternalDocumentStandard } = require('./ExternalDocumentStandard');
 
 /**
@@ -71,8 +68,6 @@ ExternalDocumentFactory.get = documentMetadata => {
         return new ExternalDocumentNonStandardI(documentMetadata);
       case 'nonstandard j':
         return new ExternalDocumentNonStandardJ(documentMetadata);
-      case 'nonstandard k':
-        return new ExternalDocumentNonStandardK(documentMetadata);
     }
   }
 
