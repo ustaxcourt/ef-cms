@@ -135,4 +135,27 @@ describe('migrateItems', () => {
       ]),
     );
   });
+
+  it('should not run a migration on a docket entry where a judge already contains the name Judge in it', async () => {
+    const mockDocketEntryValidChange = {
+      ...mockDocketEntry,
+      judge: 'Judge Fieri',
+      pk: 'case|999-99',
+      sk: 'docket-entry|2129e02c-4122-4368-a888-b3b18196c687',
+    };
+
+    const items = [mockDocketEntryValidChange];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ...mockDocketEntryValidChange,
+          documentTitle:
+            'Order that case is assigned to Judge Fieri Cheese fries',
+        }),
+      ]),
+    );
+  });
 });
