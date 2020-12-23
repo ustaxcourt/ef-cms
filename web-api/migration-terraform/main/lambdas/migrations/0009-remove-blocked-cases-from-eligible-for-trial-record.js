@@ -1,3 +1,7 @@
+const {
+  CASE_STATUS_TYPES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
+
 const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
@@ -15,7 +19,12 @@ const migrateItems = async (items, documentClient) => {
           return res.Item;
         });
 
-      if (!caseRecord.automaticBlocked && !caseRecord.blocked) {
+      if (
+        caseRecord.docketNumber &&
+        !caseRecord.automaticBlocked &&
+        !caseRecord.blocked &&
+        caseRecord.status !== CASE_STATUS_TYPES.calendared
+      ) {
         itemsAfter.push(item);
       }
     } else {

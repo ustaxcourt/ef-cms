@@ -29,7 +29,7 @@ export const CaseSearchBox = connect(
             <div className="card">
               <div className="content-wrapper gray">
                 <div className="grid-row underlined">
-                  <div className="  grid-col-8">
+                  <div className="grid-col-8">
                     <h3>Search for a Case</h3>
                   </div>
                   <div className="tablet:grid-col-4 padding-top-05">

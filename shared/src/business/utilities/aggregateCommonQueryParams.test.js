@@ -12,10 +12,7 @@ describe('aggregateCommonQueryParams', () => {
     const result = aggregateCommonQueryParams({}, {});
 
     expect(result).toMatchObject({
-      commonQuery: [
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
-      ],
+      commonQuery: [{ match: { 'entityName.S': 'Case' } }],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
     });
@@ -24,50 +21,53 @@ describe('aggregateCommonQueryParams', () => {
   it('should include search params for petitionerName if present in query', () => {
     const queryParams = {
       applicationContext,
-      petitionerName: 'Test Search',
+      petitionerName: '+Test (-Search)',
     };
 
     const result = aggregateCommonQueryParams(queryParams);
 
-    expect(result).toMatchObject({
-      commonQuery: [
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
-      ],
-      exactMatchesQuery: [
+    expect(result.commonQuery).toMatchObject([
+      { match: { 'entityName.S': 'Case' } },
+    ]);
+
+    expect(result.exactMatchesQuery).toMatchObject([
+      {
+        bool: {
+          should: expect.arrayContaining([
+            {
+              simple_query_string: expect.objectContaining({
+                boost: expect.any(Number),
+                default_operator: 'and',
+                fields: expect.any(Array),
+                flags: expect.any(String),
+                query: '"Test Search"',
+              }),
+            },
+            {
+              simple_query_string: expect.objectContaining({
+                boost: expect.any(Number),
+                default_operator: 'and',
+                fields: expect.any(Array),
+                flags: expect.any(String),
+                query: 'Test Search',
+              }),
+            },
+          ]),
+        },
+      },
+    ]);
+
+    expect(result.nonExactMatchesQuery).toMatchObject(
+      expect.arrayContaining([
         {
-          bool: {
-            must: [
-              {
-                simple_query_string: {
-                  default_operator: 'and',
-                  fields: [
-                    'contactPrimary.M.name.S',
-                    'contactPrimary.M.secondaryName.S',
-                    'contactSecondary.M.name.S',
-                  ],
-                  flags: 'AND|PHRASE|PREFIX',
-                  query: 'Test Search',
-                },
-              },
-            ],
+          simple_query_string: {
+            default_operator: 'or',
+            fields: expect.any(Array),
+            query: 'Test Search',
           },
         },
-      ],
-      nonExactMatchesQuery: [
-        {
-          query_string: {
-            fields: [
-              'contactPrimary.M.name.S',
-              'contactPrimary.M.secondaryName.S',
-              'contactSecondary.M.name.S',
-              'caseCaption.S',
-            ],
-            query: '*Test Search*',
-          },
-        },
-      ],
-    });
+      ]),
+    );
   });
 
   it('should include search params for countryType if present in query', () => {
@@ -96,8 +96,7 @@ describe('aggregateCommonQueryParams', () => {
             ],
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -130,8 +129,7 @@ describe('aggregateCommonQueryParams', () => {
             ],
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -157,8 +155,7 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -183,8 +180,7 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
@@ -209,8 +205,7 @@ describe('aggregateCommonQueryParams', () => {
             },
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'case|' } },
+        { match: { 'entityName.S': 'Case' } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],

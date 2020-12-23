@@ -1,7 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
-import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
@@ -43,7 +42,6 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     month: '01',
     year: '2019',
   });
-  docketClerkServesDocument(test, 0);
   docketClerkCreatesAnOrder(test, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
@@ -57,7 +55,6 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     month: today.month,
     year: today.year,
   });
-  docketClerkServesDocument(test, 1);
 
   loginAs(test, 'petitioner@example.com');
   it('petitioner views transcript on docket record', async () => {
