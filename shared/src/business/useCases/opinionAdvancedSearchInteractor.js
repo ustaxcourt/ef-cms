@@ -50,14 +50,14 @@ exports.opinionAdvancedSearchInteractor = async ({
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const { results } = (
+  const results = (
     await applicationContext.getPersistenceGateway().advancedDocumentSearch({
       applicationContext,
       documentEventCodes: OPINION_EVENT_CODES,
       judgeType: 'judge',
       ...rawSearch,
     })
-  ).slice(0, MAX_SEARCH_RESULTS);
+  ).results.slice(0, MAX_SEARCH_RESULTS);
 
   return InternalDocumentSearchResult.validateRawCollection(results, {
     applicationContext,

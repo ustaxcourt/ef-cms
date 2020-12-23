@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.todaysOrders based on props.todaysOrders
+ * clears the state.todaysOrders and sets results to an empty array
  *
  * @param {object} props the props object
  * @param {object} store the store object
