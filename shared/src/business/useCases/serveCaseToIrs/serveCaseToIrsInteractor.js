@@ -1,8 +1,4 @@
 const {
-  COUNTRY_TYPES,
-  PETITIONS_SECTION,
-} = require('../../entities/EntityConstants');
-const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
@@ -16,6 +12,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -238,20 +235,12 @@ exports.serveCaseToIrsInteractor = async ({
     receivedAt,
   } = caseEntityToUpdate;
 
-  const address = {
-    ...caseEntityToUpdate.contactPrimary,
-    countryName:
-      caseEntityToUpdate.contactPrimary.countryType !== COUNTRY_TYPES.DOMESTIC
-        ? caseEntityToUpdate.contactPrimary.country
-        : '',
-  };
-
-  const pdfData = await applicationContext
+  let pdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
-        address,
+        address: caseEntityToUpdate.contactPrimary,
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
@@ -267,6 +256,68 @@ exports.serveCaseToIrsInteractor = async ({
           ),
       },
     });
+
+  if (caseEntityToUpdate.contactSecondary) {
+    const contactInformationDiff = applicationContext
+      .getUtilities()
+      .getAddressPhoneDiff({
+        newData: caseEntityToUpdate.contactPrimary,
+        oldData: caseEntityToUpdate.contactSecondary,
+      });
+
+    const addressFields = [
+      'country',
+      'countryType',
+      'address1',
+      'address2',
+      'address3',
+      'city',
+      'state',
+      'postalCode',
+    ];
+
+    const contactAddressesAreDifferent = Object.keys(
+      contactInformationDiff,
+    ).some(field => addressFields.includes(field));
+
+    let secondaryPdfData;
+
+    if (contactAddressesAreDifferent) {
+      secondaryPdfData = await applicationContext
+        .getDocumentGenerators()
+        .noticeOfReceiptOfPetition({
+          applicationContext,
+          data: {
+            address: caseEntityToUpdate.contactSecondary,
+            caseCaptionExtension,
+            caseTitle,
+            docketNumberWithSuffix,
+            preferredTrialCity,
+            receivedAtFormatted: applicationContext
+              .getUtilities()
+              .formatDateString(receivedAt, 'MMMM D, YYYY'),
+            servedDate: applicationContext
+              .getUtilities()
+              .formatDateString(
+                caseEntityToUpdate.getIrsSendDate(),
+                'MMMM D, YYYY',
+              ),
+          },
+        });
+
+      const { PDFDocument } = await applicationContext.getPdfLib();
+      const pdfDoc = await PDFDocument.load(pdfData);
+      const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
+      const coverPageDocumentPages = await pdfDoc.copyPages(
+        secondaryPdfDoc,
+        secondaryPdfDoc.getPageIndices(),
+      );
+      pdfDoc.insertPage(1, coverPageDocumentPages[0]);
+
+      const pdfDataBuffer = await pdfDoc.save();
+      pdfData = Buffer.from(pdfDataBuffer);
+    }
+  }
 
   const caseConfirmationPdfName = caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
 
