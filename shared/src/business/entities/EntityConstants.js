@@ -209,7 +209,6 @@ const SCENARIOS = [
   'Nonstandard H',
   'Nonstandard I',
   'Nonstandard J',
-  'Nonstandard K',
   'Type A',
   'Type B',
   'Type C',
