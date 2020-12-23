@@ -20,6 +20,7 @@ exports.advancedDocumentSearch = async ({
   omitSealed,
   opinionType,
   overrideResultSize,
+  overrideSort = false,
   startDate,
 }) => {
   const sourceFields = [
@@ -172,6 +173,12 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
+  let sort;
+
+  if (overrideSort) {
+    sort = [{ 'filingDate.S': { order: 'desc' } }];
+  }
+
   const documentQuery = {
     body: {
       _source: sourceFields,
@@ -191,6 +198,7 @@ exports.advancedDocumentSearch = async ({
         },
       },
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
+      sort,
     },
     index: 'efcms-docket-entry',
   };
