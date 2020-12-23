@@ -9,9 +9,9 @@ export const setTodaysOrdersAction = async ({ get, props, store }) => {
   const currentResults = get(state.todaysOrders.results);
   store.set(state.todaysOrders.results, [
     ...currentResults,
-    ...props.todaysOrders,
+    ...props.todaysOrders.results,
   ]);
-  store.set(state.todaysOrders.totalCount, props.totalCount);
+  store.set(state.todaysOrders.totalCount, props.todaysOrders.totalCount);
 
   const page = get(state.todaysOrders.page) || 1;
   store.set(state.todaysOrders.page, page + 1);
