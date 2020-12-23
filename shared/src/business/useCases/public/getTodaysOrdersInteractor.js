@@ -35,6 +35,7 @@ exports.getTodaysOrdersInteractor = async ({ applicationContext, page }) => {
     judgeType: ORDER_JUDGE_FIELD,
     omitSealed: true,
     overrideResultSize: TODAYS_ORDERS_PAGE_SIZE,
+    overrideSort: true,
     startDate: currentDateStart,
   });
 
