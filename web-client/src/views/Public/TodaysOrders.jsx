@@ -116,7 +116,7 @@ export const TodaysOrders = connect(
                         <td>
                           <Button
                             link
-                            aria-label={`View PDF: ${order.descriptionDisplay}`}
+                            aria-label={`View PDF: ${order.documentTitle}`}
                             className="text-left"
                             overrideMargin={true}
                             onClick={() => {
@@ -127,7 +127,7 @@ export const TodaysOrders = connect(
                               });
                             }}
                           >
-                            {order.documentType}
+                            {order.documentTitle}
                           </Button>
                         </td>
                         <td className="padding-5">
