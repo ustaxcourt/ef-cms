@@ -3,7 +3,7 @@ import { setTodaysOrdersAction } from './setTodaysOrdersAction';
 
 describe('setTodaysOrdersAction', () => {
   it('should set state.todaysOrders.results from props.todaysOrders.results and state.todaysOrders.results', async () => {
-    const mockTodaysOrdersState = [
+    const mockTodaysOrdersFromState = [
       {
         docketEntryId: '1234',
         documentTitle: 'An order',
@@ -13,7 +13,7 @@ describe('setTodaysOrdersAction', () => {
         documentTitle: 'Another order',
       },
     ];
-    const mockTodaysOrdersProps = [
+    const mockTodaysOrdersFromProps = [
       {
         docketEntryId: '0987',
         documentTitle: 'An order from props',
@@ -26,23 +26,25 @@ describe('setTodaysOrdersAction', () => {
 
     const { state } = await runAction(setTodaysOrdersAction, {
       props: {
-        todaysOrders: { results: mockTodaysOrdersProps, totalCount: 17 },
+        todaysOrders: mockTodaysOrdersFromProps,
+        totalCount: 17,
       },
       state: {
-        todaysOrders: { results: mockTodaysOrdersState },
+        todaysOrders: { results: mockTodaysOrdersFromState },
       },
     });
 
     expect(state.todaysOrders.results).toMatchObject([
-      ...mockTodaysOrdersState,
-      ...mockTodaysOrdersProps,
+      ...mockTodaysOrdersFromState,
+      ...mockTodaysOrdersFromProps,
     ]);
   });
 
   it('should set state.todaysOrders.totalCount from props.todaysOrders.totalCount', async () => {
     const { state } = await runAction(setTodaysOrdersAction, {
       props: {
-        todaysOrders: { results: [], totalCount: 17 },
+        todaysOrders: [],
+        totalCount: 17,
       },
       state: {
         todaysOrders: { results: [] },
@@ -55,7 +57,7 @@ describe('setTodaysOrdersAction', () => {
   it('should default state.todaysOrders.page to 1', async () => {
     const { state } = await runAction(setTodaysOrdersAction, {
       props: {
-        todaysOrders: { results: [] },
+        todaysOrders: [],
       },
       state: {
         todaysOrders: { results: [] },
@@ -68,7 +70,7 @@ describe('setTodaysOrdersAction', () => {
   it('should set state.todaysOrders.page to the value in state + 1', async () => {
     const { state } = await runAction(setTodaysOrdersAction, {
       props: {
-        todaysOrders: { results: [] },
+        todaysOrders: [],
       },
       state: {
         todaysOrders: { page: 4, results: [] },
