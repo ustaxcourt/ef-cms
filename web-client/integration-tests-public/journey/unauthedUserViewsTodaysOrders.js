@@ -6,15 +6,18 @@ export const unauthedUserViewsTodaysOrders = (test, testClient) => {
 
     await test.runSequence('gotoTodaysOrdersSequence', {});
 
-    expect(test.getState('todaysOrders')).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          documentTitle: test.documentTitle,
-          documentType: 'Order',
-          numberOfPages: 1,
-        }),
-      ]),
-    );
+    expect(test.getState('todaysOrders.results')).toMatchObject([
+      {
+        documentTitle: test.documentTitle2,
+        documentType: 'Order',
+        numberOfPages: 1,
+      },
+      {
+        documentTitle: test.documentTitle1,
+        documentType: 'Order',
+        numberOfPages: 1,
+      },
+    ]);
 
     await test.runSequence('openCaseDocumentDownloadUrlSequence', {
       docketEntryId: testClient.docketEntryId,

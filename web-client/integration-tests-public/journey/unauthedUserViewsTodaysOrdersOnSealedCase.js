@@ -6,7 +6,7 @@ export const unauthedUserViewsTodaysOrdersOnSealedCase = test => {
 
     await test.runSequence('gotoTodaysOrdersSequence', {});
 
-    expect(test.getState('todaysOrders')).not.toEqual(
+    expect(test.getState('todaysOrders.results')).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           documentTitle: test.documentTitle,
