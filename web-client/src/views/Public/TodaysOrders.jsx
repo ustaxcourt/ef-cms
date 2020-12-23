@@ -33,7 +33,7 @@ export const TodaysOrders = connect(
             </div>
             {todaysOrdersHelper.hasResults && (
               <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
-                {todaysOrdersHelper.formattedOrders.length} Order(s)
+                {todaysOrdersHelper.totalCount} Order(s)
               </div>
             )}
           </div>
