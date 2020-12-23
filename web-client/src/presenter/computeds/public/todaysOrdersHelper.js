@@ -1,7 +1,8 @@
 import { state } from 'cerebral';
 
 export const todaysOrdersHelper = (get, applicationContext) => {
-  const todaysOrders = get(state.todaysOrders);
+  const todaysOrders = get(state.todaysOrders.results);
+  const totalCount = get(state.todaysOrders.totalCount);
 
   const currentDate = applicationContext.getUtilities().createISODateString();
   const formattedCurrentDate = applicationContext
@@ -20,5 +21,12 @@ export const todaysOrdersHelper = (get, applicationContext) => {
 
   const hasResults = formattedOrders.length > 0;
 
-  return { formattedCurrentDate, formattedOrders, hasResults };
+  const showLoadMoreButton = formattedOrders.length < totalCount;
+
+  return {
+    formattedCurrentDate,
+    formattedOrders,
+    hasResults,
+    showLoadMoreButton,
+  };
 };
