@@ -72,7 +72,7 @@ export const TodaysOrders = connect(
                         <td>
                           <Button
                             link
-                            aria-label={`View PDF: ${order.descriptionDisplay}`}
+                            aria-label={`View PDF: ${order.documentType}`}
                             onClick={() => {
                               openCaseDocumentDownloadUrlSequence({
                                 docketEntryId: order.docketEntryId,
