@@ -76,7 +76,8 @@ const migrateItems = async (items, documentClient) => {
       item.pk.startsWith('case|') &&
       item.sk.startsWith('docket-entry|') &&
       ['Type B', 'Type F'].includes(item.scenario) &&
-      item.judge
+      item.judge &&
+      !item.judge.includes('Judge')
     ) {
       if (!judges) {
         judges = await getRecordsViaMapping({
