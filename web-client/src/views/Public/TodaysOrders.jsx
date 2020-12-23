@@ -33,7 +33,7 @@ export const TodaysOrders = connect(
             </div>
             {todaysOrdersHelper.hasResults && (
               <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
-                {todaysOrdersHelper.formattedOrders.length} Order(s)
+                {todaysOrdersHelper.totalCount} Order(s)
               </div>
             )}
           </div>
@@ -55,7 +55,7 @@ export const TodaysOrders = connect(
                       <th aria-hidden="true" />
                       <th aria-label="Docket Number">Docket No.</th>
                       <th>Case Title</th>
-                      <th>Order Type</th>
+                      <th>Order</th>
                       <th>Pages</th>
                       <th>Judge</th>
                     </tr>
@@ -72,7 +72,7 @@ export const TodaysOrders = connect(
                         <td>
                           <Button
                             link
-                            aria-label={`View PDF: ${order.documentType}`}
+                            aria-label={`View PDF: ${order.documentTitle}`}
                             onClick={() => {
                               openCaseDocumentDownloadUrlSequence({
                                 docketEntryId: order.docketEntryId,
@@ -81,7 +81,7 @@ export const TodaysOrders = connect(
                               });
                             }}
                           >
-                            {order.documentType}
+                            {order.documentTitle}
                           </Button>
                         </td>
                         <td>{order.numberOfPages}</td>
