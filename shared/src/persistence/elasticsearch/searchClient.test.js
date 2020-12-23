@@ -138,17 +138,18 @@ describe('searchClient', () => {
       .search.mockImplementation(() =>
         Promise.reject(new Error('malformed elasticsearch query syntax error')),
       );
-    const results = await search({
-      applicationContext,
-      searchParameters: { some: '[bad: $syntax -=error' },
-    });
+
+    await expect(
+      search({
+        applicationContext,
+        searchParameters: { some: '[bad: $syntax -=error' },
+      }),
+    ).rejects.toThrow('Search client encountered an error.');
 
     expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
       1,
     );
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
-
-    expect(results).toMatchObject({ results: [], total: 0 });
   });
 
   it('finds hits and formats them', async () => {

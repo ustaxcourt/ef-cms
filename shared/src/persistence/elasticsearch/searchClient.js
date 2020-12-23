@@ -47,8 +47,12 @@ exports.search = async ({ applicationContext, searchParameters }) => {
   let body;
   try {
     body = await applicationContext.getSearchClient().search(searchParameters);
+    if (body) {
+      throw new Error('fake error');
+    }
   } catch (searchError) {
     applicationContext.logger.error(searchError);
+    throw new Error('Search client encountered an error.');
   }
 
   const total = get(body, 'hits.total.value', 0);
