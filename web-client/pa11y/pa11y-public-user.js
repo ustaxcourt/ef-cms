@@ -9,7 +9,11 @@ module.exports = [
     notes: 'checks a11y of advanced case search',
     url: 'http://localhost:5678/',
   },
-
+  {
+    actions: ['wait for .todays-orders to be visible'],
+    notes: 'checks a11y of todays orders',
+    url: 'http://localhost:5678/todays-orders',
+  },
   // Temporarily disabled for story 7387
   // {
   //   actions: [
@@ -53,7 +57,6 @@ module.exports = [
   //   notes: 'checks a11y of advanced opinion search with results on sealed case',
   //   url: 'http://localhost:5678/',
   // },
-
   'http://localhost:5678/todays-opinions',
   'http://localhost:5678/health',
   'http://localhost:5678/contact',
