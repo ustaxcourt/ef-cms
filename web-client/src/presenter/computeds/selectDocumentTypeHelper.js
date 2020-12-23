@@ -118,15 +118,6 @@ export const getOptionsForCategory = ({
       };
       break;
     }
-    case 'Nonstandard K': {
-      options = {
-        ordinalField: categoryInformation.ordinalField,
-        showNonstandardForm: true,
-        showTextInput: true,
-        textInputLabel: categoryInformation.labelFreeText,
-      };
-      break;
-    }
   }
 
   return options;
