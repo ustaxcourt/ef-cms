@@ -13,11 +13,14 @@ exports.advancedDocumentSearch = async ({
   docketNumber,
   documentEventCodes,
   endDate,
+  from = 0,
   judge,
   judgeType,
   keyword,
   omitSealed,
   opinionType,
+  overrideResultSize,
+  overrideSort = false,
   startDate,
 }) => {
   const sourceFields = [
@@ -170,9 +173,16 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
+  let sort;
+
+  if (overrideSort) {
+    sort = [{ 'filingDate.S': { order: 'desc' } }];
+  }
+
   const documentQuery = {
     body: {
       _source: sourceFields,
+      from,
       query: {
         bool: {
           must: [
@@ -187,14 +197,16 @@ exports.advancedDocumentSearch = async ({
           ],
         },
       },
-      size: MAX_SEARCH_CLIENT_RESULTS,
+      size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
+      sort,
     },
     index: 'efcms-docket-entry',
   };
 
-  const { results } = await search({
+  const { results, total } = await search({
     applicationContext,
     searchParameters: documentQuery,
   });
-  return results;
+
+  return { results, totalCount: total };
 };
