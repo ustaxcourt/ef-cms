@@ -26,7 +26,9 @@ describe('opinionPublicSearchInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue(mockOpinionSearchResult);
+      .advancedDocumentSearch.mockResolvedValue({
+        results: mockOpinionSearchResult,
+      });
   });
 
   it('should only search for opinion document types, allowing opinions within sealed cases', async () => {
@@ -54,7 +56,7 @@ describe('opinionPublicSearchInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue(maxPlusOneResults);
+      .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
     const results = await opinionPublicSearchInteractor({
       applicationContext,
