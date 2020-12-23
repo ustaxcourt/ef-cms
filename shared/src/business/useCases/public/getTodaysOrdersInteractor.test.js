@@ -115,7 +115,7 @@ describe('getTodaysOrdersInteractor', () => {
     ).toBeTruthy();
   });
 
-  it('should make a call to advancedDocumentSearch with the result page size overridden', async () => {
+  it('should make a call to advancedDocumentSearch with the result page size and sort overridden', async () => {
     await getTodaysOrdersInteractor({
       applicationContext,
       page: 1,
@@ -125,6 +125,10 @@ describe('getTodaysOrdersInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0].overrideResultSize,
     ).toBe(TODAYS_ORDERS_PAGE_SIZE);
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].overrideSort,
+    ).toBe(true);
   });
 
   it('should return the results and totalCount of results', async () => {
