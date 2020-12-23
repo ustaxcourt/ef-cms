@@ -7,6 +7,7 @@ const {
 const {
   ORDER_EVENT_CODES,
   ORDER_JUDGE_FIELD,
+  TODAYS_ORDERS_PAGE_SIZE,
 } = require('../../entities/EntityConstants');
 
 /**
@@ -16,19 +17,26 @@ const {
  * @param {object} providers.applicationContext application context object
  * @returns {array} an array of orders (if any)
  */
-exports.getTodaysOrdersInteractor = async ({ applicationContext }) => {
+exports.getTodaysOrdersInteractor = async ({ applicationContext, page }) => {
   const { day, month, year } = deconstructDate(createISODateString());
   const currentDateStart = createStartOfDayISO({ day, month, year });
   const currentDateEnd = createEndOfDayISO({ day, month, year });
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: ORDER_EVENT_CODES,
-      endDate: currentDateEnd,
-      judgeType: ORDER_JUDGE_FIELD,
-      omitSealed: true,
-      startDate: currentDateStart,
-    });
+  const from = (page - 1) * TODAYS_ORDERS_PAGE_SIZE;
+
+  const {
+    results,
+    totalCount,
+  } = await applicationContext.getPersistenceGateway().advancedDocumentSearch({
+    applicationContext,
+    documentEventCodes: ORDER_EVENT_CODES,
+    endDate: currentDateEnd,
+    from,
+    judgeType: ORDER_JUDGE_FIELD,
+    omitSealed: true,
+    overrideResultSize: TODAYS_ORDERS_PAGE_SIZE,
+    startDate: currentDateStart,
+  });
+
+  return { results, totalCount };
 };

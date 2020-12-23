@@ -8,7 +8,7 @@ describe('getTodaysOrdersAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('gets the list of todays orders', async () => {
+  it('should return the searchResults and totalCount of results', async () => {
     const mockTodaysOrders = [
       {
         docketEntryId: '1234',
@@ -19,9 +19,11 @@ describe('getTodaysOrdersAction', () => {
         documentTitle: 'Another order',
       },
     ];
-    applicationContext
-      .getUseCases()
-      .getTodaysOrdersInteractor.mockReturnValue(mockTodaysOrders);
+    const mockTotalCount = 2;
+    applicationContext.getUseCases().getTodaysOrdersInteractor.mockReturnValue({
+      results: mockTodaysOrders,
+      totalCount: mockTotalCount,
+    });
 
     const result = await runAction(getTodaysOrdersAction, {
       modules: {
@@ -30,5 +32,6 @@ describe('getTodaysOrdersAction', () => {
     });
 
     expect(result.output.todaysOrders).toMatchObject(mockTodaysOrders);
+    expect(result.output.totalCount).toBe(mockTotalCount);
   });
 });

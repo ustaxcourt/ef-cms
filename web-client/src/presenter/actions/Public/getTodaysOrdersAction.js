@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * gets today's orders
  *
@@ -5,10 +7,15 @@
  * @param {object} providers.applicationContext the applicationContext
  * @returns {Promise} a list of today's order documents
  */
-export const getTodaysOrdersAction = async ({ applicationContext }) => {
-  const todaysOrders = await applicationContext
-    .getUseCases()
-    .getTodaysOrdersInteractor({ applicationContext });
+export const getTodaysOrdersAction = async ({ applicationContext, get }) => {
+  const page = get(state.todaysOrders.page) || 1;
 
-  return { todaysOrders };
+  const {
+    results,
+    totalCount,
+  } = await applicationContext
+    .getUseCases()
+    .getTodaysOrdersInteractor({ applicationContext, page });
+
+  return { todaysOrders: results, totalCount };
 };
