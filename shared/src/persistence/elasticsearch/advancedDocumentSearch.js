@@ -199,5 +199,6 @@ exports.advancedDocumentSearch = async ({
     applicationContext,
     searchParameters: documentQuery,
   });
+
   return { results, totalCount: total };
 };
