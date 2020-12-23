@@ -34,24 +34,15 @@ const putEntries = async entries => {
 };
 
 module.exports.seedLocalDatabase = async entries => {
-  console.log('****STARTING TO SEED DATABASE');
   if (entries) {
-    console.log('**** booooo');
     await putEntries(entries);
   } else {
-    console.log('**** about to create users');
-
     await createUsers();
-    console.log('**** about to put some stuff ');
 
     await putEntries(seedEntries);
 
-    console.log('**** about to create case ');
     const docketNumber = await createCase1();
-    console.log('**** about to create order', docketNumber);
 
-    const docketEntryId = await createOrder({ docketNumber });
-
-    console.log('****', docketNumber, docketEntryId);
+    await createOrder({ docketNumber });
   }
 };
