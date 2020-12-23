@@ -28,5 +28,6 @@ export const todaysOrdersHelper = (get, applicationContext) => {
     formattedOrders,
     hasResults,
     showLoadMoreButton,
+    totalCount,
   };
 };

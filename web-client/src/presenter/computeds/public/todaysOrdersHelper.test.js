@@ -52,6 +52,19 @@ describe('todaysOrdersHelper', () => {
     expect(result.formattedCurrentDate).toEqual(formattedCurrentDate);
   });
 
+  it('should return the total count based on state.todaysOrders.totalCount', () => {
+    state = {
+      todaysOrders: {
+        results: state.todaysOrders.results,
+        totalCount: 21,
+      },
+    };
+
+    const result = runCompute(todaysOrdersHelper, { state });
+
+    expect(result.totalCount).toBe(21);
+  });
+
   describe('hasResults', () => {
     it('should be true when formattedOrders is not an empty list', () => {
       const result = runCompute(todaysOrdersHelper, { state });
