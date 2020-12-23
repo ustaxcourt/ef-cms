@@ -201,11 +201,11 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a search for keyword with special characters removed', async () => {
+  it('does a search for keyword with advanced syntax characters removed', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
-      keyword: 'Guy Fieri$^!(',
+      keyword: '+Guy* -Fieri!(',
     });
 
     expect(
