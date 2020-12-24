@@ -5,9 +5,9 @@ import { getFormValueBarNumberAction } from '../actions/getFormValueBarNumberAct
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
 import { hasPractitionerDetailAction } from '../actions/hasPractitionerDetailAction';
 import { navigateToPractitionerDetailSequence } from './navigateToPractitionerDetailSequence';
+import { setAdvancedSearchResultsAction } from '../actions/AdvancedSearch/setAdvancedSearchResultsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
-import { setPractitionerResultsAction } from '../actions/AdvancedSearch/setPractitionerResultsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -31,7 +31,7 @@ export const submitPractitionerBarNumberSearchSequence = [
       getPractitionerDetailAction,
       hasPractitionerDetailAction,
       {
-        noResults: [setPractitionerResultsAction],
+        noResults: [setAdvancedSearchResultsAction],
         success: [
           setPractitionerDetailAction,
           ...navigateToPractitionerDetailSequence,

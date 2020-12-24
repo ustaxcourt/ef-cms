@@ -1495,7 +1495,7 @@ button.change-scanner-button {
     }
 
     .advanced-search__form-container {
-      height: 326px;
+      height: 375px;
     }
   }
   /* little screens */
@@ -1757,4 +1757,9 @@ button.change-scanner-button {
 
 .dark-icon {
   color: color($theme-color-primary-darker);
+}
+
+.text-middle-margin {
+  margin-top: auto;
+  margin-bottom: auto;
 }

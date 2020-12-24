@@ -71,10 +71,12 @@ import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
+import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
+import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
@@ -166,10 +168,12 @@ const helpers = {
   practitionerSearchFormHelper,
   printPaperServiceHelper,
   recentMessagesHelper,
+  removeFromTrialSessionModalHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
+  setForHearingModalHelper,
   showAppTimeoutModalHelper,
   startCaseHelper,
   startCaseInternalContactsHelper,

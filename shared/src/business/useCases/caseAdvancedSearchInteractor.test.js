@@ -2,7 +2,7 @@ const {
   caseAdvancedSearchInteractor,
 } = require('./caseAdvancedSearchInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ROLES } = require('../entities/EntityConstants');
+const { MAX_SEARCH_RESULTS, ROLES } = require('../entities/EntityConstants');
 
 describe('caseAdvancedSearchInteractor', () => {
   let mockUser;
@@ -84,6 +84,30 @@ describe('caseAdvancedSearchInteractor', () => {
     });
 
     expect(results).toEqual([]);
+  });
+
+  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.irsPractitioner,
+      userId: 'b45a0633-acda-499e-8fab-8785baeafed7',
+    });
+
+    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+      contactPrimary: {},
+      docketNumber: '101-20',
+      userId: '28e908f6-edf0-4289-9372-5b8fe8d2265c',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .caseAdvancedSearch.mockResolvedValue(maxPlusOneResults);
+
+    const results = await caseAdvancedSearchInteractor({
+      applicationContext,
+      petitionerName: 'test person',
+    });
+
+    expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('returns results if practitioner is associated', async () => {

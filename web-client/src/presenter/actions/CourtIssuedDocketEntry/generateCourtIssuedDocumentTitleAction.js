@@ -16,8 +16,9 @@ export const generateCourtIssuedDocumentTitleAction = ({
   store,
 }) => {
   const documentMetadata = get(state.form);
-  const { computedDate } = props;
+  const { computedDate, judgeWithTitle } = props;
   documentMetadata.date = computedDate;
+  documentMetadata.judgeWithTitle = judgeWithTitle;
 
   let documentTitle = applicationContext
     .getUseCases()

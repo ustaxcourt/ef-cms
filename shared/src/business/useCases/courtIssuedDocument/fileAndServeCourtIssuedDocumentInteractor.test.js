@@ -346,6 +346,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       });
 
     caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileAndServeCourtIssuedDocumentInteractor({
       applicationContext,

@@ -15,7 +15,7 @@ describe('defaultAdvancedSearchFormAction', () => {
       },
     });
 
-    expect(result.state.advancedSearchForm).toEqual({
+    expect(result.state.advancedSearchForm).toMatchObject({
       caseSearchByDocketNumber: {},
       caseSearchByName: {
         countryType: COUNTRY_TYPES.DOMESTIC,
@@ -58,7 +58,7 @@ describe('defaultAdvancedSearchFormAction', () => {
       },
     });
 
-    expect(result.state.advancedSearchForm).toEqual({
+    expect(result.state.advancedSearchForm).toMatchObject({
       caseSearchByDocketNumber: { yes: true },
       caseSearchByName: {
         countryType: COUNTRY_TYPES.INTERNATIONAL,
@@ -70,5 +70,16 @@ describe('defaultAdvancedSearchFormAction', () => {
       practitionerSearchByName: { one: 'two' },
       searchMode: 'byDocketNumber',
     });
+  });
+
+  it('should set the current page to 1', async () => {
+    const result = await runAction(defaultAdvancedSearchFormAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {},
+      },
+    });
+
+    expect(result.state.advancedSearchForm.currentPage).toEqual(1);
   });
 });

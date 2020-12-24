@@ -10,6 +10,9 @@ const pdfLib = require('pdf-lib');
 const sass = require('sass');
 const util = require('util');
 const {
+  addCaseToHearing,
+} = require('../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing');
+const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
 const {
@@ -85,6 +88,7 @@ const {
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
   CASE_STATUS_TYPES,
+  MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   SESSION_STATUS_GROUPS,
 } = require('../../shared/src/business/entities/EntityConstants');
@@ -95,7 +99,7 @@ const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
-  casePublicSearch: casePublicSearchPersistence,
+  casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
@@ -808,6 +812,9 @@ const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
+  setForHearingInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
+const {
   setMessageAsRead,
 } = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
 const {
@@ -957,9 +964,6 @@ const {
 const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
-const {
-  userIsAssociated,
-} = require('../../shared/src/business/useCases/caseAssociation/userIsAssociatedInteractor');
 const {
   validatePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
@@ -1111,6 +1115,7 @@ const isValidatedDecorator = persistenceGatewayMethods => {
 
 const gatewayMethods = {
   ...isValidatedDecorator({
+    addCaseToHearing,
     addWorkItemToSectionInbox,
     associateUserWithCase,
     associateUserWithCasePending,
@@ -1160,7 +1165,7 @@ const gatewayMethods = {
   // methods below are not known to create "entity" records
   advancedDocumentSearch,
   caseAdvancedSearch,
-  casePublicSearch: casePublicSearchPersistence,
+  casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
@@ -1291,6 +1296,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
+      MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
         status => status !== CASE_STATUS_TYPES.closed,
@@ -1619,6 +1625,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         serveExternallyFiledDocumentInteractor,
+        setForHearingInteractor,
         setMessageAsReadInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
@@ -1650,7 +1657,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateTrialSessionWorkingCopyInteractor,
         updateUserCaseNoteInteractor,
         updateUserContactInformationInteractor,
-        userIsAssociated,
         validatePdfInteractor,
         verifyPendingCaseForUserInteractor,
         virusScanPdfInteractor: args =>
