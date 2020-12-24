@@ -88,7 +88,7 @@ export const CorrespondenceViewerCorrespondence = connect(
                     docketEntryId:
                       viewerCorrespondenceToDisplay.correspondenceId,
                     docketNumber: caseDetail.docketNumber,
-                    //fixme open in new tab or nmo???
+                    isForIFrame: true,
                   })
                 }
               >
