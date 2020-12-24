@@ -88,7 +88,6 @@ export const CorrespondenceViewerCorrespondence = connect(
                     docketEntryId:
                       viewerCorrespondenceToDisplay.correspondenceId,
                     docketNumber: caseDetail.docketNumber,
-                    isForIFrame: true,
                   })
                 }
               >

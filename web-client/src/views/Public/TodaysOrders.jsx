@@ -78,6 +78,7 @@ export const TodaysOrders = connect(
                                 docketEntryId: order.docketEntryId,
                                 docketNumber: order.docketNumber,
                                 isPublic: true,
+                                useSameTab: true,
                               });
                             }}
                           >
@@ -123,8 +124,8 @@ export const TodaysOrders = connect(
                               openCaseDocumentDownloadUrlSequence({
                                 docketEntryId: order.docketEntryId,
                                 docketNumber: order.docketNumber,
-                                isMobile: true,
                                 isPublic: true,
+                                useSameTab: true,
                               });
                             }}
                           >

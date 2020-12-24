@@ -64,6 +64,7 @@ export const TodaysOpinions = connect(
                             docketEntryId: opinion.docketEntryId,
                             docketNumber: opinion.docketNumber,
                             isPublic: true,
+                            useSameTab: true,
                           });
                         }}
                       >

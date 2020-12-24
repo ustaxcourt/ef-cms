@@ -46,13 +46,13 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
   });
 
-  it('should set window.location.href when props.isMobile is true and props.isForIFrame is false', async () => {
+  it('should set window.location.href when props.useSameTab is true and props.isForIFrame is false', async () => {
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
         docketEntryId: 'docket-entry-id-123',
         docketNumber: '123-20',
-        isMobile: true,
+        useSameTab: true,
       },
     });
 
@@ -67,13 +67,13 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     expect(window.location.href).toEqual('http://example.com');
   });
 
-  it('should open in a new tab when props.isMobile and props.isForIFrame is false', async () => {
+  it('should open in a new tab when props.useSameTab and props.isForIFrame is false', async () => {
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
         docketEntryId: 'docket-entry-id-123',
         docketNumber: '123-20',
-        isMobile: false,
+        useSameTab: false,
       },
     });
 
