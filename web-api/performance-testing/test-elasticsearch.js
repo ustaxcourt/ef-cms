@@ -1,31 +1,18 @@
 const AWS = require('aws-sdk');
 const { get, pick } = require('lodash');
-const { EnvironmentCredentials } = AWS;
-const connectionClass = require('http-aws-es');
-const elasticsearch = require('elasticsearch');
-const {
-  ELASTICSEARCH_API_VERSION,
-} = require('../elasticsearch/elasticsearch-settings');
+const { getClient, getHost } = require('../elasticsearch/client');
+
 // const mappings = require('../elasticsearch/elasticsearch-mappings');
 // const migratedCase = require('./migratedCase.json');
 // const { settings } = require('../elasticsearch/elasticsearch-settings');
 
-const esClient = new elasticsearch.Client({
-  amazonES: {
-    credentials: new EnvironmentCredentials('AWS'),
-    region: 'us-east-1',
-  },
-  apiVersion: ELASTICSEARCH_API_VERSION,
-  awsConfig: new AWS.Config({ region: 'us-east-1' }),
-  connectionClass: connectionClass,
-  host:
-    'https://search-efcms-search-prod-alpha-uxekmvwjhblksyin6ndohlaazq.us-east-1.es.amazonaws.com/',
-  log: 'warning',
-  port: 443,
-  protocol: 'https',
-});
+const environmentName = process.argv[2] || 'exp1';
+const version = process.argv[3] || 'alpha';
 
 (async () => {
+  const host = await getHost({ environmentName, version });
+  const esClient = getClient(host);
+
   const orderQuery = {
     body: {
       _source: [
@@ -339,6 +326,7 @@ const esClient = new elasticsearch.Client({
     },
     index: 'efcms-docket-entry',
   };
+
   let results = await esClient.search(orderQuery);
 
   const hits = get(results, 'hits.hits');
