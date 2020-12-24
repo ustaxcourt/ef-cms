@@ -23,6 +23,7 @@ export const unauthedUserViewsTodaysOrders = (test, testClient) => {
       docketEntryId: testClient.docketEntryId,
       docketNumber: testClient.docketNumber,
       isPublic: true,
+      useSameTab: true,
     });
 
     expect(window.location.href).toContain(testClient.docketEntryId);
