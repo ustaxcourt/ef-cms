@@ -54,6 +54,7 @@ const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 Case.VALIDATION_ERROR_MESSAGES = {
@@ -162,6 +163,7 @@ Case.prototype.init = function init(
   }
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
+  this.assignHearings({ applicationContext, rawCase });
   this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
@@ -290,6 +292,19 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
     }
   } else {
     this.docketEntries = [];
+  }
+};
+
+Case.prototype.assignHearings = function assignHearings({
+  applicationContext,
+  rawCase,
+}) {
+  if (Array.isArray(rawCase.hearings)) {
+    this.hearings = rawCase.hearings
+      .map(hearing => new TrialSession(hearing, { applicationContext }))
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+  } else {
+    this.hearings = [];
   }
 };
 
@@ -715,8 +730,13 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
-  trialDate: JoiValidationConstants.ISO_DATE.optional()
-    .allow(null)
+  trialDate: joi
+    .alternatives()
+    .conditional('trialSessionId', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.ISO_DATE.optional().allow(null),
+      then: JoiValidationConstants.ISO_DATE.required(),
+    })
     .description('When this case goes to trial.'),
   trialLocation: joi
     .alternatives()
@@ -728,13 +748,19 @@ Case.VALIDATION_RULES = {
     .description(
       'Where this case goes to trial. This may be different that the preferred trial location.',
     ),
-  trialSessionId: JoiValidationConstants.UUID.when('status', {
-    is: CASE_STATUS_TYPES.calendared,
-    otherwise: joi.optional(),
-    then: joi.required(),
-  }).description(
-    'The unique ID of the trial session associated with this case.',
-  ),
+  trialSessionId: joi
+    .when('status', {
+      is: CASE_STATUS_TYPES.calendared,
+      otherwise: joi.when('trialDate', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.UUID.optional(),
+        then: JoiValidationConstants.UUID.required(),
+      }),
+      then: JoiValidationConstants.UUID.required(),
+    })
+    .description(
+      'The unique ID of the trial session associated with this case.',
+    ),
   trialTime: JoiValidationConstants.STRING.pattern(PATTERNS['H:MM'])
     .optional()
     .description('Time of day when this case goes to trial.'),
@@ -1384,7 +1410,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
  *
  * @param {object} arguments arguments
  * @param {object} arguments.caseRaw raw case details
- * @param {string} arguments.userId id of the user account
+ * @param {string} arguments.user the user account
  * @returns {boolean} if the case is associated
  */
 const isAssociatedUser = function ({ caseRaw, user }) {
@@ -1415,6 +1441,16 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Determines if provided user is associated with the case
+ *
+ * @param {object} arguments.user the user account
+ * @returns {boolean} true if the user provided is associated with the case, false otherwise
+ */
+Case.prototype.isAssociatedUser = function ({ user }) {
+  return isAssociatedUser({ caseRaw: this, user });
 };
 
 /**
@@ -1520,16 +1556,45 @@ Case.prototype.unsetAsHighPriority = function () {
 /**
  * remove case from trial, setting case status to generalDocketReadyForTrial
  *
+ * @param {string} caseStatus optional case status to set the case to
+ * @param {string} associatedJudge optional associatedJudge to set on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function () {
-  this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
-  this.associatedJudge = CHIEF_JUDGE;
+Case.prototype.removeFromTrial = function (caseStatus, associatedJudge) {
+  this.setAssociatedJudge(associatedJudge || CHIEF_JUDGE);
+  this.setCaseStatus(
+    caseStatus || CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  );
   this.trialDate = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
   this.trialTime = undefined;
   return this;
+};
+
+/**
+ * check to see if trialSessionId is a hearing
+ *
+ * @param {string} trialSessionId trial session id to check
+ * @returns {boolean} whether or not the trial session id associated is a hearing or not
+ */
+Case.prototype.isHearing = function (trialSessionId) {
+  return this.hearings.some(
+    trialSession => trialSession.trialSessionId === trialSessionId,
+  );
+};
+
+/**
+ * removes a hearing from the case.hearings array
+ *
+ * @param {string} trialSessionId trial session id associated with hearing to remove
+ */
+Case.prototype.removeFromHearing = function (trialSessionId) {
+  const removeIndex = this.hearings
+    .map(trialSession => trialSession.trialSessionId)
+    .indexOf(trialSessionId);
+
+  this.hearings.splice(removeIndex, 1);
 };
 
 /**

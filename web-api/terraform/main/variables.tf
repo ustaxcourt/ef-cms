@@ -74,3 +74,7 @@ variable "disable_emails" {
 variable "es_volume_size" {
   type = number
 }
+
+variable "bounced_email_recipient" {
+  type = string
+}
