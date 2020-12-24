@@ -200,6 +200,7 @@ export const MessageDocument = connect(
                   openCaseDocumentDownloadUrlSequence({
                     docketEntryId: viewerDocumentToDisplay.documentId,
                     docketNumber: caseDetail.docketNumber,
+                    isForIFrame: true,
                   })
                 }
               >
