@@ -16,29 +16,31 @@ describe('orderAdvancedSearchInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue([
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
-          docketNumber: '103-19',
-          docketNumberSuffix: 'AAA',
-          documentContents:
-            'Everyone knows that Reeses Outrageous bars are the best candy',
-          documentTitle: 'Order for More Candy',
-          eventCode: 'ODD',
-          signedJudgeName: 'Guy Fieri',
-        },
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
-          docketNumber: '103-19',
-          docketNumberSuffix: 'AAA',
-          documentContents: 'KitKats are inferior candies',
-          documentTitle: 'Order for KitKats',
-          eventCode: 'ODD',
-          signedJudgeName: 'Guy Fieri',
-        },
-      ]);
+      .advancedDocumentSearch.mockResolvedValue({
+        results: [
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
+            docketNumber: '103-19',
+            docketNumberSuffix: 'AAA',
+            documentContents:
+              'Everyone knows that Reeses Outrageous bars are the best candy',
+            documentTitle: 'Order for More Candy',
+            eventCode: 'ODD',
+            signedJudgeName: 'Guy Fieri',
+          },
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
+            docketNumber: '103-19',
+            docketNumberSuffix: 'AAA',
+            documentContents: 'KitKats are inferior candies',
+            documentTitle: 'Order for KitKats',
+            eventCode: 'ODD',
+            signedJudgeName: 'Guy Fieri',
+          },
+        ],
+      });
   });
 
   it('returns an unauthorized error on petitioner user role', async () => {
@@ -112,7 +114,7 @@ describe('orderAdvancedSearchInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue(maxPlusOneResults);
+      .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
     const results = await orderAdvancedSearchInteractor({
       applicationContext,

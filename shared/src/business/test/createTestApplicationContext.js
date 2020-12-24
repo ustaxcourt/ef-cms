@@ -1,5 +1,4 @@
 const DateHandler = require('../utilities/DateHandler');
-const getAddressPhoneDiff = require('../utilities/generateChangeOfAddressTemplate');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
 const {
@@ -71,6 +70,9 @@ const {
 const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
+const {
+  getAddressPhoneDiff,
+} = require('../utilities/generateChangeOfAddressTemplate');
 const {
   getCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getCaseByDocketNumber');

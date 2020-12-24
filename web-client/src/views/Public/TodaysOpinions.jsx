@@ -23,13 +23,16 @@ export const TodaysOpinions = connect(
           <h1>{todaysOpinionsHelper.formattedCurrentDate}</h1>
 
           {todaysOpinionsHelper.formattedOpinions.length === 0 && (
-            <p>There are no opinions today.</p>
+            <h3>
+              Opinions are generally published at 3:00 PM. If you are receiving
+              this message after 3:00 PM, there are no opinions today.
+            </h3>
           )}
 
           {todaysOpinionsHelper.formattedOpinions.length > 0 && (
             <table
               aria-label="todays opinions"
-              className="usa-table todays-opinions responsive-table row-border-only"
+              className="usa-table gray-header todays-opinions responsive-table row-border-only"
             >
               <thead>
                 <tr>

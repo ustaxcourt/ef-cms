@@ -1,7 +1,7 @@
 const { CASE_SEARCH_MIN_YEAR } = require('../entities/EntityConstants');
 
-const makeSimpleQuerySafe = text => {
-  const nonWordCharacters = /\W+/gims;
+const removeAdvancedSyntaxSymbols = text => {
+  const nonWordCharacters = /[-+\s[\]{}:?!*."()<>=]+/gims;
   return text.replace(nonWordCharacters, ' ').trim();
 };
 
@@ -30,7 +30,7 @@ const aggregateCommonQueryParams = ({
   const nonExactMatchesQuery = [];
 
   if (petitionerName) {
-    const simplePetitionerQuery = makeSimpleQuerySafe(petitionerName);
+    const simplePetitionerQuery = removeAdvancedSyntaxSymbols(petitionerName);
     const simpleQuery = {
       default_operator: 'and',
       fields: [
@@ -137,5 +137,5 @@ const aggregateCommonQueryParams = ({
 
 module.exports = {
   aggregateCommonQueryParams,
-  makeSimpleQuerySafe,
+  removeAdvancedSyntaxSymbols,
 };
