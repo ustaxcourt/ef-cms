@@ -18,8 +18,8 @@ export const openCaseDocumentDownloadUrlAction = async ({
     docketEntryId,
     docketNumber,
     isForIFrame = false,
-    isMobile,
     isPublic,
+    useSameTab,
   } = props;
 
   const {
@@ -33,7 +33,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
 
   if (isForIFrame) {
     store.set(state.iframeSrc, url);
-  } else if (isMobile) {
+  } else if (useSameTab) {
     window.location.href = url;
   } else {
     router.openInNewTab(url);

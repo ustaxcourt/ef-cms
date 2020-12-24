@@ -144,7 +144,6 @@ export const DraftDocumentViewerDocument = connect(
                   openCaseDocumentDownloadUrlSequence({
                     docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
-                    isForIFrame: true,
                   })
                 }
               >
