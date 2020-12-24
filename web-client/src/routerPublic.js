@@ -43,6 +43,11 @@ const router = {
       app.getSequence('gotoTodaysOpinionsSequence')();
     });
 
+    route('/todays-orders', () => {
+      setPageTitle('Today’s Orders');
+      app.getSequence('gotoTodaysOrdersSequence')();
+    });
+
     route('/health', () => {
       setPageTitle('Health Check');
       return app.getSequence('gotoHealthCheckSequence')();

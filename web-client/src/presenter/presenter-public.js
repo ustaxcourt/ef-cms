@@ -13,6 +13,8 @@ import { gotoPublicCaseDetailSequence } from './sequences/public/gotoPublicCaseD
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/public/gotoTodaysOpinionsSequence';
+import { gotoTodaysOrdersSequence } from './sequences/public/gotoTodaysOrdersSequence';
+import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
@@ -57,6 +59,8 @@ export const presenter = {
     gotoPublicPrintableDocketRecordSequence,
     gotoPublicSearchSequence,
     gotoTodaysOpinionsSequence,
+    gotoTodaysOrdersSequence,
+    loadMoreTodaysOrdersSequence,
     navigateBackSequence,
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,

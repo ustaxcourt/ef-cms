@@ -3,15 +3,6 @@ const { get } = require('lodash');
 
 exports.search = async ({ applicationContext, searchParameters }) => {
   const caseMap = {};
-  const results = [];
-
-  const body = await applicationContext
-    .getSearchClient()
-    .search(searchParameters);
-
-  const hits = get(body, 'hits.hits');
-  const total = get(body, 'hits.total.value');
-
   const formatHit = hit => {
     const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
       hit['_source'],
@@ -53,11 +44,16 @@ exports.search = async ({ applicationContext, searchParameters }) => {
     }
   };
 
-  if (hits && hits.length > 0) {
-    hits.forEach(hit => {
-      results.push(formatHit(hit));
-    });
+  let body;
+  try {
+    body = await applicationContext.getSearchClient().search(searchParameters);
+  } catch (searchError) {
+    applicationContext.logger.error(searchError);
+    throw new Error('Search client encountered an error.');
   }
+
+  const total = get(body, 'hits.total.value', 0);
+  const results = get(body, 'hits.hits', []).map(formatHit);
 
   return {
     results,

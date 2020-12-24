@@ -18,6 +18,8 @@ const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
 const SERVED_PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
+const ORDER_JUDGE_FIELD = 'signedJudgeName';
+
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
@@ -205,6 +207,8 @@ const SCENARIOS = [
   'Nonstandard F',
   'Nonstandard G',
   'Nonstandard H',
+  'Nonstandard I',
+  'Nonstandard J',
   'Type A',
   'Type B',
   'Type C',
@@ -1034,6 +1038,7 @@ const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page wh
 const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
 const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
 const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
+const TODAYS_ORDERS_PAGE_SIZE = 2; // number of results returned for each page for the today's orders page
 
 // TODO: event codes need to be reorganized
 const ALL_EVENT_CODES = flatten([
@@ -1177,6 +1182,7 @@ module.exports = deepFreeze({
   ORDER_TYPES,
   OTHER_FILER_TYPES,
   OTHER_TYPES,
+  ORDER_JUDGE_FIELD,
   PARTY_TYPES,
   PAYMENT_STATUS,
   PETITIONS_SECTION,
@@ -1200,6 +1206,7 @@ module.exports = deepFreeze({
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  TODAYS_ORDERS_PAGE_SIZE,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_CITIES,

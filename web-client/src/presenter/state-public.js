@@ -7,6 +7,7 @@ import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetai
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/public/todaysOpinionsHelper';
+import { todaysOrdersHelper } from './computeds/public/todaysOrdersHelper';
 
 const helpers = {
   advancedDocumentSearchHelper,
@@ -18,6 +19,7 @@ const helpers = {
   publicCaseDetailHelper,
   templateHelper,
   todaysOpinionsHelper,
+  todaysOrdersHelper,
 };
 
 export const state = {
@@ -42,6 +44,9 @@ export const state = {
     waitingForResponseRequests: 0,
   },
   todaysOpinions: [],
+  todaysOrders: {
+    results: [],
+  },
   user: {},
   validationErrors: {},
 };
