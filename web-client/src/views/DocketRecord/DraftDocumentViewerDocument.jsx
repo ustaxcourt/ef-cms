@@ -144,6 +144,7 @@ export const DraftDocumentViewerDocument = connect(
                   openCaseDocumentDownloadUrlSequence({
                     docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
+                    //fixme open in new tab or nmo???
                   })
                 }
               >

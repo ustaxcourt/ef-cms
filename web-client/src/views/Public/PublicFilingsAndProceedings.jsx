@@ -27,6 +27,7 @@ export const PublicFilingsAndProceedings = connect(
                 docketEntryId: entry.docketEntryId,
                 docketNumber: caseDetail.docketNumber,
                 isPublic: true,
+                //fixme open in new tab or nmo???
               });
             }}
           >

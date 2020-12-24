@@ -43,6 +43,7 @@ export const FilingsAndProceedings = connect(
                 openCaseDocumentDownloadUrlSequence({
                   docketEntryId: entry.docketEntryId,
                   docketNumber: caseDetail.docketNumber,
+                  //fixme open in new tab or nmo???
                 })
               }
             >
