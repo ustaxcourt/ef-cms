@@ -20,11 +20,13 @@ CourtIssuedDocumentTypeF.prototype.init = function init(rawProps) {
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
   this.judge = rawProps.judge;
+  this.judgeWithTitle = rawProps.judgeWithTitle;
   this.trialLocation = rawProps.trialLocation;
 };
 
 CourtIssuedDocumentTypeF.prototype.getDocumentTitle = function () {
-  return replaceBracketed(this.documentTitle, this.judge, this.trialLocation);
+  const judge = this.judgeWithTitle || this.judge;
+  return replaceBracketed(this.documentTitle, judge, this.trialLocation);
 };
 
 CourtIssuedDocumentTypeF.schema = {
@@ -32,6 +34,7 @@ CourtIssuedDocumentTypeF.schema = {
   documentTitle: JoiValidationConstants.STRING.optional(),
   documentType: JoiValidationConstants.STRING.required(),
   judge: JoiValidationConstants.STRING.required(),
+  judgeWithtitle: JoiValidationConstants.STRING.optional(),
   trialLocation: JoiValidationConstants.STRING.required(),
 };
 

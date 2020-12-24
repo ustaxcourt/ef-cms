@@ -4,11 +4,11 @@ import { state } from 'cerebral';
 
 export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
-  const searchResults = get(state.searchResults);
   const isPublic = get(state.isPublic);
   const advancedSearchTab = get(state.advancedSearchTab);
+  const searchResults = get(state.searchResults[advancedSearchTab]);
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
-  const MANY_RESULTS = applicationContext.getConstants().MAX_SEARCH_RESULTS / 2;
+  const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
 
   let showSealedIcon = true;
   let documentTypeVerbiage = capitalize(advancedSearchTab);
@@ -34,14 +34,14 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   }
 
   const showManyResultsMessage = !!(
-    searchResults && searchResults.length >= MANY_RESULTS
+    searchResults && searchResults.length >= MAX_SEARCH_RESULTS
   );
 
   return {
     ...paginatedResults,
     documentTypeVerbiage,
     isPublic,
-    manyResults: MANY_RESULTS, // e.g. if max=200, many=100
+    manyResults: MAX_SEARCH_RESULTS,
     showManyResultsMessage,
     showSealedIcon,
   };

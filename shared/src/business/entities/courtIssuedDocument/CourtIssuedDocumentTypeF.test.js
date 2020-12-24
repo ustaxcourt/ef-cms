@@ -45,12 +45,27 @@ describe('CourtIssuedDocumentTypeF', () => {
         attachments: false,
         documentTitle: 'Further Trial before [Judge] at [Place]',
         documentType: 'FTRL - Further Trial before ...',
-        judge: 'Judge Colvin',
+        judge: 'Colvin',
+        judgeWithTitle: 'Judge Colvin',
         scenario: 'Type F',
         trialLocation: 'Seattle, Washington',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Further Trial before Judge Colvin at Seattle, Washington',
+      );
+    });
+
+    it('should generate a title without the judge title if not available', () => {
+      const extDoc = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: 'Further Trial before [Judge] at [Place]',
+        documentType: 'FTRL - Further Trial before ...',
+        judge: 'Colvin',
+        scenario: 'Type F',
+        trialLocation: 'Seattle, Washington',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Further Trial before Colvin at Seattle, Washington',
       );
     });
   });

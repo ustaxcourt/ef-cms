@@ -16,6 +16,7 @@ exports.search = async ({ applicationContext, searchParameters }) => {
     const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
       hit['_source'],
     );
+    sourceUnmarshalled['_score'] = hit['_score'];
 
     if (
       hit['_index'] === 'efcms-docket-entry' &&

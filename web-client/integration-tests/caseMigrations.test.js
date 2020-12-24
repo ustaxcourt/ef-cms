@@ -1,5 +1,7 @@
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { documentViewerHelper as documentViewerHelperComputed } from '../src/presenter/computeds/documentViewerHelper';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
@@ -8,6 +10,9 @@ import axios from 'axios';
 
 const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
+);
+const documentViewerHelper = withAppContextDecorator(
+  documentViewerHelperComputed,
 );
 
 const test = setupTest();
@@ -190,6 +195,22 @@ const otherPetitionersCase = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
+const proposedStipDecisionLegacyServed = {
+  createdAt: '2018-11-21T20:49:28.192Z',
+  docketEntryId: '4070e75c-bfd6-4c25-b822-0f980a6d29fc',
+  docketNumber: '156-21',
+  documentTitle: 'Proposed Stipulated Decision',
+  documentType: 'Proposed Stipulated Decision',
+  eventCode: 'PSDE',
+  filedBy: 'Test Petitioner',
+  index: 6,
+  isFileAttached: true,
+  isLegacyServed: true,
+  isOnDocketRecord: true,
+  processingStatus: 'pending',
+  userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+};
+
 const legacyServedDocumentCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
@@ -213,6 +234,7 @@ const legacyServedDocumentCase = {
       processingStatus: 'complete',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     },
+    proposedStipDecisionLegacyServed,
   ],
   docketNumber: '156-21',
   preferredTrialCity: 'Washington, District of Columbia',
@@ -342,7 +364,7 @@ describe('Case migration journey', () => {
       docketNumber: legacyServedDocumentCase.docketNumber,
     });
     const caseDocuments = test.getState('caseDetail.docketEntries');
-    expect(caseDocuments.length).toBe(4);
+    expect(caseDocuments.length).toBe(5);
 
     const legacyServedDocument = caseDocuments.find(d => d.isLegacyServed);
     expect(legacyServedDocument.servedAt).toBeUndefined();
@@ -365,6 +387,12 @@ describe('Case migration journey', () => {
         isOnDocketRecord: true,
         pending: true,
       },
+      {
+        docketEntryId: '4070e75c-bfd6-4c25-b822-0f980a6d29fc',
+        docketNumber: '156-21',
+        documentTitle: 'Proposed Stipulated Decision',
+        documentType: 'Proposed Stipulated Decision',
+      },
     ]);
 
     await test.runSequence('gotoPendingReportSequence');
@@ -377,23 +405,50 @@ describe('Case migration journey', () => {
       item => item.docketNumber === legacyServedDocumentCase.docketNumber,
     );
 
-    expect(pendingItemsForThisCase).toMatchObject([
-      {
-        associatedJudge: 'Chief Judge',
-        caseCaption: 'The Sixth Migrated Case',
-        docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        docketNumber: '156-21',
-        docketNumberSuffix: null,
-        documentTitle: 'Proposed Stipulated Decision',
-        documentType: 'Proposed Stipulated Decision',
-        status: 'New',
+    expect(pendingItemsForThisCase).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(
+          {
+            associatedJudge: 'Chief Judge',
+            caseCaption: 'The Sixth Migrated Case',
+            docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            docketNumber: '156-21',
+            docketNumberSuffix: null,
+            documentTitle: 'Proposed Stipulated Decision',
+            documentType: 'Proposed Stipulated Decision',
+            status: 'New',
+          },
+          {
+            associatedJudge: 'Chief Judge',
+            caseCaption: 'The Sixth Migrated Case',
+            docketEntryId: '4070e75c-bfd6-4c25-b822-0f980a6d29fc',
+            docketNumber: '156-21',
+            docketNumberSuffix: null,
+            documentTitle: 'Proposed Stipulated Decision',
+            documentType: 'Proposed Stipulated Decision',
+            status: 'New',
+          },
+          {
+            docketEntryId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
+            documentTitle: 'Answer',
+            documentType: 'Answer',
+          },
+        ),
+      ]),
+    );
+
+    await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
+      docketRecordTab: 'documentView',
+      viewerDocumentToDisplay: {
+        docketEntryId: proposedStipDecisionLegacyServed.docketEntryId,
       },
-      {
-        docketEntryId: 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0',
-        documentTitle: 'Answer',
-        documentType: 'Answer',
-      },
-    ]);
+    });
+
+    const documentViewer = runCompute(documentViewerHelper, {
+      state: test.getState(),
+    });
+
+    expect(documentViewer.showSignStipulatedDecisionButton).toBeTruthy();
   });
 
   loginAs(test, 'privatePractitioner@example.com');
@@ -433,7 +488,7 @@ describe('Case migration journey', () => {
 
     expect(
       test
-        .getState('searchResults')
+        .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(
           result =>
             result.contactPrimary.name ===
@@ -486,7 +541,7 @@ describe('Case migration journey', () => {
 
     expect(
       test
-        .getState('searchResults')
+        .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(
           result =>
             result.contactPrimary.name ===
@@ -508,7 +563,7 @@ describe('Case migration journey', () => {
 
     expect(
       test
-        .getState('searchResults')
+        .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(
           result =>
             result.contactPrimary.name ===

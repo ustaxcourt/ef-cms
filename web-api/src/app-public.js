@@ -33,24 +33,29 @@ const {
 const {
   getPublicDocumentDownloadUrlLambda,
 } = require('./public-api/getPublicDocumentDownloadUrlLambda');
-const {
-  opinionPublicSearchLambda,
-} = require('./public-api/opinionPublicSearchLambda');
-const {
-  orderPublicSearchLambda,
-} = require('./public-api/orderPublicSearchLambda');
 const { getHealthCheckLambda } = require('./health/getHealthCheckLambda');
 const { getPublicCaseLambda } = require('./public-api/getPublicCaseLambda');
 const { getPublicJudgesLambda } = require('./public-api/getPublicJudgesLambda');
 const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
+
+// Temporarily disabled for story 7387
+// const {
+//   opinionPublicSearchLambda,
+// } = require('./public-api/opinionPublicSearchLambda');
+// const {
+//   orderPublicSearchLambda,
+// } = require('./public-api/orderPublicSearchLambda');
 
 /**
  * public-api
  */
 app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
-app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
-app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
+
+// Temporarily disabled for story 7387
+// app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
+// app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
+
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
 app.get(

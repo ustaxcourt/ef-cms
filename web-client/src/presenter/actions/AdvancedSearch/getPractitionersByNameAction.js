@@ -22,5 +22,5 @@ export const getPractitionersByNameAction = async ({
       name: practitionerName,
     });
 
-  return { practitioners };
+  return { searchResults: practitioners };
 };

@@ -1,4 +1,5 @@
 const { filterForPublic } = require('./publicHelpers');
+const { MAX_SEARCH_RESULTS } = require('../../entities/EntityConstants');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
 /**
@@ -17,7 +18,7 @@ exports.casePublicSearchInteractor = async ({
 }) => {
   const foundCases = await applicationContext
     .getPersistenceGateway()
-    .casePublicSearch({
+    .casePublicSearchExactMatch({
       applicationContext,
       countryType,
       petitionerName,
@@ -26,10 +27,12 @@ exports.casePublicSearchInteractor = async ({
       yearFiledMin,
     });
 
-  const unsealedFoundCases = await filterForPublic({
-    applicationContext,
-    unfiltered: foundCases,
-  });
+  const unsealedFoundCases = (
+    await filterForPublic({
+      applicationContext,
+      unfiltered: foundCases,
+    })
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return PublicCase.validateRawCollection(unsealedFoundCases, {
     applicationContext,

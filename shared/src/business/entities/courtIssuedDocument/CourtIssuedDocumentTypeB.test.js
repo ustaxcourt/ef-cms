@@ -45,11 +45,26 @@ describe('CourtIssuedDocumentTypeB', () => {
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
         freeText: 'Some free text',
-        judge: 'Judge Colvin',
+        judge: 'Colvin',
+        judgeWithTitle: 'Judge Colvin',
         scenario: 'Type B',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Order that case is assigned to Judge Colvin Some free text',
+      );
+    });
+
+    it('should generate a title without the judge title if not available', () => {
+      const extDoc = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
+        documentType: 'Order that case is assigned',
+        freeText: 'Some free text',
+        judge: 'Colvin',
+        scenario: 'Type B',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Order that case is assigned to Colvin Some free text',
       );
     });
 

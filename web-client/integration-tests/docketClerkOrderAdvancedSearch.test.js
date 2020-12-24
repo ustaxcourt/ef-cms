@@ -1,3 +1,4 @@
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
 import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
 import {
   FORMATS,
@@ -111,6 +112,7 @@ describe('docket clerk order advanced search', () => {
       await refreshElasticsearchIndex();
 
       await test.runSequence('gotoAdvancedSearchSequence');
+      test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
       const judges = test.getState('legacyAndCurrentJudges');
       expect(judges.length).toBeGreaterThan(0);
@@ -174,7 +176,9 @@ describe('docket clerk order advanced search', () => {
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
       expect(test.getState('validationErrors')).toEqual({});
-      expect(test.getState('searchResults')).toEqual([]);
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual([]);
     });
 
     it('search for a docket number that is not present in any served orders', async () => {
@@ -190,7 +194,9 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual([]);
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual([]);
     });
 
     it('search for a case title that is not present in any served orders', async () => {
@@ -206,7 +212,9 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual([]);
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual([]);
     });
 
     it('search for a date range that does not contain served orders', async () => {
@@ -220,7 +228,9 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual([]);
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual([]);
     });
 
     it('search for a judge that has not signed any served orders', async () => {
@@ -236,7 +246,9 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual([]);
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual([]);
     });
   });
 
@@ -251,7 +263,9 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: test.draftOrders[2].docketEntryId,
@@ -259,7 +273,9 @@ describe('docket clerk order advanced search', () => {
           }),
         ]),
       );
-      expect(test.getState('searchResults')).not.toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: test.draftOrders[1].docketEntryId,
@@ -279,14 +295,18 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: test.draftOrders[2].docketEntryId,
           }),
         ]),
       );
-      expect(test.getState('searchResults')).not.toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: test.draftOrders[1].docketEntryId,
@@ -306,14 +326,18 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: test.draftOrders[2].docketEntryId,
           }),
         ]),
       );
-      expect(test.getState('searchResults')).not.toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: test.draftOrders[1].docketEntryId,
@@ -365,14 +389,18 @@ describe('docket clerk order advanced search', () => {
 
       await refreshElasticsearchIndex();
 
-      expect(test.getState('searchResults')).toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: test.draftOrders[2].docketEntryId,
           }),
         ]),
       );
-      expect(test.getState('searchResults')).not.toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: test.draftOrders[1].docketEntryId,
@@ -392,12 +420,16 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ docketEntryId: seedData.docketEntryId }),
         ]),
       );
-      expect(test.getState('searchResults')).not.toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).not.toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: test.draftOrders[1].docketEntryId,
@@ -416,7 +448,9 @@ describe('docket clerk order advanced search', () => {
 
       await test.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(test.getState('searchResults')).toEqual(
+      expect(
+        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             numberOfPages: 1,

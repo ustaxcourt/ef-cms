@@ -3614,6 +3614,53 @@ describe('Case entity', () => {
     });
   });
 
+  describe('trialDate and trialSessionId validation', () => {
+    it('should fail validation when trialSessionId is defined and trialDate is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        trialSessionId: '0762e545-8cbc-4a18-ab7a-27d205c83f60',
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toEqual({
+        trialDate: '"trialDate" is required',
+      });
+    });
+
+    it('should fail validation when case status is calendared, trialDate is defined and trialSessionId is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:40:46.415Z',
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toEqual({
+        trialSessionId: '"trialSessionId" is required',
+      });
+    });
+
+    it('should pass validation when case status is not calendared, trialDate is undefined and trialSessionId is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.new,
+        trialDate: undefined,
+        trialSessionId: undefined,
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+
+    it('should pass validation when case status is calendared, trialDate is defined and trialSessionId is defined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:40:46.415Z',
+        trialSessionId: '0762e545-8cbc-4a18-ab7a-27d205c83f60',
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+  });
+
   describe('setNoticeOfTrialDate', () => {
     it('should set noticeOfTrialDate on the given case', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
@@ -4212,6 +4259,7 @@ describe('Case entity', () => {
         automaticBlockedDate: '2019-03-01T21:42:29.073Z',
         automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedCalendaredCase, { applicationContext });
@@ -4227,6 +4275,7 @@ describe('Case entity', () => {
         automaticBlockedDate: '2019-03-01T21:42:29.073Z',
         automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedCalendaredCase, { applicationContext });
@@ -4240,6 +4289,7 @@ describe('Case entity', () => {
         blockedDate: '2019-03-01T21:42:29.073Z',
         blockedReason: 'A reason',
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedCalendaredCase, { applicationContext });
@@ -4253,6 +4303,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         automaticBlocked: false,
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(calendaredCase, { applicationContext });
@@ -4264,6 +4315,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         blocked: false,
         status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(calendaredCase, { applicationContext });
@@ -4277,6 +4329,7 @@ describe('Case entity', () => {
         automaticBlockedDate: '2019-03-01T21:42:29.073Z',
         automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         status: CASE_STATUS_TYPES.new,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedNewCase, { applicationContext });
@@ -4290,6 +4343,7 @@ describe('Case entity', () => {
         blockedDate: '2019-03-01T21:42:29.073Z',
         blockedReason: 'A reason',
         status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(blockedReadyForTrialCase, {
