@@ -200,7 +200,7 @@ export const MessageDocument = connect(
                   openCaseDocumentDownloadUrlSequence({
                     docketEntryId: viewerDocumentToDisplay.documentId,
                     docketNumber: caseDetail.docketNumber,
-                    //fixme open in new tab or nmo???
+                    isForIFrame: true,
                   })
                 }
               >

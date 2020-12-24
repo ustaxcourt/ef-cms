@@ -79,7 +79,6 @@ export const DocumentSearchResults = connect(
                               docketEntryId: result.docketEntryId,
                               docketNumber: result.docketNumber,
                               isPublic: advancedDocumentSearchHelper.isPublic,
-                              //fixme open in new tab or nmo???
                             });
                           }}
                         >

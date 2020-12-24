@@ -4,6 +4,8 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('openCaseDocumentDownloadUrlAction', () => {
+  const openInNewTab = jest.fn();
+
   beforeAll(() => {
     window.open = jest.fn().mockReturnValue({
       location: { href: '' },
@@ -12,6 +14,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     window.location = { href: '' };
 
     presenter.providers.applicationContext = applicationContext;
+    presenter.providers.router = { openInNewTab };
 
     applicationContext
       .getUseCases()
@@ -20,7 +23,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       });
   });
 
-  it('sets iframeSrc with the url', async () => {
+  it('should set iframeSrc with the url when props.isForIFrame is true', async () => {
     const result = await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
@@ -43,12 +46,13 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
   });
 
-  it('sets window.location.href', async () => {
+  it('should set window.location.href when props.isMobile is true and props.isForIFrame is false', async () => {
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
         docketEntryId: 'docket-entry-id-123',
         docketNumber: '123-20',
+        isMobile: true,
       },
     });
 
@@ -61,5 +65,26 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       }),
     );
     expect(window.location.href).toEqual('http://example.com');
+  });
+
+  it('should open in a new tab when props.isMobile and props.isForIFrame is false', async () => {
+    await runAction(openCaseDocumentDownloadUrlAction, {
+      modules: { presenter },
+      props: {
+        docketEntryId: 'docket-entry-id-123',
+        docketNumber: '123-20',
+        isMobile: false,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getDocumentDownloadUrlInteractor,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        docketNumber: '123-20',
+        key: 'docket-entry-id-123',
+      }),
+    );
+    expect(openInNewTab).toHaveBeenCalledWith('http://example.com');
   });
 });
