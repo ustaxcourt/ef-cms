@@ -1,8 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { getPractitionersByNameAction } from '../actions/AdvancedSearch/getPractitionersByNameAction';
+import { setAdvancedSearchResultsAction } from '../actions/AdvancedSearch/setAdvancedSearchResultsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setPractitionerResultsAction } from '../actions/AdvancedSearch/setPractitionerResultsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -22,7 +22,7 @@ export const submitPractitionerNameSearchSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       getPractitionersByNameAction,
-      setPractitionerResultsAction,
+      setAdvancedSearchResultsAction,
     ]),
   },
 ];

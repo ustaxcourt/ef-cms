@@ -2,9 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  MAX_SEARCH_RESULTS,
+  OPINION_EVENT_CODES,
+} = require('../../entities/EntityConstants');
+const {
   opinionPublicSearchInteractor,
 } = require('./opinionPublicSearchInteractor');
-const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
 describe('opinionPublicSearchInteractor', () => {
   const mockOpinionSearchResult = [
@@ -37,6 +40,29 @@ describe('opinionPublicSearchInteractor', () => {
       .advancedDocumentSearch.mock.calls[0][0];
     expect(searchArgs.documentEventCodes).toMatchObject(OPINION_EVENT_CODES);
     expect(searchArgs.omitSealed).toBeUndefined();
+  });
+
+  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+      caseCaption: 'Samson Workman, Petitioner',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+      docketNumber: '103-19',
+      documentTitle: 'T.C. Opinion for More Candy',
+      documentType: 'T.C. Opinion',
+      eventCode: 'TCOP',
+      signedJudgeName: 'Guy Fieri',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue(maxPlusOneResults);
+
+    const results = await opinionPublicSearchInteractor({
+      applicationContext,
+      keyword: 'fish',
+      startDate: '2001-01-01',
+    });
+
+    expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('should return search results based on the supplied opinion keyword', async () => {
