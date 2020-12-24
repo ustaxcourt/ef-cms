@@ -112,6 +112,8 @@ export const DocketRecordOverlay = connect(
                     docketEntryId: entry.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
                     isMobile: true,
+                    //fixme open in new tab or nmo???
+                    //fix all internal to open in a new tab
                   });
                 }}
               >
