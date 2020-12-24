@@ -36,6 +36,6 @@ describe('getPractitionersByNameAction', () => {
     ).toMatchObject({
       name: 'Ricky',
     });
-    expect(results.output).toEqual({ practitioners: [{ barNumber: '11111' }] });
+    expect(results.output).toEqual({ searchResults: [{ barNumber: '11111' }] });
   });
 });

@@ -789,7 +789,7 @@ describe('documentViewerHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(true);
     });
 
-    it('should be undefined if the eventCode is PSDE and the PSDE is not served', () => {
+    it('should be true if the eventCode is PSDE, the PSDE is legacy served, and the SDEC eventCode is not in the documents', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
@@ -800,6 +800,7 @@ describe('documentViewerHelper', () => {
                 documentType: 'Proposed Stipulated Decision',
                 entityName: 'Document',
                 eventCode: 'PSDE',
+                isLegacyServed: true,
                 isOnDocketRecord: true,
               },
             ],
@@ -811,7 +812,33 @@ describe('documentViewerHelper', () => {
         },
       });
 
-      expect(result.showSignStipulatedDecisionButton).toBeUndefined();
+      expect(result.showSignStipulatedDecisionButton).toEqual(true);
+    });
+
+    it('should be undefined if the eventCode is PSDE and the PSDE is not served', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isLegacyServed: false,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {},
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toBeFalsy();
     });
 
     it('should be true if the document code is PSDE, the PSDE is served, and an archived SDEC eventCode is in the documents', () => {

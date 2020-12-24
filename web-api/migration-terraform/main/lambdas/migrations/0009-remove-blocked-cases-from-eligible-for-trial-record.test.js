@@ -1,5 +1,6 @@
 const {
   AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 const {
   migrateItems,
@@ -67,6 +68,25 @@ describe('migrateItems', () => {
     );
   });
 
+  it('should not migrate eligible for trial records that are associated with a case that was not found', async () => {
+    const mockNonBlockedCase = {
+      docketNumber: MOCK_CASE.docketNumber,
+      pk: 'eligible-for-trial-case-catalog',
+    };
+
+    const items = [mockNonBlockedCase];
+
+    documentClient.get = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Item: {},
+      }),
+    });
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results).toEqual([]);
+  });
+
   it('should NOT return records that are eligible for trial case catalog records that are blocked', async () => {
     const mockNonBlockedCase = {
       docketNumber: MOCK_CASE.docketNumber,
@@ -85,6 +105,32 @@ describe('migrateItems', () => {
           blockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'A reason',
+        },
+      }),
+    });
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results).toEqual([]);
+  });
+
+  it('should NOT migrate eligible for trial case catalog records which belong to a cases that are calendered', async () => {
+    const mockNonBlockedCase = {
+      docketNumber: MOCK_CASE.docketNumber,
+      pk: 'eligible-for-trial-case-catalog',
+    };
+
+    const items = [mockNonBlockedCase];
+
+    documentClient.get = jest.fn().mockReturnValue({
+      promise: async () => ({
+        Item: {
+          ...MOCK_CASE,
+          associatedJudge: 'Judge Dredd',
+          blocked: false,
+          deadlineDate: '2019-03-01T21:42:29.073Z',
+          description: 'A reason',
+          status: CASE_STATUS_TYPES.calendared,
         },
       }),
     });

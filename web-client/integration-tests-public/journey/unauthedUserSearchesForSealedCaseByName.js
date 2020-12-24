@@ -1,3 +1,4 @@
+import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
 export const unauthedUserSearchesForSealedCaseByName = test => {
@@ -12,7 +13,9 @@ export const unauthedUserSearchesForSealedCaseByName = test => {
 
     await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
 
-    const searchResults = test.getState('searchResults');
+    const searchResults = test.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
+    );
     expect(searchResults.length).toEqual(0);
   });
 };
