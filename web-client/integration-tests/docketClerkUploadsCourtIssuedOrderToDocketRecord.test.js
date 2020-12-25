@@ -1,3 +1,4 @@
+import { docketClerkAddsDocketEntryForNoticeFromDraft } from './journey/docketClerkAddsDocketEntryForNoticeFromDraft';
 import { docketClerkAddsDocketEntryFromDraft } from './journey/docketClerkAddsDocketEntryFromDraft';
 import { docketClerkEditsAnUploadedCourtIssuedDocument } from './journey/docketClerkEditsAnUploadedCourtIssuedDocument';
 import { docketClerkEditsSignedUploadedCourtIssuedDocument } from './journey/docketClerkEditsSignedUploadedCourtIssuedDocument';
@@ -44,4 +45,12 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
 
   loginAs(test, 'petitioner@example.com');
   petitionerViewsCaseDetail(test, { documentCount: 3 });
+
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkUploadsACourtIssuedDocument(test, fakeFile);
+  docketClerkViewsDraftOrder(test, 0);
+  docketClerkAddsDocketEntryForNoticeFromDraft(test, 0);
+
+  loginAs(test, 'petitioner@example.com');
+  petitionerViewsCaseDetail(test, { documentCount: 4 });
 });
