@@ -68,6 +68,20 @@ exports.createPractitionerUserWithId = async ({ applicationContext, user }) => {
       Username: user.userId,
     })
     .promise();
+
+  await applicationContext
+    .getCognito()
+    .adminUpdateUserAttributes({
+      UserAttributes: [
+        {
+          Name: 'preferred_username',
+          Value: user.userId,
+        },
+      ],
+      UserPoolId: process.env.USER_POOL_ID,
+      Username: user.email,
+    })
+    .promise();
 };
 
 exports.createPractitionerUser = async ({ applicationContext, user }) => {
