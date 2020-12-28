@@ -101,4 +101,11 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     destinations: [destination],
     templateName: process.env.EMAIL_SERVED_PETITION_TEMPLATE,
   });
+
+  applicationContext.logger.info('served a document to the irs', {
+    destination,
+    docketEntryId,
+    docketNumber,
+    eventCode,
+  });
 };
