@@ -169,7 +169,6 @@ const {
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
   createPractitionerUser,
-  createPractitionerUserWithId,
 } = require('../../shared/src/persistence/dynamo/users/createPractitionerUser');
 const {
   createPractitionerUserInteractor,
@@ -1131,7 +1130,6 @@ const gatewayMethods = {
     createMessage,
     createMigratedPetitionerUser,
     createPractitionerUser,
-    createPractitionerUserWithId,
     createSectionInboxRecord,
     createTrialSession,
     createTrialSessionWorkingCopy,
