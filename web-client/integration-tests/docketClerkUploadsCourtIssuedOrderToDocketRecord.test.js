@@ -15,11 +15,11 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
 const test = setupTest();
-test.draftOrders = [];
 
 describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+    test.draftOrders = [];
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -48,8 +48,8 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkUploadsACourtIssuedDocument(test, fakeFile);
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkAddsDocketEntryForNoticeFromDraft(test, 0);
+  docketClerkViewsDraftOrder(test, 2);
+  docketClerkAddsDocketEntryForNoticeFromDraft(test, 2);
 
   loginAs(test, 'petitioner@example.com');
   petitionerViewsCaseDetail(test, { documentCount: 4 });
