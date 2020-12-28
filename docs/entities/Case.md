@@ -3253,7 +3253,6 @@
                             - "OAD"
                             - "ODJ"
                             - "SDEC"
-                            - "NOT"
                             - "NTD"
                         then: 
                           type: "any"
@@ -6857,7 +6856,6 @@
                             - "OAD"
                             - "ODJ"
                             - "SDEC"
-                            - "NOT"
                             - "NTD"
                         then: 
                           type: "any"
