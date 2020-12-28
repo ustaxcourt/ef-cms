@@ -1,7 +1,8 @@
 import 'wicg-inert';
 import React, { useEffect, useRef } from 'react';
 
-const appRoot = document.getElementById('app');
+const appRoot =
+  document.getElementById('app') || document.getElementById('app-public');
 const tabbableSelector =
   'a:enabled,button:enabled,input:enabled,select:enabled,textarea:enabled';
 
