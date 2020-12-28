@@ -79,18 +79,7 @@ exports.updatePractitionerUserInteractor = async ({
       user: validatedUserData,
     });
 
-  const practitioner = new Practitioner(updatedUser, { applicationContext })
+  return new Practitioner(updatedUser, { applicationContext })
     .validate()
     .toRawObject();
-
-  console.log('we are here', practitioner);
-
-  await applicationContext
-    .getPersistenceGateway()
-    .createPractitionerUserWithId({
-      applicationContext,
-      user: practitioner,
-    });
-
-  return practitioner;
 };

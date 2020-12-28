@@ -42,48 +42,6 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   };
 };
 
-exports.createPractitionerUserWithId = async ({ applicationContext, user }) => {
-  await applicationContext
-    .getCognito()
-    .adminCreateUser({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: user.email,
-        },
-        {
-          Name: 'custom:role',
-          Value: user.role,
-        },
-        {
-          Name: 'name',
-          Value: user.name,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: user.userId,
-    })
-    .promise();
-
-  await applicationContext
-    .getCognito()
-    .adminUpdateUserAttributes({
-      UserAttributes: [
-        {
-          Name: 'preferred_username',
-          Value: user.userId,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: user.email,
-    })
-    .promise();
-};
-
 exports.createPractitionerUser = async ({ applicationContext, user }) => {
   let userId = applicationContext.getUniqueId();
   const practitionerRoleTypes = [

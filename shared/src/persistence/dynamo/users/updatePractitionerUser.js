@@ -71,33 +71,75 @@ exports.updatePractitionerUser = async ({ applicationContext, user }) => {
     userId,
   });
 
-  try {
-    const response = await applicationContext
+  if (!oldUser.email && user.email) {
+    await applicationContext
       .getCognito()
-      .adminGetUser({
+      .adminCreateUser({
+        UserAttributes: [
+          {
+            Name: 'email_verified',
+            Value: 'True',
+          },
+          {
+            Name: 'email',
+            Value: user.email,
+          },
+          {
+            Name: 'custom:role',
+            Value: user.role,
+          },
+          {
+            Name: 'name',
+            Value: user.name,
+          },
+        ],
         UserPoolId: process.env.USER_POOL_ID,
         Username: user.email,
       })
       .promise();
 
-    if (response) {
-      await applicationContext
+    await applicationContext
+      .getCognito()
+      .adminUpdateUserAttributes({
+        UserAttributes: [
+          {
+            Name: 'preferred_username',
+            Value: user.userId,
+          },
+        ],
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: user.email,
+      })
+      .promise();
+  } else {
+    try {
+      const response = await applicationContext
         .getCognito()
-        .adminUpdateUserAttributes({
-          UserAttributes: [
-            {
-              Name: 'custom:role',
-              Value: user.role,
-            },
-          ],
+        .adminGetUser({
           UserPoolId: process.env.USER_POOL_ID,
-          Username: response.Username,
+          Username: user.email,
         })
         .promise();
+
+      if (response) {
+        await applicationContext
+          .getCognito()
+          .adminUpdateUserAttributes({
+            UserAttributes: [
+              {
+                Name: 'custom:role',
+                Value: user.role,
+              },
+            ],
+            UserPoolId: process.env.USER_POOL_ID,
+            Username: response.Username,
+          })
+          .promise();
+      }
+    } catch (error) {
+      applicationContext.logger.error(error);
+      await applicationContext.notifyHoneybadger(error);
     }
-  } catch (error) {
-    applicationContext.logger.error(error);
-    await applicationContext.notifyHoneybadger(error);
   }
 
   return await exports.updateUserRecords({
