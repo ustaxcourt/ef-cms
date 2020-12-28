@@ -7,9 +7,7 @@ export const docketClerkAddsDocketEntryForNoticeFromDraft = (
   draftOrderIndex,
 ) => {
   return it('Docket Clerk adds a docket entry  for a notice from the given draft', async () => {
-    let caseDetailFormatted;
-
-    caseDetailFormatted = runCompute(
+    let caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
         state: test.getState(),
@@ -36,7 +34,7 @@ export const docketClerkAddsDocketEntryForNoticeFromDraft = (
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'freeText',
-      value: 'Notice Not Requiring Signatue',
+      value: 'Notice Not Requiring Signature',
     });
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');

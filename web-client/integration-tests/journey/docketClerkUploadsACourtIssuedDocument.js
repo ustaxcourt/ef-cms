@@ -4,7 +4,6 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkUploadsACourtIssuedDocument = (test, fakeFile) => {
   return it('Docket Clerk uploads a court issued document', async () => {
-    test.draftOrders = [];
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
