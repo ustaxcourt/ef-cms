@@ -37,6 +37,19 @@ describe('practitionerDetailHelper', () => {
     expect(alternateEmail).toEqual('Not provided');
   });
 
+  it('should fall back to None when email is not set', () => {
+    const { emailFormatted } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {},
+        practitionerDetail: {
+          email: null,
+        },
+        user: { role: 'petitioner' },
+      },
+    });
+    expect(emailFormatted).toEqual('None');
+  });
+
   it('should format the admissionsDate', () => {
     const { admissionsDateFormatted } = runCompute(practitionerDetailHelper, {
       state: {
