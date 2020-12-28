@@ -72,17 +72,28 @@ exports.filePetitionInteractor = async ({
     );
   }
 
-  await Promise.all([
+  const [
+    ownershipDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  ] = await Promise.all([
     ownershipDisclosureFileUpload,
     petitionFileUpload,
     stinFileUpload,
   ]);
 
-  return await applicationContext.getUseCases().createCaseInteractor({
-    applicationContext,
-    ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
-    petitionFileId: await petitionFileUpload,
-    petitionMetadata,
-    stinFileId: await stinFileUpload,
-  });
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .createCaseInteractor({
+      applicationContext,
+      ownershipDisclosureFileId,
+      petitionFileId,
+      petitionMetadata,
+      stinFileId,
+    });
+
+  return {
+    caseDetail,
+    stinFileId,
+  };
 };
