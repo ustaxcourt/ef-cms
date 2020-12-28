@@ -6,23 +6,23 @@ export const unauthedUserViewsTodaysOrders = (test, testClient) => {
 
     await test.runSequence('gotoTodaysOrdersSequence', {});
 
-    expect(test.getState('todaysOrders.results')).toMatchObject([
-      {
-        documentTitle: test.documentTitle2,
-        documentType: 'Order',
-        numberOfPages: 1,
-      },
-      {
-        documentTitle: test.documentTitle1,
-        documentType: 'Order',
-        numberOfPages: 1,
-      },
-    ]);
+    //verifying that todays orders are sorted by most recent servedAt date
+    expect(test.getState('todaysOrders.results')[0]).toMatchObject({
+      documentTitle: test.documentTitle2,
+      documentType: 'Order',
+      numberOfPages: 1,
+    });
+    expect(test.getState('todaysOrders.results')[1]).toMatchObject({
+      documentTitle: test.documentTitle1,
+      documentType: 'Order',
+      numberOfPages: 1,
+    });
 
     await test.runSequence('openCaseDocumentDownloadUrlSequence', {
       docketEntryId: testClient.docketEntryId,
       docketNumber: testClient.docketNumber,
       isPublic: true,
+      useSameTab: true,
     });
 
     expect(window.location.href).toContain(testClient.docketEntryId);
