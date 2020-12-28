@@ -1,4 +1,5 @@
 import { Address } from '../StartCase/Address';
+import { Button } from '../../ustc-ui/Button/Button';
 import { Country } from '../StartCase/Country';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from '../StartCase/InternationalAddress';
@@ -136,8 +137,21 @@ export const PractitionerContactForm = connect(
               </FormGroup>
             ) : (
               <>
-                <span className="usa-label">Email address</span>
-                <p>{form.email}</p>
+                <span className="usa-label">
+                  Email address{' '}
+                  {!form.email && (
+                    <Button
+                      link
+                      className="margin-left-2"
+                      icon="plus-circle"
+                      id="load-more-deadlines-button"
+                      onClick={() => {}}
+                    >
+                      Add email address
+                    </Button>
+                  )}
+                </span>
+                <p>{createPractitionerUserHelper.emailFormatted} </p>
               </>
             )}
           </div>

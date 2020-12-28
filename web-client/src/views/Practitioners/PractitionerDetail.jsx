@@ -131,7 +131,7 @@ export const PractitionerDetail = connect(
                         >
                           Email address
                         </span>
-                        {practitionerDetailHelper.practitionerEmailDisplay}
+                        {practitionerDetailHelper.emailFormatted}
                         {practitionerDetailHelper.showEAccessFlag && (
                           <FontAwesomeIcon
                             className="margin-left-05 fa-icon-blue"
