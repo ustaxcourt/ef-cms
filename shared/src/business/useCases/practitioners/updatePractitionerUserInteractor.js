@@ -34,9 +34,13 @@ exports.updatePractitionerUserInteractor = async ({
     throw new Error('Bar number does not match user data.');
   }
 
-  // do not allow edit of bar number or email
+  // do not allow edit of bar number
   const validatedUserData = new Practitioner(
-    { ...user, barNumber: oldUserInfo.barNumber, email: oldUserInfo.email },
+    {
+      ...user,
+      barNumber: oldUserInfo.barNumber,
+      email: oldUserInfo.email || user.email,
+    },
     { applicationContext },
   )
     .validate()
@@ -75,7 +79,18 @@ exports.updatePractitionerUserInteractor = async ({
       user: validatedUserData,
     });
 
-  return new Practitioner(updatedUser, { applicationContext })
+  const practitioner = new Practitioner(updatedUser, { applicationContext })
     .validate()
     .toRawObject();
+
+  console.log('we are here', practitioner);
+
+  await applicationContext
+    .getPersistenceGateway()
+    .createPractitionerUserWithId({
+      applicationContext,
+      user: practitioner,
+    });
+
+  return practitioner;
 };
