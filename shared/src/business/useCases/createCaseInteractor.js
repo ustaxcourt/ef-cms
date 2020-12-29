@@ -246,5 +246,9 @@ exports.createCaseInteractor = async ({
     workItem: newWorkItem.validate().toRawObject(),
   });
 
+  applicationContext.logger.info('filed a new petition', {
+    docketNumber: caseToAdd.docketNumber,
+  });
+
   return new Case(caseToAdd, { applicationContext }).toRawObject();
 };
