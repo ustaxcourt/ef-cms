@@ -21,9 +21,9 @@ describe('Modify Practitioner Contact Information', () => {
   let caseDetail;
   test.createdDocketNumbers = [];
 
-  for (let i = 0; i < 3; i++) {
-    loginAs(test, 'privatePractitioner2@example.com');
-    it(`login as a practitioner and create case #${i}`, async () => {
+  loginAs(test, 'privatePractitioner2@example.com');
+  it('login as a practitioner and create 3 cases', async () => {
+    for (let i = 0; i < 3; i++) {
       caseDetail = await uploadPetition(
         test,
         {},
@@ -31,8 +31,8 @@ describe('Modify Practitioner Contact Information', () => {
       );
       expect(caseDetail.docketNumber).toBeDefined();
       test.createdDocketNumbers.push(caseDetail.docketNumber);
-    });
-  }
+    }
+  });
   it('got pasted creating cases', () => {
     console.log('we got pass creating cases');
   });
