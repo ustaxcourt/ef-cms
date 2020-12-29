@@ -352,11 +352,18 @@ export const uploadPetition = async (
     data.ownershipDisclosureFileId = overrides.ownershipDisclosureFileId;
   }
 
-  const response = await axios.post('http://localhost:4000/cases', data, {
-    headers: {
-      Authorization: `Bearer ${userToken}`,
-    },
-  });
+  let response;
+  try {
+    response = await axios.post('http://localhost:4000/cases', data, {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+    console.log('no error!', response);
+  } catch (e) {
+    console.log('ERROR creating case', e);
+    throw e;
+  }
 
   test.setState('caseDetail', response.data);
 
