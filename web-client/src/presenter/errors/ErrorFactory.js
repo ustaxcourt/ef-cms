@@ -18,6 +18,7 @@ export const ErrorFactory = {
     } else if (401 == responseCode) {
       newError = new UnidentifiedUserError();
     } else if (/^4/.test(responseCode)) {
+      console.log('error here is', JSON.stringify(e, null, 2));
       newError = new InvalidRequestError(e);
     } else if (/^5/.test(responseCode)) {
       newError = new ServerInvalidResponseError(e);
