@@ -10,22 +10,17 @@
 
 # User Research
 
-Initial onsite user research
-
-We conducted several days of onsite user research with approx. 24 court users. It consisted of a focus group that helped map out the end-to-end journey of a case that's filed, as well as one-on-one interviews with court users about their daily tasks, how they use the system, and future needs.
-
-https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0
-
-# Research
 [UX Research Approach ](https://docs.google.com/presentation/d/14XKR6X1xKq2E_raH8xFxeZpokAiDScUq_WVh0wmIo_E/edit?usp=sharing)
 
 [USTC Staff UX Research Plan ](https://docs.google.com/document/d/1_ZkL96yEGX-FZ6bgVHW90OpS2SKoPMc9PZVgESu2yqc/edit?usp=sharing)
 
-## Exploratory Research - November 2018
-[USTC Staff - User Interviews Findings](https://docs.google.com/presentation/d/1mbGDypXm3lVTgH44KGhNkrgedQAkcimmDPis6_mdi2Y/edit?usp=sharing)
+[UX Discovery Research Findings](https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0)
+We conducted several days of onsite user research with approx. 24 court users. It consisted of a focus group that helped map out the end-to-end journey of a case that's filed, as well as one-on-one interviews with court users about their daily tasks, how they use the system, and future needs.
 
-## Personas
-https://drive.google.com/file/d/1YhsRK8sB9rOJOefDGdFHUvxsC3I8w5Gv/view
+[UX Discovery Personas](https://drive.google.com/file/d/1YhsRK8sB9rOJOefDGdFHUvxsC3I8w5Gv/view)
+
+
+# Usability Testing
 
 ## Petitioner usability testing Feb 2019
 #### [Case Form Usability Test - Petitioner  - Test Plan](https://docs.google.com/document/d/1wRmXNfXAumPpczC_P3XbOY4uxUPgUZfY6xc-RNHVmTk/edit?usp=sharing)
