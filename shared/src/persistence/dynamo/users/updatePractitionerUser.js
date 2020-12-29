@@ -92,18 +92,8 @@ exports.updatePractitionerUser = async ({ applicationContext, user }) => {
             Name: 'name',
             Value: user.name,
           },
-        ],
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email,
-      })
-      .promise();
-
-    await applicationContext
-      .getCognito()
-      .adminUpdateUserAttributes({
-        UserAttributes: [
           {
-            Name: 'preferred_username',
+            Name: 'custom:userId',
             Value: user.userId,
           },
         ],
