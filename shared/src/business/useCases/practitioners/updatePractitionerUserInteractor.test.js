@@ -78,7 +78,7 @@ describe('updatePractitionerUserInteractor', () => {
     ).rejects.toThrow('Bar number does not match user data.');
   });
 
-  it('updates the practitioner user and overrides a bar number or email passed in with the old user data', async () => {
+  it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {
     const updatedUser = await updatePractitionerUserInteractor({
       applicationContext,
       barNumber: 'AB1111',
@@ -95,7 +95,7 @@ describe('updatePractitionerUserInteractor', () => {
     ).toMatchObject({ user: mockUser });
   });
 
-  it('updates the practitioner user and overrides a bar number or email passed in with the old user data', async () => {
+  it('updates the practitioner user and adds an email if the original user did not have an email', async () => {
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockResolvedValue({
