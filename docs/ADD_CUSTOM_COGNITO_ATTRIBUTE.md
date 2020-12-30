@@ -12,6 +12,8 @@ recreating them.
 
 ## Running add-cognito-custom-attributes.sh
 
+Ensure your environment variables match the environment the script will be run on.
+
 `./add-cognito-custom-attributes.sh <ENV>`
 
 ## After Running Script on All Environments/Post-Run
