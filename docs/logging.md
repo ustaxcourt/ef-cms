@@ -64,7 +64,7 @@ This includes both successful and unsuccessful attempts of a user elevating thei
 - Application
   - EF-CMS: All access, change, and deletions happen through API requests — [Kibana][kibana]
   - EF-CMS: Access to documents in S3 happens via generating signed download URLs (by API request) — [Kibana][kibana] with message containing: `document-download-url`
-  - EF-CMS: Background processes log their invocations — [Kibana][kibana] ❌
+  - EF-CMS: Background processes log their invocations when performing work — [Kibana][kibana]
 
 ## Where logs are located
 
