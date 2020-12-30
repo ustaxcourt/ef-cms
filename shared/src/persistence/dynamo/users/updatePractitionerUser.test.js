@@ -184,7 +184,7 @@ describe('updatePractitionerUser - with a cognito response', () => {
     );
   });
 
-  it("should not log an error when updating a practitioner's Cognito attributes", async () => {
+  it('should not log an error when creating a cognito practitioner user', async () => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: () => ({
         Username: 'admissionsclerkUsername',
