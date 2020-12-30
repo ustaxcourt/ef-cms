@@ -46,6 +46,13 @@ exports.updatePractitionerUserInteractor = async ({
     .validate()
     .toRawObject();
 
+  const updatedUser = await applicationContext
+    .getPersistenceGateway()
+    .updatePractitionerUser({
+      applicationContext,
+      user: validatedUserData,
+    });
+
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
@@ -72,13 +79,6 @@ exports.updatePractitionerUserInteractor = async ({
     },
     userId: requestUser.userId,
   });
-
-  const updatedUser = await applicationContext
-    .getPersistenceGateway()
-    .updatePractitionerUser({
-      applicationContext,
-      user: validatedUserData,
-    });
 
   return new Practitioner(updatedUser, { applicationContext })
     .validate()
