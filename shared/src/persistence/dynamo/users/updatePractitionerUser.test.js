@@ -176,10 +176,67 @@ describe('updatePractitionerUser - with a cognito response', () => {
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
     expect(
-      applicationContext.getCognito().adminUpdateUserAttributes.mock
-        .calls[0][0],
-    ).toMatchObject({
-      Username: 'inactivePractitionerUsername',
+      applicationContext.getCognito().adminUpdateUserAttributes,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        Username: 'inactivePractitionerUsername',
+      }),
+    );
+  });
+
+  it("should not log an error when updating a practitioner's Cognito attributes", async () => {
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () => ({
+        Username: 'admissionsclerkUsername',
+      }),
     });
+    applicationContext.getDocumentClient().get.mockReturnValue({
+      promise: async () => ({
+        Item: {
+          name: 'Test Admissions Clerk',
+          role: ROLES.admissionsclerk,
+          section: 'admissionsclerk',
+        },
+      }),
+    });
+
+    const updatedUser = {
+      email: 'practitioner@example.com',
+      name: 'Test Admissions Clerk',
+      role: ROLES.admissionsclerk,
+      section: 'admissionsclerk',
+    };
+
+    await updatePractitionerUser({
+      applicationContext,
+      user: updatedUser,
+    });
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        UserAttributes: expect.arrayContaining([
+          {
+            Name: 'email_verified',
+            Value: 'True',
+          },
+          {
+            Name: 'email',
+            Value: 'practitioner@example.com',
+          },
+          {
+            Name: 'custom:role',
+            Value: ROLES.admissionsclerk,
+          },
+          {
+            Name: 'name',
+            Value: 'Test Admissions Clerk',
+          },
+        ]),
+        Username: 'practitioner@example.com',
+      }),
+    );
   });
 });

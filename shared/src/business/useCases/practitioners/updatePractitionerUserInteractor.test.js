@@ -94,4 +94,28 @@ describe('updatePractitionerUserInteractor', () => {
         .calls[0][0],
     ).toMatchObject({ user: mockUser });
   });
+
+  it('updates the practitioner user and overrides a bar number or email passed in with the old user data', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getPractitionerByBarNumber.mockResolvedValue({
+        ...mockUser,
+        email: undefined,
+      });
+
+    const updatedUser = await updatePractitionerUserInteractor({
+      applicationContext,
+      barNumber: 'AB1111',
+      user: { ...mockUser, email: 'admissionsclerk@example.com' },
+    });
+
+    expect(updatedUser).toBeDefined();
+    expect(
+      applicationContext.getPersistenceGateway().updatePractitionerUser,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updatePractitionerUser.mock
+        .calls[0][0].user.email,
+    ).toEqual('admissionsclerk@example.com');
+  });
 });
