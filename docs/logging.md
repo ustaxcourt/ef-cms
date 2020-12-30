@@ -21,8 +21,10 @@ This includes both successful and unsuccessful attempts of a user elevating thei
   - AWS: User and processes assuming roles (and role assumption failures) — [CloudTrail][cloudtrail] with event source: `iam.amazonaws.com`
 - Application
   - AWS: Cognito user login (and login failure) — ❌
+    - [Logs are not available when using Cognito Hosted UI](https://docs.aws.amazon.com/cognito/latest/developerguide/logging-using-cloudtrail.html)
   - AWS: IAM policy granted to user from Cognito authorizer — [Kibana][kibana] with message: `Request authorized`
   - EF-CMS: Exchanging authorization codes for tokens (and failed exchanges) — ❌
+    - [Logs are not available when using Cognito Hosted UI](https://docs.aws.amazon.com/cognito/latest/developerguide/logging-using-cloudtrail.html)
 
 ### All administrator activity
 
@@ -44,6 +46,7 @@ This includes both successful and unsuccessful attempts of a user elevating thei
 - Infrastructure
   - AWS: IAM user management — [CloudTrail][cloudtrail] with event source: `iam.amazonaws.com`
   - AWS: Role and account management is done through Cognito API requests — ❌
+    - Roles and user management are performed through Cognito directly, which despite documentation, appears not to be logging in CloudTrail for changes to users.
   - Terraform: Test accounts seeded into development environments are applied through Terraform — [CircleCI][circleci]
 - Application
   - Authorization requires Cognito account management listed above
@@ -53,6 +56,7 @@ This includes both successful and unsuccessful attempts of a user elevating thei
 
 - Infrastructure
   - AWS: Cognito users and roles — ❌
+    - Roles and user management are performed through Cognito directly, which despite documentation, appears not to be logging in CloudTrail for changes to users.
   - AWS: DynamoDB table and stream operations (changes to table entries are not logged) — [CloudTrail][cloudtrail] with event source: `dynamodb.amazonaws.com`
   - AWS: S3 bucket operations (changes to individual documents are not logged) — [CloudTrail][cloudtrail] with event source: `s3.amazonaws.com`
   - AWS: Elasticsearch cluster operations (changes to documents are not logged) — [CloudTrail][cloudtrail] with event source: `es.amazonaws.com`
@@ -60,7 +64,7 @@ This includes both successful and unsuccessful attempts of a user elevating thei
 - Application
   - EF-CMS: All access, change, and deletions happen through API requests — [Kibana][kibana]
   - EF-CMS: Access to documents in S3 happens via generating signed download URLs (by API request) — [Kibana][kibana] with message containing: `document-download-url`
-  - EF-CMS: Background processes which access data do so via API requests — [Kibana][kibana] ❌
+  - EF-CMS: Background processes log their invocations — [Kibana][kibana] ❌
 
 ## Where logs are located
 
