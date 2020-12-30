@@ -59,6 +59,7 @@ exports.updatePractitionerUserInteractor = async ({
     bypassDocketEntry,
     contactInfo: validatedUserData.contact,
     requestUserId: requestUser.userId,
+    updatedEmail: validatedUserData.email,
     updatedName: validatedUserData.name,
     user: oldUserInfo,
     websocketMessagePrefix: 'admin',
