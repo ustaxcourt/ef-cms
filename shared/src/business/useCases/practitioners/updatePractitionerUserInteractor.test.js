@@ -5,12 +5,13 @@ const {
   updatePractitionerUserInteractor,
 } = require('./updatePractitionerUserInteractor');
 const { ROLES } = require('../../entities/EntityConstants');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 jest.mock('../users/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;
-  const mockUser = {
+  let mockUser = {
     admissionsDate: '2019-03-01T21:40:46.415Z',
     admissionsStatus: 'Active',
     barNumber: 'AB1111',
@@ -76,6 +77,27 @@ describe('updatePractitionerUserInteractor', () => {
         },
       }),
     ).rejects.toThrow('Bar number does not match user data.');
+  });
+
+  it("should set the practitioner's serviceIndicator to electronic when an email is added", async () => {
+    mockUser = {
+      ...mockUser,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    const updatedUser = await updatePractitionerUserInteractor({
+      applicationContext,
+      barNumber: 'AB1111',
+      user: {
+        ...mockUser,
+        barNumber: 'AB2222',
+        email: 'bc@example.com',
+      },
+    });
+
+    expect(updatedUser.serviceIndicator).toBe(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
   });
 
   it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {

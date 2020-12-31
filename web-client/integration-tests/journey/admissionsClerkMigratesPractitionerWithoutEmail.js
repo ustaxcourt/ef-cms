@@ -1,6 +1,11 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
-
 import axios from 'axios';
+import faker from 'faker';
+
+const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
+
+faker.seed(faker.random.number());
 
 const axiosInstance = axios.create({
   headers: {
@@ -12,11 +17,14 @@ const axiosInstance = axios.create({
   timeout: 2000,
 });
 
+const mockUserId = faker.random.uuid();
+const mockBarNumber = `ZZ${faker.random.number({ max: 9999, min: 1000 })}`;
+
 const practitionerWithoutEmail = {
   user: {
     admissionsDate: '1991-01-11T05:00:00.000Z',
     admissionsStatus: 'Active',
-    barNumber: 'ZZ7099',
+    barNumber: mockBarNumber,
     birthYear: 1970,
     contact: {
       address1: 'Suite 111 1st Floor',
@@ -40,8 +48,8 @@ const practitionerWithoutEmail = {
     practitionerType: 'Attorney',
     role: 'privatePractitioner',
     section: 'privatePractitioner',
-    serviceIndicator: 'Paper',
-    userId: '5a3be82e-390d-43c8-a9cc-bab5b2dd2631',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    userId: mockUserId,
     year: '1991',
   },
 };
@@ -53,7 +61,7 @@ export const admissionsClerkMigratesPractitionerWithoutEmail = test => {
       practitionerWithoutEmail,
     );
 
-    test.barNumber = practitionerWithoutEmail.barNumber;
+    test.barNumber = practitionerWithoutEmail.user.barNumber;
 
     await refreshElasticsearchIndex();
   });
