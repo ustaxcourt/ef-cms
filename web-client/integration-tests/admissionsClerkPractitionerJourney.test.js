@@ -1,5 +1,6 @@
 import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAddsNewPractitioner';
 import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkEditsPractitionerInfo';
+import { admissionsClerkMigratesPractitionerWithoutEmail } from './journey/admissionsClerkMigratesPractitionerWithoutEmail';
 import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/admissionsClerkSearchesForPractitionerByBarNumber';
 import { admissionsClerkSearchesForPractitionersByName } from './journey/admissionsClerkSearchesForPractitionersByName';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
@@ -16,11 +17,11 @@ describe('admissions clerk practitioner journey', () => {
     jest.setTimeout(30000);
   });
 
-  loginAs(test, 'admissionsclerk@example.com');
+  // loginAs(test, 'admissionsclerk@example.com');
 
-  admissionsClerkAddsNewPractitioner(test);
-  admissionsClerkSearchesForPractitionersByName(test);
-  admissionsClerkSearchesForPractitionerByBarNumber(test);
+  // admissionsClerkAddsNewPractitioner(test);
+  // admissionsClerkSearchesForPractitionersByName(test);
+  // admissionsClerkSearchesForPractitionerByBarNumber(test);
 
   loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
@@ -40,10 +41,19 @@ describe('admissions clerk practitioner journey', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
+  // loginAs(test, 'petitionsclerk@example.com');
+  // petitionsClerkViewsCaseDetail(test);
+  // petitionsClerkAddsPractitionersToCase(test, true);
+
+  loginAs(test, 'admissionsclerk@example.com');
+  // admissionsClerkEditsPractitionerInfo(test);
+
+  admissionsClerkMigratesPractitionerWithoutEmail(test);
+
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test, true);
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkEditsPractitionerInfo(test);
+  // loginAs(test, 'admissionsclerk@example.com');
+  // admissionsClerkAddsPractitionerEmailAddress(test); //verify validation errors, new email, change in servie indicator etc
 });
