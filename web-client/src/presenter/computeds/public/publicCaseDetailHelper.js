@@ -41,6 +41,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
 
       const canDisplayDocumentLink =
         record.isCourtIssuedDocument &&
+        record.isFileAttached &&
         !record.isNotServedDocument &&
         !record.isStricken &&
         !record.isTranscript &&

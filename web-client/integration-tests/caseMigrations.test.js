@@ -124,7 +124,7 @@ const otherPetitionersCase = {
   ...MOCK_CASE,
   associatedJudge: CHIEF_JUDGE,
   caseCaption: 'The Fifth Migrated Case',
-  docketNumber: '162-20',
+  docketNumber: '16222-20',
   irsPractitioners: [
     {
       barNumber: 'RT6789',
