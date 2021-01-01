@@ -1,41 +1,65 @@
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { getDocumentTitle } = require('./getDocumentTitle');
 
 describe('getDocumentTitle', () => {
-  it('returns an object with the case caption, case caption postfix, and the combined case caption with postfix', () => {
-    const caseDetail = {
-      caseCaption: 'Eve Brewer, Petitioner',
-    };
-    expect(getDocumentTitle(caseDetail)).toMatchObject({
-      CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
-      caseCaption: 'Eve Brewer, Petitioner',
-      caseCaptionWithPostfix: `Eve Brewer, Petitioner ${CASE_CAPTION_POSTFIX}`,
-    });
-  });
+  let docketEntry = {
+    additionalInfo: 'additional info',
+    additionalInfo2: 'additional info 2',
+    docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+    documentTitle: 'Answer',
+    documentType: 'Answer',
+    eventCode: 'A',
+    filedBy: 'Test Petitioner',
+    index: 42,
+    isOnDocketRecord: true,
+    servedAt: '2019-08-25T05:00:00.000Z',
+    servedParties: [{ name: 'Bernard Lowe' }],
+    userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+  };
 
-  it('returns an object with the case title', () => {
-    const caseDetail = {
-      caseCaption: 'Selma Horn & Cairo Harris, Petitioners',
-    };
-    expect(getDocumentTitle(caseDetail).caseTitle).toEqual(
-      'Selma Horn & Cairo Harris',
+  it('returns the original documentTitle when addToCoversheet is false', () => {
+    expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
+      docketEntry.documentTitle,
     );
   });
 
-  it('returns an object with the computed case caption extension for single petitioners', () => {
-    const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-    };
-    expect(getDocumentTitle(caseDetail).caseCaptionExtension).toEqual(
-      PARTY_TYPES.petitioner,
+  it('appends additionalInfo to docketEntry.documentTitle when docketEntry.addToCoversheet is true', () => {
+    docketEntry.addToCoversheet = true;
+    docketEntry.additionalInfo2 = undefined;
+
+    expect(getDocumentTitle({ applicationContext, docketEntry })).not.toEqual(
+      docketEntry.documentTitle,
+    );
+    expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
+      `${docketEntry.documentTitle} ${docketEntry.additionalInfo} `,
     );
   });
 
-  it('returns an object with the computed case caption extension for multiple petitioners', () => {
-    const caseDetail = {
-      caseCaption: 'Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)',
-    };
-    expect(getDocumentTitle(caseDetail).caseCaptionExtension).toEqual(
-      'Petitioner(s)',
+  it('appends additionalInfo2 to docketEntry.documentTitle + additionalInfo when docketEntry.addToCoversheet is true', () => {
+    docketEntry.addToCoversheet = true;
+    docketEntry.additionalInfo2 = 'Another one (DJ Khaled)';
+
+    expect(getDocumentTitle({ applicationContext, docketEntry })).not.toEqual(
+      docketEntry.documentTitle,
+    );
+    expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
+      `${docketEntry.documentTitle} ${docketEntry.additionalInfo}  ${docketEntry.additionalInfo2}`,
+    );
+  });
+
+  it('appends additionalInfo2 to docketEntry.documentTitle when docketEntry.addToCoversheet is true', () => {
+    docketEntry.addToCoversheet = true;
+    docketEntry.additionalInfo = undefined;
+    docketEntry.additionalInfo2 = 'Another one (DJ Khaled)';
+
+    expect(getDocumentTitle({ applicationContext, docketEntry })).not.toEqual(
+      docketEntry.documentTitle,
+    );
+    expect(getDocumentTitle({ applicationContext, docketEntry })).not.toEqual(
+      `${docketEntry.documentTitle} ${docketEntry.additionalInfo}  ${docketEntry.additionalInfo2}`,
+    );
+    expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
+      `${docketEntry.documentTitle}  ${docketEntry.additionalInfo2}`,
     );
   });
 });
