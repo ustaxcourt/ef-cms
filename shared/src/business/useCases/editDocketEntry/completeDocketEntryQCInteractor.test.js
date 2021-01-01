@@ -238,6 +238,13 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toBeCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after: 'Answer 123  abc',
+      before: 'Answer',
+    });
   });
 
   it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
@@ -257,6 +264,13 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toBeCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after: 'Answer ',
+      before: 'Answer',
+    });
   });
 
   it('should generate a notice of docket change with a new coversheet when documentTitle has changed and addToCoversheeet is false', async () => {
@@ -276,6 +290,13 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toBeCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after: 'Something Different',
+      before: 'Answer',
+    });
   });
 
   it('should not generate a new coversheet when the documentTitle has not changed and addToCoversheet is false', async () => {
@@ -297,6 +318,69 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toBeCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after: 'Answer',
+      before: 'Answer',
+    });
+  });
+
+  it('should generate a new coversheet when additionalInfo is changed and addToCoversheet is true', async () => {
+    await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        addToCoversheet: true,
+        additionalInfo: 'additional info',
+        additionalInfo2: 'additional info 221',
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: caseRecord.docketEntries[0].documentTitle,
+        documentType: caseRecord.docketEntries[0].documentType,
+        eventCode: caseRecord.docketEntries[0].eventCode,
+        partyPrimary: true,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after: 'Answer additional info  additional info 221',
+      before: 'Answer',
+    });
+  });
+
+  it('should generate a new coversheet when additionalInfo is NOT changed and addToCoversheet is true', async () => {
+    await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        addToCoversheet: true,
+        additionalInfo: 'additional info',
+        additionalInfo2: 'additional info',
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: caseRecord.docketEntries[0].documentTitle,
+        documentType: caseRecord.docketEntries[0].documentType,
+        eventCode: caseRecord.docketEntries[0].eventCode,
+        partyPrimary: true,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toBeCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after: 'Answer additional info  additional info',
+      before: 'Answer',
+    });
   });
 
   it('serves the document for parties with paper service if a notice of docket change is generated', async () => {
