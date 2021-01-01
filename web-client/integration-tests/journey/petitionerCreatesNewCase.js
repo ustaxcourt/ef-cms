@@ -6,6 +6,8 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
   return it('petitioner creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
 
+    expect(test.getState('currentPage')).toBe('StartCaseWizard');
+
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
@@ -112,6 +114,12 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
       key: 'wizardStep',
       value: '5',
     });
+
+    await test.runSequence('validateStartCaseWizardSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('alertError')).toBeUndefined();
+
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
