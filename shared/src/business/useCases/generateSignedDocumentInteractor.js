@@ -1,3 +1,5 @@
+import { degrees } from 'pdf-lib';
+
 /**
  * @param {PDFPage} page the page to get dimensions for
  * @returns {Array} [width, height]
@@ -61,21 +63,35 @@ exports.generateSignedDocumentInteractor = async ({
   const boxWidth = Math.max(nameTextWidth, titleTextWidth) + padding * 2;
   const boxHeight = textHeight * 2 + padding * 2;
 
+  const rotationAngle = page.getRotation().angle;
+  const shouldRotateSignature = rotationAngle !== 0;
+  const rotateSignatureDegrees = degrees(rotationAngle);
+
+  console.log(
+    rotationAngle,
+    shouldRotateSignature,
+    rotateSignatureDegrees,
+    '****',
+  );
+
   page.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
+    rotate: shouldRotateSignature ? rotateSignatureDegrees : 0,
     width: boxWidth,
     x: posX,
     y: pageHeight - posY - boxHeight,
   });
   page.drawText(signatureName, {
     font: helveticaBoldFont,
+    rotate: shouldRotateSignature ? rotateSignatureDegrees : 0,
     size: textSize,
     x: posX + (boxWidth - nameTextWidth) / 2,
     y: pageHeight - posY + boxHeight / 2 - boxHeight,
   });
   page.drawText(signatureTitle, {
     font: helveticaBoldFont,
+    rotate: shouldRotateSignature ? rotateSignatureDegrees : 0,
     size: textSize,
     x: posX + (boxWidth - titleTextWidth) / 2,
     y:
