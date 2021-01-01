@@ -6,6 +6,8 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
   return it('petitioner creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
 
+    expect(test.getState('currentPage')).toBe('StartCaseWizard');
+
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
