@@ -114,6 +114,12 @@ export const petitionerCreatesNewCase = (test, fakeFile, overrides = {}) => {
       key: 'wizardStep',
       value: '5',
     });
+
+    await test.runSequence('validateStartCaseWizardSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('alertError')).toBeUndefined();
+
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
