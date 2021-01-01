@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import { Button } from '../ustc-ui/Button/Button';
 import { DeployedDate } from './DeployedDate';
 import { Icon } from '../ustc-ui/Icon/Icon';
@@ -54,7 +55,6 @@ export const Footer = connect(
                           <a
                             className="usa-footer__primary-link usa-link--external"
                             href="https://ustaxcourt.gov/dawson.html"
-                            // eslint-disable-next-line react/jsx-no-target-blank
                             target="_blank"
                           >
                             Frequently Asked Questions

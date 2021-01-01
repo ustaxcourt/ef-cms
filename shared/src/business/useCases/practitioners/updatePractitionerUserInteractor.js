@@ -4,6 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
 const { Practitioner } = require('../../entities/Practitioner');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -32,6 +33,10 @@ exports.updatePractitionerUserInteractor = async ({
 
   if (oldUserInfo.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
+  }
+
+  if (!oldUserInfo.email && user.email) {
+    user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
   // do not allow edit of bar number
