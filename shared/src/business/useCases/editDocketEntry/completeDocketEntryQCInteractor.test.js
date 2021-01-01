@@ -17,6 +17,13 @@ const {
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
 
+  const mockUser = {
+    name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+    role: ROLES.docketClerk,
+    section: DOCKET_SECTION,
+    userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+  };
+
   beforeEach(() => {
     const PDF_MOCK_BUFFER = 'Hello World';
 
@@ -95,32 +102,31 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext.getPug.mockImplementation(() => ({
       compile: () => () => '',
     }));
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockUser);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
+
     applicationContext.getUniqueId.mockReturnValue(
       'b6f835aa-bf95-4996-b858-c8e94566db47',
     );
+
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
       }),
     });
+
     applicationContext
       .getStorageClient()
       .upload.mockImplementation((params, resolve) => resolve());
+
     applicationContext.getChromiumBrowser().newPage.mockReturnValue({
       addStyleTag: () => {},
       pdf: () => {
@@ -128,6 +134,7 @@ describe('completeDocketEntryQCInteractor', () => {
       },
       setContent: () => {},
     });
+
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({
@@ -212,68 +219,77 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(result.paperServiceParties.length).toEqual(0);
   });
 
-  it('generates a notice of docket change with a new coversheet if additional info fields are added and serves the document', async () => {
+  it('should generate a notice of docket change with a new coversheet when additional info fields are added and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
+        addToCoversheet: true,
         additionalInfo: '123',
         additionalInfo2: 'abc',
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Something Else',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
+        documentTitle: caseRecord.docketEntries[0].documentTitle,
+        documentType: caseRecord.docketEntries[0].documentType,
+        eventCode: caseRecord.docketEntries[0].eventCode,
         partyPrimary: true,
       },
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
-    expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toBeCalled();
   });
 
-  it('generates a notice of docket change with a new coversheet if additional info fields are removed and serves the document', async () => {
+  it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        addToCoversheet: true,
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Something Else',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
+        documentTitle: caseRecord.docketEntries[0].documentTitle,
+        documentType: caseRecord.docketEntries[0].documentType,
+        eventCode: caseRecord.docketEntries[0].eventCode,
         partyPrimary: true,
       },
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
+      applicationContext.getUseCases().addCoversheetInteractor,
     ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+  });
+
+  it('should generate a notice of docket change with a new coversheet when documentTitle has changed and addToCoversheeet is false', async () => {
+    await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        addToCoversheet: false,
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Something Different',
+        documentType: caseRecord.docketEntries[0].documentType,
+        eventCode: caseRecord.docketEntries[0].eventCode,
+        partyPrimary: true,
+      },
+    });
+
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toBeCalled();
   });
 
-  it('does not generate a new coversheet if nothing changes', async () => {
+  it('should not generate a new coversheet when the documentTitle has not changed and addToCoversheet is false', async () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
+        addToCoversheet: false,
         additionalInfo: 'additional info',
         additionalInfo2: 'additional info 2',
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Answer',
-        documentType: 'Answer',
-        eventCode: 'A',
+        documentTitle: caseRecord.docketEntries[0].documentTitle,
+        documentType: caseRecord.docketEntries[0].documentType,
+        eventCode: caseRecord.docketEntries[0].eventCode,
         partyPrimary: true,
       },
     });

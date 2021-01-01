@@ -125,30 +125,34 @@ exports.completeDocketEntryQCInteractor = async ({
   updatedDocketEntry.setQCed(user);
 
   let updatedDocumentTitle = updatedDocketEntry.documentTitle;
-  if (updatedDocketEntry.additionalInfo) {
-    updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo}`;
-  }
-  updatedDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocketEntry(applicationContext, updatedDocketEntry),
-  )}`;
-  if (updatedDocketEntry.additionalInfo2) {
-    updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo2}`;
+  if (updatedDocketEntry.addToCoversheet) {
+    if (updatedDocketEntry.additionalInfo) {
+      updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo}`;
+    }
+    updatedDocumentTitle += ` ${getFilingsAndProceedings(
+      formatDocketEntry(applicationContext, updatedDocketEntry),
+    )}`;
+    if (updatedDocketEntry.additionalInfo2) {
+      updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo2}`;
+    }
   }
 
   let currentDocumentTitle = currentDocketEntry.documentTitle;
-  if (currentDocketEntry.additionalInfo) {
-    currentDocumentTitle += ` ${currentDocketEntry.additionalInfo}`;
-  }
-  currentDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocketEntry(applicationContext, currentDocketEntry),
-  )}`;
-  if (currentDocketEntry.additionalInfo2) {
-    currentDocumentTitle += ` ${currentDocketEntry.additionalInfo2}`;
+  if (currentDocketEntry.addToCoversheet) {
+    if (currentDocketEntry.additionalInfo) {
+      currentDocumentTitle += ` ${currentDocketEntry.additionalInfo}`;
+    }
+    currentDocumentTitle += ` ${getFilingsAndProceedings(
+      formatDocketEntry(applicationContext, currentDocketEntry),
+    )}`;
+    if (currentDocketEntry.additionalInfo2) {
+      currentDocumentTitle += ` ${currentDocketEntry.additionalInfo2}`;
+    }
   }
 
   const needsNewCoversheet =
-    updatedDocketEntry.additionalInfo !== currentDocketEntry.additionalInfo ||
-    updatedDocumentTitle !== currentDocumentTitle;
+    updatedDocumentTitle !== currentDocumentTitle ||
+    updatedDocketEntry.addToCoversheet;
 
   const needsNoticeOfDocketChange =
     updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||
