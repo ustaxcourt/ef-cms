@@ -449,7 +449,14 @@ const createTestApplicationContext = ({ user } = {}) => {
       return mockGetChromiumBrowserReturnValue;
     }),
     getClerkOfCourtNameForSigning: jest.fn(),
-    getCognito: appContextProxy(),
+    getCognito: appContextProxy({
+      adminCreateUser: jest.fn().mockReturnValue({
+        promise: jest.fn(),
+      }),
+      adminUpdateUserAttributes: jest.fn().mockReturnValue({
+        promise: jest.fn(),
+      }),
+    }),
     getCognitoClientId: jest.fn(),
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),

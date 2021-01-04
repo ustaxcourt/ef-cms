@@ -13,10 +13,7 @@ const {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../../entities/EntityConstants');
-const {
-  formatDocketEntry,
-  getFilingsAndProceedings,
-} = require('../../utilities/getFormattedCaseDetail');
+
 const {
   generateNoticeOfDocketChangePdf,
 } = require('../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf');
@@ -29,6 +26,7 @@ const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getDocumentTitle } = require('../../utilities/getDocumentTitle');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -124,31 +122,19 @@ exports.completeDocketEntryQCInteractor = async ({
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = updatedDocketEntry.documentTitle;
-  if (updatedDocketEntry.additionalInfo) {
-    updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo}`;
-  }
-  updatedDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocketEntry(applicationContext, updatedDocketEntry),
-  )}`;
-  if (updatedDocketEntry.additionalInfo2) {
-    updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo2}`;
-  }
+  let updatedDocumentTitle = getDocumentTitle({
+    applicationContext,
+    docketEntry: updatedDocketEntry,
+  });
 
-  let currentDocumentTitle = currentDocketEntry.documentTitle;
-  if (currentDocketEntry.additionalInfo) {
-    currentDocumentTitle += ` ${currentDocketEntry.additionalInfo}`;
-  }
-  currentDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocketEntry(applicationContext, currentDocketEntry),
-  )}`;
-  if (currentDocketEntry.additionalInfo2) {
-    currentDocumentTitle += ` ${currentDocketEntry.additionalInfo2}`;
-  }
+  let currentDocumentTitle = getDocumentTitle({
+    applicationContext,
+    docketEntry: currentDocketEntry,
+  });
 
   const needsNewCoversheet =
-    updatedDocketEntry.additionalInfo !== currentDocketEntry.additionalInfo ||
-    updatedDocumentTitle !== currentDocumentTitle;
+    updatedDocumentTitle !== currentDocumentTitle ||
+    updatedDocketEntry.addToCoversheet;
 
   const needsNoticeOfDocketChange =
     updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||
