@@ -74,7 +74,7 @@ exports.generateSignedDocumentInteractor = async ({
     textSize,
   );
   const textHeight = helveticaBoldFont.sizeAtHeight(textSize);
-  const lineHeight = textHeight / 10;
+  // const lineHeight = textHeight / 10;
   const boxWidth = Math.max(nameTextWidth, titleTextWidth) + padding * 2;
   const boxHeight = textHeight * 2 + padding * 2;
 
@@ -82,21 +82,68 @@ exports.generateSignedDocumentInteractor = async ({
   const shouldRotateSignature = rotationAngle !== 0;
   const rotateSignatureDegrees = degrees(rotationAngle);
 
-  const { x: realX, y: realY } = translateXAndY({
-    height: pageHeight,
-    rotation: rotationAngle,
-    width: pageWidth,
-    x: posX,
-    y: posY,
-  });
+  let pageRotation = page.getRotation().angle;
+  let rotationRads = (pageRotation * Math.PI) / 180;
 
-  const { x: rectangleX, y: rectangleY } = translateXAndY({
-    height: pageHeight,
-    rotation: rotationAngle,
-    width: pageWidth,
-    x: posX,
-    y: pageHeight - posY - boxHeight,
-  });
+  let coordsFromBottomLeft = {
+    x: posX / scale,
+  };
+  if (pageRotation === 90 || pageRotation === 270) {
+    coordsFromBottomLeft.y = pageWidth - (posY + boxHeight) / scale;
+  } else {
+    coordsFromBottomLeft.y = pageHeight - (posY + boxHeight) / scale;
+  }
+
+  let drawX = null;
+  let drawY = null;
+  if (pageRotation === 90) {
+    drawX =
+      coordsFromBottomLeft.x * Math.cos(rotationRads) -
+      coordsFromBottomLeft.y * Math.sin(rotationRads) +
+      pageWidth;
+    drawY =
+      coordsFromBottomLeft.x * Math.sin(rotationRads) +
+      coordsFromBottomLeft.y * Math.cos(rotationRads);
+  } else if (pageRotation === 180) {
+    drawX =
+      coordsFromBottomLeft.x * Math.cos(rotationRads) -
+      coordsFromBottomLeft.y * Math.sin(rotationRads) +
+      pageWidth;
+    drawY =
+      coordsFromBottomLeft.x * Math.sin(rotationRads) +
+      coordsFromBottomLeft.y * Math.cos(rotationRads) +
+      pageHeight;
+  } else if (pageRotation === 270) {
+    drawX =
+      coordsFromBottomLeft.x * Math.cos(rotationRads) -
+      coordsFromBottomLeft.y * Math.sin(rotationRads);
+    drawY =
+      coordsFromBottomLeft.x * Math.sin(rotationRads) +
+      coordsFromBottomLeft.y * Math.cos(rotationRads) +
+      pageHeight;
+  } else {
+    //no rotation
+    drawX = coordsFromBottomLeft.x;
+    drawY = coordsFromBottomLeft.y;
+  }
+
+  // page.setRotation(degrees(0));
+
+  // const { x: realX, y: realY } = translateXAndY({
+  //   height: pageHeight,
+  //   rotation: rotationAngle,
+  //   width: pageWidth,
+  //   x: posX,
+  //   y: posY,
+  // });
+
+  // const { x: rectangleX, y: rectangleY } = translateXAndY({
+  //   height: pageHeight,
+  //   rotation: rotationAngle,
+  //   width: pageWidth,
+  //   x: posX,
+  //   y: pageHeight - posY - boxHeight,
+  // });
 
   console.log(
     rotationAngle,
@@ -110,27 +157,23 @@ exports.generateSignedDocumentInteractor = async ({
     height: boxHeight,
     rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
     width: boxWidth,
-    x: rectangleX,
-    y: rectangleY,
+    x: drawX,
+    y: drawY,
   });
-  page.drawText(signatureName, {
-    font: helveticaBoldFont,
-    rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
-    size: textSize,
-    x: realX + (boxWidth - nameTextWidth) / 2,
-    y: pageHeight - realY + boxHeight / 2 - boxHeight,
-  });
-  page.drawText(signatureTitle, {
-    font: helveticaBoldFont,
-    rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
-    size: textSize,
-    x: realX + (boxWidth - titleTextWidth) / 2,
-    y:
-      pageHeight -
-      realY +
-      (boxHeight - textHeight * 2 - lineHeight) / 2 -
-      boxHeight,
-  });
+  // page.drawText(signatureName, {
+  //   font: helveticaBoldFont,
+  //   rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
+  //   size: textSize,
+  //   x: pageWidth - boxHeight - posY - textHeight,
+  //   y: pageHeight - posX,
+  // });
+  // page.drawText(signatureTitle, {
+  //   font: helveticaBoldFont,
+  //   rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
+  //   size: textSize,
+  //   x: pageWidth - boxHeight,
+  //   y: pageHeight - posY,
+  // });
 
   const pdfBytes = await pdfDoc.save({
     useObjectStreams: false,
