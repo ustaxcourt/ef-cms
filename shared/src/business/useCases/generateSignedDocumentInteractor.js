@@ -1,5 +1,3 @@
-const { degrees } = require('pdf-lib');
-
 /**
  * @param {PDFPage} page the page to get dimensions for
  * @returns {Array} [width, height]
@@ -33,14 +31,14 @@ const computeCoordinates = ({
     coordsFromBottomLeft.y = pageHeight - (posY + boxHeight) / scale;
   }
 
-  let drawX, drawY, sigTitleX, sigTitleY, sigNameX, sigNameY;
+  let rectangleX, rectangleY, sigTitleX, sigTitleY, sigNameX, sigNameY;
 
   if (pageRotation === 90) {
-    drawX =
+    rectangleX =
       coordsFromBottomLeft.x * Math.cos(rotationRads) -
       coordsFromBottomLeft.y * Math.sin(rotationRads) +
       pageWidth;
-    drawY =
+    rectangleY =
       coordsFromBottomLeft.x * Math.sin(rotationRads) +
       coordsFromBottomLeft.y * Math.cos(rotationRads);
     sigNameX = posY + textHeight * 2;
@@ -48,11 +46,11 @@ const computeCoordinates = ({
     sigTitleX = posY + textHeight * 3;
     sigTitleY = posX + textHeight * 4;
   } else if (pageRotation === 180) {
-    drawX =
+    rectangleX =
       coordsFromBottomLeft.x * Math.cos(rotationRads) -
       coordsFromBottomLeft.y * Math.sin(rotationRads) +
       pageWidth;
-    drawY =
+    rectangleY =
       coordsFromBottomLeft.x * Math.sin(rotationRads) +
       coordsFromBottomLeft.y * Math.cos(rotationRads) +
       pageHeight;
@@ -64,10 +62,10 @@ const computeCoordinates = ({
     sigTitleY =
       posY - (boxHeight - textHeight * 2 - lineHeight) / 2 + boxHeight;
   } else if (pageRotation === 270) {
-    drawX =
+    rectangleX =
       coordsFromBottomLeft.x * Math.cos(rotationRads) -
       coordsFromBottomLeft.y * Math.sin(rotationRads);
-    drawY =
+    rectangleY =
       coordsFromBottomLeft.x * Math.sin(rotationRads) +
       coordsFromBottomLeft.y * Math.cos(rotationRads) +
       pageHeight;
@@ -76,8 +74,8 @@ const computeCoordinates = ({
     sigTitleX = pageWidth - posY - textHeight * 3;
     sigTitleY = pageHeight - posX - textHeight * 4;
   } else {
-    drawX = coordsFromBottomLeft.x;
-    drawY = coordsFromBottomLeft.y;
+    rectangleX = coordsFromBottomLeft.x;
+    rectangleY = coordsFromBottomLeft.y;
     sigNameX = posX + (boxWidth - nameTextWidth) / 2;
     sigNameY = pageHeight - posY + boxHeight / 2 - boxHeight;
 
@@ -88,7 +86,7 @@ const computeCoordinates = ({
       (boxHeight - textHeight * 2 - lineHeight) / 2 -
       boxHeight;
   }
-  return { drawX, drawY, sigNameX, sigNameY, sigTitleX, sigTitleY };
+  return { rectangleX, rectangleY, sigNameX, sigNameY, sigTitleX, sigTitleY };
 };
 
 exports.computeCoordinates = computeCoordinates;
@@ -115,6 +113,7 @@ exports.generateSignedDocumentInteractor = async ({
   sigTextData,
 }) => {
   const {
+    degrees,
     PDFDocument,
     rgb,
     StandardFonts,
@@ -154,8 +153,8 @@ exports.generateSignedDocumentInteractor = async ({
   let pageRotation = page.getRotation().angle;
 
   const {
-    drawX,
-    drawY,
+    rectangleX,
+    rectangleY,
     sigNameX,
     sigNameY,
     sigTitleX,
@@ -175,24 +174,26 @@ exports.generateSignedDocumentInteractor = async ({
     titleTextWidth,
   });
 
+  const rotate = shouldRotateSignature ? rotateSignatureDegrees : degrees(0);
+
   page.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
-    rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
+    rotate,
     width: boxWidth,
-    x: drawX,
-    y: drawY,
+    x: rectangleX,
+    y: rectangleY,
   });
   page.drawText(signatureName, {
     font: helveticaBoldFont,
-    rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
+    rotate,
     size: textSize,
     x: sigNameX,
     y: sigNameY,
   });
   page.drawText(signatureTitle, {
     font: helveticaBoldFont,
-    rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
+    rotate,
     size: textSize,
     x: sigTitleX,
     y: sigTitleY,
