@@ -19,8 +19,6 @@ CourtIssuedDocumentDefault.prototype.init = function init(rawProps) {
   this.documentType = rawProps.documentType;
   this.eventCode = rawProps.eventCode;
   this.filingDate = rawProps.filingDate;
-
-  console.log(UNSERVABLE_EVENT_CODES);
 };
 
 CourtIssuedDocumentDefault.prototype.getDocumentTitle = function () {
@@ -31,10 +29,13 @@ CourtIssuedDocumentDefault.schema = {
   documentTitle: JoiValidationConstants.STRING.optional(),
   documentType: JoiValidationConstants.STRING.required(),
   eventCode: JoiValidationConstants.STRING.optional(),
-  filingDate: JoiValidationConstants.ISO_DATE.max('now').when('eventCode', {
-    is: JoiValidationConstants.STRING.valid(...UNSERVABLE_EVENT_CODES),
+  filingDate: joi.when('eventCode', {
+    is: joi
+      .exist()
+      .not(null)
+      .valid(...UNSERVABLE_EVENT_CODES),
     otherwise: joi.optional().allow(null),
-    then: joi.required(),
+    then: JoiValidationConstants.ISO_DATE.max('now').required(),
   }),
 };
 
