@@ -10,6 +10,7 @@
 
 # User Research
 
+## Initial Discovery
 [UX Research Approach ](https://docs.google.com/presentation/d/14XKR6X1xKq2E_raH8xFxeZpokAiDScUq_WVh0wmIo_E/edit?usp=sharing)
 * Our guiding principles and general approach to user research, especially related to the discovery phase, and including planned deliverables.
 
@@ -22,23 +23,35 @@
 
 [UX Discovery Personas](https://drive.google.com/file/d/1YhsRK8sB9rOJOefDGdFHUvxsC3I8w5Gv/view)
 
+## Targeted Discovery
+
+[IRS Attorney User Interviews (June 2019)](https://docs.google.com/presentation/d/1Wcj4TJ7Bq7sHUoMdH_O3huennZ7wBy8BsDgz8WjD9fw/edit?usp=sharing)
+
+### Judge User Interviews (June 2019)
+
+#### [Judge User Interviews Plan](https://docs.google.com/document/d/1K8oEg7GCfWamsSSixs-FP8cZwSPDC0zzFfPySFxwl5U/edit?usp=sharing)
+
+#### [Judge User Interviews (June 2019) - Findings](https://docs.google.com/presentation/d/1HBD21K_sKtOnuJTu6aXse8qt8bSn5ImpX649YmyOzZ0/edit?usp=sharing)
 
 # Usability Testing
 
-## Petitioner usability testing Feb 2019
+## Case Form Usability Testing (January 2019)
 Conducting usability testing with pro se petitioners (public) on the Start a Case form design and user flow.
 
 #### [Case Form Usability Test - Petitioner  - Test Plan](https://docs.google.com/document/d/1wRmXNfXAumPpczC_P3XbOY4uxUPgUZfY6xc-RNHVmTk/edit?usp=sharing)
 
 #### [Case Form Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/1E4MJ4y6lf7C2DkACHvBEubtRdfGCJBsyZ83qDNzXZdo/edit?usp=sharing)
 
-## Petition Clerk - Petition QC Usability Testing (March 2019)
+## Petition QC Usability Testing (March 2019)
 In this study, Flexion UX Designers tested the Petitions QC Workflow in a development environment for the first time. Previously, the team conducted several iterative design studies with Petitions Clerks using Figma wireframes.
 #### [Petitions Workflow Usability Study Findings](https://drive.google.com/open?id=1a3el4zlM0P_sXDZXt75-krHRBW92XVAn24etA0tcCDE)
 
 ## Practitioner Interviews / Usability Testing (April 2019)
 In this study, Flexion UX Designers interviewed current practitioners to understand their use of the existing Tax Court system. The Flexion UX Team then tested the new Case Form with the practitioners, as well as the file document functionality for the first time.
-https://drive.google.com/open?id=1HcjhQ3_nKtgIR-9hh8uqKMS4yB02XGwznEKfFrx6SyA
+
+#### [Case Form Interview and Usability Test - Practitioner - Test Plan](https://docs.google.com/document/d/1zrlYYbbgJsscnl6zDlhf9sooaz7ne0rKujATB2ZbJkw/edit?usp=sharing)
+
+#### [Case Form Usability Test - Practitioner - Findings](https://drive.google.com/open?id=1HcjhQ3_nKtgIR-9hh8uqKMS4yB02XGwznEKfFrx6SyA)
 
 ## Judge Interviews (June 2019)
 [Judge Interviews Plan](https://docs.google.com/document/d/1K8oEg7GCfWamsSSixs-FP8cZwSPDC0zzFfPySFxwl5U/edit?usp=sharing)
