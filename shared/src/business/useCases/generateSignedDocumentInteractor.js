@@ -9,6 +9,21 @@ exports.getPageDimensions = page => {
   return [size.width, size.height];
 };
 
+const translateXAndY = ({ height, rotation, width, x, y }) => {
+  const Ox = width / 2;
+  const Oy = height / 2;
+  const newX = x - Ox + Ox * Math.cos(rotation) - Oy * Math.sin(rotation);
+  const newY = y - Oy + Ox * Math.sin(rotation) + Oy * Math.cos(rotation);
+  // if (rotation === 0) {
+  //   return { x: newX, y: newY };
+  // } else if (rotation === 270) {
+  //   return { x: newY, y: newX };
+  // }
+  return { x: newX, y: newY };
+};
+
+exports.translateXAndY = translateXAndY;
+
 /**
  * generateSignedDocumentInteractor
  *
@@ -40,7 +55,7 @@ exports.generateSignedDocumentInteractor = async ({
   const pages = pdfDoc.getPages();
   const page = pages[pageIndex];
 
-  const [, pageHeight] = exports.getPageDimensions(page);
+  const [pageWidth, pageHeight] = exports.getPageDimensions(page);
 
   const { signatureName, signatureTitle } = sigTextData;
 
@@ -67,6 +82,22 @@ exports.generateSignedDocumentInteractor = async ({
   const shouldRotateSignature = rotationAngle !== 0;
   const rotateSignatureDegrees = degrees(rotationAngle);
 
+  const { x: realX, y: realY } = translateXAndY({
+    height: pageHeight,
+    rotation: rotationAngle,
+    width: pageWidth,
+    x: posX,
+    y: posY,
+  });
+
+  const { x: rectangleX, y: rectangleY } = translateXAndY({
+    height: pageHeight,
+    rotation: rotationAngle,
+    width: pageWidth,
+    x: posX,
+    y: pageHeight - posY - boxHeight,
+  });
+
   console.log(
     rotationAngle,
     shouldRotateSignature,
@@ -75,28 +106,28 @@ exports.generateSignedDocumentInteractor = async ({
   );
 
   page.drawRectangle({
-    color: rgb(1, 1, 1),
+    color: rgb(1, 0, 0),
     height: boxHeight,
-    rotate: shouldRotateSignature ? rotateSignatureDegrees : 0,
+    rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
     width: boxWidth,
-    x: posX,
-    y: pageHeight - posY - boxHeight,
+    x: rectangleX,
+    y: rectangleY,
   });
   page.drawText(signatureName, {
     font: helveticaBoldFont,
-    rotate: shouldRotateSignature ? rotateSignatureDegrees : 0,
+    rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
     size: textSize,
-    x: posX + (boxWidth - nameTextWidth) / 2,
-    y: pageHeight - posY + boxHeight / 2 - boxHeight,
+    x: realX + (boxWidth - nameTextWidth) / 2,
+    y: pageHeight - realY + boxHeight / 2 - boxHeight,
   });
   page.drawText(signatureTitle, {
     font: helveticaBoldFont,
-    rotate: shouldRotateSignature ? rotateSignatureDegrees : 0,
+    rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
     size: textSize,
-    x: posX + (boxWidth - titleTextWidth) / 2,
+    x: realX + (boxWidth - titleTextWidth) / 2,
     y:
       pageHeight -
-      posY +
+      realY +
       (boxHeight - textHeight * 2 - lineHeight) / 2 -
       boxHeight,
   });
