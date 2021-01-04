@@ -11,11 +11,14 @@
 # User Research
 
 [UX Research Approach ](https://docs.google.com/presentation/d/14XKR6X1xKq2E_raH8xFxeZpokAiDScUq_WVh0wmIo_E/edit?usp=sharing)
+* Our guiding principles and general approach to user research, especially related to the discovery phase, and including planned deliverables.
 
 [USTC Staff UX Research Plan ](https://docs.google.com/document/d/1_ZkL96yEGX-FZ6bgVHW90OpS2SKoPMc9PZVgESu2yqc/edit?usp=sharing)
+* Comprehensive plan of initial discovery research with all court user groups.
 
 [UX Discovery Research Findings](https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0)
-We conducted several days of onsite user research with approx. 24 court users. It consisted of a focus group that helped map out the end-to-end journey of a case that's filed, as well as one-on-one interviews with court users about their daily tasks, how they use the system, and future needs.
+
+* We conducted several days of onsite user research with approx. 24 court users. It consisted of a focus group that helped map out the end-to-end journey of a case that's filed, as well as one-on-one interviews with court users about their daily tasks, how they use the system, and future needs.
 
 [UX Discovery Personas](https://drive.google.com/file/d/1YhsRK8sB9rOJOefDGdFHUvxsC3I8w5Gv/view)
 
@@ -23,14 +26,15 @@ We conducted several days of onsite user research with approx. 24 court users. I
 # Usability Testing
 
 ## Petitioner usability testing Feb 2019
+Conducting usability testing with pro se petitioners (public) on the Start a Case form design and user flow.
+
 #### [Case Form Usability Test - Petitioner  - Test Plan](https://docs.google.com/document/d/1wRmXNfXAumPpczC_P3XbOY4uxUPgUZfY6xc-RNHVmTk/edit?usp=sharing)
 
-Conducting usability testing with pro se petitioners (public) on the Start a Case form design and user flow.
-https://docs.google.com/presentation/d/1E4MJ4y6lf7C2DkACHvBEubtRdfGCJBsyZ83qDNzXZdo/edit?usp=sharing
+#### [Case Form Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/1E4MJ4y6lf7C2DkACHvBEubtRdfGCJBsyZ83qDNzXZdo/edit?usp=sharing)
 
 ## Petition Clerk - Petition QC Usability Testing (March 2019)
 In this study, Flexion UX Designers tested the Petitions QC Workflow in a development environment for the first time. Previously, the team conducted several iterative design studies with Petitions Clerks using Figma wireframes.
-https://drive.google.com/open?id=1a3el4zlM0P_sXDZXt75-krHRBW92XVAn24etA0tcCDE
+#### [Petitions Workflow Usability Study Findings](https://drive.google.com/open?id=1a3el4zlM0P_sXDZXt75-krHRBW92XVAn24etA0tcCDE)
 
 ## Practitioner Interviews / Usability Testing (April 2019)
 In this study, Flexion UX Designers interviewed current practitioners to understand their use of the existing Tax Court system. The Flexion UX Team then tested the new Case Form with the practitioners, as well as the file document functionality for the first time.
