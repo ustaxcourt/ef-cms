@@ -3,7 +3,7 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentDefault', () => {
   describe('validation', () => {
-    it('should have error messages for missing fields', () => {
+    it.only('should have error messages for missing fields', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
         scenario: null,
       });
@@ -19,6 +19,17 @@ describe('CourtIssuedDocumentDefault', () => {
         documentType: 'Order',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when filingDate is undefined and eventCode is for an unservable document', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        documentTitle: 'Corrected Transcript of [Anything] on [Date]',
+        documentType: 'Corrected Transcript',
+        eventCode: 'CTRA',
+      });
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        filingDate: VALIDATION_ERROR_MESSAGES.filingDate,
+      });
     });
   });
 
