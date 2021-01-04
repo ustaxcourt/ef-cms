@@ -58,6 +58,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const eventCodeIsUnservable = !!UNSERVABLE_EVENT_CODES.includes(
     form.eventCode,
   );
+
   const showReceivedDate = eventCodeIsUnservable;
   const showSaveAndServeButton = !eventCodeIsUnservable;
 
