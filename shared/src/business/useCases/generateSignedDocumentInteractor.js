@@ -9,20 +9,89 @@ exports.getPageDimensions = page => {
   return [size.width, size.height];
 };
 
-const translateXAndY = ({ height, rotation, width, x, y }) => {
-  const Ox = width / 2;
-  const Oy = height / 2;
-  const newX = x - Ox + Ox * Math.cos(rotation) - Oy * Math.sin(rotation);
-  const newY = y - Oy + Ox * Math.sin(rotation) + Oy * Math.cos(rotation);
-  // if (rotation === 0) {
-  //   return { x: newX, y: newY };
-  // } else if (rotation === 270) {
-  //   return { x: newY, y: newX };
-  // }
-  return { x: newX, y: newY };
+const computeCoordinates = ({
+  boxHeight,
+  boxWidth,
+  lineHeight,
+  nameTextWidth,
+  pageHeight,
+  pageRotation,
+  pageWidth,
+  posX,
+  posY,
+  scale,
+  textHeight,
+  titleTextWidth,
+}) => {
+  let rotationRads = (pageRotation * Math.PI) / 180;
+  let coordsFromBottomLeft = {
+    x: posX / scale,
+  };
+  if (pageRotation === 90 || pageRotation === 270) {
+    coordsFromBottomLeft.y = pageWidth - (posY + boxHeight) / scale;
+  } else {
+    coordsFromBottomLeft.y = pageHeight - (posY + boxHeight) / scale;
+  }
+
+  let drawX, drawY, sigTitleX, sigTitleY, sigNameX, sigNameY;
+
+  if (pageRotation === 90) {
+    drawX =
+      coordsFromBottomLeft.x * Math.cos(rotationRads) -
+      coordsFromBottomLeft.y * Math.sin(rotationRads) +
+      pageWidth;
+    drawY =
+      coordsFromBottomLeft.x * Math.sin(rotationRads) +
+      coordsFromBottomLeft.y * Math.cos(rotationRads);
+    sigNameX = posY + textHeight * 2;
+    sigNameY = posX + textHeight;
+    sigTitleX = posY + textHeight * 3;
+    sigTitleY = posX + textHeight * 4;
+  } else if (pageRotation === 180) {
+    drawX =
+      coordsFromBottomLeft.x * Math.cos(rotationRads) -
+      coordsFromBottomLeft.y * Math.sin(rotationRads) +
+      pageWidth;
+    drawY =
+      coordsFromBottomLeft.x * Math.sin(rotationRads) +
+      coordsFromBottomLeft.y * Math.cos(rotationRads) +
+      pageHeight;
+
+    sigNameX = pageWidth - posX - (boxWidth - nameTextWidth) / 2;
+    sigNameY = posY - boxHeight / 2 + boxHeight;
+
+    sigTitleX = pageWidth - posX - (boxWidth - titleTextWidth) / 2;
+    sigTitleY =
+      posY - (boxHeight - textHeight * 2 - lineHeight) / 2 + boxHeight;
+  } else if (pageRotation === 270) {
+    drawX =
+      coordsFromBottomLeft.x * Math.cos(rotationRads) -
+      coordsFromBottomLeft.y * Math.sin(rotationRads);
+    drawY =
+      coordsFromBottomLeft.x * Math.sin(rotationRads) +
+      coordsFromBottomLeft.y * Math.cos(rotationRads) +
+      pageHeight;
+    sigNameX = pageWidth - posY - textHeight * 2;
+    sigNameY = pageHeight - posX - textHeight;
+    sigTitleX = pageWidth - posY - textHeight * 3;
+    sigTitleY = pageHeight - posX - textHeight * 4;
+  } else {
+    drawX = coordsFromBottomLeft.x;
+    drawY = coordsFromBottomLeft.y;
+    sigNameX = posX + (boxWidth - nameTextWidth) / 2;
+    sigNameY = pageHeight - posY + boxHeight / 2 - boxHeight;
+
+    sigTitleX = posX + (boxWidth - titleTextWidth) / 2;
+    sigTitleY =
+      pageHeight -
+      posY +
+      (boxHeight - textHeight * 2 - lineHeight) / 2 -
+      boxHeight;
+  }
+  return { drawX, drawY, sigNameX, sigNameY, sigTitleX, sigTitleY };
 };
 
-exports.translateXAndY = translateXAndY;
+exports.computeCoordinates = computeCoordinates;
 
 /**
  * generateSignedDocumentInteractor
@@ -83,71 +152,28 @@ exports.generateSignedDocumentInteractor = async ({
   const rotateSignatureDegrees = degrees(rotationAngle);
 
   let pageRotation = page.getRotation().angle;
-  let rotationRads = (pageRotation * Math.PI) / 180;
 
-  let coordsFromBottomLeft = {
-    x: posX / scale,
-  };
-  if (pageRotation === 90 || pageRotation === 270) {
-    coordsFromBottomLeft.y = pageWidth - (posY + boxHeight) / scale;
-  } else {
-    coordsFromBottomLeft.y = pageHeight - (posY + boxHeight) / scale;
-  }
-
-  let drawX, drawY, sigTitleX, sigTitleY, sigNameX, sigNameY;
-  if (pageRotation === 90) {
-    drawX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
-    drawY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads);
-    sigNameX = posY + textHeight * 2;
-    sigNameY = posX + textHeight;
-    sigTitleX = posY + textHeight * 3;
-    sigTitleY = posX + textHeight * 4;
-  } else if (pageRotation === 180) {
-    drawX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
-    drawY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
-
-    sigNameX = pageWidth - posX - (boxWidth - nameTextWidth) / 2;
-    sigNameY = posY - boxHeight / 2 + boxHeight;
-
-    sigTitleX = pageWidth - posX - (boxWidth - titleTextWidth) / 2;
-    sigTitleY =
-      posY - (boxHeight - textHeight * 2 - lineHeight) / 2 + boxHeight;
-  } else if (pageRotation === 270) {
-    drawX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads);
-    drawY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
-    sigNameX = pageWidth - posY - textHeight * 2;
-    sigNameY = pageHeight - posX - textHeight;
-    sigTitleX = pageWidth - posY - textHeight * 3;
-    sigTitleY = pageHeight - posX - textHeight * 4;
-  } else {
-    drawX = coordsFromBottomLeft.x;
-    drawY = coordsFromBottomLeft.y;
-    sigNameX = posX + (boxWidth - nameTextWidth) / 2;
-    sigNameY = pageHeight - posY + boxHeight / 2 - boxHeight;
-
-    sigTitleX = posX + (boxWidth - titleTextWidth) / 2;
-    sigTitleY =
-      pageHeight -
-      posY +
-      (boxHeight - textHeight * 2 - lineHeight) / 2 -
-      boxHeight;
-  }
+  const {
+    drawX,
+    drawY,
+    sigNameX,
+    sigNameY,
+    sigTitleX,
+    sigTitleY,
+  } = computeCoordinates({
+    boxHeight,
+    boxWidth,
+    lineHeight,
+    nameTextWidth,
+    pageHeight,
+    pageRotation,
+    pageWidth,
+    posX,
+    posY,
+    scale,
+    textHeight,
+    titleTextWidth,
+  });
 
   page.drawRectangle({
     color: rgb(1, 1, 1),
