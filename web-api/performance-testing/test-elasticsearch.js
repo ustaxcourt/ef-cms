@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const { get, pick } = require('lodash');
-const { getClient, getHost } = require('../elasticsearch/client');
+const { getClient } = require('../elasticsearch/client');
 
 // const mappings = require('../elasticsearch/elasticsearch-mappings');
 // const migratedCase = require('./migratedCase.json');
@@ -10,8 +10,7 @@ const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';
 
 (async () => {
-  const host = await getHost({ environmentName, version });
-  const esClient = getClient(host);
+  const esClient = await getClient({ environmentName, version });
 
   const orderQuery = {
     body: {
