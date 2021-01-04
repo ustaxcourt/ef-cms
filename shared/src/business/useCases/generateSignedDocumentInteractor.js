@@ -1,4 +1,4 @@
-import { degrees } from 'pdf-lib';
+const { degrees } = require('pdf-lib');
 
 /**
  * @param {PDFPage} page the page to get dimensions for
