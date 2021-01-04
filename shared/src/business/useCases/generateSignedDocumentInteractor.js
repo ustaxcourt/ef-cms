@@ -103,10 +103,10 @@ exports.generateSignedDocumentInteractor = async ({
     drawY =
       coordsFromBottomLeft.x * Math.sin(rotationRads) +
       coordsFromBottomLeft.y * Math.cos(rotationRads);
-    sigNameX = pageHeight - posY;
-    sigNameY = pageHeight - posY + boxHeight / 2;
-    sigTitleX = pageWidth - posY;
-    sigTitleY = pageHeight - posX;
+    sigNameX = posY + textHeight * 2;
+    sigNameY = posX + textHeight;
+    sigTitleX = posY + textHeight * 3;
+    sigTitleY = posX + textHeight * 4;
   } else if (pageRotation === 180) {
     drawX =
       coordsFromBottomLeft.x * Math.cos(rotationRads) -
@@ -156,13 +156,13 @@ exports.generateSignedDocumentInteractor = async ({
     x: sigNameX,
     y: sigNameY,
   });
-  // page.drawText(signatureTitle, {
-  //   font: helveticaBoldFont,
-  //   rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
-  //   size: textSize,
-  //   x: sigTitleX,
-  //   y: sigTitleY,
-  // });
+  page.drawText(signatureTitle, {
+    font: helveticaBoldFont,
+    rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
+    size: textSize,
+    x: sigTitleX,
+    y: sigTitleY,
+  });
 
   const pdfBytes = await pdfDoc.save({
     useObjectStreams: false,
