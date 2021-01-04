@@ -116,6 +116,13 @@ exports.generateSignedDocumentInteractor = async ({
       coordsFromBottomLeft.x * Math.sin(rotationRads) +
       coordsFromBottomLeft.y * Math.cos(rotationRads) +
       pageHeight;
+
+    sigNameX = pageWidth - posX - (boxWidth - nameTextWidth) / 2;
+    sigNameY = posY - boxHeight / 2 + boxHeight;
+
+    sigTitleX = pageWidth - posX - (boxWidth - titleTextWidth) / 2;
+    sigTitleY =
+      posY - (boxHeight - textHeight * 2 - lineHeight) / 2 + boxHeight;
   } else if (pageRotation === 270) {
     drawX =
       coordsFromBottomLeft.x * Math.cos(rotationRads) -
@@ -133,6 +140,7 @@ exports.generateSignedDocumentInteractor = async ({
     drawY = coordsFromBottomLeft.y;
     sigNameX = posX + (boxWidth - nameTextWidth) / 2;
     sigNameY = pageHeight - posY + boxHeight / 2 - boxHeight;
+
     sigTitleX = posX + (boxWidth - titleTextWidth) / 2;
     sigTitleY =
       pageHeight -
@@ -142,7 +150,7 @@ exports.generateSignedDocumentInteractor = async ({
   }
 
   page.drawRectangle({
-    color: rgb(0, 0, 1),
+    color: rgb(1, 1, 1),
     height: boxHeight,
     rotate: shouldRotateSignature ? rotateSignatureDegrees : degrees(0),
     width: boxWidth,
