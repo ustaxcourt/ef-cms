@@ -11,7 +11,6 @@ export const practitionerUpdatesAddress = test => {
     });
 
     await test.runSequence('submitUpdateUserContactInformationSequence');
-
     expect(test.getState('validationErrors')).toEqual({
       contact: { address1: expect.anything() },
     });
@@ -28,7 +27,9 @@ export const practitionerUpdatesAddress = test => {
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('userContactUpdateCompleteSequence');
+
     await refreshElasticsearchIndex(5000);
+
     expect(test.getState('alertSuccess')).toMatchObject({
       message: 'Changes saved.',
     });

@@ -23,7 +23,7 @@ describe('Modify Practitioner Contact Information', () => {
 
   for (let i = 0; i < 3; i++) {
     loginAs(test, 'privatePractitioner2@example.com');
-    it(`login as a practitioner and create case #${i}`, async () => {
+    it('login as a practitioner and create 3 cases', async () => {
       caseDetail = await uploadPetition(
         test,
         {},
@@ -33,6 +33,7 @@ describe('Modify Practitioner Contact Information', () => {
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }
+
   it('waits for elasticsearch', async () => {
     await refreshElasticsearchIndex();
   });
