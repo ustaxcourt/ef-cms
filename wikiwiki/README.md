@@ -8,4 +8,4 @@
 ## [System Documentation](./system-documentation.md)
 1. Glossary
 2. Testing Logins
-3. Fuctional Documentation 
+3. Functional Documentation
