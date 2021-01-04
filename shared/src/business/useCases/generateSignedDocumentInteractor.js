@@ -150,7 +150,7 @@ exports.generateSignedDocumentInteractor = async ({
   const shouldRotateSignature = rotationAngle !== 0;
   const rotateSignatureDegrees = degrees(rotationAngle);
 
-  let pageRotation = page.getRotation().angle;
+  const pageRotation = page.getRotation().angle;
 
   const {
     rectangleX,
