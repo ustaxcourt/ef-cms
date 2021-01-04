@@ -32,12 +32,12 @@ resource "aws_api_gateway_gateway_response" "large_payload_public" {
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api_public.id
   status_code   = "413"
   response_type = "REQUEST_TOO_LARGE"
-  
+
   response_parameters = {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
-}  
+}
 
 resource "aws_api_gateway_gateway_response" "timeout_public" {
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api_public.id
@@ -166,7 +166,7 @@ resource "aws_api_gateway_method_settings" "api_public_default" {
   method_path = "*/*"
 
   settings {
-    throttling_burst_limit = 5000
-    throttling_rate_limit = 10000
+    throttling_burst_limit = 5000 // concurrent request limit
+    throttling_rate_limit = 10000 // per second
   }
 }

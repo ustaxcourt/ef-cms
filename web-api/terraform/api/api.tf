@@ -32,12 +32,12 @@ resource "aws_api_gateway_gateway_response" "large_payload" {
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
   status_code   = "413"
   response_type = "REQUEST_TOO_LARGE"
-  
+
   response_parameters = {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
-}  
+}
 
 resource "aws_api_gateway_gateway_response" "timeout" {
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
@@ -333,7 +333,12 @@ resource "aws_api_gateway_method_settings" "api_default" {
   method_path = "*/*"
 
   settings {
-    throttling_burst_limit = 5000
-    throttling_rate_limit = 10000
+    throttling_burst_limit = 5000 // concurrent request limit
+    throttling_rate_limit = 10000 // per second
   }
+}
+
+resource "aws_wafv2_web_acl_association" "association" {
+  resource_arn = aws_api_gateway_stage.api_stage.arn
+  web_acl_arn  = aws_wafv2_web_acl.apis.arn
 }
