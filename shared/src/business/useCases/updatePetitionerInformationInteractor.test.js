@@ -147,6 +147,74 @@ describe('update petitioner contact information on a case', () => {
     ).toHaveBeenCalled();
   });
 
+  it('ensures updates to fields with null values are persisted', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactPrimary: {
+        address1: '989 Division St',
+        address2: 'Lights out',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Primary Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      contactSecondary: {
+        address1: '789 Division St',
+        address2: 'Apt B',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Secondary Petitioner',
+        phone: '1234568',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      partyType: PARTY_TYPES.petitionerSpouse,
+      privatePractitioners: [],
+    };
+
+    await updatePetitionerInformationInteractor({
+      applicationContext,
+      contactPrimary: {
+        address1: '989 Division St',
+        // removed address2
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Primary Petitioner',
+        phone: '1234568',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      contactSecondary: {
+        address1: '789 Division St',
+        // removed address2
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Secondary Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Executor',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.contactPrimary.address2,
+    ).toBeUndefined();
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.contactSecondary.address2,
+    ).toBeUndefined();
+  });
+
   it('sets filedBy to undefined on notice of change docket entry', async () => {
     mockCase = {
       ...MOCK_CASE,
