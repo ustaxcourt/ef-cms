@@ -54,9 +54,13 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const formattedDocumentTitle = `${form.generatedDocumentTitle || ''}${
     form.attachments ? ' (Attachment(s))' : ''
   }`;
-  const showSaveAndServeButton = !UNSERVABLE_EVENT_CODES.includes(
+
+  const eventCodeIsUnservable = !!UNSERVABLE_EVENT_CODES.includes(
     form.eventCode,
   );
+  const showReceivedDate = eventCodeIsUnservable;
+  const showSaveAndServeButton = !eventCodeIsUnservable;
+
   const showDocumentTypeDropdown =
     form.eventCode !==
     SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.eventCode;
@@ -66,6 +70,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     formattedDocumentTitle,
     serviceParties,
     showDocumentTypeDropdown,
+    showReceivedDate,
     showSaveAndServeButton,
     showServiceStamp,
   };

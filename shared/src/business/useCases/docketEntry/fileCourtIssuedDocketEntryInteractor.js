@@ -78,6 +78,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       editState: JSON.stringify(documentMeta),
       eventCode: documentMeta.eventCode,
       filedBy: undefined,
+      filingDate: documentMeta.filingDate,
       freeText: documentMeta.freeText,
       isDraft: false,
       isFileAttached: true,

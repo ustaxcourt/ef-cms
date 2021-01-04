@@ -3,6 +3,7 @@ import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -197,6 +198,27 @@ export const CourtIssuedDocketEntry = connect(
                     </div>
                   ))}
                 </div>
+
+                {addCourtIssuedDocketEntryHelper.showReceivedDate && (
+                  <DateInput
+                    className="margin-top-4"
+                    errorText={validationErrors.filingDate}
+                    id="date-received"
+                    label="Date received"
+                    names={{
+                      day: 'filingDateDay',
+                      month: 'filingDateMonth',
+                      year: 'filingDateYear',
+                    }}
+                    values={{
+                      day: form.filingDateDay,
+                      month: form.filingDateMonth,
+                      year: form.filingDateYear,
+                    }}
+                    onBlur={validateCourtIssuedDocketEntrySequence}
+                    onChange={updateCourtIssuedDocketEntryFormValueSequence}
+                  />
+                )}
               </div>
 
               <section className="usa-section DocumentDetail">
