@@ -7,6 +7,7 @@ const {
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
 const {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
@@ -36,6 +37,7 @@ const MOCK_TRIAL = {
     userId: '410e4ade-6ad5-4fc4-8741-3f8352c72a0c',
   },
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Regular',
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
