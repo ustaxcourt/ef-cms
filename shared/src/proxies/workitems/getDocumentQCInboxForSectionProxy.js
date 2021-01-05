@@ -10,10 +10,11 @@ const { get } = require('../requests');
  */
 exports.getDocumentQCInboxForSectionInteractor = ({
   applicationContext,
+  judgeUser,
   section,
 }) => {
   return get({
     applicationContext,
-    endpoint: `/sections/${section}/document-qc/inbox`,
+    endpoint: `/sections/${section}/document-qc/inbox?judgeUserName=${judgeUser.name}`,
   });
 };

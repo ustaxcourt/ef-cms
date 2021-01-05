@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * fetched the document qc inbox items for a section.
  *
@@ -6,14 +8,18 @@
  */
 export const getDocumentQCInboxForSectionAction = async ({
   applicationContext,
+  get,
 }) => {
   const user = applicationContext.getCurrentUser();
+  const judgeUser = get(state.judgeUser);
 
-  const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getDocumentQCInboxForSectionInteractor({
-    applicationContext,
-    section: user.section,
-  });
+  const workItems = await applicationContext
+    .getUseCases()
+    .getDocumentQCInboxForSectionInteractor({
+      applicationContext,
+      judgeUser,
+      section: user.section,
+    });
 
   return { workItems };
 };
