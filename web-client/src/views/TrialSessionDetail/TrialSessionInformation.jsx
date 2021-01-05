@@ -5,8 +5,40 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
+const RemoteProceedingInformation = ({ formattedTrialSessionDetails }) => {
+  return (
+    <div className="card trial-session-card height-full">
+      <div className="content-wrapper">
+        <h3 className="underlined">Remote Proceeding</h3>
+        <div className="grid-row grid-gap">
+          <div className="grid-col-6">
+            <p className="label">Meeting ID</p>
+            <p>{formattedTrialSessionDetails.meetingId}</p>
+          </div>
+          <div className="grid-col-6">
+            <p className="label">Join by telephone</p>
+            <p>{formattedTrialSessionDetails.joinPhoneNumber}</p>
+          </div>
+        </div>
+        <div className="grid-row grid-gap">
+          <div className="grid-col-6">
+            <p className="label">Password</p>
+            <p>{formattedTrialSessionDetails.password}</p>
+          </div>
+          <div className="grid-col-6">
+            <p className="label">Chambers phone number</p>
+            <p>{formattedTrialSessionDetails.chambersPhoneNumber}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const TrialSessionInformation = connect(
   {
+    TRIAL_SESSION_PROCEEDING_TYPES:
+      state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openConfirmDeleteTrialSessionModalSequence:
       sequences.openConfirmDeleteTrialSessionModalSequence,
@@ -19,6 +51,7 @@ export const TrialSessionInformation = connect(
     openConfirmDeleteTrialSessionModalSequence,
     printTrialCalendarSequence,
     showModal,
+    TRIAL_SESSION_PROCEEDING_TYPES,
     trialSessionHeaderHelper,
   }) {
     return (
@@ -194,26 +227,33 @@ export const TrialSessionInformation = connect(
             </div>
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                <div className="card trial-session-card height-full">
-                  <div className="content-wrapper">
-                    <h3 className="underlined">Courthouse Location</h3>
-                    {formattedTrialSessionDetails.noLocationEntered && (
-                      <p>No location entered</p>
-                    )}
-                    <p>{formattedTrialSessionDetails.courthouseName}</p>
-                    <p>
-                      <span className="address-line">
-                        {formattedTrialSessionDetails.address1}
-                      </span>
-                      <span className="address-line">
-                        {formattedTrialSessionDetails.address2}
-                      </span>
-                      <span className="address-line">
-                        {formattedTrialSessionDetails.formattedCityStateZip}
-                      </span>
-                    </p>
+                {formattedTrialSessionDetails.proceedingType ===
+                  TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
+                  <div className="card trial-session-card height-full">
+                    <div className="content-wrapper">
+                      <h3 className="underlined">Courthouse Location</h3>
+                      {formattedTrialSessionDetails.noLocationEntered && (
+                        <p>No location entered</p>
+                      )}
+                      <p>{formattedTrialSessionDetails.courthouseName}</p>
+                      <p>
+                        <span className="address-line">
+                          {formattedTrialSessionDetails.address1}
+                        </span>
+                        <span className="address-line">
+                          {formattedTrialSessionDetails.address2}
+                        </span>
+                        <span className="address-line">
+                          {formattedTrialSessionDetails.formattedCityStateZip}
+                        </span>
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {formattedTrialSessionDetails.proceedingType ===
+                  TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+                  RemoteProceedingInformation({ formattedTrialSessionDetails })}
               </div>
               <div className="grid-col-6">
                 <div className="card trial-session-card height-full">

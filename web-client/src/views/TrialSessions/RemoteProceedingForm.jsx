@@ -54,7 +54,7 @@ export const RemoteProceedingForm = connect(
         <div className="usa-form-group">
           <label
             className="usa-label margin-bottom-0"
-            htmlFor="join-by-telephone"
+            htmlFor="join-phone-number"
           >
             Join by telephone <span className="usa-hint">(optional)</span>
           </label>
@@ -65,10 +65,10 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
-            id="join-by-telephone"
-            name="joinByTelephone"
+            id="join-phone-number"
+            name="joinPhoneNumber"
             type="text"
-            value={form.joinByTelephone || ''}
+            value={form.joinPhoneNumber || ''}
             onChange={e => {
               updateTrialSessionFormDataSequence({
                 key: e.target.name,
