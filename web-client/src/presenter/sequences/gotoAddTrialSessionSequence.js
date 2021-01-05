@@ -7,7 +7,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDefaultTrialStartTimeAction } from '../actions/setDefaultTrialStartTimeAction';
+import { setDefaultTrialSessionFormValuesAction } from '../actions/setDefaultTrialSessionFormValuesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -25,7 +25,7 @@ const gotoAddTrialSession = [
       setUsersByKeyAction('trialClerks'),
     ],
   ]),
-  setDefaultTrialStartTimeAction,
+  setDefaultTrialSessionFormValuesAction,
   setCurrentPageAction('AddTrialSession'),
 ];
 
