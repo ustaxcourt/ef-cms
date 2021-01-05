@@ -13,23 +13,53 @@ const RemoteProceedingInformation = ({ formattedTrialSessionDetails }) => {
         <div className="grid-row grid-gap">
           <div className="grid-col-6">
             <p className="label">Meeting ID</p>
-            <p>{formattedTrialSessionDetails.meetingId}</p>
+            <p>{formattedTrialSessionDetails.meetingId || 'Not provided'}</p>
           </div>
           <div className="grid-col-6">
             <p className="label">Join by telephone</p>
-            <p>{formattedTrialSessionDetails.joinPhoneNumber}</p>
+            <p>
+              {formattedTrialSessionDetails.joinPhoneNumber || 'Not provided'}
+            </p>
           </div>
         </div>
         <div className="grid-row grid-gap">
           <div className="grid-col-6">
             <p className="label">Password</p>
-            <p>{formattedTrialSessionDetails.password}</p>
+            <p>{formattedTrialSessionDetails.password || 'Not provided'}</p>
           </div>
           <div className="grid-col-6">
             <p className="label">Chambers phone number</p>
-            <p>{formattedTrialSessionDetails.chambersPhoneNumber}</p>
+            <p>
+              {formattedTrialSessionDetails.chambersPhoneNumber ||
+                'Not provided'}
+            </p>
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const InPersonProceedingInformation = ({ formattedTrialSessionDetails }) => {
+  return (
+    <div className="card trial-session-card height-full">
+      <div className="content-wrapper">
+        <h3 className="underlined">Courthouse Location</h3>
+        {formattedTrialSessionDetails.noLocationEntered && (
+          <p>No location entered</p>
+        )}
+        <p>{formattedTrialSessionDetails.courthouseName}</p>
+        <p>
+          <span className="address-line">
+            {formattedTrialSessionDetails.address1}
+          </span>
+          <span className="address-line">
+            {formattedTrialSessionDetails.address2}
+          </span>
+          <span className="address-line">
+            {formattedTrialSessionDetails.formattedCityStateZip}
+          </span>
+        </p>
       </div>
     </div>
   );
@@ -228,28 +258,10 @@ export const TrialSessionInformation = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
                 {formattedTrialSessionDetails.proceedingType ===
-                  TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
-                  <div className="card trial-session-card height-full">
-                    <div className="content-wrapper">
-                      <h3 className="underlined">Courthouse Location</h3>
-                      {formattedTrialSessionDetails.noLocationEntered && (
-                        <p>No location entered</p>
-                      )}
-                      <p>{formattedTrialSessionDetails.courthouseName}</p>
-                      <p>
-                        <span className="address-line">
-                          {formattedTrialSessionDetails.address1}
-                        </span>
-                        <span className="address-line">
-                          {formattedTrialSessionDetails.address2}
-                        </span>
-                        <span className="address-line">
-                          {formattedTrialSessionDetails.formattedCityStateZip}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                )}
+                  TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+                  InPersonProceedingInformation({
+                    formattedTrialSessionDetails,
+                  })}
 
                 {formattedTrialSessionDetails.proceedingType ===
                   TRIAL_SESSION_PROCEEDING_TYPES.remote &&
