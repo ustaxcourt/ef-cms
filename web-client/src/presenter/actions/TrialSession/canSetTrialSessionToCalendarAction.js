@@ -33,6 +33,15 @@ export const canSetTrialSessionToCalendarAction = async ({
   const missingAddressProperties = addressProperties.filter(property =>
     emptyFields.includes(property),
   );
+  const meetingProperties = [
+    'chambersPhoneNumber',
+    'joinPhoneNumber',
+    'meetingId',
+    'password',
+  ];
+  const missingMeetingProperties = meetingProperties.filter(property =>
+    emptyFields.includes(property),
+  );
   const missingFieldsForWarningMessage = [];
 
   if (emptyFields.includes('judge')) {
@@ -41,6 +50,9 @@ export const canSetTrialSessionToCalendarAction = async ({
 
   if (missingAddressProperties.length > 0) {
     missingFieldsForWarningMessage.unshift('an address');
+  }
+  if (missingMeetingProperties.length > 0) {
+    missingFieldsForWarningMessage.unshift('meeting information');
   }
 
   return path.no({

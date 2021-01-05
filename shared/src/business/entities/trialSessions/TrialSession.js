@@ -45,15 +45,19 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
     removedFromTrial: caseOrder.removedFromTrial,
     removedFromTrialDate: caseOrder.removedFromTrialDate,
   }));
+  this.chambersPhoneNumber = rawSession.chambersPhoneNumber;
   this.city = rawSession.city;
   this.courtReporter = rawSession.courtReporter;
   this.courthouseName = rawSession.courthouseName;
   this.createdAt = rawSession.createdAt || createISODateString();
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
+  this.joinPhoneNumber = rawSession.joinPhoneNumber;
   this.maxCases = rawSession.maxCases;
+  this.meetingId = rawSession.meetingId;
   this.notes = rawSession.notes;
   this.noticeIssuedDate = rawSession.noticeIssuedDate;
+  this.password = rawSession.password;
   this.postalCode = rawSession.postalCode;
   this.sessionType = rawSession.sessionType;
   this.startDate = rawSession.startDate;
@@ -108,18 +112,28 @@ TrialSession.VALIDATION_ERROR_MESSAGES = {
   trialLocation: 'Select a trial session location',
 };
 
-TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = [
-  'address1',
-  'city',
-  'state',
-  'postalCode',
-  'judge',
-];
+TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = {
+  [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
+    'address1',
+    'city',
+    'state',
+    'postalCode',
+    'judge',
+  ],
+  [TRIAL_SESSION_PROCEEDING_TYPES.remote]: [
+    'chambersPhoneNumber',
+    'joinPhoneNumber',
+    'meetingId',
+    'password',
+    'judge',
+  ],
+};
 
 TrialSession.validationRules = {
   COMMON: {
     address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
     address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
+    chambersPhoneNumber: JoiValidationConstants.STRING.max(100).optional(),
     city: JoiValidationConstants.STRING.max(100).allow('').optional(),
     courtReporter: JoiValidationConstants.STRING.max(100).optional(),
     courthouseName: JoiValidationConstants.STRING.max(100).allow('').optional(),
@@ -127,6 +141,7 @@ TrialSession.validationRules = {
     entityName: JoiValidationConstants.STRING.valid('TrialSession').required(),
     irsCalendarAdministrator: JoiValidationConstants.STRING.max(100).optional(),
     isCalendared: joi.boolean().required(),
+    joinPhoneNumber: JoiValidationConstants.STRING.max(100).optional(),
     judge: joi
       .object({
         name: JoiValidationConstants.STRING.max(100).required(),
@@ -134,8 +149,10 @@ TrialSession.validationRules = {
       })
       .optional(),
     maxCases: joi.number().greater(0).integer().required(),
+    meetingId: JoiValidationConstants.STRING.max(100).optional(),
     notes: JoiValidationConstants.STRING.max(400).optional(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
+    password: JoiValidationConstants.STRING.max(100).optional(),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     proceedingType: JoiValidationConstants.STRING.valid(
       ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
@@ -360,9 +377,9 @@ TrialSession.prototype.canSetAsCalendared = function () {
  * @returns {Array} A list of property names of the trial session that are empty
  */
 TrialSession.prototype.getEmptyFields = function () {
-  const missingProperties = TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING.filter(
-    property => isEmpty(this[property]),
-  );
+  const missingProperties = TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING[
+    this.proceedingType
+  ].filter(property => isEmpty(this[property]));
 
   return missingProperties;
 };
