@@ -189,6 +189,19 @@
           name: "pattern"
           args: 
             regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
+    proceedingType: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "In Person"
+        - "Remote"
     sessionType: 
       type: "string"
       flags: 
