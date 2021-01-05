@@ -26,6 +26,43 @@ export const LocationInformationForm = connect(
       <>
         <h2 className="margin-top-4">Location Information</h2>
         <div className="blue-container">
+          <FormGroup errorText={validationErrors.startTime}>
+            <fieldset className="start-time usa-fieldset margin-bottom-0">
+              <legend className="usa-legend" id="proceeding-type-legend">
+                Proceeding type
+              </legend>
+              {['In Person', 'Remote'].map(option => (
+                <div className="usa-radio usa-radio__inline" key={option}>
+                  <input
+                    aria-describedby="proceeding-type-legend"
+                    checked={'Remote' === option}
+                    className="usa-radio__input"
+                    id={`${option}-proceeding`}
+                    name={`${option}-proceeding`}
+                    type="radio"
+                    value={option}
+                    onBlur={() => {
+                      validateTrialSessionSequence();
+                    }}
+                    onChange={e => {
+                      updateTrialSessionFormDataSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                  <label
+                    aria-label={option.toUpperCase()}
+                    className="usa-radio__label smaller-padding-right"
+                    htmlFor={`startTimeExtension-${option}`}
+                  >
+                    {option}
+                  </label>
+                </div>
+              ))}
+            </fieldset>
+          </FormGroup>
+
           <FormGroup errorText={validationErrors.trialLocation}>
             <label className="usa-label" htmlFor="trial-location">
               Trial location
