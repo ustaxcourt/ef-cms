@@ -18,6 +18,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.getDocumentQCInboxForSectionInteractor = async ({
   applicationContext,
+  judgeUserName,
   section,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -37,6 +38,7 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
     .getPersistenceGateway()
     .getDocumentQCInboxForSection({
       applicationContext,
+      judgeUserName,
       section: sectionToShow,
     });
 
