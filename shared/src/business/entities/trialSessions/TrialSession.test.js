@@ -601,7 +601,7 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-        proceedingType: '"proceedingType" must be one of [In Person, Remote]',
+        proceedingType: TrialSession.VALIDATION_ERROR_MESSAGES.proceedingType,
       });
     });
 
@@ -624,7 +624,7 @@ describe('TrialSession entity', () => {
       expect(trialSession.isValid()).toBeTruthy();
     });
 
-    it('should be valid with a "Remote" proceedingType', () => {
+    it('should be valid with an "In Person" proceedingType', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
@@ -660,7 +660,7 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-        proceedingType: '"proceedingType" must be a string',
+        proceedingType: TrialSession.VALIDATION_ERROR_MESSAGES.proceedingType,
       });
     });
   });

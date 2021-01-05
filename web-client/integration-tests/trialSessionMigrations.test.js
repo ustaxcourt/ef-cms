@@ -15,11 +15,16 @@ const axiosInstance = axios.create({
   timeout: 2000,
 });
 
-const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();
+const {
+  CHIEF_JUDGE,
+  STATUS_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = applicationContext.getConstants();
 
 const calendaredTrialSession = {
   isCalendared: true,
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Hybrid',
   startDate: '2020-08-10',
   term: 'Summer',

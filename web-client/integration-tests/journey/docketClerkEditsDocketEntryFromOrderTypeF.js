@@ -36,6 +36,18 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
       value: 'FTRL',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: '2021',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
       value: 'Further Trial before',
     });

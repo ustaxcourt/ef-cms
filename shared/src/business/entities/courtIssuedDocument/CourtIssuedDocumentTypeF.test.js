@@ -37,6 +37,37 @@ describe('CourtIssuedDocumentTypeF', () => {
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
     });
+
+    describe('requiring filing dates on unservable documents', () => {
+      it('should be invalid when filingDate is undefined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          judge: 'Judge Colvin',
+          scenario: 'Type F',
+          trialLocation: 'Seattle, Washington',
+        });
+        expect(
+          documentInstance.getFormattedValidationErrors().filingDate,
+        ).toBeDefined();
+      });
+
+      it('should be valid when filingDate is defined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          filingDate: '1990-01-01T05:00:00.000Z',
+          judge: 'Judge Colvin',
+          scenario: 'Type F',
+          trialLocation: 'Seattle, Washington',
+        });
+        expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+      });
+    });
   });
 
   describe('title generation', () => {
