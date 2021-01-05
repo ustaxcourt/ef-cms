@@ -2,11 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   updateTrialSessionInteractor,
 } = require('./updateTrialSessionInteractor');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('updateTrialSessionInteractor', () => {
@@ -15,6 +18,7 @@ describe('updateTrialSessionInteractor', () => {
 
   const MOCK_TRIAL = {
     maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '2025-12-01T00:00:00.000Z',
     term: 'Fall',
