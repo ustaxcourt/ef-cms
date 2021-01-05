@@ -1,11 +1,13 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const { TRIAL_SESSION_PROCEEDING_TYPES } = require('../EntityConstants');
 const { TrialSession } = require('./TrialSession');
 
 describe('TrialSession entity', () => {
   const VALID_TRIAL_SESSION = {
     maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '2025-03-01T00:00:00.000Z',
     term: 'Fall',
@@ -495,6 +497,88 @@ describe('TrialSession entity', () => {
       trialSession.setNoticesIssued();
 
       expect(trialSession.noticeIssuedDate).toBeTruthy();
+    });
+  });
+
+  describe('proceedingType', () => {
+    it('should throw an error when passed an invalid proceedingType', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          proceedingType: 'NOT A VALID TYPE',
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        proceedingType: '"proceedingType" must be one of [In Person, Remote]',
+      });
+    });
+
+    it('should be valid with a "Remote" proceedingType', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBeTruthy();
+    });
+
+    it('should be valid with a "Remote" proceedingType', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBeTruthy();
+    });
+
+    it('should be invalid with no proceedingType', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          proceedingType: null,
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        proceedingType: '"proceedingType" must be a string',
+      });
     });
   });
 });

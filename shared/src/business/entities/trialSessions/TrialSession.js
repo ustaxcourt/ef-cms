@@ -11,6 +11,7 @@ const {
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
+  TRIAL_SESSION_PROCEEDING_TYPES,
   US_STATES,
   US_STATES_OTHER,
 } = require('../EntityConstants');
@@ -63,6 +64,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.term = rawSession.term;
   this.termYear = rawSession.termYear;
   this.trialLocation = rawSession.trialLocation;
+  this.proceedingType = rawSession.proceedingType;
   this.trialSessionId =
     rawSession.trialSessionId || applicationContext.getUniqueId();
 
@@ -135,6 +137,9 @@ TrialSession.validationRules = {
     notes: JoiValidationConstants.STRING.max(400).optional(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
+    proceedingType: JoiValidationConstants.STRING.valid(
+      ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
+    ).required(),
     sessionType: JoiValidationConstants.STRING.valid(
       ...SESSION_TYPES,
     ).required(),
