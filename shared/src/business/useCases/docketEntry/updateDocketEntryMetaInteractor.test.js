@@ -57,6 +57,32 @@ describe('updateDocketEntryMetaInteractor', () => {
         servedParties: [{ name: 'Some Other Party' }],
         userId: mockUserId,
       },
+      {
+        docketEntryId: 'd1197867-f25d-4e26-828c-f536419c96b7',
+        documentTitle: 'Some Order',
+        documentType: 'Order',
+        eventCode: 'O',
+        filingDate: '2011-01-11T00:01:00.000Z',
+        index: 4,
+        isMinuteEntry: false,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+        userId: mockUserId,
+      },
+      {
+        docketEntryId: 'd2297867-f25d-4e26-828c-f536419c96b7',
+        documentTitle: 'Unservable Document with Filing Date',
+        documentType: 'U.S.C.A',
+        eventCode: 'USCA',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 5,
+        isMinuteEntry: false,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+        userId: mockUserId,
+      },
     ];
 
     const caseByDocketNumber = {
@@ -246,6 +272,38 @@ describe('updateDocketEntryMetaInteractor', () => {
       docketEntryMeta: {
         ...docketEntries[0],
         servedAt: '2020-01-01T00:01:00.000Z',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should generate a new coversheet for the document if the filingDate field is changed on a document that is becoming unservable', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[3], // originally an Order
+        documentType: 'U.S.C.A',
+        eventCode: 'USCA', // changing to USCA
+        filingDate: '2020-02-22T02:22:00.000Z',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should generate a new coversheet for the document if the filingDate field is changed on an unservable document', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[4], // was already a USCA
+        filingDate: '2012-02-22T02:22:00.000Z',
       },
       docketNumber: '101-20',
     });

@@ -48,7 +48,7 @@ describe('CourtIssuedDocumentDefault', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
         documentTitle: 'Corrected Transcript of [Anything] on [Date]',
         documentType: 'Corrected Transcript',
-        eventCode: 'CTRA',
+        eventCode: UNSERVABLE_EVENT_CODES[1],
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
         filingDate: VALIDATION_ERROR_MESSAGES.filingDate,
