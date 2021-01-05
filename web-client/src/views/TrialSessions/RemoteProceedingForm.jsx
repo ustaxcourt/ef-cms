@@ -52,7 +52,10 @@ export const RemoteProceedingForm = connect(
         </div>
 
         <div className="usa-form-group">
-          <label className="usa-label" htmlFor="join-by-telephone">
+          <label
+            className="usa-label margin-bottom-0"
+            htmlFor="join-by-telephone"
+          >
             Join by telephone <span className="usa-hint">(optional)</span>
           </label>
           <span className="usa-hint">
