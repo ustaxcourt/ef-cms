@@ -93,6 +93,7 @@ TrialSession.VALIDATION_ERROR_MESSAGES = {
       message: 'Enter ZIP code',
     },
   ],
+  proceedingType: 'Enter a valid proceeding type',
   sessionType: 'Select a session type',
   startDate: [
     {
