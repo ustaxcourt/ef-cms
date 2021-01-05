@@ -6,6 +6,7 @@ const {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
@@ -420,6 +421,7 @@ describe('migrateCaseInteractor', () => {
       .getTrialSessionById.mockResolvedValue({
         isCalendared: true,
         maxCases: 100,
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionType: 'Hybrid',
         startDate: '2020-08-10',
         term: 'Summer',
