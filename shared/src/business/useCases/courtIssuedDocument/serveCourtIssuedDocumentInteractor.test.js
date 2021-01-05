@@ -422,6 +422,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         maxCases: 100,
         pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionType: 'Regular',
         sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
         startDate: '2019-11-27T05:00:00.000Z',
