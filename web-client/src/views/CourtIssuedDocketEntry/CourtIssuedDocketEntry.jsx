@@ -156,7 +156,10 @@ export const CourtIssuedDocketEntry = connect(
                     <fieldset className="usa-fieldset">
                       <legend className="usa-legend">Service stamp</legend>
                       {constants.SERVICE_STAMP_OPTIONS.map((option, idx) => (
-                        <div className="usa-radio usa-radio__inline" key={idx}>
+                        <div
+                          className="usa-radio usa-radio__inline"
+                          key={`stamp_${idx}`}
+                        >
                           <input
                             checked={form.serviceStamp === option}
                             className="usa-radio__input"
