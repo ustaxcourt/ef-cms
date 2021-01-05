@@ -55,6 +55,10 @@ export const RemoteProceedingForm = connect(
           <label className="usa-label" htmlFor="join-by-telephone">
             Join by telephone <span className="usa-hint">(optional)</span>
           </label>
+          <span className="usa-hint">
+            Enter the phone number parties will use to join the remote
+            proceedings by phone.
+          </span>
           <input
             autoCapitalize="none"
             className="usa-input"
