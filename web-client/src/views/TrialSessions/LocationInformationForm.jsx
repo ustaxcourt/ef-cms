@@ -6,6 +6,8 @@ import React from 'react';
 
 export const LocationInformationForm = connect(
   {
+    TRIAL_SESSION_PROCEEDING_TYPES:
+      state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
     form: state.form,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
@@ -16,6 +18,7 @@ export const LocationInformationForm = connect(
   },
   function LocationInformationForm({
     form,
+    TRIAL_SESSION_PROCEEDING_TYPES,
     updateTrialSessionFormDataSequence,
     usStates,
     usStatesOther,
@@ -31,14 +34,14 @@ export const LocationInformationForm = connect(
               <legend className="usa-legend" id="proceeding-type-legend">
                 Proceeding type
               </legend>
-              {['In Person', 'Remote'].map(option => (
+              {Object.values(TRIAL_SESSION_PROCEEDING_TYPES).map(option => (
                 <div className="usa-radio usa-radio__inline" key={option}>
                   <input
                     aria-describedby="proceeding-type-legend"
-                    checked={'Remote' === option}
+                    checked={form.proceedingType === option}
                     className="usa-radio__input"
                     id={`${option}-proceeding`}
-                    name={`${option}-proceeding`}
+                    name="proceedingType"
                     type="radio"
                     value={option}
                     onBlur={() => {
@@ -52,9 +55,9 @@ export const LocationInformationForm = connect(
                     }}
                   />
                   <label
-                    aria-label={option.toUpperCase()}
+                    aria-label={option}
                     className="usa-radio__label smaller-padding-right"
-                    htmlFor={`startTimeExtension-${option}`}
+                    htmlFor={`${option}-proceeding`}
                   >
                     {option}
                   </label>
