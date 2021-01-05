@@ -422,4 +422,31 @@ describe('getNotificationsInteractor', () => {
       userInboxCount: 2,
     });
   });
+
+  it('should fetch the qc section items for the provided judgeUserId', async () => {
+    await getNotificationsInteractor({
+      applicationContext,
+      judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
+        .mock.calls[0][0],
+    ).toMatchObject({
+      judgeUserName: 'Some Judge',
+    });
+  });
+
+  it('should fetch the qc section items without a judgeName when a judgeUserId is not provided', async () => {
+    await getNotificationsInteractor({
+      applicationContext,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
+        .mock.calls[0][0],
+    ).toMatchObject({
+      judgeUserName: null,
+    });
+  });
 });

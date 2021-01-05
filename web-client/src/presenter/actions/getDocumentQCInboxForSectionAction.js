@@ -10,8 +10,13 @@ export const getDocumentQCInboxForSectionAction = async ({
   applicationContext,
   get,
 }) => {
+  const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
-  const judgeUser = get(state.judgeUser);
+  let judgeUser = get(state.judgeUser);
+
+  if (!judgeUser && user.role === USER_ROLES.adc) {
+    judgeUser = { name: CHIEF_JUDGE };
+  }
 
   const workItems = await applicationContext
     .getUseCases()
