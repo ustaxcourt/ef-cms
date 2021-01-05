@@ -37,6 +37,33 @@ describe('CourtIssuedDocumentTypeA', () => {
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
     });
 
+    describe('requiring filing dates on unservable documents', () => {
+      it('should be invalid when filingDate is undefined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          scenario: 'Type A',
+        });
+        expect(
+          documentInstance.getFormattedValidationErrors().filingDate,
+        ).toBeDefined();
+      });
+
+      it('should be valid when filingDate is defined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          filingDate: '1990-01-01T05:00:00.000Z',
+          scenario: 'Type A',
+        });
+        expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+      });
+    });
+
     it('should be invalid if the document type is a generic order and serviceStamp and freeText are not present', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
         attachments: false,

@@ -4,6 +4,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   removeCaseFromTrialInteractor,
@@ -18,6 +19,7 @@ describe('remove case from trial session', () => {
       { docketNumber: '123-45' },
     ],
     maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '3000-03-01T00:00:00.000Z',
     term: 'Fall',
