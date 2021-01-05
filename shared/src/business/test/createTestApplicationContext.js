@@ -48,9 +48,6 @@ const {
   documentUrlTranslator,
 } = require('../../../src/business/utilities/documentUrlTranslator');
 const {
-  filterQcItemsByAssociatedJudge,
-} = require('../utilities/filterQcItemsByAssociatedJudge');
-const {
   filterWorkItemsForUser,
 } = require('../../../src/business/utilities/filterWorkItemsForUser');
 const {
@@ -223,9 +220,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    filterQcItemsByAssociatedJudge: jest
-      .fn()
-      .mockImplementation(filterQcItemsByAssociatedJudge),
     filterWorkItemsForUser: jest
       .fn()
       .mockImplementation(filterWorkItemsForUser),
