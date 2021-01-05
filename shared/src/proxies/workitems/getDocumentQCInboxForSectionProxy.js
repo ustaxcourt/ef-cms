@@ -1,3 +1,4 @@
+const querystring = require('querystring');
 const { get } = require('../requests');
 
 /**
@@ -13,8 +14,13 @@ exports.getDocumentQCInboxForSectionInteractor = ({
   judgeUser,
   section,
 }) => {
+  const queryParams =
+    judgeUser && judgeUser.name
+      ? querystring.stringify({ judgeUserName: judgeUser.name })
+      : '';
+
   return get({
     applicationContext,
-    endpoint: `/sections/${section}/document-qc/inbox?judgeUserName=${judgeUser.name}`,
+    endpoint: `/sections/${section}/document-qc/inbox?${queryParams}`,
   });
 };
