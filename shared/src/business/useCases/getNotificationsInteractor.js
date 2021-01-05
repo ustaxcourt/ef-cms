@@ -1,3 +1,5 @@
+const { CHIEF_JUDGE, ROLES } = require('../entities/EntityConstants');
+
 /**
  * getNotificationsInteractor
  *
@@ -21,6 +23,10 @@ exports.getNotificationsInteractor = async ({
     judgeUser = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId: judgeUserId });
+  } else if (currentUser.role === ROLES.adc) {
+    judgeUser = {
+      name: CHIEF_JUDGE,
+    };
   }
 
   const { section, userId } = currentUser;
@@ -28,16 +34,9 @@ exports.getNotificationsInteractor = async ({
     .getUtilities()
     .getDocQcSectionForUser(currentUser);
 
-  const additionalFilters = applicationContext
-    .getUtilities()
-    .filterQcItemsByAssociatedJudge({
-      applicationContext,
-      judgeUser,
-    });
-
   const filters = applicationContext
     .getUtilities()
-    .getWorkQueueFilters({ additionalFilters, user: currentUser });
+    .getWorkQueueFilters({ user: currentUser });
 
   const userInbox = await applicationContext
     .getPersistenceGateway()
