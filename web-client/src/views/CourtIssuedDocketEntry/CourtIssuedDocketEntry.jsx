@@ -204,7 +204,7 @@ export const CourtIssuedDocketEntry = connect(
                     className="margin-top-4"
                     errorText={validationErrors.filingDate}
                     id="date-received"
-                    label="Date received"
+                    label="Filed date"
                     names={{
                       day: 'filingDateDay',
                       month: 'filingDateMonth',

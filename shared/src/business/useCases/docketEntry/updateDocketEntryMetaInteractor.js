@@ -6,7 +6,7 @@ const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
-
+const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
 /**
  *
  * @param {object} providers the providers object
@@ -83,9 +83,14 @@ exports.updateDocketEntryMetaInteractor = async ({
     const filingDateUpdated =
       editableFields.filingDate &&
       editableFields.filingDate !== originalDocketEntry.filingDate;
+
+    const entryIsUnservable = UNSERVABLE_EVENT_CODES.includes(
+      editableFields.eventCode,
+    );
+
     const shouldGenerateCoversheet =
       (servedAtUpdated || filingDateUpdated) &&
-      !originalDocketEntry.isCourtIssued() &&
+      (!originalDocketEntry.isCourtIssued() || entryIsUnservable) &&
       !originalDocketEntry.isMinuteEntry;
 
     const docketEntryEntity = new DocketEntry(
