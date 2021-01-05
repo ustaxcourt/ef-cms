@@ -541,7 +541,7 @@ describe('TrialSession entity', () => {
       expect(trialSession.isValid()).toBeTruthy();
     });
 
-    it('should be valid with a "Remote" proceedingType', () => {
+    it('should be valid with an "In Person" proceedingType', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
