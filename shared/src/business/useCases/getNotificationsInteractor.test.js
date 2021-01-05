@@ -114,6 +114,13 @@ describe('getNotificationsInteractor', () => {
             section: 'someChambers',
             userId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
           };
+        } else if (userId === '79f21a87-810c-4440-9189-bb6bfea413fd') {
+          return {
+            name: 'ADC',
+            role: ROLES.adc,
+            section: 'adc',
+            userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
+          };
         }
       });
 
@@ -358,37 +365,6 @@ describe('getNotificationsInteractor', () => {
           isRead: true,
           section: 'petitions',
         },
-        {
-          associatedJudge: 'Some Judge',
-          caseIsInProgress: false,
-          docketEntry: {
-            isFileAttached: true,
-          },
-          inProgress: false,
-          isRead: true,
-          section: 'docket',
-        },
-        {
-          assigneeId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
-          associatedJudge: 'Some Judge',
-          caseIsInProgress: true,
-          docketEntry: {
-            isFileAttached: true,
-          },
-          inProgress: true,
-          isRead: true,
-          section: 'docket',
-        },
-        {
-          associatedJudge: 'Some Judge',
-          caseIsInProgress: true,
-          docketEntry: {
-            isFileAttached: true,
-          },
-          inProgress: true,
-          isRead: true,
-          section: 'docket',
-        },
       ]);
 
     const result = await getNotificationsInteractor({
@@ -420,6 +396,51 @@ describe('getNotificationsInteractor', () => {
 
     expect(result).toMatchObject({
       userInboxCount: 2,
+    });
+  });
+
+  it('should fetch the qc section items for the provided judgeUserId', async () => {
+    await getNotificationsInteractor({
+      applicationContext,
+      judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
+        .mock.calls[0][0],
+    ).toMatchObject({
+      judgeUserName: 'Some Judge',
+    });
+  });
+
+  it('should fetch the qc section items without a judgeName when a judgeUserId is not provided', async () => {
+    await getNotificationsInteractor({
+      applicationContext,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
+        .mock.calls[0][0],
+    ).toMatchObject({
+      judgeUserName: null,
+    });
+  });
+
+  it('should fetch the qc section items without judgeName of CHIEF_JUDGE when a judgeUserId is not provided and the user role is adc', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.adc,
+      userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
+    });
+
+    await getNotificationsInteractor({
+      applicationContext,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
+        .mock.calls[0][0],
+    ).toMatchObject({
+      judgeUserName: CHIEF_JUDGE,
     });
   });
 });
