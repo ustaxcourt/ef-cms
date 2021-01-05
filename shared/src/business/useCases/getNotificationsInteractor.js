@@ -58,6 +58,7 @@ exports.getNotificationsInteractor = async ({
     .getPersistenceGateway()
     .getDocumentQCInboxForSection({
       applicationContext,
+      judgeUserName: judgeUser ? judgeUser.name : null,
       section: sectionToShow,
     });
 
