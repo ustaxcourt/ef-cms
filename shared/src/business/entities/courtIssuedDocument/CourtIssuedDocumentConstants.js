@@ -19,7 +19,7 @@ const VALIDATION_ERROR_MESSAGES = {
   ],
   docketNumbers: 'Enter docket number(s)',
   documentType: 'Select a document type',
-  filingDate: 'Enter a filing date', //fixme
+  filingDate: 'Enter a filing date',
   freeText: 'Enter a description',
   judge: 'Select a judge',
   serviceStamp: 'Select a service stamp',

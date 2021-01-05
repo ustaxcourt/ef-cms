@@ -54,8 +54,16 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'date-date',
-      value: '2020-01-01T05:00:00.000Z',
+      key: 'month',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'day',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'year',
+      value: '2020',
     });
 
     expect(getHelper().showReceivedDate).toEqual(true);
@@ -67,10 +75,24 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDate',
-      value: '2020-01-04T05:00:00.000Z',
+      key: 'filingDateMonth',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: '2021',
     });
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+
+    expect(test.getState('alertSuccess').message).toEqual(
+      'Your entry has been added to docket record.',
+    );
   });
 });
