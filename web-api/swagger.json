@@ -2709,6 +2709,12 @@
           "in": "path",
           "required": true,
           "type": "string"
+        },
+        {
+          "name": "judgeUserName",
+          "in": "query",
+          "required": false,
+          "type": "string"
         }
       ],
       "get": {
