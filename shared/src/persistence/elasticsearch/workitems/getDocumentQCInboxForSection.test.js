@@ -66,4 +66,21 @@ describe('getDocumentQCInboxForSection', () => {
       },
     });
   });
+
+  it('queries the search client for work items with the given section and a judgeUserName', async () => {
+    const mockJudgeName = 'Ashford';
+    await getDocumentQCInboxForSection({
+      applicationContext,
+      judgeUserName: mockJudgeName,
+      section: 'docket',
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must[3],
+    ).toEqual({
+      match: {
+        'associatedJudge.S': mockJudgeName,
+      },
+    });
+  });
 });
