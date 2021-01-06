@@ -4,6 +4,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   PARTY_TYPES,
+  ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
@@ -40,6 +41,13 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
   this._score = rawCase['_score'];
+
+  const currentUser = applicationContext.getCurrentUser();
+
+  if (currentUser.role === ROLES.irsPractitioner) {
+    this.otherPetitioners = rawCase.otherPetitioners;
+    this.otherFilers = rawCase.otherFilers;
+  }
 
   this.isSealed = isSealedCase(rawCase);
 

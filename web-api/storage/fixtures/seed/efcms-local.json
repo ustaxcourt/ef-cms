@@ -3252,7 +3252,39 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|108-19",
     "docketNumber": "108-19",
-    "status": "Calendared"
+    "status": "Calendared",
+    "otherFilers": [
+      {
+        "isAddressSealed": false,
+        "country": "USA",
+        "city": "Nashville",
+        "contactId": "89d7d182-46da-4b96-b29b-260d15249c25",
+        "address1": "42 Lamb Sauce Blvd",
+        "postalCode": "05198",
+        "title": "Intervenor",
+        "countryType": "domestic",
+        "phone": "1234567890",
+        "name": "Gordon Ramsay",
+        "state": "AK",
+        "email": "testUser@example.com",
+        "otherFilerType": "Intervenor"
+      },
+      {
+        "isAddressSealed": false,
+        "country": "USA",
+        "city": "Flavortown",
+        "contactId": "277ca24a-7be3-49e9-80d3-529a19a1a841",
+        "address1": "1337 12th Ave",
+        "postalCode": "05198",
+        "title": "Partner Other Than Tax Matters Partner",
+        "countryType": "domestic",
+        "phone": "1234567890",
+        "name": "Guy Fieri",
+        "state": "AK",
+        "email": "testUser@example.com",
+        "otherFilerType": "Partner Other Than Tax Matters Partner"
+      }
+    ]
   },
   {
     "isStricken": false,

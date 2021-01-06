@@ -1,10 +1,14 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const { isPrivateDocument, PublicCase } = require('./PublicCase');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('PublicCase', () => {
   describe('validation', () => {
@@ -22,7 +26,7 @@ describe('PublicCase', () => {
           partyType: PARTY_TYPES.petitioner,
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
-        {},
+        { applicationContext },
       );
 
       expect(entity.getFormattedValidationErrors()).toBe(null);
@@ -41,7 +45,7 @@ describe('PublicCase', () => {
           receivedAt: '2020-01-05T03:30:45.007Z',
           sealedDate: '2020-01-05T03:30:45.007Z',
         },
-        {},
+        { applicationContext },
       );
 
       expect(entity.getFormattedValidationErrors()).toMatchObject({
@@ -70,7 +74,7 @@ describe('PublicCase', () => {
         partyType: PARTY_TYPES.petitioner,
         receivedAt: 'testing',
       },
-      {},
+      { applicationContext },
     );
 
     expect(entity.toRawObject()).toEqual({
@@ -108,7 +112,7 @@ describe('PublicCase', () => {
         partyType: PARTY_TYPES.petitioner,
         receivedAt: 'testing',
       },
-      {},
+      { applicationContext },
     );
 
     expect(entity.toRawObject()).toEqual({
@@ -150,7 +154,7 @@ describe('PublicCase', () => {
         partyType: PARTY_TYPES.petitioner,
         receivedAt: 'testing',
       },
-      {},
+      { applicationContext },
     );
 
     expect(entity.toRawObject()).toEqual({
@@ -284,7 +288,7 @@ describe('PublicCase', () => {
         docketNumberWithSuffix: null,
         receivedAt: '2020-01-05T03:30:45.007Z',
       },
-      {},
+      { applicationContext },
     );
     expect(entity.docketNumberWithSuffix).toBe('102-20SL');
   });
@@ -302,7 +306,7 @@ describe('PublicCase', () => {
         docketNumberWithSuffix: null,
         receivedAt: '2020-01-05T03:30:45.007Z',
       },
-      {},
+      { applicationContext },
     );
     expect(entity.docketNumberWithSuffix).toBe('102-20');
   });
@@ -3832,7 +3836,7 @@ describe('PublicCase', () => {
         status: 'Rule 155',
         userId: '692923ab-1ab0-48c3-b851-552c103c2df3',
       },
-      {},
+      { applicationContext },
     );
 
     let error;
@@ -3858,7 +3862,7 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'W',
         sealedDate: 'some date',
       },
-      {},
+      { applicationContext },
     );
     expect(entity.isSealed).toBe(true);
 
@@ -3877,7 +3881,7 @@ describe('PublicCase', () => {
         docketEntries: [{ isOnDocketRecord: true, isSealed: true }],
         docketNumber: '17000-15',
       },
-      {},
+      { applicationContext },
     );
     expect(entity.isSealed).toBe(true);
     expect(entity.docketEntries.length).toBe(1);
@@ -3891,6 +3895,122 @@ describe('PublicCase', () => {
     expect(error.details).toMatchObject({
       docketEntries: expect.anything(),
       isSealed: expect.anything(),
+    });
+  });
+
+  describe('irsPractitioner', () => {
+    beforeAll(() => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+    });
+
+    it('an irsPractitioner should be able to see otherPetitioners and otherFilers', () => {
+      const entity = new PublicCase(
+        {
+          caseCaption: 'testing',
+          contactPrimary: {},
+          contactSecondary: {},
+          createdAt: '2020-01-02T03:30:45.007Z',
+          docketEntries: [{}],
+          docketNumber: '102-20',
+          docketNumberSuffix: null,
+          docketNumberWithSuffix: null,
+          otherFilers: [
+            {
+              address1: '42 Lamb Sauce Blvd',
+              city: 'Nashville',
+              contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
+              country: 'USA',
+              countryType: 'domestic',
+              email: 'testUser@example.com',
+              isAddressSealed: false,
+              name: 'Gordon Ramsay',
+              otherFilerType: 'Intervenor',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+              title: 'Intervenor',
+            },
+          ],
+          otherPetitioners: [
+            {
+              additionalName: 'Guy Fieri',
+              address1: '453 Electric Ave',
+              city: 'Philadelphia',
+              countryType: 'domestic',
+              email: 'mayorofflavortown@example.com',
+              name: 'Guy Fieri',
+              phone: '1234567890',
+              postalCode: '99999',
+              serviceIndicator: 'None',
+              state: 'PA',
+              title: 'Petitioner',
+            },
+          ],
+          receivedAt: '2020-01-05T03:30:45.007Z',
+        },
+        { applicationContext },
+      );
+
+      expect(entity.otherFilers.length).toBeTruthy();
+      expect(entity.otherPetitioners.length).toBeTruthy();
+    });
+
+    it('anyone other than an irsPractitioner does not see otherPetitioners or otherFilers', () => {
+      applicationContext.getCurrentUser.mockReturnValue(
+        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
+      );
+
+      const entity = new PublicCase(
+        {
+          caseCaption: 'testing',
+          contactPrimary: {},
+          contactSecondary: {},
+          createdAt: '2020-01-02T03:30:45.007Z',
+          docketEntries: [{}],
+          docketNumber: '102-20',
+          docketNumberSuffix: null,
+          docketNumberWithSuffix: null,
+          otherFilers: [
+            {
+              address1: '42 Lamb Sauce Blvd',
+              city: 'Nashville',
+              contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
+              country: 'USA',
+              countryType: 'domestic',
+              email: 'testUser@example.com',
+              isAddressSealed: false,
+              name: 'Gordon Ramsay',
+              otherFilerType: 'Intervenor',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+              title: 'Intervenor',
+            },
+          ],
+          otherPetitioners: [
+            {
+              additionalName: 'Guy Fieri',
+              address1: '453 Electric Ave',
+              city: 'Philadelphia',
+              countryType: 'domestic',
+              email: 'mayorofflavortown@example.com',
+              name: 'Guy Fieri',
+              phone: '1234567890',
+              postalCode: '99999',
+              serviceIndicator: 'None',
+              state: 'PA',
+              title: 'Petitioner',
+            },
+          ],
+          receivedAt: '2020-01-05T03:30:45.007Z',
+        },
+        { applicationContext },
+      );
+
+      expect(entity.otherFilers).toBeUndefined();
+      expect(entity.otherPetitioners).toBeUndefined();
     });
   });
 });
