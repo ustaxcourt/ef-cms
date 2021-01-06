@@ -454,7 +454,7 @@ module.exports = [
       'wait for #start-date-date to be visible',
       'wait for #meeting-id to be visible',
     ],
-    notes: 'checks a11y of trial sessions add form',
+    notes: 'checks a11y of remote trial session add form',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
   },
@@ -464,7 +464,7 @@ module.exports = [
       'click element #inPerson-proceeding-label',
       'wait for #address1 to be visible',
     ],
-    notes: 'checks a11y of trial sessions add form',
+    notes: 'checks a11y of in-person trial sessions add form',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
   },

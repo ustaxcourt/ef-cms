@@ -14,7 +14,15 @@ describe('addCaseToTrialSessionInteractor', () => {
   let mockCase;
 
   const MOCK_TRIAL = {
+    chambersPhoneNumber: '1111111',
+    joinPhoneNumber: '0987654321',
+    judge: {
+      name: 'Chief Judge',
+      userId: '822366b7-e47c-413e-811f-d29113d09b06',
+    },
     maxCases: 100,
+    meetingId: '1234567890',
+    password: 'abcdefg',
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '2025-12-01T00:00:00.000Z',
