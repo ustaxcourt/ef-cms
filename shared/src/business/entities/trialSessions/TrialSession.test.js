@@ -667,7 +667,7 @@ describe('TrialSession entity', () => {
 
   describe('required fields when calendared', () => {
     describe('proceedingType In Person', () => {
-      it('should be invalid when isCalendared is true, proceedingType is In Person, and required address fields are missing', () => {
+      it('should be valid when isCalendared is true, proceedingType is In Person, and required address fields are missing', () => {
         const trialSession = new TrialSession(
           {
             ...VALID_TRIAL_SESSION,
@@ -683,12 +683,7 @@ describe('TrialSession entity', () => {
           },
         );
 
-        expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-          address1: expect.anything(),
-          city: expect.anything(),
-          postalCode: expect.anything(),
-          state: expect.anything(),
-        });
+        expect(trialSession.getFormattedValidationErrors()).toEqual(null);
       });
 
       it('should be valid when isCalendared is true, proceedingType is In Person, and required address fields are defined', () => {
