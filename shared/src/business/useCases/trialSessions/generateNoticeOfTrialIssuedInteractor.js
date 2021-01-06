@@ -1,3 +1,4 @@
+const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 
 /**
@@ -31,19 +32,34 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
   const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
+  const formattedStartDate = formatDateString(
+    trialSession.startDate,
+    FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
+  );
+
+  let [hour, min] = trialSession.startTime.split(':');
+  let startTimeExtension = 'am';
+
+  if (+hour > 12) {
+    startTimeExtension = 'pm';
+    hour = +hour - 12;
+  }
+
+  const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
+
   const trialInfo = {
     address1: trialSession.address1,
     address2: trialSession.address2,
     city: trialSession.city,
     courthouseName: trialSession.courthouseName,
-    formattedStartDate: trialSession.startDate, //format to make nice
+    formattedStartDate,
+    formattedStartTime,
     joinPhoneNumber: trialSession.joinPhoneNumber,
     judge: trialSession.judge.name,
     meetingId: trialSession.meetingId,
     password: trialSession.password,
     postalCode: trialSession.postalCode,
     startDate: trialSession.startDate,
-    startTime: trialSession.startTime,
     state: trialSession.state,
     trialLocation: trialSession.trialLocation,
   };
