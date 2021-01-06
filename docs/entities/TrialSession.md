@@ -3,50 +3,7 @@
 ---
   type: "object"
   keys: 
-    address1: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      allow: 
-        - ""
     address2: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      allow: 
-        - ""
-    chambersPhoneNumber: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 100
-    city: 
       type: "string"
       flags: 
         presence: "optional"
@@ -125,10 +82,8 @@
       type: "boolean"
       flags: 
         presence: "required"
-    joinPhoneNumber: 
+    address1: 
       type: "string"
-      flags: 
-        presence: "optional"
       rules: 
         - 
           name: "min"
@@ -138,6 +93,223 @@
           name: "max"
           args: 
             limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCalendared"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "proceedingType"
+                is: 
+                  type: "any"
+                  flags: 
+                    only: true
+                    presence: "required"
+                  allow: 
+                    - 
+                      override: true
+                    - "In Person"
+                then: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                otherwise: 
+                  type: "any"
+                  flags: 
+                    presence: "optional"
+                  allow: 
+                    - ""
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - ""
+    chambersPhoneNumber: 
+      type: "string"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCalendared"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "proceedingType"
+                is: 
+                  type: "any"
+                  flags: 
+                    only: true
+                    presence: "required"
+                  allow: 
+                    - 
+                      override: true
+                    - "Remote"
+                then: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                otherwise: 
+                  type: "any"
+                  flags: 
+                    presence: "optional"
+                  allow: 
+                    - ""
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - ""
+    city: 
+      type: "string"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCalendared"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "proceedingType"
+                is: 
+                  type: "any"
+                  flags: 
+                    only: true
+                    presence: "required"
+                  allow: 
+                    - 
+                      override: true
+                    - "In Person"
+                then: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                otherwise: 
+                  type: "any"
+                  flags: 
+                    presence: "optional"
+                  allow: 
+                    - ""
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - ""
+    joinPhoneNumber: 
+      type: "string"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCalendared"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "proceedingType"
+                is: 
+                  type: "any"
+                  flags: 
+                    only: true
+                    presence: "required"
+                  allow: 
+                    - 
+                      override: true
+                    - "Remote"
+                then: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                otherwise: 
+                  type: "any"
+                  flags: 
+                    presence: "optional"
+                  allow: 
+                    - ""
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - ""
     judge: 
       type: "object"
       flags: 
@@ -184,8 +356,6 @@
           name: "integer"
     meetingId: 
       type: "string"
-      flags: 
-        presence: "optional"
       rules: 
         - 
           name: "min"
@@ -195,6 +365,52 @@
           name: "max"
           args: 
             limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCalendared"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "proceedingType"
+                is: 
+                  type: "any"
+                  flags: 
+                    only: true
+                    presence: "required"
+                  allow: 
+                    - 
+                      override: true
+                    - "Remote"
+                then: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                otherwise: 
+                  type: "any"
+                  flags: 
+                    presence: "optional"
+                  allow: 
+                    - ""
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - ""
     notes: 
       type: "string"
       flags: 
@@ -217,8 +433,6 @@
         presence: "optional"
     password: 
       type: "string"
-      flags: 
-        presence: "optional"
       rules: 
         - 
           name: "min"
@@ -228,10 +442,54 @@
           name: "max"
           args: 
             limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCalendared"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "proceedingType"
+                is: 
+                  type: "any"
+                  flags: 
+                    only: true
+                    presence: "required"
+                  allow: 
+                    - 
+                      override: true
+                    - "Remote"
+                then: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                otherwise: 
+                  type: "any"
+                  flags: 
+                    presence: "optional"
+                  allow: 
+                    - ""
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - ""
     postalCode: 
       type: "string"
-      flags: 
-        presence: "optional"
       rules: 
         - 
           name: "min"
@@ -241,6 +499,52 @@
           name: "pattern"
           args: 
             regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCalendared"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "proceedingType"
+                is: 
+                  type: "any"
+                  flags: 
+                    only: true
+                    presence: "required"
+                  allow: 
+                    - 
+                      override: true
+                    - "In Person"
+                then: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                otherwise: 
+                  type: "any"
+                  flags: 
+                    presence: "optional"
+                  allow: 
+                    - ""
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - ""
     proceedingType: 
       type: "string"
       flags: 
@@ -292,7 +596,6 @@
       type: "string"
       flags: 
         only: true
-        presence: "optional"
       rules: 
         - 
           name: "min"
@@ -361,6 +664,52 @@
         - "PR"
         - "PW"
         - "VI"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "isCalendared"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "proceedingType"
+                is: 
+                  type: "any"
+                  flags: 
+                    only: true
+                    presence: "required"
+                  allow: 
+                    - 
+                      override: true
+                    - "In Person"
+                then: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                otherwise: 
+                  type: "any"
+                  flags: 
+                    presence: "optional"
+                  allow: 
+                    - ""
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - ""
     swingSession: 
       type: "boolean"
       flags: 
