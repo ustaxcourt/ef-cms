@@ -47,6 +47,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   if (currentUser.role === ROLES.irsPractitioner) {
     this.otherPetitioners = rawCase.otherPetitioners;
     this.otherFilers = rawCase.otherFilers;
+    this.irsPractitioners = rawCase.irsPractitioners;
   }
 
   this.isSealed = isSealedCase(rawCase);
