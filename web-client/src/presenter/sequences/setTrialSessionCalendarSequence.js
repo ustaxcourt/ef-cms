@@ -14,7 +14,6 @@ import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAct
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-//fixme maybe (interactor) validate?
 export const setTrialSessionCalendarSequence = [
   clearModalStateAction,
   clearModalAction,

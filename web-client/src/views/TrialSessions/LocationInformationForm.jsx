@@ -33,35 +33,38 @@ export const LocationInformationForm = connect(
               <legend className="usa-legend" id="proceeding-type-legend">
                 Proceeding type
               </legend>
-              {Object.values(TRIAL_SESSION_PROCEEDING_TYPES).map(option => (
-                <div className="usa-radio usa-radio__inline" key={option}>
-                  <input
-                    aria-describedby="proceeding-type-legend"
-                    checked={form.proceedingType === option}
-                    className="usa-radio__input"
-                    id={`${option}-proceeding`}
-                    name="proceedingType"
-                    type="radio"
-                    value={option}
-                    onBlur={() => {
-                      validateTrialSessionSequence();
-                    }}
-                    onChange={e => {
-                      updateTrialSessionFormDataSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                  <label
-                    aria-label={option}
-                    className="usa-radio__label smaller-padding-right"
-                    htmlFor={`${option}-proceeding`}
-                  >
-                    {option}
-                  </label>
-                </div>
-              ))}
+              {Object.entries(TRIAL_SESSION_PROCEEDING_TYPES).map(
+                ([key, value]) => (
+                  <div className="usa-radio usa-radio__inline" key={key}>
+                    <input
+                      aria-describedby="proceeding-type-legend"
+                      checked={form.proceedingType === value}
+                      className="usa-radio__input"
+                      id={`${key}-proceeding`}
+                      name="proceedingType"
+                      type="radio"
+                      value={value}
+                      onBlur={() => {
+                        validateTrialSessionSequence();
+                      }}
+                      onChange={e => {
+                        updateTrialSessionFormDataSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                    <label
+                      aria-label={value}
+                      className="usa-radio__label smaller-padding-right"
+                      htmlFor={`${key}-proceeding`}
+                      id={`${key}-proceeding-label`}
+                    >
+                      {value}
+                    </label>
+                  </div>
+                ),
+              )}
             </fieldset>
           </FormGroup>
 

@@ -664,4 +664,96 @@ describe('TrialSession entity', () => {
       });
     });
   });
+
+  describe('required fields when calendared', () => {
+    describe('proceedingType In Person', () => {
+      it('should be invalid when isCalendared is true, proceedingType is In Person, and required address fields are missing', () => {
+        const trialSession = new TrialSession(
+          {
+            ...VALID_TRIAL_SESSION,
+            address1: undefined,
+            city: undefined,
+            isCalendared: true,
+            postalCode: undefined,
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+            state: undefined,
+          },
+          {
+            applicationContext,
+          },
+        );
+
+        expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+          address1: expect.anything(),
+          city: expect.anything(),
+          postalCode: expect.anything(),
+          state: expect.anything(),
+        });
+      });
+
+      it('should be valid when isCalendared is true, proceedingType is In Person, and required address fields are defined', () => {
+        const trialSession = new TrialSession(
+          {
+            ...VALID_TRIAL_SESSION,
+            address1: '123 Flavor Ave',
+            city: 'Flavortown',
+            isCalendared: true,
+            postalCode: '12345',
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+            state: 'TN',
+          },
+          {
+            applicationContext,
+          },
+        );
+
+        expect(trialSession.getFormattedValidationErrors()).toEqual(null);
+      });
+    });
+
+    describe('proceedingType Remote', () => {
+      it('should be invalid when isCalendared is true, proceedingType is Remote, and required proceeding information fields are missing', () => {
+        const trialSession = new TrialSession(
+          {
+            ...VALID_TRIAL_SESSION,
+            chambersPhoneNumber: undefined,
+            isCalendared: true,
+            joinPhoneNumber: undefined,
+            meetingId: undefined,
+            password: undefined,
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          },
+          {
+            applicationContext,
+          },
+        );
+
+        expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+          chambersPhoneNumber: expect.anything(),
+          joinPhoneNumber: expect.anything(),
+          meetingId: expect.anything(),
+          password: expect.anything(),
+        });
+      });
+
+      it('should be valid when isCalendared is true, proceedingType is Remote, and required proceeding information fields are defined', () => {
+        const trialSession = new TrialSession(
+          {
+            ...VALID_TRIAL_SESSION,
+            chambersPhoneNumber: '1111',
+            isCalendared: true,
+            joinPhoneNumber: '222222',
+            meetingId: '33333',
+            password: '44444',
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          },
+          {
+            applicationContext,
+          },
+        );
+
+        expect(trialSession.getFormattedValidationErrors()).toEqual(null);
+      });
+    });
+  });
 });

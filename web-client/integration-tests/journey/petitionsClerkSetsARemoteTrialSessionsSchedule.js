@@ -1,6 +1,5 @@
 import { wait } from '../helpers';
 
-//fixme check non  remote version of this file for modal related problem and
 export const petitionsClerkSetsARemoteTrialSessionsSchedule = test => {
   return it('Petitions Clerk Sets A Remote Trial Sessions Schedule', async () => {
     await test.runSequence('gotoTrialSessionDetailSequence', {
