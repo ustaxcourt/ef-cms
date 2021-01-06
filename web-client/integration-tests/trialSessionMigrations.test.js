@@ -22,11 +22,16 @@ const {
 } = applicationContext.getConstants();
 
 const calendaredTrialSession = {
+  address1: 'some random street',
+  city: 'elm street',
   isCalendared: true,
+  judge: 'Cohen',
   maxCases: 100,
+  postalCode: '33333',
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Hybrid',
   startDate: '2020-08-10',
+  state: 'FL',
   term: 'Summer',
   termYear: '2020',
   trialLocation: 'Memphis, Tennessee',
