@@ -18,35 +18,30 @@ export const NoticeOfTrialIssued = ({
       />
       <div>
         <div className="info-box info-box-trial" id="trial-info">
-          <div className="info-box-header">Trial At:</div>
+          <div className="info-box-header">Trial At</div>
           <div className="info-box-content">
-            {trialInfo.courthouseName && <div>{trialInfo.courthouseName}</div>}
-            <div>{trialInfo.address1}</div>
-            {trialInfo.address2 && <div>{trialInfo.address2}</div>}
-            <div>
-              {trialInfo.city}, {trialInfo.state} {trialInfo.postalCode}
-            </div>
+            {trialInfo.trialLocation && <div>{trialInfo.trialLocation}</div>}
+            Remote Proceeding
           </div>
         </div>
 
         <div className="info-box info-box-judge" id="judge-info">
-          <div className="info-box-header">Judge:</div>
+          <div className="info-box-header">Judge</div>
           <div className="info-box-content">{trialInfo.judge}</div>
         </div>
         <div className="clear" />
       </div>
-      <h3>NOTICE SETTING CASE FOR TRIAL</h3>
+      <h3>Notice Setting Case For Trial</h3>
 
       <div id="notice-body">
         <p>
-          This case is set for trial at the Trial Session beginning at
-          {trialInfo.startTime} on {trialInfo.startDate}. The calendar for that
-          Session will be called at that date and time, and the parties are
-          expected to be present and to be prepared to try the case.
-          <b>
-            Your failure to appear may result in dismissal of the case and entry
-            of decision against you.
-          </b>
+          The parties are hereby notified that this case is set for trial at the
+          Trial Session beginning at {trialInfo.startTime} on
+          {trialInfo.formattedStartDate}. The calendar for that Session will be
+          called at that date and time, and the parties are directed to appear
+          before the Court at a proceeding to be held using Zoomgov and to be
+          prepared to try the case. Your failure to appear may result in
+          dismissal of the case and entry of decision against you.
         </p>
         <p>
           The Court will set the time for each trial at the end of the calendar
@@ -54,23 +49,34 @@ export const NoticeOfTrialIssued = ({
           parties, but the final determination of trial times rests in the
           Court’s discretion.
         </p>
+
+        {/* add styling */}
+        <h3>ACCESS REMOTE PROCEEDING</h3>
+        <p>Your Meeting ID and Password for the remote proceeding is:</p>
         <p>
-          Information about presenting a case in the Tax Court can be found at
-          <a href="www.ustaxcourt.gov" target="_blank">
-            {' '}
-            www.ustaxcourt.gov
-          </a>
-          .
+          <b>Meeting ID:</b> {trialInfo.meetingId}
+        </p>
+        <p>
+          <b>Password:</b>
+          {trialInfo.password}
         </p>
 
         <p>
-          The parties should contact each other promptly and cooperate fully so
-          that the necessary steps can be taken to comply with these
-          requirements.{' '}
-          <b>
-            Your failure to cooperate may also result in dismissal of the case
-            and entry of decision against you.
-          </b>
+          Join online: Go to and click `Join a meeting` (blue box in the middle
+          of the page). Enter the Meeting ID and Password above when prompted.
+        </p>
+
+        <p>
+          Join by telephone: Call {trialInfo.joinPhoneNumber}. Enter the Meeting
+          ID and Password above when prompted.
+        </p>
+
+        <p>
+          There are specific requirements in the Standing Pretrial Order that is
+          served with this Notice. The parties should contact each other
+          promptly and cooperate fully so that the necessary steps can be taken
+          to comply with these requirements. Your failure to cooperate may also
+          result in dismissal of the case and entry of decision against you.
         </p>
 
         <p className="float-right width-third">
