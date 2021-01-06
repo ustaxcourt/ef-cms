@@ -36,11 +36,16 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     address2: trialSession.address2,
     city: trialSession.city,
     courthouseName: trialSession.courthouseName,
+    formattedStartDate: trialSession.startDate, //format to make nice
+    joinPhoneNumber: trialSession.joinPhoneNumber,
     judge: trialSession.judge.name,
+    meetingId: trialSession.meetingId,
+    password: trialSession.password,
     postalCode: trialSession.postalCode,
     startDate: trialSession.startDate,
     startTime: trialSession.startTime,
     state: trialSession.state,
+    trialLocation: trialSession.trialLocation,
   };
 
   return await applicationContext.getDocumentGenerators().noticeOfTrialIssued({
