@@ -1321,13 +1321,13 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Denver, Colorado",
     "createdAt": "2020-10-02T05:00:00.000Z",
-    "sk": "trial-session-9c943468-bc2e-4631-84e3-b084cf5b1faa",
+    "sk": "trial-session|9c943468-bc2e-4631-84e3-b084cf5b1faa",
     "sessionType": "Special",
     "termYear": "2020",
     "proceedingType": "In Person",
     "startTime": "21:00",
     "term": "Fall",
-    "pk": "trial-session-9c943468-bc2e-4631-84e3-b084cf5b1faa",
+    "pk": "trial-session|9c943468-bc2e-4631-84e3-b084cf5b1faa",
     "judge": {
       "name": "Cohen",
       "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
