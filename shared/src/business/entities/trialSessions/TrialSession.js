@@ -132,15 +132,7 @@ TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = {
 
 TrialSession.validationRules = {
   COMMON: {
-    address1: JoiValidationConstants.STRING.max(100).when('isCalendared', {
-      is: true,
-      otherwise: joi.allow('').optional(),
-      then: joi.when('proceedingType', {
-        is: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        otherwise: joi.allow('').optional(),
-        then: joi.required(),
-      }),
-    }),
+    address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
     address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
     chambersPhoneNumber: JoiValidationConstants.STRING.max(100).when(
       'isCalendared',
@@ -154,15 +146,7 @@ TrialSession.validationRules = {
         }),
       },
     ),
-    city: JoiValidationConstants.STRING.max(100).when('isCalendared', {
-      is: true,
-      otherwise: joi.allow('').optional(),
-      then: joi.when('proceedingType', {
-        is: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        otherwise: joi.allow('').optional(),
-        then: joi.required(),
-      }),
-    }),
+    city: JoiValidationConstants.STRING.max(100).allow('').optional(),
     courtReporter: JoiValidationConstants.STRING.max(100).optional(),
     courthouseName: JoiValidationConstants.STRING.max(100).allow('').optional(),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
@@ -208,15 +192,7 @@ TrialSession.validationRules = {
         then: joi.required(),
       }),
     }),
-    postalCode: JoiValidationConstants.US_POSTAL_CODE.when('isCalendared', {
-      is: true,
-      otherwise: joi.allow('').optional(),
-      then: joi.when('proceedingType', {
-        is: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        otherwise: joi.allow('').optional(),
-        then: joi.required(),
-      }),
-    }),
+    postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
     proceedingType: JoiValidationConstants.STRING.valid(
       ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
     ).required(),
@@ -228,15 +204,9 @@ TrialSession.validationRules = {
     state: JoiValidationConstants.STRING.valid(
       ...Object.keys(US_STATES),
       ...US_STATES_OTHER,
-    ).when('isCalendared', {
-      is: true,
-      otherwise: joi.allow('').optional(),
-      then: joi.when('proceedingType', {
-        is: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        otherwise: joi.allow('').optional(),
-        then: joi.required(),
-      }),
-    }),
+    )
+      .allow('')
+      .optional(),
     swingSession: joi.boolean().optional(),
     swingSessionId: JoiValidationConstants.UUID.when('swingSession', {
       is: true,
