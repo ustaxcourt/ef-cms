@@ -3,11 +3,8 @@ import { TrialSession } from '../../../shared/src/business/entities/trialSession
 
 const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
 
-export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
-  test,
-  overrides = {},
-) => {
-  return it('Docket clerk starts a trial session before calendaring', async () => {
+export const docketClerkCreatesARemoteTrialSession = (test, overrides = {}) => {
+  return it('Docket clerk starts a remote trial session', async () => {
     await test.runSequence('gotoAddTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
@@ -25,7 +22,7 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'proceedingType',
-      value: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      value: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -40,7 +37,7 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
-      value: '8',
+      value: '13',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -54,9 +51,37 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'judge',
+      value: overrides.judge || {
+        name: 'Cohen',
+        userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+      },
+    });
+
+    if (overrides.trialClerk) {
+      await test.runSequence('updateTrialSessionFormDataSequence', {
+        key: 'trialClerk',
+        value: overrides.trialClerk,
+      });
+    }
+
+    await test.runSequence('validateTrialSessionSequence');
+
+    expect(test.getState('validationErrors')).toEqual({
+      startDate: errorMessages.startDate[1],
+      term: errorMessages.term,
+      trialLocation: errorMessages.trialLocation,
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
       value: '12',
     });
+
+    await test.runSequence('validateTrialSessionSequence');
+
+    expect(test.getState('form.term')).toEqual('Fall');
+    expect(test.getState('form.termYear')).toEqual('2025');
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
