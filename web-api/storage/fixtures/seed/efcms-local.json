@@ -2424,6 +2424,10 @@
       "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "swingSession": false,
     "startDate": "2020-01-26T05:00:00.000Z",
     "isCalendared": true,
@@ -5069,6 +5073,10 @@
       "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "swingSession": true,
     "startDate": "2020-11-27T05:00:00.000Z",
     "isCalendared": true,
@@ -5305,6 +5313,10 @@
     "term": "Winter",
     "pk": "trial-session|539c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "proceedingType": "In Person",
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "judge": {
       "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
@@ -7016,6 +7028,10 @@
       "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "swingSession": false,
     "startDate": "2020-01-06T05:00:00.000Z",
     "isCalendared": true,
@@ -10107,6 +10123,10 @@
       "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "swingSession": false,
     "startDate": "2020-01-16T05:00:00.000Z",
     "isCalendared": true,

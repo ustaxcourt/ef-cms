@@ -5,6 +5,10 @@ export const petitionsClerkSetsATrialSessionsSchedule = test => {
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,
     });
+
+    await test.runSequence('openSetCalendarModalSequence');
+    expect(test.getState('alertWarning.message')).toBeUndefined();
+
     await test.runSequence('setTrialSessionCalendarSequence');
     await wait(1000);
   });
