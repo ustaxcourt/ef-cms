@@ -33,6 +33,19 @@
             limit: 100
       allow: 
         - ""
+    chambersPhoneNumber: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
     city: 
       type: "string"
       flags: 
@@ -112,6 +125,19 @@
       type: "boolean"
       flags: 
         presence: "required"
+    joinPhoneNumber: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
     judge: 
       type: "object"
       flags: 
@@ -156,6 +182,19 @@
             limit: 0
         - 
           name: "integer"
+    meetingId: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
     notes: 
       type: "string"
       flags: 
@@ -176,6 +215,19 @@
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "optional"
+    password: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
     postalCode: 
       type: "string"
       flags: 
