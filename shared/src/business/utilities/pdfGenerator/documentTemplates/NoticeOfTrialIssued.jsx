@@ -16,6 +16,7 @@ export const NoticeOfTrialIssued = ({
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
       />
+      <h3>Notice Setting Case For Trial</h3>
       <div>
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
@@ -31,12 +32,11 @@ export const NoticeOfTrialIssued = ({
         </div>
         <div className="clear" />
       </div>
-      <h3>Notice Setting Case For Trial</h3>
 
       <div id="notice-body">
         <p>
           The parties are hereby notified that this case is set for trial at the
-          Trial Session beginning at {trialInfo.startTime} on
+          Trial Session beginning at {trialInfo.formattedStartTime} on{' '}
           {trialInfo.formattedStartDate}. The calendar for that Session will be
           called at that date and time, and the parties are directed to appear
           before the Court at a proceeding to be held using Zoomgov and to be
@@ -50,20 +50,22 @@ export const NoticeOfTrialIssued = ({
           Court’s discretion.
         </p>
 
-        {/* add styling */}
-        <h3>ACCESS REMOTE PROCEEDING</h3>
+        <p className="text-underline">ACCESS REMOTE PROCEEDING</p>
         <p>Your Meeting ID and Password for the remote proceeding is:</p>
-        <p>
+        <p className="text-center">
           <b>Meeting ID:</b> {trialInfo.meetingId}
         </p>
-        <p>
-          <b>Password:</b>
-          {trialInfo.password}
+        <p className="text-center">
+          <b>Password:</b> {trialInfo.password}
         </p>
 
         <p>
-          Join online: Go to and click `Join a meeting` (blue box in the middle
-          of the page). Enter the Meeting ID and Password above when prompted.
+          Join online: Go to{' '}
+          <a href="http://www.zoomgov.com" rel="noreferrer" target="_blank">
+            www.zoomgov.com
+          </a>{' '}
+          and click `Join a meeting` (blue box in the middle of the page). Enter
+          the Meeting ID and Password above when prompted.
         </p>
 
         <p>
