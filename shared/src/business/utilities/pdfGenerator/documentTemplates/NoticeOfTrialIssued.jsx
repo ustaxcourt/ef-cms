@@ -61,7 +61,7 @@ export const NoticeOfTrialIssued = ({
 
         <p>
           Join online: Go to{' '}
-          <a href="http://www.zoomgov.com" rel="noreferrer" target="_blank">
+          <a href="https://www.zoomgov.com" rel="noreferrer" target="_blank">
             www.zoomgov.com
           </a>{' '}
           and click `Join a meeting` (blue box in the middle of the page). Enter
