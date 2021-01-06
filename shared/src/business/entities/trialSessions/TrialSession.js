@@ -18,6 +18,7 @@ const {
 const { createISODateString } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
 
+//fixme -- add entity validation for if calendared and proceedingtype is abc, xyz fields
 /**
  * constructor
  *
