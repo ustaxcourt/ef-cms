@@ -29,6 +29,6 @@ export const irsPractitionerViewsPetitionerInfoForUnassociatedCase = test => {
 
     expect(test.getState().screenMetadata.isAssociatd).toBeFalsy();
     expect(helper.showCaseInformationTab).toBeTruthy();
-    expect(caseDetail.contactPrimary.serviceIndicator).toBeTruthy();
+    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 };
