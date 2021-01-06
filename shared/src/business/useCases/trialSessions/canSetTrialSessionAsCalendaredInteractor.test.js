@@ -4,10 +4,14 @@ const {
 const {
   canSetTrialSessionAsCalendaredInteractor,
 } = require('./canSetTrialSessionAsCalendaredInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const {
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 
 const MOCK_TRIAL = {
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Regular',
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
