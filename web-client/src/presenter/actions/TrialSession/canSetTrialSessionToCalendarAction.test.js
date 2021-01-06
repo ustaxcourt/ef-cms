@@ -127,7 +127,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
     });
   });
 
-  it('should return the no path when meeting properties are missing', async () => {
+  it('should return the no path when remote properties are missing', async () => {
     applicationContext
       .getUseCases()
       .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
@@ -161,7 +161,8 @@ describe('canSetTrialSessionToCalendarAction', () => {
     ).toHaveBeenCalled();
     expect(pathNoStub).toHaveBeenCalledWith({
       alertWarning: {
-        message: 'Provide meeting information to set this trial session.',
+        message:
+          'Provide remote proceeding information to set this trial session.',
       },
     });
   });
