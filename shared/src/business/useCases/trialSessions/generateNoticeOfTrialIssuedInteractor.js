@@ -37,6 +37,7 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
   );
 
+  // TODO - extract into utility function as part of DOD for 7443
   let [hour, min] = trialSession.startTime.split(':');
   let startTimeExtension = 'am';
 
@@ -61,25 +62,18 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
   );
 
   if (!foundJudge) {
-    throw new Error(`Judge of ${trialSession.judge.name} was not found`);
+    throw new Error(`Judge ${trialSession.judge.name} was not found`);
   }
 
   const judgeWithTitle = `${foundJudge.judgeTitle} ${foundJudge.name}`;
 
   const trialInfo = {
-    address1: trialSession.address1,
-    address2: trialSession.address2,
-    city: trialSession.city,
-    courthouseName: trialSession.courthouseName,
+    formattedJudge: judgeWithTitle,
     formattedStartDate,
     formattedStartTime,
     joinPhoneNumber: trialSession.joinPhoneNumber,
-    judge: judgeWithTitle,
     meetingId: trialSession.meetingId,
     password: trialSession.password,
-    postalCode: trialSession.postalCode,
-    startDate: trialSession.startDate,
-    state: trialSession.state,
     trialLocation: trialSession.trialLocation,
   };
 
