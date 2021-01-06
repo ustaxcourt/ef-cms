@@ -28,7 +28,7 @@ export const NoticeOfTrialIssued = ({
 
         <div className="info-box info-box-judge" id="judge-info">
           <div className="info-box-header">Judge</div>
-          <div className="info-box-content">{trialInfo.judge}</div>
+          <div className="info-box-content">{trialInfo.formattedJudge}</div>
         </div>
         <div className="clear" />
       </div>
