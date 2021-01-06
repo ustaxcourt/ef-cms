@@ -3916,45 +3916,17 @@ describe('PublicCase', () => {
           docketNumber: '102-20',
           docketNumberSuffix: null,
           docketNumberWithSuffix: null,
-          otherFilers: [
-            {
-              address1: '42 Lamb Sauce Blvd',
-              city: 'Nashville',
-              contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
-              country: 'USA',
-              countryType: 'domestic',
-              email: 'testUser@example.com',
-              isAddressSealed: false,
-              name: 'Gordon Ramsay',
-              otherFilerType: 'Intervenor',
-              phone: '1234567890',
-              postalCode: '05198',
-              state: 'AK',
-              title: 'Intervenor',
-            },
-          ],
-          otherPetitioners: [
-            {
-              additionalName: 'Guy Fieri',
-              address1: '453 Electric Ave',
-              city: 'Philadelphia',
-              countryType: 'domestic',
-              email: 'mayorofflavortown@example.com',
-              name: 'Guy Fieri',
-              phone: '1234567890',
-              postalCode: '99999',
-              serviceIndicator: 'None',
-              state: 'PA',
-              title: 'Petitioner',
-            },
-          ],
+          irsPractitioners: [],
+          otherFilers: [],
+          otherPetitioners: [],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
       );
 
-      expect(entity.otherFilers.length).toBeTruthy();
-      expect(entity.otherPetitioners.length).toBeTruthy();
+      expect(entity.otherFilers).toBeTruthy();
+      expect(entity.otherPetitioners).toBeTruthy();
+      expect(entity.irsPractitioners).toBeTruthy();
     });
 
     it('anyone other than an irsPractitioner does not see otherPetitioners or otherFilers', () => {
@@ -4011,6 +3983,7 @@ describe('PublicCase', () => {
 
       expect(entity.otherFilers).toBeUndefined();
       expect(entity.otherPetitioners).toBeUndefined();
+      expect(entity.irsPractitioners).toBeUndefined();
     });
   });
 });
