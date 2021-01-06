@@ -8,7 +8,7 @@ export const petitionsClerkSetsARemoteTrialSessionsSchedule = test => {
     await test.runSequence('openSetCalendarModalSequence');
 
     expect(test.getState('alertWarning.message')).toEqual(
-      'Provide meeting information to set this trial session.',
+      'Provide remote proceeding information to set this trial session.',
     );
 
     await test.runSequence('gotoEditTrialSessionSequence', {
