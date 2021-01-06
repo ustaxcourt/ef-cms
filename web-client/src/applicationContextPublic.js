@@ -118,6 +118,7 @@ const applicationContextPublic = {
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
   getConstants: () => frozenConstants,
+  getCurrentUser: () => ({}),
   getCurrentUserToken: () => null,
   getEnvironment: () => ({
     stage: process.env.STAGE || 'local',
