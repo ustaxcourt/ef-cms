@@ -4,6 +4,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   removeCaseFromTrialInteractor,
@@ -13,13 +14,22 @@ const { ROLES } = require('../../entities/EntityConstants');
 
 describe('remove case from trial session', () => {
   const MOCK_TRIAL_SESSION = {
+    address1: '123 Street Lane',
     caseOrder: [
       { docketNumber: MOCK_CASE.docketNumber },
       { docketNumber: '123-45' },
     ],
+    city: 'Scottsburg',
+    judge: {
+      name: 'A Judge',
+      userId: '55f4fc65-b33e-4c04-8561-3e56d533f386',
+    },
     maxCases: 100,
+    postalCode: '47130',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     sessionType: 'Regular',
     startDate: '3000-03-01T00:00:00.000Z',
+    state: 'IN',
     term: 'Fall',
     termYear: '3000',
     trialLocation: 'Birmingham, Alabama',
