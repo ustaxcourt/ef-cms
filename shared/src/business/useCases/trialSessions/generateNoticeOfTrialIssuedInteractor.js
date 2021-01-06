@@ -1,3 +1,4 @@
+const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 
 /**
@@ -31,16 +32,49 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
   const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
+  const formattedStartDate = formatDateString(
+    trialSession.startDate,
+    FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
+  );
+
+  // TODO - extract into utility function as part of DOD for 7443
+  let [hour, min] = trialSession.startTime.split(':');
+  let startTimeExtension = 'am';
+
+  if (+hour > 12) {
+    startTimeExtension = 'pm';
+    hour = +hour - 12;
+  }
+
+  const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
+
+  // fetch judges
+  const judges = await applicationContext
+    .getPersistenceGateway()
+    .getUsersInSection({
+      applicationContext,
+      section: 'judge',
+    });
+
+  // find associated judge
+  const foundJudge = judges.find(
+    _judge => _judge.name === trialSession.judge.name,
+  );
+
+  if (!foundJudge) {
+    throw new Error(`Judge ${trialSession.judge.name} was not found`);
+  }
+
+  const judgeWithTitle = `${foundJudge.judgeTitle} ${foundJudge.name}`;
+
   const trialInfo = {
-    address1: trialSession.address1,
-    address2: trialSession.address2,
-    city: trialSession.city,
-    courthouseName: trialSession.courthouseName,
-    judge: trialSession.judge.name,
-    postalCode: trialSession.postalCode,
-    startDate: trialSession.startDate,
-    startTime: trialSession.startTime,
-    state: trialSession.state,
+    formattedJudge: judgeWithTitle,
+    formattedStartDate,
+    formattedStartTime,
+    joinPhoneNumber: trialSession.joinPhoneNumber,
+    meetingId: trialSession.meetingId,
+    password: trialSession.password,
+    trialLocation: trialSession.trialLocation,
   };
 
   return await applicationContext.getDocumentGenerators().noticeOfTrialIssued({
