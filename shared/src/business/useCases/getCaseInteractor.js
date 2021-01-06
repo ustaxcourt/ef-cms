@@ -186,7 +186,7 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
       isAssociatedWithCase,
     });
   } else {
-    const userRole = applicationContext.getCurrentUser().role;
+    const { role: userRole } = currentUser;
     const isInternalUser = User.isInternalUser(userRole);
 
     if (isInternalUser) {
