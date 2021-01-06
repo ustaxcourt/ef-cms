@@ -10,16 +10,17 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
-        h3="Standing Pre Trial Order"
+        h3="Standing Pretrial Order"
       />
+
+      {/* add box with location and time */}
 
       <p>
         <span className="text-bold">
           The attached Notice Setting Case for Trial notifies the parties that
           this case is calendared for trial at the remote trial session
-          beginning on
-          {trialInfo.fullStartDate}. This Order sets out the Court’s standing
-          procedures for the remote trial session.
+          beginning on {trialInfo.fullStartDate}. This Order sets out the
+          Court’s standing procedures for the remote trial session.
         </span>
       </p>
 
@@ -104,16 +105,20 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         proceedings involving counsel. See Rule 202(a).
       </p>
 
-      <span>
-        To allow the efficient disposition of all cases on the trial calendar:
-      </span>
+      <p>
+        <span>
+          To allow the efficient disposition of all cases on the trial calendar:
+        </span>
+      </p>
 
-      <span>
-        It is ORDERED that the parties comply with the following deadlines and
-        requirements, unless the Court, upon request, grants an extension:
-      </span>
+      <p>
+        <span>
+          It is ORDERED that the parties comply with the following deadlines and
+          requirements, unless the Court, upon request, grants an extension:
+        </span>
+      </p>
 
-      <ol>
+      <ol className="text-bold">
         <li>
           <p>
             <span className="text-bold">
@@ -188,10 +193,10 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
             Memorandum, a Motion to Dismiss for Lack of Prosecution, or a Status
             Report.
           </p>
-          <ol>
+          <ol className="text-bold" type="A">
             <li>
               <p>
-                <span className="text-underline text-bold">Settlement.</span> If
+                <span className="text-underline text-bold">Settlement</span>. If
                 a basis for settlement has been reached, the Proposed Stipulated
                 Decision shall be electronically filed no later than 21 days
                 before the first day of the trial session. If the parties have
@@ -211,9 +216,9 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
             <li>
               <p>
                 <span className="text-underline text-bold">
-                  Pretrial Memoranda.{' '}
+                  Pretrial Memoranda
                 </span>
-                If a basis for settlement has not been reached and it appears
+                . If a basis for settlement has not been reached and it appears
                 that a trial is necessary, each party shall file a Pretrial
                 Memorandum no later than 21 days before the first day of the
                 trial session. A Pretrial Memorandum form is attached to this
@@ -221,25 +226,29 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
               </p>
             </li>
             <li>
-              <p>
-                <span className="text-underline text-bold"> Witnesses.</span>
-                Witnesses shall be identified in the pretrial memorandum with a
-                brief summary of their anticipated testimony. Witnesses who are
-                not identified will not be permitted to testify at the trial
-                without a showing of good cause.
-              </p>
+              <ol className="text-bold" type="I">
+                <li>
+                  <p>
+                    <span className="text-underline text-bold"> Witnesses</span>
+                    . Witnesses shall be identified in the pretrial memorandum
+                    with a brief summary of their anticipated testimony.
+                    Witnesses who are not identified will not be permitted to
+                    testify at the trial without a showing of good cause.
+                  </p>
+                </li>
+              </ol>
             </li>
             <li>
               <p>
                 <span className="text-underline text-bold">
                   {' '}
-                  Motion to Dismiss for Lack of Prosecution.
+                  Motion to Dismiss for Lack of Prosecution
                 </span>
-                If a party has been unresponsive and has failed to cooperate in
-                preparing the case for trial or resolution or to participate in
-                preparing a Stipulation of Facts, the opposing party shall file
-                a Motion to Dismiss for Lack of Prosecution no later than 21
-                days before the first day of the trial session.
+                . If a party has been unresponsive and has failed to cooperate
+                in preparing the case for trial or resolution or to participate
+                in preparing a Stipulation of Facts, the opposing party shall
+                file a Motion to Dismiss for Lack of Prosecution no later than
+                21 days before the first day of the trial session.
               </p>
             </li>
           </ol>
@@ -259,13 +268,13 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
             Documents and pages should be numbered for parties to identify
             documents and pages within documents easily.
           </p>
-          <ol>
+          <ol className="text-bold" type="A">
             <li>
               <p>
                 <span className="text-underline text-bold">
-                  Stipulation of Facts.
+                  Stipulation of Facts
                 </span>
-                All facts and documents shall be stipulated (agreed upon in
+                . All facts and documents shall be stipulated (agreed upon in
                 writing) to the maximum extent possible. If a complete
                 stipulation of facts is not ready for submission no later than
                 14 days before the first day of the trial session, or when
@@ -277,9 +286,9 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
             <li>
               <p>
                 <span className="text-underline text-bold">
-                  Unagreed Trial Exhibits.
+                  Unagreed Trial Exhibits
                 </span>
-                All documents or materials (except impeachment documents or
+                . All documents or materials (except impeachment documents or
                 materials) that a party expects to use at trial that are not in
                 the Stipulation of Facts shall be marked and filed as Proposed
                 Trial Exhibits. The Court may refuse to receive in evidence any
@@ -293,9 +302,9 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         <li>
           <p>
             <span className="text-underline text-bold">
-              Change in Case Status.
+              Change in Case Status
             </span>
-            Status Report shall be filed to inform the Court if the status of
+            . Status Report shall be filed to inform the Court if the status of
             the case changes at any time before the trial date and after a
             Pretrial Memorandum, Motion to Dismiss for Lack of Prosecution, or
             Status Report is filed. Alternatively, if the case has settled, a
@@ -305,9 +314,9 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         <li>
           <p>
             <span className="text-underline text-bold">
-              Remote Proceeding Access.
+              Remote Proceeding Access
             </span>
-            Parties shall be responsible for ensuring, to the best of their
+            . Parties shall be responsible for ensuring, to the best of their
             abilities, that they and their witnesses have adequate technology
             and internet resources to participate in a remote proceeding. The
             parties should log on and test their connections at least 30 minutes
@@ -316,8 +325,8 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         </li>
         <li>
           <p>
-            <span className="text-underline text-bold">Time of Trial.</span>
-            All parties shall be prepared for trial at any time during the trial
+            <span className="text-underline text-bold">Time of Trial</span>. All
+            parties shall be prepared for trial at any time during the trial
             session unless a specific date has been previously set by the Court.
             After Pretrial Memoranda are filed, the Court may schedule a time
             and date certain for the trial. The parties may also jointly contact
@@ -331,135 +340,12 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         </li>
       </ol>
 
-      {/* the stuff below is oooooolllllddddd */}
-
       <p>
-        <strong className="text-underline">Continuances.</strong> Continuances
-        (i.e., postponement softrial) will be granted only in exceptional
-        circumstances. See Rule 133, Tax Court Rules of Practice and Procedure.
-        (The Court&apos;s Rules are available at{' '}
-        <a href="www.ustaxcourt.gov" target="_blank">
-          www.ustaxcourt.gov
-        </a>
-        .) Even joint motions for continuance are not granted automatically.
+        <strong>
+          If you do not follow the provisions of this Order, the Judge may
+          dismiss your case and enter a Decision against you.
+        </strong>
       </p>
-
-      <p>
-        <strong className="text-underline">Sanctions.</strong> The Court may
-        impose appropriate sanctions, including dismissal, for any unexcused
-        failure to comply with this Order. See Rule 131(b). Such failure may
-        also be considered in relation to sanctions against and disciplinary
-        proceedings involving counsel. See Rule 202(a).
-      </p>
-
-      <div style={{ marginBottom: '90px', marginLeft: '20px' }}>
-        <p>
-          To help the efficient disposition of all cases on the trial calendar:
-        </p>
-
-        <p>
-          <strong className="text-underline">1. Stipulation.</strong>
-          It is ORDERED that all facts shall be stipulated (agreed upon in
-          writing) to the maximum extent possible. All documents and written
-          evidence shall be marked and stipulated in accordance with Rule 91(b),
-          unless the evidence is to be used only to impeach(discredit) a
-          witness. Either party may preserve objections by noting them in the
-          stipulation. If a complete stipulation of facts is not ready for
-          submission at the start of the trial or when otherwise ordered by the
-          Court, and if the Court determines that this is due to lack of
-          cooperation by either party, the Court may order sanctions against the
-          uncooperative party.
-        </p>
-
-        <p>
-          <strong className="text-underline">2. Trial Exhibits.</strong>
-          It is ORDERED that any documents or materials which a party expects to
-          use (except solely for impeachment) if the case is tried, but which
-          are not stipulated, shall be identified in writing and exchanged by
-          the parties at least 14 days before the first day of the trial
-          session. The Court may refuse to receive in evidence any document or
-          material that is not so stipulated or exchanged, unless the parties
-          have agreed otherwise or the Court so allows for good cause shown.
-        </p>
-
-        <p>
-          <strong className="text-underline">3. Pretrial Memoranda.</strong> It
-          is ORDERED that, unless a basis of settlement (resolution of the
-          issues) has been reached, each party shall prepare a Pretrial
-          Memorandum containing the information in the attached form. Each party
-          shall serve on the other party and file the Pretrial Memorandum not
-          less than 14 days before the first day of the trial session.
-        </p>
-        <p>
-          <strong className="text-underline">4. Final Status Reports.</strong>{' '}
-          It is ORDERED that, if the status of the case changes from that
-          reported in a party&apos;s Pretrial Memorandum, the party shall submit
-          to the undersigned and to the other party a Final Status Report
-          containing the information in the attached form. A Final Status Report
-          maybe submitted to the Court in paper format, electronically by
-          following the procedures in the &quot;Final Status Report&quot; tab on
-          the Court&apos;s Website or by fax sent to 202-521-3378. (Only the
-          Final Status Report maybe sent to this fax number; any other documents
-          will be discarded.) The report must be received by the Court no later
-          than 3p.m. eastern time on the last business day (normally Friday)
-          before the calendar call. The Final Status Report must be promptly
-          submitted to the opposing party by mail, email, or fax, and a copy of
-          the report must be given to the opposing party at the calendar call if
-          the opposing party is present.
-        </p>
-        <p>
-          <strong className="text-underline">5.Witnesses.</strong> It is ORDERED
-          that witnessess hall be identified in the Pretrial Memorandum with a
-          brief summary of their anticipated testimony. Witnesses who are not
-          identified will not be permitted to testify at the trial with out a
-          showing of good cause.
-        </p>
-        <p>
-          <strong className="text-underline">6. Expert Witnesses.</strong> It is
-          ORDERED that unless otherwise permitted by the Court, expert
-          witnessess hall prepare a written report which shall be submitted
-          directly to the undersigned and served upon each other party at least
-          30 days before the first day of the trial session. An expert
-          witness&apos;s test imony may be excluded for failure to comply with
-          this Order and Rule 143(g).
-        </p>
-        <p>
-          <strong className="text-underline">7. Settlements.</strong> It is
-          ORDERED that if the parties have reached a basis of settlement,
-          astipulated decision shall be submitted to the Court prior to or at
-          the call of the calendar on the first day of the trial session.
-          Additional time for submitting astipulated decision will be granted
-          only where it is clear that all parties have approved the settlement.
-          The parties shall be prepared to state for the record the basis of
-          settlement and the reasons for delay. The Court will specify the date
-          by which the stipulated decision and any related settlement documents
-          will be due.
-        </p>
-        <p>
-          <strong className="text-underline">8. Time of Trial.</strong> It is
-          ORDERED that all parties shall be prepared for trial at anytime during
-          the trial session unless a specific date has been previously set by
-          the Court. Your case may or may not be tried on the same date as the
-          calendar call, and you may need to return to Court on a later date
-          during the trial session. Thus, it may be beneficial to contact the
-          Court in advance. Within 2 weeks before the start of the trial
-          session, the parties may jointly contact the Judge&apos;s chamber
-          store quest a time and date certain for the trial. If practicable, the
-          Court will attempt to accommodate the request, keeping in mind other
-          scheduling requirements and the anticipated length of the session.
-          Parties should jointly inform the Judge as early as possible if they
-          expect trial to require 3 days or more.
-        </p>
-        <p>
-          <strong className="text-underline">9. Service of Documents.</strong>{' '}
-          It is ORDERED that every pleading, motion, letter, or other document
-          (with the exception of the petition and the post trial briefs, see
-          Rule 151(c)) submitted to the Court shall contain a certificate of
-          service as specified in Rule21(b), which shows that the party has
-          given a copy of that pleading, motion, letter or other document to all
-          other parties.
-        </p>
-      </div>
 
       <div className="signature text-center">
         <p>
