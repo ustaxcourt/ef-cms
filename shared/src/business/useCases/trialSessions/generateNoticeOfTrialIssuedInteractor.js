@@ -47,6 +47,25 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
 
   const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
 
+  // fetch judges
+  const judges = await applicationContext
+    .getPersistenceGateway()
+    .getUsersInSection({
+      applicationContext,
+      section: 'judge',
+    });
+
+  // find associated judge
+  const foundJudge = judges.find(
+    _judge => _judge.name === trialSession.judge.name,
+  );
+
+  if (!foundJudge) {
+    throw new Error(`Judge of ${trialSession.judge.name} was not found`);
+  }
+
+  const judgeWithTitle = `${foundJudge.judgeTitle} ${foundJudge.name}`;
+
   const trialInfo = {
     address1: trialSession.address1,
     address2: trialSession.address2,
@@ -55,7 +74,7 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     formattedStartDate,
     formattedStartTime,
     joinPhoneNumber: trialSession.joinPhoneNumber,
-    judge: trialSession.judge.name,
+    judge: judgeWithTitle,
     meetingId: trialSession.meetingId,
     password: trialSession.password,
     postalCode: trialSession.postalCode,
