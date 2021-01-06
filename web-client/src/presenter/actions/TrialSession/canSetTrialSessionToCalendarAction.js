@@ -44,15 +44,14 @@ export const canSetTrialSessionToCalendarAction = async ({
   );
   const missingFieldsForWarningMessage = [];
 
-  if (emptyFields.includes('judge')) {
-    missingFieldsForWarningMessage.push('a judge');
-  }
-
   if (missingAddressProperties.length > 0) {
-    missingFieldsForWarningMessage.unshift('an address');
+    missingFieldsForWarningMessage.push('an address');
   }
   if (missingMeetingProperties.length > 0) {
-    missingFieldsForWarningMessage.unshift('meeting information');
+    missingFieldsForWarningMessage.push('remote proceeding information');
+  }
+  if (emptyFields.includes('judge')) {
+    missingFieldsForWarningMessage.push('a judge');
   }
 
   return path.no({
