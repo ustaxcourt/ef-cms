@@ -19,6 +19,9 @@ const {
 const {
   migrateItems: migration0012,
 } = require('./migrations/0012-remove-incorrect-counsel');
+const {
+  migrateItems: migration0013,
+} = require('./migrations/0013-trial-session-default-proceedingType');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -44,16 +47,18 @@ const migrateRecords = async ({ documentClient, items }) => {
   // not been run yet
   applicationContext.logger.info('about to run migration 0010');
   items = await migration0010(items, documentClient);
-  applicationContext.logger.info('about to run migration 007');
+  applicationContext.logger.info('about to run migration 0007');
   items = await migration0007(items, documentClient);
-  applicationContext.logger.info('about to run migration 008');
+  applicationContext.logger.info('about to run migration 0008');
   items = await migration0008(items, documentClient);
-  applicationContext.logger.info('about to run migration 009');
+  applicationContext.logger.info('about to run migration 0009');
   items = await migration0009(items, documentClient);
-  applicationContext.logger.info('about to run migration 011');
+  applicationContext.logger.info('about to run migration 0011');
   items = await migration0011(items, documentClient);
-  applicationContext.logger.info('about to run migration 012');
+  applicationContext.logger.info('about to run migration 0012');
   items = await migration0012(items, documentClient);
+  applicationContext.logger.info('about to run migration 0013');
+  items = await migration0013(items, documentClient);
 
   return items;
 };
