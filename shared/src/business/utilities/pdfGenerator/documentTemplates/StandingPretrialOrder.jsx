@@ -389,14 +389,12 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         </strong>
       </p>
 
-      <div className="text-center">
+      <div>
         <p style={{ float: 'left', width: '40%' }}>
           Dated: {trialInfo.formattedServedDate}
         </p>
-        <p style={{ float: 'left', width: '59%' }}>
+        <p style={{ float: 'right', textAlign: 'right', width: '59%' }}>
           (Signed) {trialInfo.formattedJudgeName}
-          <br />
-          Trial Judge
           <br />
           {trialInfo.chambersPhoneNumber}
         </p>
@@ -405,12 +403,10 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       <br />
       <div style={{ pageBreakAfter: 'always' }}></div>
 
-      <p style={{ marginBottom: '74px', marginLeft: '363px' }}>
+      <p style={{ marginBottom: '74px', textAlign: 'right' }}>
         Trial Calendar: {trialInfo.trialLocation} - Remote Proceedings
         <br />
-        <span style={{ marginLeft: '55px' }}>
-          Date: {trialInfo.formattedStartDate}
-        </span>
+        <span>Date: {trialInfo.formattedStartDate}</span>
       </p>
 
       <p className="text-center" style={{ marginBottom: '56px' }}>
