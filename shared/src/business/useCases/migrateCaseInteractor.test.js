@@ -6,6 +6,7 @@ const {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
@@ -418,10 +419,19 @@ describe('migrateCaseInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue({
+        address1: '123 Street Lane',
+        city: 'Scottsburg',
         isCalendared: true,
+        judge: {
+          name: 'A Judge',
+          userId: '55f4fc65-b33e-4c04-8561-3e56d533f386',
+        },
         maxCases: 100,
+        postalCode: '47130',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionType: 'Hybrid',
         startDate: '2020-08-10',
+        state: 'IN',
         term: 'Summer',
         termYear: '2020',
         trialLocation: 'Memphis, Tennessee',

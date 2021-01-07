@@ -4,6 +4,9 @@ const {
 const {
   createTrialSessionAndWorkingCopy,
 } = require('./createTrialSessionAndWorkingCopy');
+const {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 const { omit } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
@@ -13,6 +16,7 @@ const trialSessionMetadata = {
   isCalendared: false,
   judge: { name: 'Buch', userId: 'd90e7b8c-c8a1-4b96-9b30-70bd47b63df0' },
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Hybrid',
   startDate: DATE,
   term: 'Fall',
