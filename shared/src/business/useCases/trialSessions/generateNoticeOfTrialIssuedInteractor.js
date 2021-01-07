@@ -1,5 +1,6 @@
 const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
 /**
  * generateNoticeOfTrialIssuedInteractor
@@ -48,25 +49,10 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
 
   const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
 
-  // TODO - extract into utility function as part of DOD for 7443
-  // fetch judges
-  const judges = await applicationContext
-    .getPersistenceGateway()
-    .getUsersInSection({
-      applicationContext,
-      section: 'judge',
-    });
-
-  // find associated judge
-  const foundJudge = judges.find(
-    _judge => _judge.name === trialSession.judge.name,
-  );
-
-  if (!foundJudge) {
-    throw new Error(`Judge ${trialSession.judge.name} was not found`);
-  }
-
-  const judgeWithTitle = `${foundJudge.judgeTitle} ${foundJudge.name}`;
+  const judgeWithTitle = await getJudgeWithTitle({
+    applicationContext,
+    judgeUserName: trialSession.judge.name,
+  });
 
   const trialInfo = {
     formattedJudge: judgeWithTitle,
