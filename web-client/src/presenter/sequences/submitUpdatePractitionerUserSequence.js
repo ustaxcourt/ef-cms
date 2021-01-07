@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -30,7 +31,7 @@ export const submitUpdatePractitionerUserSequence = [
           updatePractitionerUserAction,
           {
             error: [],
-            success: [setPractitionerDetailAction],
+            success: [setPractitionerDetailAction, clearScreenMetadataAction],
           },
         ],
       },

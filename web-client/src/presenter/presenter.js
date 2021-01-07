@@ -297,6 +297,7 @@ import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecor
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+import { showPractitionerEmailInputSequence } from './sequences/showPractitionerEmailInputSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { startScanSequence } from './sequences/startScanSequence';
@@ -745,6 +746,7 @@ export const presenter = {
     showMoreClosedCasesSequence,
     showMoreOpenCasesSequence,
     showMoreResultsSequence,
+    showPractitionerEmailInputSequence,
     signOutSequence,
     skipSigningOrderSequence,
     startScanSequence,

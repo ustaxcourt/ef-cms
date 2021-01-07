@@ -4,6 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
 const { Practitioner } = require('../../entities/Practitioner');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -34,13 +35,28 @@ exports.updatePractitionerUserInteractor = async ({
     throw new Error('Bar number does not match user data.');
   }
 
-  // do not allow edit of bar number or email
+  if (!oldUserInfo.email && user.email) {
+    user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+  }
+
+  // do not allow edit of bar number
   const validatedUserData = new Practitioner(
-    { ...user, barNumber: oldUserInfo.barNumber, email: oldUserInfo.email },
+    {
+      ...user,
+      barNumber: oldUserInfo.barNumber,
+      email: oldUserInfo.email || user.email,
+    },
     { applicationContext },
   )
     .validate()
     .toRawObject();
+
+  const updatedUser = await applicationContext
+    .getPersistenceGateway()
+    .updatePractitionerUser({
+      applicationContext,
+      user: validatedUserData,
+    });
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
@@ -55,6 +71,7 @@ exports.updatePractitionerUserInteractor = async ({
     bypassDocketEntry,
     contactInfo: validatedUserData.contact,
     requestUserId: requestUser.userId,
+    updatedEmail: validatedUserData.email,
     updatedName: validatedUserData.name,
     user: oldUserInfo,
     websocketMessagePrefix: 'admin',
@@ -67,13 +84,6 @@ exports.updatePractitionerUserInteractor = async ({
     },
     userId: requestUser.userId,
   });
-
-  const updatedUser = await applicationContext
-    .getPersistenceGateway()
-    .updatePractitionerUser({
-      applicationContext,
-      user: validatedUserData,
-    });
 
   return new Practitioner(updatedUser, { applicationContext })
     .validate()
