@@ -48,6 +48,7 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
 
   const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
 
+  // TODO - extract into utility function as part of DOD for 7443
   // fetch judges
   const judges = await applicationContext
     .getPersistenceGateway()
