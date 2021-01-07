@@ -403,29 +403,30 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       <br />
       <div style={{ pageBreakAfter: 'always' }}></div>
 
-      <p style={{ marginBottom: '74px', textAlign: 'right' }}>
+      <p style={{ marginBottom: '54px', textAlign: 'right' }}>
         Trial Calendar: {trialInfo.trialLocation} - Remote Proceedings
         <br />
         <span>Date: {trialInfo.formattedStartDate}</span>
       </p>
 
       <p className="text-center" style={{ marginBottom: '56px' }}>
-        <strong>PRETRIAL MEMORANDUM FOR</strong> (Petitioner/Respondent)
+        <span className="text-bold">PRETRIAL MEMORANDUM FOR </span>
+        <span className="text-underline">(Petitioner/Respondent)</span>
         <br />
         (Please type or print legibly. This form may be expanded as necessary.)
       </p>
       <div style={{ marginBottom: '29px' }}>
         <p style={{ float: 'left', width: '60%' }}>
-          <strong className="text-underline">NAME OF CASE</strong>:
+          <span className="text-bold text-underline">NAME OF CASE</span>:
         </p>
         <p style={{ float: 'left', width: '39%' }}>
-          <strong className="text-underline">DOCKET NO(S).</strong>:
+          <span className="text-bold text-underline">DOCKET NO(S).</span>:
         </p>
         <div className="clear"></div>
       </div>
 
       <p style={{ marginBottom: '2px' }}>
-        <strong className="text-underline">ATTORNEYS</strong>:
+        <span className="text-bold text-underline">ATTORNEYS</span>:
       </p>
       <div style={{ marginBottom: '33px' }}>
         <p
@@ -436,14 +437,17 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
           <br />
           Tel No.: ______________________________________
           <br />
-          Email: ________________________________________
+          Email: _______________________________________
         </p>
-        <p className="margin-top-0" style={{ float: 'left', width: '49%' }}>
-          Respondent: ____________________________________
+        <p
+          className="margin-top-0"
+          style={{ float: 'left', marginRight: '1%', width: '49%' }}
+        >
+          Respondent: __________________________________
           <br />
-          Tel No.: ________________________________________
+          Tel No.: ______________________________________
           <br />
-          Email: ________________________________________
+          Email: _______________________________________
         </p>
         <div className="clear"></div>
       </div>
@@ -452,13 +456,19 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         <strong className="text-underline">AMOUNTS IN DISPUTE</strong>:
       </p>
       <p className="margin-top-0" style={{ marginBottom: '52px' }}>
-        <strong className="text-underline">Year(s)/Period(s)</strong>
-        <strong className="text-underline" style={{ marginLeft: '95px' }}>
+        <span className="text-underline text-bold">Year(s)/Period(s)</span>
+        <span
+          className="text-underline text-bold"
+          style={{ marginLeft: '95px' }}
+        >
           Deficiencies/Liabilities
-        </strong>
-        <strong className="text-underline" style={{ marginLeft: '95px' }}>
+        </span>
+        <span
+          className="text-underline text-bold"
+          style={{ marginLeft: '95px' }}
+        >
           Additions/Penalties
-        </strong>
+        </span>
       </p>
       <p>
         <strong className="text-underline">STATUS OF CASE</strong>:
@@ -486,8 +496,18 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       </p>
 
       <p className="margin-top-0" style={{ marginBottom: '45px' }}>
-        <span>Completed, will be filed electronically ________</span>
-        <span style={{ marginLeft: '15px' }}>In Process________</span>
+        <input id="completed" type="checkbox"></input>
+        <label htmlFor="completed" id="completed-label">
+          Completed, will be filed electronically
+        </label>
+        <input
+          id="in-progress"
+          style={{ marginLeft: '15px' }}
+          type="checkbox"
+        ></input>
+        <label htmlFor="in-progress" id="in-progress-label">
+          In Progress
+        </label>
       </p>
       <p>
         <strong className="text-underline">ISSUES</strong>:
@@ -524,7 +544,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       </p>
 
       <div style={{ marginBottom: '61px' }}>
-        <p style={{ float: 'left', width: '40%' }}>
+        <p className="text-normal" style={{ float: 'left', width: '40%' }}>
           Date: _________________________
         </p>
         <p style={{ float: 'left', width: '59%' }}>
