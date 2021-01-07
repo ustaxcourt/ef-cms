@@ -65,15 +65,4 @@ describe('StandingPretrialOrder', () => {
       `(Signed) ${trialInfo.formattedJudgeName}`,
     );
   });
-
-  it('renders the formatted judge name and chambers phone number in footer', () => {
-    const wrapper = shallow(
-      <StandingPretrialOrder options={options} trialInfo={trialInfo} />,
-    );
-
-    const signature = wrapper.find('.final-page-footer');
-
-    expect(signature.text()).toContain(trialInfo.formattedJudgeName);
-    expect(signature.text()).toContain(trialInfo.chambersPhoneNumber);
-  });
 });

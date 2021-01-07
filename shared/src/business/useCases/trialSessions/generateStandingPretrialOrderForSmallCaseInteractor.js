@@ -34,24 +34,13 @@ exports.generateStandingPretrialOrderForSmallCaseInteractor = async ({
       docketNumber,
     });
 
-  const { docketNumberWithSuffix, irsPractitioners } = caseDetail;
-
-  let respondentContactText = 'not available at this time';
-  if (irsPractitioners && irsPractitioners.length) {
-    const firstRespondent = irsPractitioners[0];
-    respondentContactText = `${firstRespondent.name} (${firstRespondent.contact.phone})`;
-  }
+  const { docketNumberWithSuffix } = caseDetail;
 
   const trialStartTimeIso = createISODateString(
     trialSession.startTime,
     'HH:mm',
   );
-  const startTime = formatDateString(trialStartTimeIso, 'hh:mm A');
-  const startDay = formatDateString(trialSession.startDate, 'dddd');
-  const fullStartDate = formatDateString(
-    trialSession.startDate,
-    'dddd, MMMM D, YYYY',
-  );
+  const formattedStartTime = formatDateString(trialStartTimeIso, 'hh:mm A');
 
   const formattedServedDate = formatNow(FORMATS.MMDDYY);
 
@@ -99,10 +88,7 @@ exports.generateStandingPretrialOrderForSmallCaseInteractor = async ({
           formattedServedDate,
           formattedStartDate,
           formattedStartDateWithDayOfWeek,
-          fullStartDate,
-          respondentContactText,
-          startDay,
-          startTime,
+          formattedStartTime,
         },
       },
     });
