@@ -147,11 +147,11 @@ const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
 const appContextProxy = (initial = {}, makeMock = true) => {
   const applicationContextHandler = {
-    get(target, name, receiver) {
-      if (!Reflect.has(target, name)) {
-        Reflect.set(target, name, jest.fn(), receiver);
+    get(target, myName, receiver) {
+      if (!Reflect.has(target, myName)) {
+        Reflect.set(target, myName, jest.fn(), receiver);
       }
-      return Reflect.get(target, name, receiver);
+      return Reflect.get(target, myName, receiver);
     },
   };
   const proxied = new Proxy(initial, applicationContextHandler);
