@@ -45,9 +45,11 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.receivedAt = rawCase.receivedAt;
   this._score = rawCase['_score'];
 
+  this.isSealed = isSealedCase(rawCase);
+
   const currentUser = applicationContext.getCurrentUser();
 
-  if (currentUser.role === ROLES.irsPractitioner) {
+  if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {
@@ -79,8 +81,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       ? new PublicContact(rawCase.contactSecondary)
       : undefined;
   }
-
-  this.isSealed = isSealedCase(rawCase);
 
   // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
   this.docketEntries = (rawCase.docketEntries || [])
