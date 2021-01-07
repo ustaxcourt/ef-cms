@@ -271,6 +271,6 @@ describe('getCaseInventoryReport', () => {
       },
     ]);
 
-    expect(results).toEqual({ foundCases: [], totalCount: undefined });
+    expect(results).toEqual({ foundCases: [], totalCount: 0 });
   });
 });

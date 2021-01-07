@@ -34,6 +34,18 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
     });
   });
 
+  it('returns expected errors when event code requires filing date but no date is provided', () => {
+    const errors = validateCourtIssuedDocketEntryInteractor({
+      applicationContext,
+      entryMetadata: {
+        eventCode: 'USCA',
+        scenario: 'Type A',
+      },
+    });
+
+    expect(errors.filingDate).toEqual(VALIDATION_ERROR_MESSAGES.filingDate);
+  });
+
   it('returns no errors when all required data fields are set', () => {
     const errors = validateCourtIssuedDocketEntryInteractor({
       applicationContext,

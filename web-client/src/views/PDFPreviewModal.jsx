@@ -26,6 +26,7 @@ export const PDFPreviewModal = connect(
     loadPdfSequence,
     pdfPreviewModal,
     pdfPreviewModalHelper,
+    preventScrolling,
     previewPdfFile,
     setPageSequence,
     title,
@@ -49,6 +50,7 @@ export const PDFPreviewModal = connect(
         className="pdf-preview-modal"
         confirmLabel="Ok"
         confirmSequence={confirmSequence}
+        preventScrolling={preventScrolling}
         title={title}
       >
         <Mobile>

@@ -36,6 +36,36 @@ describe('CourtIssuedDocumentTypeC', () => {
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
     });
+    describe('requiring filing dates on unservable documents', () => {
+      it('should be invalid when filingDate is undefined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          docketNumbers: '101-19',
+
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          scenario: 'Type C',
+        });
+        expect(
+          documentInstance.getFormattedValidationErrors().filingDate,
+        ).toBeDefined();
+      });
+
+      it('should be valid when filingDate is defined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          docketNumbers: '101-19',
+
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          filingDate: '1990-01-01T05:00:00.000Z',
+          scenario: 'Type C',
+        });
+        expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+      });
+    });
   });
 
   describe('title generation', () => {
