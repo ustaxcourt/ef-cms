@@ -1,3 +1,4 @@
+import '../../htmlGenerator/index.scss';
 const React = require('react');
 const { DocketHeader } = require('../components/DocketHeader.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
@@ -7,13 +8,13 @@ export const StandingPretrialNotice = ({ options, trialInfo }) => {
     docketNumberWithSuffix: '101-99L',
   };
   trialInfo = {
-    city: 'Orlando',
     fullStartDate: '01/01/1991',
     judge: {
       name: 'Bob Sagot',
     },
     startTime: '10:00 am',
     state: 'Florida',
+    trialLocation: 'Orlando, California',
   };
   return (
     <div className="standing-pretrial-order-small-case">
@@ -26,8 +27,8 @@ export const StandingPretrialNotice = ({ options, trialInfo }) => {
       />
 
       <p className="dashed-box">
-        This case is set for trial at the {trialInfo.city} trial session
-        beginning at
+        This case is set for trial at the {trialInfo.trialLocation} trial
+        session beginning at
         <br /> <span className="text-bold">{trialInfo.startTime}</span> on{' '}
         <span className="text-bold">
           {trialInfo.fullStartDate}
