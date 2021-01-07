@@ -1,4 +1,8 @@
-const { formatDateString, formatNow } = require('../../utilities/DateHandler');
+const {
+  formatDateString,
+  formatNow,
+  FORMATS,
+} = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 
 /**
@@ -32,8 +36,47 @@ exports.generateStandingPretrialOrderInteractor = async ({
   const { startDate } = trialSession;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-  const fullStartDate = formatDateString(startDate, 'dddd, MMMM D, YYYY');
-  const footerDate = formatNow('MMDDYYYY');
+  const formattedStartDateWithDayOfWeek = formatDateString(
+    startDate,
+    FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
+  );
+
+  const formattedStartDate = formatDateString(
+    startDate,
+    FORMATS.MONTH_DAY_YEAR,
+  );
+
+  // fetch judges
+  const judges = await applicationContext
+    .getPersistenceGateway()
+    .getUsersInSection({
+      applicationContext,
+      section: 'judge',
+    });
+
+  // find associated judge
+  const foundJudge = judges.find(
+    _judge => _judge.name === trialSession.judge.name,
+  );
+
+  if (!foundJudge) {
+    throw new Error(`Judge ${trialSession.judge.name} was not found`);
+  }
+
+  const formattedJudgeName = `${foundJudge.judgeTitle} ${foundJudge.name}`;
+
+  // TODO - extract into utility function as part of DOD for 7443
+  let [hour, min] = trialSession.startTime.split(':');
+  let startTimeExtension = 'am';
+
+  if (+hour > 12) {
+    startTimeExtension = 'pm';
+    hour = +hour - 12;
+  }
+
+  const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
+
+  const formattedServedDate = formatNow(FORMATS.MMDDYY);
 
   const pdfData = await applicationContext
     .getDocumentGenerators()
@@ -43,10 +86,13 @@ exports.generateStandingPretrialOrderInteractor = async ({
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
-        footerDate,
         trialInfo: {
           ...trialSession,
-          fullStartDate,
+          formattedJudgeName,
+          formattedServedDate,
+          formattedStartDate,
+          formattedStartDateWithDayOfWeek,
+          formattedStartTime,
         },
       },
     });
