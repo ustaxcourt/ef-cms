@@ -13,16 +13,17 @@ const {
 
 const getDocumentTitle = ({ applicationContext, docketEntry }) => {
   let { documentTitle } = docketEntry;
+  const filingsAndProceedings = getFilingsAndProceedings(
+    formatDocketEntry(applicationContext, docketEntry),
+  );
+
   if (docketEntry.addToCoversheet) {
-    if (docketEntry.additionalInfo) {
-      documentTitle += ` ${docketEntry.additionalInfo}`;
-    }
-    documentTitle += ` ${getFilingsAndProceedings(
-      formatDocketEntry(applicationContext, docketEntry),
-    )}`;
-    if (docketEntry.additionalInfo2) {
-      documentTitle += ` ${docketEntry.additionalInfo2}`;
-    }
+    documentTitle = `${documentTitle} ${
+      docketEntry.additionalInfo || ''
+    } ${filingsAndProceedings} ${docketEntry.additionalInfo2 || ''}`
+      .trim()
+      .replace('   ', ' ')
+      .replace('  ', ' ');
   }
   return documentTitle;
 };
