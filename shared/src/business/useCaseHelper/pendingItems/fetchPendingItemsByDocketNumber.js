@@ -30,13 +30,16 @@ exports.fetchPendingItemsByDocketNumber = async ({
   } = new Case(caseResult, { applicationContext });
   let foundDocuments = [];
 
-  docketEntries.forEach(document => {
-    if (document.pending && (document.servedAt || document.isLegacyServed)) {
+  docketEntries.forEach(docketEntry => {
+    if (
+      docketEntry.pending &&
+      (docketEntry.servedAt || docketEntry.isLegacyServed)
+    ) {
       foundDocuments.push({
         ...omit(
           new DocketEntry(
             {
-              ...document,
+              ...docketEntry,
             },
             { applicationContext },
           ).toRawObject(),

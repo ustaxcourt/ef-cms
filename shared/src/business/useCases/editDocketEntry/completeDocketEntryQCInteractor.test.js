@@ -415,7 +415,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     const noticeOfDocketChange = result.caseDetail.docketEntries.find(
-      document => document.eventCode === 'NODC',
+      docketEntry => docketEntry.eventCode === 'NODC',
     );
 
     expect(
