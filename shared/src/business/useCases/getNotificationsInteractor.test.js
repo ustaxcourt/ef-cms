@@ -426,7 +426,7 @@ describe('getNotificationsInteractor', () => {
     });
   });
 
-  it('should fetch the qc section items without judgeName of CHIEF_JUDGE when a judgeUserId is not provided and the user role is adc', async () => {
+  it('should fetch the qc section items with judgeName of CHIEF_JUDGE when a judgeUserId is not provided and the user role is adc', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.adc,
       userId: '79f21a87-810c-4440-9189-bb6bfea413fd',

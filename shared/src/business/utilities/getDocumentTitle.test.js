@@ -31,7 +31,7 @@ describe('getDocumentTitle', () => {
       docketEntry.documentTitle,
     );
     expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
-      `${docketEntry.documentTitle} ${docketEntry.additionalInfo} `,
+      `${docketEntry.documentTitle} ${docketEntry.additionalInfo}`,
     );
   });
 
@@ -43,7 +43,7 @@ describe('getDocumentTitle', () => {
       docketEntry.documentTitle,
     );
     expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
-      `${docketEntry.documentTitle} ${docketEntry.additionalInfo}  ${docketEntry.additionalInfo2}`,
+      `${docketEntry.documentTitle} ${docketEntry.additionalInfo} ${docketEntry.additionalInfo2}`,
     );
   });
 
@@ -56,10 +56,10 @@ describe('getDocumentTitle', () => {
       docketEntry.documentTitle,
     );
     expect(getDocumentTitle({ applicationContext, docketEntry })).not.toEqual(
-      `${docketEntry.documentTitle} ${docketEntry.additionalInfo}  ${docketEntry.additionalInfo2}`,
+      `${docketEntry.documentTitle} ${docketEntry.additionalInfo} ${docketEntry.additionalInfo2}`,
     );
     expect(getDocumentTitle({ applicationContext, docketEntry })).toEqual(
-      `${docketEntry.documentTitle}  ${docketEntry.additionalInfo2}`,
+      `${docketEntry.documentTitle} ${docketEntry.additionalInfo2}`,
     );
   });
 });

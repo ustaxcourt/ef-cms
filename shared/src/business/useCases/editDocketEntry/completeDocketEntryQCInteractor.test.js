@@ -242,7 +242,7 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
-      after: 'Answer 123  abc',
+      after: 'Answer 123 abc',
       before: 'Answer',
     });
   });
@@ -268,7 +268,7 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
-      after: 'Answer ',
+      after: 'Answer',
       before: 'Answer',
     });
   });
@@ -350,7 +350,7 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
-      after: 'Answer additional info  additional info 221',
+      after: 'Answer additional info additional info 221',
       before: 'Answer',
     });
   });
@@ -378,7 +378,7 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
-      after: 'Answer additional info  additional info',
+      after: 'Answer additional info additional info',
       before: 'Answer',
     });
   });
@@ -415,7 +415,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
 
     const noticeOfDocketChange = result.caseDetail.docketEntries.find(
-      document => document.eventCode === 'NODC',
+      docketEntry => docketEntry.eventCode === 'NODC',
     );
 
     expect(
