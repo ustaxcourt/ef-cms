@@ -6,6 +6,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { irsPractitionerViewsPetitionerInfoForUnassociatedCase } from './journey/irsPractitionerViewsPetitionerInfoForUnassociatedCase';
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
@@ -118,4 +119,7 @@ describe('Practitioner requests access to case', () => {
   practitionerViewsCaseDetailWithPublicOrder(test, false);
   practitionerRequestsPendingAccessToCase(test, fakeFile);
   practitionerViewsCaseDetailOfPendingCase(test);
+
+  loginAs(test, 'irsPractitioner@example.com');
+  irsPractitionerViewsPetitionerInfoForUnassociatedCase(test);
 });
