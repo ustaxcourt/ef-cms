@@ -303,8 +303,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
-    standingPretrialNotice: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
+    standingPretrialOrderForSmallCase: jest
+      .fn()
+      .mockImplementation(getFakeFile),
     trialCalendar: jest.fn().mockImplementation(getFakeFile),
     trialSessionPlanningReport: jest.fn().mockImplementation(getFakeFile),
   };

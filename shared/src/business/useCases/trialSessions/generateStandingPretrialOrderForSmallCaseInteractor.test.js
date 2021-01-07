@@ -2,11 +2,11 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  generateStandingPretrialNoticeInteractor,
-} = require('./generateStandingPretrialNoticeInteractor');
+  generateStandingPretrialOrderForSmallCaseInteractor,
+} = require('./generateStandingPretrialOrderForSmallCaseInteractor');
 const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
 
-describe('generateStandingPretrialNoticeInteractor', () => {
+describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getUseCases()
@@ -57,7 +57,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
   });
 
   it('should fetch case and trial information and call the document generator', async () => {
-    await generateStandingPretrialNoticeInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor({
       applicationContext,
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -70,12 +70,13 @@ describe('generateStandingPretrialNoticeInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().standingPretrialNotice,
+      applicationContext.getDocumentGenerators()
+        .standingPretrialOrderForSmallCase,
     ).toHaveBeenCalled();
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
-    await generateStandingPretrialNoticeInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor({
       applicationContext,
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -83,37 +84,39 @@ describe('generateStandingPretrialNoticeInteractor', () => {
 
     const {
       data,
-    } = applicationContext.getDocumentGenerators().standingPretrialNotice.mock.calls[0][0];
+    } = applicationContext.getDocumentGenerators().standingPretrialOrderForSmallCase.mock.calls[0][0];
 
     expect(data.docketNumberWithSuffix).toEqual('234-56S');
   });
 
   it('return the respondent contact info if present', async () => {
-    await generateStandingPretrialNoticeInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor({
       applicationContext,
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
 
     expect(
-      applicationContext.getDocumentGenerators().standingPretrialNotice.mock
-        .calls[0][0].data.trialInfo.respondentContactText,
+      applicationContext.getDocumentGenerators()
+        .standingPretrialOrderForSmallCase.mock.calls[0][0].data.trialInfo
+        .respondentContactText,
     ).toEqual('not available at this time');
 
-    await generateStandingPretrialNoticeInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor({
       applicationContext,
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
 
     expect(
-      applicationContext.getDocumentGenerators().standingPretrialNotice.mock
-        .calls[1][0].data.trialInfo.respondentContactText,
+      applicationContext.getDocumentGenerators()
+        .standingPretrialOrderForSmallCase.mock.calls[1][0].data.trialInfo
+        .respondentContactText,
     ).toEqual('Test IRS Practitioner (123-123-1234)');
   });
 
   it('should format trial start info', async () => {
-    await generateStandingPretrialNoticeInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor({
       applicationContext,
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
@@ -121,7 +124,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
 
     const {
       data,
-    } = applicationContext.getDocumentGenerators().standingPretrialNotice.mock.calls[0][0];
+    } = applicationContext.getDocumentGenerators().standingPretrialOrderForSmallCase.mock.calls[0][0];
 
     expect(data.trialInfo.fullStartDate).toEqual('Monday, February 3, 2020');
     expect(data.trialInfo.startDay).toEqual('Monday');
@@ -129,7 +132,7 @@ describe('generateStandingPretrialNoticeInteractor', () => {
   });
 
   it('should add a served stamp to the document', async () => {
-    await generateStandingPretrialNoticeInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor({
       applicationContext,
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',

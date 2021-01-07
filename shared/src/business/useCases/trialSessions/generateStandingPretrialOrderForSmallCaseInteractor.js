@@ -7,7 +7,7 @@ const {
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 
 /**
- * generateStandingPretrialNoticeInteractor
+ * generateStandingPretrialOrderForSmallCaseInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -15,7 +15,7 @@ const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateStandingPretrialNoticeInteractor = async ({
+exports.generateStandingPretrialOrderForSmallCaseInteractor = async ({
   applicationContext,
   docketNumber,
   trialSessionId,
@@ -87,7 +87,7 @@ exports.generateStandingPretrialNoticeInteractor = async ({
 
   const pdfData = await applicationContext
     .getDocumentGenerators()
-    .standingPretrialNotice({
+    .standingPretrialOrderForSmallCase({
       applicationContext,
       data: {
         caseCaptionExtension,

@@ -3,24 +3,7 @@ const { DocketHeader } = require('../components/DocketHeader.jsx');
 const { PretrialMemorandum } = require('../components/PretrialMemorandum.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
-export const StandingPretrialNotice = ({ options, trialInfo }) => {
-  // options = {
-  //   caseTitle: 'this is a case',
-  //   docketNumberWithSuffix: '101-99L',
-  // };
-  // trialInfo = {
-  //   formattedJudgeName: 'Judge Cohen',
-  //   formattedServedDate: '01/01/2001',
-  //   formattedStartDate: 'January 7th, 2021',
-  //   formattedStartDateWithDayOfWeek: 'Monday, January 7th, 2021',
-  //   fullStartDate: '01/01/1991',
-  //   judge: {
-  //     name: 'Bob Sagot',
-  //   },
-  //   startTime: '10:00 am',
-  //   state: 'Florida',
-  //   trialLocation: 'Orlando, California',
-  // };
+export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
   return (
     <div className="standing-pretrial-order-small-case">
       <PrimaryHeader />
