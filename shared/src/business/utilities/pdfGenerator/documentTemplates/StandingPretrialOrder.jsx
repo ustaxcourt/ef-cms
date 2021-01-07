@@ -389,13 +389,18 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         </strong>
       </p>
 
-      <div className="signature text-center">
-        <p>
-          (Signed) {trialInfo.judge.name}
+      <div className="text-center">
+        <p style={{ float: 'left', width: '40%' }}>
+          Dated: {trialInfo.servedDate}
+        </p>
+        <p style={{ float: 'left', width: '59%' }}>
+          (Signed) {trialInfo.formattedJudgeName}
           <br />
           Trial Judge
+          <p>{trialInfo.chambersPhoneNumber}</p>
         </p>
       </div>
+
       <br />
       <div style={{ pageBreakAfter: 'always' }}></div>
 
@@ -403,16 +408,14 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         Trial Calendar: {trialInfo.trialLocation} - Remote Proceedings
         <br />
         <span style={{ marginLeft: '55px' }}>
-          Date: {trialInfo.fullStartDate}
+          Date: {trialInfo.startDateFormatted}
         </span>
       </p>
 
       <p className="text-center" style={{ marginBottom: '56px' }}>
         <strong>PRETRIAL MEMORANDUM FOR</strong> (Petitioner/Respondent)
         <br />
-        Please type or print legibly
-        <br />
-        (This form may be expanded as necessary)
+        (Please type or print legibly. This form may be expanded as necessary.)
       </p>
       <div style={{ marginBottom: '29px' }}>
         <p style={{ float: 'left', width: '60%' }}>
@@ -435,11 +438,15 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
           Petitioner: ____________________________________
           <br />
           Tel No.: ______________________________________
+          <br />
+          Email: ________________________________________
         </p>
         <p className="margin-top-0" style={{ float: 'left', width: '49%' }}>
           Respondent: ____________________________________
           <br />
           Tel No.: ________________________________________
+          <br />
+          Email: ________________________________________
         </p>
         <div className="clear"></div>
       </div>
@@ -468,10 +475,10 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         <strong className="text-underline">
           CURRENT ESTIMATE OF TRIAL TIME:
         </strong>
-        __________________________________________
+        __________________________________________hour(s)
       </p>
       <p style={{ marginBottom: '63px' }}>
-        <strong className="text-underline">MOTIONS YOUR EXPECT TO MAKE</strong>:
+        <strong className="text-underline">MOTIONS YOU EXPECT TO MAKE</strong>:
         <br />
         (Title and brief description)
       </p>
@@ -482,7 +489,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       </p>
 
       <p className="margin-top-0" style={{ marginBottom: '45px' }}>
-        <span>Completed________</span>
+        <span>Completed, will be filed electronically ________</span>
         <span style={{ marginLeft: '15px' }}>In Process________</span>
       </p>
       <p>
@@ -511,7 +518,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
           BRIEF SYNOPSIS OF LEGAL AUTHORITIES:
         </strong>
         <br />
-        (Attach separate pages, if necessary, to discuss fully your legal
+        (Attach separate pages, if necessary, to fully discuss your legal
         position)
       </p>
 
@@ -536,7 +543,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
 
         <p style={{ float: 'left', width: '70%' }}>
           <strong>
-            {trialInfo.judge.name}
+            {trialInfo.formattedJudgeName}
             <br />
             United States Tax Court
             <br />
@@ -544,7 +551,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
             <br />
             Washington, D.C. 20217
             <br />
-            (202) 521-0700
+            {trialInfo.chambersPhoneNumber}
           </strong>
         </p>
         <div className="clear"></div>
