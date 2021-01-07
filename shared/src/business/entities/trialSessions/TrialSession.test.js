@@ -1,7 +1,10 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { TRIAL_SESSION_PROCEEDING_TYPES } = require('../EntityConstants');
+const {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../EntityConstants');
 const { TrialSession } = require('./TrialSession');
 
 describe('TrialSession entity', () => {
@@ -707,7 +710,7 @@ describe('TrialSession entity', () => {
     });
 
     describe('proceedingType Remote', () => {
-      it('should be invalid when isCalendared is true, proceedingType is Remote, and required proceeding information fields are missing', () => {
+      it('should be invalid when isCalendared is true and required proceeding information fields are missing', () => {
         const trialSession = new TrialSession(
           {
             ...VALID_TRIAL_SESSION,
@@ -731,7 +734,7 @@ describe('TrialSession entity', () => {
         });
       });
 
-      it('should be valid when isCalendared is true, proceedingType is Remote, and required proceeding information fields are defined', () => {
+      it('should be valid when isCalendared is true and required proceeding information fields are defined', () => {
         const trialSession = new TrialSession(
           {
             ...VALID_TRIAL_SESSION,
@@ -741,6 +744,46 @@ describe('TrialSession entity', () => {
             meetingId: '33333',
             password: '44444',
             proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          },
+          {
+            applicationContext,
+          },
+        );
+
+        expect(trialSession.getFormattedValidationErrors()).toEqual(null);
+      });
+
+      it('should be valid when isCalendared is true, sessionType is Special and required proceeding information fields are missing', () => {
+        const trialSession = new TrialSession(
+          {
+            ...VALID_TRIAL_SESSION,
+            chambersPhoneNumber: undefined,
+            isCalendared: true,
+            joinPhoneNumber: undefined,
+            meetingId: undefined,
+            password: undefined,
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+            sessionType: SESSION_TYPES.special,
+          },
+          {
+            applicationContext,
+          },
+        );
+
+        expect(trialSession.getFormattedValidationErrors()).toEqual(null);
+      });
+
+      it('should be valid when isCalendared is true, sessionType is Motion/Hearing and required proceeding information fields are missing', () => {
+        const trialSession = new TrialSession(
+          {
+            ...VALID_TRIAL_SESSION,
+            chambersPhoneNumber: undefined,
+            isCalendared: true,
+            joinPhoneNumber: undefined,
+            meetingId: undefined,
+            password: undefined,
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+            sessionType: SESSION_TYPES.motionHearing,
           },
           {
             applicationContext,

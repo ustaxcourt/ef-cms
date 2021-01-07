@@ -142,7 +142,11 @@ TrialSession.validationRules = {
         then: joi.when('proceedingType', {
           is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
           otherwise: joi.allow('').optional(),
-          then: joi.required(),
+          then: joi.when('sessionType', {
+            is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
+            otherwise: joi.required(),
+            then: joi.allow('').optional(),
+          }),
         }),
       },
     ),
@@ -161,7 +165,11 @@ TrialSession.validationRules = {
         then: joi.when('proceedingType', {
           is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
           otherwise: joi.allow('').optional(),
-          then: joi.required(),
+          then: joi.when('sessionType', {
+            is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
+            otherwise: joi.required(),
+            then: joi.allow('').optional(),
+          }),
         }),
       },
     ),
@@ -178,7 +186,11 @@ TrialSession.validationRules = {
       then: joi.when('proceedingType', {
         is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         otherwise: joi.allow('').optional(),
-        then: joi.required(),
+        then: joi.when('sessionType', {
+          is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
+          otherwise: joi.required(),
+          then: joi.allow('').optional(),
+        }),
       }),
     }),
     notes: JoiValidationConstants.STRING.max(400).optional(),
@@ -189,7 +201,11 @@ TrialSession.validationRules = {
       then: joi.when('proceedingType', {
         is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         otherwise: joi.allow('').optional(),
-        then: joi.required(),
+        then: joi.when('sessionType', {
+          is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
+          otherwise: joi.required(),
+          then: joi.allow('').optional(),
+        }),
       }),
     }),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
@@ -197,7 +213,7 @@ TrialSession.validationRules = {
       ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
     ).required(),
     sessionType: JoiValidationConstants.STRING.valid(
-      ...SESSION_TYPES,
+      ...Object.values(SESSION_TYPES),
     ).required(),
     startDate: JoiValidationConstants.ISO_DATE.required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
