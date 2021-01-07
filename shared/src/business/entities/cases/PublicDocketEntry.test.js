@@ -19,6 +19,16 @@ describe('PublicDocketEntry', () => {
       processingStatus: 'testing',
       receivedAt: 'testing',
       servedAt: '2019-03-01T21:40:46.415Z',
+      servedParties: [
+        {
+          email: 'jdirt@example.com',
+          gsi1pk: 'shoot',
+          name: 'Joe Dirt',
+          phone: '555-555-1212',
+          pk: 'oh no',
+          sk: 'secondary',
+        },
+      ],
     });
 
     expect(entity.toRawObject()).toEqual({
