@@ -48,6 +48,54 @@ describe('formatCase', () => {
     };
   });
 
+  it('should set showPrintConfirmationLink to true for served cases without legacy docket entries', () => {
+    const docketEntries = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+        documentType: 'Petition',
+        eventCode: 'P',
+        index: 1,
+        isLegacy: false,
+        isLegacySealed: false,
+        isOnDocketRecord: true,
+        servedAt: getDateISO(),
+        workItem: {
+          completedAt: getDateISO(),
+        },
+      },
+    ];
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries,
+    });
+    expect(result.showPrintConfirmationLink).toBeTruthy();
+  });
+
+  it('should set showPrintConfirmationLink to false for served cases with legacy docket entries', () => {
+    const docketEntries = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+        documentType: 'Petition',
+        eventCode: 'P',
+        index: 1,
+        isLegacy: true,
+        isLegacySealed: false,
+        isOnDocketRecord: true,
+        servedAt: getDateISO(),
+        workItem: {
+          completedAt: getDateISO(),
+        },
+      },
+    ];
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries,
+    });
+    expect(result.showPrintConfirmationLink).toBeFalsy();
+  });
+
   it('should return an empty object if caseDetail is empty', () => {
     const mockApplicationContext = {};
     const caseDetail = {};

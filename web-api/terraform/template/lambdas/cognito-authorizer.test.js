@@ -2,20 +2,18 @@ jest.mock('jwk-to-pem', () => jest.fn());
 jest.mock('../../../../shared/src/utilities/createLogger', () => {
   return { createLogger: jest.fn() };
 });
-
 const { createLogger: actualCreateLogger } = jest.requireActual(
   '../../../../shared/src/utilities/createLogger',
 );
-const fs = require('fs');
-const { transports } = require('winston');
-
 const axios = require('axios');
+const fs = require('fs');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const {
   createLogger,
 } = require('../../../../shared/src/utilities/createLogger');
 const { handler } = require('./cognito-authorizer');
+const { transports } = require('winston');
 
 describe('cognito-authorizer', () => {
   let event, context, transport;
@@ -211,6 +209,59 @@ describe('cognito-authorizer', () => {
           Version: '2012-10-17',
         },
         principalId: 'test-sub',
+      }),
+    );
+
+    expect(transport.log).toHaveBeenCalledWith(
+      expect.objectContaining({
+        level: expect.stringContaining('info'),
+        message: expect.stringContaining('Request authorized'),
+        metadata: expect.objectContaining({ policy }),
+      }),
+      expect.any(Function),
+    );
+  });
+
+  it('returns IAM policy to allow invoking requested lambda when authorized using the payload custom:userId instead of sub', async () => {
+    axios.get.mockImplementation(() => {
+      return Promise.resolve({
+        data: { keys: [{ kid: 'key-identifier' }] },
+      });
+    });
+
+    jwkToPem.mockImplementation(key => {
+      if (key.kid !== 'key-identifier') {
+        throw new Error('wrong key was given');
+      }
+
+      return 'test-pem';
+    });
+
+    jwk.verify.mockImplementation((token, pem, options, callback) => {
+      if (token !== 'tokenValue' || pem !== 'test-pem') {
+        throw new Error('wrong token or pem was passed to verification');
+      }
+
+      expect(options.issuer).toBeDefined();
+      callback(null, { 'custom:userId': 'test-custom:userId' });
+    });
+
+    const policy = await handler(event, context);
+
+    expect(policy).toStrictEqual(
+      expect.objectContaining({
+        policyDocument: {
+          Statement: [
+            {
+              Action: 'execute-api:Invoke',
+              Effect: 'Allow',
+              Resource:
+                'arn:aws:execute-api:us-east-1:aws-account-id:api-gateway-id/stage/*',
+            },
+          ],
+          Version: '2012-10-17',
+        },
+        principalId: 'test-custom:userId',
       }),
     );
 

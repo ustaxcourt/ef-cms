@@ -43,7 +43,7 @@ exports.opinionPublicSearchInteractor = async ({
       documentEventCodes: OPINION_EVENT_CODES,
       judgeType: 'judge',
     })
-  ).slice(0, MAX_SEARCH_RESULTS);
+  ).results.slice(0, MAX_SEARCH_RESULTS);
 
   return PublicDocumentSearchResult.validateRawCollection(results, {
     applicationContext,
