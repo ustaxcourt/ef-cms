@@ -24,7 +24,6 @@ import { faFilePdf as faFilePdfRegular } from '@fortawesome/free-regular-svg-ico
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
-import { StandingPretrialNotice } from '../../shared/src/business/utilities/pdfGenerator/documentTemplates/StandingPretrialNotice';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -263,8 +262,7 @@ const app = {
     ReactDOM.render(
       <Container app={cerebralApp}>
         <IdleActivityMonitor />
-        <StandingPretrialNotice />
-        {/* <AppComponent /> */}
+        <AppComponent />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
       document.querySelector('#app'),
