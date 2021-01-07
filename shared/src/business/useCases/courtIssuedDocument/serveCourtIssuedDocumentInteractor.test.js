@@ -291,8 +291,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      document =>
-        document.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      docketEntry =>
+        docketEntry.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
@@ -318,7 +318,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      document => document.docketEntryId === mockDocketEntryId,
+      docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
 
     expect(updatedDocument.numberOfPages).toBe(1);
@@ -342,7 +342,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      document => document.docketEntryId === mockDocketEntryId,
+      docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
@@ -452,11 +452,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  docketEntriesWithCaseClosingEventCodes.forEach(document => {
-    it(`should set the case status to closed for event code: ${document.eventCode}`, async () => {
+  docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
+    it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await serveCourtIssuedDocumentInteractor({
         applicationContext,
-        docketEntryId: document.docketEntryId,
+        docketEntryId: docketEntry.docketEntryId,
         docketNumber: '101-20',
       });
 

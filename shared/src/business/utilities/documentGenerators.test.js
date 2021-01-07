@@ -434,7 +434,6 @@ describe('documentGenerators', () => {
           caseTitle:
             'Test Petitioner, Another Petitioner, and Yet Another Petitioner',
           docketNumberWithSuffix: '123-45S',
-          footerDate: '02/02/20',
           trialInfo: {
             address1: '123 Some St.',
             address2: '3rd Floor',
@@ -475,7 +474,6 @@ describe('documentGenerators', () => {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Test Petitioner',
           docketNumberWithSuffix: '123-45S',
-          footerDate: '02/02/20',
           trialInfo: {
             city: 'Some City',
             fullStartDate: 'Friday May 8, 2020',
