@@ -16,17 +16,14 @@ describe('StandingPretrialOrderForSmallCase', () => {
     };
 
     trialInfo = {
-      address1: '123 Some St.',
-      city: 'Some City',
-      courthouseName: 'Hall of Justice',
-      fullStartDate: 'Friday May 8, 2020',
-      judge: {
-        name: 'Test Judge',
-      },
-      postalCode: '12345',
+      chambersPhoneNumber: '123456',
+      formattedJudgeName: 'Judge What',
+      formattedServedDate: 'June 20, 2020',
+      formattedStartDate: 'May 8, 2020',
+      formattedStartDateWithDayOfWeek: 'Friday May 8, 2020',
+      formattedStartTime: '10:00 am',
       startDay: 'Friday',
-      startTime: '10:00am',
-      state: 'AL',
+      trialLocation: 'Boise, Idaho',
     };
   });
 
@@ -47,7 +44,7 @@ describe('StandingPretrialOrderForSmallCase', () => {
     );
   });
 
-  it('renders the trial start date and time', () => {
+  it('renders the trial location and formatted trial start date and time', () => {
     const wrapper = shallow(
       <StandingPretrialOrderForSmallCase
         options={options}
@@ -55,52 +52,16 @@ describe('StandingPretrialOrderForSmallCase', () => {
       />,
     );
 
-    const trialInformation = wrapper.find('#trial-information');
+    const trialInformation = wrapper.find('.dashed-box');
 
-    expect(trialInformation.text()).toContain(trialInfo.address1);
-    expect(trialInformation.text()).toContain(trialInfo.city);
-    expect(trialInformation.text()).toContain(trialInfo.state);
-    expect(trialInformation.text()).toContain(trialInfo.postalCode);
-  });
-
-  it('renders the trial location information', () => {
-    const wrapper = shallow(
-      <StandingPretrialOrderForSmallCase
-        options={options}
-        trialInfo={trialInfo}
-      />,
+    expect(trialInformation.text()).toContain(trialInfo.trialLocation);
+    expect(trialInformation.text()).toContain(trialInfo.formattedStartTime);
+    expect(trialInformation.text()).toContain(
+      trialInfo.formattedStartDateWithDayOfWeek,
     );
-
-    const trialInformation = wrapper.find('#trial-information');
-    const optionalAddress = wrapper.find('.address-optional');
-
-    expect(trialInformation.text()).toContain(trialInfo.courthouseName);
-    expect(trialInformation.text()).toContain(trialInfo.address1);
-    expect(trialInformation.text()).toContain(trialInfo.city);
-    expect(trialInformation.text()).toContain(trialInfo.state);
-    expect(trialInformation.text()).toContain(trialInfo.postalCode);
-    expect(optionalAddress.length).toEqual(0);
   });
 
-  it('renders optional trial location information if present', () => {
-    const wrapper = shallow(
-      <StandingPretrialOrderForSmallCase
-        options={options}
-        trialInfo={{
-          ...trialInfo,
-          address2: 'Address Two',
-          address3: 'Address Three',
-        }}
-      />,
-    );
-
-    const trialLocation = wrapper.find('#trial-location');
-
-    expect(trialLocation.text()).toContain('Address Two');
-    expect(trialLocation.text()).toContain('Address Three');
-  });
-
-  it('renders the trial judge signature', () => {
+  it('renders the formatted trial judge signature', () => {
     const wrapper = shallow(
       <StandingPretrialOrderForSmallCase
         options={options}
@@ -110,6 +71,9 @@ describe('StandingPretrialOrderForSmallCase', () => {
 
     const signature = wrapper.find('.signature');
 
-    expect(signature.text()).toContain(`(Signed) ${trialInfo.judge.name}`);
+    expect(signature.text()).toContain(trialInfo.formattedServedDate);
+    expect(signature.text()).toContain(
+      `(Signed) ${trialInfo.formattedJudgeName}`,
+    );
   });
 });

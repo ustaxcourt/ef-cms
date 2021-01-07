@@ -17,7 +17,10 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
       <p className="dashed-box">
         This case is set for trial at the {trialInfo.trialLocation} trial
         session beginning at
-        <br /> <span className="text-bold">{trialInfo.startTime}</span> on{' '}
+        <br /> <span className="text-bold">
+          {trialInfo.formattedStartTime}
+        </span>{' '}
+        on{' '}
         <span className="text-bold">
           {trialInfo.formattedStartDateWithDayOfWeek}.<span></span>
         </span>{' '}
@@ -198,7 +201,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
         </li>
       </ol>
 
-      <div className="flex">
+      <div className="flex signature">
         <div className="flex-grow-1">
           Dated: {trialInfo.formattedServedDate}
         </div>
