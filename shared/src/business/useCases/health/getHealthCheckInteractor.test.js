@@ -26,6 +26,7 @@ describe('getHealthCheckInteractor', () => {
             getTableStatus: () => 'ACTIVE',
           };
         },
+        getScannerResourceUri: () => '',
         getStorageClient: () => {
           return {
             listObjectsV2: () => ({
@@ -96,6 +97,7 @@ describe('getHealthCheckInteractor', () => {
             },
           };
         },
+        getScannerResourceUri: () => '',
         getStorageClient: () => {
           return {
             listObjectsV2: () => ({

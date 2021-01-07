@@ -83,3 +83,7 @@ variable "alert_sns_topic_arn" {
 variable "bounced_email_recipient" {
   type = string
 }
+
+variable "scanner_resource_uri" {
+  type = string
+}
