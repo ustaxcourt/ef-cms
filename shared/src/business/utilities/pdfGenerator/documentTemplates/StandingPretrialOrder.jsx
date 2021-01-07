@@ -13,7 +13,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         h3="Standing Pretrial Order"
       />
 
-      <div className="text-center card">
+      <div className="text-center card" id="trial-information-card">
         <p>
           This case is set for trial at the {trialInfo.trialLocation} trial
           session beginning at
@@ -396,7 +396,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         </strong>
       </p>
 
-      <div>
+      <div className="signature">
         <p style={{ float: 'left', width: '40%' }}>
           Dated: {trialInfo.formattedServedDate}
         </p>
@@ -568,7 +568,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         <div className="clear"></div>
       </div>
 
-      <div>
+      <div className="final-page-footer">
         <p style={{ float: 'left', width: '15%' }}>Trial Judge:</p>
 
         <p style={{ float: 'left', width: '70%' }}>
