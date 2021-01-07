@@ -1,21 +1,5 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
-
-const {
-  migrateItems: migration0007,
-} = require('./migrations/0007-unblock-migrated-calendared-cases');
-const {
-  migrateItems: migration0008,
-} = require('./migrations/0008-associated-judge-on-deadlines');
-const {
-  migrateItems: migration0009,
-} = require('./migrations/0009-remove-blocked-cases-from-eligible-for-trial-record');
-const {
-  migrateItems: migration0010,
-} = require('./migrations/0010-remove-trial-date-if-no-trial-session-id');
-const {
-  migrateItems: migration0011,
-} = require('./migrations/0011-judge-title-docket-entry-title');
 const {
   migrateItems: migration0012,
 } = require('./migrations/0012-remove-incorrect-counsel');
@@ -41,21 +25,9 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
+// eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  // migration 10 is at the top because it is fixing invalid case data; if one of the other migrations
-  // that also validates the case runs before it, the data would be invalid because this migration had
-  // not been run yet
-  applicationContext.logger.info('about to run migration 0010');
-  items = await migration0010(items, documentClient);
-  applicationContext.logger.info('about to run migration 0007');
-  items = await migration0007(items, documentClient);
-  applicationContext.logger.info('about to run migration 0008');
-  items = await migration0008(items, documentClient);
-  applicationContext.logger.info('about to run migration 0009');
-  items = await migration0009(items, documentClient);
-  applicationContext.logger.info('about to run migration 0011');
-  items = await migration0011(items, documentClient);
-  applicationContext.logger.info('about to run migration 0012');
+  applicationContext.logger.info('about to run migration 012');
   items = await migration0012(items, documentClient);
   applicationContext.logger.info('about to run migration 0013');
   items = await migration0013(items, documentClient);
