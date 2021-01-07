@@ -225,6 +225,47 @@ describe('PublicCase', () => {
     });
   });
 
+  it('should not show practitioner and other filer information if user has IRS Practitioner role and the case is sealed', () => {
+    applicationContext.getCurrentUser.mockReturnValueOnce({
+      role: ROLES.irsPractitioner,
+    });
+
+    const rawCase = {
+      caseCaption: 'testing',
+      docketEntries: [],
+      docketNumber: 'testing',
+      docketNumberSuffix: 'testing',
+      irsPractitioners: [
+        {
+          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      isSealed: true,
+      otherFilers: [
+        {
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      otherPetitioners: [
+        {
+          contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      privatePractitioners: [
+        {
+          userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      receivedAt: 'testing',
+    };
+    const entity = new PublicCase(rawCase, { applicationContext });
+
+    expect(entity.irsPractitioners).toBeUndefined();
+    expect(entity.otherFilers).toBeUndefined();
+    expect(entity.privatePractitioners).toBeUndefined();
+  });
+
   it('should only have expected fields if docketEntries is null', () => {
     const entity = new PublicCase(
       {
