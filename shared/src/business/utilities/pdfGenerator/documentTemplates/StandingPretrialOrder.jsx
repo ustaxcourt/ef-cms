@@ -16,7 +16,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       <div className="text-center card">
         <p>
           This case is set for trial at the {trialInfo.trialLocation} trial
-          session beginning at {trialInfo.startTime} on{' '}
+          session beginning at {trialInfo.formattedStartTime} on{' '}
           {trialInfo.fullStartDate}.
         </p>
         <p>
@@ -55,7 +55,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
 
       <p>
         <span className="text-underline text-bold">
-          Electronic Filing (eFiling)
+          Electronic Filing (eFiling).
         </span>{' '}
         The Court encourages registration for DAWSON so that you can
         electronically file and view documents in your case. To register for
