@@ -802,13 +802,13 @@ const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
 
 const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
 
-const SESSION_TYPES = [
-  'Regular',
-  'Small',
-  'Hybrid',
-  'Special',
-  'Motion/Hearing',
-];
+const SESSION_TYPES = {
+  regular: 'Regular',
+  small: 'Small',
+  hybrid: 'Hybrid',
+  special: 'Special',
+  motionHearing: 'Motion/Hearing',
+};
 
 const SESSION_STATUS_GROUPS = {
   all: 'All',

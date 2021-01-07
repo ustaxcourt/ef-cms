@@ -155,8 +155,31 @@
                     - "Remote"
                 then: 
                   type: "any"
-                  flags: 
-                    presence: "required"
+                  whens: 
+                    - 
+                      ref: 
+                        path: 
+                          - "sessionType"
+                      is: 
+                        type: "any"
+                        flags: 
+                          only: true
+                          presence: "required"
+                        allow: 
+                          - 
+                            override: true
+                          - "Special"
+                          - "Motion/Hearing"
+                      then: 
+                        type: "any"
+                        flags: 
+                          presence: "optional"
+                        allow: 
+                          - ""
+                      otherwise: 
+                        type: "any"
+                        flags: 
+                          presence: "required"
                 otherwise: 
                   type: "any"
                   flags: 
@@ -212,8 +235,31 @@
                     - "Remote"
                 then: 
                   type: "any"
-                  flags: 
-                    presence: "required"
+                  whens: 
+                    - 
+                      ref: 
+                        path: 
+                          - "sessionType"
+                      is: 
+                        type: "any"
+                        flags: 
+                          only: true
+                          presence: "required"
+                        allow: 
+                          - 
+                            override: true
+                          - "Special"
+                          - "Motion/Hearing"
+                      then: 
+                        type: "any"
+                        flags: 
+                          presence: "optional"
+                        allow: 
+                          - ""
+                      otherwise: 
+                        type: "any"
+                        flags: 
+                          presence: "required"
                 otherwise: 
                   type: "any"
                   flags: 
@@ -313,8 +359,31 @@
                     - "Remote"
                 then: 
                   type: "any"
-                  flags: 
-                    presence: "required"
+                  whens: 
+                    - 
+                      ref: 
+                        path: 
+                          - "sessionType"
+                      is: 
+                        type: "any"
+                        flags: 
+                          only: true
+                          presence: "required"
+                        allow: 
+                          - 
+                            override: true
+                          - "Special"
+                          - "Motion/Hearing"
+                      then: 
+                        type: "any"
+                        flags: 
+                          presence: "optional"
+                        allow: 
+                          - ""
+                      otherwise: 
+                        type: "any"
+                        flags: 
+                          presence: "required"
                 otherwise: 
                   type: "any"
                   flags: 
@@ -390,8 +459,31 @@
                     - "Remote"
                 then: 
                   type: "any"
-                  flags: 
-                    presence: "required"
+                  whens: 
+                    - 
+                      ref: 
+                        path: 
+                          - "sessionType"
+                      is: 
+                        type: "any"
+                        flags: 
+                          only: true
+                          presence: "required"
+                        allow: 
+                          - 
+                            override: true
+                          - "Special"
+                          - "Motion/Hearing"
+                      then: 
+                        type: "any"
+                        flags: 
+                          presence: "optional"
+                        allow: 
+                          - ""
+                      otherwise: 
+                        type: "any"
+                        flags: 
+                          presence: "required"
                 otherwise: 
                   type: "any"
                   flags: 
