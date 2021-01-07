@@ -1,8 +1,10 @@
 const React = require('react');
+const {
+  StandingPretrialOrderForSmallCase,
+} = require('./StandingPretrialOrderForSmallCase.jsx');
 const { mount, shallow } = require('enzyme');
-const { StandingPretrialNotice } = require('./StandingPretrialNotice.jsx');
 
-describe('StandingPretrialNotice', () => {
+describe('StandingPretrialOrderForSmallCase', () => {
   let options;
   let trialInfo;
 
@@ -30,7 +32,10 @@ describe('StandingPretrialNotice', () => {
 
   it('renders a document header with case information', () => {
     const wrapper = mount(
-      <StandingPretrialNotice options={options} trialInfo={trialInfo} />,
+      <StandingPretrialOrderForSmallCase
+        options={options}
+        trialInfo={trialInfo}
+      />,
     );
 
     expect(wrapper.find('#caption-title').text()).toEqual(options.caseTitle);
@@ -44,7 +49,10 @@ describe('StandingPretrialNotice', () => {
 
   it('renders the trial start date and time', () => {
     const wrapper = shallow(
-      <StandingPretrialNotice options={options} trialInfo={trialInfo} />,
+      <StandingPretrialOrderForSmallCase
+        options={options}
+        trialInfo={trialInfo}
+      />,
     );
 
     const trialInformation = wrapper.find('#trial-information');
@@ -57,7 +65,10 @@ describe('StandingPretrialNotice', () => {
 
   it('renders the trial location information', () => {
     const wrapper = shallow(
-      <StandingPretrialNotice options={options} trialInfo={trialInfo} />,
+      <StandingPretrialOrderForSmallCase
+        options={options}
+        trialInfo={trialInfo}
+      />,
     );
 
     const trialInformation = wrapper.find('#trial-information');
@@ -73,7 +84,7 @@ describe('StandingPretrialNotice', () => {
 
   it('renders optional trial location information if present', () => {
     const wrapper = shallow(
-      <StandingPretrialNotice
+      <StandingPretrialOrderForSmallCase
         options={options}
         trialInfo={{
           ...trialInfo,
@@ -91,7 +102,10 @@ describe('StandingPretrialNotice', () => {
 
   it('renders the trial judge signature', () => {
     const wrapper = shallow(
-      <StandingPretrialNotice options={options} trialInfo={trialInfo} />,
+      <StandingPretrialOrderForSmallCase
+        options={options}
+        trialInfo={trialInfo}
+      />,
     );
 
     const signature = wrapper.find('.signature');
