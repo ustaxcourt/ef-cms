@@ -456,7 +456,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await serveCourtIssuedDocumentInteractor({
         applicationContext,
-        docketEntryId: document.docketEntryId,
+        docketEntryId: docketEntry.docketEntryId,
         docketNumber: '101-20',
       });
 
