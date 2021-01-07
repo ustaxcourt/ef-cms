@@ -20,6 +20,32 @@ h2 {
   text-align: center;
 }
 
+.bu {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.check-list {
+  list-style-type: none;
+
+  li {
+    position: relative;
+    margin-bottom: 10px;
+  }
+
+  input {
+    position: absolute;
+    left: -20px;
+    margin-right: 10px;
+  }
+}
+
+.dashed-box {
+  padding: 10px;
+  border: 1px solid #999;
+  text-align: center;
+}
+
 .padding-top-1 {
   padding-top: 12px;
 }
@@ -333,6 +359,44 @@ th {
 
 .text-center {
   text-align: center;
+}
+
+.standing-pretrial-order-small-case {
+  line-height: 22px;
+
+  p {
+    line-height: 22px;
+  }
+
+  ol {
+    li {
+      padding-bottom: 20px;
+    }
+  }
+}
+
+.mr-1 {
+  margin-right: 10px;
+}
+
+.mb-8 {
+  margin-bottom: 80px;
+}
+
+.mr-2 {
+  margin-right: 20px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-grow-2 {
+  flex-grow: 2;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
 }
 
 .text-right {
