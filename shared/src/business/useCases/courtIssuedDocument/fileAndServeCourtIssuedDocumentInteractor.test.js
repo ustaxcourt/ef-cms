@@ -549,7 +549,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'Order',
           documentType: 'Order',
-          eventCode: document.eventCode,
+          eventCode: docketEntry.eventCode,
           serviceStamp: 'Served',
         },
       });
