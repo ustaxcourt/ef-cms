@@ -16,6 +16,9 @@ const {
 const {
   migrateItems: migration0011,
 } = require('./migrations/0011-judge-title-docket-entry-title');
+const {
+  migrateItems: migration0012,
+} = require('./migrations/0012-remove-incorrect-counsel');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -49,6 +52,8 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0009(items, documentClient);
   applicationContext.logger.info('about to run migration 011');
   items = await migration0011(items, documentClient);
+  applicationContext.logger.info('about to run migration 012');
+  items = await migration0012(items, documentClient);
 
   return items;
 };

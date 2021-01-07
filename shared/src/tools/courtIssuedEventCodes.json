@@ -352,7 +352,7 @@
     "documentTitle": "[Anything]",
     "scenario": "Type A",
     "isNotice": true,
-    "requiresSignature": true
+    "requiresSignature": false
   },
   {
     "eventCode": "SOP",
