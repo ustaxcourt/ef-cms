@@ -16,8 +16,15 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       <div className="text-center card">
         <p>
           This case is set for trial at the {trialInfo.trialLocation} trial
-          session beginning at {trialInfo.formattedStartTime} on{' '}
-          {trialInfo.formattedStartDateWithDayOfWeek}.
+          session beginning at
+          <br />
+          <span className="text-bold">
+            {trialInfo.formattedStartTime}
+          </span> on{' '}
+          <span className="text-bold">
+            {trialInfo.formattedStartDateWithDayOfWeek}
+          </span>
+          .
         </p>
         <p>
           <span className="text-bold">
@@ -394,7 +401,9 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
           Dated: {trialInfo.formattedServedDate}
         </p>
         <p style={{ float: 'right', textAlign: 'right', width: '59%' }}>
-          (Signed) {trialInfo.formattedJudgeName}
+          <span className="text-bold">
+            (Signed) {trialInfo.formattedJudgeName}
+          </span>
           <br />
           {trialInfo.chambersPhoneNumber}
         </p>
@@ -435,7 +444,9 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         >
           Petitioner: ____________________________________
           <br />
+          <br />
           Tel No.: ______________________________________
+          <br />
           <br />
           Email: _______________________________________
         </p>
@@ -445,7 +456,9 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         >
           Respondent: __________________________________
           <br />
+          <br />
           Tel No.: ______________________________________
+          <br />
           <br />
           Email: _______________________________________
         </p>
@@ -544,8 +557,8 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       </p>
 
       <div style={{ marginBottom: '61px' }}>
-        <p className="text-normal" style={{ float: 'left', width: '40%' }}>
-          Date: _________________________
+        <p style={{ float: 'left', width: '40%' }}>
+          <span className="text-bold">Date:</span> _________________________
         </p>
         <p style={{ float: 'left', width: '59%' }}>
           ________________________________________
