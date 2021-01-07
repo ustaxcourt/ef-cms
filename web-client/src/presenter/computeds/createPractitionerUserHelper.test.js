@@ -52,4 +52,26 @@ describe('createPractitionerUserHelper', () => {
     expect(result.canEditEmail).toBeTruthy();
     expect(result.canEditAdmissionStatus).toBeFalsy();
   });
+
+  it('returns emailFormatted defaulted to Not provided if one is not present', () => {
+    const result = runCompute(createPractitionerUserHelper, {
+      state: {
+        form: {
+          email: null,
+        },
+      },
+    });
+    expect(result.emailFormatted).toEqual('Not provided');
+  });
+
+  it('returns emailFormatted as the email if one is present on the form', () => {
+    const result = runCompute(createPractitionerUserHelper, {
+      state: {
+        form: {
+          email: 'abc@example.com',
+        },
+      },
+    });
+    expect(result.emailFormatted).toEqual('abc@example.com');
+  });
 });

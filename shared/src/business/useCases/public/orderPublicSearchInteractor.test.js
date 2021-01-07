@@ -13,24 +13,26 @@ describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue([
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-          docketNumber: '103-19',
-          documentTitle: 'Order for More Candy',
-          eventCode: 'ODD',
-          signedJudgeName: 'Guy Fieri',
-        },
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-          docketNumber: '103-19',
-          documentTitle: 'Order for KitKats',
-          eventCode: 'ODD',
-          signedJudgeName: 'Guy Fieri',
-        },
-      ]);
+      .advancedDocumentSearch.mockResolvedValue({
+        results: [
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '103-19',
+            documentTitle: 'Order for More Candy',
+            eventCode: 'ODD',
+            signedJudgeName: 'Guy Fieri',
+          },
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '103-19',
+            documentTitle: 'Order for KitKats',
+            eventCode: 'ODD',
+            signedJudgeName: 'Guy Fieri',
+          },
+        ],
+      });
   });
 
   it('should only search for order document types', async () => {
@@ -79,7 +81,7 @@ describe('orderPublicSearchInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue(maxPlusOneResults);
+      .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
     const results = await orderPublicSearchInteractor({
       applicationContext,
@@ -93,17 +95,19 @@ describe('orderPublicSearchInteractor', () => {
   it('throws an error if the search results do not validate', async () => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue([
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-          docketNumber: '103-19',
-          documentTitle: 'Order for KitKats',
-          eventCode: 'ODD',
-          numberOfPages: 'green',
-          signedJudgeName: 'Guy Fieri',
-        },
-      ]);
+      .advancedDocumentSearch.mockResolvedValue({
+        results: [
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '103-19',
+            documentTitle: 'Order for KitKats',
+            eventCode: 'ODD',
+            numberOfPages: 'green',
+            signedJudgeName: 'Guy Fieri',
+          },
+        ],
+      });
     await expect(
       orderPublicSearchInteractor({
         applicationContext,

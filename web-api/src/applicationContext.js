@@ -297,9 +297,6 @@ const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
-  filterQcItemsByAssociatedJudge,
-} = require('../../shared/src/business/utilities/filterQcItemsByAssociatedJudge');
-const {
   filterWorkItemsForUser,
 } = require('../../shared/src/business/utilities/filterWorkItemsForUser');
 const {
@@ -577,6 +574,9 @@ const {
 const {
   getTodaysOpinionsInteractor,
 } = require('../../shared/src/business/useCases/public/getTodaysOpinionsInteractor');
+const {
+  getTodaysOrdersInteractor,
+} = require('../../shared/src/business/useCases/public/getTodaysOrdersInteractor');
 const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
@@ -1591,6 +1591,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,
         getTodaysOpinionsInteractor,
+        getTodaysOrdersInteractor,
         getTrialSessionDetailsInteractor,
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
@@ -1669,7 +1670,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         compareISODateStrings,
         compareStrings,
         createISODateString,
-        filterQcItemsByAssociatedJudge,
         filterWorkItemsForUser,
         formatCaseForTrialSession,
         formatDateString,

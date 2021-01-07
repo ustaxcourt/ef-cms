@@ -1,13 +1,31 @@
 const {
+  aggregateCommonQueryParams,
+  removeAdvancedSyntaxSymbols,
+} = require('./aggregateCommonQueryParams');
+const {
   CASE_SEARCH_MIN_YEAR,
   COUNTRY_TYPES,
   US_STATES,
 } = require('../entities/EntityConstants');
-const { aggregateCommonQueryParams } = require('./aggregateCommonQueryParams');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { formatNow } = require('./DateHandler');
 
 describe('aggregateCommonQueryParams', () => {
+  describe('removeAdvancedSyntaxSymbols', () => {
+    it('removes symbols used for advanced syntax searches', () => {
+      const unsanitized = ' "({[+allow  :-no?special.=>!symbols*<]})" ';
+      expect(removeAdvancedSyntaxSymbols(unsanitized)).toEqual(
+        'allow no special symbols',
+      );
+    });
+    it('preserves single-quotes in search terms', () => {
+      const unchangedString = "d'Angelo's pizzeria";
+      expect(removeAdvancedSyntaxSymbols(unchangedString)).toEqual(
+        unchangedString,
+      );
+    });
+  });
+
   it('should return an object containing aggregated query param arrays', () => {
     const result = aggregateCommonQueryParams({}, {});
 
