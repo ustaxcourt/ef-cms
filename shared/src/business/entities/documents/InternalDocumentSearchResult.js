@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { ORDER_JUDGE_FIELD } = require('../EntityConstants');
 const { pick } = require('lodash');
 
 InternalDocumentSearchResult.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
@@ -35,7 +36,7 @@ InternalDocumentSearchResult.prototype.init = function init(rawProps = {}) {
     'judge',
     'numberOfPages',
     'sealedDate',
-    'signedJudgeName',
+    ORDER_JUDGE_FIELD,
   ];
   Object.assign(this, pick(rawProps, propNames));
 };

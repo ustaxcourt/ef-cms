@@ -1,5 +1,4 @@
 const DateHandler = require('../utilities/DateHandler');
-const getAddressPhoneDiff = require('../utilities/generateChangeOfAddressTemplate');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
 const {
@@ -49,9 +48,6 @@ const {
   documentUrlTranslator,
 } = require('../../../src/business/utilities/documentUrlTranslator');
 const {
-  filterQcItemsByAssociatedJudge,
-} = require('../utilities/filterQcItemsByAssociatedJudge');
-const {
   filterWorkItemsForUser,
 } = require('../../../src/business/utilities/filterWorkItemsForUser');
 const {
@@ -71,6 +67,9 @@ const {
 const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
+const {
+  getAddressPhoneDiff,
+} = require('../utilities/generateChangeOfAddressTemplate');
 const {
   getCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
@@ -221,9 +220,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    filterQcItemsByAssociatedJudge: jest
-      .fn()
-      .mockImplementation(filterQcItemsByAssociatedJudge),
     filterWorkItemsForUser: jest
       .fn()
       .mockImplementation(filterWorkItemsForUser),
@@ -447,7 +443,14 @@ const createTestApplicationContext = ({ user } = {}) => {
       return mockGetChromiumBrowserReturnValue;
     }),
     getClerkOfCourtNameForSigning: jest.fn(),
-    getCognito: appContextProxy(),
+    getCognito: appContextProxy({
+      adminCreateUser: jest.fn().mockReturnValue({
+        promise: jest.fn(),
+      }),
+      adminUpdateUserAttributes: jest.fn().mockReturnValue({
+        promise: jest.fn(),
+      }),
+    }),
     getCognitoClientId: jest.fn(),
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),

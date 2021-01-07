@@ -14,10 +14,10 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
+const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -241,26 +241,14 @@ exports.updatePetitionerInformationInteractor = async ({
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
-  const primaryEditableFields = pick(contactPrimary, [
-    'address1',
-    'address2',
-    'address3',
-    'city',
-    'country',
-    'countryType',
-    'inCareOf',
-    'name',
-    'phone',
-    'postalCode',
-    'secondaryName',
-    'serviceIndicator',
-    'state',
-    'title',
-  ]);
-
-  let secondaryEditableFields;
-  if (contactSecondary) {
-    secondaryEditableFields = pick(contactSecondary, [
+  const primaryEditableFields = pick(
+    defaults(contactPrimary, {
+      address2: undefined,
+      address3: undefined,
+      secondaryName: undefined,
+      title: undefined,
+    }),
+    [
       'address1',
       'address2',
       'address3',
@@ -271,9 +259,32 @@ exports.updatePetitionerInformationInteractor = async ({
       'name',
       'phone',
       'postalCode',
+      'secondaryName',
       'serviceIndicator',
       'state',
-    ]);
+      'title',
+    ],
+  );
+
+  let secondaryEditableFields;
+  if (contactSecondary) {
+    secondaryEditableFields = pick(
+      defaults(contactSecondary, { address2: undefined, address3: undefined }),
+      [
+        'address1',
+        'address2',
+        'address3',
+        'city',
+        'country',
+        'countryType',
+        'inCareOf',
+        'name',
+        'phone',
+        'postalCode',
+        'serviceIndicator',
+        'state',
+      ],
+    );
   }
 
   const oldCase = await applicationContext

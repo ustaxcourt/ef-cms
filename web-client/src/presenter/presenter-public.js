@@ -6,6 +6,7 @@ import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabCh
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
+import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
@@ -13,6 +14,8 @@ import { gotoPublicCaseDetailSequence } from './sequences/public/gotoPublicCaseD
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/public/gotoTodaysOpinionsSequence';
+import { gotoTodaysOrdersSequence } from './sequences/public/gotoTodaysOrdersSequence';
+import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
@@ -50,6 +53,7 @@ export const presenter = {
     cerebralBindSimpleSetStateSequence,
     clearAdvancedSearchFormSequence,
     clearPdfPreviewUrlSequence,
+    dismissModalSequence,
     gotoContactSequence,
     gotoHealthCheckSequence,
     gotoPrivacySequence,
@@ -57,6 +61,8 @@ export const presenter = {
     gotoPublicPrintableDocketRecordSequence,
     gotoPublicSearchSequence,
     gotoTodaysOpinionsSequence,
+    gotoTodaysOrdersSequence,
+    loadMoreTodaysOrdersSequence,
     navigateBackSequence,
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,

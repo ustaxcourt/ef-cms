@@ -59,6 +59,7 @@ export const FilingsAndProceedings = connect(
                 showDocketRecordDetailModalSequence({
                   docketRecordIndex: arrayIndex,
                   showModal: 'DocketRecordOverlay',
+                  useSameTab: true,
                 });
               }}
             >
