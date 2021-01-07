@@ -40,7 +40,7 @@ describe('PublicDocketEntry', () => {
   });
 
   it('forbids validation of public docket entries which are sealed', () => {
-    const document = new PublicDocketEntry({
+    const publicDocketEntry = new PublicDocketEntry({
       documentType: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
       filedBy: 'testing',
@@ -49,7 +49,7 @@ describe('PublicDocketEntry', () => {
       servedAt: '2019-03-01T21:40:46.415Z',
     });
 
-    expect(document.getValidationErrors()).toMatchObject({
+    expect(publicDocketEntry.getValidationErrors()).toMatchObject({
       isSealed: expect.anything(),
     });
   });
