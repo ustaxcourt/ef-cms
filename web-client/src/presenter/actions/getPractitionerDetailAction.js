@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -15,7 +16,7 @@ export const getPractitionerDetailAction = async ({
   props,
 }) => {
   const { barNumber } = props;
-  const currentPractitionerDetail = get(state.practitionerDetail);
+  const currentPractitionerDetail = cloneDeep(get(state.practitionerDetail));
 
   if (
     currentPractitionerDetail &&

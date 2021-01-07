@@ -7,6 +7,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('addCourtIssuedDocketEntryHelper', () => {
   const {
     SYSTEM_GENERATED_DOCUMENT_TYPES,
+    UNSERVABLE_EVENT_CODES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
@@ -21,7 +22,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     ],
     EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
     SYSTEM_GENERATED_DOCUMENT_TYPES,
-    UNSERVABLE_EVENT_CODES: ['RUHROH'],
+    UNSERVABLE_EVENT_CODES: UNSERVABLE_EVENT_CODES,
     USER_ROLES: {
       petitionsClerk: USER_ROLES.petitionsClerk,
     },
@@ -194,7 +195,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
         },
         docketEntryId: '123',
         form: {
-          eventCode: 'RUHROH',
+          eventCode: UNSERVABLE_EVENT_CODES[0],
         },
       },
     });
@@ -248,5 +249,19 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     });
 
     expect(result.showDocumentTypeDropdown).toBeTruthy();
+  });
+
+  it('should set showReceivedDate to true when the document is unservable', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        docketEntryId: '123',
+        form: {
+          eventCode: UNSERVABLE_EVENT_CODES[0],
+        },
+      },
+    });
+
+    expect(result.showReceivedDate).toBeTruthy();
   });
 });

@@ -57,7 +57,7 @@ exports.opinionAdvancedSearchInteractor = async ({
       judgeType: 'judge',
       ...rawSearch,
     })
-  ).slice(0, MAX_SEARCH_RESULTS);
+  ).results.slice(0, MAX_SEARCH_RESULTS);
 
   return InternalDocumentSearchResult.validateRawCollection(results, {
     applicationContext,

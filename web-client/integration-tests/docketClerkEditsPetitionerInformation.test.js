@@ -70,13 +70,38 @@ describe('docket clerk edits the petitioner information', () => {
 
     await test.runSequence('updatePetitionerInformationFormSequence');
 
+    expect(test.getState('validationErrors')).toEqual({
+      contactPrimary: {
+        address1: 'Enter mailing address',
+      },
+      contactSecondary: null,
+    });
+
     await test.runSequence('gotoEditPetitionerInformationSequence', {
       docketNumber: caseDetail.docketNumber,
     });
 
+    expect(test.getState('form.contactPrimary.address2')).toEqual(
+      'Cum aut velit volupt',
+    );
+
+    expect(test.getState('form.contactPrimary.address3')).toEqual(
+      'Et sunt veritatis ei',
+    );
+
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
       value: '123 Some Street',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.address2',
+      value: '',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.address3',
+      value: '',
     });
   });
 
@@ -88,6 +113,9 @@ describe('docket clerk edits the petitioner information', () => {
     expect(test.getState('caseDetail.contactPrimary.address1')).toEqual(
       '123 Some Street',
     );
+
+    expect(test.getState('caseDetail.contactPrimary.address2')).toBeUndefined();
+    expect(test.getState('caseDetail.contactPrimary.address3')).toBeUndefined();
 
     const noticeDocument = test
       .getState('caseDetail.docketEntries')
