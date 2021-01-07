@@ -17,7 +17,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         <p>
           This case is set for trial at the {trialInfo.trialLocation} trial
           session beginning at {trialInfo.formattedStartTime} on{' '}
-          {trialInfo.fullStartDate}.
+          {trialInfo.formattedStartDateWithDayOfWeek}.
         </p>
         <p>
           <span className="text-bold">
@@ -32,8 +32,8 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       <p className="text-bold">
         The attached Notice Setting Case for Trial notifies the parties that
         this case is calendared for trial at the remote trial session beginning
-        on {trialInfo.fullStartDate}. This Order sets out the Court’s standing
-        procedures for the remote trial session.
+        on {trialInfo.formattedStartDateWithDayOfWeek}. This Order sets out the
+        Court’s standing procedures for the remote trial session.
       </p>
       <p>
         <span className="text-underline text-bold">About the Court.</span> The
@@ -391,24 +391,25 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
 
       <div className="text-center">
         <p style={{ float: 'left', width: '40%' }}>
-          Dated: {trialInfo.servedDate}
+          Dated: {trialInfo.formattedServedDate}
         </p>
         <p style={{ float: 'left', width: '59%' }}>
           (Signed) {trialInfo.formattedJudgeName}
           <br />
           Trial Judge
-          <p>{trialInfo.chambersPhoneNumber}</p>
+          <br />
+          {trialInfo.chambersPhoneNumber}
         </p>
       </div>
 
       <br />
       <div style={{ pageBreakAfter: 'always' }}></div>
 
-      <p style={{ marginBottom: '74px', marginLeft: '393px' }}>
+      <p style={{ marginBottom: '74px', marginLeft: '363px' }}>
         Trial Calendar: {trialInfo.trialLocation} - Remote Proceedings
         <br />
         <span style={{ marginLeft: '55px' }}>
-          Date: {trialInfo.startDateFormatted}
+          Date: {trialInfo.formattedStartDate}
         </span>
       </p>
 
