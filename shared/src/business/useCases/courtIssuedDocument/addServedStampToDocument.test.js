@@ -11,6 +11,7 @@ const { PDFDocument } = require('pdf-lib');
 describe('addServedStampToDocument', () => {
   let drawTextMock;
   let saveMock;
+  let getTrimBoxMock;
 
   beforeAll(() => {
     getPageDimensions.mockReturnValue([0, 0]);
@@ -19,6 +20,7 @@ describe('addServedStampToDocument', () => {
   beforeEach(() => {
     drawTextMock = jest.fn();
     saveMock = jest.fn();
+    getTrimBoxMock = jest.fn();
 
     PDFDocument.load.mockReturnValue(
       Promise.resolve({
@@ -32,6 +34,7 @@ describe('addServedStampToDocument', () => {
             drawText: drawTextMock,
           },
         ]),
+        getTrimBox: getTrimBoxMock,
         save: saveMock,
       }),
     );
