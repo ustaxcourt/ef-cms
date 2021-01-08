@@ -32,6 +32,14 @@
     "requiresSignature": true
   },
   {
+    "eventCode": "SPTN",
+    "documentType": "Standing Pretrial Notice",
+    "documentTitle": "Standing Pretrial Notice",
+    "scenario": "Type A",
+    "isOrder": false,
+    "requiresSignature": false
+  },
+  {
     "eventCode": "OAL",
     "documentType": "Order that the letter \"L\" is added to Docket number",
     "documentTitle": "Order that the letter \"L\" is added to Docket number [Anything]",
