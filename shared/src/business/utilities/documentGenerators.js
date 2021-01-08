@@ -1,6 +1,7 @@
 const {
   reactTemplateGenerator,
 } = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
+const { combineTwoPdfs } = require('./combineTwoPdfs');
 const { COUNTRY_TYPES } = require('../entities/EntityConstants');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
@@ -488,8 +489,6 @@ const standingPretrialOrderForSmallCase = async ({
     trialInfo,
   } = data;
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
-
   const reactStandingPretrialOrderForSmallCaseTemplate = reactTemplateGenerator(
     {
       componentName: 'StandingPretrialOrderForSmallCase',
@@ -558,28 +557,11 @@ const standingPretrialOrderForSmallCase = async ({
       overwriteHeader: false,
     });
 
-  //TODO extract
-  const fullDocument = await PDFDocument.create();
-  const pagesWithHeader = await PDFDocument.load(pdfWithHeader);
-  const pagesWithoutHeader = await PDFDocument.load(pdfWithoutHeader);
-
-  let copiedPages = await fullDocument.copyPages(
-    pagesWithHeader,
-    pagesWithHeader.getPageIndices(),
-  );
-  copiedPages.forEach(page => {
-    fullDocument.addPage(page);
+  return await combineTwoPdfs({
+    applicationContext,
+    firstPdf: pdfWithHeader,
+    secondPdf: pdfWithoutHeader,
   });
-
-  copiedPages = await fullDocument.copyPages(
-    pagesWithoutHeader,
-    pagesWithoutHeader.getPageIndices(),
-  );
-  copiedPages.forEach(page => {
-    fullDocument.addPage(page);
-  });
-
-  return fullDocument.save();
 };
 
 const standingPretrialOrder = async ({ applicationContext, data }) => {
