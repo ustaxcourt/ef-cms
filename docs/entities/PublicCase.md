@@ -720,7 +720,6 @@
                 - "SPML"
                 - "SPMT"
                 - "SPOS"
-                - "SPTN"
                 - "SPTO"
                 - "SRMB"
                 - "SSB"
