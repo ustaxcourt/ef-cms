@@ -1,5 +1,6 @@
 const React = require('react');
 const { DocketHeader } = require('../components/DocketHeader.jsx');
+const { PretrialMemorandum } = require('../components/PretrialMemorandum.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 export const StandingPretrialOrder = ({ options, trialInfo }) => {
@@ -13,11 +14,18 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         h3="Standing Pretrial Order"
       />
 
-      <div className="text-center card">
+      <div className="text-center card" id="trial-information-card">
         <p>
           This case is set for trial at the {trialInfo.trialLocation} trial
-          session beginning at {trialInfo.formattedStartTime} on{' '}
-          {trialInfo.formattedStartDateWithDayOfWeek}.
+          session beginning at
+          <br />
+          <span className="text-bold">
+            {trialInfo.formattedStartTime}
+          </span> on{' '}
+          <span className="text-bold">
+            {trialInfo.formattedStartDateWithDayOfWeek}
+          </span>
+          .
         </p>
         <p>
           <span className="text-bold">
@@ -389,12 +397,14 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         </strong>
       </p>
 
-      <div>
+      <div className="signature">
         <p style={{ float: 'left', width: '40%' }}>
           Dated: {trialInfo.formattedServedDate}
         </p>
         <p style={{ float: 'right', textAlign: 'right', width: '59%' }}>
-          (Signed) {trialInfo.formattedJudgeName}
+          <span className="text-bold">
+            (Signed) {trialInfo.formattedJudgeName}
+          </span>
           <br />
           {trialInfo.chambersPhoneNumber}
         </p>
@@ -403,156 +413,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
       <br />
       <div style={{ pageBreakAfter: 'always' }}></div>
 
-      <p style={{ marginBottom: '74px', textAlign: 'right' }}>
-        Trial Calendar: {trialInfo.trialLocation} - Remote Proceedings
-        <br />
-        <span>Date: {trialInfo.formattedStartDate}</span>
-      </p>
-
-      <p className="text-center" style={{ marginBottom: '56px' }}>
-        <strong>PRETRIAL MEMORANDUM FOR</strong> (Petitioner/Respondent)
-        <br />
-        (Please type or print legibly. This form may be expanded as necessary.)
-      </p>
-      <div style={{ marginBottom: '29px' }}>
-        <p style={{ float: 'left', width: '60%' }}>
-          <strong className="text-underline">NAME OF CASE</strong>:
-        </p>
-        <p style={{ float: 'left', width: '39%' }}>
-          <strong className="text-underline">DOCKET NO(S).</strong>:
-        </p>
-        <div className="clear"></div>
-      </div>
-
-      <p style={{ marginBottom: '2px' }}>
-        <strong className="text-underline">ATTORNEYS</strong>:
-      </p>
-      <div style={{ marginBottom: '33px' }}>
-        <p
-          className="margin-top-0"
-          style={{ float: 'left', marginRight: '1%', width: '49%' }}
-        >
-          Petitioner: ____________________________________
-          <br />
-          Tel No.: ______________________________________
-          <br />
-          Email: ________________________________________
-        </p>
-        <p className="margin-top-0" style={{ float: 'left', width: '49%' }}>
-          Respondent: ____________________________________
-          <br />
-          Tel No.: ________________________________________
-          <br />
-          Email: ________________________________________
-        </p>
-        <div className="clear"></div>
-      </div>
-
-      <p style={{ marginBottom: '2px' }}>
-        <strong className="text-underline">AMOUNTS IN DISPUTE</strong>:
-      </p>
-      <p className="margin-top-0" style={{ marginBottom: '52px' }}>
-        <strong className="text-underline">Year(s)/Period(s)</strong>
-        <strong className="text-underline" style={{ marginLeft: '95px' }}>
-          Deficiencies/Liabilities
-        </strong>
-        <strong className="text-underline" style={{ marginLeft: '95px' }}>
-          Additions/Penalties
-        </strong>
-      </p>
-      <p>
-        <strong className="text-underline">STATUS OF CASE</strong>:
-      </p>
-      <p style={{ marginBottom: '40px' }}>
-        <span>Probable Settlement________</span>
-        <span style={{ marginLeft: '30px' }}>Probable Trial________</span>
-        <span style={{ marginLeft: '30px' }}>Definite Trial________</span>
-      </p>
-      <p style={{ marginBottom: '30px' }}>
-        <strong className="text-underline">
-          CURRENT ESTIMATE OF TRIAL TIME:
-        </strong>
-        __________________________________________hour(s)
-      </p>
-      <p style={{ marginBottom: '63px' }}>
-        <strong className="text-underline">MOTIONS YOU EXPECT TO MAKE</strong>:
-        <br />
-        (Title and brief description)
-      </p>
-      <p style={{ marginBottom: '2px' }}>
-        <strong className="text-underline">
-          STATUS OF STIPULATION OF FACTS:
-        </strong>
-      </p>
-
-      <p className="margin-top-0" style={{ marginBottom: '45px' }}>
-        <span>Completed, will be filed electronically ________</span>
-        <span style={{ marginLeft: '15px' }}>In Process________</span>
-      </p>
-      <p>
-        <strong className="text-underline">ISSUES</strong>:
-      </p>
-
-      <br />
-      <div style={{ pageBreakAfter: 'always' }}></div>
-
-      <p style={{ marginBottom: '88px' }}>
-        <strong className="text-underline">
-          WITNESS(ES) YOU EXPECT TO CALL:
-        </strong>
-        <br />
-        (Name and brief summary of expected testimony)
-      </p>
-      <p style={{ marginBottom: '97px' }}>
-        <strong className="text-underline">SUMMARY OF FACTS</strong>:
-        <br />
-        (Attach separate pages, if necessary, to inform the Court of facts in
-        chronological narrative form)
-      </p>
-
-      <p style={{ marginBottom: '91px' }}>
-        <strong className="text-underline">
-          BRIEF SYNOPSIS OF LEGAL AUTHORITIES:
-        </strong>
-        <br />
-        (Attach separate pages, if necessary, to fully discuss your legal
-        position)
-      </p>
-
-      <p style={{ marginBottom: '91px' }}>
-        <strong className="text-underline">EVIDENTIARY PROBLEMS</strong>:
-      </p>
-
-      <div style={{ marginBottom: '61px' }}>
-        <p style={{ float: 'left', width: '40%' }}>
-          Date: _________________________
-        </p>
-        <p style={{ float: 'left', width: '59%' }}>
-          ________________________________________
-          <br />
-          Petitioner/ Respondent
-        </p>
-        <div className="clear"></div>
-      </div>
-
-      <div>
-        <p style={{ float: 'left', width: '15%' }}>Trial Judge:</p>
-
-        <p style={{ float: 'left', width: '70%' }}>
-          <strong>
-            {trialInfo.formattedJudgeName}
-            <br />
-            United States Tax Court
-            <br />
-            400 Second Street, N.W.
-            <br />
-            Washington, D.C. 20217
-            <br />
-            {trialInfo.chambersPhoneNumber}
-          </strong>
-        </p>
-        <div className="clear"></div>
-      </div>
+      <PretrialMemorandum trialInfo={trialInfo} />
     </>
   );
 };

@@ -40,7 +40,6 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.processingStatus = rawDocketEntry.processingStatus;
   this.receivedAt = rawDocketEntry.receivedAt;
   this.servedAt = rawDocketEntry.servedAt;
-  this.servedParties = rawDocketEntry.servedParties;
 };
 
 PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
@@ -74,14 +73,6 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   processingStatus: JoiValidationConstants.STRING.optional(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
   servedAt: JoiValidationConstants.ISO_DATE.optional(),
-  servedParties: joi
-    .array()
-    .items({
-      name: JoiValidationConstants.STRING.optional().description(
-        'The name of a party from a contact, or "IRS"',
-      ),
-    })
-    .optional(),
 });
 
 joiValidationDecorator(

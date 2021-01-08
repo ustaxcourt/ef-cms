@@ -25,7 +25,8 @@ const findStandingPretrialDocument = caseRecord => {
   return caseRecord.docketEntries.find(
     document =>
       document.documentType ===
-        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice.documentType ||
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+          .documentType ||
       document.documentType ===
         SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.documentType,
   );
@@ -132,7 +133,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .generateNoticeOfTrialIssuedInteractor.mockReturnValue(fakeData);
     applicationContext
       .getUseCases()
-      .generateStandingPretrialNoticeInteractor.mockReturnValue(fakeData);
+      .generateStandingPretrialOrderForSmallCaseInteractor.mockReturnValue(
+        fakeData,
+      );
     applicationContext
       .getUseCases()
       .generateStandingPretrialOrderInteractor.mockReturnValue(fakeData);
@@ -441,7 +444,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateStandingPretrialNoticeInteractor,
+      applicationContext.getUseCases()
+        .generateStandingPretrialOrderForSmallCaseInteractor,
     ).toHaveBeenCalled();
   });
 
