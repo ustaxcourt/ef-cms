@@ -353,11 +353,11 @@ const MINUTE_ENTRIES_MAP = {
   },
 };
 
-const sptoDocument = COURT_ISSUED_EVENT_CODES.find(
+const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPTO',
 );
-const sptnDocument = COURT_ISSUED_EVENT_CODES.find(
-  doc => doc.eventCode === 'SPTN',
+const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
+  doc => doc.eventCode === 'SPOS',
 );
 
 const EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP = {
@@ -405,14 +405,14 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'NTD',
   },
   standingPretrialOrderForSmallCase: {
-    documentTitle: sptnDocument.documentTitle,
-    documentType: sptnDocument.documentType,
-    eventCode: sptnDocument.eventCode,
+    documentTitle: SPOS_DOCUMENT.documentTitle,
+    documentType: SPOS_DOCUMENT.documentType,
+    eventCode: SPOS_DOCUMENT.eventCode,
   },
   standingPretrialOrder: {
-    documentTitle: sptoDocument.documentTitle,
-    documentType: sptoDocument.documentType,
-    eventCode: sptoDocument.eventCode,
+    documentTitle: SPTO_DOCUMENT.documentTitle,
+    documentType: SPTO_DOCUMENT.documentType,
+    eventCode: SPTO_DOCUMENT.eventCode,
   },
 };
 
