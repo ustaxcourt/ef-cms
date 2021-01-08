@@ -5,6 +5,7 @@ const {
   FORMATS,
 } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
 /**
  * generateStandingPretrialOrderForSmallCaseInteractor
@@ -46,23 +47,10 @@ exports.generateStandingPretrialOrderForSmallCaseInteractor = async ({
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-  // fetch judges
-  const judges = await applicationContext
-    .getPersistenceGateway()
-    .getUsersInSection({
-      applicationContext,
-      section: 'judge',
-    });
-
-  // find associated judge
-  const foundJudge = judges.find(
-    _judge => _judge.name === trialSession.judge.name,
-  );
-
-  if (!foundJudge) {
-    throw new Error(`Judge ${trialSession.judge.name} was not found`);
-  }
-  const formattedJudgeName = `${foundJudge.judgeTitle} ${foundJudge.name}`;
+  const formattedJudgeName = await getJudgeWithTitle({
+    applicationContext,
+    judgeUserName: trialSession.judge.name,
+  });
 
   const formattedStartDate = formatDateString(
     trialSession.startDate,
