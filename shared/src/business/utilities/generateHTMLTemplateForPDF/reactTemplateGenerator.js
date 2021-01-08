@@ -45,6 +45,9 @@ const {
   PendingReport,
 } = require('../pdfGenerator/documentTemplates/PendingReport.jsx');
 const {
+  PretrialMemorandum,
+} = require('../pdfGenerator/components/PretrialMemorandum.jsx');
+const {
   ReceiptOfFiling,
 } = require('../pdfGenerator/documentTemplates/ReceiptOfFiling.jsx');
 const {
@@ -92,6 +95,7 @@ const components = {
   PageMetaHeaderDocket,
   PendingReport,
   PetitionService,
+  PretrialMemorandum,
   ReceiptOfFiling,
   ReportsMetaHeader,
   StandingPretrialOrder,

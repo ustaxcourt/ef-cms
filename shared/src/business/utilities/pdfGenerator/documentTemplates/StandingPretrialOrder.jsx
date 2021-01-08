@@ -1,6 +1,5 @@
 const React = require('react');
 const { DocketHeader } = require('../components/DocketHeader.jsx');
-const { PretrialMemorandum } = require('../components/PretrialMemorandum.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 export const StandingPretrialOrder = ({ options, trialInfo }) => {
@@ -397,7 +396,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         </strong>
       </p>
 
-      <div className="signature">
+      <div className="judge-signature">
         <p style={{ float: 'left', width: '40%' }}>
           Dated: {trialInfo.formattedServedDate}
         </p>
@@ -412,8 +411,6 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
 
       <br />
       <div style={{ pageBreakAfter: 'always' }}></div>
-
-      <PretrialMemorandum trialInfo={trialInfo} />
     </>
   );
 };
