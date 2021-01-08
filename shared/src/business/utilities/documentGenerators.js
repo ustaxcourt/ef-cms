@@ -504,7 +504,7 @@ const standingPretrialOrderForSmallCase = async ({
     },
   );
 
-  const pdfContentHtml = await generateHTMLTemplateForPDF({
+  const pdfContentHtmlWithHeader = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactStandingPretrialOrderForSmallCaseTemplate,
     options: {
@@ -520,63 +520,62 @@ const standingPretrialOrderForSmallCase = async ({
     },
   });
 
-  const pdf = await applicationContext
+  const pdfWithHeader = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
       applicationContext,
-      contentHtml: pdfContentHtml,
+      contentHtml: pdfContentHtmlWithHeader,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,
       overwriteHeader: true,
     });
 
-  const reactStandingPretrialOrderForSmallCaseTemplatePart2 = reactTemplateGenerator(
-    {
-      componentName: 'GettingReadyForTrialChecklist',
-      data: {
-        options: {
-          caseCaptionExtension,
-          caseTitle,
-          docketNumberWithSuffix,
-        },
-        trialInfo,
+  const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
+    componentName: 'GettingReadyForTrialChecklist',
+    data: {
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
       },
+      trialInfo,
     },
-  );
-
-  const pdfContentHtml2 = await generateHTMLTemplateForPDF({
-    applicationContext,
-    content: reactStandingPretrialOrderForSmallCaseTemplatePart2,
   });
 
-  const pdf2 = await applicationContext
+  const pdfContentHtmlWithoutHeader = await generateHTMLTemplateForPDF({
+    applicationContext,
+    content: reactGettingReadyForTrialChecklistTemplate,
+  });
+
+  const pdfWithoutHeader = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
       applicationContext,
-      contentHtml: pdfContentHtml2,
+      contentHtml: pdfContentHtmlWithoutHeader,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
       overwriteHeader: false,
     });
 
+  //TODO extract
   const fullDocument = await PDFDocument.create();
-  const pagesWithoutHeader = await PDFDocument.load(pdf2);
-  const standingPretrialOrderForSmallCasePdf = await PDFDocument.load(pdf);
+  const pagesWithHeader = await PDFDocument.load(pdfWithHeader);
+  const pagesWithoutHeader = await PDFDocument.load(pdfWithoutHeader);
 
   let copiedPages = await fullDocument.copyPages(
-    standingPretrialOrderForSmallCasePdf,
-    standingPretrialOrderForSmallCasePdf.getPageIndices(),
+    pagesWithHeader,
+    pagesWithHeader.getPageIndices(),
   );
   copiedPages.forEach(page => {
     fullDocument.addPage(page);
   });
 
-  let copiedPages2 = await fullDocument.copyPages(
+  copiedPages = await fullDocument.copyPages(
     pagesWithoutHeader,
     pagesWithoutHeader.getPageIndices(),
   );
-  copiedPages2.forEach(page => {
+  copiedPages.forEach(page => {
     fullDocument.addPage(page);
   });
 
