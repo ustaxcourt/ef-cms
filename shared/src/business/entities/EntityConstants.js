@@ -404,7 +404,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Trial',
     eventCode: 'NTD',
   },
-  standingPretrialNotice: {
+  standingPretrialOrderForSmallCase: {
     documentTitle: sptnDocument.documentTitle,
     documentType: sptnDocument.documentType,
     eventCode: sptnDocument.eventCode,

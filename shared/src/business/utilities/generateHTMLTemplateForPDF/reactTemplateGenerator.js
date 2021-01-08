@@ -48,11 +48,11 @@ const {
   ReportsMetaHeader,
 } = require('../pdfGenerator/components/ReportsMetaHeader.jsx');
 const {
-  StandingPretrialNotice,
-} = require('../pdfGenerator/documentTemplates/StandingPretrialNotice.jsx');
-const {
   StandingPretrialOrder,
 } = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx');
+const {
+  StandingPretrialOrderForSmallCase,
+} = require('../pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase.jsx');
 const {
   TrialCalendar,
 } = require('../pdfGenerator/documentTemplates/TrialCalendar.jsx');
@@ -90,8 +90,8 @@ const components = {
   PetitionService,
   ReceiptOfFiling,
   ReportsMetaHeader,
-  StandingPretrialNotice,
   StandingPretrialOrder,
+  StandingPretrialOrderForSmallCase,
   TrialCalendar,
   TrialSessionPlanningReport,
 };
