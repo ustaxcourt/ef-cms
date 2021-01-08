@@ -25,7 +25,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
         <div className="clear"></div>
       </div>
 
-      <p style={{ marginBottom: '2px' }}>
+      <p style={{ marginBottom: '20px' }}>
         <span className="text-bold text-underline">ATTORNEYS</span>:
       </p>
       <div style={{ marginBottom: '33px' }}>
@@ -33,13 +33,13 @@ export const PretrialMemorandum = ({ trialInfo }) => {
           className="margin-top-0"
           style={{ float: 'left', marginRight: '1%', width: '49%' }}
         >
-          Petitioner: ____________________________________
+          Petitioner: ___________________________________
           <br />
           <br />
-          Tel No.: ______________________________________
+          Tel No.: _____________________________________
           <br />
           <br />
-          Email: _______________________________________
+          Email: ______________________________________
         </p>
         <p
           className="margin-top-0"
@@ -48,15 +48,15 @@ export const PretrialMemorandum = ({ trialInfo }) => {
           Respondent: __________________________________
           <br />
           <br />
-          Tel No.: ______________________________________
+          Tel No.: _____________________________________
           <br />
           <br />
-          Email: _______________________________________
+          Email: ______________________________________
         </p>
         <div className="clear"></div>
       </div>
 
-      <p style={{ marginBottom: '2px' }}>
+      <p style={{ marginBottom: '20px' }}>
         <strong className="text-underline">AMOUNTS IN DISPUTE</strong>:
       </p>
       <p className="margin-top-0" style={{ marginBottom: '52px' }}>
