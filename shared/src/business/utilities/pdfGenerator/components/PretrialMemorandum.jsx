@@ -33,13 +33,13 @@ export const PretrialMemorandum = ({ trialInfo }) => {
           className="margin-top-0"
           style={{ float: 'left', marginRight: '1%', width: '49%' }}
         >
-          Petitioner: ____________________________________
+          Petitioner: ___________________________________
           <br />
           <br />
-          Tel No.: ______________________________________
+          Tel No.: _____________________________________
           <br />
           <br />
-          Email: _______________________________________
+          Email: ______________________________________
         </p>
         <p
           className="margin-top-0"
@@ -48,10 +48,10 @@ export const PretrialMemorandum = ({ trialInfo }) => {
           Respondent: __________________________________
           <br />
           <br />
-          Tel No.: ______________________________________
+          Tel No.: _____________________________________
           <br />
           <br />
-          Email: _______________________________________
+          Email: ______________________________________
         </p>
         <div className="clear"></div>
       </div>
