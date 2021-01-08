@@ -25,7 +25,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
         <div className="clear"></div>
       </div>
 
-      <p style={{ marginBottom: '2px' }}>
+      <p style={{ marginBottom: '20px' }}>
         <span className="text-bold text-underline">ATTORNEYS</span>:
       </p>
       <div style={{ marginBottom: '33px' }}>
@@ -56,7 +56,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
         <div className="clear"></div>
       </div>
 
-      <p style={{ marginBottom: '2px' }}>
+      <p style={{ marginBottom: '20px' }}>
         <strong className="text-underline">AMOUNTS IN DISPUTE</strong>:
       </p>
       <p className="margin-top-0" style={{ marginBottom: '52px' }}>
