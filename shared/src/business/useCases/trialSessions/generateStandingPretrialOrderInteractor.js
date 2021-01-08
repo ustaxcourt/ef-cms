@@ -1,9 +1,11 @@
 const {
+  createISODateString,
   formatDateString,
   formatNow,
   FORMATS,
 } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
 /**
  * generateStandingPretrialOrderInteractor
@@ -46,35 +48,16 @@ exports.generateStandingPretrialOrderInteractor = async ({
     FORMATS.MONTH_DAY_YEAR,
   );
 
-  // fetch judges
-  const judges = await applicationContext
-    .getPersistenceGateway()
-    .getUsersInSection({
-      applicationContext,
-      section: 'judge',
-    });
+  const formattedJudgeName = await getJudgeWithTitle({
+    applicationContext,
+    judgeUserName: trialSession.judge.name,
+  });
 
-  // find associated judge
-  const foundJudge = judges.find(
-    _judge => _judge.name === trialSession.judge.name,
+  const trialStartTimeIso = createISODateString(
+    trialSession.startTime,
+    'HH:mm',
   );
-
-  if (!foundJudge) {
-    throw new Error(`Judge ${trialSession.judge.name} was not found`);
-  }
-
-  const formattedJudgeName = `${foundJudge.judgeTitle} ${foundJudge.name}`;
-
-  // TODO - extract into utility function as part of DOD for 7443
-  let [hour, min] = trialSession.startTime.split(':');
-  let startTimeExtension = 'am';
-
-  if (+hour > 12) {
-    startTimeExtension = 'pm';
-    hour = +hour - 12;
-  }
-
-  const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
+  const formattedStartTime = formatDateString(trialStartTimeIso, 'hh:mm A');
 
   const formattedServedDate = formatNow(FORMATS.MMDDYY);
 
