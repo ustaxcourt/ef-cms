@@ -58,7 +58,7 @@ describe('StandingPretrialOrder', () => {
       <StandingPretrialOrder options={options} trialInfo={trialInfo} />,
     );
 
-    const signature = wrapper.find('.signature');
+    const signature = wrapper.find('.judge-signature');
 
     expect(signature.text()).toContain(trialInfo.formattedServedDate);
     expect(signature.text()).toContain(
