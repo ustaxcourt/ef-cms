@@ -80,5 +80,8 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
     documentTitle:
       SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
         .documentTitle,
+    eventCode:
+      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+        .eventCode,
   });
 });
