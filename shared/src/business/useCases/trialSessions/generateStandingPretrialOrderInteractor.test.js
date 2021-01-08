@@ -78,7 +78,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
         formattedServedDate: expect.anything(),
         formattedStartDate: 'August 25, 2019',
         formattedStartDateWithDayOfWeek: 'Sunday, August 25, 2019',
-        formattedStartTime: '10:00 am',
+        formattedStartTime: '10:00 AM',
         joinPhoneNumber: '3333',
         meetingId: '1111',
         password: '2222',

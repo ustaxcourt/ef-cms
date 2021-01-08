@@ -1,4 +1,8 @@
-const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
+const {
+  createISODateString,
+  formatDateString,
+  FORMATS,
+} = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
@@ -38,16 +42,11 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
   );
 
-  // TODO - extract into utility function as part of DOD for 7443
-  let [hour, min] = trialSession.startTime.split(':');
-  let startTimeExtension = 'am';
-
-  if (+hour > 12) {
-    startTimeExtension = 'pm';
-    hour = +hour - 12;
-  }
-
-  const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
+  const trialStartTimeIso = createISODateString(
+    trialSession.startTime,
+    'HH:mm',
+  );
+  const formattedStartTime = formatDateString(trialStartTimeIso, 'hh:mm A');
 
   const judgeWithTitle = await getJudgeWithTitle({
     applicationContext,

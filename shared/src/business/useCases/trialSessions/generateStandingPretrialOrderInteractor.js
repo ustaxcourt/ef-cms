@@ -1,4 +1,5 @@
 const {
+  createISODateString,
   formatDateString,
   formatNow,
   FORMATS,
@@ -52,16 +53,11 @@ exports.generateStandingPretrialOrderInteractor = async ({
     judgeUserName: trialSession.judge.name,
   });
 
-  // TODO - extract into utility function as part of DOD for 7443
-  let [hour, min] = trialSession.startTime.split(':');
-  let startTimeExtension = 'am';
-
-  if (+hour > 12) {
-    startTimeExtension = 'pm';
-    hour = +hour - 12;
-  }
-
-  const formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
+  const trialStartTimeIso = createISODateString(
+    trialSession.startTime,
+    'HH:mm',
+  );
+  const formattedStartTime = formatDateString(trialStartTimeIso, 'hh:mm A');
 
   const formattedServedDate = formatNow(FORMATS.MMDDYY);
 
