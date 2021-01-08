@@ -54,6 +54,9 @@ const {
   StandingPretrialOrderForSmallCase,
 } = require('../pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase.jsx');
 const {
+  StandingPretrialOrderForSmallCasePart2,
+} = require('../pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCasePart2.jsx');
+const {
   TrialCalendar,
 } = require('../pdfGenerator/documentTemplates/TrialCalendar.jsx');
 const {
@@ -92,6 +95,7 @@ const components = {
   ReportsMetaHeader,
   StandingPretrialOrder,
   StandingPretrialOrderForSmallCase,
+  StandingPretrialOrderForSmallCasePart2,
   TrialCalendar,
   TrialSessionPlanningReport,
 };

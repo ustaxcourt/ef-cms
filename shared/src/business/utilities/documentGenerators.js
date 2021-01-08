@@ -488,6 +488,8 @@ const standingPretrialOrderForSmallCase = async ({
     trialInfo,
   } = data;
 
+  const { PDFDocument } = await applicationContext.getPdfLib();
+
   const reactStandingPretrialOrderForSmallCaseTemplate = reactTemplateGenerator(
     {
       componentName: 'StandingPretrialOrderForSmallCase',
@@ -529,7 +531,56 @@ const standingPretrialOrderForSmallCase = async ({
       overwriteHeader: true,
     });
 
-  return pdf;
+  const reactStandingPretrialOrderForSmallCaseTemplatePart2 = reactTemplateGenerator(
+    {
+      componentName: 'StandingPretrialOrderForSmallCasePart2',
+      data: {
+        options: {
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+        },
+        trialInfo,
+      },
+    },
+  );
+
+  const pdfContentHtml2 = await generateHTMLTemplateForPDF({
+    applicationContext,
+    content: reactStandingPretrialOrderForSmallCaseTemplatePart2,
+  });
+
+  const pdf2 = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml2,
+      displayHeaderFooter: false,
+      docketNumber: docketNumberWithSuffix,
+      overwriteHeader: false,
+    });
+
+  const fullDocument = await PDFDocument.create();
+  const pagesWithoutHeader = await PDFDocument.load(pdf2);
+  const standingPretrialOrderForSmallCasePdf = await PDFDocument.load(pdf);
+
+  let copiedPages = await fullDocument.copyPages(
+    standingPretrialOrderForSmallCasePdf,
+    standingPretrialOrderForSmallCasePdf.getPageIndices(),
+  );
+  copiedPages.forEach(page => {
+    fullDocument.addPage(page);
+  });
+
+  let copiedPages2 = await fullDocument.copyPages(
+    pagesWithoutHeader,
+    pagesWithoutHeader.getPageIndices(),
+  );
+  copiedPages2.forEach(page => {
+    fullDocument.addPage(page);
+  });
+
+  return fullDocument.save();
 };
 
 const standingPretrialOrder = async ({ applicationContext, data }) => {
