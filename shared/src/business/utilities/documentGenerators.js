@@ -533,7 +533,7 @@ const standingPretrialOrderForSmallCase = async ({
 
   const reactStandingPretrialOrderForSmallCaseTemplatePart2 = reactTemplateGenerator(
     {
-      componentName: 'StandingPretrialOrderForSmallCasePart2',
+      componentName: 'GettingReadyForTrialChecklist',
       data: {
         options: {
           caseCaptionExtension,

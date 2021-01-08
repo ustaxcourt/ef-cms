@@ -2,7 +2,7 @@ const React = require('react');
 const { PretrialMemorandum } = require('../components/PretrialMemorandum.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
-export const StandingPretrialOrderForSmallCasePart2 = ({ trialInfo }) => {
+export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
   return (
     <div className="standing-pretrial-order-small-case">
       <PrimaryHeader />
