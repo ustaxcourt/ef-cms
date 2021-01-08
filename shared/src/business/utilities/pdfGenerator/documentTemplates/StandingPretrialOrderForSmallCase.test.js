@@ -1,8 +1,10 @@
 const React = require('react');
+const {
+  StandingPretrialOrderForSmallCase,
+} = require('./StandingPretrialOrderForSmallCase.jsx');
 const { mount, shallow } = require('enzyme');
-const { StandingPretrialOrder } = require('./StandingPretrialOrder.jsx');
 
-describe('StandingPretrialOrder', () => {
+describe('StandingPretrialOrderForSmallCase', () => {
   let options;
   let trialInfo;
 
@@ -27,7 +29,10 @@ describe('StandingPretrialOrder', () => {
 
   it('renders a document header with case information', () => {
     const wrapper = mount(
-      <StandingPretrialOrder options={options} trialInfo={trialInfo} />,
+      <StandingPretrialOrderForSmallCase
+        options={options}
+        trialInfo={trialInfo}
+      />,
     );
 
     expect(wrapper.find('#caption-title').text()).toEqual(options.caseTitle);
@@ -41,10 +46,13 @@ describe('StandingPretrialOrder', () => {
 
   it('renders the trial location and formatted trial start date and time', () => {
     const wrapper = shallow(
-      <StandingPretrialOrder options={options} trialInfo={trialInfo} />,
+      <StandingPretrialOrderForSmallCase
+        options={options}
+        trialInfo={trialInfo}
+      />,
     );
 
-    const trialInformation = wrapper.find('#trial-information-card');
+    const trialInformation = wrapper.find('.dashed-box');
 
     expect(trialInformation.text()).toContain(trialInfo.trialLocation);
     expect(trialInformation.text()).toContain(trialInfo.formattedStartTime);
@@ -55,7 +63,10 @@ describe('StandingPretrialOrder', () => {
 
   it('renders the formatted trial judge signature', () => {
     const wrapper = shallow(
-      <StandingPretrialOrder options={options} trialInfo={trialInfo} />,
+      <StandingPretrialOrderForSmallCase
+        options={options}
+        trialInfo={trialInfo}
+      />,
     );
 
     const signature = wrapper.find('.signature');

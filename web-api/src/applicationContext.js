@@ -36,8 +36,8 @@ const {
   order,
   pendingReport,
   receiptOfFiling,
-  standingPretrialNotice,
   standingPretrialOrder,
+  standingPretrialOrderForSmallCase,
   trialCalendar,
   trialSessionPlanningReport,
 } = require('../../shared/src/business/utilities/documentGenerators');
@@ -336,8 +336,8 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
-  generateStandingPretrialNoticeInteractor,
-} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialNoticeInteractor');
+  generateStandingPretrialOrderForSmallCaseInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor');
 const {
   generateStandingPretrialOrderInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
@@ -1322,8 +1322,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
       order,
       pendingReport,
       receiptOfFiling,
-      standingPretrialNotice,
       standingPretrialOrder,
+      standingPretrialOrderForSmallCase,
       trialCalendar,
       trialSessionPlanningReport,
     }),
@@ -1552,7 +1552,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
-        generateStandingPretrialNoticeInteractor,
+        generateStandingPretrialOrderForSmallCaseInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
         getBlockedCasesInteractor,

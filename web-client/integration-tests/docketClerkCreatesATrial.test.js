@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesARemoteTrialSession } from './journey/docketClerkCreatesARemoteTrialSession';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSession';
@@ -25,5 +26,12 @@ describe('Docket Clerk Creates A Trial', () => {
   });
   docketClerkViewsTrialSessionList(test, {
     trialLocation,
+  });
+
+  docketClerkCreatesARemoteTrialSession(test, {
+    sessionType: SESSION_TYPES.special,
+  });
+  docketClerkViewsTrialSessionList(test, {
+    sessionType: SESSION_TYPES.special,
   });
 });

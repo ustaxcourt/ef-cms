@@ -16,8 +16,11 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
+const { ContactFactory } = require('../contacts/ContactFactory');
+const { IrsPractitioner } = require('../IrsPractitioner');
 const { isSealedCase } = require('./Case');
 const { map } = require('lodash');
+const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { PublicContact } = require('./PublicContact');
 const { PublicDocketEntry } = require('./PublicDocketEntry');
 
@@ -42,22 +45,42 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.receivedAt = rawCase.receivedAt;
   this._score = rawCase['_score'];
 
-  const currentUser = applicationContext.getCurrentUser();
-
-  if (currentUser.role === ROLES.irsPractitioner) {
-    this.otherPetitioners = rawCase.otherPetitioners;
-    this.otherFilers = rawCase.otherFilers;
-    this.irsPractitioners = rawCase.irsPractitioners;
-  }
-
   this.isSealed = isSealedCase(rawCase);
 
-  this.contactPrimary = rawCase.contactPrimary
-    ? new PublicContact(rawCase.contactPrimary)
-    : undefined;
-  this.contactSecondary = rawCase.contactSecondary
-    ? new PublicContact(rawCase.contactSecondary)
-    : undefined;
+  const currentUser = applicationContext.getCurrentUser();
+
+  if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
+    const contacts = ContactFactory.createContacts({
+      applicationContext,
+      contactInfo: {
+        otherFilers: rawCase.otherFilers,
+        otherPetitioners: rawCase.otherPetitioners,
+        primary: rawCase.contactPrimary,
+        secondary: rawCase.contactSecondary,
+      },
+      isPaper: rawCase.isPaper,
+      partyType: rawCase.partyType,
+    });
+
+    this.otherPetitioners = contacts.otherPetitioners;
+    this.otherFilers = contacts.otherFilers;
+    this.contactPrimary = contacts.primary;
+    this.contactSecondary = contacts.secondary;
+
+    this.irsPractitioners = (rawCase.irsPractitioners || []).map(
+      irsPractitioner => new IrsPractitioner(irsPractitioner),
+    );
+    this.privatePractitioners = (rawCase.privatePractitioners || []).map(
+      practitioner => new PrivatePractitioner(practitioner),
+    );
+  } else {
+    this.contactPrimary = rawCase.contactPrimary
+      ? new PublicContact(rawCase.contactPrimary)
+      : undefined;
+    this.contactSecondary = rawCase.contactSecondary
+      ? new PublicContact(rawCase.contactSecondary)
+      : undefined;
+  }
 
   // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
   this.docketEntries = (rawCase.docketEntries || [])

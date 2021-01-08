@@ -33,7 +33,7 @@ export const TrialSessionsTable = connect(
                   name="sessionType"
                 >
                   <option value="">-Session type-</option>
-                  {trialSessionTypes.map(sessionType => (
+                  {Object.values(trialSessionTypes).map(sessionType => (
                     <option key={sessionType} value={sessionType}>
                       {sessionType}
                     </option>

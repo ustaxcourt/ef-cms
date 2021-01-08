@@ -12,8 +12,8 @@ const {
   order,
   pendingReport,
   receiptOfFiling,
-  standingPretrialNotice,
   standingPretrialOrder,
+  standingPretrialOrderForSmallCase,
   trialCalendar,
   trialSessionPlanningReport,
 } = require('./documentGenerators');
@@ -425,9 +425,9 @@ describe('documentGenerators', () => {
     });
   });
 
-  describe('standingPretrialNotice', () => {
+  describe('standingPretrialOrderForSmallCase', () => {
     it('generates a Standing Pre-trial Notice document', async () => {
-      const pdf = await standingPretrialNotice({
+      const pdf = await standingPretrialOrderForSmallCase({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',

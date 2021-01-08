@@ -477,7 +477,10 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
   return pdf;
 };
 
-const standingPretrialNotice = async ({ applicationContext, data }) => {
+const standingPretrialOrderForSmallCase = async ({
+  applicationContext,
+  data,
+}) => {
   const {
     caseCaptionExtension,
     caseTitle,
@@ -485,21 +488,23 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
     trialInfo,
   } = data;
 
-  const reactStandingPretrialNoticeTemplate = reactTemplateGenerator({
-    componentName: 'StandingPretrialNotice',
-    data: {
-      options: {
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
+  const reactStandingPretrialOrderForSmallCaseTemplate = reactTemplateGenerator(
+    {
+      componentName: 'StandingPretrialOrderForSmallCase',
+      data: {
+        options: {
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+        },
+        trialInfo,
       },
-      trialInfo,
     },
-  });
+  );
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
-    content: reactStandingPretrialNoticeTemplate,
+    content: reactStandingPretrialOrderForSmallCaseTemplate,
     options: {
       overwriteMain: true,
       title: 'Standing Pre-trial Order',
@@ -741,8 +746,8 @@ module.exports = {
   order,
   pendingReport,
   receiptOfFiling,
-  standingPretrialNotice,
   standingPretrialOrder,
+  standingPretrialOrderForSmallCase,
   trialCalendar,
   trialSessionPlanningReport,
 };

@@ -240,8 +240,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      document =>
-        document.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+      docketEntry =>
+        docketEntry.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
@@ -273,8 +273,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      document =>
-        document.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+      docketEntry =>
+        docketEntry.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
     );
 
     expect(updatedDocument.numberOfPages).toBe(1);
@@ -303,8 +303,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      document =>
-        document.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      docketEntry =>
+        docketEntry.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
@@ -539,8 +539,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  docketEntriesWithCaseClosingEventCodes.forEach(document => {
-    it(`should set the case status to closed for event code: ${document.eventCode}`, async () => {
+  docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
+    it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await fileAndServeCourtIssuedDocumentInteractor({
         applicationContext,
         documentMeta: {
@@ -549,7 +549,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'Order',
           documentType: 'Order',
-          eventCode: document.eventCode,
+          eventCode: docketEntry.eventCode,
           serviceStamp: 'Served',
         },
       });

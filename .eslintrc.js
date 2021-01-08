@@ -112,7 +112,7 @@ module.exports = {
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
-    'no-shadow': ['warn', { builtinGlobals: false }],
+    'no-shadow': ['warn', { builtinGlobals: true }],
     'no-trailing-spaces': 'error',
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-unneeded-ternary': ['error', { defaultAssignment: false }],
