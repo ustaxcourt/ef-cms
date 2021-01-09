@@ -4,8 +4,8 @@ const { validatePdfInteractor } = require('./validatePdfInteractor');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
-const testAsset = name => {
-  return fs.readFileSync(testAssetsPath + name);
+const testAsset = filename => {
+  return fs.readFileSync(testAssetsPath + filename);
 };
 
 describe('validatePdfInteractor', () => {
