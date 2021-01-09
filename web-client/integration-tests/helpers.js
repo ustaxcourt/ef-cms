@@ -29,7 +29,7 @@ import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormData from 'form-data';
+import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import queryString from 'query-string';
@@ -68,31 +68,31 @@ export const fakeFile1 = (() => {
   return getFakeFile(false, true);
 })();
 
-export const getFormattedDocumentQCMyInbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCMyInbox = async testApp => {
+  await testApp.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: test.getState(),
+    state: testApp.getState(),
   });
 };
 
-export const getFormattedCaseDetailForTest = async test => {
-  await test.runSequence('gotoCaseDetailSequence', {
-    docketNumber: test.docketNumber,
+export const getFormattedCaseDetailForTest = async testApp => {
+  await testApp.runSequence('gotoCaseDetailSequence', {
+    docketNumber: testApp.docketNumber,
   });
   return runCompute(formattedCaseDetail, {
-    state: test.getState(),
+    state: testApp.getState(),
   });
 };
 
-export const getCaseMessagesForCase = async test => {
-  await test.runSequence('gotoCaseDetailSequence', {
-    docketNumber: test.docketNumber,
+export const getCaseMessagesForCase = async testApp => {
+  await testApp.runSequence('gotoCaseDetailSequence', {
+    docketNumber: testApp.docketNumber,
   });
   return runCompute(formattedCaseMessages, {
-    state: test.getState(),
+    state: testApp.getState(),
   });
 };
 
@@ -125,44 +125,48 @@ export const deleteEmails = emails => {
   );
 };
 
-export const getFormattedDocumentQCSectionInbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCSectionInbox = async testApp => {
+  await testApp.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
   });
   return runCompute(formattedWorkQueue, {
-    state: test.getState(),
+    state: testApp.getState(),
   });
 };
 
-export const getFormattedDocumentQCMyOutbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCMyOutbox = async testApp => {
+  await testApp.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: test.getState(),
+    state: testApp.getState(),
   });
 };
 
-export const getFormattedDocumentQCSectionOutbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCSectionOutbox = async testApp => {
+  await testApp.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'section',
   });
   return runCompute(formattedWorkQueue, {
-    state: test.getState(),
+    state: testApp.getState(),
   });
 };
 
-export const serveDocument = async ({ docketEntryId, docketNumber, test }) => {
-  await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+export const serveDocument = async ({
+  docketEntryId,
+  docketNumber,
+  testApp,
+}) => {
+  await testApp.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
     docketEntryId,
     docketNumber,
   });
 
-  await test.runSequence('openConfirmInitiateServiceModalSequence');
-  await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
+  await testApp.runSequence('openConfirmInitiateServiceModalSequence');
+  await testApp.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
 };
 
 export const createCourtIssuedDocketEntry = async ({
@@ -170,72 +174,72 @@ export const createCourtIssuedDocketEntry = async ({
   docketNumber,
   eventCode,
   filingDate,
-  test,
+  testApp,
   trialLocation,
 }) => {
-  await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+  await testApp.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
     docketEntryId,
     docketNumber,
   });
 
   if (eventCode) {
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+    await testApp.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: eventCode,
     });
   }
 
-  await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+  await testApp.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
     key: 'judge',
     value: 'Judge Buch',
   });
 
   if (trialLocation) {
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+    await testApp.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: trialLocation,
     });
   }
 
   if (filingDate) {
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+    await testApp.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'filingDateMonth',
       value: filingDate.month,
     });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+    await testApp.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'filingDateDay',
       value: filingDate.day,
     });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+    await testApp.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'filingDateYear',
       value: filingDate.year,
     });
   }
 
-  await test.runSequence('submitCourtIssuedDocketEntrySequence');
+  await testApp.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
-export const getIndividualInboxCount = test => {
+export const getIndividualInboxCount = testApp => {
   return runCompute(workQueueHelper, {
-    state: test.getState(),
+    state: testApp.getState(),
   }).individualInboxCount;
 };
 
-export const getSectionInboxCount = test => {
+export const getSectionInboxCount = testApp => {
   return runCompute(workQueueHelper, {
-    state: test.getState(),
+    state: testApp.getState(),
   }).sectionInboxCount;
 };
 
-export const getSectionInProgressCount = test => {
+export const getSectionInProgressCount = testApp => {
   return runCompute(workQueueHelper, {
-    state: test.getState(),
+    state: testApp.getState(),
   }).sectionInProgressCount;
 };
 
-export const getIndividualInProgressCount = test => {
+export const getIndividualInProgressCount = testApp => {
   return runCompute(workQueueHelper, {
-    state: test.getState(),
+    state: testApp.getState(),
   }).individualInProgressCount;
 };
 
@@ -243,35 +247,35 @@ export const findWorkItemByDocketNumber = (queue, docketNumber) => {
   return queue.find(workItem => workItem.docketNumber === docketNumber);
 };
 
-export const getNotifications = test => {
-  return test.getState('notifications');
+export const getNotifications = testApp => {
+  return testApp.getState('notifications');
 };
 
-export const assignWorkItems = async (test, to, workItems) => {
+export const assignWorkItems = async (testApp, to, workItems) => {
   const users = {
     adc: {
-      name: 'Test ADC',
+      name: 'testApp ADC',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     },
     docketclerk: {
-      name: 'Test Docketclerk',
+      name: 'testApp Docketclerk',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     },
   };
-  await test.runSequence('selectAssigneeSequence', {
+  await testApp.runSequence('selectAssigneeSequence', {
     assigneeId: users[to].userId,
     assigneeName: users[to].name,
   });
   for (let workItem of workItems) {
-    await test.runSequence('selectWorkItemSequence', {
+    await testApp.runSequence('selectWorkItemSequence', {
       workItem,
     });
   }
-  await test.runSequence('assignSelectedWorkItemsSequence');
+  await testApp.runSequence('assignSelectedWorkItemsSequence');
 };
 
-export const uploadExternalDecisionDocument = async test => {
-  test.setState('form', {
+export const uploadExternalDecisionDocument = async testApp => {
+  testApp.setState('form', {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -291,11 +295,11 @@ export const uploadExternalDecisionDocument = async test => {
     supportingDocumentFreeText: null,
     supportingDocumentMetadata: null,
   });
-  await test.runSequence('submitExternalDocumentSequence');
+  await testApp.runSequence('submitExternalDocumentSequence');
 };
 
-export const uploadProposedStipulatedDecision = async test => {
-  test.setState('form', {
+export const uploadProposedStipulatedDecision = async testApp => {
+  testApp.setState('form', {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -312,16 +316,16 @@ export const uploadProposedStipulatedDecision = async test => {
     scenario: 'Standard',
     searchError: false,
   });
-  await test.runSequence('submitExternalDocumentSequence');
+  await testApp.runSequence('submitExternalDocumentSequence');
 };
 
 export const uploadPetition = async (
-  test,
+  testApp,
   overrides = {},
   loginUsername = 'petitioner@example.com',
 ) => {
   if (!userMap[loginUsername]) {
-    throw new Error(`Unable to log into test as ${loginUsername}`);
+    throw new Error(`Unable to log into testApp as ${loginUsername}`);
   }
   const user = {
     ...userMap[loginUsername],
@@ -374,28 +378,28 @@ export const uploadPetition = async (
     },
   });
 
-  test.setState('caseDetail', response.data);
+  testApp.setState('caseDetail', response.data);
 
   return response.data;
 };
 
-export const loginAs = (test, user) => {
+export const loginAs = (testApp, user) => {
   // eslint-disable-next-line jest/expect-expect
   return it(`login as ${user}`, async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await testApp.runSequence('updateFormValueSequence', {
       key: 'name',
       value: user,
     });
 
-    await test.runSequence('submitLoginSequence', {
+    await testApp.runSequence('submitLoginSequence', {
       path: '/',
     });
   });
 };
 
 export const setupTest = ({ useCases = {} } = {}) => {
-  let test;
-  global.FormData = FormData;
+  let testApp;
+  global.FormData = FormDataHelper;
   global.Blob = () => {
     return fakeFile;
   };
@@ -423,20 +427,23 @@ export const setupTest = ({ useCases = {} } = {}) => {
   presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.applicationContext = applicationContext;
-  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+  const {
+    initialize: initializeSocketProvider,
+    start,
+    stop: stopSocket,
+  } = socketProvider({
     socketRouter,
   });
-  presenter.providers.socket = { start, stop };
+  presenter.providers.socket = { start, stop: stopSocket };
 
-  test = CerebralTest(presenter);
-  test.getSequence = name => async obj => await test.runSequence(name, obj);
-  test.closeSocket = stop;
-  test.applicationContext = applicationContext;
-
-  const { window } = dom;
+  testApp = CerebralTest(presenter);
+  testApp.getSequence = seqName => async obj =>
+    await testApp.runSequence(seqName, obj);
+  testApp.closeSocket = stopSocket;
+  testApp.applicationContext = applicationContext;
 
   global.window = {
-    ...window,
+    ...dom.window,
     DOMParser: () => {
       return {
         parseFromString: () => {
@@ -465,7 +472,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
     location: {},
     open: url => {
-      test.setState('openedUrl', url);
+      testApp.setState('openedUrl', url);
     },
     pdfjsObj: {
       getData: () => Promise.resolve(getFakeFile(true)),
@@ -511,24 +518,22 @@ export const setupTest = ({ useCases = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  test = CerebralTest(presenter);
-  test.getSequence = name => async obj => {
-    const result = await test.runSequence(name, obj);
-    return result;
-  };
-  test.closeSocket = stop;
+  testApp = CerebralTest(presenter);
+  testApp.getSequence = seqName => async obj =>
+    await testApp.runSequence(seqName, obj);
+  testApp.closeSocket = stopSocket;
 
-  test.setState('constants', applicationContext.getConstants());
+  testApp.setState('constants', applicationContext.getConstants());
 
-  router.initialize(test, (route, cb) => {
+  router.initialize(testApp, (route, cb) => {
     routes.push({
       cb,
       route,
     });
   });
-  initializeSocketProvider(test);
+  initializeSocketProvider(testApp);
 
-  return test;
+  return testApp;
 };
 
 const mockQuery = routeToGoTo => {
@@ -556,8 +561,8 @@ export const gotoRoute = (routes, routeToGoTo) => {
   throw new Error(`route ${routeToGoTo} not found`);
 };
 
-export const viewCaseDetail = async ({ docketNumber, test }) => {
-  await test.runSequence('gotoCaseDetailSequence', {
+export const viewCaseDetail = async ({ docketNumber, testApp }) => {
+  await testApp.runSequence('gotoCaseDetailSequence', {
     docketNumber,
   });
 };
@@ -586,13 +591,13 @@ export const base64ToUInt8Array = b64 => {
   return bytes;
 };
 
-export const setBatchPages = ({ test }) => {
-  const selectedDocumentType = test.getState(
+export const setBatchPages = ({ testApp }) => {
+  const selectedDocumentType = testApp.getState(
     'currentViewMetadata.documentSelectedForScan',
   );
-  let batches = test.getState(`scanner.batches.${selectedDocumentType}`);
+  let batches = testApp.getState(`scanner.batches.${selectedDocumentType}`);
 
-  test.setState(
+  testApp.setState(
     `scanner.batches.${selectedDocumentType}`,
     batches.map(batch => ({
       ...batch,
@@ -605,9 +610,7 @@ export const getPetitionDocumentForCase = caseDetail => {
   // In our tests, we had numerous instances of `case.docketEntries[0]`, which would
   // return the petition document most of the time, but occasionally fail,
   // producing unintended results.
-  return caseDetail.docketEntries.find(
-    document => document.documentType === 'Petition',
-  );
+  return caseDetail.docketEntries.find(doc => doc.documentType === 'Petition');
 };
 
 export const getPetitionWorkItemForCase = caseDetail => {
