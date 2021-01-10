@@ -2149,6 +2149,8 @@
         - "Nonstandard F"
         - "Nonstandard G"
         - "Nonstandard H"
+        - "Nonstandard I"
+        - "Nonstandard J"
         - "Type A"
         - "Type B"
         - "Type C"
@@ -3157,7 +3159,6 @@
                     - "OAD"
                     - "ODJ"
                     - "SDEC"
-                    - "NOT"
                     - "NTD"
                 then: 
                   type: "any"

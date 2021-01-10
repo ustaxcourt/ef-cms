@@ -309,6 +309,11 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketEntryId: uploadedDocument.docketEntryId,
       docketNumber: test.docketNumber,
       eventCode: 'HEAR',
+      filingDate: {
+        day: '1',
+        month: '1',
+        year: '2020',
+      },
       test,
       trialLocation: 'Birmingham, AL',
     });

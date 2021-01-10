@@ -193,6 +193,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         documentTitle: 'Order to Show Cause',
         documentType: 'Order to Show Cause',
         eventCode: 'OSC',
+        filingDate: '2011-03-01T21:40:46.415Z',
         generatedDocumentTitle: 'Generated Order Document Title',
       },
     });
@@ -208,6 +209,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     );
     expect(docketEntryInCaseToUpdate).toMatchObject({
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      filingDate: '2011-03-01T21:40:46.415Z',
       pending: true,
     });
   });

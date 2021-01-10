@@ -129,7 +129,7 @@ exports.handler = async (event, context) => {
       ],
       Version: '2012-10-17',
     },
-    principalId: payload.sub,
+    principalId: payload['custom:userId'] || payload.sub,
   };
 
   logger.info('Request authorized', {
