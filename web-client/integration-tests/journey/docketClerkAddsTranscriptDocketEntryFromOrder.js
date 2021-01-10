@@ -68,6 +68,21 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
       value: date.year,
     });
 
+    const today = new Date();
+
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: today.getMonth() + 1,
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: today.getDate(),
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: today.getFullYear(),
+    });
+
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({});

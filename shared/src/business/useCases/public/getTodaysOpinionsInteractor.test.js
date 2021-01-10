@@ -51,7 +51,9 @@ describe('getTodaysOpinionsInteractor', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue(mockOpinionSearchResult);
+      .advancedDocumentSearch.mockResolvedValue({
+        results: mockOpinionSearchResult,
+      });
   });
 
   it('should only search for opinion document types', async () => {
