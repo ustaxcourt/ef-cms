@@ -1,15 +1,5 @@
 const faker = require('faker');
 const {
-  closeScannerSetupDialog: closeScannerSetupDialogDeployed,
-  goToCreateCase,
-  goToReviewCase,
-  saveCaseForLater,
-  serveCaseToIrs,
-} = require('../support/pages/create-paper-case');
-const {
-  closeScannerSetupDialog: closeScannerSetupDialogLocal,
-} = require('../support/pages/create-paper-case-local');
-const {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -29,28 +19,25 @@ const {
   fillInCreateCaseFromPaperForm,
 } = require('../../cypress/support/pages/create-paper-petition');
 const {
-  getUserToken: getUserTokenDeployed,
-  login: loginDeployed,
-} = require('../support/pages/login');
+  getEnvironmentSpecificFunctions,
+} = require('../support/pages/environment-specific-factory');
 const {
-  getUserToken: getUserTokenLocal,
-  login: loginLocal,
-} = require('../support/pages/local-login');
+  goToCreateCase,
+  goToReviewCase,
+  saveCaseForLater,
+  serveCaseToIrs,
+} = require('../support/pages/create-paper-case');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
-const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
-
-const getUserToken = SMOKETESTS_LOCAL
-  ? getUserTokenLocal
-  : getUserTokenDeployed;
-const login = SMOKETESTS_LOCAL ? loginLocal : loginDeployed;
-const closeScannerSetupDialog = SMOKETESTS_LOCAL
-  ? closeScannerSetupDialogLocal
-  : closeScannerSetupDialogDeployed;
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 let token = null;
 
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+const {
+  closeScannerSetupDialog,
+  getUserToken,
+  login,
+} = getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
   before(async () => {

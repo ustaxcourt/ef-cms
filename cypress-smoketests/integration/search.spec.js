@@ -11,42 +11,29 @@ const {
   searchOpinionByKeyword,
 } = require('../support/pages/advanced-search');
 const {
-  closeScannerSetupDialog: closeScannerSetupDialogDeployed,
+  fillInCreateCaseFromPaperForm,
+} = require('../../cypress/support/pages/create-paper-petition');
+const {
+  getEnvironmentSpecificFunctions,
+} = require('../support/pages/environment-specific-factory');
+const {
   goToCreateCase,
   goToReviewCase,
   serveCaseToIrs,
 } = require('../support/pages/create-paper-case');
-const {
-  closeScannerSetupDialog: closeScannerSetupDialogLocal,
-} = require('../support/pages/create-paper-case-local');
-const {
-  fillInCreateCaseFromPaperForm,
-} = require('../../cypress/support/pages/create-paper-petition');
-const {
-  getUserToken: getUserTokenDeployed,
-  login: loginDeployed,
-} = require('../support/pages/login');
-const {
-  getUserToken: getUserTokenLocal,
-  login: loginLocal,
-} = require('../support/pages/local-login');
 const { goToCaseDetail } = require('../support/pages/case-detail');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
-
-const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
-
-const getUserToken = SMOKETESTS_LOCAL
-  ? getUserTokenLocal
-  : getUserTokenDeployed;
-const login = SMOKETESTS_LOCAL ? loginLocal : loginDeployed;
-const closeScannerSetupDialog = SMOKETESTS_LOCAL
-  ? closeScannerSetupDialogLocal
-  : closeScannerSetupDialogDeployed;
 
 const barNumberToSearchBy = 'PT1234';
 let testData = {};
 let token;
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+
+const {
+  closeScannerSetupDialog,
+  getUserToken,
+  login,
+} = getEnvironmentSpecificFunctions();
 
 describe('Create and serve a case to search for', () => {
   before(async () => {
