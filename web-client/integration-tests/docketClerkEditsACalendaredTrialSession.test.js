@@ -1,6 +1,7 @@
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSession';
 import { docketClerkUpdatesCaseStatusToClosed } from './journey/docketClerkUpdatesCaseStatusToClosed';
+import { docketClerkVerifiesCaseStatusIsUnchanged } from './journey/docketClerkVerifiesCaseStatusIsUnchanged';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
@@ -51,9 +52,8 @@ describe('Docket Clerk edits a calendared trial session', () => {
       userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
     },
   };
-
   docketClerkEditsTrialSession(test, overrides);
 
   //expcet the closed case should have the updated judge, should not be calendared
-  // docketClerkVerifiesCaseStatusRemainsUnchanged(test);
+  docketClerkVerifiesCaseStatusIsUnchanged(test);
 });

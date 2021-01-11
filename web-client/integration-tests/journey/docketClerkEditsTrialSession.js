@@ -14,7 +14,6 @@ export const docketClerkEditsTrialSession = (test, overrides = {}) => {
     expect(test.getState('currentPage')).toEqual('EditTrialSession');
 
     const mockNote = 'hello';
-
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: overrides.fieldToUpdate || 'notes',
       value: overrides.valueToUpdate || mockNote,
@@ -28,7 +27,11 @@ export const docketClerkEditsTrialSession = (test, overrides = {}) => {
       state: test.getState(),
     });
 
+    const expectedUpdatedValue =
+      formatted[overrides.fieldToUpdate] || formatted.notes;
+    const receivedUpdatedValue = overrides.valueToUpdate || mockNote;
+
     //need to update this to expect formatted.judge to be updated
-    expect(formatted.notes).toEqual(mockNote);
+    expect(expectedUpdatedValue).toEqual(receivedUpdatedValue);
   });
 };
