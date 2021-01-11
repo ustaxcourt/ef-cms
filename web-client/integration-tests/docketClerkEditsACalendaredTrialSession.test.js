@@ -52,8 +52,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
     },
   };
 
-  docketClerkEditsTrialSession(test, overrides
-  });
+  docketClerkEditsTrialSession(test, overrides);
 
   //expcet the closed case should have the updated judge, should not be calendared
   // docketClerkVerifiesCaseStatusRemainsUnchanged(test);
