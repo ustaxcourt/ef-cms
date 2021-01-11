@@ -12,11 +12,14 @@ const {
   uploadCourtIssuedDocPdf,
 } = require('../support/pages/case-detail');
 const {
-  closeScannerSetupDialog,
+  closeScannerSetupDialog: closeScannerSetupDialogDeployed,
   goToCreateCase,
   goToReviewCase,
   serveCaseToIrs,
 } = require('../support/pages/create-paper-case');
+const {
+  closeScannerSetupDialog: closeScannerSetupDialogLocal,
+} = require('../support/pages/create-paper-case-local');
 const {
   completeWizardStep1,
   completeWizardStep2,
@@ -36,7 +39,25 @@ const {
 const {
   fillInCreateCaseFromPaperForm,
 } = require('../../cypress/support/pages/create-paper-petition');
-const { getUserToken, login } = require('../support/pages/login');
+const {
+  getUserToken: getUserTokenDeployed,
+  login: loginDeployed,
+} = require('../support/pages/login');
+const {
+  getUserToken: getUserTokenLocal,
+  login: loginLocal,
+} = require('../support/pages/local-login');
+
+const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
+
+const getUserToken = SMOKETESTS_LOCAL
+  ? getUserTokenLocal
+  : getUserTokenDeployed;
+const login = SMOKETESTS_LOCAL ? loginLocal : loginDeployed;
+const closeScannerSetupDialog = SMOKETESTS_LOCAL
+  ? closeScannerSetupDialogLocal
+  : closeScannerSetupDialogDeployed;
+
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
 let token = null;
