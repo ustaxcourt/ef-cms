@@ -4,7 +4,21 @@ const {
   CASE_WITH_OTHER_FILERS,
   CASE_WITH_OTHER_PETITIONERS,
 } = require('../fixtures/caseMigrations');
-const { getRestApi, getUserToken } = require('../support/pages/login');
+const {
+  getRestApi: getRestApiDeployed,
+  getUserToken: getUserTokenDeployed,
+} = require('../support/pages/login');
+const {
+  getRestApi: getRestApiLocal,
+  getUserToken: getUserTokenLocal,
+} = require('../support/pages/local-login');
+
+const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
+
+const getRestApi = SMOKETESTS_LOCAL ? getRestApiLocal : getRestApiDeployed;
+const getUserToken = SMOKETESTS_LOCAL
+  ? getUserTokenLocal
+  : getUserTokenDeployed;
 
 let token = null;
 let restApi = null;
