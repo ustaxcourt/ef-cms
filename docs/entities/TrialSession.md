@@ -316,7 +316,7 @@
             limit: 0
         - 
           name: "integer"
-    meetingId: 
+    meetingIdPhone: 
       type: "string"
       rules: 
         - 
@@ -416,7 +416,7 @@
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "optional"
-    password: 
+    passwoasdfasdfrd: 
       type: "string"
       rules: 
         - 
