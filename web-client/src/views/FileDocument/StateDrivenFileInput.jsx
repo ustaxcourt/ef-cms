@@ -9,18 +9,18 @@ export const StateDrivenFileInput = connect(
   {
     ariaDescribedBy: props.ariaDescribedBy,
     constants: state.constants,
+    fileInputName: props.name,
     form: state.form,
     id: props.id,
-    name: props.name,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
     validationSequence: sequences[props.validationSequence],
   },
   function StateDrivenFileInput({
     ariaDescribedBy,
     constants,
+    fileInputName,
     form,
     id,
-    name,
     updateFormValueSequence,
     validationSequence,
   }) {
@@ -33,10 +33,10 @@ export const StateDrivenFileInput = connect(
           aria-describedby={ariaDescribedBy}
           className="usa-input"
           id={id}
-          name={name}
+          name={fileInputName}
           ref={ref => (inputRef = ref)}
           style={{
-            display: form[name] ? 'none' : 'block',
+            display: form[fileInputName] ? 'none' : 'block',
           }}
           type="file"
           onChange={e => {

@@ -6,7 +6,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import close from '../../../../node_modules/uswds/dist/img/close.svg';
+import closeImg from '../../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../../images/ustc_seal.svg';
 
 const BetaBar = toggleBetaBarSequence => {
@@ -27,7 +27,7 @@ const BetaBar = toggleBetaBarSequence => {
               <img
                 alt="close"
                 className="ustc-icon-square--small"
-                src={close}
+                src={closeImg}
               />
             </button>
           </div>

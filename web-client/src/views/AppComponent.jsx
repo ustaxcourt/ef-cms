@@ -35,7 +35,7 @@ import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformatio
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
-import { Error } from './Error';
+import { ErrorView } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
@@ -120,7 +120,7 @@ const pages = {
   EditPractitionerUser,
   EditTrialSession,
   EditUploadCourtIssuedDocument,
-  Error,
+  ErrorView,
   FileDocumentWizard,
   FilePetitionSuccess,
   IdleLogout,

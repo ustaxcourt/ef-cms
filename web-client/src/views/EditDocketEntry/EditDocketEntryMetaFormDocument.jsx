@@ -101,11 +101,11 @@ export const EditDocketEntryMetaFormDocument = connect(
                 internalTypesHelper.internalDocumentTypesForSelectSorted,
               selectedEventCode: form.eventCode,
             })}
-            onChange={(inputValue, { action, name }) => {
+            onChange={(inputValue, { action, name: inputName }) => {
               docketEntryOnChange({
                 action,
+                inputName,
                 inputValue,
-                name,
                 updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
                 validateSequence: validateDocumentSequence,
               });

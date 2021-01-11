@@ -1,5 +1,5 @@
 import { Contact } from './Contact';
-import { Error } from './Error';
+import { ErrorView } from './Error';
 import { Footer } from './Footer';
 import { HeaderPublic } from './Header/HeaderPublic';
 import { HealthCheck } from './Health/HealthCheck';
@@ -19,7 +19,7 @@ import React, { useEffect } from 'react';
 
 const pages = {
   Contact,
-  Error,
+  ErrorView,
   HealthCheck,
   Interstitial,
   Privacy,
