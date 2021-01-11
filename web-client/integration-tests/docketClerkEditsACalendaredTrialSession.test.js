@@ -52,12 +52,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
     },
   };
 
-  docketClerkEditsTrialSession(test, {
-    fieldToUpdate: 'judge',
-    valueToUpdate: {
-      name: 'Gustafson',
-      userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
-    },
+  docketClerkEditsTrialSession(test, overrides
   });
 
   //expcet the closed case should have the updated judge, should not be calendared
