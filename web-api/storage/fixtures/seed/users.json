@@ -494,6 +494,14 @@
     "entityName": "User"
   },
   {
+    "role": "trialclerk1",
+    "name": "Test trialclerk1",
+    "section": "trialClerks",
+    "userId": "d1f8a729-cbfa-4d22-a09b-73743a12f188",
+    "email": "trialclerk1@example.com",
+    "entityName": "User"
+  },
+  {
     "role": "chambers",
     "name": "Test Colvin's Chambers",
     "section": "colvinsChambers",

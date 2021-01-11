@@ -36,13 +36,13 @@ const {
 } = require('../../support/pages/reports');
 const { BASE_CASE } = require('../../fixtures/caseMigrations');
 
-const getRestApi = process.env.SMOKETESTS_LOCAL
-  ? getRestApiLocal
-  : getRestApiDeployed;
-const getUserToken = process.env.SMOKETESTS_LOCAL
+const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
+
+const getRestApi = SMOKETESTS_LOCAL ? getRestApiLocal : getRestApiDeployed;
+const getUserToken = SMOKETESTS_LOCAL
   ? getUserTokenLocal
   : getUserTokenDeployed;
-const login = process.env.SMOKETESTS_LOCAL ? loginLocal : loginDeployed;
+const login = SMOKETESTS_LOCAL ? loginLocal : loginDeployed;
 
 faker.seed(faker.random.number());
 
