@@ -166,10 +166,10 @@ TrialSession.validationRules = {
       })
       .optional(),
     maxCases: joi.number().greater(0).integer().required(),
-    meetingIdPhone: stringRequiredForRemoteProceedings,
+    meetingId: stringRequiredForRemoteProceedings,
     notes: JoiValidationConstants.STRING.max(400).optional(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
-    passwoasdfasdfrd: stringRequiredForRemoteProceedings,
+    password: stringRequiredForRemoteProceedings,
     postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
     proceedingType: JoiValidationConstants.STRING.valid(
       ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
