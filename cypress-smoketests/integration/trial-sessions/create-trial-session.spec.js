@@ -21,28 +21,15 @@ const {
   verifyOpenCaseOnTrialSession,
 } = require('../../support/pages/trial-sessions');
 const {
-  getRestApi: getRestApiDeployed,
-  getUserToken: getUserTokenDeployed,
-  login: loginDeployed,
-} = require('../../support/pages/login');
-const {
-  getRestApi: getRestApiLocal,
-  getUserToken: getUserTokenLocal,
-  login: loginLocal,
-} = require('../../support/pages/local-login');
+  getEnvironmentSpecificFunctions,
+} = require('../../support/pages/environment-specific-factory');
 const {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
 } = require('../../support/pages/reports');
 const { BASE_CASE } = require('../../fixtures/caseMigrations');
 
-const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
-
-const getRestApi = SMOKETESTS_LOCAL ? getRestApiLocal : getRestApiDeployed;
-const getUserToken = SMOKETESTS_LOCAL
-  ? getUserTokenLocal
-  : getUserTokenDeployed;
-const login = SMOKETESTS_LOCAL ? loginLocal : loginDeployed;
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 faker.seed(faker.random.number());
 
@@ -76,9 +63,10 @@ const testData = {
 };
 const firstDocketNumber = createDocketNumber();
 const secondDocketNumber = createDocketNumber();
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 describe('Petitions Clerk', () => {
+  const { getRestApi, getUserToken, login } = getEnvironmentSpecificFunctions();
+
   before(async () => {
     let result = await getUserToken(
       'petitionsclerk1@example.com',
