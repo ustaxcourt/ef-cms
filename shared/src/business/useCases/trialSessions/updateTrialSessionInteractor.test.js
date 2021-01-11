@@ -239,7 +239,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
-    mockCalendaredCase.setAsCalendared(MOCK_TRIAL);
+    mockCalendaredCase.updateTrialSessionInformation(MOCK_TRIAL);
 
     await updateTrialSessionInteractor({
       applicationContext,
