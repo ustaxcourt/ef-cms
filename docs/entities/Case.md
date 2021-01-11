@@ -2243,6 +2243,8 @@
                 - "Nonstandard F"
                 - "Nonstandard G"
                 - "Nonstandard H"
+                - "Nonstandard I"
+                - "Nonstandard J"
                 - "Type A"
                 - "Type B"
                 - "Type C"
@@ -3251,7 +3253,6 @@
                             - "OAD"
                             - "ODJ"
                             - "SDEC"
-                            - "NOT"
                             - "NTD"
                         then: 
                           type: "any"
@@ -5845,6 +5846,8 @@
                 - "Nonstandard F"
                 - "Nonstandard G"
                 - "Nonstandard H"
+                - "Nonstandard I"
+                - "Nonstandard J"
                 - "Type A"
                 - "Type B"
                 - "Type C"
@@ -6853,7 +6856,6 @@
                             - "OAD"
                             - "ODJ"
                             - "SDEC"
-                            - "NOT"
                             - "NTD"
                         then: 
                           type: "any"
@@ -71459,7 +71461,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 2020
+                    limit: 2021
               whens: 
                 - 
                   ref: 
@@ -71744,15 +71746,36 @@
             allow: 
               - null
     trialDate: 
-      type: "date"
+      type: "alternatives"
       flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-        presence: "optional"
         description: "When this case goes to trial."
-      allow: 
-        - null
+      matches: 
+        - 
+          ref: 
+            path: 
+              - "trialSessionId"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
+              presence: "required"
+          otherwise: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
+              presence: "optional"
+            allow: 
+              - null
     trialLocation: 
       type: "alternatives"
       flags: 
@@ -71858,20 +71881,9 @@
                 args: 
                   regex: "/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/"
     trialSessionId: 
-      type: "string"
+      type: "any"
       flags: 
         description: "The unique ID of the trial session associated with this case."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
       whens: 
         - 
           ref: 
@@ -71887,13 +71899,63 @@
                 override: true
               - "Calendared"
           then: 
-            type: "any"
+            type: "string"
             flags: 
               presence: "required"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
+                name: "guid"
+                args: 
+                  options: 
+                    version: 
+                      - "uuidv4"
           otherwise: 
             type: "any"
-            flags: 
-              presence: "optional"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "trialDate"
+                is: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                  invalid: 
+                    - null
+                then: 
+                  type: "string"
+                  flags: 
+                    presence: "required"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
+                      name: "guid"
+                      args: 
+                        options: 
+                          version: 
+                            - "uuidv4"
+                otherwise: 
+                  type: "string"
+                  flags: 
+                    presence: "optional"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
+                      name: "guid"
+                      args: 
+                        options: 
+                          version: 
+                            - "uuidv4"
     trialTime: 
       type: "string"
       flags: 

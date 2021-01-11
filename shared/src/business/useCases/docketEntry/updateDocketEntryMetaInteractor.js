@@ -1,4 +1,7 @@
 const {
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -6,7 +9,6 @@ const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
-
 /**
  *
  * @param {object} providers the providers object
@@ -83,9 +85,14 @@ exports.updateDocketEntryMetaInteractor = async ({
     const filingDateUpdated =
       editableFields.filingDate &&
       editableFields.filingDate !== originalDocketEntry.filingDate;
+
+    const entryRequiresCoverSheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      editableFields.eventCode,
+    );
+
     const shouldGenerateCoversheet =
       (servedAtUpdated || filingDateUpdated) &&
-      !originalDocketEntry.isCourtIssued() &&
+      (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
       !originalDocketEntry.isMinuteEntry;
 
     const docketEntryEntity = new DocketEntry(

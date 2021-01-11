@@ -37,6 +37,37 @@ describe('CourtIssuedDocumentTypeF', () => {
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
     });
+
+    describe('requiring filing dates on unservable documents', () => {
+      it('should be invalid when filingDate is undefined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          judge: 'Judge Colvin',
+          scenario: 'Type F',
+          trialLocation: 'Seattle, Washington',
+        });
+        expect(
+          documentInstance.getFormattedValidationErrors().filingDate,
+        ).toBeDefined();
+      });
+
+      it('should be valid when filingDate is defined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          filingDate: '1990-01-01T05:00:00.000Z',
+          judge: 'Judge Colvin',
+          scenario: 'Type F',
+          trialLocation: 'Seattle, Washington',
+        });
+        expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+      });
+    });
   });
 
   describe('title generation', () => {
@@ -45,12 +76,27 @@ describe('CourtIssuedDocumentTypeF', () => {
         attachments: false,
         documentTitle: 'Further Trial before [Judge] at [Place]',
         documentType: 'FTRL - Further Trial before ...',
-        judge: 'Judge Colvin',
+        judge: 'Colvin',
+        judgeWithTitle: 'Judge Colvin',
         scenario: 'Type F',
         trialLocation: 'Seattle, Washington',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Further Trial before Judge Colvin at Seattle, Washington',
+      );
+    });
+
+    it('should generate a title without the judge title if not available', () => {
+      const extDoc = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: 'Further Trial before [Judge] at [Place]',
+        documentType: 'FTRL - Further Trial before ...',
+        judge: 'Colvin',
+        scenario: 'Type F',
+        trialLocation: 'Seattle, Washington',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Further Trial before Colvin at Seattle, Washington',
       );
     });
   });

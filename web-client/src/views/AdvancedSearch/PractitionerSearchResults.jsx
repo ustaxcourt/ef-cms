@@ -6,11 +6,13 @@ import React from 'react';
 
 export const PractitionerSearchResults = connect(
   {
+    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedSearchHelper: state.advancedSearchHelper,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
   function PractitionerSearchResults({
     advancedSearchHelper,
+    MAX_SEARCH_RESULTS,
     showMoreResultsSequence,
   }) {
     return (
@@ -21,10 +23,11 @@ export const PractitionerSearchResults = connect(
             {advancedSearchHelper.showManyResultsMessage && (
               <WarningNotificationComponent
                 alertWarning={{
-                  message:
-                    'Your search has a high number of matching results. Refine your search for more accurate results.',
+                  message: 'Narrow your search by adding search terms.',
+                  title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
                 }}
                 dismissable={false}
+                scrollToTop={false}
               />
             )}
             <table className="usa-table search-results docket-record responsive-table row-border-only">

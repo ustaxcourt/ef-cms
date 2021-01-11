@@ -1,9 +1,13 @@
 const {
+  MAX_SEARCH_RESULTS,
+  ORDER_EVENT_CODES,
+  ORDER_JUDGE_FIELD,
+} = require('../../entities/EntityConstants');
+const {
   PublicDocumentSearchResult,
 } = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 const { filterForPublic } = require('./publicHelpers');
-const { ORDER_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * orderPublicSearchInteractor
@@ -32,20 +36,22 @@ exports.orderPublicSearchInteractor = async ({
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const foundDocuments = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      ...rawSearch,
-      documentEventCodes: ORDER_EVENT_CODES,
-      judgeType: 'signedJudgeName',
-      omitSealed: true,
-    });
-
-  const filteredResults = await filterForPublic({
+  const {
+    results,
+  } = await applicationContext.getPersistenceGateway().advancedDocumentSearch({
     applicationContext,
-    unfiltered: foundDocuments,
+    ...rawSearch,
+    documentEventCodes: ORDER_EVENT_CODES,
+    judgeType: ORDER_JUDGE_FIELD,
+    omitSealed: true,
   });
+
+  const filteredResults = (
+    await filterForPublic({
+      applicationContext,
+      unfiltered: results,
+    })
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return PublicDocumentSearchResult.validateRawCollection(filteredResults, {
     applicationContext,

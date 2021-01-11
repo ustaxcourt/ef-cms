@@ -1,4 +1,5 @@
 const {
+  MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES,
   ROLES,
 } = require('../../business/entities/EntityConstants');
@@ -15,26 +16,28 @@ describe('opinionAdvancedSearchInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue([
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-          docketNumber: '103-19',
-          documentTitle: 'T.C. Opinion for More Candy',
-          documentType: 'T.C. Opinion',
-          eventCode: 'TCOP',
-          signedJudgeName: 'Guy Fieri',
-        },
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-          docketNumber: '103-19',
-          documentTitle: 'Summary Opinion for KitKats',
-          documentType: 'Summary Opinion',
-          eventCode: 'SOP',
-          signedJudgeName: 'Guy Fieri',
-        },
-      ]);
+      .advancedDocumentSearch.mockResolvedValue({
+        results: [
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '103-19',
+            documentTitle: 'T.C. Opinion for More Candy',
+            documentType: 'T.C. Opinion',
+            eventCode: 'TCOP',
+            signedJudgeName: 'Guy Fieri',
+          },
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '103-19',
+            documentTitle: 'Summary Opinion for KitKats',
+            documentType: 'Summary Opinion',
+            eventCode: 'SOP',
+            signedJudgeName: 'Guy Fieri',
+          },
+        ],
+      });
   });
 
   it('returns an unauthorized error on petitioner user role', async () => {
@@ -76,6 +79,29 @@ describe('opinionAdvancedSearchInteractor', () => {
         signedJudgeName: 'Guy Fieri',
       },
     ]);
+  });
+
+  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+      caseCaption: 'Samson Workman, Petitioner',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+      docketNumber: '103-19',
+      documentTitle: 'T.C. Opinion for More Candy',
+      documentType: 'T.C. Opinion',
+      eventCode: 'TCOP',
+      signedJudgeName: 'Guy Fieri',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
+
+    const results = await opinionAdvancedSearchInteractor({
+      applicationContext,
+      keyword: 'keyword',
+      petitionerName: 'test person',
+    });
+
+    expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('searches for documents that are of type opinions', async () => {

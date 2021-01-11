@@ -169,6 +169,7 @@ export const createCourtIssuedDocketEntry = async ({
   docketEntryId,
   docketNumber,
   eventCode,
+  filingDate,
   test,
   trialLocation,
 }) => {
@@ -193,6 +194,21 @@ export const createCourtIssuedDocketEntry = async ({
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: trialLocation,
+    });
+  }
+
+  if (filingDate) {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: filingDate.month,
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: filingDate.day,
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: filingDate.year,
     });
   }
 
@@ -316,7 +332,7 @@ export const uploadPetition = async (
 
   const petitionMetadata = {
     caseType: overrides.caseType || CASE_TYPES_MAP.cdp,
-    contactPrimary: {
+    contactPrimary: overrides.contactPrimary || {
       address1: '734 Cowley Parkway',
       address2: 'Cum aut velit volupt',
       address3: 'Et sunt veritatis ei',

@@ -8,6 +8,8 @@ export const WarningNotificationComponent = function WarningNotificationComponen
   alertWarning,
   dismissable = true,
   dismissAlertSequence,
+  messageNotBold = false,
+  scrollToTop = true,
 }) {
   const notificationRef = useRef(null);
   const isMessageOnly =
@@ -15,7 +17,7 @@ export const WarningNotificationComponent = function WarningNotificationComponen
 
   useEffect(() => {
     const notification = notificationRef.current;
-    if (notification) {
+    if (notification && scrollToTop) {
       window.scrollTo(0, 0);
     }
   });
@@ -38,11 +40,16 @@ export const WarningNotificationComponent = function WarningNotificationComponen
               <div className="grid-row">
                 <div className="tablet:grid-col-10">
                   {alertWarning.title && (
-                    <p className="heading-3 usa-alert__heading padding-top-0">
+                    <p className="usa-alert__heading padding-top-0">
                       {alertWarning.title}
                     </p>
                   )}
-                  <p className="usa-alert__text padding-top-0">
+                  <p
+                    className={classNames(
+                      'usa-alert__text',
+                      messageNotBold && 'font-weight-normal',
+                    )}
+                  >
                     {alertWarning.message}
                   </p>
                   {alertWarning.linkUrl && (
