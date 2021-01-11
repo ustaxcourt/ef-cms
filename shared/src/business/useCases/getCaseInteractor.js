@@ -19,14 +19,14 @@ const getDocumentContentsForDocuments = async ({
   applicationContext,
   docketEntries,
 }) => {
-  for (const document of docketEntries) {
-    if (document.documentContentsId) {
+  for (const doc of docketEntries) {
+    if (doc.documentContentsId) {
       try {
         const documentContentsFile = await applicationContext
           .getPersistenceGateway()
           .getDocument({
             applicationContext,
-            key: document.documentContentsId,
+            key: doc.documentContentsId,
             protocol: 'S3',
             useTempBucket: false,
           });
@@ -34,15 +34,15 @@ const getDocumentContentsForDocuments = async ({
         const documentContentsData = JSON.parse(
           documentContentsFile.toString(),
         );
-        document.documentContents = documentContentsData.documentContents;
-        document.draftOrderState = {
-          ...document.draftOrderState,
+        doc.documentContents = documentContentsData.documentContents;
+        doc.draftOrderState = {
+          ...doc.draftOrderState,
           documentContents: documentContentsData.documentContents,
           richText: documentContentsData.richText,
         };
       } catch (e) {
         applicationContext.logger.error(
-          `Document contents ${document.documentContentsId} could not be found in the S3 bucket.`,
+          `Document contents ${doc.documentContentsId} could not be found in the S3 bucket.`,
         );
       }
     }
