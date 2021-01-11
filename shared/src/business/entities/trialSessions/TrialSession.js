@@ -130,26 +130,27 @@ TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = {
   ],
 };
 
+const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
+  100,
+).when('isCalendared', {
+  is: true,
+  otherwise: joi.allow('').optional(),
+  then: joi.when('proceedingType', {
+    is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    otherwise: joi.allow('').optional(),
+    then: joi.when('sessionType', {
+      is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
+      otherwise: joi.required(),
+      then: joi.allow('').optional(),
+    }),
+  }),
+});
+
 TrialSession.validationRules = {
   COMMON: {
     address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
     address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
-    chambersPhoneNumber: JoiValidationConstants.STRING.max(100).when(
-      'isCalendared',
-      {
-        is: true,
-        otherwise: joi.allow('').optional(),
-        then: joi.when('proceedingType', {
-          is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-          otherwise: joi.allow('').optional(),
-          then: joi.when('sessionType', {
-            is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
-            otherwise: joi.required(),
-            then: joi.allow('').optional(),
-          }),
-        }),
-      },
-    ),
+    chambersPhoneNumber: stringRequiredForRemoteProceedings,
     city: JoiValidationConstants.STRING.max(100).allow('').optional(),
     courtReporter: JoiValidationConstants.STRING.max(100).optional(),
     courthouseName: JoiValidationConstants.STRING.max(100).allow('').optional(),
@@ -157,22 +158,7 @@ TrialSession.validationRules = {
     entityName: JoiValidationConstants.STRING.valid('TrialSession').required(),
     irsCalendarAdministrator: JoiValidationConstants.STRING.max(100).optional(),
     isCalendared: joi.boolean().required(),
-    joinPhoneNumber: JoiValidationConstants.STRING.max(100).when(
-      'isCalendared',
-      {
-        is: true,
-        otherwise: joi.allow('').optional(),
-        then: joi.when('proceedingType', {
-          is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-          otherwise: joi.allow('').optional(),
-          then: joi.when('sessionType', {
-            is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
-            otherwise: joi.required(),
-            then: joi.allow('').optional(),
-          }),
-        }),
-      },
-    ),
+    joinPhoneNumber: stringRequiredForRemoteProceedings,
     judge: joi
       .object({
         name: JoiValidationConstants.STRING.max(100).required(),
@@ -180,34 +166,10 @@ TrialSession.validationRules = {
       })
       .optional(),
     maxCases: joi.number().greater(0).integer().required(),
-    meetingId: JoiValidationConstants.STRING.max(100).when('isCalendared', {
-      is: true,
-      otherwise: joi.allow('').optional(),
-      then: joi.when('proceedingType', {
-        is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-        otherwise: joi.allow('').optional(),
-        then: joi.when('sessionType', {
-          is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
-          otherwise: joi.required(),
-          then: joi.allow('').optional(),
-        }),
-      }),
-    }),
+    meetingId: stringRequiredForRemoteProceedings,
     notes: JoiValidationConstants.STRING.max(400).optional(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
-    password: JoiValidationConstants.STRING.max(100).when('isCalendared', {
-      is: true,
-      otherwise: joi.allow('').optional(),
-      then: joi.when('proceedingType', {
-        is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-        otherwise: joi.allow('').optional(),
-        then: joi.when('sessionType', {
-          is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
-          otherwise: joi.required(),
-          then: joi.allow('').optional(),
-        }),
-      }),
-    }),
+    password: stringRequiredForRemoteProceedings,
     postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
     proceedingType: JoiValidationConstants.STRING.valid(
       ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
