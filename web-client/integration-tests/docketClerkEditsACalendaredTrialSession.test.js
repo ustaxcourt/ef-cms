@@ -4,6 +4,7 @@ import { docketClerkUpdatesCaseStatusToClosed } from './journey/docketClerkUpdat
 import { docketClerkVerifiesCaseStatusIsUnchanged } from './journey/docketClerkVerifiesCaseStatusIsUnchanged';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
@@ -40,7 +41,26 @@ describe('Docket Clerk edits a calendared trial session', () => {
     petitionsClerkManuallyAddsCaseToTrial(test);
   }
 
+  it('verify that there are 3 cases on the trial session', async () => {
+    await test.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: test.trialSessionId,
+    });
+
+    expect(test.getState('trialSession.caseOrder').length).toBe(3);
+  });
+
+  markAllCasesAsQCed(test, () =>
+    test.casesReadyForTrial.map(d => d.docketNumber),
+  );
   petitionsClerkSetsATrialSessionsSchedule(test);
+
+  it('verify that there are 3 cases on the trial session', async () => {
+    await test.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: test.trialSessionId,
+    });
+
+    expect(test.getState('trialSession.caseOrder').length).toBe(3);
+  });
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToClosed(test);
@@ -54,6 +74,13 @@ describe('Docket Clerk edits a calendared trial session', () => {
   };
   docketClerkEditsTrialSession(test, overrides);
 
-  //expcet the closed case should have the updated judge, should not be calendared
+  it('verify that there are 3 cases on the trial session', async () => {
+    await test.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: test.trialSessionId,
+    });
+
+    expect(test.getState('trialSession.caseOrder').length).toBe(3);
+  });
+
   docketClerkVerifiesCaseStatusIsUnchanged(test);
 });
