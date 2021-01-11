@@ -1,3 +1,4 @@
+jest.mock('./combineTwoPdfs');
 const fs = require('fs');
 const path = require('path');
 const {
@@ -18,6 +19,10 @@ const {
   trialSessionPlanningReport,
 } = require('./documentGenerators');
 const {
+  applicationContext,
+  testPdfDoc,
+} = require('../test/createTestApplicationContext');
+const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   DOCKET_NUMBER_SUFFIXES,
@@ -28,7 +33,7 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../useCases/generatePdfFromHtmlInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+const { combineTwoPdfs } = require('./combineTwoPdfs');
 const { getChromiumBrowser } = require('./getChromiumBrowser');
 const { sass } = require('sass');
 
@@ -68,6 +73,8 @@ describe('documentGenerators', () => {
           generatePdfFromHtmlInteractor,
         );
     }
+
+    combineTwoPdfs.mockReturnValue(testPdfDoc);
   });
 
   describe('addressLabelCoverSheet', () => {
@@ -426,7 +433,7 @@ describe('documentGenerators', () => {
   });
 
   describe('standingPretrialOrderForSmallCase', () => {
-    it('generates a Standing Pre-trial Notice document', async () => {
+    it('generates a Standing Pre-trial Order for Small Case document', async () => {
       const pdf = await standingPretrialOrderForSmallCase({
         applicationContext,
         data: {

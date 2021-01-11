@@ -1,6 +1,5 @@
 const React = require('react');
 const { DocketHeader } = require('../components/DocketHeader.jsx');
-const { PretrialMemorandum } = require('../components/PretrialMemorandum.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
@@ -13,7 +12,6 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
         docketNumberWithSuffix={options.docketNumberWithSuffix}
         h3="Standing Pretrial Order for Small Tax Cases"
       />
-
       <p className="dashed-box">
         This case is set for trial at the {trialInfo.trialLocation} trial
         session beginning at
@@ -30,7 +28,6 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
         <br /> (Please refer to the Notice Setting Case for Trial for log-in
         instructions.)
       </p>
-
       <p>
         Read this Order because it sets out the Court’s standing procedures for
         the remote trial session. If this is your first time appearing before
@@ -40,7 +37,6 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           (Taxpayer’s) Getting Ready for Trial Checklist”.
         </span>
       </p>
-
       <ol>
         <li>
           <span className="bu">About the Court.</span> The U.S. Tax Court hears
@@ -101,7 +97,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           <span className="bu">Technology</span>. For remote proceedings, you
           must appear before the Judge as instructed in the Notice Setting Case
           for Trial. That may be by telephone or by video. Information on how to
-          use Zoomgov, including tips, can be found on the Court’s website{' '}
+          use Zoomgov, including tips, can be found on the Court’s website,{' '}
           <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>. A
           personal Zoom account is not required, and there is no cost to you. If
           you have any concerns about your ability to participate in a remote
@@ -200,102 +196,18 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           </b>
         </li>
       </ol>
-
-      <div className="flex signature">
-        <div className="flex-grow-1">
+      <div className="judge-signature">
+        <p style={{ float: 'left', width: '40%' }}>
           Dated: {trialInfo.formattedServedDate}
-        </div>
-        <div className="flex-grow-1 text-right">
-          <p>
-            <b>(Signed) {trialInfo.formattedJudgeName}</b>
-          </p>
+        </p>
+        <p style={{ float: 'right', textAlign: 'right', width: '59%' }}>
+          <b>(Signed) {trialInfo.formattedJudgeName}</b>
+          <br />
           {trialInfo.chambersPhoneNumber}
-        </div>
+        </p>
       </div>
-
       <br />
       <div style={{ pageBreakAfter: 'always' }}></div>
-
-      <PrimaryHeader />
-
-      <h2>
-        <b>
-          <u>Petitioner’s (Taxpayer’s) Getting Ready for Trial Checklist</u>
-        </b>
-      </h2>
-
-      <p>Before you come to Court: </p>
-
-      <ul className="check-list">
-        <li>
-          <input type="checkbox" />
-          Review all of the materials that the Court has sent you.
-        </li>
-
-        <li>
-          <input type="checkbox" />
-          Think about what facts you want to tell the Judge.
-        </li>
-
-        <li>
-          <input type="checkbox" />
-          Organize your facts and arguments so you can tell your side of the
-          story.
-        </li>
-
-        <li>
-          <input type="checkbox" />
-          Organize any documents you have to support your case.
-        </li>
-        <li>
-          <input type="checkbox" />
-          Speak to the people at the IRS who call or write to you after you get
-          this notice.
-        </li>
-        <li>
-          <input type="checkbox" />
-          Provide copies of documents to the IRS as soon as possible. The
-          parties are required to exchange copies of any documents they want to
-          use at trial, and to submit them to the Court before trial.
-        </li>
-
-        <li>
-          <input type="checkbox" />
-          Agree (stipulate) in writing to facts and documents that are not in
-          dispute. All minor issues should be settled so that the Judge can
-          focus on the remaining issue(s). The Stipulation of Facts needs to be
-          filed with the Judge no later than 14 days before trial.
-        </li>
-
-        <li>
-          <input type="checkbox" />
-          Consider whether you need any witnesses to support your case. If you
-          plan to have a witness, let the IRS know no later than 21 days before
-          trial. Make sure the witness is available for trial at the trial
-          session.
-        </li>
-
-        <li>
-          <input type="checkbox" />
-          Participate in contacts from the Judge by telephone or video.
-        </li>
-        <li>
-          <input type="checkbox" />
-          Be ready when your case is called for trial. That means you should log
-          on and test your connection at least 30 minutes before your scheduled
-          time.
-        </li>
-
-        <li>
-          <input type="checkbox" />
-          Learn more about the Tax Court at www.ustaxcourt.gov.
-        </li>
-      </ul>
-
-      <br />
-      <div style={{ pageBreakAfter: 'always' }}></div>
-
-      <PretrialMemorandum trialInfo={trialInfo} />
     </div>
   );
 };
