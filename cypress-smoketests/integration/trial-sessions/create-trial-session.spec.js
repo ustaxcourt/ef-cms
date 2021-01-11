@@ -21,15 +21,28 @@ const {
   verifyOpenCaseOnTrialSession,
 } = require('../../support/pages/trial-sessions');
 const {
-  getRestApi,
-  getUserToken,
-  login,
+  getRestApi: getRestApiDeployed,
+  getUserToken: getUserTokenDeployed,
+  login: loginDeployed,
 } = require('../../support/pages/login');
+const {
+  getRestApi: getRestApiLocal,
+  getUserToken: getUserTokenLocal,
+  login: loginLocal,
+} = require('../../support/pages/local-login');
 const {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
 } = require('../../support/pages/reports');
 const { BASE_CASE } = require('../../fixtures/caseMigrations');
+
+const getRestApi = process.env.SMOKETESTS_LOCAL
+  ? getRestApiLocal
+  : getRestApiDeployed;
+const getUserToken = process.env.SMOKETESTS_LOCAL
+  ? getUserTokenLocal
+  : getUserTokenDeployed;
+const login = process.env.SMOKETESTS_LOCAL ? loginLocal : loginDeployed;
 
 faker.seed(faker.random.number());
 
