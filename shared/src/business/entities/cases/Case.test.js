@@ -2187,7 +2187,7 @@ describe('Case entity', () => {
       expect(myCase.status).toBe(CASE_STATUS_TYPES.closed);
     });
 
-    it.only('should set only judge and trialSessionId if the trial session is calendared', () => {
+    it('should set only judge and trialSessionId if the trial session is calendared', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
