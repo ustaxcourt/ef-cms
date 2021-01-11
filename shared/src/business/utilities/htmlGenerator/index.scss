@@ -31,13 +31,17 @@ h2 {
   li {
     position: relative;
     margin-bottom: 10px;
-  }
 
-  input {
-    position: absolute;
-    top: 4px;
-    left: -20px;
-    margin-right: 10px;
+    label {
+      display: block;
+    }
+
+    input {
+      position: absolute;
+      top: 4px;
+      left: -20px;
+      margin-right: 10px;
+    }
   }
 }
 
