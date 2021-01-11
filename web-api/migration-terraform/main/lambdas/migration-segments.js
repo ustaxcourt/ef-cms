@@ -1,15 +1,8 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
-
 const {
-  migrateItems: migration0007,
-} = require('./migrations/0007-unblock-migrated-calendared-cases');
-const {
-  migrateItems: migration0008,
-} = require('./migrations/0008-associated-judge-on-deadlines');
-const {
-  migrateItems: migration0009,
-} = require('./migrations/0009-remove-blocked-cases-from-eligible-for-trial-record');
+  migrateItems: migration0012,
+} = require('./migrations/0012-remove-incorrect-counsel');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -29,14 +22,10 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
+// eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 007');
-  items = await migration0007(items, documentClient);
-  applicationContext.logger.info('about to run migration 008');
-  items = await migration0008(items, documentClient);
-  applicationContext.logger.info('about to run migration 009');
-  items = await migration0009(items, documentClient);
-
+  applicationContext.logger.info('about to run migration 012');
+  items = await migration0012(items, documentClient);
   return items;
 };
 

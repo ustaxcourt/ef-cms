@@ -250,6 +250,7 @@ describe('remove case from trial session', () => {
         ...MOCK_CASE,
         associatedJudge: 'someone',
         hearings: [mockTrialSession],
+        trialDate: '2019-08-25T05:00:00.000Z',
         trialLocation: 'Boise, Idaho',
         trialSessionId: MOCK_CASE.userId,
       });

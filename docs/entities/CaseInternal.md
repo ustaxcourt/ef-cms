@@ -2250,6 +2250,8 @@
                 - "Nonstandard F"
                 - "Nonstandard G"
                 - "Nonstandard H"
+                - "Nonstandard I"
+                - "Nonstandard J"
                 - "Type A"
                 - "Type B"
                 - "Type C"
@@ -3258,7 +3260,6 @@
                             - "OAD"
                             - "ODJ"
                             - "SDEC"
-                            - "NOT"
                             - "NTD"
                         then: 
                           type: "any"
@@ -4306,7 +4307,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 2020
+                    limit: 2021
               whens: 
                 - 
                   ref: 

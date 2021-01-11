@@ -4,7 +4,7 @@ const {
 const {
   getPractitionersByNameInteractor,
 } = require('./getPractitionersByNameInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { MAX_SEARCH_RESULTS, ROLES } = require('../../entities/EntityConstants');
 
 describe('getPractitionersByNameInteractor', () => {
   beforeEach(() => {
@@ -33,6 +33,26 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
       }),
     ).rejects.toThrow('Name must be provided to search');
+  });
+
+  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+      barNumber: 'PT1234',
+      contact: { flavor: 'bbq', state: 'WI' },
+      name: 'Test Practitioner1',
+      role: ROLES.irsPractitioner,
+      userId: '8190d648-e643-4964-988e-141e4e0db861',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getPractitionersByName.mockResolvedValue(maxPlusOneResults);
+
+    const results = await getPractitionersByNameInteractor({
+      applicationContext,
+      name: 'some name',
+    });
+
+    expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('calls search function with correct params and returns records for a name search', async () => {

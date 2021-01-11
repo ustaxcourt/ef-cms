@@ -1,4 +1,5 @@
 import { Address } from '../StartCase/Address';
+import { Button } from '../../ustc-ui/Button/Button';
 import { Country } from '../StartCase/Country';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from '../StartCase/InternationalAddress';
@@ -17,6 +18,9 @@ export const PractitionerContactForm = connect(
     onBlurValidationSequence: sequences[props.onBlurSequenceName],
     onChangeSequenceName: props.onChangeSequenceName,
     onChangeUpdateSequence: sequences[props.onChangeSequenceName],
+    screenMetadata: state.screenMetadata,
+    showPractitionerEmailInputSequence:
+      sequences.showPractitionerEmailInputSequence,
     type: props.type,
     validationErrors: state.validationErrors,
   },
@@ -30,6 +34,8 @@ export const PractitionerContactForm = connect(
     onBlurValidationSequence,
     onChangeSequenceName,
     onChangeUpdateSequence,
+    screenMetadata,
+    showPractitionerEmailInputSequence,
     type,
     validationErrors,
   }) {
@@ -135,10 +141,44 @@ export const PractitionerContactForm = connect(
                 />
               </FormGroup>
             ) : (
-              <>
-                <span className="usa-label">Email address</span>
-                <p>{form.email}</p>
-              </>
+              <FormGroup errorText={validationErrors.email}>
+                <span className="usa-label">
+                  Email address{' '}
+                  {!screenMetadata.showPractitionerEmailInput && !form.email && (
+                    <Button
+                      link
+                      className="margin-left-2"
+                      icon="plus-circle"
+                      id="add-practitioner-email-button"
+                      onClick={() => {
+                        showPractitionerEmailInputSequence();
+                      }}
+                    >
+                      Add email address
+                    </Button>
+                  )}
+                </span>
+                {screenMetadata.showPractitionerEmailInput ? (
+                  <input
+                    autoCapitalize="none"
+                    className="usa-input"
+                    id="email"
+                    name="email"
+                    value={form.email || ''}
+                    onBlur={() => {
+                      onBlurValidationSequence();
+                    }}
+                    onChange={e => {
+                      onChangeUpdateSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                ) : (
+                  <p>{createPractitionerUserHelper.emailFormatted}</p>
+                )}
+              </FormGroup>
             )}
           </div>
 

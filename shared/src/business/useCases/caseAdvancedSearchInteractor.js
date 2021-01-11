@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { caseSearchFilter } = require('../utilities/caseFilter');
+const { MAX_SEARCH_RESULTS } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -38,7 +39,10 @@ exports.caseAdvancedSearchInteractor = async ({
       },
     });
 
-  const filteredCases = caseSearchFilter(foundCases, authorizedUser);
+  const filteredCases = caseSearchFilter(foundCases, authorizedUser).slice(
+    0,
+    MAX_SEARCH_RESULTS,
+  );
 
   return filteredCases;
 };

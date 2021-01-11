@@ -17,6 +17,7 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
       },
       props: {
         computedDate: '12-12-2019',
+        judgeWithTitle: 'Judge Fieri',
       },
       state: {
         form: {
@@ -39,6 +40,7 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
     ).toMatchObject({
       date: '12-12-2019',
       documentType: 'Order',
+      judgeWithTitle: 'Judge Fieri',
     });
     expect(results.state.form.generatedDocumentTitle).toEqual(
       'Order for something',

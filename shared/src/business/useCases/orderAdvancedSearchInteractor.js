@@ -9,7 +9,9 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const {
+  MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
+  ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { caseSearchFilter } = require('../utilities/caseFilter');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -51,17 +53,20 @@ exports.orderAdvancedSearchInteractor = async ({
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const results = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: ORDER_EVENT_CODES,
-      judgeType: 'signedJudgeName',
-      omitSealed,
-      ...rawSearch,
-    });
+  const {
+    results,
+  } = await applicationContext.getPersistenceGateway().advancedDocumentSearch({
+    applicationContext,
+    documentEventCodes: ORDER_EVENT_CODES,
+    judgeType: ORDER_JUDGE_FIELD,
+    omitSealed,
+    ...rawSearch,
+  });
 
-  const filteredResults = caseSearchFilter(results, authorizedUser);
+  const filteredResults = caseSearchFilter(results, authorizedUser).slice(
+    0,
+    MAX_SEARCH_RESULTS,
+  );
 
   return InternalDocumentSearchResult.validateRawCollection(filteredResults, {
     applicationContext,

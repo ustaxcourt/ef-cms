@@ -8963,6 +8963,11 @@
     "pk": "docketNumberCounter-2020"
   },
   {
+    "sk": "docketNumberCounter-2021",
+    "id": 200,
+    "pk": "docketNumberCounter-2021"
+  },
+  {
     "judgeTitle": "Judge",
     "judgeFullName": "Cary Douglas Pugh",
     "role": "judge",

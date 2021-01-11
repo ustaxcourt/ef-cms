@@ -132,6 +132,26 @@ describe('searchClient', () => {
     expect(results).toMatchObject({ results: [], total: 0 });
   });
 
+  it('returns a query exception of some kind', async () => {
+    applicationContext
+      .getSearchClient()
+      .search.mockImplementation(() =>
+        Promise.reject(new Error('malformed elasticsearch query syntax error')),
+      );
+
+    await expect(
+      search({
+        applicationContext,
+        searchParameters: { some: '[bad: $syntax -=error' },
+      }),
+    ).rejects.toThrow('Search client encountered an error.');
+
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
+      1,
+    );
+    expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
+  });
+
   it('finds hits and formats them', async () => {
     applicationContext.getSearchClient().search.mockReturnValue(matchesResults);
     const results = await search({
@@ -145,6 +165,7 @@ describe('searchClient', () => {
     expect(results).toMatchObject({
       results: [
         {
+          _score: expect.anything(),
           caseCaption: 'Eve Brewer, Petitioner',
           contactPrimary: {
             address1: '67 Oak Parkway',
