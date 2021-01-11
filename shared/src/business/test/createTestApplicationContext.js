@@ -48,6 +48,12 @@ const {
   documentUrlTranslator,
 } = require('../../../src/business/utilities/documentUrlTranslator');
 const {
+  fakeData,
+  getFakeFile,
+  testInvalidPdfDoc,
+  testPdfDoc,
+} = require('./getFakeFile');
+const {
   filterWorkItemsForUser,
 } = require('../../../src/business/utilities/filterWorkItemsForUser');
 const {
@@ -131,7 +137,6 @@ const {
 const { Case, caseHasServedDocketEntries } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { fakeData, getFakeFile, testPdfDoc } = require('./getFakeFile');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
@@ -547,5 +552,6 @@ module.exports = {
   createTestApplicationContext,
   fakeData,
   getFakeFile,
+  testInvalidPdfDoc,
   testPdfDoc,
 };

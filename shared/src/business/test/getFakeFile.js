@@ -22,6 +22,11 @@ const getFakeFile = (returnArray = false, useFakeData1 = false) => {
   return fakeFile;
 };
 
+const testInvalidPdfDocBytes = () => {
+  return new Uint8Array(fs.readFileSync(`${testAssetsPath}not-a-pdf.pdf`));
+};
+const testInvalidPdfDoc = testInvalidPdfDocBytes();
+
 const testPdfDocBytes = () => {
   // sample.pdf is a 1 page document
   return new Uint8Array(fs.readFileSync(testAssetsPath + 'sample.pdf'));
@@ -31,5 +36,6 @@ const testPdfDoc = testPdfDocBytes();
 module.exports = {
   fakeData,
   getFakeFile,
+  testInvalidPdfDoc,
   testPdfDoc,
 };
