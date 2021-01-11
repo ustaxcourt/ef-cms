@@ -7,8 +7,5 @@ export const petitionsClerkSetsATrialSessionsSchedule = test => {
     });
     await test.runSequence('setTrialSessionCalendarSequence');
     await wait(1000);
-
-    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
-    expect(test.getState('trialSession.isCalendared')).toBeTruthy();
   });
 };
