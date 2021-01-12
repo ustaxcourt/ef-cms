@@ -130,42 +130,61 @@ describe('Docket Clerk', () => {
 
   it('should be able to create an order on the electronically-filed case and serve it', () => {
     createOrder(testData.createdDocketNumber);
+    cy.task('log', '1');
     editAndSignOrder();
+    cy.task('log', '2');
+
     addDocketEntryForOrderAndSaveForLater();
+    cy.task('log', '3');
+
     serveCourtIssuedDocketEntry();
+    cy.task('log', '4');
   });
 
   it('should be able to create an order on the paper-filed case and serve it', () => {
     createOrder(testData.createdPaperDocketNumber);
+    cy.task('log', '5');
     editAndSignOrder();
+    cy.task('log', '6');
     addDocketEntryForOrderAndServePaper();
+    cy.task('log', '7');
   });
 
   it('should be able to upload a court-issued order pdf on the electronically-filed case', () => {
     goToCaseDetail(testData.createdDocketNumber);
+    cy.task('log', '8');
+
     uploadCourtIssuedDocPdf();
+    cy.task('log', '9');
   });
 
   // in its own step for retry purposes - sometimes the click fails
   it('should click the save uploaded PDF button', () => {
     clickSaveUploadedPdfButton();
+    cy.task('log', '10');
   });
 
   it('should add a docket entry for the uploaded PDF and serve', () => {
     addDocketEntryForUploadedPdfAndServe();
+    cy.task('log', '11');
   });
 
   it('should be able to upload a court-issued order pdf on the paper-filed case', () => {
     goToCaseDetail(testData.createdPaperDocketNumber);
+    cy.task('log', '12');
+
     uploadCourtIssuedDocPdf();
+    cy.task('log', '13');
   });
 
   // in its own step for retry purposes - sometimes the click fails
   it('should click the save uploaded PDF button', () => {
     clickSaveUploadedPdfButton();
+    cy.task('log', '14');
   });
 
   it('should add a docket entry for the uploaded PDF and serve for paper', () => {
     addDocketEntryForUploadedPdfAndServePaper();
+    cy.task('log', '7');
   });
 });

@@ -83,9 +83,6 @@ export const SignOrder = connect(
     };
 
     const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
-      if (process.env.CI) {
-        return;
-      }
       setSignatureData({
         signatureApplied: true,
         signatureData: { scale, x, y },
@@ -98,6 +95,11 @@ export const SignOrder = connect(
     };
 
     const start = () => {
+      setSignatureData({
+        signatureApplied: true,
+        signatureData: null,
+      });
+
       if (process.env.CI) {
         return;
       }
@@ -106,11 +108,6 @@ export const SignOrder = connect(
       const canvasEl = canvasRef.current;
       let x;
       let y;
-
-      setSignatureData({
-        signatureApplied: true,
-        signatureData: null,
-      });
 
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
@@ -217,17 +214,17 @@ export const SignOrder = connect(
                   <br />
                   {pdfForSigning.nameForSigningLine2}
                 </span>
-                {/* {!process.env.CI && ( */}
-                <canvas
-                  className={
-                    !signatureData && signatureApplied
-                      ? 'cursor-grabbing'
-                      : 'cursor-grab'
-                  }
-                  id="sign-pdf-canvas"
-                  ref={canvasRef}
-                ></canvas>
-                {/* )} */}
+                {!process.env.CI && (
+                  <canvas
+                    className={
+                      !signatureData && signatureApplied
+                        ? 'cursor-grabbing'
+                        : 'cursor-grab'
+                    }
+                    id="sign-pdf-canvas"
+                    ref={canvasRef}
+                  ></canvas>
+                )}
               </div>
             </div>
           </div>

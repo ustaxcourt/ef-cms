@@ -1,4 +1,4 @@
-describe('Health check', () => {
+describe.skip('Health check', () => {
   const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
 
   if (!SMOKETESTS_LOCAL) {
