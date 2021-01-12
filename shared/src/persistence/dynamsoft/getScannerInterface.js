@@ -30,8 +30,11 @@ exports.getScannerInterface = () => {
       dynamsoftLoader = new Promise(resolve => {
         const dynamScriptClass = 'dynam-scanner-injection';
 
+        // eslint-disable-next-line no-restricted-globals
+        const appDocument = document;
+
         // Create a script element to inject into the header
-        const initiateScript = document.createElement('script');
+        const initiateScript = appDocument.createElement('script');
         initiateScript.type = 'text/javascript';
         initiateScript.async = true;
         initiateScript.setAttribute('class', dynamScriptClass);
@@ -71,8 +74,8 @@ exports.getScannerInterface = () => {
         configScript.src = `${scannerResourceUri}/dynamsoft.webtwain.config.js`;
 
         // Inject scripts into <head />
-        document.getElementsByTagName('head')[0].appendChild(initiateScript);
-        document.getElementsByTagName('head')[0].appendChild(configScript);
+        appDocument.getElementsByTagName('head')[0].appendChild(initiateScript);
+        appDocument.getElementsByTagName('head')[0].appendChild(configScript);
       });
     }
 
