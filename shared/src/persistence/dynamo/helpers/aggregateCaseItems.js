@@ -43,21 +43,21 @@ exports.aggregateCaseItems = caseAndCaseItems => {
   let privatePractitioners = [];
 
   caseAndCaseItems.forEach(item => {
-    if (isArchivedCorrespondenceItem(item)) {
-      // Archived Correspondences
-      archivedCorrespondences.push(item);
+    if (isDocketEntryItem(item)) {
+      // Docket Entries
+      docketEntries.push(item);
     } else if (isArchivedDocketEntryItem(item)) {
       // Archived Docket Entries
       archivedDocketEntries.push(item);
-    } else if (isCaseItem(item)) {
-      // Case Records
-      caseRecords.push(item);
     } else if (isCorrespondenceItem(item)) {
       // Correspondences
       correspondences.push(item);
-    } else if (isDocketEntryItem(item)) {
-      // Docket Entries
-      docketEntries.push(item);
+    } else if (isArchivedCorrespondenceItem(item)) {
+      // Archived Correspondences
+      archivedCorrespondences.push(item);
+    } else if (isCaseItem(item)) {
+      // Case Records
+      caseRecords.push(item);
     } else if (isHearingItem(item)) {
       // Hearings
       hearings.push(item);
