@@ -39,7 +39,7 @@ const {
   login,
 } = getEnvironmentSpecificFunctions();
 
-describe('Petitioner', () => {
+describe.skip('Petitioner', () => {
   before(async () => {
     const results = await getUserToken(
       'petitioner1@example.com',
