@@ -35,7 +35,7 @@ const {
   login,
 } = getEnvironmentSpecificFunctions();
 
-describe.skip('Create and serve a case to search for', () => {
+describe('Create and serve a case to search for', () => {
   before(async () => {
     const results = await getUserToken(
       'petitionsclerk1@example.com',

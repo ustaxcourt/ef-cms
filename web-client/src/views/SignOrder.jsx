@@ -92,15 +92,15 @@ export const SignOrder = connect(
     };
 
     const start = () => {
-      setSignatureData({
-        signatureApplied: true,
-        signatureData: null,
-      });
-
       const sigEl = signatureRef.current;
       const canvasEl = canvasRef.current;
       let x;
       let y;
+
+      setSignatureData({
+        signatureApplied: true,
+        signatureData: null,
+      });
 
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
