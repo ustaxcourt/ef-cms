@@ -23,6 +23,8 @@ export const computeFormDateFactoryAction = (prefix, toIsoString) => {
       year: formYear,
     });
 
+    // TODO - fix format from computeDate so isValidDateString can validate it properly (expects different format)
+
     if (
       toIsoString &&
       applicationContext.getUtilities().isValidDateString(computedDate)
