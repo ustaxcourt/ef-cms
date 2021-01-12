@@ -3,13 +3,13 @@ import React from 'react';
 export const PretrialMemorandum = ({ trialInfo }) => {
   return (
     <div>
-      <p style={{ marginBottom: '54px', textAlign: 'right' }}>
+      <p style={{ marginBottom: '30px', textAlign: 'right' }}>
         Trial Calendar: {trialInfo.trialLocation} - Remote Proceedings
         <br />
         <span>Date: {trialInfo.formattedStartDate}</span>
       </p>
 
-      <p className="text-center" style={{ marginBottom: '56px' }}>
+      <p className="text-center" style={{ marginBottom: '15px' }}>
         <span className="text-bold">PRETRIAL MEMORANDUM FOR </span>
         <span className="text-underline">(Petitioner/Respondent)</span>
         <br />
