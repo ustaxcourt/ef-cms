@@ -46,3 +46,8 @@ The infrastructure for EF-CMS is configured with Terraform — see [Terraform ti
 1. [Initial environment setup](environments/setup.md)
 2. [Continuous release process with CircleCI](environments/release.md)
 3. [Environment teardown](environments/teardown.md)
+
+During routine operations of EF-CMS:
+
+- [Accessing log data in Kibana](operations/logging.md)
+- [Receiving system health alerts](operations/system-health-alerts.md)
