@@ -134,12 +134,16 @@ exports.updateTrialSessionInteractor = async ({
         });
 
       const caseEntity = new Case(caseToUpdate, { applicationContext });
-      caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
+      if (
+        caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
+      ) {
+        caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
-      await applicationContext.getPersistenceGateway().updateCase({
-        applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
-      });
+        await applicationContext.getPersistenceGateway().updateCase({
+          applicationContext,
+          caseToUpdate: caseEntity.validate().toRawObject(),
+        });
+      }
     }
   }
 
