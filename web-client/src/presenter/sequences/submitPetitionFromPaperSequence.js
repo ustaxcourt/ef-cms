@@ -2,9 +2,7 @@ import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/ass
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
-import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
-import { computePetitionFeeDatesAction } from '../actions/StartCaseInternal/computePetitionFeeDatesAction';
-import { computeReceivedAtDateAction } from '../actions/caseDetailEdit/computeReceivedAtDateAction';
+import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { computeStatisticDatesAction } from '../actions/StartCaseInternal/computeStatisticDatesAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
@@ -13,6 +11,7 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -30,9 +29,14 @@ export const submitPetitionFromPaperSequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      computeReceivedAtDateAction,
-      computeIrsNoticeDateAction,
-      computePetitionFeeDatesAction,
+      computeFormDateFactoryAction('receivedAt', true),
+      setComputeFormDateFactoryAction('receivedAt'),
+      computeFormDateFactoryAction('irsNotice', true),
+      setComputeFormDateFactoryAction('irsNoticeDate'),
+      computeFormDateFactoryAction('petitionPayment', true),
+      setComputeFormDateFactoryAction('petitionPayment'),
+      computeFormDateFactoryAction('paymentDateWaived', true),
+      setComputeFormDateFactoryAction('paymentDateWaived'),
       computeStatisticDatesAction,
       filterEmptyStatisticsAction,
       validatePetitionFromPaperAction,
