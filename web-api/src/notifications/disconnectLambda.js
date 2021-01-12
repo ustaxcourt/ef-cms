@@ -17,10 +17,11 @@ exports.disconnectLambda = event =>
           connectionId: event.requestContext.connectionId,
         });
 
-      applicationContext.logger.debug(
-        'Connection',
-        event.requestContext.connectionId,
-      );
+      applicationContext.logger.info('Websocket disconnected', {
+        requestId: {
+          connection: event.requestContext.connectionId,
+        },
+      });
 
       return results;
     },
