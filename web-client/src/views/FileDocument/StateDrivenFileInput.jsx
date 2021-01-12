@@ -61,22 +61,22 @@ export const StateDrivenFileInput = connect(
             });
           }}
           onClick={e => {
-            if (form[name]) e.preventDefault();
+            if (form[fileInputName]) e.preventDefault();
           }}
         />
 
-        {form[name] && (
+        {form[fileInputName] && (
           <div>
             <span className="success-message icon-upload margin-right-1">
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>
-            <span className="mr-1">{form[name].name}</span>
+            <span className="mr-1">{form[fileInputName].name}</span>
             <Button
               link
               className="ustc-button--mobile-inline margin-left-1"
               onClick={() => {
                 updateFormValueSequence({
-                  key: name,
+                  key: fileInputName,
                   value: null,
                 });
                 inputRef.value = null;
