@@ -21,48 +21,22 @@ exports.createOrder = docketNumber => {
   cy.goToRoute(
     `/case-detail/${docketNumber}/create-order?documentTitle=Order to Show Cause&documentType=Order to Show Cause&eventCode=OSC`,
   );
-  cy.task('log', 'a');
   cy.url().should('contain', '/create-order');
-  cy.task('log', 'b');
-
   cy.get('.ql-editor').type('A created order!');
-  cy.task('log', 'c');
-
   cy.get('#save-order-button').click();
-  cy.task('log', 'd');
-
   cy.url().should('contain', '/sign');
-  cy.task('log', 'e');
-
   cy.get('#skip-signature-button').click();
-  cy.task('log', 'f');
-
   cy.url().should('not.contain', '/sign');
-  cy.task('log', 'g');
 };
 
 exports.editAndSignOrder = () => {
   cy.get('#draft-edit-button-not-signed').click();
-  cy.task('log', '-1');
-
   cy.url().should('contain', '/edit-order');
-  cy.task('log', '-2g');
-
   cy.get('.ql-editor').type('edited');
-  cy.task('log', '-3g');
-
   cy.get('#save-order-button').click();
-  cy.task('log', '-4g');
-
   cy.url().should('contain', '/sign');
-  cy.task('log', '-5g');
-
   cy.get('#sign-pdf-canvas').click();
-  cy.task('log', '-6g');
-
   cy.get('#save-signature-button').click();
-  cy.task('log', '-8g');
-
   cy.url().should('not.contain', '/sign');
 };
 
