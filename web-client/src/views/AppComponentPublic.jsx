@@ -40,8 +40,7 @@ export const AppComponentPublic = connect(
   function AppComponentPublic({ currentPage }) {
     const focusMain = e => {
       e && e.preventDefault();
-      // eslint-disable-next-line no-restricted-globals
-      const header = document.querySelector('#main-content h1');
+      const header = window.document.querySelector('#main-content h1');
       if (header) header.focus();
       return;
     };

@@ -92,8 +92,7 @@ const appPublic = {
         <AppComponentPublic />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      // eslint-disable-next-line no-restricted-globals
-      document.querySelector('#app-public'),
+      window.document.querySelector('#app-public'),
     );
   },
 };
