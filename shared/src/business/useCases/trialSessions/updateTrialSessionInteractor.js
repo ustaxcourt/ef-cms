@@ -134,7 +134,7 @@ exports.updateTrialSessionInteractor = async ({
         });
 
       const caseEntity = new Case(caseToUpdate, { applicationContext });
-      caseEntity.setAsCalendared(newTrialSessionEntity);
+      caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
       await applicationContext.getPersistenceGateway().updateCase({
         applicationContext,
