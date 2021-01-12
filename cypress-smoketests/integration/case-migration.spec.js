@@ -11,7 +11,7 @@ const {
 let token = null;
 let restApi = null;
 
-describe.skip('Case Migration', () => {
+describe('Case Migration', () => {
   let docketNumber;
 
   const { getRestApi, getUserToken } = getEnvironmentSpecificFunctions();
