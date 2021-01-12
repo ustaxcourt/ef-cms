@@ -1,5 +1,5 @@
 import { Contact } from './Contact';
-import { Error } from './Error';
+import { ErrorView } from './Error';
 import { Footer } from './Footer';
 import { HeaderPublic } from './Header/HeaderPublic';
 import { HealthCheck } from './Health/HealthCheck';
@@ -19,7 +19,7 @@ import React, { useEffect } from 'react';
 
 const pages = {
   Contact,
-  Error,
+  ErrorView,
   HealthCheck,
   Interstitial,
   Privacy,
@@ -40,6 +40,7 @@ export const AppComponentPublic = connect(
   function AppComponentPublic({ currentPage }) {
     const focusMain = e => {
       e && e.preventDefault();
+      // eslint-disable-next-line no-restricted-globals
       const header = document.querySelector('#main-content h1');
       if (header) header.focus();
       return;
