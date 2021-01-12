@@ -73,8 +73,8 @@ const batchDownloadTrialSessionInteractor = async ({
       d => d.isOnDocketRecord && d.isFileAttached,
     );
 
-    const documentMap = docketEntriesOnDocketRecord.reduce((acc, document) => {
-      acc[document.docketEntryId] = document;
+    const documentMap = docketEntriesOnDocketRecord.reduce((acc, doc) => {
+      acc[doc.docketEntryId] = doc;
       return acc;
     }, {});
 
@@ -131,19 +131,17 @@ const batchDownloadTrialSessionInteractor = async ({
         includePartyDetail: true,
       });
 
-    const document = await applicationContext
-      .getPersistenceGateway()
-      .getDocument({
-        applicationContext,
-        docketNumber: sessionCase.docketNumber,
-        key: result.fileId,
-        protocol: 'S3',
-        useTempBucket: true,
-      });
+    const doc = await applicationContext.getPersistenceGateway().getDocument({
+      applicationContext,
+      docketNumber: sessionCase.docketNumber,
+      key: result.fileId,
+      protocol: 'S3',
+      useTempBucket: true,
+    });
 
     await onDocketRecordCreation({ docketNumber: sessionCase.docketNumber });
 
-    extraFiles.push(document);
+    extraFiles.push(doc);
 
     extraFileNames.push(`${sessionCase.caseFolder}/0_Docket Record.pdf`);
   };
