@@ -39,9 +39,6 @@ export const SignOrder = connect(
     const signatureRef = useRef(null);
 
     const renderPDFPage = pageNumber => {
-      if (process.env.CI) {
-        return;
-      }
       const canvas = canvasRef.current;
       const canvasContext = canvas.getContext('2d');
 
@@ -99,10 +96,6 @@ export const SignOrder = connect(
         signatureApplied: true,
         signatureData: null,
       });
-
-      if (process.env.CI) {
-        return;
-      }
 
       const sigEl = signatureRef.current;
       const canvasEl = canvasRef.current;
@@ -214,17 +207,15 @@ export const SignOrder = connect(
                   <br />
                   {pdfForSigning.nameForSigningLine2}
                 </span>
-                {!process.env.CI && (
-                  <canvas
-                    className={
-                      !signatureData && signatureApplied
-                        ? 'cursor-grabbing'
-                        : 'cursor-grab'
-                    }
-                    id="sign-pdf-canvas"
-                    ref={canvasRef}
-                  ></canvas>
-                )}
+                <canvas
+                  className={
+                    !signatureData && signatureApplied
+                      ? 'cursor-grabbing'
+                      : 'cursor-grab'
+                  }
+                  id="sign-pdf-canvas"
+                  ref={canvasRef}
+                ></canvas>
               </div>
             </div>
           </div>
