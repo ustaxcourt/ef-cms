@@ -4,7 +4,9 @@ import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-const modalRoot = document.getElementById('modal-root');
+// eslint-disable-next-line no-restricted-globals
+const appDocument = document;
+const modalRoot = appDocument.getElementById('modal-root');
 
 export const ModalDialog = ({
   ariaLiveMode,
@@ -30,20 +32,20 @@ export const ModalDialog = ({
 
   const getEl = () => {
     if (!elRef.current) {
-      elRef.current = document.createElement('div');
+      elRef.current = appDocument.createElement('div');
     }
     return elRef.current;
   };
 
   const toggleNoScroll = scrollingOn => {
     if (preventScrolling && scrollingOn) {
-      document.body.classList.add('no-scroll');
-      document.addEventListener('touchmove', touchmoveTriggered, {
+      appDocument.body.classList.add('no-scroll');
+      appDocument.addEventListener('touchmove', touchmoveTriggered, {
         passive: false,
       });
     } else {
-      document.body.classList.remove('no-scroll');
-      document.removeEventListener('touchmove', touchmoveTriggered, {
+      appDocument.body.classList.remove('no-scroll');
+      appDocument.removeEventListener('touchmove', touchmoveTriggered, {
         passive: false,
       });
     }
@@ -78,12 +80,12 @@ export const ModalDialog = ({
 
   useEffect(() => {
     modalRoot.appendChild(getEl());
-    document.addEventListener('keydown', keydownTriggered, false);
+    appDocument.addEventListener('keydown', keydownTriggered, false);
     toggleNoScroll(true);
 
     return () => {
       modalRoot.removeChild(getEl());
-      document.removeEventListener('keydown', keydownTriggered, false);
+      appDocument.removeEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(false);
     };
   }, []);
