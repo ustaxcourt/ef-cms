@@ -2,7 +2,8 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+// import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
@@ -21,7 +22,11 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 
 export const completeDocketEntryQCSequence = [
   startShowValidationAction,
-  computeFormDateAction,
+  computeFormDateFactoryAction('', true),
+  // computeFormDateAction,
+  // TODO: setComputeFormDayFactoryAction('form.secondaryDocumennt.day')
+  // TODO: setComputeFormMonthFactoryAction('form.secondaryDocumennt.month')
+  // TODO: setComputeFormYearFactoryAction('form.secondaryDocumennt.year')
   computeSecondaryFormDateAction,
   computeCertificateOfServiceFormDateAction,
   computeDateReceivedAction,

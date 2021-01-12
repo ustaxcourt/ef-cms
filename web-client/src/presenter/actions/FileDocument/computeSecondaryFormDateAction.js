@@ -10,6 +10,7 @@ import { state } from 'cerebral';
 export const computeSecondaryFormDateAction = ({ get, store }) => {
   const secondaryDocument = get(state.form.secondaryDocument);
 
+  // TODO: abstract these date values out
   if (secondaryDocument && secondaryDocument.documentType) {
     const year = get(state.form.secondaryDocument.year);
     const month = get(state.form.secondaryDocument.month);

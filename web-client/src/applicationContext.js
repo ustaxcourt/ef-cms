@@ -52,6 +52,7 @@ import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCase
 import {
   calculateISODate,
   checkDate,
+  computeDate,
   createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,
@@ -600,6 +601,7 @@ const applicationContext = {
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
+      computeDate,
       createEndOfDayISO,
       createISODateString,
       createISODateStringFromObject,
