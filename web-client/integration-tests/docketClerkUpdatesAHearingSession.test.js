@@ -10,9 +10,9 @@ const test = setupTest();
 describe('Docket Clerk updates a hearing session', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
-  }); //
+  });
 
-  test.createdTrialSessions = [''];
+  test.createdTrialSessions = [];
 
   loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
@@ -32,7 +32,7 @@ describe('Docket Clerk updates a hearing session', () => {
     trialLocation,
   });
 
-  docketClerkAddsCaseToHearing(test);
+  docketClerkAddsCaseToHearing(test, 'Low blast radius', 0);
 
   docketClerkEditsTrialSession(test);
 
