@@ -10,6 +10,7 @@ export const DeployedDate = connect(
     const [displayDate, setDisplayDate] = useState(null);
 
     useEffect(() => {
+      // eslint-disable-next-line no-restricted-globals
       const deployedAt = document.getElementById('last-deployed').innerText;
       setDisplayDate(deployedAt);
     }, []);
