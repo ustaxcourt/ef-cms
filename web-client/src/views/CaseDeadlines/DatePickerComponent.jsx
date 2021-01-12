@@ -27,10 +27,9 @@ export const DatePickerComponent = ({
       datePicker.on(datePickerRef.current);
     }
   }, [datePickerRef]);
-  // eslint-disable-next-line no-restricted-globals
-  const appDocument = document;
+
   useEffect(() => {
-    const input = appDocument.getElementById(`${name}-date`);
+    const input = window.document.getElementById(`${name}-date`);
     if (!input) return;
     if (value.indexOf('-') > -1) {
       const [year, month, day] = value.split('-');
@@ -41,7 +40,7 @@ export const DatePickerComponent = ({
   }, [value]);
 
   useEffect(() => {
-    const input = appDocument.getElementById(`${name}-date`);
+    const input = window.document.getElementById(`${name}-date`);
     if (!input) return;
     if (values && values.month && values.day && values.year) {
       input.value = `${values.month}/${values.day}/${values.year}`;
@@ -64,7 +63,7 @@ export const DatePickerComponent = ({
 
   useEffect(() => {
     const input =
-      appDocument.getElementById(`${name}-date`) || inputRef.current;
+      window.document.getElementById(`${name}-date`) || inputRef.current;
 
     input.addEventListener('change', e => {
       if (values) {
