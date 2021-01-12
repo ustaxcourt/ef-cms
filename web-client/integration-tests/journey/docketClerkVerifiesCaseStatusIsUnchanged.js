@@ -10,6 +10,6 @@ export const docketClerkVerifiesCaseStatusIsUnchanged = test => {
     const caseDetail = test.getState('caseDetail');
 
     expect(caseDetail.status).toBe(CASE_STATUS_TYPES.closed);
-    expect(caseDetail.associatedJudge).toBe('Gustafson');
+    expect(caseDetail.associatedJudge).toBe('Cohen');
   });
 };
