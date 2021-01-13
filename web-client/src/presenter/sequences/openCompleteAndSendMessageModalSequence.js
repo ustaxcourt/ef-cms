@@ -1,9 +1,13 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
-import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
+import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
+import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
+import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem/setCreateMessageModalDialogModalStateAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -12,9 +16,23 @@ import { updateMessageModalAttachmentsAction } from '../actions/updateMessageMod
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const openCompleteAndSendMessageModalSequence = [
-  computeSecondaryFormDateAction,
+  formHasSecondaryDocumentAction,
+  {
+    no: [],
+    yes: [
+      setComputeFormDayFactoryAction('secondaryDocument.day'),
+      setComputeFormMonthFactoryAction('secondaryDocument.month'),
+      setComputeFormYearFactoryAction('secondaryDocument.year'),
+      computeFormDateFactoryAction(null),
+      setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
+    ],
+  },
   computeCertificateOfServiceFormDateAction,
-  computeDateReceivedAction,
+  setComputeFormDayFactoryAction('dateReceivedDay'),
+  setComputeFormMonthFactoryAction('dateReceivedMonth'),
+  setComputeFormYearFactoryAction('dateReceivedYear'),
+  computeFormDateFactoryAction(null),
+  setComputeFormDateFactoryAction('dateReceived'),
   validateDocketEntryAction,
   {
     error: [

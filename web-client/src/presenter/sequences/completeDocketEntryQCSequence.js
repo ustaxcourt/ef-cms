@@ -1,15 +1,17 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
-// import { computeFormDateAction } from '../actions/computeFormDateAction';
-import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
+import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
+import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
+import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -22,14 +24,24 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 
 export const completeDocketEntryQCSequence = [
   startShowValidationAction,
-  computeFormDateFactoryAction('', true),
-  // computeFormDateAction,
-  // TODO: setComputeFormDayFactoryAction('form.secondaryDocumennt.day')
-  // TODO: setComputeFormMonthFactoryAction('form.secondaryDocumennt.month')
-  // TODO: setComputeFormYearFactoryAction('form.secondaryDocumennt.year')
-  computeSecondaryFormDateAction,
+  computeFormDateFactoryAction(null),
+  formHasSecondaryDocumentAction,
+  {
+    no: [],
+    yes: [
+      setComputeFormDayFactoryAction('secondaryDocument.day'),
+      setComputeFormMonthFactoryAction('secondaryDocument.month'),
+      setComputeFormYearFactoryAction('secondaryDocument.year'),
+      computeFormDateFactoryAction(null),
+      setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
+    ],
+  },
   computeCertificateOfServiceFormDateAction,
-  computeDateReceivedAction,
+  setComputeFormDayFactoryAction('dateReceivedDay'),
+  setComputeFormMonthFactoryAction('dateReceivedMonth'),
+  setComputeFormYearFactoryAction('dateReceivedYear'),
+  computeFormDateFactoryAction(null),
+  setComputeFormDateFactoryAction('dateReceived'),
   validateDocketEntryAction,
   {
     error: [
