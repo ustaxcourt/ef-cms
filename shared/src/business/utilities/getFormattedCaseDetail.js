@@ -5,7 +5,7 @@ const {
 } = require('./DateHandler');
 const {
   CASE_STATUS_TYPES,
-  COURT_ISSUED_DOCUMENT_TYPES,
+  COURT_ISSUED_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   SERVED_PARTIES_CODES,
@@ -124,9 +124,9 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.documentType === 'Petition' ||
     formattedEntry.eventCode === 'P';
 
-  formattedEntry.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
-    formattedEntry.documentType,
-  );
+  formattedEntry.isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(formattedEntry.eventCode);
 
   const qcWorkItem = formattedEntry.workItem;
 
