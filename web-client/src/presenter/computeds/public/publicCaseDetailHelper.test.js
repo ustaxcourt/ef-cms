@@ -54,7 +54,7 @@ describe('publicCaseDetailHelper', () => {
       });
     });
 
-    it.only('should not display a link for the PMT event code', () => {
+    it('should not display a link for the PMT event code', () => {
       state.caseDetail.docketEntries = [
         {
           docketEntryId: 'ae454c18-be84-4a2b-b055-9046ada4f65d',
