@@ -1,11 +1,16 @@
 import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
-import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
+import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
+import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
+import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
+import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -18,7 +23,17 @@ import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocum
 export const completeDocumentSelectSequence = [
   startShowValidationAction,
   computeFormDateAction,
-  computeSecondaryFormDateAction,
+  formHasSecondaryDocumentAction,
+  {
+    no: [],
+    yes: [
+      setComputeFormDayFactoryAction('secondaryDocument.day'),
+      setComputeFormMonthFactoryAction('secondaryDocument.month'),
+      setComputeFormYearFactoryAction('secondaryDocument.year'),
+      computeFormDateFactoryAction(null),
+      setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
+    ],
+  },
   defaultSecondaryDocumentAction,
   validateSelectDocumentTypeAction,
   {
