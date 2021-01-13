@@ -1,49 +1,70 @@
-jest.mock('pdf-lib');
-jest.mock('../generateSignedDocumentInteractor');
 const {
   applicationContext,
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const { addServedStampToDocument } = require('./addServedStampToDocument.js');
-const { getPageDimensions } = require('../generateSignedDocumentInteractor');
-const { PDFDocument } = require('pdf-lib');
+const { degrees, PDFDocument } = require('pdf-lib');
 
 describe('addServedStampToDocument', () => {
   let drawTextMock;
   let saveMock;
   let getTrimBoxMock;
   let trimBoxReturnValue;
+  let rotatedTestPdfDoc;
 
-  beforeAll(() => {
-    getPageDimensions.mockReturnValue([0, 0]);
+  beforeAll(async () => {
+    const pdfDoc = await PDFDocument.load(testPdfDoc);
+    const pages = pdfDoc.getPages();
+    const page = pages[0];
+
+    page.setRotation(degrees(90));
+
+    rotatedTestPdfDoc = await pdfDoc.save({
+      useObjectStreams: false,
+    });
   });
+
+  const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);
+  const rotatedPdfDocumentLoadMock = async () =>
+    await PDFDocument.load(rotatedTestPdfDoc);
 
   beforeEach(() => {
     trimBoxReturnValue = { width: 0, y: 0 };
 
     drawTextMock = jest.fn();
     saveMock = jest.fn();
-    getTrimBoxMock = jest.fn().mockImplementation(() => trimBoxReturnValue);
+    // getTrimBoxMock = jest.fn().mockImplementation(() => trimBoxReturnValue);
 
-    PDFDocument.load.mockReturnValue(
-      Promise.resolve({
-        embedStandardFont: jest.fn().mockReturnValue({
-          sizeAtHeight: jest.fn(),
-          widthOfTextAtSize: jest.fn(),
-        }),
-        getPages: jest.fn().mockReturnValue([
-          {
-            drawRectangle: jest.fn(),
-            drawText: drawTextMock,
-            getTrimBox: getTrimBoxMock,
-          },
-        ]),
-        save: saveMock,
-      }),
-    );
+    applicationContext.getPdfLib.mockReturnValue({
+      PDFDocument: {
+        load: pdfDocumentLoadMock,
+      },
+      StandardFonts: {
+        HelveticaBold: 'Helvetica-Bold',
+      },
+      degrees: () => {},
+      rgb: () => {},
+    });
+
+    // PDFDocument.load.mockReturnValue(
+    //   Promise.resolve({
+    //     embedStandardFont: jest.fn().mockReturnValue({
+    //       sizeAtHeight: jest.fn(),
+    //       widthOfTextAtSize: jest.fn(),
+    //     }),
+    //     getPages: jest.fn().mockReturnValue([
+    //       {
+    //         drawRectangle: jest.fn(),
+    //         drawText: drawTextMock,
+    //         getTrimBox: getTrimBoxMock,
+    //       },
+    //     ]),
+    //     save: saveMock,
+    //   }),
+    // );
   });
 
-  it('adds a served stamp to a pdf document', async () => {
+  it.only('adds a served stamp to a pdf document', async () => {
     await addServedStampToDocument({
       applicationContext,
       pdfData: testPdfDoc,
