@@ -1,6 +1,5 @@
 import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
 import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
@@ -22,7 +21,7 @@ import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocum
 
 export const completeDocumentSelectSequence = [
   startShowValidationAction,
-  computeFormDateAction,
+  computeFormDateFactoryAction(null),
   formHasSecondaryDocumentAction,
   {
     no: [],
