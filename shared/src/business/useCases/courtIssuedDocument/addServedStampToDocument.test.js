@@ -1,8 +1,11 @@
 const {
+  addServedStampToDocument,
+  computeCoordinates,
+} = require('./addServedStampToDocument.js');
+const {
   applicationContext,
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
-const { addServedStampToDocument } = require('./addServedStampToDocument.js');
 const { degrees, PDFDocument } = require('pdf-lib');
 
 describe('addServedStampToDocument', () => {
@@ -94,5 +97,61 @@ describe('addServedStampToDocument', () => {
     });
 
     expect(drawTextMock.mock.calls[0][1]).toMatchObject({ y: 159 });
+  });
+});
+
+describe('computeCoordinates', () => {
+  let args = {
+    boxHeight: 1,
+    boxWidth: 2,
+    lineHeight: 1,
+    nameTextWidth: 2,
+    pageHeight: 150,
+    pageRotation: 0,
+    pageWidth: 100,
+    posX: 10,
+    posY: 12,
+    scale: 1,
+    textHeight: 4,
+    titleTextWidth: 4,
+  };
+
+  it('computes served stamp coordinates when the page rotation is 0 degrees', () => {
+    const result = computeCoordinates(args);
+
+    expect(result).toEqual({
+      rectangleX: 49,
+      rectangleY: 13,
+    });
+  });
+
+  it('computes served stamp coordinates when the page rotation is 90 degrees', () => {
+    args.pageRotation = 90;
+    const result = computeCoordinates(args);
+
+    expect(result).toEqual({
+      rectangleX: 87,
+      rectangleY: 74,
+    });
+  });
+
+  it('computes served stamp coordinates when the page rotation is 180 degrees', () => {
+    args.pageRotation = 180;
+    const result = computeCoordinates(args);
+
+    expect(result).toEqual({
+      rectangleX: 51,
+      rectangleY: 137,
+    });
+  });
+
+  it('computes served stamp coordinates when the page rotation is 270 degrees', () => {
+    args.pageRotation = 270;
+    const result = computeCoordinates(args);
+
+    expect(result).toEqual({
+      rectangleX: 12.999999999999986,
+      rectangleY: 76,
+    });
   });
 });
