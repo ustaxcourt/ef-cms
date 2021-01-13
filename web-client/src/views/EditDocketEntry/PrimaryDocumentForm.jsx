@@ -107,11 +107,11 @@ export const PrimaryDocumentForm = connect(
                   internalTypesHelper.internalDocumentTypesForSelectSorted,
                 selectedEventCode: form.eventCode,
               })}
-              onChange={(inputValue, { action, name }) => {
+              onChange={(inputValue, { action, name: inputName }) => {
                 docketEntryOnChange({
                   action,
+                  inputName,
                   inputValue,
-                  name,
                   updateSequence: updateDocketEntryFormValueSequence,
                   validateSequence: validateDocketEntrySequence,
                 });
@@ -157,11 +157,11 @@ export const PrimaryDocumentForm = connect(
                   selectedEventCode:
                     form.secondaryDocument && form.secondaryDocument.eventCode,
                 })}
-                onChange={(inputValue, { action, name }) => {
+                onChange={(inputValue, { action, name: inputName }) => {
                   docketEntryOnChange({
                     action,
+                    inputName,
                     inputValue,
-                    name,
                     updateSequence: updateDocketEntryFormValueSequence,
                     validateSequence: validateDocketEntrySequence,
                   });

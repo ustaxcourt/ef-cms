@@ -112,7 +112,15 @@ module.exports = {
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
-    'no-shadow': ['warn', { builtinGlobals: true }],
+    'no-restricted-globals': [
+      'warn', // TODO: 'error'
+      { name: 'error' },
+      { name: 'event' },
+      { name: 'status' },
+      { name: 'name' },
+      { name: 'document' },
+    ],
+    'no-shadow': ['warn', { builtinGlobals: false }],
     'no-trailing-spaces': 'error',
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-unneeded-ternary': ['error', { defaultAssignment: false }],
