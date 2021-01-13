@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { computeTrialSessionFormDataAction } from '../actions/TrialSession/computeTrialSessionFormDataAction';
 import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -15,7 +15,7 @@ import { validateTrialSessionAction } from '../actions/TrialSession/validateTria
 export const updateTrialSessionSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  computeFormDateAction,
+  computeFormDateFactoryAction(null),
   computeTrialSessionFormDataAction,
   validateTrialSessionAction,
   {

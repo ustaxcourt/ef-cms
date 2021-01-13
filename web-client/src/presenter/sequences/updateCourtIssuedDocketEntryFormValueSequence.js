@@ -1,5 +1,5 @@
 import { clearCourtIssuedDocketEntryFormValuesAction } from '../actions/CourtIssuedDocketEntry/clearCourtIssuedDocketEntryFormValuesAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { setDefaultFreeTextForCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/setDefaultFreeTextForCourtIssuedDocketEntryAction';
@@ -9,7 +9,7 @@ export const updateCourtIssuedDocketEntryFormValueSequence = [
   setFormValueAction,
   clearCourtIssuedDocketEntryFormValuesAction,
   setDefaultFreeTextForCourtIssuedDocketEntryAction,
-  computeFormDateAction,
+  computeFormDateFactoryAction(null),
   computeJudgeNameWithTitleAction,
   generateCourtIssuedDocumentTitleAction,
 ];
