@@ -50,7 +50,7 @@ export const ConfirmModal = connect(
 
     useEffect(() => {
       const focusModal = () => {
-        const modalHeader = document.querySelector(
+        const modalHeader = window.document.querySelector(
           '.modal-header .modal-header__title',
         );
         modalHeader && modalHeader.focus();
