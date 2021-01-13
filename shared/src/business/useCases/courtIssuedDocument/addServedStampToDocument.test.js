@@ -10,7 +10,6 @@ describe('addServedStampToDocument', () => {
   let saveMock;
   let getTrimBoxMock;
   let trimBoxReturnValue;
-  let rotatedTestPdfDoc;
 
   beforeAll(async () => {
     const pdfDoc = await PDFDocument.load(testPdfDoc);
@@ -18,22 +17,16 @@ describe('addServedStampToDocument', () => {
     const page = pages[0];
 
     page.setRotation(degrees(90));
-
-    rotatedTestPdfDoc = await pdfDoc.save({
-      useObjectStreams: false,
-    });
   });
 
-  const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);
-  const rotatedPdfDocumentLoadMock = async () =>
-    await PDFDocument.load(rotatedTestPdfDoc);
+  const pdfDocumentLoadMock = jest.fn(); //async () => await PDFDocument.load(testPdfDoc);
 
   beforeEach(() => {
-    trimBoxReturnValue = { width: 0, y: 0 };
+    trimBoxReturnValue = { height: 200, width: 0, y: 0 };
 
     drawTextMock = jest.fn();
     saveMock = jest.fn();
-    // getTrimBoxMock = jest.fn().mockImplementation(() => trimBoxReturnValue);
+    getTrimBoxMock = jest.fn().mockImplementation(() => trimBoxReturnValue);
 
     applicationContext.getPdfLib.mockReturnValue({
       PDFDocument: {
@@ -46,25 +39,28 @@ describe('addServedStampToDocument', () => {
       rgb: () => {},
     });
 
-    // PDFDocument.load.mockReturnValue(
-    //   Promise.resolve({
-    //     embedStandardFont: jest.fn().mockReturnValue({
-    //       sizeAtHeight: jest.fn(),
-    //       widthOfTextAtSize: jest.fn(),
-    //     }),
-    //     getPages: jest.fn().mockReturnValue([
-    //       {
-    //         drawRectangle: jest.fn(),
-    //         drawText: drawTextMock,
-    //         getTrimBox: getTrimBoxMock,
-    //       },
-    //     ]),
-    //     save: saveMock,
-    //   }),
-    // );
+    pdfDocumentLoadMock.mockReturnValue(
+      Promise.resolve({
+        embedStandardFont: jest.fn().mockReturnValue({
+          sizeAtHeight: jest.fn().mockReturnValue(50),
+          widthOfTextAtSize: jest.fn().mockReturnValue(100),
+        }),
+        getPages: jest.fn().mockReturnValue([
+          {
+            drawRectangle: jest.fn(),
+            drawText: drawTextMock,
+            getRotation() {
+              return { angle: 270 };
+            },
+            getTrimBox: getTrimBoxMock,
+          },
+        ]),
+        save: saveMock,
+      }),
+    );
   });
 
-  it.only('adds a served stamp to a pdf document', async () => {
+  it('adds a served stamp to a pdf document', async () => {
     await addServedStampToDocument({
       applicationContext,
       pdfData: testPdfDoc,
@@ -84,11 +80,11 @@ describe('addServedStampToDocument', () => {
     });
 
     expect(drawTextMock.mock.calls[0][0]).toEqual('SERVED 01/01/20');
-    expect(drawTextMock.mock.calls[0][1]).toMatchObject({ y: 12 });
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({ y: 159 });
   });
 
   it('increases the y value of the rectangle and stamp when the image in the pdf exceeds the pages size', async () => {
-    trimBoxReturnValue = { width: 0, y: 20 };
+    trimBoxReturnValue = { height: 200, width: 0, y: 20 };
 
     applicationContext.getUtilities().formatNow.mockReturnValue('01/01/20');
 
@@ -97,6 +93,6 @@ describe('addServedStampToDocument', () => {
       pdfData: testPdfDoc,
     });
 
-    expect(drawTextMock.mock.calls[0][1]).toMatchObject({ y: 32 });
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({ y: 159 });
   });
 });
