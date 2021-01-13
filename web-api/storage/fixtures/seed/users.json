@@ -449,6 +449,17 @@
   },
   {
     "role": "petitioner",
+    "name": "Test Petitioner 1",
+    "section": "petitioner",
+    "userId": "b84acb19-008f-4911-bfb6-773ca4020464",
+    "email": "petitioner1@example.com",
+    "address1": "3202 Elk Avenue",
+    "address2": "Hanover, MI 49241",
+    "phone": "517-563-1536",
+    "entityName": "User"
+  },
+  {
+    "role": "petitioner",
     "name": "Test Petitioner 2",
     "section": "petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
@@ -491,6 +502,14 @@
     "section": "trialClerks",
     "userId": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
     "email": "trialclerk@example.com",
+    "entityName": "User"
+  },
+  {
+    "role": "trialclerk",
+    "name": "Test trialclerk1",
+    "section": "trialClerks",
+    "userId": "d1f8a729-cbfa-4d22-a09b-73743a12f188",
+    "email": "trialclerk1@example.com",
     "entityName": "User"
   },
   {
