@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { createPractitionerUserAction } from '../actions/createPractitionerUserAction';
 import { navigateToPractitionerDetailAction } from '../actions/navigateToPractitionerDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -13,7 +13,7 @@ import { validateAddPractitionerAction } from '../actions/validateAddPractitione
 export const submitAddPractitionerSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  computeFormDateAction,
+  computeFormDateFactoryAction(null),
   validateAddPractitionerAction,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],

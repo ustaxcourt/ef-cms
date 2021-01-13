@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateCaseDeadlineAction } from '../actions/CaseDeadline/validateCaseDeadlineAction';
@@ -9,7 +9,7 @@ export const validateCaseDeadlineSequence = [
   {
     ignore: [],
     validate: [
-      computeFormDateAction,
+      computeFormDateFactoryAction(null),
       validateCaseDeadlineAction,
       {
         error: [setValidationErrorsAction],

@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { computeTrialSessionFormDataAction } from '../actions/TrialSession/computeTrialSessionFormDataAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
@@ -11,7 +11,7 @@ export const validateTrialSessionSequence = [
   {
     ignore: [],
     validate: [
-      computeFormDateAction,
+      computeFormDateFactoryAction(null),
       validateTrialSessionAction,
       {
         error: [setValidationErrorsAction],
