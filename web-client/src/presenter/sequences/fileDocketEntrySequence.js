@@ -82,7 +82,7 @@ export const fileDocketEntrySequence = [
       setComputeFormMonthFactoryAction('dateReceivedMonth'),
       setComputeFormYearFactoryAction('dateReceivedYear'),
       computeFormDateFactoryAction(null),
-      setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
+      setComputeFormDateFactoryAction('dateReceived'),
       setDocumentIsRequiredAction,
       validateDocketEntryAction,
       {

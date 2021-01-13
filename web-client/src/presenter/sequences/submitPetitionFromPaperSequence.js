@@ -12,6 +12,9 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
+import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
+import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -29,12 +32,22 @@ export const submitPetitionFromPaperSequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      computeFormDateFactoryAction('receivedAt', true),
+      // receivedAt
+      setComputeFormDayFactoryAction('receivedAtDay'),
+      setComputeFormMonthFactoryAction('receivedAtMonth'),
+      setComputeFormYearFactoryAction('receivedAtYear'),
+      computeFormDateFactoryAction(null, true),
       setComputeFormDateFactoryAction('receivedAt'),
-      computeFormDateFactoryAction('irsNotice', true),
+      // irsNoticeDate
+      setComputeFormDayFactoryAction('irsDay'),
+      setComputeFormMonthFactoryAction('irsMonth'),
+      setComputeFormYearFactoryAction('irsYear'),
+      computeFormDateFactoryAction(null, true),
       setComputeFormDateFactoryAction('irsNoticeDate'),
+      // petitionPaymentDate
       computeFormDateFactoryAction('petitionPayment', true),
       setComputeFormDateFactoryAction('petitionPayment'),
+      // paymentDateWaived
       computeFormDateFactoryAction('paymentDateWaived', true),
       setComputeFormDateFactoryAction('paymentDateWaived'),
       computeStatisticDatesAction,

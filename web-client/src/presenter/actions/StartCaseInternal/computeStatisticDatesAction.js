@@ -48,5 +48,7 @@ export const computeStatisticDatesAction = ({
     }),
   );
 
+  console.log('LE DATES N STUFFZ', get(state.form));
+
   store.set(state.form.statistics, statistics);
 };
