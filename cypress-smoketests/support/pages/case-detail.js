@@ -13,8 +13,11 @@ exports.goToCaseDetail = docketNumber => {
 
 exports.goToCaseOverview = docketNumber => {
   cy.goToRoute(`/case-detail/${docketNumber}`);
+  console.log('a');
   cy.get('#tab-case-information').click();
+  console.log('b');
   cy.get('#tab-overview').click();
+  console.log('c');
 };
 
 exports.createOrder = docketNumber => {
@@ -120,19 +123,28 @@ exports.manuallyAddCaseToNewTrialSession = trialSessionId => {
 
 exports.manuallyAddCaseToCalendaredTrialSession = trialSessionId => {
   cy.get('#add-to-trial-session-btn').should('exist').click();
+  console.log('d');
   cy.get('label[for="show-all-locations-true"]').click();
+  console.log('e');
   cy.get('select#trial-session')
     .select(trialSessionId)
     .should('have.value', trialSessionId);
+  console.log('f');
   cy.get('#modal-root .modal-button-confirm').click();
+  console.log('g');
   cy.get('.usa-alert--success').should('contain', 'Case set for trial.');
+  console.log('h');
 };
 
 exports.removeCaseFromTrialSession = () => {
   cy.get('#remove-from-trial-session-btn').should('exist').click();
+  console.log('i');
   cy.get('#disposition').type(faker.company.catchPhrase());
+  console.log('j');
   cy.get('#modal-root .modal-button-confirm').click();
+  console.log('k');
   cy.get('#add-to-trial-session-btn').should('not.exist');
+  console.log('l');
 };
 
 exports.blockCaseFromTrial = () => {
