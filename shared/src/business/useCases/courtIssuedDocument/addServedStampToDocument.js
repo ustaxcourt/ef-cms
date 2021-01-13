@@ -1,6 +1,8 @@
+const { computeCoordinates } = require('../generateSignedDocumentInteractor');
+
 const getPageDimensionsWithTrim = page => {
   const size = page.getTrimBox();
-  return { pageWidth: size.width, startingY: size.y };
+  return { pageHeight: size.height, pageWidth: size.width, startingY: size.y };
 };
 
 /**
@@ -23,6 +25,7 @@ exports.addServedStampToDocument = async ({
   }
 
   const {
+    degrees,
     PDFDocument,
     rgb,
     StandardFonts,
@@ -33,7 +36,7 @@ exports.addServedStampToDocument = async ({
   const pages = pdfDoc.getPages();
   const page = pages[0];
 
-  const { pageWidth, startingY } = getPageDimensionsWithTrim(page);
+  const { pageHeight, pageWidth, startingY } = getPageDimensionsWithTrim(page);
 
   const helveticaBoldFont = pdfDoc.embedStandardFont(
     StandardFonts.HelveticaBold,
@@ -51,18 +54,41 @@ exports.addServedStampToDocument = async ({
   const posX = pageWidth / 2 - boxWidth / 2;
   const posY = startingY + padding * 2;
 
+  const rotationAngle = page.getRotation().angle;
+  const shouldRotateStamp = rotationAngle !== 0;
+  const rotateSignatureDegrees = degrees(rotationAngle);
+
+  const { rectangleX } = computeCoordinates({
+    boxHeight,
+    boxWidth,
+    lineHeight: textHeight / 2,
+    nameTextWidth: textHeight / 2,
+    pageHeight,
+    pageRotation: rotationAngle,
+    pageWidth,
+    posX,
+    posY,
+    scale,
+    textHeight,
+    titleTextWidth: textHeight / 2,
+  });
+
+  const rotate = shouldRotateStamp ? rotateSignatureDegrees : degrees(0);
+
   page.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
+    rotate,
     width: boxWidth,
-    x: posX,
-    y: posY,
+    x: rectangleX,
+    y: padding,
   });
   page.drawText(serviceStampText, {
     font: helveticaBoldFont,
+    rotate,
     size: textSize,
-    x: posX + padding,
-    y: posY + padding * 2,
+    x: rectangleX + padding,
+    y: padding * 2,
   });
 
   const pdfBytes = await pdfDoc.save({
