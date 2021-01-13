@@ -122,6 +122,7 @@ exports.manuallyAddCaseToNewTrialSession = trialSessionId => {
 };
 
 exports.manuallyAddCaseToCalendaredTrialSession = trialSessionId => {
+  cy.wait(1000); // eslint-disable-line cypress/no-unnecessary-waiting
   cy.get('#add-to-trial-session-btn').should('exist').click();
   console.log('d');
   cy.get('label[for="show-all-locations-true"]').click();
