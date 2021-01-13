@@ -145,3 +145,5 @@ exports.addServedStampToDocument = async ({
 
   return pdfBytes;
 };
+
+exports.computeCoordinates = computeCoordinates;
