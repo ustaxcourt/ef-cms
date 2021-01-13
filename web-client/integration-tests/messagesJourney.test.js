@@ -19,6 +19,7 @@ import { petitionsClerkCreatesNewMessageOnCaseWithNoAttachments } from './journe
 import { petitionsClerkCreatesOrderFromMessage } from './journey/petitionsClerkCreatesOrderFromMessage';
 import { petitionsClerkForwardsMessageToDocketClerk } from './journey/petitionsClerkForwardsMessageToDocketClerk';
 import { petitionsClerkForwardsMessageWithAttachment } from './journey/petitionsClerkForwardsMessageWithAttachment';
+import { petitionsClerkVerifiesCompletedMessageNotInInbox } from './journey/petitionsClerkVerifiesCompletedMessageNotInInbox';
 import { petitionsClerkViewsInProgressMessagesOnCaseDetail } from './journey/petitionsClerkViewsInProgressMessagesOnCaseDetail';
 import { petitionsClerkViewsRepliesAndCompletesMessageInInbox } from './journey/petitionsClerkViewsRepliesAndCompletesMessageInInbox';
 import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
@@ -92,4 +93,7 @@ describe('messages journey', () => {
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerkViewsRepliesAndCompletesMessageInInbox(test);
+
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkVerifiesCompletedMessageNotInInbox(test);
 });

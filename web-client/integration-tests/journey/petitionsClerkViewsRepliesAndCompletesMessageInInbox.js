@@ -14,6 +14,13 @@ export const petitionsClerkViewsRepliesAndCompletesMessageInInbox = test => {
     expect(foundMessage).toBeDefined();
     expect(foundMessage.from).toEqual('Test Petitionsclerk');
 
+    test.parentMessageId = foundMessage.parentMessageId;
+
+    await test.runSequence('gotoMessageDetailSequence', {
+      docketNumber: test.docketNumber,
+      parentMessageId: test.parentMessageId,
+    });
+
     await test.runSequence('openReplyToMessageModalSequence');
 
     expect(test.getState('modal.form')).toMatchObject({
