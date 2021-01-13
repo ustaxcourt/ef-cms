@@ -1,9 +1,16 @@
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { computeCertificateOfServiceFormDateAction } from './computeCertificateOfServiceFormDateAction';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('computeCertificateOfServiceFormDateAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should set certificateOfServiceDate to null if state.form is empty', async () => {
     const result = await runAction(computeCertificateOfServiceFormDateAction, {
+      modules: {
+        presenter,
+      },
       state: {
         form: {},
       },
@@ -14,6 +21,9 @@ describe('computeCertificateOfServiceFormDateAction', () => {
 
   it('should set certificateOfServiceDate to YYYY-MM-DD if state.form has year, month, and day', async () => {
     const result = await runAction(computeCertificateOfServiceFormDateAction, {
+      modules: {
+        presenter,
+      },
       state: {
         form: {
           certificateOfServiceDay: '5',
@@ -28,6 +38,9 @@ describe('computeCertificateOfServiceFormDateAction', () => {
 
   it('should set certificateOfServiceDate to undefined-MM-DD if state.form has month and day', async () => {
     const result = await runAction(computeCertificateOfServiceFormDateAction, {
+      modules: {
+        presenter,
+      },
       state: {
         form: {
           certificateOfServiceDay: '5',
@@ -43,6 +56,9 @@ describe('computeCertificateOfServiceFormDateAction', () => {
 
   it('should set certificateOfServiceDate for secondary and supporting documents', async () => {
     const result = await runAction(computeCertificateOfServiceFormDateAction, {
+      modules: {
+        presenter,
+      },
       state: {
         form: {
           certificateOfServiceDay: '5',
