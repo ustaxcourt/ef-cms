@@ -50,7 +50,8 @@ Practitioner.prototype.init = function init(rawUser) {
   this.section = this.role;
   this.suffix = rawUser.suffix;
   this.serviceIndicator =
-    rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    rawUser.serviceIndicator ||
+    Practitioner.getDefaultServiceIndicator(rawUser);
   if (this.admissionsStatus === 'Active') {
     this.role = roleMap[this.employer];
   } else {
@@ -188,6 +189,18 @@ Practitioner.getFullName = function (practitionerData) {
   const suffix = practitionerData.suffix ? ' ' + practitionerData.suffix : '';
 
   return `${firstName}${middleName} ${lastName}${suffix}`;
+};
+
+/**
+ * returns a default service indicator based on whether the presence of an email address
+ *
+ * @param {object} practitionerData data where an email may exist
+ * @returns {string} the service indicator for the given condition
+ */
+Practitioner.getDefaultServiceIndicator = function (practitionerData) {
+  return practitionerData.email
+    ? SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
+    : SERVICE_INDICATOR_TYPES.SI_PAPER;
 };
 
 module.exports = {
