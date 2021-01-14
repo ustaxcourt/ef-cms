@@ -20,7 +20,13 @@ const VALIDATION_ERROR_MESSAGES = {
   docketNumbers: 'Enter docket number(s)',
   documentType: 'Select a document type',
   filingDate: 'Enter a filing date',
-  freeText: 'Enter a description',
+  freeText: [
+    { contains: 'is required', message: 'Enter a description' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+    },
+  ],
   judge: 'Select a judge',
   serviceStamp: 'Select a service stamp',
   trialLocation: 'Select a trial location',
