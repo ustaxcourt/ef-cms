@@ -29,7 +29,7 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
     'Enter a valid date received',
   ],
   documentTitle:
-    'Docket entry must be 3000 characters or fewer. Update this docket entry and try again.',
+    'Document title must be 3000 characters or fewer. Update this document title and try again.',
   eventCode: 'Select a document type',
   lodged: 'Enter selection for filing status.',
   otherFilingParty: 'Enter other filing party name.',

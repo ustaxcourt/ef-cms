@@ -24,6 +24,10 @@ describe('DocketEntryFactory', () => {
     expect(errors().primaryDocumentFile).toBeDefined();
   });
 
+  it('should require a documentTitle', () => {
+    expect(errors().documentTitle).toBeDefined();
+  });
+
   it('should require a file', () => {
     rawEntity.primaryDocumentFile = {};
     rawEntity.primaryDocumentFileSize = 1;

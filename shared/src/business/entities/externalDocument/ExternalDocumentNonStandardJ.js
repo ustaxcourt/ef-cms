@@ -35,7 +35,7 @@ ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES = {
 
 ExternalDocumentNonStandardJ.schema = {
   category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
+  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.required(),
   documentType: JoiValidationConstants.STRING.required(),
   freeText: JoiValidationConstants.STRING.max(1000).required(),
   freeText2: JoiValidationConstants.STRING.max(1000).required(),
