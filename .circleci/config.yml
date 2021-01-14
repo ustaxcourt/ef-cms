@@ -416,6 +416,8 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
+            npm run cypress:smoketests:local
+            sleep 5
             npm run cypress
       - store_artifacts:
           path: /root/project/cypress/videos/

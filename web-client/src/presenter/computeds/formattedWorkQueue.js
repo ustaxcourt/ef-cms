@@ -48,7 +48,7 @@ export const formatWorkItem = ({
   isSelected,
 }) => {
   const {
-    COURT_ISSUED_DOCUMENT_TYPES,
+    COURT_ISSUED_EVENT_CODES,
     ORDER_TYPES_MAP,
   } = applicationContext.getConstants();
 
@@ -102,9 +102,10 @@ export const formatWorkItem = ({
     applicationContext,
   );
 
-  result.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
-    result.docketEntry.documentType,
-  );
+  result.isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(result.docketEntry.eventCode);
+
   result.isOrder = !!orderDocumentTypes.includes(
     result.docketEntry.documentType,
   );

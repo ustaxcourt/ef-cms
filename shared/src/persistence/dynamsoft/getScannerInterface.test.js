@@ -256,9 +256,9 @@ describe('getScannerInterface', () => {
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {
-    delete global.document;
+    delete global.window.document;
     let calls = 0;
-    global.document = {
+    global.window.document = {
       addEventListener: () => null,
       createElement: () => ({
         cloneNode: function () {
@@ -280,7 +280,6 @@ describe('getScannerInterface', () => {
         ];
       },
     };
-    // global.window.document = ;
     const scannerAPI = getScannerInterface();
     let script = await scannerAPI.loadDynamsoft({
       applicationContext,

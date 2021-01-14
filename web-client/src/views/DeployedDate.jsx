@@ -10,7 +10,8 @@ export const DeployedDate = connect(
     const [displayDate, setDisplayDate] = useState(null);
 
     useEffect(() => {
-      const deployedAt = document.getElementById('last-deployed').innerText;
+      const deployedAt = window.document.getElementById('last-deployed')
+        .innerText;
       setDisplayDate(deployedAt);
     }, []);
 
