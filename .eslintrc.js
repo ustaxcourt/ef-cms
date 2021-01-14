@@ -113,7 +113,7 @@ module.exports = {
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
     'no-restricted-globals': [
-      'warn', // TODO: 'error'
+      'error',
       { name: 'error' },
       { name: 'event' },
       { name: 'status' },
