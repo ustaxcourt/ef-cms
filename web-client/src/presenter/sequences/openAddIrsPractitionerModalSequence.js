@@ -20,7 +20,7 @@ export const openAddIrsPractitionerModalSequence = showProgressSequenceDecorator
       success: [
         setRespondentsAction,
         getDefaultServiceIndicatorForPractitionerMatchesAction(
-          'practitionerMatches',
+          'respondentMatches',
         ),
         setDefaultServiceIndicatorAction('modal'),
         isRespondentInCaseAction,
