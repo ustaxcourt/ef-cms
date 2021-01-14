@@ -232,9 +232,9 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual('c7d90c05-f6cd-442c-a168-202db587f16f');
   });
 
-  it('updates calendared case with new trial session info', async () => {
+  it('should update the calendared case with new trial session info when the trialSessionId matches the case.trialSessionId', async () => {
     const mockCalendaredCase = new Case(
-      { ...MOCK_CASE, docketNumber: '123-45' },
+      { ...MOCK_CASE, docketNumber: '123-45', trialSessionId: MOCK_TRIAL_ID_4 },
       { applicationContext },
     );
     const calendaredTrialSession = {
@@ -244,7 +244,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
-    mockCalendaredCase.setAsCalendared(MOCK_TRIAL);
+    mockCalendaredCase.updateTrialSessionInformation(MOCK_TRIAL);
 
     await updateTrialSessionInteractor({
       applicationContext,
@@ -317,6 +317,38 @@ describe('updateTrialSessionInteractor', () => {
       ...mockTrialsById[MOCK_TRIAL_ID_6],
       ...updatedFields,
     });
+  });
+
+  it('should not update the calendared case with new trial session info when the trialSessionId does NOT match the case.trialSessionId', async () => {
+    const calendaredTrialSession = {
+      ...mockTrialsById[MOCK_TRIAL_ID_4],
+      startDate: '2025-12-02T00:00:00.000Z',
+    };
+    const mockCalendaredCase = new Case(
+      {
+        ...MOCK_CASE,
+        docketNumber: '123-45',
+        hearings: [calendaredTrialSession],
+        trialSessionId: MOCK_TRIAL_ID_3,
+      },
+      { applicationContext },
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
+    mockCalendaredCase.updateTrialSessionInformation(MOCK_TRIAL);
+
+    await updateTrialSessionInteractor({
+      applicationContext,
+      trialSession: {
+        ...calendaredTrialSession,
+        startDate: '2025-12-02T00:00:00.000Z',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toHaveBeenCalled();
   });
 
   it('does not update non-editable fields', async () => {
