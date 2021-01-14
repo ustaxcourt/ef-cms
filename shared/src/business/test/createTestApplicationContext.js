@@ -552,12 +552,16 @@ Object.entries(applicationContext).map(([key, value]) => {
   }
 });
 
+const over1000Characters =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam volutpat turpis in turpis tincidunt sagittis. Pellentesque fringilla fringilla fermentum. Suspendisse porta semper diam sit amet lobortis. Nam commodo turpis velit, id vestibulum quam porttitor a. Nulla metus eros, interdum eu blandit non, scelerisque at tellus. Ut pretium pretium magna non feugiat. Pellentesque vestibulum tempor leo finibus lobortis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vestibulum blandit, urna eu porta eleifend, tortor ante aliquet arcu, non venenatis purus enim in ex. In sed accumsan nibh. In pulvinar id dui id aliquam. Vestibulum ante felis, porta id accumsan sed, hendrerit non arcu. Sed suscipit elit at metus pulvinar, iaculis vulputate justo volutpat. Pellentesque a dolor pharetra risus ornare semper eu at massa. Integer ut rutrum lacus, posuere dignissim massa. Etiam molestie at tortor mollis semper. Donec pulvinar mauris ac commodo malesuada. In quis tellus euismod, tempor quam et, dapibus lacus. Donec gravida tempor nunc, a maximus lectus fermentum vitae. Nullam hendrerit, nisi at fermentum scelerisque, massa nibh varius purus, at dapibus lorem massa id enim. Maecenas aliquet arcu mi, ut volutpat eros consectetur ac. Quisque dolor eros, posuere commodo vehicula sed, auctor ac nulla. Etiam sit amet massa justo. Nunc ullamcorper porta lorem quis maximus. Donec congue vel est eget accumsan. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean non suscipit tortor.';
+
 module.exports = {
   applicationContext,
   applicationContextForClient,
   createTestApplicationContext,
   fakeData,
   getFakeFile,
+  over1000Characters,
   testInvalidPdfDoc,
   testPdfDoc,
 };

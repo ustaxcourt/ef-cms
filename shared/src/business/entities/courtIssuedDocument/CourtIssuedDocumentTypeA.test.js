@@ -1,3 +1,6 @@
+const {
+  over1000Characters,
+} = require('../../test/createTestApplicationContext');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
@@ -72,8 +75,22 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText,
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
         serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+      });
+    });
+
+    it('should be invalid when freeText is longer than 1000 characters', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: '[Anything]',
+        documentType: 'Order',
+        freeText: over1000Characters,
+        scenario: 'Type A',
+        serviceStamp: 'Served',
+      });
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
       });
     });
 

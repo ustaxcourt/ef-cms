@@ -37,8 +37,8 @@ ExternalDocumentNonStandardJ.schema = {
   category: JoiValidationConstants.STRING.required(),
   documentTitle: JoiValidationConstants.STRING.optional(),
   documentType: JoiValidationConstants.STRING.required(),
-  freeText: JoiValidationConstants.STRING.required(),
-  freeText2: JoiValidationConstants.STRING.required(),
+  freeText: JoiValidationConstants.STRING.max(1000).required(),
+  freeText2: JoiValidationConstants.STRING.max(1000).required(),
 };
 
 joiValidationDecorator(
