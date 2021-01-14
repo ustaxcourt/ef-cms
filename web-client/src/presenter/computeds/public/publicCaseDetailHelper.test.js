@@ -54,6 +54,34 @@ describe('publicCaseDetailHelper', () => {
       });
     });
 
+    it('should not display a link for the PMT event code', () => {
+      state.caseDetail.docketEntries = [
+        {
+          docketEntryId: 'ae454c18-be84-4a2b-b055-9046ada4f65d',
+          documentTitle: 'PRE-TRIAL MEMORANDUM for Resp. (C/S 5-16-13)',
+          documentType: 'Miscellaneous',
+          eventCode: 'PMT',
+          filedBy: 'See Filings and Proceedings',
+          filingDate: '2013-05-16T00:00:00.000-04:00',
+          index: 14,
+          isFileAttached: true,
+          isLegacyServed: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isSealed: false,
+          isStricken: false,
+          numberOfPages: 5,
+          processingStatus: 'complete',
+          receivedAt: '2013-05-16T00:00:00.000-04:00',
+        },
+      ];
+      const result = runCompute(publicCaseDetailHelper, { state });
+
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toBeFalsy();
+    });
+
     it('should not show a link for documents not visible to the public', () => {
       state.caseDetail.docketEntries = [
         {

@@ -951,6 +951,7 @@ describe('formattedCaseDetail', () => {
           description: 'Petition',
           docketEntryId: 'Petition',
           documentType: 'Petition',
+          eventCode: 'P',
           filedBy: 'Jessica Frase Marine',
           filingDate: '2019-02-28T21:14:39.488Z',
           index: 1,
@@ -964,6 +965,7 @@ describe('formattedCaseDetail', () => {
           docketEntryId: 'd-1-2-3',
           documentTitle: 'Order to do something',
           documentType: 'Order',
+          eventCode: 'O',
           isDraft: true,
           isOnDocketRecord: false,
         },
@@ -973,6 +975,7 @@ describe('formattedCaseDetail', () => {
           docketEntryId: 'd-2-3-4',
           documentTitle: 'Stipulated Decision',
           documentType: 'Stipulated Decision',
+          eventCode: 'SDEC',
           isDraft: true,
           isOnDocketRecord: false,
         },
@@ -995,6 +998,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
+
       expect(result.formattedDraftDocuments).toMatchObject([
         {
           createdAtFormatted: '02/28/19',

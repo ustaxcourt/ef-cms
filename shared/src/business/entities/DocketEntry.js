@@ -1,5 +1,5 @@
 const {
-  COURT_ISSUED_DOCUMENT_TYPES,
+  COURT_ISSUED_EVENT_CODES,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
@@ -317,7 +317,9 @@ DocketEntry.prototype.isAutoServed = function () {
 };
 
 DocketEntry.prototype.isCourtIssued = function () {
-  return COURT_ISSUED_DOCUMENT_TYPES.includes(this.documentType);
+  return COURT_ISSUED_EVENT_CODES.map(({ eventCode }) => eventCode).includes(
+    this.eventCode,
+  );
 };
 
 /**
