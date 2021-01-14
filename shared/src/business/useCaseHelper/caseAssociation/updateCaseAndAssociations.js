@@ -1,4 +1,4 @@
-import { Case } from '../../entities/cases/Case';
+const { Case } = require('../../entities/cases/Case');
 
 /**
  * updateCaseAndAssociations
