@@ -17,14 +17,20 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Enter a date',
   ],
-  docketNumbers: 'Enter docket number(s)',
+  docketNumbers: [
+    { contains: 'is required', message: 'Enter docket number(s)' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+    },
+  ],
   documentType: 'Select a document type',
   filingDate: 'Enter a filing date',
   freeText: [
     { contains: 'is required', message: 'Enter a description' },
     {
       contains: 'must be less than or equal to',
-      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     },
   ],
   judge: 'Select a judge',

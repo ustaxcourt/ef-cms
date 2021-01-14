@@ -46,8 +46,20 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Select a document type',
   ],
-  freeText: 'Provide an answer',
-  freeText2: 'Provide an answer',
+  freeText: [
+    { contains: 'is required', message: 'Provide an answer' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    },
+  ],
+  freeText2: [
+    { contains: 'is required', message: 'Provide an answer' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    },
+  ],
   hasSecondarySupportingDocuments:
     'Enter selection for Secondary Supporting Documents.',
   hasSupportingDocuments: 'Enter selection for Supporting Documents.',
