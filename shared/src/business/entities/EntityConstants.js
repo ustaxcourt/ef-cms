@@ -360,9 +360,14 @@ const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 );
 
-const EVENT_CODES_VISIBLE_TO_PUBLIC = COURT_ISSUED_EVENT_CODES.filter(
-  d => d.isOrder || d.isOpinion,
-).map(d => d.eventCode);
+const EVENT_CODES_VISIBLE_TO_PUBLIC = [
+  ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
+    d => d.eventCode,
+  ),
+  'DEC',
+  'ODL',
+  'SPTN',
+];
 
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfDocketChange: {
