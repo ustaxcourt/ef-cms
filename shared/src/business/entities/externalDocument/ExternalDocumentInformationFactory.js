@@ -50,6 +50,8 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Enter date of service',
   ],
+  documentTitle:
+    'Document title must be 3000 characters or fewer. Update this document title and try again.',
   documentType: [
     {
       contains: 'contains an invalid value',

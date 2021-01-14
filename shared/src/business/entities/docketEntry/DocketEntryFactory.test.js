@@ -241,6 +241,7 @@ describe('DocketEntryFactory', () => {
   describe('otherFilingParty', () => {
     beforeEach(() => {
       rawEntity.dateReceived = createISODateString();
+      rawEntity.documentTitle = 'Order to do something';
       rawEntity.documentType = 'Order';
       rawEntity.eventCode = 'O';
       rawEntity.partyPrimary = true;
@@ -279,6 +280,7 @@ describe('DocketEntryFactory', () => {
   describe('partyPrimary', () => {
     beforeEach(() => {
       rawEntity.dateReceived = createISODateString();
+      rawEntity.documentTitle = 'Notice of Change of Address';
       rawEntity.documentType = 'Notice of Change of Address';
       rawEntity.eventCode = 'NCA';
     });

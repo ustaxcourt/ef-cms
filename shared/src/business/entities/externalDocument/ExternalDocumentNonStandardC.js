@@ -30,7 +30,10 @@ ExternalDocumentNonStandardC.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
     this.freeText,
-    this.previousDocument.documentTitle || this.previousDocument.documentType,
+    this.previousDocument
+      ? this.previousDocument.documentTitle ||
+          this.previousDocument.documentType
+      : '',
   );
 };
 
@@ -47,7 +50,7 @@ ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES = {
 
 ExternalDocumentNonStandardC.schema = {
   category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
   documentType: JoiValidationConstants.STRING.required(),
   freeText: JoiValidationConstants.STRING.max(1000).required(),
   previousDocument: joi
