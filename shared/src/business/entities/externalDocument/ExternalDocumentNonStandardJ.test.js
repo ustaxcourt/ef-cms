@@ -1,4 +1,7 @@
 const {
+  over1000Characters,
+} = require('../../test/createTestApplicationContext');
+const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
@@ -12,8 +15,8 @@ describe('ExternalDocumentNonStandardJ', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: VALIDATION_ERROR_MESSAGES.category,
         documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-        freeText: VALIDATION_ERROR_MESSAGES.freeText,
-        freeText2: VALIDATION_ERROR_MESSAGES.freeText2,
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
+        freeText2: VALIDATION_ERROR_MESSAGES.freeText2[0].message,
       });
     });
 
@@ -27,6 +30,21 @@ describe('ExternalDocumentNonStandardJ', () => {
         scenario: 'Nonstandard J',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should not be valid when freeText or freeText2 is over 1000 characters', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Decision',
+        documentTitle: 'Stipulated Decision Entered [judge] [anything]',
+        documentType: 'Stipulated Decision',
+        freeText: over1000Characters,
+        freeText2: over1000Characters,
+        scenario: 'Nonstandard J',
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+        freeText2: VALIDATION_ERROR_MESSAGES.freeText2[1].message,
+      });
     });
   });
 
