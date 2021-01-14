@@ -1,4 +1,7 @@
-import { AUTOMATIC_BLOCKED_REASONS } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  AUTOMATIC_BLOCKED_REASONS,
+  OBJECTIONS_OPTIONS_MAP,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -13,12 +16,12 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'eventCode',
-      value: 'REQA',
+      value: 'APLD',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'ordinalValue',
-      value: 'First',
+      key: 'freeText',
+      value: 'The Sauceboss',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
@@ -59,6 +62,11 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'pending',
       value: true,
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'objections',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     await test.runSequence('submitEditDocketEntryMetaSequence', {
@@ -106,6 +114,7 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: pendingDocketEntry.docketEntryId,
+          documentTitle: 'Application to Take Deposition of The Sauceboss',
         }),
       ]),
     );
