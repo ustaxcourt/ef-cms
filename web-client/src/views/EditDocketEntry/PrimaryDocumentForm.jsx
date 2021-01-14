@@ -190,7 +190,7 @@ export const PrimaryDocumentForm = connect(
 
           {form.secondaryDocument && <SecondaryDocumentForm />}
 
-          <div className="usa-form-group">
+          <FormGroup errorText={validationErrors.additionalInfo}>
             <label
               className="usa-label"
               htmlFor="additional-info"
@@ -213,7 +213,7 @@ export const PrimaryDocumentForm = connect(
                 });
               }}
             />
-          </div>
+          </FormGroup>
           <div className="usa-form-group">
             <div className="usa-checkbox">
               <input
@@ -238,7 +238,7 @@ export const PrimaryDocumentForm = connect(
             </div>
           </div>
 
-          <div className="usa-form-group">
+          <FormGroup errorText={validationErrors.additionalInfo2}>
             <label
               className="usa-label"
               htmlFor="additional-info2"
@@ -261,7 +261,7 @@ export const PrimaryDocumentForm = connect(
                 });
               }}
             />
-          </div>
+          </FormGroup>
 
           <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
 
