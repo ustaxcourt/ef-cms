@@ -368,7 +368,7 @@ describe('publicCaseDetailHelper', () => {
           descriptionDisplay:
             'Notice of Trial on 12/30/2019 at San Francisco, California',
           docketEntryId: '162d3c72-2a31-4c66-b3f4-efaceb2cf0fd',
-          eventCode: 'NTD', // EVENT_CODES_NOT_VISIBLE_TO_PUBLIC
+          eventCode: 'NTD', // not in EVENT_CODES_VISIBLE_TO_PUBLIC
           index: 4,
           showLinkToDocument: false,
         },
