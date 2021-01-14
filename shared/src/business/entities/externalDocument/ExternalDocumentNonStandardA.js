@@ -28,7 +28,10 @@ ExternalDocumentNonStandardA.prototype.init = function init(rawProps) {
 ExternalDocumentNonStandardA.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
-    this.previousDocument.documentTitle || this.previousDocument.documentType,
+    this.previousDocument
+      ? this.previousDocument.documentTitle ||
+          this.previousDocument.documentType
+      : '',
   );
 };
 
