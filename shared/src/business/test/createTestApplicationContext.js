@@ -123,6 +123,9 @@ const {
   setWorkItemAsRead,
 } = require('../../persistence/dynamo/workitems/setWorkItemAsRead');
 const {
+  updateCaseAndAssociations,
+} = require('../useCaseHelper/caseAssociation/updateCaseAndAssociations');
+const {
   updateCaseAutomaticBlock,
 } = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const {
@@ -291,6 +294,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
+    updateCaseAndAssociations: jest
+      .fn()
+      .mockImplementation(updateCaseAndAssociations),
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
