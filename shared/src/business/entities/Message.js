@@ -190,6 +190,7 @@ joiValidationDecorator(
 Message.prototype.markAsCompleted = function ({ message, user }) {
   this.isCompleted = true;
   this.completedAt = createISODateString();
+  this.isRepliedTo = true;
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedBySection = user.section;

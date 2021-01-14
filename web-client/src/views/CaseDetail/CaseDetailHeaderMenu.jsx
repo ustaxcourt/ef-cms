@@ -78,12 +78,12 @@ export const CaseDetailHeaderMenu = connect(
     };
 
     useEffect(() => {
-      document.addEventListener('mousedown', reset, false);
-      document.addEventListener('keydown', keydown, false);
+      window.document.addEventListener('mousedown', reset, false);
+      window.document.addEventListener('keydown', keydown, false);
       return () => {
         resetCaseMenuSequence();
-        document.removeEventListener('mousedown', reset, false);
-        document.removeEventListener('keydown', keydown, false);
+        window.document.removeEventListener('mousedown', reset, false);
+        window.document.removeEventListener('keydown', keydown, false);
       };
     }, []);
 
