@@ -88,8 +88,8 @@ function DocketEntryFactory(rawProps) {
 
   let schema = joi.object().keys({
     addToCoversheet: joi.boolean(),
-    additionalInfo: JoiValidationConstants.STRING,
-    additionalInfo2: JoiValidationConstants.STRING,
+    additionalInfo: JoiValidationConstants.STRING.max(500),
+    additionalInfo2: JoiValidationConstants.STRING.max(500),
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
     dateReceived: JoiValidationConstants.ISO_DATE.max('now').required(),

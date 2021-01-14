@@ -26,6 +26,18 @@ const {
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
 
 const VALIDATION_ERROR_MESSAGES = {
+  additionalInfo: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+    },
+  ],
+  additionalInfo2: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+    },
+  ],
   attachments: 'Enter selection for Attachments.',
   category: 'Select a Category.',
   certificateOfService:
