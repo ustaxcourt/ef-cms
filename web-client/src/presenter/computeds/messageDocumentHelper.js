@@ -11,7 +11,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   }
 
   const {
-    COURT_ISSUED_DOCUMENT_TYPES,
+    COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
@@ -100,9 +100,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
     draftDocuments,
   });
 
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    caseDocument.documentType,
-  );
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(caseDocument.eventCode);
 
   const showServeCourtIssuedDocumentButton =
     showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
