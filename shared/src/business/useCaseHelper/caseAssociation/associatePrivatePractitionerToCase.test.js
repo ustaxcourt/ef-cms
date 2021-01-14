@@ -93,7 +93,7 @@ describe('associatePrivatePractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).not.toHaveBeenCalled();
   });
 
@@ -114,7 +114,7 @@ describe('associatePrivatePractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
   });
 
@@ -135,11 +135,11 @@ describe('associatePrivatePractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate,
     ).toMatchObject({
       contactPrimary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
       contactSecondary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
@@ -162,11 +162,11 @@ describe('associatePrivatePractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate,
     ).toMatchObject({
       contactPrimary: {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,

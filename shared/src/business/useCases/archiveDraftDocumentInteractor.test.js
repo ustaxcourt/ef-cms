@@ -34,7 +34,7 @@ describe('archiveDraftDocumentInteractor', () => {
 
     const {
       caseToUpdate,
-    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
 
     expect(
       caseToUpdate.archivedDocketEntries.find(
