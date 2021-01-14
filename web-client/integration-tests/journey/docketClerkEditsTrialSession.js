@@ -6,19 +6,22 @@ const formattedTrialSessionDetails = withAppContextDecorator(
   formattedTrialSessionDetailsComputed,
 );
 
-export const docketClerkEditsTrialSession = test => {
+export const docketClerkEditsTrialSession = (test, overrides = {}) => {
   return it('Docket clerk edits trial session', async () => {
     await test.runSequence('gotoEditTrialSessionSequence', {
       trialSessionId: test.trialSessionId,
     });
     expect(test.getState('currentPage')).toEqual('EditTrialSession');
 
+    const mockNote = 'hello';
     await test.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'notes',
-      value: 'hello',
+      key: overrides.fieldToUpdate || 'notes',
+      value: overrides.valueToUpdate || mockNote,
     });
 
     await test.runSequence('updateTrialSessionSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
 
@@ -26,6 +29,10 @@ export const docketClerkEditsTrialSession = test => {
       state: test.getState(),
     });
 
-    expect(formatted.notes).toEqual('hello');
+    const expectedUpdatedValue =
+      formatted[overrides.fieldToUpdate] || formatted.notes;
+    const receivedUpdatedValue = overrides.valueToUpdate || mockNote;
+
+    expect(expectedUpdatedValue).toEqual(receivedUpdatedValue);
   });
 };
