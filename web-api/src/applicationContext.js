@@ -860,6 +860,9 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
+  updateCaseAndAssociations,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations');
+const {
   updateCaseAutomaticBlock,
 } = require('../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const {
@@ -1498,6 +1501,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
+        updateCaseAndAssociations,
         updateCaseAutomaticBlock,
         updateInitialFilingDocuments,
       };
