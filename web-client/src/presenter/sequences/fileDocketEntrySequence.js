@@ -77,6 +77,7 @@ export const fileDocketEntrySequence = [
       clearAlertsAction,
       startShowValidationAction,
       computeFormDateFactoryAction(null),
+      setComputeFormDateFactoryAction('serviceDate'),
       computeCertificateOfServiceFormDateAction,
       setComputeFormDayFactoryAction('dateReceivedDay'),
       setComputeFormMonthFactoryAction('dateReceivedMonth'),

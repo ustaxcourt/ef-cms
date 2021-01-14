@@ -27,7 +27,7 @@ export const gotoEditCourtIssuedDocketEntry = [
   getCaseAction,
   setCaseAction,
   setDocketEntryFormForDocketEditAction,
-  computeFormDateFactoryAction(null),
+  computeFormDateFactoryAction(null, true),
   generateCourtIssuedDocumentTitleAction,
   setDocketEntryIdAction,
   set(state.isEditingDocketEntry, true),
