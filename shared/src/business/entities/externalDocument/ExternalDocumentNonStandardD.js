@@ -30,7 +30,10 @@ ExternalDocumentNonStandardD.prototype.init = function init(rawProps) {
 ExternalDocumentNonStandardD.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
-    this.previousDocument.documentTitle || this.previousDocument.documentType,
+    this.previousDocument
+      ? this.previousDocument.documentTitle ||
+          this.previousDocument.documentType
+      : '',
     formatDateString(this.serviceDate, 'MM-DD-YYYY'),
   );
 };

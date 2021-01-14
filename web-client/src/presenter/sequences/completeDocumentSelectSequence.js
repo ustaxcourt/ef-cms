@@ -21,6 +21,7 @@ export const completeDocumentSelectSequence = [
   computeFormDateAction,
   computeSecondaryFormDateAction,
   defaultSecondaryDocumentAction,
+  refreshExternalDocumentTitleFromEventCodeAction,
   generateTitleAction,
   validateSelectDocumentTypeAction,
   {
@@ -28,7 +29,6 @@ export const completeDocumentSelectSequence = [
     success: [
       clearAlertsAction,
       stopShowValidationAction,
-      refreshExternalDocumentTitleFromEventCodeAction,
       setDocketNumberPropAction,
       setDefaultFileDocumentFormValuesAction,
       canFileInConsolidatedCasesAction,

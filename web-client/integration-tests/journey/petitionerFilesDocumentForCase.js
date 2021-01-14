@@ -127,10 +127,6 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('completeDocumentSelectSequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
-
     expect(test.getState('form.documentTitle')).toEqual(
       'Motion for Leave to File Out of Time Statement Anything',
     );

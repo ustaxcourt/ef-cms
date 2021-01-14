@@ -30,7 +30,10 @@ ExternalDocumentNonStandardC.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
     this.freeText,
-    this.previousDocument.documentTitle || this.previousDocument.documentType,
+    this.previousDocument
+      ? this.previousDocument.documentTitle ||
+          this.previousDocument.documentType
+      : '',
   );
 };
 
