@@ -4,7 +4,12 @@ export const setComputeFormDateFactoryAction = path => {
   const setComputeFormDateAction = ({ props, store }) => {
     const { computedDate } = props;
 
-    store.set(state.form[path], computedDate);
+    if (computedDate) {
+      store.set(state.form[path], computedDate);
+    } else {
+      store.unset(state.form[path]);
+    }
+
     return { [path]: computedDate };
   };
 

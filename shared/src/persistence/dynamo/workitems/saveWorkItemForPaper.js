@@ -11,6 +11,7 @@ const { put } = require('../../dynamodbClientService');
  * @returns {Promise} the promise for the call to persistence
  */
 exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
+  console.log('le workItem :D', workItem);
   await Promise.all([
     put({
       Item: {

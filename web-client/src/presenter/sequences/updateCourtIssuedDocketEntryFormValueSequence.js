@@ -9,7 +9,7 @@ export const updateCourtIssuedDocketEntryFormValueSequence = [
   setFormValueAction,
   clearCourtIssuedDocketEntryFormValuesAction,
   setDefaultFreeTextForCourtIssuedDocketEntryAction,
-  computeFormDateFactoryAction(null),
+  computeFormDateFactoryAction(null, true),
   computeJudgeNameWithTitleAction,
   generateCourtIssuedDocumentTitleAction,
 ];
