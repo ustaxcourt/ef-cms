@@ -19,6 +19,7 @@ export const openConfirmPaperServiceModalSequence = [
   computeCertificateOfServiceFormDateAction,
   computeDateReceivedAction,
   setDocumentIsRequiredAction,
+  generateTitleForPaperFilingAction,
   validateDocketEntryAction,
   {
     error: [
@@ -27,7 +28,6 @@ export const openConfirmPaperServiceModalSequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
-      generateTitleForPaperFilingAction,
       clearModalStateAction,
       setShowModalFactoryAction('ConfirmInitiateServiceModal'),
     ],

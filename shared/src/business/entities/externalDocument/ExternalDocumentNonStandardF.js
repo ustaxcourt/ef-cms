@@ -40,7 +40,7 @@ ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES = {
 
 ExternalDocumentNonStandardF.schema = {
   category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
   documentType: JoiValidationConstants.STRING.required(),
   ordinalValue: JoiValidationConstants.STRING.required(),
   previousDocument: joi
