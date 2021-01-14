@@ -1,24 +1,18 @@
-import { AUTOMATIC_BLOCKED_REASONS } from '../../../shared/src/business/entities/EntityConstants';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import {
+  AUTOMATIC_BLOCKED_REASONS,
+  OBJECTIONS_OPTIONS_MAP,
+} from '../../../shared/src/business/entities/EntityConstants';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
-export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
+export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
+  test,
+  docketRecordIndex,
+) => {
   return it('docket clerk edits docket entry meta', async () => {
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'eventCode',
-      value: 'REQA',
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'ordinalValue',
-      value: 'First',
+      key: 'freeText',
+      value: 'The Sauceboss',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
@@ -61,6 +55,11 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
       value: true,
     });
 
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'objections',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
+    });
+
     await test.runSequence('submitEditDocketEntryMetaSequence', {
       docketNumber: test.docketNumber,
     });
@@ -95,19 +94,8 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
     );
 
     expect(pendingDocketEntry.pending).toEqual(true);
-
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(
-      caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
-    ).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketEntryId: pendingDocketEntry.docketEntryId,
-        }),
-      ]),
+    expect(pendingDocketEntry.documentTitle).toEqual(
+      'Application to Take Deposition of The Sauceboss',
     );
   });
 };
