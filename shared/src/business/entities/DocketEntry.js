@@ -127,7 +127,9 @@ DocketEntry.prototype.init = function init(
   this.relationship = rawDocketEntry.relationship;
   this.scenario = rawDocketEntry.scenario;
   this.secondaryDate = rawDocketEntry.secondaryDate;
-  this.secondaryDocument = rawDocketEntry.secondaryDocument;
+  if (rawDocketEntry.scenario === 'Nonstandard H') {
+    this.secondaryDocument = rawDocketEntry.secondaryDocument;
+  }
   this.servedAt = rawDocketEntry.servedAt;
   this.servedPartiesCode = rawDocketEntry.servedPartiesCode;
   this.serviceDate = rawDocketEntry.serviceDate;

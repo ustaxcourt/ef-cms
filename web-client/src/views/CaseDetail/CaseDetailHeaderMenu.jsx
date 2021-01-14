@@ -6,6 +6,7 @@ import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
 import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
 import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { PrioritizeCaseModal } from './PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './RemoveFromTrialSessionModal';
@@ -256,14 +257,15 @@ export const CaseDetailHeaderMenu = connect(
             <button
               aria-expanded={isCaseDetailMenuOpen}
               className="usa-accordion__button usa-nav__link hidden-underline case-detail-menu__button text-no-wrap"
-              icon={isCaseDetailMenuOpen ? 'caret-up' : 'caret-down'}
-              iconRight={true}
               id="case-detail-menu-button"
               onClick={() => {
                 toggleMenuSequence({ caseDetailMenu: 'CaseDetailMenu' });
               }}
             >
-              Create
+              Create{' '}
+              <FontAwesomeIcon
+                icon={isCaseDetailMenuOpen ? 'caret-up' : 'caret-down'}
+              />
             </button>
 
             {isCaseDetailMenuOpen && caseMenu()}

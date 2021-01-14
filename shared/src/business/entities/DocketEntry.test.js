@@ -1742,7 +1742,7 @@ describe('DocketEntry entity', () => {
   });
 
   describe('secondaryDocument validation', () => {
-    it('should not be valid if secondaryDocument is present and the scenario is not Nonstandard H', () => {
+    it('should not set value of secondaryDocument if the scenario is not Nonstandard H', () => {
       const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
@@ -1752,6 +1752,21 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
+      expect(createdDocketEntry.secondaryDocument).toBeUndefined();
+      expect(createdDocketEntry.isValid()).toEqual(true);
+    });
+    it('should not be valid if secondaryDocument is present and the scenario is not Nonstandard H', () => {
+      const createdDocketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Standard',
+        },
+        { applicationContext },
+      );
+      createdDocketEntry.secondaryDocument = {
+        secondaryDocumentInfo: 'was set by accessor rather than init',
+      };
       expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
         Object.keys(createdDocketEntry.getFormattedValidationErrors()),
