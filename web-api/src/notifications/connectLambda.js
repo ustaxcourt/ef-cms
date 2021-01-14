@@ -10,9 +10,17 @@ exports.connectLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const endpoint = event.requestContext.domainName;
 
-    return await applicationContext.getUseCases().onConnectInteractor({
+    const results = await applicationContext.getUseCases().onConnectInteractor({
       applicationContext,
       connectionId: event.requestContext.connectionId,
       endpoint,
     });
+
+    applicationContext.logger.info('Websocket connected', {
+      requestId: {
+        connection: event.requestContext.connectionId,
+      },
+    });
+
+    return results;
   });

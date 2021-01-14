@@ -1,5 +1,8 @@
 const AWS = require('aws-sdk');
 const {
+  createLogger,
+} = require('../../../../shared/src/utilities/createLogger');
+const {
   createPetitionerAccountInteractor,
 } = require('../../../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
@@ -7,6 +10,13 @@ const {
 } = require('../../../../shared/src/persistence/dynamo/users/persistUser');
 
 const { DynamoDB } = AWS;
+const logger = createLogger({
+  defaultMeta: {
+    environment: {
+      stage: process.env.STAGE || 'local',
+    },
+  },
+});
 
 const applicationContext = {
   getDocumentClient: () => {
@@ -25,6 +35,11 @@ const applicationContext = {
   getUseCases: () => ({
     createPetitionerAccountInteractor,
   }),
+  logger: {
+    debug: logger.debug.bind(logger),
+    error: logger.error.bind(logger),
+    info: logger.info.bind(logger),
+  },
 };
 
 exports.applicationContext = applicationContext;
@@ -33,11 +48,18 @@ exports.handler = async event => {
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
     const { email, name, sub: userId } = event.request.userAttributes;
 
-    await applicationContext.getUseCases().createPetitionerAccountInteractor({
-      applicationContext,
-      email,
-      name,
-      userId,
+    const user = await applicationContext
+      .getUseCases()
+      .createPetitionerAccountInteractor({
+        applicationContext,
+        email,
+        name,
+        userId,
+      });
+
+    applicationContext.logger.info('Petitioner signup processed', {
+      event,
+      user,
     });
   }
 

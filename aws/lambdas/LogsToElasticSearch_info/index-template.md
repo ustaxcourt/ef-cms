@@ -52,7 +52,8 @@ PUT _template/cwl
           "apiGateway": { "type": "keyword" },
           "applicationLoadBalancer": { "type": "keyword" },
           "lambda": { "type": "keyword" },
-          "authorizer": { "type": "keyword" }
+          "authorizer": { "type": "keyword" },
+          "connection": { "type": "keyword" }
         }
       },
       "request": {
