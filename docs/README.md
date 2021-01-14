@@ -34,6 +34,7 @@ Table of contents:
 |  Visual style guide | A [visual style guide](style-guide.pdf) — covering typography, colors, icons, buttons, form elements, etc. — is maintained as a PDF.
 | Accessibility testing | Per the requirements of the code review, all work must meet [Section 508 standards](https://www.section508.gov/), per [WCAG 2.0 AA](https://www.w3.org/TR/WCAG20/). The process by which that’s assured by developers is documented in [`testing.md`](testing.md#accessibility).
 | Developer Check Lists | Various check lists that can help you out when developing on this project and doing things such as adding a new endpoint or creating a new stack. [`CHECKLISTS.md`](CHECKLISTS.md).
+| Logging guide | What is needed in logs and where they are located is covered in the [Logging guide](logging.md).
 
 ## Reviewing and accepting changes to EF-CMS
 
@@ -46,3 +47,8 @@ The infrastructure for EF-CMS is configured with Terraform — see [Terraform ti
 1. [Initial environment setup](environments/setup.md)
 2. [Continuous release process with CircleCI](environments/release.md)
 3. [Environment teardown](environments/teardown.md)
+
+During routine operations of EF-CMS:
+
+- [Accessing log data in Kibana](operations/logging.md)
+- [Receiving system health alerts](operations/system-health-alerts.md)

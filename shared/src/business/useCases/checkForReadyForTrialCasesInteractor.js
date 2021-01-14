@@ -18,9 +18,9 @@ exports.checkForReadyForTrialCasesInteractor = async ({
   const updateForTrial = async entity => {
     // assuming we want these done serially; if first fails, promise is rejected and error thrown
     const caseEntity = entity.validate();
-    await applicationContext.getPersistenceGateway().updateCase({
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
     if (caseEntity.isReadyForTrial()) {
