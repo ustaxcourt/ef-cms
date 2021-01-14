@@ -38,7 +38,7 @@ ExternalDocumentNonStandardA.VALIDATION_ERROR_MESSAGES = {
 
 ExternalDocumentNonStandardA.schema = {
   category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.required(),
+  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
   documentType: JoiValidationConstants.STRING.required(),
   previousDocument: joi
     .object()

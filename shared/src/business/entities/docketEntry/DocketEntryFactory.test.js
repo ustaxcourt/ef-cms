@@ -24,10 +24,6 @@ describe('DocketEntryFactory', () => {
     expect(errors().primaryDocumentFile).toBeDefined();
   });
 
-  it('should require a documentTitle', () => {
-    expect(errors().documentTitle).toBeDefined();
-  });
-
   it('should require a file', () => {
     rawEntity.primaryDocumentFile = {};
     rawEntity.primaryDocumentFileSize = 1;
@@ -245,6 +241,7 @@ describe('DocketEntryFactory', () => {
   describe('otherFilingParty', () => {
     beforeEach(() => {
       rawEntity.dateReceived = createISODateString();
+      rawEntity.documentTitle = 'Order to do something';
       rawEntity.documentType = 'Order';
       rawEntity.eventCode = 'O';
       rawEntity.partyPrimary = true;
@@ -283,6 +280,7 @@ describe('DocketEntryFactory', () => {
   describe('partyPrimary', () => {
     beforeEach(() => {
       rawEntity.dateReceived = createISODateString();
+      rawEntity.documentTitle = 'Notice of Change of Address';
       rawEntity.documentType = 'Notice of Change of Address';
       rawEntity.eventCode = 'NCA';
     });

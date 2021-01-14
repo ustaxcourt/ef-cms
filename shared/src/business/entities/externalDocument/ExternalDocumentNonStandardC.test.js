@@ -3,6 +3,7 @@ const {
 } = require('./ExternalDocumentNonStandardC');
 const {
   over1000Characters,
+  over3000Characters,
 } = require('../../test/createTestApplicationContext');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 
@@ -47,6 +48,20 @@ describe('ExternalDocumentNonStandardC', () => {
         freeText:
           ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES.freeText[1]
             .message,
+      });
+    });
+
+    it('should be invalid when documentTitle is over 3000 characters', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentTitle: over3000Characters,
+        documentType: 'Affidavit in Support',
+        freeText: 'what',
+        previousDocument: { documentType: 'Petition' },
+        scenario: 'Nonstandard C',
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
       });
     });
   });

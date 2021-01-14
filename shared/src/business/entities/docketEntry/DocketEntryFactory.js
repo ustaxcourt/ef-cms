@@ -96,7 +96,7 @@ function DocketEntryFactory(rawProps) {
     attachments: joi.boolean(),
     certificateOfService: joi.boolean(),
     dateReceived: JoiValidationConstants.ISO_DATE.max('now').required(),
-    documentTitle: JoiValidationConstants.DOCUMENT_TITLE.required(),
+    documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
     documentType: JoiValidationConstants.STRING.valid(
       ...ALL_DOCUMENT_TYPES,
     ).optional(),
