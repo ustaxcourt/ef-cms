@@ -36,7 +36,13 @@ ExternalDocumentNonStandardC.prototype.getDocumentTitle = function () {
 
 ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
-  freeText: 'Enter name',
+  freeText: [
+    { contains: 'is required', message: 'Enter name' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    },
+  ],
 };
 
 ExternalDocumentNonStandardC.schema = {

@@ -1,6 +1,9 @@
 const {
   ExternalDocumentNonStandardC,
 } = require('./ExternalDocumentNonStandardC');
+const {
+  over1000Characters,
+} = require('../../test/createTestApplicationContext');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 
 const { VALIDATION_ERROR_MESSAGES } = ExternalDocumentNonStandardC;
@@ -14,7 +17,7 @@ describe('ExternalDocumentNonStandardC', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: VALIDATION_ERROR_MESSAGES.category,
         documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-        freeText: VALIDATION_ERROR_MESSAGES.freeText,
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
         previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
       });
     });
@@ -29,6 +32,22 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when freeText is over 1000 characters', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentTitle: 'Affidavit Of [Name] in Support Of [Document Name]',
+        documentType: 'Affidavit in Support',
+        freeText: over1000Characters,
+        previousDocument: { documentType: 'Petition' },
+        scenario: 'Nonstandard C',
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        freeText:
+          ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES.freeText[1]
+            .message,
+      });
     });
   });
 
