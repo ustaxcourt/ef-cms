@@ -77,6 +77,7 @@ export const fileDocketEntrySequence = [
       computeCertificateOfServiceFormDateAction,
       computeDateReceivedAction,
       setDocumentIsRequiredAction,
+      generateTitleForPaperFilingAction,
       validateDocketEntryAction,
       {
         error: [
@@ -86,7 +87,6 @@ export const fileDocketEntrySequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
-          generateTitleForPaperFilingAction,
           stopShowValidationAction,
           clearAlertsAction,
           isFileAttachedAction,

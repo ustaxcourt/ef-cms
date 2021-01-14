@@ -20,6 +20,7 @@ export const completeDocumentSelectSequence = [
   computeFormDateAction,
   computeSecondaryFormDateAction,
   defaultSecondaryDocumentAction,
+  generateTitleAction,
   validateSelectDocumentTypeAction,
   {
     error: [setValidationErrorsAction],
@@ -27,7 +28,6 @@ export const completeDocumentSelectSequence = [
       clearAlertsAction,
       stopShowValidationAction,
       refreshExternalDocumentTitleFromEventCodeAction,
-      generateTitleAction,
       setDocketNumberPropAction,
       setDefaultFileDocumentFormValuesAction,
       canFileInConsolidatedCasesAction,
