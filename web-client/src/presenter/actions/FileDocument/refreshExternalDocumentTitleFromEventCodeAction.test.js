@@ -37,4 +37,66 @@ describe('refreshExternalDocumentTitleFromEventCodeAction', () => {
       documentScenario.documentTitle,
     );
   });
+
+  it('should set the state.form.secondaryDocument.documentTitle secondaryDocument eventCode and category is defined', async () => {
+    const result = await runAction(
+      refreshExternalDocumentTitleFromEventCodeAction,
+      {
+        modules: { presenter },
+        state: {
+          form: {
+            category: 'Notice',
+            documentTitle:
+              'Notice of Concatenated Title that should be refreshed',
+            documentType: 'Notice of Abatement of Jeopardy Assessment',
+            eventCode: 'NAJA',
+            secondaryDocument: {
+              category: 'Miscellaneous',
+              documentTitle: '[First, Second, etc.] Amendment to blablahblah',
+              documentType: 'Amendment blablahblah',
+              eventCode: 'ADMT',
+              labelFreeText: '',
+              labelPreviousDocument: 'What is this amendment for?',
+              ordinalField: 'What iteration is this filing?',
+              scenario: 'Nonstandard F',
+            },
+          },
+        },
+      },
+    );
+
+    expect(result.state.form.secondaryDocument.documentTitle).toEqual(
+      '[First, Second, etc.] Amendment to [anything]',
+    );
+  });
+
+  it('should set the state.form.secondaryDocument.documentTitle secondaryDocument eventCode and category is defined', async () => {
+    const result = await runAction(
+      refreshExternalDocumentTitleFromEventCodeAction,
+      {
+        modules: { presenter },
+        state: {
+          form: {
+            category: 'Notice',
+            documentTitle:
+              'Notice of Concatenated Title that should be refreshed',
+            documentType: 'Notice of Abatement of Jeopardy Assessment',
+            eventCode: 'NAJA',
+            secondaryDocument: {
+              documentTitle: '[First, Second, etc.] Amendment to blablahblah',
+              documentType: 'Amendment blablahblah',
+              labelFreeText: '',
+              labelPreviousDocument: 'What is this amendment for?',
+              ordinalField: 'What iteration is this filing?',
+              scenario: 'Nonstandard F',
+            },
+          },
+        },
+      },
+    );
+
+    expect(result.state.form.secondaryDocument.documentTitle).toEqual(
+      '[First, Second, etc.] Amendment to blablahblah',
+    );
+  });
 });
