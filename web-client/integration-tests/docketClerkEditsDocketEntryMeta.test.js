@@ -5,6 +5,7 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkEditsDocketEntryMeta } from './journey/docketClerkEditsDocketEntryMeta';
 import { docketClerkEditsDocketEntryMetaCourtIssued } from './journey/docketClerkEditsDocketEntryMetaCourtIssued';
 import { docketClerkEditsDocketEntryMetaMinuteEntry } from './journey/docketClerkEditsDocketEntryMetaMinuteEntry';
+import { docketClerkEditsDocketEntryMetaWithNewFreeText } from './journey/docketClerkEditsDocketEntryMetaWithNewFreeText';
 import { docketClerkNavigatesToEditDocketEntryMeta } from './journey/docketClerkNavigatesToEditDocketEntryMeta';
 import { docketClerkNavigatesToEditDocketEntryMetaCourtIssued } from './journey/docketClerkNavigatesToEditDocketEntryMetaCourtIssued';
 import { docketClerkNavigatesToEditDocketEntryMetaMinuteEntry } from './journey/docketClerkNavigatesToEditDocketEntryMetaMinuteEntry';
@@ -19,6 +20,7 @@ import { docketClerkVerifiesEditCourtIssuedNonstandardFields } from './journey/d
 import { docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
+import { petitionerFilesApplicationToTakeDeposition } from './journey/petitionerFilesApplicationToTakeDeposition';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -77,4 +79,11 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkServesDocument(test, 1);
   docketClerkNavigatesToEditDocketEntryMetaCourtIssued(test, 5);
   docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge(test);
+
+  loginAs(test, 'petitioner@example.com');
+  petitionerFilesApplicationToTakeDeposition(test, fakeFile);
+
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkNavigatesToEditDocketEntryMeta(test, 6);
+  docketClerkEditsDocketEntryMetaWithNewFreeText(test, 6);
 });
