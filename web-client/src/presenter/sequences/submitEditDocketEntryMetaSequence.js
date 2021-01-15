@@ -11,6 +11,7 @@ import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDate
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
+import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setFormDateAction } from '../actions/setFormDateAction';
@@ -38,7 +39,10 @@ export const submitEditDocketEntryMetaSequence = [
       generateCourtIssuedDocumentTitleAction,
       setupUploadMetadataAction,
     ],
-    document: [generateTitleAction],
+    document: [
+      refreshExternalDocumentTitleFromEventCodeAction,
+      generateTitleAction,
+    ],
     noDocument: [],
   },
   validateDocumentAction,
