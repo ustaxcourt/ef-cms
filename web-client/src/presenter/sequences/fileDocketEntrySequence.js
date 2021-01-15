@@ -4,8 +4,8 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
 import { getIsSavingForLaterAction } from '../actions/DocketEntry/getIsSavingForLaterAction';
@@ -76,13 +76,13 @@ export const fileDocketEntrySequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       setComputeFormDateFactoryAction('serviceDate'),
       computeCertificateOfServiceFormDateAction,
       setComputeFormDayFactoryAction('dateReceivedDay'),
       setComputeFormMonthFactoryAction('dateReceivedMonth'),
       setComputeFormYearFactoryAction('dateReceivedYear'),
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       setComputeFormDateFactoryAction('dateReceived'),
       setDocumentIsRequiredAction,
       validateDocketEntryAction,

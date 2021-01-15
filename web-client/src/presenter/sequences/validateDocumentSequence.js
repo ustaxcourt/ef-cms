@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
 import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
@@ -18,7 +18,7 @@ export const validateDocumentSequence = [
       setComputeFormDayFactoryAction('dateReceivedDay'),
       setComputeFormMonthFactoryAction('dateReceivedMonth'),
       setComputeFormYearFactoryAction('dateReceivedYear'),
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       setComputeFormDateFactoryAction('dateReceived'),
       validateDocumentAction,
       {

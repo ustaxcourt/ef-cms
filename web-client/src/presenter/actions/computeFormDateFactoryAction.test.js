@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { computeFormDateFactoryAction } from './computeFormDateFactoryAction';
+import { getComputedFormDateFactoryAction } from './computeFormDateFactoryAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
@@ -9,14 +9,14 @@ describe('computeFormDateFactoryAction', () => {
   });
 
   it('returns a computeFormDateAction function', () => {
-    expect(computeFormDateFactoryAction('testPrefix', false)).toBeInstanceOf(
-      Function,
-    );
+    expect(
+      getComputedFormDateFactoryAction('testPrefix', false),
+    ).toBeInstanceOf(Function);
   });
 
   describe('computeFormDateAction', () => {
     it('computes date parts from generic state.form values if no prefix is given in the outter scope and returns', async () => {
-      const result = await runAction(computeFormDateFactoryAction(), {
+      const result = await runAction(getComputedFormDateFactoryAction(), {
         modules: {
           presenter,
         },
@@ -34,7 +34,7 @@ describe('computeFormDateFactoryAction', () => {
 
     it('computes date parts from the computed state.form values if a prefix is given in the outter scope', async () => {
       const result = await runAction(
-        computeFormDateFactoryAction('testPrefix'),
+        getComputedFormDateFactoryAction('testPrefix'),
         {
           modules: {
             presenter,
@@ -56,18 +56,21 @@ describe('computeFormDateFactoryAction', () => {
     });
 
     it('returns the date in iso string format if toIsoString is given as true in the outter scope', async () => {
-      const result = await runAction(computeFormDateFactoryAction(null, true), {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: {
-            day: '13',
-            month: '1',
-            year: '2020',
+      const result = await runAction(
+        getComputedFormDateFactoryAction(null, true),
+        {
+          modules: {
+            presenter,
+          },
+          state: {
+            form: {
+              day: '13',
+              month: '1',
+              year: '2020',
+            },
           },
         },
-      });
+      );
 
       expect(result.output.computedDate).toEqual('2020-01-13T05:00:00.000Z');
     });

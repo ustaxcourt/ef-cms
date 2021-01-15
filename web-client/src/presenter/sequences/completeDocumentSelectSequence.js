@@ -1,9 +1,9 @@
 import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
@@ -21,7 +21,7 @@ import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocum
 
 export const completeDocumentSelectSequence = [
   startShowValidationAction,
-  computeFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction(null),
   setComputeFormDateFactoryAction('serviceDate'),
   formHasSecondaryDocumentAction,
   {
@@ -30,7 +30,7 @@ export const completeDocumentSelectSequence = [
       setComputeFormDayFactoryAction('secondaryDocument.day'),
       setComputeFormMonthFactoryAction('secondaryDocument.month'),
       setComputeFormYearFactoryAction('secondaryDocument.year'),
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
     ],
   },

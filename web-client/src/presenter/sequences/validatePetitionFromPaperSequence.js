@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { computeStatisticDatesAction } from '../actions/StartCaseInternal/computeStatisticDatesAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
@@ -11,13 +11,13 @@ export const validatePetitionFromPaperSequence = [
   {
     ignore: [],
     validate: [
-      computeFormDateFactoryAction('receivedAt', true),
+      getComputedFormDateFactoryAction('receivedAt', true),
       setComputeFormDateFactoryAction('receivedAt'),
-      computeFormDateFactoryAction('irsNotice', true),
+      getComputedFormDateFactoryAction('irsNotice', true),
       setComputeFormDateFactoryAction('irsNoticeDate'),
-      computeFormDateFactoryAction('petitionPayment', true),
+      getComputedFormDateFactoryAction('petitionPayment', true),
       setComputeFormDateFactoryAction('petitionPayment'),
-      computeFormDateFactoryAction('paymentDateWaived', true),
+      getComputedFormDateFactoryAction('paymentDateWaived', true),
       setComputeFormDateFactoryAction('paymentDateWaived'),
       computeStatisticDatesAction,
       validatePetitionFromPaperAction,
