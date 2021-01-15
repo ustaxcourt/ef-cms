@@ -114,6 +114,26 @@ resource "aws_cognito_user_pool_client" "client" {
   supported_identity_providers = ["COGNITO"]
 
   user_pool_id = aws_cognito_user_pool.pool.id
+
+  write_attributes = [
+    "address",
+    "birthdate",
+    "email",
+    "family_name",
+    "gender",
+    "given_name",
+    "locale", 
+    "middle_name", 
+    "name",
+    "nickname",
+    "phone_number",
+    "picture",
+    "preferred_username",
+    "profile",
+    "updated_at",
+    "website",
+    "zoneinfo",
+  ]
 }
 
 resource "aws_cognito_user_pool_domain" "main" {
@@ -224,6 +244,26 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   supported_identity_providers = ["COGNITO"]
 
   user_pool_id = aws_cognito_user_pool.irs_pool.id
+
+  write_attributes = [
+    "address",
+    "birthdate",
+    "email",
+    "family_name",
+    "gender",
+    "given_name",
+    "locale", 
+    "middle_name", 
+    "name",
+    "nickname",
+    "phone_number",
+    "picture",
+    "preferred_username",
+    "profile",
+    "updated_at",
+    "website",
+    "zoneinfo",
+  ]
 }
 
 resource "aws_cognito_user_pool_domain" "irs" {
