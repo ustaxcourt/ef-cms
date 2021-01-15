@@ -32,16 +32,42 @@ export const caseDetailPractitionerSearchHelper = get => {
     });
   }
 
+  const practitionerSearchResultsCount =
+    modalState &&
+    modalState.practitionerMatches &&
+    modalState.practitionerMatches.length;
+
+  const respondentSearchResultsCount =
+    modalState &&
+    modalState.respondentMatches &&
+    modalState.respondentMatches.length;
+
+  let showOnePractitioner = false;
+  let showMultiplePractitioners = false;
+
+  if (practitionerSearchResultsCount === 1) {
+    showOnePractitioner = true;
+  } else if (practitionerSearchResultsCount > 1) {
+    showMultiplePractitioners = true;
+  }
+
+  let showOneRespondent = false;
+  let showMultipleRespondents = false;
+
+  if (respondentSearchResultsCount === 1) {
+    showOneRespondent = true;
+  } else if (respondentSearchResultsCount > 1) {
+    showMultipleRespondents = true;
+  }
+
   return {
     practitionerMatchesFormatted,
-    practitionerSearchResultsCount:
-      modalState &&
-      modalState.practitionerMatches &&
-      modalState.practitionerMatches.length,
+    practitionerSearchResultsCount,
     respondentMatchesFormatted,
-    respondentSearchResultsCount:
-      modalState &&
-      modalState.respondentMatches &&
-      modalState.respondentMatches.length,
+    respondentSearchResultsCount,
+    showMultiplePractitioners,
+    showMultipleRespondents,
+    showOnePractitioner,
+    showOneRespondent,
   };
 };

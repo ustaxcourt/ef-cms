@@ -3,6 +3,9 @@ const {
   createISODateString,
 } = require('../../utilities/DateHandler');
 const {
+  over3000Characters,
+} = require('../../test/createTestApplicationContext');
+const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
@@ -61,6 +64,21 @@ describe('ExternalDocumentNonStandardD', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         serviceDate: VALIDATION_ERROR_MESSAGES.serviceDate[1],
+      });
+    });
+
+    it('should be invalid when documentTitle is over 3000 characters', () => {
+      const serviceDate = createISODateString();
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentTitle: over3000Characters,
+        documentType: 'Certificate of Service',
+        previousDocument: { documentType: 'Petition' },
+        scenario: 'Nonstandard D',
+        serviceDate,
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
       });
     });
   });

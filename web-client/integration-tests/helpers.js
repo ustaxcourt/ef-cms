@@ -29,7 +29,7 @@ import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormData from 'form-data';
+import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import queryString from 'query-string';
@@ -250,11 +250,11 @@ export const getNotifications = test => {
 export const assignWorkItems = async (test, to, workItems) => {
   const users = {
     adc: {
-      name: 'Test ADC',
+      name: 'test ADC',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     },
     docketclerk: {
-      name: 'Test Docketclerk',
+      name: 'test Docketclerk',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     },
   };
@@ -395,7 +395,7 @@ export const loginAs = (test, user) => {
 
 export const setupTest = ({ useCases = {} } = {}) => {
   let test;
-  global.FormData = FormData;
+  global.FormData = FormDataHelper;
   global.Blob = () => {
     return fakeFile;
   };
@@ -423,20 +423,23 @@ export const setupTest = ({ useCases = {} } = {}) => {
   presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.applicationContext = applicationContext;
-  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+  const {
+    initialize: initializeSocketProvider,
+    start,
+    stop: stopSocket,
+  } = socketProvider({
     socketRouter,
   });
-  presenter.providers.socket = { start, stop };
+  presenter.providers.socket = { start, stop: stopSocket };
 
   test = CerebralTest(presenter);
-  test.getSequence = name => async obj => await test.runSequence(name, obj);
-  test.closeSocket = stop;
+  test.getSequence = seqName => async obj =>
+    await test.runSequence(seqName, obj);
+  test.closeSocket = stopSocket;
   test.applicationContext = applicationContext;
 
-  const { window } = dom;
-
   global.window = {
-    ...window,
+    ...dom.window,
     DOMParser: () => {
       return {
         parseFromString: () => {
@@ -512,11 +515,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
   };
 
   test = CerebralTest(presenter);
-  test.getSequence = name => async obj => {
-    const result = await test.runSequence(name, obj);
-    return result;
-  };
-  test.closeSocket = stop;
+  test.getSequence = seqName => async obj =>
+    await test.runSequence(seqName, obj);
+  test.closeSocket = stopSocket;
 
   test.setState('constants', applicationContext.getConstants());
 
@@ -605,9 +606,7 @@ export const getPetitionDocumentForCase = caseDetail => {
   // In our tests, we had numerous instances of `case.docketEntries[0]`, which would
   // return the petition document most of the time, but occasionally fail,
   // producing unintended results.
-  return caseDetail.docketEntries.find(
-    document => document.documentType === 'Petition',
-  );
+  return caseDetail.docketEntries.find(doc => doc.documentType === 'Petition');
 };
 
 export const getPetitionWorkItemForCase = caseDetail => {

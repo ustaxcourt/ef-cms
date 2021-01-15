@@ -31,7 +31,7 @@ CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function () {
 
 CourtIssuedDocumentTypeC.schema = {
   attachments: joi.boolean().required(),
-  docketNumbers: JoiValidationConstants.STRING.required(),
+  docketNumbers: JoiValidationConstants.STRING.max(500).required(),
   documentTitle: JoiValidationConstants.STRING.optional(),
   documentType: JoiValidationConstants.STRING.required(),
   eventCode: CourtIssuedDocumentDefault.schema.eventCode,

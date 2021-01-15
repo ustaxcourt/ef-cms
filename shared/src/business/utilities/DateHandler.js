@@ -277,6 +277,19 @@ const dateHasText = updatedDateString => {
   );
 };
 
+const computeDate = ({ day, month, year }) => {
+  let computedDate = null;
+  if (month || day || year) {
+    computedDate = `${year}-${month}-${day}`;
+
+    computedDate = computedDate
+      .split('-')
+      .map(segment => segment.padStart(2, '0'))
+      .join('-');
+  }
+  return computedDate;
+};
+
 module.exports = {
   FORMATS,
   PATTERNS,
@@ -285,6 +298,7 @@ module.exports = {
   calendarDatesCompared,
   castToISO,
   checkDate,
+  computeDate,
   createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,

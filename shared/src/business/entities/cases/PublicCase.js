@@ -1,6 +1,6 @@
 const joi = require('joi');
 const {
-  COURT_ISSUED_DOCUMENT_TYPES,
+  COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   PARTY_TYPES,
@@ -152,9 +152,9 @@ const isPrivateDocument = function (documentEntity) {
   const isTranscript = documentEntity.eventCode === TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(documentEntity.documentType);
   const isDocumentOnDocketRecord = documentEntity.isOnDocketRecord;
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    documentEntity.documentType,
-  );
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(documentEntity.eventCode);
   const documentIsStricken = !!documentEntity.isStricken;
 
   const isPublicDocumentType =

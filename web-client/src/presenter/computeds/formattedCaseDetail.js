@@ -81,7 +81,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
+    EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
@@ -220,7 +220,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       hasDocument: entry.isFileAttached,
       isCourtIssuedDocument: entry.isCourtIssuedDocument,
       isExternalUser,
-      isHiddenToPublic: EVENT_CODES_NOT_VISIBLE_TO_PUBLIC.includes(
+      isHiddenToPublic: !EVENT_CODES_VISIBLE_TO_PUBLIC.includes(
         entry.eventCode,
       ),
       isInitialDocument,

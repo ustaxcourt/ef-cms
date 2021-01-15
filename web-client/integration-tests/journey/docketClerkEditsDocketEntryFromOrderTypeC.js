@@ -52,7 +52,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers,
+      docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers[0].message,
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {

@@ -63,8 +63,8 @@ exports.fileDocketEntryInteractor = async ({
     [primaryDocumentFileId, documentMetadata, DOCUMENT_RELATIONSHIPS.PRIMARY],
   ];
 
-  for (let document of documentsToFile) {
-    const [docketEntryId, metadata, relationship] = document;
+  for (let doc of documentsToFile) {
+    const [docketEntryId, metadata, relationship] = doc;
 
     if (docketEntryId && metadata) {
       let servedParties;

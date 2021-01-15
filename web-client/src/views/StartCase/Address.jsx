@@ -28,7 +28,7 @@ export const Address = connect(
     validationErrors,
   }) {
     /**
-     *
+     * @returns {object} city and state form group for mobile
      */
     function MobileCityAndState() {
       return (
@@ -86,7 +86,7 @@ export const Address = connect(
     }
 
     /**
-     *
+     * @returns {object} city and state form group for non-mobile
      */
     function NonMobileCityAndState() {
       return (
