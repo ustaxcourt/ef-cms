@@ -1,9 +1,9 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -24,7 +24,7 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 
 export const completeDocketEntryQCSequence = [
   startShowValidationAction,
-  computeFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction(null),
   formHasSecondaryDocumentAction,
   {
     no: [],
@@ -32,7 +32,7 @@ export const completeDocketEntryQCSequence = [
       setComputeFormDayFactoryAction('secondaryDocument.day'),
       setComputeFormMonthFactoryAction('secondaryDocument.month'),
       setComputeFormYearFactoryAction('secondaryDocument.year'),
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
     ],
   },
@@ -40,7 +40,7 @@ export const completeDocketEntryQCSequence = [
   setComputeFormDayFactoryAction('dateReceivedDay'),
   setComputeFormMonthFactoryAction('dateReceivedMonth'),
   setComputeFormYearFactoryAction('dateReceivedYear'),
-  computeFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction(null),
   setComputeFormDateFactoryAction('dateReceived'),
   validateDocketEntryAction,
   {

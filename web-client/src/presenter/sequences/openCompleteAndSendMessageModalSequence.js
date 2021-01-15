@@ -1,8 +1,8 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
@@ -23,7 +23,7 @@ export const openCompleteAndSendMessageModalSequence = [
       setComputeFormDayFactoryAction('secondaryDocument.day'),
       setComputeFormMonthFactoryAction('secondaryDocument.month'),
       setComputeFormYearFactoryAction('secondaryDocument.year'),
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
     ],
   },
@@ -31,7 +31,7 @@ export const openCompleteAndSendMessageModalSequence = [
   setComputeFormDayFactoryAction('dateReceivedDay'),
   setComputeFormMonthFactoryAction('dateReceivedMonth'),
   setComputeFormYearFactoryAction('dateReceivedYear'),
-  computeFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction(null),
   setComputeFormDateFactoryAction('dateReceived'),
   validateDocketEntryAction,
   {

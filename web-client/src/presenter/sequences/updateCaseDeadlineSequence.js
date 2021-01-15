@@ -3,8 +3,8 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -16,7 +16,7 @@ import { validateCaseDeadlineAction } from '../actions/CaseDeadline/validateCase
 export const updateCaseDeadlineSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  computeFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction(null),
   validateCaseDeadlineAction,
   {
     error: [setValidationErrorsAction],
