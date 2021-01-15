@@ -3,6 +3,7 @@ import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from '../AddDocketEntry/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
+import { SecondaryDocumentForm } from '../AddDocketEntry/SecondaryDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {
@@ -121,6 +122,56 @@ export const EditDocketEntryMetaFormDocument = connect(
           />
         </FormGroup>
 
+        {editDocketEntryMetaHelper.primary.showSecondaryDocumentForm && (
+          <FormGroup
+            errorText={
+              validationErrors.secondaryDocument && !form.secondaryDocument
+            }
+          >
+            <label
+              className="usa-label"
+              htmlFor="react-select-3-input"
+              id="secondary-document-type-label"
+            >
+              Which Document Is This Motion for Leave For?
+              <span className="usa-hint">
+                You can upload the associated document by creating a new docket
+                entry for it.
+              </span>
+            </label>
+            <SelectSearch
+              aria-label="secondary-document-type-label"
+              id="secondary-document-type"
+              isClearable={true}
+              name="secondaryDocument.eventCode"
+              options={internalTypesHelper.internalDocumentTypesForSelectSorted}
+              value={reactSelectValue({
+                documentTypes:
+                  internalTypesHelper.internalDocumentTypesForSelectSorted,
+                selectedEventCode:
+                  form.secondaryDocument && form.secondaryDocument.eventCode,
+              })}
+              onChange={(inputValue, { action, name: inputName }) => {
+                docketEntryOnChange({
+                  action,
+                  inputName,
+                  inputValue,
+                  updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
+                  validateSequence: validateDocumentSequence,
+                });
+                return true;
+              }}
+              onInputChange={(inputText, { action }) => {
+                onInputChange({
+                  action,
+                  inputText,
+                  updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
+                });
+              }}
+            />
+          </FormGroup>
+        )}
+
         {editDocketEntryMetaHelper.primary.showNonstandardForm && (
           <NonstandardForm
             helper="editDocketEntryMetaHelper"
@@ -130,6 +181,8 @@ export const EditDocketEntryMetaFormDocument = connect(
             validationErrors="validationErrors"
           />
         )}
+
+        {form.secondaryDocument && <SecondaryDocumentForm />}
 
         <FormGroup errorText={validationErrors.additionalInfo}>
           <label
