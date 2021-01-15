@@ -34,24 +34,24 @@ exports.dataSecurityFilter = (data, { applicationContext }) => {
 /**
  * generic handler function for use in lambdas
  *
- * @param {object} event the AWS event object
+ * @param {object} awsEvent the AWS event object
  * @param {Function} cb the code to be executed
  * @param options
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 
-exports.genericHandler = (event, cb, options = {}) => {
-  return handle(event, async () => {
-    const user = options.user || getUserFromAuthHeader(event);
+exports.genericHandler = (awsEvent, cb, options = {}) => {
+  return handle(awsEvent, async () => {
+    const user = options.user || getUserFromAuthHeader(awsEvent);
     const applicationContext =
       options.applicationContext ||
-      createApplicationContext(user, event.logger);
+      createApplicationContext(user, awsEvent.logger);
 
-    delete event.logger;
+    delete awsEvent.logger;
 
     try {
       applicationContext.logger.debug('Request:', {
-        request: event,
+        request: awsEvent,
         user,
       });
 

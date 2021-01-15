@@ -24,10 +24,10 @@ const getElasticSearchStatus = async ({ applicationContext }) => {
 
 const getDynamoStatus = async ({ applicationContext }) => {
   try {
-    const status = await applicationContext
+    const dynamoStatus = await applicationContext
       .getPersistenceGateway()
       .getTableStatus({ applicationContext });
-    return status === 'ACTIVE';
+    return dynamoStatus === 'ACTIVE';
   } catch (e) {
     applicationContext.logger.error('Dynamo health check failed. ', e);
     return false;
@@ -36,10 +36,10 @@ const getDynamoStatus = async ({ applicationContext }) => {
 
 const getDeployDynamoStatus = async ({ applicationContext }) => {
   try {
-    const status = await applicationContext
+    const deployDynamoStatus = await applicationContext
       .getPersistenceGateway()
       .getDeployTableStatus({ applicationContext });
-    return status === 'ACTIVE';
+    return deployDynamoStatus === 'ACTIVE';
   } catch (e) {
     applicationContext.logger.error('Dynamo deploy health check failed. ', e);
     return false;

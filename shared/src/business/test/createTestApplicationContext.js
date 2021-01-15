@@ -48,6 +48,12 @@ const {
   documentUrlTranslator,
 } = require('../../../src/business/utilities/documentUrlTranslator');
 const {
+  fakeData,
+  getFakeFile,
+  testInvalidPdfDoc,
+  testPdfDoc,
+} = require('./getFakeFile');
+const {
   filterWorkItemsForUser,
 } = require('../../../src/business/utilities/filterWorkItemsForUser');
 const {
@@ -131,7 +137,6 @@ const {
 const { Case, caseHasServedDocketEntries } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { fakeData, getFakeFile, testPdfDoc } = require('./getFakeFile');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
@@ -147,11 +152,11 @@ const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
 const appContextProxy = (initial = {}, makeMock = true) => {
   const applicationContextHandler = {
-    get(target, name, receiver) {
-      if (!Reflect.has(target, name)) {
-        Reflect.set(target, name, jest.fn(), receiver);
+    get(target, myName, receiver) {
+      if (!Reflect.has(target, myName)) {
+        Reflect.set(target, myName, jest.fn(), receiver);
       }
-      return Reflect.get(target, name, receiver);
+      return Reflect.get(target, myName, receiver);
     },
   };
   const proxied = new Proxy(initial, applicationContextHandler);
@@ -303,8 +308,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
-    standingPretrialNotice: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
+    standingPretrialOrderForSmallCase: jest
+      .fn()
+      .mockImplementation(getFakeFile),
     trialCalendar: jest.fn().mockImplementation(getFakeFile),
     trialSessionPlanningReport: jest.fn().mockImplementation(getFakeFile),
   };
@@ -545,5 +552,6 @@ module.exports = {
   createTestApplicationContext,
   fakeData,
   getFakeFile,
+  testInvalidPdfDoc,
   testPdfDoc,
 };
