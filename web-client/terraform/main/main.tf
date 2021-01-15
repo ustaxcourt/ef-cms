@@ -168,7 +168,7 @@ resource "aws_route53_health_check" "public_ui_health_check" {
   port              = 443
   type              = "HTTPS"
   resource_path     = "/"
-  failure_threshold = "2"
+  failure_threshold = "3"
   request_interval  = "30"
   regions           = [ "us-east-1", "us-west-1", "us-west-2" ] # Minimum of three regions required
 }
@@ -197,7 +197,7 @@ resource "aws_route53_health_check" "ui_health_check" {
   port              = 443
   type              = "HTTPS"
   resource_path     = "/"
-  failure_threshold = "2"
+  failure_threshold = "3"
   request_interval  = "30"
   regions           = [ "us-east-1", "us-west-1", "us-west-2" ] # Minimum of three regions required
 }
@@ -226,7 +226,7 @@ resource "aws_route53_health_check" "status_health_check" {
   port               = 443
   type               = "HTTPS_STR_MATCH"
   resource_path      = "/public-api/health"
-  failure_threshold  = "2"
+  failure_threshold  = "3"
   request_interval   = "30"
   invert_healthcheck = true
   search_string      = "false" # Search for any JSON property returning "false"
