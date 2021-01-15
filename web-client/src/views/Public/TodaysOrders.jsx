@@ -73,6 +73,7 @@ export const TodaysOrders = connect(
                           <Button
                             link
                             aria-label={`View PDF: ${order.documentTitle}`}
+                            className="text-left line-height-standard"
                             onClick={() => {
                               openCaseDocumentDownloadUrlSequence({
                                 docketEntryId: order.docketEntryId,
