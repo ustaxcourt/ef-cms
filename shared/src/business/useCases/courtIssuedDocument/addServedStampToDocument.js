@@ -1,4 +1,7 @@
-const { getPageDimensions } = require('../generateSignedDocumentInteractor');
+const getPageDimensionsWithTrim = page => {
+  const size = page.getTrimBox();
+  return { pageWidth: size.width, startingY: size.y };
+};
 
 /**
  * addServedStampToDocument
@@ -30,7 +33,7 @@ exports.addServedStampToDocument = async ({
   const pages = pdfDoc.getPages();
   const page = pages[0];
 
-  const [originalPageWidth] = getPageDimensions(page);
+  const { pageWidth, startingY } = getPageDimensionsWithTrim(page);
 
   const helveticaBoldFont = pdfDoc.embedStandardFont(
     StandardFonts.HelveticaBold,
@@ -45,8 +48,8 @@ exports.addServedStampToDocument = async ({
   const textHeight = helveticaBoldFont.sizeAtHeight(textSize);
   const boxWidth = serviceStampWidth + padding * 2;
   const boxHeight = textHeight + padding * 2;
-  const posX = originalPageWidth / 2 - boxWidth / 2;
-  const posY = boxHeight;
+  const posX = pageWidth / 2 - boxWidth / 2;
+  const posY = startingY + padding * 2;
 
   page.drawRectangle({
     color: rgb(1, 1, 1),
@@ -59,7 +62,7 @@ exports.addServedStampToDocument = async ({
     font: helveticaBoldFont,
     size: textSize,
     x: posX + padding,
-    y: posY + padding,
+    y: posY + padding * 2,
   });
 
   const pdfBytes = await pdfDoc.save({
