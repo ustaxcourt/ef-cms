@@ -35,7 +35,7 @@ AddIrsPractitioner.VALIDATION_ERROR_MESSAGES = {
 };
 
 AddIrsPractitioner.schema = joi.object().keys({
-  email: joi.optional(),
+  email: JoiValidationConstants.STRING.optional(),
   serviceIndicator: joi
     .when('email', {
       is: joi.exist().not(null),
