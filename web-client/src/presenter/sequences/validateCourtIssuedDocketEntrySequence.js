@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
@@ -9,7 +9,7 @@ export const validateCourtIssuedDocketEntrySequence = [
   {
     ignore: [],
     validate: [
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       validateCourtIssuedDocketEntryAction,
       {
         error: [setValidationErrorsAction],

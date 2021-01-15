@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
 import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
@@ -14,7 +14,7 @@ export const validateSelectDocumentTypeSequence = [
   {
     ignore: [],
     validate: [
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       setComputeFormDateFactoryAction('serviceDate'),
       formHasSecondaryDocumentAction,
       {
@@ -23,7 +23,7 @@ export const validateSelectDocumentTypeSequence = [
           setComputeFormDayFactoryAction('secondaryDocument.day'),
           setComputeFormMonthFactoryAction('secondaryDocument.month'),
           setComputeFormYearFactoryAction('secondaryDocument.year'),
-          computeFormDateFactoryAction(null),
+          getComputedFormDateFactoryAction(null),
           setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
         ],
       },

@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
 import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
@@ -16,7 +16,7 @@ export const validateDocketEntrySequence = [
     ignore: [],
     validate: [
       computeCertificateOfServiceFormDateAction,
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       setComputeFormDateFactoryAction('serviceDate'),
       formHasSecondaryDocumentAction,
       {
@@ -25,14 +25,14 @@ export const validateDocketEntrySequence = [
           setComputeFormDayFactoryAction('secondaryDocument.day'),
           setComputeFormMonthFactoryAction('secondaryDocument.month'),
           setComputeFormYearFactoryAction('secondaryDocument.year'),
-          computeFormDateFactoryAction(null),
+          getComputedFormDateFactoryAction(null),
           setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
         ],
       },
       setComputeFormDayFactoryAction('dateReceivedDay'),
       setComputeFormMonthFactoryAction('dateReceivedMonth'),
       setComputeFormYearFactoryAction('dateReceivedYear'),
-      computeFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null),
       setComputeFormDateFactoryAction('dateReceived'),
       validateDocketEntryAction,
       {

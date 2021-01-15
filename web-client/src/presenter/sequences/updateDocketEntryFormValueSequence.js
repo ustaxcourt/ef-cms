@@ -1,9 +1,9 @@
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setFileDocumentFormValueAction } from '../actions/setFileDocumentFormValueAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const updateDocketEntryFormValueSequence = [
   setFileDocumentFormValueAction,
-  computeFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction(null),
   updateDocketEntryWizardDataAction,
 ];
