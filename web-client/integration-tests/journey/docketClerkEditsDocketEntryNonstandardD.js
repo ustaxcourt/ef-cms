@@ -70,13 +70,9 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       value: petitionDocument.docketEntryId,
     });
 
-    console.log('form', test.getState('form'));
-
     await test.runSequence('fileDocketEntrySequence', {
       isSavingForLater: true,
     });
-
-    console.log('form', test.getState('form'));
 
     expect(test.getState('validationErrors')).toEqual({});
 

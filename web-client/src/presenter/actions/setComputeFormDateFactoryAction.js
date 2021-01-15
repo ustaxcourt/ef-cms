@@ -6,12 +6,13 @@ export const setComputeFormDateFactoryAction = path => {
 
     if (computedDate) {
       store.set(state.form[path], computedDate);
-      store.unset(state.form.day);
-      store.unset(state.form.month);
-      store.unset(state.form.year);
     } else {
       store.unset(state.form[path]);
     }
+
+    store.unset(state.form.day);
+    store.unset(state.form.month);
+    store.unset(state.form.year);
 
     return { [path]: computedDate };
   };
