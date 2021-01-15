@@ -19,6 +19,16 @@ describe('PublicDocketEntry', () => {
       processingStatus: 'testing',
       receivedAt: 'testing',
       servedAt: '2019-03-01T21:40:46.415Z',
+      servedParties: [
+        {
+          email: 'jdirt@example.com',
+          gsi1pk: 'shoot',
+          name: 'Joe Dirt',
+          phone: '555-555-1212',
+          pk: 'oh no',
+          sk: 'secondary',
+        },
+      ],
     });
 
     expect(entity.toRawObject()).toEqual({
@@ -40,7 +50,7 @@ describe('PublicDocketEntry', () => {
   });
 
   it('forbids validation of public docket entries which are sealed', () => {
-    const document = new PublicDocketEntry({
+    const publicDocketEntry = new PublicDocketEntry({
       documentType: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
       filedBy: 'testing',
@@ -49,7 +59,7 @@ describe('PublicDocketEntry', () => {
       servedAt: '2019-03-01T21:40:46.415Z',
     });
 
-    expect(document.getValidationErrors()).toMatchObject({
+    expect(publicDocketEntry.getValidationErrors()).toMatchObject({
       isSealed: expect.anything(),
     });
   });

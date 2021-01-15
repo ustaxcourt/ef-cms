@@ -1,24 +1,26 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { InPersonProceedingForm } from './InPersonProceedingForm';
+import { RemoteProceedingForm } from './RemoteProceedingForm';
 import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 export const LocationInformationForm = connect(
   {
+    TRIAL_SESSION_PROCEEDING_TYPES:
+      state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
     form: state.form,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
-    usStates: state.constants.US_STATES,
-    usStatesOther: state.constants.US_STATES_OTHER,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
   function LocationInformationForm({
     form,
+    TRIAL_SESSION_PROCEEDING_TYPES,
     updateTrialSessionFormDataSequence,
-    usStates,
-    usStatesOther,
     validateTrialSessionSequence,
     validationErrors,
   }) {
@@ -26,6 +28,46 @@ export const LocationInformationForm = connect(
       <>
         <h2 className="margin-top-4">Location Information</h2>
         <div className="blue-container">
+          <FormGroup errorText={validationErrors.startTime}>
+            <fieldset className="start-time usa-fieldset margin-bottom-0">
+              <legend className="usa-legend" id="proceeding-type-legend">
+                Proceeding type
+              </legend>
+              {Object.entries(TRIAL_SESSION_PROCEEDING_TYPES).map(
+                ([key, value]) => (
+                  <div className="usa-radio usa-radio__inline" key={key}>
+                    <input
+                      aria-describedby="proceeding-type-legend"
+                      checked={form.proceedingType === value}
+                      className="usa-radio__input"
+                      id={`${key}-proceeding`}
+                      name="proceedingType"
+                      type="radio"
+                      value={value}
+                      onBlur={() => {
+                        validateTrialSessionSequence();
+                      }}
+                      onChange={e => {
+                        updateTrialSessionFormDataSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                    <label
+                      aria-label={value}
+                      className="usa-radio__label smaller-padding-right"
+                      htmlFor={`${key}-proceeding`}
+                      id={`${key}-proceeding-label`}
+                    >
+                      {value}
+                    </label>
+                  </div>
+                ),
+              )}
+            </fieldset>
+          </FormGroup>
+
           <FormGroup errorText={validationErrors.trialLocation}>
             <label className="usa-label" htmlFor="trial-location">
               Trial location
@@ -48,149 +90,12 @@ export const LocationInformationForm = connect(
             </select>
           </FormGroup>
 
-          <div className="usa-form-group">
-            <label className="usa-label" htmlFor="courthouse-name">
-              Courthouse name <span className="usa-hint">(optional)</span>
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              id="courthouse-name"
-              name="courthouseName"
-              type="text"
-              value={form.courthouseName || ''}
-              onChange={e => {
-                updateTrialSessionFormDataSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </div>
-
-          <div className="usa-form-group">
-            <label className="usa-label" htmlFor="address1">
-              Address line 1 <span className="usa-hint">(optional)</span>
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              id="address1"
-              name="address1"
-              type="text"
-              value={form.address1 || ''}
-              onChange={e => {
-                updateTrialSessionFormDataSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </div>
-
-          <div className="usa-form-group">
-            <label className="usa-label" htmlFor="address2">
-              Address line 2 <span className="usa-hint">(optional)</span>
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              id="address2"
-              name="address2"
-              type="text"
-              value={form.address2 || ''}
-              onChange={e => {
-                updateTrialSessionFormDataSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </div>
-
-          <div className="usa-form-group">
-            <div className="grid-row grid-gap state-and-city">
-              <div className="grid-col-8">
-                <label className="usa-label" htmlFor="city">
-                  City <span className="usa-hint">(optional)</span>
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input usa-input--inline"
-                  id="city"
-                  name="city"
-                  type="text"
-                  value={form.city || ''}
-                  onChange={e => {
-                    updateTrialSessionFormDataSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="grid-col-4">
-                <label className="usa-label" htmlFor="state">
-                  State <span className="usa-hint">(optional)</span>
-                </label>
-                <select
-                  className="usa-select"
-                  id="state"
-                  name="state"
-                  value={form.state || ''}
-                  onChange={e => {
-                    updateTrialSessionFormDataSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                >
-                  <option value="">- Select -</option>
-                  <optgroup label="State">
-                    {Object.keys(usStates).map(abbrev => {
-                      return (
-                        <option key={abbrev} value={abbrev}>
-                          {usStates[abbrev]}
-                        </option>
-                      );
-                    })}
-                  </optgroup>
-                  <optgroup label="Other">
-                    {usStatesOther.map(abbrev => {
-                      return (
-                        <option key={abbrev} value={abbrev}>
-                          {abbrev}
-                        </option>
-                      );
-                    })}
-                  </optgroup>
-                </select>
-              </div>
-            </div>
-          </div>
-          <FormGroup errorText={validationErrors.postalCode}>
-            <label aria-hidden className="usa-label" htmlFor="postal-code">
-              ZIP code <span className="usa-hint">(optional)</span>
-            </label>
-            <input
-              aria-label="zip code"
-              autoCapitalize="none"
-              className="usa-input max-width-200 usa-input--medium"
-              id="postal-code"
-              name="postalCode"
-              type="text"
-              value={form.postalCode || ''}
-              onBlur={() => {
-                validateTrialSessionSequence();
-              }}
-              onChange={e => {
-                updateTrialSessionFormDataSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </FormGroup>
+          {form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
+            <InPersonProceedingForm />
+          )}
+          {form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote && (
+            <RemoteProceedingForm />
+          )}
         </div>
       </>
     );

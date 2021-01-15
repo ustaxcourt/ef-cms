@@ -1,7 +1,15 @@
+/* eslint-disable complexity */
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
+  const viewerDocumentIdToDisplay = get(
+    state.viewerDocumentToDisplay.documentId,
+  );
+  if (!viewerDocumentIdToDisplay) {
+    return null;
+  }
+
   const {
     COURT_ISSUED_DOCUMENT_TYPES,
     EVENT_CODES_REQUIRING_SIGNATURE,
@@ -13,23 +21,18 @@ export const messageDocumentHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
-  const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
-
-  if (!viewerDocumentToDisplay) {
-    return null;
-  }
 
   const { docketEntries } = caseDetail;
 
   const caseDocument =
     applicationContext.getUtilities().getAttachmentDocumentById({
       caseDetail,
-      documentId: viewerDocumentToDisplay.documentId,
+      documentId: viewerDocumentIdToDisplay,
       useArchived: true,
     }) || {};
 
-  const isCorrespondence = !caseDocument.entityName; // TODO: Sure this up a little
+  const isCorrespondence = !caseDocument.entityName;
 
   const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
     caseDocument.eventCode,
@@ -45,7 +48,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   let editUrl = '';
   const formattedDocument = draftDocuments.find(
-    doc => doc.docketEntryId === viewerDocumentToDisplay.documentId,
+    doc => doc.docketEntryId === viewerDocumentIdToDisplay,
   );
 
   if (formattedDocument) {
@@ -67,11 +70,11 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const hasDocketEntryPermission = permissions.CREATE_ORDER_DOCKET_ENTRY;
   const hasEditCorrespondencePermission = permissions.CASE_CORRESPONDENCE;
 
-  const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
-  const showAddDocketEntryButtonForDocument =
+  const showAddDocketEntryButton =
+    hasDocketEntryPermission &&
     !isCorrespondence &&
     caseDocument.isDraft &&
     (documentIsSigned || !documentRequiresSignature);
@@ -124,8 +127,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   return {
     archived: documentIsArchived,
     editUrl,
-    showAddDocketEntryButton:
-      showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
+    showAddDocketEntryButton,
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,

@@ -4,7 +4,10 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
 } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+const {
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 
 describe('setForHearingInteractor', () => {
   let mockCurrentUser;
@@ -13,6 +16,7 @@ describe('setForHearingInteractor', () => {
 
   const MOCK_TRIAL = {
     maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '2025-12-01T00:00:00.000Z',
     term: 'Fall',

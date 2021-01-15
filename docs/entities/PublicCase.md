@@ -837,24 +837,6 @@
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
                 presence: "optional"
-            servedParties: 
-              type: "array"
-              flags: 
-                presence: "optional"
-              items: 
-                - 
-                  type: "object"
-                  keys: 
-                    name: 
-                      type: "string"
-                      flags: 
-                        presence: "optional"
-                        description: "The name of a party from a contact, or \"IRS\""
-                      rules: 
-                        - 
-                          name: "min"
-                          args: 
-                            limit: 1
     docketNumber: 
       type: "string"
       flags: 

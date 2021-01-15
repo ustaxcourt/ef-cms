@@ -27,6 +27,9 @@ const {
   DocketRecord,
 } = require('../pdfGenerator/documentTemplates/DocketRecord.jsx');
 const {
+  GettingReadyForTrialChecklist,
+} = require('../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist.jsx');
+const {
   NoticeOfDocketChange,
 } = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
 const {
@@ -42,17 +45,20 @@ const {
   PendingReport,
 } = require('../pdfGenerator/documentTemplates/PendingReport.jsx');
 const {
+  PretrialMemorandum,
+} = require('../pdfGenerator/components/PretrialMemorandum.jsx');
+const {
   ReceiptOfFiling,
 } = require('../pdfGenerator/documentTemplates/ReceiptOfFiling.jsx');
 const {
   ReportsMetaHeader,
 } = require('../pdfGenerator/components/ReportsMetaHeader.jsx');
 const {
-  StandingPretrialNotice,
-} = require('../pdfGenerator/documentTemplates/StandingPretrialNotice.jsx');
-const {
   StandingPretrialOrder,
 } = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.jsx');
+const {
+  StandingPretrialOrderForSmallCase,
+} = require('../pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase.jsx');
 const {
   TrialCalendar,
 } = require('../pdfGenerator/documentTemplates/TrialCalendar.jsx');
@@ -81,6 +87,7 @@ const components = {
   DateServedFooter,
   DocketRecord,
   DocumentService,
+  GettingReadyForTrialChecklist,
   NoticeOfDocketChange,
   NoticeOfReceiptOfPetition,
   NoticeOfTrialIssued,
@@ -88,10 +95,11 @@ const components = {
   PageMetaHeaderDocket,
   PendingReport,
   PetitionService,
+  PretrialMemorandum,
   ReceiptOfFiling,
   ReportsMetaHeader,
-  StandingPretrialNotice,
   StandingPretrialOrder,
+  StandingPretrialOrderForSmallCase,
   TrialCalendar,
   TrialSessionPlanningReport,
 };
