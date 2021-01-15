@@ -2572,7 +2572,7 @@ describe('Case entity', () => {
   });
 
   describe('updateDocketEntry', () => {
-    it('should update the document', () => {
+    it('should replace the docket entry with the exact object provided', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -2585,8 +2585,11 @@ describe('Case entity', () => {
       expect(
         myCase.docketEntries.find(
           d => d.docketEntryId === MOCK_DOCUMENTS[0].docketEntryId,
-        ).processingStatus,
-      ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
+        ),
+      ).toEqual({
+        docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      });
     });
 
     it('should not change any docketEntries if no match is found', () => {

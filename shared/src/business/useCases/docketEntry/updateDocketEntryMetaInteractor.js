@@ -72,6 +72,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     partySecondary: docketEntryMeta.partySecondary,
     pending: docketEntryMeta.pending,
     scenario: docketEntryMeta.scenario,
+    secondaryDocument: docketEntryMeta.secondaryDocument,
     servedAt: docketEntryMeta.servedAt,
     servedPartiesCode: docketEntryMeta.servedPartiesCode,
     serviceDate: docketEntryMeta.serviceDate,
@@ -106,7 +107,7 @@ exports.updateDocketEntryMetaInteractor = async ({
         }),
       },
       { applicationContext },
-    );
+    ).validate();
 
     caseEntity.updateDocketEntry(docketEntryEntity);
 
