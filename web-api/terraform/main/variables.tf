@@ -78,3 +78,7 @@ variable "es_volume_size" {
 variable "bounced_email_recipient" {
   type = string
 }
+
+variable "scanner_resource_uri" {
+  type = string
+}
