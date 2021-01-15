@@ -7,7 +7,7 @@ export const getShowNotServedForDocument = ({
   let showNotServed = false;
 
   const caseDocument = caseDetail.docketEntries.find(
-    document => document.docketEntryId === docketEntryId,
+    doc => doc.docketEntryId === docketEntryId,
   );
 
   if (caseDocument) {

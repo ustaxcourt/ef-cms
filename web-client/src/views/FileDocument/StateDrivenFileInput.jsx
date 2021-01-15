@@ -9,18 +9,18 @@ export const StateDrivenFileInput = connect(
   {
     ariaDescribedBy: props.ariaDescribedBy,
     constants: state.constants,
+    fileInputName: props.name,
     form: state.form,
     id: props.id,
-    name: props.name,
     updateFormValueSequence: sequences[props.updateFormValueSequence],
     validationSequence: sequences[props.validationSequence],
   },
   function StateDrivenFileInput({
     ariaDescribedBy,
     constants,
+    fileInputName,
     form,
     id,
-    name,
     updateFormValueSequence,
     validationSequence,
   }) {
@@ -33,10 +33,10 @@ export const StateDrivenFileInput = connect(
           aria-describedby={ariaDescribedBy}
           className="usa-input"
           id={id}
-          name={name}
+          name={fileInputName}
           ref={ref => (inputRef = ref)}
           style={{
-            display: form[name] ? 'none' : 'block',
+            display: form[fileInputName] ? 'none' : 'block',
           }}
           type="file"
           onChange={e => {
@@ -61,22 +61,22 @@ export const StateDrivenFileInput = connect(
             });
           }}
           onClick={e => {
-            if (form[name]) e.preventDefault();
+            if (form[fileInputName]) e.preventDefault();
           }}
         />
 
-        {form[name] && (
+        {form[fileInputName] && (
           <div>
             <span className="success-message icon-upload margin-right-1">
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>
-            <span className="mr-1">{form[name].name}</span>
+            <span className="mr-1">{form[fileInputName].name}</span>
             <Button
               link
               className="ustc-button--mobile-inline margin-left-1"
               onClick={() => {
                 updateFormValueSequence({
-                  key: name,
+                  key: fileInputName,
                   value: null,
                 });
                 inputRef.value = null;

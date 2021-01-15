@@ -2,7 +2,7 @@ const { getHealthCheckInteractor } = require('./getHealthCheckInteractor');
 
 describe('getHealthCheckInteractor', () => {
   it('should return the expected true statues for all services', async () => {
-    const status = await getHealthCheckInteractor({
+    const statusResult = await getHealthCheckInteractor({
       applicationContext: {
         environment: {
           stage: 'dev',
@@ -39,7 +39,7 @@ describe('getHealthCheckInteractor', () => {
       },
     });
 
-    expect(status).toEqual({
+    expect(statusResult).toEqual({
       cognito: true,
       dynamo: {
         efcms: true,

@@ -133,11 +133,11 @@ export const PrimaryDocumentForm = connect(
                   internalTypesHelper.internalDocumentTypesForSelectSorted,
                 selectedEventCode: form.eventCode,
               })}
-              onChange={(inputValue, { action, name }) => {
+              onChange={(inputValue, { action, name: inputName }) => {
                 docketEntryOnChange({
                   action,
+                  inputName,
                   inputValue,
-                  name,
                   updateSequence: updateDocketEntryFormValueSequence,
                   validateSequence: validateDocketEntrySequence,
                 });
@@ -184,11 +184,11 @@ export const PrimaryDocumentForm = connect(
                   selectedEventCode:
                     form.secondaryDocument && form.secondaryDocument.eventCode,
                 })}
-                onChange={(inputValue, { action, name }) => {
+                onChange={(inputValue, { action, name: inputName }) => {
                   docketEntryOnChange({
                     action,
+                    inputName,
                     inputValue,
-                    name,
                     updateSequence: updateDocketEntryFormValueSequence,
                     validateSequence: validateDocketEntrySequence,
                   });
@@ -217,7 +217,7 @@ export const PrimaryDocumentForm = connect(
 
           {form.secondaryDocument && <SecondaryDocumentForm />}
 
-          <div className="usa-form-group">
+          <FormGroup errorText={validationErrors.additionalInfo}>
             <label
               className="usa-label"
               htmlFor="additional-info"
@@ -243,7 +243,7 @@ export const PrimaryDocumentForm = connect(
                 });
               }}
             />
-          </div>
+          </FormGroup>
           <div className="usa-form-group">
             <div className="usa-checkbox">
               <input
@@ -269,7 +269,7 @@ export const PrimaryDocumentForm = connect(
             </div>
           </div>
 
-          <div className="usa-form-group">
+          <FormGroup errorText={validationErrors.additionalInfo2}>
             <label
               className="usa-label"
               htmlFor="additional-info2"
@@ -295,7 +295,7 @@ export const PrimaryDocumentForm = connect(
                 });
               }}
             />
-          </div>
+          </FormGroup>
 
           <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
 

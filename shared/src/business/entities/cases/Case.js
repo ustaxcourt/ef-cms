@@ -1233,22 +1233,22 @@ Case.prototype.generateNextDocketRecordIndex = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
-  const foundDocketEntry = this.docketEntries.find(
+  const foundDocketEntryIndex = this.docketEntries.findIndex(
     docketEntry =>
       docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
   );
 
-  if (foundDocketEntry) {
-    Object.assign(foundDocketEntry, updatedDocketEntry);
+  if (foundDocketEntryIndex !== -1) {
+    this.docketEntries[foundDocketEntryIndex] = updatedDocketEntry;
 
-    if (foundDocketEntry.isOnDocketRecord) {
+    if (updatedDocketEntry.isOnDocketRecord) {
       const updateIndex = shouldGenerateDocketRecordIndex({
         caseDetail: this,
-        docketEntry: foundDocketEntry,
+        docketEntry: updatedDocketEntry,
       });
 
       if (updateIndex) {
-        foundDocketEntry.index = this.generateNextDocketRecordIndex();
+        updatedDocketEntry.index = this.generateNextDocketRecordIndex();
       }
     }
   }
@@ -1388,6 +1388,20 @@ Case.prototype.generateTrialSortTags = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.setAsCalendared = function (trialSessionEntity) {
+  this.updateTrialSessionInformation(trialSessionEntity);
+  if (trialSessionEntity.isCalendared === true) {
+    this.status = CASE_STATUS_TYPES.calendared;
+  }
+  return this;
+};
+
+/**
+ * update trial session information
+ *
+ * @param {object} trialSessionEntity - the trial session that is associated with the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.updateTrialSessionInformation = function (trialSessionEntity) {
   if (
     trialSessionEntity.isCalendared &&
     trialSessionEntity.judge &&
@@ -1399,9 +1413,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
   this.trialDate = trialSessionEntity.startDate;
   this.trialTime = trialSessionEntity.startTime;
   this.trialLocation = trialSessionEntity.trialLocation;
-  if (trialSessionEntity.isCalendared === true) {
-    this.status = CASE_STATUS_TYPES.calendared;
-  }
+
   return this;
 };
 

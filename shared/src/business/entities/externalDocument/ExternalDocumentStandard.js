@@ -33,7 +33,7 @@ ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES = {
 
 ExternalDocumentStandard.schema = joi.object({
   category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
   documentType: JoiValidationConstants.STRING.required().when('selectedCases', {
     is: joi.array().min(1).required(),
     then: JoiValidationConstants.STRING.invalid('Proposed Stipulated Decision'),

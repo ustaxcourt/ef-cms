@@ -155,7 +155,7 @@ const createMockDocumentClient = () => {
           for (let expressionAttributeName in ExpressionAttributeNames) {
             UpdateExpression = UpdateExpression.replace(
               expressionAttributeName,
-              ExpressionAttributeNames[name],
+              ExpressionAttributeNames[expressionAttributeName],
             );
           }
 

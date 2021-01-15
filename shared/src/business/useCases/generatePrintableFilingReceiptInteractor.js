@@ -3,18 +3,18 @@ const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
 const getDocumentInfo = ({ applicationContext, documentData }) => {
-  const document = new DocketEntry(documentData, {
+  const doc = new DocketEntry(documentData, {
     applicationContext,
   });
 
   return {
-    attachments: document.attachments,
-    certificateOfService: document.certificateOfService,
-    certificateOfServiceDate: document.certificateOfServiceDate,
-    documentTitle: document.documentTitle,
-    filedBy: document.filedBy,
-    objections: document.objections,
-    receivedAt: document.receivedAt,
+    attachments: doc.attachments,
+    certificateOfService: doc.certificateOfService,
+    certificateOfServiceDate: doc.certificateOfServiceDate,
+    documentTitle: doc.documentTitle,
+    filedBy: doc.filedBy,
+    objections: doc.objections,
+    receivedAt: doc.receivedAt,
   };
 };
 

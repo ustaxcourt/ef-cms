@@ -17,10 +17,6 @@ export const setPDFForSigningAction = async ({
 
   store.set(state.pdfForSigning.docketEntryId, docketEntryId);
 
-  if (process.env.CI === 'true') {
-    return;
-  }
-
   let removeCover = false;
 
   let editingSignedStipulatedDecision = false;

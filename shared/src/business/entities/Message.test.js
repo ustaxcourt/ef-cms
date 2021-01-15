@@ -137,7 +137,7 @@ describe('Message', () => {
   });
 
   describe('markAsCompleted', () => {
-    it('should mark the message as completed with a message and user', () => {
+    it('should mark the message as completed and replied to with a message and user', () => {
       const message = new Message(
         {
           caseStatus: CASE_STATUS_TYPES.generalDocket,
@@ -148,6 +148,7 @@ describe('Message', () => {
           from: 'gg',
           fromSection: PETITIONS_SECTION,
           fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          isRepliedTo: false,
           message: 'hello world',
           subject: 'hey!',
           to: 'bob',
@@ -174,6 +175,7 @@ describe('Message', () => {
         completedMessage: 'the completed message',
         createdAt: expect.anything(),
         isCompleted: true,
+        isRepliedTo: true,
       });
     });
   });

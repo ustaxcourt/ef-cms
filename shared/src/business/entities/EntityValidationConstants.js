@@ -115,8 +115,8 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description('Date that this Document was filed.'),
-  freeText: JoiValidationConstants.STRING.max(500).optional(),
-  freeText2: JoiValidationConstants.STRING.max(500).optional(),
+  freeText: JoiValidationConstants.STRING.max(1000).optional(),
+  freeText2: JoiValidationConstants.STRING.max(1000).optional(),
   hasOtherFilingParty: joi
     .boolean()
     .optional()
