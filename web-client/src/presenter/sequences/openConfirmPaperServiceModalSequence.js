@@ -19,6 +19,7 @@ export const openConfirmPaperServiceModalSequence = [
   clearAlertsAction,
   startShowValidationAction,
   computeFormDateFactoryAction(null),
+  setComputeFormDateFactoryAction('serviceDate'),
   computeCertificateOfServiceFormDateAction,
   setComputeFormDayFactoryAction('dateReceivedDay'),
   setComputeFormMonthFactoryAction('dateReceivedMonth'),

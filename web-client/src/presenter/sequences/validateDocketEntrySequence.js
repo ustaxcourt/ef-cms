@@ -17,6 +17,7 @@ export const validateDocketEntrySequence = [
     validate: [
       computeCertificateOfServiceFormDateAction,
       computeFormDateFactoryAction(null),
+      setComputeFormDateFactoryAction('serviceDate'),
       formHasSecondaryDocumentAction,
       {
         no: [],

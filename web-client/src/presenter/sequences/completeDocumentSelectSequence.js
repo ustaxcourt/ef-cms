@@ -22,6 +22,7 @@ import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocum
 export const completeDocumentSelectSequence = [
   startShowValidationAction,
   computeFormDateFactoryAction(null),
+  setComputeFormDateFactoryAction('serviceDate'),
   formHasSecondaryDocumentAction,
   {
     no: [],

@@ -15,6 +15,7 @@ export const validateSelectDocumentTypeSequence = [
     ignore: [],
     validate: [
       computeFormDateFactoryAction(null),
+      setComputeFormDateFactoryAction('serviceDate'),
       formHasSecondaryDocumentAction,
       {
         no: [],

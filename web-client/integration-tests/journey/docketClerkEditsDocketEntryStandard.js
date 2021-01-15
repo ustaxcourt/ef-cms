@@ -64,13 +64,9 @@ export const docketClerkEditsDocketEntryStandard = test => {
       value: '2018',
     });
 
-    console.log('before form', test.getState('form'));
-
     await test.runSequence('fileDocketEntrySequence', {
       isSavingForLater: true,
     });
-
-    console.log('form', test.getState('form'));
 
     expect(test.getState('validationErrors')).toEqual({});
 
