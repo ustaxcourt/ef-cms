@@ -10,7 +10,11 @@ describe('setComputeFormDateFactoryAction', () => {
           computedDate: '2020-01-13',
         },
         state: {
-          form: {},
+          form: {
+            day: '13',
+            month: '01',
+            year: '2020',
+          },
         },
       },
     );
