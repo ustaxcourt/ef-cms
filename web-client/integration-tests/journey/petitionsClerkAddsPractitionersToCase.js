@@ -46,6 +46,10 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       value: true,
     });
 
+    expect(
+      test.getState('validationErrors.practitionerSearchError'),
+    ).toBeUndefined();
+
     await test.runSequence('associatePrivatePractitionerWithCaseSequence');
 
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
