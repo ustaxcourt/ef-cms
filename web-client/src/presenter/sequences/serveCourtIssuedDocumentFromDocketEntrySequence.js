@@ -1,11 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { fileAndServeCourtIssuedDocumentAction } from '../actions/CourtIssuedDocketEntry/fileAndServeCourtIssuedDocumentAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
@@ -36,7 +36,7 @@ export const serveCourtIssuedDocumentFromDocketEntrySequence = [
       stopShowValidationAction,
       clearAlertsAction,
       computeJudgeNameWithTitleAction,
-      computeFormDateAction,
+      getComputedFormDateFactoryAction(null),
       generateCourtIssuedDocumentTitleAction,
       fileAndServeCourtIssuedDocumentAction,
       setPdfPreviewUrlAction,
