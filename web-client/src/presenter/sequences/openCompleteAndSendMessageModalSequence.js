@@ -1,6 +1,6 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';

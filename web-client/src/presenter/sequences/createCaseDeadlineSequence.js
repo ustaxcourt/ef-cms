@@ -3,7 +3,7 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { createCaseDeadlineAction } from '../actions/CaseDeadline//createCaseDeadlineAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';

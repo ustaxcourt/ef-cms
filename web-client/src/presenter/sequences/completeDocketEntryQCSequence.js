@@ -1,7 +1,7 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';

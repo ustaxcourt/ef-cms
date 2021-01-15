@@ -2,7 +2,7 @@ import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/ass
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { computeStatisticDatesAction } from '../actions/StartCaseInternal/computeStatisticDatesAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';

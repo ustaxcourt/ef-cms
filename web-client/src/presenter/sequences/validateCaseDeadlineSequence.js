@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateCaseDeadlineAction } from '../actions/CaseDeadline/validateCaseDeadlineAction';

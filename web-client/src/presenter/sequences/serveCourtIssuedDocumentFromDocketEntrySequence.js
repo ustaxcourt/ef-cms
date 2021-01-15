@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
-import { computeFormDateFactoryAction } from '../actions/computeFormDateFactoryAction';
+import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { fileAndServeCourtIssuedDocumentAction } from '../actions/CourtIssuedDocketEntry/fileAndServeCourtIssuedDocumentAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
