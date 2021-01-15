@@ -4,9 +4,8 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
-import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
 import { getIsSavingForLaterAction } from '../actions/DocketEntry/getIsSavingForLaterAction';
@@ -19,6 +18,10 @@ import { saveDocketEntryAction } from '../actions/DocketEntry/saveDocketEntryAct
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
+import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
+import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -73,9 +76,14 @@ export const fileDocketEntrySequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      computeFormDateAction,
+      getComputedFormDateFactoryAction(null),
+      setComputeFormDateFactoryAction('serviceDate'),
       computeCertificateOfServiceFormDateAction,
-      computeDateReceivedAction,
+      setComputeFormDayFactoryAction('dateReceivedDay'),
+      setComputeFormMonthFactoryAction('dateReceivedMonth'),
+      setComputeFormYearFactoryAction('dateReceivedYear'),
+      getComputedFormDateFactoryAction(null),
+      setComputeFormDateFactoryAction('dateReceived'),
       setDocumentIsRequiredAction,
       generateTitleForPaperFilingAction,
       validateDocketEntryAction,
