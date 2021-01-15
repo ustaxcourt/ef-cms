@@ -1,6 +1,21 @@
 import { state } from 'cerebral';
 
+/**
+ * sets the state.form[path] to whatever the computedDate value is from props
+ *
+ * @param {string} prefix prefix for form state date field keys
+ * @param {boolean} toIsoString cast the computedDate as an ISO string
+ * @returns {Function} the primed action
+ */
 export const getComputedFormDateFactoryAction = (prefix, toIsoString) => {
+  /**
+   * computes the date given either a prefix or the default of day, month, year props on the form
+   *
+   * @param {object} providers the providers object
+   * @param {object} providers.applicationContext application context for getting date utility functions
+   * @param {object} providers.get the cerebral get function
+   * @returns {object} computedDate
+   */
   const computeFormDateAction = ({ applicationContext, get }) => {
     let formYear;
     let formMonth;
