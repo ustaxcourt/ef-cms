@@ -4,10 +4,10 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
-import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
@@ -28,7 +28,7 @@ export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
   computeFilingFormDateAction,
   computeCertificateOfServiceFormDateAction,
-  computeFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction(null),
   setFormDateAction,
   primePropsFromEditDocketEntryMetaModalAction,
   chooseMetaTypePathAction,

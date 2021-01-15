@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { computeTrialSessionFormDataAction } from '../actions/TrialSession/computeTrialSessionFormDataAction';
 import { createTrialSessionAction } from '../actions/TrialSession/createTrialSessionAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getCreateTrialSessionAlertSuccessAction } from '../actions/TrialSession/getCreateTrialSessionAlertSuccessAction';
 import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -17,7 +17,7 @@ import { validateTrialSessionAction } from '../actions/TrialSession/validateTria
 export const submitTrialSessionSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  computeFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction(null),
   computeTrialSessionFormDataAction,
   validateTrialSessionAction,
   {
