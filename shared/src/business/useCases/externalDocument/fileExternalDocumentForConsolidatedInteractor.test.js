@@ -153,6 +153,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   });
 
   // skipping this test until we have better acceptance criteria about consolidated cases
+  // eslint-disable-next-line
   it.skip('should aggregate the filing parties for the docket record entry', async () => {
     await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,

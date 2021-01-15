@@ -1,6 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from '../src/presenter/computeds/caseInventoryReportHelper';
-1;
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {

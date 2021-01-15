@@ -1,3 +1,4 @@
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
 
 const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
@@ -17,6 +18,11 @@ export const docketClerkCreatesATrialSession = (test, overrides = {}) => {
       term: errorMessages.term,
       termYear: errorMessages.termYear,
       trialLocation: errorMessages.trialLocation,
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'proceedingType',
+      value: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
