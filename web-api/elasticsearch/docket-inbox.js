@@ -29,11 +29,11 @@ const version = process.argv[3] || 'alpha';
               },
             },
           ],
-          // must_not: {
-          //   exists: {
-          //     field: 'completedAt.S',
-          //   },
-          // },
+          must_not: {
+            exists: {
+              field: 'completedAt.S',
+            },
+          },
         },
       },
     },
