@@ -2,6 +2,7 @@ const {
   applicationContext,
   over1000Characters,
 } = require('../test/createTestApplicationContext');
+const { Message } = require('./Message');
 const { NewMessage } = require('./NewMessage');
 const { PETITIONS_SECTION } = require('./EntityConstants');
 
@@ -52,7 +53,7 @@ describe('NewMessage', () => {
         { applicationContext },
       );
       expect(message.getFormattedValidationErrors()).toEqual({
-        message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+        message: Message.VALIDATION_ERROR_MESSAGES.message[1].message,
       });
     });
   });
