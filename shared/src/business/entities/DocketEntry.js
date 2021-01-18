@@ -330,15 +330,6 @@ DocketEntry.prototype.isCourtIssued = function () {
 };
 
 /**
- * Determines if the docket entry has been served
- *
- * @returns {Boolean} true if the docket entry has been served, false otherwise
- */
-DocketEntry.prototype.isServed = function () {
-  return !!this.servedAt || !!this.isLegacyServed;
-};
-
-/**
  * sets the number of pages for the docket entry
  *
  * @param {Number} numberOfPages the number of pages
@@ -370,4 +361,13 @@ DocketEntry.prototype.strikeEntry = function ({
   }
 };
 
-exports.DocketEntry = validEntityDecorator(DocketEntry);
+/**
+ * Determines if the docket entry has been served
+ *
+ * @returns {Boolean} true if the docket entry has been served, false otherwise
+ */
+const isServed = function (rawDocketEntry) {
+  return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
+};
+
+module.exports = { DocketEntry: validEntityDecorator(DocketEntry), isServed };
