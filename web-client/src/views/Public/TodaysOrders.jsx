@@ -62,7 +62,7 @@ export const TodaysOrders = connect(
                   </thead>
                   <tbody>
                     {todaysOrdersHelper.formattedOrders.map((order, idx) => (
-                      <tr key={idx}>
+                      <tr key={`todays-orders-${idx}`}>
                         <td className="center-column">{idx + 1}</td>
                         <td aria-hidden="true"></td>
                         <td>
@@ -73,6 +73,7 @@ export const TodaysOrders = connect(
                           <Button
                             link
                             aria-label={`View PDF: ${order.documentTitle}`}
+                            className="text-left line-height-standard"
                             onClick={() => {
                               openCaseDocumentDownloadUrlSequence({
                                 docketEntryId: order.docketEntryId,
@@ -109,7 +110,7 @@ export const TodaysOrders = connect(
                   </thead>
                   <tbody>
                     {todaysOrdersHelper.formattedOrders.map((order, idx) => (
-                      <tr key={idx}>
+                      <tr key={`todays-orders-mobile-${idx}`}>
                         <td className="padding-5 margin-top-2">
                           <CaseLink formattedCase={order} />
                         </td>

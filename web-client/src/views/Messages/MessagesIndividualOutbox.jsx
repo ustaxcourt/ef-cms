@@ -24,8 +24,8 @@ export const MessagesIndividualOutbox = connect(
           </thead>
           {formattedMessages.map((message, idx) => {
             return (
-              <tbody key={idx}>
-                <tr key={idx}>
+              <tbody key={`message-${idx}`}>
+                <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
