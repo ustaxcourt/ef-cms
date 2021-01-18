@@ -13,7 +13,7 @@ exports.goToCaseDetail = docketNumber => {
 
 exports.goToCaseOverview = docketNumber => {
   cy.goToRoute(`/case-detail/${docketNumber}`);
-  cy.get('.heading-2').should('contain', docketNumber);
+  cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
   cy.get('#tab-case-information').click();
   cy.get('#tab-overview').click();
   cy.get('.internal-information').should('exist');
