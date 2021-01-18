@@ -1,9 +1,6 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
-  migrateItems: migration0012,
-} = require('./migrations/0012-remove-incorrect-counsel');
-const {
   migrateItems: migration0013,
 } = require('./migrations/0013-trial-session-default-proceedingType');
 const {
@@ -33,8 +30,6 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 0012');
-  items = await migration0012(items, documentClient);
   applicationContext.logger.info('about to run migration 0013');
   items = await migration0013(items, documentClient);
   applicationContext.logger.info('about to run migration 0014');
