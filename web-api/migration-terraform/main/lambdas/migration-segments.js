@@ -3,6 +3,9 @@ const createApplicationContext = require('../../../src/applicationContext');
 const {
   migrateItems: migration0013,
 } = require('./migrations/0013-trial-session-default-proceedingType');
+const {
+  migrateItems: migration0014,
+} = require('./migrations/0014-hearings-proceeding-type');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -26,6 +29,8 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.info('about to run migration 0013');
   items = await migration0013(items, documentClient);
+  applicationContext.logger.info('about to run migration 0014');
+  items = await migration0014(items, documentClient);
 
   return items;
 };
