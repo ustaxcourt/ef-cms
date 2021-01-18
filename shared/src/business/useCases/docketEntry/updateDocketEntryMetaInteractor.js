@@ -71,6 +71,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     partyPrimary: docketEntryMeta.partyPrimary,
     partySecondary: docketEntryMeta.partySecondary,
     pending: docketEntryMeta.pending,
+    previousDocument: docketEntryMeta.previousDocument,
     scenario: docketEntryMeta.scenario,
     servedAt: docketEntryMeta.servedAt,
     servedPartiesCode: docketEntryMeta.servedPartiesCode,
