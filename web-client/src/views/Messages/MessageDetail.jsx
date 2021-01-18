@@ -199,7 +199,7 @@ export const MessageDetail = connect(
             formattedMessageDetail.olderMessages.map((message, idx) => (
               <div
                 className="border border-base-lightest padding-top-2 padding-bottom-2 padding-left-3 padding-right-3"
-                key={idx}
+                key={`older-messages-${idx}`}
               >
                 <SingleMessage indent={true} message={message} />
               </div>
@@ -227,7 +227,7 @@ export const MessageDetail = connect(
                           viewerDocumentToDisplay.documentId ===
                           attachment.documentId
                         }
-                        key={idx}
+                        key={`attachment-button-${idx}`}
                         onClick={() => {
                           setMessageDetailViewerDocumentToDisplaySequence({
                             viewerDocumentToDisplay: attachment,

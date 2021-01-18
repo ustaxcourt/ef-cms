@@ -169,6 +169,7 @@ module.exports = {
         shorthandLast: false,
       },
     ],
+    'react/no-array-index-key': 'warn',
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'warn',
     'require-atomic-updates': 'off',
