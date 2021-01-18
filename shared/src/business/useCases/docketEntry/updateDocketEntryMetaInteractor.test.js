@@ -93,6 +93,17 @@ describe('updateDocketEntryMetaInteractor', () => {
         isMinuteEntry: false,
         userId: mockUserId,
       },
+      {
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        documentTitle: 'Summary Opinion',
+        documentType: 'Summary Opinion',
+        eventCode: 'SOP',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 7,
+        isMinuteEntry: false,
+        judge: 'Buch',
+        userId: mockUserId,
+      },
     ];
 
     const caseByDocketNumber = {
@@ -510,5 +521,21 @@ describe('updateDocketEntryMetaInteractor', () => {
     );
     expect(updatedDocketEntry.previousDocument).toBeDefined();
     expect(updatedDocketEntry.previousDocument.documentType).toEqual('Order');
+  });
+
+  it('should add a coversheet when the docket entry event code changes to one requiring a coverhseet', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[6],
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        eventCode: 'HE',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
   });
 });

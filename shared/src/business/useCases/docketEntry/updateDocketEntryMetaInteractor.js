@@ -91,9 +91,15 @@ exports.updateDocketEntryMetaInteractor = async ({
     const entryRequiresCoverSheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       editableFields.eventCode,
     );
+    const originalEntryDoesNotRequireCoversheet = !COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      originalDocketEntry.eventCode,
+    );
+
+    const shouldAddNewCoverSheet =
+      originalEntryDoesNotRequireCoversheet && entryRequiresCoverSheet;
 
     const shouldGenerateCoversheet =
-      (servedAtUpdated || filingDateUpdated) &&
+      (servedAtUpdated || filingDateUpdated || shouldAddNewCoverSheet) &&
       (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
       !originalDocketEntry.isMinuteEntry;
 
