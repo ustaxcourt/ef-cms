@@ -59,6 +59,7 @@ export const TodaysOpinions = connect(
                       <Button
                         link
                         aria-label={`View PDF: ${opinion.descriptionDisplay}`}
+                        className="text-left line-height-standard padding-0"
                         onClick={() => {
                           openCaseDocumentDownloadUrlSequence({
                             docketEntryId: opinion.docketEntryId,
