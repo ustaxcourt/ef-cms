@@ -9,6 +9,9 @@ const {
 const {
   migrateItems: migration0015,
 } = require('./migrations/0015-practitioner-case-service-indicator');
+const {
+  migrateItems: migration0016,
+} = require('./migrations/0016-hearings-proceeding-type');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -36,6 +39,8 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0014(items, documentClient);
   applicationContext.logger.info('about to run migration 0015');
   items = await migration0015(items, documentClient);
+  applicationContext.logger.info('about to run migration 0016');
+  items = await migration0016(items, documentClient);
   return items;
 };
 
