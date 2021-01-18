@@ -23,11 +23,15 @@ describe('Get users in section', () => {
 
   const MOCK_JUDGE_SECTION = [
     {
+      judgeFullName: 'Test Judge 1',
+      judgeTitle: 'Judge',
       name: 'Test Judge 1',
       role: ROLES.judge,
       userId: 'ce5add74-1559-448d-a67d-c887c8351b2e',
     },
     {
+      judgeFullName: 'Test Judge 1',
+      judgeTitle: 'Judge',
       name: 'Test Judge 2',
       role: ROLES.judge,
       userId: 'ea83cea2-5ce9-451d-b3d6-1e7c0e51d311',
