@@ -2,17 +2,19 @@ import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/ass
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
-import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
-import { computePetitionFeeDatesAction } from '../actions/StartCaseInternal/computePetitionFeeDatesAction';
-import { computeReceivedAtDateAction } from '../actions/caseDetailEdit/computeReceivedAtDateAction';
 import { computeStatisticDatesAction } from '../actions/StartCaseInternal/computeStatisticDatesAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
+import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
+import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -30,9 +32,30 @@ export const submitPetitionFromPaperSequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      computeReceivedAtDateAction,
-      computeIrsNoticeDateAction,
-      computePetitionFeeDatesAction,
+      // receivedAt
+      setComputeFormDayFactoryAction('receivedAtDay'),
+      setComputeFormMonthFactoryAction('receivedAtMonth'),
+      setComputeFormYearFactoryAction('receivedAtYear'),
+      getComputedFormDateFactoryAction(null, true),
+      setComputeFormDateFactoryAction('receivedAt'),
+      // irsNoticeDate
+      setComputeFormDayFactoryAction('irsDay'),
+      setComputeFormMonthFactoryAction('irsMonth'),
+      setComputeFormYearFactoryAction('irsYear'),
+      getComputedFormDateFactoryAction(null, true),
+      setComputeFormDateFactoryAction('irsNoticeDate'),
+      // petitionPaymentDate
+      setComputeFormDayFactoryAction('paymentDateDay'),
+      setComputeFormMonthFactoryAction('paymentDateMonth'),
+      setComputeFormYearFactoryAction('paymentDateYear'),
+      getComputedFormDateFactoryAction(null, true),
+      setComputeFormDateFactoryAction('petitionPaymentDate'),
+      // paymentDateWaived
+      setComputeFormDayFactoryAction('paymentDateWaivedDay'),
+      setComputeFormMonthFactoryAction('paymentDateWaivedMonth'),
+      setComputeFormYearFactoryAction('paymentDateWaivedYear'),
+      getComputedFormDateFactoryAction(null, true),
+      setComputeFormDateFactoryAction('petitionPaymentWaivedDate'),
       computeStatisticDatesAction,
       filterEmptyStatisticsAction,
       validatePetitionFromPaperAction,

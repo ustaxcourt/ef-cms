@@ -2,6 +2,9 @@ const {
   calculateISODate,
   createISODateString,
 } = require('../../utilities/DateHandler');
+const {
+  over1000Characters,
+} = require('../../test/createTestApplicationContext');
 const { DocketEntryFactory } = require('./DocketEntryFactory');
 const { OBJECTIONS_OPTIONS_MAP } = require('../EntityConstants');
 
@@ -52,6 +55,22 @@ describe('DocketEntryFactory', () => {
     rawEntity.dateReceived = calculateISODate({ howMuch: 1, unit: 'days' });
     expect(errors().dateReceived).toEqual(
       VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
+    );
+  });
+
+  it('should be invalid when additionalInfo is over 500 characters long', () => {
+    rawEntity.additionalInfo = over1000Characters;
+
+    expect(errors().additionalInfo).toEqual(
+      VALIDATION_ERROR_MESSAGES.additionalInfo[0].message,
+    );
+  });
+
+  it('should be invalid when additionalInfo2 is over 500 characters long', () => {
+    rawEntity.additionalInfo2 = over1000Characters;
+
+    expect(errors().additionalInfo2).toEqual(
+      VALIDATION_ERROR_MESSAGES.additionalInfo2[0].message,
     );
   });
 
@@ -222,6 +241,7 @@ describe('DocketEntryFactory', () => {
   describe('otherFilingParty', () => {
     beforeEach(() => {
       rawEntity.dateReceived = createISODateString();
+      rawEntity.documentTitle = 'Order to do something';
       rawEntity.documentType = 'Order';
       rawEntity.eventCode = 'O';
       rawEntity.partyPrimary = true;
@@ -260,6 +280,7 @@ describe('DocketEntryFactory', () => {
   describe('partyPrimary', () => {
     beforeEach(() => {
       rawEntity.dateReceived = createISODateString();
+      rawEntity.documentTitle = 'Notice of Change of Address';
       rawEntity.documentType = 'Notice of Change of Address';
       rawEntity.eventCode = 'NCA';
     });

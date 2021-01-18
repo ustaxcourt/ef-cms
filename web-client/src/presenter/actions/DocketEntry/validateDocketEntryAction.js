@@ -27,6 +27,7 @@ export const validateDocketEntryAction = ({
     return path.success();
   } else {
     const errorDisplayOrder = [
+      'documentTitle',
       'primaryDocumentFile',
       'dateReceived',
       'eventCode',

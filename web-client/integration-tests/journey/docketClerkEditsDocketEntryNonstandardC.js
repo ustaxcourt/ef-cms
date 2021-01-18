@@ -48,7 +48,7 @@ export const docketClerkEditsDocketEntryNonstandardC = test => {
     });
 
     expect(test.getState('validationErrors')).toEqual({
-      freeText: VALIDATION_ERROR_MESSAGES.freeText,
+      freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
     });
 

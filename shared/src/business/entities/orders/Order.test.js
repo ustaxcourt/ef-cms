@@ -1,3 +1,6 @@
+const {
+  over1000Characters,
+} = require('../../test/createTestApplicationContext');
 const { Order } = require('./Order');
 
 describe('Order', () => {
@@ -11,8 +14,21 @@ describe('Order', () => {
         }).isValid(),
       ).toBeTruthy();
     });
+
     it('returns false if nothing is passed in', () => {
       expect(new Order({}).isValid()).toBeFalsy();
+    });
+
+    it('should be invalid when documentTitle is over 100 characters long', () => {
+      const order = new Order({
+        documentTitle: over1000Characters,
+        documentType: 'Order',
+        orderBody: 'some text',
+      });
+
+      expect(order.getFormattedValidationErrors()).toEqual({
+        documentTitle: Order.VALIDATION_ERROR_MESSAGES.documentTitle[1].message,
+      });
     });
   });
 });

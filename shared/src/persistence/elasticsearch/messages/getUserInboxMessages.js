@@ -14,6 +14,9 @@ exports.getUserInboxMessages = async ({ applicationContext, userId }) => {
             {
               match: { 'isRepliedTo.BOOL': false },
             },
+            {
+              match: { 'isCompleted.BOOL': false },
+            },
           ],
         },
       },

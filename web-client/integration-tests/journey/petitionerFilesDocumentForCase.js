@@ -114,7 +114,7 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        freeText: VALIDATION_ERROR_MESSAGES.freeText,
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
       },
     });
 
@@ -122,10 +122,6 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
       key: 'secondaryDocument.freeText',
       value: 'Anything',
     });
-
-    await test.runSequence('completeDocumentSelectSequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('completeDocumentSelectSequence');
 

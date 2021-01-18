@@ -48,7 +48,7 @@ export const TodaysOpinions = connect(
               </thead>
               <tbody>
                 {todaysOpinionsHelper.formattedOpinions.map((opinion, idx) => (
-                  <tr key={idx}>
+                  <tr key={`opinion-row-${idx}`}>
                     <td className="center-column">{idx + 1}</td>
                     <td aria-hidden="true"></td>
                     <td>

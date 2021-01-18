@@ -159,8 +159,8 @@ describe('documentTypeSelectHelper', () => {
 
       docketEntryOnChange({
         action: 'select-option',
+        inputName: 'primaryDocument.eventCode',
         inputValue,
-        name: 'primaryDocument.eventCode',
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });
@@ -176,7 +176,7 @@ describe('documentTypeSelectHelper', () => {
     it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
       docketEntryOnChange({
         action: 'clear',
-        name: 'primaryDocument.eventCode',
+        inputName: 'primaryDocument.eventCode',
         updateSequence: updateSequenceSpy,
         validateSequence: validateSequenceSpy,
       });

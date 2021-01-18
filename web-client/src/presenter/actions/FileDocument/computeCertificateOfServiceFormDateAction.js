@@ -1,18 +1,5 @@
 import { state } from 'cerebral';
 
-const computeDate = ({ day, month, year }) => {
-  let computedDate = null;
-  if (month || day || year) {
-    computedDate = `${year}-${month}-${day}`;
-
-    computedDate = computedDate
-      .split('-')
-      .map(segment => segment.padStart(2, '0'))
-      .join('-');
-  }
-  return computedDate;
-};
-
 /**
  * computes the certificate of service dates from the form
  * month, day and year values
@@ -21,13 +8,17 @@ const computeDate = ({ day, month, year }) => {
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.get the cerebral get function
  */
-export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
+export const computeCertificateOfServiceFormDateAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
   let month = get(state.form.certificateOfServiceMonth);
   let day = get(state.form.certificateOfServiceDay);
   let year = get(state.form.certificateOfServiceYear);
   store.set(
     state.form.certificateOfServiceDate,
-    computeDate({ day, month, year }),
+    applicationContext.getUtilities().computeDate({ day, month, year }),
   );
 
   const secondaryDocument = get(state.form.secondaryDocument);
@@ -38,7 +29,7 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
     year = get(state.form.secondaryDocument.certificateOfServiceYear);
     store.set(
       state.form.secondaryDocument.certificateOfServiceDate,
-      computeDate({ day, month, year }),
+      applicationContext.getUtilities().computeDate({ day, month, year }),
     );
   }
 
@@ -53,7 +44,7 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
       year = get(state.form.supportingDocuments[idx].certificateOfServiceYear);
       store.set(
         state.form.supportingDocuments[idx].certificateOfServiceDate,
-        computeDate({ day, month, year }),
+        applicationContext.getUtilities().computeDate({ day, month, year }),
       );
     });
   }
@@ -75,7 +66,7 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
       );
       store.set(
         state.form.secondarySupportingDocuments[idx].certificateOfServiceDate,
-        computeDate({ day, month, year }),
+        applicationContext.getUtilities().computeDate({ day, month, year }),
       );
     });
   }
