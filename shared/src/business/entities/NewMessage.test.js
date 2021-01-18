@@ -1,4 +1,8 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
+const {
+  applicationContext,
+  over1000Characters,
+} = require('../test/createTestApplicationContext');
+const { Message } = require('./Message');
 const { NewMessage } = require('./NewMessage');
 const { PETITIONS_SECTION } = require('./EntityConstants');
 
@@ -33,6 +37,24 @@ describe('NewMessage', () => {
         { applicationContext },
       );
       expect(message.isValid()).toBeFalsy();
+    });
+  });
+
+  describe('validation message', () => {
+    it('displays a message when the message is over 500 characters long', () => {
+      const message = new NewMessage(
+        {
+          message: over1000Characters,
+          subject: 'hey!',
+          to: 'bob',
+          toSection: PETITIONS_SECTION,
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+      expect(message.getFormattedValidationErrors()).toEqual({
+        message: Message.VALIDATION_ERROR_MESSAGES.message[1].message,
+      });
     });
   });
 });
