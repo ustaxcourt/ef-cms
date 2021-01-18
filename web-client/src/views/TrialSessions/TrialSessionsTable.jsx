@@ -60,7 +60,7 @@ export const TrialSessionsTable = connect(
                 >
                   <option value="">-Judge-</option>
                   {trialSessionsHelper.trialSessionJudges.map((judge, idx) => (
-                    <option key={idx} value={judge.userId}>
+                    <option key={`session-judge-${idx}`} value={judge.userId}>
                       {judge.name}
                     </option>
                   ))}
@@ -107,7 +107,7 @@ export const TrialSessionsTable = connect(
                 </tr>
               </tbody>
               {trialDate.sessions.map((item, idx) => (
-                <tbody key={idx}>
+                <tbody key={`date-session-${idx}`}>
                   <tr className="trial-sessions-row">
                     <td>{item.formattedStartDate}</td>
                     <td>
