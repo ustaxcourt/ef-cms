@@ -527,7 +527,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(updatedDocketEntry.previousDocument.documentType).toEqual('Order');
   });
 
-  it('should add a coversheet when the docket entry event code changes to one requiring a coverhseet', async () => {
+  it('should add a coversheet when the docket entry event code changes to one requiring a coversheet', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
       docketEntryMeta: {
@@ -543,7 +543,20 @@ describe('updateDocketEntryMetaInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  describe.only('shouldGenerateCoversheetForDocketEntry', () => {
+  it('should throw an error when the docket entry is not found on the case', async () => {
+    await expect(
+      updateDocketEntryMetaInteractor({
+        applicationContext,
+        docketEntryMeta: {
+          ...docketEntries[6],
+          docketEntryId: 'not-a-guid',
+        },
+        docketNumber: '101-20',
+      }),
+    ).rejects.toThrow('Docket entry with id not-a-guid not found.');
+  });
+
+  describe('shouldGenerateCoversheetForDocketEntry', () => {
     let mockDocketEntry = new DocketEntry(
       {
         docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
@@ -564,11 +577,6 @@ describe('updateDocketEntryMetaInteractor', () => {
     let originalDocketEntry = mockDocketEntry;
     let servedAtUpdated = false;
     let shouldAddNewCoverSheet = false;
-
-    //true:
-    //servedAtUpdated && !servedAtUpdated && !shouldAddNewCoverSheet && !originalDocketEntry.isCourtIssued() && !entryRequiresCoverSheet &&     !originalDocketEntry.isMinuteEntry
-    //!servedAtUpdated && servedAtUpdated && !shouldAddNewCoverSheet && !originalDocketEntry.isCourtIssued() && !entryRequiresCoverSheet &&     !originalDocketEntry.isMinuteEntry
-    //!servedAtUpdated && !servedAtUpdated && shouldAddNewCoverSheet && !originalDocketEntry.isCourtIssued() && !entryRequiresCoverSheet &&     !originalDocketEntry.isMinuteEntry
 
     it('should return true when shouldAddNewCoverSheet and entryRequiresCoverSheet are true for a non-minute entry', async () => {
       mockDocketEntry.isMinuteEntry = false;
