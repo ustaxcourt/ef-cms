@@ -492,4 +492,23 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
   });
+
+  it('should update the previousDocument', async () => {
+    const result = await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[0],
+        previousDocument: {
+          ...docketEntries[1],
+        },
+      },
+      docketNumber: '101-20',
+    });
+
+    const updatedDocketEntry = result.docketEntries.find(
+      record => record.index === 1,
+    );
+    expect(updatedDocketEntry.previousDocument).toBeDefined();
+    expect(updatedDocketEntry.previousDocument.documentType).toEqual('Order');
+  });
 });
