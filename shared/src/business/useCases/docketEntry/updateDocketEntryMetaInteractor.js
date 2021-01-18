@@ -9,6 +9,22 @@ const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
+
+const shouldGenerateCoversheetForDocketEntry = ({
+  entryRequiresCoverSheet,
+  filingDateUpdated,
+  originalDocketEntry,
+  servedAtUpdated,
+  shouldAddNewCoverSheet,
+}) => {
+  return (
+    (servedAtUpdated || filingDateUpdated || shouldAddNewCoverSheet) &&
+    (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
+    !originalDocketEntry.isMinuteEntry
+  );
+};
+
+exports.shouldGenerateCoversheetForDocketEntry = shouldGenerateCoversheetForDocketEntry;
 /**
  *
  * @param {object} providers the providers object
@@ -98,10 +114,13 @@ exports.updateDocketEntryMetaInteractor = async ({
     const shouldAddNewCoverSheet =
       originalEntryDoesNotRequireCoversheet && entryRequiresCoverSheet;
 
-    const shouldGenerateCoversheet =
-      (servedAtUpdated || filingDateUpdated || shouldAddNewCoverSheet) &&
-      (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
-      !originalDocketEntry.isMinuteEntry;
+    const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry(
+      servedAtUpdated,
+      filingDateUpdated,
+      shouldAddNewCoverSheet,
+      originalDocketEntry,
+      entryRequiresCoverSheet,
+    );
 
     const docketEntryEntity = new DocketEntry(
       {

@@ -1,7 +1,11 @@
-import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
+import {
+  shouldGenerateCoversheetForDocketEntry,
+  updateDocketEntryMetaInteractor,
+} from './updateDocketEntryMetaInteractor';
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { NotFoundError } = require('../../../errors/errors');
 const { ROLES } = require('../../entities/EntityConstants');
@@ -537,5 +541,65 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
+  });
+
+  describe.only('shouldGenerateCoversheetForDocketEntry', () => {
+    let mockDocketEntry = new DocketEntry(
+      {
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        documentTitle: 'Summary Opinion',
+        documentType: 'Summary Opinion',
+        eventCode: 'SOP',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 7,
+        isMinuteEntry: false,
+        judge: 'Buch',
+        userId: mockUserId,
+      },
+      { applicationContext },
+    );
+
+    let entryRequiresCoverSheet = false;
+    let filingDateUpdated = false;
+    let originalDocketEntry = mockDocketEntry;
+    let servedAtUpdated = false;
+    let shouldAddNewCoverSheet = false;
+
+    //true:
+    //servedAtUpdated && !servedAtUpdated && !shouldAddNewCoverSheet && !originalDocketEntry.isCourtIssued() && !entryRequiresCoverSheet &&     !originalDocketEntry.isMinuteEntry
+    //!servedAtUpdated && servedAtUpdated && !shouldAddNewCoverSheet && !originalDocketEntry.isCourtIssued() && !entryRequiresCoverSheet &&     !originalDocketEntry.isMinuteEntry
+    //!servedAtUpdated && !servedAtUpdated && shouldAddNewCoverSheet && !originalDocketEntry.isCourtIssued() && !entryRequiresCoverSheet &&     !originalDocketEntry.isMinuteEntry
+
+    it('should return true when shouldAddNewCoverSheet and entryRequiresCoverSheet are true for a non-minute entry', async () => {
+      mockDocketEntry.isMinuteEntry = false;
+      shouldAddNewCoverSheet = true;
+      entryRequiresCoverSheet = true;
+
+      const result = shouldGenerateCoversheetForDocketEntry({
+        entryRequiresCoverSheet,
+        filingDateUpdated,
+        originalDocketEntry,
+        servedAtUpdated,
+        shouldAddNewCoverSheet,
+      });
+
+      expect(result).toBe(true);
+    });
+
+    it('should return true when servedAtUpdated and entryRequiresCoverSheet are true for a non-minute entry', async () => {
+      mockDocketEntry.isMinuteEntry = false;
+      shouldAddNewCoverSheet = true;
+      entryRequiresCoverSheet = true;
+
+      const result = shouldGenerateCoversheetForDocketEntry({
+        entryRequiresCoverSheet,
+        filingDateUpdated,
+        originalDocketEntry,
+        servedAtUpdated,
+        shouldAddNewCoverSheet,
+      });
+
+      expect(result).toBe(true);
+    });
   });
 });
