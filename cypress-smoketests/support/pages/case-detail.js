@@ -13,6 +13,7 @@ exports.goToCaseDetail = docketNumber => {
 
 exports.goToCaseOverview = docketNumber => {
   cy.goToRoute(`/case-detail/${docketNumber}`);
+  cy.get('.heading-2').should('contain', docketNumber);
   cy.get('#tab-case-information').click();
   cy.get('#tab-overview').click();
   cy.get('.internal-information').should('exist');
@@ -141,13 +142,13 @@ exports.blockCaseFromTrial = () => {
   cy.get('#tabContent-overview .block-from-trial-btn').click();
   cy.get('.modal-dialog #reason').type(faker.company.catchPhrase());
   cy.get('.modal-dialog .modal-button-confirm').click();
-  cy.contains('Blocked From Trial');
+  cy.contains('Blocked From Trial').should('exist');
 };
 
 exports.unblockCaseFromTrial = () => {
   cy.get('#remove-block').click();
   cy.get('.modal-button-confirm').click();
-  cy.contains('Block removed.');
+  cy.contains('Block removed.').should('exist');
 };
 
 exports.setCaseAsHighPriority = () => {

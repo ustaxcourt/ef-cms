@@ -103,7 +103,7 @@ describe('Petitions Clerk', () => {
             ...BASE_CASE.contactPrimary,
             ...createRandomContact(),
           },
-          docketEntries: [BASE_CASE.docketEntries[0]],
+          docketEntries: [{ ...BASE_CASE.docketEntries[0], docketNumber }],
           docketNumber,
           docketNumberWithSuffix: docketNumber,
           preferredTrialCity: testData.preferredTrialCity,
@@ -149,6 +149,8 @@ describe('Petitions Clerk', () => {
     it('manually block second case', () => {
       // block it
       goToCaseOverview(secondDocketNumber);
+      cy.task('log', 'second docket number is');
+      cy.task('log', secondDocketNumber);
       blockCaseFromTrial();
       // do this well before we look for it on blocked cases report...
     });
