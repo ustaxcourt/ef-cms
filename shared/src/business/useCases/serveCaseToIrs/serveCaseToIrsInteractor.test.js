@@ -433,15 +433,15 @@ describe('serveCaseToIrsInteractor', () => {
     const rqtMinuteEntry = applicationContext
       .getPersistenceGateway()
       .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        document =>
-          document.documentType ===
+        doc =>
+          doc.documentType ===
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
       );
     const odsDocketEntry = applicationContext
       .getPersistenceGateway()
       .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        document =>
-          document.documentType ===
+        doc =>
+          doc.documentType ===
           INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
       );
     expect(result).toBeDefined();

@@ -131,8 +131,7 @@ export const getPreviouslyFiledDocuments = (
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   return caseDetail.docketEntries
     .filter(
-      document =>
-        document.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+      doc => doc.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
     )
-    .filter(document => document.docketEntryId !== selectedDocketEntryId);
+    .filter(doc => doc.docketEntryId !== selectedDocketEntryId);
 };

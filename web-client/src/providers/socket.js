@@ -13,7 +13,7 @@ export const socketProvider = ({ socketRouter }) => {
   let applicationContext;
   let socket;
 
-  const stop = () => {
+  const stopSocket = () => {
     if (socket) {
       socket.close();
       socket = null;
@@ -24,7 +24,7 @@ export const socketProvider = ({ socketRouter }) => {
     const token = app.getState('token');
 
     if (socket && socket.close) {
-      stop();
+      stopSocket();
     }
 
     return new Promise((resolve, reject) => {
@@ -61,6 +61,6 @@ export const socketProvider = ({ socketRouter }) => {
   return {
     initialize,
     start,
-    stop,
+    stop: stopSocket,
   };
 };
