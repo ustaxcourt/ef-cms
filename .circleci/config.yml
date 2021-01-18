@@ -930,58 +930,58 @@ workflows:
       # - e2e-pa11y-public
       # - e2e-cypress
       # - e2e-cypress-public
-      - deploy:
-          requires:
-            - build-client-coverage
-          filters:
-            branches:
-              only:
-                - irs
-                - migration
-                - staging
-                - test
-                - master
-                - experimental1
-                - experimental2
-                - experimental3
-                - dawson
-      - migrate:
-          requires:
-            - deploy
-          filters:
-            branches:
-              only:
-                - irs
-                - migration
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-      - smoketests:
-          requires:
-            - migrate
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - experimental1
-                - experimental2
-                - experimental3
-      - switch-colors:
-          requires:
-            - smoketests
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - master
-                - experimental1
-                - experimental2
-                - experimental3
-                - dawson
+      # - deploy:
+      #     requires:
+      #       - build-client-coverage
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - migration
+      #           - staging
+      #           - test
+      #           - master
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - dawson
+      # - migrate:
+      #     requires:
+      #       - deploy
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - migration
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      # - smoketests:
+      #     requires:
+      #       - migrate
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      # - switch-colors:
+      #     requires:
+      #       - smoketests
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           - master
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - dawson
 
   build-and-deploy-with-context:
     jobs:
