@@ -149,8 +149,6 @@ describe('Petitions Clerk', () => {
     it('manually block second case', () => {
       // block it
       goToCaseOverview(secondDocketNumber);
-      cy.task('log', 'second docket number is');
-      cy.task('log', secondDocketNumber);
       blockCaseFromTrial();
       // do this well before we look for it on blocked cases report...
     });
@@ -161,8 +159,6 @@ describe('Petitions Clerk', () => {
 
     it('manually add, view, and remove first case from the SET trial session', () => {
       goToCaseOverview(firstDocketNumber);
-      cy.task('log', 'docket number is');
-      cy.task('log', firstDocketNumber);
       manuallyAddCaseToCalendaredTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();
     });
