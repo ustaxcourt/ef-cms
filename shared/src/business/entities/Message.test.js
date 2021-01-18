@@ -240,7 +240,7 @@ describe('Message', () => {
         { applicationContext },
       );
       expect(message.getFormattedValidationErrors()).toEqual({
-        message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+        message: Message.VALIDATION_ERROR_MESSAGES.message[1].message,
       });
     });
   });

@@ -32,18 +32,7 @@ NewMessage.prototype.init = function init(rawMessage, { applicationContext }) {
 
 NewMessage.validationName = 'NewMessage';
 
-NewMessage.VALIDATION_ERROR_MESSAGES = {
-  message: [
-    { contains: 'is required', message: 'Enter a message' },
-    {
-      contains: 'must be less than or equal to',
-      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
-    },
-  ],
-  subject: 'Enter a subject line',
-  toSection: 'Select a section',
-  toUserId: 'Select a recipient',
-};
+NewMessage.VALIDATION_ERROR_MESSAGES = Message.VALIDATION_ERROR_MESSAGES;
 
 joiValidationDecorator(
   NewMessage,
