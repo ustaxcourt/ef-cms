@@ -1,4 +1,5 @@
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
+import { isServed } from '../../../../shared/src/business/entities/DocketEntry';
 import { state } from 'cerebral';
 
 export const documentViewerHelper = (get, applicationContext) => {
@@ -66,8 +67,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showSignStipulatedDecisionButton =
     formattedDocumentToDisplay.eventCode ===
       PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    (formattedDocumentToDisplay.servedAt ||
-      formattedDocumentToDisplay.isLegacyServed) &&
+    isServed(formattedDocumentToDisplay) &&
     !formattedCaseDetail.docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
