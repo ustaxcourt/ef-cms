@@ -318,10 +318,24 @@ DocketEntry.prototype.isAutoServed = function () {
   );
 };
 
+/**
+ * Determines if the docket entry is a court issued document
+ *
+ * @returns {Boolean} true if the docket entry is a court issued document, false otherwise
+ */
 DocketEntry.prototype.isCourtIssued = function () {
   return COURT_ISSUED_EVENT_CODES.map(({ eventCode }) => eventCode).includes(
     this.eventCode,
   );
+};
+
+/**
+ * Determines if the docket entry has been served
+ *
+ * @returns {Boolean} true if the docket entry has been served, false otherwise
+ */
+DocketEntry.prototype.isServed = function () {
+  return !!this.servedAt || !!this.isLegacyServed;
 };
 
 /**
