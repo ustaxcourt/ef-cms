@@ -119,7 +119,7 @@ exports.serveCaseToIrsInteractor = async ({
     const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
     const initialDocketEntry = caseEntity.docketEntries.find(
-      document => document.documentType === initialDocumentType.documentType,
+      doc => doc.documentType === initialDocumentType.documentType,
     );
 
     if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
@@ -168,8 +168,7 @@ exports.serveCaseToIrsInteractor = async ({
     .validate();
 
   const petitionDocument = caseEntity.docketEntries.find(
-    document =>
-      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
   const initializeCaseWorkItem = petitionDocument.workItem;
 

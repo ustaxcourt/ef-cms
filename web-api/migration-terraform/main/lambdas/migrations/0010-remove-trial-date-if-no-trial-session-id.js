@@ -20,9 +20,7 @@ const migrateItems = async (items, documentClient) => {
       item.status !== CASE_STATUS_TYPES.calendared
     ) {
       const trialDateCutoff = '2020-11-20T00:00:00.000Z';
-      if (item.trialDate < trialDateCutoff) {
-        item.trialDate = undefined;
-      } else if (!item.trialSessionId) {
+      if (item.trialDate < trialDateCutoff || !item.trialSessionId) {
         item.trialDate = undefined;
       }
 

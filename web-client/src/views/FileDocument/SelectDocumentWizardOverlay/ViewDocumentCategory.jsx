@@ -66,7 +66,7 @@ export const ViewDocumentCategory = connect(
         </div>
         <div>
           {viewAllDocumentsHelper.categoryMap[modal.category].map(
-            (document, index) => (
+            (doc, index) => (
               <div
                 className="category-view grid-container padding-bottom-1 padding-top-1"
                 key={`document-${index}`}
@@ -79,28 +79,28 @@ export const ViewDocumentCategory = connect(
                       (modal.forSecondary && 'secondaryDocument.') || '';
                     updateFileDocumentWizardFormValueSequence({
                       key: `${prefix}category`,
-                      value: document.category,
+                      value: doc.category,
                     });
                     updateFileDocumentWizardFormValueSequence({
                       key: `${prefix}documentType`,
-                      value: document.documentType,
+                      value: doc.documentType,
                     });
                     updateFileDocumentWizardFormValueSequence({
                       key: `${prefix}documentTitle`,
-                      value: document.documentTitle,
+                      value: doc.documentTitle,
                     });
                     updateFileDocumentWizardFormValueSequence({
                       key: `${prefix}eventCode`,
-                      value: document.eventCode,
+                      value: doc.eventCode,
                     });
                     updateFileDocumentWizardFormValueSequence({
                       key: `${prefix}scenario`,
-                      value: document.scenario,
+                      value: doc.scenario,
                     });
                     clearModalSequence();
                   }}
                 >
-                  {document.documentType}
+                  {doc.documentType}
                 </Button>
               </div>
             ),

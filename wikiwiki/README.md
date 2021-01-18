@@ -9,3 +9,4 @@
 1. Glossary
 2. Testing Logins
 3. Functional Documentation
+4. [Release Notes](./release-notes.md)
