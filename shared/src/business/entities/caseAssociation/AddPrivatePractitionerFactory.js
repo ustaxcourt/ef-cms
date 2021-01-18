@@ -52,7 +52,7 @@ AddPrivatePractitionerFactory.get = metadata => {
   };
 
   let schema = {
-    email: joi.optional(),
+    email: JoiValidationConstants.STRING.optional(),
     serviceIndicator: joi
       .when('email', {
         is: joi.exist().not(null),
