@@ -87,6 +87,12 @@ else
   fi
 fi
 
+if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
+  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/dynamic-web-twain-sdk-14.3.1"
+else
+  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/dynamic-web-twain-sdk-14.3.1"
+fi
+
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_environment=$ENVIRONMENT
@@ -105,6 +111,7 @@ export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_disable_emails=$DISABLE_EMAILS
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
+export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan

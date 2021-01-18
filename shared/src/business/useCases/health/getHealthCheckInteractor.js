@@ -52,16 +52,13 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
   const source = handleAxiosTimeout(axios);
 
   try {
-    // Currently, dynamsoft is only deployed on the court's staging environment as it shares a license with
-    // other environments. Leaving this domain hard-coded for now until dynamsoft is deployed across multiple
-    // environments.
-    const dynamsoftDeployEnv = 'stg.ef-cms.ustaxcourt.gov';
+    const scannerResourceUri = applicationContext.getScannerResourceUri();
     await Promise.all(
       [
-        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.initiate.js`,
-        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js`,
-        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.install.js`,
-        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.css`,
+        `${scannerResourceUri}/dynamsoft.webtwain.initiate.js`,
+        `${scannerResourceUri}/dynamsoft.webtwain.config.js`,
+        `${scannerResourceUri}/dynamsoft.webtwain.install.js`,
+        `${scannerResourceUri}/dynamsoft.webtwain.css`,
       ].map(url => {
         return axios.get(url, { cancelToken: source.token, timeout: 1000 });
       }),

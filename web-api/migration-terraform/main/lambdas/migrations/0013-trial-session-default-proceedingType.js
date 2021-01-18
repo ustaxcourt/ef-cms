@@ -15,7 +15,6 @@ const migrateItems = async items => {
       item.sk.startsWith('trial-session|')
     ) {
       if (!item.proceedingType) {
-        console.log('adding a proceeding type');
         const trialSessionEntity = new TrialSession(
           {
             ...item,
@@ -30,10 +29,13 @@ const migrateItems = async items => {
           ...item,
           ...trialSessionEntity.validate().toRawObject(),
         });
-        console.log('pushed an updated item', {
-          ...item,
-          ...trialSessionEntity.validate().toRawObject(),
-        });
+        applicationContext.logger.info(
+          `migrating trial session ${item.trialSessionId} with default proceeding type: ${DEFAULT_PROCEEDING_TYPE}`,
+          {
+            ...item,
+            ...trialSessionEntity.validate().toRawObject(),
+          },
+        );
       } else {
         itemsAfter.push(item);
       }

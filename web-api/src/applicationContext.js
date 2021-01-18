@@ -1440,6 +1440,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         return new SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
       }
     },
+    getScannerResourceUri: () => {
+      return (
+        process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
+      );
+    },
     getSearchClient: () => {
       if (!searchClientCache) {
         if (environment.stage === 'local') {
