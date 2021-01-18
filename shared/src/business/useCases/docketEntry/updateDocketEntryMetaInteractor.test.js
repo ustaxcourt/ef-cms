@@ -1,7 +1,11 @@
-import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
+import {
+  shouldGenerateCoversheetForDocketEntry,
+  updateDocketEntryMetaInteractor,
+} from './updateDocketEntryMetaInteractor';
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { NotFoundError } = require('../../../errors/errors');
 const { ROLES } = require('../../entities/EntityConstants');
@@ -91,6 +95,17 @@ describe('updateDocketEntryMetaInteractor', () => {
         filingDate: '2011-02-22T00:01:00.000Z',
         index: 6,
         isMinuteEntry: false,
+        userId: mockUserId,
+      },
+      {
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        documentTitle: 'Summary Opinion',
+        documentType: 'Summary Opinion',
+        eventCode: 'SOP',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 7,
+        isMinuteEntry: false,
+        judge: 'Buch',
         userId: mockUserId,
       },
     ];
@@ -510,5 +525,89 @@ describe('updateDocketEntryMetaInteractor', () => {
     );
     expect(updatedDocketEntry.previousDocument).toBeDefined();
     expect(updatedDocketEntry.previousDocument.documentType).toEqual('Order');
+  });
+
+  it('should add a coversheet when the docket entry event code changes to one requiring a coversheet', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[6],
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        eventCode: 'HE',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should throw an error when the docket entry is not found on the case', async () => {
+    await expect(
+      updateDocketEntryMetaInteractor({
+        applicationContext,
+        docketEntryMeta: {
+          ...docketEntries[6],
+          docketEntryId: 'not-a-guid',
+        },
+        docketNumber: '101-20',
+      }),
+    ).rejects.toThrow('Docket entry with id not-a-guid not found.');
+  });
+
+  describe('shouldGenerateCoversheetForDocketEntry', () => {
+    let mockDocketEntry = new DocketEntry(
+      {
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        documentTitle: 'Summary Opinion',
+        documentType: 'Summary Opinion',
+        eventCode: 'SOP',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 7,
+        isMinuteEntry: false,
+        judge: 'Buch',
+        userId: mockUserId,
+      },
+      { applicationContext },
+    );
+
+    let entryRequiresCoverSheet = false;
+    let filingDateUpdated = false;
+    let originalDocketEntry = mockDocketEntry;
+    let servedAtUpdated = false;
+    let shouldAddNewCoverSheet = false;
+
+    it('should return true when shouldAddNewCoverSheet and entryRequiresCoverSheet are true for a non-minute entry', async () => {
+      mockDocketEntry.isMinuteEntry = false;
+      shouldAddNewCoverSheet = true;
+      entryRequiresCoverSheet = true;
+
+      const result = shouldGenerateCoversheetForDocketEntry({
+        entryRequiresCoverSheet,
+        filingDateUpdated,
+        originalDocketEntry,
+        servedAtUpdated,
+        shouldAddNewCoverSheet,
+      });
+
+      expect(result).toBe(true);
+    });
+
+    it('should return true when servedAtUpdated and entryRequiresCoverSheet are true for a non-minute entry', async () => {
+      mockDocketEntry.isMinuteEntry = false;
+      shouldAddNewCoverSheet = true;
+      entryRequiresCoverSheet = true;
+
+      const result = shouldGenerateCoversheetForDocketEntry({
+        entryRequiresCoverSheet,
+        filingDateUpdated,
+        originalDocketEntry,
+        servedAtUpdated,
+        shouldAddNewCoverSheet,
+      });
+
+      expect(result).toBe(true);
+    });
   });
 });
