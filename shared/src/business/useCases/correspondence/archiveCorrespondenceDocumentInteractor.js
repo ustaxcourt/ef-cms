@@ -34,14 +34,16 @@ exports.archiveCorrespondenceDocumentInteractor = async ({
     applicationContext,
   });
 
-  await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
-    applicationContext,
-    correspondence: correspondenceToArchive,
-    docketNumber,
-  });
+  await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociationsCorrespondence({
+      applicationContext,
+      correspondence: correspondenceToArchive,
+      docketNumber,
+    });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 };
