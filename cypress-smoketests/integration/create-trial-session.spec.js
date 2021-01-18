@@ -157,8 +157,10 @@ describe('Petitions Clerk', () => {
       setTrialSessionAsCalendared(testData.trialSessionIds[0]);
     });
 
-    it('manually add, view, and remove first case case from the SET trial session', () => {
+    it('manually add, view, and remove first case from the SET trial session', () => {
       goToCaseOverview(firstDocketNumber);
+      cy.task('log', 'docket number is');
+      cy.task('log', firstDocketNumber);
       manuallyAddCaseToCalendaredTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();
     });

@@ -15,6 +15,7 @@ exports.goToCaseOverview = docketNumber => {
   cy.goToRoute(`/case-detail/${docketNumber}`);
   cy.get('#tab-case-information').click();
   cy.get('#tab-overview').click();
+  cy.get('.internal-information').should('exist');
 };
 
 exports.createOrder = docketNumber => {
