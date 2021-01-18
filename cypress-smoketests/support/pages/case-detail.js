@@ -133,7 +133,8 @@ exports.removeCaseFromTrialSession = () => {
   cy.get('#remove-from-trial-session-btn').should('exist').click();
   cy.get('#disposition').type(faker.company.catchPhrase());
   cy.get('#modal-root .modal-button-confirm').click();
-  cy.get('#add-to-trial-session-btn').should('not.exist');
+  cy.get('#add-to-trial-session-btn').should('exist');
+  cy.get('.usa-alert--success').should('contain', 'Case removed from trial.');
 };
 
 exports.blockCaseFromTrial = () => {
