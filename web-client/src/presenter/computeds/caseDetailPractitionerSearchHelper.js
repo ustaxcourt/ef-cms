@@ -4,61 +4,46 @@ export const caseDetailPractitionerSearchHelper = get => {
   const caseDetail = get(state.caseDetail);
   const modalState = get(state.modal);
 
-  const practitionerMatchesFormatted =
-    modalState && modalState.practitionerMatches;
-  if (practitionerMatchesFormatted) {
-    practitionerMatchesFormatted.map(practitioner => {
-      if (practitioner.contact) {
-        practitioner.cityStateZip = `${practitioner.contact.city}, ${practitioner.contact.state} ${practitioner.contact.postalCode}`;
-      }
-      if (caseDetail.privatePractitioners) {
-        practitioner.isAlreadyInCase = caseDetail.privatePractitioners.find(
-          casePractitioner => casePractitioner.userId === practitioner.userId,
-        );
-      }
-    });
-  }
-  const respondentMatchesFormatted = modalState && modalState.respondentMatches;
-  if (respondentMatchesFormatted) {
-    respondentMatchesFormatted.map(respondent => {
-      if (respondent.contact) {
-        respondent.cityStateZip = `${respondent.contact.city}, ${respondent.contact.state} ${respondent.contact.postalCode}`;
-      }
-      if (caseDetail.irsPractitioners) {
-        respondent.isAlreadyInCase = caseDetail.irsPractitioners.find(
-          caseRespondent => caseRespondent.userId === respondent.userId,
-        );
-      }
-    });
-  }
+  const formatMatches = matchesKey => {
+    const matchesFormatted = (modalState && modalState[matchesKey]) || [];
 
-  const practitionerSearchResultsCount =
-    modalState &&
-    modalState.practitionerMatches &&
-    modalState.practitionerMatches.length;
+    const casePractitionerKey =
+      matchesKey === 'practitionerMatches'
+        ? 'privatePractitioners'
+        : 'irsPractitioners';
 
-  const respondentSearchResultsCount =
-    modalState &&
-    modalState.respondentMatches &&
-    modalState.respondentMatches.length;
+    if (matchesFormatted.length) {
+      matchesFormatted.map(practitioner => {
+        if (practitioner.contact) {
+          practitioner.cityStateZip = `${practitioner.contact.city}, ${practitioner.contact.state} ${practitioner.contact.postalCode}`;
+        }
+        if (caseDetail[casePractitionerKey]) {
+          practitioner.isAlreadyInCase = caseDetail[casePractitionerKey].find(
+            casePractitioner => casePractitioner.userId === practitioner.userId,
+          );
+        }
+      });
+    }
 
-  let showOnePractitioner = false;
-  let showMultiplePractitioners = false;
+    return matchesFormatted;
+  };
 
-  if (practitionerSearchResultsCount === 1) {
-    showOnePractitioner = true;
-  } else if (practitionerSearchResultsCount > 1) {
-    showMultiplePractitioners = true;
-  }
+  const practitionerMatchesFormatted = formatMatches('practitionerMatches');
+  const respondentMatchesFormatted = formatMatches('respondentMatches');
 
-  let showOneRespondent = false;
-  let showMultipleRespondents = false;
+  const practitionerSearchResultsCount = modalState
+    ? modalState.practitionerMatches?.length
+    : undefined;
 
-  if (respondentSearchResultsCount === 1) {
-    showOneRespondent = true;
-  } else if (respondentSearchResultsCount > 1) {
-    showMultipleRespondents = true;
-  }
+  const respondentSearchResultsCount = modalState
+    ? modalState?.respondentMatches?.length
+    : undefined;
+
+  const showOnePractitioner = practitionerSearchResultsCount === 1;
+  let showMultiplePractitioners = practitionerSearchResultsCount > 1;
+
+  let showOneRespondent = respondentSearchResultsCount === 1;
+  let showMultipleRespondents = respondentSearchResultsCount > 1;
 
   return {
     practitionerMatchesFormatted,
