@@ -86,9 +86,9 @@ exports.addConsolidatedCaseInteractor = async ({
     caseEntity.setLeadCase(newLeadCase.docketNumber);
 
     updateCasePromises.push(
-      applicationContext.getPersistenceGateway().updateCase({
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseToUpdate: caseEntity,
       }),
     );
   });
