@@ -62,7 +62,7 @@ Message.VALIDATION_ERROR_MESSAGES = {
     { contains: 'is required', message: 'Enter a message' },
     {
       contains: 'must be less than or equal to',
-      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+      message: 'Limit is 700 characters. Enter 700 or fewer characters.',
     },
   ],
   subject: 'Enter a subject line',
@@ -151,7 +151,7 @@ Message.VALIDATION_RULES = {
     .boolean()
     .required()
     .description('Whether the message has been replied to or forwarded.'),
-  message: JoiValidationConstants.STRING.max(500)
+  message: JoiValidationConstants.STRING.max(700)
     .required()
     .description('The message text.'),
   messageId: JoiValidationConstants.UUID.required().description(
