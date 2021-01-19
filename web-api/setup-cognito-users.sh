@@ -77,17 +77,18 @@ createAdmin() {
   role=$2
   name=$3
 
-  aws cognito-idp sign-up \
-    --region "${REGION}" \
-    --client-id "${CLIENT_ID}" \
-    --username "${email}" \
-    --user-attributes 'Name="name",'Value="${name}" 'Name="custom:role",'Value="${role}" \
-    --password "${USTC_ADMIN_PASS}" || true
-
-  aws cognito-idp admin-confirm-sign-up \
-    --region "${REGION}" \
+  aws cognito-idp admin-create-user \
     --user-pool-id "${USER_POOL_ID}" \
-    --username "${email}" || true
+    --username "${email}" \
+    --region "${REGION}" \
+    --user-attributes 'Name="name",'Value="${name}" 'Name="custom:role",'Value="${role}" \
+    --temporary-password "${USTC_ADMIN_PASS}" || true
+
+  aws cognito-idp admin-update-user-attributes \
+    --user-pool-id "${USER_POOL_ID}" \
+    --username "${email}" \
+    --region "${REGION}" \
+    --user-attributes 'Name="password",'Value="${USTC_ADMIN_PASS}" || true
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
@@ -187,41 +188,41 @@ createJudgeAccount() {
 
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
-createAccount "migrator@example.com" "admin" "" "" "admin"
-createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "0" "GM9999" "privatePractitioner" "Private Practitioner Gmail" "Private" "Test" "private" "Practitioner"
-createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "0" "GM4444" "irsPractitioner" "IRS Practitioner Gmail" "IRS" "Test" "private" "Practitioner"
-createAccount "flexionustc+petitioner@gmail.com" "petitioner" "0" "0" "petitioner" "Petitioner Gmail"
-createManyAccounts "10" "adc" "adc" &
-createManyAccounts "10" "admissionsclerk" "admissions"
-createManyAccounts "10" "clerkofcourt" "clerkofcourt" &
-createManyAccounts "10" "docketclerk" "docket"
-createManyAccounts "10" "petitionsclerk" "petitions" &
-createManyAccounts "10" "trialclerk" "trialClerks" &
-createManyAccounts "30" "petitioner" "petitioner"
-createManyAccounts "2" "floater" "floater"
-createManyAccounts "2" "general" "general"
-createManyAccounts "2" "reportersOffice" "reportersOffice"
-createChambersAccount "ashfordsChambers" "chambers" &
-createChambersAccount "buchsChambers" "chambers" 
-createChambersAccount "cohensChambers" "chambers" &
-createPrivatePractitionerAccount "1" "PT1234" 
-createPrivatePractitionerAccount "2" "PT5432" &
-createPrivatePractitionerAccount "3" "PT1111" 
-createPrivatePractitionerAccount "4" "PT2222" &
-createPrivatePractitionerAccount "5" "PT3333" 
-createPrivatePractitionerAccount "6" "PT4444" "Test private practitioner" &
-createPrivatePractitionerAccount "7" "PT5555" "Test private practitioner" 
-createPrivatePractitionerAccount "8" "PT6666" "Test private practitioner" &
-createPrivatePractitionerAccount "9" "PT7777" "Test private practitioner" 
-createPrivatePractitionerAccount "10" "PT8888" "Test private practitioner" &
-createIRSPractitionerAccount "1" "RT6789" 
-createIRSPractitionerAccount "2" "RT0987" &
-createIRSPractitionerAccount "3" "RT7777" 
-createIRSPractitionerAccount "4" "RT8888" &
-createIRSPractitionerAccount "5" "RT9999" 
-createIRSPractitionerAccount "6" "RT6666" "Test IRS practitioner" &
-createIRSPractitionerAccount "7" "RT0000" "Test IRS practitioner" 
-createIRSPractitionerAccount "8" "RT1111" "Test IRS practitioner" &
-createIRSPractitionerAccount "9" "RT2222" "Test IRS practitioner" 
-createIRSPractitionerAccount "10" "RT3333" "Test IRS practitioner" &
+# createAccount "migrator@example.com" "admin" "" "" "admin"
+# createAccount "flexionustc+privatePractitioner@gmail.com" "privatePractitioner" "0" "GM9999" "privatePractitioner" "Private Practitioner Gmail" "Private" "Test" "private" "Practitioner"
+# createAccount "flexionustc+irsPractitioner@gmail.com" "irsPractitioner" "0" "GM4444" "irsPractitioner" "IRS Practitioner Gmail" "IRS" "Test" "private" "Practitioner"
+# createAccount "flexionustc+petitioner@gmail.com" "petitioner" "0" "0" "petitioner" "Petitioner Gmail"
+# createManyAccounts "10" "adc" "adc" &
+# createManyAccounts "10" "admissionsclerk" "admissions"
+# createManyAccounts "10" "clerkofcourt" "clerkofcourt" &
+# createManyAccounts "10" "docketclerk" "docket"
+# createManyAccounts "10" "petitionsclerk" "petitions" &
+# createManyAccounts "10" "trialclerk" "trialClerks" &
+# createManyAccounts "30" "petitioner" "petitioner"
+# createManyAccounts "2" "floater" "floater"
+# createManyAccounts "2" "general" "general"
+# createManyAccounts "2" "reportersOffice" "reportersOffice"
+# createChambersAccount "ashfordsChambers" "chambers" &
+# createChambersAccount "buchsChambers" "chambers" 
+# createChambersAccount "cohensChambers" "chambers" &
+# createPrivatePractitionerAccount "1" "PT1234" 
+# createPrivatePractitionerAccount "2" "PT5432" &
+# createPrivatePractitionerAccount "3" "PT1111" 
+# createPrivatePractitionerAccount "4" "PT2222" &
+# createPrivatePractitionerAccount "5" "PT3333" 
+# createPrivatePractitionerAccount "6" "PT4444" "Test private practitioner" &
+# createPrivatePractitionerAccount "7" "PT5555" "Test private practitioner" 
+# createPrivatePractitionerAccount "8" "PT6666" "Test private practitioner" &
+# createPrivatePractitionerAccount "9" "PT7777" "Test private practitioner" 
+# createPrivatePractitionerAccount "10" "PT8888" "Test private practitioner" &
+# createIRSPractitionerAccount "1" "RT6789" 
+# createIRSPractitionerAccount "2" "RT0987" &
+# createIRSPractitionerAccount "3" "RT7777" 
+# createIRSPractitionerAccount "4" "RT8888" &
+# createIRSPractitionerAccount "5" "RT9999" 
+# createIRSPractitionerAccount "6" "RT6666" "Test IRS practitioner" &
+# createIRSPractitionerAccount "7" "RT0000" "Test IRS practitioner" 
+# createIRSPractitionerAccount "8" "RT1111" "Test IRS practitioner" &
+# createIRSPractitionerAccount "9" "RT2222" "Test IRS practitioner" 
+# createIRSPractitionerAccount "10" "RT3333" "Test IRS practitioner" &
 wait
