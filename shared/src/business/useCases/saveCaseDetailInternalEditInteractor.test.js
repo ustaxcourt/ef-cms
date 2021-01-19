@@ -182,11 +182,12 @@ describe('updateCase', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToUserAndSectionInbox,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForPaper.mock
-        .calls[0][0].workItem,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToUserAndSectionInbox.mock.calls[0][0].workItem,
     ).toMatchObject({
       assigneeId: petitionsClerkUser.userId,
       assigneeName: petitionsClerkUser.name,
@@ -209,7 +210,8 @@ describe('updateCase', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToUserAndSectionInbox,
     ).not.toBeCalled();
   });
 
