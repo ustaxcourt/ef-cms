@@ -215,7 +215,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
             saveWorkItems.push(
               applicationContext
                 .getPersistenceGateway()
-                .saveWorkItemForNonPaper({
+                .saveWorkItemAndAddToSectionInbox({
                   applicationContext,
                   workItem: workItem.validate().toRawObject(),
                 }),
