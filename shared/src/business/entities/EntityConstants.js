@@ -228,6 +228,8 @@ const SCENARIOS = [
 
 const TRANSCRIPT_EVENT_CODE = 'TRAN';
 
+const LODGED_EVENT_CODE = 'MISCL';
+
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 const OBJECTIONS_OPTIONS_MAP = {
   YES: 'Yes',
@@ -1149,6 +1151,7 @@ module.exports = deepFreeze({
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
   JUDGES_CHAMBERS,
+  LODGED_EVENT_CODE,
   MAX_ELASTICSEARCH_PAGINATION: 10000,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,

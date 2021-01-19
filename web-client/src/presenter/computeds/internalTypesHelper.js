@@ -43,9 +43,9 @@ export const internalTypesHelper = (get, applicationContext) => {
     INTERNAL_CATEGORY_MAP,
   );
 
-  const internalDocumentTypesForSelectSorted = internalDocumentTypesForSelect.sort(
-    getSortFunction(searchText),
-  );
+  const internalDocumentTypesForSelectSorted = internalDocumentTypesForSelect
+    .sort(getSortFunction(searchText))
+    .filter(d => d.scenario !== 'Not in dropdown');
 
   return {
     internalDocumentTypesForSelect,
