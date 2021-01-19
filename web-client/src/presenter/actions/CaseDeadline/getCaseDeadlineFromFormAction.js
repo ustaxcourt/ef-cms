@@ -10,7 +10,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {object} the case deadline object
  */
-export const getCaseDeadlineFromForm = ({ applicationContext, get, props }) => {
+export const getCaseDeadlineFromFormAction = ({
+  applicationContext,
+  get,
+  props,
+}) => {
   let deadlineDate;
 
   if (props.computedDate) {
