@@ -3974,6 +3974,27 @@ describe('Case entity', () => {
 
       expect(isAssociated).toBeTruthy();
     });
+
+    it('should return true when the petition docket entry has been served in the legacy system and the current user is an irs superuser', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: {
+          ...caseEntity.toRawObject(),
+          docketEntries: [
+            {
+              documentTitle: 'Petition',
+              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+              eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
+              isLegacyServed: true,
+              servedAt: undefined,
+              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+        },
+        user: { role: ROLES.irsSuperuser },
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
   });
 
   describe('getCaseConfirmationGeneratedPdfFileName', () => {
