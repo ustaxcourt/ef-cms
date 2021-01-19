@@ -1,3 +1,5 @@
+import { isServed } from '../../../../shared/src/business/entities/DocketEntry';
+
 export const getShowNotServedForDocument = ({
   caseDetail,
   docketEntryId,
@@ -20,10 +22,7 @@ export const getShowNotServedForDocument = ({
       !!draftDocuments.find(draft => draft.docketEntryId === docketEntryId);
 
     showNotServed =
-      !isUnservable &&
-      !caseDocument.servedAt &&
-      !caseDocument.isLegacyServed &&
-      !isDraftDocument;
+      !isUnservable && !isServed(caseDocument) && !isDraftDocument;
   }
 
   return showNotServed;
