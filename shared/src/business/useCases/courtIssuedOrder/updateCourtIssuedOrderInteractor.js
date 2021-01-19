@@ -128,5 +128,5 @@ exports.updateCourtIssuedOrderInteractor = async ({
       caseToUpdate: caseEntity,
     });
 
-  new Case(result, { applicationContext }).validate().toRawObject();
+  return new Case(result, { applicationContext }).validate().toRawObject();
 };
