@@ -30,20 +30,29 @@ ExternalDocumentNonStandardC.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
     this.freeText,
-    this.previousDocument.documentTitle || this.previousDocument.documentType,
+    this.previousDocument
+      ? this.previousDocument.documentTitle ||
+          this.previousDocument.documentType
+      : '',
   );
 };
 
 ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
-  freeText: 'Enter name',
+  freeText: [
+    { contains: 'is required', message: 'Enter name' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    },
+  ],
 };
 
 ExternalDocumentNonStandardC.schema = {
   category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
+  documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
   documentType: JoiValidationConstants.STRING.required(),
-  freeText: JoiValidationConstants.STRING.required(),
+  freeText: JoiValidationConstants.STRING.max(1000).required(),
   previousDocument: joi
     .object()
     .keys({

@@ -54,6 +54,34 @@ describe('publicCaseDetailHelper', () => {
       });
     });
 
+    it('should not display a link for the PMT event code', () => {
+      state.caseDetail.docketEntries = [
+        {
+          docketEntryId: 'ae454c18-be84-4a2b-b055-9046ada4f65d',
+          documentTitle: 'PRE-TRIAL MEMORANDUM for Resp. (C/S 5-16-13)',
+          documentType: 'Miscellaneous',
+          eventCode: 'PMT',
+          filedBy: 'See Filings and Proceedings',
+          filingDate: '2013-05-16T00:00:00.000-04:00',
+          index: 14,
+          isFileAttached: true,
+          isLegacyServed: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isSealed: false,
+          isStricken: false,
+          numberOfPages: 5,
+          processingStatus: 'complete',
+          receivedAt: '2013-05-16T00:00:00.000-04:00',
+        },
+      ];
+      const result = runCompute(publicCaseDetailHelper, { state });
+
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toBeFalsy();
+    });
+
     it('should not show a link for documents not visible to the public', () => {
       state.caseDetail.docketEntries = [
         {
@@ -261,6 +289,53 @@ describe('publicCaseDetailHelper', () => {
           showLegacySealed: false,
           showServedAt: true,
         },
+        {
+          createdAtFormatted: '11/25/20',
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          documentTitle: 'Standing Pretrial Order',
+          documentType: 'Standing Pretrial Order',
+          eventCode: 'SPTO',
+          filingDate: '2020-11-25T16:03:21.363Z',
+          filingsAndProceedings: '',
+          index: 6,
+          isAvailableToUser: true,
+          isCourtIssuedDocument: true,
+          isFileAttached: false,
+          isInProgress: false,
+          isMinuteEntry: false,
+          isNotServedDocument: false,
+          isOnDocketRecord: true,
+          isPetition: false,
+          isSealed: false,
+          isStatusServed: true,
+          isStipDecision: false,
+          isStricken: false,
+          isTranscript: false,
+          numberOfPages: 4,
+          processingStatus: 'complete',
+          qcWorkItemsCompleted: true,
+          receivedAt: '2020-11-25T16:03:21.363Z',
+          servedAt: '2020-11-25T16:03:21.375Z',
+          servedAtFormatted: '11/25/20',
+          servedParties: [
+            {
+              address1: '123 Teachers Way',
+              city: 'Haifa',
+              contactId: '0f170690-1e02-4903-b336-e471108a2cd1',
+              country: 'Palestine',
+              countryType: 'international',
+              isAddressSealed: false,
+              name: 'Hanan Al Hroub',
+              postalCode: '123456',
+              sealedAndUnavailable: false,
+              serviceIndicator: 'Paper',
+            },
+          ],
+          servedPartiesCode: 'B',
+          showLegacySealed: false,
+          showServedAt: true,
+        },
       ];
 
       const result = runCompute(publicCaseDetailHelper, { state });
@@ -293,7 +368,7 @@ describe('publicCaseDetailHelper', () => {
           descriptionDisplay:
             'Notice of Trial on 12/30/2019 at San Francisco, California',
           docketEntryId: '162d3c72-2a31-4c66-b3f4-efaceb2cf0fd',
-          eventCode: 'NTD', // EVENT_CODES_NOT_VISIBLE_TO_PUBLIC
+          eventCode: 'NTD', // not in EVENT_CODES_VISIBLE_TO_PUBLIC
           index: 4,
           showLinkToDocument: false,
         },
@@ -303,6 +378,13 @@ describe('publicCaseDetailHelper', () => {
           eventCode: 'SPTO',
           index: 5,
           showLinkToDocument: true,
+        },
+        {
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          eventCode: 'SPTO',
+          index: 6,
+          showLinkToDocument: false,
         },
       ]);
     });
@@ -326,6 +408,7 @@ describe('publicCaseDetailHelper', () => {
         eventCode: 'P',
         filingDate: '2018-11-21T20:49:28.192Z',
         index: 4,
+        isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
       },
@@ -342,6 +425,7 @@ describe('publicCaseDetailHelper', () => {
         filedBy: 'Petrs. Dylan Fowler & Jaquelyn Estes',
         filingDate: '2018-10-21T20:49:28.192Z',
         index: 1,
+        isFileAttached: true,
         isOnDocketRecord: true,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
@@ -355,6 +439,7 @@ describe('publicCaseDetailHelper', () => {
         eventCode: 'O',
         filingDate: '2018-10-25T20:49:28.192Z',
         index: 3,
+        isFileAttached: true,
         isOnDocketRecord: true,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
@@ -370,6 +455,7 @@ describe('publicCaseDetailHelper', () => {
         eventCode: 'O',
         filingDate: '2018-10-25T20:49:28.192Z',
         index: 2,
+        isFileAttached: true,
         isOnDocketRecord: true,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
@@ -383,6 +469,7 @@ describe('publicCaseDetailHelper', () => {
         eventCode: 'RQT',
         filingDate: '2018-12-25T20:49:28.192Z',
         index: 5,
+        isFileAttached: true,
         isOnDocketRecord: true,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
@@ -395,6 +482,7 @@ describe('publicCaseDetailHelper', () => {
         eventCode: TRANSCRIPT_EVENT_CODE,
         filingDate: '2018-12-25T20:49:28.192Z',
         index: 6,
+        isFileAttached: true,
         isOnDocketRecord: true,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
@@ -408,6 +496,7 @@ describe('publicCaseDetailHelper', () => {
         eventCode: TRANSCRIPT_EVENT_CODE,
         filingDate: '2019-12-24T20:49:28.192Z',
         index: 7,
+        isFileAttached: true,
         isOnDocketRecord: true,
         isStricken: true,
         numberOfPages: 0,
@@ -422,6 +511,7 @@ describe('publicCaseDetailHelper', () => {
         eventCode: STIPULATED_DECISION_EVENT_CODE,
         filingDate: '2019-12-24T20:49:28.192Z',
         index: 8,
+        isFileAttached: true,
         isOnDocketRecord: true,
         isStricken: false,
         numberOfPages: 0,
@@ -437,6 +527,7 @@ describe('publicCaseDetailHelper', () => {
         eventCode: 'ROA',
         filingDate: '2019-12-25T20:49:28.192Z',
         index: 9,
+        isFileAttached: true,
         isOnDocketRecord: true,
         isStricken: false,
         numberOfPages: 0,

@@ -4,13 +4,17 @@ const {
 const {
   getTrialSessionDetailsInteractor,
 } = require('./getTrialSessionDetailsInteractor');
+const {
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 const { omit } = require('lodash');
-const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('Get trial session details', () => {
   const MOCK_TRIAL_SESSION = {
     maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '3000-03-01T00:00:00.000Z',
     term: 'Fall',

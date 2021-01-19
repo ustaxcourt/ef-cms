@@ -7,11 +7,18 @@
 * Petitions/Calendar clerk must QC cases before they are set for trial and check the "QC Complete" checkbox on the trial session eligible case list
 * When trial session is set (calendared) - eligible cases that have QC checked will be set for trial, in priority order, until they reach the max number of cases for that session
 
+### Required Fields
+Some fields are optional when creating a trial session but must be fulfilled to set the calendar:
+* Judge
+* Address, City, State, ZIP (for In Person Proceedings)
+* Meeting ID, Password, Join by number, Chambers phone number (for Remote proceedings)
+
+
 #### Bulk Generation of Notices
-* When the trial session is set, all eligible cases added to that session are issued a Notice Setting Case for Trial and a Standing Pre-Trial Order (Regular cases) or Standing Pre-Trial Notice (Small cases)
-* If any cases added include paper service, the clerk is directed to Print Paper Service documents; for printing purposes, the Notice Setting Case for Trial and Standing Pre-Trial Order/Notice are combined for each case
+* When the trial session is set, all eligible cases added to that session are issued a Notice Setting Case for Trial and a Standing Pre-Trial Order (Regular cases) or Standing Pre-Trial Order for Small Case
+* If any cases added include paper service, the clerk is directed to Print Paper Service documents; for printing purposes, the Notice Setting Case for Trial and Standing Pre-Trial Orders are combined for each case
 * The Notice Setting Case for Trial displays on the Docket Record for each case added to the trial session
-* The Standing Pre-Trial Order or Standing Pre-Trial Notice displays on the Docket Record for each case added to the trial session
+* The Standing Pre-Trial Order or Standing Pre-Trial Order for Small Case displays on the Docket Record for each case added to the trial session
 
 ### Manually Add a Case to an Open Trial Session
 * User manually adds a case to a trial session that is already set

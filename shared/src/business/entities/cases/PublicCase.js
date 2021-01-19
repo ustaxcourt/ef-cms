@@ -1,9 +1,10 @@
 const joi = require('joi');
 const {
-  COURT_ISSUED_DOCUMENT_TYPES,
+  COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   PARTY_TYPES,
+  ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
@@ -15,8 +16,11 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
+const { ContactFactory } = require('../contacts/ContactFactory');
+const { IrsPractitioner } = require('../IrsPractitioner');
 const { isSealedCase } = require('./Case');
 const { map } = require('lodash');
+const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { PublicContact } = require('./PublicContact');
 const { PublicDocketEntry } = require('./PublicDocketEntry');
 
@@ -43,12 +47,40 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
   this.isSealed = isSealedCase(rawCase);
 
-  this.contactPrimary = rawCase.contactPrimary
-    ? new PublicContact(rawCase.contactPrimary)
-    : undefined;
-  this.contactSecondary = rawCase.contactSecondary
-    ? new PublicContact(rawCase.contactSecondary)
-    : undefined;
+  const currentUser = applicationContext.getCurrentUser();
+
+  if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
+    const contacts = ContactFactory.createContacts({
+      applicationContext,
+      contactInfo: {
+        otherFilers: rawCase.otherFilers,
+        otherPetitioners: rawCase.otherPetitioners,
+        primary: rawCase.contactPrimary,
+        secondary: rawCase.contactSecondary,
+      },
+      isPaper: rawCase.isPaper,
+      partyType: rawCase.partyType,
+    });
+
+    this.otherPetitioners = contacts.otherPetitioners;
+    this.otherFilers = contacts.otherFilers;
+    this.contactPrimary = contacts.primary;
+    this.contactSecondary = contacts.secondary;
+
+    this.irsPractitioners = (rawCase.irsPractitioners || []).map(
+      irsPractitioner => new IrsPractitioner(irsPractitioner),
+    );
+    this.privatePractitioners = (rawCase.privatePractitioners || []).map(
+      practitioner => new PrivatePractitioner(practitioner),
+    );
+  } else {
+    this.contactPrimary = rawCase.contactPrimary
+      ? new PublicContact(rawCase.contactPrimary)
+      : undefined;
+    this.contactSecondary = rawCase.contactSecondary
+      ? new PublicContact(rawCase.contactSecondary)
+      : undefined;
+  }
 
   // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
   this.docketEntries = (rawCase.docketEntries || [])
@@ -120,9 +152,9 @@ const isPrivateDocument = function (documentEntity) {
   const isTranscript = documentEntity.eventCode === TRANSCRIPT_EVENT_CODE;
   const isOrder = orderDocumentTypes.includes(documentEntity.documentType);
   const isDocumentOnDocketRecord = documentEntity.isOnDocketRecord;
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    documentEntity.documentType,
-  );
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(documentEntity.eventCode);
   const documentIsStricken = !!documentEntity.isStricken;
 
   const isPublicDocumentType =

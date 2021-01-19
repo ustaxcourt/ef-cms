@@ -47,7 +47,7 @@ export const ViewAllDocumentsDesktop = connect(
                     <AccordionItem key={`item-${index}`} title={title}>
                       <div className="all-columns-view">
                         {viewAllDocumentsHelper.categoryMap[title].map(
-                          (document, docIndex) => (
+                          (doc, docIndex) => (
                             <Button
                               link
                               className="text-left"
@@ -55,28 +55,28 @@ export const ViewAllDocumentsDesktop = connect(
                               onClick={() => {
                                 updateFileDocumentWizardFormValueSequence({
                                   key: 'category',
-                                  value: document.category,
+                                  value: doc.category,
                                 });
                                 updateFileDocumentWizardFormValueSequence({
                                   key: 'documentType',
-                                  value: document.documentType,
+                                  value: doc.documentType,
                                 });
                                 updateFileDocumentWizardFormValueSequence({
                                   key: 'documentTitle',
-                                  value: document.documentTitle,
+                                  value: doc.documentTitle,
                                 });
                                 updateFileDocumentWizardFormValueSequence({
                                   key: 'eventCode',
-                                  value: document.eventCode,
+                                  value: doc.eventCode,
                                 });
                                 updateFileDocumentWizardFormValueSequence({
                                   key: 'scenario',
-                                  value: document.scenario,
+                                  value: doc.scenario,
                                 });
                                 openCompleteSelectDocumentTypeModalSequence();
                               }}
                             >
-                              {document.documentType}
+                              {doc.documentType}
                             </Button>
                           ),
                         )}

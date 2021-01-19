@@ -70,7 +70,7 @@ export const docketClerkAddsTrackedDocketEntry = (
     });
 
     expect(test.getState('validationErrors')).toEqual({
-      freeText: VALIDATION_ERROR_MESSAGES.freeText,
+      freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {

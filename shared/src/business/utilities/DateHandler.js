@@ -8,6 +8,7 @@ const FORMATS = {
   MMDDYY: 'MM/DD/YY',
   MMDDYYYY: 'MM/DD/YYYY',
   MONTH_DAY_YEAR: 'MMMM D, YYYY',
+  MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'dddd, MMMM D, YYYY',
   SORTABLE_CALENDAR: 'YYYY/MM/DD',
   TIME: 'hh:mm a',
   TIME_TZ: 'h:mm a [ET]',
@@ -276,6 +277,19 @@ const dateHasText = updatedDateString => {
   );
 };
 
+const computeDate = ({ day, month, year }) => {
+  let computedDate = null;
+  if (month || day || year) {
+    computedDate = `${year}-${month}-${day}`;
+
+    computedDate = computedDate
+      .split('-')
+      .map(segment => segment.padStart(2, '0'))
+      .join('-');
+  }
+  return computedDate;
+};
+
 module.exports = {
   FORMATS,
   PATTERNS,
@@ -284,6 +298,7 @@ module.exports = {
   calendarDatesCompared,
   castToISO,
   checkDate,
+  computeDate,
   createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,

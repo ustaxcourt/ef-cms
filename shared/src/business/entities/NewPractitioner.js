@@ -28,7 +28,7 @@ NewPractitioner.validationName = 'Practitioner';
 
 const VALIDATION_ERROR_MESSAGES = {
   ...Practitioner.VALIDATION_ERROR_MESSAGES,
-  email: 'Enter email',
+  email: 'Enter email address',
   firstName: 'Enter first name',
   lastName: 'Enter last name',
 };

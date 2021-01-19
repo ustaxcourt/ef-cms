@@ -1,7 +1,11 @@
-import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
+import {
+  shouldGenerateCoversheetForDocketEntry,
+  updateDocketEntryMetaInteractor,
+} from './updateDocketEntryMetaInteractor';
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { NotFoundError } = require('../../../errors/errors');
 const { ROLES } = require('../../entities/EntityConstants');
@@ -55,6 +59,53 @@ describe('updateDocketEntryMetaInteractor', () => {
         partyPrimary: true,
         servedAt: '2019-01-02T00:01:00.000Z',
         servedParties: [{ name: 'Some Other Party' }],
+        userId: mockUserId,
+      },
+      {
+        docketEntryId: 'd1197867-f25d-4e26-828c-f536419c96b7',
+        documentTitle: 'Some Order',
+        documentType: 'Order',
+        eventCode: 'O',
+        filingDate: '2011-01-11T00:01:00.000Z',
+        index: 4,
+        isMinuteEntry: false,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+        userId: mockUserId,
+      },
+      {
+        docketEntryId: 'd2297867-f25d-4e26-828c-f536419c96b7',
+        documentTitle: 'Unservable Document with Filing Date',
+        documentType: 'U.S.C.A',
+        eventCode: 'USCA',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 5,
+        isMinuteEntry: false,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+        userId: mockUserId,
+      },
+      {
+        docketEntryId: 'd3397867-f25d-4e26-828c-f536419c96b7',
+        documentTitle: 'Hearing before [Judge] at [Place]',
+        documentType: 'Hearing before',
+        eventCode: 'HEAR',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 6,
+        isMinuteEntry: false,
+        userId: mockUserId,
+      },
+      {
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        documentTitle: 'Summary Opinion',
+        documentType: 'Summary Opinion',
+        eventCode: 'SOP',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 7,
+        isMinuteEntry: false,
+        judge: 'Buch',
         userId: mockUserId,
       },
     ];
@@ -159,7 +210,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 1,
     );
     const updatedDocument = result.docketEntries.find(
-      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
+      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
     );
     expect(updatedDocketEntry.filedBy).toEqual('Petr. Test Petitioner');
     expect(updatedDocument.filedBy).toEqual('Petr. Test Petitioner');
@@ -195,7 +246,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 1,
     );
     const updatedDocument = result.docketEntries.find(
-      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
+      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
     );
     expect(updatedDocument.servedAt).toEqual('2020-01-01T00:01:00.000Z');
   });
@@ -215,7 +266,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 1,
     );
     const updatedDocument = result.docketEntries.find(
-      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
+      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
     );
     expect(updatedDocument.hasOtherFilingParty).toBe(true);
     expect(updatedDocument.otherFilingParty).toBe('Brianna Noble');
@@ -235,7 +286,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 1,
     );
     const updatedDocument = result.docketEntries.find(
-      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
+      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
     );
     expect(updatedDocument.freeText).toBeUndefined();
   });
@@ -253,6 +304,53 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
+  });
+
+  it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[3], // originally an Order
+        documentType: 'U.S.C.A',
+        eventCode: 'USCA', // changing to USCA - which DOES require a coversheet
+        filingDate: '2020-02-22T02:22:00.000Z',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[4], // was already a USCA - which DOES require a coversheet
+        filingDate: '2012-02-22T02:22:00.000Z',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should not generate a coversheet for the document if the filingDate field is changed on a document that does NOT require a coversheet', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[5], // HEAR - which does NOT require a coversheet
+        filingDate: '2012-02-22T02:22:00.000Z',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
   });
 
   it('should not generate a new coversheet for a court-issued docket entry if the servedAt field is changed', async () => {
@@ -390,7 +488,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 1,
     );
     const updatedDocument = result.docketEntries.find(
-      document => document.docketEntryId === updatedDocketEntry.docketEntryId,
+      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
     );
     expect(updatedDocument.pending).toBeTruthy();
   });
@@ -408,5 +506,108 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
+  });
+
+  it('should update the previousDocument', async () => {
+    const result = await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[0],
+        previousDocument: {
+          ...docketEntries[1],
+        },
+      },
+      docketNumber: '101-20',
+    });
+
+    const updatedDocketEntry = result.docketEntries.find(
+      record => record.index === 1,
+    );
+    expect(updatedDocketEntry.previousDocument).toBeDefined();
+    expect(updatedDocketEntry.previousDocument.documentType).toEqual('Order');
+  });
+
+  it('should add a coversheet when the docket entry event code changes to one requiring a coversheet', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[6],
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        eventCode: 'HE',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should throw an error when the docket entry is not found on the case', async () => {
+    await expect(
+      updateDocketEntryMetaInteractor({
+        applicationContext,
+        docketEntryMeta: {
+          ...docketEntries[6],
+          docketEntryId: 'not-a-guid',
+        },
+        docketNumber: '101-20',
+      }),
+    ).rejects.toThrow('Docket entry with id not-a-guid not found.');
+  });
+
+  describe('shouldGenerateCoversheetForDocketEntry', () => {
+    let mockDocketEntry = new DocketEntry(
+      {
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        documentTitle: 'Summary Opinion',
+        documentType: 'Summary Opinion',
+        eventCode: 'SOP',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 7,
+        isMinuteEntry: false,
+        judge: 'Buch',
+        userId: mockUserId,
+      },
+      { applicationContext },
+    );
+
+    let entryRequiresCoverSheet = false;
+    let filingDateUpdated = false;
+    let originalDocketEntry = mockDocketEntry;
+    let servedAtUpdated = false;
+    let shouldAddNewCoverSheet = false;
+
+    it('should return true when shouldAddNewCoverSheet and entryRequiresCoverSheet are true for a non-minute entry', async () => {
+      mockDocketEntry.isMinuteEntry = false;
+      shouldAddNewCoverSheet = true;
+      entryRequiresCoverSheet = true;
+
+      const result = shouldGenerateCoversheetForDocketEntry({
+        entryRequiresCoverSheet,
+        filingDateUpdated,
+        originalDocketEntry,
+        servedAtUpdated,
+        shouldAddNewCoverSheet,
+      });
+
+      expect(result).toBe(true);
+    });
+
+    it('should return true when servedAtUpdated and entryRequiresCoverSheet are true for a non-minute entry', async () => {
+      mockDocketEntry.isMinuteEntry = false;
+      shouldAddNewCoverSheet = true;
+      entryRequiresCoverSheet = true;
+
+      const result = shouldGenerateCoversheetForDocketEntry({
+        entryRequiresCoverSheet,
+        filingDateUpdated,
+        originalDocketEntry,
+        servedAtUpdated,
+        shouldAddNewCoverSheet,
+      });
+
+      expect(result).toBe(true);
+    });
   });
 });

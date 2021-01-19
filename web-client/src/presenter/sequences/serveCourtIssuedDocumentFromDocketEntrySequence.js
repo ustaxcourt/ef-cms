@@ -5,6 +5,7 @@ import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWith
 import { fileAndServeCourtIssuedDocumentAction } from '../actions/CourtIssuedDocketEntry/fileAndServeCourtIssuedDocumentAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
@@ -35,6 +36,7 @@ export const serveCourtIssuedDocumentFromDocketEntrySequence = [
       stopShowValidationAction,
       clearAlertsAction,
       computeJudgeNameWithTitleAction,
+      getComputedFormDateFactoryAction(null),
       generateCourtIssuedDocumentTitleAction,
       fileAndServeCourtIssuedDocumentAction,
       setPdfPreviewUrlAction,

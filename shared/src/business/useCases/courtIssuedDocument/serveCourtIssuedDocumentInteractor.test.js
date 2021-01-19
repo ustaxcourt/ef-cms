@@ -11,6 +11,7 @@ const {
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
@@ -225,6 +226,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         maxCases: 100,
         pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionType: 'Regular',
         sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
         startDate: '2019-11-27T05:00:00.000Z',
@@ -289,8 +291,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      document =>
-        document.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      docketEntry =>
+        docketEntry.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
@@ -316,7 +318,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      document => document.docketEntryId === mockDocketEntryId,
+      docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
 
     expect(updatedDocument.numberOfPages).toBe(1);
@@ -340,7 +342,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
-      document => document.docketEntryId === mockDocketEntryId,
+      docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
 
     expect(updatedDocument.servedAt).toBeDefined();
@@ -420,6 +422,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         maxCases: 100,
         pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionType: 'Regular',
         sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
         startDate: '2019-11-27T05:00:00.000Z',
@@ -449,11 +452,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  docketEntriesWithCaseClosingEventCodes.forEach(document => {
-    it(`should set the case status to closed for event code: ${document.eventCode}`, async () => {
+  docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
+    it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await serveCourtIssuedDocumentInteractor({
         applicationContext,
-        docketEntryId: document.docketEntryId,
+        docketEntryId: docketEntry.docketEntryId,
         docketNumber: '101-20',
       });
 

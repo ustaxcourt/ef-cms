@@ -4,7 +4,7 @@ import { state } from 'cerebral';
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
+    EVENT_CODES_VISIBLE_TO_PUBLIC,
   } = applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
 
@@ -41,11 +41,12 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
 
       const canDisplayDocumentLink =
         record.isCourtIssuedDocument &&
+        record.isFileAttached &&
         !record.isNotServedDocument &&
         !record.isStricken &&
         !record.isTranscript &&
         !record.isStipDecision &&
-        !EVENT_CODES_NOT_VISIBLE_TO_PUBLIC.includes(record.eventCode);
+        EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
 
       const showDocumentDescriptionWithoutLink = !canDisplayDocumentLink;
       const showLinkToDocument =

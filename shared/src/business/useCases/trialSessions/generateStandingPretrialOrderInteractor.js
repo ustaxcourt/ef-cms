@@ -1,5 +1,11 @@
-const { formatDateString, formatNow } = require('../../utilities/DateHandler');
+const {
+  createISODateString,
+  formatDateString,
+  formatNow,
+  FORMATS,
+} = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
 /**
  * generateStandingPretrialOrderInteractor
@@ -32,8 +38,28 @@ exports.generateStandingPretrialOrderInteractor = async ({
   const { startDate } = trialSession;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-  const fullStartDate = formatDateString(startDate, 'dddd, MMMM D, YYYY');
-  const footerDate = formatNow('MMDDYYYY');
+  const formattedStartDateWithDayOfWeek = formatDateString(
+    startDate,
+    FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
+  );
+
+  const formattedStartDate = formatDateString(
+    startDate,
+    FORMATS.MONTH_DAY_YEAR,
+  );
+
+  const formattedJudgeName = await getJudgeWithTitle({
+    applicationContext,
+    judgeUserName: trialSession.judge.name,
+  });
+
+  const trialStartTimeIso = createISODateString(
+    trialSession.startTime,
+    'HH:mm',
+  );
+  const formattedStartTime = formatDateString(trialStartTimeIso, 'hh:mm A');
+
+  const formattedServedDate = formatNow(FORMATS.MMDDYY);
 
   const pdfData = await applicationContext
     .getDocumentGenerators()
@@ -43,10 +69,13 @@ exports.generateStandingPretrialOrderInteractor = async ({
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
-        footerDate,
         trialInfo: {
           ...trialSession,
-          fullStartDate,
+          formattedJudgeName,
+          formattedServedDate,
+          formattedStartDate,
+          formattedStartDateWithDayOfWeek,
+          formattedStartTime,
         },
       },
     });

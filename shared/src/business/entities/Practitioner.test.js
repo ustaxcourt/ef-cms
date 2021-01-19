@@ -1,4 +1,9 @@
-const { COUNTRY_TYPES, ROLES, US_STATES } = require('./EntityConstants');
+const {
+  COUNTRY_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+  US_STATES,
+} = require('./EntityConstants');
 const { Practitioner } = require('./Practitioner');
 
 describe('Practitioner', () => {
@@ -260,6 +265,104 @@ describe('Practitioner', () => {
     expect(user.name).toEqual('Test Middle Practitioner Sfx');
   });
 
+  it('should default the serviceIndicator to paper if the user does not have an email address and no serviceIndicator value is already set', () => {
+    const user = new Practitioner({
+      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsStatus: 'Active',
+      barNumber: 'PT20001',
+      birthYear: 2019,
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        country: 'Brazil',
+        countryType: COUNTRY_TYPES.INTERNATIONAL,
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      employer: 'Private',
+      firmName: 'GW Law Offices',
+      firstName: 'Test',
+      lastName: 'Practitioner',
+      name: 'Test Practitioner',
+      originalBarState: US_STATES.IL,
+      practitionerType: 'Attorney',
+      role: ROLES.privatePractitioner,
+      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
+    });
+
+    expect(user.serviceIndicator).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
+  });
+
+  it('should default the serviceIndicator to electronic if the user does have an email address and no serviceIndicator value is already set', () => {
+    const user = new Practitioner({
+      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsStatus: 'Active',
+      barNumber: 'PT20001',
+      birthYear: 2019,
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        country: 'Brazil',
+        countryType: COUNTRY_TYPES.INTERNATIONAL,
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      email: 'test.practitioner@example.com',
+      employer: 'Private',
+      firmName: 'GW Law Offices',
+      firstName: 'Test',
+      lastName: 'Practitioner',
+      name: 'Test Practitioner',
+      originalBarState: US_STATES.IL,
+      practitionerType: 'Attorney',
+      role: ROLES.privatePractitioner,
+      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
+    });
+
+    expect(user.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+  });
+
+  it('should default the serviceIndicator to the already existing serviceIndicator value if present', () => {
+    const user = new Practitioner({
+      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsStatus: 'Active',
+      barNumber: 'PT20001',
+      birthYear: 2019,
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        country: 'Brazil',
+        countryType: COUNTRY_TYPES.INTERNATIONAL,
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      email: 'test.practitioner@example.com',
+      employer: 'Private',
+      firmName: 'GW Law Offices',
+      firstName: 'Test',
+      lastName: 'Practitioner',
+      name: 'Test Practitioner',
+      originalBarState: US_STATES.IL,
+      practitionerType: 'Attorney',
+      role: ROLES.privatePractitioner,
+      serviceIndicator: 'CARRIER_PIGEON',
+      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
+    });
+
+    expect(user.serviceIndicator).toEqual('CARRIER_PIGEON');
+  });
+
   describe('getFullName', () => {
     let userData;
 
@@ -310,6 +413,22 @@ describe('Practitioner', () => {
       expect(Practitioner.getFullName(userData)).toEqual(
         'Test Foo Practitioner Bar',
       );
+    });
+  });
+
+  describe('getDefaultServiceIndicator', () => {
+    it('returns electronic when an email address is present in the given practitioner data', () => {
+      expect(
+        Practitioner.getDefaultServiceIndicator({
+          email: 'test.practitioner@example.com',
+        }),
+      ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
+    });
+
+    it('returns paper when an email address is NOT present in the given practitioner data', () => {
+      expect(
+        Practitioner.getDefaultServiceIndicator({ email: undefined }),
+      ).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
     });
   });
 });

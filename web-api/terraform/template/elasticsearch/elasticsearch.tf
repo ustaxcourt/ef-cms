@@ -55,10 +55,10 @@ locals {
 }
 
 module "logs_alarms" {
-  source = "github.com/dubiety/terraform-aws-elasticsearch-cloudwatch-sns-alarms.git?ref=v1.0.4"
-  domain_name = aws_elasticsearch_domain.efcms-search.domain_name
-  alarm_name_prefix = "${aws_elasticsearch_domain.efcms-search.domain_name}: "
+  source                       = "github.com/dubiety/terraform-aws-elasticsearch-cloudwatch-sns-alarms.git?ref=v1.0.4"
+  domain_name                  = aws_elasticsearch_domain.efcms-search.domain_name
+  alarm_name_prefix            = "${aws_elasticsearch_domain.efcms-search.domain_name}: "
   free_storage_space_threshold = local.instance_size_in_mb * 0.25
-  create_sns_topic = false
-  sns_topic = var.alert_sns_topic_arn
+  create_sns_topic             = false
+  sns_topic                    = var.alert_sns_topic_arn
 }

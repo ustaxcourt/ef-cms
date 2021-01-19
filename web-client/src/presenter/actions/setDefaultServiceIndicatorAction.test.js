@@ -10,7 +10,26 @@ describe('setDefaultServiceIndicatorAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets the default serviceIndicator for the key', async () => {
+  it('sets the default serviceIndicator to the props.defaultServiceIndicator for the given key', async () => {
+    const { state } = await runAction(
+      setDefaultServiceIndicatorAction('testKey'),
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          defaultServiceIndicator: 'foo',
+        },
+        state: {
+          testKey: null, // the key that will be set
+        },
+      },
+    );
+
+    expect(state['testKey'].serviceIndicator).toEqual('foo');
+  });
+
+  it('sets the default serviceIndicator to electronic for the given key if no props.defaultServiceIndicator is given', async () => {
     const { state } = await runAction(
       setDefaultServiceIndicatorAction('testKey'),
       {

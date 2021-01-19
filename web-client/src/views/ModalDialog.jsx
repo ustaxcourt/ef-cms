@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-const modalRoot = document.getElementById('modal-root');
+const modalRoot = window.document.getElementById('modal-root');
 
 export const ModalDialog = ({
   ariaLiveMode,
@@ -13,8 +13,10 @@ export const ModalDialog = ({
   cancelSequence,
   children,
   className,
+  confirmHref,
   confirmLabel,
   confirmSequence,
+  confirmTarget = '_self',
   message,
   preventCancelOnBlur,
   preventScrolling,
@@ -28,20 +30,20 @@ export const ModalDialog = ({
 
   const getEl = () => {
     if (!elRef.current) {
-      elRef.current = document.createElement('div');
+      elRef.current = window.document.createElement('div');
     }
     return elRef.current;
   };
 
   const toggleNoScroll = scrollingOn => {
     if (preventScrolling && scrollingOn) {
-      document.body.classList.add('no-scroll');
-      document.addEventListener('touchmove', touchmoveTriggered, {
+      window.document.body.classList.add('no-scroll');
+      window.document.addEventListener('touchmove', touchmoveTriggered, {
         passive: false,
       });
     } else {
-      document.body.classList.remove('no-scroll');
-      document.removeEventListener('touchmove', touchmoveTriggered, {
+      window.document.body.classList.remove('no-scroll');
+      window.document.removeEventListener('touchmove', touchmoveTriggered, {
         passive: false,
       });
     }
@@ -76,12 +78,12 @@ export const ModalDialog = ({
 
   useEffect(() => {
     modalRoot.appendChild(getEl());
-    document.addEventListener('keydown', keydownTriggered, false);
+    window.document.addEventListener('keydown', keydownTriggered, false);
     toggleNoScroll(true);
 
     return () => {
       modalRoot.removeChild(getEl());
-      document.removeEventListener('keydown', keydownTriggered, false);
+      window.document.removeEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(false);
     };
   }, []);
@@ -131,6 +133,8 @@ export const ModalDialog = ({
             <div className="margin-top-5">
               <Button
                 className="modal-button-confirm"
+                href={confirmHref}
+                target={confirmTarget}
                 onClick={runConfirmSequence}
               >
                 {confirmLabel}

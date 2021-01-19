@@ -121,10 +121,12 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
 
-  return caseEntity.toRawObject();
+  return new Case(result, { applicationContext }).validate().toRawObject();
 };

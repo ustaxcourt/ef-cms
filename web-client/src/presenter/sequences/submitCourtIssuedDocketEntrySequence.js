@@ -1,5 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -18,6 +20,8 @@ import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDock
 export const submitCourtIssuedDocketEntrySequence = [
   clearAlertsAction,
   startShowValidationAction,
+  getComputedFormDateFactoryAction(null),
+  computeFilingFormDateAction,
   validateCourtIssuedDocketEntryAction,
   {
     error: [

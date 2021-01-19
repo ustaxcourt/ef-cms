@@ -1,3 +1,6 @@
+const {
+  over1000Characters,
+} = require('../../test/createTestApplicationContext');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
@@ -14,13 +17,14 @@ describe('CourtIssuedDocumentTypeC', () => {
       expect(documentInstance.attachments).toBe(false);
     });
   });
+
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
         scenario: 'Type C',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers,
+        docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers[0].message,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
@@ -35,6 +39,51 @@ describe('CourtIssuedDocumentTypeC', () => {
         scenario: 'Type C',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when docketNumbers field is over 500 characters', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        docketNumbers: over1000Characters,
+        documentTitle:
+          'Order that the letter "L" is added to Docket Number [Anything]',
+        documentType: 'Order that the letter "L" is added to Docket Number',
+        scenario: 'Type C',
+      });
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers[1].message,
+      });
+    });
+
+    describe('requiring filing dates on unservable documents', () => {
+      it('should be invalid when filingDate is undefined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          docketNumbers: '101-19',
+
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          scenario: 'Type C',
+        });
+        expect(
+          documentInstance.getFormattedValidationErrors().filingDate,
+        ).toBeDefined();
+      });
+
+      it('should be valid when filingDate is defined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          docketNumbers: '101-19',
+
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          filingDate: '1990-01-01T05:00:00.000Z',
+          scenario: 'Type C',
+        });
+        expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+      });
     });
   });
 

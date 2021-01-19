@@ -416,6 +416,8 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
+            npm run cypress:smoketests:local
+            sleep 5
             npm run cypress
       - store_artifacts:
           path: /root/project/cypress/videos/
@@ -551,6 +553,7 @@ jobs:
              -e "DISABLE_EMAILS=${DISABLE_EMAILS}" \
              -e "ES_VOLUME_SIZE=${ES_VOLUME_SIZE}" \
              -e "BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}" \
+             -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - Terraform'

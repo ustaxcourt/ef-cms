@@ -15,5 +15,6 @@ exports.getDocumentQCInboxForSectionLambda = event =>
       .getDocumentQCInboxForSectionInteractor({
         applicationContext,
         section,
+        ...event.queryStringParameters,
       });
   });

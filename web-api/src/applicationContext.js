@@ -36,8 +36,8 @@ const {
   order,
   pendingReport,
   receiptOfFiling,
-  standingPretrialNotice,
   standingPretrialOrder,
+  standingPretrialOrderForSmallCase,
   trialCalendar,
   trialSessionPlanningReport,
 } = require('../../shared/src/business/utilities/documentGenerators');
@@ -297,9 +297,6 @@ const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
-  filterQcItemsByAssociatedJudge,
-} = require('../../shared/src/business/utilities/filterQcItemsByAssociatedJudge');
-const {
   filterWorkItemsForUser,
 } = require('../../shared/src/business/utilities/filterWorkItemsForUser');
 const {
@@ -339,8 +336,8 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
-  generateStandingPretrialNoticeInteractor,
-} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialNoticeInteractor');
+  generateStandingPretrialOrderForSmallCaseInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor');
 const {
   generateStandingPretrialOrderInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
@@ -773,17 +770,17 @@ const {
   saveUserConnection,
 } = require('../../shared/src/persistence/dynamo/notifications/saveUserConnection');
 const {
+  saveWorkItemAndAddToSectionInbox,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemAndAddToSectionInbox');
+const {
+  saveWorkItemAndAddToUserAndSectionInbox,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemAndAddToUserAndSectionInbox');
+const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
   saveWorkItemForDocketEntryInProgress,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryInProgress');
-const {
-  saveWorkItemForNonPaper,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
-const {
-  saveWorkItemForPaper,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
   scrapePdfContents,
 } = require('../../shared/src/business/utilities/scrapePdfContents');
@@ -862,6 +859,9 @@ const {
 const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
+const {
+  updateCaseAndAssociations,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations');
 const {
   updateCaseAutomaticBlock,
 } = require('../../shared/src/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
@@ -1145,10 +1145,10 @@ const gatewayMethods = {
     putWorkItemInUsersOutbox,
     saveDocumentFromLambda,
     saveUserConnection,
+    saveWorkItemAndAddToSectionInbox,
+    saveWorkItemAndAddToUserAndSectionInbox,
     saveWorkItemForDocketClerkFilingExternalDocument,
     saveWorkItemForDocketEntryInProgress,
-    saveWorkItemForNonPaper,
-    saveWorkItemForPaper,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
     setWorkItemAsRead,
@@ -1325,8 +1325,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
       order,
       pendingReport,
       receiptOfFiling,
-      standingPretrialNotice,
       standingPretrialOrder,
+      standingPretrialOrderForSmallCase,
       trialCalendar,
       trialSessionPlanningReport,
     }),
@@ -1440,6 +1440,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         return new SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
       }
     },
+    getScannerResourceUri: () => {
+      return (
+        process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
+      );
+    },
     getSearchClient: () => {
       if (!searchClientCache) {
         if (environment.stage === 'local') {
@@ -1501,6 +1506,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         saveFileAndGenerateUrl,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
+        updateCaseAndAssociations,
         updateCaseAutomaticBlock,
         updateInitialFilingDocuments,
       };
@@ -1555,7 +1561,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
-        generateStandingPretrialNoticeInteractor,
+        generateStandingPretrialOrderForSmallCaseInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
         getBlockedCasesInteractor,
@@ -1673,7 +1679,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         compareISODateStrings,
         compareStrings,
         createISODateString,
-        filterQcItemsByAssociatedJudge,
         filterWorkItemsForUser,
         formatCaseForTrialSession,
         formatDateString,

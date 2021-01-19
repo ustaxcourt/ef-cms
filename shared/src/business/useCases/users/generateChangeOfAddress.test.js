@@ -17,6 +17,7 @@ jest.mock('../addCoversheetInteractor', () => ({
 
 describe('generateChangeOfAddress', () => {
   const { COUNTRY_TYPES } = applicationContext.getConstants();
+
   const mockIrsPractitioner = {
     barNumber: 'PT5432',
     contact: {
@@ -38,30 +39,30 @@ describe('generateChangeOfAddress', () => {
     userId: '35db9c50-0384-4830-a004-115001e86652',
   };
 
+  const mockPrivatePractitioner = {
+    barNumber: 'PT5432',
+    contact: {
+      address1: '234 Main St!',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
+      city: 'Chicago',
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      phone: '+1 (555) 555-5555',
+      postalCode: '61234',
+      state: 'IL',
+    },
+    email: 'privatePractitioner1@example.com',
+    name: 'Test Private Practitioner',
+    representingPrimary: true,
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
+  };
+
   const mockCaseWithPrivatePractitioner = {
     ...MOCK_CASE,
-    privatePractitioners: [
-      {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1@example.com',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
-    ],
+    privatePractitioners: [mockPrivatePractitioner],
     userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
@@ -90,35 +91,10 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     expect(
@@ -142,14 +118,8 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockIrsPractitioner.contact,
         address1: '23456 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under all the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
       user: mockIrsPractitioner,
     });
@@ -166,35 +136,10 @@ describe('generateChangeOfAddress', () => {
     await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockIrsPractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: {},
     });
 
     expect(
@@ -227,35 +172,10 @@ describe('generateChangeOfAddress', () => {
     await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockIrsPractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     const changeOfAddressDocketEntry = applicationContext
@@ -282,35 +202,10 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockIrsPractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     const noticeOfChangeOfAddressDocument = cases[0].docketEntries.find(
@@ -343,35 +238,10 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     expect(applicationContext.notifyHoneybadger).toBeCalled();
@@ -404,34 +274,12 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
       user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
+        ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
       },
     });
 
@@ -443,7 +291,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress.workItem).toBeDefined();
     expect(cases).toMatchObject([
@@ -472,35 +321,10 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
@@ -511,7 +335,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress.workItem).toBeDefined();
     expect(cases).toMatchObject([
@@ -540,35 +365,10 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
@@ -579,7 +379,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress.workItem).toBeDefined();
     expect(cases).toMatchObject([
@@ -608,35 +409,10 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
@@ -647,7 +423,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).not.toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress.workItem).toBeUndefined();
     expect(cases).toMatchObject([
@@ -677,42 +454,18 @@ describe('generateChangeOfAddress', () => {
       applicationContext,
       bypassDocketEntry: true,
       contactInfo: {
+        ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).not.toHaveBeenCalled();
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
@@ -730,42 +483,18 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).not.toHaveBeenCalled();
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
@@ -802,35 +531,10 @@ describe('generateChangeOfAddress', () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
+        ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
       },
-      user: {
-        barNumber: 'PT5432',
-        contact: {
-          address1: '234 Main St!',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        email: 'privatePractitioner1',
-        name: 'Test Private Practitioner',
-        representingPrimary: true,
-        role: ROLES.privatePractitioner,
-        section: 'privatePractitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
+      user: mockPrivatePractitioner,
     });
 
     const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
@@ -842,7 +546,8 @@ describe('generateChangeOfAddress', () => {
     ).toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress).toBeDefined();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toHaveBeenCalled();
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
@@ -851,5 +556,47 @@ describe('generateChangeOfAddress', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
+  });
+
+  it('should update the practitioner serviceIndicator and email if the original practitioner did not have an email and a new one was added', async () => {
+    const mockPaperServiceCase = {
+      ...mockCaseWithPrivatePractitioner,
+      privatePractitioners: [
+        {
+          ...mockCaseWithPrivatePractitioner.privatePractitioners[0],
+          email: undefined,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
+
+    const UPDATED_EMAIL = 'abc@example.com';
+
+    await generateChangeOfAddress({
+      applicationContext,
+      contactInfo: {
+        ...mockPrivatePractitioner.contact,
+      },
+      updatedEmail: UPDATED_EMAIL,
+      user: {
+        ...mockPrivatePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.privatePractitioners[0],
+    ).toMatchObject({
+      email: UPDATED_EMAIL,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    });
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
   });
 });
