@@ -85,7 +85,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cognito-idp:GetUserPoolMfaConfig",
         "cognito-idp:SetUserPoolMfaConfig",
         "cognito-idp:AdminCreateUser",
-        "cognito-idp:AdminUpdateUserAttributes"
+        "cognito-idp:AdminSetUserPassword"
       ],
       "Resource": "*"
     },
