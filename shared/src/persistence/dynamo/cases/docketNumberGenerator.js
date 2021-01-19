@@ -5,7 +5,7 @@ const {
   FORMATS,
 } = require('../../../business/utilities/DateHandler');
 
-const getNextDocketNumber = async ({ applicationContext, year }) => {
+exports.getNextDocketNumber = async ({ applicationContext, year }) => {
   const id = await applicationContext.getPersistenceGateway().incrementCounter({
     applicationContext,
     key: 'docketNumberCounter',
@@ -16,7 +16,7 @@ const getNextDocketNumber = async ({ applicationContext, year }) => {
   return `${plus100}-${lastTwo}`;
 };
 
-const checkCaseExists = async ({ applicationContext, docketNumber }) => {
+exports.checkCaseExists = async ({ applicationContext, docketNumber }) => {
   const caseMetadata = await client.get({
     Key: {
       pk: `case|${docketNumber}`,
@@ -28,7 +28,7 @@ const checkCaseExists = async ({ applicationContext, docketNumber }) => {
   return !!caseMetadata;
 };
 
-const MAX_ATTEMPTS = 1;
+exports.MAX_ATTEMPTS = 5;
 
 /**
  *
@@ -44,15 +44,15 @@ exports.createDocketNumber = async ({ applicationContext, receivedAt }) => {
   let attempt = 0;
 
   const docketNumber = await (async () => {
-    while (attempt < MAX_ATTEMPTS) {
-      const nextDocketNumber = await getNextDocketNumber({
+    while (attempt < exports.MAX_ATTEMPTS) {
+      const nextDocketNumber = await exports.getNextDocketNumber({
         applicationContext,
         year,
       });
 
-      const caseExists = await checkCaseExists({
+      const caseExists = await exports.checkCaseExists({
         applicationContext,
-        nextDocketNumber,
+        docketNumber: nextDocketNumber,
       });
 
       if (!caseExists) {
