@@ -140,7 +140,8 @@ describe('updateSecondaryContactInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toBeCalled();
   });
 
@@ -176,7 +177,8 @@ describe('updateSecondaryContactInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).not.toBeCalled();
   });
 
