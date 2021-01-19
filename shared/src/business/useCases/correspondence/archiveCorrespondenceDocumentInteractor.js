@@ -34,13 +34,11 @@ exports.archiveCorrespondenceDocumentInteractor = async ({
     applicationContext,
   });
 
-  await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociationsCorrespondence({
-      applicationContext,
-      correspondence: correspondenceToArchive,
-      docketNumber,
-    });
+  await applicationContext.getUseCaseHelpers().updateCaseCorrespondence({
+    applicationContext,
+    correspondence: correspondenceToArchive,
+    docketNumber,
+  });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
