@@ -66,8 +66,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showSignStipulatedDecisionButton =
     formattedDocumentToDisplay.eventCode ===
       PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    (formattedDocumentToDisplay.servedAt ||
-      formattedDocumentToDisplay.isLegacyServed) &&
+    applicationContext.getUtilities().isServed(formattedDocumentToDisplay) &&
     !formattedCaseDetail.docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );

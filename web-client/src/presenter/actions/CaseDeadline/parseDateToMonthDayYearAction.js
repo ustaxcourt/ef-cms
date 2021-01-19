@@ -6,7 +6,10 @@
  * @param {object} options.applicationContext the application context
  * @returns {object} the parsed date
  */
-export const parseDateToMonthDayYear = ({ applicationContext, dateString }) => {
+export const parseDateToMonthDayYearAction = ({
+  applicationContext,
+  dateString,
+}) => {
   const momentedDate = applicationContext
     .getUtilities()
     .prepareDateFromString(dateString);
@@ -23,6 +26,7 @@ export const parseDateToMonthDayYear = ({ applicationContext, dateString }) => {
     day = momentedDate.format('D');
     year = momentedDate.format('YYYY');
   }
+
   return {
     day,
     month,

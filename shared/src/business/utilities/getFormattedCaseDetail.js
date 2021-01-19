@@ -15,6 +15,7 @@ const {
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
+const { isServed } = require('../entities/DocketEntry');
 const { ROLES } = require('../entities/EntityConstants');
 
 const getServedPartiesCode = servedParties => {
@@ -81,8 +82,7 @@ const computeIsInProgress = ({ formattedEntry }) => {
 
 const computeIsNotServedDocument = ({ formattedEntry }) => {
   return (
-    !formattedEntry.servedAt &&
-    !formattedEntry.isLegacyServed &&
+    !isServed(formattedEntry) &&
     !formattedEntry.isUnservable &&
     !formattedEntry.isMinuteEntry
   );

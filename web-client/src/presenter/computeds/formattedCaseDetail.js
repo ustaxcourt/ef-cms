@@ -1,3 +1,4 @@
+import { isServed } from '../../../../shared/src/business/entities/DocketEntry';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -225,7 +226,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       ),
       isInitialDocument,
       isLegacySealed: entry.isLegacySealed,
-      isServed: !!entry.servedAt || !!entry.isLegacyServed,
+      isServed: isServed(entry),
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
@@ -262,7 +263,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && (d.servedAt || d.isLegacyServed),
+    d => d.pending && isServed(d),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
