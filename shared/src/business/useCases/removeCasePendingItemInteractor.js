@@ -44,12 +44,10 @@ exports.removeCasePendingItemInteractor = async ({
       caseEntity: updatedCaseEntity,
     });
 
-  const updatedCase = updatedCaseEntity.validate().toRawObject();
-
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: updatedCase,
+    caseToUpdate: updatedCaseEntity,
   });
 
-  return updatedCase;
+  return updatedCaseEntity.toRawObject();
 };
