@@ -1684,6 +1684,16 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Amended Simultaneous Memoranda of Law',
+        },
+        { applicationContext },
+      );
+      expect(docketEntry.isAutoServed()).toBeFalsy();
+    });
+
+    it('should return false if the documentType is an external document and the documentType contains Simultaneous', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
           documentType: 'Amended Simultaneous Memoranda of Law',
         },
         { applicationContext },
