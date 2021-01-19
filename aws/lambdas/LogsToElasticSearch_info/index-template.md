@@ -41,13 +41,19 @@ PUT _template/cwl
       "level": { "type": "keyword" },
       "logGroup": { "type": "keyword" },
       "logStream": { "type": "keyword" },
-      "message": { "type": "text" },
+      "message": {
+        "type": "text",
+        "fields": {
+          "raw": { "type": "keyword" }
+        }
+      },
       "requestId": {
         "properties": {
           "apiGateway": { "type": "keyword" },
           "applicationLoadBalancer": { "type": "keyword" },
           "lambda": { "type": "keyword" },
-          "authorizer": { "type": "keyword" }
+          "authorizer": { "type": "keyword" },
+          "connection": { "type": "keyword" }
         }
       },
       "request": {

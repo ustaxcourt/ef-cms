@@ -118,15 +118,6 @@ export const getOptionsForCategory = ({
       };
       break;
     }
-    case 'Nonstandard K': {
-      options = {
-        ordinalField: categoryInformation.ordinalField,
-        showNonstandardForm: true,
-        showTextInput: true,
-        textInputLabel: categoryInformation.labelFreeText,
-      };
-      break;
-    }
   }
 
   return options;
@@ -140,8 +131,7 @@ export const getPreviouslyFiledDocuments = (
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   return caseDetail.docketEntries
     .filter(
-      document =>
-        document.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+      doc => doc.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
     )
-    .filter(document => document.docketEntryId !== selectedDocketEntryId);
+    .filter(doc => doc.docketEntryId !== selectedDocketEntryId);
 };

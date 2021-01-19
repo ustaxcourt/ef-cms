@@ -1,3 +1,6 @@
+const {
+  over1000Characters,
+} = require('../../test/createTestApplicationContext');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
@@ -14,6 +17,7 @@ describe('CourtIssuedDocumentTypeB', () => {
       expect(documentInstance.attachments).toBe(false);
     });
   });
+
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
@@ -35,6 +39,49 @@ describe('CourtIssuedDocumentTypeB', () => {
         scenario: 'Type B',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when freeText is longer than 1000 characters', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
+        documentType: 'Order that case is assigned',
+        freeText: over1000Characters,
+        judge: 'Judge Colvin',
+        scenario: 'Type B',
+      });
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+      });
+    });
+
+    describe('requiring filing dates on unservable documents', () => {
+      it('should be invalid when filingDate is undefined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          judge: 'Judge Colvin',
+          scenario: 'Type B',
+        });
+        expect(
+          documentInstance.getFormattedValidationErrors().filingDate,
+        ).toBeDefined();
+      });
+
+      it('should be valid when filingDate is defined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          filingDate: '1990-01-01T05:00:00.000Z',
+          judge: 'Judge Colvin',
+          scenario: 'Type B',
+        });
+        expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+      });
     });
   });
 

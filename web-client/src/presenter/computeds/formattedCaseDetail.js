@@ -1,3 +1,4 @@
+import { isServed } from '../../../../shared/src/business/entities/DocketEntry';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -81,7 +82,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
+    EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
@@ -220,12 +221,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
       hasDocument: entry.isFileAttached,
       isCourtIssuedDocument: entry.isCourtIssuedDocument,
       isExternalUser,
-      isHiddenToPublic: EVENT_CODES_NOT_VISIBLE_TO_PUBLIC.includes(
+      isHiddenToPublic: !EVENT_CODES_VISIBLE_TO_PUBLIC.includes(
         entry.eventCode,
       ),
       isInitialDocument,
       isLegacySealed: entry.isLegacySealed,
-      isServed: !!entry.servedAt || !!entry.isLegacyServed,
+      isServed: isServed(entry),
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
@@ -262,7 +263,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && (d.servedAt || d.isLegacyServed),
+    d => d.pending && isServed(d),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(

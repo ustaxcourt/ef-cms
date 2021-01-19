@@ -27,15 +27,12 @@ exports.filePetitionInteractor = async ({
    * @param {Function} onUploadProgress the progressFunction
    * @returns {Promise<string>} the key returned from a successful upload
    */
-  const uploadDocumentAndMakeSafeInteractor = async (
-    document,
-    onUploadProgress,
-  ) => {
+  const uploadDocumentAndMakeSafeInteractor = async (doc, onUploadProgress) => {
     const key = await applicationContext
       .getPersistenceGateway()
       .uploadDocumentFromClient({
         applicationContext,
-        document,
+        document: doc,
         onUploadProgress,
       });
 
@@ -72,17 +69,28 @@ exports.filePetitionInteractor = async ({
     );
   }
 
-  await Promise.all([
+  const [
+    ownershipDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  ] = await Promise.all([
     ownershipDisclosureFileUpload,
     petitionFileUpload,
     stinFileUpload,
   ]);
 
-  return await applicationContext.getUseCases().createCaseInteractor({
-    applicationContext,
-    ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
-    petitionFileId: await petitionFileUpload,
-    petitionMetadata,
-    stinFileId: await stinFileUpload,
-  });
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .createCaseInteractor({
+      applicationContext,
+      ownershipDisclosureFileId,
+      petitionFileId,
+      petitionMetadata,
+      stinFileId,
+    });
+
+  return {
+    caseDetail,
+    stinFileId,
+  };
 };

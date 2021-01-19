@@ -39,6 +39,7 @@ exports.generateChangeOfAddress = async ({
   bypassDocketEntry = false,
   contactInfo,
   requestUserId,
+  updatedEmail,
   updatedName,
   user,
   websocketMessagePrefix = 'user',
@@ -93,6 +94,12 @@ exports.generateChangeOfAddress = async ({
       // This updates the case by reference!
       practitionerObject.contact = contactInfo;
       practitionerObject.name = practitionerName;
+
+      if (!oldData.email && updatedEmail) {
+        practitionerObject.serviceIndicator =
+          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+        practitionerObject.email = updatedEmail;
+      }
 
       // we do this again so that it will convert '' to null
       caseEntity = new Case(caseEntity, { applicationContext });
@@ -301,10 +308,12 @@ const generateAndServeDocketEntry = async ({
     });
 
   if (workItem) {
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    });
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemAndAddToSectionInbox({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
   }
 
   caseEntity.updateDocketEntry(changeOfAddressDocketEntry);

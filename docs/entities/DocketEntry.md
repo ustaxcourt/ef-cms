@@ -1342,7 +1342,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 1000
     freeText2: 
       type: "string"
       flags: 
@@ -1355,7 +1355,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 1000
     hasOtherFilingParty: 
       type: "boolean"
       flags: 
@@ -2151,7 +2151,6 @@
         - "Nonstandard H"
         - "Nonstandard I"
         - "Nonstandard J"
-        - "Nonstandard K"
         - "Type A"
         - "Type B"
         - "Type C"
@@ -3160,7 +3159,6 @@
                     - "OAD"
                     - "ODJ"
                     - "SDEC"
-                    - "NOT"
                     - "NTD"
                 then: 
                   type: "any"

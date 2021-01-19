@@ -34,12 +34,9 @@ export const computeFilingFormDateAction = ({
         .date(formDay)
         .toISOString();
     } else {
-      formDate = `${formYear}-${formMonth}-${formDay}`;
-
-      formDate = formDate
-        .split('-')
-        .map(segment => segment.padStart(2, '0'))
-        .join('-');
+      formDate = applicationContext
+        .getUtilities()
+        .computeDate({ day: formDay, month: formMonth, year: formYear });
     }
   }
 

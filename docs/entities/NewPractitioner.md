@@ -55,7 +55,7 @@
           then: 
             type: "any"
             flags: 
-              presence: "optional"
+              presence: "required"
           otherwise: 
             type: "any"
             flags: 
@@ -90,7 +90,7 @@
           then: 
             type: "any"
             flags: 
-              presence: "optional"
+              presence: "required"
           otherwise: 
             type: "any"
             flags: 
@@ -551,7 +551,7 @@
         - 
           name: "max"
           args: 
-            limit: 2020
+            limit: 2021
     employer: 
       type: "string"
       flags: 

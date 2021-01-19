@@ -1,10 +1,10 @@
 const {
-  makeSimpleQuerySafe,
-} = require('../../business/utilities/aggregateCommonQueryParams');
-const {
   MAX_SEARCH_CLIENT_RESULTS,
   ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
+const {
+  removeAdvancedSyntaxSymbols,
+} = require('../../business/utilities/aggregateCommonQueryParams');
 const { search } = require('./searchClient');
 
 exports.advancedDocumentSearch = async ({
@@ -13,11 +13,14 @@ exports.advancedDocumentSearch = async ({
   docketNumber,
   documentEventCodes,
   endDate,
+  from = 0,
   judge,
   judgeType,
   keyword,
   omitSealed,
   opinionType,
+  overrideResultSize,
+  overrideSort = false,
   startDate,
 }) => {
   const sourceFields = [
@@ -63,7 +66,7 @@ exports.advancedDocumentSearch = async ({
       simple_query_string: {
         default_operator: 'and',
         fields: ['documentContents.S', 'documentTitle.S'],
-        query: makeSimpleQuerySafe(keyword),
+        query: removeAdvancedSyntaxSymbols(keyword),
       },
     });
   }
@@ -101,7 +104,7 @@ exports.advancedDocumentSearch = async ({
           'contactPrimary.M.name.S',
           'contactSecondary.M.name.S',
         ],
-        query: caseTitleOrPetitioner,
+        query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
       },
     };
   }
@@ -170,9 +173,16 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
+  let sort;
+
+  if (overrideSort) {
+    sort = [{ 'filingDate.S': { order: 'desc' } }];
+  }
+
   const documentQuery = {
     body: {
       _source: sourceFields,
+      from,
       query: {
         bool: {
           must: [
@@ -187,14 +197,16 @@ exports.advancedDocumentSearch = async ({
           ],
         },
       },
-      size: MAX_SEARCH_CLIENT_RESULTS,
+      size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
+      sort,
     },
     index: 'efcms-docket-entry',
   };
 
-  const { results } = await search({
+  const { results, total } = await search({
     applicationContext,
     searchParameters: documentQuery,
   });
-  return results;
+
+  return { results, totalCount: total };
 };

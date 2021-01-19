@@ -20,6 +20,13 @@ const SERVED_PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
 const ORDER_JUDGE_FIELD = 'signedJudgeName';
 
+const TRIAL_SESSION_PROCEEDING_TYPES = {
+  inPerson: 'In Person',
+  remote: 'Remote',
+};
+
+const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
+
 const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
@@ -209,7 +216,6 @@ const SCENARIOS = [
   'Nonstandard H',
   'Nonstandard I',
   'Nonstandard J',
-  'Nonstandard K',
   'Type A',
   'Type B',
   'Type C',
@@ -221,6 +227,8 @@ const SCENARIOS = [
 ];
 
 const TRANSCRIPT_EVENT_CODE = 'TRAN';
+
+const LODGED_EVENT_CODE = 'MISCL';
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 const OBJECTIONS_OPTIONS_MAP = {
@@ -347,44 +355,20 @@ const MINUTE_ENTRIES_MAP = {
   },
 };
 
-const sptoDocument = COURT_ISSUED_EVENT_CODES.find(
+const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPTO',
 );
-const sptnDocument = COURT_ISSUED_EVENT_CODES.find(
-  doc => doc.eventCode === 'SPTN',
+const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
+  doc => doc.eventCode === 'SPOS',
 );
 
-const EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP = {
-  TRAN: {
-    eventCode: 'TRAN',
-    timePeriodDays: 90,
-  },
-  CTRA: {
-    eventCode: 'CTRA',
-    timePeriodDays: 90,
-  },
-  RTRA: {
-    eventCode: 'RTRA',
-    timePeriodDays: 90,
-  },
-};
-
-const EVENT_CODES_NOT_VISIBLE_TO_PUBLIC = [
-  'SDEC',
-  'NOT',
-  'FTRL',
-  'HEAR',
-  'NTD',
-  'PTRL',
-  'TRL',
-  'ROA',
-  'MISC',
-  'HE',
-  'TE',
-  'USCA',
-  'ES',
-  'RM',
-  ...Object.keys(EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP),
+const EVENT_CODES_VISIBLE_TO_PUBLIC = [
+  ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
+    d => d.eventCode,
+  ),
+  'DEC',
+  'ODL',
+  'SPTN',
 ];
 
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
@@ -398,15 +382,15 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Trial',
     eventCode: 'NTD',
   },
-  standingPretrialNotice: {
-    documentTitle: sptnDocument.documentTitle,
-    documentType: sptnDocument.documentType,
-    eventCode: sptnDocument.eventCode,
+  standingPretrialOrderForSmallCase: {
+    documentTitle: SPOS_DOCUMENT.documentTitle,
+    documentType: SPOS_DOCUMENT.documentType,
+    eventCode: SPOS_DOCUMENT.eventCode,
   },
   standingPretrialOrder: {
-    documentTitle: sptoDocument.documentTitle,
-    documentType: sptoDocument.documentType,
-    eventCode: sptoDocument.eventCode,
+    documentTitle: SPTO_DOCUMENT.documentTitle,
+    documentType: SPTO_DOCUMENT.documentType,
+    eventCode: SPTO_DOCUMENT.eventCode,
   },
 };
 
@@ -796,13 +780,13 @@ const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
 
 const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
 
-const SESSION_TYPES = [
-  'Regular',
-  'Small',
-  'Hybrid',
-  'Special',
-  'Motion/Hearing',
-];
+const SESSION_TYPES = {
+  regular: 'Regular',
+  small: 'Small',
+  hybrid: 'Hybrid',
+  special: 'Special',
+  motionHearing: 'Motion/Hearing',
+};
 
 const SESSION_STATUS_GROUPS = {
   all: 'All',
@@ -1039,6 +1023,7 @@ const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page wh
 const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
 const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
 const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
+const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 
 // TODO: event codes need to be reorganized
 const ALL_EVENT_CODES = flatten([
@@ -1141,6 +1126,7 @@ module.exports = deepFreeze({
   DEADLINE_REPORT_PAGE_SIZE,
   DEFAULT_PRACTITIONER_BIRTH_YEAR,
   DEFAULT_PROCEDURE_TYPE,
+  DEFAULT_PROCEEDING_TYPE,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
@@ -1153,8 +1139,7 @@ module.exports = deepFreeze({
   DOCUMENT_RELATIONSHIPS,
   EMPLOYER_OPTIONS,
   ESTATE_TYPES,
-  EVENT_CODES_NOT_VISIBLE_TO_PUBLIC,
-  EVENT_CODES_NOT_VISIBLE_TO_PARTIES_FOR_TIME_PERIOD_MAP,
+  EVENT_CODES_VISIBLE_TO_PUBLIC,
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
@@ -1166,6 +1151,7 @@ module.exports = deepFreeze({
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
   JUDGES_CHAMBERS,
+  LODGED_EVENT_CODE,
   MAX_ELASTICSEARCH_PAGINATION: 10000,
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
@@ -1206,10 +1192,12 @@ module.exports = deepFreeze({
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  TODAYS_ORDERS_PAGE_SIZE,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_CITIES,
   TRIAL_CITY_STRINGS,
+  TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_CLERKS_SECTION,
   TRIAL_LOCATION_MATCHER,
   TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,

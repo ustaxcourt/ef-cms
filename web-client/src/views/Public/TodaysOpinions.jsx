@@ -23,7 +23,10 @@ export const TodaysOpinions = connect(
           <h1>{todaysOpinionsHelper.formattedCurrentDate}</h1>
 
           {todaysOpinionsHelper.formattedOpinions.length === 0 && (
-            <p>There are no opinions today.</p>
+            <h3>
+              Opinions are generally published at 3:00 PM. If you are receiving
+              this message after 3:00 PM, there are no opinions today.
+            </h3>
           )}
 
           {todaysOpinionsHelper.formattedOpinions.length > 0 && (
@@ -45,7 +48,7 @@ export const TodaysOpinions = connect(
               </thead>
               <tbody>
                 {todaysOpinionsHelper.formattedOpinions.map((opinion, idx) => (
-                  <tr key={idx}>
+                  <tr key={`opinion-row-${idx}`}>
                     <td className="center-column">{idx + 1}</td>
                     <td aria-hidden="true"></td>
                     <td>
@@ -56,11 +59,13 @@ export const TodaysOpinions = connect(
                       <Button
                         link
                         aria-label={`View PDF: ${opinion.descriptionDisplay}`}
+                        className="text-left line-height-standard padding-0"
                         onClick={() => {
                           openCaseDocumentDownloadUrlSequence({
                             docketEntryId: opinion.docketEntryId,
                             docketNumber: opinion.docketNumber,
                             isPublic: true,
+                            useSameTab: true,
                           });
                         }}
                       >

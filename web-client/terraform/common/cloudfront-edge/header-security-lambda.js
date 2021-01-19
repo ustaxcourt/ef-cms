@@ -1,13 +1,13 @@
 /**
  * adds headers
  *
- * @param {object} event the AWS event object
- * @param {object} context the context
+ * @param {object} awsEvent the AWS event object
+ * @param {object} handlerContext the context
  * @param {object} callback the callback
  */
-exports.handler = (event, context, callback) => {
+exports.handler = (awsEvent, handlerContext, callback) => {
   //Get contents of response
-  const { request, response } = event.Records[0].cf;
+  const { request, response } = awsEvent.Records[0].cf;
   const { headers } = response;
   const { headers: requestHeaders } = request;
 
@@ -31,7 +31,8 @@ exports.handler = (event, context, callback) => {
   const applicationUrl = `https://${allowedDomainString}`;
   const subdomainsUrl = `https://*.${allowedDomainString}`;
   const cognitoUrl = 'https://*.auth.us-east-1.amazoncognito.com';
-  const dynamsoftUrl = 'https://dynamsoft-lib.stg.ef-cms.ustaxcourt.gov';
+  const dynamsoftUrlStaging = 'https://dynamsoft-lib.stg.ef-cms.ustaxcourt.gov';
+  const dynamsoftUrlProd = 'https://dynamsoft-lib.dawson.ustaxcourt.gov';
   const websocketUrl = `wss://*.${allowedDomainString}`;
   const honeybadgerApiUrl = 'https://api.honeybadger.io';
   const localUrl = 'https://127.0.0.1:*';
@@ -40,13 +41,13 @@ exports.handler = (event, context, callback) => {
   const statuspageUrl = 'https://lynmjtcq5px1.statuspage.io';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${honeybadgerApiUrl}`,
+    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${honeybadgerApiUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
     `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
-    `script-src 'self' 'unsafe-inline' ${dynamsoftUrl} ${statuspageUrl} resource://pdf.js`,
-    `style-src 'self' 'unsafe-inline' ${dynamsoftUrl}`,
+    `script-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${statuspageUrl} resource://pdf.js`,
+    `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging}`,
     `img-src ${applicationUrl} ${subdomainsUrl} data:`,
     `font-src ${applicationUrl} ${subdomainsUrl}`,
     `frame-src ${s3Url} ${subdomainsUrl} ${statuspageUrl} blob: data:`,

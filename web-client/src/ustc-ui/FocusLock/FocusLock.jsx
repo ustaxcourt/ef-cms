@@ -1,7 +1,9 @@
 import 'wicg-inert';
 import React, { useEffect, useRef } from 'react';
 
-const appRoot = document.getElementById('app');
+const appRoot =
+  window.document.getElementById('app') ||
+  window.document.getElementById('app-public');
 const tabbableSelector =
   'a:enabled,button:enabled,input:enabled,select:enabled,textarea:enabled';
 
@@ -36,12 +38,12 @@ export const FocusLock = ({ children }) => {
   useEffect(() => {
     appRoot.inert = true; // leverages wicg-inert polyfill
     appRoot.setAttribute('aria-hidden', 'true');
-    document.addEventListener('keydown', onKey);
+    window.document.addEventListener('keydown', onKey);
 
     return () => {
       appRoot.inert = false;
       appRoot.setAttribute('aria-hidden', 'false');
-      document.removeEventListener('keydown', onKey);
+      window.document.removeEventListener('keydown', onKey);
     };
   }, []);
 

@@ -2169,6 +2169,102 @@ describe('Case entity', () => {
     });
   });
 
+  describe('updateTrialSessionInformation', () => {
+    it('should not change the status of the case', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, status: CASE_STATUS_TYPES.closed },
+        {
+          applicationContext,
+        },
+      );
+      myCase.updateTrialSessionInformation({
+        isCalendared: false,
+        judge: {
+          name: 'Judge Judy',
+        },
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+      expect(myCase.status).toBe(CASE_STATUS_TYPES.closed);
+    });
+
+    it('should set only judge and trialSessionId if the trial session is calendared', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      myCase.updateTrialSessionInformation({
+        isCalendared: false,
+        judge: {
+          name: 'Judge Judy',
+        },
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+      expect(myCase.trialSessionId).toBeTruthy();
+    });
+
+    it('should set all trial session fields if the trial session is calendared', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      myCase.updateTrialSessionInformation(trialSession);
+
+      expect(myCase.trialDate).toBeTruthy();
+      expect(myCase.associatedJudge).toBeTruthy();
+      expect(myCase.trialLocation).toBeTruthy();
+      expect(myCase.trialSessionId).toBeTruthy();
+      expect(myCase.trialTime).toBeTruthy();
+    });
+
+    it('should set all trial session fields but not set the associated judge if the trial session is not calendared', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: false,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      myCase.setAsCalendared(trialSession);
+
+      expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);
+      expect(myCase.trialDate).toBeTruthy();
+      expect(myCase.associatedJudge).toEqual(CHIEF_JUDGE);
+      expect(myCase.trialLocation).toBeTruthy();
+      expect(myCase.trialSessionId).toBeTruthy();
+      expect(myCase.trialTime).toBeTruthy();
+    });
+  });
+
   describe('closeCase', () => {
     it('should update the status of the case to closed and add a closedDate', () => {
       const myCase = new Case(
@@ -2476,7 +2572,7 @@ describe('Case entity', () => {
   });
 
   describe('updateDocketEntry', () => {
-    it('should update the document', () => {
+    it('should replace the docket entry with the exact object provided', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -2489,8 +2585,11 @@ describe('Case entity', () => {
       expect(
         myCase.docketEntries.find(
           d => d.docketEntryId === MOCK_DOCUMENTS[0].docketEntryId,
-        ).processingStatus,
-      ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
+        ),
+      ).toEqual({
+        docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      });
     });
 
     it('should not change any docketEntries if no match is found', () => {
@@ -3871,6 +3970,27 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: { userId: CONTACT_SECONDARY_ID },
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('should return true when the petition docket entry has been served in the legacy system and the current user is an irs superuser', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: {
+          ...caseEntity.toRawObject(),
+          docketEntries: [
+            {
+              documentTitle: 'Petition',
+              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+              eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
+              isLegacyServed: true,
+              servedAt: undefined,
+              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+        },
+        user: { role: ROLES.irsSuperuser },
       });
 
       expect(isAssociated).toBeTruthy();

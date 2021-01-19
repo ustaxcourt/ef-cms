@@ -78,6 +78,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       editState: JSON.stringify(documentMeta),
       eventCode: documentMeta.eventCode,
       filedBy: undefined,
+      filingDate: documentMeta.filingDate,
       freeText: documentMeta.freeText,
       isDraft: false,
       isFileAttached: true,
@@ -132,30 +133,31 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   });
 
   const saveItems = [
-    applicationContext.getPersistenceGateway().updateCase({
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     }),
   ];
 
+  const rawValidWorkItem = workItem.validate().toRawObject();
   if (isUnservable) {
     saveItems.push(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
         applicationContext,
         section: user.section,
         userId: user.userId,
-        workItem: workItem.validate().toRawObject(),
+        workItem: rawValidWorkItem,
       }),
     );
   } else {
     saveItems.push(
       applicationContext.getPersistenceGateway().createUserInboxRecord({
         applicationContext,
-        workItem: workItem.validate().toRawObject(),
+        workItem: rawValidWorkItem,
       }),
       applicationContext.getPersistenceGateway().createSectionInboxRecord({
         applicationContext,
-        workItem: workItem.validate().toRawObject(),
+        workItem: rawValidWorkItem,
       }),
     );
   }

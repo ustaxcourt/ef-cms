@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { CourtIssuedDocumentDefault } = require('./CourtIssuedDocumentDefault');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
@@ -20,6 +21,8 @@ CourtIssuedDocumentTypeC.prototype.init = function init(rawProps) {
   this.documentTitle = rawProps.documentTitle;
   this.docketNumbers = rawProps.docketNumbers;
   this.documentType = rawProps.documentType;
+  this.eventCode = rawProps.eventCode;
+  this.filingDate = rawProps.filingDate;
 };
 
 CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function () {
@@ -28,9 +31,11 @@ CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function () {
 
 CourtIssuedDocumentTypeC.schema = {
   attachments: joi.boolean().required(),
-  docketNumbers: JoiValidationConstants.STRING.required(),
+  docketNumbers: JoiValidationConstants.STRING.max(500).required(),
   documentTitle: JoiValidationConstants.STRING.optional(),
   documentType: JoiValidationConstants.STRING.required(),
+  eventCode: CourtIssuedDocumentDefault.schema.eventCode,
+  filingDate: CourtIssuedDocumentDefault.schema.filingDate,
 };
 
 joiValidationDecorator(

@@ -1,5 +1,5 @@
 const {
-  COURT_ISSUED_DOCUMENT_TYPES,
+  COURT_ISSUED_EVENT_CODES,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
@@ -29,6 +29,40 @@ function DocketEntry() {
   this.entityName = 'DocketEntry';
 }
 
+DocketEntry.prototype.initUnfilteredForInternalUsers = function initForUnfilteredForInternalUsers(
+  rawDocketEntry,
+  { applicationContext },
+) {
+  this.editState = rawDocketEntry.editState;
+  this.draftOrderState = rawDocketEntry.draftOrderState;
+  this.isDraft = rawDocketEntry.isDraft || false;
+  this.judge = rawDocketEntry.judge;
+  this.judgeUserId = rawDocketEntry.judgeUserId;
+  this.pending =
+    rawDocketEntry.pending === undefined
+      ? DocketEntry.isPendingOnCreation(rawDocketEntry)
+      : rawDocketEntry.pending;
+  if (rawDocketEntry.previousDocument) {
+    this.previousDocument = {
+      docketEntryId: rawDocketEntry.previousDocument.docketEntryId,
+      documentTitle: rawDocketEntry.previousDocument.documentTitle,
+      documentType: rawDocketEntry.previousDocument.documentType,
+    };
+  }
+  this.qcAt = rawDocketEntry.qcAt;
+  this.qcByUserId = rawDocketEntry.qcByUserId;
+  this.signedAt = rawDocketEntry.signedAt;
+  this.signedByUserId = rawDocketEntry.signedByUserId;
+  this.signedJudgeName = rawDocketEntry.signedJudgeName;
+  this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
+  this.strickenBy = rawDocketEntry.strickenBy;
+  this.strickenByUserId = rawDocketEntry.strickenByUserId;
+  this.userId = rawDocketEntry.userId;
+  this.workItem = rawDocketEntry.workItem
+    ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
+    : undefined;
+};
+
 DocketEntry.prototype.init = function init(
   rawDocketEntry,
   { applicationContext, filtered = false },
@@ -40,40 +74,13 @@ DocketEntry.prototype.init = function init(
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
-    this.editState = rawDocketEntry.editState;
-    this.draftOrderState = rawDocketEntry.draftOrderState;
-    this.isDraft = rawDocketEntry.isDraft || false;
-    this.judge = rawDocketEntry.judge;
-    this.judgeUserId = rawDocketEntry.judgeUserId;
-    this.pending =
-      rawDocketEntry.pending === undefined
-        ? DocketEntry.isPendingOnCreation(rawDocketEntry)
-        : rawDocketEntry.pending;
-    if (rawDocketEntry.previousDocument) {
-      this.previousDocument = {
-        docketEntryId: rawDocketEntry.previousDocument.docketEntryId,
-        documentTitle: rawDocketEntry.previousDocument.documentTitle,
-        documentType: rawDocketEntry.previousDocument.documentType,
-      };
-    }
-    this.qcAt = rawDocketEntry.qcAt;
-    this.qcByUserId = rawDocketEntry.qcByUserId;
-    this.signedAt = rawDocketEntry.signedAt;
-    this.signedByUserId = rawDocketEntry.signedByUserId;
-    this.signedJudgeName = rawDocketEntry.signedJudgeName;
-    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
-    this.strickenBy = rawDocketEntry.strickenBy;
-    this.strickenByUserId = rawDocketEntry.strickenByUserId;
-    this.userId = rawDocketEntry.userId;
-    this.workItem = rawDocketEntry.workItem
-      ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
-      : undefined;
+    this.initUnfilteredForInternalUsers(rawDocketEntry, { applicationContext });
   }
 
   this.action = rawDocketEntry.action;
   this.additionalInfo = rawDocketEntry.additionalInfo;
   this.additionalInfo2 = rawDocketEntry.additionalInfo2;
-  this.addToCoversheet = rawDocketEntry.addToCoversheet;
+  this.addToCoversheet = rawDocketEntry.addToCoversheet || false;
   this.archived = rawDocketEntry.archived;
   this.attachments = rawDocketEntry.attachments;
   this.certificateOfService = rawDocketEntry.certificateOfService;
@@ -120,7 +127,9 @@ DocketEntry.prototype.init = function init(
   this.relationship = rawDocketEntry.relationship;
   this.scenario = rawDocketEntry.scenario;
   this.secondaryDate = rawDocketEntry.secondaryDate;
-  this.secondaryDocument = rawDocketEntry.secondaryDocument;
+  if (rawDocketEntry.scenario === 'Nonstandard H') {
+    this.secondaryDocument = rawDocketEntry.secondaryDocument;
+  }
   this.servedAt = rawDocketEntry.servedAt;
   this.servedPartiesCode = rawDocketEntry.servedPartiesCode;
   this.serviceDate = rawDocketEntry.serviceDate;
@@ -295,10 +304,12 @@ DocketEntry.prototype.isAutoServed = function () {
   const isExternalDocumentType = EXTERNAL_DOCUMENT_TYPES.includes(
     this.documentType,
   );
+
   const isPractitionerAssociationDocumentType = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(
     this.documentType,
   );
-  //if fully concatenated document title includes the word Simultaneous, do not auto-serve
+
+  // if fully concatenated document title includes the word Simultaneous, do not auto-serve
   const isSimultaneous = (this.documentTitle || this.documentType).includes(
     'Simultaneous',
   );
@@ -309,8 +320,15 @@ DocketEntry.prototype.isAutoServed = function () {
   );
 };
 
+/**
+ * Determines if the docket entry is a court issued document
+ *
+ * @returns {Boolean} true if the docket entry is a court issued document, false otherwise
+ */
 DocketEntry.prototype.isCourtIssued = function () {
-  return COURT_ISSUED_DOCUMENT_TYPES.includes(this.documentType);
+  return COURT_ISSUED_EVENT_CODES.map(({ eventCode }) => eventCode).includes(
+    this.eventCode,
+  );
 };
 
 /**
@@ -345,4 +363,13 @@ DocketEntry.prototype.strikeEntry = function ({
   }
 };
 
-exports.DocketEntry = validEntityDecorator(DocketEntry);
+/**
+ * Determines if the docket entry has been served
+ *
+ * @returns {Boolean} true if the docket entry has been served, false otherwise
+ */
+const isServed = function (rawDocketEntry) {
+  return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
+};
+
+module.exports = { DocketEntry: validEntityDecorator(DocketEntry), isServed };

@@ -450,8 +450,21 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-sessions&info=list-trial-sessions',
   },
   {
-    actions: ['wait for #start-date-date to be visible'],
-    notes: 'checks a11y of trial sessions add form',
+    actions: [
+      'wait for #start-date-date to be visible',
+      'wait for #meeting-id to be visible',
+    ],
+    notes: 'checks a11y of remote trial session add form',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
+  },
+  {
+    actions: [
+      'wait for #start-date-date to be visible',
+      'click element #inPerson-proceeding-label',
+      'wait for #address1 to be visible',
+    ],
+    notes: 'checks a11y of in-person trial sessions add form',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
   },

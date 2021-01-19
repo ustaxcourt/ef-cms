@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { Practitioner } = require('./Practitioner');
 const { ROLES } = require('./EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
 const { USER_CONTACT_VALIDATION_RULES, userDecorator } = require('./User');
@@ -28,7 +29,8 @@ PrivatePractitioner.prototype.init = function init(rawUser) {
   this.firmName = rawUser.firmName;
   this.representing = rawUser.representing || [];
   this.serviceIndicator =
-    rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    rawUser.serviceIndicator ||
+    Practitioner.getDefaultServiceIndicator(rawUser);
 };
 
 PrivatePractitioner.validationName = 'PrivatePractitioner';

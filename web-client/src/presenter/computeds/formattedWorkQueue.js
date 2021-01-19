@@ -48,7 +48,7 @@ export const formatWorkItem = ({
   isSelected,
 }) => {
   const {
-    COURT_ISSUED_DOCUMENT_TYPES,
+    COURT_ISSUED_EVENT_CODES,
     ORDER_TYPES_MAP,
   } = applicationContext.getConstants();
 
@@ -102,9 +102,10 @@ export const formatWorkItem = ({
     applicationContext,
   );
 
-  result.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
-    result.docketEntry.documentType,
-  );
+  result.isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(result.docketEntry.eventCode);
+
   result.isOrder = !!orderDocumentTypes.includes(
     result.docketEntry.documentType,
   );
@@ -213,22 +214,14 @@ export const getWorkItemDocumentLink = ({
 
 export const filterWorkItems = ({
   applicationContext,
-  judgeUser,
   user,
   workQueueToDisplay,
 }) => {
   const { box, queue } = workQueueToDisplay;
 
-  let additionalFilters = applicationContext
-    .getUtilities()
-    .filterQcItemsByAssociatedJudge({
-      applicationContext,
-      judgeUser,
-    });
-
   const filters = applicationContext
     .getUtilities()
-    .getWorkQueueFilters({ additionalFilters, user });
+    .getWorkQueueFilters({ user });
 
   const composedFilter = filters[queue][box];
   return composedFilter;
@@ -267,13 +260,10 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
 
-  const judgeUser = get(state.judgeUser);
-
   let workQueue = workItems
     .filter(
       filterWorkItems({
         applicationContext,
-        judgeUser,
         user,
         workQueueToDisplay,
       }),

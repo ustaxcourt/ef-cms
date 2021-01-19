@@ -8,11 +8,13 @@ import React from 'react';
 
 export const TodaysOrders = connect(
   {
+    loadMoreTodaysOrdersSequence: sequences.loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     todaysOrdersHelper: state.todaysOrdersHelper,
   },
   function TodaysOrders({
+    loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence,
     todaysOrdersHelper,
   }) {
@@ -31,7 +33,7 @@ export const TodaysOrders = connect(
             </div>
             {todaysOrdersHelper.hasResults && (
               <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
-                {todaysOrdersHelper.formattedOrders.length} Order(s)
+                {todaysOrdersHelper.totalCount} Order(s)
               </div>
             )}
           </div>
@@ -53,14 +55,14 @@ export const TodaysOrders = connect(
                       <th aria-hidden="true" />
                       <th aria-label="Docket Number">Docket No.</th>
                       <th>Case Title</th>
-                      <th>Order Type</th>
+                      <th>Order</th>
                       <th>Pages</th>
                       <th>Judge</th>
                     </tr>
                   </thead>
                   <tbody>
                     {todaysOrdersHelper.formattedOrders.map((order, idx) => (
-                      <tr key={idx}>
+                      <tr key={`todays-orders-${idx}`}>
                         <td className="center-column">{idx + 1}</td>
                         <td aria-hidden="true"></td>
                         <td>
@@ -70,16 +72,18 @@ export const TodaysOrders = connect(
                         <td>
                           <Button
                             link
-                            aria-label={`View PDF: ${order.descriptionDisplay}`}
+                            aria-label={`View PDF: ${order.documentTitle}`}
+                            className="text-left line-height-standard padding-0"
                             onClick={() => {
                               openCaseDocumentDownloadUrlSequence({
                                 docketEntryId: order.docketEntryId,
                                 docketNumber: order.docketNumber,
                                 isPublic: true,
+                                useSameTab: true,
                               });
                             }}
                           >
-                            {order.documentType}
+                            {order.documentTitle}
                           </Button>
                         </td>
                         <td>{order.numberOfPages}</td>
@@ -106,7 +110,7 @@ export const TodaysOrders = connect(
                   </thead>
                   <tbody>
                     {todaysOrdersHelper.formattedOrders.map((order, idx) => (
-                      <tr key={idx}>
+                      <tr key={`todays-orders-mobile-${idx}`}>
                         <td className="padding-5 margin-top-2">
                           <CaseLink formattedCase={order} />
                         </td>
@@ -114,7 +118,7 @@ export const TodaysOrders = connect(
                         <td>
                           <Button
                             link
-                            aria-label={`View PDF: ${order.descriptionDisplay}`}
+                            aria-label={`View PDF: ${order.documentTitle}`}
                             className="text-left"
                             overrideMargin={true}
                             onClick={() => {
@@ -122,10 +126,11 @@ export const TodaysOrders = connect(
                                 docketEntryId: order.docketEntryId,
                                 docketNumber: order.docketNumber,
                                 isPublic: true,
+                                useSameTab: true,
                               });
                             }}
                           >
-                            {order.documentType}
+                            {order.documentTitle}
                           </Button>
                         </td>
                         <td className="padding-5">
@@ -140,6 +145,15 @@ export const TodaysOrders = connect(
                 </table>
               </Mobile>
             </>
+          )}
+          {todaysOrdersHelper.showLoadMoreButton && (
+            <Button
+              secondary
+              aria-label={'load more results'}
+              onClick={() => loadMoreTodaysOrdersSequence()}
+            >
+              Load More
+            </Button>
           )}
         </section>
       </>
