@@ -59,109 +59,107 @@ exports.fileDocketEntryInteractor = async ({
     'practitioner',
   ]);
 
-  const documentsToFile = [
-    [primaryDocumentFileId, documentMetadata, DOCUMENT_RELATIONSHIPS.PRIMARY],
+  const [docketEntryId, metadata, relationship] = [
+    primaryDocumentFileId,
+    documentMetadata,
+    DOCUMENT_RELATIONSHIPS.PRIMARY,
   ];
 
-  for (let doc of documentsToFile) {
-    const [docketEntryId, metadata, relationship] = doc;
+  if (docketEntryId && metadata) {
+    let servedParties;
+    const docketRecordEditState =
+      metadata.isFileAttached === false ? documentMetadata : {};
 
-    if (docketEntryId && metadata) {
-      let servedParties;
-      const docketRecordEditState =
-        metadata.isFileAttached === false ? documentMetadata : {};
+    const readyForService = metadata.isFileAttached && !isSavingForLater;
+    const docketEntryEntity = new DocketEntry(
+      {
+        ...baseMetadata,
+        ...metadata,
+        docketEntryId,
+        documentTitle: metadata.documentTitle,
+        documentType: metadata.documentType,
+        editState: JSON.stringify(docketRecordEditState),
+        filingDate: metadata.receivedAt,
+        isOnDocketRecord: true,
+        mailingDate: metadata.mailingDate,
+        relationship,
+        userId: user.userId,
+        ...caseEntity.getCaseContacts({
+          contactPrimary: true,
+          contactSecondary: true,
+        }),
+      },
+      { applicationContext },
+    );
 
-      const readyForService = metadata.isFileAttached && !isSavingForLater;
-      const docketEntryEntity = new DocketEntry(
-        {
-          ...baseMetadata,
-          ...metadata,
-          docketEntryId,
-          documentTitle: metadata.documentTitle,
-          documentType: metadata.documentType,
-          editState: JSON.stringify(docketRecordEditState),
-          filingDate: metadata.receivedAt,
-          isOnDocketRecord: true,
-          mailingDate: metadata.mailingDate,
-          relationship,
-          userId: user.userId,
-          ...caseEntity.getCaseContacts({
-            contactPrimary: true,
-            contactSecondary: true,
-          }),
+    const workItem = new WorkItem(
+      {
+        assigneeId: null,
+        assigneeName: null,
+        associatedJudge: caseToUpdate.associatedJudge,
+        caseIsInProgress: caseEntity.inProgress,
+        caseStatus: caseToUpdate.status,
+        caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
         },
-        { applicationContext },
-      );
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+        inProgress: isSavingForLater,
+        isRead: user.role !== ROLES.privatePractitioner,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
+      },
+      { applicationContext },
+    );
 
-      const workItem = new WorkItem(
-        {
-          assigneeId: null,
-          assigneeName: null,
-          associatedJudge: caseToUpdate.associatedJudge,
-          caseIsInProgress: caseEntity.inProgress,
-          caseStatus: caseToUpdate.status,
-          caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-          inProgress: isSavingForLater,
-          isRead: user.role !== ROLES.privatePractitioner,
-          section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-        },
-        { applicationContext },
-      );
+    docketEntryEntity.setWorkItem(workItem);
 
-      docketEntryEntity.setWorkItem(workItem);
-
-      if (metadata.isPaper) {
-        workItem.assignToUser({
-          assigneeId: user.userId,
-          assigneeName: user.name,
-          section: user.section,
-          sentBy: user.name,
-          sentBySection: user.section,
-          sentByUserId: user.userId,
-        });
-      }
-
-      if (readyForService) {
-        servedParties = aggregatePartiesForService(caseEntity);
-        docketEntryEntity.setAsServed(servedParties.all);
-        if (metadata.isPaper) {
-          workItem.setAsCompleted({
-            message: 'completed',
-            user,
-          });
-        }
-      }
-
-      if (isFileAttached) {
-        docketEntryEntity.numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({
-            applicationContext,
-            docketEntryId,
-          });
-      }
-
-      caseEntity.addDocketEntry(docketEntryEntity);
-
-      if (readyForService) {
-        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-          applicationContext,
-          caseEntity,
-          docketEntryId: docketEntryEntity.docketEntryId,
-          servedParties,
-        });
-      }
-
-      workItems.push(workItem);
+    if (metadata.isPaper) {
+      workItem.assignToUser({
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        section: user.section,
+        sentBy: user.name,
+        sentBySection: user.section,
+        sentByUserId: user.userId,
+      });
     }
+
+    if (readyForService) {
+      servedParties = aggregatePartiesForService(caseEntity);
+      docketEntryEntity.setAsServed(servedParties.all);
+      if (metadata.isPaper) {
+        workItem.setAsCompleted({
+          message: 'completed',
+          user,
+        });
+      }
+    }
+
+    if (isFileAttached) {
+      docketEntryEntity.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          docketEntryId,
+        });
+    }
+
+    caseEntity.addDocketEntry(docketEntryEntity);
+
+    if (readyForService) {
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        docketEntryId: docketEntryEntity.docketEntryId,
+        servedParties,
+      });
+    }
+
+    workItems.push(workItem);
   }
 
   caseEntity = await applicationContext
