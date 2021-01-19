@@ -291,7 +291,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress.workItem).toBeDefined();
     expect(cases).toMatchObject([
@@ -334,7 +335,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress.workItem).toBeDefined();
     expect(cases).toMatchObject([
@@ -377,7 +379,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress.workItem).toBeDefined();
     expect(cases).toMatchObject([
@@ -420,7 +423,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).not.toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress.workItem).toBeUndefined();
     expect(cases).toMatchObject([
@@ -460,7 +464,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).not.toHaveBeenCalled();
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
@@ -488,7 +493,8 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).not.toHaveBeenCalled();
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
@@ -540,7 +546,8 @@ describe('generateChangeOfAddress', () => {
     ).toHaveBeenCalled();
     expect(docketEntryForNoticeOfChangeOfAddress).toBeDefined();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toHaveBeenCalled();
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
