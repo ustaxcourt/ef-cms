@@ -3,12 +3,13 @@
 ## PR 60 Release Notes
 ### Internal
 
-**New Feature**: Practitioners without an email address on record will default to paper service
+**Improvement**: Practitioners without an email address on record will default to paper service
 * Migrated practitioners without an email address will have paper service for all of their associated cases
 
-**Bug Fix**: Increased character count limits have been applied to several fields
-* Message fields can now accept up to 700 characters, and will show a helpful error message when the limit is reached.
-* Document title fields can now accept up to 1000 characters, and will show a helpful error message when the limit is reached.
+**Bug Fix**: Character limits on fields were not throwing validation errors
+* Message input fields can now accept up to 700 characters, and will show a helpful error message when the limit is reached.
+* Document free text fields can now accept up to 1000 characters, and will show a helpful error message when the limit is reached.
+* The complete document title now accepts up to 3000 characters total, and will inform the user when the limit is reached.
 
 **Bug Fix**: Several fixes were made to the Edit Docket Entry feature
 * All data entered when adding a docket entry is now retained on the Edit Docket Entry screen
@@ -16,14 +17,14 @@
 * A cover sheet is now being applied when a docket entry is updated to event codes HE, TE, USCA, RM, ES
 * Some migrated docket entries were causing an error when accessing the Edit Docket Entry screen. The undefined values have been identified and will no longer produce an error.
 
-**Bug Fix**: Completed message no longer show in Inbox
-* Completed messages are now removed from all users’ inboxes.
+**Bug Fix**: Completed messages were still showing in user Inboxes
+* When a message is completed, it is now removed from all users’ inboxes, regardless of who completed it.
 
-**Bug Fix**: Service stamps no longer display vertically
+**Bug Fix**: Service stamps were displaying vertically on rotated PDFs
 * Service stamps and signatures that were displaying vertically when applied to PDFs will now display horizontally only.
 
 **Bug Fix**: Pretrial Memorandums are no longer accessible by the public
-* Some Pretrial Memorandum docket entries were hyperlinked for public users, and the PDF document was accessible. This document type is now not accessible to the public.
+* Some Pretrial Memorandum docket entries were hyperlinked for public users, and the PDF document was visible. Public users and those not associated with a case no longer can view a Pretrial Memorandum.
 
 **Bug Fix**: Alignment corrected on Today’s Orders
 * Order titles that expand to multiple lines on the Today’s Orders table are now left-aligned.  
@@ -34,14 +35,16 @@
 
 ### External / public
 
-**Bug Fix**: Pretrial Memorandums are no longer accessible by the public
+**Bug Fix**: Pretrial Memorandums PDFs were accessible to the public
 * Some Pretrial Memorandum docket entries were hyperlinked for public users, and the PDF document was accessible. This document type is now not accessible to the public.
 
-**Bug Fix**: Alignment corrected on Today’s Orders
+**Bug Fix**: Order title on Today’s Orders table was not left-aligned
 * Order titles that expand to multiple lines on the Today’s Orders table are now left-aligned.  
 
-**Bug Fix**: Increased character count limits have been applied to several fields
-* Document title fields can now accept up to 1000 characters, and will show a helpful error message when the limit is reached.
+**Bug Fix**: Character limits on fields were not throwing validation errors 
+* Document free text fields can now accept up to 1000 characters, and will show a helpful error message when the limit is reached.
+* The complete document title now accepts up to 3000 characters total, and will inform the user when the limit is reached.
+
 
 
 ## PR 59
