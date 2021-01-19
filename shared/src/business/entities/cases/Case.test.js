@@ -141,8 +141,9 @@ describe('Case entity', () => {
   });
 
   describe('hearings', () => {
-    it('sets associated hearings on the case hearings array', () => {
-      const mockhearing = {
+    it('sets associated hearings on the case hearings array, and make sure they are sorted by created date', () => {
+      const mockhearing1 = {
+        createdAt: '2024-03-01T00:00:00.000Z',
         maxCases: 100,
         sessionType: 'Regular',
         startDate: '2025-03-01T00:00:00.000Z',
@@ -151,15 +152,37 @@ describe('Case entity', () => {
         trialLocation: 'Birmingham, Alabama',
       };
 
+      const mockhearing2 = {
+        createdAt: '2024-01-01T00:00:00.000Z',
+        maxCases: 100,
+        sessionType: 'Regular',
+        startDate: '2025-01-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialLocation: 'Birmingham, Alabama',
+      };
+
+      const mockhearing3 = {
+        createdAt: '2024-02-01T00:00:00.000Z',
+        maxCases: 100,
+        sessionType: 'Regular',
+        startDate: '2025-02-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialLocation: 'Birmingham, Alabama',
+      };
+
       const newCase = new Case(
         {
           ...MOCK_CASE,
-          hearings: [mockhearing],
+          hearings: [mockhearing1, mockhearing2, mockhearing3],
         },
         { applicationContext },
       );
 
-      expect(newCase.hearings).toEqual([expect.objectContaining(mockhearing)]);
+      expect(newCase.hearings[0].createdAt).toEqual(mockhearing2.createdAt);
+      expect(newCase.hearings[1].createdAt).toEqual(mockhearing3.createdAt);
+      expect(newCase.hearings[2].createdAt).toEqual(mockhearing1.createdAt);
     });
 
     it('sets the case hearings property to an empty object if none are provided', () => {
@@ -2630,6 +2653,31 @@ describe('Case entity', () => {
           d => d.correspondenceId === mockCorrespondence.correspondenceId,
         ).documentTitle,
       ).toEqual('updated title');
+    });
+
+    it('should not throw an exception when the specified correspondence document is not found', () => {
+      const mockCorrespondence = new Correspondence({
+        correspondenceId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+
+      myCase.updateCorrespondence({
+        correspondenceId: 'BAD-ID',
+        documentTitle: 'updated title',
+      });
+
+      expect(
+        myCase.correspondence.find(
+          d => d.correspondenceId === mockCorrespondence.correspondenceId,
+        ).documentTitle,
+      ).toEqual('My Correspondence');
     });
   });
 
