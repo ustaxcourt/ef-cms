@@ -18,6 +18,7 @@ const FORMATS = {
 
 const PATTERNS = {
   'H:MM': /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, // hour can be specified with either one OR two digits.
+  YYYYMMDD: /^\d{4}-\d{1,2}-\d{1,2}$/,
 };
 
 const USTC_TZ = 'America/New_York';
@@ -82,7 +83,7 @@ const createStartOfDayISO = ({ day, month, year }) => {
 const createISODateStringFromObject = options => {
   return createISODateString(
     `${options.year}-${options.month}-${options.day}`,
-    'YYYY-MM-DD',
+    FORMATS.YYYYMMDD,
   );
 };
 
@@ -206,15 +207,17 @@ const castToISO = dateString => {
     return null;
   }
 
-  const formatDate = ds => createISODateString(ds, 'YYYY-MM-DD');
+  const formatDate = ds => createISODateString(ds, FORMATS.YYYYMMDD);
 
   dateString = dateString
     .split('-')
     .map(segment => segment.padStart(2, '0'))
     .join('-');
-  if (momentPackage.utc(`${dateString}-01-01`, 'YYYY-MM-DD', true).isValid()) {
+  if (
+    momentPackage.utc(`${dateString}-01-01`, FORMATS.YYYYMMDD, true).isValid()
+  ) {
     return formatDate(`${dateString}-01-01`);
-  } else if (momentPackage.utc(dateString, 'YYYY-MM-DD', true).isValid()) {
+  } else if (momentPackage.utc(dateString, FORMATS.YYYYMMDD, true).isValid()) {
     return formatDate(dateString);
   } else if (isStringISOFormatted(dateString)) {
     return dateString;
@@ -274,10 +277,14 @@ const computeDate = ({ day, month, year }) => {
   if (!inputProvided) {
     return null;
   }
-  const preparedDateISO = prepareDateFromString(
-    `${year}-${month}-${day}`,
-    FORMATS.YYYYMMDD,
-  );
+  const yyyyPadded = `${year}`.padStart(4, '0');
+  const mmPadded = `${month}`.padStart(2, '0');
+  const ddPadded = `${day}`.padStart(2, '0');
+  const dateToParse = `${yyyyPadded}-${mmPadded}-${ddPadded}`;
+  if (!PATTERNS.YYYYMMDD.test(dateToParse)) {
+    return dateToParse;
+  }
+  const preparedDateISO = prepareDateFromString(dateToParse, FORMATS.YYYYMMDD);
   const yyyymmdd = formatDateString(preparedDateISO, FORMATS.YYYYMMDD);
   return yyyymmdd;
 };
