@@ -14,7 +14,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
+const { DocketEntry, isServed } = require('./DocketEntry');
 const { omit } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
@@ -128,7 +128,7 @@ describe('DocketEntry entity', () => {
         { applicationContext },
       );
 
-      expect(doc1.isServed()).toBeFalsy();
+      expect(isServed(doc1)).toBeFalsy();
     });
 
     it('should return true when servedAt is defined', () => {
@@ -137,7 +137,7 @@ describe('DocketEntry entity', () => {
         { applicationContext },
       );
 
-      expect(doc1.isServed()).toBeTruthy();
+      expect(isServed(doc1)).toBeTruthy();
     });
 
     it('should return true when servedAt is undefined and isLegacyServed is true', () => {
@@ -146,7 +146,7 @@ describe('DocketEntry entity', () => {
         { applicationContext },
       );
 
-      expect(doc1.isServed()).toBeTruthy();
+      expect(isServed(doc1)).toBeTruthy();
     });
   });
 
