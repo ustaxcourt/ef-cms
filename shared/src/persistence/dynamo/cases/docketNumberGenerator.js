@@ -5,6 +5,14 @@ const {
   FORMATS,
 } = require('../../../business/utilities/DateHandler');
 
+/**
+ * gets the next docket number in the series
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.year the year in which the docket number is to be generator
+ * @returns {string} the generated docket number
+ */
 exports.getNextDocketNumber = async ({ applicationContext, year }) => {
   const id = await applicationContext.getPersistenceGateway().incrementCounter({
     applicationContext,
@@ -16,6 +24,14 @@ exports.getNextDocketNumber = async ({ applicationContext, year }) => {
   return `${plus100}-${lastTwo}`;
 };
 
+/**
+ * verifies whether a case already exists with the given docket number
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.docketNumber a docket number to verify as available
+ * @returns {string} the generated docket number
+ */
 exports.checkCaseExists = async ({ applicationContext, docketNumber }) => {
   const caseMetadata = await client.get({
     Key: {
@@ -31,9 +47,11 @@ exports.checkCaseExists = async ({ applicationContext, docketNumber }) => {
 exports.MAX_ATTEMPTS = 5;
 
 /**
+ * creates a new unique docket number
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {object} providers.receivedAt the receivedAt date for determining the year portion of the docket number
  * @returns {string} the generated docket number
  */
 exports.createDocketNumber = async ({ applicationContext, receivedAt }) => {
