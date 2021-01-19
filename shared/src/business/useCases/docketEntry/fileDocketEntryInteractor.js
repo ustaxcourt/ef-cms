@@ -174,34 +174,56 @@ exports.fileDocketEntryInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
+  await saveWorkItems({
+    applicationContext,
+    isSavingForLater,
+    workItems,
+  });
+
+  return caseEntity.toRawObject();
+};
+
+/**
+ * Helper function to save any work items required when filing this docket entry
+ *
+ * @param {object} providers  The providers Object
+ * @param {object} providers.applicationContext The application Context
+ * @param {boolean} providers.isSavingForLater Whether or not we are saving these work items for later
+ * @param {object} providers.workItems An array of work items we are saving
+ */
+const saveWorkItems = async ({
+  applicationContext,
+  isSavingForLater,
+  workItems,
+}) => {
   const workItemsSaved = [];
-  for (let workItem of workItems) {
-    if (workItem.docketEntry.isPaper) {
+  for (const workItemObj of workItems) {
+    const workItem = workItemObj.validate().toRawObject();
+    const { isFileAttached, isPaper } = workItemObj.docketEntry;
+    if (isPaper) {
       workItemsSaved.push(
-        workItem.docketEntry.isFileAttached && !isSavingForLater
+        isFileAttached && !isSavingForLater
           ? applicationContext
               .getPersistenceGateway()
               .saveWorkItemForDocketClerkFilingExternalDocument({
                 applicationContext,
-                workItem: workItem.validate().toRawObject(),
+                workItem,
               })
           : applicationContext
               .getPersistenceGateway()
               .saveWorkItemForDocketEntryInProgress({
                 applicationContext,
-                workItem: workItem.validate().toRawObject(),
+                workItem,
               }),
       );
     } else {
       workItemsSaved.push(
         applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
           applicationContext,
-          workItem: workItem.validate().toRawObject(),
+          workItem,
         }),
       );
     }
   }
   await Promise.all(workItemsSaved);
-
-  return caseEntity.toRawObject();
 };
