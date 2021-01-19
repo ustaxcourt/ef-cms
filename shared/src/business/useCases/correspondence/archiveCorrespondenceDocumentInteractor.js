@@ -34,7 +34,7 @@ exports.archiveCorrespondenceDocumentInteractor = async ({
     applicationContext,
   });
 
-  await applicationContext.getUseCaseHelpers().updateCaseCorrespondence({
+  await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
     applicationContext,
     correspondence: correspondenceToArchive,
     docketNumber,
