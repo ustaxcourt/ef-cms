@@ -111,8 +111,8 @@ const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
-  saveWorkItemForNonPaper,
-} = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
+  saveWorkItemAndAddToSectionInbox,
+} = require('../../persistence/dynamo/workitems/saveWorkItemAndAddToSectionInbox');
 const {
   saveWorkItemForPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
@@ -395,9 +395,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDocumentFromLambda: jest.fn(),
-    saveWorkItemForNonPaper: jest
+    saveWorkItemAndAddToSectionInbox: jest
       .fn()
-      .mockImplementation(saveWorkItemForNonPaper),
+      .mockImplementation(saveWorkItemAndAddToSectionInbox),
     saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),

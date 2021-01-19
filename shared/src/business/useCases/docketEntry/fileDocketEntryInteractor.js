@@ -196,10 +196,12 @@ exports.fileDocketEntryInteractor = async ({
       );
     } else {
       workItemsSaved.push(
-        applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-          applicationContext,
-          workItem: workItem.validate().toRawObject(),
-        }),
+        applicationContext
+          .getPersistenceGateway()
+          .saveWorkItemAndAddToSectionInbox({
+            applicationContext,
+            workItem: workItem.validate().toRawObject(),
+          }),
       );
     }
   }

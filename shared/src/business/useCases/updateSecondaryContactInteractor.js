@@ -169,10 +169,12 @@ exports.updateSecondaryContactInteractor = async ({
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
 
-      await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
-      });
+      await applicationContext
+        .getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox({
+          applicationContext,
+          workItem: workItem.validate().toRawObject(),
+        });
     }
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
