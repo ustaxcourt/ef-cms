@@ -36,7 +36,10 @@ export const getSortFunction = searchText => {
 };
 
 export const internalTypesHelper = (get, applicationContext) => {
-  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
+  const {
+    INTERNAL_CATEGORY_MAP,
+    LODGED_EVENT_CODE,
+  } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
 
   const internalDocumentTypesForSelect = getDocumentTypesForSelect(
@@ -45,7 +48,7 @@ export const internalTypesHelper = (get, applicationContext) => {
 
   const internalDocumentTypesForSelectSorted = internalDocumentTypesForSelect
     .sort(getSortFunction(searchText))
-    .filter(d => d.scenario !== 'Not in dropdown');
+    .filter(d => d.eventCode !== LODGED_EVENT_CODE);
 
   return {
     internalDocumentTypesForSelect,
