@@ -9,28 +9,27 @@ const {
   setCaseAsHighPriority,
   setCaseAsReadyForTrial,
   unblockCaseFromTrial,
-} = require('../../support/pages/case-detail');
+} = require('../support/pages/case-detail');
 const {
   COUNTRY_TYPES,
-} = require('../../../shared/src/business/entities/EntityConstants');
+} = require('../../shared/src/business/entities/EntityConstants');
 const {
   createTrialSession,
   goToTrialSession,
   markCaseAsQcCompleteForTrial,
   setTrialSessionAsCalendared,
   verifyOpenCaseOnTrialSession,
-} = require('../../support/pages/trial-sessions');
+} = require('../support/pages/trial-sessions');
 const {
   getEnvironmentSpecificFunctions,
-} = require('../../support/pages/environment-specific-factory');
+} = require('../support/pages/environment-specific-factory');
 const {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
-} = require('../../support/pages/reports');
-const { BASE_CASE } = require('../../fixtures/caseMigrations');
+} = require('../support/pages/reports');
+const { BASE_CASE } = require('../fixtures/caseMigrations');
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
-const SMOKETESTS_LOCAL = Cypress.env('SMOKETESTS_LOCAL');
 
 faker.seed(faker.random.number());
 
@@ -104,7 +103,7 @@ describe('Petitions Clerk', () => {
             ...BASE_CASE.contactPrimary,
             ...createRandomContact(),
           },
-          docketEntries: [BASE_CASE.docketEntries[0]],
+          docketEntries: [{ ...BASE_CASE.docketEntries[0], docketNumber }],
           docketNumber,
           docketNumberWithSuffix: docketNumber,
           preferredTrialCity: testData.preferredTrialCity,
@@ -140,80 +139,70 @@ describe('Petitions Clerk', () => {
     });
   });
 
-  // This describe block is reliably failing on PR builds, after
-  // a lot of investigation, we are still unsure of the root cause of the
-  // failure. Skipping this block for now.
-  if (!SMOKETESTS_LOCAL) {
-    describe('after a new trial session is created', () => {
-      it('is possible to manually add, view, and remove first case from an UNSET trial session', () => {
-        goToCaseOverview(firstDocketNumber);
-        manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
-        removeCaseFromTrialSession();
-      });
+  describe('after a new trial session is created', () => {
+    it('is possible to manually add, view, and remove first case from an UNSET trial session', () => {
+      goToCaseOverview(firstDocketNumber);
+      manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
+      removeCaseFromTrialSession();
+    });
 
-      it('manually block second case', () => {
-        // block it
-        goToCaseOverview(secondDocketNumber);
-        blockCaseFromTrial();
-        // do this well before we look for it on blocked cases report...
-      });
+    it('manually block second case', () => {
+      // block it
+      goToCaseOverview(secondDocketNumber);
+      blockCaseFromTrial();
+      // do this well before we look for it on blocked cases report...
+    });
 
-      it('sets the first trial session as calendared', () => {
-        setTrialSessionAsCalendared(testData.trialSessionIds[0]);
-      });
+    it('sets the first trial session as calendared', () => {
+      setTrialSessionAsCalendared(testData.trialSessionIds[0]);
+    });
 
-      it('manually add, view, and remove first case case from the SET trial session', () => {
-        goToCaseOverview(firstDocketNumber);
-        cy.task('log', '1');
-        cy.task('log', firstDocketNumber);
-        manuallyAddCaseToCalendaredTrialSession(testData.trialSessionIds[0]);
-        cy.task('log', '2');
-        cy.task('log', testData.trialSessionIds[0]);
-        removeCaseFromTrialSession();
-        cy.task('log', '3');
-      });
+    it('manually add, view, and remove first case from the SET trial session', () => {
+      goToCaseOverview(firstDocketNumber);
+      manuallyAddCaseToCalendaredTrialSession(testData.trialSessionIds[0]);
+      removeCaseFromTrialSession();
+    });
 
-      it('view Blocked report containing second case, and unblock second case', () => {
-        // enough time has elapsed since we blocked second case. look for it on blocked cases report
-        // warning: if there are elasticsearch delays, this test might be brittle...
-        // view blocked report
-        viewBlockedCaseOnBlockedReport({
-          ...testData,
-          docketNumber: secondDocketNumber,
-        });
-      });
-
-      it('unblock second case', () => {
-        goToCaseOverview(secondDocketNumber);
-        unblockCaseFromTrial();
-      });
-
-      it('login as docket clerk', () => {
-        login(docketClerkToken);
-      });
-
-      it('set second case as High Priority for a trial session', () => {
-        goToCaseOverview(secondDocketNumber);
-        setCaseAsReadyForTrial(secondDocketNumber);
-        setCaseAsHighPriority();
-      });
-
-      it('login as petitions clerk', () => {
-        login(petitionsClerkToken);
-      });
-
-      it('complete QC of eligible (second) case and set calendar for second trial session', () => {
-        goToTrialSession(testData.trialSessionIds[1]);
-        markCaseAsQcCompleteForTrial(secondDocketNumber);
-
-        // set as calendared
-        setTrialSessionAsCalendared(testData.trialSessionIds[1]);
-        verifyOpenCaseOnTrialSession(secondDocketNumber);
-      });
-
-      it('run Trial Session Planning Report', () => {
-        runTrialSessionPlanningReport();
+    it('view Blocked report containing second case, and unblock second case', () => {
+      // enough time has elapsed since we blocked second case. look for it on blocked cases report
+      // warning: if there are elasticsearch delays, this test might be brittle...
+      // view blocked report
+      viewBlockedCaseOnBlockedReport({
+        ...testData,
+        docketNumber: secondDocketNumber,
       });
     });
-  }
+
+    it('unblock second case', () => {
+      goToCaseOverview(secondDocketNumber);
+      unblockCaseFromTrial();
+    });
+
+    it('login as docket clerk', () => {
+      login(docketClerkToken);
+    });
+
+    it('set second case as High Priority for a trial session', () => {
+      goToCaseOverview(secondDocketNumber);
+      setCaseAsReadyForTrial(secondDocketNumber);
+      setCaseAsHighPriority();
+    });
+
+    it('login as petitions clerk', () => {
+      login(petitionsClerkToken);
+    });
+
+    it('complete QC of eligible (second) case and set calendar for second trial session', () => {
+      goToTrialSession(testData.trialSessionIds[1]);
+      markCaseAsQcCompleteForTrial(secondDocketNumber);
+
+      // set as calendared
+      setTrialSessionAsCalendared(testData.trialSessionIds[1]);
+      verifyOpenCaseOnTrialSession(secondDocketNumber);
+    });
+
+    it('run Trial Session Planning Report', () => {
+      runTrialSessionPlanningReport();
+    });
+  });
 });
