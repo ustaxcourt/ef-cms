@@ -34,7 +34,7 @@ describe('parseDateToMonthDayYearAction', () => {
     });
 
     expect(result.output).toEqual({
-      day: '19',
+      day: '20',
       month: '1',
       year: '2021',
     });
