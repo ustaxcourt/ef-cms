@@ -194,10 +194,10 @@ exports.updatePrimaryContactInteractor = async ({
     });
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
-  return caseEntity.validate().toRawObject();
+  return caseEntity.toRawObject();
 };

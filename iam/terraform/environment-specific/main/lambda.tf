@@ -89,7 +89,16 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "ses:*"
+                "ses:SendBulkTemplatedEmail"
+            ],
+            "Resource": [
+                "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "ses:GetSendStatistics"
             ],
             "Resource": [
                 "*"
@@ -98,10 +107,13 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "es:*"
+                "es:ESHttpGet",
+                "es:ESHttpPost",
+                "es:ESHttpPut",
+                "es:ESHttpDelete"
             ],
             "Resource": [
-                "*"
+                "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*"
             ],
             "Effect": "Allow"
         },

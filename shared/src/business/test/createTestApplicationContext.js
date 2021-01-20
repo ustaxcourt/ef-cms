@@ -114,8 +114,8 @@ const {
   saveWorkItemAndAddToSectionInbox,
 } = require('../../persistence/dynamo/workitems/saveWorkItemAndAddToSectionInbox');
 const {
-  saveWorkItemForPaper,
-} = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
+  saveWorkItemAndAddToUserAndSectionInbox,
+} = require('../../persistence/dynamo/workitems/saveWorkItemAndAddToUserAndSectionInbox');
 const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
@@ -398,7 +398,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItemAndAddToSectionInbox: jest
       .fn()
       .mockImplementation(saveWorkItemAndAddToSectionInbox),
-    saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
+    saveWorkItemAndAddToUserAndSectionInbox: jest
+      .fn()
+      .mockImplementation(saveWorkItemAndAddToUserAndSectionInbox),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),

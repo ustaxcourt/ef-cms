@@ -773,14 +773,14 @@ const {
   saveWorkItemAndAddToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemAndAddToSectionInbox');
 const {
+  saveWorkItemAndAddToUserAndSectionInbox,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemAndAddToUserAndSectionInbox');
+const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
   saveWorkItemForDocketEntryInProgress,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryInProgress');
-const {
-  saveWorkItemForPaper,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
   scrapePdfContents,
 } = require('../../shared/src/business/utilities/scrapePdfContents');
@@ -1146,9 +1146,9 @@ const gatewayMethods = {
     saveDocumentFromLambda,
     saveUserConnection,
     saveWorkItemAndAddToSectionInbox,
+    saveWorkItemAndAddToUserAndSectionInbox,
     saveWorkItemForDocketClerkFilingExternalDocument,
     saveWorkItemForDocketEntryInProgress,
-    saveWorkItemForPaper,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
     setWorkItemAsRead,
