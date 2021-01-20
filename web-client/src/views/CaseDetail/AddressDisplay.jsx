@@ -42,9 +42,9 @@ export const AddressDisplay = connect(
           {contact.firmName}
           <br />
           {[contact.secondaryName, contact.inCareOf].map(
-            (contactName, idx) =>
+            contactName =>
               contactName && (
-                <span key={`co-${idx}`}>
+                <span key={contactName}>
                   <br />
                   c/o {contactName}
                   {contact.title && <span>, {contact.title}</span>}
@@ -62,9 +62,9 @@ export const AddressDisplay = connect(
             )}
           >
             {[contact.address1, contact.address2, contact.address3].map(
-              (addr, idx) =>
+              addr =>
                 addr && (
-                  <span className="address-line" key={`addr-${idx}`}>
+                  <span className="address-line" key={addr}>
                     {addr}
                   </span>
                 ),
