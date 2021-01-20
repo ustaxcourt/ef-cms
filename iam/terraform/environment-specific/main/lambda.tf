@@ -63,7 +63,10 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "cognito-idp:*"
+                "cognito-idp:AdminCreateUser",
+                "cognito-idp:AdminGetUser",
+                "cognito-idp:AdminUpdateUserAttributes",
+                "cognito-idp:AdminDisableUser"
             ],
             "Resource": [
                 "arn:aws:cognito-idp:us-east-1:${data.aws_caller_identity.current.account_id}:userpool/*"
