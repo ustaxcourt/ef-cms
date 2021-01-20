@@ -1,4 +1,4 @@
-import { parseDateToMonthDayYearAction } from '../CaseDeadline/parseDateToMonthDayYearAction';
+import { parseDateToMonthDayYear } from '../CaseDeadline/parseDateToMonthDayYear';
 import { state } from 'cerebral';
 
 /**
@@ -15,7 +15,7 @@ export const setTrialSessionDetailsOnFormAction = ({
 }) => {
   store.set(state.form, {
     ...props.trialSession,
-    ...parseDateToMonthDayYearAction({
+    ...parseDateToMonthDayYear({
       applicationContext,
       dateString: props.trialSession.startDate,
     }),
