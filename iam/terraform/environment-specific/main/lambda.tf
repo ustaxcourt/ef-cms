@@ -101,8 +101,13 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "dynamodb:BatchGetItem",
                 "dynamodb:BatchWriteItem",
                 "dynamodb:DeleteItem",
+                "dynamodb:DescribeStream",
                 "dynamodb:DescribeTable",
                 "dynamodb:GetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:ListShards",
+                "dynamodb:ListStreams",
                 "dynamodb:PutItem",
                 "dynamodb:Query",
                 "dynamodb:UpdateItem"
