@@ -2,7 +2,10 @@ import {
   Case,
   caseHasServedDocketEntries,
 } from '../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import {
+  DocketEntry,
+  isServed,
+} from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
   chiefJudgeNameForSigning,
@@ -632,6 +635,7 @@ const applicationContext = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
+      isServed,
       isStringISOFormatted,
       isValidDateString,
       prepareDateFromString,

@@ -220,7 +220,7 @@ describe('Message', () => {
   });
 
   describe('validation message', () => {
-    it('displays a message when the message is over 500 characters long', () => {
+    it('displays a message when the message is over 700 characters long', () => {
       const message = new Message(
         {
           caseStatus: CASE_STATUS_TYPES.generalDocket,

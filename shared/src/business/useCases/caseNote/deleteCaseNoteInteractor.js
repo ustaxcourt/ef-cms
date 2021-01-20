@@ -30,15 +30,12 @@ exports.deleteCaseNoteInteractor = async ({
     });
 
   delete caseRecord.caseNote;
-  const caseToUpdate = new Case(caseRecord, {
-    applicationContext,
-  })
-    .validate()
-    .toRawObject();
 
-  const result = await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate,
-  });
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseRecord,
+    });
   return new Case(result, { applicationContext }).validate().toRawObject();
 };

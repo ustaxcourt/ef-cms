@@ -2,20 +2,9 @@
 
 ENVIRONMENT=$1
 
-if [ -z "$ENVIRONMENT" ]; then
-  echo "Please specify the environment"
-  exit 1
-fi
-
-if [ -z "$EFCMS_DOMAIN" ]; then
-  echo "Please export the EFCMS_DOMAIN variable in your shell"
-  exit 1
-fi
-
-if [ -z "$ZONE_NAME" ]; then
-  echo "Please export the ZONE_NAME variable in your shell"
-  exit 1
-fi
+[ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
+[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
 tf_version=$(terraform --version)
 
@@ -47,5 +36,8 @@ fi
 # exit on any failure
 set -eo pipefail
 
+export TF_VAR_environment=$ENVIRONMENT
+export TF_VAR_dns_domain=$EFCMS_DOMAIN
+
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform apply -auto-approve -var "environment=${ENVIRONMENT}"
+terraform apply -auto-approve
