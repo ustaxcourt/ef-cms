@@ -52,7 +52,7 @@ export const DocumentSearchResults = connect(
               <tbody>
                 {advancedDocumentSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
-                    <tr className="search-result" key={idx}>
+                    <tr className="search-result" key={result.docketEntryId}>
                       <td aria-hidden="true" className="small-column">
                         {idx + 1}
                       </td>
