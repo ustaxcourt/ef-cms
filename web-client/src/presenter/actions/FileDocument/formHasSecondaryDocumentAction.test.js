@@ -6,15 +6,15 @@ import { runAction } from 'cerebral/test';
 describe('formHasSecondaryDocumentAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  const pathSuccessStub = jest.fn();
-  const pathErrorStub = jest.fn();
+  const pathYesStub = jest.fn();
+  const pathNoStub = jest.fn();
 
   presenter.providers.path = {
-    error: pathErrorStub,
-    success: pathSuccessStub,
+    no: pathNoStub,
+    yes: pathYesStub,
   };
 
-  it('should call path.error when state.form.secondaryDocument is undefined', async () => {
+  it('should call path.no when state.form.secondaryDocument is undefined', async () => {
     await runAction(formHasSecondaryDocumentAction, {
       modules: {
         presenter,
@@ -26,10 +26,10 @@ describe('formHasSecondaryDocumentAction', () => {
       },
     });
 
-    expect(pathErrorStub).toHaveBeenCalled();
+    expect(pathNoStub).toHaveBeenCalled();
   });
 
-  it('should call path.error when state.form.secondaryDocument.documentType is undefined', async () => {
+  it('should call path.no when state.form.secondaryDocument.documentType is undefined', async () => {
     await runAction(formHasSecondaryDocumentAction, {
       modules: {
         presenter,
@@ -41,10 +41,10 @@ describe('formHasSecondaryDocumentAction', () => {
       },
     });
 
-    expect(pathErrorStub).toHaveBeenCalled();
+    expect(pathNoStub).toHaveBeenCalled();
   });
 
-  it('should call path.success when state.form.secondaryDocument.documentType is defined', async () => {
+  it('should call path.yes when state.form.secondaryDocument.documentType is defined', async () => {
     await runAction(formHasSecondaryDocumentAction, {
       modules: {
         presenter,
@@ -59,6 +59,6 @@ describe('formHasSecondaryDocumentAction', () => {
       },
     });
 
-    expect(pathSuccessStub).toHaveBeenCalled();
+    expect(pathYesStub).toHaveBeenCalled();
   });
 });
