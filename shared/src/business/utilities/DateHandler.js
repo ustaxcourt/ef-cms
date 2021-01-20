@@ -18,6 +18,7 @@ const FORMATS = {
 
 const PATTERNS = {
   'H:MM': /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, // hour can be specified with either one OR two digits.
+  YYYYMMDD: /^\d{4}-\d{1,2}-\d{1,2}$/,
 };
 
 const USTC_TZ = 'America/New_York';
@@ -82,7 +83,7 @@ const createStartOfDayISO = ({ day, month, year }) => {
 const createISODateStringFromObject = options => {
   return createISODateString(
     `${options.year}-${options.month}-${options.day}`,
-    'YYYY-MM-DD',
+    FORMATS.YYYYMMDD,
   );
 };
 
@@ -133,24 +134,6 @@ const dateStringsCompared = (a, b) => {
     return 0;
   }
   return aDate - bDate;
-};
-
-/**
- * @param {string} a the first date to be compared
- * @param {string} b the second date to be compared
- * @returns {number} -1 if date a is larger, 1 if date b is larger, 0 if dates are equal
- */
-const calendarDatesCompared = (a, b) => {
-  const aFormatEst = formatDateString(a, FORMATS.SORTABLE_CALENDAR);
-  const bFormatEst = formatDateString(b, FORMATS.SORTABLE_CALENDAR);
-
-  if (aFormatEst < bFormatEst) {
-    return -1;
-  } else if (aFormatEst > bFormatEst) {
-    return 1;
-  } else {
-    return 0;
-  }
 };
 
 /**
@@ -224,15 +207,17 @@ const castToISO = dateString => {
     return null;
   }
 
-  const formatDate = ds => createISODateString(ds, 'YYYY-MM-DD');
+  const formatDate = ds => createISODateString(ds, FORMATS.YYYYMMDD);
 
   dateString = dateString
     .split('-')
     .map(segment => segment.padStart(2, '0'))
     .join('-');
-  if (momentPackage.utc(`${dateString}-01-01`, 'YYYY-MM-DD', true).isValid()) {
+  if (
+    momentPackage.utc(`${dateString}-01-01`, FORMATS.YYYYMMDD, true).isValid()
+  ) {
     return formatDate(`${dateString}-01-01`);
-  } else if (momentPackage.utc(dateString, 'YYYY-MM-DD', true).isValid()) {
+  } else if (momentPackage.utc(dateString, FORMATS.YYYYMMDD, true).isValid()) {
     return formatDate(dateString);
   } else if (isStringISOFormatted(dateString)) {
     return dateString;
@@ -251,20 +236,19 @@ const castToISO = dateString => {
  */
 const checkDate = updatedDateString => {
   const hasAllDateParts = /.+-.+-.+/;
+  let result = null;
 
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
-    updatedDateString = null;
+    result = null;
   } else if (dateHasText(updatedDateString)) {
-    updatedDateString = '-1';
+    result = '-1';
   } else if (
     !updatedDateString.includes('undefined') &&
     hasAllDateParts.test(updatedDateString)
   ) {
-    updatedDateString = castToISO(updatedDateString);
-  } else {
-    return null;
+    result = castToISO(updatedDateString);
   }
-  return updatedDateString;
+  return result;
 };
 
 const dateHasText = updatedDateString => {
@@ -277,17 +261,32 @@ const dateHasText = updatedDateString => {
   );
 };
 
+/**
+ * Attempts to format separate date components provided into a string
+ * like YYYY-MM-DD, e.g. 2021-01-20 if any of day, month, or year are defined
+ * otherwise, will return null.
+ *
+ * @param {object} deconstructed date object
+ * @param {string} deconstructed.day two-digit calendar day
+ * @param {string} deconstructed.month two-digit calendar month
+ * @param {string} deconstructed.year four-digit calendar year
+ * @returns {string} a date formatted as YYYY-MM-DD
+ */
 const computeDate = ({ day, month, year }) => {
-  let computedDate = null;
-  if (month || day || year) {
-    computedDate = `${year}-${month}-${day}`;
-
-    computedDate = computedDate
-      .split('-')
-      .map(segment => segment.padStart(2, '0'))
-      .join('-');
+  const inputProvided = day || month || year;
+  if (!inputProvided) {
+    return null;
   }
-  return computedDate;
+  const yyyyPadded = `${year}`.padStart(4, '0');
+  const mmPadded = `${month}`.padStart(2, '0');
+  const ddPadded = `${day}`.padStart(2, '0');
+  const dateToParse = `${yyyyPadded}-${mmPadded}-${ddPadded}`;
+  if (!PATTERNS.YYYYMMDD.test(dateToParse)) {
+    return dateToParse;
+  }
+  const preparedDateISO = prepareDateFromString(dateToParse, FORMATS.YYYYMMDD);
+  const yyyymmdd = formatDateString(preparedDateISO, FORMATS.YYYYMMDD);
+  return yyyymmdd;
 };
 
 module.exports = {
@@ -295,7 +294,6 @@ module.exports = {
   PATTERNS,
   calculateDifferenceInDays,
   calculateISODate,
-  calendarDatesCompared,
   castToISO,
   checkDate,
   computeDate,
