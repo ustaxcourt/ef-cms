@@ -193,6 +193,52 @@ describe('PublicCase', () => {
     });
   });
 
+  it('should sort the docketEntries array by received date', () => {
+    const docketEntry1 = {
+      documentTitle: '1',
+      isOnDocketRecord: true,
+      receivedAt: '2024-03-01T00:00:00.000Z',
+    };
+
+    const docketEntry2 = {
+      documentTitle: '2',
+      isOnDocketRecord: true,
+      receivedAt: '2024-02-01T00:00:00.000Z',
+    };
+
+    const docketEntry3 = {
+      documentTitle: '3',
+      isOnDocketRecord: true,
+      receivedAt: '2024-01-01T00:00:00.000Z',
+    };
+
+    const entity = new PublicCase(
+      {
+        caseCaption: 'testing',
+        contactPrimary: undefined,
+        contactSecondary: undefined,
+        createdAt: 'testing',
+        docketEntries: [docketEntry1, docketEntry2, docketEntry3],
+        docketNumber: 'testing',
+        docketNumberSuffix: 'testing',
+        irsPractitioners: [],
+        partyType: PARTY_TYPES.petitioner,
+        receivedAt: 'testing',
+      },
+      { applicationContext },
+    );
+
+    expect(entity.docketEntries[0].documentTitle).toEqual(
+      docketEntry3.documentTitle,
+    );
+    expect(entity.docketEntries[1].documentTitle).toEqual(
+      docketEntry2.documentTitle,
+    );
+    expect(entity.docketEntries[2].documentTitle).toEqual(
+      docketEntry1.documentTitle,
+    );
+  });
+
   describe('isPrivateDocument', () => {
     it('should return true for a stipulated decision document that is not on the docket record', () => {
       const isPrivate = isPrivateDocument(
