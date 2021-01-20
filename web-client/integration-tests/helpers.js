@@ -285,7 +285,6 @@ export const uploadExternalDecisionDocument = async test => {
     primaryDocumentFileSize: 115022,
     scenario: 'Standard',
     searchError: false,
-    serviceDate: null,
     supportingDocument: null,
     supportingDocumentFile: null,
     supportingDocumentFreeText: null,

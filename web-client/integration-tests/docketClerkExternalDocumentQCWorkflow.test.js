@@ -142,6 +142,8 @@ describe('Create a work item', () => {
 
     await test.runSequence('completeDocketEntryQCSequence');
 
+    expect(test.getState('validationErrors')).toEqual({});
+
     await refreshElasticsearchIndex();
 
     const documentQCMyInbox = await getFormattedDocumentQCMyInbox(test);
@@ -173,12 +175,39 @@ describe('Create a work item', () => {
     expect(test.getState('modal.showModal')).toEqual(
       'PaperServiceConfirmModal',
     );
+
+    await test.runSequence('navigateToPrintPaperServiceSequence');
+    expect(test.getState('pdfPreviewUrl')).toBeDefined();
   });
 
   it('docket clerk completes QC of a document and sends a message', async () => {
+    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
+      test,
+    );
+
+    decisionWorkItem = documentQCSectionInbox.find(
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
+    );
+
+    expect(decisionWorkItem).toMatchObject({
+      docketEntry: {
+        documentTitle: 'Agreed Computation for Entry of Decision',
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    });
+
+    await test.runSequence('gotoEditDocketEntrySequence', {
+      docketEntryId: decisionWorkItem.docketEntry.docketEntryId,
+      docketNumber: caseDetail.docketNumber,
+    });
+
+    expect(test.getState('currentPage')).toEqual('EditDocketEntry');
+
     test.setState('modal.showModal', '');
 
     await test.runSequence('openCompleteAndSendMessageModalSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('modal.showModal')).toEqual(
       'CreateMessageModalDialog',
@@ -241,5 +270,12 @@ describe('Create a work item', () => {
       formattedCaseMessages.inProgressMessages[0].message;
 
     expect(qcDocumentMessage).toBe(messageBody);
+
+    expect(test.getState('modal.showModal')).toEqual(
+      'PaperServiceConfirmModal',
+    );
+
+    await test.runSequence('navigateToPrintPaperServiceSequence');
+    expect(test.getState('pdfPreviewUrl')).toBeDefined();
   });
 });
