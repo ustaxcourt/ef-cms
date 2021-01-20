@@ -125,12 +125,11 @@ exports.generateChangeOfAddress = async ({
         });
       }
 
-      const validatedRawCase = caseEntity.validate().toRawObject();
       const updatedCase = await applicationContext
-        .getPersistenceGateway()
-        .updateCase({
+        .getUseCaseHelpers()
+        .updateCaseAndAssociations({
           applicationContext,
-          caseToUpdate: validatedRawCase,
+          caseToUpdate: caseEntity,
         });
 
       updatedCases.push(updatedCase);
