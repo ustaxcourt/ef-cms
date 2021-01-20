@@ -1,5 +1,5 @@
 import { find } from 'lodash';
-import { parseDateToMonthDayYearAction } from './parseDateToMonthDayYearAction';
+import { parseDateToMonthDayYear } from './parseDateToMonthDayYear';
 import { state } from 'cerebral';
 
 /**
@@ -27,7 +27,7 @@ export const setCaseDeadlineFormAction = async ({
 
   if (caseDeadline) {
     form = {
-      ...parseDateToMonthDayYearAction({
+      ...parseDateToMonthDayYear({
         applicationContext,
         dateString: caseDeadline.deadlineDate,
       }),
