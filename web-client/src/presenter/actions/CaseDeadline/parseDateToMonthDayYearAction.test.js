@@ -1,9 +1,7 @@
-import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { parseDateToMonthDayYearAction } from './parseDateToMonthDayYearAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import moment from 'moment-timezone';
 
 describe('parseDateToMonthDayYearAction', () => {
   presenter.providers.applicationContext = applicationContext;
@@ -29,7 +27,7 @@ describe('parseDateToMonthDayYearAction', () => {
 
   it('should return an object that contains the day, month, and year as separate properties from the dateString provided', async () => {
     const result = await runAction(parseDateToMonthDayYearAction, {
-      dateString: '01/12/2019',
+      dateString: '1/20/2021',
       modules: {
         presenter,
       },
