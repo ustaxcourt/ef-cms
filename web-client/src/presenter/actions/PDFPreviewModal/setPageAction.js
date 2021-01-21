@@ -7,7 +7,14 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @param {Function} providers.props the cerebral props object
  */
-export const setPageAction = async ({ get, props, store }) => {
+export const setPageAction = async ({
+  //applicationContext,
+  get,
+  props,
+  store,
+}) => {
+  //const { PDFDocument } = await applicationContext.getPdfLib();
+
   let desiredPage = 1;
   if (props.currentPage !== undefined) {
     desiredPage = props.currentPage;
@@ -19,22 +26,19 @@ export const setPageAction = async ({ get, props, store }) => {
   );
   store.set(state.modal.pdfPreviewModal.currentPage, actualPage);
 
-  const { ctx, pdfDoc } = get(state.modal.pdfPreviewModal);
+  const { pdfDoc } = get(state.modal.pdfPreviewModal);
 
-  const page = await pdfDoc.getPage(actualPage);
+  // const pdfToDisplay = await PDFDocument.create();
 
-  const viewport = page.getViewport({
-    scale: 2,
-  });
+  // const actualPageIndex = actualPage - 1;
+  // const [copiedPageToDisplay] = await pdfToDisplay.copyPages(pdfDoc, [
+  //   actualPageIndex,
+  // ]);
 
-  store.set(state.modal.pdfPreviewModal.width, viewport.width);
-  store.set(state.modal.pdfPreviewModal.height, viewport.height);
+  // pdfToDisplay.addPage(copiedPageToDisplay);
 
-  const renderContext = {
-    canvasContext: ctx,
-    viewport: viewport,
-  };
+  // const pdfDataUri = await pdfToDisplay.saveAsBase64({ dataUri: true });
 
-  page.cleanup();
-  page.render(renderContext);
+  const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+  store.set(state.pdfPreviewUrl, pdfDataUri);
 };

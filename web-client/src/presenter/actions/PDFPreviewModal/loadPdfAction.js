@@ -28,11 +28,14 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
       }
 
       try {
-        const pdfJs = await applicationContext.getPdfJs();
-        const pdfDoc = await pdfJs.getDocument({ data: binaryFile }).promise;
+        const { PDFDocument } = await applicationContext.getPdfLib();
+        const pdfDoc = await PDFDocument.load(binaryFile);
 
         store.set(state.modal.pdfPreviewModal.pdfDoc, pdfDoc);
-        store.set(state.modal.pdfPreviewModal.totalPages, pdfDoc.numPages);
+        store.set(
+          state.modal.pdfPreviewModal.totalPages,
+          pdfDoc.getPages().length,
+        );
         store.set(state.modal.pdfPreviewModal.currentPage, 1);
         store.unset(state.modal.pdfPreviewModal.error);
         resolve(path.success());
