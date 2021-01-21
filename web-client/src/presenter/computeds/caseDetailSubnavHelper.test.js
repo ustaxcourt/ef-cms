@@ -78,7 +78,7 @@ describe('caseDetailSubnavHelper', () => {
 
   it('should not show case information tab if user is external and not associated with the case', () => {
     const user = {
-      role: ROLES.irsPractitioner,
+      role: ROLES.privatePractitioner,
       userId: '123',
     };
     const result = runCompute(caseDetailSubnavHelper, {
@@ -90,6 +90,22 @@ describe('caseDetailSubnavHelper', () => {
       },
     });
     expect(result.showCaseInformationTab).toBeFalsy();
+  });
+
+  it('should show case information tab if user is an irsPractitioner and not associated with the case', () => {
+    const user = {
+      role: ROLES.irsPractitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailSubnavHelper, {
+      state: {
+        ...getBaseState(user),
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+    expect(result.showCaseInformationTab).toBeTruthy();
   });
 
   it('should show primaryTab as selected if it is not caseInformation', () => {

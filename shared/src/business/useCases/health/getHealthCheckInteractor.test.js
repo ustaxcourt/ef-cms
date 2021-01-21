@@ -2,7 +2,7 @@ const { getHealthCheckInteractor } = require('./getHealthCheckInteractor');
 
 describe('getHealthCheckInteractor', () => {
   it('should return the expected true statues for all services', async () => {
-    const status = await getHealthCheckInteractor({
+    const statusResult = await getHealthCheckInteractor({
       applicationContext: {
         environment: {
           stage: 'dev',
@@ -26,6 +26,7 @@ describe('getHealthCheckInteractor', () => {
             getTableStatus: () => 'ACTIVE',
           };
         },
+        getScannerResourceUri: () => '',
         getStorageClient: () => {
           return {
             listObjectsV2: () => ({
@@ -39,7 +40,7 @@ describe('getHealthCheckInteractor', () => {
       },
     });
 
-    expect(status).toEqual({
+    expect(statusResult).toEqual({
       cognito: true,
       dynamo: {
         efcms: true,
@@ -96,6 +97,7 @@ describe('getHealthCheckInteractor', () => {
             },
           };
         },
+        getScannerResourceUri: () => '',
         getStorageClient: () => {
           return {
             listObjectsV2: () => ({

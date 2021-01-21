@@ -102,9 +102,9 @@ describe('saveSignedDocumentInteractor', () => {
     expect(caseEntity.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 1);
 
     const signedDocketEntryEntity = caseEntity.docketEntries.find(
-      document =>
-        document.documentType === 'Stipulated Decision' &&
-        document.docketEntryId === mockSignedDocketEntryId,
+      doc =>
+        doc.documentType === 'Stipulated Decision' &&
+        doc.docketEntryId === mockSignedDocketEntryId,
     );
 
     expect(signedDocketEntryEntity.isPaper).toEqual(false);

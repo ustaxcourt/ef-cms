@@ -7,6 +7,7 @@ const {
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
 const {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
@@ -14,18 +15,19 @@ const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
   return caseRecord.docketEntries.find(
-    document =>
-      document.documentType ===
+    doc =>
+      doc.documentType ===
       SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
   );
 };
 
 const findStandingPretrialDocument = caseRecord => {
   return caseRecord.docketEntries.find(
-    document =>
-      document.documentType ===
-        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice.documentType ||
-      document.documentType ===
+    doc =>
+      doc.documentType ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+          .documentType ||
+      doc.documentType ===
         SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.documentType,
   );
 };
@@ -36,6 +38,7 @@ const MOCK_TRIAL = {
     userId: '410e4ade-6ad5-4fc4-8741-3f8352c72a0c',
   },
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Regular',
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
@@ -130,7 +133,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .generateNoticeOfTrialIssuedInteractor.mockReturnValue(fakeData);
     applicationContext
       .getUseCases()
-      .generateStandingPretrialNoticeInteractor.mockReturnValue(fakeData);
+      .generateStandingPretrialOrderForSmallCaseInteractor.mockReturnValue(
+        fakeData,
+      );
     applicationContext
       .getUseCases()
       .generateStandingPretrialOrderInteractor.mockReturnValue(fakeData);
@@ -426,12 +431,14 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
     expect(findStandingPretrialDocument(calendaredCases[0])).toMatchObject({
       attachments: false,
+      eventCode:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
       signedByUserId: MOCK_TRIAL.judge.userId,
       signedJudgeName: MOCK_TRIAL.judge.name,
     });
   });
 
-  it('Should generate a Standing Pretrial Notice for SMALL cases', async () => {
+  it('Should generate a Standing Pretrial Order for Small Case for SMALL cases', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       docketNumber: '103-20', // MOCK_CASE with procedureType: 'Small'
@@ -439,8 +446,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().generateStandingPretrialNoticeInteractor,
+      applicationContext.getUseCases()
+        .generateStandingPretrialOrderForSmallCaseInteractor,
     ).toHaveBeenCalled();
+    expect(findStandingPretrialDocument(calendaredCases[1]).eventCode).toBe(
+      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+        .eventCode,
+    );
   });
 
   it('Should set the status of the Standing Pretrial Document as served for each case', async () => {

@@ -1,11 +1,14 @@
 const {
   createISODateString,
   formatDateString,
+  formatNow,
+  FORMATS,
 } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
 /**
- * generateStandingPretrialNoticeInteractor
+ * generateStandingPretrialOrderForSmallCaseInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -13,7 +16,7 @@ const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateStandingPretrialNoticeInteractor = async ({
+exports.generateStandingPretrialOrderForSmallCaseInteractor = async ({
   applicationContext,
   docketNumber,
   trialSessionId,
@@ -32,30 +35,36 @@ exports.generateStandingPretrialNoticeInteractor = async ({
       docketNumber,
     });
 
-  const { docketNumberWithSuffix, irsPractitioners } = caseDetail;
-
-  let respondentContactText = 'not available at this time';
-  if (irsPractitioners && irsPractitioners.length) {
-    const firstRespondent = irsPractitioners[0];
-    respondentContactText = `${firstRespondent.name} (${firstRespondent.contact.phone})`;
-  }
+  const { docketNumberWithSuffix } = caseDetail;
 
   const trialStartTimeIso = createISODateString(
     trialSession.startTime,
     'HH:mm',
   );
-  const startTime = formatDateString(trialStartTimeIso, 'hh:mm A');
-  const startDay = formatDateString(trialSession.startDate, 'dddd');
-  const fullStartDate = formatDateString(
-    trialSession.startDate,
-    'dddd, MMMM D, YYYY',
-  );
+  const formattedStartTime = formatDateString(trialStartTimeIso, 'hh:mm A');
+
+  const formattedServedDate = formatNow(FORMATS.MMDDYY);
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
+  const formattedJudgeName = await getJudgeWithTitle({
+    applicationContext,
+    judgeUserName: trialSession.judge.name,
+  });
+
+  const formattedStartDate = formatDateString(
+    trialSession.startDate,
+    FORMATS.MONTH_DAY_YEAR,
+  );
+
+  const formattedStartDateWithDayOfWeek = formatDateString(
+    trialSession.startDate,
+    FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
+  );
+
   const pdfData = await applicationContext
     .getDocumentGenerators()
-    .standingPretrialNotice({
+    .standingPretrialOrderForSmallCase({
       applicationContext,
       data: {
         caseCaptionExtension,
@@ -63,10 +72,11 @@ exports.generateStandingPretrialNoticeInteractor = async ({
         docketNumberWithSuffix,
         trialInfo: {
           ...trialSession,
-          fullStartDate,
-          respondentContactText,
-          startDay,
-          startTime,
+          formattedJudgeName,
+          formattedServedDate,
+          formattedStartDate,
+          formattedStartDateWithDayOfWeek,
+          formattedStartTime,
         },
       },
     });
