@@ -19,6 +19,16 @@ KEY="permissions-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
+if [[ ${ENVIRONMENT} == "prod" ]]; then
+  if [[ ${EFCMS_DOMAIN} != *"dawson"* ]]; then
+    echo "ENVIRONMENT and EFCMS_DOMAIN do not match. Please check your environment variables and run again."
+    exit 1
+  fi
+elif [[ ${EFCMS_DOMAIN} != "${ENVIRONMENT}"* ]]; then
+  echo "ENVIRONMENT and EFCMS_DOMAIN do not match. Please check your environment variables and run again."
+  exit 1
+fi
+
 rm -rf .terraform
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
