@@ -28,7 +28,7 @@ export const updateMessageModalAttachmentsAction = ({
 
     const generatedDocumentTitle = applicationContext
       .getUtilities()
-      .getDocumentTitle({ applicationContext, docketEntry: document });
+      .getDocumentTitleWithAdditionalInfo({ docketEntry: document });
 
     const documentTitle = generatedDocumentTitle || document.documentType;
 
