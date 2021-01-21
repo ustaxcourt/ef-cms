@@ -30,10 +30,10 @@ export const completeDocketEntryQCSequence = [
   {
     no: [],
     yes: [
-      setComputeFormDayFactoryAction('secondaryDocument.day'),
-      setComputeFormMonthFactoryAction('secondaryDocument.month'),
-      setComputeFormYearFactoryAction('secondaryDocument.year'),
-      getComputedFormDateFactoryAction(null),
+      setComputeFormDayFactoryAction('secondaryDocument.serviceDateDay'),
+      setComputeFormMonthFactoryAction('secondaryDocument.serviceDateMonth'),
+      setComputeFormYearFactoryAction('secondaryDocument.serviceDateYear'),
+      getComputedFormDateFactoryAction('secondaryDocument.serviceDate'),
       setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
     ],
   },
@@ -41,8 +41,13 @@ export const completeDocketEntryQCSequence = [
   setComputeFormDayFactoryAction('dateReceivedDay'),
   setComputeFormMonthFactoryAction('dateReceivedMonth'),
   setComputeFormYearFactoryAction('dateReceivedYear'),
-  getComputedFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction('dateReceived'),
   setComputeFormDateFactoryAction('dateReceived'),
+  setComputeFormDayFactoryAction('serviceDateDay'),
+  setComputeFormMonthFactoryAction('serviceDateMonth'),
+  setComputeFormYearFactoryAction('serviceDateYear'),
+  getComputedFormDateFactoryAction('serviceDate'),
+  setComputeFormDateFactoryAction('serviceDate'),
   validateDocketEntryAction,
   {
     error: [

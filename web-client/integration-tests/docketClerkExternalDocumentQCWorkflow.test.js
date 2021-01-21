@@ -71,10 +71,11 @@ describe('Create a work item', () => {
     await uploadExternalDecisionDocument(test);
     await uploadExternalDecisionDocument(test);
     await uploadExternalRatificationDocument(test);
+    await uploadExternalRatificationDocument(test);
   });
 
   loginAs(test, 'docketclerk@example.com');
-  it('login as the docketclerk and verify there are 3 document qc section inbox entries', async () => {
+  it('login as the docketclerk and verify there are 4 document qc section inbox entries', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       test,
     );
@@ -90,10 +91,10 @@ describe('Create a work item', () => {
     });
 
     const qcSectionInboxCountAfter = getSectionInboxCount(test);
-    expect(qcSectionInboxCountAfter).toEqual(qcSectionInboxCountBefore + 3);
+    expect(qcSectionInboxCountAfter).toEqual(qcSectionInboxCountBefore + 4);
   });
 
-  it('have the docketclerk assign those 3 items to self', async () => {
+  it('have the docketclerk assign those 4 items to self', async () => {
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       test,
     );
@@ -103,7 +104,7 @@ describe('Create a work item', () => {
     await assignWorkItems(test, 'docketclerk', decisionWorkItems);
   });
 
-  it('verify the docketclerk has 3 messages in document qc my inbox', async () => {
+  it('verify the docketclerk has 4 messages in document qc my inbox', async () => {
     await refreshElasticsearchIndex();
     const documentQCMyInbox = await getFormattedDocumentQCMyInbox(test);
     decisionWorkItem = findWorkItemByDocketNumber(
@@ -117,14 +118,14 @@ describe('Create a work item', () => {
       },
     });
     const qcMyInboxCountAfter = getIndividualInboxCount(test);
-    expect(qcMyInboxCountAfter).toEqual(qcMyInboxCountBefore + 3);
+    expect(qcMyInboxCountAfter).toEqual(qcMyInboxCountBefore + 4);
   });
 
   it('verify the docketclerk has the expected unread count', async () => {
     await refreshElasticsearchIndex();
     const notifications = getNotifications(test);
     expect(notifications).toMatchObject({
-      qcUnreadCount: notificationsBefore.qcUnreadCount + 3,
+      qcUnreadCount: notificationsBefore.qcUnreadCount + 4,
     });
   });
 
@@ -345,6 +346,76 @@ describe('Create a work item', () => {
 
     expect(test.getState('alertSuccess')).toMatchObject({
       message: `${updatedDocumentTitle} QC completed and message sent.`,
+    });
+
+    expect(test.getState('currentPage')).toBe('WorkQueue');
+
+    const myOutbox = (await getFormattedDocumentQCMyOutbox(test)).filter(
+      item => item.docketNumber === caseDetail.docketNumber,
+    );
+    const qcDocumentTitleMyOutbox = myOutbox[0].docketEntry.documentTitle;
+
+    expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const docketEntries = test.getState('caseDetail.docketEntries');
+
+    const ratificationDocketEntry = docketEntries.find(
+      d => d.docketEntryId === ratificationWorkItem.docketEntry.docketEntryId,
+    );
+
+    const noticeDocketEntry = docketEntries.find(
+      doc =>
+        doc.documentTitle ===
+        `Notice of Docket Change for Docket Entry No. ${ratificationDocketEntry.index}`,
+    );
+
+    expect(noticeDocketEntry).toBeTruthy();
+    expect(noticeDocketEntry.servedAt).toBeDefined();
+    expect(noticeDocketEntry.processingStatus).toEqual(
+      DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    );
+  });
+
+  it('docket clerk updates freeText and completes QC', async () => {
+    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
+      test,
+    );
+
+    const ratificationWorkItem = documentQCSectionInbox.find(
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
+    );
+
+    expect(ratificationWorkItem).toMatchObject({
+      docketEntry: {
+        documentTitle: 'Ratification of do the test',
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    });
+
+    await test.runSequence('gotoEditDocketEntrySequence', {
+      docketEntryId: ratificationWorkItem.docketEntry.docketEntryId,
+      docketNumber: caseDetail.docketNumber,
+    });
+
+    expect(test.getState('currentPage')).toEqual('EditDocketEntry');
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'freeText',
+      value: 'break the test again',
+    });
+
+    await test.runSequence('completeDocketEntryQCSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+
+    const updatedDocumentTitle = 'Ratification of break the test again';
+
+    expect(test.getState('alertSuccess')).toMatchObject({
+      message: `${updatedDocumentTitle} has been completed.`,
     });
 
     expect(test.getState('currentPage')).toBe('WorkQueue');

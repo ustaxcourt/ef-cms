@@ -23,9 +23,9 @@ export const deconstructDatesToFormAction = async ({
   }
 
   if ((formDate = deconstructDate(docketEntry.serviceDate))) {
-    store.set(state.form.month, formDate.month);
-    store.set(state.form.day, formDate.day);
-    store.set(state.form.year, formDate.year);
+    store.set(state.form.serviceDateMonth, formDate.month);
+    store.set(state.form.serviceDateDay, formDate.day);
+    store.set(state.form.serviceDateYear, formDate.year);
   }
 
   if (
