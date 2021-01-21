@@ -1,13 +1,11 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile } from '../ustc-ui/Responsive/Responsive';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
-import classNames from 'classnames';
 
-import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview.jsx';
+import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 
 export const PDFPreviewModal = connect(
   {
@@ -24,15 +22,11 @@ export const PDFPreviewModal = connect(
   function PDFPreviewModal({
     cancelSequence,
     confirmSequence,
-    currentPage,
     loadPdfSequence,
     //pdfPreviewModal,
-    pdfPreviewModalHelper,
     preventScrolling,
     previewPdfFile,
-    setPageSequence,
     title,
-    totalPages,
   }) {
     useEffect(() => {
       loadPdfSequence({
@@ -48,6 +42,7 @@ export const PDFPreviewModal = connect(
         confirmLabel="Ok"
         confirmSequence={confirmSequence}
         preventScrolling={preventScrolling}
+        showButtons={false}
         title={title}
       >
         <Mobile>
@@ -68,89 +63,8 @@ export const PDFPreviewModal = connect(
           </h2>
         </Mobile>
         <div>
-          <div className="margin-bottom-3">
-            <Button
-              link
-              title="pdf preview first page"
-              onClick={() =>
-                setPageSequence({
-                  currentPage: 1,
-                })
-              }
-            >
-              <FontAwesomeIcon
-                className={classNames(
-                  'icon-button',
-                  pdfPreviewModalHelper.disableLeftButtons && 'disabled',
-                )}
-                icon={['fas', 'step-backward']}
-                id="firstPage"
-                size="2x"
-              />
-            </Button>
-            <Button
-              link
-              title="pdf preview next page"
-              onClick={() =>
-                setPageSequence({
-                  currentPage: currentPage - 1,
-                })
-              }
-            >
-              <FontAwesomeIcon
-                className={classNames(
-                  'icon-button',
-                  pdfPreviewModalHelper.disableLeftButtons && 'disabled',
-                )}
-                icon={['fas', 'caret-left']}
-                id="previous"
-                size="2x"
-              />
-            </Button>
-            <span className="pages">
-              Page {currentPage} of {totalPages}
-            </span>
-            <Button
-              link
-              title="pdf preview previous page"
-              onClick={() =>
-                setPageSequence({
-                  currentPage: currentPage + 1,
-                })
-              }
-            >
-              <FontAwesomeIcon
-                className={classNames(
-                  'icon-button',
-                  pdfPreviewModalHelper.disableRightButtons && 'disabled',
-                )}
-                icon={['fas', 'caret-right']}
-                id="next"
-                size="2x"
-              />
-            </Button>
-            <Button
-              link
-              title="pdf preview last page"
-              onClick={() =>
-                setPageSequence({
-                  currentPage: totalPages,
-                })
-              }
-            >
-              <FontAwesomeIcon
-                className={classNames(
-                  'icon-button',
-                  pdfPreviewModalHelper.disableRightButtons && 'disabled',
-                )}
-                icon={['fas', 'step-forward']}
-                id="lastPage"
-                size="2x"
-              />
-            </Button>
-          </div>
           <div className="pdf-preview-content">
-            <PdfPreview />
+            <PdfPreview scroll={false} />
           </div>
         </div>
       </ModalDialog>
