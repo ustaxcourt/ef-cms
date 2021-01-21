@@ -20,6 +20,7 @@
 #   - $5 - the section of the user [petitionsclerk, docketclerk, ...]
 #   - $6 - the full name of the user
 
+( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 [ -z "$1" ] && echo "The ENV must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]." && exit 1
 [ -z "$2" ] && echo "The email address of the user must be provided as \$2 argument." && exit 1
 [ -z "$3" ] && echo "The password of the user must be provided as the \$3 argument." && exit 1
