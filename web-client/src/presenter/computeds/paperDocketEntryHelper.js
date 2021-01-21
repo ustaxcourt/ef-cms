@@ -10,12 +10,12 @@ export const paperDocketEntryHelper = get => {
     ...(caseDetail.docketEntries || []),
     ...(caseDetail.correspondence || []),
   ];
-  const document = allCaseDocuments.find(
+  const doc = allCaseDocuments.find(
     item => item.docketEntryId === docketEntryId,
   );
 
   const docketEntryHasDocument =
-    document && document.isFileAttached && documentUploadMode === 'preview';
+    doc && doc.isFileAttached && documentUploadMode === 'preview';
 
   return {
     docketEntryHasDocument,

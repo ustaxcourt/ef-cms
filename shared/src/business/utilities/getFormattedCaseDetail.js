@@ -33,12 +33,12 @@ const getServedPartiesCode = servedParties => {
 };
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
-const documentMeetsAgeRequirements = document => {
+const documentMeetsAgeRequirements = doc => {
   const transcriptCodes = [TRANSCRIPT_EVENT_CODE];
-  const isTranscript = transcriptCodes.includes(document.eventCode);
+  const isTranscript = transcriptCodes.includes(doc.eventCode);
   if (!isTranscript) return true;
   const availableOnDate = calculateISODate({
-    dateString: document.secondaryDate,
+    dateString: doc.secondaryDate,
     howMuch: TRANSCRIPT_AGE_DAYS_MIN,
     units: 'days',
   });
