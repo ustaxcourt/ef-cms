@@ -5,6 +5,7 @@ import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasS
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
+import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -52,6 +53,7 @@ export const completeDocketEntryQCSequence = [
     success: [
       stopShowValidationAction,
       setCurrentPageAction('Interstitial'),
+      refreshExternalDocumentTitleFromEventCodeAction,
       generateTitleAction,
       completeDocketEntryQCAction,
       setPdfPreviewUrlAction,
