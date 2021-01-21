@@ -3,9 +3,10 @@
 This directory contains terraform to install an AWSL Glue job to migrate a dynamoDB table from one account (source) to another (destination). Before running the terraform to install these resources, you must first setup a role in the destination account that allows the source account to write to its DynamoDB tables. Terraform code to do this is in the `remote_role` directory.
 
 ## To Use
+
 Initialize the terraform backend with the bash script `./bin/deploy-init.sh`. Set the environmental variable `ZONE_NAME` to the appropriate value such as `ef-cms.ustaxcourt.gov` that corresponds to the S3 bucket holding the project's state files. Run script from this directory passing the environment as an argument:
 
-`./bin/deploy-init.sh migef-cms.ustaxcourt.gov`
+`./bin/deploy-init.sh mig`
 
 Run `terraform [plan|apply]` to install the resources necessary to create the Glue job. Terraform will expect variables for
 
@@ -17,4 +18,4 @@ For example:
 
 `terraform plan  -var 'source_table=efcms-prod-alpha' -var 'destination_table=efcms-mig-beta' -var 'external_role_arn=arn:aws:iam::350455059537:role/efcms_remote_user_780456054515'`
 
-Once installed you can confirm the job, ETL python script, and passed-in parameters in the AWS console. 
+Once installed you can confirm the job, ETL python script, and passed-in parameters in the AWS console.
