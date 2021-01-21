@@ -7,14 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @param {Function} providers.props the cerebral props object
  */
-export const setPageAction = async ({
-  //applicationContext,
-  get,
-  props,
-  store,
-}) => {
-  //const { PDFDocument } = await applicationContext.getPdfLib();
-
+export const setPageAction = async ({ get, props, store }) => {
   let desiredPage = 1;
   if (props.currentPage !== undefined) {
     desiredPage = props.currentPage;
@@ -24,20 +17,10 @@ export const setPageAction = async ({
     Math.max(1, desiredPage),
     get(state.modal.pdfPreviewModal.totalPages),
   );
+
   store.set(state.modal.pdfPreviewModal.currentPage, actualPage);
 
   const { pdfDoc } = get(state.modal.pdfPreviewModal);
-
-  // const pdfToDisplay = await PDFDocument.create();
-
-  // const actualPageIndex = actualPage - 1;
-  // const [copiedPageToDisplay] = await pdfToDisplay.copyPages(pdfDoc, [
-  //   actualPageIndex,
-  // ]);
-
-  // pdfToDisplay.addPage(copiedPageToDisplay);
-
-  // const pdfDataUri = await pdfToDisplay.saveAsBase64({ dataUri: true });
 
   const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
   store.set(state.pdfPreviewUrl, pdfDataUri);
