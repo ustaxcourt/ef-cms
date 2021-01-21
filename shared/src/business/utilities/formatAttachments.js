@@ -21,7 +21,7 @@ export const formatAttachments = ({
     if (doc) {
       const generatedDocumentTitle = applicationContext
         .getUtilities()
-        .getDocumentTitle({ applicationContext, docketEntry: doc });
+        .getDocumentTitleWithAdditionalInfo({ docketEntry: doc });
 
       return {
         archived: !!doc.archived,
