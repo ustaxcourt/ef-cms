@@ -293,6 +293,30 @@ export const uploadExternalDecisionDocument = async test => {
   await test.runSequence('submitExternalDocumentSequence');
 };
 
+export const uploadExternalRatificationDocument = async test => {
+  test.setState('form', {
+    attachments: false,
+    category: 'Miscellaneous',
+    certificateOfService: false,
+    certificateOfServiceDate: null,
+    documentTitle: 'Ratification of do the test',
+    documentType: 'Ratification',
+    eventCode: 'RATF',
+    freeText: 'do the test',
+    hasSupportingDocuments: false,
+    partyPrimary: true,
+    primaryDocumentFile: fakeFile,
+    primaryDocumentFileSize: 115022,
+    scenario: 'Nonstandard B',
+    searchError: false,
+    supportingDocument: null,
+    supportingDocumentFile: null,
+    supportingDocumentFreeText: null,
+    supportingDocumentMetadata: null,
+  });
+  await test.runSequence('submitExternalDocumentSequence');
+};
+
 export const uploadProposedStipulatedDecision = async test => {
   test.setState('form', {
     attachments: false,

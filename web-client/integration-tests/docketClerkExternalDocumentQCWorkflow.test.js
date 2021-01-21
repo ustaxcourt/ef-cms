@@ -14,6 +14,7 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadExternalDecisionDocument,
+  uploadExternalRatificationDocument,
   uploadPetition,
   wait,
 } from './helpers';
@@ -69,7 +70,7 @@ describe('Create a work item', () => {
 
     await uploadExternalDecisionDocument(test);
     await uploadExternalDecisionDocument(test);
-    await uploadExternalDecisionDocument(test);
+    await uploadExternalRatificationDocument(test);
   });
 
   loginAs(test, 'docketclerk@example.com');
@@ -277,5 +278,107 @@ describe('Create a work item', () => {
 
     await test.runSequence('navigateToPrintPaperServiceSequence');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
+  });
+
+  it('docket clerk completes QC of a document, updates freeText, and sends a message', async () => {
+    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
+      test,
+    );
+
+    const ratificationWorkItem = documentQCSectionInbox.find(
+      workItem => workItem.docketNumber === caseDetail.docketNumber,
+    );
+
+    expect(ratificationWorkItem).toMatchObject({
+      docketEntry: {
+        documentTitle: 'Ratification of do the test',
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    });
+
+    await test.runSequence('gotoEditDocketEntrySequence', {
+      docketEntryId: ratificationWorkItem.docketEntry.docketEntryId,
+      docketNumber: caseDetail.docketNumber,
+    });
+
+    expect(test.getState('currentPage')).toEqual('EditDocketEntry');
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'freeText',
+      value: 'break the test',
+    });
+
+    test.setState('modal.showModal', '');
+
+    await test.runSequence('openCompleteAndSendMessageModalSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+
+    expect(test.getState('modal.showModal')).toEqual(
+      'CreateMessageModalDialog',
+    );
+
+    const updatedDocumentTitle = 'Ratification of break the test';
+
+    // fixme - verify with Kristen
+    // expect(test.getState('modal.form.subject')).toEqual(
+    //   updatedDocumentTitle,
+    // );
+
+    const messageBody = 'This is a message in a bottle';
+
+    await test.runSequence('updateModalFormValueSequence', {
+      key: 'message',
+      value: messageBody,
+    });
+
+    await test.runSequence('updateModalFormValueSequence', {
+      key: 'toSection',
+      value: 'petitions',
+    });
+
+    await test.runSequence('updateModalFormValueSequence', {
+      key: 'toUserId',
+      value: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    await test.runSequence('completeDocketEntryQCAndSendMessageSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+
+    expect(test.getState('alertSuccess')).toMatchObject({
+      message: `${updatedDocumentTitle} QC completed and message sent.`,
+    });
+
+    expect(test.getState('currentPage')).toBe('WorkQueue');
+
+    const myOutbox = (await getFormattedDocumentQCMyOutbox(test)).filter(
+      item => item.docketNumber === caseDetail.docketNumber,
+    );
+    const qcDocumentTitleMyOutbox = myOutbox[0].docketEntry.documentTitle;
+
+    expect(qcDocumentTitleMyOutbox).toBe(updatedDocumentTitle);
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const docketEntries = test.getState('caseDetail.docketEntries');
+
+    const ratificationDocketEntry = docketEntries.find(
+      d => d.docketEntryId === ratificationWorkItem.docketEntry.docketEntryId,
+    );
+
+    const noticeDocketEntry = docketEntries.find(
+      doc =>
+        doc.documentTitle ===
+        `Notice of Docket Change for Docket Entry No. ${ratificationDocketEntry.index}`,
+    );
+
+    expect(noticeDocketEntry).toBeTruthy();
+    expect(noticeDocketEntry.servedAt).toBeDefined();
+    expect(noticeDocketEntry.processingStatus).toEqual(
+      DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    );
   });
 });
