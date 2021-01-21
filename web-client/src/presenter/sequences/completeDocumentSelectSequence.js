@@ -22,16 +22,19 @@ import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocum
 
 export const completeDocumentSelectSequence = [
   startShowValidationAction,
-  getComputedFormDateFactoryAction(null),
+  setComputeFormDayFactoryAction('serviceDateDay'),
+  setComputeFormMonthFactoryAction('serviceDateMonth'),
+  setComputeFormYearFactoryAction('serviceDateYear'),
+  getComputedFormDateFactoryAction('serviceDate'),
   setComputeFormDateFactoryAction('serviceDate'),
   formHasSecondaryDocumentAction,
   {
     no: [],
     yes: [
-      setComputeFormDayFactoryAction('secondaryDocument.day'),
-      setComputeFormMonthFactoryAction('secondaryDocument.month'),
-      setComputeFormYearFactoryAction('secondaryDocument.year'),
-      getComputedFormDateFactoryAction(null),
+      setComputeFormDayFactoryAction('secondaryDocument.serviceDateDay'),
+      setComputeFormMonthFactoryAction('secondaryDocument.serviceDateMonth'),
+      setComputeFormYearFactoryAction('secondaryDocument.serviceDateYear'),
+      getComputedFormDateFactoryAction('secondaryDocument.serviceDate'),
       setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
     ],
   },
