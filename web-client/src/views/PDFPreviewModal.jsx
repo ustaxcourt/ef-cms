@@ -4,8 +4,10 @@ import { Mobile } from '../ustc-ui/Responsive/Responsive';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
+
+import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview.jsx';
 
 export const PDFPreviewModal = connect(
   {
@@ -24,7 +26,7 @@ export const PDFPreviewModal = connect(
     confirmSequence,
     currentPage,
     loadPdfSequence,
-    pdfPreviewModal,
+    //pdfPreviewModal,
     pdfPreviewModalHelper,
     preventScrolling,
     previewPdfFile,
@@ -32,13 +34,8 @@ export const PDFPreviewModal = connect(
     title,
     totalPages,
   }) {
-    const canvasRef = useRef(null);
-
     useEffect(() => {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
       loadPdfSequence({
-        ctx,
         file: previewPdfFile,
       });
     }, []);
@@ -153,12 +150,7 @@ export const PDFPreviewModal = connect(
             </Button>
           </div>
           <div className="pdf-preview-content">
-            <canvas
-              height={pdfPreviewModal.height}
-              id="the-canvas"
-              ref={canvasRef}
-              width={pdfPreviewModal.width}
-            ></canvas>
+            <PdfPreview />
           </div>
         </div>
       </ModalDialog>
