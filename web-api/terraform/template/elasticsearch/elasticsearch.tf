@@ -55,10 +55,7 @@ locals {
 }
 
 module "logs_alarms" {
-  # temporarily using this fork which removes a defaulted variable from the module due to a terraform import bug -
-  # this can be set back to github.com/dubiety/terraform-aws-elasticsearch-cloudwatch-sns-alarms.git?ref=v1.0.4
-  # after the terraform import has been run on all environments
-  source                       = "github.com/rachaelparris/terraform-aws-elasticsearch-cloudwatch-sns-alarms.git?ref=dont-default-variables"
+  source                       = "github.com/dubiety/terraform-aws-elasticsearch-cloudwatch-sns-alarms.git?ref=v1.0.4"
   domain_name                  = aws_elasticsearch_domain.efcms-search.domain_name
   alarm_name_prefix            = "${aws_elasticsearch_domain.efcms-search.domain_name}: "
   free_storage_space_threshold = local.instance_size_in_mb * 0.25

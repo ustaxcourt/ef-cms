@@ -27,6 +27,7 @@ exports.createTrialSession = testData => {
   cy.get('#max-cases').type(faker.random.number({ max: 100, min: 10 }));
 
   // location information
+  cy.get('#inPerson-proceeding-label').click();
   cy.get('#trial-location').select(testData.preferredTrialCity);
   cy.get('#courthouse-name').type(faker.commerce.productName());
   cy.get('#address1').type(faker.address.streetAddress());

@@ -134,6 +134,33 @@ describe('getCaseInteractor', () => {
     });
   });
 
+  it('should return the case when the currentUser is an unassociated IRS practitioner', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'IRS Practitionerr',
+      role: ROLES.irsPractitioner,
+      userId: irsPractitionerId,
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          contactId: 'dc56e26e-f9fd-4165-8997-97676cc0523e',
+        },
+        docketNumber: '101-00',
+        userId: '320fce0e-b050-4e04-8720-db25da3ca598',
+      });
+
+    const result = await getCaseInteractor({
+      applicationContext,
+      docketNumber: '00101-00',
+    });
+
+    expect(result.docketNumber).toEqual('101-00');
+  });
+
   it('should return the case when the currentUser is the contactPrimary on the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       userId: 'dc56e26e-f9fd-4165-8997-97676cc0523e',

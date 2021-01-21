@@ -1,6 +1,7 @@
 const {
   reactTemplateGenerator,
 } = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
+const { combineTwoPdfs } = require('./combineTwoPdfs');
 const { COUNTRY_TYPES } = require('../entities/EntityConstants');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
@@ -477,7 +478,10 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
   return pdf;
 };
 
-const standingPretrialNotice = async ({ applicationContext, data }) => {
+const standingPretrialOrderForSmallCase = async ({
+  applicationContext,
+  data,
+}) => {
   const {
     caseCaptionExtension,
     caseTitle,
@@ -485,21 +489,23 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
     trialInfo,
   } = data;
 
-  const reactStandingPretrialNoticeTemplate = reactTemplateGenerator({
-    componentName: 'StandingPretrialNotice',
-    data: {
-      options: {
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
+  const reactStandingPretrialOrderForSmallCaseTemplate = reactTemplateGenerator(
+    {
+      componentName: 'StandingPretrialOrderForSmallCase',
+      data: {
+        options: {
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+        },
+        trialInfo,
       },
-      trialInfo,
     },
-  });
+  );
 
-  const pdfContentHtml = await generateHTMLTemplateForPDF({
+  const pdfContentHtmlWithHeader = await generateHTMLTemplateForPDF({
     applicationContext,
-    content: reactStandingPretrialNoticeTemplate,
+    content: reactStandingPretrialOrderForSmallCaseTemplate,
     options: {
       overwriteMain: true,
       title: 'Standing Pre-trial Order',
@@ -513,18 +519,49 @@ const standingPretrialNotice = async ({ applicationContext, data }) => {
     },
   });
 
-  const pdf = await applicationContext
+  const pdfWithHeader = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
       applicationContext,
-      contentHtml: pdfContentHtml,
+      contentHtml: pdfContentHtmlWithHeader,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,
       overwriteHeader: true,
     });
 
-  return pdf;
+  const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
+    componentName: 'GettingReadyForTrialChecklist',
+    data: {
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+      trialInfo,
+    },
+  });
+
+  const pdfContentHtmlWithoutHeader = await generateHTMLTemplateForPDF({
+    applicationContext,
+    content: reactGettingReadyForTrialChecklistTemplate,
+  });
+
+  const pdfWithoutHeader = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtmlWithoutHeader,
+      displayHeaderFooter: false,
+      docketNumber: docketNumberWithSuffix,
+      overwriteHeader: false,
+    });
+
+  return await combineTwoPdfs({
+    applicationContext,
+    firstPdf: pdfWithHeader,
+    secondPdf: pdfWithoutHeader,
+  });
 };
 
 const standingPretrialOrder = async ({ applicationContext, data }) => {
@@ -547,12 +584,12 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     },
   });
 
-  const pdfContentHtml = await generateHTMLTemplateForPDF({
+  const pdfContentHtmlWithHeader = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactStandingPretrialOrderTemplate,
     options: {
       overwriteMain: true,
-      title: 'Standing Pre-trial Order',
+      title: 'Standing Pretrial Order',
     },
   });
 
@@ -563,18 +600,49 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     },
   });
 
-  const pdf = await applicationContext
+  const pdfWithHeader = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
       applicationContext,
-      contentHtml: pdfContentHtml,
+      contentHtml: pdfContentHtmlWithHeader,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,
       overwriteHeader: true,
     });
 
-  return pdf;
+  const pretrialMemorandumTemplate = reactTemplateGenerator({
+    componentName: 'PretrialMemorandum',
+    data: {
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+      trialInfo,
+    },
+  });
+
+  const pdfContentHtmlWithoutHeader = await generateHTMLTemplateForPDF({
+    applicationContext,
+    content: pretrialMemorandumTemplate,
+  });
+
+  const pdfWithoutHeader = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtmlWithoutHeader,
+      displayHeaderFooter: false,
+      docketNumber: docketNumberWithSuffix,
+      overwriteHeader: false,
+    });
+
+  return await combineTwoPdfs({
+    applicationContext,
+    firstPdf: pdfWithHeader,
+    secondPdf: pdfWithoutHeader,
+  });
 };
 
 const caseInventoryReport = async ({ applicationContext, data }) => {
@@ -741,8 +809,8 @@ module.exports = {
   order,
   pendingReport,
   receiptOfFiling,
-  standingPretrialNotice,
   standingPretrialOrder,
+  standingPretrialOrderForSmallCase,
   trialCalendar,
   trialSessionPlanningReport,
 };

@@ -44,13 +44,17 @@ exports.updateTrialSessionInteractor = async ({
   const editableFields = {
     address1: trialSession.address1,
     address2: trialSession.address2,
+    chambersPhoneNumber: trialSession.chambersPhoneNumber,
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
+    joinPhoneNumber: trialSession.joinPhoneNumber,
     judge: trialSession.judge,
     maxCases: trialSession.maxCases,
+    meetingId: trialSession.meetingId,
     notes: trialSession.notes,
+    password: trialSession.password,
     postalCode: trialSession.postalCode,
     sessionType: trialSession.sessionType,
     startDate: trialSession.startDate,
@@ -134,12 +138,16 @@ exports.updateTrialSessionInteractor = async ({
         });
 
       const caseEntity = new Case(caseToUpdate, { applicationContext });
-      caseEntity.setAsCalendared(newTrialSessionEntity);
+      if (
+        caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
+      ) {
+        caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
-      await applicationContext.getPersistenceGateway().updateCase({
-        applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
-      });
+        await applicationContext.getPersistenceGateway().updateCase({
+          applicationContext,
+          caseToUpdate: caseEntity.validate().toRawObject(),
+        });
+      }
     }
   }
 

@@ -25,25 +25,32 @@ Here are the steps involved:
    - `EFCMS_DOMAIN`: The Domain for the environment (e.g., `mig.ef-cms.ustaxcourt.gov`)
    - `AWS_ACCESS_KEY_ID`: Your AWS credentials
    - `AWS_ACCESS_SECRET_ACCESS_KEY`: Your AWS credentials
-3. Deploy the Migration infrastructure with the following script. This sets up the SQS queues and Lambdas to perform the migration:
+3. Because you are deploying the migration infrastructure from your machine, **you MUST be on the latest version of the codebase** branch checked out in order for this to work!
+
+   ```bash
+   git checkout staging
+   git pull
+   ```
+
+4. Deploy the migration infrastructure with the following script. This sets up the SQS queues and Lambdas to perform the migration:
 
     ```bash
     npm run deploy:migration -- ${ENV}
     ```
 
-4. Using AWS CLI, set the `STREAM_ARN` environmental with the following command:
+5. Using AWS CLI, set the `STREAM_ARN` environmental with the following command:
 
     ```bash
     export STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
     ```
 
-5. Kickoff the the migration scripts by sending items to the SQS queue:
+6. Kickoff the the migration scripts by sending items to the SQS queue:
 
     ```bash
     npm run start:migration -- ${ENV}
     ```
 
-6. This next script will run until the SQS Queue is empty. You can also monitor this in the AWS Console by going to **Amazon SQS** > **Queues** > **migration_segments_queue_ENV**, and then clicking the Monitoring tab
+7. This next script will run until the SQS Queue is empty. You can also monitor this in the AWS Console by going to **Amazon SQS** > **Queues** > **migration_segments_queue_ENV**, and then clicking the Monitoring tab
 
     ```bash
     ./wait-for-migration-to-finish.sh
@@ -53,13 +60,13 @@ Here are the steps involved:
 
     And look for items in the **migration_segments_queue_ENV_dl** This is the Dead Letter Queue. These items may need to be run again. Errors may need to be handled. If they cannot be solved, we may need to adjust the migration script(s) and re-run the migration.
 
-7. Finally, destroy the Migration infrastructure (the SQS queues):
+8. Finally, destroy the Migration infrastructure (the SQS queues):
 
     ```bash
     npm run destroy:migration -- ${ENV}
     ```
 
-8. When complete, Elasticsearch is probably busily reindexing the newly migrated DB. When you are ready to accept the deployment, perform the following command to switch the colors:
+9. When complete, Elasticsearch is probably busily reindexing the newly migrated DB. When you are ready to accept the deployment, perform the following command to switch the colors:
 
     ```bash
     npm run switch-colors -- $ENV

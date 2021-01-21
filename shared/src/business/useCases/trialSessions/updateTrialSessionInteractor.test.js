@@ -2,11 +2,15 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  ROLES,
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   updateTrialSessionInteractor,
 } = require('./updateTrialSessionInteractor');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('updateTrialSessionInteractor', () => {
@@ -15,6 +19,7 @@ describe('updateTrialSessionInteractor', () => {
 
   const MOCK_TRIAL = {
     maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '2025-12-01T00:00:00.000Z',
     term: 'Fall',
@@ -227,9 +232,9 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual('c7d90c05-f6cd-442c-a168-202db587f16f');
   });
 
-  it('updates calendared case with new trial session info', async () => {
+  it('should update the calendared case with new trial session info when the trialSessionId matches the case.trialSessionId', async () => {
     const mockCalendaredCase = new Case(
-      { ...MOCK_CASE, docketNumber: '123-45' },
+      { ...MOCK_CASE, docketNumber: '123-45', trialSessionId: MOCK_TRIAL_ID_4 },
       { applicationContext },
     );
     const calendaredTrialSession = {
@@ -239,7 +244,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
-    mockCalendaredCase.setAsCalendared(MOCK_TRIAL);
+    mockCalendaredCase.updateTrialSessionInformation(MOCK_TRIAL);
 
     await updateTrialSessionInteractor({
       applicationContext,
@@ -258,6 +263,92 @@ describe('updateTrialSessionInteractor', () => {
     ).toMatchObject({
       trialDate: '2025-12-02T00:00:00.000Z',
     });
+  });
+
+  it('updates editable fields', async () => {
+    const updatedFields = {
+      address1: '123 Main St',
+      address2: 'Apt 234',
+      chambersPhoneNumber: '111111',
+      city: 'Somewhere',
+      courtReporter: 'Someone Reporter',
+      courthouseName: 'The Courthouse',
+      irsCalendarAdministrator: 'Admin',
+      joinPhoneNumber: '22222',
+      judge: {
+        name: 'Judge Buch',
+        userId: '96bf390d-7418-41a3-b411-f1d8d89fb3d8',
+      },
+      maxCases: 1,
+      meetingId: '333333',
+      notes: 'some notes',
+      password: '444444',
+      postalCode: '12345',
+      sessionType: SESSION_TYPES.motionHearing,
+      startDate: '2025-12-02T00:00:00.000Z',
+      startTime: '10:00',
+      state: 'TN',
+      swingSession: true,
+      swingSessionId: '70fa4d58-0ade-4e22-95e2-a98322f999b5',
+      term: 'Spring',
+      termYear: '2021',
+      trialClerk: {
+        name: 'The Clerk',
+        userId: '200d96ac-7edc-407d-a3a7-a3e7db78b881',
+      },
+      trialLocation: 'Boise, Idaho',
+    };
+
+    await updateTrialSessionInteractor({
+      applicationContext,
+      trialSession: {
+        ...mockTrialsById[MOCK_TRIAL_ID_6],
+        ...updatedFields,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession.mock
+        .calls[0][0].trialSessionToUpdate,
+    ).toMatchObject({
+      ...mockTrialsById[MOCK_TRIAL_ID_6],
+      ...updatedFields,
+    });
+  });
+
+  it('should not update the calendared case with new trial session info when the trialSessionId does NOT match the case.trialSessionId', async () => {
+    const calendaredTrialSession = {
+      ...mockTrialsById[MOCK_TRIAL_ID_4],
+      startDate: '2025-12-02T00:00:00.000Z',
+    };
+    const mockCalendaredCase = new Case(
+      {
+        ...MOCK_CASE,
+        docketNumber: '123-45',
+        hearings: [calendaredTrialSession],
+        trialSessionId: MOCK_TRIAL_ID_3,
+      },
+      { applicationContext },
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
+    mockCalendaredCase.updateTrialSessionInformation(MOCK_TRIAL);
+
+    await updateTrialSessionInteractor({
+      applicationContext,
+      trialSession: {
+        ...calendaredTrialSession,
+        startDate: '2025-12-02T00:00:00.000Z',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toHaveBeenCalled();
   });
 
   it('does not update non-editable fields', async () => {
