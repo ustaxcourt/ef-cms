@@ -458,9 +458,6 @@ const {
   getDocumentQCServedForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor');
 const {
-  getDocumentTitle,
-} = require('../../shared/src/business/utilities/getDocumentTitle');
-const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
 const {
@@ -1690,7 +1687,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formattedTrialSessionDetails,
         getAddressPhoneDiff,
         getDocQcSectionForUser,
-        getDocumentTitle,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         getWorkQueueFilters,
