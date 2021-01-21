@@ -27,15 +27,12 @@ exports.filePetitionInteractor = async ({
    * @param {Function} onUploadProgress the progressFunction
    * @returns {Promise<string>} the key returned from a successful upload
    */
-  const uploadDocumentAndMakeSafeInteractor = async (
-    document,
-    onUploadProgress,
-  ) => {
+  const uploadDocumentAndMakeSafeInteractor = async (doc, onUploadProgress) => {
     const key = await applicationContext
       .getPersistenceGateway()
       .uploadDocumentFromClient({
         applicationContext,
-        document,
+        document: doc,
         onUploadProgress,
       });
 

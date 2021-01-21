@@ -16,13 +16,13 @@ describe('socket', () => {
     webSocketStub = jest.fn();
     webSocketCloseStub = jest.fn();
 
-    const { initialize, start, stop } = socketProvider({
+    ({
+      initialize: initializeSocket,
+      start: startSocket,
+      stop: stopSocket,
+    } = socketProvider({
       socketRouter,
-    });
-
-    initializeSocket = initialize;
-    startSocket = start;
-    stopSocket = stop;
+    }));
 
     global.WebSocket = class {
       constructor() {

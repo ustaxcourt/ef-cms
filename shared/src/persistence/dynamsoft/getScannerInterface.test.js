@@ -50,7 +50,7 @@ describe('getScannerInterface', () => {
     IfDisableSourceAfterAcquire: false,
     IfFeederLoaded: true,
     OpenSource: mockOpenSource,
-    RegisterEvent: (event, cb) => {
+    RegisterEvent: (scannerEvent, cb) => {
       onPostAllTransfersCb = cb;
     },
     RemoveAllImages: mockRemoveAllImages,

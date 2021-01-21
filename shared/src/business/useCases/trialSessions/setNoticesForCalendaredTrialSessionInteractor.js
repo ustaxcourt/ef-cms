@@ -153,16 +153,18 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       // Generate Standing Pretrial Notice
       standingPretrialFile = await applicationContext
         .getUseCases()
-        .generateStandingPretrialNoticeInteractor({
+        .generateStandingPretrialOrderForSmallCaseInteractor({
           applicationContext,
           docketNumber: caseEntity.docketNumber,
           trialSessionId: trialSessionEntity.trialSessionId,
         });
 
       standingPretrialDocumentTitle =
-        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice.documentType;
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+          .documentType;
       standingPretrialDocumentEventCode =
-        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialNotice.eventCode;
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+          .eventCode;
     } else {
       // Generate Standing Pretrial Order
       standingPretrialFile = await applicationContext

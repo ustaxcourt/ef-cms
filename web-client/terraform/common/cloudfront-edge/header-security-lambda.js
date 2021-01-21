@@ -1,13 +1,13 @@
 /**
  * adds headers
  *
- * @param {object} event the AWS event object
- * @param {object} context the context
+ * @param {object} awsEvent the AWS event object
+ * @param {object} handlerContext the context
  * @param {object} callback the callback
  */
-exports.handler = (event, context, callback) => {
+exports.handler = (awsEvent, handlerContext, callback) => {
   //Get contents of response
-  const { request, response } = event.Records[0].cf;
+  const { request, response } = awsEvent.Records[0].cf;
   const { headers } = response;
   const { headers: requestHeaders } = request;
 

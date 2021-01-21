@@ -8,6 +8,7 @@ const FORMATS = {
   MMDDYY: 'MM/DD/YY',
   MMDDYYYY: 'MM/DD/YYYY',
   MONTH_DAY_YEAR: 'MMMM D, YYYY',
+  MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'dddd, MMMM D, YYYY',
   SORTABLE_CALENDAR: 'YYYY/MM/DD',
   TIME: 'hh:mm a',
   TIME_TZ: 'h:mm a [ET]',
