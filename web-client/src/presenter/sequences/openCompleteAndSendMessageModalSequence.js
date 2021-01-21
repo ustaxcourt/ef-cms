@@ -12,7 +12,7 @@ import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { updateMessageModalAttachmentsAction } from '../actions/updateMessageModalAttachmentsAction';
+import { updateMessageModalAttachmentsForCompleteAndSendAction } from '../actions/updateMessageModalAttachmentsForCompleteAndSendAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const openCompleteAndSendMessageModalSequence = [
@@ -44,7 +44,7 @@ export const openCompleteAndSendMessageModalSequence = [
       clearModalStateAction,
       generateTitleAction,
       setCreateMessageModalDialogModalStateAction,
-      updateMessageModalAttachmentsAction,
+      updateMessageModalAttachmentsForCompleteAndSendAction,
       setShowModalFactoryAction('CreateMessageModalDialog'),
     ],
   },
