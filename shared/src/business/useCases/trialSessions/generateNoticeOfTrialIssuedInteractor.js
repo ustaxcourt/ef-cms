@@ -1,4 +1,10 @@
+const {
+  createISODateString,
+  formatDateString,
+  FORMATS,
+} = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
 /**
  * generateNoticeOfTrialIssuedInteractor
@@ -31,16 +37,30 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
   const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
+  const formattedStartDate = formatDateString(
+    trialSession.startDate,
+    FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
+  );
+
+  const trialStartTimeIso = createISODateString(
+    trialSession.startTime,
+    'HH:mm',
+  );
+  const formattedStartTime = formatDateString(trialStartTimeIso, 'hh:mm A');
+
+  const judgeWithTitle = await getJudgeWithTitle({
+    applicationContext,
+    judgeUserName: trialSession.judge.name,
+  });
+
   const trialInfo = {
-    address1: trialSession.address1,
-    address2: trialSession.address2,
-    city: trialSession.city,
-    courthouseName: trialSession.courthouseName,
-    judge: trialSession.judge.name,
-    postalCode: trialSession.postalCode,
-    startDate: trialSession.startDate,
-    startTime: trialSession.startTime,
-    state: trialSession.state,
+    formattedJudge: judgeWithTitle,
+    formattedStartDate,
+    formattedStartTime,
+    joinPhoneNumber: trialSession.joinPhoneNumber,
+    meetingId: trialSession.meetingId,
+    password: trialSession.password,
+    trialLocation: trialSession.trialLocation,
   };
 
   return await applicationContext.getDocumentGenerators().noticeOfTrialIssued({

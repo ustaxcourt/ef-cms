@@ -1,58 +1,69 @@
-const fs = require('fs');
-const path = require('path');
+const {
+  applicationContext,
+  testInvalidPdfDoc,
+  testPdfDoc,
+} = require('../../test/createTestApplicationContext');
 const { validatePdfInteractor } = require('./validatePdfInteractor');
 
-const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-
-const testAsset = name => {
-  return fs.readFileSync(testAssetsPath + name);
-};
-
 describe('validatePdfInteractor', () => {
-  it('validates a clean PDF', async () => {
-    const validParams = {
-      applicationContext: {
-        environment: { documentsBucketName: 'documents' },
-        getStorageClient: () => ({
-          getObject: jest.fn().mockReturnValue({
-            promise: async () => ({
-              Body: testAsset('sample.pdf'),
-            }),
-          }),
-          putObjectTagging: () => {},
+  beforeEach(() => {
+    applicationContext.getPdfLib = jest.fn().mockResolvedValue({
+      PDFDocument: {
+        load: jest.fn().mockResolvedValue({
+          isEncrypted: false,
         }),
-        logger: {
-          debug: () => null,
-        },
       },
+    });
+
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => ({
+        Body: testPdfDoc,
+      }),
+    });
+  });
+
+  it('validates a clean PDF', async () => {
+    const result = await validatePdfInteractor({
+      applicationContext,
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    };
-    const result = await validatePdfInteractor(validParams);
+    });
     expect(result).toBeTruthy();
   });
 
-  it('validates an invalid PDF', async () => {
-    const invalidParams = {
-      applicationContext: {
-        environment: { documentsBucketName: 'documents' },
-        getStorageClient: () => ({
-          getObject: jest.fn().mockReturnValue({
-            promise: async () => ({
-              Body: testAsset('not-a-pdf.pdf'),
-            }),
-          }),
-          putObjectTagging: () => {},
+  it('validates an encrypted PDF', async () => {
+    applicationContext.getPdfLib = jest.fn().mockResolvedValue({
+      PDFDocument: {
+        load: jest.fn().mockResolvedValue({
+          isEncrypted: true,
         }),
-        logger: {
-          debug: () => null,
-        },
       },
-      key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    };
+    });
 
     let error;
     try {
-      await validatePdfInteractor(invalidParams);
+      await validatePdfInteractor({
+        applicationContext,
+        key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toEqual('invalid pdf');
+  });
+
+  it('validates an invalid PDF', async () => {
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: async () => ({
+        Body: testInvalidPdfDoc,
+      }),
+    });
+
+    let error;
+    try {
+      await validatePdfInteractor({
+        applicationContext,
+        key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      });
     } catch (err) {
       error = err;
     }

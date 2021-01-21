@@ -1,7 +1,7 @@
 const { asUserFromEmail } = require('../createUsers');
 
 module.exports.createOrder = async ({ docketNumber }) => {
-  const docketEntryId = await asUserFromEmail(
+  const createdDocketEntryId = await asUserFromEmail(
     'docketclerk@example.com',
     async applicationContext => {
       const docketEntryId = '25100ec6-eeeb-4e88-872f-c99fad1fe6c7';
@@ -56,5 +56,5 @@ module.exports.createOrder = async ({ docketNumber }) => {
     },
   );
 
-  return docketEntryId;
+  return createdDocketEntryId;
 };

@@ -33,7 +33,7 @@ elif [[ $BRANCH == 'master' ]] ; then
 elif [[ $BRANCH == 'dawson' ]] ; then
   echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'prod' ]] ; then
-  echo "m5.2xlarge.elasticsearch"
+  echo "m5.xlarge.elasticsearch"
 else
   exit 1;
 fi
