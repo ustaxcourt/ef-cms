@@ -320,10 +320,7 @@ describe('Create a work item', () => {
 
     const updatedDocumentTitle = 'Ratification of break the test';
 
-    // fixme - verify with Kristen
-    // expect(test.getState('modal.form.subject')).toEqual(
-    //   updatedDocumentTitle,
-    // );
+    expect(test.getState('modal.form.subject')).toEqual(updatedDocumentTitle);
 
     const messageBody = 'This is a message in a bottle';
 

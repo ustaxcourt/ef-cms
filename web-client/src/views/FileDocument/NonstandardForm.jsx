@@ -133,7 +133,6 @@ export const NonstandardForm = connect(
             </select>
           </FormGroup>
         )}
-
         {helper[level].showDateFields && (
           <DateInput
             errorText={validationErrors?.serviceDate}
