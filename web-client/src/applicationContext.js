@@ -27,6 +27,7 @@ import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
+import { getDocumentTitle } from '../../shared/src/business/utilities/getDocumentTitle';
 const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
@@ -625,6 +626,7 @@ const applicationContext = {
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
       getDocQcSectionForUser,
+      getDocumentTitle,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getJudgeLastName,

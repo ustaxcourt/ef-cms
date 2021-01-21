@@ -146,4 +146,39 @@ describe('updateMessageModalAttachmentsAction', () => {
 
     expect(result.state.modal.form.subject).toEqual('Testing');
   });
+
+  it('calls getDocumentTitle and returns a generated document title', async () => {
+    const mockDocumentTitle = 'I was generated';
+    applicationContext
+      .getUtilities()
+      .getDocumentTitle.mockReturnValue(mockDocumentTitle);
+
+    const { state } = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
+      props: {
+        documentId: '123',
+      },
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [{}], // already contains one attachment
+            subject: 'Testing',
+          },
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().getDocumentTitle,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUtilities().getDocumentTitle.mock.calls[0][0],
+    ).toMatchObject({
+      docketEntry: { docketEntryId: '123', documentType: 'Petition' },
+    });
+    expect(state.modal.form.attachments[1].documentTitle).toEqual(
+      mockDocumentTitle,
+    );
+  });
 });
