@@ -763,7 +763,7 @@
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
-                presence: "optional"
+                presence: "required"
                 description: "Date that this Document was filed."
               rules: 
                 - 
@@ -829,7 +829,12 @@
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
-                presence: "optional"
+                presence: "required"
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    date: "now"
             servedAt: 
               type: "date"
               flags: 
@@ -837,6 +842,11 @@
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
                 presence: "optional"
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    date: "now"
     docketNumber: 
       type: "string"
       flags: 
