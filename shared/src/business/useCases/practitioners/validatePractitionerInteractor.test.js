@@ -2,23 +2,21 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  validatePractitionerInteractor,
-} = require('./validatePractitionerInteractor');
-const { ROLES, US_STATES } = require('../../entities/EntityConstants');
+  validateAddPractitionerInteractor,
+} = require('./validateAddPractitionerInteractor');
+const { US_STATES } = require('../../entities/EntityConstants');
 
-describe('validatePractitionerInteractor', () => {
+describe('validateAddPractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
-    const errors = validatePractitionerInteractor({
+    const errors = validateAddPractitionerInteractor({
       applicationContext,
       practitioner: {},
     });
 
     expect(Object.keys(errors)).toEqual([
-      'role',
-      'userId',
+      'email',
       'admissionsDate',
       'admissionsStatus',
-      'barNumber',
       'birthYear',
       'employer',
       'firstName',
@@ -29,20 +27,18 @@ describe('validatePractitionerInteractor', () => {
   });
 
   it('returns null on no errors', () => {
-    const errors = validatePractitionerInteractor({
+    const errors = validateAddPractitionerInteractor({
       applicationContext,
       practitioner: {
         admissionsDate: '2019-03-01T21:40:46.415Z',
         admissionsStatus: 'Active',
-        barNumber: 'PT7890',
         birthYear: '2009',
+        email: 'test@example.com',
         employer: 'IRS',
         firstName: 'Test',
         lastName: 'Practitioner',
         originalBarState: US_STATES.TX,
         practitionerType: 'Attorney',
-        role: ROLES.privatePractitioner,
-        userId: '195e31b6-20f7-4fa4-980e-4236b771cced',
       },
     });
 
