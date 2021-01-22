@@ -18,7 +18,10 @@ export const updateUserContactInformationAction = async ({
     .getUseCases()
     .updateUserContactInformationInteractor({
       applicationContext,
-      contactInfo: formUser.contact,
+      contactInfo: {
+        ...formUser.contact,
+        email: formUser.email,
+      },
       userId: currentUser.userId,
     });
 };
