@@ -24,6 +24,7 @@ export const validateUserContactAction = ({
       user: {
         ...currentUser,
         contact: formContact.contact,
+        email: formContact.email,
       },
     });
 
@@ -36,6 +37,7 @@ export const validateUserContactAction = ({
       },
       errors: {
         contact: errors,
+        email: errors.email,
       },
     });
   }
