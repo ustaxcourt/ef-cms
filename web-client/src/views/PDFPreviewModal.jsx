@@ -16,7 +16,6 @@ export const PDFPreviewModal = connect(
     pdfPreviewModal: state.modal.pdfPreviewModal,
     pdfPreviewModalHelper: state.pdfPreviewModalHelper,
     previewPdfFile: state.previewPdfFile,
-    setPageSequence: sequences.setPageSequence,
     totalPages: state.modal.pdfPreviewModal.totalPages,
   },
   function PDFPreviewModal({
