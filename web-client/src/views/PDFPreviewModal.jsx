@@ -23,7 +23,6 @@ export const PDFPreviewModal = connect(
     cancelSequence,
     confirmSequence,
     loadPdfSequence,
-    //pdfPreviewModal,
     preventScrolling,
     previewPdfFile,
     title,

@@ -557,7 +557,6 @@ const applicationContext = {
     const pdfjsLib = await import('pdfjs-dist');
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    console.log('pdfjsWorker', pdfjsLib.GlobalWorkerOptions.AnnotationFlag);
     return pdfjsLib;
   },
   getPdfLib: () => {
