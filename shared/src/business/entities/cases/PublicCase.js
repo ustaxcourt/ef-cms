@@ -88,7 +88,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     .map(
       docketEntry => new PublicDocketEntry(docketEntry, { applicationContext }),
     )
-    .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+    .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
 };
 
 PublicCase.validationName = 'PublicCase';
