@@ -24,6 +24,7 @@ export const validateUserContactAction = ({
       user: {
         ...currentUser,
         contact: formContact.contact,
+        email: formContact.email,
       },
     });
 
