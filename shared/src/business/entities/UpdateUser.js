@@ -30,12 +30,13 @@ UpdateUser.prototype.init = function init(rawUser) {
 
 const VALIDATION_ERROR_MESSAGES = {
   ...USER_VALIDATION_ERROR_MESSAGES,
-  email: 'An email is required', // TODO: get real wording
+  email: 'Enter a valid email address',
 };
 
 const updateUserValidation = {
   ...userValidation,
   email: JoiValidationConstants.EMAIL.required(),
+  entityName: JoiValidationConstants.STRING.valid(entityName).required(),
 };
 
 joiValidationDecorator(
