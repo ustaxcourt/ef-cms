@@ -1,18 +1,22 @@
 import { CerebralTest } from 'cerebral/test';
 import {
   applicationContextForClient as applicationContext,
-  getFakeFile,
+  testPdfDoc,
 } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { loadPdfSequence } from '../../sequences/PDFPreviewModal/loadPdfSequence';
 import { presenter } from '../../presenter-mock';
 
+const base64File = `data:application/pdf;base64,${Buffer.from(
+  String.fromCharCode.apply(null, testPdfDoc),
+).toString('base64')}`;
+
 const mocks = {
   readAsArrayBufferMock: jest.fn(function () {
-    this.result = 'def';
+    this.result = testPdfDoc;
     this.onload();
   }),
   readAsDataURLMock: jest.fn(function () {
-    this.result = 'abc';
+    this.result = base64File;
     this.onload();
   }),
 };
@@ -43,15 +47,12 @@ describe('loadPdfSequence', () => {
     test.setState('pdfPreviewModal', {});
     await test.runSequence('loadPdfSequence', {
       ctx: 'abc',
-      file: getFakeFile(),
+      file: testPdfDoc,
     });
     expect(test.getState('modal.pdfPreviewModal')).toMatchObject({
       ctx: 'abc',
-      currentPage: 1,
-      height: 100,
-      pdfDoc: { numPages: 5 },
-      totalPages: 5,
-      width: 100,
+      pdfDoc: expect.anything(),
+      totalPages: 1,
     });
   });
 });

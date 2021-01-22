@@ -7,9 +7,9 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 const fakeFile = testPdfDoc;
-const b64File = `data:application/pdf;base64,${btoa(
+const b64File = `data:application/pdf;base64,${Buffer.from(
   String.fromCharCode.apply(null, fakeFile),
-)}`;
+).toString('base64')}`;
 
 const mocks = {
   readAsArrayBufferMock: jest.fn().mockImplementation(async function () {
