@@ -12,9 +12,6 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
-import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
-import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
-import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -33,28 +30,16 @@ export const submitPetitionFromPaperSequence = [
       clearAlertsAction,
       startShowValidationAction,
       // receivedAt
-      setComputeFormDayFactoryAction('receivedAtDay'),
-      setComputeFormMonthFactoryAction('receivedAtMonth'),
-      setComputeFormYearFactoryAction('receivedAtYear'),
-      getComputedFormDateFactoryAction(null, true),
+      getComputedFormDateFactoryAction('receivedAt', true),
       setComputeFormDateFactoryAction('receivedAt'),
       // irsNoticeDate
-      setComputeFormDayFactoryAction('irsDay'),
-      setComputeFormMonthFactoryAction('irsMonth'),
-      setComputeFormYearFactoryAction('irsYear'),
-      getComputedFormDateFactoryAction(null, true),
+      getComputedFormDateFactoryAction('irs', true),
       setComputeFormDateFactoryAction('irsNoticeDate'),
       // petitionPaymentDate
-      setComputeFormDayFactoryAction('paymentDateDay'),
-      setComputeFormMonthFactoryAction('paymentDateMonth'),
-      setComputeFormYearFactoryAction('paymentDateYear'),
-      getComputedFormDateFactoryAction(null, true),
+      getComputedFormDateFactoryAction('paymentDate', true),
       setComputeFormDateFactoryAction('petitionPaymentDate'),
       // paymentDateWaived
-      setComputeFormDayFactoryAction('paymentDateWaivedDay'),
-      setComputeFormMonthFactoryAction('paymentDateWaivedMonth'),
-      setComputeFormYearFactoryAction('paymentDateWaivedYear'),
-      getComputedFormDateFactoryAction(null, true),
+      getComputedFormDateFactoryAction('paymentDateWaived', true),
       setComputeFormDateFactoryAction('petitionPaymentWaivedDate'),
       computeStatisticDatesAction,
       filterEmptyStatisticsAction,
