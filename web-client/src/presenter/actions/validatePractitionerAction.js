@@ -1,3 +1,4 @@
+import { combineContactErrors } from './validateAddPractitionerAction';
 import { state } from 'cerebral';
 
 /**
@@ -45,22 +46,7 @@ export const validatePractitionerAction = ({
       'admissionsDate',
     ];
 
-    //todo refactor as a part of DOD
-    if (
-      errors.address1 ||
-      errors.city ||
-      errors.country ||
-      errors.postalCode ||
-      errors.state
-    ) {
-      errors.contact = {};
-      ['address1', 'city', 'country', 'postalCode', 'state'].forEach(key => {
-        if (errors[key]) {
-          errors.contact[key] = errors[key];
-          delete errors[key];
-        }
-      });
-    }
+    combineContactErrors({ errors });
 
     return path.error({
       alertError: {
