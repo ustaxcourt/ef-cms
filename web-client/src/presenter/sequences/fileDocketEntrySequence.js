@@ -19,9 +19,6 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
-import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
-import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
-import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -76,15 +73,9 @@ export const fileDocketEntrySequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      setComputeFormDayFactoryAction('serviceDateDay'),
-      setComputeFormMonthFactoryAction('serviceDateMonth'),
-      setComputeFormYearFactoryAction('serviceDateYear'),
       getComputedFormDateFactoryAction('serviceDate'),
       setComputeFormDateFactoryAction('serviceDate'),
       computeCertificateOfServiceFormDateAction,
-      setComputeFormDayFactoryAction('dateReceivedDay'),
-      setComputeFormMonthFactoryAction('dateReceivedMonth'),
-      setComputeFormYearFactoryAction('dateReceivedYear'),
       getComputedFormDateFactoryAction('dateReceived'),
       setComputeFormDateFactoryAction('dateReceived'),
       setDocumentIsRequiredAction,

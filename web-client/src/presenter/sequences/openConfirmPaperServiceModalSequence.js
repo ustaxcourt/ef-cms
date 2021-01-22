@@ -4,9 +4,6 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
-import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
-import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
-import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -18,15 +15,9 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 export const openConfirmPaperServiceModalSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  setComputeFormDayFactoryAction('serviceDateDay'),
-  setComputeFormMonthFactoryAction('serviceDateMonth'),
-  setComputeFormYearFactoryAction('serviceDateYear'),
   getComputedFormDateFactoryAction('serviceDate'),
   setComputeFormDateFactoryAction('serviceDate'),
   computeCertificateOfServiceFormDateAction,
-  setComputeFormDayFactoryAction('dateReceivedDay'),
-  setComputeFormMonthFactoryAction('dateReceivedMonth'),
-  setComputeFormYearFactoryAction('dateReceivedYear'),
   getComputedFormDateFactoryAction('dateReceived'),
   setComputeFormDateFactoryAction('dateReceived'),
   setDocumentIsRequiredAction,
