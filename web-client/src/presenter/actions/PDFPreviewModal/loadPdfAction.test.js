@@ -45,12 +45,11 @@ describe('loadPdfAction', () => {
   });
 
   it('should detect binary (not base64-encoded) pdf data and read it successfully', async () => {
-    await runAction(loadPdfAction, {
+    const result = await runAction(loadPdfAction, {
       modules: {
         presenter,
       },
       props: {
-        ctx: 'abc',
         file: fakeFile,
       },
       state: {
@@ -59,16 +58,15 @@ describe('loadPdfAction', () => {
     });
 
     expect(mocks.readAsArrayBufferMock).toHaveBeenCalled();
-    expect(presenter.providers.path.success).toHaveBeenCalled();
+    expect(result.state.modal.pdfPreviewModal.error).toBeUndefined();
   });
 
   it('should detect base64-encoded pdf data and read it successfully', async () => {
-    await runAction(loadPdfAction, {
+    const result = await runAction(loadPdfAction, {
       modules: {
         presenter,
       },
       props: {
-        ctx: 'abc',
         file: b64File,
       },
       state: {
@@ -77,22 +75,21 @@ describe('loadPdfAction', () => {
     });
 
     expect(mocks.readAsDataURLMock).toHaveBeenCalled();
-    expect(presenter.providers.path.success).toHaveBeenCalled();
+    expect(result.state.modal.pdfPreviewModal.error).toBeUndefined();
   });
 
   it('should return an error when given an invalid pdf', async () => {
-    applicationContext.getPdfLib.mockReturnValue({
+    applicationContext.getPdfLib.mockResolvedValue({
       PDFDocument: {
-        load: Promise.reject(new Error('bad pdf data')),
+        load: jest.fn().mockRejectedValueOnce('bad pdf data'),
       },
     });
 
-    await runAction(loadPdfAction, {
+    const result = await runAction(loadPdfAction, {
       modules: {
         presenter,
       },
       props: {
-        ctx: 'abc',
         file: 'data:binary/pdf,INVALID-BYTES',
       },
       state: {
@@ -100,7 +97,7 @@ describe('loadPdfAction', () => {
       },
     });
 
-    expect(presenter.providers.path.error).toHaveBeenCalled();
+    expect(result.state.modal.pdfPreviewModal.error).toEqual('bad pdf data');
   });
 
   it('should error out when the FileReader fails', async () => {
@@ -114,7 +111,6 @@ describe('loadPdfAction', () => {
         presenter,
       },
       props: {
-        ctx: 'abc',
         file: 'this my file',
       },
       state: {
@@ -123,9 +119,32 @@ describe('loadPdfAction', () => {
     });
 
     expect(result.state.modal.pdfPreviewModal).toMatchObject({
-      ctx: 'abc',
       error: 'An error called via reader.onerror.',
     });
-    expect(presenter.providers.path.error).toHaveBeenCalled();
+  });
+
+  it('sets the pdfPreviewUrl on state from the given file', async () => {
+    const saveAsBase64Mock = jest.fn().mockResolvedValue('fakePdfUri');
+
+    applicationContext.getPdfLib.mockResolvedValue({
+      PDFDocument: {
+        load: jest.fn().mockReturnValue({
+          saveAsBase64: saveAsBase64Mock,
+        }),
+      },
+    });
+    const result = await runAction(loadPdfAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        file: b64File,
+      },
+      state: {
+        pdfPreviewModal: {},
+      },
+    });
+
+    expect(result.state.pdfPreviewUrl).toEqual('fakePdfUri');
   });
 });
