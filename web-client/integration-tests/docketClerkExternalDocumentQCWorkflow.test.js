@@ -205,6 +205,11 @@ describe('Create a work item', () => {
 
     expect(test.getState('currentPage')).toEqual('EditDocketEntry');
 
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'eventCode',
+      value: 'A',
+    });
+
     test.setState('modal.showModal', '');
 
     await test.runSequence('openCompleteAndSendMessageModalSequence');
@@ -214,6 +219,8 @@ describe('Create a work item', () => {
     expect(test.getState('modal.showModal')).toEqual(
       'CreateMessageModalDialog',
     );
+
+    expect(test.getState('modal.form.subject')).toEqual('Answer');
 
     await test.runSequence('completeDocketEntryQCAndSendMessageSequence');
 

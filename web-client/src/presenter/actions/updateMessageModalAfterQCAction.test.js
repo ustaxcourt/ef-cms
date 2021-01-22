@@ -40,6 +40,7 @@ describe('updateMessageModalAfterQCAction', () => {
 
     expect(result.state.modal.form.subject).toEqual(mockDocumentTitle);
   });
+
   it('set state.modal.form.attachments with state.docketEntryId and state.form.documentTitle', async () => {
     const result = await runAction(updateMessageModalAfterQCAction, {
       modules: { presenter },
@@ -55,5 +56,23 @@ describe('updateMessageModalAfterQCAction', () => {
     expect(result.state.modal.form.attachments).toEqual([
       { documentId: mockDocketEntryId, documentTitle: mockDocumentTitle },
     ]);
+  });
+
+  it('should call getDocumentTitleWithAdditionalInfo', async () => {
+    await runAction(updateMessageModalAfterQCAction, {
+      modules: { presenter },
+      state: {
+        docketEntryId: mockDocketEntryId,
+        form: {
+          documentTitle: mockDocumentTitle,
+        },
+        modal: { form: undefined },
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo.mock
+        .calls[0][0],
+    ).toMatchObject({ docketEntry: { documentTitle: mockDocumentTitle } });
   });
 });

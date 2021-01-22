@@ -71,8 +71,10 @@ describe('PublicDocketEntry', () => {
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          filingDate: '2020-05-27T09:23:43.007Z',
           isMinuteEntry: true,
           isOnDocketRecord: true,
+          receivedAt: '2020-05-27T09:23:43.007Z',
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         });
 
@@ -93,6 +95,7 @@ describe('PublicDocketEntry', () => {
         isOnDocketRecord: true,
         isStricken: false,
         numberOfPages: null,
+        receivedAt: '2020-05-27T09:23:43.007Z',
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       });
 
@@ -106,6 +109,7 @@ describe('PublicDocketEntry', () => {
         isOnDocketRecord: true,
         isSealed: false,
         isStricken: false,
+        receivedAt: '2020-05-27T09:23:43.007Z',
       });
     });
   });

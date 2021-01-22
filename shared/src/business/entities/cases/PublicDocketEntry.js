@@ -57,7 +57,7 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).optional(),
   filedBy: JoiValidationConstants.STRING.optional().allow('', null),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
-    .optional()
+    .required()
     .description('Date that this Document was filed.'),
   index: DOCKET_ENTRY_VALIDATION_RULE_KEYS.index,
   isFileAttached: joi.boolean().optional(),
@@ -71,8 +71,8 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
     .description('Indicates the item has been removed from the docket record.'),
   numberOfPages: DOCKET_ENTRY_VALIDATION_RULE_KEYS.numberOfPages,
   processingStatus: JoiValidationConstants.STRING.optional(),
-  receivedAt: JoiValidationConstants.ISO_DATE.optional(),
-  servedAt: JoiValidationConstants.ISO_DATE.optional(),
+  receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
+  servedAt: JoiValidationConstants.ISO_DATE.max('now').optional(),
 });
 
 joiValidationDecorator(
