@@ -34,17 +34,18 @@ export const validatePractitionerAction = ({
       'birthYear',
       'practitionerType',
       'employer',
-      'contact.country',
-      'contact.address1',
-      'contact.city',
-      'contact.state',
-      'contact.postalCode',
+      'country',
+      'address1',
+      'city',
+      'state',
+      'postalCode',
       'phone',
       'originalBarState',
       'admissionsStatus',
       'admissionsDate',
     ];
 
+    //todo refactor as a part of DOD
     if (
       errors.address1 ||
       errors.city ||
