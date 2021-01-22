@@ -103,7 +103,6 @@ export const ModalDialog = ({
             aria-modal="true"
             className={classNames('modal-dialog padding-205', className)}
             role="status"
-            style={{ maxHeight: '100vh' }}
             onClick={evt => evt.stopPropagation()}
           >
             <div className="modal-header grid-container padding-x-0">
