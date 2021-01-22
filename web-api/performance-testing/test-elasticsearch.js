@@ -11,6 +11,52 @@ const version = process.argv[3] || 'alpha';
 
 (async () => {
   const esClient = await getClient({ environmentName, version });
+  // const otherQuery = {
+  //   body: {
+  //     _source: [
+  //       'caseCaption',
+  //       'contactPrimary',
+  //       'contactSecondary',
+  //       'docketNumber',
+  //       'docketNumberSuffix',
+  //       'docketNumberWithSuffix',
+  //       'irsPractitioners',
+  //       'partyType',
+  //       'receivedAt',
+  //       'sealedDate',
+  //     ],
+  //     query: {
+  //       bool: {
+  //         must: [
+  //           {
+  //             simple_query_string: {
+  //               default_operator: 'and',
+  //               fields: [
+  //                 'contactPrimary.M.name.S',
+  //                 'contactPrimary.M.secondaryName.S',
+  //                 'contactSecondary.M.name.S',
+  //               ],
+  //               flags: 'AND|PHRASE|PREFIX',
+  //               query: 'knight stephanie bilbo',
+  //             },
+  //           },
+  //           {
+  //             match: {
+  //               'entityName.S': 'Case',
+  //             },
+  //           },
+  //         ],
+  //         must_not: {
+  //           exists: {
+  //             field: 'sealedDate',
+  //           },
+  //         },
+  //       },
+  //     },
+  //     size: 5,
+  //   },
+  //   index: 'efcms-case',
+  // };
 
   const searchString = 'knight stephanie';
   const otherQuery2 = {
@@ -91,7 +137,107 @@ const version = process.argv[3] || 'alpha';
   };
 
   let results = await esClient.search(otherQuery2);
-
+  // const orderQuery = {
+  //   body: {
+  //     _source: [
+  //       'caseCaption',
+  //       'contactPrimary',
+  //       'contactSecondary',
+  //       'docketNumber',
+  //       'docketNumberSuffix',
+  //       'docketNumberWithSuffix',
+  //       'irsPractitioners',
+  //       'partyType',
+  //       'receivedAt',
+  //       'sealedDate',
+  //     ],
+  //     query: {
+  //       bool: {
+  //         must: [
+  //           {
+  //             simple_query_string: {
+  //               default_operator: 'and',
+  //               fields: [
+  //                 'contactPrimary.M.name.S',
+  //                 'contactPrimary.M.secondaryName.S',
+  //                 'contactSecondary.M.name.S',
+  //               ],
+  //               flags: 'AND|PHRASE|PREFIX',
+  //               query: 'stephanie murrin',
+  //             },
+  //           },
+  //           {
+  //             match: {
+  //               'pk.S': 'case}',
+  //             },
+  //           },
+  //           {
+  //             match: {
+  //               'sk.S': 'case}',
+  //             },
+  //           },
+  //         ],
+  //         must_not: {
+  //           exists: {
+  //             field: 'sealedDate',
+  //           },
+  //         },
+  //       },
+  //     },
+  //     size: 20,
+  //   },
+  //   index: 'efcms-case',
+  // };
+  // const murrinquery = {
+  //   body: {
+  //     _source: [
+  //       'caseCaption',
+  //       'contactPrimary',
+  //       'contactSecondary',
+  //       'docketNumber',
+  //       'docketNumberSuffix',
+  //       'docketNumberWithSuffix',
+  //       'irsPractitioners',
+  //       'partyType',
+  //       'receivedAt',
+  //       'sealedDate',
+  //     ],
+  //     query: {
+  //       bool: {
+  //         must: [
+  //           {
+  //             query_string: {
+  //               fields: [
+  //                 'contactPrimary.M.name.S',
+  //                 'contactPrimary.M.secondaryName.S',
+  //                 'contactSecondary.M.name.S',
+  //                 'caseCaption.S',
+  //               ],
+  //               query: '*stephanie murrin*',
+  //             },
+  //           },
+  //           {
+  //             match: {
+  //               'pk.S': 'case|',
+  //             },
+  //           },
+  //           {
+  //             match: {
+  //               'sk.S': 'case|',
+  //             },
+  //           },
+  //         ],
+  //         must_not: {
+  //           exists: {
+  //             field: 'sealedDate',
+  //           },
+  //         },
+  //       },
+  //     },
+  //     size: 10,
+  //   },
+  //   index: 'efcms-case',
+  // };
   const hits = get(results, 'hits.hits');
   const formatHit = hit => {
     return {
