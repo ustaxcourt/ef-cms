@@ -43,16 +43,13 @@ describe('loadPdfSequence', () => {
     };
     test = CerebralTest(presenter);
   });
-  it('should load the expected objects onto the store and try to render the page into the context', async () => {
+  it('should load the expected objects onto the store', async () => {
     test.setState('pdfPreviewModal', {});
+
     await test.runSequence('loadPdfSequence', {
-      ctx: 'abc',
       file: testPdfDoc,
     });
-    expect(test.getState('modal.pdfPreviewModal')).toMatchObject({
-      ctx: 'abc',
-      pdfDoc: expect.anything(),
-      totalPages: 1,
-    });
+
+    expect(test.getState('pdfPreviewUrl')).toBeDefined();
   });
 });
