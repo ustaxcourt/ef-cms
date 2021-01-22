@@ -8,18 +8,26 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
-export const updateMessageModalAfterQCAction = ({ get, store }) => {
+export const updateMessageModalAfterQCAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
   store.set(state.modal.validationErrors, {});
 
-  const { documentTitle } = get(state.form);
+  const docketEntry = get(state.form);
   const documentId = get(state.docketEntryId);
 
-  store.set(state.modal.form.subject, documentTitle);
+  const generatedDocumentTitle = applicationContext
+    .getUtilities()
+    .getDocumentTitleWithAdditionalInfo({ docketEntry });
+
+  store.set(state.modal.form.subject, generatedDocumentTitle);
 
   store.set(state.modal.form.attachments, [
     {
       documentId,
-      documentTitle,
+      documentTitle: generatedDocumentTitle,
     },
   ]);
 };
