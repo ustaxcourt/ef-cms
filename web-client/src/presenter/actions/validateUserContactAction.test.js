@@ -40,4 +40,25 @@ describe('validateUserContactAction', () => {
     });
     expect(successMock).toHaveBeenCalled();
   });
+
+  it('should return the path.error with an email error in the errors object', async () => {
+    applicationContext
+      .getUseCases()
+      .validateUserContactInteractor.mockReturnValue({
+        email: 'some email error',
+      });
+
+    runAction(validateUserContactAction, {
+      modules: {
+        presenter,
+      },
+      state: { form: { contact: {} } },
+    });
+
+    expect(errorMock.mock.calls[0][0]).toMatchObject({
+      errors: {
+        email: 'some email error',
+      },
+    });
+  });
 });
