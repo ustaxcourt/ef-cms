@@ -37,6 +37,7 @@ export const validateUserContactAction = ({
       },
       errors: {
         contact: errors,
+        email: errors.email,
       },
     });
   }
