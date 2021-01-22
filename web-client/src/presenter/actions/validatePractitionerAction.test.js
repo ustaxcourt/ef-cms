@@ -1,51 +1,131 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  validatePractitionerInteractor,
-} = require('./validatePractitionerInteractor');
-const { ROLES, US_STATES } = require('../../entities/EntityConstants');
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter-mock';
+import { runAction } from 'cerebral/test';
+import { validatePractitionerAction } from './validatePractitionerAction';
 
-describe('validatePractitionerInteractor', () => {
-  it('returns the expected errors object on an empty practitioner', () => {
-    const errors = validatePractitionerInteractor({
-      applicationContext,
-      practitioner: {},
-    });
+describe('validatePractitionerAction', () => {
+  let successMock;
+  let errorMock;
 
-    expect(Object.keys(errors)).toEqual([
-      'role',
-      'userId',
-      'admissionsDate',
-      'admissionsStatus',
-      'barNumber',
-      'birthYear',
-      'employer',
-      'firstName',
-      'lastName',
-      'originalBarState',
-      'practitionerType',
-    ]);
+  const {
+    COUNTRY_TYPES,
+    US_STATES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  beforeAll(() => {
+    successMock = jest.fn();
+    errorMock = jest.fn();
+
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      error: errorMock,
+      success: successMock,
+    };
   });
 
-  it('returns null on no errors', () => {
-    const errors = validatePractitionerInteractor({
-      applicationContext,
-      practitioner: {
-        admissionsDate: '2019-03-01T21:40:46.415Z',
-        admissionsStatus: 'Active',
-        barNumber: 'PT7890',
-        birthYear: '2009',
-        employer: 'IRS',
-        firstName: 'Test',
-        lastName: 'Practitioner',
-        originalBarState: US_STATES.TX,
-        practitionerType: 'Attorney',
-        role: ROLES.privatePractitioner,
-        userId: '195e31b6-20f7-4fa4-980e-4236b771cced',
+  it('returns the success path when the use case returns no errors', () => {
+    applicationContext
+      .getUseCases()
+      .validatePractitionerInteractor.mockReturnValue(null);
+
+    runAction(validatePractitionerAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        computedDate: '2019-03-01T21:40:46.415Z',
+      },
+      state: {
+        form: {
+          barNumber: 'BN001',
+          contact: {
+            address1: '123 Some St.',
+            city: 'Some City',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            phone: '123-123-1234',
+            postalCode: '12345',
+            state: 'AL',
+          },
+          firstName: 'Test',
+          lastName: 'Attorney',
+          originalBarState: US_STATES.TX,
+          role: USER_ROLES.privatePractitioner,
+        },
       },
     });
 
-    expect(errors).toBeNull();
+    expect(successMock).toHaveBeenCalled();
+  });
+
+  it('returns the error path when the use case returns errors', () => {
+    applicationContext
+      .getUseCases()
+      .validatePractitionerInteractor.mockReturnValue({
+        firstName: 'Enter a first name',
+      });
+
+    runAction(validatePractitionerAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        computedDate: '2019-03-01T21:40:46.415Z',
+      },
+      state: {
+        form: {
+          barNumber: 'BN001',
+          contact: {
+            address1: '123 Some St.',
+            city: 'Some City',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
+            phone: '123-123-1234',
+            postalCode: '12345',
+          },
+          originalBarState: US_STATES.TX,
+          role: USER_ROLES.privatePractitioner,
+        },
+      },
+    });
+
+    expect(errorMock).toHaveBeenCalled();
+  });
+
+  it('returns the error path with nested contact errors if the use case returns contact errors', () => {
+    applicationContext
+      .getUseCases()
+      .validatePractitionerInteractor.mockReturnValue({
+        address1: 'Enter a mailing address',
+      });
+
+    runAction(validatePractitionerAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        computedDate: '2019-03-01T21:40:46.415Z',
+      },
+      state: {
+        form: {
+          barNumber: 'BN001',
+          contact: {
+            address1: '123 Some St.',
+            city: 'Some City',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
+            phone: '123-123-1234',
+            postalCode: '12345',
+          },
+          originalBarState: US_STATES.TX,
+          role: USER_ROLES.privatePractitioner,
+        },
+      },
+    });
+
+    expect(errorMock).toHaveBeenCalled();
+    expect(errorMock.mock.calls[0][0].errors).toEqual({
+      contact: {
+        address1: 'Enter a mailing address',
+      },
+    });
   });
 });
