@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const { get, pick } = require('lodash');
-const { getClient } = require('../elasticsearch/client');
+const { getClient } = require('../../../web-api/elasticsearch/client');
 
 // const mappings = require('../elasticsearch/elasticsearch-mappings');
 // const migratedCase = require('./migratedCase.json');
