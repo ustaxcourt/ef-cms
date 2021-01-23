@@ -7,8 +7,8 @@
  */
 
 // @path
-const elasticsearchMappings = require('./elasticsearch-mappings');
-const { getClient } = require('./client');
+const elasticsearchMappings = require('../../../web-api/elasticsearch/elasticsearch-mappings');
+const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const environmentName = process.argv[2] || 'exp1';
 

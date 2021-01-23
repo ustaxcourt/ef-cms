@@ -1,4 +1,4 @@
-const { getClient } = require('../elasticsearch/client');
+const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';

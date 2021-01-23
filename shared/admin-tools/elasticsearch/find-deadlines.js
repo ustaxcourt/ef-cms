@@ -1,7 +1,7 @@
-const createApplicationContext = require('../src/applicationContext');
-const { Case } = require('../../shared/src/business/entities/cases/Case');
+const createApplicationContext = require('../../../web-api/src/applicationContext');
+const { Case } = require('../../src/business/entities/cases/Case');
 const { DynamoDB } = require('aws-sdk');
-const { getClient } = require('../elasticsearch/client');
+const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const applicationContext = createApplicationContext({});
 
