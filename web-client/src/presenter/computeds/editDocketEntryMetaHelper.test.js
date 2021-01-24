@@ -103,4 +103,42 @@ describe('editDocketEntryMetaHelper', () => {
       expect(result.strickenAtFormatted).toEqual('03/01/2019');
     });
   });
+
+  it('should show the secondary document form for a Nonstandard H document type', () => {
+    const result = runCompute(editDocketEntryMetaHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [],
+          partyType: PARTY_TYPES.petitioner,
+        },
+        docketEntryId: 'e097200c-031a-4520-b306-5e1e4b1e2cc7',
+        form: {
+          docketEntryId: 'e097200c-031a-4520-b306-5e1e4b1e2cc7',
+          documentType: 'Motion for Leave to File',
+          eventCode: 'M115',
+        },
+      },
+    });
+
+    expect(result.primary.showSecondaryDocumentForm).toBeTruthy();
+  });
+
+  it('should not show the secondary document form for a Nonstandard A document type', () => {
+    const result = runCompute(editDocketEntryMetaHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [],
+          partyType: PARTY_TYPES.petitioner,
+        },
+        docketEntryId: 'e097200c-031a-4520-b306-5e1e4b1e2cc7',
+        form: {
+          docketEntryId: 'e097200c-031a-4520-b306-5e1e4b1e2cc7',
+          documentType: 'Notice of No Objection',
+          eventCode: 'NNOB',
+        },
+      },
+    });
+
+    expect(result.primary.showSecondaryDocumentForm).toBeFalsy();
+  });
 });

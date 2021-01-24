@@ -57,7 +57,8 @@ describe('createCaseInteractor', () => {
       applicationContext.getPersistenceGateway().createCase,
     ).not.toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).not.toBeCalled();
   });
 
@@ -100,7 +101,8 @@ describe('createCaseInteractor', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toBeCalled();
   });
 
@@ -190,7 +192,8 @@ describe('createCaseInteractor', () => {
     ]);
     expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toBeCalled();
   });
 
@@ -253,7 +256,8 @@ describe('createCaseInteractor', () => {
     ]);
     expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toBeCalled();
   });
 });

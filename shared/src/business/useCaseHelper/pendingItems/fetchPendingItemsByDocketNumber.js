@@ -1,5 +1,5 @@
 const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
+const { DocketEntry, isServed } = require('../../entities/DocketEntry');
 const { omit } = require('lodash');
 
 /**
@@ -31,10 +31,7 @@ exports.fetchPendingItemsByDocketNumber = async ({
   let foundDocuments = [];
 
   docketEntries.forEach(docketEntry => {
-    if (
-      docketEntry.pending &&
-      (docketEntry.servedAt || docketEntry.isLegacyServed)
-    ) {
+    if (docketEntry.pending && isServed(docketEntry)) {
       foundDocuments.push({
         ...omit(
           new DocketEntry(

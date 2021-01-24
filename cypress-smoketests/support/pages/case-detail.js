@@ -13,8 +13,10 @@ exports.goToCaseDetail = docketNumber => {
 
 exports.goToCaseOverview = docketNumber => {
   cy.goToRoute(`/case-detail/${docketNumber}`);
+  cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
   cy.get('#tab-case-information').click();
   cy.get('#tab-overview').click();
+  cy.get('.internal-information').should('exist');
 };
 
 exports.createOrder = docketNumber => {
@@ -132,20 +134,21 @@ exports.removeCaseFromTrialSession = () => {
   cy.get('#remove-from-trial-session-btn').should('exist').click();
   cy.get('#disposition').type(faker.company.catchPhrase());
   cy.get('#modal-root .modal-button-confirm').click();
-  cy.get('#add-to-trial-session-btn').should('not.exist');
+  cy.get('#add-to-trial-session-btn').should('exist');
+  cy.get('.usa-alert--success').should('contain', 'Case removed from trial.');
 };
 
 exports.blockCaseFromTrial = () => {
   cy.get('#tabContent-overview .block-from-trial-btn').click();
   cy.get('.modal-dialog #reason').type(faker.company.catchPhrase());
   cy.get('.modal-dialog .modal-button-confirm').click();
-  cy.contains('Blocked From Trial');
+  cy.contains('Blocked From Trial').should('exist');
 };
 
 exports.unblockCaseFromTrial = () => {
   cy.get('#remove-block').click();
   cy.get('.modal-button-confirm').click();
-  cy.contains('Block removed.');
+  cy.contains('Block removed.').should('exist');
 };
 
 exports.setCaseAsHighPriority = () => {

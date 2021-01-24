@@ -31,7 +31,7 @@ exports.getScannerInterface = () => {
         const dynamScriptClass = 'dynam-scanner-injection';
 
         // Create a script element to inject into the header
-        const initiateScript = document.createElement('script');
+        const initiateScript = window.document.createElement('script');
         initiateScript.type = 'text/javascript';
         initiateScript.async = true;
         initiateScript.setAttribute('class', dynamScriptClass);
@@ -71,8 +71,12 @@ exports.getScannerInterface = () => {
         configScript.src = `${scannerResourceUri}/dynamsoft.webtwain.config.js`;
 
         // Inject scripts into <head />
-        document.getElementsByTagName('head')[0].appendChild(initiateScript);
-        document.getElementsByTagName('head')[0].appendChild(configScript);
+        window.document
+          .getElementsByTagName('head')[0]
+          .appendChild(initiateScript);
+        window.document
+          .getElementsByTagName('head')[0]
+          .appendChild(configScript);
       });
     }
 

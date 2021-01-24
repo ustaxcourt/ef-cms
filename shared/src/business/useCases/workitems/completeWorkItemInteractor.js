@@ -82,9 +82,9 @@ exports.completeWorkItemInteractor = async ({
     }
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseToUpdate.validate().toRawObject(),
+    caseToUpdate: caseToUpdate,
   });
 
   return completedWorkItem;

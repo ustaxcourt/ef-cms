@@ -4,13 +4,17 @@ const {
   CASE_WITH_OTHER_FILERS,
   CASE_WITH_OTHER_PETITIONERS,
 } = require('../fixtures/caseMigrations');
-const { getRestApi, getUserToken } = require('../support/pages/login');
+const {
+  getEnvironmentSpecificFunctions,
+} = require('../support/pages/environment-specific-factory');
 
 let token = null;
 let restApi = null;
 
 describe('Case Migration', () => {
   let docketNumber;
+
+  const { getRestApi, getUserToken } = getEnvironmentSpecificFunctions();
 
   before(async () => {
     const results = await getUserToken(

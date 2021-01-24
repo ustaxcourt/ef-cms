@@ -11,15 +11,16 @@ const {
   searchOpinionByKeyword,
 } = require('../support/pages/advanced-search');
 const {
-  closeScannerSetupDialog,
+  fillInCreateCaseFromPaperForm,
+} = require('../../cypress/support/pages/create-paper-petition');
+const {
+  getEnvironmentSpecificFunctions,
+} = require('../support/pages/environment-specific-factory');
+const {
   goToCreateCase,
   goToReviewCase,
   serveCaseToIrs,
 } = require('../support/pages/create-paper-case');
-const {
-  fillInCreateCaseFromPaperForm,
-} = require('../../cypress/support/pages/create-paper-petition');
-const { getUserToken, login } = require('../support/pages/login');
 const { goToCaseDetail } = require('../support/pages/case-detail');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
@@ -27,6 +28,12 @@ const barNumberToSearchBy = 'PT1234';
 let testData = {};
 let token;
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+
+const {
+  closeScannerSetupDialog,
+  getUserToken,
+  login,
+} = getEnvironmentSpecificFunctions();
 
 describe('Create and serve a case to search for', () => {
   before(async () => {

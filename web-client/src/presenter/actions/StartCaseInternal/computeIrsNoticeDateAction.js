@@ -33,5 +33,5 @@ export const computeIrsNoticeDateAction = ({
 
   store.set(state.form.irsNoticeDate, irsNoticeDate);
 
-  return { computedIrsNoticeDate: irsNoticeDate };
+  return { irsNoticeDate };
 };

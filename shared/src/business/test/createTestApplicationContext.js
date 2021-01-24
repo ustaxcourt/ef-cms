@@ -111,17 +111,20 @@ const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
-  saveWorkItemForNonPaper,
-} = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
+  saveWorkItemAndAddToSectionInbox,
+} = require('../../persistence/dynamo/workitems/saveWorkItemAndAddToSectionInbox');
 const {
-  saveWorkItemForPaper,
-} = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
+  saveWorkItemAndAddToUserAndSectionInbox,
+} = require('../../persistence/dynamo/workitems/saveWorkItemAndAddToUserAndSectionInbox');
 const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
 const {
   setWorkItemAsRead,
 } = require('../../persistence/dynamo/workitems/setWorkItemAsRead');
+const {
+  updateCaseAndAssociations,
+} = require('../useCaseHelper/caseAssociation/updateCaseAndAssociations');
 const {
   updateCaseAutomaticBlock,
 } = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
@@ -208,6 +211,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
+    computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
     createEndOfDayISO: jest
       .fn()
       .mockImplementation(DateHandler.createEndOfDayISO),
@@ -291,6 +295,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
+    updateCaseAndAssociations: jest
+      .fn()
+      .mockImplementation(updateCaseAndAssociations),
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
@@ -388,10 +395,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDocumentFromLambda: jest.fn(),
-    saveWorkItemForNonPaper: jest
+    saveWorkItemAndAddToSectionInbox: jest
       .fn()
-      .mockImplementation(saveWorkItemForNonPaper),
-    saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
+      .mockImplementation(saveWorkItemAndAddToSectionInbox),
+    saveWorkItemAndAddToUserAndSectionInbox: jest
+      .fn()
+      .mockImplementation(saveWorkItemAndAddToUserAndSectionInbox),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
@@ -546,12 +555,19 @@ Object.entries(applicationContext).map(([key, value]) => {
   }
 });
 
+const over1000Characters =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam volutpat turpis in turpis tincidunt sagittis. Pellentesque fringilla fringilla fermentum. Suspendisse porta semper diam sit amet lobortis. Nam commodo turpis velit, id vestibulum quam porttitor a. Nulla metus eros, interdum eu blandit non, scelerisque at tellus. Ut pretium pretium magna non feugiat. Pellentesque vestibulum tempor leo finibus lobortis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vestibulum blandit, urna eu porta eleifend, tortor ante aliquet arcu, non venenatis purus enim in ex. In sed accumsan nibh. In pulvinar id dui id aliquam. Vestibulum ante felis, porta id accumsan sed, hendrerit non arcu. Sed suscipit elit at metus pulvinar, iaculis vulputate justo volutpat. Pellentesque a dolor pharetra risus ornare semper eu at massa. Integer ut rutrum lacus, posuere dignissim massa. Etiam molestie at tortor mollis semper. Donec pulvinar mauris ac commodo malesuada. In quis tellus euismod, tempor quam et, dapibus lacus. Donec gravida tempor nunc, a maximus lectus fermentum vitae. Nullam hendrerit, nisi at fermentum scelerisque, massa nibh varius purus, at dapibus lorem massa id enim. Maecenas aliquet arcu mi, ut volutpat eros consectetur ac. Quisque dolor eros, posuere commodo vehicula sed, auctor ac nulla. Etiam sit amet massa justo. Nunc ullamcorper porta lorem quis maximus. Donec congue vel est eget accumsan. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean non suscipit tortor.';
+const over3000Characters =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec sem quis, interdum condimentum ligula. Quisque interdum, tortor efficitur fringilla pharetra, elit risus blandit lacus, sit amet finibus felis lacus in felis. Curabitur at nisl velit. Vestibulum pellentesque tincidunt neque, vel maximus nisl porttitor nec. Nulla et sagittis lorem, in accumsan mi. Sed ultricies magna eu diam finibus, sed blandit sem ultrices. Nullam consequat malesuada vestibulum. Quisque dictum mattis vulputate. Sed ut facilisis nisi. Vestibulum in nunc nulla. Aenean ut dui iaculis, euismod nisl sit amet, porta ex. Quisque ultricies dui tellus, in maximus enim aliquet quis. Praesent id tincidunt ipsum. Sed non vulputate mauris. Praesent dignissim metus in nunc egestas, id tincidunt elit fringilla. In tincidunt, massa ut blandit condimentum, diam neque vulputate lacus, at condimentum tellus felis at nisl. Curabitur purus diam, cursus vel feugiat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec sem quis, interdum condimentum ligula. Quisque interdum, tortor efficitur fringilla pharetra, elit risus blandit lacus, sit amet finibus felis lacus in felis. Curabitur at nisl velit. Vestibulum pellentesque tincidunt neque, vel maximus nisl porttitor nec. Nulla et sagittis lorem, in accumsan mi. Sed ultricies magna eu diam finibus, sed blandit sem ultrices. Nullam consequat malesuada vestibulum. Quisque dictum mattis vulputate. Sed ut facilisis nisi. Vestibulum in nunc nulla. Aenean ut dui iaculis, euismod nisl sit amet, porta ex. Quisque ultricies dui tellus, in maximus enim aliquet quis. Praesent id tincidunt ipsum. Sed non vulputate mauris. Praesent dignissim metus in nunc egestas, id tincidunt elit fringilla. In tincidunt, massa ut blandit condimentum, diam neque vulputate lacus, at condimentum tellus felis at nisl. Curabitur purus diam, cursus vel feugiat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec sem quis, interdum condimentum ligula. Quisque interdum, tortor efficitur fringilla pharetra, elit risus blandit lacus, sit amet finibus felis lacus in felis. Curabitur at nisl velit. Vestibulum pellentesque tincidunt neque, vel maximus nisl porttitor nec. Nulla et sagittis lorem, in accumsan mi. Sed ultricies magna eu diam finibus, sed blandit sem ultrices. Nullam consequat malesuada vestibulum. Quisque dictum mattis vulputate. Sed ut facilisis nisi. Vestibulum in nunc nulla. Aenean ut dui iaculis, euismod nisl sit amet, porta ex. Quisque ultricies dui tellus, in maximus enim aliquet quis. Praesent id tincidunt ipsum. Sed non vulputate mauris. Praesent dignissim metus in nunc egestas, id tincidunt elit fringilla. In tincidunt, massa ut blandit condimentum, diam neque vulputate lacus, at condimentum tellus felis at nisl. Curabitur purus diam, cursus vel feugiat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec se';
+
 module.exports = {
   applicationContext,
   applicationContextForClient,
   createTestApplicationContext,
   fakeData,
   getFakeFile,
+  over1000Characters,
+  over3000Characters,
   testInvalidPdfDoc,
   testPdfDoc,
 };

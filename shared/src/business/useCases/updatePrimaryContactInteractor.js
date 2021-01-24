@@ -156,10 +156,12 @@ exports.updatePrimaryContactInteractor = async ({
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
 
-      await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
-      });
+      await applicationContext
+        .getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox({
+          applicationContext,
+          workItem: workItem.validate().toRawObject(),
+        });
     }
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
@@ -192,10 +194,10 @@ exports.updatePrimaryContactInteractor = async ({
     });
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
-  return caseEntity.validate().toRawObject();
+  return caseEntity.toRawObject();
 };
