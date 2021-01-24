@@ -171,9 +171,9 @@ exports.fileDocketEntryInteractor = async ({
       caseEntity,
     });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   const workItemsSaved = [];
@@ -196,10 +196,12 @@ exports.fileDocketEntryInteractor = async ({
       );
     } else {
       workItemsSaved.push(
-        applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-          applicationContext,
-          workItem: workItem.validate().toRawObject(),
-        }),
+        applicationContext
+          .getPersistenceGateway()
+          .saveWorkItemAndAddToSectionInbox({
+            applicationContext,
+            workItem: workItem.validate().toRawObject(),
+          }),
       );
     }
   }

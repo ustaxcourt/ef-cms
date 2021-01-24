@@ -159,9 +159,9 @@ exports.saveSignedDocumentInteractor = async ({
     caseEntity.updateDocketEntry(signedDocketEntryEntity);
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   return {

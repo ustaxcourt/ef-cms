@@ -77,17 +77,19 @@ createAdmin() {
   role=$2
   name=$3
 
-  aws cognito-idp sign-up \
-    --region "${REGION}" \
-    --client-id "${CLIENT_ID}" \
-    --username "${email}" \
-    --user-attributes 'Name="name",'Value="${name}" 'Name="custom:role",'Value="${role}" \
-    --password "${USTC_ADMIN_PASS}" || true
-
-  aws cognito-idp admin-confirm-sign-up \
-    --region "${REGION}" \
+  aws cognito-idp admin-create-user \
     --user-pool-id "${USER_POOL_ID}" \
-    --username "${email}" || true
+    --username "${email}" \
+    --region "${REGION}" \
+    --user-attributes 'Name="name",'Value="${name}" 'Name="custom:role",'Value="${role}" \
+    --temporary-password "${USTC_ADMIN_PASS}" || true
+
+  aws cognito-idp admin-set-user-password \
+    --user-pool-id "${USER_POOL_ID}" \
+    --username "${email}" \
+    --region "${REGION}" \
+    --password "${USTC_ADMIN_PASS}" \
+    --permanent || true
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \

@@ -127,7 +127,8 @@ describe('update primary contact on a case', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toBeCalled();
   });
 
@@ -164,7 +165,8 @@ describe('update primary contact on a case', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).not.toBeCalled();
   });
 
