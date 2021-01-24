@@ -215,7 +215,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
             saveWorkItems.push(
               applicationContext
                 .getPersistenceGateway()
-                .saveWorkItemForNonPaper({
+                .saveWorkItemAndAddToSectionInbox({
                   applicationContext,
                   workItem: workItem.validate().toRawObject(),
                 }),
@@ -240,10 +240,12 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
         saveCasesMap[
           caseEntity.docketNumber
-        ] = await applicationContext.getPersistenceGateway().updateCase({
-          applicationContext,
-          caseToUpdate: caseEntity.validate().toRawObject(),
-        });
+        ] = await applicationContext
+          .getUseCaseHelpers()
+          .updateCaseAndAssociations({
+            applicationContext,
+            caseToUpdate: caseEntity,
+          });
       } // consolidatedCases
     }
   } // documentsToAdd

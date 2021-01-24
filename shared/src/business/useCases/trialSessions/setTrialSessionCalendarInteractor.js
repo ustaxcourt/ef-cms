@@ -6,6 +6,7 @@ const {
   TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
+const { partition } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -30,9 +31,9 @@ const removeManuallyAddedCaseFromTrialSession = ({
 
   caseEntity.removeFromTrialWithAssociatedJudge();
 
-  return applicationContext.getPersistenceGateway().updateCase({
+  return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 };
 
@@ -77,20 +78,16 @@ exports.setTrialSessionCalendarInteractor = async ({
       trialSessionId,
     });
 
-  const manuallyAddedQcCompleteCases = [];
-  const manuallyAddedQcIncompleteCases = [];
-
   // these cases are already on the caseOrder, so if they have not been QCed we have to remove them
-  manuallyAddedCases.forEach(manualCase => {
-    if (
+  const [
+    manuallyAddedQcCompleteCases,
+    manuallyAddedQcIncompleteCases,
+  ] = partition(
+    manuallyAddedCases,
+    manualCase =>
       manualCase.qcCompleteForTrial &&
-      manualCase.qcCompleteForTrial[trialSessionId] === true
-    ) {
-      manuallyAddedQcCompleteCases.push(manualCase);
-    } else {
-      manuallyAddedQcIncompleteCases.push(manualCase);
-    }
-  });
+      manualCase.qcCompleteForTrial[trialSessionId] === true,
+  );
 
   let eligibleCasesLimit =
     trialSessionEntity.maxCases + TRIAL_SESSION_ELIGIBLE_CASES_BUFFER;
@@ -134,9 +131,9 @@ exports.setTrialSessionCalendarInteractor = async ({
         highPriority: true,
         trialDate: caseEntity.trialDate,
       }),
-      applicationContext.getPersistenceGateway().updateCase({
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseToUpdate: caseEntity,
       }),
     ]);
   };
@@ -160,9 +157,9 @@ exports.setTrialSessionCalendarInteractor = async ({
         highPriority: true,
         trialDate: caseEntity.trialDate,
       }),
-      applicationContext.getPersistenceGateway().updateCase({
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseToUpdate: caseEntity,
       }),
       applicationContext
         .getPersistenceGateway()

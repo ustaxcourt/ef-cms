@@ -58,8 +58,14 @@ Inactive
 * new attorney is created in the DB with automated bar number generated
 * user is navigated to the Practitioner Detail screen with success message displayed
 
+## Practitioner without email address
+* Although email is required to add a practitioner to the database, some practitioners were migrated into the system without an email address
+* Practitioners without email automatically default to paper service
+
 
 ## Editing Practitioner information
+### Adding email address for a practitioner without email
+* When adding an email to a practitioner who previously had no email on record, the practitioner service indicator updates to electronic for all existing cases assciated with that practitioner
 
 ### Admissions clerk edits practitioner contact info in DB
 If Address is changed in DB:

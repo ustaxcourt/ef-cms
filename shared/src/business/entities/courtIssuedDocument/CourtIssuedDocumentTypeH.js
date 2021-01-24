@@ -42,7 +42,7 @@ CourtIssuedDocumentTypeH.schema = {
   documentType: JoiValidationConstants.STRING.required(),
   eventCode: CourtIssuedDocumentDefault.schema.eventCode,
   filingDate: CourtIssuedDocumentDefault.schema.filingDate,
-  freeText: JoiValidationConstants.STRING.required(),
+  freeText: JoiValidationConstants.STRING.max(1000).required(),
 };
 
 joiValidationDecorator(

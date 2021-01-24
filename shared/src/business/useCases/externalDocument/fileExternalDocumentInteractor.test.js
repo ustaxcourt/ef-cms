@@ -127,7 +127,8 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
@@ -223,7 +224,8 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
@@ -251,11 +253,12 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0],
     ).toMatchObject({
       workItem: { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
     });
@@ -277,11 +280,12 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0],
     ).toMatchObject({
       workItem: { highPriority: false },
     });

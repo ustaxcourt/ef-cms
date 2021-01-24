@@ -211,4 +211,112 @@ describe('caseDetailPractitionerSearchHelper', () => {
     });
     expect(result.respondentSearchResultsCount).toBeUndefined();
   });
+
+  it('should return showMultiplePractitioners true and showOnePractitioner false if practitioner search results count is greater than one', () => {
+    const user = {
+      role: ROLES.privatePractitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailPractitionerSearchHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [] },
+        form: {},
+        modal: { practitionerMatches: [{ name: '1' }, { name: '2' }] },
+      },
+    });
+
+    expect(result.showMultiplePractitioners).toEqual(true);
+    expect(result.showOnePractitioner).toEqual(false);
+  });
+
+  it('should return showOnePractitioner true and showMultiplePractitioners false if practitioner search results count is only one', () => {
+    const user = {
+      role: ROLES.privatePractitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailPractitionerSearchHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [] },
+        form: {},
+        modal: { practitionerMatches: [{ name: '1' }] },
+      },
+    });
+
+    expect(result.showOnePractitioner).toEqual(true);
+    expect(result.showMultiplePractitioners).toEqual(false);
+  });
+
+  it('should return showOnePractitioner false and showMultiplePractitioners false if there are no practitioner search results', () => {
+    const user = {
+      role: ROLES.privatePractitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailPractitionerSearchHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [] },
+        form: {},
+        modal: {},
+      },
+    });
+
+    expect(result.showOnePractitioner).toEqual(false);
+    expect(result.showMultiplePractitioners).toEqual(false);
+  });
+
+  it('should return showMultipleRespondents true and showOneRespondent false if respondent search results count is greater than one', () => {
+    const user = {
+      role: ROLES.privatePractitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailPractitionerSearchHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [] },
+        form: {},
+        modal: { respondentMatches: [{ name: '1' }, { name: '2' }] },
+      },
+    });
+
+    expect(result.showMultipleRespondents).toEqual(true);
+    expect(result.showOneRespondent).toEqual(false);
+  });
+
+  it('should return showOneRespondent true and showMultipleRespondents false if respondent search results count is only one', () => {
+    const user = {
+      role: ROLES.privatePractitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailPractitionerSearchHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [] },
+        form: {},
+        modal: { respondentMatches: [{ name: '1' }] },
+      },
+    });
+
+    expect(result.showOneRespondent).toEqual(true);
+    expect(result.showMultipleRespondents).toEqual(false);
+  });
+
+  it('should return showOneRespondent false and showMultipleRespondents false if there are no respondent search results', () => {
+    const user = {
+      role: ROLES.privatePractitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailPractitionerSearchHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { docketEntries: [] },
+        form: {},
+        modal: {},
+      },
+    });
+
+    expect(result.showOneRespondent).toEqual(false);
+    expect(result.showMultipleRespondents).toEqual(false);
+  });
 });

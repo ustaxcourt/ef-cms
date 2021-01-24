@@ -109,7 +109,7 @@ export const CaseDeadlines = connect(
                     >
                       <option value="">-Judge-</option>
                       {caseDeadlineReportHelper.judges.map((judge, idx) => (
-                        <option key={idx} value={judge}>
+                        <option key={`deadline-judge-${idx}`} value={judge}>
                           {judge}
                         </option>
                       ))}
@@ -130,7 +130,7 @@ export const CaseDeadlines = connect(
                   </thead>
                   <tbody>
                     {caseDeadlineReportHelper.caseDeadlines.map((item, idx) => (
-                      <tr key={idx}>
+                      <tr key={`deadline-${idx}`}>
                         <td className="smaller-column semi-bold">
                           {item.formattedDeadline}
                         </td>

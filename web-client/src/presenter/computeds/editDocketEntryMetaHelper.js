@@ -36,6 +36,11 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
     selectedDocketEntryId,
   });
 
+  if (optionsForCategory.showSecondaryDocumentSelect) {
+    optionsForCategory.showSecondaryDocumentSelect = false;
+    optionsForCategory.showSecondaryDocumentForm = true;
+  }
+
   const strickenAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(strickenAt, 'MMDDYYYY');
