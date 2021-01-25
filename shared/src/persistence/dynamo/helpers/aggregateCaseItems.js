@@ -11,40 +11,68 @@ const getAssociatedJudge = (theCase, caseAndCaseItems) => {
   }
 };
 
+const isArchivedCorrespondenceItem = item =>
+  item.sk.startsWith('correspondence|') && item.archived;
+
+const isArchivedDocketEntryItem = item =>
+  item.sk.startsWith('docket-entry|') && item.archived;
+
+const isCaseItem = item => item.sk.startsWith('case|');
+
+const isCorrespondenceItem = item =>
+  item.sk.startsWith('correspondence|') && !item.archived;
+
+const isDocketEntryItem = item =>
+  item.sk.startsWith('docket-entry|') && !item.archived;
+
+const isHearingItem = item => item.sk.startsWith('hearing|');
+
+const isIrsPractitionerItem = item => item.sk.startsWith('irsPractitioner|');
+
+const isPrivatePractitionerItem = item =>
+  item.sk.startsWith('privatePractitioner|');
+
 exports.aggregateCaseItems = caseAndCaseItems => {
-  const theCase = caseAndCaseItems
-    .filter(item => item.sk.startsWith('case|'))
-    .pop();
+  let archivedCorrespondences = [];
+  let archivedDocketEntries = [];
+  let caseRecords = [];
+  let correspondences = [];
+  let docketEntries = []; // documents
+  let hearings = [];
+  let irsPractitioners = [];
+  let privatePractitioners = [];
 
-  const documents = caseAndCaseItems.filter(
-    item => item.sk.startsWith('docket-entry|') && !item.archived,
-  );
+  caseAndCaseItems.forEach(item => {
+    if (isDocketEntryItem(item)) {
+      // Docket Entries
+      docketEntries.push(item);
+    } else if (isArchivedDocketEntryItem(item)) {
+      // Archived Docket Entries
+      archivedDocketEntries.push(item);
+    } else if (isCorrespondenceItem(item)) {
+      // Correspondences
+      correspondences.push(item);
+    } else if (isArchivedCorrespondenceItem(item)) {
+      // Archived Correspondences
+      archivedCorrespondences.push(item);
+    } else if (isCaseItem(item)) {
+      // Case Records
+      caseRecords.push(item);
+    } else if (isHearingItem(item)) {
+      // Hearings
+      hearings.push(item);
+    } else if (isIrsPractitionerItem(item)) {
+      // IRS Practitioners
+      irsPractitioners.push(item);
+    } else if (isPrivatePractitionerItem(item)) {
+      // Private Practitioners
+      privatePractitioners.push(item);
+    }
+  });
 
-  const hearings = caseAndCaseItems.filter(item =>
-    item.sk.startsWith('hearing|'),
-  );
+  const theCase = caseRecords.pop();
 
-  const archivedDocketEntries = caseAndCaseItems.filter(
-    item => item.sk.startsWith('docket-entry|') && item.archived,
-  );
-
-  const privatePractitioners = caseAndCaseItems.filter(item =>
-    item.sk.startsWith('privatePractitioner|'),
-  );
-
-  const irsPractitioners = caseAndCaseItems.filter(item =>
-    item.sk.startsWith('irsPractitioner|'),
-  );
-
-  const correspondences = caseAndCaseItems.filter(
-    item => item.sk.startsWith('correspondence|') && !item.archived,
-  );
-
-  const archivedCorrespondences = caseAndCaseItems.filter(
-    item => item.sk.startsWith('correspondence|') && item.archived,
-  );
-
-  const sortedDocuments = sortBy(documents, 'createdAt');
+  const sortedDocketEntries = sortBy(docketEntries, 'createdAt');
 
   const sortedArchivedDocketEntries = sortBy(
     archivedDocketEntries,
@@ -63,7 +91,7 @@ exports.aggregateCaseItems = caseAndCaseItems => {
     archivedDocketEntries: sortedArchivedDocketEntries,
     associatedJudge: getAssociatedJudge(theCase, caseAndCaseItems),
     correspondence: sortedCorrespondences,
-    docketEntries: sortedDocuments,
+    docketEntries: sortedDocketEntries,
     hearings,
     irsPractitioners,
     privatePractitioners,
@@ -71,3 +99,11 @@ exports.aggregateCaseItems = caseAndCaseItems => {
 };
 
 exports.getAssociatedJudge = getAssociatedJudge;
+exports.isArchivedCorrespondenceItem = isArchivedCorrespondenceItem;
+exports.isArchivedDocketEntryItem = isArchivedDocketEntryItem;
+exports.isCaseItem = isCaseItem;
+exports.isCorrespondenceItem = isCorrespondenceItem;
+exports.isDocketEntryItem = isDocketEntryItem;
+exports.isHearingItem = isHearingItem;
+exports.isIrsPractitionerItem = isIrsPractitionerItem;
+exports.isPrivatePractitionerItem = isPrivatePractitionerItem;

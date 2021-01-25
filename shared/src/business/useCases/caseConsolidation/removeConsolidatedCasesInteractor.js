@@ -62,9 +62,9 @@ exports.removeConsolidatedCasesInteractor = async ({
       caseEntity.setLeadCase(newLeadCase.docketNumber);
 
       updateCasePromises.push(
-        applicationContext.getPersistenceGateway().updateCase({
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
-          caseToUpdate: caseEntity.validate().toRawObject(),
+          caseToUpdate: caseEntity,
         }),
       );
     }
@@ -75,9 +75,9 @@ exports.removeConsolidatedCasesInteractor = async ({
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getPersistenceGateway().updateCase({
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseToUpdate: caseEntity,
       }),
     );
   }
@@ -100,9 +100,9 @@ exports.removeConsolidatedCasesInteractor = async ({
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getPersistenceGateway().updateCase({
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseToUpdate: caseEntity,
       }),
     );
   }

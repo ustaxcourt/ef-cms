@@ -14,7 +14,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry } = require('./DocketEntry');
+const { DocketEntry, isServed } = require('./DocketEntry');
 const { omit } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
@@ -101,6 +101,52 @@ describe('DocketEntry entity', () => {
       };
       const doc4 = new DocketEntry(raw4, { applicationContext });
       expect(doc4.pending).toBeTruthy();
+    });
+  });
+
+  describe('isCourtIssued', () => {
+    it('should return false when the docketEntry.eventCode is NOT in the list of court issued documents', () => {
+      const doc1 = new DocketEntry(
+        { eventCode: 'PMT' },
+        { applicationContext },
+      );
+
+      expect(doc1.isCourtIssued()).toBeFalsy();
+    });
+
+    it('should return true when the docketEntry.eventCode is in the list of court issued documents', () => {
+      const doc1 = new DocketEntry({ eventCode: 'O' }, { applicationContext });
+
+      expect(doc1.isCourtIssued()).toBeTruthy();
+    });
+  });
+
+  describe('isServed', () => {
+    it('should return false when servedAt is undefined and isLegacyServed is false', () => {
+      const doc1 = new DocketEntry(
+        { isLegacyServed: undefined, servedAt: undefined },
+        { applicationContext },
+      );
+
+      expect(isServed(doc1)).toBeFalsy();
+    });
+
+    it('should return true when servedAt is defined', () => {
+      const doc1 = new DocketEntry(
+        { isLegacyServed: undefined, servedAt: '2020-07-17T19:28:29.675Z' },
+        { applicationContext },
+      );
+
+      expect(isServed(doc1)).toBeTruthy();
+    });
+
+    it('should return true when servedAt is undefined and isLegacyServed is true', () => {
+      const doc1 = new DocketEntry(
+        { isLegacyServed: true, servedAt: undefined },
+        { applicationContext },
+      );
+
+      expect(isServed(doc1)).toBeTruthy();
     });
   });
 
@@ -1667,6 +1713,16 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           documentTitle: 'Amended Simultaneous Memoranda of Law',
+        },
+        { applicationContext },
+      );
+      expect(docketEntry.isAutoServed()).toBeFalsy();
+    });
+
+    it('should return false if the documentType is an external document and the documentType contains Simultaneous', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
           documentType: 'Amended Simultaneous Memoranda of Law',
         },
         { applicationContext },
@@ -1725,7 +1781,7 @@ describe('DocketEntry entity', () => {
   });
 
   describe('secondaryDocument validation', () => {
-    it('should not be valid if secondaryDocument is present and the scenario is not Nonstandard H', () => {
+    it('should not set value of secondaryDocument if the scenario is not Nonstandard H', () => {
       const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
@@ -1735,6 +1791,21 @@ describe('DocketEntry entity', () => {
         },
         { applicationContext },
       );
+      expect(createdDocketEntry.secondaryDocument).toBeUndefined();
+      expect(createdDocketEntry.isValid()).toEqual(true);
+    });
+    it('should not be valid if secondaryDocument is present and the scenario is not Nonstandard H', () => {
+      const createdDocketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
+          scenario: 'Standard',
+        },
+        { applicationContext },
+      );
+      createdDocketEntry.secondaryDocument = {
+        secondaryDocumentInfo: 'was set by accessor rather than init',
+      };
       expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
         Object.keys(createdDocketEntry.getFormattedValidationErrors()),

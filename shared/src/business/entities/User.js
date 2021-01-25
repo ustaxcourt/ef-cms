@@ -94,12 +94,12 @@ const baseUserValidation = {
   judgeFullName: JoiValidationConstants.STRING.max(100).when('role', {
     is: ROLES.judge,
     otherwise: joi.optional().allow(null),
-    then: joi.optional(),
+    then: joi.required(),
   }),
   judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
-    is: ROLES.judge || ROLES.judgeTitle,
+    is: ROLES.judge,
     otherwise: joi.optional().allow(null),
-    then: joi.optional(),
+    then: joi.required(),
   }),
   name: JoiValidationConstants.STRING.max(100).required(),
   role: JoiValidationConstants.STRING.valid(...Object.values(ROLES)).required(),

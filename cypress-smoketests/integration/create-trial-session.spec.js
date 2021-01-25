@@ -9,27 +9,27 @@ const {
   setCaseAsHighPriority,
   setCaseAsReadyForTrial,
   unblockCaseFromTrial,
-} = require('../../support/pages/case-detail');
+} = require('../support/pages/case-detail');
 const {
   COUNTRY_TYPES,
-} = require('../../../shared/src/business/entities/EntityConstants');
+} = require('../../shared/src/business/entities/EntityConstants');
 const {
   createTrialSession,
   goToTrialSession,
   markCaseAsQcCompleteForTrial,
   setTrialSessionAsCalendared,
   verifyOpenCaseOnTrialSession,
-} = require('../../support/pages/trial-sessions');
+} = require('../support/pages/trial-sessions');
 const {
-  getRestApi,
-  getUserToken,
-  login,
-} = require('../../support/pages/login');
+  getEnvironmentSpecificFunctions,
+} = require('../support/pages/environment-specific-factory');
 const {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
-} = require('../../support/pages/reports');
-const { BASE_CASE } = require('../../fixtures/caseMigrations');
+} = require('../support/pages/reports');
+const { BASE_CASE } = require('../fixtures/caseMigrations');
+
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 faker.seed(faker.random.number());
 
@@ -63,9 +63,10 @@ const testData = {
 };
 const firstDocketNumber = createDocketNumber();
 const secondDocketNumber = createDocketNumber();
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 describe('Petitions Clerk', () => {
+  const { getRestApi, getUserToken, login } = getEnvironmentSpecificFunctions();
+
   before(async () => {
     let result = await getUserToken(
       'petitionsclerk1@example.com',
@@ -102,7 +103,7 @@ describe('Petitions Clerk', () => {
             ...BASE_CASE.contactPrimary,
             ...createRandomContact(),
           },
-          docketEntries: [BASE_CASE.docketEntries[0]],
+          docketEntries: [{ ...BASE_CASE.docketEntries[0], docketNumber }],
           docketNumber,
           docketNumberWithSuffix: docketNumber,
           preferredTrialCity: testData.preferredTrialCity,
@@ -156,7 +157,7 @@ describe('Petitions Clerk', () => {
       setTrialSessionAsCalendared(testData.trialSessionIds[0]);
     });
 
-    it('manually add, view, and remove first case case from the SET trial session', () => {
+    it('manually add, view, and remove first case from the SET trial session', () => {
       goToCaseOverview(firstDocketNumber);
       manuallyAddCaseToCalendaredTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();

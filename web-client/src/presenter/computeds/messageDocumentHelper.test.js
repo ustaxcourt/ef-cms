@@ -3,6 +3,7 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { messageDocumentHelper as messageDocumentHeperComputed } from './messageDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
+
 const { USER_ROLES } = applicationContext.getConstants();
 
 const messageDocumentHelper = withAppContextDecorator(
@@ -777,6 +778,44 @@ describe('messageDocumentHelper', () => {
       });
 
       expect(showNotServed).toBe(true);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton to false when the document eventCode is not present in the list of court issued documents', () => {
+      const { showServeCourtIssuedDocumentButton } = runCompute(
+        messageDocumentHelper,
+        {
+          state: {
+            ...getBaseState(docketClerkUser),
+            caseDetail: {
+              ...baseCaseDetail,
+              docketEntries: [
+                {
+                  docketEntryId: '123',
+                  documentTitle: 'PRE-TRIAL MEMORANDUM for Resp. (C/S 5-16-13)',
+                  documentType: 'Miscellaneous',
+                  eventCode: 'PMT',
+                  filedBy: 'See Filings and Proceedings',
+                  filingDate: '2013-05-16T00:00:00.000-04:00',
+                  index: 14,
+                  isFileAttached: true,
+                  isMinuteEntry: false,
+                  isOnDocketRecord: true,
+                  isSealed: false,
+                  isStricken: false,
+                  numberOfPages: 5,
+                  processingStatus: 'complete',
+                  receivedAt: '2013-05-16T00:00:00.000-04:00',
+                },
+              ],
+            },
+            viewerDocumentToDisplay: {
+              documentId: '123',
+            },
+          },
+        },
+      );
+
+      expect(showServeCourtIssuedDocumentButton).toBe(false);
     });
 
     it('should set showServeCourtIssuedDocumentButton to true when the document is a servable court issued document that is unserved, and not a draft document', () => {
