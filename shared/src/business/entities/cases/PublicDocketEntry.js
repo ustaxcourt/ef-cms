@@ -21,6 +21,9 @@ function PublicDocketEntry() {}
 PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.additionalInfo = rawDocketEntry.additionalInfo;
   this.additionalInfo2 = rawDocketEntry.additionalInfo2;
+  this.attachments = rawDocketEntry.attachments;
+  this.certificateOfService = rawDocketEntry.certificateOfService;
+  this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
   this.docketEntryId = rawDocketEntry.docketEntryId;
   this.docketNumber = rawDocketEntry.docketNumber;
   this.documentTitle = rawDocketEntry.documentTitle;
@@ -36,7 +39,9 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.isPaper = rawDocketEntry.isPaper;
   this.isSealed = !!rawDocketEntry.isSealed;
   this.isStricken = rawDocketEntry.isStricken;
+  this.lodged = rawDocketEntry.lodged;
   this.numberOfPages = rawDocketEntry.numberOfPages;
+  this.objections = rawDocketEntry.objections;
   this.processingStatus = rawDocketEntry.processingStatus;
   this.receivedAt = rawDocketEntry.receivedAt;
   this.servedAt = rawDocketEntry.servedAt;
@@ -45,6 +50,10 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
 PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
   additionalInfo2: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo2,
+  attachments: DOCKET_ENTRY_VALIDATION_RULE_KEYS.attachments,
+  certificateOfService: DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
+  certificateOfServiceDate:
+    DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfServiceDate,
   createdAt: JoiValidationConstants.ISO_DATE.optional().description(
     'When the Document was added to the system.',
   ),
@@ -69,7 +78,9 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
     .boolean()
     .optional()
     .description('Indicates the item has been removed from the docket record.'),
+  lodged: DOCKET_ENTRY_VALIDATION_RULE_KEYS.lodged,
   numberOfPages: DOCKET_ENTRY_VALIDATION_RULE_KEYS.numberOfPages,
+  objections: DOCKET_ENTRY_VALIDATION_RULE_KEYS.objections,
   processingStatus: JoiValidationConstants.STRING.optional(),
   receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
   servedAt: JoiValidationConstants.ISO_DATE.max('now').optional(),
