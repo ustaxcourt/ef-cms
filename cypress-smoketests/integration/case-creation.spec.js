@@ -1,12 +1,5 @@
 const faker = require('faker');
 const {
-  closeScannerSetupDialog,
-  goToCreateCase,
-  goToReviewCase,
-  saveCaseForLater,
-  serveCaseToIrs,
-} = require('../support/pages/create-paper-case');
-const {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -25,12 +18,26 @@ const {
 const {
   fillInCreateCaseFromPaperForm,
 } = require('../../cypress/support/pages/create-paper-petition');
-const { getUserToken, login } = require('../support/pages/login');
+const {
+  getEnvironmentSpecificFunctions,
+} = require('../support/pages/environment-specific-factory');
+const {
+  goToCreateCase,
+  goToReviewCase,
+  saveCaseForLater,
+  serveCaseToIrs,
+} = require('../support/pages/create-paper-case');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
+
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 let token = null;
 
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+const {
+  closeScannerSetupDialog,
+  getUserToken,
+  login,
+} = getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
   before(async () => {

@@ -308,10 +308,12 @@ const generateAndServeDocketEntry = async ({
     });
 
   if (workItem) {
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    });
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemAndAddToSectionInbox({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
   }
 
   caseEntity.updateDocketEntry(changeOfAddressDocketEntry);

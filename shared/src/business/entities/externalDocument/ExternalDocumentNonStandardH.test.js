@@ -1,4 +1,7 @@
 const {
+  over3000Characters,
+} = require('../../test/createTestApplicationContext');
+const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
@@ -51,6 +54,23 @@ describe('ExternalDocumentNonStandardH', () => {
           documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
           previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
         },
+      });
+    });
+
+    it('should be invalid when documentTitle is over 3000 characters', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Motion',
+        documentTitle: over3000Characters,
+        documentType: 'Motion for Leave to File',
+        scenario: 'Nonstandard H',
+        secondaryDocument: {
+          category: 'Application',
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+        },
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
       });
     });
   });

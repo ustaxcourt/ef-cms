@@ -2,7 +2,10 @@ import {
   Case,
   caseHasServedDocketEntries,
 } from '../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import {
+  DocketEntry,
+  isServed,
+} from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
   chiefJudgeNameForSigning,
@@ -52,6 +55,7 @@ import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCase
 import {
   calculateISODate,
   checkDate,
+  computeDate,
   createEndOfDayISO,
   createISODateString,
   createISODateStringFromObject,
@@ -600,6 +604,7 @@ const applicationContext = {
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
+      computeDate,
       createEndOfDayISO,
       createISODateString,
       createISODateStringFromObject,
@@ -630,6 +635,7 @@ const applicationContext = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
+      isServed,
       isStringISOFormatted,
       isValidDateString,
       prepareDateFromString,

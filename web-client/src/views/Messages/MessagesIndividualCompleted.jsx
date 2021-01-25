@@ -22,8 +22,8 @@ export const MessagesIndividualCompleted = connect(
           </thead>
           {formattedMessages.map((message, idx) => {
             return (
-              <tbody key={idx}>
-                <tr key={idx}>
+              <tbody key={`message-individual-${idx}`}>
+                <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}

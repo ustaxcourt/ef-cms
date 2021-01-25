@@ -1090,22 +1090,34 @@ describe('formatted work queue computed', () => {
       expect(result.received).toEqual('12/27/18');
     });
 
-    it('should return isCourtIssuedDocument as true when the documentType is a court issued document type', () => {
+    it('should return isCourtIssuedDocument as false when the eventCode is NOT court issued document type', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         docketEntry: {
           ...FORMATTED_WORK_ITEM.docketEntry,
           documentType: 'Petition',
+          eventCode: 'P',
         },
       };
 
-      let result = formatWorkItem({ applicationContext, workItem });
-      expect(result.isCourtIssuedDocument).toEqual(false);
+      const result = formatWorkItem({ applicationContext, workItem });
 
-      workItem.docketEntry.documentType = 'Transcript';
+      expect(result.isCourtIssuedDocument).toBeFalsy();
+    });
 
-      result = formatWorkItem({ applicationContext, workItem });
-      expect(result.isCourtIssuedDocument).toEqual(true);
+    it('should return isCourtIssuedDocument as true when the eventCode is a court issued document type', () => {
+      const workItem = {
+        ...FORMATTED_WORK_ITEM,
+        docketEntry: {
+          ...FORMATTED_WORK_ITEM.docketEntry,
+          documentType: 'Miscellaneous',
+          eventCode: 'O',
+        },
+      };
+
+      const result = formatWorkItem({ applicationContext, workItem });
+
+      expect(result.isCourtIssuedDocument).toBeTruthy();
     });
 
     it('should return isOrder as true when the documentType is a court issued document type', () => {
