@@ -35,7 +35,7 @@ import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformatio
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
-import { Error } from './Error';
+import { ErrorView } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
@@ -120,7 +120,7 @@ const pages = {
   EditPractitionerUser,
   EditTrialSession,
   EditUploadCourtIssuedDocument,
-  Error,
+  ErrorView,
   FileDocumentWizard,
   FilePetitionSuccess,
   IdleLogout,
@@ -180,7 +180,7 @@ export const AppComponent = connect(
   }) {
     const focusMain = e => {
       e && e.preventDefault();
-      const header = document.querySelector('#main-content h1');
+      const header = window.document.querySelector('#main-content h1');
       if (header) header.focus();
       return;
     };

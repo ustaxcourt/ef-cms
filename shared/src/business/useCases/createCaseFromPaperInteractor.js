@@ -280,10 +280,12 @@ exports.createCaseFromPaperInteractor = async ({
       applicationContext,
       caseToCreate: caseToAdd.validate().toRawObject(),
     }),
-    applicationContext.getPersistenceGateway().saveWorkItemForPaper({
-      applicationContext,
-      workItem: newWorkItem.validate().toRawObject(),
-    }),
+    applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemAndAddToUserAndSectionInbox({
+        applicationContext,
+        workItem: newWorkItem.validate().toRawObject(),
+      }),
   ]);
 
   return new Case(caseToAdd, { applicationContext }).toRawObject();

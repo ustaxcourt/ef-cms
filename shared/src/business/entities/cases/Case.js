@@ -49,7 +49,7 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { DocketEntry } = require('../DocketEntry');
+const { DocketEntry, isServed } = require('../DocketEntry');
 const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
@@ -254,9 +254,7 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   }
 
   this.hasPendingItems = this.docketEntries.some(
-    docketEntry =>
-      docketEntry.pending &&
-      (docketEntry.servedAt || docketEntry.isLegacyServed),
+    docketEntry => docketEntry.pending && isServed(docketEntry),
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
@@ -858,9 +856,7 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 
 Case.prototype.doesHavePendingItems = function () {
   return this.docketEntries.some(
-    docketEntry =>
-      docketEntry.pending &&
-      (docketEntry.servedAt || docketEntry.isLegacyServed),
+    docketEntry => docketEntry.pending && isServed(docketEntry),
   );
 };
 
@@ -1233,22 +1229,22 @@ Case.prototype.generateNextDocketRecordIndex = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
-  const foundDocketEntry = this.docketEntries.find(
+  const foundDocketEntryIndex = this.docketEntries.findIndex(
     docketEntry =>
       docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
   );
 
-  if (foundDocketEntry) {
-    Object.assign(foundDocketEntry, updatedDocketEntry);
+  if (foundDocketEntryIndex !== -1) {
+    this.docketEntries[foundDocketEntryIndex] = updatedDocketEntry;
 
-    if (foundDocketEntry.isOnDocketRecord) {
+    if (updatedDocketEntry.isOnDocketRecord) {
       const updateIndex = shouldGenerateDocketRecordIndex({
         caseDetail: this,
-        docketEntry: foundDocketEntry,
+        docketEntry: updatedDocketEntry,
       });
 
       if (updateIndex) {
-        foundDocketEntry.index = this.generateNextDocketRecordIndex();
+        updatedDocketEntry.index = this.generateNextDocketRecordIndex();
       }
     }
   }
@@ -1443,8 +1439,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     doc => doc.documentType === 'Petition',
   );
 
-  const isPetitionServed =
-    petitionDocketEntry && !!petitionDocketEntry.servedAt;
+  const isPetitionServed = petitionDocketEntry && isServed(petitionDocketEntry);
 
   return (
     isIrsPractitioner ||
@@ -1981,9 +1976,7 @@ const isSealedCase = rawCase => {
 };
 
 const caseHasServedDocketEntries = rawCase => {
-  return !!rawCase.docketEntries.some(
-    docketEntry => !!docketEntry.servedAt || docketEntry.isLegacyServed,
-  );
+  return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
 };
 
 module.exports = {

@@ -388,7 +388,7 @@ describe('documentViewerHelper', () => {
               {
                 docketEntryId,
                 documentTitle: 'Some Stuff',
-                documentType: 'Petition',
+                documentType: 'Miscellaneous',
                 eventCode: 'P',
                 isOnDocketRecord: true,
               },

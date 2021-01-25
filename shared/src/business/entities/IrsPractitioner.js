@@ -11,6 +11,7 @@ const {
   userDecorator,
   VALIDATION_ERROR_MESSAGES,
 } = require('./User');
+const { Practitioner } = require('./Practitioner');
 const { ROLES, SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
 
 const entityName = 'IrsPractitioner';
@@ -29,7 +30,8 @@ IrsPractitioner.prototype.init = function init(rawUser) {
   userDecorator(this, rawUser);
   this.barNumber = rawUser.barNumber;
   this.serviceIndicator =
-    rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    rawUser.serviceIndicator ||
+    Practitioner.getDefaultServiceIndicator(rawUser);
 };
 
 IrsPractitioner.validationName = 'IrsPractitioner';
