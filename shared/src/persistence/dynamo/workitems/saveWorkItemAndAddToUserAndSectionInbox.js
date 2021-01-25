@@ -3,14 +3,17 @@ const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');
 
 /**
- * saveWorkItemForPaper
+ * saveWorkItemAndAddToUserAndSectionInbox
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.workItem the work item data
  * @returns {Promise} the promise for the call to persistence
  */
-exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
+exports.saveWorkItemAndAddToUserAndSectionInbox = async ({
+  applicationContext,
+  workItem,
+}) => {
   await Promise.all([
     put({
       Item: {

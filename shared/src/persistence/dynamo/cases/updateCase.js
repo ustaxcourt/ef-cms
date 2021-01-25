@@ -25,8 +25,203 @@ const { Case } = require('../../../business/entities/cases/Case');
 const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 const { differenceWith, isEqual } = require('lodash');
 const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
-const { omit } = require('lodash');
+const { omit, pick } = require('lodash');
 const { updateMessage } = require('../messages/updateMessage');
+
+const updateCaseDocuments = ({ applicationContext, caseToUpdate, oldCase }) => {
+  const updatedDocuments = differenceWith(
+    caseToUpdate.docketEntries,
+    oldCase.docketEntries,
+    isEqual,
+  );
+  const updatedArchivedDocketEntries = differenceWith(
+    caseToUpdate.archivedDocketEntries,
+    oldCase.archivedDocketEntries,
+    isEqual,
+  );
+  return [...updatedDocuments, ...updatedArchivedDocketEntries].map(doc =>
+    client.put({
+      Item: {
+        pk: `case|${caseToUpdate.docketNumber}`,
+        sk: `docket-entry|${doc.docketEntryId}`,
+        ...doc,
+      },
+      applicationContext,
+    }),
+  );
+};
+
+const updateCorrespondence = ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const updatedArchivedCorrespondences = differenceWith(
+    caseToUpdate.archivedCorrespondences,
+    oldCase.archivedCorrespondences,
+    isEqual,
+  );
+  const updatedCorrespondence = differenceWith(
+    caseToUpdate.correspondence,
+    oldCase.correspondence,
+    isEqual,
+  );
+
+  return [...updatedArchivedCorrespondences, ...updatedCorrespondence].map(
+    correspondence =>
+      client.put({
+        Item: {
+          pk: `case|${caseToUpdate.docketNumber}`,
+          sk: `correspondence|${correspondence.correspondenceId}`,
+          ...correspondence,
+        },
+        applicationContext,
+      }),
+  );
+};
+
+const updateIrsPractitioners = ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const oldIrsPractitioners = oldCase.irsPractitioners.map(irsPractitioner =>
+    omit(irsPractitioner, ['pk', 'sk']),
+  );
+  const {
+    added: addedIrsPractitioners,
+    removed: deletedIrsPractitioners,
+    updated: updatedIrsPractitioners,
+  } = diff(oldIrsPractitioners, caseToUpdate.irsPractitioners, 'userId');
+
+  const deletePractitionerRequests = deletedIrsPractitioners.map(practitioner =>
+    client.delete({
+      applicationContext,
+      key: {
+        pk: `case|${caseToUpdate.docketNumber}`,
+        sk: `irsPractitioner|${practitioner.userId}`,
+      },
+    }),
+  );
+
+  const updatePractitionerRequests = [
+    ...addedIrsPractitioners,
+    ...updatedIrsPractitioners,
+  ].map(practitioner =>
+    client.put({
+      Item: {
+        pk: `case|${caseToUpdate.docketNumber}`,
+        sk: `irsPractitioner|${practitioner.userId}`,
+        ...practitioner,
+      },
+      applicationContext,
+    }),
+  );
+
+  return [...deletePractitionerRequests, ...updatePractitionerRequests];
+};
+
+const updatePrivatePractitioners = ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const oldPrivatePractitioners = oldCase.privatePractitioners.map(
+    privatePractitioner => omit(privatePractitioner, ['pk', 'sk']),
+  );
+  const {
+    added: addedPrivatePractitioners,
+    removed: deletedPrivatePractitioners,
+    updated: updatedPrivatePractitioners,
+  } = diff(
+    oldPrivatePractitioners,
+    caseToUpdate.privatePractitioners,
+    'userId',
+  );
+
+  const deletePractitionerRequests = deletedPrivatePractitioners.map(
+    practitioner =>
+      client.delete({
+        applicationContext,
+        key: {
+          pk: `case|${caseToUpdate.docketNumber}`,
+          sk: `privatePractitioner|${practitioner.userId}`,
+        },
+      }),
+  );
+
+  const updatePractitionerRequests = [
+    ...addedPrivatePractitioners,
+    ...updatedPrivatePractitioners,
+  ].map(practitioner =>
+    client.put({
+      Item: {
+        pk: `case|${caseToUpdate.docketNumber}`,
+        sk: `privatePractitioner|${practitioner.userId}`,
+        ...practitioner,
+      },
+      applicationContext,
+    }),
+  );
+
+  return [...deletePractitionerRequests, ...updatePractitionerRequests];
+};
+
+const deleteOldHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
+  const oldHearings = oldCase.hearings.map(trialSession =>
+    omit(trialSession, ['pk', 'sk']),
+  );
+
+  const { removed: deletedHearings } = diff(
+    oldHearings,
+    caseToUpdate.hearings,
+    'trialSessionId',
+  );
+
+  const deletedHearingRequests = deletedHearings.map(hearing =>
+    client.delete({
+      applicationContext,
+      key: {
+        pk: `case|${caseToUpdate.docketNumber}`,
+        sk: `hearing|${hearing.trialSessionId}`,
+      },
+    }),
+  );
+  return deletedHearingRequests;
+};
+
+const updateUserCaseMappings = ({
+  applicationContext,
+  caseToUpdate,
+  userCaseMappings,
+}) => {
+  const updatedAttributeValues = pick(caseToUpdate, [
+    'caseCaption',
+    'closedDate',
+    'docketNumberSuffix',
+    'docketNumberWithSuffix',
+    'leadDocketNumber',
+    'status',
+  ]);
+
+  const updatedUserCases = userCaseMappings.map(userCaseItem =>
+    Object.assign({}, userCaseItem, updatedAttributeValues),
+  );
+
+  const gsi1pk = `user-case|${caseToUpdate.docketNumber}`;
+
+  const mappingUpdateRequests = updatedUserCases.map(userCaseItem =>
+    client.put({
+      Item: {
+        ...userCaseItem,
+        gsi1pk,
+      },
+      applicationContext,
+    }),
+  );
+
+  return mappingUpdateRequests;
+};
 
 /**
  * updateCase
@@ -44,160 +239,28 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
 
   const requests = [];
 
-  const updatedDocuments = differenceWith(
-    caseToUpdate.docketEntries,
-    oldCase.docketEntries,
-    isEqual,
+  requests.push(
+    ...updateCaseDocuments({ applicationContext, caseToUpdate, oldCase }),
   );
 
-  const updatedArchivedDocketEntries = differenceWith(
-    caseToUpdate.archivedDocketEntries,
-    oldCase.archivedDocketEntries,
-    isEqual,
+  requests.push(
+    ...updateCorrespondence({ applicationContext, caseToUpdate, oldCase }),
   );
 
-  const updatedCorrespondence = differenceWith(
-    caseToUpdate.correspondence,
-    oldCase.correspondence,
-    isEqual,
+  requests.push(
+    ...updateIrsPractitioners({ applicationContext, caseToUpdate, oldCase }),
   );
 
-  const updatedArchivedCorrespondences = differenceWith(
-    caseToUpdate.archivedCorrespondences,
-    oldCase.archivedCorrespondences,
-    isEqual,
+  requests.push(
+    ...updatePrivatePractitioners({
+      applicationContext,
+      caseToUpdate,
+      oldCase,
+    }),
   );
 
-  const allUpdatedDocuments = updatedDocuments.concat(
-    updatedArchivedDocketEntries,
-  );
-  const allUpdatedCorrespondences = updatedCorrespondence.concat(
-    updatedArchivedCorrespondences,
-  );
-
-  allUpdatedDocuments.forEach(document => {
-    requests.push(
-      client.put({
-        Item: {
-          pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `docket-entry|${document.docketEntryId}`,
-          ...document,
-        },
-        applicationContext,
-      }),
-    );
-  });
-
-  allUpdatedCorrespondences.forEach(correspondence => {
-    requests.push(
-      client.put({
-        Item: {
-          pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `correspondence|${correspondence.correspondenceId}`,
-          ...correspondence,
-        },
-        applicationContext,
-      }),
-    );
-  });
-
-  const oldIrsPractitioners = oldCase.irsPractitioners.map(irsPractitioner =>
-    omit(irsPractitioner, ['pk', 'sk']),
-  );
-  const {
-    added: addedIrsPractitioners,
-    removed: deletedIrsPractitioners,
-    updated: updatedIrsPractitioners,
-  } = diff(oldIrsPractitioners, caseToUpdate.irsPractitioners, 'userId');
-
-  deletedIrsPractitioners.forEach(practitioner => {
-    requests.push(
-      client.delete({
-        applicationContext,
-        key: {
-          pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `irsPractitioner|${practitioner.userId}`,
-        },
-      }),
-    );
-  });
-
-  [...addedIrsPractitioners, ...updatedIrsPractitioners].forEach(
-    practitioner => {
-      requests.push(
-        client.put({
-          Item: {
-            pk: `case|${caseToUpdate.docketNumber}`,
-            sk: `irsPractitioner|${practitioner.userId}`,
-            ...practitioner,
-          },
-          applicationContext,
-        }),
-      );
-    },
-  );
-
-  const oldHearings = oldCase.hearings.map(trialSession =>
-    omit(trialSession, ['pk', 'sk']),
-  );
-
-  const { removed: deletedHearings } = diff(
-    oldHearings,
-    caseToUpdate.hearings,
-    'trialSessionId',
-  );
-
-  deletedHearings.forEach(hearing => {
-    requests.push(
-      client.delete({
-        applicationContext,
-        key: {
-          pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `hearing|${hearing.trialSessionId}`,
-        },
-      }),
-    );
-  });
-
-  const oldPrivatePractitioners = oldCase.privatePractitioners.map(
-    privatePractitioner => omit(privatePractitioner, ['pk', 'sk']),
-  );
-
-  const {
-    added: addedPrivatePractitioners,
-    removed: deletedPrivatePractitioners,
-    updated: updatedPrivatePractitioners,
-  } = diff(
-    oldPrivatePractitioners,
-    caseToUpdate.privatePractitioners,
-    'userId',
-  );
-
-  deletedPrivatePractitioners.forEach(practitioner => {
-    requests.push(
-      client.delete({
-        applicationContext,
-        key: {
-          pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `privatePractitioner|${practitioner.userId}`,
-        },
-      }),
-    );
-  });
-
-  [...addedPrivatePractitioners, ...updatedPrivatePractitioners].forEach(
-    practitioner => {
-      requests.push(
-        client.put({
-          Item: {
-            pk: `case|${caseToUpdate.docketNumber}`,
-            sk: `privatePractitioner|${practitioner.userId}`,
-            ...practitioner,
-          },
-          applicationContext,
-        }),
-      );
-    },
+  requests.push(
+    ...deleteOldHearings({ applicationContext, caseToUpdate, oldCase }),
   );
 
   if (
@@ -330,17 +393,14 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
     });
-
-    deadlines.forEach(deadline => {
-      deadline.associatedJudge = caseToUpdate.associatedJudge;
-
-      requests.push(
-        createCaseDeadline({
-          applicationContext,
-          caseDeadline: deadline,
-        }),
-      );
+    const updatedDeadlineRequests = deadlines.map(caseDeadline => {
+      caseDeadline.associatedJudge = caseToUpdate.associatedJudge;
+      return createCaseDeadline({
+        applicationContext,
+        caseDeadline,
+      });
     });
+    requests.push(...updatedDeadlineRequests);
   }
 
   // update user-case mappings
@@ -362,23 +422,13 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       applicationContext,
     });
 
-    for (let userCaseItem of userCaseMappings) {
-      requests.push(
-        client.put({
-          Item: {
-            ...userCaseItem,
-            caseCaption: caseToUpdate.caseCaption,
-            closedDate: caseToUpdate.closedDate,
-            docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-            docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-            gsi1pk: `user-case|${caseToUpdate.docketNumber}`,
-            leadDocketNumber: caseToUpdate.leadDocketNumber,
-            status: caseToUpdate.status,
-          },
-          applicationContext,
-        }),
-      );
-    }
+    requests.push(
+      ...updateUserCaseMappings({
+        applicationContext,
+        caseToUpdate,
+        userCaseMappings,
+      }),
+    );
   }
 
   const setLeadCase = caseToUpdate.leadDocketNumber

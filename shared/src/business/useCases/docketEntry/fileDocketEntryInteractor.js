@@ -155,9 +155,9 @@ exports.fileDocketEntryInteractor = async ({
       caseEntity,
     });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   await saveWorkItem({
@@ -227,9 +227,11 @@ const saveWorkItem = async ({
         workItem: workItemRaw,
       });
   } else {
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-      applicationContext,
-      workItem: workItemRaw,
-    });
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemAndAddToSectionInbox({
+        applicationContext,
+        workItem: workItemRaw,
+      });
   }
 };

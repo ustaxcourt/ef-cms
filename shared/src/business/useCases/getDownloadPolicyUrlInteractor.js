@@ -11,6 +11,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { isServed } = require('../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -60,7 +61,7 @@ const handleIrsSuperUser = ({
 };
 
 const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
-  if (!docketEntryEntity.servedAt && !docketEntryEntity.isLegacyServed) {
+  if (!isServed(docketEntryEntity)) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   } else if (
     docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&

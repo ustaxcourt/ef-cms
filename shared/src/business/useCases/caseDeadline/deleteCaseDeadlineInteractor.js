@@ -44,10 +44,11 @@ exports.deleteCaseDeadlineInteractor = async ({
       caseEntity: updatedCase,
     });
 
-  const updatedCaseRaw = updatedCase.validate().toRawObject();
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: updatedCaseRaw,
-  });
-  return updatedCaseRaw;
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: updatedCase,
+    });
+  return new Case(result, { applicationContext }).validate().toRawObject();
 };

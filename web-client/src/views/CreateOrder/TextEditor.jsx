@@ -36,10 +36,10 @@ export const TextEditor = ({
   };
 
   const addKeyboardListeners = () => {
-    document.addEventListener('keydown', onKeyboard, false);
+    window.document.addEventListener('keydown', onKeyboard, false);
   };
   const removeKeyboardListeners = () => {
-    document.removeEventListener('keydown', onKeyboard, false);
+    window.document.removeEventListener('keydown', onKeyboard, false);
   };
 
   useEffect(() => {

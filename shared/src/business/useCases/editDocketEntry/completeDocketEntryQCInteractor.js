@@ -375,9 +375,9 @@ exports.completeDocketEntryQCInteractor = async ({
     }
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   if (needsNewCoversheet) {

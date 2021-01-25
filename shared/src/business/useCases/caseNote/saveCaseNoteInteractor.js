@@ -40,10 +40,12 @@ exports.saveCaseNoteInteractor = async ({
     .validate()
     .toRawObject();
 
-  const result = await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate,
-  });
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate,
+    });
 
   return new Case(result, { applicationContext }).validate().toRawObject();
 };

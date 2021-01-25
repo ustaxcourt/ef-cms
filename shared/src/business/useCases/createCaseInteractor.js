@@ -241,10 +241,12 @@ exports.createCaseInteractor = async ({
     userId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-    applicationContext,
-    workItem: newWorkItem.validate().toRawObject(),
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .saveWorkItemAndAddToSectionInbox({
+      applicationContext,
+      workItem: newWorkItem.validate().toRawObject(),
+    });
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

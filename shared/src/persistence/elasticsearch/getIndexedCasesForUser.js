@@ -40,9 +40,9 @@ exports.getIndexedCasesForUser = async ({
             { match: { 'gsi1pk.S': 'user-case|' } },
             {
               bool: {
-                should: statuses.map(status => ({
+                should: statuses.map(statusStr => ({
                   match: {
-                    'status.S': status,
+                    'status.S': statusStr,
                   },
                 })),
               },
