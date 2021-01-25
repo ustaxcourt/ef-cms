@@ -42,6 +42,8 @@ describe('getUserInteractor', () => {
 
   it('should call the persistence method to get the user when the user is a judge', async () => {
     const mockJudge = {
+      judgeFullName: 'Test Judge',
+      judgeTitle: 'Judge',
       name: 'Test Judge',
       role: ROLES.judge,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',

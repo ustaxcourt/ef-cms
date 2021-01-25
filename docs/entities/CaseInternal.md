@@ -1443,7 +1443,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 1000
             freeText2: 
               type: "string"
               flags: 
@@ -1456,7 +1456,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 1000
             hasOtherFilingParty: 
               type: "boolean"
               flags: 

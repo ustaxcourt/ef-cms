@@ -4,7 +4,11 @@ const {
 const {
   getPractitionerByBarNumberInteractor,
 } = require('./getPractitionerByBarNumberInteractor');
-const { ROLES, US_STATES } = require('../../entities/EntityConstants');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+  US_STATES,
+} = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('getPractitionerByBarNumberInteractor', () => {
@@ -80,7 +84,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       section: ROLES.privatePractitioner,
-      serviceIndicator: 'Electronic',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       suffix: undefined,
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -139,7 +143,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       section: 'irsPractitioner',
-      serviceIndicator: 'Electronic',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       suffix: undefined,
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',

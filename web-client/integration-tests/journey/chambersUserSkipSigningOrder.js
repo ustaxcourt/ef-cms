@@ -9,7 +9,7 @@ export const chambersUserSkipSigningOrder = test => {
     await test.runSequence('submitCreateOrderModalSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      documentTitle: errorMessages.documentTitle,
+      documentTitle: errorMessages.documentTitle[0].message,
       documentType: errorMessages.documentType,
       eventCode: errorMessages.eventCode,
     });

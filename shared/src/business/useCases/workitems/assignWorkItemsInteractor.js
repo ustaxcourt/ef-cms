@@ -60,7 +60,7 @@ exports.assignWorkItemsInteractor = async ({
     sentByUserId: user.userId,
   });
 
-  // This must run BEFORE saveWorkItemForPaper
+  // This must run BEFORE saveWorkItemAndAddToUserAndSectionInbox
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
     deleteFromSection: false,
@@ -73,9 +73,11 @@ exports.assignWorkItemsInteractor = async ({
       caseToUpdate: caseToUpdate.validate().toRawObject(),
       workItem: workItemEntity.validate().toRawObject(),
     }),
-    applicationContext.getPersistenceGateway().saveWorkItemForPaper({
-      applicationContext,
-      workItem: workItemEntity.validate().toRawObject(),
-    }),
+    applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemAndAddToUserAndSectionInbox({
+        applicationContext,
+        workItem: workItemEntity.validate().toRawObject(),
+      }),
   ]);
 };

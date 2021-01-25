@@ -3,7 +3,7 @@ const {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { migrateItems } = require('./0014-hearings-proceeding-type');
+const { migrateItems } = require('./0016-hearings-proceeding-type');
 
 describe('migrateItems', () => {
   let documentClient;

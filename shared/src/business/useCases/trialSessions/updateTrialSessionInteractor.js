@@ -6,6 +6,7 @@ const {
   TrialSessionWorkingCopy,
 } = require('../../entities/trialSessions/TrialSessionWorkingCopy');
 const { Case } = require('../../entities/cases/Case');
+const { get } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -76,9 +77,8 @@ exports.updateTrialSessionInteractor = async ({
   );
 
   if (
-    ((!currentTrialSession.judge || !currentTrialSession.judge.userId) &&
-      newTrialSessionEntity.judge &&
-      newTrialSessionEntity.judge.userId) ||
+    (!get(currentTrialSession, 'judge.userId') &&
+      get(newTrialSessionEntity, 'judge.userId')) ||
     (currentTrialSession.judge &&
       newTrialSessionEntity.judge &&
       currentTrialSession.judge.userId !== newTrialSessionEntity.judge.userId)
@@ -100,10 +100,8 @@ exports.updateTrialSessionInteractor = async ({
   }
 
   if (
-    ((!currentTrialSession.trialClerk ||
-      !currentTrialSession.trialClerk.userId) &&
-      newTrialSessionEntity.trialClerk &&
-      newTrialSessionEntity.trialClerk.userId) ||
+    (!get(currentTrialSession, 'trialClerk.userId') &&
+      get(newTrialSessionEntity, 'trialClerk.userId')) ||
     (currentTrialSession.trialClerk &&
       newTrialSessionEntity.trialClerk &&
       currentTrialSession.trialClerk.userId !==
@@ -143,9 +141,9 @@ exports.updateTrialSessionInteractor = async ({
       ) {
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
-        await applicationContext.getPersistenceGateway().updateCase({
+        await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
-          caseToUpdate: caseEntity.validate().toRawObject(),
+          caseToUpdate: caseEntity,
         });
       }
     }

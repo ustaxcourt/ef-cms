@@ -39,7 +39,7 @@ CourtIssuedDocumentTypeA.schema = {
   documentType: JoiValidationConstants.STRING.required(),
   eventCode: CourtIssuedDocumentDefault.schema.eventCode,
   filingDate: CourtIssuedDocumentDefault.schema.filingDate,
-  freeText: JoiValidationConstants.STRING.when('documentType', {
+  freeText: JoiValidationConstants.STRING.max(1000).when('documentType', {
     is: GENERIC_ORDER_DOCUMENT_TYPE,
     otherwise: joi.optional().allow(null),
     then: joi.required(),
