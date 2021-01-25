@@ -431,7 +431,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 700
     messageId: 
       type: "string"
       flags: 

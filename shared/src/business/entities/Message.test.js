@@ -1,4 +1,7 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
+const {
+  applicationContext,
+  over1000Characters,
+} = require('../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES, PETITIONS_SECTION } = require('./EntityConstants');
 const { Message } = require('./Message');
 
@@ -137,7 +140,7 @@ describe('Message', () => {
   });
 
   describe('markAsCompleted', () => {
-    it('should mark the message as completed with a message and user', () => {
+    it('should mark the message as completed and replied to with a message and user', () => {
       const message = new Message(
         {
           caseStatus: CASE_STATUS_TYPES.generalDocket,
@@ -148,6 +151,7 @@ describe('Message', () => {
           from: 'gg',
           fromSection: PETITIONS_SECTION,
           fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          isRepliedTo: false,
           message: 'hello world',
           subject: 'hey!',
           to: 'bob',
@@ -174,6 +178,7 @@ describe('Message', () => {
         completedMessage: 'the completed message',
         createdAt: expect.anything(),
         isCompleted: true,
+        isRepliedTo: true,
       });
     });
   });
@@ -211,6 +216,32 @@ describe('Message', () => {
           documentTitle: 'Petition',
         },
       ]);
+    });
+  });
+
+  describe('validation message', () => {
+    it('displays a message when the message is over 700 characters long', () => {
+      const message = new Message(
+        {
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
+          caseTitle: 'Test Petitioner',
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45S',
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          message: over1000Characters,
+          subject: 'hey!',
+          to: 'bob',
+          toSection: PETITIONS_SECTION,
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+      expect(message.getFormattedValidationErrors()).toEqual({
+        message: Message.VALIDATION_ERROR_MESSAGES.message[1].message,
+      });
     });
   });
 });

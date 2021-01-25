@@ -28,6 +28,7 @@ export const validateSelectDocumentTypeAction = ({
     return path.success();
   } else {
     const errorDisplayOrder = [
+      'documentTitle',
       'documentType',
       'freeText',
       'freeText2',

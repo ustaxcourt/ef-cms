@@ -12,11 +12,16 @@ export const setDefaultServiceIndicatorAction = key => {
    * @param {object} providers.applicationContext the application context
    * @param {object} providers.store the cerebral store used for setting the service indicator
    */
-  return ({ applicationContext, store }) => {
-    const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
-    store.set(
-      state[key].serviceIndicator,
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    );
+  return ({ applicationContext, props, store }) => {
+    let serviceIndicator;
+
+    if (props.defaultServiceIndicator) {
+      serviceIndicator = props.defaultServiceIndicator;
+    } else {
+      const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
+      serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    }
+
+    store.set(state[key].serviceIndicator, serviceIndicator);
   };
 };

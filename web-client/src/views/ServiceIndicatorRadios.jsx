@@ -21,6 +21,13 @@ export const ServiceIndicatorRadios = connect(
     validateSequence,
     validationErrors,
   }) {
+    const selectElectronic =
+      bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    const selectPaper =
+      bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
+    const selectNone =
+      bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_NONE;
+
     return (
       <FormGroup
         className="margin-bottom-0"
@@ -40,10 +47,7 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby={`service-type-radios-${bindKey}`}
-              checked={
-                bindObject.serviceIndicator ===
-                SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
-              }
+              checked={selectElectronic}
               className="usa-radio__input"
               id={`service-type-electronic-${bindKey}`}
               name={`${bindKey}.serviceIndicator`}
@@ -68,9 +72,7 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby={`service-type-radios-${bindKey}`}
-              checked={
-                bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER
-              }
+              checked={selectPaper}
               className="usa-radio__input"
               id={`service-type-paper-${bindKey}`}
               name={`${bindKey}.serviceIndicator`}
@@ -95,9 +97,7 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby={`service-type-radios-${bindKey}`}
-              checked={
-                bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_NONE
-              }
+              checked={selectNone}
               className="usa-radio__input"
               id={`service-type-none-${bindKey}`}
               name={`${bindKey}.serviceIndicator`}

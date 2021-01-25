@@ -71,7 +71,7 @@ describe('associateIrsPractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).not.toHaveBeenCalled();
   });
 
@@ -98,11 +98,11 @@ describe('associateIrsPractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate,
     ).toMatchObject({
       irsPractitioners: [
         {
