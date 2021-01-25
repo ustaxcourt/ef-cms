@@ -219,7 +219,7 @@ describe('fileDocketEntryInteractor', () => {
 
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
         .caseToUpdate,
     ).toMatchObject({
       automaticBlocked: true,
@@ -256,7 +256,7 @@ describe('fileDocketEntryInteractor', () => {
 
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
         .caseToUpdate,
     ).toMatchObject({
       automaticBlocked: true,
@@ -267,5 +267,35 @@ describe('fileDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
     ).toBeCalled();
+  });
+
+  it('does not send the service email if an error occurs while updating the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockRejectedValue(new Error('bad!'));
+
+    let error;
+    try {
+      await fileDocketEntryInteractor({
+        applicationContext,
+        documentMetadata: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toEqual(new Error('bad!'));
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toBeCalled();
   });
 });
