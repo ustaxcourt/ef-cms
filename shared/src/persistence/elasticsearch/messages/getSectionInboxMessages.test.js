@@ -20,4 +20,25 @@ describe('getSectionInboxMessages', () => {
     expect(search).toHaveBeenCalledTimes(1);
     expect(results).toMatchObject(['some', 'matches']);
   });
+
+  it('should filter out completed messages', async () => {
+    search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
+
+    await getSectionInboxMessages({
+      applicationContext,
+      section: PETITIONS_SECTION,
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must,
+    ).toEqual(
+      expect.arrayContaining([
+        {
+          match: {
+            'isCompleted.BOOL': false,
+          },
+        },
+      ]),
+    );
+  });
 });
