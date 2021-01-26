@@ -38,7 +38,7 @@ export const TrialSessionsSummary = connect(
                     formattedUpcomingSessions.map((trialSession, idx) => (
                       <div
                         className="grid-row margin-top-4 margin-bottom-4"
-                        key={idx}
+                        key={`upcoming-${idx}`}
                         role="listitem"
                       >
                         <div className="tablet:grid-col-6">
@@ -71,7 +71,7 @@ export const TrialSessionsSummary = connect(
                     formattedRecentSessions.map((trialSession, idx) => (
                       <div
                         className="grid-row margin-top-4 margin-bottom-4"
-                        key={idx}
+                        key={`recent-${idx}`}
                         role="listitem"
                       >
                         <div className="tablet:grid-col-6">

@@ -37,7 +37,7 @@ export const ErrorNotification = connect(
               {alertHelper.showMultipleMessages && (
                 <ul>
                   {alertHelper.messagesDeduped.map((message, idx) => (
-                    <li key={idx}>{message}</li>
+                    <li key={`alert-error-${idx}`}>{message}</li>
                   ))}
                 </ul>
               )}

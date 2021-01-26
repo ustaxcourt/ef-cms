@@ -62,6 +62,7 @@ exports.setTrialSessionAsCalendared = trialSessionId => {
   cy.get('#set-calendar-button').should('exist').click();
   cy.get('#modal-root .modal-button-confirm').click();
   cy.get('#set-calendar-button').should('not.exist');
+  cy.get('.progress-indicator').should('not.exist');
 };
 
 exports.markCaseAsQcCompleteForTrial = docketNumber => {

@@ -40,7 +40,7 @@ export const OtherFilerInformation = connect(
                             return (
                               <div
                                 className="grid-col-12 margin-top-1 margin-bottom-1"
-                                key={idx}
+                                key={`otherFilers-${idx}`}
                               >
                                 <address aria-labelledby="primary-label">
                                   <AddressDisplay
@@ -77,7 +77,7 @@ export const OtherFilerInformation = connect(
                                   'grid-col-3',
                                   idx > 3 && 'margin-top-4',
                                 )}
-                                key={idx}
+                                key={`otherFilers-${idx}`}
                               >
                                 <address aria-labelledby="primary-label">
                                   <AddressDisplay

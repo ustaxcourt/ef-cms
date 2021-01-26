@@ -48,7 +48,7 @@ export const TodaysOpinions = connect(
               </thead>
               <tbody>
                 {todaysOpinionsHelper.formattedOpinions.map((opinion, idx) => (
-                  <tr key={idx}>
+                  <tr key={`opinion-row-${idx}`}>
                     <td className="center-column">{idx + 1}</td>
                     <td aria-hidden="true"></td>
                     <td>
@@ -59,6 +59,7 @@ export const TodaysOpinions = connect(
                       <Button
                         link
                         aria-label={`View PDF: ${opinion.descriptionDisplay}`}
+                        className="text-left line-height-standard padding-0"
                         onClick={() => {
                           openCaseDocumentDownloadUrlSequence({
                             docketEntryId: opinion.docketEntryId,

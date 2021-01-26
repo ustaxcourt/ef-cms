@@ -185,16 +185,18 @@ exports.fileExternalDocumentInteractor = async ({
       caseEntity,
     });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   for (let workItem of workItems) {
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    });
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemAndAddToSectionInbox({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
   }
 
   return caseEntity.toRawObject();

@@ -42,12 +42,10 @@ exports.removeSignatureFromDocumentInteractor = async ({
     key: docketEntryId,
   });
 
-  const caseToUpdate = caseEntity.validate().toRawObject();
-
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate,
+    caseToUpdate: caseEntity,
   });
 
-  return caseToUpdate;
+  return caseEntity.toRawObject();
 };

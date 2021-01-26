@@ -889,6 +889,12 @@ describe('formatDocketEntry', () => {
     });
   });
 
+  it('should set isCourtIssuedDocument to false when document.eventCode is not present in the list of court issued documents', () => {
+    const results = formatDocketEntry(applicationContext, { eventCode: 'PMT' });
+
+    expect(results.isCourtIssuedDocument).toBeFalsy();
+  });
+
   describe('isInProgress', () => {
     it('should return isInProgress true if the document is not court-issued, not a minute entry, does not have a file attached, and is not unservable', () => {
       const results = formatDocketEntry(applicationContext, {
