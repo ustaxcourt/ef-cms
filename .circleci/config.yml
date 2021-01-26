@@ -147,7 +147,7 @@ jobs:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: medium+
-    parallelism: 5
+    parallelism: 8
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -217,6 +217,9 @@ jobs:
             ./web-client/coverage-integration-2/coverage-final.json \
             ./web-client/coverage-integration-3/coverage-final.json \
             ./web-client/coverage-integration-4/coverage-final.json \
+            ./web-client/coverage-integration-5/coverage-final.json \
+            ./web-client/coverage-integration-6/coverage-final.json \
+            ./web-client/coverage-integration-7/coverage-final.json \
             ./web-client/coverage-unit/coverage-final.json
       - run:
           name: Check Coverage
