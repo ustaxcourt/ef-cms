@@ -37,29 +37,29 @@ const getCounts = async ({ indexName, version }) => {
   };
 
   console.log(`## ${environmentName} Index Summary`);
-  console.log('+----+----+----+----+');
-  console.log('| Index | Alpha | Beta | Difference |');
-  console.log('+----+----+----+----+');
+  const out = [];
 
   for (const indexName of Object.keys(elasticsearchMappings)) {
     const [countAlpha, countBeta] = await Promise.all(
       ['alpha', 'beta'].map(version => getCounts({ indexName, version })),
     );
 
-    // const alpha - beta
-    console.log(
-      `| ${indexName} |  ${countAlpha} | ${countBeta} | ${Math.abs(
-        countAlpha - countBeta,
-      )} |`,
-    );
+    out.push({
+      indexName,
+      countAlpha, // eslint-disable-line sort-keys-fix/sort-keys-fix
+      countBeta,
+      diff: Math.abs(countAlpha - countBeta),
+    });
+
     totals.alpha += countAlpha;
     totals.beta += countBeta;
-    console.log('+----+----+----+----+');
   }
 
   const [nominator, denominator] = [totals.alpha, totals.beta].sort(
     (a, b) => a - b,
   );
+
+  console.table(out);
 
   console.log(
     `Total Difference: ${Math.round(
