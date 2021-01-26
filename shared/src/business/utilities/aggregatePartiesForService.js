@@ -37,6 +37,7 @@ const aggregatePartiesForService = caseEntity => {
     ) {
       aggregated.paper.push({
         ...party,
+        ...(party.contact || {}),
       });
     }
   });

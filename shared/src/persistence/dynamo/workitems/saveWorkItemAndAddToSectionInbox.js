@@ -1,13 +1,16 @@
 const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { put } = require('../../dynamodbClientService');
 /**
- * saveWorkItemForNonPaper
+ * saveWorkItemAndAddToSectionInbox
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.workItem the work item data
  */
-exports.saveWorkItemForNonPaper = async ({ applicationContext, workItem }) => {
+exports.saveWorkItemAndAddToSectionInbox = async ({
+  applicationContext,
+  workItem,
+}) => {
   await put({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,

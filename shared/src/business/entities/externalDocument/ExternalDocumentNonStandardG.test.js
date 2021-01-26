@@ -1,4 +1,7 @@
 const {
+  over3000Characters,
+} = require('../../test/createTestApplicationContext');
+const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
@@ -25,6 +28,19 @@ describe('ExternalDocumentNonStandardG', () => {
         scenario: 'Nonstandard G',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when documentTitle is over 3000 characters', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Answer',
+        documentTitle: over3000Characters,
+        documentType: 'Amendment to Answer',
+        ordinalValue: 'First',
+        scenario: 'Nonstandard G',
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
+      });
     });
   });
 

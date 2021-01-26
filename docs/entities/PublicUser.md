@@ -73,7 +73,7 @@
           then: 
             type: "any"
             flags: 
-              presence: "optional"
+              presence: "required"
           otherwise: 
             type: "any"
             flags: 
@@ -108,7 +108,7 @@
           then: 
             type: "any"
             flags: 
-              presence: "optional"
+              presence: "required"
           otherwise: 
             type: "any"
             flags: 
