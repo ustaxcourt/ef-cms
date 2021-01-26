@@ -1,3 +1,4 @@
+import { admissionsClerVerifiesPractitionerServiceIndicator } from './journey/admissionsClerVerifiesPractitionerServiceIndicator';
 import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAddsNewPractitioner';
 import { admissionsClerkAddsPractitionerEmail } from './journey/admissionsClerkAddsPractitionerEmail';
 import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkEditsPractitionerInfo';
@@ -17,7 +18,11 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 const test = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+  const {
+    COUNTRY_TYPES,
+    PARTY_TYPES,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -73,6 +78,10 @@ describe('admissions clerk practitioner journey', () => {
 
   loginAs(test, 'admissionsclerk@example.com');
   admissionsClerkMigratesPractitionerWithoutEmail(test);
+  admissionsClerVerifiesPractitionerServiceIndicator(
+    test,
+    SERVICE_INDICATOR_TYPES.SI_PAPER,
+  );
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test);
@@ -84,4 +93,8 @@ describe('admissions clerk practitioner journey', () => {
 
   loginAs(test, 'admissionsclerk@example.com');
   admissionsClerkAddsPractitionerEmail(test);
+  admissionsClerVerifiesPractitionerServiceIndicator(
+    test,
+    SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  );
 });

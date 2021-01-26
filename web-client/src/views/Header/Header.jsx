@@ -6,7 +6,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import close from '../../../../node_modules/uswds/dist/img/close.svg';
+import closeImg from '../../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../../images/ustc_seal.svg';
 
 const BetaBar = toggleBetaBarSequence => {
@@ -27,7 +27,7 @@ const BetaBar = toggleBetaBarSequence => {
               <img
                 alt="close"
                 className="ustc-icon-square--small"
-                src={close}
+                src={closeImg}
               />
             </button>
           </div>
@@ -185,11 +185,11 @@ export const Header = connect(
     const headerRef = useRef(null);
 
     useEffect(() => {
-      document.addEventListener('mousedown', reset, false);
-      document.addEventListener('keydown', keydown, false);
+      window.document.addEventListener('mousedown', reset, false);
+      window.document.addEventListener('keydown', keydown, false);
       return () => {
-        document.removeEventListener('mousedown', reset, false);
-        document.removeEventListener('keydown', keydown, false);
+        window.document.removeEventListener('mousedown', reset, false);
+        window.document.removeEventListener('keydown', keydown, false);
       };
     }, []);
 

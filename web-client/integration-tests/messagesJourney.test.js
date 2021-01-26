@@ -19,11 +19,13 @@ import { petitionsClerkCreatesNewMessageOnCaseWithNoAttachments } from './journe
 import { petitionsClerkCreatesOrderFromMessage } from './journey/petitionsClerkCreatesOrderFromMessage';
 import { petitionsClerkForwardsMessageToDocketClerk } from './journey/petitionsClerkForwardsMessageToDocketClerk';
 import { petitionsClerkForwardsMessageWithAttachment } from './journey/petitionsClerkForwardsMessageWithAttachment';
+import { petitionsClerkVerifiesCompletedMessageNotInInbox } from './journey/petitionsClerkVerifiesCompletedMessageNotInInbox';
 import { petitionsClerkViewsInProgressMessagesOnCaseDetail } from './journey/petitionsClerkViewsInProgressMessagesOnCaseDetail';
+import { petitionsClerkViewsRepliesAndCompletesMessageInInbox } from './journey/petitionsClerkViewsRepliesAndCompletesMessageInInbox';
 import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
-const theTest = setupTest();
+const test = setupTest();
 const { STATUS_TYPES } = applicationContext.getConstants();
 
 describe('messages journey', () => {
@@ -31,58 +33,67 @@ describe('messages journey', () => {
     jest.setTimeout(40000);
   });
 
-  loginAs(theTest, 'petitioner@example.com');
+  loginAs(test, 'petitioner@example.com');
   it('Create test case to send messages', async () => {
-    const caseDetail = await uploadPetition(theTest);
+    const caseDetail = await uploadPetition(test);
     expect(caseDetail.docketNumber).toBeDefined();
-    theTest.docketNumber = caseDetail.docketNumber;
-    theTest.documentId = caseDetail.docketEntries[0].docketEntryId;
+    test.docketNumber = caseDetail.docketNumber;
+    test.documentId = caseDetail.docketEntries[0].docketEntryId;
   });
 
-  loginAs(theTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(theTest);
-  createNewMessageOnCase(theTest);
-  petitionsClerkViewsSentMessagesBox(theTest);
-  petitionsClerk1VerifiesCaseStatusOnMessage(theTest, STATUS_TYPES.new);
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
+  createNewMessageOnCase(test);
+  petitionsClerkViewsSentMessagesBox(test);
+  petitionsClerk1VerifiesCaseStatusOnMessage(test, STATUS_TYPES.new);
 
-  loginAs(theTest, 'docketclerk1@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(theTest);
+  loginAs(test, 'docketclerk1@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(test);
 
-  loginAs(theTest, 'petitionsclerk1@example.com');
-  petitionsClerk1ViewsMessageInbox(theTest);
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1VerifiesCaseStatusOnMessage(
-    theTest,
+    test,
     STATUS_TYPES.generalDocketReadyForTrial,
   );
-  petitionsClerk1ViewsMessageDetail(theTest);
-  petitionsClerk1RepliesToMessage(theTest);
+  petitionsClerk1ViewsMessageDetail(test);
+  petitionsClerk1RepliesToMessage(test);
 
-  loginAs(theTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsReplyInInbox(theTest);
-  petitionsClerkCreatesOrderFromMessage(theTest);
-  petitionsClerkForwardsMessageToDocketClerk(theTest);
-  petitionsClerkViewsInProgressMessagesOnCaseDetail(theTest);
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkViewsReplyInInbox(test);
+  petitionsClerkCreatesOrderFromMessage(test);
+  petitionsClerkForwardsMessageToDocketClerk(test);
+  petitionsClerkViewsInProgressMessagesOnCaseDetail(test);
 
-  loginAs(theTest, 'docketclerk@example.com');
-  docketClerkViewsForwardedMessageInInbox(theTest);
-  docketClerkEditsOrderFromMessage(theTest);
-  docketClerkAppliesSignatureFromMessage(theTest);
-  docketClerkRemovesSignatureFromMessage(theTest);
-  docketClerkAppliesSignatureFromMessage(theTest);
-  docketClerkAddsDocketEntryFromMessage(theTest);
-  docketClerkCompletesMessageThread(theTest);
-  docketClerkViewsCompletedMessagesOnCaseDetail(theTest);
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkViewsForwardedMessageInInbox(test);
+  docketClerkEditsOrderFromMessage(test);
+  docketClerkAppliesSignatureFromMessage(test);
+  docketClerkRemovesSignatureFromMessage(test);
+  docketClerkAppliesSignatureFromMessage(test);
+  docketClerkAddsDocketEntryFromMessage(test);
+  docketClerkCompletesMessageThread(test);
+  docketClerkViewsCompletedMessagesOnCaseDetail(test);
 
-  loginAs(theTest, 'petitionsclerk1@example.com');
-  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(theTest);
-  createNewMessageOnCase(theTest);
-  petitionsClerk1ViewsMessageInbox(theTest);
-  petitionsClerk1ViewsMessageDetail(theTest);
-  petitionsClerk1CreatesNoticeFromMessageDetail(theTest);
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
+  createNewMessageOnCase(test);
+  petitionsClerk1ViewsMessageInbox(test);
+  petitionsClerk1ViewsMessageDetail(test);
+  petitionsClerk1CreatesNoticeFromMessageDetail(test);
 
-  loginAs(theTest, 'petitionsclerk1@example.com');
-  petitionsClerkCreatesNewMessageOnCaseWithNoAttachments(theTest);
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithNoAttachments(test);
 
-  loginAs(theTest, 'petitionsclerk1@example.com');
-  petitionsClerkForwardsMessageWithAttachment(theTest);
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerkForwardsMessageWithAttachment(test);
+
+  loginAs(test, 'petitionsclerk@example.com');
+  createNewMessageOnCase(test);
+
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerkViewsRepliesAndCompletesMessageInInbox(test);
+
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkVerifiesCompletedMessageNotInInbox(test);
 });
