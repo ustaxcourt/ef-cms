@@ -62,7 +62,7 @@ export const UserContactEditForm = connect(
             validationErrors.contact.phone
           }
         >
-          <label className="usa-label margin-bottom-0" htmlFor="phone">
+          <label className="usa-label" htmlFor="phone">
             Phone number
           </label>
           <span className="usa-hint">
@@ -75,33 +75,6 @@ export const UserContactEditForm = connect(
             name="contact.phone"
             type="tel"
             value={form.contact.phone || ''}
-            onBlur={() => {
-              onBlurValidationSequence();
-            }}
-            onChange={e => {
-              onChangeUpdateSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-        </FormGroup>
-
-        <FormGroup errorText={validationErrors && validationErrors.email}>
-          <label className="usa-label margin-bottom-0" htmlFor="email">
-            Email address
-          </label>
-          <span className="usa-hint">
-            This is the email you will use to log in to the system and where you
-            will receive service.
-          </span>
-          <input
-            autoCapitalize="none"
-            className="usa-input max-width-200"
-            id="email"
-            name="email"
-            type="email"
-            value={form.email || ''}
             onBlur={() => {
               onBlurValidationSequence();
             }}

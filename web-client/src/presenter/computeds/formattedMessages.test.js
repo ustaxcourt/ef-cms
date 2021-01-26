@@ -176,36 +176,45 @@ describe('formattedMessages', () => {
         applicationContext,
         messages: [
           {
-            completedAt: '2019-01-02T16:29:13.122Z',
             createdAt: '2019-01-01T16:29:13.122Z',
             docketNumber: '101-20',
-            message: 'This is a test message',
+            message: 'This is a test message one',
           },
           {
             createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
+            docketNumber: '101-20',
             isRepliedTo: true,
-            message: 'This is a test message',
+            message: 'This is a test message two',
+          },
+          {
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '101-20',
+            message: 'This is a test message three',
           },
           {
             completedAt: '2019-01-03T16:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
-            docketNumber: '102-20',
-            message: 'This is a test message',
+            docketNumber: '101-20',
+            isCompleted: true,
+            message: 'This is a test message four',
           },
         ],
       });
 
-      expect(result.inProgressMessages).toMatchObject([
+      expect(result.inProgressMessages).toEqual([
         {
+          completedAtFormatted: undefined,
           createdAt: '2019-01-01T16:29:13.122Z',
+          createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
-          message: 'This is a test message',
+          message: 'This is a test message one',
         },
         {
+          completedAtFormatted: undefined,
           createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '102-20',
-          message: 'This is a test message',
+          createdAtFormatted: '01/01/19',
+          docketNumber: '101-20',
+          message: 'This is a test message three',
         },
       ]);
     });
