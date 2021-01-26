@@ -1,4 +1,5 @@
 import { migrateItems } from './0000-validate-all-items';
+import { validUserCase } from '../../../../../shared/src/business/entities/UserCase.test';
 
 describe('0000-validate-all-items', () => {
   const entities = [
@@ -39,10 +40,16 @@ describe('0000-validate-all-items', () => {
   ];
 
   entities.forEach(entity => {
-    it('should validate the expected entities', async () => {
-      await expect(migrateItems([entity])).rejects.toThrow(
+    it('should validate the expected entities', () => {
+      expect(() => migrateItems([entity])).toThrow(
         `The ${entity.entityName} entity was invalid`,
       );
     });
+  });
+
+  it('should not throw an error when the entity is valid', () => {
+    const result = migrateItems([validUserCase]);
+
+    expect(result).toEqual([validUserCase]);
   });
 });

@@ -32,8 +32,7 @@ const {
 const { User } = require('../../../../../shared/src/business/entities/User');
 const applicationContext = createApplicationContext({});
 
-const migrateItems = async items => {
-  const itemsAfter = [];
+const migrateItems = items => {
   for (const item of items) {
     switch (item.entityName) {
       case 'Case':
@@ -75,7 +74,7 @@ const migrateItems = async items => {
         break;
     }
   }
-  return itemsAfter;
+  return items;
 };
 
 exports.migrateItems = migrateItems;
