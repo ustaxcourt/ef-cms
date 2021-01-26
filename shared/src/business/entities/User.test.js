@@ -109,6 +109,26 @@ describe('User entity', () => {
     expect(user.isValid()).toBeTruthy();
   });
 
+  it('is invalid when a judge does not have a judge title', () => {
+    const user = new User({
+      judgeFullName: 'Saul Perfectly Goodman',
+      name: 'Saul Goodman',
+      role: ROLES.judge,
+      userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+    });
+    expect(user.isValid()).toBeFalsy();
+  });
+
+  it('is invalid when a judge does not have a judgeFullName', () => {
+    const user = new User({
+      judgeTitle: 'Judge',
+      name: 'Saul Goodman',
+      role: ROLES.judge,
+      userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+    });
+    expect(user.isValid()).toBeFalsy();
+  });
+
   it('Creates a valid legacy judge user', () => {
     const user = new User({
       judgeTitle: 'Legacy Chief Judge',

@@ -20,7 +20,7 @@ export const PendingReportList = connect(
     setPendingReportSelectedJudgeSequence,
   }) {
     return (
-      <React.Fragment>
+      <>
         <div className="grid-row margin-bottom-2">
           <div className="tablet:grid-col-8">
             <div className="grid-row grid-gap">
@@ -40,7 +40,7 @@ export const PendingReportList = connect(
               >
                 <option value="">-Judge-</option>
                 {formattedPendingItems.judges.map((judge, idx) => (
-                  <option key={idx} value={judge}>
+                  <option key={`pending-judge-${idx}`} value={judge}>
                     {judge}
                   </option>
                 ))}
@@ -73,7 +73,7 @@ export const PendingReportList = connect(
             </tr>
           </thead>
           {formattedPendingItems.items.map((item, idx) => (
-            <tbody key={idx}>
+            <tbody key={`pending-item-${idx}`}>
               <tr className="pending-item-row">
                 <td>
                   <CaseLink formattedCase={item} />
@@ -117,7 +117,7 @@ export const PendingReportList = connect(
             Load More
           </Button>
         )}
-      </React.Fragment>
+      </>
     );
   },
 );

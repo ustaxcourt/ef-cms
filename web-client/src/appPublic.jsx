@@ -92,7 +92,7 @@ const appPublic = {
         <AppComponentPublic />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      document.querySelector('#app-public'),
+      window.document.querySelector('#app-public'),
     );
   },
 };

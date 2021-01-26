@@ -235,13 +235,12 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       standingPretrialPdfData: standingPretrialFile,
     });
 
-    const rawCase = caseEntity.validate().toRawObject();
-    await applicationContext.getPersistenceGateway().updateCase({
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: rawCase,
+      caseToUpdate: caseEntity,
     });
 
-    return rawCase;
+    return caseEntity.toRawObject();
   };
 
   /**
