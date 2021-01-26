@@ -12,6 +12,12 @@ const {
 const {
   migrateItems: migration0016,
 } = require('./migrations/0016-hearings-proceeding-type');
+const {
+  migrateItems: migration0017,
+} = require('./migrations/0017-remove-values-from-cases');
+const {
+  migrateItems: validationMigration,
+} = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -41,6 +47,12 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0015(items, documentClient);
   applicationContext.logger.info('about to run migration 0016');
   items = await migration0016(items, documentClient);
+  applicationContext.logger.info('about to run migration 0017');
+  items = await migration0017(items, documentClient);
+
+  applicationContext.logger.info('about to run validation migration');
+  items = await validationMigration(items, documentClient);
+
   return items;
 };
 
