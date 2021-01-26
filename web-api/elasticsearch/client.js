@@ -26,6 +26,34 @@ const getHost = async DomainName => {
   }
 };
 
+/**
+ * This function makes it easy to lookup the current version so that we can perform searches against it
+ *
+ * @param {String} environmentName The environment we are going to lookup the current color
+ * @returns {String} The current version of the application
+ */
+const getVersion = async environmentName => {
+  const dynamodb = new AWS.DynamoDB({ region: 'us-east-1' });
+  const result = await dynamodb
+    .getItem({
+      Key: {
+        pk: {
+          S: 'source-table-version',
+        },
+        sk: {
+          S: 'source-table-version',
+        },
+      },
+      TableName: `efcms-deploy-${environmentName}`,
+    })
+    .promise();
+
+  if (!result || !result.Item) {
+    throw 'Could not determine the current version';
+  }
+  return result.Item.current.S;
+};
+
 const cache = {
   hosts: {},
 };
@@ -39,6 +67,7 @@ const cache = {
  * @returns {Client} An instance of an Elasticsearch Client
  */
 const getClient = async ({ environmentName, version }) => {
+  version = version || (await getVersion(environmentName));
   const domainName = `efcms-search-${environmentName}-${version}`;
   const host = cache.hosts[domainName] || (await getHost(domainName));
 
