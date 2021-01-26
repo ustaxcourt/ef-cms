@@ -13,20 +13,10 @@ describe('updateUserContactInformationAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        form: {
-          contact: { address1: '999 jump street' },
-          email: 'test@example.com',
-        },
-      },
+      state: { form: { contact: {} } },
     });
-
     expect(
-      applicationContext.getUseCases().updateUserContactInformationInteractor
-        .mock.calls[0][0].contactInfo,
-    ).toEqual({
-      address1: '999 jump street',
-      email: 'test@example.com',
-    });
+      applicationContext.getUseCases().updateUserContactInformationInteractor,
+    ).toHaveBeenCalled();
   });
 });

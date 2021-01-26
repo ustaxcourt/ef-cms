@@ -14,7 +14,6 @@ describe('setUserOnFormAction', () => {
           contact: {
             address1: '123 Main St',
           },
-          email: 'testing@example.com',
           name: 'Test User',
           userId: '123',
         },
@@ -26,7 +25,6 @@ describe('setUserOnFormAction', () => {
       contact: {
         address1: '123 Main St',
       },
-      email: 'testing@example.com',
       name: 'Test User',
     });
   });
