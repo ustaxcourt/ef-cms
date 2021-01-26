@@ -140,15 +140,23 @@ describe('Petitions Clerk', () => {
   });
 
   describe('after a new trial session is created', () => {
-    it('is possible to manually add, view, and remove first case from an UNSET trial session', () => {
+    // these are separated into their own steps so if they fail
+    // they can be rerun without affecting other steps in the test
+    it('view case detail for first case', () => {
       goToCaseOverview(firstDocketNumber);
+    });
+
+    it('is possible to manually add, view, and remove first case from an UNSET trial session', () => {
       manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();
     });
 
+    it('view case detail for second case', () => {
+      goToCaseOverview(secondDocketNumber);
+    });
+
     it('manually block second case', () => {
       // block it
-      goToCaseOverview(secondDocketNumber);
       blockCaseFromTrial();
       // do this well before we look for it on blocked cases report...
     });
@@ -157,8 +165,11 @@ describe('Petitions Clerk', () => {
       setTrialSessionAsCalendared(testData.trialSessionIds[0]);
     });
 
-    it('manually add, view, and remove first case from the SET trial session', () => {
+    it('view case detail for first case', () => {
       goToCaseOverview(firstDocketNumber);
+    });
+
+    it('manually add, view, and remove first case from the SET trial session', () => {
       manuallyAddCaseToCalendaredTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();
     });
@@ -173,8 +184,11 @@ describe('Petitions Clerk', () => {
       });
     });
 
-    it('unblock second case', () => {
+    it('view case detail for second case', () => {
       goToCaseOverview(secondDocketNumber);
+    });
+
+    it('unblock second case', () => {
       unblockCaseFromTrial();
     });
 
@@ -182,8 +196,11 @@ describe('Petitions Clerk', () => {
       login(docketClerkToken);
     });
 
-    it('set second case as High Priority for a trial session', () => {
+    it('view case detail for second case', () => {
       goToCaseOverview(secondDocketNumber);
+    });
+
+    it('set second case as High Priority for a trial session', () => {
       setCaseAsReadyForTrial(secondDocketNumber);
       setCaseAsHighPriority();
     });
