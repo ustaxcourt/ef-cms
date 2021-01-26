@@ -1,6 +1,16 @@
 const client = require('../../dynamodbClientService');
 const { omit } = require('lodash');
 
+const fieldsToOmitBeforePersisting = [
+  'archivedCorrespondences',
+  'archivedDocketEntries',
+  'correspondence',
+  'docketEntries',
+  'hearings',
+  'irsPractitioners',
+  'privatePractitioners',
+];
+
 /**
  * createCase
  *
@@ -15,11 +25,7 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
       Item: {
         pk: `case|${caseToCreate.docketNumber}`,
         sk: `case|${caseToCreate.docketNumber}`,
-        ...omit(caseToCreate, [
-          'irsPractitioners',
-          'privatePractitioners',
-          'docketEntries',
-        ]),
+        ...omit(caseToCreate, fieldsToOmitBeforePersisting),
       },
       applicationContext,
     }),
@@ -57,3 +63,5 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
 
   return results;
 };
+
+exports.fieldsToOmitBeforePersisting = fieldsToOmitBeforePersisting;
