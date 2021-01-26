@@ -50,7 +50,6 @@ const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.info('about to run migration 0017');
   items = await migration0017(items, documentClient);
 
-  // todo - stop the whole migration if there is a validation error
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
 
