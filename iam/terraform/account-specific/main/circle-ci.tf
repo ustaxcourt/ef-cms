@@ -98,7 +98,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "apigateway:PATCH",
         "apigateway:GET",
         "apigateway:PUT",
-        "apigateway:POST"
+        "apigateway:POST",
+        "apigateway:SetWebACL"
       ],
       "Resource": "*"
     },
@@ -231,6 +232,16 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-work-items-*-lambdaRole",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*"
+      ]
+    },
+    {
+      "Sid": "WAFv2",
+      "Effect": "Allow",
+      "Action": [
+        "wafv2:*"
+      ],
+      "Resource": [
+        "*"
       ]
     }
   ]
