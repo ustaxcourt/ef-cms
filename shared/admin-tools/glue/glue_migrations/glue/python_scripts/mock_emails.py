@@ -2,11 +2,12 @@
 
 import sys
 from hashlib import md5
-from awsglue.transforms import *
-from awsglue.utils import getResolvedOptions
-from pyspark.context import SparkContext
-from awsglue.context import GlueContext
-from awsglue.job import Job
+from awsglue.transforms import Map  # type: ignore
+from awsglue.utils import getResolvedOptions  # type: ignore
+from pyspark.context import SparkContext  # type: ignore
+from awsglue.context import GlueContext  # type: ignore
+from awsglue.job import Job  # type: ignore
+
 
 ## @params: [JOB_NAME]
 args = getResolvedOptions(
@@ -61,11 +62,23 @@ def find_and_mock_emails(record):
             find_and_mock_emails(item)
 
 
+def mock_user_email_key(record):
+    '''
+    Handle records with pk in the form of `user-email|somebody@example.com`
+    This changes the record in-place.
+    '''
+    record_type, data = record['pk'].split('|', 1)
+    if record_type == 'user-email':
+        mocked_email = mock_email(data, FAKE_DOMAIN)
+        record['pk'] = f"{record_type}|{mocked_email}"
+
+
 sc = SparkContext()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
+
 
 ## @type: DataSource
 ## @args: [connection_type="dynamodb", connection_options={"dynamodb.input.tableName": "source_table"}, transformation_ctx="datasource0"]
@@ -83,11 +96,15 @@ datasource0 = glueContext.create_dynamic_frame.from_options(
 ## @return: mapped
 ## @inputs: [frame = datasource0]
 def map_function(dynamicRecord):
+    if dynamicRecord['pk'].startswith('user-email|'):
+        mock_user_email_key(dynamicRecord)
+
     find_and_mock_emails(dynamicRecord)
     return dynamicRecord
 
 
 mapped = Map.apply(frame=datasource0, f=map_function, transformation_ctx='mapped')
+
 
 ## @type: DataSink
 ## @args: [connection_type="dynamodb", connection_options={"table_name": "destination_table"} ]
