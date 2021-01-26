@@ -109,9 +109,9 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
       - e.g. `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh $ENVIRONMENT`
     - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
 8. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
-9. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
 10. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
-11. Update CircleCI to have all the new environment variables needed:
-     - DYNAMSOFT_PRODUCT_KEYS_`$ENVIRONMENT`
+11. Update CircleCI to have all the new environment variables needed.
+
+Then, follow the instructions found in the [Blue-Green Migration documentation](../BLUE_GREEN_MIGRATION.md) for a first-time deployment.
 
 A deploy of a new environment is likely to require _two_ attempts to work, due to Terraform limitations. See [the troubleshooting guide](TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.
