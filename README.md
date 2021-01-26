@@ -185,8 +185,8 @@ digraph {
 		ElasticsearchEast
 	}
 
-	S3DocumentsEast -> S3DocumentsWest [ 
-		label = "S3 Replication" 
+	S3DocumentsEast -> S3DocumentsWest [
+		label = "S3 Replication"
 	]
 
 	DynamoDBEast -> DynamoDBWest [
@@ -217,7 +217,7 @@ This diagram was created with [Graphviz](https://graphviz.org/), and the source 
 ```dot
 digraph {
 	rankdir="LR"
-	
+
 	Code [shape = doublecircle]
 	node [style = rounded, shape = box]
 

@@ -17,4 +17,3 @@ SOURCE_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "ef
 [ -z "$SOURCE_TABLE_VERSION" ] && echo "efcms-search-${ENV}" && exit
 
 echo "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}"
-

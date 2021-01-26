@@ -20,4 +20,3 @@ if [ -z "$DESTINATION_TABLE_VERSION" ]; then
 else
   echo "efcms-search-${ENV}-${DESTINATION_TABLE_VERSION}"
 fi
-
