@@ -1,5 +1,5 @@
 export const petitionsClerkVerifiesCompletedMessageNotInSection = test => {
-  return it('petitions clerk verifies the completed message is not in their inbox', async () => {
+  return it('petitions clerk verifies the completed message is not in the section inbox', async () => {
     await test.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'section',
