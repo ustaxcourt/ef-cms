@@ -52,6 +52,9 @@ const {
   caseAdvancedSearchLambda,
 } = require('./cases/caseAdvancedSearchLambda');
 const {
+  checkEmailAvailabilityLambda,
+} = require('./users/checkEmailAvailabilityLambda');
+const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
@@ -921,6 +924,10 @@ app.get(
 app.put(
   '/async/users/:userId/contact-info',
   lambdaWrapper(updateUserContactInformationLambda),
+);
+app.get(
+  '/users/email-availability',
+  lambdaWrapper(checkEmailAvailabilityLambda),
 );
 app.get(
   '/users/privatePractitioners/search',
