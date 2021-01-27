@@ -3,6 +3,12 @@ const {
   Case,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const {
+  CaseDeadline,
+} = require('../../../../../shared/src/business/entities/CaseDeadline');
+const {
+  Correspondence,
+} = require('../../../../../shared/src/business/entities/Correspondence');
+const {
   DocketEntry,
 } = require('../../../../../shared/src/business/entities/DocketEntry');
 const {
@@ -27,6 +33,9 @@ const {
   UserCase,
 } = require('../../../../../shared/src/business/entities/UserCase');
 const {
+  UserCaseNote,
+} = require('../../../../../shared/src/business/entities/notes/UserCaseNote');
+const {
   WorkItem,
 } = require('../../../../../shared/src/business/entities/WorkItem');
 const { User } = require('../../../../../shared/src/business/entities/User');
@@ -37,6 +46,12 @@ const migrateItems = items => {
     switch (item.entityName) {
       case 'Case':
         new Case(item, { applicationContext }).validate();
+        break;
+      case 'Correspondence':
+        new Correspondence(item, { applicationContext }).validate();
+        break;
+      case 'CaseDeadline':
+        new CaseDeadline(item, { applicationContext }).validate();
         break;
       case 'DocketEntry':
         new DocketEntry(item, { applicationContext }).validate();
@@ -65,12 +80,13 @@ const migrateItems = items => {
       case 'UserCase':
         new UserCase(item, { applicationContext }).validate();
         break;
+      case 'UserCaseNote':
+        new UserCaseNote(item, { applicationContext }).validate();
+        break;
       case 'WorkItem':
         new WorkItem(item, { applicationContext }).validate();
         break;
       default:
-        // There are still more entities, but they might have undefined for entity name
-        // TODO: figure out how to validate the rest
         break;
     }
   }
