@@ -47,6 +47,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
+import { MyAccount } from './MyAccount';
 import { OtherFilerInformation } from './CaseDetail/OtherFilerInformation';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
@@ -129,6 +130,7 @@ const pages = {
   LogIn,
   MessageDetail,
   Messages,
+  MyAccount,
   OtherFilerInformation,
   PendingReport,
   PetitionQc,
