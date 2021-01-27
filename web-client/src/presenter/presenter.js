@@ -106,6 +106,7 @@ import { gotoCaseDeadlineReportSequence } from './sequences/gotoCaseDeadlineRepo
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
+import { gotoChangeLoginAndServiceEmailSequence } from './sequences/gotoChangeLoginAndServiceEmailSequence';
 import { gotoCompleteDocketEntrySequence } from './sequences/gotoCompleteDocketEntrySequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
@@ -556,6 +557,7 @@ export const presenter = {
     gotoCaseDetailSequence,
     gotoCaseInventoryReportSequence,
     gotoCaseSearchNoMatchesSequence,
+    gotoChangeLoginAndServiceEmailSequence,
     gotoCompleteDocketEntrySequence,
     gotoContactSequence,
     gotoCreateOrderSequence,
