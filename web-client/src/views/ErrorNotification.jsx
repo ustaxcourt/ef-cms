@@ -19,7 +19,7 @@ export const ErrorNotification = connect(
     });
 
     return (
-      <React.Fragment>
+      <>
         {alertHelper.showErrorAlert && (
           <div
             aria-live="assertive"
@@ -36,8 +36,8 @@ export const ErrorNotification = connect(
               )}
               {alertHelper.showMultipleMessages && (
                 <ul>
-                  {alertHelper.messagesDeduped.map((message, idx) => (
-                    <li key={`alert-error-${idx}`}>{message}</li>
+                  {alertHelper.messagesDeduped.map(message => (
+                    <li key={message}>{message}</li>
                   ))}
                 </ul>
               )}
@@ -47,7 +47,7 @@ export const ErrorNotification = connect(
             </div>
           </div>
         )}
-      </React.Fragment>
+      </>
     );
   },
 );

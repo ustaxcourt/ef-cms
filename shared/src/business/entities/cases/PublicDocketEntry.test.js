@@ -7,6 +7,9 @@ describe('PublicDocketEntry', () => {
       additionalInfo: 'something',
       additionalInfo2: 'something else',
       anotherThing: false,
+      attachments: true,
+      certificateOfService: true,
+      certificateOfServiceDate: '2018-06-07',
       createdAt: 'testing',
       docketEntryId: 'testing',
       docketNumber: '123-20',
@@ -16,6 +19,8 @@ describe('PublicDocketEntry', () => {
       isFileAttached: true,
       isLegacyServed: true,
       isPaper: true,
+      lodged: true,
+      objections: 'Yes',
       processingStatus: 'testing',
       receivedAt: 'testing',
       servedAt: '2019-03-01T21:40:46.415Z',
@@ -34,6 +39,9 @@ describe('PublicDocketEntry', () => {
     expect(entity.toRawObject()).toEqual({
       additionalInfo: 'something',
       additionalInfo2: 'something else',
+      attachments: true,
+      certificateOfService: true,
+      certificateOfServiceDate: '2018-06-07',
       docketEntryId: 'testing',
       docketNumber: '123-20',
       documentType: 'testing',
@@ -43,6 +51,8 @@ describe('PublicDocketEntry', () => {
       isLegacyServed: true,
       isPaper: true,
       isSealed: false,
+      lodged: true,
+      objections: 'Yes',
       processingStatus: 'testing',
       receivedAt: 'testing',
       servedAt: '2019-03-01T21:40:46.415Z',
@@ -71,8 +81,10 @@ describe('PublicDocketEntry', () => {
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          filingDate: '2020-05-27T09:23:43.007Z',
           isMinuteEntry: true,
           isOnDocketRecord: true,
+          receivedAt: '2020-05-27T09:23:43.007Z',
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         });
 
@@ -93,6 +105,7 @@ describe('PublicDocketEntry', () => {
         isOnDocketRecord: true,
         isStricken: false,
         numberOfPages: null,
+        receivedAt: '2020-05-27T09:23:43.007Z',
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       });
 
@@ -106,6 +119,7 @@ describe('PublicDocketEntry', () => {
         isOnDocketRecord: true,
         isSealed: false,
         isStricken: false,
+        receivedAt: '2020-05-27T09:23:43.007Z',
       });
     });
   });

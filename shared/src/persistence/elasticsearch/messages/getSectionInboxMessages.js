@@ -14,6 +14,9 @@ exports.getSectionInboxMessages = async ({ applicationContext, section }) => {
             {
               match: { 'isRepliedTo.BOOL': false },
             },
+            {
+              match: { 'isCompleted.BOOL': false },
+            },
           ],
         },
       },

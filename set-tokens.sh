@@ -9,6 +9,7 @@
 #   - aws cli must be installed on your machine
 #   - aws credentials must be installed on your machine
 
+( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 [ -z "${DEFAULT_ACCOUNT_PASS}" ] && echo "You must have DEFAULT_ACCOUNT_PASS set in your environment" && exit 1
 
 REGION="us-east-1"

@@ -329,6 +329,44 @@
                   name: "max"
                   args: 
                     limit: 500
+            attachments: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+            certificateOfService: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+            certificateOfServiceDate: 
+              type: "date"
+              flags: 
+                format: 
+                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                  - "YYYY-MM-DD"
+              whens: 
+                - 
+                  ref: 
+                    path: 
+                      - "certificateOfService"
+                  is: 
+                    type: "any"
+                    flags: 
+                      only: true
+                      presence: "required"
+                    allow: 
+                      - 
+                        override: true
+                      - true
+                  then: 
+                    type: "any"
+                    flags: 
+                      presence: "required"
+                  otherwise: 
+                    type: "any"
+                    flags: 
+                      presence: "optional"
+                    allow: 
+                      - null
             createdAt: 
               type: "date"
               flags: 
@@ -763,7 +801,7 @@
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
-                presence: "optional"
+                presence: "required"
                 description: "Date that this Document was filed."
               rules: 
                 - 
@@ -805,6 +843,11 @@
               flags: 
                 presence: "optional"
                 description: "Indicates the item has been removed from the docket record."
+            lodged: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+                description: "A lodged document is awaiting action by the judge to enact or refuse."
             numberOfPages: 
               type: "number"
               flags: 
@@ -814,6 +857,20 @@
                   name: "integer"
               allow: 
                 - null
+            objections: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+              allow: 
+                - "Yes"
+                - "No"
+                - "Unknown"
             processingStatus: 
               type: "string"
               flags: 
@@ -829,7 +886,12 @@
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
-                presence: "optional"
+                presence: "required"
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    date: "now"
             servedAt: 
               type: "date"
               flags: 
@@ -837,6 +899,11 @@
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
                   - "YYYY-MM-DD"
                 presence: "optional"
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    date: "now"
     docketNumber: 
       type: "string"
       flags: 

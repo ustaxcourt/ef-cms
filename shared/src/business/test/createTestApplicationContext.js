@@ -93,6 +93,9 @@ const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
 } = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../../src/business/utilities/getDocumentTitleWithAdditionalInfo');
+const {
   getDocumentTypeForAddressChange,
 } = require('../utilities/generateChangeOfAddressTemplate');
 const {
@@ -253,6 +256,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
+    getDocumentTitleWithAdditionalInfo: jest
+      .fn()
+      .mockImplementation(getDocumentTitleWithAdditionalInfo),
     getDocumentTypeForAddressChange: jest
       .fn()
       .mockImplementation(getDocumentTypeForAddressChange),
