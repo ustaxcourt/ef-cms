@@ -1,5 +1,6 @@
 import { BigHeader } from './BigHeader';
 import { ErrorNotification } from './ErrorNotification';
+import { LoginAndServiceEmailAddress } from './LoginAndServiceEmailAddress';
 import { MyContactInformation } from './MyContactInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { connect } from '@cerebral/react';
@@ -19,7 +20,7 @@ export const MyAccount = connect({}, function MyAccount() {
               <MyContactInformation />
             </div>
             <div className="grid-col-4">
-              {/* TODO: put the change email here */}
+              <LoginAndServiceEmailAddress />
             </div>
           </div>
         </div>

@@ -1,31 +1,29 @@
-import { AddressDisplay } from './CaseDetail/AddressDisplay';
 import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
-export const MyContactInformation = connect(
+export const LoginAndServiceEmailAddress = connect(
   {
-    canEditContactInformationSequence:
-      sequences.canEditContactInformationSequence,
     user: state.user,
   },
-  function MyContactInformation({ canEditContactInformationSequence, user }) {
+  function LoginAndServiceEmailAddress({ user }) {
     return (
       <div className="card">
         <div className="content-wrapper gray">
-          <h3>My Contact Information</h3>
+          <h3>Login & Service Email Address</h3>
           <hr />
-          <AddressDisplay contact={{ ...user, ...user.contact }} />
+          {user.email}
+          {/* TODO: get email */}
           <p className="margin-bottom-0">
             <Button
               link
               icon="edit"
               onClick={() => {
-                canEditContactInformationSequence();
+                // canEditContactInformationSequence();
               }}
             >
-              Edit
+              Change Email
             </Button>
           </p>
         </div>
