@@ -1,61 +1,78 @@
-import { checkForActiveBatchesAction } from './checkForActiveBatchesAction';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { checkEmailAvailabilityAction } from './checkEmailAvailabilityAction';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('checkForActiveBatchesAction', () => {
-  let presenter;
+describe('checkEmailAvailabilityAction', () => {
+  const mockEmail = 'someone@example.com';
 
-  beforeAll(() => {
-    presenter = {
-      providers: {
-        path: {
-          hasActiveBatches: jest.fn(),
-          noActiveBatches: jest.fn(),
-        },
-      },
+  let pathEmailAvailableStub;
+  let pathEmailInUseStub;
+
+  beforeEach(() => {
+    pathEmailAvailableStub = jest.fn();
+    pathEmailInUseStub = jest.fn();
+
+    presenter.providers.applicationContext = applicationContext;
+
+    presenter.providers.path = {
+      emailAvailable: pathEmailAvailableStub,
+      emailInUse: pathEmailInUseStub,
     };
   });
 
-  it('should call hasActiveBatches when there are any batches with a length > 0', async () => {
-    await runAction(checkForActiveBatchesAction, {
+  it('should call checkEmailAvailabilityInteractor with state.form.email', async () => {
+    await runAction(checkEmailAvailabilityAction, {
       modules: {
         presenter,
       },
-      props: {
-        key: 'certificateOfService',
-      },
       state: {
-        scanner: {
-          batches: {
-            petition: [
-              {
-                index: 1,
-              },
-            ],
-          },
-        },
+        form: { email: mockEmail },
       },
     });
 
-    expect(presenter.providers.path.hasActiveBatches).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({ email: mockEmail });
   });
 
-  it('should call noActiveBatches when there are any batches with a length > 0', async () => {
-    await runAction(checkForActiveBatchesAction, {
+  it('should call path.emailAvailable when checkEmailAvailabilityInteractor returns true', async () => {
+    applicationContext
+      .getUseCases()
+      .checkEmailAvailabilityInteractor.mockReturnValue(true);
+
+    await runAction(checkEmailAvailabilityAction, {
       modules: {
         presenter,
       },
-      props: {
-        key: 'certificateOfService',
-      },
       state: {
-        scanner: {
-          batches: {
-            petition: [],
-          },
-        },
+        form: { email: mockEmail },
       },
     });
 
-    expect(presenter.providers.path.noActiveBatches).toHaveBeenCalled();
+    expect(pathEmailAvailableStub).toHaveBeenCalled();
+  });
+
+  it('should call path.emailInUse with an error message when checkEmailAvailabilityInteractor returns false', async () => {
+    applicationContext
+      .getUseCases()
+      .checkEmailAvailabilityInteractor.mockReturnValue(false);
+
+    await runAction(checkEmailAvailabilityAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { email: mockEmail },
+      },
+    });
+
+    expect(pathEmailInUseStub.mock.calls[0][0]).toMatchObject({
+      alertError: {
+        title:
+          'An account with this email already exists. Enter a new email address.',
+      },
+    });
   });
 });
