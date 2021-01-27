@@ -8,6 +8,9 @@ describe('0000-validate-all-items', () => {
       entityName: 'Case',
     },
     {
+      entityName: 'CaseDeadline',
+    },
+    {
       entityName: 'DocketEntry',
     },
     {
@@ -33,6 +36,9 @@ describe('0000-validate-all-items', () => {
     },
     {
       entityName: 'UserCase',
+    },
+    {
+      entityName: 'UserCaseNote',
     },
     {
       entityName: 'WorkItem',
