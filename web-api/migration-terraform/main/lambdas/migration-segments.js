@@ -16,6 +16,9 @@ const {
   migrateItems: migration0017,
 } = require('./migrations/0017-remove-values-from-cases');
 const {
+  migrateItems: migration0018,
+} = require('./migrations/0018-add-entity-name-for-correspondences');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
@@ -49,6 +52,8 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0016(items, documentClient);
   applicationContext.logger.info('about to run migration 0017');
   items = await migration0017(items, documentClient);
+  applicationContext.logger.info('about to run migration 0018');
+  items = await migration0018(items, documentClient);
 
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
