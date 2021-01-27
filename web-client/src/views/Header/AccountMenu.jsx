@@ -6,11 +6,13 @@ import classNames from 'classnames';
 
 export const AccountMenu = connect(
   {
+    gotoMyAccountSequence: sequences.gotoMyAccountSequence,
     headerHelper: state.headerHelper,
     signOutSequence: sequences.signOutSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
   },
   function AccountMenu({
+    gotoMyAccountSequence,
     headerHelper,
     isExpanded,
     signOutSequence,
@@ -44,6 +46,17 @@ export const AccountMenu = connect(
             </button>
             {isExpanded && (
               <ul className="usa-nav__submenu position-right-0">
+                {headerHelper.showMyAccount && (
+                  <li className="usa-nav__submenu-item">
+                    <button
+                      className="account-menu-item usa-button usa-button--unstyled"
+                      id="my-account"
+                      onClick={() => gotoMyAccountSequence()}
+                    >
+                      My Account
+                    </button>
+                  </li>
+                )}
                 <li className="usa-nav__submenu-item">
                   <button
                     className="account-menu-item usa-button usa-button--unstyled"
