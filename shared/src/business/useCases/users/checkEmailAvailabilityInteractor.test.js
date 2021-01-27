@@ -22,7 +22,7 @@ describe('checkEmailAvailabilityInteractor', () => {
     });
   });
 
-  it('should return true if the specified email is not already in use', async () => {
+  it('should return true when the specified email is not already in use', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCognitoUserByEmail.mockReturnValue(false);
@@ -35,7 +35,7 @@ describe('checkEmailAvailabilityInteractor', () => {
     expect(result).toBeTruthy();
   });
 
-  it('should return false if the specified email is already in use', async () => {
+  it('should return false when the specified email is already in use', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCognitoUserByEmail.mockReturnValue(true);
