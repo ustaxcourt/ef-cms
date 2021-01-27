@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -6,13 +7,11 @@ import classNames from 'classnames';
 
 export const AccountMenu = connect(
   {
-    gotoMyAccountSequence: sequences.gotoMyAccountSequence,
     headerHelper: state.headerHelper,
     signOutSequence: sequences.signOutSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
   },
   function AccountMenu({
-    gotoMyAccountSequence,
     headerHelper,
     isExpanded,
     signOutSequence,
@@ -48,13 +47,14 @@ export const AccountMenu = connect(
               <ul className="usa-nav__submenu position-right-0">
                 {headerHelper.showMyAccount && (
                   <li className="usa-nav__submenu-item">
-                    <button
-                      className="account-menu-item usa-button usa-button--unstyled"
+                    <Button
+                      className="account-menu-item usa-button usa-button--unstyled font-body-2xs"
+                      href="/my-account"
                       id="my-account"
-                      onClick={() => gotoMyAccountSequence()}
+                      overrideMargin="margin-right-0"
                     >
                       My Account
-                    </button>
+                    </Button>
                   </li>
                 )}
                 <li className="usa-nav__submenu-item">
