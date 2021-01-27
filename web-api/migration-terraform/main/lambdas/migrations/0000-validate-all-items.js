@@ -6,6 +6,9 @@ const {
   CaseDeadline,
 } = require('../../../../../shared/src/business/entities/CaseDeadline');
 const {
+  Correspondence,
+} = require('../../../../../shared/src/business/entities/Correspondence');
+const {
   DocketEntry,
 } = require('../../../../../shared/src/business/entities/DocketEntry');
 const {
@@ -43,6 +46,9 @@ const migrateItems = items => {
     switch (item.entityName) {
       case 'Case':
         new Case(item, { applicationContext }).validate();
+        break;
+      case 'Correspondence':
+        new Correspondence(item, { applicationContext }).validate();
         break;
       case 'CaseDeadline':
         new CaseDeadline(item, { applicationContext }).validate();
