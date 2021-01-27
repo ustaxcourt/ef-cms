@@ -14,6 +14,9 @@
 ENV=$1
 
 DESTINATION_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"}}' | jq -r ".Item.current.S")
-[ -z "$DESTINATION_TABLE_VERSION" ] && echo "efcms-${ENV}"
 
-echo "efcms-${ENV}-${DESTINATION_TABLE_VERSION}"
+if [ -z "$DESTINATION_TABLE_VERSION" ]; then
+  echo "efcms-${ENV}"
+else
+  echo "efcms-${ENV}-${DESTINATION_TABLE_VERSION}"
+fi
