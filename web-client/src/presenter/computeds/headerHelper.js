@@ -50,6 +50,9 @@ export const headerHelper = (get, applicationContext) => {
     showDocumentQC: isInternalUser,
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
     showMessages: isInternalUser && userRole !== USER_ROLES.general,
+    showMyAccount:
+      userRole === USER_ROLES.privatePractitioner ||
+      userRole === USER_ROLES.irsPractitioner,
     showMyCases:
       isExternalUser && userRole && userRole !== USER_ROLES.irsSuperuser,
     showReports: isInternalUser,
