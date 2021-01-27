@@ -314,6 +314,7 @@ import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDock
 import { submitCaseInventoryReportModalSequence } from './sequences/submitCaseInventoryReportModalSequence';
 import { submitCaseSearchForConsolidationSequence } from './sequences/submitCaseSearchForConsolidationSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
+import { submitChangeLoginAndServiceEmailSequence } from './sequences/submitChangeLoginAndServiceEmailSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
@@ -410,6 +411,7 @@ import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSe
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateCaseInventoryReportModalSequence } from './sequences/validateCaseInventoryReportModalSequence';
+import { validateChangeLoginAndServiceEmailSequence } from './sequences/validateChangeLoginAndServiceEmailSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
@@ -763,6 +765,7 @@ export const presenter = {
     submitCaseInventoryReportModalSequence,
     submitCaseSearchForConsolidationSequence,
     submitCaseSearchSequence,
+    submitChangeLoginAndServiceEmailSequence,
     submitCourtIssuedDocketEntrySequence,
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
@@ -859,6 +862,7 @@ export const presenter = {
     validateCaseDetailSequence,
     validateCaseDocketNumberSearchFormSequence,
     validateCaseInventoryReportModalSequence,
+    validateChangeLoginAndServiceEmailSequence,
     validateCourtIssuedDocketEntrySequence,
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,
