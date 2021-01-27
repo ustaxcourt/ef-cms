@@ -52,8 +52,8 @@ export const BlockedCasesReport = connect(
                       </thead>
                       <tbody>
                         {blockedCasesReportHelper.blockedCasesFormatted.map(
-                          (item, idx) => (
-                            <tr key={idx}>
+                          item => (
+                            <tr key={item.docketNumber}>
                               <td>
                                 <CaseLink formattedCase={item} />
                               </td>
