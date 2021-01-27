@@ -14,15 +14,8 @@ export const LoginAndServiceEmailAddress = connect(
           <h3>Login & Service Email Address</h3>
           <hr />
           {user.email}
-          {/* TODO: get email */}
           <p className="margin-bottom-0">
-            <Button
-              link
-              icon="edit"
-              onClick={() => {
-                // canEditContactInformationSequence();
-              }}
-            >
+            <Button link href="/change-login-and-service-email" icon="edit">
               Change Email
             </Button>
           </p>
