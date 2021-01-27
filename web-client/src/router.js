@@ -761,6 +761,14 @@ const router = {
     );
 
     registerRoute(
+      '/my-account',
+      ifHasAccess(() => {
+        setPageTitle('My Account');
+        return app.getSequence('gotoMyAccountSequence')();
+      }),
+    );
+
+    registerRoute(
       '/document-qc/my',
       ifHasAccess(() => {
         setPageTitle('Document QC');
