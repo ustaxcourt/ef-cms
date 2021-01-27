@@ -7,9 +7,10 @@ import React from 'react';
 
 export const ChangeLoginAndServiceEmail = connect(
   {
+    form: state.form,
     user: state.user,
   },
-  function ChangeLoginAndServiceEmail({ user }) {
+  function ChangeLoginAndServiceEmail({ form, user }) {
     return (
       <React.Fragment>
         <BigHeader text={'Change Login & Service Email Address'} />
@@ -38,7 +39,7 @@ export const ChangeLoginAndServiceEmail = connect(
                   id="email"
                   name="email"
                   type="text"
-                  value={''}
+                  value={form.email || ''}
                 />
               </FormGroup>
               <FormGroup>
@@ -51,7 +52,7 @@ export const ChangeLoginAndServiceEmail = connect(
                   id="confirm-email"
                   name="confirmEmail"
                   type="text"
-                  value={''}
+                  value={form.confirmEmail || ''}
                 />
               </FormGroup>
             </div>
