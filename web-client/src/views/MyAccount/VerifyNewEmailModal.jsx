@@ -27,7 +27,7 @@ export const VerifyNewEmailModal = connect(
         }
         title="Verify Your New Email"
       >
-        <div className="margin-bottom-4" id="add-to-trial-session-modal">
+        <div className="margin-bottom-4" id="verify-new-email-modal">
           <p>A verification email has been sent to {email}.</p>
           <p>
             Use your old email to login until you verify your new email address.
