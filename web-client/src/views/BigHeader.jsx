@@ -1,3 +1,4 @@
+import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@cerebral/react';
 import { props } from 'cerebral';
 import React from 'react';
@@ -8,11 +9,21 @@ export const BigHeader = connect(
   },
   function BigHeader({ text }) {
     return (
-      <div className="big-blue-header">
-        <div className="grid-container">
-          <h1 tabIndex="-1">{text}</h1>
+      <>
+        <div className="big-blue-header">
+          <div className="grid-container">
+            <h1 tabIndex="-1">{text}</h1>
+          </div>
         </div>
-      </div>
+        <WarningNotificationComponent
+          alertWarning={{
+            message: 'blah blah blah.',
+            title: 'Ruh roh!',
+          }}
+          dismissable={false}
+          scrollToTop={false}
+        />
+      </>
     );
   },
 );
