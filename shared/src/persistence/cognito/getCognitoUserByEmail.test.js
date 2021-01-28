@@ -9,7 +9,7 @@ describe('getCognitoUserByEmail', () => {
 
   it('returns a user when found in cognito', async () => {
     applicationContext.getCognito().listUsers.mockReturnValue({
-      promise: async () => [mockFoundUser],
+      promise: async () => ({ Users: [mockFoundUser] }),
     });
 
     const result = await getCognitoUserByEmail({
@@ -23,7 +23,7 @@ describe('getCognitoUserByEmail', () => {
   it('returns null when no associated user is found in cognito', async () => {
     applicationContext.getCognito().listUsers.mockReturnValue({
       promise: async () => {
-        return {};
+        return { Users: [] };
       },
     });
 
