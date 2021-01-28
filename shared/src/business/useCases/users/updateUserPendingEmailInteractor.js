@@ -36,5 +36,24 @@ exports.updateUserPendingEmailInteractor = async ({
     user: userEntity,
   });
 
+  const templateHtml =
+    'Please confirm your new email: <a href="/verify">Verify</a>';
+
+  const destination = {
+    email: pendingEmail,
+    templateData: {
+      emailContent: templateHtml,
+    },
+  };
+
+  await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+    applicationContext,
+    defaultTemplateData: {
+      emailContent: 'Please confirm your new email',
+    },
+    destinations: [destination],
+    templateName: process.env.EMAIL_SERVED_PETITION_TEMPLATE,
+  });
+
   return userEntity;
 };
