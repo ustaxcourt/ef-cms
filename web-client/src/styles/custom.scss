@@ -1767,17 +1767,8 @@ button.change-scanner-button {
 
 .verify-email-notification {
   background: color($theme-color-warning-lighter);
-  height: 80px;
-  padding: 20px;
-  font-size: 16px;
-  box-sizing: border-box;
-  line-height: 24px;
-  font-weight: $font-semibold;
 
   svg {
     color: color($theme-color-warning);
-    position: relative;
-    font-size: 18px;
-    top: -28px;
   }
 }
