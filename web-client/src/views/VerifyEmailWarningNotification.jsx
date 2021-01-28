@@ -1,12 +1,11 @@
 import { Icon } from '../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const VerifyEmailWarningNotification = connect(
-  {},
-  function VerifyEmailWarningNotification() {
-    const email = 'testing@example.com'; // todo get from state after new email is being persisted
-
+  { user: state.user },
+  function VerifyEmailWarningNotification({ user }) {
     return (
       <div className="verify-email-notification text-semibold padding-2">
         <div className="grid-container">
@@ -21,8 +20,9 @@ export const VerifyEmailWarningNotification = connect(
             </div>
             <div className="desktop:grid-col-auto grid-col-11">
               <p className="margin-0">
-                A verification email has been sent to {email}. Verify your email
-                to log in and receive service at the new email address.
+                A verification email has been sent to{' '}
+                {user && user.pendingEmail}. Verify your email to log in and
+                receive service at the new email address.
               </p>
             </div>
           </div>

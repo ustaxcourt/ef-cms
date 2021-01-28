@@ -12,8 +12,12 @@ export const updateUserPendingEmailAction = async ({
 }) => {
   const { email: pendingEmail } = get(state.form);
 
-  await applicationContext.getUseCases().updateUserPendingEmailInteractor({
-    applicationContext,
-    pendingEmail,
-  });
+  const updatedUser = await applicationContext
+    .getUseCases()
+    .updateUserPendingEmailInteractor({
+      applicationContext,
+      pendingEmail,
+    });
+
+  return { user: updatedUser };
 };
