@@ -8,7 +8,6 @@ export const WarningNotificationComponent = function WarningNotificationComponen
   alertWarning,
   dismissable = true,
   dismissAlertSequence,
-  isWarningBanner = false,
   messageNotBold = false,
   scrollToTop = true,
 }) {
@@ -29,8 +28,6 @@ export const WarningNotificationComponent = function WarningNotificationComponen
         <div
           aria-live="polite"
           className={classNames(
-            isWarningBanner && 'usa-alert-warning-banner',
-            isWarningBanner && 'margin-bottom-0',
             'usa-alert',
             'usa-alert--warning',
             isMessageOnly && 'usa-alert-warning-message-only',
