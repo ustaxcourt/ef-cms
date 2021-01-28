@@ -25,6 +25,8 @@ export const submitChangeLoginAndServiceEmailSequence = [
         emailInUse: [
           clearAlertsAction,
           setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
           stopShowValidationAction,
         ],
       },

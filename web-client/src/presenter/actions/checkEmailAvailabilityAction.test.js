@@ -69,8 +69,8 @@ describe('checkEmailAvailabilityAction', () => {
     });
 
     expect(pathEmailInUseStub.mock.calls[0][0]).toMatchObject({
-      alertError: {
-        title:
+      errors: {
+        email:
           'An account with this email already exists. Enter a new email address.',
       },
     });

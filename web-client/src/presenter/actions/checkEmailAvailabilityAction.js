@@ -25,8 +25,8 @@ export const checkEmailAvailabilityAction = async ({
   return isEmailFree
     ? path.emailAvailable()
     : path.emailInUse({
-        alertError: {
-          title:
+        errors: {
+          email:
             'An account with this email already exists. Enter a new email address.',
         },
       });
