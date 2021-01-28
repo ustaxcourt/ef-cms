@@ -30,14 +30,12 @@ exports.updateUserPendingEmailInteractor = async ({
 
   user.pendingEmail = pendingEmail;
 
-  const userEntity = new User(user);
+  const userEntity = new User(user).validate().toRawObject();
 
-  const updatedUser = await applicationContext
-    .getPersistenceGateway()
-    .updateUser({
-      applicationContext,
-      user: userEntity.validate().toRawObject(),
-    });
+  await applicationContext.getPersistenceGateway().updateUser({
+    applicationContext,
+    user: userEntity,
+  });
 
-  return new User(updatedUser).validate().toRawObject();
+  return userEntity;
 };

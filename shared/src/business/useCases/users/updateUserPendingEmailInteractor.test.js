@@ -1,46 +1,16 @@
 const {
-  ADMISSIONS_STATUS_OPTIONS,
-  COUNTRY_TYPES,
-  EMPLOYER_OPTIONS,
-  PRACTITIONER_TYPE_OPTIONS,
-  ROLES,
-} = require('../../entities/EntityConstants');
-const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  entityName: irsPractitionerEntityName,
-} = require('../../entities/IrsPractitioner');
-const {
-  entityName: practitionerEntityName,
-} = require('../../entities/Practitioner');
-const {
-  entityName: privatePractitionerEntityName,
-} = require('../../entities/PrivatePractitioner');
-const {
   updateUserPendingEmailInteractor,
 } = require('./updateUserPendingEmailInteractor');
-const { MOCK_USERS } = require('../../../test/mockUsers');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { validUser } = require('../../entities/User.test');
-jest.mock('./generateChangeOfAddress');
-const { generateChangeOfAddress } = require('./generateChangeOfAddress');
+const { validUser } = require('../../../test/mockUsers');
 
 describe('updateUserPendingEmailInteractor', () => {
   const pendingEmail = 'hello@example.com';
   let mockUser;
-
-  const contactInfo = {
-    address1: '234 Main St',
-    address2: 'Apartment 4',
-    address3: 'Under the stairs',
-    city: 'Chicago',
-    country: 'Brazil',
-    countryType: COUNTRY_TYPES.INTERNATIONAL,
-    phone: '+1 (555) 555-5555',
-    postalCode: '61234',
-    state: 'IL',
-  };
 
   beforeEach(() => {
     mockUser = { ...validUser, role: ROLES.privatePractitioner };
@@ -98,5 +68,14 @@ describe('updateUserPendingEmailInteractor', () => {
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
         .user,
     ).toMatchObject({ pendingEmail });
+  });
+
+  it('should return the updated user entity', async () => {
+    const results = await updateUserPendingEmailInteractor({
+      applicationContext,
+      pendingEmail,
+    });
+
+    expect(results).toMatchObject({ ...mockUser, pendingEmail });
   });
 });

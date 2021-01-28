@@ -12,6 +12,6 @@ exports.updateUserPendingEmailLambda = event =>
       .getUseCases()
       .updateUserPendingEmailInteractor({
         applicationContext,
-        pendingEmail: JSON.parse(event.body),
+        ...JSON.parse(event.body),
       });
   });

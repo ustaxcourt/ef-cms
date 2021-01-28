@@ -178,6 +178,7 @@ import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/remo
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
+import { updateUserPendingEmailInteractor } from '../../shared/src/proxies/users/updateUserPendingEmailProxy';
 const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/proxies/documents/removePdfFromDocketEntryProxy');
@@ -441,6 +442,7 @@ const allUseCases = {
   updateTrialSessionWorkingCopyInteractor,
   updateUserCaseNoteInteractor,
   updateUserContactInformationInteractor,
+  updateUserPendingEmailInteractor,
   uploadCorrespondenceDocumentInteractor,
   uploadDocumentAndMakeSafeInteractor,
   uploadDocumentInteractor,
