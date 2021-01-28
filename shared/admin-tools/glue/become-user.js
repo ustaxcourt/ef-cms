@@ -1,6 +1,15 @@
 /**
  * This script is to grant the user running it the ability to become the specified
  * UserId by utilizing the custom:userId attribute
+ *
+ * You must have the following Environment variables set:
+ * - ENV: The name of the environment you are working with (mig)
+ * - COGNITO_USER_EMAIL: The email address you use to access this environment (your.email@example.com)
+ * - COGNITO_USER_POOL: The Cognito User Pool for the environment (us-east-1_ExAmPlES)
+ *
+ * Example usage:
+ *
+ * $ npm run admin:become-user 432143213-4321-1234-4321-432143214321
  */
 const { checkEnvVar, getVersion } = require('../util');
 const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
@@ -16,11 +25,6 @@ checkEnvVar(
   'You must have COGNITO_USER_EMAIL set in your environment; This is the email address you use for Cognito',
 );
 checkEnvVar(ENV, 'You must have ENV set in your environment; (e.g., mig)');
-
-/**
- * This script is to grant the user running it the ability to search for a UserId
- * in the system.
- */
 
 const usage = () => {
   console.log(`Assume the account of another user in the system. 
