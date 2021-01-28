@@ -25,7 +25,7 @@ describe('checkEmailAvailabilityInteractor', () => {
   it('should return true when the specified email is not already in use', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCognitoUserByEmail.mockReturnValue(false);
+      .getCognitoUserByEmail.mockReturnValue(null);
 
     const result = await checkEmailAvailabilityInteractor({
       applicationContext,
@@ -38,7 +38,9 @@ describe('checkEmailAvailabilityInteractor', () => {
   it('should return false when the specified email is already in use', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCognitoUserByEmail.mockReturnValue(true);
+      .getCognitoUserByEmail.mockReturnValue({
+        userId: 'd3e736fc-d7b2-4e2e-a058-9789e6f1d129',
+      });
 
     const result = await checkEmailAvailabilityInteractor({
       applicationContext,
