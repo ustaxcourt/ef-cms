@@ -152,6 +152,7 @@
   },
   "scripts": {
     "admin:lookup-user": "node shared/admin-tools/glue/lookup-user.js",
+    "admin:become-user": "node shared/admin-tools/glue/become-user.js",
     "build:all": "npm run clean && npm run build:assets && npm run build:client:no-sourcemaps",
     "build:assets": "node shared/createModule.js",
     "build:client:no-sourcemaps": "USTC_ENV=prod parcel build --no-source-maps web-client/src/index.pug",
