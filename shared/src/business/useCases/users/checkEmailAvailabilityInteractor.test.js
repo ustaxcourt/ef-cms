@@ -25,7 +25,7 @@ describe('checkEmailAvailabilityInteractor', () => {
         applicationContext,
         email: mockEmail,
       }),
-    ).rejects.toThrow('Unauthorized to check for email availability');
+    ).rejects.toThrow('Unauthorized to manage emails.');
   });
 
   it('should attempt to retrieve the user by email', async () => {

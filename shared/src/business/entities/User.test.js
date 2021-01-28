@@ -1,24 +1,27 @@
 const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
 const { User } = require('./User');
+const validUser = {
+  contact: {
+    address1: '234 Main St',
+    address2: 'Apartment 4',
+    address3: 'Under the stairs',
+    city: 'Chicago',
+    country: 'Brazil',
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    phone: '+1 (555) 555-5555',
+    postalCode: '61234',
+    state: 'IL',
+  },
+  name: 'Saul Goodman',
+  role: ROLES.petitioner,
+  userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+};
+
+exports.validUser = validUser;
 
 describe('User entity', () => {
   it('Creates a valid international petitioner user', () => {
-    const user = new User({
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      name: 'Saul Goodman',
-      role: ROLES.petitioner,
-      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
-    });
+    const user = new User(validUser);
     expect(user.isValid()).toBeTruthy();
   });
 
