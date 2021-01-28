@@ -1,5 +1,5 @@
 exports.getCognitoUserByEmail = async ({ applicationContext, email }) => {
-  const users = await applicationContext
+  const { Users: users } = await applicationContext
     .getCognito()
     .listUsers({
       Filter: `email = "${email}"`, // TODO: check for possible email injection?  do we need to validate this is an email for sure?
