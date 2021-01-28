@@ -1,7 +1,7 @@
-import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@cerebral/react';
 import { props } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const BigHeader = connect(
   {
@@ -10,20 +10,11 @@ export const BigHeader = connect(
   function BigHeader({ text }) {
     return (
       <>
-        <div className="big-blue-header">
+        <div className={classNames('big-blue-header')}>
           <div className="grid-container">
             <h1 tabIndex="-1">{text}</h1>
           </div>
         </div>
-        <WarningNotificationComponent
-          alertWarning={{
-            message:
-              'A verification email has been sent to <new email address>. Verify your email to log in and receive service at the new email address.',
-          }}
-          dismissable={false}
-          isWarningBanner={true}
-          scrollToTop={false}
-        />
       </>
     );
   },
