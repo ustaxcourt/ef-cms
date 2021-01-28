@@ -346,6 +346,9 @@ const {
   updateUserContactInformationLambda,
 } = require('./users/updateUserContactInformationLambda');
 const {
+  updateUserPendingEmailLambda,
+} = require('./users/updateUserPendingEmailLambda');
+const {
   verifyPendingCaseForUserLambda,
 } = require('./cases/verifyPendingCaseForUserLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
@@ -925,6 +928,7 @@ app.put(
   '/async/users/:userId/contact-info',
   lambdaWrapper(updateUserContactInformationLambda),
 );
+app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
 app.get(
   '/users/email-availability',
   lambdaWrapper(checkEmailAvailabilityLambda),
