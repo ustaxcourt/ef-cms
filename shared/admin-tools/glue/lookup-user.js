@@ -1,6 +1,13 @@
 /**
- * This script is to grant the user running it the ability to search for a UserId
- * in the system.
+ * This script is to help search for users belonging to a certain role in the
+ * environment designated by the ENV environment variable
+ *
+ * You must have the following Environment variables set:
+ * - ENV: The name of the environment you are working with (mig)
+ *
+ * Example usage:
+ *
+ * $ npm run admin:lookup-user docketClerk "Beth"
  */
 
 const { checkEnvVar } = require('../util');

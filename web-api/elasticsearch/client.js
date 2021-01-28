@@ -22,9 +22,7 @@ const getHost = async DomainName => {
 
     return result.DomainStatus.Endpoint;
   } catch (err) {
-    console.log(err);
-    console.log(`could not find resource for ${DomainName}`);
-    // if we care about it, throw it...
+    console.error(`could not find resource for ${DomainName}`, err);
   }
 };
 
@@ -33,7 +31,7 @@ const cache = {
 };
 
 /**
- * This gets an Elasticsearch Client that can hopefully perform queries against
+ * This gets an Elasticsearch Client to perform search queries
  *
  * @param {Object} providers providers
  * @param {String} providers.environmentName The name of the environment
