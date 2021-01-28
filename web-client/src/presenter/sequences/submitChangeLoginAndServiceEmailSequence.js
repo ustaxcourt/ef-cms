@@ -1,6 +1,7 @@
 import { checkEmailAvailabilityAction } from '../actions/checkEmailAvailabilityAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -21,7 +22,7 @@ export const submitChangeLoginAndServiceEmailSequence = [
     success: showProgressSequenceDecorator([
       checkEmailAvailabilityAction,
       {
-        emailAvailable: [],
+        emailAvailable: [setShowModalFactoryAction('VerifyNewEmailModal')],
         emailInUse: [
           clearAlertsAction,
           setAlertErrorAction,

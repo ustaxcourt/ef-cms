@@ -98,6 +98,8 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
           </div>
         </section>
+
+        {/* VerifyNewEmailModal */}
       </React.Fragment>
     );
   },
