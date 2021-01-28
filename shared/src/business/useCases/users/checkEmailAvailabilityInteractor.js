@@ -17,10 +17,8 @@ exports.checkEmailAvailabilityInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (
-    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.CHECK_EMAIL_AVAILABILITY)
-  ) {
-    throw new UnauthorizedError('Unauthorized to check for email availability');
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
+    throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
   const isEmailInUse = await applicationContext

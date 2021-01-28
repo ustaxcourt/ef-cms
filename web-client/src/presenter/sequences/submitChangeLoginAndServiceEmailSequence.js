@@ -2,11 +2,13 @@ import { checkEmailAvailabilityAction } from '../actions/checkEmailAvailabilityA
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
+import { setUserAction } from '../actions/setUserAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { updateUserPendingEmailAction } from '../actions/updateUserPendingEmailAction';
 import { validateChangeLoginAndServiceEmailAction } from '../actions/validateChangeLoginAndServiceEmailAction';
 
 export const submitChangeLoginAndServiceEmailSequence = [
@@ -22,7 +24,11 @@ export const submitChangeLoginAndServiceEmailSequence = [
     success: showProgressSequenceDecorator([
       checkEmailAvailabilityAction,
       {
-        emailAvailable: [setShowModalFactoryAction('VerifyNewEmailModal')],
+        emailAvailable: [
+          updateUserPendingEmailAction,
+          setUserAction,
+          setShowModalFactoryAction('VerifyNewEmailModal'),
+        ],
         emailInUse: [
           clearAlertsAction,
           setAlertErrorAction,
