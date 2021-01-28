@@ -1,5 +1,6 @@
 const {
   ADC_SECTION,
+  COUNTRY_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
@@ -63,4 +64,21 @@ exports.MOCK_USERS = {
     section: ADC_SECTION,
     userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
   },
+};
+
+exports.validUser = {
+  contact: {
+    address1: '234 Main St',
+    address2: 'Apartment 4',
+    address3: 'Under the stairs',
+    city: 'Chicago',
+    country: 'Brazil',
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    phone: '+1 (555) 555-5555',
+    postalCode: '61234',
+    state: 'IL',
+  },
+  name: 'Saul Goodman',
+  role: ROLES.petitioner,
+  userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
 };

@@ -15,7 +15,9 @@ exports.updateUserPendingEmailInteractor = ({
 }) => {
   return put({
     applicationContext,
-    body: pendingEmail,
+    body: {
+      pendingEmail,
+    },
     endpoint: '/users/pending-email',
   });
 };
