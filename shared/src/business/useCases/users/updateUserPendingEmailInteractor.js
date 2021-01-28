@@ -10,9 +10,8 @@ const { User } = require('../../entities/User');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.pendingEmail the contactInfo to update the pendingEmail
- * @param {string} providers.userId the userId to update the pendingEmail
- * @returns {Promise} an object is successful
+ * @param {string} providers.pendingEmail the pending email
+ * @returns {Promise} the updated user object
  */
 exports.updateUserPendingEmailInteractor = async ({
   applicationContext,
