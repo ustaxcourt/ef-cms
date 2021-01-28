@@ -110,6 +110,11 @@ option:first-child {
 .usa-alert--warning {
   background-image: url('images/alerts/warning.svg');
   font-weight: 600;
+
+  .usa-alert-warning-banner {
+    max-width: unset;
+    min-height: unset;
+  }
 }
 
 .usa-alert--success {
