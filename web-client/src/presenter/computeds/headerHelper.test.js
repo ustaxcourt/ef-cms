@@ -294,4 +294,34 @@ describe('headerHelper', () => {
       expect(result.showMyAccount).toBeFalsy();
     });
   });
+
+  describe('showVerifyEmailWarningNotification', () => {
+    it('should be true when the user has a pending email', () => {
+      const result = runCompute(headerHelper, {
+        state: {
+          ...getBaseState({
+            pendingEmail: 'test@example.com',
+            role: ROLES.irsPractitioner,
+          }),
+          currentPage: 'DashboardRespondent',
+        },
+      });
+
+      expect(result.showVerifyEmailWarningNotification).toBeTruthy();
+    });
+
+    it('should be false when the user does not have a pending email', () => {
+      const result = runCompute(headerHelper, {
+        state: {
+          ...getBaseState({
+            pendingEmail: undefined,
+            role: ROLES.irsPractitioner,
+          }),
+          currentPage: 'DashboardRespondent',
+        },
+      });
+
+      expect(result.showVerifyEmailWarningNotification).toBeFalsy();
+    });
+  });
 });

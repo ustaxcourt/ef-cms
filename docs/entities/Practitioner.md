@@ -416,6 +416,26 @@
       flags: 
         presence: "optional"
         description: "Whether the contact information for the user is being updated."
+    pendingEmail: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "email"
+          args: 
+            options: 
+              tlds: false
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      allow: 
+        - null
     section: 
       type: "string"
       flags: 
