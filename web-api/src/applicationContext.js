@@ -1298,7 +1298,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
             promise: () => {},
           }),
           listUsers: () => ({
-            promise: () => [],
+            promise: () => ({
+              Users: [],
+            }),
           }),
         };
       } else {

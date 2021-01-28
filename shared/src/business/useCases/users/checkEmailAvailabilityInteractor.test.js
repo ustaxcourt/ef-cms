@@ -4,9 +4,29 @@ const {
 const {
   checkEmailAvailabilityInteractor,
 } = require('./checkEmailAvailabilityInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('checkEmailAvailabilityInteractor', () => {
   const mockEmail = 'test@example.com';
+
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+    });
+  });
+
+  it('should throw an error when the logged in user is unauthorized to check email availability', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+    });
+
+    await expect(
+      checkEmailAvailabilityInteractor({
+        applicationContext,
+        email: mockEmail,
+      }),
+    ).rejects.toThrow('Unauthorized to check for email availability');
+  });
 
   it('should attempt to retrieve the user by email', async () => {
     await checkEmailAvailabilityInteractor({
