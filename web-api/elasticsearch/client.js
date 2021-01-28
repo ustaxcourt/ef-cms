@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const { EnvironmentCredentials } = AWS;
+const { getVersion } = require('../../shared/admin-tools/util');
 
 const es = new AWS.ES({
   region: 'us-east-1',
@@ -11,6 +12,7 @@ const {
 } = require('../elasticsearch/elasticsearch-settings');
 
 const getHost = async DomainName => {
+  console.log(DomainName);
   try {
     const result = await es
       .describeElasticsearchDomain({
@@ -20,9 +22,7 @@ const getHost = async DomainName => {
 
     return result.DomainStatus.Endpoint;
   } catch (err) {
-    // console.log(err);
-    console.log(`could not find resource for ${DomainName}`);
-    // if we care about it, throw it...
+    console.error(`could not find resource for ${DomainName}`, err);
   }
 };
 
@@ -31,20 +31,21 @@ const cache = {
 };
 
 /**
- * This gets a client that can query
+ * This gets an Elasticsearch Client to perform search queries
  *
  * @param {Object} providers providers
  * @param {String} providers.environmentName The name of the environment
  * @param {String} providers.version The name of the currently deployed stack (alpha or beta)
- * @returns {Client} An instance of an Elasticsearch Client
+ * @returns {elasticsearch.Client} An instance of an Elasticsearch Client
  */
 const getClient = async ({ environmentName, version }) => {
+  version = version || (await getVersion(environmentName));
   const domainName = `efcms-search-${environmentName}-${version}`;
   const host = cache.hosts[domainName] || (await getHost(domainName));
-
+  const credentials = new EnvironmentCredentials('AWS');
   return new elasticsearch.Client({
     amazonES: {
-      credentials: new EnvironmentCredentials('AWS'),
+      credentials,
       region: 'us-east-1',
     },
     apiVersion: ELASTICSEARCH_API_VERSION,
