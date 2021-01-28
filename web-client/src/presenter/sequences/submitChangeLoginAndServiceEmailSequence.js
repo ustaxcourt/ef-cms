@@ -1,3 +1,4 @@
+import { checkEmailAvailabilityAction } from '../actions/checkEmailAvailabilityAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -17,6 +18,18 @@ export const submitChangeLoginAndServiceEmailSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: showProgressSequenceDecorator([stopShowValidationAction]),
+    success: showProgressSequenceDecorator([
+      checkEmailAvailabilityAction,
+      {
+        emailAvailable: [],
+        emailInUse: [
+          clearAlertsAction,
+          setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
+          stopShowValidationAction,
+        ],
+      },
+    ]),
   },
 ];
