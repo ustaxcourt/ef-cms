@@ -17,10 +17,11 @@ export const BigHeader = connect(
         </div>
         <WarningNotificationComponent
           alertWarning={{
-            message: 'blah blah blah.',
-            title: 'Ruh roh!',
+            message:
+              'A verification email has been sent to <new email address>. Verify your email to log in and receive service at the new email address.',
           }}
           dismissable={false}
+          isWarningBanner={true}
           scrollToTop={false}
         />
       </>
