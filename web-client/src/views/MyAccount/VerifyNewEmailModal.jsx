@@ -6,13 +6,25 @@ import React from 'react';
 export const VerifyNewEmailModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
+    closeVerifyEmailModalAndNavigateToMyAccountSequence:
+      sequences.closeVerifyEmailModalAndNavigateToMyAccountSequence,
     email: state.form.email,
+    navigateToPathSequence: sequences.navigateToPathSequence,
   },
-  function VerifyNewEmailModal({ cancelSequence, email }) {
+  function VerifyNewEmailModal({
+    cancelSequence,
+    closeVerifyEmailModalAndNavigateToMyAccountSequence,
+    email,
+  }) {
     return (
       <ModalDialog
+        cancelSequence={cancelSequence}
         confirmLabel="Ok"
-        confirmSequence={cancelSequence}
+        confirmSequence={() =>
+          closeVerifyEmailModalAndNavigateToMyAccountSequence({
+            path: '/my-account',
+          })
+        }
         title="Verify Your New Email"
       >
         <div className="margin-bottom-4" id="add-to-trial-session-modal">
