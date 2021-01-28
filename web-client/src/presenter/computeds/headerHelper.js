@@ -64,6 +64,7 @@ export const headerHelper = (get, applicationContext) => {
       userRole !== USER_ROLES.irsSuperuser,
     showSearchNavItem: userRole && userRole === USER_ROLES.irsSuperuser,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
+    showVerifyEmailWarningNotification: !!user.pendingEmail,
     unreadMessageCount,
     userName: user && user.name,
   };

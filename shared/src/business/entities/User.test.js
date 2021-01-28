@@ -139,6 +139,17 @@ describe('User entity', () => {
     expect(user.isValid()).toBeTruthy();
   });
 
+  it('Creates a valid user with a pending email', () => {
+    const user = new User({
+      name: 'Saul Goodman',
+      pendingEmail: 'test@example.com',
+      role: ROLES.irsPractitioner,
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+    });
+    expect(user.isValid()).toBeTruthy();
+    expect(user.pendingEmail).toBeDefined();
+  });
+
   it('Creates a user with default role of petitioner if not provided', () => {
     const user = new User({
       name: 'Saul Goodman',

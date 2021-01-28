@@ -266,7 +266,9 @@ export const Header = connect(
           </div>
         </div>
 
-        {true && <VerifyEmailWarningNotification />}
+        {headerHelper.showVerifyEmailWarningNotification && (
+          <VerifyEmailWarningNotification />
+        )}
       </>
     );
   },
