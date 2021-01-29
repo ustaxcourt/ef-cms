@@ -139,15 +139,31 @@ describe('User entity', () => {
     expect(user.isValid()).toBeTruthy();
   });
 
-  it('Creates a valid user with a pending email', () => {
+  it('Creates a valid user with a pending email and pendingEmailVerificationToken', () => {
     const user = new User({
       name: 'Saul Goodman',
       pendingEmail: 'test@example.com',
+      pendingEmailVerificationToken: '26dc3fd7-f480-4000-91cc-9fcc565816f1',
       role: ROLES.irsPractitioner,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
     expect(user.pendingEmail).toBeDefined();
+    expect(user.pendingEmailVerificationToken).toBeDefined();
+  });
+
+  it('Creates an invalid user with a pendingEmailVerificationToken that is not a UUID', () => {
+    const user = new User({
+      name: 'Saul Goodman',
+      pendingEmail: 'test@example.com',
+      pendingEmailVerificationToken: 'abc',
+      role: ROLES.irsPractitioner,
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+    });
+    expect(user.isValid()).toBeFalsy();
+    expect(user.getFormattedValidationErrors()).toEqual({
+      pendingEmailVerificationToken: expect.anything(),
+    });
   });
 
   it('Creates a user with default role of petitioner if not provided', () => {
