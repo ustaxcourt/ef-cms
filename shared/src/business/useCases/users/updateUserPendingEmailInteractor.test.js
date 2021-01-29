@@ -76,6 +76,27 @@ describe('updateUserPendingEmailInteractor', () => {
       pendingEmail,
     });
 
-    expect(results).toMatchObject({ ...mockUser, pendingEmail });
+    expect(results).toMatchObject({
+      ...mockUser,
+      pendingEmail,
+      pendingEmailVerificationToken: expect.anything(),
+    });
+  });
+
+  it('should attempt to send out a verification link email', async () => {
+    const results = await updateUserPendingEmailInteractor({
+      applicationContext,
+      pendingEmail,
+    });
+
+    const {
+      email,
+      templateData,
+    } = applicationContext.getDispatchers().sendBulkTemplatedEmail.mock.calls[0][0].destinations[0];
+
+    expect(email).toEqual(pendingEmail);
+    expect(templateData.emailContent).toContain(
+      results.pendingEmailVerificationToken,
+    );
   });
 });

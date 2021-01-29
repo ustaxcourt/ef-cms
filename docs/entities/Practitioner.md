@@ -436,6 +436,23 @@
             limit: 100
       allow: 
         - null
+    pendingEmailVerificationToken: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
+      allow: 
+        - null
     section: 
       type: "string"
       flags: 
