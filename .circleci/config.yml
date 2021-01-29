@@ -968,6 +968,7 @@ workflows:
             branches:
               only:
                 - irs
+                - migration
                 - staging
                 - experimental1
                 - experimental2
@@ -979,6 +980,7 @@ workflows:
             branches:
               only:
                 - irs
+                - migration
                 - staging
                 - master
                 - experimental1
