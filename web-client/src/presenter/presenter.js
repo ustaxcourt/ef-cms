@@ -281,6 +281,7 @@ import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreview
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setForHearingSequence } from './sequences/setForHearingSequence';
+import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
@@ -734,6 +735,7 @@ export const presenter = {
     setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
     setForHearingSequence,
+    setIdleStatusActiveSequence,
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setMessageDetailViewerDocumentToDisplaySequence,
