@@ -5,11 +5,10 @@
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.router the riot.router object that is used for changing the route
  */
-export const navigateToPublicVerifyEmailInstructionsAction = ({
+export const navigateToPublicEmailVerificationInstructionsAction = ({
   applicationContext,
   router,
 }) => {
-  console.log('we are here');
-  const publicSiteUrl = `${applicationContext.getPublicSiteUrl()}/verify-email-instructions`;
+  const publicSiteUrl = `${applicationContext.getPublicSiteUrl()}/email-verification-instructions`;
   router.externalRoute(publicSiteUrl);
 };
