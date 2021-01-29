@@ -29,6 +29,7 @@ exports.verifyUserPendingEmailInteractor = async ({
 
   const userEntity = new User(user);
 
+  // TODO: fix this Potential timing attack
   if (userEntity.pendingEmailVerificationToken !== token) {
     throw new UnauthorizedError('Tokens do not match');
   }

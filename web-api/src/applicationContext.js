@@ -992,6 +992,9 @@ const {
   verifyPendingCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
 const {
+  verifyUserPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/verifyUserPendingEmailInteractor');
+const {
   virusScanPdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
 const {
@@ -1690,6 +1693,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateUserPendingEmailInteractor,
         validatePdfInteractor,
         verifyPendingCaseForUserInteractor,
+        verifyUserPendingEmailInteractor,
         virusScanPdfInteractor: args =>
           process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
       };
