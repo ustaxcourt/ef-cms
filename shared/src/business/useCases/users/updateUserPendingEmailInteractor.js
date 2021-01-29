@@ -41,7 +41,7 @@ exports.updateUserPendingEmailInteractor = async ({
 
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/verify-email?token=${pendingEmailVerificationToken}`;
 
-  const templateHtml = `Please confirm your new email: <a href="${verificationLink}">Verify</a>`;
+  const templateHtml = `The email on your account has been changed.<br>To login with your new email, <a href="${verificationLink}">verify your email</a>.<br>If you did not make this change, no action is required.`;
 
   const destination = {
     email: pendingEmail,

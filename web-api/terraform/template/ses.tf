@@ -113,7 +113,7 @@ EOF
 #Email Change Verification Email Template
 resource "aws_ses_template" "email_change_verification" {
   name    = "email_change_verification_${var.environment}"
-  subject = "Email Change Verification from US Tax Court"
+  subject = "U.S. Tax Court: Verify Your New Email"
   html    = <<EOF
   {{emailContent}}
 EOF
