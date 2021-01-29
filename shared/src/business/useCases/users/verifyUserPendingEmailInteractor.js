@@ -29,7 +29,6 @@ exports.verifyUserPendingEmailInteractor = async ({
 
   const userEntity = new User(user);
 
-  // TODO: fix this Potential timing attack
   if (
     !userEntity.pendingEmailVerificationToken ||
     userEntity.pendingEmailVerificationToken !== token
@@ -53,5 +52,5 @@ exports.verifyUserPendingEmailInteractor = async ({
     user: updatedRawUser,
   });
 
-  // update all the cases with their new contact info
+  // TODO in another 7406 task update all the cases with their new contact info
 };
