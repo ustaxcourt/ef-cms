@@ -778,7 +778,10 @@ const router = {
 
     registerRoute('/verify-email..', () => {
       setPageTitle('Verify Email');
-      return app.getSequence('gotoVerifyEmailSequence')();
+      const { token } = route.query();
+      return app.getSequence('gotoVerifyEmailSequence')({
+        token,
+      });
     });
 
     registerRoute(
