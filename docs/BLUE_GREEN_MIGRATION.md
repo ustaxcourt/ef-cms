@@ -56,7 +56,7 @@ Here are the steps involved:
     ./wait-for-migration-to-finish.sh
     ```
 
-    Keep an eye out for errors in the logs for the Lambda (More info!). 
+    Keep an eye out for errors in the logs for the Lambda (More info!).
 
     And look for items in the **migration_segments_queue_ENV_dl** This is the Dead Letter Queue. These items may need to be run again. Errors may need to be handled. If they cannot be solved, we may need to adjust the migration script(s) and re-run the migration.
 
@@ -93,6 +93,11 @@ If this is the first time running a blue/green deployment on the environment:
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"${VERSION}"}}'```
 9. Run the following command to set the environment's migrate flag to **false** (for next time):
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"S":"false"}}'```
+10. Run the SES verification script for this environment (view the script and ensure your environment variables are configured correctly):
+    ```./web-api/verify-ses-email.sh```
+11. Run the switch colors script to configure the top-level DNS records appropriately (view the script and ensure your environment variables are configured correctly):
+    ```./web-client/switch-colors.sh```
+
 
 ## If a Migration is not necessary
 
@@ -104,7 +109,7 @@ If this is the first time running a blue/green deployment on the environment:
 If a new dynamo table and elasticsearch domain is necessary, duplicate the modules found in `web-api/terraform/template/main.tf`. Be sure to update the version number at the end of the module names, `table_name`, and `domain_name`. Do not delete the old modules. Add the modules to `depends_on` in `main-east.tf` and `main-west.tf`
 
 1. Run a deploy in circle.
-2. Verify the new application works at: 
+2. Verify the new application works at:
    - https://<DEPLOYED_COLOR>-<ENV>.<ZONE_NAME>
    - https://app-<DEPLOYED_COLOR>.<ENV>.<ZONE_NAME>
 3. Destroy the migration infrastructure to turn off the live streams
