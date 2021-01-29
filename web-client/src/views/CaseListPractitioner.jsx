@@ -195,7 +195,6 @@ export const CaseListPractitioner = connect(
                     </Accordion>
                   </div>
                 </div>
-                <MyContactInformation />
               </div>
             </div>
           </div>
