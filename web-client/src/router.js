@@ -732,6 +732,14 @@ const router = {
     );
 
     registerRoute(
+      '/change-login-and-service-email',
+      ifHasAccess(() => {
+        setPageTitle('Change Login & Service Email Address');
+        return app.getSequence('gotoChangeLoginAndServiceEmailSequence')();
+      }),
+    );
+
+    registerRoute(
       '/users/create-practitioner',
       ifHasAccess(() => {
         setPageTitle('EF-CMS User Management - Create Practitioner User');
@@ -757,6 +765,14 @@ const router = {
           box: null,
           queue: null,
         });
+      }),
+    );
+
+    registerRoute(
+      '/my-account',
+      ifHasAccess(() => {
+        setPageTitle('My Account');
+        return app.getSequence('gotoMyAccountSequence')();
       }),
     );
 

@@ -24,6 +24,7 @@ const {
 const { Case } = require('../../../business/entities/cases/Case');
 const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 const { differenceWith, isEqual } = require('lodash');
+const { fieldsToOmitBeforePersisting } = require('./createCase');
 const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
 const { omit, pick } = require('lodash');
 const { updateMessage } = require('../messages/updateMessage');
@@ -441,11 +442,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
         pk: `case|${caseToUpdate.docketNumber}`,
         sk: `case|${caseToUpdate.docketNumber}`,
         ...setLeadCase,
-        ...omit(caseToUpdate, [
-          'docketEntries',
-          'irsPractitioners',
-          'privatePractitioners',
-        ]),
+        ...omit(caseToUpdate, fieldsToOmitBeforePersisting),
       },
       applicationContext,
     }),

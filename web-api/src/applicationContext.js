@@ -105,6 +105,9 @@ const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
+  checkEmailAvailabilityInteractor,
+} = require('../../shared/src/business/useCases/users/checkEmailAvailabilityInteractor');
+const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
@@ -405,6 +408,9 @@ const {
 const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
+const {
+  getCognitoUserByEmail,
+} = require('../../shared/src/persistence/cognito/getCognitoUserByEmail');
 const {
   getCompletedMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor');
@@ -962,6 +968,9 @@ const {
   updateUserContactInformationInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
 const {
+  updateUserPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/updateUserPendingEmailInteractor');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -1194,6 +1203,7 @@ const gatewayMethods = {
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getClientId,
+  getCognitoUserByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1289,6 +1299,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
           adminUpdateUserAttributes: () => ({
             promise: () => {},
+          }),
+          listUsers: () => ({
+            promise: () => ({
+              Users: [],
+            }),
           }),
         };
       } else {
@@ -1526,6 +1541,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         blockCaseFromTrialInteractor,
         caseAdvancedSearchInteractor,
         casePublicSearchInteractor,
+        checkEmailAvailabilityInteractor,
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeMessageInteractor,
@@ -1667,6 +1683,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateTrialSessionWorkingCopyInteractor,
         updateUserCaseNoteInteractor,
         updateUserContactInformationInteractor,
+        updateUserPendingEmailInteractor,
         validatePdfInteractor,
         verifyPendingCaseForUserInteractor,
         virusScanPdfInteractor: args =>

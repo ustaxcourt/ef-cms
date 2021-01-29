@@ -1,5 +1,43 @@
 # Release Notes
 
+## PR 61 Release Notes
+
+### Internal
+**Improvement**: Admissions clerks can edit the profile for a practitioner without an email address.
+* Clerks can make changes to practitioner information for practitioners with or without an email address on record.
+
+**Bug Fix**: Docket clerks will not be prompted to print paper service after completing QC and sending a message.
+* When completing QC and sending a message for a document to be served via paper service, clerks are now prompted immediately to print and mail the necessary documents.
+
+**Bug Fix**: Document titles will now display correctly across the application
+* Document titles were missing any “additional info” text when attaching a document to a message. The full document title now displays in the dropdown to attach a document.
+* Updates to the document title during the QC process were not being reflected when sending a message or being updated accurately on the Docket Record. Any updates made to a document title during the QC process reflect immediately on messages and on the Docket Record.
+
+**Bug Fix**: Electronic signatures are now visible in all PDF previews
+*  Some PDF previews were not properly displaying electronic signatures on documents. Documents uploaded to the system with electronic signatures now display the signature in all PDF previews
+* Parties filing documents on mobile devices do not have access to PDF previews prior to submitting their documents.
+
+**Bug Fix**: Errors when clicking on messages has been resolved
+* Some users were encountering a white screen when clicking on their messages, which required to refresh to view the message. Users are now able to access their messages without refresh directly from their inboxes.   
+
+**Bug Fix**: Completed messages will no longer display in any inbox or In Progress queue
+* Completed messages were still displaying in the section Inbox and in the In Progress tab on the case.
+* When a message is completed, it is no longer display in any individual or section Inboxes, or in the In Progress tab under Case Messages. Completed messages will display in the Completed tabs.
+
+**Bug Fix**: Public docket record now displays accurate event codes and filings and proceedings
+* The public view of the Docket Record was displaying an incorrect event code for lodged documents. All lodged documents now show on the Docket Record with the correct event code of MISCL.
+* The public view of the Docket Record was not displaying the complete entry text under Filings and Proceedings. Parenthetical text (i.e. Attachments, Certificate of Service, Objections) now display as part of the Filings and Proceedings for all views of the Docket Record.
+
+### External / Public  
+**Bug Fix**: Electronic signatures are now visible in all PDF previews
+*  Some PDF previews were not properly displaying electronic signatures on documents. Documents uploaded to the system with electronic signatures now display the signature in all PDF previews
+* Parties filing documents on mobile devices do not have access to PDF previews prior to submitting their documents.
+
+**Bug Fix**: Public docket record now displays accurate event codes and filings and proceedings
+* The public view of the Docket Record was displaying an incorrect event code for lodged documents. All lodged documents now show on the Docket Record with the correct event code of MISCL.
+* The public view of the Docket Record was not displaying the complete entry text under Filings and Proceedings. Parenthetical text (i.e. Attachments, Certificate of Service, Objections) now display as part of the Filings and Proceedings for all views of the Docket Record.
+
+
 ## PR 60 Release Notes
 ### Internal
 
@@ -41,7 +79,7 @@
 **Bug Fix**: Order title on Today’s Orders table was not left-aligned
 * Order titles that expand to multiple lines on the Today’s Orders table are now left-aligned.  
 
-**Bug Fix**: Character limits on fields were not throwing validation errors 
+**Bug Fix**: Character limits on fields were not throwing validation errors
 * Document free text fields can now accept up to 1000 characters, and will show a helpful error message when the limit is reached.
 * The complete document title now accepts up to 3000 characters total, and will inform the user when the limit is reached.
 

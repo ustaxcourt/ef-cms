@@ -53,6 +53,7 @@ import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequenc
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
+import { closeVerifyEmailModalAndNavigateToMyAccountSequence } from './sequences/closeVerifyEmailModalAndNavigateToMyAccountSequence';
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
 import { completeDocketEntryQCSequence } from './sequences/completeDocketEntryQCSequence';
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
@@ -106,6 +107,7 @@ import { gotoCaseDeadlineReportSequence } from './sequences/gotoCaseDeadlineRepo
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
+import { gotoChangeLoginAndServiceEmailSequence } from './sequences/gotoChangeLoginAndServiceEmailSequence';
 import { gotoCompleteDocketEntrySequence } from './sequences/gotoCompleteDocketEntrySequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
@@ -129,6 +131,7 @@ import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMessageDetailSequence } from './sequences/gotoMessageDetailSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
+import { gotoMyAccountSequence } from './sequences/gotoMyAccountSequence';
 import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
@@ -312,6 +315,7 @@ import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDock
 import { submitCaseInventoryReportModalSequence } from './sequences/submitCaseInventoryReportModalSequence';
 import { submitCaseSearchForConsolidationSequence } from './sequences/submitCaseSearchForConsolidationSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
+import { submitChangeLoginAndServiceEmailSequence } from './sequences/submitChangeLoginAndServiceEmailSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
@@ -408,6 +412,7 @@ import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSe
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateCaseInventoryReportModalSequence } from './sequences/validateCaseInventoryReportModalSequence';
+import { validateChangeLoginAndServiceEmailSequence } from './sequences/validateChangeLoginAndServiceEmailSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
@@ -502,6 +507,7 @@ export const presenter = {
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
     closeModalAndReturnToTrialSessionsSequence,
+    closeVerifyEmailModalAndNavigateToMyAccountSequence,
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
     completeDocumentSelectSequence,
@@ -555,6 +561,7 @@ export const presenter = {
     gotoCaseDetailSequence,
     gotoCaseInventoryReportSequence,
     gotoCaseSearchNoMatchesSequence,
+    gotoChangeLoginAndServiceEmailSequence,
     gotoCompleteDocketEntrySequence,
     gotoContactSequence,
     gotoCreateOrderSequence,
@@ -578,6 +585,7 @@ export const presenter = {
     gotoLoginSequence,
     gotoMessageDetailSequence,
     gotoMessagesSequence,
+    gotoMyAccountSequence,
     gotoPdfPreviewSequence,
     gotoPendingReportSequence,
     gotoPetitionQcSequence,
@@ -759,6 +767,7 @@ export const presenter = {
     submitCaseInventoryReportModalSequence,
     submitCaseSearchForConsolidationSequence,
     submitCaseSearchSequence,
+    submitChangeLoginAndServiceEmailSequence,
     submitCourtIssuedDocketEntrySequence,
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
@@ -855,6 +864,7 @@ export const presenter = {
     validateCaseDetailSequence,
     validateCaseDocketNumberSearchFormSequence,
     validateCaseInventoryReportModalSequence,
+    validateChangeLoginAndServiceEmailSequence,
     validateCourtIssuedDocketEntrySequence,
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,

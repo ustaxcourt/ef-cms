@@ -14,6 +14,8 @@ const { createISODateString } = require('../utilities/DateHandler');
  */
 function Correspondence() {}
 Correspondence.prototype.init = function init(rawProps) {
+  this.entityName = 'Correspondence';
+
   this.archived = rawProps.archived;
   this.correspondenceId = rawProps.correspondenceId;
   this.documentTitle = rawProps.documentTitle;
