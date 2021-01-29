@@ -16,7 +16,8 @@ describe('getShouldSetAppTimeoutModalAction', () => {
     };
   });
 
-  it('should return the yes path if there is no active idle status in any app instance', async () => {
+  it('should return the yes path if all app instances have idleStatus of idle', async () => {
+    // TODO use applicationContext.getConstants().IDLE_STATUS constants here
     await runAction(getShouldSetAppTimeoutModalAction, {
       modules: {
         presenter,
@@ -39,7 +40,7 @@ describe('getShouldSetAppTimeoutModalAction', () => {
     expect(yesMock).toHaveBeenCalled();
   });
 
-  it('should return the no path if there is an active idle status in any app instance', async () => {
+  it('should return the no path any app instance does not have idleStatus of idle', async () => {
     await runAction(getShouldSetAppTimeoutModalAction, {
       modules: {
         presenter,

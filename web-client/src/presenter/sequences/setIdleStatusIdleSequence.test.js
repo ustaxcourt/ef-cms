@@ -15,6 +15,8 @@ describe('setIdleStatusIdleSequence', () => {
   });
   it('should show the idle status modal and set a delayed logout timer', async () => {
     test.setState('modal.showModal', 'SomeOtherModal');
+    test.setState('appInstanceId', '42');
+    test.setState('appInstances', [{ appInstanceId: '42' }]);
     await test.runSequence('setIdleStatusIdleSequence');
     expect(test.getState('modal.showModal')).toBe('AppTimeoutModal');
     const logoutTimer = test.getState('logoutTimer');

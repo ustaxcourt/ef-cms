@@ -1,12 +1,13 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getConstants } from '../../getConstants';
 import { getShouldSetAppTimeoutModalAction } from '../actions/getShouldSetAppTimeoutModalAction';
-import { setIdleStatusIdleAction } from '../actions/setIdleStatusIdleAction';
+import { setIdleStatusFactoryAction } from '../actions/setIdleStatusFactoryAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { startDelayedLogoutAction } from '../actions/startDelayedLogoutAction';
 
 export const setIdleStatusIdleSequence = [
   clearModalStateAction,
-  setIdleStatusIdleAction,
+  setIdleStatusFactoryAction(getConstants().IDLE_STATUS.IDLE),
   getShouldSetAppTimeoutModalAction,
   {
     no: [],
