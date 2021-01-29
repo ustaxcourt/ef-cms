@@ -73,6 +73,13 @@ const router = {
       return app.getSequence('gotoPublicEmailVerificationSuccessSequence')();
     });
 
+    route('/verify-email-instructions', () => {
+      setPageTitle('Email Verification Instructions');
+      return app.getSequence(
+        'gotoPublicEmailVerificationInstructionsSequence',
+      )();
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({
