@@ -776,13 +776,11 @@ const router = {
       }),
     );
 
-    registerRoute(
-      '/verify-email',
-      ifHasAccess(() => {
-        setPageTitle('Verify Email');
-        return app.getSequence('gotoVerifyEmailSequence')();
-      }),
-    );
+    registerRoute('/verify-email..', () => {
+      console.log('testing');
+      setPageTitle('Verify Email');
+      return app.getSequence('gotoVerifyEmailSequence')();
+    });
 
     registerRoute(
       '/document-qc/my',
