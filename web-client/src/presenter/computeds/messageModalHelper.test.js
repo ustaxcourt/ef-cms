@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from './messageModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -371,5 +371,46 @@ describe('messageModalHelper', () => {
     });
 
     expect(result.showMessageAttachments).toEqual(false);
+  });
+
+  it('populates documents from formattedDocketEntries and sets a title on each entry', () => {
+    const mockFormattedDocketEntries = [
+      {
+        descriptionDisplay: 'Hello with additional info',
+        isFileAttached: true,
+        isOnDocketRecord: true,
+      },
+      {
+        documentType: 'Hello documentType',
+        isFileAttached: true,
+        isOnDocketRecord: true,
+      },
+    ];
+
+    applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+      formattedDocketEntries: mockFormattedDocketEntries,
+    });
+
+    const result = runCompute(messageModalHelper, {
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [], // no attachments on form
+          },
+        },
+        screenMetadata: {
+          showAddDocumentForm: false,
+        },
+      },
+    });
+
+    expect(result.documents).toEqual(mockFormattedDocketEntries);
+    expect(result.documents[0].title).toEqual(
+      mockFormattedDocketEntries[0].descriptionDisplay,
+    );
+    expect(result.documents[1].title).toEqual(
+      mockFormattedDocketEntries[1].documentType,
+    );
   });
 });

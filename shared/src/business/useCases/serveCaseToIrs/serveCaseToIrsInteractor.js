@@ -199,8 +199,11 @@ exports.serveCaseToIrsInteractor = async ({
     workItemToUpdate: initializeCaseWorkItem,
   });
   const caseWithServedDocketEntryInformation = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({ applicationContext, caseToUpdate: caseEntity });
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
 
   const caseEntityToUpdate = new Case(caseWithServedDocketEntryInformation, {
     applicationContext,

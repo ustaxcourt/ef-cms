@@ -185,8 +185,8 @@ digraph {
 		ElasticsearchEast
 	}
 
-	S3DocumentsEast -> S3DocumentsWest [ 
-		label = "S3 Replication" 
+	S3DocumentsEast -> S3DocumentsWest [
+		label = "S3 Replication"
 	]
 
 	DynamoDBEast -> DynamoDBWest [
@@ -217,7 +217,7 @@ This diagram was created with [Graphviz](https://graphviz.org/), and the source 
 ```dot
 digraph {
 	rankdir="LR"
-	
+
 	Code [shape = doublecircle]
 	node [style = rounded, shape = box]
 
@@ -276,6 +276,7 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 - npm v6.12.1
 - ClamAV v0.101.2 (see Setup below)
 -  Java 11
+- jq
 
 ### Setup
 
@@ -284,6 +285,8 @@ For ClamAV, macOS users can do the following:
 - `brew install clamav`
 - `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
 - `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
+- Installing `jq`
+  - `brew install jq` for macOS users or visit https://stedolan.github.io/jq/download/
 
 Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
 

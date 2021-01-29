@@ -389,10 +389,10 @@ exports.updatePetitionerInformationInteractor = async ({
   }
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
   return {

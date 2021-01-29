@@ -100,7 +100,7 @@ resource "aws_glue_job" "mock_emails" {
   number_of_workers = var.number_of_workers
   glue_version      = "2.0"
   worker_type       = "G.1X"
-  
+
   default_arguments = {
     "--destination_table" = var.destination_table,
     "--source_table"      = var.source_table,

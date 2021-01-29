@@ -7,5 +7,3 @@ variable "remote_account_number" {
   type = string
   description = "The trusted AWS account"
 }
-
-
