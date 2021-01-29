@@ -287,6 +287,7 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  remoteInstances: [],
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning

@@ -27,7 +27,7 @@ describe('showAppTimeoutModalHelper', () => {
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
         modal: {
-          showModal: true,
+          showModal: 'AppTimeoutModal',
         },
       },
     });
@@ -42,6 +42,60 @@ describe('showAppTimeoutModalHelper', () => {
         modal: {
           showModal: 'IncorrectTimeoutModal',
         },
+      },
+    });
+
+    expect(result).toEqual({ beginIdleMonitor: true, showModal: false });
+  });
+
+  it('shows the modal if another running instance is showing the modal', () => {
+    applicationContext.getCurrentUser = () => ({});
+    const result = runCompute(showAppTimeoutModalHelper, {
+      state: {
+        modal: {
+          showModal: '',
+        },
+        remoteInstances: [
+          {
+            showModal: 'AppTimeoutModal',
+          },
+        ],
+      },
+    });
+
+    expect(result).toEqual({ beginIdleMonitor: true, showModal: true });
+  });
+
+  it('shows the modal if another running instance is NOT showing the modal but this one is', () => {
+    applicationContext.getCurrentUser = () => ({});
+    const result = runCompute(showAppTimeoutModalHelper, {
+      state: {
+        modal: {
+          showModal: 'AppTimeoutModal',
+        },
+        remoteInstances: [
+          {
+            showModal: '',
+          },
+        ],
+      },
+    });
+
+    expect(result).toEqual({ beginIdleMonitor: true, showModal: true });
+  });
+
+  it('does not show the modal if no running instance should be showing the modal', () => {
+    applicationContext.getCurrentUser = () => ({});
+    const result = runCompute(showAppTimeoutModalHelper, {
+      state: {
+        modal: {
+          showModal: '',
+        },
+        remoteInstances: [
+          {
+            showModal: '',
+          },
+        ],
       },
     });
 
