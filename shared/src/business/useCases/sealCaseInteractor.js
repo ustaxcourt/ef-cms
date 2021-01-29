@@ -29,10 +29,10 @@ exports.sealCaseInteractor = async ({ applicationContext, docketNumber }) => {
   newCase.setAsSealed();
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase.validate().toRawObject(),
+      caseToUpdate: newCase,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

@@ -33,10 +33,10 @@ exports.deleteDeficiencyStatisticInteractor = async ({
   newCase.deleteStatistic(statisticId);
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase.validate().toRawObject(),
+      caseToUpdate: newCase,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

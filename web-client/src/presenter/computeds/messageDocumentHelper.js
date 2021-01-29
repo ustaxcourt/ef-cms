@@ -6,8 +6,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const viewerDocumentIdToDisplay = get(
     state.viewerDocumentToDisplay.documentId,
   );
+
   if (!viewerDocumentIdToDisplay) {
-    return null;
+    return {};
   }
 
   const {

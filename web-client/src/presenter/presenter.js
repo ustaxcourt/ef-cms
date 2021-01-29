@@ -283,7 +283,6 @@ import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
-import { setPageSequence } from './sequences/PDFPreviewModal/setPageSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
@@ -732,7 +731,6 @@ export const presenter = {
     setMessageDetailViewerDocumentToDisplaySequence,
     setPDFPageForSigningSequence,
     setPDFSignatureDataSequence,
-    setPageSequence,
     setPdfPreviewUrlSequence,
     setPendingReportSelectedJudgeSequence,
     setSelectedBatchIndexSequence,
