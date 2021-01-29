@@ -1,10 +1,6 @@
 name: Node.js CI
 
-on:
-  push:
-    branches: [develop, experimental1, master]
-  pull_request:
-    branches: [develop, experimental1, master]
+on: [push, pull_request]
 
 jobs:
   linting:
@@ -21,7 +17,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: NPM Install
-        run: npm ci --no-optional  && npm rebuild
+        run: npm ci --no-optional && npm rebuild
       - name: Lint
         run: npm run lint
       - name: Shellcheck
