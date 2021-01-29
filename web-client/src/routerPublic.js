@@ -68,6 +68,18 @@ const router = {
       return app.getSequence('gotoContactSequence')();
     });
 
+    route('/email-verification-success', () => {
+      setPageTitle('Email Verification Success');
+      return app.getSequence('gotoPublicEmailVerificationSuccessSequence')();
+    });
+
+    route('/email-verification-instructions', () => {
+      setPageTitle('Email Verification Instructions');
+      return app.getSequence(
+        'gotoPublicEmailVerificationInstructionsSequence',
+      )();
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({
