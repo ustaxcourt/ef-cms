@@ -11,6 +11,7 @@ import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
+  getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
 import {
@@ -583,6 +584,7 @@ const applicationContext = {
       uploadPdfFromClient,
     };
   },
+  getPublicSiteUrl,
   getScanner: async () => {
     if (process.env.NO_SCANNER) {
       const scanner = await import(
