@@ -29,6 +29,9 @@ exports.updateUserPendingEmailInteractor = async ({
 
   user.pendingEmail = pendingEmail;
 
+  const pendingEmailVerificationToken = applicationContext.getUniqueId();
+  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+
   const userEntity = new User(user).validate().toRawObject();
 
   await applicationContext.getPersistenceGateway().updateUser({
@@ -36,8 +39,9 @@ exports.updateUserPendingEmailInteractor = async ({
     user: userEntity,
   });
 
-  const templateHtml =
-    'Please confirm your new email: <a href="/verify">Verify</a>';
+  const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/verify-email?token=${pendingEmailVerificationToken}`;
+
+  const templateHtml = `Please confirm your new email: <a href="${verificationLink}">Verify</a>`;
 
   const destination = {
     email: pendingEmail,
@@ -52,7 +56,7 @@ exports.updateUserPendingEmailInteractor = async ({
       emailContent: 'Please confirm your new email',
     },
     destinations: [destination],
-    templateName: process.env.EMAIL_SERVED_PETITION_TEMPLATE,
+    templateName: process.env.EMAIL_CHANGE_VERIFICATION_TEMPLATE,
   });
 
   return userEntity;

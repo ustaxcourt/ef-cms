@@ -37,6 +37,7 @@ const userDecorator = (obj, rawObj) => {
   obj.email = rawObj.email;
   obj.name = rawObj.name;
   obj.pendingEmail = rawObj.pendingEmail;
+  obj.pendingEmailVerificationToken = rawObj.pendingEmailVerificationToken;
   obj.role = rawObj.role || ROLES.petitioner;
   obj.token = rawObj.token;
   obj.userId = rawObj.userId;
@@ -118,6 +119,9 @@ const userValidation = {
       'Whether the contact information for the user is being updated.',
     ),
   pendingEmail: JoiValidationConstants.EMAIL.allow(null).optional(),
+  pendingEmailVerificationToken: JoiValidationConstants.UUID.allow(
+    null,
+  ).optional(),
   section: JoiValidationConstants.STRING.valid(
     ...SECTIONS,
     ...CHAMBERS_SECTIONS_WITH_LEGACY,
