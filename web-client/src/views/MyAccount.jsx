@@ -8,8 +8,8 @@ import React from 'react';
 
 export const MyAccount = connect({}, function MyAccount() {
   return (
-    <React.Fragment>
-      <BigHeader text={'My Account'} />
+    <>
+      <BigHeader text="My Account" />
       <section className="usa-section grid-container">
         <SuccessNotification />
         <ErrorNotification />
@@ -25,6 +25,6 @@ export const MyAccount = connect({}, function MyAccount() {
           </div>
         </div>
       </section>
-    </React.Fragment>
+    </>
   );
 });

@@ -10,6 +10,9 @@
 
 MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)
 
+# disabling aws pager https://github.com/aws/aws-cli/pull/4702#issue-344978525
+AWS_PAGER=""
+
 # turn off the old stream if we are not doing a migration so we do not
 # have 2 streams processing the same stuff
 if [[ "${MIGRATE_FLAG}" == "false" ]]; then
