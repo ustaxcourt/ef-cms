@@ -57,7 +57,7 @@ export const Footer = connect(
                             href="https://www.ustaxcourt.gov/release_notes.html"
                             target="_blank"
                           >
-                            What&apos;s New in DAWSON
+                            What’s New in DAWSON
                           </a>
                         </li>
                         <li className="usa-footer__primary-content">
