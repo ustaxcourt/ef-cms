@@ -12,6 +12,7 @@ data "null_data_source" "locals" {
     NODE_ENV                           = "production"
     BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
     EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
+    EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
     EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
     EMAIL_SERVED_PETITION_TEMPLATE     = "petition_served_${var.environment}"
     EFCMS_DOMAIN                       = var.dns_domain
