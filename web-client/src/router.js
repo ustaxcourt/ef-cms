@@ -777,6 +777,14 @@ const router = {
     );
 
     registerRoute(
+      '/verify-email',
+      ifHasAccess(() => {
+        setPageTitle('Verify Email');
+        return app.getSequence('gotoVerifyEmailSequence')();
+      }),
+    );
+
+    registerRoute(
       '/document-qc/my',
       ifHasAccess(() => {
         setPageTitle('Document QC');
