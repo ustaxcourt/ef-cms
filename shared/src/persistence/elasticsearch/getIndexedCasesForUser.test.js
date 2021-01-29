@@ -27,38 +27,30 @@ describe('getIndexedCasesForUser', () => {
         .bool.must,
     ).toMatchObject([
       {
-        match: {
-          'pk.S': {
-            operator: 'and',
-            query: `user|${mockUserId}`,
-          },
+        term: {
+          'pk.S': `user|${mockUserId}`,
         },
       },
       {
-        match: {
-          'sk.S': 'case|',
-        },
-      },
-      {
-        match: {
-          'gsi1pk.S': 'user-case|',
+        term: {
+          'entityName.S': 'UserCase',
         },
       },
       {
         bool: {
           should: [
             {
-              match: {
+              term: {
                 'status.S': CASE_STATUS_TYPES.new,
               },
             },
             {
-              match: {
+              term: {
                 'status.S': CASE_STATUS_TYPES.jurisdictionRetained,
               },
             },
             {
-              match: {
+              term: {
                 'status.S': CASE_STATUS_TYPES.calendared,
               },
             },
@@ -85,28 +77,20 @@ describe('getIndexedCasesForUser', () => {
         .bool.must,
     ).toMatchObject([
       {
-        match: {
-          'pk.S': {
-            operator: 'and',
-            query: `user|${mockUserId}`,
-          },
+        term: {
+          'pk.S': `user|${mockUserId}`,
         },
       },
       {
-        match: {
-          'sk.S': 'case|',
-        },
-      },
-      {
-        match: {
-          'gsi1pk.S': 'user-case|',
+        term: {
+          'entityName.S': 'UserCase',
         },
       },
       {
         bool: {
           should: [
             {
-              match: {
+              term: {
                 'status.S': CASE_STATUS_TYPES.closed,
               },
             },
