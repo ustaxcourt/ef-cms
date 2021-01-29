@@ -20,16 +20,22 @@ describe('getCasesByUserId', () => {
     ).toMatchObject({
       bool: {
         must: [
-          { match: { 'pk.S': 'case|' } },
-          { match: { 'sk.S': 'case|' } },
+          { term: { 'entityName.S': 'Case' } },
           {
-            query_string: {
-              fields: [
-                'privatePractitioners.L.M.userId.S',
-                'irsPractitioners.L.M.userId.S',
-                'userId.S',
+            bool: {
+              should: [
+                {
+                  term: {
+                    'privatePractitioners.L.M.userId.S': `${userId}`,
+                  },
+                },
+                {
+                  term: { 'irsPractitioners.L.M.userId.S': `${userId}` },
+                },
+                {
+                  term: { 'userId.S': `${userId}` },
+                },
               ],
-              query: `"${userId}"`,
             },
           },
         ],
