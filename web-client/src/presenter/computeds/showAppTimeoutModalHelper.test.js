@@ -52,14 +52,14 @@ describe('showAppTimeoutModalHelper', () => {
     applicationContext.getCurrentUser = () => ({});
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
-        modal: {
-          showModal: '',
-        },
-        remoteInstances: [
+        appInstances: [
           {
             showModal: 'AppTimeoutModal',
           },
         ],
+        modal: {
+          showModal: '',
+        },
       },
     });
 
@@ -70,14 +70,14 @@ describe('showAppTimeoutModalHelper', () => {
     applicationContext.getCurrentUser = () => ({});
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
-        modal: {
-          showModal: 'AppTimeoutModal',
-        },
-        remoteInstances: [
+        appInstances: [
           {
             showModal: '',
           },
         ],
+        modal: {
+          showModal: 'AppTimeoutModal',
+        },
       },
     });
 
@@ -88,14 +88,14 @@ describe('showAppTimeoutModalHelper', () => {
     applicationContext.getCurrentUser = () => ({});
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
-        modal: {
-          showModal: '',
-        },
-        remoteInstances: [
+        appInstances: [
           {
             showModal: '',
           },
         ],
+        modal: {
+          showModal: '',
+        },
       },
     });
 
