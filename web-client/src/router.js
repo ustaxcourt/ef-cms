@@ -777,7 +777,6 @@ const router = {
     );
 
     registerRoute('/verify-email..', () => {
-      console.log('testing');
       setPageTitle('Verify Email');
       return app.getSequence('gotoVerifyEmailSequence')();
     });
