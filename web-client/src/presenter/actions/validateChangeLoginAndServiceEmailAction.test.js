@@ -29,7 +29,9 @@ describe('validateChangeLoginAndServiceEmailAction', () => {
       state: { form: {} },
     });
 
-    expect(errorMock).toHaveBeenCalled();
+    expect(errorMock.mock.calls[0][0]).toMatchObject({
+      errors: 'something went wrong',
+    });
   });
 
   it('should return the success path if update user email form is valid', async () => {

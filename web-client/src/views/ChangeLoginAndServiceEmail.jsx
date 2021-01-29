@@ -2,6 +2,7 @@ import { BigHeader } from './BigHeader';
 import { Button } from '../ustc-ui/Button/Button';
 import { ErrorNotification } from './ErrorNotification';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
+import { VerifyNewEmailModal } from './MyAccount/VerifyNewEmailModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -9,6 +10,7 @@ import React from 'react';
 export const ChangeLoginAndServiceEmail = connect(
   {
     form: state.form,
+    showModal: state.modal.showModal,
     submitChangeLoginAndServiceEmailSequence:
       sequences.submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -19,6 +21,7 @@ export const ChangeLoginAndServiceEmail = connect(
   },
   function ChangeLoginAndServiceEmail({
     form,
+    showModal,
     submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence,
     user,
@@ -98,6 +101,8 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
           </div>
         </section>
+
+        {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
       </React.Fragment>
     );
   },
