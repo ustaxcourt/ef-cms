@@ -152,6 +152,10 @@ const app = {
 
     presenter.state.constants = applicationContext.getConstants();
 
+    const appInstanceId = applicationContext.getUniqueId();
+    presenter.state.appInstanceId = appInstanceId;
+    presenter.state.appInstances.push({ appInstanceId });
+
     config.autoAddCss = false;
     library.add(
       faArrowAltCircleLeftRegular,
