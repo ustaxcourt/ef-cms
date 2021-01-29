@@ -39,7 +39,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).rejects.toThrow('Unauthorized to manage emails');
   });
 
-  it('should throw an unauthorized is the token passed as an argument does not match stored token on user', async () => {
+  it('should throw an unauthorized if the token passed as an argument does not match stored token on user', async () => {
     mockUser = {
       pendingEmailVerificationToken: '123',
       role: ROLES.privatePractitioner,
@@ -53,7 +53,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).rejects.toThrow('Tokens do not match');
   });
 
-  it('should throw an unauthorized is the token passed as an argument does not match stored token on user', async () => {
+  it('should throw an unauthorized if the token passed as an argument and the token store on the user are both undefined', async () => {
     mockUser = {
       pendingEmailVerificationToken: undefined,
       role: ROLES.privatePractitioner,
