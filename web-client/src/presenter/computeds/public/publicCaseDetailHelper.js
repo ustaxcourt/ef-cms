@@ -13,19 +13,15 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     isCaseSealed: !!caseToFormat.isSealed,
   });
 
-  const formattedDocketRecordWithDocument = publicCase.docketEntries.map(d =>
+  const formattedDocketRecordsWithDocuments = publicCase.docketEntries.map(d =>
     applicationContext.getUtilities().formatDocketEntry(applicationContext, d),
   );
 
-  let sortedFormattedDocketRecord = applicationContext
+  const sortedFormattedDocketRecords = applicationContext
     .getUtilities()
-    .sortDocketEntries(formattedDocketRecordWithDocument, 'byIndex');
+    .sortDocketEntries(formattedDocketRecordsWithDocuments, 'byDate');
 
-  sortedFormattedDocketRecord = applicationContext
-    .getUtilities()
-    .sortDocketEntries(sortedFormattedDocketRecord, 'byDate');
-
-  const formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecord.map(
+  const formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
     entry => {
       const record = cloneDeep(entry);
       let filingsAndProceedingsWithAdditionalInfo = '';
