@@ -22,16 +22,24 @@ exports.getCasesByUserId = async ({ applicationContext, userId }) => {
         query: {
           bool: {
             must: [
-              { match: { 'pk.S': 'case|' } },
-              { match: { 'sk.S': 'case|' } },
               {
-                query_string: {
-                  fields: [
-                    'privatePractitioners.L.M.userId.S',
-                    'irsPractitioners.L.M.userId.S',
-                    'userId.S',
+                term: { 'entityName.S': 'Case' },
+              },
+              {
+                bool: {
+                  should: [
+                    {
+                      term: {
+                        'privatePractitioners.L.M.userId.S': `${userId}`,
+                      },
+                    },
+                    {
+                      term: { 'irsPractitioners.L.M.userId.S': `${userId}` },
+                    },
+                    {
+                      term: { 'userId.S': `${userId}` },
+                    },
                   ],
-                  query: `"${userId}"`,
                 },
               },
             ],

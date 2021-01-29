@@ -17,19 +17,8 @@ exports.getReadyForTrialCases = async ({ applicationContext }) => {
       body: {
         _source: ['docketNumber'],
         query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  'status.S': {
-                    operator: 'and',
-                    query: CASE_STATUS_TYPES.generalDocket,
-                  },
-                },
-              },
-              { match: { 'pk.S': 'case|' } },
-              { match: { 'sk.S': 'case|' } },
-            ],
+          term: {
+            'status.S': CASE_STATUS_TYPES.generalDocket,
           },
         },
         size: 5000,

@@ -32,16 +32,19 @@ exports.getIndexedCasesForUser = async ({
         bool: {
           must: [
             {
-              match: {
-                'pk.S': { operator: 'and', query: `user|${userId}` },
+              term: {
+                'pk.S': `user|${userId}`,
               },
             },
-            { match: { 'sk.S': 'case|' } },
-            { match: { 'gsi1pk.S': 'user-case|' } },
+            {
+              term: {
+                'entityName.S': 'UserCase',
+              },
+            },
             {
               bool: {
                 should: statuses.map(statusStr => ({
-                  match: {
+                  term: {
                     'status.S': statusStr,
                   },
                 })),

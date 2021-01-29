@@ -40,14 +40,14 @@ exports.getCaseInventoryReport = async ({
         bool: {
           must: [
             {
-              match: { 'entityName.S': 'Case' },
+              term: { 'entityName.S': 'Case' },
             },
-            { match: { 'pk.S': 'case|' } },
-            { match: { 'sk.S': 'case|' } },
           ],
-          must_not: {
-            match: { 'status.S': 'Closed' },
-          },
+          must_not: [
+            {
+              term: { 'status.S': 'Closed' },
+            },
+          ],
         },
       },
       size,
@@ -65,7 +65,7 @@ exports.getCaseInventoryReport = async ({
 
   if (status) {
     searchParameters.body.query.bool.must.push({
-      match_phrase: { 'status.S': status },
+      term: { 'status.S': status },
     });
   }
 

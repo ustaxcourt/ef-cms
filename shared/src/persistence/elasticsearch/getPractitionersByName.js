@@ -19,22 +19,20 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
       query: {
         bool: {
           must: [
-            { match: { 'pk.S': 'user|' } },
-            { match: { 'sk.S': 'user|' } },
+            {
+              terms: {
+                'role.S': [
+                  ROLES.irsPractitioner,
+                  ROLES.privatePractitioner,
+                  ROLES.inactivePractitioner,
+                ],
+              },
+            },
             {
               simple_query_string: {
                 default_operator: 'and',
                 fields: ['name.S'],
                 query: name,
-              },
-            },
-            {
-              bool: {
-                should: [
-                  { match: { 'role.S': ROLES.irsPractitioner } },
-                  { match: { 'role.S': ROLES.privatePractitioner } },
-                  { match: { 'role.S': ROLES.inactivePractitioner } },
-                ],
               },
             },
           ],
