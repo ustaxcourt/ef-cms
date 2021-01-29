@@ -412,14 +412,26 @@ describe('Create a work item', () => {
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'freeText',
-      value: 'break the test again',
+      value: '',
+    });
+
+    await test.runSequence('completeDocketEntryQCSequence');
+
+    expect(test.getState('validationErrors')).toEqual({
+      freeText: 'Provide an answer',
+    });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'freeText',
+      value: 'striking realism, neutrality, dynamics and clarity',
     });
 
     await test.runSequence('completeDocketEntryQCSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    const updatedDocumentTitle = 'Ratification of break the test again';
+    const updatedDocumentTitle =
+      'Ratification of striking realism, neutrality, dynamics and clarity';
 
     expect(test.getState('alertSuccess')).toMatchObject({
       message: `${updatedDocumentTitle} has been completed.`,
