@@ -11,6 +11,8 @@ import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoPublicCaseDetailSequence } from './sequences/public/gotoPublicCaseDetailSequence';
+import { gotoPublicEmailVerificationInstructionsSequence } from './sequences/gotoPublicEmailVerificationInstructionsSequence';
+import { gotoPublicEmailVerificationSuccessSequence } from './sequences/gotoPublicEmailVerificationSuccessSequence';
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/public/gotoTodaysOpinionsSequence';
@@ -58,6 +60,8 @@ export const presenter = {
     gotoHealthCheckSequence,
     gotoPrivacySequence,
     gotoPublicCaseDetailSequence,
+    gotoPublicEmailVerificationInstructionsSequence,
+    gotoPublicEmailVerificationSuccessSequence,
     gotoPublicPrintableDocketRecordSequence,
     gotoPublicSearchSequence,
     gotoTodaysOpinionsSequence,
