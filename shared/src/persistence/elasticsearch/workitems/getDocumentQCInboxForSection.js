@@ -11,20 +11,13 @@ exports.getDocumentQCInboxForSection = async ({
         bool: {
           must: [
             {
-              match: {
+              term: {
                 'pk.S': `section|${section}`,
               },
             },
             {
-              match: {
-                'sk.S': 'work-item|',
-              },
-            },
-            {
               term: {
-                'section.S': {
-                  value: section,
-                },
+                'section.S': section,
               },
             },
           ],
