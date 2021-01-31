@@ -287,27 +287,21 @@ describe('DateHandler', () => {
       result = DateHandler.dateStringsCompared(date2, date1);
       expect(result).toEqual(86400000); // 1 day in milliseconds
     });
-  });
+    it('should return zero if two calendar-dates are the same, even if formatted differently', () => {
+      let result;
+      const date1 = '2001-01-01';
+      const date2 = '2001-01-01T08:40:55.007Z';
 
-  describe('calendarDatesCompared', () => {
-    const pastDate = '2001-01-01';
-    const futureDate = '2061-01-02';
-
-    it('should return -1 when the first date is occurs before the second', () => {
-      const result = DateHandler.calendarDatesCompared(pastDate, futureDate);
-
-      expect(result).toEqual(-1);
+      result = DateHandler.dateStringsCompared(date1, date2);
+      expect(result).toEqual(0);
     });
 
-    it('should return 1 when the first date occurs after the second', () => {
-      const result = DateHandler.calendarDatesCompared(futureDate, pastDate);
+    it('should return zero if provided two ISO timestamps within 30 seconds of each other', () => {
+      let result;
+      const date1 = '2001-01-01T08:40:26.007Z';
+      const date2 = '2001-01-01T08:40:55.007Z';
 
-      expect(result).toEqual(1);
-    });
-
-    it('should return 0 when the two dates are the same calendar date', () => {
-      const result = DateHandler.calendarDatesCompared(futureDate, futureDate);
-
+      result = DateHandler.dateStringsCompared(date1, date2);
       expect(result).toEqual(0);
     });
   });
@@ -373,6 +367,32 @@ describe('DateHandler', () => {
     });
   });
 
+  describe('computeDate', () => {
+    it('should return a zero-padded date formatted like YYYY-MM-DD if provided day, month, and year', () => {
+      const result = DateHandler.computeDate({
+        day: '9',
+        month: '3',
+        year: '1993',
+      });
+      expect(result).toBe('1993-03-09');
+    });
+    it('should return "undefined-mm-dd" when year is not provided', () => {
+      const result = DateHandler.computeDate({
+        day: '5',
+        month: '11',
+      });
+      expect(result).toBe('undefined-11-05');
+    });
+    it('should return null if not provided values for all of day, month, and year', () => {
+      const result = DateHandler.computeDate({
+        daynotprovided: true,
+        not: 'date info',
+        some: 'other thing',
+      });
+      expect(result).toBe(null);
+    });
+  });
+
   describe('getMonthDayYearObj', () => {
     beforeAll(() => {
       expect.extend({
@@ -394,7 +414,7 @@ describe('DateHandler', () => {
         },
       });
     });
-    it('takes a moment object as a parameter  to create an object with keys month, day, and year with numeric values', () => {
+    it('takes a moment object as a parameter to create an object with keys month, day, and year with numeric values', () => {
       const momentInstance = DateHandler.prepareDateFromString(
         '2001-02-03',
         DateHandler.FORMATS.YYYYMMDD,

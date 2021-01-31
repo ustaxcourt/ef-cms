@@ -53,15 +53,15 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'day',
+      key: 'serviceDateDay',
       value: '5',
     });
     await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'month',
+      key: 'serviceDateMonth',
       value: '5',
     });
     await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'year',
+      key: 'serviceDateYear',
       value: '2015',
     });
 

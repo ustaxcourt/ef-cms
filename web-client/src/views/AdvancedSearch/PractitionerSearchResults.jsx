@@ -40,20 +40,18 @@ export const PractitionerSearchResults = connect(
                 </tr>
               </thead>
               <tbody>
-                {advancedSearchHelper.formattedSearchResults.map(
-                  (result, idx) => (
-                    <tr className="search-result" key={idx}>
-                      <td>
-                        <a href={`/practitioner-detail/${result.barNumber}`}>
-                          {result.barNumber}
-                        </a>
-                      </td>
-                      <td>{result.name}</td>
-                      <td>{result.contact.state}</td>
-                      <td>{result.admissionsStatus}</td>
-                    </tr>
-                  ),
-                )}
+                {advancedSearchHelper.formattedSearchResults.map(result => (
+                  <tr className="search-result" key={result.barNumber}>
+                    <td>
+                      <a href={`/practitioner-detail/${result.barNumber}`}>
+                        {result.barNumber}
+                      </a>
+                    </td>
+                    <td>{result.name}</td>
+                    <td>{result.contact.state}</td>
+                    <td>{result.admissionsStatus}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </>

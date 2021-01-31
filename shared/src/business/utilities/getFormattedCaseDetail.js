@@ -1,6 +1,6 @@
 const {
+  calculateDifferenceInDays,
   calculateISODate,
-  calendarDatesCompared,
   createISODateString,
 } = require('./DateHandler');
 const {
@@ -532,7 +532,7 @@ const byIndexSortFunction = (a, b) => {
 
 const getDocketRecordSortFunc = sortByString => {
   const byDate = (a, b) => {
-    const compared = calendarDatesCompared(a.filingDate, b.filingDate);
+    const compared = calculateDifferenceInDays(a.filingDate, b.filingDate);
     if (compared === 0) {
       return byIndexSortFunction(a, b);
     }

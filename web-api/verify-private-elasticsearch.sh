@@ -6,6 +6,7 @@
 # Arguments
 #   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
 
+( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 [ -z "$1" ] && echo "ERROR: the env to run smoketest to \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
 [ -z "$AWS_PROFILE" ] && [ -z "$AWS_ACCESS_KEY_ID" ] && [ -z "$AWS_SECRET_ACCESS_KEY" ] && echo "Error: you must have AWS credentials setup to run this script" && exit 1
 

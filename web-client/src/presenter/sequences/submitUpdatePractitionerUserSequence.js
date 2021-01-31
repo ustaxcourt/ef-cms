@@ -10,13 +10,13 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePractitionerUserAction } from '../actions/updatePractitionerUserAction';
-import { validateAddPractitionerAction } from '../actions/validateAddPractitionerAction';
+import { validatePractitionerAction } from '../actions/validatePractitionerAction';
 
 export const submitUpdatePractitionerUserSequence = [
   clearAlertsAction,
   startShowValidationAction,
   getComputedFormDateFactoryAction(null),
-  validateAddPractitionerAction,
+  validatePractitionerAction,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [

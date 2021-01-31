@@ -10,15 +10,12 @@ export const TrialCityOptions = connect(
     return (
       <>
         {Object.keys(trialCitiesHelper('All').trialCitiesByState).map(
-          (stateName, idx) => (
-            <optgroup
-              key={`TrialCityOptions-${stateName}-${idx}`}
-              label={stateName}
-            >
+          stateName => (
+            <optgroup key={`TrialCityOptions-${stateName}`} label={stateName}>
               {trialCitiesHelper('All').trialCitiesByState[stateName].map(
-                (trialCity, cityIdx) => (
+                trialCity => (
                   <option
-                    key={`TrialCityOptions-${trialCity}-${cityIdx}`}
+                    key={`TrialCityOptions-${trialCity}`}
                     value={trialCity}
                   >
                     {trialCity}
