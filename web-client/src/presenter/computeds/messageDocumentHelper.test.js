@@ -57,7 +57,7 @@ describe('messageDocumentHelper', () => {
     docketEntries: [],
   };
 
-  it('return null if viewerDocumentToDisplay is not set', () => {
+  it('return empty object if viewerDocumentToDisplay is not set', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -70,8 +70,9 @@ describe('messageDocumentHelper', () => {
       },
     });
 
-    expect(result).toEqual(null);
+    expect(result).toEqual({});
   });
+
   describe('showAddDocketEntryButton', () => {
     it('return showAddDocketEntryButton true for user role of docketClerk and a document that is not on the docket record', () => {
       applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);

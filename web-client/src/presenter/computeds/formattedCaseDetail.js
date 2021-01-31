@@ -200,10 +200,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
       entry.isPaper;
 
     if (entry.documentTitle) {
-      formattedResult.descriptionDisplay = entry.documentTitle;
-      if (entry.additionalInfo && entry.addToCoversheet) {
-        formattedResult.descriptionDisplay += ` ${entry.additionalInfo}`;
-      }
+      formattedResult.descriptionDisplay = applicationContext
+        .getUtilities()
+        .getDocumentTitleWithAdditionalInfo({ docketEntry: entry });
     }
 
     formattedResult.showDocumentProcessing =

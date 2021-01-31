@@ -76,7 +76,7 @@ export const AddPrivatePractitionerModal = connect(
                           'padding-1',
                           counsel.isAlreadyInCase && 'bg-gold',
                         )}
-                        key={idx}
+                        key={counsel.userId}
                       >
                         {counsel.isAlreadyInCase && (
                           <div className="float-right text-italic padding-right-1">

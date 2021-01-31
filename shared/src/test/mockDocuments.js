@@ -14,6 +14,7 @@ exports.MOCK_DOCUMENTS = [
     isFileAttached: true,
     isOnDocketRecord: true,
     processingStatus: 'complete',
+    receivedAt: '2018-03-01T00:01:00.000Z',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
   {
@@ -23,9 +24,11 @@ exports.MOCK_DOCUMENTS = [
     documentTitle: 'Statement of Taxpayer Identification',
     documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
     eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+    filingDate: '2018-03-01T00:01:00.000Z',
     index: 3,
     isFileAttached: true,
     processingStatus: 'pending',
+    receivedAt: '2018-03-01T00:01:00.000Z',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
   {
@@ -36,9 +39,11 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Answer',
     eventCode: 'A',
     filedBy: 'Test Petitioner',
+    filingDate: '2018-03-01T00:01:00.000Z',
     index: 4,
     isFileAttached: true,
     processingStatus: 'pending',
+    receivedAt: '2018-03-01T00:01:00.000Z',
     servedAt: '2019-08-25T05:00:00.000Z',
     servedParties: [
       {
@@ -59,9 +64,11 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Proposed Stipulated Decision',
     eventCode: 'PSDE',
     filedBy: 'Test Petitioner',
+    filingDate: '2018-03-01T00:01:00.000Z',
     index: 5,
     isFileAttached: true,
     processingStatus: 'pending',
+    receivedAt: '2018-03-01T00:01:00.000Z',
     servedAt: '2019-08-25T05:00:00.000Z',
     servedParties: [
       {

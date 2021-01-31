@@ -6,6 +6,7 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  ROLES,
 } = require('../EntityConstants');
 const { CaseInternal } = require('./CaseInternal');
 const { Correspondence } = require('../Correspondence');
@@ -13,6 +14,10 @@ const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
 describe('CaseInternal entity', () => {
   describe('validation', () => {
+    it('throws an exception when not provided an application context', () => {
+      expect(() => new CaseInternal({}, {})).toThrow();
+    });
+
     it('returns the expected set of errors for an empty object', () => {
       const caseInternal = new CaseInternal({}, { applicationContext });
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
@@ -31,7 +36,56 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with minimal information', () => {
       const caseInternal = new CaseInternal(
         {
-          archivedDocketEntries: [],
+          caseCaption: 'Dr. Leo Marvin, Petitioner',
+          caseType: CASE_TYPES_MAP.other,
+          contactPrimary: {
+            address1: '876 12th Ave',
+            city: 'Nashville',
+            country: 'USA',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'someone@example.com',
+            name: 'Jimmy Dean',
+            phone: '1234567890',
+            postalCode: '05198',
+            state: 'AK',
+          },
+          mailingDate: 'test',
+          partyType: PARTY_TYPES.petitioner,
+          petitionFile: { anObject: true },
+          petitionFileSize: 1,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          preferredTrialCity: 'Boise, Idaho',
+          procedureType: 'Small',
+          receivedAt: new Date().toISOString(),
+          requestForPlaceOfTrialFile: { anObject: true },
+          requestForPlaceOfTrialFileSize: 1,
+          statistics: [
+            {
+              irsDeficiencyAmount: 1,
+              irsTotalPenalties: 1,
+              year: '2001',
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+      expect(caseInternal.isValid()).toEqual(true);
+    });
+
+    it('creates a valid petition with archived docket entries', () => {
+      const caseInternal = new CaseInternal(
+        {
+          archivedDocketEntries: [
+            {
+              documentType: 'Petition',
+              eventCode: 'A',
+              filedBy: 'Test Petitioner',
+              role: ROLES.petitioner,
+              userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+            },
+          ],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
           contactPrimary: {
