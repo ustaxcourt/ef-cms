@@ -2,8 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 
 /**
  * updateUserPendingEmailInteractor
@@ -29,12 +29,37 @@ exports.updateUserPendingEmailInteractor = async ({
 
   user.pendingEmail = pendingEmail;
 
-  const userEntity = new User(user).validate().toRawObject();
+  const pendingEmailVerificationToken = applicationContext.getUniqueId();
+  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+
+  const updatedRawPractitioner = new Practitioner(user)
+    .validate()
+    .toRawObject();
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
-    user: userEntity,
+    user: updatedRawPractitioner,
   });
 
-  return userEntity;
+  const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/verify-email?token=${pendingEmailVerificationToken}`;
+
+  const templateHtml = `The email on your account has been changed.<br>To login with your new email, <a href="${verificationLink}">verify your email</a>.<br>If you did not make this change, no action is required.`;
+
+  const destination = {
+    email: pendingEmail,
+    templateData: {
+      emailContent: templateHtml,
+    },
+  };
+
+  await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+    applicationContext,
+    defaultTemplateData: {
+      emailContent: 'Please confirm your new email',
+    },
+    destinations: [destination],
+    templateName: process.env.EMAIL_CHANGE_VERIFICATION_TEMPLATE,
+  });
+
+  return updatedRawPractitioner;
 };

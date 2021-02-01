@@ -13,7 +13,20 @@ describe('updateUserPendingEmailInteractor', () => {
   let mockUser;
 
   beforeEach(() => {
-    mockUser = { ...validUser, role: ROLES.privatePractitioner };
+    mockUser = {
+      ...validUser,
+      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsStatus: 'Active',
+      barNumber: 'RA3333',
+      birthYear: '1950',
+      employer: 'Private',
+      firstName: 'Alden',
+      lastName: 'Rivas',
+      name: 'Alden Rivas',
+      originalBarState: 'Florida',
+      practitionerType: 'Attorney',
+      role: ROLES.privatePractitioner,
+    };
 
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
@@ -76,6 +89,27 @@ describe('updateUserPendingEmailInteractor', () => {
       pendingEmail,
     });
 
-    expect(results).toMatchObject({ ...mockUser, pendingEmail });
+    expect(results).toMatchObject({
+      ...mockUser,
+      pendingEmail,
+      pendingEmailVerificationToken: expect.anything(),
+    });
+  });
+
+  it('should attempt to send out a verification link email', async () => {
+    const results = await updateUserPendingEmailInteractor({
+      applicationContext,
+      pendingEmail,
+    });
+
+    const {
+      email,
+      templateData,
+    } = applicationContext.getDispatchers().sendBulkTemplatedEmail.mock.calls[0][0].destinations[0];
+
+    expect(email).toEqual(pendingEmail);
+    expect(templateData.emailContent).toContain(
+      results.pendingEmailVerificationToken,
+    );
   });
 });
