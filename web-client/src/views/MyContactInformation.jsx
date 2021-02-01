@@ -20,6 +20,7 @@ export const MyContactInformation = connect(
           <p className="margin-bottom-0">
             <Button
               link
+              className="text-left"
               icon="edit"
               onClick={() => {
                 canEditContactInformationSequence();
