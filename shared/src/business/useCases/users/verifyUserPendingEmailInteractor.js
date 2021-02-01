@@ -2,8 +2,65 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
+const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+
+const updateUserCases = async ({ applicationContext, user }) => {
+  const docketNumbers = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByUserId({
+      applicationContext,
+      userId: user.userId,
+    });
+
+  const updatedCases = [];
+
+  for (let caseInfo of docketNumbers) {
+    try {
+      const { docketNumber } = caseInfo;
+
+      const userCase = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber,
+        });
+
+      let caseEntity = new Case(userCase, { applicationContext });
+
+      const practitionerObject = caseEntity.privatePractitioners
+        .concat(caseEntity.irsPractitioners)
+        .find(practitioner => practitioner.userId === user.userId);
+
+      if (!practitionerObject) {
+        throw new Error(
+          `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
+        );
+      }
+
+      // This updates the case by reference!
+      practitionerObject.email = user.email;
+
+      // we do this again so that it will convert '' to null
+      caseEntity = new Case(caseEntity, { applicationContext });
+
+      const updatedCase = await applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAndAssociations({
+          applicationContext,
+          caseToUpdate: caseEntity,
+        });
+
+      updatedCases.push(updatedCase);
+    } catch (error) {
+      applicationContext.logger.error(error);
+      await applicationContext.notifyHoneybadger(error);
+    }
+  }
+
+  return updatedCases;
+};
 
 /**
  * verifyUserPendingEmailInteractor
@@ -27,30 +84,30 @@ exports.verifyUserPendingEmailInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const userEntity = new User(user);
+  const practitionerEntity = new Practitioner(user);
 
   if (
-    !userEntity.pendingEmailVerificationToken ||
-    userEntity.pendingEmailVerificationToken !== token
+    !practitionerEntity.pendingEmailVerificationToken ||
+    practitionerEntity.pendingEmailVerificationToken !== token
   ) {
     throw new UnauthorizedError('Tokens do not match');
   }
 
   await applicationContext.getPersistenceGateway().updateUserEmail({
     applicationContext,
-    user: userEntity.validate().toRawObject(),
+    user: practitionerEntity.validate().toRawObject(),
   });
 
-  userEntity.email = userEntity.pendingEmail;
-  userEntity.pendingEmail = undefined;
-  userEntity.pendingEmailVerificationToken = undefined;
+  practitionerEntity.email = practitionerEntity.pendingEmail;
+  practitionerEntity.pendingEmail = undefined;
+  practitionerEntity.pendingEmailVerificationToken = undefined;
 
-  const updatedRawUser = userEntity.validate().toRawObject();
+  const updatedRawPractitioner = practitionerEntity.validate().toRawObject();
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
-    user: updatedRawUser,
+    user: updatedRawPractitioner,
   });
 
-  // TODO in another 7406 task update all the cases with their new contact info
+  await updateUserCases({ applicationContext, user: updatedRawPractitioner });
 };
