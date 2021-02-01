@@ -21,12 +21,12 @@ exports.checkEmailAvailabilityInteractor = async ({
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const isEmailInUse = await applicationContext
+  const isEmailAvailable = await applicationContext
     .getPersistenceGateway()
-    .getCognitoUserByEmail({
+    .isEmailAvailable({
       applicationContext,
       email,
     });
 
-  return !isEmailInUse;
+  return isEmailAvailable;
 };

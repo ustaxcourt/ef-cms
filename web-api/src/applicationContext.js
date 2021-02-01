@@ -409,9 +409,6 @@ const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
-  getCognitoUserByEmail,
-} = require('../../shared/src/persistence/cognito/getCognitoUserByEmail');
-const {
   getCompletedMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor');
 const {
@@ -670,6 +667,9 @@ const {
 const {
   isAuthorized,
 } = require('../../shared/src/authorization/authorizationClientService');
+const {
+  isEmailAvailable,
+} = require('../../shared/src/persistence/cognito/isEmailAvailable');
 const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
@@ -1210,7 +1210,6 @@ const gatewayMethods = {
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getClientId,
-  getCognitoUserByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1221,6 +1220,7 @@ const gatewayMethods = {
   getDocumentQCServedForSection,
   getDocumentQCServedForUser,
   getDownloadPolicyUrl,
+  isEmailAvailable,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
@@ -1306,11 +1306,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
           adminUpdateUserAttributes: () => ({
             promise: () => {},
-          }),
-          listUsers: () => ({
-            promise: () => ({
-              Users: [],
-            }),
           }),
         };
       } else {
