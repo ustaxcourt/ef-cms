@@ -13,6 +13,6 @@ exports.verifyUserPendingEmailInteractor = ({ applicationContext, token }) => {
     body: {
       token,
     },
-    endpoint: '/users/verify-email',
+    endpoint: '/async/users/verify-email',
   });
 };
