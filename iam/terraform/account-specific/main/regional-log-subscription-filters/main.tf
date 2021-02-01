@@ -86,6 +86,22 @@ resource "aws_cloudwatch_log_subscription_filter" "api_stage_logs_green" {
   log_group_name  = "/aws/apigateway/gateway_api_${element(var.log_group_environments, count.index)}_green"
 }
 
+resource "aws_cloudwatch_log_subscription_filter" "api_public_stage_logs_blue" {
+  count           = length(var.log_group_environments)
+  destination_arn = var.logs_to_elasticsearch_lambda_arn
+  filter_pattern  = ""
+  name            = "api_public_stage_logs_lambda_filter"
+  log_group_name  = "/aws/apigateway/gateway_api_public_${element(var.log_group_environments, count.index)}_blue"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "api_public_stage_logs_green" {
+  count           = length(var.log_group_environments)
+  destination_arn = var.logs_to_elasticsearch_lambda_arn
+  filter_pattern  = ""
+  name            = "api_public_stage_logs_lambda_filter"
+  log_group_name  = "/aws/apigateway/gateway_api_public_${element(var.log_group_environments, count.index)}_green"
+}
+
 resource "aws_cloudwatch_log_subscription_filter" "websockets_connect_blue" {
   count           = length(var.log_group_environments)
   destination_arn = var.logs_to_elasticsearch_lambda_arn
