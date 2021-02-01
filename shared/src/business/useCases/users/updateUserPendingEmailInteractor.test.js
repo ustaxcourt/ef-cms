@@ -13,7 +13,20 @@ describe('updateUserPendingEmailInteractor', () => {
   let mockUser;
 
   beforeEach(() => {
-    mockUser = { ...validUser, role: ROLES.privatePractitioner };
+    mockUser = {
+      ...validUser,
+      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsStatus: 'Active',
+      barNumber: 'RA3333',
+      birthYear: '1950',
+      employer: 'Private',
+      firstName: 'Alden',
+      lastName: 'Rivas',
+      name: 'Alden Rivas',
+      originalBarState: 'Florida',
+      practitionerType: 'Attorney',
+      role: ROLES.privatePractitioner,
+    };
 
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
