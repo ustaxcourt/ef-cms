@@ -14,17 +14,25 @@ export const IdleActivityMonitor = connect(
   },
   function IdleActivityMonitor({
     // constants,
-    // setIdleStatusActiveSequence,
-    // setIdleStatusIdleSequence,
+    setIdleStatusActiveSequence,
+    setIdleStatusIdleSequence,
     showAppTimeoutModalHelper,
   }) {
     const idleTimer = useRef(null);
     const id = Math.random();
-    let channelHandle;
+    const channelHandle = new BroadcastChannel('ustc'); // TODO getConstants().CHANNEL_NAME
+
     useEffect(() => {
-      channelHandle = new BroadcastChannel('ustc'); // TODO getConstants().CHANNEL_NAME
       channelHandle.onmessage = msg => {
         console.log('incoming message', msg, id);
+        switch (msg.status) {
+          case 'active':
+            setIdleStatusActiveSequence();
+            break;
+          case 'idle':
+            setIdleStatusIdleSequence();
+            break;
+        }
       };
       console.log('I have a channel handle.', id);
       // return () => channelHandle.close();
@@ -34,8 +42,8 @@ export const IdleActivityMonitor = connect(
       console.log('onActive event', e, id);
       if (channelHandle) {
         console.log('firing off active', id);
-        channelHandle.postMessage('what up dawg' + id);
-        // setIdleStatusActiveSequence();
+        channelHandle.postMessage({ status: 'active' });
+        setIdleStatusActiveSequence();
       } else {
         console.log('no channel handle for onActive', id);
       }
@@ -43,8 +51,8 @@ export const IdleActivityMonitor = connect(
     const onIdle = () => {
       if (channelHandle) {
         console.log('firing off idle', id);
-        channelHandle.postMessage('zzzz ' + id);
-        // setIdleStatusIdleSequence();
+        channelHandle.postMessage({ status: 'idle' });
+        setIdleStatusIdleSequence();
       } else {
         console.log('no channel handle for onIdle', id);
       }
@@ -55,7 +63,6 @@ export const IdleActivityMonitor = connect(
       useIdleTimer({
         debounce: 250,
         onAction: onActive,
-        onActive,
         onIdle,
         ref: idleTimer,
         timeout: 10000,

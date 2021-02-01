@@ -1,4 +1,5 @@
 import { AppComponent } from './views/AppComponent';
+import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import {
@@ -266,6 +267,7 @@ const app = {
     ReactDOM.render(
       <Container app={cerebralApp}>
         <IdleActivityMonitor />
+        <AppInstanceManager appInstanceId={appInstanceId} />
         <AppComponent />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
