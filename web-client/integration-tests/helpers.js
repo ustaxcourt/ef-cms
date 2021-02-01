@@ -110,6 +110,15 @@ export const getEmailsForAddress = address => {
     applicationContext,
   });
 };
+export const getPendingEmailVerificationTokenForUser = userId => {
+  return client.get({
+    Key: {
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
+    },
+    applicationContext,
+  });
+};
 
 export const deleteEmails = emails => {
   return Promise.all(
