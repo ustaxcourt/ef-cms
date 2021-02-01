@@ -1220,7 +1220,6 @@ const gatewayMethods = {
   getDocumentQCServedForSection,
   getDocumentQCServedForUser,
   getDownloadPolicyUrl,
-  isEmailAvailable,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
@@ -1250,6 +1249,7 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
+  isEmailAvailable,
   isFileExists,
   updateCaseCorrespondence,
   verifyCaseForUser,
@@ -1300,9 +1300,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
             promise: () => {},
           }),
           adminGetUser: ({ Username }) => ({
-            promise: () => ({
-              Username,
-            }),
+            promise: () => {
+              if (Username === 'error@example.com') {
+                throw new Error('User does not exist');
+              }
+
+              return { Username };
+            },
           }),
           adminUpdateUserAttributes: () => ({
             promise: () => {},
