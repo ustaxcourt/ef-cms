@@ -16,10 +16,10 @@ export const MyAccount = connect({}, function MyAccount() {
 
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <div className="grid-col-4">
+            <div className="tablet:grid-col-4">
               <MyContactInformation />
             </div>
-            <div className="grid-col-4">
+            <div className="tablet:grid-col-4">
               <LoginAndServiceEmailAddress />
             </div>
           </div>

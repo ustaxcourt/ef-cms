@@ -15,7 +15,12 @@ export const LoginAndServiceEmailAddress = connect(
           <hr />
           {user.email}
           <p className="margin-bottom-0">
-            <Button link href="/change-login-and-service-email" icon="edit">
+            <Button
+              link
+              className="text-left"
+              href="/change-login-and-service-email"
+              icon="edit"
+            >
               Change Email
             </Button>
           </p>
