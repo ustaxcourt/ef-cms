@@ -409,9 +409,6 @@ const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
-  getCognitoUserByEmail,
-} = require('../../shared/src/persistence/cognito/getCognitoUserByEmail');
-const {
   getCompletedMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor');
 const {
@@ -670,6 +667,9 @@ const {
 const {
   isAuthorized,
 } = require('../../shared/src/authorization/authorizationClientService');
+const {
+  isEmailAvailable,
+} = require('../../shared/src/persistence/cognito/isEmailAvailable');
 const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
@@ -1210,7 +1210,6 @@ const gatewayMethods = {
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getClientId,
-  getCognitoUserByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1250,6 +1249,7 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
+  isEmailAvailable,
   isFileExists,
   updateCaseCorrespondence,
   verifyCaseForUser,
@@ -1300,17 +1300,16 @@ module.exports = (appContextUser, logger = createLogger()) => {
             promise: () => {},
           }),
           adminGetUser: ({ Username }) => ({
-            promise: () => ({
-              Username,
-            }),
+            promise: () => {
+              if (Username === 'error@example.com') {
+                throw new Error('User does not exist');
+              }
+
+              return { Username };
+            },
           }),
           adminUpdateUserAttributes: () => ({
             promise: () => {},
-          }),
-          listUsers: () => ({
-            promise: () => ({
-              Users: [],
-            }),
           }),
         };
       } else {
