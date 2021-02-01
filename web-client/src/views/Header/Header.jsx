@@ -147,6 +147,16 @@ const NavigationItems = (
       <li className="usa-nav__primary-item nav-medium">
         <a
           className="usa-nav__link"
+          href="/my-account"
+          id="my-account"
+          onClick={() => toggleMobileMenuSequence()}
+        >
+          My Account
+        </a>
+      </li>
+      <li className="usa-nav__primary-item nav-medium">
+        <a
+          className="usa-nav__link"
           href="/"
           id="log-out"
           onClick={() => signOutSequence()}
