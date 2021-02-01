@@ -15,7 +15,7 @@ export const updateMessageModalAfterQCAction = ({
   store.set(state.modal.validationErrors, {});
 
   const docketEntry = get(state.form);
-  const documentId = get(state.docketEntryId);
+  const docketEntryId = get(state.docketEntryId);
 
   const generatedDocumentTitle = applicationContext
     .getUtilities()
@@ -25,7 +25,7 @@ export const updateMessageModalAfterQCAction = ({
 
   store.set(state.modal.form.attachments, [
     {
-      documentId,
+      documentId: docketEntryId,
       documentTitle: generatedDocumentTitle,
     },
   ]);
