@@ -23,8 +23,11 @@ function PrivatePractitioner() {
   this.entityName = entityName;
 }
 
-PrivatePractitioner.prototype.init = function init(rawUser) {
-  userDecorator(this, rawUser);
+PrivatePractitioner.prototype.init = function init(
+  rawUser,
+  { filtered = false } = {},
+) {
+  userDecorator(this, rawUser, filtered);
   this.barNumber = rawUser.barNumber;
   this.firmName = rawUser.firmName;
   this.representing = rawUser.representing || [];

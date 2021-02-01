@@ -28,16 +28,19 @@ function User() {
   this.entityName = 'User';
 }
 
-User.prototype.init = function init(rawUser) {
-  userDecorator(this, rawUser);
+User.prototype.init = function init(rawUser, { filtered = false } = {}) {
+  userDecorator(this, rawUser, filtered);
   this.section = rawUser.section;
 };
 
-const userDecorator = (obj, rawObj) => {
+const userDecorator = (obj, rawObj, filtered = false) => {
+  if (!filtered) {
+    obj.pendingEmailVerificationToken = rawObj.pendingEmailVerificationToken;
+  }
+
   obj.email = rawObj.email;
   obj.name = rawObj.name;
   obj.pendingEmail = rawObj.pendingEmail;
-  obj.pendingEmailVerificationToken = rawObj.pendingEmailVerificationToken;
   obj.role = rawObj.role || ROLES.petitioner;
   obj.token = rawObj.token;
   obj.userId = rawObj.userId;
