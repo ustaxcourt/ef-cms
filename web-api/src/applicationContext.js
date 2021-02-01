@@ -968,6 +968,9 @@ const {
   updateUserContactInformationInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
 const {
+  updateUserEmail,
+} = require('../../shared/src/persistence/dynamo/users/updateUserEmail');
+const {
   updateUserPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserPendingEmailInteractor');
 const {
@@ -988,6 +991,9 @@ const {
 const {
   verifyPendingCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
+const {
+  verifyUserPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/verifyUserPendingEmailInteractor');
 const {
   virusScanPdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
@@ -1171,6 +1177,7 @@ const gatewayMethods = {
     updateTrialSessionWorkingCopy,
     updateUser,
     updateUserCaseNote,
+    updateUserEmail,
     updateWorkItem,
     updateWorkItemInCase,
   }),
@@ -1686,6 +1693,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateUserPendingEmailInteractor,
         validatePdfInteractor,
         verifyPendingCaseForUserInteractor,
+        verifyUserPendingEmailInteractor,
         virusScanPdfInteractor: args =>
           process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
       };

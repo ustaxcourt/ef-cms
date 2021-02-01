@@ -11,6 +11,7 @@ import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
+  getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
 import {
@@ -179,6 +180,7 @@ import { removeItem } from '../../shared/src/persistence/localStorage/removeItem
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
 import { updateUserPendingEmailInteractor } from '../../shared/src/proxies/users/updateUserPendingEmailProxy';
+import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
 const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/proxies/documents/removePdfFromDocketEntryProxy');
@@ -480,6 +482,7 @@ const allUseCases = {
   validateUpdateUserEmailInteractor,
   validateUserContactInteractor,
   verifyPendingCaseForUserInteractor,
+  verifyUserPendingEmailInteractor,
   virusScanPdfInteractor: args =>
     process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
 };
@@ -583,6 +586,7 @@ const applicationContext = {
       uploadPdfFromClient,
     };
   },
+  getPublicSiteUrl,
   getScanner: async () => {
     if (process.env.NO_SCANNER) {
       const scanner = await import(
