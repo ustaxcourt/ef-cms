@@ -138,6 +138,10 @@ describe('Case permissions test', () => {
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsCaseDetail(test);

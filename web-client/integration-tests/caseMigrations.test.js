@@ -271,6 +271,10 @@ describe('Case migration journey', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   it('should migrate cases', async () => {
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',
