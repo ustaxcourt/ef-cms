@@ -16,6 +16,34 @@ const updateUserCases = async ({ applicationContext, user }) => {
 
   const updatedCases = [];
 
+  console.log('sending initial ws message');
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'user_contact_initial_update_complete',
+    },
+    userId: user.userId,
+  });
+
+  for (let i = 0; i < 1000; i++) {
+    console.log(`sending ws message ${i}/1000`);
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_update_progress',
+        totalCases: docketNumbers.length,
+        updatedCases,
+      },
+      userId: user.userId,
+    });
+
+    await new Promise(resolve => {
+      setTimeout(resolve, 500);
+    });
+  }
+
   for (let caseInfo of docketNumbers) {
     try {
       const { docketNumber } = caseInfo;
