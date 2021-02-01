@@ -58,8 +58,8 @@ const updateUserCases = async ({ applicationContext, user }) => {
         applicationContext,
         message: {
           action: 'user_contact_update_progress',
+          completedCases: updatedCases.length,
           totalCases: docketNumbers.length,
-          updatedCases,
         },
         userId: user.userId,
       });
