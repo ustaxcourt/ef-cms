@@ -19,6 +19,10 @@ describe('external users perform an advanced search for orders', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create test case #1', async () => {
     const caseDetail = await uploadPetition(test);
