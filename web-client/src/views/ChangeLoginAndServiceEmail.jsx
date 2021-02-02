@@ -42,11 +42,21 @@ export const ChangeLoginAndServiceEmail = connect(
           </p>
 
           <div className="blue-container margin-bottom-5">
-            <div className="margin-bottom-6">
-              <p className="usa-label margin-bottom-05">
-                Current email address
-              </p>
-              {user.email}
+            <div className="grid-row margin-bottom-6">
+              <div className="desktop:grid-col-3">
+                <p className="usa-label margin-bottom-05">
+                  Current email address
+                </p>
+                {user.email}
+              </div>
+              {user.pendingEmail && (
+                <div className="desktop:grid-col-3">
+                  <p className="usa-label margin-bottom-05">
+                    Pending email address
+                  </p>
+                  {user.pendingEmail}
+                </div>
+              )}
             </div>
             <div>
               <h4>Change Login & Service Email</h4>
