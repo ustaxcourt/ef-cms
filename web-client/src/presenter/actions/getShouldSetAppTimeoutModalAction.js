@@ -10,13 +10,19 @@ export const getShouldSetAppTimeoutModalAction = async ({
   path,
 }) => {
   // TODO 7501 - refactor so we call one explicit method for fetching statuses
-  const messageId = await applicationContext
-    .getBroadcastGateway()
-    .sendMessage({ subject: 'idleStatus' });
+  // const messageId = await applicationContext
+  //   .getBroadcastGateway()
+  //   .sendMessage({ subject: 'idleStatus' });
+
+  // const statuses = await applicationContext
+  //   .getBroadcastGateway()
+  //   .getMessages({ threadId: messageId });
 
   const statuses = await applicationContext
     .getBroadcastGateway()
-    .getMessages({ threadId: messageId });
+    .getIdleStatuses({ applicationContext });
+
+  console.log('statuses', statuses);
 
   const allInstancesIdle = statuses.every(
     status =>
