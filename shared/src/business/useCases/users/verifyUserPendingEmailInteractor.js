@@ -53,11 +53,29 @@ const updateUserCases = async ({ applicationContext, user }) => {
         });
 
       updatedCases.push(updatedCase);
+
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        message: {
+          action: 'user_contact_update_progress',
+          completedCases: updatedCases.length,
+          totalCases: docketNumbers.length,
+        },
+        userId: user.userId,
+      });
     } catch (error) {
       applicationContext.logger.error(error);
       await applicationContext.notifyHoneybadger(error);
     }
   }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'user_contact_full_update_complete',
+    },
+    userId: user.userId,
+  });
 
   return updatedCases;
 };

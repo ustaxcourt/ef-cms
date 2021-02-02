@@ -288,4 +288,30 @@ describe('PrivatePractitioner', () => {
       expect(representingSecondary).toBeFalsy();
     });
   });
+
+  it('should filter out pendingEmailVerificationToken when filtered is true', () => {
+    const user = new PrivatePractitioner(
+      {
+        barNumber: 'BN1234',
+        contact: {
+          address1: '234 Main St',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          country: 'Brazil',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        name: 'Saul Goodman',
+        pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
+        role: ROLES.privatePractitioner,
+        userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+      },
+      { filtered: true },
+    );
+
+    expect(user.pendingEmailVerificationToken).toBeUndefined();
+  });
 });
