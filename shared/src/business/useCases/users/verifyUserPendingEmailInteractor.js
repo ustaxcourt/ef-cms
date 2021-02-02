@@ -17,8 +17,6 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
-  const updatedCases = [];
-
   for (let caseInfo of petitionerCases) {
     try {
       const { docketNumber } = caseInfo;
@@ -30,11 +28,14 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
           docketNumber,
         });
 
-      let caseEntity = new Case(userCase, { applicationContext });
+      let caseRaw = new Case(userCase, { applicationContext })
+        .validate()
+        .toRawObject();
 
-      const petitionerObject = caseEntity.contactPrimary
-        .concat(caseEntity.contactSecondary)
-        .find(petitioner => petitioner.userId === user.userId);
+      const petitionerObject = [
+        caseRaw.contactPrimary,
+        caseRaw.contactSecondary,
+      ].find(petitioner => petitioner && petitioner.contactId === user.userId);
 
       if (!petitionerObject) {
         throw new Error(
@@ -46,42 +47,21 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       petitionerObject.email = user.email;
 
       // we do this again so that it will convert '' to null
-      caseEntity = new Case(caseEntity, { applicationContext });
+      const caseEntity = new Case(caseRaw, { applicationContext }).validate();
 
-      const updatedCase = await applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        });
-
-      updatedCases.push(updatedCase);
-
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
+      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        message: {
-          action: 'user_contact_update_progress',
-          completedCases: updatedCases.length,
-          totalCases: petitionerCases.length,
-        },
-        userId: user.userId,
+        caseToUpdate: caseEntity.validate().toRawObject(),
       });
     } catch (error) {
+      console.log('error', error);
       applicationContext.logger.error(error);
       await applicationContext.notifyHoneybadger(error);
     }
   }
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'user_contact_full_update_complete',
-    },
-    userId: user.userId,
-  });
-
-  return updatedCases;
 };
+
+exports.updatePetitionerCases = updatePetitionerCases;
 
 const updatePractitionerCases = async ({ applicationContext, user }) => {
   const docketNumbers = await applicationContext
@@ -213,22 +193,22 @@ exports.verifyUserPendingEmailInteractor = async ({
   userEntity.pendingEmail = undefined;
   userEntity.pendingEmailVerificationToken = undefined;
 
-  const updatedRawPractitioner = userEntity.validate().toRawObject();
+  const updatedRawUser = userEntity.validate().toRawObject();
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
-    user: updatedRawPractitioner,
+    user: updatedRawUser,
   });
 
   if (userEntity.role === ROLES.petitioner) {
     await updatePetitionerCases({
       applicationContext,
-      user: updatedRawPractitioner,
+      user: updatedRawUser,
     });
   } else {
     await updatePractitionerCases({
       applicationContext,
-      user: updatedRawPractitioner,
+      user: updatedRawUser,
     });
   }
 };

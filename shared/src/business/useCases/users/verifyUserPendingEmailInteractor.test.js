@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  updatePetitionerCases,
   verifyUserPendingEmailInteractor,
 } = require('./verifyUserPendingEmailInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -341,5 +342,116 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).toMatchObject({
       action: 'user_contact_full_update_complete',
     });
+  });
+
+  describe('updatePetitionerCases', () => {
+    let mockPetitionerUser;
+    const UPDATED_EMAIL = 'hello@example.com';
+
+    beforeEach(() => {
+      mockPetitionerUser = {
+        ...validUser,
+        email: UPDATED_EMAIL,
+        role: ROLES.petitioner,
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getIndexedCasesForUser.mockReturnValue([]);
+    });
+
+    it('should call getIndexedCasesForUser with user.userId', async () => {
+      await updatePetitionerCases({
+        applicationContext,
+        user: mockPetitionerUser,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().getIndexedCasesForUser.mock
+          .calls[0][0],
+      ).toMatchObject({
+        userId: validUser.userId,
+      });
+    });
+
+    it('should call getCaseByDocketNumber for each case returned by getIndexedCasesForUser', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getIndexedCasesForUser.mockReturnValue([
+          {
+            ...MOCK_CASE,
+            contactPrimary: mockPetitionerUser,
+            docketNumber: '101-21',
+          },
+          {
+            ...MOCK_CASE,
+            contactPrimary: mockPetitionerUser,
+            docketNumber: '102-21',
+          },
+        ]);
+
+      await updatePetitionerCases({
+        applicationContext,
+        user: mockPetitionerUser,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+          .calls[0][0],
+      ).toMatchObject({
+        docketNumber: '101-21',
+      });
+      expect(
+        applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+          .calls[1][0],
+      ).toMatchObject({
+        docketNumber: '102-21',
+      });
+    });
+
+    it.only('should call applicationContext.logger.error if the petitioner is not found on a case returned by getIndexedCasesForUser', async () => {
+      const userCases = [
+        {
+          ...MOCK_CASE,
+          docketNumber: '101-21',
+        },
+        {
+          ...MOCK_CASE,
+          contactPrimary: {
+            ...mockPetitionerUser,
+            contactId: mockPetitionerUser.userId,
+          },
+          docketNumber: '102-21',
+        },
+      ];
+
+      applicationContext
+        .getPersistenceGateway()
+        .getIndexedCasesForUser.mockReturnValue(userCases);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
+        .mockReturnValueOnce(userCases[1]);
+
+      await updatePetitionerCases({
+        applicationContext,
+        user: mockPetitionerUser,
+      });
+
+      expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+        new Error(`Could not find user|${mockPetitionerUser.userId} on 101-21`),
+      );
+      expect(
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0],
+      ).toMatchObject({
+        docketNumber: '102-21',
+      });
+    });
+
+    it('should call updateCaseAndAssociations with updated email address for a contactPrimary', async () => {});
+
+    it('should call updateCaseAndAssociations with updated email address for a contactSecondary', async () => {});
   });
 });
