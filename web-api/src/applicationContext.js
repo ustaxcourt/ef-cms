@@ -1301,7 +1301,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
           adminGetUser: ({ Username }) => ({
             promise: () => {
-              if (Username === 'error@example.com') {
+              if (Username.includes('error')) {
                 throw new Error('User does not exist');
               }
 
@@ -1319,7 +1319,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
       }
     },
     getConstants: () => ({
-      CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
+      CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
+      CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
+      // the Chief Judge will have ~15k records, so setting to 20k to be safe
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
