@@ -110,6 +110,15 @@ export const getEmailsForAddress = address => {
     applicationContext,
   });
 };
+export const getPendingEmailVerificationTokenForUser = userId => {
+  return client.get({
+    Key: {
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
+    },
+    applicationContext,
+  });
+};
 
 export const deleteEmails = emails => {
   return Promise.all(
@@ -489,7 +498,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
       removeItem: () => null,
       setItem: () => null,
     },
-    location: {},
+    location: { replace: jest.fn() },
     open: url => {
       test.setState('openedUrl', url);
     },
