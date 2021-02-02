@@ -40,4 +40,22 @@ describe('myAccountHelper', () => {
       expect(showMyContactInformation).toBeFalsy();
     });
   });
+
+  describe('showPetitionerView', () => {
+    it('should be true when the current user is a petitioner', () => {
+      user.role = USER_ROLES.petitioner;
+
+      const { showPetitionerView } = runCompute(myAccountHelper, {});
+
+      expect(showPetitionerView).toBeTruthy();
+    });
+
+    it('should be true when the current user is NOT a petitioner', () => {
+      user.role = USER_ROLES.irsPractitioner;
+
+      const { showPetitionerView } = runCompute(myAccountHelper, {});
+
+      expect(showPetitionerView).toBeFalsy();
+    });
+  });
 });
