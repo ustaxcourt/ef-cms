@@ -114,6 +114,10 @@ describe('external user files a document for their legacy case', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   it('should migrate case', async () => {
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',

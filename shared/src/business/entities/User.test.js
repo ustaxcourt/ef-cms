@@ -223,4 +223,25 @@ describe('User entity', () => {
       expect(User.isInternalUser(ROLES.reportersOffice)).toEqual(true);
     });
   });
+
+  it('should filter out pendingEmailVerificationToken when filtered is true', () => {
+    const user = new User(
+      {
+        contact: {
+          address1: '234 Main St',
+          city: 'Chicago',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        name: 'Saul Goodman',
+        pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
+        role: ROLES.petitioner,
+        userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+      },
+      { filtered: true },
+    );
+    expect(user.pendingEmailVerificationToken).toBeUndefined();
+  });
 });
