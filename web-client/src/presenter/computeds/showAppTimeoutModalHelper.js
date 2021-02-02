@@ -27,10 +27,6 @@ export const showAppTimeoutModalHelper = (get, applicationContext) => {
   const modalShowingInThisOrOtherInstance =
     modalShowingRemotely || showModalState === appTimeoutModalName;
 
-  console.log('beginIdleMonitor', hasCurrentUser && !isUploading);
-  console.log('hasCurrentUser', hasCurrentUser);
-  console.log('currentUser', currentUser);
-
   return {
     beginIdleMonitor: hasCurrentUser && !isUploading,
     currentUser,

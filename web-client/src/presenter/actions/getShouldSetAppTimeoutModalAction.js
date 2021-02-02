@@ -5,7 +5,9 @@ export const getShouldSetAppTimeoutModalAction = ({
   get,
   path,
 }) => {
-  const appInstances = get(state.appInstances);
+  const messageId = applicationContext.getIPCGateway().sendMessage({topic: 'ping'});
+  const appInstances = get(state.appInstances); // post message on broadcast channel?
+  const statuses = await getAllStatuses();
   const allInstancesIdle = appInstances.every(
     appInstance =>
       appInstance.idleStatus ===

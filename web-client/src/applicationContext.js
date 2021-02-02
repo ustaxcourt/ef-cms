@@ -547,6 +547,7 @@ const applicationContext = {
   },
   getFileReaderInstance: () => new FileReader(),
   getHttpClient: () => axios,
+  getIPCGateway: () => {},
   getLogger: () => ({
     error: value => {
       // eslint-disable-next-line no-console
