@@ -498,7 +498,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
       removeItem: () => null,
       setItem: () => null,
     },
-    location: {},
+    location: { replace: jest.fn() },
     open: url => {
       test.setState('openedUrl', url);
     },
