@@ -1,7 +1,6 @@
 import {
   getPendingEmailVerificationTokenForUser,
   loginAs,
-  refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
 } from './helpers';
@@ -12,6 +11,7 @@ import { withAppContextDecorator } from '../src/withAppContext';
 const headerHelper = withAppContextDecorator(headerHelperComputed);
 
 const test = setupTest();
+const mockUpdatedEmail = 'error@example.com';
 
 describe('Modify Practitioner Email', () => {
   beforeAll(() => {
@@ -35,7 +35,7 @@ describe('Modify Practitioner Email', () => {
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  it('practitioner udpates email address to one that is already in use', async () => {
+  it('practitioner updates email address to one that is already in use', async () => {
     await test.runSequence('gotoChangeLoginAndServiceEmailSequence');
 
     await test.runSequence('updateFormValueSequence', {
@@ -58,12 +58,12 @@ describe('Modify Practitioner Email', () => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'email',
-      value: 'error@example.com',
+      value: mockUpdatedEmail,
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
-      value: 'error@example.com',
+      value: mockUpdatedEmail,
     });
 
     await test.runSequence('submitChangeLoginAndServiceEmailSequence');
@@ -100,10 +100,35 @@ describe('Modify Practitioner Email', () => {
     await test.runSequence('navigateToPathSequence', {
       path: `/verify-email?token=${emailVerificationToken}`,
     });
+
+    expect(window.location.replace).toHaveBeenCalledWith(
+      'http://localhost:5678/email-verification-success',
+    );
   });
 
-  //verify the email (how?????)
-  //grab pending token value from dynamo, go to verification url
-  //make sure user email is updated, banner goes away
-  //make sure cases are updated with new email
+  loginAs(test, 'privatePractitioner2@example.com');
+  it('practitioner logs in and checks verified email address', async () => {
+    const userFromState = test.getState('user');
+
+    expect(userFromState.email).toEqual(mockUpdatedEmail);
+
+    const header = runCompute(headerHelper, {
+      state: test.getState(),
+    });
+
+    expect(header.showVerifyEmailWarningNotification).toBeFalsy();
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const privatePractitioners = test.getState(
+      'caseDetail.privatePractitioners',
+    );
+    const privatePractitioner = privatePractitioners.find(
+      practitioner => practitioner.userId === userFromState.userId,
+    );
+
+    expect(privatePractitioner.email).toEqual(mockUpdatedEmail);
+  });
 });
