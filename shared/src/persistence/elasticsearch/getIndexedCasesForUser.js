@@ -37,12 +37,8 @@ exports.getIndexedCasesForUser = async ({
               },
             },
             {
-              bool: {
-                should: statuses.map(statusStr => ({
-                  term: {
-                    'status.S': statusStr,
-                  },
-                })),
+              terms: {
+                'status.S': statuses,
               },
             },
           ],

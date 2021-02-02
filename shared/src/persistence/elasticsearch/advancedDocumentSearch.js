@@ -46,16 +46,8 @@ exports.advancedDocumentSearch = async ({
   const docketEntryQueryParams = [
     {
       bool: {
-        must_not: [
-          {
-            term: { 'isStricken.BOOL': true },
-          },
-        ],
-        should: documentEventCodes.map(eventCode => ({
-          term: {
-            'eventCode.S': eventCode,
-          },
-        })),
+        must: [{ terms: { 'eventCode.S': documentEventCodes } }],
+        must_not: [{ term: { 'isStricken.BOOL': true } }],
       },
     },
   ];
