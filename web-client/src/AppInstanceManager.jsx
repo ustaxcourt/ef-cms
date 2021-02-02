@@ -6,25 +6,23 @@ import React, { useEffect, useRef } from 'react';
 export const AppInstanceManager = connect(
   {
     // updateIdleStatusSequence: sequences.updateIdleStatusSequence,
-    // broadcastIdleStatusSequence: sequences.broadcastIdleStatusSequence,
+    broadcastIdleStatusSequence: sequences.broadcastIdleStatusSequence,
   },
-  function AppInstanceManager(
-    {
-      // broadcastIdleStatusSequence,
-      // updateIdleStatusSequence
-    },
-  ) {
+  function AppInstanceManager({
+    broadcastIdleStatusSequence,
+    // updateIdleStatusSequence
+  }) {
     // TODO: use BroadcastGateway
     const channelHandle = new BroadcastChannel('ustc'); // TODO getConstants().CHANNEL_NAME
 
     /**
      * channel message object structure
      *
-     * @param {object} providers
-     * @param {string} providers.message
-     * @param {string} providers.recipient
-     * @param {string} providers.subject
-     * @param {string} providers.threadId
+     * @param {object} providers the providers
+     * @param {string} providers.message broadcast message
+     * @param {string} providers.recipient intended recipient of message
+     * @param {string} providers.subject type of message
+     * @param {string} providers.threadId discussion thread ID
      */
     function ChannelMessage({ message, recipient, subject, threadId }) {
       this.threadId = threadId;
@@ -43,11 +41,13 @@ export const AppInstanceManager = connect(
         case 'idleLogout':
           // updateIdleStatusSequence(msg);
           break;
-        case 'idleStatus':
-          // todo: get current idle status through sequence return value
-          // broadcastIdleStatusSequence();
+        case 'idleStatusResponse': // received an idle response
           break;
-        case 'idle':
+        case 'idleStatus': // report our current idle status
+          // todo: get current idle status through sequence return value
+          broadcastIdleStatusSequence({ channelHandle });
+          break;
+        case 'idle': // we have become idle
           // setIdleStatusIdleSequence();
           break;
       }
