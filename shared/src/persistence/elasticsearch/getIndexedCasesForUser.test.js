@@ -32,11 +32,6 @@ describe('getIndexedCasesForUser', () => {
         },
       },
       {
-        term: {
-          'entityName.S': 'UserCase',
-        },
-      },
-      {
         bool: {
           should: [
             {
@@ -79,11 +74,6 @@ describe('getIndexedCasesForUser', () => {
       {
         term: {
           'pk.S': `user|${mockUserId}`,
-        },
-      },
-      {
-        term: {
-          'entityName.S': 'UserCase',
         },
       },
       {

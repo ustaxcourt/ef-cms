@@ -37,11 +37,6 @@ exports.getIndexedCasesForUser = async ({
               },
             },
             {
-              term: {
-                'entityName.S': 'UserCase',
-              },
-            },
-            {
               bool: {
                 should: statuses.map(statusStr => ({
                   term: {
