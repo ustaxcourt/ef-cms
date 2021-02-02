@@ -13,7 +13,7 @@ export const AppInstanceManager = connect(
     // updateIdleStatusSequence
   }) {
     // TODO: use BroadcastGateway
-    const channelHandle = new BroadcastChannel('ustc'); // TODO getConstants().CHANNEL_NAME
+    const channelHandle = new BroadcastChannel('ustc-broadcast'); // TODO getConstants().CHANNEL_NAME
 
     /**
      * channel message object structure
@@ -33,9 +33,11 @@ export const AppInstanceManager = connect(
     }
 
     channelHandle.onmessage = msg => {
-      if (msg.recipient && msg.recipient !== appInstanceId) {
-        return;
-      }
+      // if (msg.recipient && msg.recipient !== appInstanceId) {
+      //   return;
+      // }
+
+      //console.log('message from AppInstanceManager', msg);
 
       switch (msg.subject) {
         case 'idleLogout':

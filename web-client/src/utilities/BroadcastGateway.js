@@ -8,7 +8,8 @@ export class BroadcastGateway {
     this.messages = new Set();
     this.channelName = channelName;
     this.broadcastChannel = new BroadcastChannel(this.channelName);
-    this.broadcastChannel.onmessage = this.messageHandler;
+    this.broadcastChannel.onmessage = this.handlerFactory(this);
+    this.aggregateMessages = [];
   }
 
   /**
@@ -31,18 +32,24 @@ export class BroadcastGateway {
    * @param {object} message
    * @returns {promise}
    */
-  async messageHandler(message) {
-    this.messages.add(message);
+  handlerFactory = _this => {
+    return message => {
+      //this.messages.add(message);
 
-    switch (message.topic) {
-      case 'idleStatus':
-        break;
-
-      case 'idleQuery':
-        // todo: ask cerebral state for idle status
-        break;
-    }
-  }
+      switch (message.topic) {
+        case 'idleStatus':
+          break;
+        case 'idleStatusResponse':
+          // gather all responses into an array
+          _this.aggregateMessages.push(message);
+          console.log('this aggregate messages', _this.aggregateMessages);
+          break;
+        case 'idleQuery':
+          // todo: ask cerebral state for idle status
+          break;
+      }
+    };
+  };
 
   // async queryIdleStatus(message) {
   //   await this.sendMessage({
@@ -92,11 +99,46 @@ export class BroadcastGateway {
 
   async sendMessage({ applicationContext, subject, threadId = undefined }) {
     const messageThreadId = threadId || applicationContext.getUniqueId();
+    //console.log('sendMessage: subject', subject);
     await this.broadcastChannel.postMessage({
       sender: this.sender,
       subject,
       threadId: messageThreadId,
     });
+    //console.log({ messageThreadId });
     return messageThreadId;
+  }
+
+  async getIdleStatuses({ applicationContext }) {
+    //console.log('getting idle statuses over channel', this.broadcastChannel);
+    // post message with `idleStatus` to all instances
+    await this.sendMessage({
+      applicationContext,
+      subject: 'idleStatus',
+    });
+    //const aggregateMessages = [];
+
+    // this.broadcastChannel.onMessage = message => {
+    //   console.log('response message', message);
+    //   switch (message.subject) {
+    //     case 'idleStatusResponse':
+    //       // gather all responses into an array
+    //       console.log('HOOORAY IT WORKED HEAR THE MESSAGE: ', message);
+    //       aggregateMessages.push(message);
+    //   }
+    // };
+
+    console.log('broadcastChannel on response', this.broadcastChannel);
+
+    return new Promise(resolve => {
+      // close the window, return the array
+      const returnMessages = () => {
+        // should we close() ?
+        resolve(this.aggregateMessages);
+      };
+
+      // open a timed window where we listen for a response
+      setTimeout(returnMessages, BROADCAST_TIMEOUT_MS);
+    });
   }
 }
