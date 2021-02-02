@@ -8,10 +8,9 @@ export class BroadcastGateway {
     this.messages = new Set();
     this.channelName = channelName;
     this.broadcastChannel = new BroadcastChannel(this.channelName);
-    this.broadcastChannel.onmessage = message => {
-      this.messages.add(message);
-    };
+    this.broadcastChannel.onmessage = this.messageHandler;
   }
+
   /**
    * clears all accumulated messages
    */
@@ -25,6 +24,34 @@ export class BroadcastGateway {
   close() {
     this.broadcastChannel.close();
   }
+
+  /**
+   * handle incoming message on the channel
+   *
+   * @param {object} message
+   * @returns {promise}
+   */
+  async messageHandler(message) {
+    this.messages.add(message);
+
+    switch (message.topic) {
+      case 'idleStatus':
+        break;
+
+      case 'idleQuery':
+        // todo: ask cerebral state for idle status
+        break;
+    }
+  }
+
+  // async queryIdleStatus(message) {
+  //   await this.sendMessage({
+  //     subject: 'idleQuery',
+  //     threadId: message.threadId,
+  //   });
+
+  //   return await this.getMessages({ threadId: message.threadId });
+  // }
 
   /**
    * iterates over accumulated messages in set, and any message whose
