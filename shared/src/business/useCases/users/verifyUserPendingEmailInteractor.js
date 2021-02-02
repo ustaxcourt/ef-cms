@@ -54,7 +54,6 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
         caseToUpdate: caseEntity.validate().toRawObject(),
       });
     } catch (error) {
-      console.log('error', error);
       applicationContext.logger.error(error);
       await applicationContext.notifyHoneybadger(error);
     }
