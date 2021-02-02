@@ -43,6 +43,9 @@ describe('verifyUserPendingEmailInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByUserId.mockReturnValue([]);
+    applicationContext
+      .getPersistenceGateway()
+      .isEmailAvailable.mockReturnValue(true);
   });
 
   it('should throw unauthorized error when user does not have permission to verify emails', async () => {
@@ -85,6 +88,25 @@ describe('verifyUserPendingEmailInteractor', () => {
         token: undefined,
       }),
     ).rejects.toThrow('Tokens do not match');
+  });
+
+  it('should throw an error when the pendingEmail address is not available in cognito', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isEmailAvailable.mockReturnValue(false);
+    mockUser = {
+      ...mockUser,
+      email: 'test@example.com',
+      pendingEmail: 'other@example.com',
+      pendingEmailVerificationToken: TOKEN,
+    };
+
+    await expect(
+      verifyUserPendingEmailInteractor({
+        applicationContext,
+        token: TOKEN,
+      }),
+    ).rejects.toThrow('Email is not available');
   });
 
   it('should update the cognito email when tokens match', async () => {
