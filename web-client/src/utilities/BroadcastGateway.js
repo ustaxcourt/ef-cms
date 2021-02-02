@@ -1,4 +1,5 @@
 import { BroadcastChannel } from 'broadcast-channel';
+import { uniqBy } from 'lodash';
 
 const BROADCAST_TIMEOUT_MS = 500;
 
@@ -9,7 +10,7 @@ export class BroadcastGateway {
     this.channelName = channelName;
     this.broadcastChannel = new BroadcastChannel(this.channelName);
     this.broadcastChannel.onmessage = this.handlerFactory(this);
-    this.aggregateMessages = [];
+    this.aggregateMessages = {};
   }
 
   /**
@@ -36,16 +37,17 @@ export class BroadcastGateway {
     return message => {
       //this.messages.add(message);
 
-      switch (message.topic) {
-        case 'idleStatus':
-          break;
+      switch (message.subject) {
         case 'idleStatusResponse':
           // gather all responses into an array
-          _this.aggregateMessages.push(message);
+          _this.aggregateMessages[message.appInstanceId] = message;
           console.log('this aggregate messages', _this.aggregateMessages);
           break;
         case 'idleQuery':
           // todo: ask cerebral state for idle status
+          break;
+        default:
+          console.log('unhandled message', message);
           break;
       }
     };

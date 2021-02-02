@@ -5,14 +5,18 @@ import { setIdleStatusFactoryAction } from '../actions/setIdleStatusFactoryActio
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { startDelayedLogoutAction } from '../actions/startDelayedLogoutAction';
 
+//
+
 export const setIdleStatusIdleSequence = [
   clearModalStateAction,
+  // todo: don't trigger if already idleStatus=IDLE
   setIdleStatusFactoryAction(getConstants().IDLE_STATUS.IDLE),
   getShouldSetAppTimeoutModalAction,
   {
     no: [],
     yes: [
       setShowModalFactoryAction('AppTimeoutModal'),
+      // tell everyone else that we should go idle (broadcast allIdle)
       // TODO set state.instances[currentInstance].showAppTimeoutModal = true instead of using setShowModalFactoryAction
       startDelayedLogoutAction,
     ],

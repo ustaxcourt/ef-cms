@@ -9,6 +9,12 @@ import { state } from 'cerebral';
  */
 export const broadcastIdleStatusAction = async ({ get, props }) => {
   const idleStatus = get(state.idleStatus);
+  const appInstanceId = get(state.appInstanceId);
   const { channelHandle } = props;
-  await channelHandle.postMessage({ idleStatus, topic: 'idleStatusResponse' });
+
+  await channelHandle.postMessage({
+    appInstanceId,
+    idleStatus,
+    subject: 'idleStatusResponse',
+  });
 };

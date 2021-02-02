@@ -53,6 +53,7 @@ import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
+import { getConstants } from '../getConstants';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
@@ -95,6 +96,8 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
+
+const { IDLE_STATUS } = getConstants();
 
 const helpers = {
   addCourtIssuedDocketEntryHelper,
@@ -259,6 +262,7 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  idleStatus: IDLE_STATUS.ACTIVE,
   individualInProgressCount: 0,
   individualInboxCount: 0,
   judges: [],
