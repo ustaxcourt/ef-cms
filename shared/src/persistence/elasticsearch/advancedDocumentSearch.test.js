@@ -45,23 +45,14 @@ describe('advancedDocumentSearch', () => {
     },
     {
       bool: {
-        must_not: [
+        must: [
           {
-            term: { 'isStricken.BOOL': true },
-          },
-        ],
-        should: [
-          {
-            term: {
-              'eventCode.S': orderEventCodes[0],
-            },
-          },
-          {
-            term: {
-              'eventCode.S': orderEventCodes[1],
+            terms: {
+              'eventCode.S': [orderEventCodes[0], orderEventCodes[1]],
             },
           },
         ],
+        must_not: [{ term: { 'isStricken.BOOL': true } }],
       },
     },
   ];
@@ -75,21 +66,16 @@ describe('advancedDocumentSearch', () => {
     },
     {
       bool: {
+        must: [
+          {
+            terms: {
+              'eventCode.S': [opinionEventCodes[0], opinionEventCodes[1]],
+            },
+          },
+        ],
         must_not: [
           {
             term: { 'isStricken.BOOL': true },
-          },
-        ],
-        should: [
-          {
-            term: {
-              'eventCode.S': opinionEventCodes[0],
-            },
-          },
-          {
-            term: {
-              'eventCode.S': opinionEventCodes[1],
-            },
           },
         ],
       },

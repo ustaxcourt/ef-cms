@@ -32,23 +32,11 @@ describe('getIndexedCasesForUser', () => {
         },
       },
       {
-        bool: {
-          should: [
-            {
-              term: {
-                'status.S': CASE_STATUS_TYPES.new,
-              },
-            },
-            {
-              term: {
-                'status.S': CASE_STATUS_TYPES.jurisdictionRetained,
-              },
-            },
-            {
-              term: {
-                'status.S': CASE_STATUS_TYPES.calendared,
-              },
-            },
+        terms: {
+          'status.S': [
+            CASE_STATUS_TYPES.new,
+            CASE_STATUS_TYPES.jurisdictionRetained,
+            CASE_STATUS_TYPES.calendared,
           ],
         },
       },
@@ -77,14 +65,8 @@ describe('getIndexedCasesForUser', () => {
         },
       },
       {
-        bool: {
-          should: [
-            {
-              term: {
-                'status.S': CASE_STATUS_TYPES.closed,
-              },
-            },
-          ],
+        terms: {
+          'status.S': [CASE_STATUS_TYPES.closed],
         },
       },
     ]);
