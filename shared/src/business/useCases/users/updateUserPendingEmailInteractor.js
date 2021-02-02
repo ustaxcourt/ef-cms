@@ -3,7 +3,9 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Practitioner } = require('../../entities/Practitioner');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * updateUserPendingEmailInteractor
@@ -32,13 +34,16 @@ exports.updateUserPendingEmailInteractor = async ({
   const pendingEmailVerificationToken = applicationContext.getUniqueId();
   user.pendingEmailVerificationToken = pendingEmailVerificationToken;
 
-  const updatedRawPractitioner = new Practitioner(user)
-    .validate()
-    .toRawObject();
+  let updatedUserRaw;
+  if (user.role === ROLES.petitioner) {
+    updatedUserRaw = new User(user).validate().toRawObject();
+  } else {
+    updatedUserRaw = new Practitioner(user).validate().toRawObject();
+  }
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
-    user: updatedRawPractitioner,
+    user: updatedUserRaw,
   });
 
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/verify-email?token=${pendingEmailVerificationToken}`;
@@ -61,5 +66,5 @@ exports.updateUserPendingEmailInteractor = async ({
     templateName: process.env.EMAIL_CHANGE_VERIFICATION_TEMPLATE,
   });
 
-  return updatedRawPractitioner;
+  return updatedUserRaw;
 };
