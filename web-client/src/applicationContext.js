@@ -1,3 +1,4 @@
+import { BroadcastGateway } from './utilities/BroadcastGateway';
 import {
   Case,
   caseHasServedDocketEntries,
@@ -277,6 +278,10 @@ import { getConstants } from './getConstants';
 
 let user;
 
+const broadcastGateway = new BroadcastGateway({
+  appInstanceId: getUniqueId(),
+  channelName: getConstants().CHANNEL_NAME,
+});
 const getCurrentUser = () => {
   return user;
 };
@@ -516,6 +521,7 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
   },
+  getBroadcastGateway: () => broadcastGateway,
   getCaseTitle: Case.getCaseTitle,
   getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
   getClerkOfCourtNameForSigning: () => clerkOfCourtNameForSigning,
@@ -547,7 +553,6 @@ const applicationContext = {
   },
   getFileReaderInstance: () => new FileReader(),
   getHttpClient: () => axios,
-  getIPCGateway: () => {},
   getLogger: () => ({
     error: value => {
       // eslint-disable-next-line no-console
