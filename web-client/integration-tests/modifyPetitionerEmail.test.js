@@ -11,7 +11,7 @@ import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEm
 
 const test = setupTest();
 
-describe('Modify Practitioner Email', () => {
+describe('Modify Petitioner Email', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -23,24 +23,20 @@ describe('Modify Practitioner Email', () => {
   let caseDetail;
   test.createdDocketNumbers = [];
 
-  loginAs(test, 'privatePractitioner2@example.com');
-  it('practitioner creates a case', async () => {
-    caseDetail = await uploadPetition(
-      test,
-      {},
-      'privatePractitioner2@example.com',
-    );
+  loginAs(test, 'petitioner@example.com');
+  it('petitioner creates a case', async () => {
+    caseDetail = await uploadPetition(test, {}, 'petitioner@example.com');
     expect(caseDetail.docketNumber).toBeDefined();
 
     await refreshElasticsearchIndex();
   });
 
-  userUpdatesEmailAddressToOneAlreadyInUse(test, 'practitioner');
+  userUpdatesEmailAddressToOneAlreadyInUse(test, 'petitioner');
 
-  userSuccessfullyUpdatesEmailAddress(test, 'practitioner');
+  userSuccessfullyUpdatesEmailAddress(test, 'petitioner');
 
-  userVerifiesUpdatedEmailAddress(test, 'practitioner');
+  userVerifiesUpdatedEmailAddress(test, 'petitioner');
 
-  loginAs(test, 'privatePractitioner2@example.com');
-  userLogsInAndChecksVerifiedEmailAddress(test, 'practitioner');
+  loginAs(test, 'petitioner@example.com');
+  userLogsInAndChecksVerifiedEmailAddress(test, 'petitioner');
 });
