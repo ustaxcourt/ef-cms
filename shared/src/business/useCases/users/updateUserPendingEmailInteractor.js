@@ -23,6 +23,17 @@ exports.updateUserPendingEmailInteractor = async ({
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
+  const isEmailAvailable = await applicationContext
+    .getPersistenceGateway()
+    .isEmailAvailable({
+      applicationContext,
+      email: pendingEmail,
+    });
+
+  if (!isEmailAvailable) {
+    throw new Error('Email is not available');
+  }
+
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
