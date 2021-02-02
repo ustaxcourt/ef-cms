@@ -34,6 +34,8 @@ describe('Modify Practitioner Email', () => {
       'privatePractitioner2@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
+
+    await refreshElasticsearchIndex();
   });
 
   it('practitioner updates email address to one that is already in use', async () => {
