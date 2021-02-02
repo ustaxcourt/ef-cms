@@ -1,11 +1,13 @@
 import { BigHeader } from './BigHeader';
 import { ErrorNotification } from './ErrorNotification';
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { LoginAndServiceEmailAddress } from './LoginAndServiceEmailAddress';
 import { MyContactInformation } from './MyContactInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const MyAccount = connect(
   { myAccountHelper: state.myAccountHelper },
@@ -17,13 +19,25 @@ export const MyAccount = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="grid-container padding-x-0">
+          {myAccountHelper.showPetitionerView && (
+            <Hint>
+              You can change other contact information within the individual
+              case.
+            </Hint>
+          )}
+          <div
+            className={classNames(
+              'grid-container padding-x-0',
+              myAccountHelper.showPetitionerView && ' margin-top-2',
+            )}
+          >
             <div className="grid-row grid-gap">
               {myAccountHelper.showMyContactInformation && (
                 <div className="tablet:grid-col-4">
                   <MyContactInformation />
                 </div>
               )}
+
               <div className="tablet:grid-col-4">
                 <LoginAndServiceEmailAddress />
               </div>
