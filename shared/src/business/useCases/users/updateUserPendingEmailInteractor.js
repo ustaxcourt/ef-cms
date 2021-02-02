@@ -23,6 +23,17 @@ exports.updateUserPendingEmailInteractor = async ({
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
+  const isEmailAvailable = await applicationContext
+    .getPersistenceGateway()
+    .isEmailAvailable({
+      applicationContext,
+      email: pendingEmail,
+    });
+
+  if (!isEmailAvailable) {
+    throw new Error('Email is not available');
+  }
+
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -43,7 +54,7 @@ exports.updateUserPendingEmailInteractor = async ({
 
   const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/verify-email?token=${pendingEmailVerificationToken}`;
 
-  const templateHtml = `The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.<br><a href="${verificationLink}">Verify your email.</a><br>If you did not make this change, please contact support at <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.`;
+  const templateHtml = `The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.<br><a href="${verificationLink}">Verify your email.</a><br><br>If you did not make this change, please contact support at <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.`;
 
   const destination = {
     email: pendingEmail,
