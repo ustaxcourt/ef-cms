@@ -111,6 +111,17 @@ exports.verifyUserPendingEmailInteractor = async ({
     throw new UnauthorizedError('Tokens do not match');
   }
 
+  const isEmailAvailable = await applicationContext
+    .getPersistenceGateway()
+    .isEmailAvailable({
+      applicationContext,
+      email: practitionerEntity.pendingEmail,
+    });
+
+  if (!isEmailAvailable) {
+    throw new Error('Email is not available');
+  }
+
   await applicationContext.getPersistenceGateway().updateUserEmail({
     applicationContext,
     user: practitionerEntity.validate().toRawObject(),
