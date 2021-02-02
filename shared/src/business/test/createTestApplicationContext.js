@@ -440,6 +440,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
   };
 
+  const mockBroadcastGateway = {
+    getMessages: jest.fn(),
+    sendMessage: jest.fn(),
+  };
+
   const applicationContext = {
     ...sharedAppContext,
     barNumberGenerator: {
@@ -459,6 +464,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
+    getBroadcastGateway: () => mockBroadcastGateway,
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
     getChiefJudgeNameForSigning: jest.fn(),
     getChromiumBrowser: jest.fn().mockImplementation(() => {

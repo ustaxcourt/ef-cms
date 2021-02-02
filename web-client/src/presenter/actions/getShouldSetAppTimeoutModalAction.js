@@ -1,18 +1,28 @@
-import { state } from 'cerebral';
-
-export const getShouldSetAppTimeoutModalAction = ({
+/**
+ * examines all app instances and determines whether to display the AppTimeoutModal
+ *
+ * @param {object} applicationContext the applicationContext
+ * @param {object} path the cerebral path object
+ * @returns {promise} the next path in the sequence
+ */
+export const getShouldSetAppTimeoutModalAction = async ({
   applicationContext,
-  get,
   path,
 }) => {
-  const messageId = applicationContext.getIPCGateway().sendMessage({topic: 'ping'});
-  const appInstances = get(state.appInstances); // post message on broadcast channel?
-  const statuses = await getAllStatuses();
-  const allInstancesIdle = appInstances.every(
-    appInstance =>
-      appInstance.idleStatus ===
-      applicationContext.getConstants().IDLE_STATUS.IDLE,
+  // TODO 7501 - refactor so we call one explicit method for fetching statuses
+  const messageId = await applicationContext
+    .getBroadcastGateway()
+    .sendMessage({ topic: 'idleStatus' });
+
+  const statuses = await applicationContext
+    .getBroadcastGateway()
+    .getMessages({ threadId: messageId });
+
+  const allInstancesIdle = statuses.every(
+    status =>
+      status.idleStatus === applicationContext.getConstants().IDLE_STATUS.IDLE,
   );
+
   if (allInstancesIdle) {
     return path.yes();
   } else {
