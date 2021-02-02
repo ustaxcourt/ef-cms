@@ -6,7 +6,7 @@ const {
   verifyUserPendingEmailInteractor,
 } = require('./verifyUserPendingEmailInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { validUser } = require('../../../test/mockUsers');
 
 describe('verifyUserPendingEmailInteractor', () => {
@@ -409,8 +409,8 @@ describe('verifyUserPendingEmailInteractor', () => {
       });
     });
 
-    it.only('should call applicationContext.logger.error if the petitioner is not found on a case returned by getIndexedCasesForUser', async () => {
-      const userCases = [
+    it('should call applicationContext.logger.error if the petitioner is not found on a case returned by getIndexedCasesForUser', async () => {
+      userCases = [
         {
           ...MOCK_CASE,
           docketNumber: '101-21',
@@ -418,7 +418,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         {
           ...MOCK_CASE,
           contactPrimary: {
-            ...mockPetitionerUser,
+            ...MOCK_CASE.contactPrimary,
             contactId: mockPetitionerUser.userId,
           },
           docketNumber: '102-21',
@@ -444,14 +444,51 @@ describe('verifyUserPendingEmailInteractor', () => {
       );
       expect(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-          .calls[0][0],
+          .calls[0][0].caseToUpdate,
       ).toMatchObject({
+        contactPrimary: {
+          email: UPDATED_EMAIL,
+        },
         docketNumber: '102-21',
       });
     });
 
-    it('should call updateCaseAndAssociations with updated email address for a contactPrimary', async () => {});
+    it('should call updateCaseAndAssociations with updated email address for a contactSecondary', async () => {
+      userCases = [
+        {
+          ...MOCK_CASE,
+          contactSecondary: {
+            ...MOCK_CASE.contactPrimary,
+            contactId: mockPetitionerUser.userId,
+            inCareOf: 'Barney',
+          },
+          docketNumber: '102-21',
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        },
+      ];
 
-    it('should call updateCaseAndAssociations with updated email address for a contactSecondary', async () => {});
+      applicationContext
+        .getPersistenceGateway()
+        .getIndexedCasesForUser.mockReturnValue(userCases);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
+
+      await updatePetitionerCases({
+        applicationContext,
+        user: mockPetitionerUser,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0].caseToUpdate,
+      ).toMatchObject({
+        contactSecondary: {
+          email: UPDATED_EMAIL,
+        },
+        docketNumber: '102-21',
+      });
+    });
   });
 });
