@@ -35,6 +35,9 @@ describe('updateUserPendingEmailInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .updateUser.mockImplementation(() => mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .isEmailAvailable.mockReturnValue(true);
   });
 
   it('should throw unauthorized error when user does not have permission to manage emails', async () => {
@@ -49,6 +52,19 @@ describe('updateUserPendingEmailInteractor', () => {
         pendingEmail,
       }),
     ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('should throw an error when the pendingEmail address is not available in cognito', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isEmailAvailable.mockReturnValue(false);
+
+    await expect(
+      updateUserPendingEmailInteractor({
+        applicationContext,
+        pendingEmail,
+      }),
+    ).rejects.toThrow('Email is not available');
   });
 
   it('should make a call to get the current user', async () => {
