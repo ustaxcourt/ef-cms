@@ -38,11 +38,7 @@ exports.getCaseInventoryReport = async ({
       from,
       query: {
         bool: {
-          must: [
-            {
-              term: { 'entityName.S': 'Case' },
-            },
-          ],
+          must: [],
           must_not: [
             {
               term: { 'status.S': 'Closed' },
