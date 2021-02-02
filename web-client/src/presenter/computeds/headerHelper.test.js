@@ -283,6 +283,17 @@ describe('headerHelper', () => {
       expect(result.showMyAccount).toBeTruthy();
     });
 
+    it('should be true when the user role is petitioner', () => {
+      const result = runCompute(headerHelper, {
+        state: {
+          ...getBaseState({ role: ROLES.petitioner }),
+          currentPage: 'DashboardPetitioner',
+        },
+      });
+
+      expect(result.showMyAccount).toBeTruthy();
+    });
+
     it('should be false when the user role is not private or irs practitioner', () => {
       const result = runCompute(headerHelper, {
         state: {
