@@ -10,6 +10,7 @@ import React from 'react';
 export const ChangeLoginAndServiceEmail = connect(
   {
     form: state.form,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     showModal: state.modal.showModal,
     submitChangeLoginAndServiceEmailSequence:
       sequences.submitChangeLoginAndServiceEmailSequence,
@@ -21,6 +22,7 @@ export const ChangeLoginAndServiceEmail = connect(
   },
   function ChangeLoginAndServiceEmail({
     form,
+    navigateToPathSequence,
     showModal,
     submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence,
@@ -97,7 +99,12 @@ export const ChangeLoginAndServiceEmail = connect(
               >
                 Save
               </Button>
-              <Button link>Cancel</Button>
+              <Button
+                link
+                onClick={() => navigateToPathSequence({ path: '/my-account' })}
+              >
+                Cancel
+              </Button>
             </div>
           </div>
         </section>
