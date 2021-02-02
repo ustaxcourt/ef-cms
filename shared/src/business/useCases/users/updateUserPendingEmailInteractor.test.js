@@ -99,12 +99,29 @@ describe('updateUserPendingEmailInteractor', () => {
     ).toMatchObject({ pendingEmail });
   });
 
-  it('should return the updated user entity', async () => {
+  it('should return the updated User entity when currentUser.role is petitioner', async () => {
+    mockUser = validUser;
+
     const results = await updateUserPendingEmailInteractor({
       applicationContext,
       pendingEmail,
     });
 
+    expect(results.entityName).toBe('User');
+    expect(results).toMatchObject({
+      ...mockUser,
+      pendingEmail,
+      pendingEmailVerificationToken: expect.anything(),
+    });
+  });
+
+  it('should return the updated Practitioner entity when currentUser.role is NOT petitioner', async () => {
+    const results = await updateUserPendingEmailInteractor({
+      applicationContext,
+      pendingEmail,
+    });
+
+    expect(results.entityName).toBe('Practitioner');
     expect(results).toMatchObject({
       ...mockUser,
       pendingEmail,
