@@ -1,6 +1,7 @@
 import {
   getPendingEmailVerificationTokenForUser,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
 } from './helpers';
@@ -26,7 +27,7 @@ describe('Modify Practitioner Email', () => {
   test.createdDocketNumbers = [];
 
   loginAs(test, 'privatePractitioner2@example.com');
-  it('login as a practitioner and create a case', async () => {
+  it('practitioner creates a case', async () => {
     caseDetail = await uploadPetition(
       test,
       {},
@@ -117,6 +118,8 @@ describe('Modify Practitioner Email', () => {
     });
 
     expect(header.showVerifyEmailWarningNotification).toBeFalsy();
+
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
