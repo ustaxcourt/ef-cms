@@ -52,7 +52,8 @@ export const headerHelper = (get, applicationContext) => {
     showMessages: isInternalUser && userRole !== USER_ROLES.general,
     showMyAccount:
       userRole === USER_ROLES.privatePractitioner ||
-      userRole === USER_ROLES.irsPractitioner,
+      userRole === USER_ROLES.irsPractitioner ||
+      userRole === USER_ROLES.petitioner,
     showMyCases:
       isExternalUser && userRole && userRole !== USER_ROLES.irsSuperuser,
     showReports: isInternalUser,
