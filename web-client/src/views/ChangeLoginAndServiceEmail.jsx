@@ -50,7 +50,7 @@ export const ChangeLoginAndServiceEmail = connect(
                 {user.email}
               </div>
               {user.pendingEmail && (
-                <div className="desktop:grid-col-3">
+                <div className="desktop:grid-col-3 padding-top-2 desktop:padding-top-0">
                   <p className="usa-label margin-bottom-05">
                     Pending email address
                   </p>
