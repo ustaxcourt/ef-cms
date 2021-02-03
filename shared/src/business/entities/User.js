@@ -28,12 +28,16 @@ function User() {
   this.entityName = 'User';
 }
 
-User.prototype.init = function init(rawUser) {
-  userDecorator(this, rawUser);
+User.prototype.init = function init(rawUser, { filtered = false } = {}) {
+  userDecorator(this, rawUser, filtered);
   this.section = rawUser.section;
 };
 
-const userDecorator = (obj, rawObj) => {
+const userDecorator = (obj, rawObj, filtered = false) => {
+  if (!filtered) {
+    obj.pendingEmailVerificationToken = rawObj.pendingEmailVerificationToken;
+  }
+
   obj.email = rawObj.email;
   obj.name = rawObj.name;
   obj.pendingEmail = rawObj.pendingEmail;
@@ -118,6 +122,9 @@ const userValidation = {
       'Whether the contact information for the user is being updated.',
     ),
   pendingEmail: JoiValidationConstants.EMAIL.allow(null).optional(),
+  pendingEmailVerificationToken: JoiValidationConstants.UUID.allow(
+    null,
+  ).optional(),
   section: JoiValidationConstants.STRING.valid(
     ...SECTIONS,
     ...CHAMBERS_SECTIONS_WITH_LEGACY,

@@ -409,9 +409,6 @@ const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
-  getCognitoUserByEmail,
-} = require('../../shared/src/persistence/cognito/getCognitoUserByEmail');
-const {
   getCompletedMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor');
 const {
@@ -670,6 +667,9 @@ const {
 const {
   isAuthorized,
 } = require('../../shared/src/authorization/authorizationClientService');
+const {
+  isEmailAvailable,
+} = require('../../shared/src/persistence/cognito/isEmailAvailable');
 const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
@@ -968,6 +968,9 @@ const {
   updateUserContactInformationInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
 const {
+  updateUserEmail,
+} = require('../../shared/src/persistence/dynamo/users/updateUserEmail');
+const {
   updateUserPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserPendingEmailInteractor');
 const {
@@ -988,6 +991,9 @@ const {
 const {
   verifyPendingCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
+const {
+  verifyUserPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/verifyUserPendingEmailInteractor');
 const {
   virusScanPdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
@@ -1171,6 +1177,7 @@ const gatewayMethods = {
     updateTrialSessionWorkingCopy,
     updateUser,
     updateUserCaseNote,
+    updateUserEmail,
     updateWorkItem,
     updateWorkItemInCase,
   }),
@@ -1203,7 +1210,6 @@ const gatewayMethods = {
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getClientId,
-  getCognitoUserByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1243,6 +1249,7 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
+  isEmailAvailable,
   isFileExists,
   updateCaseCorrespondence,
   verifyCaseForUser,
@@ -1293,17 +1300,16 @@ module.exports = (appContextUser, logger = createLogger()) => {
             promise: () => {},
           }),
           adminGetUser: ({ Username }) => ({
-            promise: () => ({
-              Username,
-            }),
+            promise: () => {
+              if (Username.includes('error')) {
+                throw new Error('User does not exist');
+              }
+
+              return { Username };
+            },
           }),
           adminUpdateUserAttributes: () => ({
             promise: () => {},
-          }),
-          listUsers: () => ({
-            promise: () => ({
-              Users: [],
-            }),
           }),
         };
       } else {
@@ -1314,6 +1320,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
+      CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
@@ -1686,6 +1693,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateUserPendingEmailInteractor,
         validatePdfInteractor,
         verifyPendingCaseForUserInteractor,
+        verifyUserPendingEmailInteractor,
         virusScanPdfInteractor: args =>
           process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
       };

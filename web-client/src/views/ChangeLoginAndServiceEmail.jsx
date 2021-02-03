@@ -10,6 +10,7 @@ import React from 'react';
 export const ChangeLoginAndServiceEmail = connect(
   {
     form: state.form,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     showModal: state.modal.showModal,
     submitChangeLoginAndServiceEmailSequence:
       sequences.submitChangeLoginAndServiceEmailSequence,
@@ -21,6 +22,7 @@ export const ChangeLoginAndServiceEmail = connect(
   },
   function ChangeLoginAndServiceEmail({
     form,
+    navigateToPathSequence,
     showModal,
     submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence,
@@ -40,11 +42,21 @@ export const ChangeLoginAndServiceEmail = connect(
           </p>
 
           <div className="blue-container margin-bottom-5">
-            <div className="margin-bottom-6">
-              <p className="usa-label margin-bottom-05">
-                Current email address
-              </p>
-              {user.email}
+            <div className="grid-row margin-bottom-6">
+              <div className="desktop:grid-col-3">
+                <p className="usa-label margin-bottom-05">
+                  Current email address
+                </p>
+                {user.email}
+              </div>
+              {user.pendingEmail && (
+                <div className="desktop:grid-col-3 padding-top-2 desktop:padding-top-0">
+                  <p className="usa-label margin-bottom-05">
+                    Pending email address
+                  </p>
+                  {user.pendingEmail}
+                </div>
+              )}
             </div>
             <div>
               <h4>Change Login & Service Email</h4>
@@ -97,7 +109,12 @@ export const ChangeLoginAndServiceEmail = connect(
               >
                 Save
               </Button>
-              <Button link>Cancel</Button>
+              <Button
+                link
+                onClick={() => navigateToPathSequence({ path: '/my-account' })}
+              >
+                Cancel
+              </Button>
             </div>
           </div>
         </section>
