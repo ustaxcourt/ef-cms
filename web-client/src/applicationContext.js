@@ -277,8 +277,8 @@ import deepFreeze from 'deep-freeze';
 import { getConstants } from './getConstants';
 
 let user;
+let broadcastChannel;
 
-const broadcastGateway = new BroadcastChannel(getConstants().CHANNEL_NAME);
 const getCurrentUser = () => {
   return user;
 };
@@ -518,7 +518,12 @@ const applicationContext = {
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
   },
-  getBroadcastGateway: () => broadcastGateway,
+  getBroadcastGateway: () => {
+    if (!broadcastChannel) {
+      broadcastChannel = new BroadcastChannel(getConstants().CHANNEL_NAME);
+    }
+    return broadcastChannel;
+  },
   getCaseTitle: Case.getCaseTitle,
   getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
   getClerkOfCourtNameForSigning: () => clerkOfCourtNameForSigning,

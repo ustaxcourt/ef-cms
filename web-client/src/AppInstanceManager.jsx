@@ -15,16 +15,13 @@ export const AppInstanceManager = connect(
   }) {
     const { channelHandle } = appInstanceManagerHelper;
 
-    channelHandle.onmessage = ({ data: msg }) => {
+    channelHandle.onmessage = msg => {
       switch (msg.subject) {
         case 'idleStatusActive':
           resetIdleTimerSequence();
           break;
         case 'stayLoggedIn':
           confirmStayLoggedInSequence();
-          break;
-        case 'idleLogout':
-          // TODO: new story for sync'd logout
           break;
       }
     };
