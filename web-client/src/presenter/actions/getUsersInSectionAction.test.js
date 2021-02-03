@@ -4,41 +4,90 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getUsersInSectionAction', () => {
-  const mockUser = {
-    barNumber: 'BN1234',
-    name: 'Private Practitioner',
-    role: 'privatePractitioner',
-    section: 'privatePractitioner',
-    userId: '330d4b65-620a-489d-8414-6623653ebc4f',
-  };
-
   beforeAll(() => {
-    applicationContext
-      .getUseCases()
-      .getUserInteractor.mockReturnValue(mockUser);
-
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should make a call to getUserInteractor', async () => {
-    await runAction(getUsersInSectionAction, {
+  it('should retrieve all the users in the section provided', async () => {
+    const mockSection = 'Test Section';
+    applicationContext
+      .getUseCases()
+      .getUsersInSectionInteractor.mockReturnValue([]);
+
+    await runAction(await getUsersInSectionAction({ section: mockSection }), {
       modules: {
         presenter,
       },
     });
 
     expect(
-      applicationContext.getUseCases().getUserInteractor,
-    ).toHaveBeenCalled();
+      applicationContext.getUseCases().getUsersInSectionInteractor.mock
+        .calls[0][0].section,
+    ).toBe(mockSection);
   });
 
-  it('should return the retrieved user as props', async () => {
-    const { output } = await runAction(getUsersInSectionAction, {
+  it("should retrieve all the users in the current user's section when a section is not provided", async () => {
+    const mockSection = 'Test User Section';
+    applicationContext.getCurrentUser.mockReturnValue({
+      section: mockSection,
+    });
+    applicationContext
+      .getUseCases()
+      .getUsersInSectionInteractor.mockReturnValue([]);
+
+    await runAction(await getUsersInSectionAction({ section: undefined }), {
       modules: {
         presenter,
       },
     });
 
-    expect(output).toEqual({ user: mockUser });
+    expect(
+      applicationContext.getUseCases().getUsersInSectionInteractor.mock
+        .calls[0][0].section,
+    ).toBe(mockSection);
+  });
+
+  it('should return the list of users sorted by name', async () => {
+    const mockUsers = [
+      {
+        name: 'Wonder Woman',
+      },
+      {
+        name: 'The Incredible Hulk',
+      },
+      {
+        name: 'Dr. Strange',
+      },
+      {
+        name: 'Thor',
+      },
+    ];
+    applicationContext
+      .getUseCases()
+      .getUsersInSectionInteractor.mockReturnValue(mockUsers);
+
+    const result = await runAction(
+      await getUsersInSectionAction({ section: 'judge' }),
+      {
+        modules: {
+          presenter,
+        },
+      },
+    );
+
+    expect(result.output.users).toEqual([
+      {
+        name: 'Dr. Strange',
+      },
+      {
+        name: 'The Incredible Hulk',
+      },
+      {
+        name: 'Thor',
+      },
+      {
+        name: 'Wonder Woman',
+      },
+    ]);
   });
 });
