@@ -264,6 +264,8 @@ const app = {
     router.initialize(cerebralApp, route);
     initializeSocketProvider(cerebralApp, applicationContext);
 
+    console.log('appInstanceId', appInstanceId);
+
     ReactDOM.render(
       <Container app={cerebralApp}>
         <IdleActivityMonitor />

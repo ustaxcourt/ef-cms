@@ -21,13 +21,12 @@ export const AppInstanceManager = connect(
      * channel message object structure
      *
      * @param {object} providers the providers
+     * @param {string} providers.appInstanceId application instance ID
      * @param {string} providers.message broadcast message
      * @param {string} providers.recipient intended recipient of message
      * @param {string} providers.subject type of message
-     * @param {string} providers.threadId discussion thread ID
      */
-    function ChannelMessage({ message, recipient, subject, threadId }) {
-      this.threadId = threadId;
+    function ChannelMessage({ appInstanceId, message, recipient, subject }) {
       this.recipient = recipient;
       this.sender = appInstanceId;
       this.subject = subject;
@@ -39,7 +38,7 @@ export const AppInstanceManager = connect(
       //   return;
       // }
 
-      //console.log('message from AppInstanceManager', msg);
+      // console.log('message from AppInstanceManager', msg);
 
       switch (msg.subject) {
         case 'idleStatusActive':
@@ -47,8 +46,7 @@ export const AppInstanceManager = connect(
           break;
         case 'idleLogout':
           // updateIdleStatusSequence(msg);
-          break;
-        case 'idleStatusResponse': // received an idle response
+          // broadcastIdleLogoutSequence();
           break;
         case 'idleStatus': // report our current idle status
           // todo: get current idle status through sequence return value
@@ -77,6 +75,7 @@ export const AppInstanceManager = connect(
       onSetup();
       return onTeardown;
     }, []);
+
     return <button onClick={buttonClick}>This is my AIM button</button>;
   },
 );
