@@ -21,45 +21,19 @@ export const IdleActivityMonitor = connect(
     setIdleTimerRefSequence,
     showAppTimeoutModalHelper,
   }) {
-    let ref;
-    if (showAppTimeoutModalHelper.beginIdleMonitor) {
-      ref = useIdleTimer({
-        debounce: constants.SESSION_DEBOUNCE,
-        onAction: broadcastIdleStatusActiveSequence,
-        onIdle: setIdleStatusIdleSequence,
-        timeout: constants.SESSION_TIMEOUT,
-      });
-    }
+    let ref = useIdleTimer({
+      debounce: constants.SESSION_DEBOUNCE,
+      onAction: broadcastIdleStatusActiveSequence,
+      onIdle: setIdleStatusIdleSequence,
+      timeout: constants.SESSION_TIMEOUT,
+    });
 
     useEffect(() => {
-      setIdleTimerRefSequence({ ref });
-      console.log('setting ref', ref);
-    }, []);
+      if (showAppTimeoutModalHelper.beginIdleMonitor) {
+        setIdleTimerRefSequence({ ref });
+      }
+    }, [showAppTimeoutModalHelper.beginIdleMonitor]);
 
-    // console.log('should start???');
-    // if (showAppTimeoutModalHelper.beginIdleMonitor) {
-    //   console.log('starting');
-    // }
-
-    // const { getRemainingTime, getLastActiveTime } = useIdleTimer({
-    //   timeout: 1000 * 60 * 15,
-    //   onIdle: handleOnIdle,
-    //   onActive: handleOnActive,
-    //   onAction: handleOnAction,
-    //   debounce: 500
-    // })
-    return (
-      <>
-        {/* {showAppTimeoutModalHelper.beginIdleMonitor && (
-          <IdleTimer
-            debounce={constants.SESSION_DEBOUNCE}
-            timeout={constants.SESSION_TIMEOUT}
-            onAction={broadcastIdleStatusActiveSequence}
-            onIdle={setIdleStatusIdleSequence}
-          />
-        )} */}
-        {showAppTimeoutModalHelper.showModal && <AppTimeoutModal />}
-      </>
-    );
+    return <>{showAppTimeoutModalHelper.showModal && <AppTimeoutModal />}</>;
   },
 );
