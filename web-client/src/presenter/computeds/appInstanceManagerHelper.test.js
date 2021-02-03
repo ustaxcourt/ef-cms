@@ -6,16 +6,13 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('appInstanceManagerHelper', () => {
   const appInstanceManagerHelper = withAppContextDecorator(
     appInstanceManagerHelperComputed,
-    applicationContext,
+    {
+      ...applicationContext,
+      getBroadcastGateway: jest.fn().mockReturnValue('broadcast channel'),
+    },
   );
 
-  beforeEach(() => {
-    applicationContext.getBroadcastGateway.mockResolvedValue(
-      'broadcast channel',
-    );
-  });
-
-  it('returns expected data when state.batchDownloads contains fileCount and totalFiles', () => {
+  it('returns the broadcastChannel instance on the channelHandle property', () => {
     const result = runCompute(appInstanceManagerHelper);
 
     expect(result.channelHandle).toEqual('broadcast channel');
