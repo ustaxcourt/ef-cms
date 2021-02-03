@@ -1,4 +1,3 @@
-import { BroadcastGateway } from './utilities/BroadcastGateway';
 import {
   Case,
   caseHasServedDocketEntries,
@@ -278,10 +277,7 @@ import { getConstants } from './getConstants';
 
 let user;
 
-const broadcastGateway = new BroadcastGateway({
-  appInstanceId: getUniqueId(),
-  channelName: getConstants().CHANNEL_NAME,
-});
+const broadcastGateway = new BroadcastChannel(getConstants().CHANNEL_NAME);
 const getCurrentUser = () => {
   return user;
 };

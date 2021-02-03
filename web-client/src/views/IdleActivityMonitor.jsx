@@ -17,17 +17,11 @@ export const IdleActivityMonitor = connect(
   function IdleActivityMonitor({
     broadcastIdleStatusActiveSequence,
     constants,
-    setIdleStatusActiveSequence,
     setIdleStatusIdleSequence,
     setIdleTimerRefSequence,
     showAppTimeoutModalHelper,
   }) {
     let ref;
-    useEffect(() => {
-      setIdleTimerRefSequence({ ref });
-      console.log('setting ref', ref);
-    }, []);
-
     if (showAppTimeoutModalHelper.beginIdleMonitor) {
       ref = useIdleTimer({
         debounce: constants.SESSION_DEBOUNCE,
@@ -35,9 +29,12 @@ export const IdleActivityMonitor = connect(
         onIdle: setIdleStatusIdleSequence,
         timeout: constants.SESSION_TIMEOUT,
       });
-
-      //;
     }
+
+    useEffect(() => {
+      setIdleTimerRefSequence({ ref });
+      console.log('setting ref', ref);
+    }, []);
 
     // console.log('should start???');
     // if (showAppTimeoutModalHelper.beginIdleMonitor) {
