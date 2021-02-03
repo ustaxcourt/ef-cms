@@ -8,7 +8,7 @@
 export const broadcastIdleStatusActiveAction = async ({
   applicationContext,
 }) => {
-  const { broadcastChannel } = applicationContext.getBroadcastGateway();
+  const broadcastChannel = applicationContext.getBroadcastGateway();
 
   await broadcastChannel.postMessage({ subject: 'idleStatusActive' });
 };

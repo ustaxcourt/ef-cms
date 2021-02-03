@@ -24,7 +24,7 @@ import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequen
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
 import { broadcastIdleStatusActiveSequence } from './sequences/broadcastIdleStatusActiveSequence';
-import { broadcastIdleStatusSequence } from './sequences/broadcastIdleStatusSequence';
+import { broadcastStayLoggedInSequence } from './sequences/broadcastStayLoggedInSequence';
 import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
 import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
@@ -484,7 +484,7 @@ export const presenter = {
     batchDownloadTrialSessionSequence,
     blockCaseFromTrialSequence,
     broadcastIdleStatusActiveSequence,
-    broadcastIdleStatusSequence,
+    broadcastStayLoggedInSequence,
     calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
     canEditContactInformationSequence,

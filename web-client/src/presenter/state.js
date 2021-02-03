@@ -5,6 +5,7 @@ import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModal
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
@@ -107,6 +108,7 @@ const helpers = {
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
+  appInstanceManagerHelper,
   batchDownloadHelper,
   blockedCasesReportHelper,
   caseDeadlineReportHelper,

@@ -269,7 +269,7 @@ const app = {
     ReactDOM.render(
       <Container app={cerebralApp}>
         <IdleActivityMonitor />
-        <AppInstanceManager appInstanceId={appInstanceId} />
+        <AppInstanceManager />
         <AppComponent />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
