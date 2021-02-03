@@ -3,7 +3,7 @@ const { flattenDeep, get, partition } = require('lodash');
 const { omit } = require('lodash');
 
 const {
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
 } = require('../entities/EntityConstants');
 
@@ -172,8 +172,9 @@ const processDocketEntries = async ({
       );
 
       const isSearchable =
-        OPINION_EVENT_CODES.includes(fullDocketEntry.eventCode) ||
-        ORDER_EVENT_CODES.includes(fullDocketEntry.eventCode);
+        OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
+          fullDocketEntry.eventCode,
+        ) || ORDER_EVENT_CODES.includes(fullDocketEntry.eventCode);
 
       if (isSearchable && fullDocketEntry.documentContentsId) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
