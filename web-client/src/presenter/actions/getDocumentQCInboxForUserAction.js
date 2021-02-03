@@ -11,7 +11,7 @@ export const getDocumentQCInboxForUserAction = async ({
     .getUseCases()
     .getDocumentQCInboxForUserInteractor({
       applicationContext,
-      userId: applicationContext.getUseCases().getCurrentUser().userId,
+      userId: applicationContext.getCurrentUser().userId,
     });
 
   return { workItems };

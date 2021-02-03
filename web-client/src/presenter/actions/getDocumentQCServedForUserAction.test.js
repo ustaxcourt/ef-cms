@@ -1,11 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getDocumentQCInboxForUserAction } from './getDocumentQCInboxForUserAction';
+import { getDocumentQCServedForUserAction } from './getDocumentQCServedForUserAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getDocumentQCInboxForUserAction', () => {
+describe('getDocumentQCServedForUserAction', () => {
   const mockWorkItems = [{ docketEnryId: 1 }, { docketEntryId: 2 }];
-  const mockUserId = '35f77d01-df22-479c-b5a9-84edfbc876af';
+  const mockUserId = 'a2eaa4e5-e6d8-434c-973a-fe9431f84e66';
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
@@ -14,13 +14,13 @@ describe('getDocumentQCInboxForUserAction', () => {
 
     applicationContext
       .getUseCases()
-      .getDocumentQCInboxForUserInteractor.mockReturnValue(mockWorkItems);
+      .getDocumentQCServedForUserInteractor.mockReturnValue(mockWorkItems);
 
     presenter.providers.applicationContext = applicationContext;
   });
 
   it('should make a call to get the current user', async () => {
-    await runAction(getDocumentQCInboxForUserAction, {
+    await runAction(getDocumentQCServedForUserAction, {
       modules: {
         presenter,
       },
@@ -29,21 +29,21 @@ describe('getDocumentQCInboxForUserAction', () => {
     expect(applicationContext.getCurrentUser).toHaveBeenCalled();
   });
 
-  it("should make a call to getDocumentQCInboxForUserInteractor with the current user's userId", async () => {
-    await runAction(getDocumentQCInboxForUserAction, {
+  it("should make a call to getDocumentQCServedForUserInteractor with the current user's userId", async () => {
+    await runAction(getDocumentQCServedForUserAction, {
       modules: {
         presenter,
       },
     });
 
     expect(
-      applicationContext.getUseCases().getDocumentQCInboxForUserInteractor.mock
+      applicationContext.getUseCases().getDocumentQCServedForUserInteractor.mock
         .calls[0][0],
     ).toMatchObject({ userId: mockUserId });
   });
 
   it('should return the retrieved work items as props', async () => {
-    const { output } = await runAction(getDocumentQCInboxForUserAction, {
+    const { output } = await runAction(getDocumentQCServedForUserAction, {
       modules: {
         presenter,
       },
