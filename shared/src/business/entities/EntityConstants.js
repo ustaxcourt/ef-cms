@@ -139,20 +139,20 @@ const ORDER_TYPES = [
   },
 ];
 
-const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder).map(
-  pickEventCode,
-);
+const BENCH_OPINION_EVENT_CODE = 'OST';
+
+const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
+  d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
+).map(pickEventCode);
 
 const DOCUMENT_NOTICE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isNotice,
 ).map(pickEventCode);
 
 const OPINION_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.filter(
-  d => d.isOpinion,
+  d => d.isOpinion || d.eventCode === BENCH_OPINION_EVENT_CODE,
 );
 const OPINION_EVENT_CODES = OPINION_DOCUMENT_TYPES.map(pickEventCode);
-
-const BENCH_OPINION_EVENT_CODE = 'OST';
 
 const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,

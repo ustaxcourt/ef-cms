@@ -2,7 +2,6 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  BENCH_OPINION_EVENT_CODE,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   OPINION_EVENT_CODES,
@@ -57,7 +56,7 @@ describe('getTodaysOpinionsInteractor', () => {
       });
   });
 
-  it('should only search for opinion event codes AND "OST" event codes', async () => {
+  it('should only search for opinion event codes', async () => {
     await getTodaysOpinionsInteractor({
       applicationContext,
     });
@@ -70,7 +69,7 @@ describe('getTodaysOpinionsInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: [...OPINION_EVENT_CODES, BENCH_OPINION_EVENT_CODE],
+      documentEventCodes: OPINION_EVENT_CODES,
       endDate: currentDateEnd,
       startDate: currentDateStart,
     });
