@@ -259,6 +259,7 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
   judges: [],

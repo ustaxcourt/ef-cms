@@ -23,6 +23,7 @@ import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequen
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
+import { broadcastIdleStatusActiveSequence } from './sequences/broadcastIdleStatusActiveSequence';
 import { broadcastIdleStatusSequence } from './sequences/broadcastIdleStatusSequence';
 import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
@@ -256,6 +257,7 @@ import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
+import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
@@ -285,6 +287,7 @@ import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadMode
 import { setForHearingSequence } from './sequences/setForHearingSequence';
 import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
+import { setIdleTimerRefSequence } from './sequences/setIdleTimerRefSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
@@ -480,6 +483,7 @@ export const presenter = {
     batchDownloadReadySequence,
     batchDownloadTrialSessionSequence,
     blockCaseFromTrialSequence,
+    broadcastIdleStatusActiveSequence,
     broadcastIdleStatusSequence,
     calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
@@ -713,6 +717,7 @@ export const presenter = {
     rescanBatchSequence,
     resetCaseMenuSequence,
     resetHeaderAccordionsSequence,
+    resetIdleTimerSequence,
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
@@ -741,6 +746,7 @@ export const presenter = {
     setForHearingSequence,
     setIdleStatusActiveSequence,
     setIdleStatusIdleSequence,
+    setIdleTimerRefSequence,
     setIrsNoticeFalseSequence,
     setMessageDetailViewerDocumentToDisplaySequence,
     setPDFPageForSigningSequence,

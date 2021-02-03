@@ -7,9 +7,11 @@ export const AppInstanceManager = connect(
   {
     // updateIdleStatusSequence: sequences.updateIdleStatusSequence,
     broadcastIdleStatusSequence: sequences.broadcastIdleStatusSequence,
+    resetIdleTimerSequence: sequences.resetIdleTimerSequence,
   },
   function AppInstanceManager({
     broadcastIdleStatusSequence,
+    resetIdleTimerSequence,
     // updateIdleStatusSequence
   }) {
     // TODO: use BroadcastGateway
@@ -40,6 +42,9 @@ export const AppInstanceManager = connect(
       //console.log('message from AppInstanceManager', msg);
 
       switch (msg.subject) {
+        case 'idleStatusActive':
+          resetIdleTimerSequence();
+          break;
         case 'idleLogout':
           // updateIdleStatusSequence(msg);
           break;

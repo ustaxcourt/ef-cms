@@ -7,14 +7,18 @@ import { startDelayedLogoutAction } from '../actions/startDelayedLogoutAction';
 
 export const setIdleStatusIdleSequence = [
   clearModalStateAction,
-  setIdleStatusFactoryAction(getConstants().IDLE_STATUS.IDLE),
-  getShouldSetAppTimeoutModalAction,
-  {
-    no: [],
-    yes: [
-      setShowModalFactoryAction('AppTimeoutModal'),
-      // TODO set state.instances[currentInstance].showAppTimeoutModal = true instead of using setShowModalFactoryAction
-      startDelayedLogoutAction,
-    ],
-  },
+  setShowModalFactoryAction('AppTimeoutModal'),
+  startDelayedLogoutAction,
+  // clearModalStateAction,
+  // setIdleStatusFactoryAction(getConstants().IDLE_STATUS.IDLE),
+  // getShouldSetAppTimeoutModalAction,
+  // {
+  //   no: [],
+  //   yes: [
+  //     // TODO 7501 maybe publish event saying the delayed logout has started
+  //     setShowModalFactoryAction('AppTimeoutModal'),
+  //     // TODO 7501 - set state.instances[currentInstance].showAppTimeoutModal = true instead of using setShowModalFactoryAction
+  //     startDelayedLogoutAction,
+  //   ],
+  // },
 ];
