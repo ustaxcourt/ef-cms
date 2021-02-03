@@ -4,7 +4,7 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getDocumentQCInboxForUserAction', () => {
-  const mockWorkItems = [{ docketEnryId: 1 }, { docketEntryId: 2 }];
+  const mockWorkItems = [{ docketEntryId: 1 }, { docketEntryId: 2 }];
   const mockUserId = '35f77d01-df22-479c-b5a9-84edfbc876af';
 
   beforeAll(() => {
