@@ -15,7 +15,7 @@ describe('navigateToRequestAccessReviewAction', () => {
     };
   });
 
-  it('should route to the request acces review page using state.caseDetail.docketNumber', async () => {
+  it('should route to the request access review page using state.caseDetail.docketNumber', async () => {
     await runAction(navigateToRequestAccessReviewAction, {
       modules: {
         presenter,
