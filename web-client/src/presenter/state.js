@@ -202,8 +202,6 @@ const helpers = {
 export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   allJudges: [],
-  appInstanceId: null,
-  appInstances: [],
   archiveDraftDocument: {
     docketEntryId: null,
     // used by the delete draft document modal
