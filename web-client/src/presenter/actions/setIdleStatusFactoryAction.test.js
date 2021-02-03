@@ -8,56 +8,10 @@ describe('setIdleStatusFactoryAction', () => {
     const { state } = await runAction(
       setIdleStatusFactoryAction(IDLE_STATUS.IDLE),
       {
-        state: {
-          appInstanceId: 'foo',
-          appInstances: [
-            {
-              appInstanceId: 'bar',
-            },
-            {
-              appInstanceId: 'foo',
-            },
-          ],
-        },
+        state: {},
       },
     );
 
-    expect(state.appInstances).toEqual([
-      {
-        appInstanceId: 'bar',
-      },
-      {
-        appInstanceId: 'foo',
-        idleStatus: IDLE_STATUS.IDLE,
-      },
-    ]);
-  });
-  it('should set the idleStatus to active for the current app instance', async () => {
-    const { state } = await runAction(
-      setIdleStatusFactoryAction(IDLE_STATUS.ACTIVE),
-      {
-        state: {
-          appInstanceId: 'foo',
-          appInstances: [
-            {
-              appInstanceId: 'bar',
-            },
-            {
-              appInstanceId: 'foo',
-            },
-          ],
-        },
-      },
-    );
-
-    expect(state.appInstances).toEqual([
-      {
-        appInstanceId: 'bar',
-      },
-      {
-        appInstanceId: 'foo',
-        idleStatus: IDLE_STATUS.ACTIVE,
-      },
-    ]);
+    expect(state.idleStatus).toEqual(IDLE_STATUS.IDLE);
   });
 });

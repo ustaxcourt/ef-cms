@@ -153,10 +153,6 @@ const app = {
 
     presenter.state.constants = applicationContext.getConstants();
 
-    const appInstanceId = applicationContext.getUniqueId();
-    presenter.state.appInstanceId = appInstanceId;
-    presenter.state.appInstances.push({ appInstanceId });
-
     config.autoAddCss = false;
     library.add(
       faArrowAltCircleLeftRegular,
@@ -263,8 +259,6 @@ const app = {
 
     router.initialize(cerebralApp, route);
     initializeSocketProvider(cerebralApp, applicationContext);
-
-    console.log('appInstanceId', appInstanceId);
 
     ReactDOM.render(
       <Container app={cerebralApp}>

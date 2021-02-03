@@ -16,10 +16,11 @@ describe('showAppTimeoutModalHelper', () => {
         modal: {
           showModal: 'AppTimeoutModal',
         },
+        user: {},
       },
     });
 
-    expect(result).toEqual({ beginIdleMonitor: true, showModal: true });
+    expect(result).toMatchObject({ beginIdleMonitor: true, showModal: true });
   });
 
   it('does not show the modal due to no user', () => {
@@ -29,10 +30,11 @@ describe('showAppTimeoutModalHelper', () => {
         modal: {
           showModal: 'AppTimeoutModal',
         },
+        user: undefined,
       },
     });
 
-    expect(result).toEqual({ beginIdleMonitor: false, showModal: false });
+    expect(result).toMatchObject({ beginIdleMonitor: false, showModal: false });
   });
 
   it('does not show the modal due to different modal state component', () => {
@@ -42,63 +44,10 @@ describe('showAppTimeoutModalHelper', () => {
         modal: {
           showModal: 'IncorrectTimeoutModal',
         },
+        user: {},
       },
     });
 
-    expect(result).toEqual({ beginIdleMonitor: true, showModal: false });
-  });
-
-  it('shows the modal if another running instance is showing the modal', () => {
-    applicationContext.getCurrentUser = () => ({});
-    const result = runCompute(showAppTimeoutModalHelper, {
-      state: {
-        appInstances: [
-          {
-            showModal: 'AppTimeoutModal',
-          },
-        ],
-        modal: {
-          showModal: '',
-        },
-      },
-    });
-
-    expect(result).toEqual({ beginIdleMonitor: true, showModal: true });
-  });
-
-  it('shows the modal if another running instance is NOT showing the modal but this one is', () => {
-    applicationContext.getCurrentUser = () => ({});
-    const result = runCompute(showAppTimeoutModalHelper, {
-      state: {
-        appInstances: [
-          {
-            showModal: '',
-          },
-        ],
-        modal: {
-          showModal: 'AppTimeoutModal',
-        },
-      },
-    });
-
-    expect(result).toEqual({ beginIdleMonitor: true, showModal: true });
-  });
-
-  it('does not show the modal if no running instance should be showing the modal', () => {
-    applicationContext.getCurrentUser = () => ({});
-    const result = runCompute(showAppTimeoutModalHelper, {
-      state: {
-        appInstances: [
-          {
-            showModal: '',
-          },
-        ],
-        modal: {
-          showModal: '',
-        },
-      },
-    });
-
-    expect(result).toEqual({ beginIdleMonitor: true, showModal: false });
+    expect(result).toMatchObject({ beginIdleMonitor: true, showModal: false });
   });
 });
