@@ -1618,6 +1618,7 @@
                         args: 
                           limit: 1
                     allow: 
+                      - "Order of Service of Transcript (Bench Opinion)"
                       - "Memorandum Opinion"
                       - "Summary Opinion"
                       - "T.C. Opinion"
@@ -5221,6 +5222,7 @@
                         args: 
                           limit: 1
                     allow: 
+                      - "Order of Service of Transcript (Bench Opinion)"
                       - "Memorandum Opinion"
                       - "Summary Opinion"
                       - "T.C. Opinion"

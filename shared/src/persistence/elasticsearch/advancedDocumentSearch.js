@@ -40,7 +40,8 @@ exports.advancedDocumentSearch = async ({
     'numberOfPages',
     'privatePractitioners',
     'sealedDate',
-    judgeType,
+    'signedJudgeName',
+    'judge',
   ];
 
   const docketEntryQueryParams = [
