@@ -8,7 +8,7 @@ describe('getUsersInSectionAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should should retrieve all the users in the section provided', async () => {
+  it('should retrieve all the users in the section provided', async () => {
     const mockSection = 'Test Section';
     applicationContext
       .getUseCases()
@@ -26,7 +26,7 @@ describe('getUsersInSectionAction', () => {
     ).toBe(mockSection);
   });
 
-  it("should should retrieve all the users in the current user's section when a section is not provided", async () => {
+  it("should retrieve all the users in the current user's section when a section is not provided", async () => {
     const mockSection = 'Test User Section';
     applicationContext.getCurrentUser.mockReturnValue({
       section: mockSection,
@@ -47,7 +47,7 @@ describe('getUsersInSectionAction', () => {
     ).toBe(mockSection);
   });
 
-  it('should should return the list of users sorted by name', async () => {
+  it('should return the list of users sorted by name', async () => {
     const mockUsers = [
       {
         name: 'Wonder Woman',
