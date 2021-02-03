@@ -21,7 +21,7 @@ export const IdleActivityMonitor = connect(
     setIdleTimerRefSequence,
     showAppTimeoutModalHelper,
   }) {
-    let ref = useIdleTimer({
+    const ref = useIdleTimer({
       debounce: constants.SESSION_DEBOUNCE,
       onAction: broadcastIdleStatusActiveSequence,
       onIdle: setIdleStatusIdleSequence,
