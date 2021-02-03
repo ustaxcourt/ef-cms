@@ -1,30 +1,50 @@
 import { BigHeader } from './BigHeader';
 import { ErrorNotification } from './ErrorNotification';
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { LoginAndServiceEmailAddress } from './LoginAndServiceEmailAddress';
 import { MyContactInformation } from './MyContactInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
-export const MyAccount = connect({}, function MyAccount() {
-  return (
-    <React.Fragment>
-      <BigHeader text={'My Account'} />
-      <section className="usa-section grid-container">
-        <SuccessNotification />
-        <ErrorNotification />
+export const MyAccount = connect(
+  { myAccountHelper: state.myAccountHelper },
+  function MyAccount({ myAccountHelper }) {
+    return (
+      <>
+        <BigHeader text="My Account" />
+        <section className="usa-section grid-container">
+          <SuccessNotification />
+          <ErrorNotification />
 
-        <div className="grid-container padding-x-0">
-          <div className="grid-row grid-gap">
-            <div className="grid-col-4">
-              <MyContactInformation />
-            </div>
-            <div className="grid-col-4">
-              <LoginAndServiceEmailAddress />
+          {myAccountHelper.showPetitionerView && (
+            <Hint>
+              You can change other contact information within the individual
+              case.
+            </Hint>
+          )}
+          <div
+            className={classNames(
+              'grid-container padding-x-0',
+              myAccountHelper.showPetitionerView && ' margin-top-2',
+            )}
+          >
+            <div className="grid-row grid-gap">
+              {myAccountHelper.showMyContactInformation && (
+                <div className="tablet:grid-col-4">
+                  <MyContactInformation />
+                </div>
+              )}
+
+              <div className="tablet:grid-col-4">
+                <LoginAndServiceEmailAddress />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </React.Fragment>
-  );
-});
+        </section>
+      </>
+    );
+  },
+);

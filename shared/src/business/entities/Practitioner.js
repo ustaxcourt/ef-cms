@@ -31,8 +31,11 @@ function Practitioner() {
   this.entityName = entityName;
 }
 
-Practitioner.prototype.init = function init(rawUser) {
-  userDecorator(this, rawUser);
+Practitioner.prototype.init = function init(
+  rawUser,
+  { filtered = false } = {},
+) {
+  userDecorator(this, rawUser, filtered);
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
   this.admissionsStatus = rawUser.admissionsStatus;

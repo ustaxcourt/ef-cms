@@ -8,12 +8,14 @@ import classNames from 'classnames';
 export const AccountMenu = connect(
   {
     headerHelper: state.headerHelper,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     signOutSequence: sequences.signOutSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
   },
   function AccountMenu({
     headerHelper,
     isExpanded,
+    navigateToPathSequence,
     signOutSequence,
     toggleMenuSequence,
   }) {
@@ -49,9 +51,13 @@ export const AccountMenu = connect(
                   <li className="usa-nav__submenu-item">
                     <Button
                       className="account-menu-item usa-button usa-button--unstyled font-body-2xs"
-                      href="/my-account"
                       id="my-account"
                       overrideMargin="margin-right-0"
+                      onClick={() =>
+                        navigateToPathSequence({
+                          path: '/my-account',
+                        })
+                      }
                     >
                       My Account
                     </Button>
