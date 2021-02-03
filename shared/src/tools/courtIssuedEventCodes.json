@@ -298,8 +298,8 @@
     "documentType": "Order of Service of Transcript (Bench Opinion)",
     "documentTitle": "Order of Service of Transcript (Bench Opinion) [Anything]",
     "scenario": "Type A",
-    "isOrder": false,
-    "requiresSignature": false
+    "isOrder": true,
+    "requiresSignature": true
   },
   {
     "eventCode": "OSUB",
