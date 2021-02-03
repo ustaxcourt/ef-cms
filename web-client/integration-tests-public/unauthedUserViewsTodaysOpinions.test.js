@@ -1,4 +1,5 @@
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsOSTDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsOSTDocketEntryFromOrder';
 import { docketClerkConvertsAnOrderToAnOpinion } from '../integration-tests/journey/docketClerkConvertsAnOrderToAnOpinion';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
@@ -45,11 +46,26 @@ describe('Unauthed user views todays opinions', () => {
   docketClerkConvertsAnOrderToAnOpinion(testClient, 0);
   docketClerkServesDocument(testClient, 0);
 
+  // upload an OST to an unsealed case
+  docketClerkCreatesAnOrder(testClient, {
+    documentTitle: 'Order to do something',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkViewsDraftOrder(testClient, 1);
+  docketClerkSignsOrder(testClient, 1);
+  docketClerkAddsOSTDocketEntryFromOrder(testClient, 1);
+
   unauthedUserViewsTodaysOpinions(test, testClient);
+
+  // view today's opinions and verify that the OST shows up and the pdf is viewable
+  // view today's orders and verify that the OST do NOT show up
 
   // opinions for sealed cases should still be public
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 
   unauthedUserViewsTodaysOpinions(test, testClient);
+
+  // view today's opinions and verify that the OST shows up and the pdf is viewable
 });
