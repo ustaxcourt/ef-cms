@@ -128,7 +128,6 @@ exports.updatePractitionerUser = async ({ applicationContext, user }) => {
       }
     } catch (error) {
       applicationContext.logger.error(error);
-      await applicationContext.notifyHoneybadger(error);
     }
   }
 
