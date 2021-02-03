@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * examines all app instances and determines whether to display the AppTimeoutModal
  *
@@ -7,6 +9,7 @@
  */
 export const getShouldSetAppTimeoutModalAction = async ({
   applicationContext,
+  get,
   path,
 }) => {
   // TODO 7501 - refactor so we call one explicit method for fetching statuses
@@ -14,19 +17,16 @@ export const getShouldSetAppTimeoutModalAction = async ({
   //   .getBroadcastGateway()
   //   .sendMessage({ subject: 'idleStatus' });
 
-  // const statuses = await applicationContext
-  //   .getBroadcastGateway()
-  //   .getMessages({ threadId: messageId });
-
   const statuses = await applicationContext
     .getBroadcastGateway()
     .getIdleStatuses({ applicationContext });
 
   console.log('statuses', statuses);
 
-  const allInstancesIdle = statuses.every(
-    status =>
-      status.idleStatus === applicationContext.getConstants().IDLE_STATUS.IDLE,
+  const allInstancesIdle = Object.keys(statuses).every(
+    appInstanceId =>
+      statuses[appInstanceId].idleStatus ===
+      applicationContext.getConstants().IDLE_STATUS.IDLE,
   );
 
   if (allInstancesIdle) {

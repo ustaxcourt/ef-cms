@@ -9,6 +9,7 @@ export const IdleActivityMonitor = connect(
     broadcastIdleStatusActiveSequence:
       sequences.broadcastIdleStatusActiveSequence,
     constants: state.constants,
+    setIdleStatusActiveSequence: sequences.setIdleStatusActiveSequence,
     setIdleStatusIdleSequence: sequences.setIdleStatusIdleSequence,
     setIdleTimerRefSequence: sequences.setIdleTimerRefSequence,
     showAppTimeoutModalHelper: state.showAppTimeoutModalHelper,
@@ -16,6 +17,7 @@ export const IdleActivityMonitor = connect(
   function IdleActivityMonitor({
     broadcastIdleStatusActiveSequence,
     constants,
+    setIdleStatusActiveSequence,
     setIdleStatusIdleSequence,
     setIdleTimerRefSequence,
     showAppTimeoutModalHelper,
