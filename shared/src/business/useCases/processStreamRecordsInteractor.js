@@ -140,10 +140,6 @@ const processCaseEntries = async ({
       'the case or docket entry records that failed to index',
       failedRecords,
     );
-    applicationContext.notifyHoneybadger(
-      'the case or docket entry records that failed to index',
-      failedRecords,
-    );
     throw new Error('failed to index case entry or docket entry records');
   }
 };
@@ -229,10 +225,6 @@ const processDocketEntries = async ({
       'the docket entry records that failed to index',
       failedRecords,
     );
-    applicationContext.notifyHoneybadger(
-      'the docket entry records that failed to index',
-      failedRecords,
-    );
     throw new Error('failed to index docket entry records');
   }
 };
@@ -259,10 +251,6 @@ const processWorkItemEntries = async ({
       'the records that failed to index',
       failedRecords,
     );
-    applicationContext.notifyHoneybadger(
-      'the records that failed to index',
-      failedRecords,
-    );
     throw new Error('failed to index records');
   }
 };
@@ -283,10 +271,6 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
-      'the records that failed to index',
-      failedRecords,
-    );
-    applicationContext.notifyHoneybadger(
       'the records that failed to index',
       failedRecords,
     );
@@ -311,10 +295,6 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
       'the records that failed to delete',
-      failedRecords,
-    );
-    applicationContext.notifyHoneybadger(
-      'failed to delete these records from elasticsearch',
       failedRecords,
     );
     throw new Error('failed to delete records');
@@ -369,9 +349,6 @@ exports.processStreamRecordsInteractor = async ({
       removeRecords,
     }).catch(err => {
       applicationContext.logger.error("failed to processRemoveEntries',", err);
-      applicationContext.notifyHoneybadger(err, {
-        message: 'failed to processRemoveEntries',
-      });
       throw err;
     });
 
@@ -381,9 +358,6 @@ exports.processStreamRecordsInteractor = async ({
       utils,
     }).catch(err => {
       applicationContext.logger.error("failed to processCaseEntries',", err);
-      applicationContext.notifyHoneybadger(err, {
-        message: 'failed to processCaseEntries',
-      });
       throw err;
     });
 
@@ -393,9 +367,6 @@ exports.processStreamRecordsInteractor = async ({
       utils,
     }).catch(err => {
       applicationContext.logger.error("failed to processDocketEntries',", err);
-      applicationContext.notifyHoneybadger(err, {
-        message: 'failed to processDocketEntries',
-      });
       throw err;
     });
 
@@ -405,9 +376,6 @@ exports.processStreamRecordsInteractor = async ({
           "failed to process workItem records',",
           err,
         );
-        applicationContext.notifyHoneybadger(err, {
-          message: 'failed to process workItem records',
-        });
         throw err;
       },
     );
@@ -415,9 +383,6 @@ exports.processStreamRecordsInteractor = async ({
     await processOtherEntries({ applicationContext, otherRecords }).catch(
       err => {
         applicationContext.logger.error("failed to processOtherEntries',", err);
-        applicationContext.notifyHoneybadger(err, {
-          message: 'failed to processOtherEntries',
-        });
         throw err;
       },
     );
@@ -426,7 +391,6 @@ exports.processStreamRecordsInteractor = async ({
       'processStreamRecordsInteractor failed to process the records',
       err,
     );
-    applicationContext.notifyHoneybadger(err);
     throw err;
   }
 };

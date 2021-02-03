@@ -61,8 +61,6 @@
     "express": "^4.17.1",
     "faker": "^5.3.1",
     "form-data": "^3.0.0",
-    "honeybadger": "^1.4.0",
-    "honeybadger-js": "^2.3.0",
     "http-aws-es": "^6.0.0",
     "husky": "^4.3.8",
     "i": "^0.3.6",

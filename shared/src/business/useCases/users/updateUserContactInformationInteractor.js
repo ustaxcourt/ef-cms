@@ -141,6 +141,5 @@ exports.updateUserContactInformationInteractor = async ({
       },
       userId: authenticatedUser.userId,
     });
-    await applicationContext.notifyHoneybadger(error);
   }
 };
