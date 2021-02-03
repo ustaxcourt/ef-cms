@@ -442,6 +442,7 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockBroadcastGateway = {
     getMessages: jest.fn(),
+    postMessage: jest.fn(),
     sendMessage: jest.fn(),
   };
 
