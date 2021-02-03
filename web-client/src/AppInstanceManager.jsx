@@ -15,11 +15,6 @@ export const AppInstanceManager = connect(
   }) {
     const { channelHandle } = appInstanceManagerHelper;
 
-    console.log('channelHandle', channelHandle);
-
-    // TODO: stay logged in stopped working unexpectedly for current tab
-    // TODO: refresh (idleactivitymonitor) needed to render timer
-
     channelHandle.onmessage = ({ data: msg }) => {
       switch (msg.subject) {
         case 'idleStatusActive':
