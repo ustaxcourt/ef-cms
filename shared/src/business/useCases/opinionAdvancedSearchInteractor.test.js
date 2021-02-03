@@ -1,6 +1,6 @@
 const {
   MAX_SEARCH_RESULTS,
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ROLES,
 } = require('../../business/entities/EntityConstants');
 const {
@@ -117,7 +117,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: OPINION_EVENT_CODES,
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     });
   });
 });

@@ -3,7 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   MAX_SEARCH_RESULTS,
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } = require('../../entities/EntityConstants');
 const {
   opinionPublicSearchInteractor,
@@ -40,7 +40,9 @@ describe('opinionPublicSearchInteractor', () => {
 
     const searchArgs = applicationContext.getPersistenceGateway()
       .advancedDocumentSearch.mock.calls[0][0];
-    expect(searchArgs.documentEventCodes).toMatchObject(OPINION_EVENT_CODES);
+    expect(searchArgs.documentEventCodes).toMatchObject(
+      OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+    );
     expect(searchArgs.omitSealed).toBeUndefined();
   });
 
