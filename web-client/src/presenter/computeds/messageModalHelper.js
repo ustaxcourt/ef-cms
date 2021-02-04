@@ -32,9 +32,7 @@ export const messageModalHelper = (get, applicationContext) => {
     }
   });
   draftDocuments.forEach(entry => {
-    if (entry.isFileAttached) {
-      entry.title = entry.documentTitle || entry.documentType;
-    }
+    entry.title = entry.documentTitle || entry.documentType;
   });
 
   const showMessageAttachments =
