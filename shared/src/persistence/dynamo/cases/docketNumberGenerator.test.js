@@ -29,7 +29,6 @@ describe('Create docket number', function () {
         return { ...DateHandler, formatNow: () => '96' };
       },
       logger: { error: () => true, info: () => true },
-      notifyHoneybadger: () => true,
     };
   });
 

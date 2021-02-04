@@ -30,10 +30,6 @@ variable "es_instance_type" {
   type = string
 }
 
-variable "honeybadger_key" {
-  type = string
-}
-
 variable "irs_superuser_email" {
   type = string
 }
