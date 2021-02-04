@@ -532,13 +532,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
-    initHoneybadger: appContextProxy(),
     logger: {
       debug: jest.fn(),
       error: jest.fn(),
       info: jest.fn(),
     },
-    notifyHoneybadger: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
   };
