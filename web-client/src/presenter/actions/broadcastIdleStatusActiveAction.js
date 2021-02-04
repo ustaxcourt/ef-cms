@@ -1,9 +1,9 @@
 /**
- * broadcasts an active state to all app instances
+ * broadcasts an idle status to all app instances
  *
  * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function to retrieve state values
- * @returns {number} total computed value from penalty values
+ * @param {object} providers.applicationContext the application context
+ * @returns {Promise} upon posting of message
  */
 export const broadcastIdleStatusActiveAction = async ({
   applicationContext,
