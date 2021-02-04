@@ -55,7 +55,6 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       });
     } catch (error) {
       applicationContext.logger.error(error);
-      await applicationContext.notifyHoneybadger(error);
     }
   }
 };
@@ -121,7 +120,6 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
       });
     } catch (error) {
       applicationContext.logger.error(error);
-      await applicationContext.notifyHoneybadger(error);
     }
   }
 

@@ -5,7 +5,6 @@ const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/ba
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
-const Honeybadger = require('honeybadger');
 const pdfLib = require('pdf-lib');
 const sass = require('sass');
 const util = require('util');
@@ -1041,20 +1040,6 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-const initHoneybadger = () => {
-  if (process.env.NODE_ENV === 'production') {
-    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
-    if (apiKey) {
-      const config = {
-        apiKey,
-        environment: 'api',
-      };
-      Honeybadger.configure(config);
-      return Honeybadger;
-    }
-  }
-};
-
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoClientCache[type]) {
@@ -1720,38 +1705,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         setServiceIndicatorsForCase,
       };
     },
-    initHoneybadger,
     isAuthorized,
     logger: {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),
       info: logger.info.bind(logger),
-    },
-    notifyHoneybadger: async (message, context) => {
-      const honeybadger = initHoneybadger();
-
-      const notifyAsync = messageForNotification => {
-        return new Promise(resolve => {
-          honeybadger.notify(messageForNotification, null, null, resolve);
-        });
-      };
-
-      if (honeybadger) {
-        const { role, userId } = getCurrentUser() || {};
-
-        const errorContext = {
-          role,
-          userId,
-        };
-
-        if (context) {
-          Object.assign(errorContext, context);
-        }
-
-        honeybadger.setContext(errorContext);
-
-        await notifyAsync(message);
-      }
     },
     runVirusScan: async ({ filePath }) => {
       return execPromise(
