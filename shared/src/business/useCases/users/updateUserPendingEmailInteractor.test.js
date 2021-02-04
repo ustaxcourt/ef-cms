@@ -35,6 +35,9 @@ describe('updateUserPendingEmailInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .updateUser.mockImplementation(() => mockUser);
+    applicationContext
+      .getPersistenceGateway()
+      .isEmailAvailable.mockReturnValue(true);
   });
 
   it('should throw unauthorized error when user does not have permission to manage emails', async () => {
@@ -49,6 +52,19 @@ describe('updateUserPendingEmailInteractor', () => {
         pendingEmail,
       }),
     ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('should throw an error when the pendingEmail address is not available in cognito', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isEmailAvailable.mockReturnValue(false);
+
+    await expect(
+      updateUserPendingEmailInteractor({
+        applicationContext,
+        pendingEmail,
+      }),
+    ).rejects.toThrow('Email is not available');
   });
 
   it('should make a call to get the current user', async () => {
@@ -83,12 +99,29 @@ describe('updateUserPendingEmailInteractor', () => {
     ).toMatchObject({ pendingEmail });
   });
 
-  it('should return the updated user entity', async () => {
+  it('should return the updated User entity when currentUser.role is petitioner', async () => {
+    mockUser = validUser;
+
     const results = await updateUserPendingEmailInteractor({
       applicationContext,
       pendingEmail,
     });
 
+    expect(results.entityName).toBe('User');
+    expect(results).toMatchObject({
+      ...mockUser,
+      pendingEmail,
+      pendingEmailVerificationToken: expect.anything(),
+    });
+  });
+
+  it('should return the updated Practitioner entity when currentUser.role is NOT petitioner', async () => {
+    const results = await updateUserPendingEmailInteractor({
+      applicationContext,
+      pendingEmail,
+    });
+
+    expect(results.entityName).toBe('Practitioner');
     expect(results).toMatchObject({
       ...mockUser,
       pendingEmail,

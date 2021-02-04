@@ -110,7 +110,6 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
-    applicationContext.initHoneybadger();
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor({ applicationContext, key: 'scannerSourceName' });

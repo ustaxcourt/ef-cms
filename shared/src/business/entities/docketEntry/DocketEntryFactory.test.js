@@ -78,6 +78,27 @@ describe('DocketEntryFactory', () => {
     expect(errors().eventCode).toBeDefined();
   });
 
+  it('should require objections when eventCode is ADMT and previopus document is an objection document type', () => {
+    rawEntity.eventCode = 'ADMT';
+    rawEntity.previousDocument = {
+      documentType: 'Application to Take Deposition',
+    };
+    expect(errors().objections).toBeDefined();
+  });
+
+  it('should require objections when eventCode is AMAT and previopus document is an objection document type', () => {
+    rawEntity.eventCode = 'AMAT';
+    rawEntity.previousDocument = {
+      documentType: 'Application to Take Deposition',
+    };
+    expect(errors().objections).toBeDefined();
+  });
+
+  it('should require objections when document is an objection document type', () => {
+    rawEntity.documentType = 'Application to Take Deposition';
+    expect(errors().objections).toBeDefined();
+  });
+
   describe('Document type', () => {
     beforeEach(() => {
       rawEntity = {

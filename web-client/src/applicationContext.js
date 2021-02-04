@@ -490,23 +490,6 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const initHoneybadger = async () => {
-  if (process.env.USTC_ENV === 'prod') {
-    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
-
-    if (apiKey) {
-      const Honeybadger = await import('honeybadger-js'); // browser version
-
-      const config = {
-        apiKey,
-        environment: 'client',
-      };
-      Honeybadger.configure(config);
-      return Honeybadger;
-    }
-  }
-};
-
 const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)(
   getConstants(),
 );
@@ -665,33 +648,6 @@ const applicationContext = {
       setServiceIndicatorsForCase,
       sortDocketEntries,
     };
-  },
-  initHoneybadger,
-  notifyHoneybadger: async (message, context) => {
-    const honeybadger = await initHoneybadger();
-
-    const notifyAsync = messageForNotification => {
-      return new Promise(resolve => {
-        honeybadger.notify(messageForNotification, null, null, resolve);
-      });
-    };
-
-    if (honeybadger) {
-      const { role, userId } = getCurrentUser() || {};
-
-      const errorContext = {
-        role,
-        userId,
-      };
-
-      if (context) {
-        Object.assign(errorContext, context);
-      }
-
-      honeybadger.setContext(errorContext);
-
-      await notifyAsync(message);
-    }
   },
   setCurrentUser,
   setCurrentUserToken,

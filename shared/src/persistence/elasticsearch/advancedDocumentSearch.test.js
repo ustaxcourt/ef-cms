@@ -14,7 +14,7 @@ describe('advancedDocumentSearch', () => {
   const orderEventCodes = ['O', 'OOD'];
   const opinionEventCodes = ['MOP', 'TCOP'];
 
-  const getSource = judge => ({
+  const SOURCE = {
     includes: [
       'caseCaption',
       'contactPrimary',
@@ -29,12 +29,13 @@ describe('advancedDocumentSearch', () => {
       'irsPractitioners',
       'isSealed',
       'isStricken',
+      'judge',
       'numberOfPages',
       'privatePractitioners',
       'sealedDate',
-      judge,
+      'signedJudgeName',
     ],
-  });
+  };
 
   const orderQueryParams = [
     { match: { 'pk.S': 'case|' } },
@@ -142,7 +143,7 @@ describe('advancedDocumentSearch', () => {
     return {
       has_parent: {
         inner_hits: {
-          _source: getSource(judge),
+          _source: SOURCE,
           name: 'case-mappings',
         },
         parent_type: 'case',

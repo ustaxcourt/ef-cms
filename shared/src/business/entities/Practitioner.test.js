@@ -37,6 +37,40 @@ describe('Practitioner', () => {
     expect(user.isValid()).toBeTruthy();
   });
 
+  it('should filter out the pendingEmailVerificationToken when filtered is true', () => {
+    const user = new Practitioner(
+      {
+        admissionsDate: '2019-03-01T21:40:46.415Z',
+        admissionsStatus: 'Active',
+        barNumber: 'PT20001',
+        birthYear: 2019,
+        contact: {
+          address1: '234 Main St',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          country: 'Brazil',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        employer: 'Private',
+        firmName: 'GW Law Offices',
+        firstName: 'Test',
+        lastName: 'Practitioner',
+        name: 'Test Practitioner',
+        originalBarState: US_STATES.IL,
+        pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
+        practitionerType: 'Attorney',
+        role: ROLES.Practitioner,
+        userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+      },
+      { filtered: true },
+    );
+    expect(user.pendingEmailVerificationToken).toBeUndefined();
+  });
+
   it('Creates an invalid Practitioner with missing required fields', () => {
     const user = new Practitioner({
       role: ROLES.Practitioner,
