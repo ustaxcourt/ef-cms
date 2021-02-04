@@ -13,6 +13,7 @@ import {
 } from '../integration-tests/helpers';
 import { setupTest } from './helpers';
 import { unauthedUserViewsTodaysOpinions } from './journey/unauthedUserViewsTodaysOpinions';
+import { unauthedUserViewsTodaysOrdersWithoutBenchOpinion } from './journey/unauthedUserViewsTodaysOrdersWithoutBenchOpinion';
 
 const test = setupTest();
 const testClient = setupTestClient();
@@ -55,17 +56,14 @@ describe('Unauthed user views todays opinions', () => {
   docketClerkViewsDraftOrder(testClient, 1);
   docketClerkSignsOrder(testClient, 1);
   docketClerkAddsOSTDocketEntryFromOrder(testClient, 1);
+  docketClerkServesDocument(testClient, 1);
 
-  unauthedUserViewsTodaysOpinions(test, testClient);
-
-  // view today's opinions and verify that the OST shows up and the pdf is viewable
-  // view today's orders and verify that the OST do NOT show up
+  unauthedUserViewsTodaysOpinions(test);
+  unauthedUserViewsTodaysOrdersWithoutBenchOpinion(test);
 
   // opinions for sealed cases should still be public
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 
-  unauthedUserViewsTodaysOpinions(test, testClient);
-
-  // view today's opinions and verify that the OST shows up and the pdf is viewable
+  unauthedUserViewsTodaysOpinions(test);
 });
