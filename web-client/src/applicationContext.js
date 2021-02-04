@@ -1,3 +1,4 @@
+import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
   caseHasServedDocketEntries,
@@ -276,6 +277,7 @@ import deepFreeze from 'deep-freeze';
 import { getConstants } from './getConstants';
 
 let user;
+let broadcastChannel;
 
 const getCurrentUser = () => {
   return user;
@@ -498,6 +500,12 @@ const applicationContext = {
   },
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:4000';
+  },
+  getBroadcastGateway: () => {
+    if (!broadcastChannel) {
+      broadcastChannel = new BroadcastChannel(getConstants().CHANNEL_NAME);
+    }
+    return broadcastChannel;
   },
   getCaseTitle: Case.getCaseTitle,
   getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
