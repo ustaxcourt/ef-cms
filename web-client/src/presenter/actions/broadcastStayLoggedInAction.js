@@ -3,7 +3,7 @@
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext application context used to get the broadcast gateway
- * @returns {number} total computed value from penalty values
+ * @returns {Promise} upon posting of message
  */
 export const broadcastStayLoggedInAction = async ({ applicationContext }) => {
   const broadcastChannel = applicationContext.getBroadcastGateway();
