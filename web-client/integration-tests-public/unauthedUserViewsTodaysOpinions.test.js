@@ -47,7 +47,6 @@ describe('Unauthed user views todays opinions', () => {
   docketClerkConvertsAnOrderToAnOpinion(testClient, 0);
   docketClerkServesDocument(testClient, 0);
 
-  // upload an OST to an unsealed case
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
