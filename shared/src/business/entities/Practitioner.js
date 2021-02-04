@@ -39,7 +39,6 @@ Practitioner.prototype.init = function init(
   this.additionalPhone = rawUser.additionalPhone;
   this.admissionsDate = rawUser.admissionsDate;
   this.admissionsStatus = rawUser.admissionsStatus;
-  this.alternateEmail = rawUser.alternateEmail;
   this.barNumber = rawUser.barNumber;
   this.birthYear = rawUser.birthYear;
   this.employer = rawUser.employer;
@@ -107,9 +106,6 @@ const practitionerValidation = {
   )
     .required()
     .description('The Tax Court bar admission status for the practitioner.'),
-  alternateEmail: JoiValidationConstants.EMAIL.optional()
-    .allow(null)
-    .description('An alternate email address for the practitioner.'),
   barNumber: JoiValidationConstants.STRING.max(100)
     .required()
     .description(
