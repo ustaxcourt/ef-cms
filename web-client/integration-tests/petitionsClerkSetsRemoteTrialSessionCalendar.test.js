@@ -61,7 +61,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
   describe(`Create a remote trial session with Small session type for '${trialLocation}'`, () => {
     loginAs(test, 'docketclerk@example.com');
     docketClerkCreatesARemoteTrialSession(test, overrides);
-    docketClerkViewsTrialSessionList(test, overrides);
+    docketClerkViewsTrialSessionList(test);
     docketClerkViewsNewTrialSession(test);
   });
 
