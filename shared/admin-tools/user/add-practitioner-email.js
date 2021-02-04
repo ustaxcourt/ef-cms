@@ -1,29 +1,56 @@
 const axios = require('axios');
-const { activate, deactivate, getAuthToken } = require('./admin');
+const { checkEnvVar } = require('../util');
 
-const { EFCMS_DOMAIN } = process.env;
+const { AUTH_TOKEN, EFCMS_DOMAIN } = process.env;
 
-const getPractitionerInfo = async ({ authToken, barNumber }) => {
-  const user = {};
-
+const getPractitionerInfo = async ({ barNumber }) => {
   const headers = {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-      'Content-type': 'application/json',
-    },
+    Authorization: `Bearer ${AUTH_TOKEN}`,
   };
 
   const url = `https://api.${EFCMS_DOMAIN}/practitioners/${barNumber}`;
-  console.log(url);
-  const info = await axios.get(url, user, headers);
-  console.log(info);
+  const info = await axios.get(url, { headers });
+  return info.data;
 };
 
-const barNumber = process.argv[2];
+const updatePractitionerInfo = async ({ barNumber, info }) => {
+  const headers = {
+    Authorization: `Bearer ${AUTH_TOKEN}`,
+  };
+  const url = `https://api.${EFCMS_DOMAIN}/async/practitioners/${barNumber}`;
+  const result = await axios.put(url, { user: info }, { headers });
+  console.log(result);
+};
+
+const processPracitioner = async ({ barNumber, email }) => {
+  console.log(`Looking up ${barNumber}`);
+  const info = await getPractitionerInfo({ barNumber });
+  if (!info) {
+    throw `Practitioner ${barNumber} not found!`;
+  }
+  if (info.email) {
+    throw `Practitioner ${barNumber} already has an email: ${info.email}`;
+  }
+  info.email = email;
+  console.log(`Updating ${barNumber} with Email: ${email}`);
+  await updatePractitionerInfo({ barNumber, info });
+};
 
 (async () => {
-  await activate();
-  const authToken = await getAuthToken();
-  await getPractitionerInfo({ authToken, barNumber });
-  await deactivate();
+  checkEnvVar(
+    EFCMS_DOMAIN,
+    'Please set EFCMS_DOMAIN in your local environment',
+  );
+  checkEnvVar(AUTH_TOKEN, 'Please set AUTH_TOKEN in your local environment');
+  const practitioners = require('./practitioners.json');
+  for (const [barNumber, email] of practitioners) {
+    try {
+      await processPracitioner({
+        barNumber,
+        email,
+      });
+    } catch (err) {
+      console.log(`ERROR: ${barNumber} ${err}`);
+    }
+  }
 })();
