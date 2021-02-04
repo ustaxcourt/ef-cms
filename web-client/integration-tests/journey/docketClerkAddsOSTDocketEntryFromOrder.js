@@ -27,10 +27,20 @@ export const docketClerkAddsOSTDocketEntryFromOrder = (
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'OST',
-    });
+    const updateKeyValues = {
+      documentTitle:
+        'Order of Service of Transcript (Bench Opinion) [Anything]',
+      documentType: 'Order of Service of Transcript (Bench Opinion)',
+      eventCode: 'OST',
+      scenario: 'Type A',
+    };
+
+    for (let key of Object.keys(updateKeyValues)) {
+      await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+        key,
+        value: updateKeyValues[key],
+      });
+    }
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'freeText',
