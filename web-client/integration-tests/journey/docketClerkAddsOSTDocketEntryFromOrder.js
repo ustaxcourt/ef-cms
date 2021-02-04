@@ -35,10 +35,10 @@ export const docketClerkAddsOSTDocketEntryFromOrder = (
       scenario: 'Type A',
     };
 
-    for (let key of Object.keys(updateKeyValues)) {
+    for (let [key, value] of Object.entries(updateKeyValues)) {
       await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
         key,
-        value: updateKeyValues[key],
+        value,
       });
     }
 
