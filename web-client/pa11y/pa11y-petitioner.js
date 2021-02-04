@@ -2,6 +2,8 @@ module.exports = [
   'http://localhost:1234/mock-login?token=petitioner&path=/',
   'http://localhost:1234/mock-login?token=petitioner&path=/before-starting-a-case',
   'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-1',
+  'http://localhost:1234/mock-login?token=petitioner&path=/my-account',
+  'http://localhost:1234/mock-login?token=petitioner&path=/change-login-and-service-email',
   {
     actions: [
       'wait for element label#hasIrsNotice-0 to be visible',

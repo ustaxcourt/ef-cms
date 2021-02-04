@@ -8,7 +8,7 @@ import {
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
@@ -73,22 +73,6 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const initHoneybadger = async () => {
-  if (process.env.USTC_ENV === 'prod') {
-    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
-
-    if (apiKey) {
-      const Honeybadger = await import('honeybadger-js'); // browser version
-
-      const config = {
-        apiKey,
-        environment: 'client',
-      };
-      Honeybadger.configure(config);
-      return Honeybadger;
-    }
-  }
-};
 const frozenConstants = deepFreeze({
   ADVANCED_SEARCH_TABS,
   CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
@@ -100,7 +84,7 @@ const frozenConstants = deepFreeze({
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
@@ -151,30 +135,6 @@ const applicationContextPublic = {
       getJudgeLastName,
       sortDocketEntries,
     };
-  },
-  initHoneybadger,
-  notifyHoneybadger: async (message, context) => {
-    const honeybadger = await initHoneybadger();
-
-    const notifyAsync = messageForNotification => {
-      return new Promise(resolve => {
-        honeybadger.notify(messageForNotification, null, null, resolve);
-      });
-    };
-
-    if (honeybadger) {
-      const errorContext = {
-        userId: 'public',
-      };
-
-      if (context) {
-        Object.assign(errorContext, context);
-      }
-
-      honeybadger.setContext(errorContext);
-
-      await notifyAsync(message);
-    }
   },
 };
 

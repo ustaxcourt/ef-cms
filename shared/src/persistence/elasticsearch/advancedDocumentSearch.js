@@ -37,10 +37,11 @@ exports.advancedDocumentSearch = async ({
     'irsPractitioners',
     'isSealed',
     'isStricken',
+    'judge',
     'numberOfPages',
     'privatePractitioners',
     'sealedDate',
-    judgeType,
+    'signedJudgeName',
   ];
 
   const docketEntryQueryParams = [

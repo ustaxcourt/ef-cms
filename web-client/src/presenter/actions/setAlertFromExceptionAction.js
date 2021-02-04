@@ -25,7 +25,6 @@ export const setAlertFromExceptionAction = async ({
   }
 
   applicationContext.getLogger().error(props.error);
-  await applicationContext.notifyHoneybadger(props.error);
 
   store.set(state.alertError, {
     message: props.error.message,

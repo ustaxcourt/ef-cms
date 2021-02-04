@@ -82,6 +82,10 @@ describe('External user views legacy sealed documents', () => {
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   it('should migrate a case with a isLegacySealed docket entry', async () => {
     await axiosInstance.post(
       'http://localhost:4000/migrate/case',

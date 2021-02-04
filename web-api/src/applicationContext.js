@@ -5,7 +5,6 @@ const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/ba
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
-const Honeybadger = require('honeybadger');
 const pdfLib = require('pdf-lib');
 const sass = require('sass');
 const util = require('util');
@@ -409,9 +408,6 @@ const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
-  getCognitoUserByEmail,
-} = require('../../shared/src/persistence/cognito/getCognitoUserByEmail');
-const {
   getCompletedMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor');
 const {
@@ -670,6 +666,9 @@ const {
 const {
   isAuthorized,
 } = require('../../shared/src/authorization/authorizationClientService');
+const {
+  isEmailAvailable,
+} = require('../../shared/src/persistence/cognito/isEmailAvailable');
 const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
@@ -1041,20 +1040,6 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-const initHoneybadger = () => {
-  if (process.env.NODE_ENV === 'production') {
-    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
-    if (apiKey) {
-      const config = {
-        apiKey,
-        environment: 'api',
-      };
-      Honeybadger.configure(config);
-      return Honeybadger;
-    }
-  }
-};
-
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoClientCache[type]) {
@@ -1210,7 +1195,6 @@ const gatewayMethods = {
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getClientId,
-  getCognitoUserByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1250,6 +1234,7 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
+  isEmailAvailable,
   isFileExists,
   updateCaseCorrespondence,
   verifyCaseForUser,
@@ -1300,17 +1285,16 @@ module.exports = (appContextUser, logger = createLogger()) => {
             promise: () => {},
           }),
           adminGetUser: ({ Username }) => ({
-            promise: () => ({
-              Username,
-            }),
+            promise: () => {
+              if (Username.includes('error')) {
+                throw new Error('User does not exist');
+              }
+
+              return { Username };
+            },
           }),
           adminUpdateUserAttributes: () => ({
             promise: () => {},
-          }),
-          listUsers: () => ({
-            promise: () => ({
-              Users: [],
-            }),
           }),
         };
       } else {
@@ -1321,6 +1305,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
+      CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
@@ -1720,38 +1705,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         setServiceIndicatorsForCase,
       };
     },
-    initHoneybadger,
     isAuthorized,
     logger: {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),
       info: logger.info.bind(logger),
-    },
-    notifyHoneybadger: async (message, context) => {
-      const honeybadger = initHoneybadger();
-
-      const notifyAsync = messageForNotification => {
-        return new Promise(resolve => {
-          honeybadger.notify(messageForNotification, null, null, resolve);
-        });
-      };
-
-      if (honeybadger) {
-        const { role, userId } = getCurrentUser() || {};
-
-        const errorContext = {
-          role,
-          userId,
-        };
-
-        if (context) {
-          Object.assign(errorContext, context);
-        }
-
-        honeybadger.setContext(errorContext);
-
-        await notifyAsync(message);
-      }
     },
     runVirusScan: async ({ filePath }) => {
       return execPromise(

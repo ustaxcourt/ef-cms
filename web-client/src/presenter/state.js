@@ -63,6 +63,7 @@ import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
+import { myAccountHelper } from './computeds/myAccountHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
@@ -163,6 +164,7 @@ const helpers = {
   messageDocumentHelper,
   messageModalHelper,
   messagesHelper,
+  myAccountHelper,
   orderTypesHelper,
   paperDocketEntryHelper,
   pdfPreviewModalHelper,
