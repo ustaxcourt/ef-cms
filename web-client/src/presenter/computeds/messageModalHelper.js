@@ -31,6 +31,9 @@ export const messageModalHelper = (get, applicationContext) => {
       documents.push(entry);
     }
   });
+  draftDocuments.forEach(entry => {
+    entry.title = entry.documentTitle || entry.documentType;
+  });
 
   const showMessageAttachments =
     form.attachments && form.attachments.length > 0;
