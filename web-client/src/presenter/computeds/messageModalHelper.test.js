@@ -388,6 +388,7 @@ describe('messageModalHelper', () => {
     ];
 
     applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+      draftDocuments: [],
       formattedDocketEntries: mockFormattedDocketEntries,
     });
 
@@ -412,5 +413,46 @@ describe('messageModalHelper', () => {
     expect(result.documents[1].title).toEqual(
       mockFormattedDocketEntries[1].documentType,
     );
+  });
+
+  it('should set a title on draftDocuments from the documentTitle or documentType', () => {
+    const mockDraftDocuments = [
+      {
+        documentTitle: 'Order to do something',
+      },
+      {
+        documentType: 'Hello documentType',
+      },
+    ];
+
+    applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+      draftDocuments: mockDraftDocuments,
+      formattedDocketEntries: [],
+    });
+
+    const result = runCompute(messageModalHelper, {
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [], // no attachments on form
+          },
+        },
+        screenMetadata: {
+          showAddDocumentForm: false,
+        },
+      },
+    });
+
+    expect(result.draftDocuments).toMatchObject([
+      {
+        documentTitle: 'Order to do something',
+        title: 'Order to do something',
+      },
+      {
+        documentType: 'Hello documentType',
+        title: 'Hello documentType',
+      },
+    ]);
   });
 });
