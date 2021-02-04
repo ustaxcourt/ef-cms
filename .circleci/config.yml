@@ -141,7 +141,7 @@ jobs:
         command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
         environment:
           discovery.type: single-node
-          JAVA_OPTS: '-Xms512m -Xmx512m'
+          JAVA_OPTS: '-Xms512m -Xmx1g'
       - image: elastic/elasticsearch:7.8.1
         environment:
           discovery.type: single-node
