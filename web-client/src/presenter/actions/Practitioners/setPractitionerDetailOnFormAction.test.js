@@ -31,4 +31,26 @@ describe('setPractitionerDetailOnFormAction', () => {
       year: '2019',
     });
   });
+
+  it('should set state.form.originalEmail to the value of props.practitionerDetail.email', async () => {
+    const mockEmail = 'test@example.com';
+
+    const { state } = await runAction(setPractitionerDetailOnFormAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        practitionerDetail: {
+          email: mockEmail,
+        },
+      },
+      state: {
+        form: {
+          originalEmail: undefined,
+        },
+      },
+    });
+
+    expect(state.form.originalEmail).toEqual(mockEmail);
+  });
 });

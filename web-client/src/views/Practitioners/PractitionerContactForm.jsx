@@ -1,5 +1,4 @@
 import { Address } from '../StartCase/Address';
-import { Button } from '../../ustc-ui/Button/Button';
 import { Country } from '../StartCase/Country';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from '../StartCase/InternationalAddress';
@@ -19,8 +18,6 @@ export const PractitionerContactForm = connect(
     onChangeSequenceName: props.onChangeSequenceName,
     onChangeUpdateSequence: sequences[props.onChangeSequenceName],
     screenMetadata: state.screenMetadata,
-    showPractitionerEmailInputSequence:
-      sequences.showPractitionerEmailInputSequence,
     type: props.type,
     validationErrors: state.validationErrors,
   },
@@ -28,14 +25,11 @@ export const PractitionerContactForm = connect(
     bind,
     changeCountryTypeSequence,
     COUNTRY_TYPES,
-    createPractitionerUserHelper,
     form,
     onBlurSequenceName,
     onBlurValidationSequence,
     onChangeSequenceName,
     onChangeUpdateSequence,
-    screenMetadata,
-    showPractitionerEmailInputSequence,
     type,
     validationErrors,
   }) {
