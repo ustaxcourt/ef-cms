@@ -83,6 +83,8 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `IRS_SUPERUSER_EMAIL_PROD` | Email address used to serve all new petitions to the IRS for PROD |
   | `DEFAULT_ACCOUNT_PASS` | Default password for all test accounts and some password resets |
   | `STATUSPAGE_DNS_RECORD` | DNS record for Statuspage of CNAME `status.${EFCMS_DOMAIN}` (optional) |
+  | `SESSION_MODAL_TIMEOUT` | Time in ms to wait before logging the user out after the idle timeout modal displays (optional, default: `300000` / 5 mins) |
+  | `SESSION_TIMEOUT` | Time in ms to wait displaying the idle timeout modal (optional, default: `3,300,000` / 55 mins) |
   | `CLIENT_STAGE` | The `process.env.STAGE` for the React application |
   | `BOUNCED_EMAIL_RECIPIENT` | An email to which email bounced should be sent (defaults to noreply@`EFCMS_DOMAIN`) |
 
