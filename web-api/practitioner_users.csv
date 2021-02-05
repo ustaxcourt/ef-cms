@@ -1,2 +1,2 @@
-admissionsDate,admissionsStatus,birthYear,practitionerType,firstName,lastName,middleName,suffix,email,firmName,alternateEmail,additionalPhone,originalBarState,barNumber,contact/address1,contact/address2,contact/city,contact/countryType,contact/phone,contact/postalCode,contact/state,isIrsEmployee,isDojEmployee
-01-11-1991,Active,1970,Attorney,Test,Practitioner,V.,,test+email@example.com,,,,TN,AB1111,Suite 111 1st Floor,123 Main Street,Somewhere,domestic,1234567890,48839,TN,N,N
+admissionsDate,admissionsStatus,birthYear,practitionerType,firstName,lastName,middleName,suffix,email,firmName,additionalPhone,originalBarState,barNumber,contact/address1,contact/address2,contact/city,contact/countryType,contact/phone,contact/postalCode,contact/state,isIrsEmployee,isDojEmployee
+01-11-1991,Active,1970,Attorney,Test,Practitioner,V.,,test+email@example.com,,,TN,AB1111,Suite 111 1st Floor,123 Main Street,Somewhere,domestic,1234567890,48839,TN,N,N
