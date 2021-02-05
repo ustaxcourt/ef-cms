@@ -14,9 +14,16 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
   store,
 }) => {
   const { category, eventCode } = get(state.form);
-  const { CATEGORY_MAP } = applicationContext.getConstants();
+  const {
+    CATEGORY_MAP,
+    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
+  } = applicationContext.getConstants();
 
-  if (category && eventCode) {
+  const isPractitionerAssociationDocument = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.find(
+    itemDocumentType => itemDocumentType.eventCode === eventCode,
+  );
+
+  if (category && eventCode && !isPractitionerAssociationDocument) {
     const categoryInformation = CATEGORY_MAP[category].find(
       itemDocumentType => itemDocumentType.eventCode === eventCode,
     );
