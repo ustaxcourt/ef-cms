@@ -280,6 +280,24 @@ export const PractitionerForm = connect(
 
         <div className="grid-row margin-bottom-4">
           <div className="grid-col-12">
+            <h2>Login & Service Email</h2>
+            <div className="blue-container">
+              <div className="grid-row grid-gap-3">
+                <div className="grid-col-6">
+                  <FormGroup errorText={validationErrors.email}>
+                    <label className="usa-label" htmlFor="email">
+                      Email address
+                    </label>
+                    jakls;dfjlaksdjflkjd
+                  </FormGroup>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid-row margin-bottom-4">
+          <div className="grid-col-12">
             <h2>Admissions Information</h2>
             <div className="blue-container">
               <div className="grid-row grid-gap-3">
