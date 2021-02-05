@@ -541,27 +541,6 @@
           name: "min"
           args: 
             limit: 1
-    alternateEmail: 
-      type: "string"
-      flags: 
-        presence: "optional"
-        description: "An alternate email address for the practitioner."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "email"
-          args: 
-            options: 
-              tlds: false
-        - 
-          name: "max"
-          args: 
-            limit: 100
-      allow: 
-        - null
     barNumber: 
       type: "string"
       flags: 
