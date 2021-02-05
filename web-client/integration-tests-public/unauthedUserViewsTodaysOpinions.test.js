@@ -1,4 +1,5 @@
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsOSTDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsOSTDocketEntryFromOrder';
 import { docketClerkConvertsAnOrderToAnOpinion } from '../integration-tests/journey/docketClerkConvertsAnOrderToAnOpinion';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from '../integration-tests/journey/docketClerkSealsCase';
@@ -12,6 +13,7 @@ import {
 } from '../integration-tests/helpers';
 import { setupTest } from './helpers';
 import { unauthedUserViewsTodaysOpinions } from './journey/unauthedUserViewsTodaysOpinions';
+import { unauthedUserViewsTodaysOrdersWithoutBenchOpinion } from './journey/unauthedUserViewsTodaysOrdersWithoutBenchOpinion';
 
 const test = setupTest();
 const testClient = setupTestClient();
@@ -45,11 +47,22 @@ describe('Unauthed user views todays opinions', () => {
   docketClerkConvertsAnOrderToAnOpinion(testClient, 0);
   docketClerkServesDocument(testClient, 0);
 
-  unauthedUserViewsTodaysOpinions(test, testClient);
+  docketClerkCreatesAnOrder(testClient, {
+    documentTitle: 'Order to do something',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkViewsDraftOrder(testClient, 1);
+  docketClerkSignsOrder(testClient, 1);
+  docketClerkAddsOSTDocketEntryFromOrder(testClient, 1);
+  docketClerkServesDocument(testClient, 1);
+
+  unauthedUserViewsTodaysOpinions(test);
+  unauthedUserViewsTodaysOrdersWithoutBenchOpinion(test);
 
   // opinions for sealed cases should still be public
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 
-  unauthedUserViewsTodaysOpinions(test, testClient);
+  unauthedUserViewsTodaysOpinions(test);
 });
