@@ -44,6 +44,8 @@ export const validatePractitionerAction = ({
       'originalBarState',
       'admissionsStatus',
       'admissionsDate',
+      'updatedEmail',
+      'confirmEmail',
     ];
 
     combineContactErrors({ errors });

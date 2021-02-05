@@ -41,6 +41,7 @@ Practitioner.prototype.init = function init(
   this.admissionsStatus = rawUser.admissionsStatus;
   this.barNumber = rawUser.barNumber;
   this.birthYear = rawUser.birthYear;
+  this.confirmEmail = rawUser.confirmEmail;
   this.employer = rawUser.employer;
   this.firmName = rawUser.firmName;
   this.firstName = rawUser.firstName;
@@ -54,6 +55,7 @@ Practitioner.prototype.init = function init(
   this.serviceIndicator =
     rawUser.serviceIndicator ||
     Practitioner.getDefaultServiceIndicator(rawUser);
+  this.updatedEmail = rawUser.updatedEmail;
   if (this.admissionsStatus === 'Active') {
     this.role = roleMap[this.employer];
   } else {
@@ -85,9 +87,18 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Enter a valid birth year',
   ],
+  confirmEmail: [
+    {
+      contains: 'must be [ref:updatedEmail]',
+      message: 'Email addresses do not match',
+    },
+    { contains: 'is required', message: 'Enter a valid email address' },
+    { contains: 'must be a valid', message: 'Enter a valid email address' },
+  ],
   employer: 'Select an employer',
   originalBarState: 'Select an original bar state',
   practitionerType: 'Select a practitioner type',
+  updatedEmail: 'Enter a valid email address',
 };
 
 const practitionerValidation = {
@@ -114,6 +125,9 @@ const practitionerValidation = {
   birthYear: JoiValidationConstants.YEAR_MAX_CURRENT.required().description(
     'The year the practitioner was born.',
   ),
+  confirmEmail: JoiValidationConstants.EMAIL.valid(
+    joi.ref('updatedEmail'),
+  ).required(),
   employer: JoiValidationConstants.STRING.valid(...EMPLOYER_OPTIONS)
     .required()
     .description('The employer designation for the practitioner.'),
@@ -158,6 +172,7 @@ const practitionerValidation = {
     .optional()
     .allow('')
     .description('The name suffix of the practitioner.'),
+  updatedEmail: JoiValidationConstants.EMAIL.optional().allow(null),
 };
 
 joiValidationDecorator(
