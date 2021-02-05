@@ -66,8 +66,10 @@ export const validateAddPractitionerAction = ({
       'contact.postalCode',
       'phone',
       'email',
+      'updatedEmail',
       'originalBarState',
       'admissionsStatus',
+      'confirmEmail',
       'admissionsDate',
     ];
 
