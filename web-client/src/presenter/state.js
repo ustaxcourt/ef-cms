@@ -5,6 +5,7 @@ import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModal
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
@@ -53,6 +54,7 @@ import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
+import { getConstants } from '../getConstants';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
@@ -97,6 +99,8 @@ import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
+const { IDLE_STATUS } = getConstants();
+
 const helpers = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
@@ -105,6 +109,7 @@ const helpers = {
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
+  appInstanceManagerHelper,
   batchDownloadHelper,
   blockedCasesReportHelper,
   caseDeadlineReportHelper,
@@ -259,6 +264,8 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  idleStatus: IDLE_STATUS.ACTIVE,
+  idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
   judges: [],

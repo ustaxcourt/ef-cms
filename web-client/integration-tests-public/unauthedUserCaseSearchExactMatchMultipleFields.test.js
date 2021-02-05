@@ -66,7 +66,7 @@ const updateCaseCaption = async (docketNumber, caseCaption) => {
 describe('Create and serve a case to test contactPrimary.name', () => {
   describe('Petitioner creates case', () => {
     beforeAll(() => {
-      jest.setTimeout(10000);
+      jest.setTimeout(20000);
     });
 
     loginAs(testClient, 'petitioner@example.com');

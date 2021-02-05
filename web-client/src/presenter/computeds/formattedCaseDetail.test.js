@@ -2026,6 +2026,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2377,6 +2378,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2478,6 +2480,7 @@ describe('formattedCaseDetail', () => {
         docketEntries: [mockDocketEntry],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
