@@ -278,21 +278,76 @@ export const PractitionerForm = connect(
           </div>
         </div>
 
-        <div className="grid-row margin-bottom-4">
-          <div className="grid-col-12">
-            <h2>Login & Service Email</h2>
-            <div className="blue-container">
-              <div className="grid-row grid-gap-3">
-                <div className="grid-col-6">
-                  <FormGroup errorText={validationErrors.email}>
-                    <label className="usa-label" htmlFor="email">
-                      Email address
-                    </label>
-                    jakls;dfjlaksdjflkjd
-                  </FormGroup>
+        <div className="margin-bottom-4">
+          <h2>Login & Service Email</h2>
+          <div className="blue-container">
+            <FormGroup errorText={validationErrors.email}>
+              <div className="grid-row margin-bottom-6">
+                <div className="desktop:grid-col-6">
+                  <p className="usa-label margin-bottom-05">
+                    Current email address
+                  </p>
+                  {/* {user.email} */}
+                  example@example.com
                 </div>
+                {/* {user.pendingEmail && ( */}
+                <div className="desktop:grid-col-6 padding-top-2 desktop:padding-top-0">
+                  <p className="usa-label margin-bottom-05">
+                    Pending email address
+                  </p>
+                  {/* {user.pendingEmail} */}
+                  pendingexample@example.com
+                </div>
+                {/* )} */}
               </div>
-            </div>
+              <div>
+                <h4>Change Login & Service Email</h4>
+                <FormGroup errorText={validationErrors.email}>
+                  <label className="usa-label" htmlFor="email">
+                    New email address
+                  </label>
+                  <input
+                    autoCapitalize="none"
+                    className="usa-input"
+                    id="email"
+                    name="email"
+                    type="text"
+                    value={form.email || ''}
+                    // onBlur={() =>
+                    //   // validateChangeLoginAndServiceEmailSequence()
+                    // }
+                    onChange={e =>
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </FormGroup>
+                <FormGroup errorText={validationErrors.confirmEmail}>
+                  <label className="usa-label" htmlFor="confirm-email">
+                    Re-enter new email address
+                  </label>
+                  <input
+                    autoCapitalize="none"
+                    className="usa-input"
+                    id="confirm-email"
+                    name="confirmEmail"
+                    type="text"
+                    value={form.confirmEmail || ''}
+                    // onBlur={() =>
+                    //   // validateChangeLoginAndServiceEmailSequence()
+                    // }
+                    onChange={e =>
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </FormGroup>
+              </div>
+            </FormGroup>
           </div>
         </div>
 
