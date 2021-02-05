@@ -753,5 +753,68 @@
             limit: 100
       allow: 
         - ""
+    updatedEmail: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "email"
+          args: 
+            options: 
+              tlds: false
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      allow: 
+        - null
+    confirmEmail: 
+      type: "string"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "email"
+          args: 
+            options: 
+              tlds: false
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "updatedEmail"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                ref: 
+                  path: 
+                    - "updatedEmail"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
 
  ```
