@@ -74,4 +74,28 @@ describe('createPractitionerUserHelper', () => {
     });
     expect(result.emailFormatted).toEqual('abc@example.com');
   });
+
+  it('returns isAddingPractitioner false and isEditingPractitioner true when barNumber is set on the form', () => {
+    const result = runCompute(createPractitionerUserHelper, {
+      state: {
+        form: {
+          barNumber: 'PT1234',
+        },
+      },
+    });
+
+    expect(result.isAddingPractitioner).toBeFalsy();
+    expect(result.isEditingPractitioner).toBeTruthy();
+  });
+
+  it('returns isAddingPractitioner true and isEditingPractitioner false when barNumber is NOT set on the form', () => {
+    const result = runCompute(createPractitionerUserHelper, {
+      state: {
+        form: {},
+      },
+    });
+
+    expect(result.isAddingPractitioner).toBeTruthy();
+    expect(result.isEditingPractitioner).toBeFalsy();
+  });
 });
