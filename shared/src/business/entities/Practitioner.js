@@ -125,9 +125,11 @@ const practitionerValidation = {
   birthYear: JoiValidationConstants.YEAR_MAX_CURRENT.required().description(
     'The year the practitioner was born.',
   ),
-  confirmEmail: JoiValidationConstants.EMAIL.valid(
-    joi.ref('updatedEmail'),
-  ).required(),
+  confirmEmail: JoiValidationConstants.EMAIL.when('updatedEmail', {
+    is: joi.exist().not(null),
+    otherwise: joi.optional().allow(null),
+    then: joi.valid(joi.ref('updatedEmail')).required(),
+  }),
   employer: JoiValidationConstants.STRING.valid(...EMPLOYER_OPTIONS)
     .required()
     .description('The employer designation for the practitioner.'),
