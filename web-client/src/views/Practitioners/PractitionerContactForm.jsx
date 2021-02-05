@@ -181,28 +181,6 @@ export const PractitionerContactForm = connect(
               </FormGroup>
             )}
           </div>
-
-          <div className="grid-col-6">
-            <FormGroup>
-              <label className="usa-label" htmlFor="alternateEmail">
-                Alternative email address{' '}
-                <span className="usa-hint">(optional)</span>
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="alternateEmail"
-                name="alternateEmail"
-                value={form.alternateEmail || ''}
-                onChange={e => {
-                  onChangeUpdateSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </FormGroup>
-          </div>
         </div>
       </>
     );
