@@ -261,9 +261,15 @@ const app = {
 
     ReactDOM.render(
       <Container app={cerebralApp}>
-        <IdleActivityMonitor />
-        <AppInstanceManager />
+        {!process.env.CI && (
+          <>
+            <IdleActivityMonitor />
+            <AppInstanceManager />
+          </>
+        )}
+
         <AppComponent />
+
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
       window.document.querySelector('#app'),
