@@ -20,8 +20,6 @@ function NewPractitioner() {
 
 NewPractitioner.prototype.init = function init(rawUser) {
   Practitioner.prototype.init.call(this, rawUser);
-  this.firstName = rawUser.firstName;
-  this.lastName = rawUser.lastName;
 };
 
 NewPractitioner.validationName = 'Practitioner';
@@ -37,11 +35,8 @@ joiValidationDecorator(
   NewPractitioner,
   joi.object().keys({
     ...Practitioner.validationRules,
-    admissionsStatus: JoiValidationConstants.STRING.required(),
     barNumber: JoiValidationConstants.STRING.optional().allow(null),
     email: JoiValidationConstants.STRING.required(),
-    firstName: JoiValidationConstants.STRING.required(),
-    lastName: JoiValidationConstants.STRING.required(),
     role: JoiValidationConstants.STRING.optional().allow(null),
     userId: JoiValidationConstants.STRING.optional().allow(null),
   }),
