@@ -7,6 +7,8 @@ export const createPractitionerUserHelper = get => {
     canEditAdmissionStatus: !!barNumber,
     canEditEmail: !barNumber,
     emailFormatted: email || 'Not provided',
+    isAddingPractitioner: !barNumber,
+    isEditingPractitioner: !!barNumber,
     showFirmName: employer === 'Private',
   };
 };
