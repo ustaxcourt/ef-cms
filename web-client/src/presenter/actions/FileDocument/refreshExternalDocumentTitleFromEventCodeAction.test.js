@@ -99,4 +99,27 @@ describe('refreshExternalDocumentTitleFromEventCodeAction', () => {
       '[First, Second, etc.] Amendment to blablahblah',
     );
   });
+
+  it('should not overwrite document title when the eventCode is included in PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP', async () => {
+    const entryOfAppearanceDocument = {
+      category: 'Appearance and Representation',
+      documentTitle: 'Entry of Appearance for Petitioner Queen Clarion',
+      documentType: 'Entry of Appearance',
+      eventCode: 'EA',
+      scenario: 'Standard',
+    };
+    const result = await runAction(
+      refreshExternalDocumentTitleFromEventCodeAction,
+      {
+        modules: { presenter },
+        state: {
+          form: entryOfAppearanceDocument,
+        },
+      },
+    );
+
+    expect(result.state.form.documentTitle).toEqual(
+      entryOfAppearanceDocument.documentTitle,
+    );
+  });
 });
