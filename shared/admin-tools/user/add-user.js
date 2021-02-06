@@ -1,7 +1,6 @@
-const axios = require('axios');
 const joi = require('joi');
-const { activate, deactivate, getAuthToken } = require('./admin');
-const { checkEnvVar, generatePassword, getUserPoolId } = require('../util');
+const { activate, createDawsonUser, deactivate } = require('./admin');
+const { checkEnvVar, getUserPoolId } = require('../util');
 const { CognitoIdentityServiceProvider } = require('aws-sdk');
 
 const { EFCMS_DOMAIN, ENV } = process.env;
@@ -40,48 +39,7 @@ const usage = error => {
   process.exit();
 };
 
-/**
- * Make API call to DAWSON to create the user in the system
- *
- * @param {Object} providers The providers object
- * @param {String} providers.email The user's email
- * @param {String} providers.name The user's full name
- * @param {String} providers.role The user's role
- * @param {String} providers.section The user's section at the Court
- */
-const createDawsonUser = async ({ email, name, role, section }) => {
-  const temp_password = generatePassword(12);
-  await activate();
-  const authToken = await getAuthToken();
-  const user = {
-    email: email,
-    employer: 'US Tax Court',
-    name: name,
-    password: temp_password,
-    role: role,
-    section: section,
-  };
-
-  const headers = {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-      'Content-type': 'application/json',
-    },
-  };
-
-  const url = `https://api.${EFCMS_DOMAIN}/users`;
-  await axios.post(url, user, headers);
-  await deactivate();
-};
-
-const params = {
-  email: process.argv[2],
-  name: process.argv[3],
-  role: process.argv[4],
-  section: process.argv[5],
-};
-
-const checkParams = () => {
+const checkParams = params => {
   const schema = joi.object().keys({
     email: joi.string().email().required(),
     name: joi.string().required(),
@@ -179,7 +137,16 @@ const sendWelcomeEmail = async email => {
 };
 
 (async () => {
-  checkParams();
+  const params = {
+    email: process.argv[2],
+    employer: 'US Tax Court',
+    name: process.argv[3],
+    role: process.argv[4],
+    section: process.argv[5],
+  };
+  checkParams(params);
+  await activate();
   await createDawsonUser(params);
+  await deactivate();
   await sendWelcomeEmail(params.email);
 })();
