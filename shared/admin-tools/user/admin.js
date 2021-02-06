@@ -1,32 +1,57 @@
+const axios = require('axios');
 const { CognitoIdentityServiceProvider } = require('aws-sdk');
-const { ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
-const { checkEnvVar, getClientId, getUserPoolId } = require('../util');
+const { EFCMS_DOMAIN, ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
+const {
+  checkEnvVar,
+  generatePassword,
+  getClientId,
+  getUserPoolId,
+} = require('../util');
+
+let cachedAuthToken;
 
 /**
+ * This activates the admin user in Cognito so we can perform actions
  */
 const activate = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
-  await cognito
-    .adminEnableUser({
-      UserPoolId,
-      Username: USTC_ADMIN_USER,
-    })
-    .promise();
+  try {
+    await cognito
+      .adminEnableUser({
+        UserPoolId,
+        Username: USTC_ADMIN_USER,
+      })
+      .promise();
+  } catch (err) {
+    switch (err.code) {
+      case 'UserNotFoundException':
+        console.error(
+          `ERROR: Admin User: ${USTC_ADMIN_USER} does not exist for ${ENV}`,
+        );
+        break;
+      default:
+        console.error(err);
+        break;
+    }
+    process.exit(1);
+  }
 };
 
+/**
+ * This disables the admin in Cognito for security
+ */
 const deactivate = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
-  const result = await cognito
+  await cognito
     .adminDisableUser({
       UserPoolId,
       Username: USTC_ADMIN_USER,
     })
     .promise();
-  console.log(result);
 };
 
 /**
@@ -35,6 +60,9 @@ const deactivate = async () => {
  * @returns {String} token to use for authentication
  */
 const getAuthToken = async () => {
+  if (cachedAuthToken) {
+    return cachedAuthToken;
+  }
   checkEnvVar(
     USTC_ADMIN_PASS,
     'You must have USTC_ADMIN_PASS set in your local environment',
@@ -67,13 +95,101 @@ const getAuthToken = async () => {
     ) {
       throw 'Could not get token!';
     }
-    return response['AuthenticationResult']['IdToken'];
+    cachedAuthToken = response['AuthenticationResult']['IdToken'];
+    return cachedAuthToken;
   } catch (err) {
-    console.error(err);
+    console.error(`ERROR: ${err}`);
+    process.exit();
+  }
+};
+
+/**
+ * Make API call to DAWSON to create the user in the system
+ *
+ * @param {Object} providers The providers object
+ * @param {String} providers.email The user's email
+ * @param {String} providers.name The user's full name
+ * @param {String} providers.role The user's role
+ * @param {String} providers.section The user's section at the Court
+ */
+const createDawsonUser = async user => {
+  checkEnvVar(
+    EFCMS_DOMAIN,
+    'Please Ensure EFCMS_DOMAIN is set in your local environment',
+  );
+  user.password = user.password || generatePassword(12);
+  const authToken = await getAuthToken();
+  const headers = {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      'Content-type': 'application/json',
+    },
+  };
+
+  const url = `https://api.${EFCMS_DOMAIN}/users`;
+  try {
+    await axios.post(url, user, headers);
+  } catch (err) {
+    console.log(err);
     throw err;
   }
 };
 
+const createAdminAccount = async () => {
+  // does the user exist?
+  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const UserPoolId = await getUserPoolId();
+  try {
+    let result = await cognito
+      .adminGetUser({
+        UserPoolId,
+        Username: USTC_ADMIN_USER,
+      })
+      .promise();
+    if (result) {
+      throw `User already exists for ${USTC_ADMIN_USER}`;
+    }
+  } catch (err) {
+    if (err.code !== 'UserNotFoundException') {
+      console.error(err);
+      process.exit(1);
+    }
+  }
+  await cognito
+    .adminCreateUser({
+      MessageAction: 'SUPPRESS',
+      UserAttributes: [
+        {
+          Name: 'email',
+          Value: USTC_ADMIN_USER,
+        },
+        {
+          Name: 'email_verified',
+          Value: 'True',
+        },
+        {
+          Name: 'custom:role',
+          Value: 'admin',
+        },
+      ],
+      UserPoolId,
+      Username: USTC_ADMIN_USER,
+    })
+    .promise();
+
+  await cognito
+    .adminSetUserPassword({
+      Password: USTC_ADMIN_PASS,
+      Permanent: true,
+      UserPoolId,
+      Username: USTC_ADMIN_USER,
+    })
+    .promise();
+  return true;
+};
+
+exports.createAdminAccount = createAdminAccount;
 exports.getAuthToken = getAuthToken;
 exports.activate = activate;
 exports.deactivate = deactivate;
+exports.createDawsonUser = createDawsonUser;
