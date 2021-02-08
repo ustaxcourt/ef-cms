@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path function
  * @returns {object} continue path for the sequence
  */
-export const shouldCheckEmailAvailabilityAction = async ({ get, path }) => {
+export const hasUpdatedEmailAction = async ({ get, path }) => {
   const { updatedEmail } = get(state.form);
 
   return updatedEmail ? path.yes() : path.no();
