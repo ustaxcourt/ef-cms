@@ -64,7 +64,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring(test, overrides);
-  docketClerkViewsTrialSessionList(test, overrides);
+  docketClerkViewsTrialSessionList(test);
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
