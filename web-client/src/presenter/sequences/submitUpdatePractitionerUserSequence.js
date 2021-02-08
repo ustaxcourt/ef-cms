@@ -1,16 +1,38 @@
+import { checkEmailAvailabilityAction } from '../actions/checkEmailAvailabilityAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { shouldCheckEmailAvailabilityAction } from '../actions/shouldCheckEmailAvailabilityAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePractitionerUserAction } from '../actions/updatePractitionerUserAction';
 import { validatePractitionerAction } from '../actions/validatePractitionerAction';
+
+const afterSuccess = [
+  setWaitingForResponseAction,
+  startWebSocketConnectionAction,
+  {
+    error: [
+      unsetWaitingForResponseAction,
+      setShowModalFactoryAction('WebSocketErrorModal'),
+    ],
+    success: [
+      updatePractitionerUserAction,
+      {
+        error: [],
+        success: [setPractitionerDetailAction, clearScreenMetadataAction],
+      },
+    ],
+  },
+];
 
 export const submitUpdatePractitionerUserSequence = [
   clearAlertsAction,
@@ -20,18 +42,20 @@ export const submitUpdatePractitionerUserSequence = [
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
-      setWaitingForResponseAction,
-      startWebSocketConnectionAction,
+      shouldCheckEmailAvailabilityAction,
       {
-        error: [
-          unsetWaitingForResponseAction,
-          setShowModalFactoryAction('WebSocketErrorModal'),
-        ],
-        success: [
-          updatePractitionerUserAction,
+        no: afterSuccess,
+        yes: [
+          checkEmailAvailabilityAction,
           {
-            error: [],
-            success: [setPractitionerDetailAction, clearScreenMetadataAction],
+            emailAvailable: afterSuccess,
+            emailInUse: [
+              clearAlertsAction,
+              setAlertErrorAction,
+              setValidationErrorsAction,
+              setValidationAlertErrorsAction,
+              stopShowValidationAction,
+            ],
           },
         ],
       },
