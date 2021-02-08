@@ -8,12 +8,6 @@ const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const updateUserPendingEmail = async ({ applicationContext, user }) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
-    throw new UnauthorizedError('Unauthorized to manage emails.');
-  }
-
   const isEmailAvailable = await applicationContext
     .getPersistenceGateway()
     .isEmailAvailable({
@@ -27,6 +21,7 @@ const updateUserPendingEmail = async ({ applicationContext, user }) => {
 
   const pendingEmailVerificationToken = applicationContext.getUniqueId();
   user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+  user.pendingEmail = user.updatedEmail;
 };
 
 /**
@@ -45,6 +40,7 @@ exports.updatePractitionerUserInteractor = async ({
   user,
 }) => {
   const requestUser = applicationContext.getCurrentUser();
+
   if (
     !isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER) ||
     !isAuthorized(requestUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)
@@ -56,16 +52,16 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
 
-  if (user.updatedEmail) {
-    await updateUserPendingEmail({ applicationContext, user: oldUserInfo });
-  }
-
   if (oldUserInfo.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
   }
 
   if (!oldUserInfo.email && user.email) {
     user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+  }
+
+  if (user.updatedEmail) {
+    await updateUserPendingEmail({ applicationContext, user });
   }
 
   // do not allow edit of bar number
