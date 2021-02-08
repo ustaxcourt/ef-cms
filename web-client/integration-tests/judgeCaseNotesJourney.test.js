@@ -33,7 +33,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test, overrides);
+  docketClerkViewsTrialSessionList(test);
   docketClerkViewsNewTrialSession(test);
 
   const caseOverrides = {
