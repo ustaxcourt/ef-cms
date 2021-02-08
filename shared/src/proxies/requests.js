@@ -1,4 +1,4 @@
-const moize = require('moize');
+const moize = require('moize').default;
 
 /**
  *
@@ -24,10 +24,10 @@ const get = async ({ applicationContext, endpoint, params }) => {
 };
 
 const getMemoized = moize({
-  isPromise: true,
-  matchesArg(cacheKeyArgument, keyArgument) {
+  equals(cacheKeyArgument, keyArgument) {
     return cacheKeyArgument.endpoint === keyArgument.endpoint;
   },
+  isPromise: true,
   maxAge: 5 * 1000, // five seconds
   updateExpire: true,
 })(get);
