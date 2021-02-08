@@ -56,6 +56,10 @@ describe('admissions clerk practitioner journey', () => {
     });
 
     expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(test.getState('form.pendingEmail')).toBeUndefined();
+    expect(test.getState('form.originalEmail')).toBe(
+      'privatePractitioner3@example.com',
+    );
 
     await test.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
@@ -95,6 +99,15 @@ describe('admissions clerk practitioner journey', () => {
 
     expect(test.getState('modal.showModal')).toBeUndefined();
     expect(test.getState('currentPage')).toEqual('PractitionerDetail');
+
+    await test.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: test.barNumber,
+    });
+
+    expect(test.getState('form.pendingEmail')).toBe('error@example.com');
+    expect(test.getState('form.originalEmail')).toBe(
+      'privatePractitioner3@example.com',
+    );
   });
 
   loginAs(test, 'privatePractitioner3@example.com');
