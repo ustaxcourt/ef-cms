@@ -105,7 +105,7 @@ describe('case inventory report journey', () => {
     },
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test, { trialLocation });
+  docketClerkViewsTrialSessionList(test);
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkSetsATrialSessionsSchedule(test);
 
