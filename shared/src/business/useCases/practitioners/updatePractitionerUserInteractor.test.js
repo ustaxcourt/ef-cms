@@ -11,22 +11,7 @@ jest.mock('../users/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;
-  let mockPractitioner = {
-    admissionsDate: '2019-03-01T21:40:46.415Z',
-    admissionsStatus: 'Active',
-    barNumber: 'AB1111',
-    birthYear: 2019,
-    email: 'ab@example.com',
-    employer: 'Private',
-    firmName: 'GW Law Offices',
-    firstName: 'Test',
-    lastName: 'Attorney',
-    name: 'Test Attorney',
-    originalBarState: 'Oklahoma',
-    practitionerType: 'Attorney',
-    role: ROLES.privatePractitioner,
-    userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
-  };
+  let mockPractitioner;
 
   beforeEach(() => {
     testUser = {
@@ -34,10 +19,27 @@ describe('updatePractitionerUserInteractor', () => {
       userId: 'admissionsclerk',
     };
 
+    mockPractitioner = {
+      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsStatus: 'Active',
+      barNumber: 'AB1111',
+      birthYear: 2019,
+      email: 'ab@example.com',
+      employer: 'Private',
+      firmName: 'GW Law Offices',
+      firstName: 'Test',
+      lastName: 'Attorney',
+      name: 'Test Attorney',
+      originalBarState: 'Oklahoma',
+      practitionerType: 'Attorney',
+      role: ROLES.privatePractitioner,
+      userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
+    };
+
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
     applicationContext
       .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue(mockPractitioner);
+      .getPractitionerByBarNumber.mockImplementation(() => mockPractitioner);
     applicationContext
       .getPersistenceGateway()
       .updatePractitionerUser.mockImplementation(({ user }) => user);
@@ -85,6 +87,7 @@ describe('updatePractitionerUserInteractor', () => {
   it("should set the practitioner's serviceIndicator to electronic when an email is added", async () => {
     mockPractitioner = {
       ...mockPractitioner,
+      email: undefined,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
@@ -190,6 +193,25 @@ describe('updatePractitionerUserInteractor', () => {
       expect(
         applicationContext.getPersistenceGateway().updatePractitionerUser.mock
           .calls[0][0].user,
+      ).toMatchObject({
+        pendingEmail: 'free-email-to-use@example.com',
+        pendingEmailVerificationToken: expect.anything(),
+      });
+    });
+
+    it('should call applicationContext.getUseCaseHelpers().sendEmailVerificationLink to send the verification link to the user', async () => {
+      await updatePractitionerUserInteractor({
+        applicationContext,
+        user: {
+          ...mockPractitioner,
+          confirmEmail: 'free-email-to-use@example.com',
+          updatedEmail: 'free-email-to-use@example.com',
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().sendEmailVerificationLink.mock
+          .calls[0][0],
       ).toMatchObject({
         pendingEmail: 'free-email-to-use@example.com',
         pendingEmailVerificationToken: expect.anything(),
