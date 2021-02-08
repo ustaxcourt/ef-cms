@@ -5,6 +5,9 @@
 ### Internal Only
 **Improvement** Admissions Clerks can change an existing practitioner’s email in DAWSON. This will reflect in all of their cases and be used for login and service.
 
+**Bug Fix** The Processed and Served boxes for Docket and Petitions now show items completed within the last 7 days, sorted newest to oldest.
+
+
 ### External / Public
 **Improvement** Petitioners and practitioners can change the email used for login and service through their DAWSON account.
 
@@ -16,6 +19,7 @@
 **Bug Fix** Users were being logged out when drafting orders using multiple tabs.
 * When working in multiple tabs, you will not be logged out until there is inactivity in all tabs.
 
+**Bug Fix** Petitioner service now displays accurate service preference for IRS attorneys before they are associated with the case.
 
 ## PR 61 Release Notes
 
