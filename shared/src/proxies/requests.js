@@ -1,4 +1,4 @@
-const moize = require('moize').default;
+const moize = require('moize');
 
 /**
  *
