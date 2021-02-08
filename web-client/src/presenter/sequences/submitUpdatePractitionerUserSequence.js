@@ -2,13 +2,13 @@ import { checkEmailAvailabilityAction } from '../actions/checkEmailAvailabilityA
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { hasUpdatedEmailAction } from '../actions/hasUpdatedEmailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { shouldCheckEmailAvailabilityAction } from '../actions/shouldCheckEmailAvailabilityAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -42,7 +42,7 @@ export const submitUpdatePractitionerUserSequence = [
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
-      shouldCheckEmailAvailabilityAction,
+      hasUpdatedEmailAction,
       {
         no: afterSuccess,
         yes: [
