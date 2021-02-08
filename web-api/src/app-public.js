@@ -1,3 +1,4 @@
+const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middleware');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
@@ -17,6 +18,7 @@ app.use((req, res, next) => {
   }
   return next();
 });
+app.use(awsServerlessExpressMiddleware.eventContext());
 app.use(logger());
 
 const {
