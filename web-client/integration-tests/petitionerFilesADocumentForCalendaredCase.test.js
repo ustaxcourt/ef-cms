@@ -36,7 +36,7 @@ describe('petitioner files document', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, { trialLocation });
-  docketClerkViewsTrialSessionList(test, { trialLocation });
+  docketClerkViewsTrialSessionList(test);
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkSetsATrialSessionsSchedule(test);
