@@ -7,6 +7,28 @@ const { Practitioner } = require('../../entities/Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const updateUserPendingEmail = async ({ applicationContext, user }) => {
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
+    throw new UnauthorizedError('Unauthorized to manage emails.');
+  }
+
+  const isEmailAvailable = await applicationContext
+    .getPersistenceGateway()
+    .isEmailAvailable({
+      applicationContext,
+      email: user.updatedEmail,
+    });
+
+  if (!isEmailAvailable) {
+    throw new Error('Email is not available');
+  }
+
+  const pendingEmailVerificationToken = applicationContext.getUniqueId();
+  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+};
+
 /**
  * updatePractitionerUserInteractor
  *
@@ -23,13 +45,20 @@ exports.updatePractitionerUserInteractor = async ({
   user,
 }) => {
   const requestUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER)) {
+  if (
+    !isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER) ||
+    !isAuthorized(requestUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)
+  ) {
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
   const oldUserInfo = await applicationContext
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
+
+  if (user.updatedEmail) {
+    await updateUserPendingEmail({ applicationContext, user: oldUserInfo });
+  }
 
   if (oldUserInfo.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
