@@ -60,6 +60,10 @@ exports.updatePractitionerUserInteractor = async ({
     user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
+  if (user.updatedEmail) {
+    await updateUserPendingEmail({ applicationContext, user });
+  }
+
   // do not allow edit of bar number
   const validatedUserData = new Practitioner(
     {
@@ -88,8 +92,6 @@ exports.updatePractitionerUserInteractor = async ({
   });
 
   if (user.updatedEmail) {
-    await updateUserPendingEmail({ applicationContext, user });
-
     await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
       applicationContext,
       pendingEmail: user.pendingEmail,
