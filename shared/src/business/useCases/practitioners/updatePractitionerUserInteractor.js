@@ -60,16 +60,6 @@ exports.updatePractitionerUserInteractor = async ({
     user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
-  if (user.updatedEmail) {
-    await updateUserPendingEmail({ applicationContext, user });
-
-    await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
-      applicationContext,
-      pendingEmail: user.pendingEmail,
-      pendingEmailVerificationToken: user.pendingEmailVerificationToken,
-    });
-  }
-
   // do not allow edit of bar number
   const validatedUserData = new Practitioner(
     {
@@ -96,6 +86,16 @@ exports.updatePractitionerUserInteractor = async ({
     },
     userId: requestUser.userId,
   });
+
+  if (user.updatedEmail) {
+    await updateUserPendingEmail({ applicationContext, user });
+
+    await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
+      applicationContext,
+      pendingEmail: user.pendingEmail,
+      pendingEmailVerificationToken: user.pendingEmailVerificationToken,
+    });
+  }
 
   await generateChangeOfAddress({
     applicationContext,
