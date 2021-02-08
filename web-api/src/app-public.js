@@ -2,7 +2,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const logger = require('./logger');
-const { eventContext } = require('@vendia/serverless-express');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
 
@@ -18,7 +17,6 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use(eventContext());
 app.use(logger());
 
 const {
