@@ -140,4 +140,34 @@ describe('updatePractitionerUserInteractor', () => {
         .calls[0][0].user.email,
     ).toEqual('admissionsclerk@example.com');
   });
+
+  describe.only('updating practitioner email', () => {
+    it('should throw unauthorized error when the logged in user does not have permission to manage emails', async () => {
+      testUser = {
+        role: ROLES.petitioner,
+        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      };
+
+      await expect(
+        updatePractitionerUserInteractor({
+          applicationContext,
+          user: mockUser,
+        }),
+      ).rejects.toThrow('Unauthorized for updating practitioner user');
+    });
+
+    it('should throw an error when user.updatedEmail is not available in cognito', async () => {
+      mockUser.updatedEmail = 'exists@example.com';
+      applicationContext
+        .getPersistenceGateway()
+        .isEmailAvailable.mockReturnValue(false);
+
+      await expect(
+        updatePractitionerUserInteractor({
+          applicationContext,
+          user: mockUser,
+        }),
+      ).rejects.toThrow('Email is not available');
+    });
+  });
 });
