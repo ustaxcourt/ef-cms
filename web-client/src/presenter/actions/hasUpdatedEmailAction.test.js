@@ -1,8 +1,8 @@
+import { hasUpdatedEmailAction } from './hasUpdatedEmailAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { shouldCheckEmailAvailabilityAction } from './shouldCheckEmailAvailabilityAction';
 
-describe('shouldCheckEmailAvailabilityAction', () => {
+describe('hasUpdatedEmailAction', () => {
   let pathNoStub = jest.fn();
   let pathYesStub = jest.fn();
 
@@ -14,7 +14,7 @@ describe('shouldCheckEmailAvailabilityAction', () => {
   });
 
   it('returns the yes path when updatedEmail is defined on state.form', async () => {
-    runAction(shouldCheckEmailAvailabilityAction, {
+    runAction(hasUpdatedEmailAction, {
       modules: { presenter },
       state: { form: { updatedEmail: 'blah@example.com' } },
     });
@@ -23,7 +23,7 @@ describe('shouldCheckEmailAvailabilityAction', () => {
   });
 
   it('returns the no path when updatedEmail is not defined on state.form', async () => {
-    runAction(shouldCheckEmailAvailabilityAction, {
+    runAction(hasUpdatedEmailAction, {
       modules: { presenter },
       state: { form: {} },
     });
