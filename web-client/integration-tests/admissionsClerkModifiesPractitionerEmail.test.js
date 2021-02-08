@@ -21,6 +21,10 @@ describe('admissions clerk practitioner journey', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test, {
@@ -43,7 +47,7 @@ describe('admissions clerk practitioner journey', () => {
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test, true);
 
-  // update email
+  loginAs(test, 'admissionsclerk@example.com');
   it('admissions clerk updates practitioner email', async () => {
     await refreshElasticsearchIndex();
 
@@ -83,7 +87,6 @@ describe('admissions clerk practitioner journey', () => {
     await test.runSequence('submitUpdatePractitionerUserSequence');
 
     expect(test.getState('modal.showModal')).toBe('EmailVerificationModal');
-
     expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
 
     await test.runSequence(
