@@ -21,7 +21,23 @@ describe('checkEmailAvailabilityAction', () => {
     };
   });
 
-  it('should call checkEmailAvailabilityInteractor with state.form.email', async () => {
+  it('should call checkEmailAvailabilityInteractor with state.form.updatedEmail', async () => {
+    await runAction(checkEmailAvailabilityAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { updatedEmail: mockEmail },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({ email: mockEmail });
+  });
+
+  it('should call checkEmailAvailabilityInteractor with state.form.email when state.form.updatedEmail is undefined', async () => {
     await runAction(checkEmailAvailabilityAction, {
       modules: {
         presenter,

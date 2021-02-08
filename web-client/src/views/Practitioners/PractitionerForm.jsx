@@ -300,7 +300,11 @@ export const PractitionerForm = connect(
               </div>
               <div>
                 <h4>Change Login & Service Email</h4>
-                <FormGroup errorText={validationErrors.updatedEmail}>
+                <FormGroup
+                  errorText={
+                    validationErrors.updatedEmail || validationErrors.email
+                  }
+                >
                   <label className="usa-label" htmlFor="updatedEmail">
                     New email address
                   </label>
