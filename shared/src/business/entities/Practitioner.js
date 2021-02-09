@@ -174,7 +174,11 @@ const practitionerValidation = {
     .optional()
     .allow('')
     .description('The name suffix of the practitioner.'),
-  updatedEmail: JoiValidationConstants.EMAIL.optional().allow(null),
+  updatedEmail: joi.alternatives().conditional('confirmEmail', {
+    is: joi.exist().not(null),
+    otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
+    then: JoiValidationConstants.EMAIL.required(),
+  }),
 };
 
 joiValidationDecorator(
@@ -184,6 +188,7 @@ joiValidationDecorator(
   }),
   VALIDATION_ERROR_MESSAGES,
 );
+
 Practitioner.prototype.toRawObject = function () {
   const result = this.toRawObjectFromJoi();
 
