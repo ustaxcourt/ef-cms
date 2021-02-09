@@ -108,6 +108,8 @@ describe('admissions clerk practitioner journey', () => {
     expect(test.getState('form.originalEmail')).toBe(
       'privatePractitioner3@example.com',
     );
+    expect(test.getState('form.updatedEmail')).toBeUndefined();
+    expect(test.getState('form.confirmEmail')).toBeUndefined();
   });
 
   loginAs(test, 'privatePractitioner3@example.com');

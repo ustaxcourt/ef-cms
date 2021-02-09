@@ -184,6 +184,15 @@ joiValidationDecorator(
   }),
   VALIDATION_ERROR_MESSAGES,
 );
+Practitioner.prototype.toRawObject = function () {
+  const result = this.toRawObjectFromJoi();
+
+  // We don't want to persist these values as they are only used for validation
+  result.confirmEmail = undefined;
+  result.updatedEmail = undefined;
+
+  return result;
+};
 
 Practitioner.validationName = 'Practitioner';
 
