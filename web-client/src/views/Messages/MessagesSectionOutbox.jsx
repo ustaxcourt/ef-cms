@@ -23,9 +23,9 @@ export const MessagesSectionOutbox = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {formattedMessages.map((message, idx) => {
+          {formattedMessages.map(message => {
             return (
-              <tbody key={idx}>
+              <tbody key={message.messageId}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
@@ -41,7 +41,7 @@ export const MessagesSectionOutbox = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={message.messageDetailLink}
                       >
                         {message.subject}
                       </Button>
