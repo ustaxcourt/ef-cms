@@ -430,20 +430,21 @@ describe('Practitioner', () => {
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
 
-    it('passes validation when updatedEmail is undefined', () => {
+    it('passes validation when updatedEmail and confirmEmail are undefined', () => {
       user.updatedEmail = undefined;
+      user.confirmEmail = undefined;
 
       expect(user.isValid()).toBeTruthy();
     });
 
-    it('passes validation when updatedEmail and confirmEmail match', () => {
+    it('passes validation when updatedEmail and confirmEmail match and are valid email addresses', () => {
       user.confirmEmail = mockUpdatedEmail;
       user.updatedEmail = mockUpdatedEmail;
 
       expect(user.isValid()).toBeTruthy();
     });
 
-    it('fails validation when updatedEmail is not a valid email address', () => {
+    it('fails validation when updatedEmail is not a valid email address and confirmEmail is a valid email address', () => {
       user.confirmEmail = mockUpdatedEmail;
       user.updatedEmail = invalidEmail;
 
@@ -454,7 +455,7 @@ describe('Practitioner', () => {
       });
     });
 
-    it('fails validation when updatedEmail is defined and confirmEmail is undefined', () => {
+    it('fails validation when updatedEmail is defined and valid and confirmEmail is undefined', () => {
       user.confirmEmail = undefined;
       user.updatedEmail = mockUpdatedEmail;
 
@@ -464,7 +465,7 @@ describe('Practitioner', () => {
       });
     });
 
-    it('fails validation when updatedEmail is defined and confirmEmail is not a valid email address', () => {
+    it('fails validation when updatedEmail is defined and valid and confirmEmail is not a valid email address', () => {
       user.confirmEmail = invalidEmail;
       user.updatedEmail = mockUpdatedEmail;
 
@@ -474,7 +475,7 @@ describe('Practitioner', () => {
       });
     });
 
-    it('fails validation when updatedEmail and confirmEmail do not match', () => {
+    it('fails validation when updatedEmail and confirmEmail do not match and both are valid', () => {
       user.confirmEmail = 'abc' + mockUpdatedEmail;
       user.updatedEmail = mockUpdatedEmail;
 
@@ -490,6 +491,17 @@ describe('Practitioner', () => {
 
       expect(user.isValid()).toBeFalsy();
       expect(user.getFormattedValidationErrors()).toEqual({
+        updatedEmail: 'Enter a valid email address',
+      });
+    });
+
+    it('should fail validation when updatedEmail is invalid and confirmEmail is a valid email address', () => {
+      user.confirmEmail = mockUpdatedEmail;
+      user.updatedEmail = invalidEmail;
+
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        confirmEmail: 'Email addresses do not match',
         updatedEmail: 'Enter a valid email address',
       });
     });

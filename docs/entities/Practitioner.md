@@ -818,24 +818,10 @@
             invalid: 
               - null
           then: 
-            type: "string"
+            type: "any"
             flags: 
               only: true
               presence: "required"
-            rules: 
-              - 
-                name: "min"
-                args: 
-                  limit: 1
-              - 
-                name: "email"
-                args: 
-                  options: 
-                    tlds: false
-              - 
-                name: "max"
-                args: 
-                  limit: 100
             allow: 
               - 
                 ref: 
