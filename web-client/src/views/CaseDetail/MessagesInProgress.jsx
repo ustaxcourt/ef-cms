@@ -25,8 +25,8 @@ export const MessagesInProgress = connect(
             </thead>
 
             <tbody>
-              {formattedInProgressMessages.map((message, idx) => (
-                <tr key={idx}>
+              {formattedInProgressMessages.map(message => (
+                <tr key={message.messageId}>
                   <td className="responsive-title padding-extra">
                     {message.to}
                   </td>
