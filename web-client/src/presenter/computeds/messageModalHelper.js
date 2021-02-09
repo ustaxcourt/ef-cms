@@ -27,6 +27,7 @@ export const messageModalHelper = (get, applicationContext) => {
   const documents = [];
   formattedDocketEntries.forEach(entry => {
     if (entry.isFileAttached && entry.isOnDocketRecord) {
+      entry.title = entry.descriptionDisplay || entry.documentType;
       documents.push(entry);
     }
   });

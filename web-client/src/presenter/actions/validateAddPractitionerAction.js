@@ -1,6 +1,31 @@
 import { state } from 'cerebral';
 
 /**
+ * combines contact error fields into a single contact error object -
+ * this modifies the original errors object rather than returning the value
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.errors the errors
+ */
+export const combineContactErrors = ({ errors }) => {
+  if (
+    errors.address1 ||
+    errors.city ||
+    errors.country ||
+    errors.postalCode ||
+    errors.state
+  ) {
+    errors.contact = {};
+    ['address1', 'city', 'country', 'postalCode', 'state'].forEach(key => {
+      if (errors[key]) {
+        errors.contact[key] = errors[key];
+        delete errors[key];
+      }
+    });
+  }
+};
+
+/**
  * validates the add practitioner user form
  *
  * @param {object} providers the providers object
@@ -46,21 +71,7 @@ export const validateAddPractitionerAction = ({
       'admissionsDate',
     ];
 
-    if (
-      errors.address1 ||
-      errors.city ||
-      errors.country ||
-      errors.postalCode ||
-      errors.state
-    ) {
-      errors.contact = {};
-      ['address1', 'city', 'country', 'postalCode', 'state'].forEach(key => {
-        if (errors[key]) {
-          errors.contact[key] = errors[key];
-          delete errors[key];
-        }
-      });
-    }
+    combineContactErrors({ errors });
 
     return path.error({
       alertError: {

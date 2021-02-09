@@ -4,7 +4,7 @@
 /**
  * npm install --save-dev @babel/core @babel/node
  * find web-client/src/ -name '*.jsx' | xargs npx babel-node sequenceAudit.js
-
+ *
  npx babel-node sequenceAudit.js web-client/src/views/CaseDetail/AddToTrialModal.jsx
  */
 const fs = require('fs');

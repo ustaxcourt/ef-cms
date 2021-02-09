@@ -108,8 +108,8 @@ export const AddToTrialModal = connect(
                   </option>
                 ))}
               {modal.showAllLocations &&
-                modalHelper.trialSessionStatesSorted.map((stateName, idx) => (
-                  <optgroup key={idx} label={stateName}>
+                modalHelper.trialSessionStatesSorted.map(stateName => (
+                  <optgroup key={stateName} label={stateName}>
                     {modalHelper.trialSessionsFormattedByState[stateName].map(
                       trialSession => (
                         <option

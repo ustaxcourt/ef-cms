@@ -19,7 +19,7 @@ export const getFormattedMessages = ({ applicationContext, messages }) => {
     });
 
   const inProgressMessages = formattedCaseMessages.filter(
-    message => !message.isRepliedTo,
+    message => !message.isRepliedTo && !message.isCompleted,
   );
   const completedMessages = formattedCaseMessages.filter(
     message => message.isCompleted,
