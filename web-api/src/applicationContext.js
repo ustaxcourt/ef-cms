@@ -799,6 +799,9 @@ const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
+  sendEmailVerificationLink,
+} = require('../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink');
+const {
   sendIrsSuperuserPetitionEmail,
 } = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
 const {
@@ -1511,6 +1514,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         parseAndScrapePdfContents,
         processUserAssociatedCases,
         saveFileAndGenerateUrl,
+        sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAndAssociations,
