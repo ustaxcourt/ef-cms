@@ -1,6 +1,8 @@
 const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
 
 const { ENV } = process.env;
+const UserPoolCache = {};
+
 /**
  * This function makes it easy to lookup the current version so that we can perform searches against it
  *
@@ -51,6 +53,11 @@ const checkEnvVar = (value, message) => {
  */
 const getUserPoolId = async () => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
+
+  if (UserPoolCache[ENV]) {
+    return UserPoolCache[ENV];
+  }
+
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const results = await cognito
     .listUserPools({
@@ -60,7 +67,8 @@ const getUserPoolId = async () => {
   const userPoolId = results.UserPools.find(
     pool => pool.Name === `efcms-${ENV}`,
   ).Id;
-  return userPoolId;
+  UserPoolCache[ENV] = userPoolId;
+  return UserPoolCache[ENV];
 };
 
 /**

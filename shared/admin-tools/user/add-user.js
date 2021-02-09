@@ -146,7 +146,7 @@ const sendWelcomeEmail = async email => {
   };
   checkParams(params);
   await activate();
-  await createDawsonUser(params);
+  await createDawsonUser({ user: params });
   await deactivate();
   await sendWelcomeEmail(params.email);
 })();

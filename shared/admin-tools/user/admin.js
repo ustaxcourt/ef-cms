@@ -104,6 +104,26 @@ const getAuthToken = async () => {
 };
 
 /**
+ *
+ * @param {Object} providers The providers object
+ * @param {String} providers.Password The password for the user
+ * @param {Boolean} providers.Permanent Whether or not the password is permanent (true) or temporary (false)
+ * @param {String} providers.Username The username (email) of the Cognito user we are updating
+ */
+const setPassword = async ({ Password, Permanent = false, Username }) => {
+  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const UserPoolId = await getUserPoolId();
+  await cognito
+    .adminSetUserPassword({
+      Password,
+      Permanent,
+      UserPoolId,
+      Username,
+    })
+    .promise();
+};
+
+/**
  * Make API call to DAWSON to create the user in the system
  *
  * @param {Object} providers The providers object
@@ -112,7 +132,7 @@ const getAuthToken = async () => {
  * @param {String} providers.role The user's role
  * @param {String} providers.section The user's section at the Court
  */
-const createDawsonUser = async user => {
+const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
   checkEnvVar(
     EFCMS_DOMAIN,
     'Please Ensure EFCMS_DOMAIN is set in your local environment',
@@ -129,6 +149,13 @@ const createDawsonUser = async user => {
   const url = `https://api.${EFCMS_DOMAIN}/users`;
   try {
     await axios.post(url, user, headers);
+    if (setPermanentPassword) {
+      await setPassword({
+        Password: user.password,
+        Permanent: true,
+        Username: user.email,
+      });
+    }
   } catch (err) {
     console.log(err);
     throw err;
