@@ -94,15 +94,15 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
           </tr>
         </thead>
         <tbody>
-          {cases.map((caseDetail, index) => (
-            <tr key={`${caseDetail.docketNumberWithSuffix}-${index}`}>
+          {cases.map(caseDetail => (
+            <tr key={caseDetail.docketNumberWithSuffix}>
               <td>{caseDetail.docketNumberWithSuffix}</td>
               <td>{caseDetail.caseTitle}</td>
               <td>
                 {caseDetail.petitionerCounsel &&
-                  caseDetail.petitionerCounsel.map((counsel, idx) => (
+                  caseDetail.petitionerCounsel.map(counsel => (
                     <div
-                      key={`counsel-${caseDetail.docketNumberWithSuffix}-${idx}`}
+                      key={`counsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
                     >
                       {counsel}
                     </div>
@@ -110,9 +110,9 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
               </td>
               <td>
                 {caseDetail.respondentCounsel &&
-                  caseDetail.respondentCounsel.map((counsel, idx) => (
+                  caseDetail.respondentCounsel.map(counsel => (
                     <div
-                      key={`rcounsel-${caseDetail.docketNumberWithSuffix}-${idx}`}
+                      key={`rcounsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
                     >
                       {counsel}
                     </div>

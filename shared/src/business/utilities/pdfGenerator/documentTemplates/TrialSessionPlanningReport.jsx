@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 const React = require('react');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 const { ReportsHeader } = require('../components/ReportsHeader.jsx');
