@@ -216,8 +216,9 @@ describe('Practitioner', () => {
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Email addresses do not match',
-        updatedEmail: 'Enter a valid email address',
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
+        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
       });
     });
 
@@ -227,7 +228,8 @@ describe('Practitioner', () => {
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
       });
     });
 
@@ -237,7 +239,8 @@ describe('Practitioner', () => {
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
       });
     });
 
@@ -247,7 +250,8 @@ describe('Practitioner', () => {
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Email addresses do not match',
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
       });
     });
 
@@ -257,18 +261,19 @@ describe('Practitioner', () => {
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        updatedEmail: 'Enter a valid email address',
+        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
       });
     });
 
-    it('should fail validation when updatedEmail is invalid and confirmEmail is a valid email address', () => {
-      validPractitioner.confirmEmail = mockUpdatedEmail;
+    it('should fail validation when updatedEmail is invalid and confirmEmail is undefined', () => {
+      validPractitioner.confirmEmail = undefined;
       validPractitioner.updatedEmail = invalidEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Email addresses do not match',
-        updatedEmail: 'Enter a valid email address',
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
       });
     });
   });

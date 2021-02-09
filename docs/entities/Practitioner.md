@@ -785,9 +785,23 @@
                 args: 
                   limit: 100
           otherwise: 
-            type: "any"
+            type: "string"
             flags: 
               presence: "optional"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
+                name: "email"
+                args: 
+                  options: 
+                    tlds: false
+              - 
+                name: "max"
+                args: 
+                  limit: 100
             allow: 
               - null
     confirmEmail: 
