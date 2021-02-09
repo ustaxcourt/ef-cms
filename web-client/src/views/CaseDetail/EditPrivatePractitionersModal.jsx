@@ -38,7 +38,7 @@ export const EditPrivatePractitionersModal = connect(
           {modal.privatePractitioners.map((practitioner, idx) => (
             <div
               className="border border-base-light padding-2 margin-bottom-2 grid-row"
-              key={idx}
+              key={practitioner.barNumber}
             >
               <div className="grid-col-8">
                 <label
