@@ -31,6 +31,8 @@ const VALIDATION_ERROR_MESSAGES = {
   lastName: 'Enter last name',
 };
 
+NewPractitioner.VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
+
 joiValidationDecorator(
   NewPractitioner,
   joi.object().keys({
