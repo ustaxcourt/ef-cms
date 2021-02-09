@@ -62,12 +62,6 @@ exports.updatePractitionerUserInteractor = async ({
 
   if (user.updatedEmail) {
     await updateUserPendingEmail({ applicationContext, user });
-
-    await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
-      applicationContext,
-      pendingEmail: user.pendingEmail,
-      pendingEmailVerificationToken: user.pendingEmailVerificationToken,
-    });
   }
 
   // do not allow edit of bar number
@@ -96,6 +90,14 @@ exports.updatePractitionerUserInteractor = async ({
     },
     userId: requestUser.userId,
   });
+
+  if (user.updatedEmail) {
+    await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
+      applicationContext,
+      pendingEmail: user.pendingEmail,
+      pendingEmailVerificationToken: user.pendingEmailVerificationToken,
+    });
+  }
 
   await generateChangeOfAddress({
     applicationContext,

@@ -21,9 +21,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
   docketClerkCreatesATrialSession(test, {
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test, {
-    trialLocation,
-  });
+  docketClerkViewsTrialSessionList(test);
 
   let caseDetail;
   test.casesReadyForTrial = [];

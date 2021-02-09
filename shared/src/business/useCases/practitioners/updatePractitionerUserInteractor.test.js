@@ -167,7 +167,6 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should throw an error when user.updatedEmail is not available in cognito', async () => {
-      mockPractitioner.updatedEmail = 'exists@example.com';
       applicationContext
         .getPersistenceGateway()
         .isEmailAvailable.mockReturnValue(false);
@@ -175,7 +174,11 @@ describe('updatePractitionerUserInteractor', () => {
       await expect(
         updatePractitionerUserInteractor({
           applicationContext,
-          user: mockPractitioner,
+          user: {
+            ...mockPractitioner,
+            confirmEmail: 'exists@example.com',
+            updatedEmail: 'exists@example.com',
+          },
         }),
       ).rejects.toThrow('Email is not available');
     });
