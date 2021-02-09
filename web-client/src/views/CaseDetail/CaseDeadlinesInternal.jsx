@@ -37,8 +37,8 @@ export const CaseDeadlinesInternal = connect(
               </tr>
             </thead>
             <tbody>
-              {caseDeadlines.map((item, idx) => (
-                <tr key={idx}>
+              {caseDeadlines.map(item => (
+                <tr key={item.caseDeadlineId}>
                   <td className="smaller-column semi-bold">
                     {item.deadlineDateFormatted}
                   </td>

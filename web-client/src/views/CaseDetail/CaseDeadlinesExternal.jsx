@@ -17,8 +17,8 @@ export const CaseDeadlinesExternal = connect(
             </div>
             <table className="usa-table row-border-only subsection deadlines">
               <tbody>
-                {caseDeadlines.map((item, idx) => (
-                  <tr key={idx}>
+                {caseDeadlines.map(item => (
+                  <tr key={item.caseDeadlineId}>
                     <td className="smaller-column center-column semi-bold">
                       {item.deadlineDateFormatted}
                     </td>

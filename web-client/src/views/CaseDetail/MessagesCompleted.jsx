@@ -26,8 +26,8 @@ export const MessagesCompleted = connect(
             </thead>
 
             <tbody>
-              {formattedCompletedMessages.map((message, idx) => (
-                <tr key={idx}>
+              {formattedCompletedMessages.map(message => (
+                <tr key={message.messageId}>
                   <td className="responsive-title padding-extra">
                     {message.completedAtFormatted}
                   </td>
