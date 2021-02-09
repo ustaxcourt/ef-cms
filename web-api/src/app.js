@@ -375,7 +375,6 @@ const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { getUserLambda } = require('./users/getUserLambda');
 const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
-const { migrateCaseLambda } = require('./migrate/migrateCaseLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -778,7 +777,6 @@ app.post(
 /**
  * migrate
  */
-app.post('/migrate/case', lambdaWrapper(migrateCaseLambda));
 app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
 app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
 
