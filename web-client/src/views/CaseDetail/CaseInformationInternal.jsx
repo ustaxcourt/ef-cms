@@ -69,8 +69,11 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
     {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}
     <div className="grid-container padding-left-0">
-      {caseDetail.consolidatedCases.map((consolidatedCase, index) => (
-        <div className="grid-row margin-top-3" key={index}>
+      {caseDetail.consolidatedCases.map(consolidatedCase => (
+        <div
+          className="grid-row margin-top-3"
+          key={consolidatedCase.docketNumber}
+        >
           <div className="grid-col-2">
             <CaseLink formattedCase={consolidatedCase} />
           </div>

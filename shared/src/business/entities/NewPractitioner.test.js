@@ -2,31 +2,33 @@ const { COUNTRY_TYPES, ROLES, US_STATES } = require('./EntityConstants');
 const { NewPractitioner } = require('./NewPractitioner');
 
 describe('NewPractitioner', () => {
+  const mockPractitioner = {
+    admissionsDate: '2019-03-01T21:40:46.415Z',
+    admissionsStatus: 'Active',
+    birthYear: 2019,
+    contact: {
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
+      city: 'Chicago',
+      country: 'Brazil',
+      countryType: COUNTRY_TYPES.INTERNATIONAL,
+      phone: '+1 (555) 555-5555',
+      postalCode: '61234',
+      state: 'IL',
+    },
+    email: 'test@example.com',
+    employer: 'Private',
+    firmName: 'GW Law Offices',
+    firstName: 'Test',
+    lastName: 'Practitioner',
+    originalBarState: US_STATES.IL,
+    practitionerType: 'Attorney',
+    role: ROLES.NewPractitioner,
+  };
+
   it('Creates a valid NewPractitioner with all required fields', () => {
-    const user = new NewPractitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      email: 'test@example.com',
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
-      role: ROLES.NewPractitioner,
-    });
+    const user = new NewPractitioner(mockPractitioner);
 
     expect(user.isValid()).toBeTruthy();
   });
@@ -40,26 +42,9 @@ describe('NewPractitioner', () => {
 
   it('Creates an invalid NewPractitioner with missing firstName and lastName', () => {
     const user = new NewPractitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      email: 'test@example.com',
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
-      role: ROLES.NewPractitioner,
+      ...mockPractitioner,
+      firstName: undefined,
+      lastName: undefined,
     });
     expect(user.isValid()).toBeFalsy();
   });
@@ -68,82 +53,63 @@ describe('NewPractitioner', () => {
     const mockUpdatedEmail = 'hello@example.com';
     const invalidEmail = 'hello@';
 
-    let user = new NewPractitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      email: 'test@example.com',
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
-      role: ROLES.NewPractitioner,
-    });
+    const validNewPractitioner = new NewPractitioner(mockPractitioner);
 
     it('passes validation when updatedEmail is undefined', () => {
-      user.updatedEmail = undefined;
+      validNewPractitioner.updatedEmail = undefined;
 
-      expect(user.isValid()).toBeTruthy();
+      expect(validNewPractitioner.isValid()).toBeTruthy();
     });
 
     it('passes validation when updatedEmail and confirmEmail match', () => {
-      user.updatedEmail = mockUpdatedEmail;
-      user.confirmEmail = mockUpdatedEmail;
+      validNewPractitioner.updatedEmail = mockUpdatedEmail;
+      validNewPractitioner.confirmEmail = mockUpdatedEmail;
 
-      expect(user.isValid()).toBeTruthy();
+      expect(validNewPractitioner.isValid()).toBeTruthy();
     });
 
     it('fails validation when updatedEmail is not a valid email address', () => {
-      user.updatedEmail = invalidEmail;
-      user.confirmEmail = undefined;
+      validNewPractitioner.updatedEmail = invalidEmail;
+      validNewPractitioner.confirmEmail = undefined;
 
-      expect(user.isValid()).toBeFalsy();
-      expect(user.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
-        updatedEmail: 'Enter a valid email address',
+      expect(validNewPractitioner.isValid()).toBeFalsy();
+      expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
+        confirmEmail:
+          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+        updatedEmail: NewPractitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
       });
     });
 
     it('fails validation when updatedEmail is defined and confirmEmail is undefined', () => {
-      user.updatedEmail = mockUpdatedEmail;
-      user.confirmEmail = undefined;
+      validNewPractitioner.updatedEmail = mockUpdatedEmail;
+      validNewPractitioner.confirmEmail = undefined;
 
-      expect(user.isValid()).toBeFalsy();
-      expect(user.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
+      expect(validNewPractitioner.isValid()).toBeFalsy();
+      expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
+        confirmEmail:
+          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
       });
     });
 
     it('fails validation when updatedEmail is defined and confirmEmail is not a valid email address', () => {
-      user.updatedEmail = mockUpdatedEmail;
-      user.confirmEmail = invalidEmail;
+      validNewPractitioner.updatedEmail = mockUpdatedEmail;
+      validNewPractitioner.confirmEmail = invalidEmail;
 
-      expect(user.isValid()).toBeFalsy();
-      expect(user.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
+      expect(validNewPractitioner.isValid()).toBeFalsy();
+      expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
+        confirmEmail:
+          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
       });
     });
 
     it('fails validation when updatedEmail and confirmEmail do not match', () => {
-      user.updatedEmail = mockUpdatedEmail;
-      user.confirmEmail = 'abc' + mockUpdatedEmail;
+      validNewPractitioner.updatedEmail = mockUpdatedEmail;
+      validNewPractitioner.confirmEmail = 'abc' + mockUpdatedEmail;
 
-      expect(user.isValid()).toBeFalsy();
-      expect(user.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Email addresses do not match',
+      expect(validNewPractitioner.isValid()).toBeFalsy();
+      expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
+        confirmEmail:
+          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
       });
     });
   });
