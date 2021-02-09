@@ -8878,7 +8878,6 @@
   {
     "admissionsStatus": "Active",
     "lastName": "Practitioner",
-    "alternateEmail": "privatePractitioner@example.com",
     "role": "privatePractitioner",
     "admissionsDate": "2019-03-01T21:40:46.415Z",
     "section": "privatePractitioner",

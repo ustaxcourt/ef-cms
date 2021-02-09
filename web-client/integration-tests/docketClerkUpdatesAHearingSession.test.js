@@ -27,10 +27,7 @@ describe('Docket Clerk updates a hearing session', () => {
     sessionType: 'Motion/Hearing',
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test, {
-    sessionType: 'Motion/Hearing',
-    trialLocation,
-  });
+  docketClerkViewsTrialSessionList(test);
 
   docketClerkAddsCaseToHearing(test, 'Low blast radius', 0);
 
