@@ -56,6 +56,7 @@ import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalA
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { closeVerifyEmailModalAndNavigateToMyAccountSequence } from './sequences/closeVerifyEmailModalAndNavigateToMyAccountSequence';
+import { closeVerifyEmailModalAndNavigateToPractitionerDetailSequence } from './sequences/closeVerifyEmailModalAndNavigateToPractitionerDetailSequence';
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
 import { completeDocketEntryQCSequence } from './sequences/completeDocketEntryQCSequence';
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
@@ -516,6 +517,7 @@ export const presenter = {
     closeModalAndReturnToDashboardSequence,
     closeModalAndReturnToTrialSessionsSequence,
     closeVerifyEmailModalAndNavigateToMyAccountSequence,
+    closeVerifyEmailModalAndNavigateToPractitionerDetailSequence,
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
     completeDocumentSelectSequence,

@@ -6,20 +6,22 @@ import React from 'react';
 export const EmailVerificationModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    closeModalAndNavigateBackSequence:
-      sequences.closeModalAndNavigateBackSequence,
+    closeVerifyEmailModalAndNavigateToPractitionerDetailSequence:
+      sequences.closeVerifyEmailModalAndNavigateToPractitionerDetailSequence,
     updatedEmail: state.form.updatedEmail,
   },
   function EmailVerificationModal({
     cancelSequence,
-    closeModalAndNavigateBackSequence,
+    closeVerifyEmailModalAndNavigateToPractitionerDetailSequence,
     updatedEmail,
   }) {
     return (
       <ModalDialog
         cancelSequence={cancelSequence}
         confirmLabel="Ok"
-        confirmSequence={() => closeModalAndNavigateBackSequence()}
+        confirmSequence={() =>
+          closeVerifyEmailModalAndNavigateToPractitionerDetailSequence()
+        }
         title="Verification Email Sent"
       >
         <div className="margin-bottom-4" id="verify-new-email-modal">
