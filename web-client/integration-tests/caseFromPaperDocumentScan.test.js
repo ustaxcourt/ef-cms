@@ -9,6 +9,7 @@ import { petitionsClerkSelectsScannerSource } from './journey/petitionsClerkSele
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 import { petitionsClerkViewsCreateNewCase } from './journey/petitionsClerkViewsCreateNewCase';
 import { petitionsClerkViewsScanView } from './journey/petitionsClerkViewsScanView';
+import { practitionerViewsCaseDetailWithPaperService } from './journey/practitionerViewsCaseDetailWithPaperService';
 
 const test = setupTest();
 
@@ -65,4 +66,7 @@ describe('Case from Paper Document Scan journey', () => {
   petitionsClerkCreatesScannedPDF(test);
   petitionsClerkCreatesNewCase(test, fakeFile);
   petitionsClerkSubmitsPaperCaseToIrs(test);
+
+  loginAs(test, 'irsPractitioner@example.com');
+  practitionerViewsCaseDetailWithPaperService(test);
 });

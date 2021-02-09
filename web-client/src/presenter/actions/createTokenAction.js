@@ -12,7 +12,7 @@ import jwt from 'jsonwebtoken';
  * @param {object} providers.props the cerebral props object
  * @returns {object} the jwt token
  */
-export const createTokenAction = async ({ applicationContext, get, props }) => {
+export const createTokenAction = ({ applicationContext, get, props }) => {
   const name = props.token || get(state.form.name);
   if (!userMap[name]) {
     throw new ActionError(`Username "${name}" not found in mock logins.`);
