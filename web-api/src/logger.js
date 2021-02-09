@@ -20,6 +20,7 @@ module.exports = (transport = console()) => (req, res, next) => {
         stage: process.env.STAGE || 'local',
       },
       request: {
+        body: JSON.stringify(req.body),
         headers: req.headers,
         method: req.method,
         url: req.url,
