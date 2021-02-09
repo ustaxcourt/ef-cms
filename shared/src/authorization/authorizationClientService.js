@@ -137,6 +137,7 @@ const AUTHORIZATION_MAP = {
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER,
     ROLE_PERMISSIONS.CASE_CORRESPONDENCE,
+    ROLE_PERMISSIONS.EMAIL_MANAGEMENT,
   ],
   chambers: [
     ...allInternalUserPermissions,

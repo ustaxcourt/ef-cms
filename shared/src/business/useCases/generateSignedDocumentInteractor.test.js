@@ -28,7 +28,7 @@ describe('generateSignedDocument', () => {
     await PDFDocument.load(rotatedTestPdfDoc);
 
   beforeEach(() => {
-    jest.setTimeout(10000);
+    jest.setTimeout(30000);
 
     applicationContext.getPdfLib.mockReturnValue({
       PDFDocument: {
