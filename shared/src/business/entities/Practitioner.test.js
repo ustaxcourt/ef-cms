@@ -397,7 +397,7 @@ describe('Practitioner', () => {
     expect(user.serviceIndicator).toEqual('CARRIER_PIGEON');
   });
 
-  describe('updating email', () => {
+  describe('updatedEmail/confirmEmail', () => {
     const mockUpdatedEmail = 'hello@example.com';
     const invalidEmail = 'hello@';
 
@@ -437,26 +437,26 @@ describe('Practitioner', () => {
     });
 
     it('passes validation when updatedEmail and confirmEmail match', () => {
-      user.updatedEmail = mockUpdatedEmail;
       user.confirmEmail = mockUpdatedEmail;
+      user.updatedEmail = mockUpdatedEmail;
 
       expect(user.isValid()).toBeTruthy();
     });
 
     it('fails validation when updatedEmail is not a valid email address', () => {
+      user.confirmEmail = mockUpdatedEmail;
       user.updatedEmail = invalidEmail;
-      user.confirmEmail = undefined;
 
       expect(user.isValid()).toBeFalsy();
       expect(user.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
+        confirmEmail: 'Email addresses do not match',
         updatedEmail: 'Enter a valid email address',
       });
     });
 
     it('fails validation when updatedEmail is defined and confirmEmail is undefined', () => {
-      user.updatedEmail = mockUpdatedEmail;
       user.confirmEmail = undefined;
+      user.updatedEmail = mockUpdatedEmail;
 
       expect(user.isValid()).toBeFalsy();
       expect(user.getFormattedValidationErrors()).toEqual({
@@ -465,8 +465,8 @@ describe('Practitioner', () => {
     });
 
     it('fails validation when updatedEmail is defined and confirmEmail is not a valid email address', () => {
-      user.updatedEmail = mockUpdatedEmail;
       user.confirmEmail = invalidEmail;
+      user.updatedEmail = mockUpdatedEmail;
 
       expect(user.isValid()).toBeFalsy();
       expect(user.getFormattedValidationErrors()).toEqual({
@@ -475,12 +475,22 @@ describe('Practitioner', () => {
     });
 
     it('fails validation when updatedEmail and confirmEmail do not match', () => {
-      user.updatedEmail = mockUpdatedEmail;
       user.confirmEmail = 'abc' + mockUpdatedEmail;
+      user.updatedEmail = mockUpdatedEmail;
 
       expect(user.isValid()).toBeFalsy();
       expect(user.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
+      });
+    });
+
+    it('should fail validation when updatedEmail is undefined and confirmEmail is a valid email address', () => {
+      user.confirmEmail = mockUpdatedEmail;
+      user.updatedEmail = undefined;
+
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        updatedEmail: 'Enter a valid email address',
       });
     });
   });
