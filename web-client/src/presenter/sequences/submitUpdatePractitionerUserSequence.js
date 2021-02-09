@@ -17,7 +17,6 @@ import { updatePractitionerUserAction } from '../actions/updatePractitionerUserA
 import { validatePractitionerAction } from '../actions/validatePractitionerAction';
 
 const afterSuccess = [
-  setWaitingForResponseAction,
   startWebSocketConnectionAction,
   {
     error: [
@@ -42,6 +41,7 @@ export const submitUpdatePractitionerUserSequence = [
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
+      setWaitingForResponseAction,
       hasUpdatedEmailAction,
       {
         no: afterSuccess,
@@ -50,6 +50,7 @@ export const submitUpdatePractitionerUserSequence = [
           {
             emailAvailable: afterSuccess,
             emailInUse: [
+              unsetWaitingForResponseAction,
               clearAlertsAction,
               setAlertErrorAction,
               setValidationErrorsAction,
