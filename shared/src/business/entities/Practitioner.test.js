@@ -7,6 +7,40 @@ const {
 const { Practitioner } = require('./Practitioner');
 
 describe('Practitioner', () => {
+  const mockUpdatedEmail = 'hello@example.com';
+  const invalidEmail = 'hello@';
+
+  let validPractitioner = new Practitioner({
+    admissionsDate: '2019-03-01T21:40:46.415Z',
+    admissionsStatus: 'Active',
+    barNumber: 'PT20001',
+    birthYear: 2019,
+    confirmEmail: mockUpdatedEmail,
+    contact: {
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
+      city: 'Chicago',
+      country: 'Brazil',
+      countryType: COUNTRY_TYPES.INTERNATIONAL,
+      phone: '+1 (555) 555-5555',
+      postalCode: '61234',
+      state: 'IL',
+    },
+    email: 'test.practitioner@example.com',
+    employer: 'Private',
+    firmName: 'GW Law Offices',
+    firstName: 'Test',
+    lastName: 'Practitioner',
+    name: 'Test Practitioner',
+    originalBarState: US_STATES.IL,
+    practitionerType: 'Attorney',
+    role: ROLES.privatePractitioner,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    updatedEmail: mockUpdatedEmail,
+    userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
+  });
+
   it('Creates a valid Practitioner with all required fields', () => {
     const user = new Practitioner({
       admissionsDate: '2019-03-01T21:40:46.415Z',
@@ -398,88 +432,56 @@ describe('Practitioner', () => {
   });
 
   describe('updating email', () => {
-    const mockUpdatedEmail = 'hello@example.com';
-    const invalidEmail = 'hello@';
-
-    let user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      email: 'test.practitioner@example.com',
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
-      role: ROLES.privatePractitioner,
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
-    });
-
     it('passes validation when updatedEmail is undefined', () => {
-      user.updatedEmail = undefined;
+      validPractitioner.updatedEmail = undefined;
 
-      expect(user.isValid()).toBeTruthy();
+      expect(validPractitioner.isValid()).toBeTruthy();
     });
 
     it('passes validation when updatedEmail and confirmEmail match', () => {
-      user.updatedEmail = mockUpdatedEmail;
-      user.confirmEmail = mockUpdatedEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
+      validPractitioner.confirmEmail = mockUpdatedEmail;
 
-      expect(user.isValid()).toBeTruthy();
+      expect(validPractitioner.isValid()).toBeTruthy();
     });
 
     it('fails validation when updatedEmail is not a valid email address', () => {
-      user.updatedEmail = invalidEmail;
-      user.confirmEmail = undefined;
+      validPractitioner.updatedEmail = invalidEmail;
+      validPractitioner.confirmEmail = undefined;
 
-      expect(user.isValid()).toBeFalsy();
-      expect(user.getFormattedValidationErrors()).toEqual({
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
         updatedEmail: 'Enter a valid email address',
       });
     });
 
     it('fails validation when updatedEmail is defined and confirmEmail is undefined', () => {
-      user.updatedEmail = mockUpdatedEmail;
-      user.confirmEmail = undefined;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
+      validPractitioner.confirmEmail = undefined;
 
-      expect(user.isValid()).toBeFalsy();
-      expect(user.getFormattedValidationErrors()).toEqual({
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
       });
     });
 
     it('fails validation when updatedEmail is defined and confirmEmail is not a valid email address', () => {
-      user.updatedEmail = mockUpdatedEmail;
-      user.confirmEmail = invalidEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
+      validPractitioner.confirmEmail = invalidEmail;
 
-      expect(user.isValid()).toBeFalsy();
-      expect(user.getFormattedValidationErrors()).toEqual({
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
       });
     });
 
     it('fails validation when updatedEmail and confirmEmail do not match', () => {
-      user.updatedEmail = mockUpdatedEmail;
-      user.confirmEmail = 'abc' + mockUpdatedEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
+      validPractitioner.confirmEmail = 'abc' + mockUpdatedEmail;
 
-      expect(user.isValid()).toBeFalsy();
-      expect(user.getFormattedValidationErrors()).toEqual({
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
       });
     });
@@ -551,6 +553,20 @@ describe('Practitioner', () => {
       expect(
         Practitioner.getDefaultServiceIndicator({ email: undefined }),
       ).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
+    });
+  });
+
+  describe('toRawObject', () => {
+    it('returns a raw practitioner object with updatedEmail and confirmEmail set to undefined', () => {
+      const rawPractitionerObject = new Practitioner(
+        validPractitioner,
+      ).toRawObject();
+
+      expect(rawPractitionerObject).toMatchObject({
+        ...validPractitioner,
+        confirmEmail: undefined,
+        updatedEmail: undefined,
+      });
     });
   });
 });
