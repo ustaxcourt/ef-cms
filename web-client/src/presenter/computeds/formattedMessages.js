@@ -13,6 +13,7 @@ export const getFormattedMessages = ({ applicationContext, messages }) => {
         message.createdAt,
         applicationContext,
       ),
+      messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
     }))
     .sort((a, b) => {
       return a.createdAt.localeCompare(b.createdAt);
