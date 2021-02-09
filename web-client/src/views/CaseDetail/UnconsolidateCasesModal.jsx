@@ -28,40 +28,38 @@ export const UnconsolidateCasesModal = connect(
       >
         <FormGroup errorText={modal.error || ''}>
           <fieldset className="usa-fieldset margin-bottom-0">
-            {formattedCaseDetail.consolidatedCases.map(
-              (consolidatedCase, index) => (
-                <div className="usa-checkbox" key={index}>
-                  <input
-                    aria-describedby="representing-legend"
-                    checked={
-                      (modal.casesToRemove &&
-                        modal.casesToRemove[consolidatedCase.docketNumber] ===
-                          true) ||
-                      false
-                    }
-                    className="usa-checkbox__input"
-                    id={`case-${consolidatedCase.docketNumber}`}
-                    name={`casesToRemove.${consolidatedCase.docketNumber}`}
-                    type="checkbox"
-                    onChange={e => {
-                      updateModalValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label inline-block"
-                    htmlFor={`case-${consolidatedCase.docketNumber}`}
-                  >
-                    <div className="display-inline margin-right-1">
-                      {consolidatedCase.docketNumberWithSuffix}
-                    </div>
-                    {consolidatedCase.caseTitle}
-                  </label>
-                </div>
-              ),
-            )}
+            {formattedCaseDetail.consolidatedCases.map(consolidatedCase => (
+              <div className="usa-checkbox" key={consolidatedCase.docketNumber}>
+                <input
+                  aria-describedby="representing-legend"
+                  checked={
+                    (modal.casesToRemove &&
+                      modal.casesToRemove[consolidatedCase.docketNumber] ===
+                        true) ||
+                    false
+                  }
+                  className="usa-checkbox__input"
+                  id={`case-${consolidatedCase.docketNumber}`}
+                  name={`casesToRemove.${consolidatedCase.docketNumber}`}
+                  type="checkbox"
+                  onChange={e => {
+                    updateModalValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor={`case-${consolidatedCase.docketNumber}`}
+                >
+                  <div className="display-inline margin-right-1">
+                    {consolidatedCase.docketNumberWithSuffix}
+                  </div>
+                  {consolidatedCase.caseTitle}
+                </label>
+              </div>
+            ))}
           </fieldset>
         </FormGroup>
       </ConfirmModal>
