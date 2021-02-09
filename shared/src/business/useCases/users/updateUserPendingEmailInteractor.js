@@ -57,24 +57,10 @@ exports.updateUserPendingEmailInteractor = async ({
     user: updatedUserRaw,
   });
 
-  const verificationLink = `https://app.${process.env.EFCMS_DOMAIN}/verify-email?token=${pendingEmailVerificationToken}`;
-
-  const templateHtml = `The email on your account has been changed. Once verified, this email will be your log in and where you will receive service.<br><a href="${verificationLink}">Verify your email.</a><br><br>If you did not make this change, please contact support at <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.`;
-
-  const destination = {
-    email: pendingEmail,
-    templateData: {
-      emailContent: templateHtml,
-    },
-  };
-
-  await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+  await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
     applicationContext,
-    defaultTemplateData: {
-      emailContent: 'Please confirm your new email',
-    },
-    destinations: [destination],
-    templateName: process.env.EMAIL_CHANGE_VERIFICATION_TEMPLATE,
+    pendingEmail,
+    pendingEmailVerificationToken,
   });
 
   return updatedUserRaw;
