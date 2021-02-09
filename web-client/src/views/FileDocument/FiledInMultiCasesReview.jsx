@@ -11,8 +11,11 @@ export const FiledInMultiCasesReview = connect(
     return (
       <>
         <h3 className="underlined">Filed In These Cases</h3>
-        {formattedSelectedCasesAsCase.map((selectedCase, index) => (
-          <div className="grid-row grid-gap margin-bottom-1" key={index}>
+        {formattedSelectedCasesAsCase.map(selectedCase => (
+          <div
+            className="grid-row grid-gap margin-bottom-1"
+            key={selectedCase.docketNumber}
+          >
             <div className="tablet:grid-col-2">{selectedCase.docketNumber}</div>
             <div className="tablet:grid-col-10">{selectedCase.caseTitle}</div>
           </div>
