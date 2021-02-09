@@ -6,10 +6,9 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const getDocumentOption = doc => {
-  const title = doc.documentTitle || doc.documentType;
   return (
     <option key={doc.docketEntryId} value={`${doc.docketEntryId}`}>
-      {doc.createdAtFormatted} - {title}
+      {doc.createdAtFormatted} - {doc.title}
     </option>
   );
 };

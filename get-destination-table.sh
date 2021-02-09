@@ -8,6 +8,7 @@
 # Arguments
 #   - $1 - the environment to check
 
+( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 [ -z "$1" ] && echo "The env to check must be provided as the \$1 argument." && exit 1
 
 ENV=$1

@@ -5,13 +5,11 @@ import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasS
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
+import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
-import { setComputeFormDayFactoryAction } from '../actions/setComputeFormDayFactoryAction';
-import { setComputeFormMonthFactoryAction } from '../actions/setComputeFormMonthFactoryAction';
-import { setComputeFormYearFactoryAction } from '../actions/setComputeFormYearFactoryAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -29,19 +27,15 @@ export const completeDocketEntryQCSequence = [
   {
     no: [],
     yes: [
-      setComputeFormDayFactoryAction('secondaryDocument.day'),
-      setComputeFormMonthFactoryAction('secondaryDocument.month'),
-      setComputeFormYearFactoryAction('secondaryDocument.year'),
-      getComputedFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction('secondaryDocument.serviceDate'),
       setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
     ],
   },
   computeCertificateOfServiceFormDateAction,
-  setComputeFormDayFactoryAction('dateReceivedDay'),
-  setComputeFormMonthFactoryAction('dateReceivedMonth'),
-  setComputeFormYearFactoryAction('dateReceivedYear'),
-  getComputedFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction('dateReceived'),
   setComputeFormDateFactoryAction('dateReceived'),
+  getComputedFormDateFactoryAction('serviceDate'),
+  setComputeFormDateFactoryAction('serviceDate'),
   validateDocketEntryAction,
   {
     error: [
@@ -52,6 +46,7 @@ export const completeDocketEntryQCSequence = [
     success: [
       stopShowValidationAction,
       setCurrentPageAction('Interstitial'),
+      refreshExternalDocumentTitleFromEventCodeAction,
       generateTitleAction,
       completeDocketEntryQCAction,
       setPdfPreviewUrlAction,

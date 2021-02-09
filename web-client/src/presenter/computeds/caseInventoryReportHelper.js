@@ -53,7 +53,7 @@ export const caseInventoryReportHelper = (get, applicationContext) => {
   }
 
   return {
-    caseStatuses: without(Object.values(STATUS_TYPES), 'Closed'),
+    caseStatuses: without(Object.values(STATUS_TYPES), STATUS_TYPES.closed),
     formattedReportData,
     judges,
     nextPageSize,

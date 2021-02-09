@@ -48,7 +48,7 @@ def mock_email(email, domain):
 
 def find_and_mock_emails(record):
     '''
-    Recursively find all keys in dictionarys named 'email' and mock these values.
+    Recursively find all keys in dictionaries named 'email' and mock these values.
     This changes the record in-place.
     '''
     if isinstance(record, dict):

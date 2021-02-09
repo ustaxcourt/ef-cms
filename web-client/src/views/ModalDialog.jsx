@@ -20,6 +20,7 @@ export const ModalDialog = ({
   message,
   preventCancelOnBlur,
   preventScrolling,
+  showButtons = true,
   title,
   useRunConfirmSequence = false,
 }) => {
@@ -130,26 +131,28 @@ export const ModalDialog = ({
             </div>
             {message && <p className="margin-bottom-5">{message}</p>}
             {children}
-            <div className="margin-top-5">
-              <Button
-                className="modal-button-confirm"
-                href={confirmHref}
-                target={confirmTarget}
-                onClick={runConfirmSequence}
-              >
-                {confirmLabel}
-              </Button>
-              {cancelLabel && (
+            {showButtons && (
+              <div className="margin-top-5">
                 <Button
-                  secondary
-                  className="modal-button-cancel"
-                  link={cancelLink}
-                  onClick={runCancelSequence}
+                  className="modal-button-confirm"
+                  href={confirmHref}
+                  target={confirmTarget}
+                  onClick={runConfirmSequence}
                 >
-                  {cancelLabel}
+                  {confirmLabel}
                 </Button>
-              )}
-            </div>
+                {cancelLabel && (
+                  <Button
+                    secondary
+                    className="modal-button-cancel"
+                    link={cancelLink}
+                    onClick={runCancelSequence}
+                  >
+                    {cancelLabel}
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </dialog>
       </FocusLock>

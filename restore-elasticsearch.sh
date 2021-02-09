@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script assumes you have already created the necessary roles and policies to 
+# This script assumes you have already created the necessary roles and policies to
 # allow ES to backup & restore into an s3 bucket
 
 # Before running, make sure you have started aws-es-proxy
@@ -15,9 +15,9 @@
 #       "region": "us-east-1",
 #       "role_arn": "arn:aws:iam::ACCOUNT_ID:role/es-snapshots-flexion.us"
 #    }
-#  }' 
+#  }'
 
-# This script assumes you have already created the necessary roles and policies to 
+# This script assumes you have already created the necessary roles and policies to
 # allow ES to backup & restore into an s3 bucket
 
 curl -XPOST 'http://localhost:9200/_snapshot/snapshot-repository/main-snapshot/_restore' -H "Content-Type: application/json" -d'{

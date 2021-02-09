@@ -17,11 +17,26 @@ export const admissionsClerkAddsPractitionerEmail = test => {
 
     expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
 
+    const mockAddress2 = 'A Place';
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.address2',
+      value: mockAddress2,
+    });
+
     await test.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
-      email: 'Enter email address',
+    expect(test.getState('validationErrors')).toEqual({});
+
+    expect(test.getState('practitionerDetail.contact.address2')).toBe(
+      mockAddress2,
+    );
+
+    await test.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: test.barNumber,
     });
+
+    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
 
     await test.runSequence('updateFormValueSequence', {
       key: 'email',
