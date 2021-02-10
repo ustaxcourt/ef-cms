@@ -17,6 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.uploadExternalDocumentsInteractor = async ({
   applicationContext,
+  docketEntryIdsAdded,
   docketNumbersForFiling,
   documentFiles,
   documentMetadata,
@@ -58,11 +59,13 @@ exports.uploadExternalDocumentsInteractor = async ({
   documentMetadata.primaryDocumentId = await uploadDocumentAndMakeSafeInteractor(
     'primary',
   );
+  docketEntryIdsAdded.push(documentMetadata.primaryDocumentId);
 
   if (documentFiles.secondary) {
     documentMetadata.secondaryDocument.docketEntryId = await uploadDocumentAndMakeSafeInteractor(
       'secondary',
     );
+    docketEntryIdsAdded.push(documentMetadata.secondaryDocument.docketEntryId);
   }
 
   if (documentMetadata.hasSupportingDocuments) {
@@ -71,6 +74,9 @@ exports.uploadExternalDocumentsInteractor = async ({
         i
       ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
         `primarySupporting${i}`,
+      );
+      docketEntryIdsAdded.push(
+        documentMetadata.supportingDocuments[i].docketEntryId,
       );
     }
   }
@@ -85,6 +91,9 @@ exports.uploadExternalDocumentsInteractor = async ({
         i
       ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
         `secondarySupporting${i}`,
+      );
+      docketEntryIdsAdded.push(
+        documentMetadata.secondarySupportingDocuments[i].docketEntryId,
       );
     }
   }
