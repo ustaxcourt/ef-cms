@@ -46,10 +46,10 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
 
   const progressFunctions = setupPercentDone(documentFiles, store);
 
-  let cases = [];
-
   try {
-    cases = await applicationContext
+    const {
+      caseDetail: cases,
+    } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
@@ -59,35 +59,35 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
         leadDocketNumber,
         progressFunctions,
       });
+
+    const getPendingDocumentsForCase = caseDetail =>
+      caseDetail.docketEntries.filter(
+        document => document.processingStatus === 'pending',
+      );
+
+    const pendingDocuments = [];
+
+    cases.forEach(caseDetail => {
+      pendingDocuments.push(...getPendingDocumentsForCase(caseDetail));
+    });
+
+    const addCoversheet = document => {
+      return applicationContext.getUseCases().addCoversheetInteractor({
+        applicationContext,
+        docketEntryId: document.docketEntryId,
+        docketNumber,
+      });
+    };
+
+    await Promise.all(pendingDocuments.map(addCoversheet));
+
+    return path.success({
+      caseDetail: currentCase,
+      consolidatedCases: cases,
+      docketNumber,
+      documentsFiled: documentMetadata,
+    });
   } catch (err) {
     return path.error();
   }
-
-  const getPendingDocumentsForCase = caseDetail =>
-    caseDetail.docketEntries.filter(
-      document => document.processingStatus === 'pending',
-    );
-
-  const pendingDocuments = [];
-
-  cases.forEach(caseDetail => {
-    pendingDocuments.push(...getPendingDocumentsForCase(caseDetail));
-  });
-
-  const addCoversheet = document => {
-    return applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId: document.docketEntryId,
-      docketNumber,
-    });
-  };
-
-  await Promise.all(pendingDocuments.map(addCoversheet));
-
-  return path.success({
-    caseDetail: currentCase,
-    consolidatedCases: cases,
-    docketNumber,
-    documentsFiled: documentMetadata,
-  });
 };
