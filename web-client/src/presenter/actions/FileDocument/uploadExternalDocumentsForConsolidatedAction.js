@@ -49,6 +49,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
   try {
     const {
       caseDetail: cases,
+      docketEntryIdsAdded,
     } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor({
@@ -60,26 +61,13 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
         progressFunctions,
       });
 
-    const getPendingDocumentsForCase = caseDetail =>
-      caseDetail.docketEntries.filter(
-        document => document.processingStatus === 'pending',
-      );
-
-    const pendingDocuments = [];
-
-    cases.forEach(caseDetail => {
-      pendingDocuments.push(...getPendingDocumentsForCase(caseDetail));
-    });
-
-    const addCoversheet = document => {
-      return applicationContext.getUseCases().addCoversheetInteractor({
+    for (let docketEntryId of docketEntryIdsAdded) {
+      await applicationContext.getUseCases().addCoversheetInteractor({
         applicationContext,
-        docketEntryId: document.docketEntryId,
+        docketEntryId,
         docketNumber,
       });
-    };
-
-    await Promise.all(pendingDocuments.map(addCoversheet));
+    }
 
     return path.success({
       caseDetail: currentCase,
