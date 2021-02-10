@@ -4,10 +4,16 @@ const {
 const {
   getDocumentContentsForDocketEntryInteractor,
 } = require('./getDocumentContentsForDocketEntryInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getDocumentContentsForDocketEntryInteractor', () => {
   const mockDocumentContentsId = '599dbad3-4912-4a61-9525-3da245700893';
   beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Tasha Yar',
+      role: ROLES.docketClerk,
+    });
+
     applicationContext.getPersistenceGateway().getDocument.mockReturnValue(
       Buffer.from(
         JSON.stringify({
@@ -16,6 +22,20 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
         }),
       ),
     );
+  });
+
+  it('should throw an error when the logged in user does not have permission to VIEW_DOCUMENTS', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Tasha Yar',
+      role: ROLES.inactivePractitioner,
+    });
+
+    await expect(
+      getDocumentContentsForDocketEntryInteractor({
+        applicationContext,
+        documentContentsId: mockDocumentContentsId,
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should call applicationContext.getPersistenceGateway().getDocument with documentCntentsId as the key', async () => {

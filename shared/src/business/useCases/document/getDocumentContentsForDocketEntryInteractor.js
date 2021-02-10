@@ -1,3 +1,9 @@
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
+
 /**
  * getDocumentContentsForDocketEntryInteractor
  *
@@ -10,6 +16,12 @@ exports.getDocumentContentsForDocketEntryInteractor = async ({
   applicationContext,
   documentContentsId,
 }) => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
   try {
     const documentContentsFile = await applicationContext
       .getPersistenceGateway()
