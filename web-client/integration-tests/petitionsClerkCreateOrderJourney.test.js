@@ -42,16 +42,16 @@ describe('Petitions Clerk Create Order Journey', () => {
     currentRichText: '<p>This is an edited test order.</p>',
     setRichText: '<p>This is a re-edited test order</p>',
   });
-  // petitionsClerkCreatesMessageToChambers(test);
-  // petitionsDeletesOrderFromCase(test);
-  // petitionsClerkViewsDraftDocuments(test, 0);
+  petitionsClerkCreatesMessageToChambers(test);
+  petitionsDeletesOrderFromCase(test);
+  petitionsClerkViewsDraftDocuments(test, 0);
 
-  // petitionsClerkAddsGenericOrderToCase(test);
-  // petitionsClerkSignsOrder(test);
-  // petitionsClerkViewsAddDocketEntryForGenericOrder(test);
-  // petitionsClerkEditsGenericOrder(test);
-  // petitionsClerkSignsOrder(test);
-  // petitionsClerkViewsAddDocketEntryForGenericOrder(test);
-  // petitionsClerkServesElectronicCaseToIrs(test);
-  // petitionsClerkAddsDocketEntryForOrderAndSavesForLater(test);
+  petitionsClerkAddsGenericOrderToCase(test);
+  petitionsClerkSignsOrder(test);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(test);
+  petitionsClerkEditsGenericOrder(test);
+  petitionsClerkSignsOrder(test);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(test);
+  petitionsClerkServesElectronicCaseToIrs(test);
+  petitionsClerkAddsDocketEntryForOrderAndSavesForLater(test);
 });
