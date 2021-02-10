@@ -53,11 +53,14 @@ export const uploadExternalDocumentsAction = async ({
 
   let caseDetail;
 
+  const docketEntryIdsAdded = [];
+
   try {
     caseDetail = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
+        docketEntryIdsAdded,
         documentFiles,
         documentMetadata,
         progressFunctions,
@@ -66,21 +69,25 @@ export const uploadExternalDocumentsAction = async ({
     return path.error();
   }
 
-  const pendingDocuments = caseDetail.docketEntries.filter(
-    document =>
-      document.processingStatus === 'pending' &&
-      document.isFileAttached !== false,
-  );
-  const addCoversheet = document => {
+  const entryIds = docketEntryIdsAdded
+    .map(id => {
+      const docketEntry = caseDetail.docketEntries
+        .filter(entry => entry.isFileAttached !== false)
+        .find(entry => entry.docketEntryId === id);
+      return docketEntry ? docketEntry.docketEntryId : null;
+    })
+    .filter(id => id);
+
+  const addCoversheet = docketEntryId => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      docketEntryId: document.docketEntryId,
+      docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
   };
 
-  for (let pendingDocument of pendingDocuments) {
-    await addCoversheet(pendingDocument);
+  for (let docketEntryId of entryIds) {
+    await addCoversheet(docketEntryId);
   }
 
   return path.success({
