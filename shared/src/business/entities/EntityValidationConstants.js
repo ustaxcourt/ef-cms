@@ -81,7 +81,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
     .required()
     .description('The type of this document.'),
-  draftOrderState: joi.object().allow(null).optional(),
+  draftOrderState: joi.object().allow(null).keys().optional(),
   editState: JoiValidationConstants.STRING.max(4000)
     .allow(null)
     .optional()
