@@ -42,19 +42,21 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
   });
 
   it('should throw an error when the document contents cannot be found', async () => {
-    applicationContext.getPersistenceGateway().getDocument.mockRejectedValue(
-      new Error(
-        `Document contents ${mockDocumentContentsId} could not be found in the S3 bucket.`,
-      ),
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockRejectedValue(
+        new Error(
+          `Document contents ${mockDocumentContentsId} could not be found in the S3 bucket.`,
+        ),
+      );
 
-      await expect(
-        getDocumentContentsForDocketEntryInteractor({
-          applicationContext,
-          documentContentsId: mockDocumentContentsId,
-        }),
-      ).rejects.toThrow(
-        `Document contents ${mockDocumentContentsId} could not be found in the S3 bucket.`,
-      ),
+    await expect(
+      getDocumentContentsForDocketEntryInteractor({
+        applicationContext,
+        documentContentsId: mockDocumentContentsId,
+      }),
+    ).rejects.toThrow(
+      `Document contents ${mockDocumentContentsId} could not be found in the S3 bucket.`,
     );
   });
 });

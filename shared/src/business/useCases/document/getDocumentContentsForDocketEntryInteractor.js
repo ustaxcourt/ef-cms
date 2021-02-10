@@ -27,5 +27,6 @@ exports.getDocumentContentsForDocketEntryInteractor = async ({
     applicationContext.logger.error(
       `Document contents ${documentContentsId} could not be found in the S3 bucket.`,
     );
+    throw e;
   }
 };
