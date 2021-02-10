@@ -77,7 +77,6 @@ export const StandingPretrialNotice = ({ options, trialInfo }) => {
             <li>
               You can send an update to the Court a week in advance if you need
               to by filing a Final Status Report, available at
-              {/* Todo: Broken Link */}
               https://www.ustaxcourt.gov/FinalStatusReport/.
             </li>
             <li>
@@ -104,7 +103,7 @@ export const StandingPretrialNotice = ({ options, trialInfo }) => {
         </li>
         <li style={{ paddingTop: '10px' }}>
           Find out more at{' '}
-          <a href="http://www.ustaxcourt.gov">www.ustaxcourt.gov</a> or call
+          <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a> or call
           call 202-521-0700.
         </li>
       </ul>
