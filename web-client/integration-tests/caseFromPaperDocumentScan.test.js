@@ -33,6 +33,10 @@ describe('Case from Paper Document Scan journey', () => {
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCreateNewCase(test);
   petitionsClerkViewsScanView(test);
