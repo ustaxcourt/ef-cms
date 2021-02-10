@@ -34,13 +34,14 @@ const getDocumentContentsForDocuments = async ({
         const documentContentsData = JSON.parse(
           documentContentsFile.toString(),
         );
-        doc.documentContents = documentContentsData.documentContents;
-        // if (doc.)
-        doc.draftOrderState = {
-          ...doc.draftOrderState,
-          documentContents: documentContentsData.documentContents,
-          richText: documentContentsData.richText,
-        };
+        // doc.documentContents = documentContentsData.documentContents;
+        if (doc.isDraft) {
+          doc.draftOrderState = {
+            ...doc.draftOrderState,
+            documentContents: documentContentsData.documentContents,
+            richText: documentContentsData.richText,
+          };
+        }
       } catch (e) {
         applicationContext.logger.error(
           `Document contents ${doc.documentContentsId} could not be found in the S3 bucket.`,
@@ -62,10 +63,10 @@ const getCaseAndDocumentContents = async ({
     .validate()
     .toRawObject();
 
-  caseDetailRaw.docketEntries = await getDocumentContentsForDocuments({
-    applicationContext,
-    docketEntries: caseDetailRaw.docketEntries,
-  });
+  // caseDetailRaw.docketEntries = await getDocumentContentsForDocuments({
+  //   applicationContext,
+  //   docketEntries: caseDetailRaw.docketEntries,
+  // });
 
   return caseDetailRaw;
 };
@@ -207,9 +208,5 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
 
   caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
 
-  console.log(
-    '------we are ehre',
-    caseDetailRaw.docketEntries[7].documentContents,
-  );
   return caseDetailRaw;
 };

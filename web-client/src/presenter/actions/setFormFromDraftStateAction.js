@@ -15,6 +15,10 @@ export const setFormFromDraftStateAction = ({ props, store }) => {
       docketEntry => docketEntry.docketEntryId === docketEntryIdToEdit,
     );
 
+    store.set(
+      state.form.draftOrderState.documentContents,
+      props.documentContents,
+    );
     store.set(state.form, {
       ...documentToEdit.draftOrderState,
       docketEntryIdToEdit,
