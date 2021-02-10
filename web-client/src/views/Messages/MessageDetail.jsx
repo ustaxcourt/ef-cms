@@ -196,10 +196,10 @@ export const MessageDetail = connect(
           )}
 
           {formattedMessageDetail.showOlderMessages &&
-            formattedMessageDetail.olderMessages.map((message, idx) => (
+            formattedMessageDetail.olderMessages.map(message => (
               <div
                 className="border border-base-lightest padding-top-2 padding-bottom-2 padding-left-3 padding-right-3"
-                key={`older-messages-${idx}`}
+                key={`older-messages-${message.messageId}`}
               >
                 <SingleMessage indent={true} message={message} />
               </div>
