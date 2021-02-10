@@ -155,6 +155,17 @@ DocketEntry.prototype.init = function init(
     );
   }
 
+  if (rawDocketEntry.draftOrderState) {
+    this.privatePractitioners = rawDocketEntry.privatePractitioners.map(
+      item => {
+        return {
+          name: item.name,
+          partyPrivatePractitioner: item.partyPrivatePractitioner,
+        };
+      },
+    );
+  }
+
   if (Array.isArray(rawDocketEntry.servedParties)) {
     this.servedParties = rawDocketEntry.servedParties.map(item => {
       return {
