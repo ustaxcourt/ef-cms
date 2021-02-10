@@ -27,11 +27,7 @@ const afterSuccess = [
       updatePractitionerUserAction,
       {
         error: [],
-        success: [
-          setPractitionerDetailAction,
-          unsetWaitingForResponseAction,
-          clearScreenMetadataAction,
-        ],
+        success: [setPractitionerDetailAction, clearScreenMetadataAction],
       },
     ],
   },
