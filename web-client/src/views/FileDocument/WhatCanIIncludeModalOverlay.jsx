@@ -26,6 +26,7 @@ export const WhatCanIIncludeModalOverlay = connect(
               filing. If an attachment can’t be converted into a PDF and
               uploaded with your primary document, you can mail it to the Court.
               For more information on mailing attachments, see the{' '}
+              {/* Todo: Is this the proper resource link? */}
               <a
                 className="usa-link--external"
                 href="https://www.ustaxcourt.gov/resources/eaccess/Petitioners_Guide_to_eAccess_and_eFiling.pdf"
