@@ -35,6 +35,7 @@ const getDocumentContentsForDocuments = async ({
           documentContentsFile.toString(),
         );
         doc.documentContents = documentContentsData.documentContents;
+        // if (doc.)
         doc.draftOrderState = {
           ...doc.draftOrderState,
           documentContents: documentContentsData.documentContents,
@@ -206,5 +207,9 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
 
   caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
 
+  console.log(
+    '------we are ehre',
+    caseDetailRaw.docketEntries[7].documentContents,
+  );
   return caseDetailRaw;
 };
