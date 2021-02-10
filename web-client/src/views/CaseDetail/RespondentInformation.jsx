@@ -45,7 +45,7 @@ const RespondentInformation = connect(
                   'tablet:grid-col-3 counsel-information',
                   index > 3 && 'margin-top-3',
                 )}
-                key={respondent.nam}
+                key={respondent.name}
               >
                 <address aria-labelledby="respondent-label">
                   {respondent.name && (
