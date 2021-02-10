@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+const { get } = require('../requests');
 
 /**
  * getDocumentContentsForDocketEntryInteractor
@@ -10,10 +10,10 @@ const { get } = require('./requests');
  */
 exports.getDocumentContentsForDocketEntryInteractor = ({
   applicationContext,
-  docketEntryId,
+  documentContentsId,
 }) => {
   return get({
     applicationContext,
-    endpoint: `/case-documents/${docketEntryId}/document-contents`,
+    endpoint: `/case-documents/${documentContentsId}/document-contents`,
   });
 };
