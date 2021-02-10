@@ -599,7 +599,6 @@ const router = {
     registerRoute(
       '/case-detail/*/edit-order/*',
       ifHasAccess((docketNumber, docketEntryIdToEdit) => {
-        console.log('i should be firing this sequence?')
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoEditOrderSequence');
         return sequence({
