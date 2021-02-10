@@ -5,7 +5,7 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketEntryId the docket number of the lead case for consolidation
+ * @param {string} providers.documentContentsId the documentContentsId
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getDocumentContentsForDocketEntryInteractor = ({
