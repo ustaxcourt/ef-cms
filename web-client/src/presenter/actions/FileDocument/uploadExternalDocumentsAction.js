@@ -66,9 +66,9 @@ export const uploadExternalDocumentsAction = async ({
 
     const entryIds = docketEntryIdsAdded
       .map(id => {
-        const docketEntry = caseDetail.docketEntries
-          .filter(entry => entry.isFileAttached !== false)
-          .find(entry => entry.docketEntryId === id);
+        const docketEntry = caseDetail.docketEntries.find(
+          entry => entry.isFileAttached !== false && entry.docketEntryId === id,
+        );
         return docketEntry ? docketEntry.docketEntryId : null;
       })
       .filter(id => id);
