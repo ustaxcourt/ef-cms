@@ -1330,4 +1330,105 @@ describe('messageDocumentHelper', () => {
       expect(isArchived).toBeFalsy();
     });
   });
+
+  describe('generate links', () => {
+    const PARENT_MESSAGE_ID = 'b52edf38-b34d-4274-a1de-750eadadcc6e';
+    const VIEWER_DOCUMENT_ID_TO_DISPLAY =
+      'a9ccf24b-5130-4be4-b475-69a794427af6';
+
+    it('should return an addDocketEntryLink', () => {
+      const { addDocketEntryLink } = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+          },
+          parentMessageId: PARENT_MESSAGE_ID,
+          viewerDocumentToDisplay: {
+            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
+          },
+        },
+      });
+
+      expect(addDocketEntryLink).toEqual(
+        `/case-detail/${baseCaseDetail.docketNumber}/documents/${VIEWER_DOCUMENT_ID_TO_DISPLAY}/add-court-issued-docket-entry/${PARENT_MESSAGE_ID}`,
+      );
+    });
+
+    it('should return an editCorrespondenceLink', () => {
+      const { editCorrespondenceLink } = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+          },
+          parentMessageId: PARENT_MESSAGE_ID,
+          viewerDocumentToDisplay: {
+            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
+          },
+        },
+      });
+
+      expect(editCorrespondenceLink).toEqual(
+        `/case-detail/${baseCaseDetail.docketNumber}/edit-correspondence/${VIEWER_DOCUMENT_ID_TO_DISPLAY}/${PARENT_MESSAGE_ID}`,
+      );
+    });
+
+    it('should return a messageDetailLink', () => {
+      const { messageDetailLink } = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+          },
+          parentMessageId: PARENT_MESSAGE_ID,
+          viewerDocumentToDisplay: {
+            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
+          },
+        },
+      });
+
+      expect(messageDetailLink).toEqual(
+        `/messages/${baseCaseDetail.docketNumber}/message-detail/${PARENT_MESSAGE_ID}`,
+      );
+    });
+
+    it('should return a servePetitionLink', () => {
+      const { servePetitionLink } = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+          },
+          parentMessageId: PARENT_MESSAGE_ID,
+          viewerDocumentToDisplay: {
+            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
+          },
+        },
+      });
+
+      expect(servePetitionLink).toEqual(
+        `/case-detail/${baseCaseDetail.docketNumber}/petition-qc/${PARENT_MESSAGE_ID}`,
+      );
+    });
+
+    it('should return a signOrderLink', () => {
+      const { signOrderLink } = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+          },
+          parentMessageId: PARENT_MESSAGE_ID,
+          viewerDocumentToDisplay: {
+            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
+          },
+        },
+      });
+
+      expect(signOrderLink).toEqual(
+        `/case-detail/${baseCaseDetail.docketNumber}/edit-order/${VIEWER_DOCUMENT_ID_TO_DISPLAY}/sign/${PARENT_MESSAGE_ID}`,
+      );
+    });
+  });
 });
