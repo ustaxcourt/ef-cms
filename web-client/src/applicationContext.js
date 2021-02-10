@@ -290,7 +290,6 @@ const setCurrentUserToken = newToken => {
 
 const allUseCases = {
   addCaseToTrialSessionInteractor,
-  addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
