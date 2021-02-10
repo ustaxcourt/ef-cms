@@ -6,22 +6,31 @@
  * @param {object} providers.props the cerebral props object
  * @returns {object} the document contents
  */
-export const getDocumentContentsAction = ({ applicationContext, props }) => {
-  const { docketEntryIdToEdit } = props;
-  const { caseDetail } = state;
+export const getDocumentContentsAction = async ({
+  applicationContext,
+  props,
+}) => {
+  const { caseDetail, docketEntryIdToEdit } = props;
 
-  const { documentContentsId } = caseDetail.docketEntries.find(
-    d => d.docketEntryId === docketEntryIdToEdit,
-  );
+  console.log('docketEntryIdToEdit', docketEntryIdToEdit);
 
-  if (docketEntryIdToEdit && documentContentsId) {
-    const documentContents = applicationContext
-      .getUseCases()
-      .getDocumentContentsForDocketEntry({
-        applicationContext,
-        docketEntryId: docketEntryIdToEdit,
-      });
+  if (docketEntryIdToEdit) {
+    const { documentContentsId } = caseDetail.docketEntries.find(
+      d => d.docketEntryId === docketEntryIdToEdit,
+    );
 
-    return { documentContents };
+    if (documentContentsId) {
+      const {
+        documentContents,
+        richText,
+      } = await applicationContext
+        .getUseCases()
+        .getDocumentContentsForDocketEntryInteractor({
+          applicationContext,
+          documentContentsId,
+        });
+
+      return { documentContents, richText };
+    }
   }
 };

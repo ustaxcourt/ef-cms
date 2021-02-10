@@ -443,7 +443,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 {
   //GET
   app.get(
-    '/case-documents/:docketEntryId/document-contents',
+    '/case-documents/:documentContentsId/document-contents',
     lambdaWrapper(getDocumentContentsForDocketEntryLambda),
   );
   app.get(
