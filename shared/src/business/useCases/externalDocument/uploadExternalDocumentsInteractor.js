@@ -17,7 +17,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.uploadExternalDocumentsInteractor = async ({
   applicationContext,
-  docketEntryIdsAdded,
   docketNumbersForFiling,
   documentFiles,
   documentMetadata,
@@ -29,6 +28,8 @@ exports.uploadExternalDocumentsInteractor = async ({
   if (!isAuthorized(user, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const docketEntryIdsAdded = [];
 
   /**
    * uploads a document and then immediately processes it to scan for viruses and validate the document
@@ -56,6 +57,7 @@ exports.uploadExternalDocumentsInteractor = async ({
 
     return key;
   };
+
   documentMetadata.primaryDocumentId = await uploadDocumentAndMakeSafeInteractor(
     'primary',
   );
@@ -99,20 +101,26 @@ exports.uploadExternalDocumentsInteractor = async ({
   }
 
   if (leadDocketNumber) {
-    return await applicationContext
-      .getUseCases()
-      .fileExternalDocumentForConsolidatedInteractor({
-        applicationContext,
-        docketNumbersForFiling,
-        documentMetadata,
-        leadDocketNumber,
-      });
+    return {
+      caseDetail: await applicationContext
+        .getUseCases()
+        .fileExternalDocumentForConsolidatedInteractor({
+          applicationContext,
+          docketNumbersForFiling,
+          documentMetadata,
+          leadDocketNumber,
+        }),
+      docketEntryIdsAdded,
+    };
   } else {
-    return await applicationContext
-      .getUseCases()
-      .fileExternalDocumentInteractor({
-        applicationContext,
-        documentMetadata,
-      });
+    return {
+      caseDetail: await applicationContext
+        .getUseCases()
+        .fileExternalDocumentInteractor({
+          applicationContext,
+          documentMetadata,
+        }),
+      docketEntryIdsAdded,
+    };
   }
 };

@@ -20,10 +20,9 @@ describe('uploadExternalDocumentsAction', () => {
   });
 
   it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor for the added document', async () => {
-    uploadExternalDocumentsInteractor.mockImplementation(
-      ({ docketEntryIdsAdded }) => {
-        docketEntryIdsAdded.push('f6b81f4d-1e47-423a-8caf-6d2fdc3d3859');
-        return {
+    uploadExternalDocumentsInteractor.mockImplementation(() => {
+      return {
+        caseDetail: {
           ...MOCK_CASE,
           docketEntries: [
             {
@@ -36,9 +35,10 @@ describe('uploadExternalDocumentsAction', () => {
               userId: 'petitioner',
             },
           ],
-        };
-      },
-    );
+        },
+        docketEntryIdsAdded: ['f6b81f4d-1e47-423a-8caf-6d2fdc3d3859'],
+      };
+    });
 
     await runAction(uploadExternalDocumentsAction, {
       modules: {
@@ -69,10 +69,9 @@ describe('uploadExternalDocumentsAction', () => {
   });
 
   it('should call uploadExternalDocumentsInteractor for a single document file and also skip addCoversheetInteractor for any docketEntryIds created', async () => {
-    uploadExternalDocumentsInteractor.mockImplementation(
-      ({ docketEntryIdsAdded }) => {
-        docketEntryIdsAdded.push('f6b81f4d-1e47-423a-8caf-6d2fdc3d3859');
-        return {
+    uploadExternalDocumentsInteractor.mockImplementation(() => {
+      return {
+        caseDetail: {
           ...MOCK_CASE,
           docketEntries: [
             {
@@ -95,9 +94,10 @@ describe('uploadExternalDocumentsAction', () => {
               userId: 'petitioner',
             },
           ],
-        };
-      },
-    );
+        },
+        docketEntryIdsAdded: ['f6b81f4d-1e47-423a-8caf-6d2fdc3d3859'],
+      };
+    });
 
     await runAction(uploadExternalDocumentsAction, {
       modules: {
