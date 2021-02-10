@@ -241,22 +241,20 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it("should NOT send the verification email when the user's email is being added for the first time", async () => {
+      mockPractitioner.email = undefined;
       await updatePractitionerUserInteractor({
         applicationContext,
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
+          email: 'anything@example.com',
           updatedEmail: 'free-email-to-use@example.com',
         },
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().sendEmailVerificationLink.mock
-          .calls[0][0],
-      ).toMatchObject({
-        pendingEmail: 'free-email-to-use@example.com',
-        pendingEmailVerificationToken: expect.anything(),
-      });
+        applicationContext.getUseCaseHelpers().sendEmailVerificationLink,
+      ).not.toHaveBeenCalled();
     });
   });
 });
