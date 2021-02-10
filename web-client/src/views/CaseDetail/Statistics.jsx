@@ -89,7 +89,7 @@ export const Statistics = connect(
                             <Button
                               link
                               className="padding-0 margin-left-2"
-                              href={`/case-detail/${caseDetail.docketNumber}/edit-deficiency-statistic/${statistic.statisticId}`}
+                              href={statistic.editStatisticLink}
                               icon="edit"
                             >
                               Edit Year/Period
