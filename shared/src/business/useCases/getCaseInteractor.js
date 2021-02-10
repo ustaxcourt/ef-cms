@@ -15,58 +15,12 @@ const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
 
-const getDocumentContentsForDocuments = async ({
-  applicationContext,
-  docketEntries,
-}) => {
-  for (const doc of docketEntries) {
-    if (doc.documentContentsId) {
-      try {
-        const documentContentsFile = await applicationContext
-          .getPersistenceGateway()
-          .getDocument({
-            applicationContext,
-            key: doc.documentContentsId,
-            protocol: 'S3',
-            useTempBucket: false,
-          });
-
-        const documentContentsData = JSON.parse(
-          documentContentsFile.toString(),
-        );
-        // doc.documentContents = documentContentsData.documentContents;
-        if (doc.isDraft) {
-          doc.draftOrderState = {
-            ...doc.draftOrderState,
-            documentContents: documentContentsData.documentContents,
-            richText: documentContentsData.richText,
-          };
-        }
-      } catch (e) {
-        applicationContext.logger.error(
-          `Document contents ${doc.documentContentsId} could not be found in the S3 bucket.`,
-        );
-      }
-    }
-  }
-
-  return docketEntries;
-};
-
-const getCaseAndDocumentContents = async ({
-  applicationContext,
-  caseRecord,
-}) => {
+const getCaseDetailRaw = async ({ applicationContext, caseRecord }) => {
   const caseDetailRaw = new Case(caseRecord, {
     applicationContext,
   })
     .validate()
     .toRawObject();
-
-  // caseDetailRaw.docketEntries = await getDocumentContentsForDocuments({
-  //   applicationContext,
-  //   docketEntries: caseDetailRaw.docketEntries,
-  // });
 
   return caseDetailRaw;
 };
@@ -106,7 +60,7 @@ const getSealedCase = async ({
   });
 
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
-    return await getCaseAndDocumentContents({
+    return await getCaseDetailRaw({
       applicationContext,
       caseRecord,
     });
@@ -127,7 +81,7 @@ const getCaseForExternalUser = async ({
   isAuthorizedToGetCase,
 }) => {
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
-    return await getCaseAndDocumentContents({ applicationContext, caseRecord });
+    return await getCaseDetailRaw({ applicationContext, caseRecord });
   } else {
     return new PublicCase(caseRecord, {
       applicationContext,
@@ -192,7 +146,7 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     const isInternalUser = User.isInternalUser(userRole);
 
     if (isInternalUser) {
-      caseDetailRaw = await getCaseAndDocumentContents({
+      caseDetailRaw = await getCaseDetailRaw({
         applicationContext,
         caseRecord,
       });

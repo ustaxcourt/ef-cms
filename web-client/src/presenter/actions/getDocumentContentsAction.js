@@ -12,8 +12,6 @@ export const getDocumentContentsAction = async ({
 }) => {
   const { caseDetail, docketEntryIdToEdit } = props;
 
-  console.log('docketEntryIdToEdit', docketEntryIdToEdit);
-
   if (docketEntryIdToEdit) {
     const { documentContentsId } = caseDetail.docketEntries.find(
       d => d.docketEntryId === docketEntryIdToEdit,
