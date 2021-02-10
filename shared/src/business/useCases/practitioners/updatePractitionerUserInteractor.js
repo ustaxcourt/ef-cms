@@ -51,7 +51,7 @@ exports.updatePractitionerUserInteractor = async ({
   const oldUserInfo = await applicationContext
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
-  const isNewAccount = !oldUserInfo.email && user.email;
+  const isNewAccount = !!(!oldUserInfo.email && user.updatedEmail);
 
   if (oldUserInfo.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
@@ -70,7 +70,7 @@ exports.updatePractitionerUserInteractor = async ({
     {
       ...user,
       barNumber: oldUserInfo.barNumber,
-      email: oldUserInfo.email || user.email,
+      email: oldUserInfo.email || user.updatedEmail,
     },
     { applicationContext },
   )

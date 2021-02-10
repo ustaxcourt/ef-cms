@@ -77,7 +77,7 @@ describe('updatePractitionerUserInteractor', () => {
         user: {
           ...mockPractitioner,
           barNumber: 'AB1111',
-          email: 'bc@example.com',
+          updatedEmail: 'bc@example.com',
           userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
         },
       }),
@@ -97,7 +97,8 @@ describe('updatePractitionerUserInteractor', () => {
       user: {
         ...mockPractitioner,
         barNumber: 'AB2222',
-        email: 'bc@example.com',
+        confirmEmail: 'bc@example.com',
+        updatedEmail: 'bc@example.com',
       },
     });
 
@@ -113,7 +114,8 @@ describe('updatePractitionerUserInteractor', () => {
       user: {
         ...mockPractitioner,
         barNumber: 'AB2222',
-        email: 'bc@example.com',
+        confirmEmail: 'bc@example.com',
+        updatedEmail: 'bc@example.com',
       },
     });
 
@@ -127,7 +129,7 @@ describe('updatePractitionerUserInteractor', () => {
     ).toMatchObject({ user: mockPractitioner });
   });
 
-  it('updates the practitioner user and adds an email if the original user did not have an email', async () => {
+  it('updates the practitioner user and adds an email when the original user did not have an email', async () => {
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockResolvedValue({
@@ -138,7 +140,11 @@ describe('updatePractitionerUserInteractor', () => {
     const updatedUser = await updatePractitionerUserInteractor({
       applicationContext,
       barNumber: 'AB1111',
-      user: { ...mockPractitioner, email: 'admissionsclerk@example.com' },
+      user: {
+        ...mockPractitioner,
+        confirmEmail: 'admissionsclerk@example.com',
+        updatedEmail: 'admissionsclerk@example.com',
+      },
     });
 
     expect(updatedUser).toBeDefined();
@@ -151,7 +157,7 @@ describe('updatePractitionerUserInteractor', () => {
     ).toEqual('admissionsclerk@example.com');
   });
 
-  describe('updating practitioner email', () => {
+  describe('updating email', () => {
     it('should throw unauthorized error when the logged in user does not have permission to manage emails', async () => {
       testUser = {
         role: ROLES.petitioner,
@@ -166,7 +172,7 @@ describe('updatePractitionerUserInteractor', () => {
       ).rejects.toThrow('Unauthorized for updating practitioner user');
     });
 
-    it('should throw an error when user.updatedEmail is not available in cognito', async () => {
+    it('should throw an error when updatedEmail is not available in cognito', async () => {
       applicationContext
         .getPersistenceGateway()
         .isEmailAvailable.mockReturnValue(false);
@@ -202,25 +208,6 @@ describe('updatePractitionerUserInteractor', () => {
       });
     });
 
-    it('should call applicationContext.getUseCaseHelpers().sendEmailVerificationLink to send the verification link to the user', async () => {
-      await updatePractitionerUserInteractor({
-        applicationContext,
-        user: {
-          ...mockPractitioner,
-          confirmEmail: 'free-email-to-use@example.com',
-          updatedEmail: 'free-email-to-use@example.com',
-        },
-      });
-
-      expect(
-        applicationContext.getUseCaseHelpers().sendEmailVerificationLink.mock
-          .calls[0][0],
-      ).toMatchObject({
-        pendingEmail: 'free-email-to-use@example.com',
-        pendingEmailVerificationToken: expect.anything(),
-      });
-    });
-
     it("should send the verification email when the user's email is being changed", async () => {
       await updatePractitionerUserInteractor({
         applicationContext,
@@ -247,7 +234,6 @@ describe('updatePractitionerUserInteractor', () => {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
-          email: 'anything@example.com',
           updatedEmail: 'free-email-to-use@example.com',
         },
       });
