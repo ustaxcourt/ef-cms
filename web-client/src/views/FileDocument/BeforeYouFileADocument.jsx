@@ -75,6 +75,7 @@ export const BeforeYouFileADocument = connect(
                       with your main document in a single PDF file. You may mail
                       exhibits to the Court that cannot be converted to a PDF
                       format. For more information on mailing exhibits, see the{' '}
+                      {/* Todo: Is this the proper resource link? */}
                       <a
                         className="usa-link--external"
                         href="https://www.ustaxcourt.gov/resources/eaccess/Petitioners_Guide_to_eAccess_and_eFiling.pdf"
