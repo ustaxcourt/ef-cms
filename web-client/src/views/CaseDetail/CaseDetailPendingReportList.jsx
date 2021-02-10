@@ -51,8 +51,8 @@ export const CaseDetailPendingReportList = connect(
             </tr>
           </thead>
           {formattedCaseDetail.formattedPendingDocketEntriesOnDocketRecord.map(
-            (entry, arrayIndex) => (
-              <tbody key={arrayIndex}>
+            entry => (
+              <tbody key={entry.docketEntryId}>
                 <tr className="pending-item-row">
                   <td>{entry.index}</td>
                   <td>
