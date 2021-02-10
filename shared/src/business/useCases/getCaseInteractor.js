@@ -15,16 +15,6 @@ const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
 
-const getCaseDetailRaw = async ({ applicationContext, caseRecord }) => {
-  const caseDetailRaw = new Case(caseRecord, {
-    applicationContext,
-  })
-    .validate()
-    .toRawObject();
-
-  return caseDetailRaw;
-};
-
 const isAuthorizedForContact = ({
   contact,
   currentUser,
@@ -60,10 +50,9 @@ const getSealedCase = async ({
   });
 
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
-    return await getCaseDetailRaw({
-      applicationContext,
-      caseRecord,
-    });
+    return new Case(caseRecord, { applicationContext })
+      .validate()
+      .toRawObject();
   } else {
     caseRecord = caseSealedFormatter(caseRecord);
     return new PublicCase(caseRecord, {
@@ -81,7 +70,9 @@ const getCaseForExternalUser = async ({
   isAuthorizedToGetCase,
 }) => {
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
-    return await getCaseDetailRaw({ applicationContext, caseRecord });
+    return new Case(caseRecord, { applicationContext })
+      .validate()
+      .toRawObject();
   } else {
     return new PublicCase(caseRecord, {
       applicationContext,
@@ -146,10 +137,9 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     const isInternalUser = User.isInternalUser(userRole);
 
     if (isInternalUser) {
-      caseDetailRaw = await getCaseDetailRaw({
-        applicationContext,
-        caseRecord,
-      });
+      caseDetailRaw = new Case(caseRecord, { applicationContext })
+        .validate()
+        .toRawObject();
     } else {
       caseDetailRaw = await getCaseForExternalUser({
         applicationContext,
