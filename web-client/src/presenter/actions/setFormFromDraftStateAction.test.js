@@ -94,6 +94,7 @@ describe('setFormFromDraftStateAction', () => {
       documentType: 'Petition',
       draftOrderState: {
         documentContents: 'some content',
+        richText: 'some content',
       },
       richText: 'some content',
     });
