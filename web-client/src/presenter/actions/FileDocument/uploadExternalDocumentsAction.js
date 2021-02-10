@@ -51,48 +51,46 @@ export const uploadExternalDocumentsAction = async ({
 
   const progressFunctions = setupPercentDone(documentFiles, store);
 
-  let caseDetail;
-
-  const docketEntryIdsAdded = [];
-
   try {
-    caseDetail = await applicationContext
+    const {
+      caseDetail,
+      docketEntryIdsAdded,
+    } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
-        docketEntryIdsAdded,
         documentFiles,
         documentMetadata,
         progressFunctions,
       });
+
+    const entryIds = docketEntryIdsAdded
+      .map(id => {
+        const docketEntry = caseDetail.docketEntries
+          .filter(entry => entry.isFileAttached !== false)
+          .find(entry => entry.docketEntryId === id);
+        return docketEntry ? docketEntry.docketEntryId : null;
+      })
+      .filter(id => id);
+
+    const addCoversheet = docketEntryId => {
+      return applicationContext.getUseCases().addCoversheetInteractor({
+        applicationContext,
+        docketEntryId,
+        docketNumber: caseDetail.docketNumber,
+      });
+    };
+
+    for (let docketEntryId of entryIds) {
+      await addCoversheet(docketEntryId);
+    }
+
+    return path.success({
+      caseDetail,
+      docketNumber,
+      documentsFiled: documentMetadata,
+    });
   } catch (err) {
     return path.error();
   }
-
-  const entryIds = docketEntryIdsAdded
-    .map(id => {
-      const docketEntry = caseDetail.docketEntries
-        .filter(entry => entry.isFileAttached !== false)
-        .find(entry => entry.docketEntryId === id);
-      return docketEntry ? docketEntry.docketEntryId : null;
-    })
-    .filter(id => id);
-
-  const addCoversheet = docketEntryId => {
-    return applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseDetail.docketNumber,
-    });
-  };
-
-  for (let docketEntryId of entryIds) {
-    await addCoversheet(docketEntryId);
-  }
-
-  return path.success({
-    caseDetail,
-    docketNumber,
-    documentsFiled: documentMetadata,
-  });
 };
