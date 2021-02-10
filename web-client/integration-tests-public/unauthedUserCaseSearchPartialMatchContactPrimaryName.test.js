@@ -55,7 +55,7 @@ function createCase(name) {
     describe(`Petitioner creates case for ${name}`, () => {
       const nameToSearchFor = name;
       beforeAll(() => {
-        jest.setTimeout(10000);
+        jest.setTimeout(30000);
       });
       loginAs(testClient, 'petitioner@example.com');
       it('Create case', async () => {

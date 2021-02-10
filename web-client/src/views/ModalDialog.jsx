@@ -108,9 +108,11 @@ export const ModalDialog = ({
             <div className="modal-header grid-container padding-x-0">
               <div className="grid-row">
                 <div className="mobile-lg:grid-col-9">
-                  <h3 className="modal-header__title" tabIndex="-1">
-                    {title}
-                  </h3>
+                  {title && (
+                    <h3 className="modal-header__title" tabIndex="-1">
+                      {title}
+                    </h3>
+                  )}
                 </div>
                 <div className="mobile-lg:grid-col-3">
                   <Button

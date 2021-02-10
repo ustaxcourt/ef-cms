@@ -66,7 +66,7 @@ const updateCaseCaption = async (docketNumber, caseCaption) => {
 describe('Create and serve a case to test contactPrimary.name', () => {
   describe('Petitioner creates case', () => {
     beforeAll(() => {
-      jest.setTimeout(10000);
+      jest.setTimeout(20000);
     });
 
     loginAs(testClient, 'petitioner@example.com');
@@ -97,7 +97,7 @@ describe('Create and serve a case to test contactPrimary.name', () => {
 describe('Create and serve a case to test contactPrimary.secondaryName', () => {
   describe('Petitioner creates case', () => {
     beforeAll(() => {
-      jest.setTimeout(10000);
+      jest.setTimeout(30000);
     });
 
     loginAs(testClient, 'petitioner@example.com');
@@ -129,7 +129,7 @@ describe('Create and serve a case to test contactPrimary.secondaryName', () => {
 describe('Create and serve a case to test contactSecondary.name', () => {
   describe('Petitioner creates case', () => {
     beforeAll(() => {
-      jest.setTimeout(10000);
+      jest.setTimeout(30000);
     });
 
     loginAs(testClient, 'petitioner@example.com');
@@ -161,7 +161,7 @@ describe('Create and serve a case to test contactSecondary.name', () => {
 describe('Create and serve a case to test caseCaption', () => {
   describe('Petitioner creates case', () => {
     beforeAll(() => {
-      jest.setTimeout(10000);
+      jest.setTimeout(30000);
     });
 
     loginAs(testClient, 'petitioner@example.com');
@@ -188,7 +188,7 @@ describe('Create and serve a case to test caseCaption', () => {
 describe('Create and serve a case to test contactPrimary.name with terms out of order that shows last in search results', () => {
   describe('Petitioner creates case', () => {
     beforeAll(() => {
-      jest.setTimeout(10000);
+      jest.setTimeout(30000);
     });
 
     loginAs(testClient, 'petitioner@example.com');

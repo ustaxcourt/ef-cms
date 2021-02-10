@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
@@ -32,7 +31,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       userHasAccessToCase = true;
       showFileDocumentButton = true;
 
-      if (caseDeadlines && caseDeadlines.length > 0) {
+      if (caseDeadlines.length > 0) {
         showCaseDeadlinesExternal = true;
       }
     } else {
@@ -42,7 +41,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     userHasAccessToCase = true;
     showQcWorkItemsUntouchedState = true;
 
-    if (caseDeadlines && caseDeadlines.length > 0) {
+    if (caseDeadlines.length > 0) {
       showCaseDeadlinesInternal = true;
     } else {
       showCaseDeadlinesInternalEmpty = true;

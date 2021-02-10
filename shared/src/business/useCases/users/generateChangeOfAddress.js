@@ -135,7 +135,6 @@ exports.generateChangeOfAddress = async ({
       updatedCases.push(updatedCase);
     } catch (error) {
       applicationContext.logger.error(error);
-      await applicationContext.notifyHoneybadger(error);
     }
 
     completedCases++;

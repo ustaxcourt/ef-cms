@@ -79,5 +79,5 @@ Bug Resolution Steps:
  - [ ] If needed, manual test is created.
  - [ ] Reason for bug has been documented.
  - [ ] Fix has been deployed to dev environment.
- - [ ] Fix has been deployed to the Flexion prod environment.
- - [ ] Bug has been tested in Flexion prod environment (UX or Engineering).
+ - [ ] Fix has been deployed to the Court's migration environment.
+ - [ ] Bug has been tested in Court's migration environment (UX or Engineering).
