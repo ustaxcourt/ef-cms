@@ -132,6 +132,7 @@ exports.updatePractitionerUser = async ({
       }
     } catch (error) {
       applicationContext.logger.error(error);
+      throw error;
     }
   }
 
@@ -141,5 +142,6 @@ exports.updatePractitionerUser = async ({
     updatedUser: user,
     userId,
   });
+
   return updatedUser;
 };
