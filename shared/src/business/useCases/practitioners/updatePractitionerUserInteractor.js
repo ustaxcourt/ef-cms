@@ -7,6 +7,23 @@ const { Practitioner } = require('../../entities/Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const updateUserPendingEmail = async ({ applicationContext, user }) => {
+  const isEmailAvailable = await applicationContext
+    .getPersistenceGateway()
+    .isEmailAvailable({
+      applicationContext,
+      email: user.updatedEmail,
+    });
+
+  if (!isEmailAvailable) {
+    throw new Error('Email is not available');
+  }
+
+  const pendingEmailVerificationToken = applicationContext.getUniqueId();
+  user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+  user.pendingEmail = user.updatedEmail;
+};
+
 /**
  * updatePractitionerUserInteractor
  *
@@ -23,7 +40,11 @@ exports.updatePractitionerUserInteractor = async ({
   user,
 }) => {
   const requestUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER)) {
+
+  if (
+    !isAuthorized(requestUser, ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER) ||
+    !isAuthorized(requestUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)
+  ) {
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
@@ -31,12 +52,19 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
 
+  const userHasAccount = !!oldUserInfo.email;
+  const userIsUpdatingEmail = !!user.updatedEmail;
+
   if (oldUserInfo.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
   }
 
-  if (!oldUserInfo.email && user.email) {
+  if (!userHasAccount && userIsUpdatingEmail) {
     user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+  }
+
+  if (userHasAccount && userIsUpdatingEmail) {
+    await updateUserPendingEmail({ applicationContext, user });
   }
 
   // do not allow edit of bar number
@@ -44,7 +72,7 @@ exports.updatePractitionerUserInteractor = async ({
     {
       ...user,
       barNumber: oldUserInfo.barNumber,
-      email: oldUserInfo.email || user.email,
+      email: oldUserInfo.email || user.updatedEmail,
     },
     { applicationContext },
   )
@@ -55,6 +83,7 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .updatePractitionerUser({
       applicationContext,
+      isNewAccount: !userHasAccount && userIsUpdatingEmail,
       user: validatedUserData,
     });
 
@@ -65,6 +94,14 @@ exports.updatePractitionerUserInteractor = async ({
     },
     userId: requestUser.userId,
   });
+
+  if (userHasAccount && userIsUpdatingEmail) {
+    await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
+      applicationContext,
+      pendingEmail: user.pendingEmail,
+      pendingEmailVerificationToken: user.pendingEmailVerificationToken,
+    });
+  }
 
   await generateChangeOfAddress({
     applicationContext,

@@ -25,12 +25,12 @@ export const MessagesIndividualInbox = connect(
               <th className="small">Section</th>
             </tr>
           </thead>
-          {formattedMessages.map((message, idx) => {
+          {formattedMessages.map(message => {
             const unreadClass = message.isRead ? '' : 'text-bold';
 
             return (
-              <tbody key={idx}>
-                <tr key={idx}>
+              <tbody key={message.messageId}>
+                <tr key={message.messageId}>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
@@ -55,7 +55,7 @@ export const MessagesIndividualInbox = connect(
                       <Button
                         link
                         className={classNames('padding-0', unreadClass)}
-                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={message.messageDetailLink}
                       >
                         {message.subject}
                       </Button>

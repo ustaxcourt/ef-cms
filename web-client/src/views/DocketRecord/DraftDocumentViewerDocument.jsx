@@ -103,7 +103,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showApplySignatureButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplay.docketEntryId}/sign/`}
+                  href={draftDocumentViewerHelper.applySignatureLink}
                   icon="pencil-alt"
                 >
                   Apply Signature
@@ -128,7 +128,7 @@ export const DraftDocumentViewerDocument = connect(
               {draftDocumentViewerHelper.showAddDocketEntryButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplay.docketEntryId}/add-court-issued-docket-entry`}
+                  href={draftDocumentViewerHelper.addDocketEntryLink}
                   icon="plus-circle"
                   id="add-court-issued-docket-entry-button"
                 >

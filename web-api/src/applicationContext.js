@@ -799,6 +799,9 @@ const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
+  sendEmailVerificationLink,
+} = require('../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink');
+const {
   sendIrsSuperuserPetitionEmail,
 } = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
 const {
@@ -1284,7 +1287,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           adminDisableUser: () => ({
             promise: () => {},
           }),
-          adminGetUser: ({ Username }) => ({
+          adminGetUser: ({ Username = '' }) => ({
             promise: () => {
               if (Username.includes('error')) {
                 throw new Error('User does not exist');
@@ -1511,6 +1514,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         parseAndScrapePdfContents,
         processUserAssociatedCases,
         saveFileAndGenerateUrl,
+        sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAndAssociations,

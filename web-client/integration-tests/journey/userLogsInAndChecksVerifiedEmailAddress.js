@@ -23,6 +23,7 @@ export const userLogsInAndChecksVerifiedEmailAddress = (test, user) =>
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
+
     if (user === 'petitioner') {
       const petitionerEmail = test.getState('caseDetail.contactPrimary.email');
 
