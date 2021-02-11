@@ -33,6 +33,7 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
  */
 function PublicCase() {}
 PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
+  this.entityName = 'PublicCase';
   this.caseCaption = rawCase.caseCaption;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -91,8 +92,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     )
     .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
 };
-
-PublicCase.validationName = 'PublicCase';
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),

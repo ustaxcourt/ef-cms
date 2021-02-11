@@ -7,15 +7,16 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
-Note.validationName = 'Note';
-
 /**
  * Note entity
  *
  * @param {object} rawProps the raw note data
  * @constructor
  */
-function Note() {}
+function Note() {
+  this.entityName = 'Note';
+}
+
 Note.prototype.init = function (rawProps) {
   this.notes = rawProps.notes;
 };

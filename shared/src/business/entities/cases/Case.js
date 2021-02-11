@@ -131,8 +131,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
   ],
 };
 
-Case.validationName = 'Case';
-
 /**
  * Case Entity
  * Represents a Case that has already been accepted into the system.
