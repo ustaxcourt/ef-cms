@@ -60,8 +60,6 @@ describe('createCase integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    // applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     const createdCase = await getCaseInteractor({
       applicationContext,
       docketNumber,
