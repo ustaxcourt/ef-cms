@@ -26,9 +26,6 @@ export const petitionsClerkEditsDraftOrder = (
     });
 
     expect(test.getState('form.richText')).toEqual(currentRichText);
-    expect(test.getState('form.draftOrderState.richText')).toEqual(
-      currentRichText,
-    );
 
     test.setState('form.richText', setRichText);
     await test.runSequence('submitCourtIssuedOrderSequence');
@@ -39,7 +36,6 @@ export const petitionsClerkEditsDraftOrder = (
     });
 
     expect(test.getState('form.richText')).toEqual(setRichText);
-    expect(test.getState('form.draftOrderState.richText')).toEqual(setRichText);
 
     await test.runSequence('submitCourtIssuedOrderSequence');
 
