@@ -24,6 +24,7 @@ const associatedFieldsVisible = () => {
 
 const associatedFieldsBlocked = () => {
   expect(test.getState('caseDetail.contactPrimary')).toEqual({
+    entityName: 'PublicContact',
     name: expect.anything(),
     state: expect.anything(),
   });

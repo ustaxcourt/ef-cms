@@ -16,6 +16,7 @@ describe('opinionPublicSearchInteractor', () => {
       docketEntryId: '6945cdff-fd12-422b-bf2c-63b792b7f618',
       docketNumber: '103-20',
       documentTitle: 'Memorandum Opinion Judge Colvin',
+      entityName: 'PublicDocumentSearchResult',
       filingDate: '2020-05-12T18:42:10.471Z',
       isSealed: false,
       numberOfPages: 1,
