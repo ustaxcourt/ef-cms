@@ -52,15 +52,18 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
 
+  const userHasAccount = !!oldUserInfo.email;
+  const userIsUpdatingEmail = !!user.updatedEmail;
+
   if (oldUserInfo.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
   }
 
-  if (!oldUserInfo.email && user.email) {
+  if (!userHasAccount && userIsUpdatingEmail) {
     user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
-  if (user.updatedEmail) {
+  if (userHasAccount && userIsUpdatingEmail) {
     await updateUserPendingEmail({ applicationContext, user });
   }
 
@@ -69,7 +72,7 @@ exports.updatePractitionerUserInteractor = async ({
     {
       ...user,
       barNumber: oldUserInfo.barNumber,
-      email: oldUserInfo.email || user.email,
+      email: oldUserInfo.email || user.updatedEmail,
     },
     { applicationContext },
   )
@@ -80,6 +83,7 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .updatePractitionerUser({
       applicationContext,
+      isNewAccount: !userHasAccount && userIsUpdatingEmail,
       user: validatedUserData,
     });
 
@@ -91,7 +95,7 @@ exports.updatePractitionerUserInteractor = async ({
     userId: requestUser.userId,
   });
 
-  if (user.updatedEmail) {
+  if (userHasAccount && userIsUpdatingEmail) {
     await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
       applicationContext,
       pendingEmail: user.pendingEmail,

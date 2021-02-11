@@ -1287,7 +1287,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           adminDisableUser: () => ({
             promise: () => {},
           }),
-          adminGetUser: ({ Username }) => ({
+          adminGetUser: ({ Username = '' }) => ({
             promise: () => {
               if (Username.includes('error')) {
                 throw new Error('User does not exist');
