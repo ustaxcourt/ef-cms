@@ -25,7 +25,7 @@ describe('navigateToCaseDetailWithDocketNumberAction', () => {
     expect(routeMock).toHaveBeenCalledWith('/case-detail/123-45');
   });
 
-  it('should call the router to navigate to the case detail page for the given state.caseDetail.docketNumbe when props.docketNumber is undefined', async () => {
+  it('should call the router to navigate to the case detail page for the given state.caseDetail.docketNumber when props.docketNumber is undefined', async () => {
     await runAction(navigateToCaseDetailWithDocketNumberAction, {
       modules: {
         presenter,
