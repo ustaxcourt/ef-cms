@@ -29,6 +29,8 @@ exports.uploadExternalDocumentsInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const docketEntryIdsAdded = [];
+
   /**
    * uploads a document and then immediately processes it to scan for viruses and validate the document
    *
@@ -55,14 +57,17 @@ exports.uploadExternalDocumentsInteractor = async ({
 
     return key;
   };
+
   documentMetadata.primaryDocumentId = await uploadDocumentAndMakeSafeInteractor(
     'primary',
   );
+  docketEntryIdsAdded.push(documentMetadata.primaryDocumentId);
 
   if (documentFiles.secondary) {
     documentMetadata.secondaryDocument.docketEntryId = await uploadDocumentAndMakeSafeInteractor(
       'secondary',
     );
+    docketEntryIdsAdded.push(documentMetadata.secondaryDocument.docketEntryId);
   }
 
   if (documentMetadata.hasSupportingDocuments) {
@@ -71,6 +76,9 @@ exports.uploadExternalDocumentsInteractor = async ({
         i
       ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
         `primarySupporting${i}`,
+      );
+      docketEntryIdsAdded.push(
+        documentMetadata.supportingDocuments[i].docketEntryId,
       );
     }
   }
@@ -86,24 +94,33 @@ exports.uploadExternalDocumentsInteractor = async ({
       ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
         `secondarySupporting${i}`,
       );
+      docketEntryIdsAdded.push(
+        documentMetadata.secondarySupportingDocuments[i].docketEntryId,
+      );
     }
   }
 
   if (leadDocketNumber) {
-    return await applicationContext
-      .getUseCases()
-      .fileExternalDocumentForConsolidatedInteractor({
-        applicationContext,
-        docketNumbersForFiling,
-        documentMetadata,
-        leadDocketNumber,
-      });
+    return {
+      caseDetail: await applicationContext
+        .getUseCases()
+        .fileExternalDocumentForConsolidatedInteractor({
+          applicationContext,
+          docketNumbersForFiling,
+          documentMetadata,
+          leadDocketNumber,
+        }),
+      docketEntryIdsAdded,
+    };
   } else {
-    return await applicationContext
-      .getUseCases()
-      .fileExternalDocumentInteractor({
-        applicationContext,
-        documentMetadata,
-      });
+    return {
+      caseDetail: await applicationContext
+        .getUseCases()
+        .fileExternalDocumentInteractor({
+          applicationContext,
+          documentMetadata,
+        }),
+      docketEntryIdsAdded,
+    };
   }
 };
