@@ -33,7 +33,6 @@ exports.MOCK_CASE = {
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.new,
-  userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
 exports.MOCK_CASE_WITHOUT_PENDING = {
@@ -59,7 +58,6 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.new,
-  userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
 exports.MOCK_CASE_WITHOUT_NOTICE = {
@@ -178,7 +176,6 @@ exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.new,
-  userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
 exports.MOCK_CASE_WITH_TRIAL_SESSION = {
@@ -213,5 +210,4 @@ exports.MOCK_CASE_WITH_TRIAL_SESSION = {
   trialLocation: 'Washington, District of Columbia',
   trialSessionId: '7805d1ab-18d0-43ec-bafb-654e83405410',
   trialTime: '10:00',
-  userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
 };

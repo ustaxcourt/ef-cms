@@ -123,12 +123,15 @@ exports.createCaseInteractor = async ({
       orderForFilingFee: true,
       ...petitionEntity.toRawObject(),
       privatePractitioners,
-      userId: user.userId,
     },
     {
       applicationContext,
     },
   );
+
+  if (user.role === ROLES.petitioner) {
+    caseToAdd.contactPrimary.contactId = user.userId;
+  }
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
   caseToAdd.initialCaption = caseToAdd.caseCaption;
