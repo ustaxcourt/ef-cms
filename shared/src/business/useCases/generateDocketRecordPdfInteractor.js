@@ -47,7 +47,6 @@ exports.generateDocketRecordPdfInteractor = async ({
       const isAuthorizedToViewSealedCase = isAuthorized(
         user,
         ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-        caseSource.userId,
       );
 
       if (isAuthorizedToViewSealedCase || isAssociated) {

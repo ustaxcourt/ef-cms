@@ -29,7 +29,7 @@ export const docketClerkViewsCaseDetailDocumentView = test => {
 
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
-    expect(caseDetail.userId).toBeDefined();
+    expect(caseDetail.contactPrimary.contactId).toBeDefined();
 
     await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
       docketRecordTab: 'documentView',
