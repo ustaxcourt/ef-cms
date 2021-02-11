@@ -215,7 +215,7 @@ export const MessageDetail = connect(
                 )}
 
                 {formattedMessageDetail.attachments.length > 0 &&
-                  formattedMessageDetail.attachments.map((attachment, idx) => {
+                  formattedMessageDetail.attachments.map(attachment => {
                     return (
                       <Button
                         className={classNames(
@@ -227,7 +227,7 @@ export const MessageDetail = connect(
                           viewerDocumentToDisplay.documentId ===
                           attachment.documentId
                         }
-                        key={`attachment-button-${idx}`}
+                        key={`attachment-button-${attachment.documentId}`}
                         onClick={() => {
                           setMessageDetailViewerDocumentToDisplaySequence({
                             viewerDocumentToDisplay: attachment,
