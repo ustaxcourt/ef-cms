@@ -28,6 +28,10 @@ describe('admissions clerk practitioner journey', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'admissionsclerk@example.com');
   admissionsClerkAddsNewPractitioner(test);
   admissionsClerkSearchesForPractitionersByName(test);

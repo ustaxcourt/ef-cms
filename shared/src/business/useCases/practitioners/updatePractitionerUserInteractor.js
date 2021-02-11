@@ -52,17 +52,18 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
 
-  const isNewAccount = !!(!oldUserInfo.email && user.updatedEmail);
+  const userHasAccount = !!oldUserInfo.email;
+  const userIsUpdatingEmail = !!user.updatedEmail;
 
   if (oldUserInfo.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
   }
 
-  if (isNewAccount) {
+  if (!userHasAccount && userIsUpdatingEmail) {
     user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
-  if (!isNewAccount && user.updatedEmail) {
+  if (userHasAccount && userIsUpdatingEmail) {
     await updateUserPendingEmail({ applicationContext, user });
   }
 
@@ -82,7 +83,7 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .updatePractitionerUser({
       applicationContext,
-      isNewAccount,
+      isNewAccount: !userHasAccount && userIsUpdatingEmail,
       user: validatedUserData,
     });
 
@@ -94,8 +95,7 @@ exports.updatePractitionerUserInteractor = async ({
     userId: requestUser.userId,
   });
 
-  // if isNewAccount==true, cognito system is responsible for sending initial email
-  if (!isNewAccount) {
+  if (userHasAccount && userIsUpdatingEmail) {
     await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
       applicationContext,
       pendingEmail: user.pendingEmail,
