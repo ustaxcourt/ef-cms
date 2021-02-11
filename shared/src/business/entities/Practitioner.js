@@ -199,8 +199,6 @@ Practitioner.prototype.toRawObject = function () {
   return result;
 };
 
-Practitioner.validationName = 'Practitioner';
-
 Practitioner.validationRules = practitionerValidation;
 
 Practitioner.VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;

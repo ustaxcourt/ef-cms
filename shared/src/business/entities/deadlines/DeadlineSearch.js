@@ -4,8 +4,6 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
-DeadlineSearch.validationName = 'DeadlineSearch';
-
 DeadlineSearch.VALID_DATE_SEARCH_FORMATS = ['MM/DD/YYYY'];
 
 /**
