@@ -96,7 +96,7 @@ export const DocketRecord = connect(
                       entry.isInProgress && 'in-progress',
                       entry.qcWorkItemsUntouched && 'qc-untouched',
                     )}
-                    key={arrayIndex}
+                    key={entry.index}
                   >
                     <td className="center-column hide-on-mobile">
                       {entry.index}
