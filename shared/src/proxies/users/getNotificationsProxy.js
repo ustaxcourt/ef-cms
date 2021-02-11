@@ -1,3 +1,4 @@
+const qs = require('qs');
 const { get } = require('../requests');
 
 /**
@@ -9,13 +10,10 @@ const { get } = require('../requests');
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getNotificationsInteractor = ({ applicationContext, judgeUserId }) => {
-  let queryString = '';
-  if (judgeUserId) {
-    queryString = '?judgeUserId=' + encodeURIComponent(judgeUserId);
-  }
+  const queryString = qs.stringify({ judgeUserId });
 
   return get({
     applicationContext,
-    endpoint: `/api/notifications${queryString}`,
+    endpoint: `/api/notifications?${queryString}`,
   });
 };
