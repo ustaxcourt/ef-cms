@@ -18,7 +18,7 @@ exports.getDocumentContentsForDocketEntryInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_ORDER)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
