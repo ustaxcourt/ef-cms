@@ -258,8 +258,10 @@ export const ReviewSavedPetition = connect(
                           </thead>
                           <tbody>
                             {reviewSavedPetitionHelper.formattedStatistics.map(
-                              (statistic, index) => (
-                                <tr key={index}>
+                              statistic => (
+                                <tr
+                                  key={`${statistic.formattedDate}-${statistic.formattedIrsDeficiencyAmount}`}
+                                >
                                   <td>{statistic.formattedDate}</td>
                                   <td>
                                     {statistic.formattedIrsDeficiencyAmount}
