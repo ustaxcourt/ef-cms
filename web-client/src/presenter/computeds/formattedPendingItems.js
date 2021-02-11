@@ -11,6 +11,9 @@ export const formatPendingItem = (item, { applicationContext }) => {
     .formatJudgeName(result.associatedJudge);
 
   result.formattedName = result.documentTitle || result.documentType;
+
+  result.documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
+
   return result;
 };
 
