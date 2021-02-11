@@ -129,20 +129,18 @@ describe('updateUserPendingEmailInteractor', () => {
     });
   });
 
-  it('should attempt to send out a verification link email', async () => {
-    const results = await updateUserPendingEmailInteractor({
+  it('should call applicationContext.getUseCaseHelpers().sendEmailVerificationLink to send the verification link to the user', async () => {
+    await updateUserPendingEmailInteractor({
       applicationContext,
       pendingEmail,
     });
 
-    const {
-      email,
-      templateData,
-    } = applicationContext.getDispatchers().sendBulkTemplatedEmail.mock.calls[0][0].destinations[0];
-
-    expect(email).toEqual(pendingEmail);
-    expect(templateData.emailContent).toContain(
-      results.pendingEmailVerificationToken,
-    );
+    expect(
+      applicationContext.getUseCaseHelpers().sendEmailVerificationLink.mock
+        .calls[0][0],
+    ).toMatchObject({
+      pendingEmail,
+      pendingEmailVerificationToken: expect.anything(),
+    });
   });
 });
