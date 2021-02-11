@@ -51,9 +51,9 @@ export const MessageModalAttachments = connect(
               />
               <span className="margin-left-1 semi-bold">Attachment(s)</span>
             </div>
-            {form.attachments.map((doc, idx) => {
+            {form.attachments.map(doc => {
               return (
-                <div className="margin-top-1" key={`${idx}-${doc.documentId}`}>
+                <div className="margin-top-1" key={doc.documentId}>
                   {doc.documentTitle}
                 </div>
               );
