@@ -7,6 +7,7 @@ const { isAssociatedUser, isSealedCase } = require('../entities/cases/Case');
 const CASE_ATTRIBUTE_WHITELIST = [
   'docketNumber',
   'docketNumberSuffix',
+  'isPaper',
   'isSealed',
   'sealedDate',
 ];
