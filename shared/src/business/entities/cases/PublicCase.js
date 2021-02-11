@@ -41,6 +41,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
   this.hasIrsPractitioner =
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
+  this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
   this._score = rawCase['_score'];
@@ -113,6 +114,7 @@ const publicCaseSchema = {
     'Auto-generated from docket number and the suffix.',
   ),
   hasIrsPractitioner: joi.boolean().required(),
+  isPaper: joi.boolean().optional(),
   isSealed: joi.boolean(),
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()

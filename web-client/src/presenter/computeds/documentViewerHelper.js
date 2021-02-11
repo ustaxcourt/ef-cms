@@ -85,7 +85,9 @@ export const documentViewerHelper = (get, applicationContext) => {
 
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
+    documentViewerLink: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
     filedLabel,
+    reviewAndServePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.docketEntryId}`,
     servedLabel,
     showNotServed,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
@@ -94,5 +96,6 @@ export const documentViewerHelper = (get, applicationContext) => {
     showServePetitionButton,
     showSignStipulatedDecisionButton,
     showStricken,
+    signStipulatedDecisionLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.docketEntryId}/sign`,
   };
 };

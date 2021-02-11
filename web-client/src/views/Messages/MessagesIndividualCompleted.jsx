@@ -20,9 +20,9 @@ export const MessagesIndividualCompleted = connect(
               <th>Case Title</th>
             </tr>
           </thead>
-          {formattedMessages.map((message, idx) => {
+          {formattedMessages.map(message => {
             return (
-              <tbody key={`message-individual-${idx}`}>
+              <tbody key={`message-individual-${message.messageId}`}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">

@@ -39,8 +39,8 @@ export const PendingReportList = connect(
                 }
               >
                 <option value="">-Judge-</option>
-                {formattedPendingItems.judges.map((judge, idx) => (
-                  <option key={`pending-judge-${idx}`} value={judge}>
+                {formattedPendingItems.judges.map(judge => (
+                  <option key={`pending-judge-${judge}`} value={judge}>
                     {judge}
                   </option>
                 ))}
@@ -72,8 +72,8 @@ export const PendingReportList = connect(
               <th>Judge</th>
             </tr>
           </thead>
-          {formattedPendingItems.items.map((item, idx) => (
-            <tbody key={`pending-item-${idx}`}>
+          {formattedPendingItems.items.map(item => (
+            <tbody key={`pending-item-${item.docketEntryId}`}>
               <tr className="pending-item-row">
                 <td>
                   <CaseLink formattedCase={item} />
@@ -81,11 +81,7 @@ export const PendingReportList = connect(
                 <td>{item.formattedFiledDate}</td>
                 <td>{item.caseTitle}</td>
                 <td>
-                  <a
-                    href={`/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`}
-                  >
-                    {item.formattedName}
-                  </a>
+                  <a href={item.documentLink}>{item.formattedName}</a>
                 </td>
                 <td>{item.status}</td>
                 <td>{item.associatedJudgeFormatted}</td>
