@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import queryString from 'query-string';
+import qs from 'qs';
 
 /**
  *
@@ -21,6 +21,13 @@ export const navigateToCreateOrderAction = async ({ get, router }) => {
     parentMessageId,
   } = get(state.modal);
 
+  const queryString = qs.stringify({
+    docketEntryId,
+    documentTitle,
+    documentType,
+    eventCode,
+  });
+
   let urlString;
   if (parentMessageId) {
     urlString = `/case-detail/${docketNumber}/create-order/${parentMessageId}`;
@@ -28,10 +35,5 @@ export const navigateToCreateOrderAction = async ({ get, router }) => {
     urlString = `/case-detail/${docketNumber}/create-order`;
   }
 
-  const url = queryString.stringifyUrl({
-    query: { docketEntryId, documentTitle, documentType, eventCode },
-    url: urlString,
-  });
-
-  await router.openInNewTab(url);
+  await router.openInNewTab(`${urlString}?${queryString}`);
 };

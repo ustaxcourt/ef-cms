@@ -1,3 +1,4 @@
+const qs = require('qs');
 const { get } = require('../requests');
 
 /**
@@ -13,11 +14,10 @@ exports.fetchPendingItemsInteractor = ({
   judge,
   page = 0,
 }) => {
-  let queryString = `?page=${page}`;
-  queryString += '&judge=' + encodeURIComponent(judge);
+  const queryString = qs.stringify({ judge, page });
 
   return get({
     applicationContext,
-    endpoint: `/reports/pending-items${queryString}`,
+    endpoint: `/reports/pending-items?${queryString}`,
   });
 };

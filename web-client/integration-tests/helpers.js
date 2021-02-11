@@ -32,7 +32,7 @@ import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/com
 import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import queryString from 'query-string';
+import qs from 'qs';
 import riotRoute from 'riot-route';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
@@ -569,7 +569,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
 const mockQuery = routeToGoTo => {
   const paramsString = routeToGoTo.split('?')[1];
-  return queryString.parse(paramsString);
+  return qs.parse(paramsString);
 };
 
 export const gotoRoute = async (routes, routeToGoTo) => {
