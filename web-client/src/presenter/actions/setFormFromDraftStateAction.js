@@ -21,8 +21,6 @@ export const setFormFromDraftStateAction = ({ props, store }) => {
       documentTitle: documentToEdit.documentTitle,
       documentType: documentToEdit.documentType,
     });
-    store.set(state.form.draftOrderState.documentContents, documentContents);
-    store.set(state.form.draftOrderState.richText, richText);
     store.set(state.form.documentContents, documentContents);
     store.set(state.form.richText, richText);
   }
