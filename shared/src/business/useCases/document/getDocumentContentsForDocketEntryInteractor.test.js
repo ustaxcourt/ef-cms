@@ -24,7 +24,7 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
     );
   });
 
-  it('should throw an error when the logged in user does not have permission to VIEW_DOCUMENTS', async () => {
+  it('should throw an error when the logged in user does not have permission to EDIT_ORDER', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Tasha Yar',
       role: ROLES.inactivePractitioner,
