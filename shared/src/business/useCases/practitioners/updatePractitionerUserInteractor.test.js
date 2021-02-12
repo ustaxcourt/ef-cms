@@ -8,8 +8,11 @@ const { ROLES } = require('../../entities/EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 jest.mock('../users/generateChangeOfAddress');
+const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
+  //generateChangeOfAddress.mock
+
   let testUser;
   let mockPractitioner;
 
@@ -24,6 +27,16 @@ describe('updatePractitionerUserInteractor', () => {
       admissionsStatus: 'Active',
       barNumber: 'AB1111',
       birthYear: 2019,
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: 'domestic', // todo import constant
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
       email: 'ab@example.com',
       employer: 'Private',
       firmName: 'GW Law Offices',
@@ -241,6 +254,19 @@ describe('updatePractitionerUserInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().sendEmailVerificationLink,
       ).not.toHaveBeenCalled();
+    });
+
+    it('should NOT generate a change of address if ONLY the email is being updated', async () => {
+      await updatePractitionerUserInteractor({
+        applicationContext,
+        user: {
+          ...mockPractitioner,
+          confirmEmail: 'free-email-to-use@example.com',
+          updatedEmail: 'free-email-to-use@example.com',
+        },
+      });
+
+      expect(generateChangeOfAddress).not.toHaveBeenCalled();
     });
   });
 });

@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
-const { omit } = require('lodash');
+const { isEmpty, isEqual, omit } = require('lodash');
 const { Practitioner } = require('../../entities/Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -115,7 +115,7 @@ exports.updatePractitionerUserInteractor = async ({
   const practitionerDetailDiff = applicationContext
     .getUtilities()
     .getAddressPhoneDiff({
-      newData: omit(updatedPractitionerEntity.toRawObject(), ['contact']),
+      newData: omit(updatedPractitionerEntity, ['contact']),
       oldData: omit(oldPractitionerEntity, ['contact']),
     });
 
@@ -129,16 +129,28 @@ exports.updatePractitionerUserInteractor = async ({
   console.log(practitionerDetailDiff, '**** 1');
   console.log(practitionerContactDiff, '**** 2');
 
-  await generateChangeOfAddress({
-    applicationContext,
-    bypassDocketEntry,
-    contactInfo: validatedUserData.contact,
-    requestUserId: requestUser.userId,
-    updatedEmail: validatedUserData.email,
-    updatedName: validatedUserData.name,
-    user: oldUserInfo,
-    websocketMessagePrefix: 'admin',
-  });
+  const hasUpdatedEmailOnly = isEqual(
+    Object.keys(practitionerDetailDiff).sort(),
+    ['pendingEmail', 'pendingEmailVerificationToken'],
+  );
+
+  let shouldGenerateChangeOfAddress = true;
+  if (isEmpty(practitionerContactDiff) && hasUpdatedEmailOnly) {
+    shouldGenerateChangeOfAddress = false;
+  }
+
+  if (shouldGenerateChangeOfAddress) {
+    await generateChangeOfAddress({
+      applicationContext,
+      bypassDocketEntry,
+      contactInfo: validatedUserData.contact,
+      requestUserId: requestUser.userId,
+      updatedEmail: validatedUserData.email,
+      updatedName: validatedUserData.name,
+      user: oldUserInfo,
+      websocketMessagePrefix: 'admin',
+    });
+  }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
