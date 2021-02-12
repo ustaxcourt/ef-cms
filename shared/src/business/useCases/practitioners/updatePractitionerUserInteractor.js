@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
+const { omit } = require('lodash');
 const { Practitioner } = require('../../entities/Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -102,6 +103,31 @@ exports.updatePractitionerUserInteractor = async ({
       pendingEmailVerificationToken: user.pendingEmailVerificationToken,
     });
   }
+
+  const updatedPractitionerEntity = new Practitioner(updatedUser, {
+    applicationContext,
+  }).toRawObject();
+  const oldPractitionerEntity = new Practitioner(oldUserInfo, {
+    applicationContext,
+  }).toRawObject();
+
+  // don't call if only email has been changed
+  const practitionerDetailDiff = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: omit(updatedPractitionerEntity.toRawObject(), ['contact']),
+      oldData: omit(oldPractitionerEntity, ['contact']),
+    });
+
+  const practitionerContactDiff = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: updatedPractitionerEntity.contact,
+      oldData: oldPractitionerEntity.contact,
+    });
+
+  console.log(practitionerDetailDiff, '**** 1');
+  console.log(practitionerContactDiff, '**** 2');
 
   await generateChangeOfAddress({
     applicationContext,
