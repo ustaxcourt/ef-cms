@@ -110,11 +110,11 @@ describe('formattedPendingItems', () => {
   it('appends screenMetadata.pendingItemsFilters.judge on the printUrl if one is present', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
-        screenMetadata: { pendingItemsFilters: { judge: CHIEF_JUDGE } },
+        screenMetadata: { pendingItemsFilters: { judge: 'Judge Somebody' } },
       },
     });
 
-    expect(result.printUrl).toContain(encodeURIComponent(CHIEF_JUDGE));
+    expect(result.printUrl).toContain('Judge%20Somebody');
   });
 
   it('returns default printUrl if screenMetadata.pendingItemsFilters.judge is not set', () => {
@@ -124,6 +124,6 @@ describe('formattedPendingItems', () => {
       },
     });
 
-    expect(result.printUrl).toEqual('/reports/pending-report/printable');
+    expect(result.printUrl).toEqual('/reports/pending-report/printable?');
   });
 });

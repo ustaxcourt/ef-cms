@@ -24,12 +24,13 @@ const associatedFieldsVisible = () => {
 
 const associatedFieldsBlocked = () => {
   expect(test.getState('caseDetail.contactPrimary')).toEqual({
+    entityName: 'PublicContact',
     name: expect.anything(),
     state: expect.anything(),
   });
   expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
   expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
-  expect(test.getState('caseDetail.userId')).toBeUndefined();
+  expect(test.getState('caseDetail.contactPrimary.contactId')).toBeUndefined();
 };
 
 const internalFieldsVisible = () => {

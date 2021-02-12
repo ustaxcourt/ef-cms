@@ -14,7 +14,7 @@ describe('messageModalHelper', () => {
 
   beforeAll(() => {
     applicationContext.getCurrentUser = () => ({
-      userId: MOCK_CASE.userId,
+      userId: '2db2d514-cc08-4900-a2fc-6113abdc43e8',
     });
 
     caseDetail = {

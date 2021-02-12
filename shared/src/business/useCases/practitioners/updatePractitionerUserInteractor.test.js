@@ -2,12 +2,16 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   updatePractitionerUserInteractor,
 } = require('./updatePractitionerUserInteractor');
 const { ROLES } = require('../../entities/EntityConstants');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 jest.mock('../users/generateChangeOfAddress');
+const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;
@@ -24,6 +28,16 @@ describe('updatePractitionerUserInteractor', () => {
       admissionsStatus: 'Active',
       barNumber: 'AB1111',
       birthYear: 2019,
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
       email: 'ab@example.com',
       employer: 'Private',
       firmName: 'GW Law Offices',
@@ -241,6 +255,51 @@ describe('updatePractitionerUserInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().sendEmailVerificationLink,
       ).not.toHaveBeenCalled();
+    });
+
+    it('should NOT call generateChangeOfAddress if ONLY the email is being updated', async () => {
+      await updatePractitionerUserInteractor({
+        applicationContext,
+        user: {
+          ...mockPractitioner,
+          confirmEmail: 'free-email-to-use@example.com',
+          updatedEmail: 'free-email-to-use@example.com',
+        },
+      });
+
+      expect(generateChangeOfAddress).not.toHaveBeenCalled();
+    });
+
+    it('should call generateChangeOfAddress if the email is being updated along with the address1', async () => {
+      await updatePractitionerUserInteractor({
+        applicationContext,
+        user: {
+          ...mockPractitioner,
+          confirmEmail: 'free-email-to-use@example.com',
+          contact: {
+            ...mockPractitioner.contact,
+            address1: 'yeahhhhh',
+          },
+          updatedEmail: 'free-email-to-use@example.com',
+        },
+      });
+
+      expect(generateChangeOfAddress).toHaveBeenCalled();
+    });
+
+    it('should call generateChangeOfAddress if the email is being updated along with the practitioner name', async () => {
+      await updatePractitionerUserInteractor({
+        applicationContext,
+        user: {
+          ...mockPractitioner,
+          confirmEmail: 'free-email-to-use@example.com',
+          firstName: 'Helen',
+          lastName: 'Hunt',
+          updatedEmail: 'free-email-to-use@example.com',
+        },
+      });
+
+      expect(generateChangeOfAddress).toHaveBeenCalled();
     });
   });
 });

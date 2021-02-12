@@ -15,8 +15,6 @@ const { isEmpty } = require('lodash');
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
-DocumentSearch.validationName = 'DocumentSearch';
-
 DocumentSearch.VALID_DATE_SEARCH_FORMATS = [
   'YYYY/MM/DD',
   'YYYY/MM/D',
@@ -31,7 +29,9 @@ DocumentSearch.VALID_DATE_SEARCH_FORMATS = [
  * @param {object} rawProps the raw document search data
  * @constructor
  */
-function DocumentSearch() {}
+function DocumentSearch() {
+  this.entityName = 'DocumentSearch';
+}
 
 DocumentSearch.prototype.init = function init(rawProps = {}) {
   if (!isEmpty(rawProps.judge)) {

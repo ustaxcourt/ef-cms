@@ -11,12 +11,11 @@ const { JoiValidationConstants } = require('./JoiValidationConstants');
  * @param {object} raw raw entity
  */
 function MockEntity1(raw) {
+  this.entityName = 'MockEntity1';
   Object.assign(this, raw);
 }
 
 MockEntity1.prototype.init = function init() {};
-
-MockEntity1.validationName = 'MockEntity1';
 
 MockEntity1.errorToMessageMap = {
   favoriteNumber: 'Tell me your favorite number.',
@@ -34,6 +33,7 @@ joiValidationDecorator(
 );
 
 const MockEntity2 = function (raw) {
+  this.entityName = 'MockEntity2';
   Object.assign(this, raw);
 };
 
@@ -69,6 +69,7 @@ joiValidationDecorator(MockEntity2, MockEntity2Schema, {
 });
 
 const MockEntity3 = function (raw) {
+  this.entityName = 'MockEntity3';
   this.anotherItem = raw.anotherItem;
   this.mockEntity2 = new MockEntity2(raw.mockEntity2);
 };
@@ -82,6 +83,7 @@ const MockEntity3Schema = joi.object().keys({
 joiValidationDecorator(MockEntity3, MockEntity3Schema, {});
 
 const MockCase = function (raw) {
+  this.entityName = 'MockCase';
   this.docketNumber = raw.docketNumber;
   this.somethingId = raw.somethingId;
   this.title = raw.title;
@@ -103,6 +105,7 @@ describe('Joi Validation Decorator', () => {
   describe('validation errors with arrays', () => {
     it('returns validation errors', () => {
       const mock1Properties = {
+        entityName: 'MockEntity1',
         favoriteNumber: 7,
         hasNickname: false,
         name: 'name',
@@ -217,8 +220,18 @@ describe('Joi Validation Decorator', () => {
     });
 
     expect(MockEntity1.validateRawCollection([obj1, obj2], {})).toEqual([
-      { favoriteNumber: 1, hasNickname: true, name: 'One' },
-      { favoriteNumber: 2, hasNickname: false, name: 'Two' },
+      {
+        entityName: 'MockEntity1',
+        favoriteNumber: 1,
+        hasNickname: true,
+        name: 'One',
+      },
+      {
+        entityName: 'MockEntity1',
+        favoriteNumber: 2,
+        hasNickname: false,
+        name: 'Two',
+      },
     ]);
   });
 
