@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
+const { isEqual, omit } = require('lodash');
 const { Practitioner } = require('../../entities/Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -103,16 +104,43 @@ exports.updatePractitionerUserInteractor = async ({
     });
   }
 
-  await generateChangeOfAddress({
+  const updatedPractitionerRaw = new Practitioner(updatedUser, {
     applicationContext,
-    bypassDocketEntry,
-    contactInfo: validatedUserData.contact,
-    requestUserId: requestUser.userId,
-    updatedEmail: validatedUserData.email,
-    updatedName: validatedUserData.name,
-    user: oldUserInfo,
-    websocketMessagePrefix: 'admin',
-  });
+  }).toRawObject();
+  const oldPractitionerRaw = new Practitioner(oldUserInfo, {
+    applicationContext,
+  }).toRawObject();
+
+  const practitionerDetailDiff = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: {
+        ...omit(updatedPractitionerRaw, 'contact'),
+        ...updatedPractitionerRaw.contact,
+      },
+      oldData: {
+        ...omit(oldPractitionerRaw, 'contact'),
+        ...oldPractitionerRaw.contact,
+      },
+    });
+
+  const hasUpdatedEmailOnly = isEqual(
+    Object.keys(practitionerDetailDiff).sort(),
+    ['pendingEmail', 'pendingEmailVerificationToken'],
+  );
+
+  if (!hasUpdatedEmailOnly) {
+    await generateChangeOfAddress({
+      applicationContext,
+      bypassDocketEntry,
+      contactInfo: validatedUserData.contact,
+      requestUserId: requestUser.userId,
+      updatedEmail: validatedUserData.email,
+      updatedName: validatedUserData.name,
+      user: oldUserInfo,
+      websocketMessagePrefix: 'admin',
+    });
+  }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
