@@ -1,4 +1,3 @@
-const joi = require('joi');
 const {
   calculateISODate,
   createISODateString,
@@ -6,13 +5,16 @@ const {
   FORMATS,
 } = require('../../utilities/DateHandler');
 const {
+  courtIssuedDocumentDecorator,
+  CourtIssuedDocumentDefault,
+} = require('./CourtIssuedDocumentDefault');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { CourtIssuedDocumentDefault } = require('./CourtIssuedDocumentDefault');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
@@ -29,12 +31,8 @@ const yesterdayFormatted = formatDateString(
  */
 function CourtIssuedDocumentTypeE() {}
 CourtIssuedDocumentTypeE.prototype.init = function init(rawProps) {
-  this.attachments = rawProps.attachments || false;
+  courtIssuedDocumentDecorator(this, rawProps);
   this.date = rawProps.date;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
-  this.eventCode = rawProps.eventCode;
-  this.filingDate = rawProps.filingDate;
 };
 
 CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function () {
@@ -45,12 +43,8 @@ CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function () {
 };
 
 CourtIssuedDocumentTypeE.schema = {
-  attachments: joi.boolean().required(),
+  ...CourtIssuedDocumentDefault.schema,
   date: JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
-  eventCode: CourtIssuedDocumentDefault.schema.eventCode,
-  filingDate: CourtIssuedDocumentDefault.schema.filingDate,
 };
 
 joiValidationDecorator(
