@@ -117,8 +117,6 @@ describe('Petitions Clerk', () => {
       describe('should be able to create another case', () => {
         after(() => {
           [firstDocketNumber, secondDocketNumber] = caseTestData.docketNumbers;
-          console.log('firstDocketNumber', firstDocketNumber);
-          console.log('secondDocketNumber', firstDocketNumber);
         });
 
         it('should complete wizard step 1', () => {
