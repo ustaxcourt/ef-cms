@@ -11,8 +11,6 @@ jest.mock('../users/generateChangeOfAddress');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
-  //generateChangeOfAddress.mock
-
   let testUser;
   let mockPractitioner;
 
