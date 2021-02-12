@@ -151,6 +151,9 @@ const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
+  getDocumentContentsForDocketEntryLambda,
+} = require('./documents/getDocumentContentsForDocketEntryLambda');
+const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
 const {
@@ -439,6 +442,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
  */
 {
   //GET
+  app.get(
+    '/case-documents/:documentContentsId/document-contents',
+    lambdaWrapper(getDocumentContentsForDocketEntryLambda),
+  );
   app.get(
     '/case-documents/:docketNumber/:key/document-download-url',
     lambdaWrapper(getDocumentDownloadUrlLambda),
