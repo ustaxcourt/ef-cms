@@ -539,6 +539,31 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should delete the draftOrderState from the docketEntry', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor({
+      applicationContext,
+      documentMeta: {
+        docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: mockDocketEntryWithWorkItem.documentTitle,
+        documentType: 'Transcript',
+        draftOrderState: {
+          documentContents: 'Some content',
+          richText: 'some content',
+        },
+        eventCode: 'TRAN',
+      },
+    });
+
+    const docketEntryToUpdate = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        d => d.docketEntryId === mockDocketEntryWithWorkItem.docketEntryId,
+      );
+
+    expect(docketEntryToUpdate).toMatchObject({ draftOrderState: null });
+  });
+
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await fileAndServeCourtIssuedDocumentInteractor({
