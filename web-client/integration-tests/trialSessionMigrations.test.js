@@ -1,6 +1,13 @@
-import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
+import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
+import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import axios from 'axios';
 
 const test = setupTest();
@@ -15,11 +22,7 @@ const axiosInstance = axios.create({
   timeout: 2000,
 });
 
-const {
-  CHIEF_JUDGE,
-  STATUS_TYPES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = applicationContext.getConstants();
+const { TRIAL_SESSION_PROCEEDING_TYPES } = applicationContext.getConstants();
 
 const calendaredTrialSession = {
   address1: 'some random street',
@@ -38,18 +41,11 @@ const calendaredTrialSession = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
 };
 
-const calendaredCase = {
-  ...MOCK_CASE,
-  associatedJudge: CHIEF_JUDGE,
-  caseCaption: 'Calendared Case w/ Trial Session',
-  docketNumber: '121-21',
-  preferredTrialCity: 'Memphis, Tennessee',
-  status: STATUS_TYPES.calendared,
-  trialLocation: 'Memphis, Tennessee',
-  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
-};
+let caseDetail;
 
 describe('Trial session migration journey', () => {
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -63,24 +59,43 @@ describe('Trial session migration journey', () => {
       'http://localhost:4000/migrate/trial-session',
       calendaredTrialSession,
     );
+    test.trialSessionId = calendaredTrialSession.trialSessionId;
   });
 
-  it('should migrate calendared cases', async () => {
-    await axiosInstance.post(
-      'http://localhost:4000/migrate/case',
-      calendaredCase,
-    );
+  it('should create a new case and calendar it', async () => {
+    caseDetail = await uploadPetition(test, {
+      contactSecondary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Jimothy Schultz',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+      partyType: PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: 'Memphis, Tennessee',
+    });
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+    test.createdCases = [test.docketNumber];
   });
+
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkSubmitsCaseToIrs(test);
 
   loginAs(test, 'docketclerk@example.com');
+  docketClerkSetsCaseReadyForTrial(test);
+
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkManuallyAddsCaseToCalendaredTrialSession(test, 0);
 
   it('Docketclerk views migrated, calendared case with migrated trial session', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: calendaredCase.docketNumber,
+      docketNumber: caseDetail.docketNumber,
     });
-    expect(test.getState('caseDetail.trialSessionId')).toEqual(
-      calendaredCase.trialSessionId,
-    );
+    caseDetail = test.getState('caseDetail');
+    expect(test.getState('caseDetail.trialSessionId')).toBeDefined();
     expect(test.getState('caseDetail.trialLocation')).toEqual(
       calendaredTrialSession.trialLocation,
     );
