@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
-const { isEmpty, isEqual, omit } = require('lodash');
+const { isEqual, omit } = require('lodash');
 const { Practitioner } = require('../../entities/Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -104,42 +104,32 @@ exports.updatePractitionerUserInteractor = async ({
     });
   }
 
-  const updatedPractitionerEntity = new Practitioner(updatedUser, {
+  const updatedPractitionerRaw = new Practitioner(updatedUser, {
     applicationContext,
   }).toRawObject();
-  const oldPractitionerEntity = new Practitioner(oldUserInfo, {
+  const oldPractitionerRaw = new Practitioner(oldUserInfo, {
     applicationContext,
   }).toRawObject();
 
-  // don't call if only email has been changed
   const practitionerDetailDiff = applicationContext
     .getUtilities()
     .getAddressPhoneDiff({
-      newData: omit(updatedPractitionerEntity, ['contact']),
-      oldData: omit(oldPractitionerEntity, ['contact']),
+      newData: {
+        ...omit(updatedPractitionerRaw, 'contact'),
+        ...updatedPractitionerRaw.contact,
+      },
+      oldData: {
+        ...omit(oldPractitionerRaw, 'contact'),
+        ...oldPractitionerRaw.contact,
+      },
     });
-
-  const practitionerContactDiff = applicationContext
-    .getUtilities()
-    .getAddressPhoneDiff({
-      newData: updatedPractitionerEntity.contact,
-      oldData: oldPractitionerEntity.contact,
-    });
-
-  console.log(practitionerDetailDiff, '**** 1');
-  console.log(practitionerContactDiff, '**** 2');
 
   const hasUpdatedEmailOnly = isEqual(
     Object.keys(practitionerDetailDiff).sort(),
     ['pendingEmail', 'pendingEmailVerificationToken'],
   );
 
-  let shouldGenerateChangeOfAddress = true;
-  if (isEmpty(practitionerContactDiff) && hasUpdatedEmailOnly) {
-    shouldGenerateChangeOfAddress = false;
-  }
-
-  if (shouldGenerateChangeOfAddress) {
+  if (!hasUpdatedEmailOnly) {
     await generateChangeOfAddress({
       applicationContext,
       bypassDocketEntry,
