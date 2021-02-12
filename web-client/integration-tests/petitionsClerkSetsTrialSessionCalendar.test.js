@@ -94,7 +94,7 @@ describe('petitions clerk sets a trial session calendar', () => {
         },
       );
 
-      expect(trialSessionFormatted.openCases.length).toEqual(2);
+      expect(trialSessionFormatted.openCases.length).toEqual(1);
     });
   });
 });
