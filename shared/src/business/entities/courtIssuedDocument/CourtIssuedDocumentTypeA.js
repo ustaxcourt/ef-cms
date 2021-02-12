@@ -1,5 +1,9 @@
 const joi = require('joi');
 const {
+  courtIssuedDocumentDecorator,
+  CourtIssuedDocumentDefault,
+} = require('./CourtIssuedDocumentDefault');
+const {
   GENERIC_ORDER_DOCUMENT_TYPE,
   SERVICE_STAMP_OPTIONS,
   VALIDATION_ERROR_MESSAGES,
@@ -11,7 +15,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { CourtIssuedDocumentDefault } = require('./CourtIssuedDocumentDefault');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
@@ -20,11 +23,7 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  */
 function CourtIssuedDocumentTypeA() {}
 CourtIssuedDocumentTypeA.prototype.init = function init(rawProps) {
-  this.attachments = rawProps.attachments || false;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
-  this.eventCode = rawProps.eventCode;
-  this.filingDate = rawProps.filingDate;
+  courtIssuedDocumentDecorator(this, rawProps);
   this.freeText = rawProps.freeText;
   this.serviceStamp = rawProps.serviceStamp;
 };
@@ -34,11 +33,7 @@ CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function () {
 };
 
 CourtIssuedDocumentTypeA.schema = {
-  attachments: joi.boolean().required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
-  eventCode: CourtIssuedDocumentDefault.schema.eventCode,
-  filingDate: CourtIssuedDocumentDefault.schema.filingDate,
+  ...CourtIssuedDocumentDefault.schema,
   freeText: JoiValidationConstants.STRING.max(1000).when('documentType', {
     is: GENERIC_ORDER_DOCUMENT_TYPE,
     otherwise: joi.optional().allow(null),
