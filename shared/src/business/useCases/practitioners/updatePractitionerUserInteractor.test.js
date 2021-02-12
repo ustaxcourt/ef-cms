@@ -2,10 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   updatePractitionerUserInteractor,
 } = require('./updatePractitionerUserInteractor');
 const { ROLES } = require('../../entities/EntityConstants');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 jest.mock('../users/generateChangeOfAddress');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
@@ -30,7 +33,7 @@ describe('updatePractitionerUserInteractor', () => {
         address2: 'Apartment 4',
         address3: 'Under the stairs',
         city: 'Chicago',
-        countryType: 'domestic', // todo import constant
+        countryType: COUNTRY_TYPES.DOMESTIC,
         phone: '+1 (555) 555-5555',
         postalCode: '61234',
         state: 'IL',
