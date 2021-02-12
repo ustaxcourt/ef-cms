@@ -87,8 +87,6 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   }
 };
 
-TrialSession.validationName = 'TrialSession';
-
 TrialSession.VALIDATION_ERROR_MESSAGES = {
   maxCases: 'Enter a valid number of maximum cases',
   postalCode: [

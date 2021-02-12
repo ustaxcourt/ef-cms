@@ -69,6 +69,11 @@ describe('createCaseFromPaperInteractor integration test', () => {
 
     expect(createdCase).toMatchObject({
       caseCaption: 'Bob Jones2, Petitioner',
+      contactPrimary: {
+        contactId: expect.not.stringContaining(
+          'a805d1ab-18d0-43ec-bafb-654e83405416',
+        ), // should NOT be the petitionsclerk who is logged in
+      },
       createdAt: RECEIVED_DATE,
       docketEntries: [
         {
@@ -115,7 +120,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
       orderToShowCause: false,
       receivedAt: RECEIVED_DATE,
       status: CASE_STATUS_TYPES.new,
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });
 });
