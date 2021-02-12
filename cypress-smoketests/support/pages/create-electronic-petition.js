@@ -50,7 +50,6 @@ exports.submitPetition = testData => {
   cy.get('@postCase').should(xhr => {
     expect(xhr.responseBody).to.have.property('docketNumber');
     const { docketNumber } = xhr.responseBody;
-    console.log('docketNumber', docketNumber);
     if (testData) {
       testData.createdDocketNumber = docketNumber;
       if (testData.docketNumbers) {
