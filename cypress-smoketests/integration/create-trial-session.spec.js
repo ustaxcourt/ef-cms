@@ -1,5 +1,4 @@
 const faker = require('faker');
-const uuid = require('uuid');
 const {
   blockCaseFromTrial,
   goToCaseOverview,
@@ -27,9 +26,6 @@ const {
   submitPetition,
 } = require('../support/pages/create-electronic-petition');
 const {
-  COUNTRY_TYPES,
-} = require('../../shared/src/business/entities/EntityConstants');
-const {
   createTrialSession,
   goToTrialSession,
   markCaseAsQcCompleteForTrial,
@@ -51,16 +47,16 @@ faker.seed(faker.random.number());
 let docketClerkToken = null;
 let petitionsClerkToken = null;
 const testData = {
-  preferredTrialCity: 'Cheyenne, Wyoming',
+  preferredTrialCity: 'Mobile, Alabama',
   trialSessionIds: [],
 };
 
 let firstDocketNumber;
 let secondDocketNumber;
-const caseTestData = { docketNumbers: []};
+const caseTestData = { docketNumbers: [] };
 
 describe('Petitions Clerk', () => {
-  const {  getUserToken, login } = getEnvironmentSpecificFunctions();
+  const { getUserToken, login } = getEnvironmentSpecificFunctions();
 
   before(async () => {
     let result = await getUserToken(
@@ -121,9 +117,9 @@ describe('Petitions Clerk', () => {
       describe('should be able to create another case', () => {
         after(() => {
           [firstDocketNumber, secondDocketNumber] = caseTestData.docketNumbers;
-          console.log('firstDocketNumber', firstDocketNumber)
-          console.log('secondDocketNumber', firstDocketNumber)
-        })
+          console.log('firstDocketNumber', firstDocketNumber);
+          console.log('secondDocketNumber', firstDocketNumber);
+        });
 
         it('should complete wizard step 1', () => {
           goToStartCreatePetition();
