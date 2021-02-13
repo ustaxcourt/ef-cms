@@ -77,7 +77,7 @@ export const StartCaseStep2 = connect(
                   <Button
                     link
                     className="usa-link--external text-left mobile-text-wrap"
-                    href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+                    href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
                     icon="file-pdf"
                     iconColor="blue"
                     overrideMargin="margin-right-1"
