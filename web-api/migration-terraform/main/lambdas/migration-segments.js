@@ -3,6 +3,9 @@ const createApplicationContext = require('../../../src/applicationContext');
 const {
   migrateItems: migration0017,
 } = require('./migrations/0017-remove-draft-order-state');
+const {
+  migrateItems: migration0018,
+} = require('./migrations/0018-remove-nested-draft-order-state');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -26,6 +29,8 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.info('about to run migration 0017');
   items = await migration0017(items, documentClient);
+  applicationContext.logger.info('about to run migration 0018');
+  items = await migration0018(items, documentClient);
   return items;
 };
 
