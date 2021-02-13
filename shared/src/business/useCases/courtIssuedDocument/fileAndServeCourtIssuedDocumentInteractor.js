@@ -94,6 +94,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
       date: documentMeta.date,
       documentTitle: documentMeta.generatedDocumentTitle,
       documentType: documentMeta.documentType,
+      draftOrderState: null,
       editState: JSON.stringify(documentMeta),
       eventCode: documentMeta.eventCode,
       filedBy: undefined,
