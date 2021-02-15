@@ -5,7 +5,6 @@ import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { MatchingEmailFoundModal } from './MatchingEmailFoundModal';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';

@@ -10,8 +10,8 @@ export const openMatchingEmailFoundModalSequence = showProgressSequenceDecorator
     clearAlertsAction,
     checkEmailAvailabilityAction,
     {
-      emailAvailable: [setShowModalFactoryAction('MatchingEmailFoundModal')],
-      emailInUse: [setShowModalFactoryAction('NoMatchingEmailFoundModal')],
+      emailAvailable: [setShowModalFactoryAction('NoMatchingEmailFoundModal')],
+      emailInUse: [setShowModalFactoryAction('MatchingEmailFoundModal')],
     },
   ],
 );
