@@ -5,12 +5,8 @@ import { documentViewerHelper as documentViewerHelperComputed } from '../src/pre
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
-import { times } from 'lodash';
 import { withAppContextDecorator } from '../src/withAppContext';
 import axios from 'axios';
-import faker from 'faker';
-
-faker.seed(faker.random.number());
 
 const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
@@ -123,21 +119,6 @@ const otherFilersCase = {
   status: STATUS_TYPES.calendared,
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
-const otherPetitionerObject = {
-  additionalName: 'Test Other Petitioner',
-  address1: '982 Oak Boulevard',
-  address2: 'Maxime dolorum quae ',
-  address3: 'Ut numquam ducimus ',
-  city: 'Placeat sed dolorum',
-  contactId: faker.random.uuid(),
-  countryType: COUNTRY_TYPES.DOMESTIC,
-  name: 'Keelie Bruce',
-  phone: '+1 (785) 771-2329',
-  postalCode: '17860',
-  secondaryName: 'Logan Fields',
-  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-  state: 'LA',
-};
 
 const otherPetitionersCase = {
   ...MOCK_CASE,
@@ -165,8 +146,21 @@ const otherPetitionersCase = {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     },
   ],
-  //fixeme try this
-  otherPetitioners: times(2700, () => otherPetitionerObject),
+  otherPetitioners: {
+    additionalName: 'Test Other Petitioner',
+    address1: '982 Oak Boulevard',
+    address2: 'Maxime dolorum quae ',
+    address3: 'Ut numquam ducimus ',
+    city: 'Placeat sed dolorum',
+    contactId: faker.random.uuid(),
+    countryType: COUNTRY_TYPES.DOMESTIC,
+    name: 'Keelie Bruce',
+    phone: '+1 (785) 771-2329',
+    postalCode: '17860',
+    secondaryName: 'Logan Fields',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+    state: 'LA',
+  },
   preferredTrialCity: 'Washington, District of Columbia',
   privatePractitioners: [
     {
