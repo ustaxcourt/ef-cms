@@ -1,52 +1,4 @@
-/* eslint-disable */
-
-const { times } = require('lodash');
-
-const workItems = times(2700, () => ({
-  "docketNumberSuffix": null,
-  "caseStatus": "New",
-  "caseIsInProgress": true,
-  "gsi1pk": `work-item|${faker.random.uuid()}`,
-  "document": {
-    "isPaper": true,
-    "serviceDate": null,
-    "documentType": "Proposed Stipulated Decision",
-    "practitioner": [],
-    "filingDate": "1990-10-10",
-    "partyPrimary": true,
-    "receivedAt": "1990-10-10",
-    "userId": `${faker.random.uuid()}`,
-    "eventCode": "PSDE",
-    "createdAt": "2019-07-12T17:11:26.955Z",
-    "processingStatus": "pending",
-    "lodged": false,
-    "numberOfPages": 1,
-    "scenario": "Standard",
-    "filedBy": "Petr. Denise Gould",
-    "documentId": `${faker.random.uuid()}`,
-    "category": "Decision",
-    "documentTitle": "Proposed Stipulated Decision",
-    "relationship": "primaryDocument",
-    "docketNumber": "106-19"
-  },
-  "section": "docket",
-  "workItemId": "2b8ef08e-50be-4f9b-8a96-57baa5112f02",
-  "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-  "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-  "sentBy": "Test Docketclerk",
-  "sentBySection": "docket",
-  "createdAt": "2019-07-12T17:11:27.244Z",
-  "assigneeName": "Test Docketclerk",
-  "sk": "2019-07-12T17:11:27.244Z", // modify
-  "pk": "section-outbox|docket",
-  "docketNumber": "106-19",
-  "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-  "completedBy": "Test Docketclerk",
-  "updatedAt": "2019-07-12T17:11:27.244Z"
-}));
-
-module.exports = [
-  ...workItems,
+[
   {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
@@ -12333,5 +12285,5 @@ module.exports = [
     "pk": "user|9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "email": "floater@example.com"
-  },
+  }
 ]
