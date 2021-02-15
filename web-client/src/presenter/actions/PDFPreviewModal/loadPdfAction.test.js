@@ -6,32 +6,33 @@ import { loadPdfAction } from './loadPdfAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const fakeFile = testPdfDoc;
-const b64File = `data:application/pdf;base64,${Buffer.from(
-  String.fromCharCode.apply(null, fakeFile),
-).toString('base64')}`;
-
-const mocks = {
-  readAsArrayBufferMock: jest.fn().mockImplementation(async function () {
-    this.result = fakeFile;
-    await this.onload();
-  }),
-  readAsDataURLMock: jest.fn().mockImplementation(async function () {
-    this.result = b64File;
-    await this.onload();
-  }),
-};
-/**
- * Mock FileReader Implementation
- */
-function MockFileReader() {
-  this.onload = null;
-  this.onerror = null;
-  this.readAsDataURL = mocks.readAsDataURLMock;
-  this.readAsArrayBuffer = mocks.readAsArrayBufferMock;
-}
-
 describe('loadPdfAction', () => {
+  const fakeFile = testPdfDoc;
+  const b64File = `data:application/pdf;base64,${Buffer.from(
+    String.fromCharCode.apply(null, fakeFile),
+  ).toString('base64')}`;
+
+  const mocks = {
+    readAsArrayBufferMock: jest.fn().mockImplementation(async function () {
+      this.result = fakeFile;
+      await this.onload();
+    }),
+    readAsDataURLMock: jest.fn().mockImplementation(async function () {
+      this.result = b64File;
+      await this.onload();
+    }),
+  };
+
+  /**
+   * Mock FileReader Implementation
+   */
+  function MockFileReader() {
+    this.onload = null;
+    this.onerror = null;
+    this.readAsDataURL = mocks.readAsDataURLMock;
+    this.readAsArrayBuffer = mocks.readAsArrayBufferMock;
+  }
+
   beforeAll(() => {
     global.atob = x => x;
     presenter.providers.path = {
