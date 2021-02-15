@@ -9,6 +9,8 @@ import { presenter } from '../../presenter-mock';
 describe('loadPdfSequence', () => {
   let test;
 
+  global.Blob = function () {};
+
   const base64File = `data:application/pdf;base64,${Buffer.from(
     String.fromCharCode.apply(null, testPdfDoc),
   ).toString('base64')}`;

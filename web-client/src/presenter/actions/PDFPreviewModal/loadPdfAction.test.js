@@ -7,6 +7,8 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('loadPdfAction', () => {
+  global.Blob = function () {};
+
   const fakeFile = testPdfDoc;
   const b64File = `data:application/pdf;base64,${Buffer.from(
     String.fromCharCode.apply(null, fakeFile),
