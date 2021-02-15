@@ -32,5 +32,73 @@ describe('editPetitionerInformationHelper', () => {
     });
     expect(result.showLoginAndServiceInformation).toEqual(false);
   });
+
+  it('should return isElectronicAvailableForPrimary true if the contactPrimary has an email address', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        form: {
+          contactPrimary: {
+            email: 'testpetitioner@example.com',
+          },
+          partyType: PARTY_TYPES.petitioner,
+        },
+        permissions: {
+          EDIT_PETITIONER_EMAIL: true,
+        },
+      },
+    });
+
+    expect(result.isElectronicAvailableForPrimary).toEqual(true);
+  });
+
+  it('should return isElectronicAvailableForPrimary false if the contactPrimary DOES NOT have an email address', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        form: {
+          contactPrimary: {},
+          partyType: PARTY_TYPES.petitioner,
+        },
+        permissions: {
+          EDIT_PETITIONER_EMAIL: true,
+        },
+      },
+    });
+
+    expect(result.isElectronicAvailableForPrimary).toEqual(false);
+  });
+
+  it('should return isElectronicAvailableForSecondary true if the contactPrimary has an email address', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        form: {
+          contactSecondary: {
+            email: 'testpetitioner@example.com',
+          },
+          partyType: PARTY_TYPES.petitionerSpouse,
+        },
+        permissions: {
+          EDIT_PETITIONER_EMAIL: true,
+        },
+      },
+    });
+
+    expect(result.isElectronicAvailableForSecondary).toEqual(true);
+  });
+
+  it('should return isElectronicAvailableForSecondary false if the contactPrimary DOES NOT have an email address', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        form: {
+          contactSecondary: {},
+          partyType: PARTY_TYPES.petitionerSpouse,
+        },
+        permissions: {
+          EDIT_PETITIONER_EMAIL: true,
+        },
+      },
+    });
+
+    expect(result.isElectronicAvailableForSecondary).toEqual(false);
+  });
   // TODO additional coverage
 });

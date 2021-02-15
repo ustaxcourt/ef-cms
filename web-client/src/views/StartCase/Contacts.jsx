@@ -3,17 +3,15 @@ import { ContactSecondary } from './ContactSecondary';
 import { EditPetitionerLoginForm } from '../EditPetitionerLoginForm';
 import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
 import React from 'react';
 
 export const Contacts = connect(
-  {
-    helper: state[props.contactsHelper],
-  },
+  {},
   function Contacts({
     bind,
     contactsHelper,
-    helper,
+    isElectronicAvailableForPrimary,
+    isElectronicAvailableForSecondary,
     onBlur,
     onChange,
     parentView,
@@ -42,9 +40,7 @@ export const Contacts = connect(
                 <div className="blue-container margin-bottom-6">
                   <ServiceIndicatorRadios
                     bind="form.contactPrimary"
-                    isElectronicAvailable={
-                      helper.isElectronicAvailableForPrimary
-                    }
+                    isElectronicAvailable={isElectronicAvailableForPrimary}
                     validateSequence={validateSequence}
                     validationErrors="validationErrors.contactPrimary"
                   />
@@ -73,9 +69,7 @@ export const Contacts = connect(
                 <div className="blue-container margin-bottom-6">
                   <ServiceIndicatorRadios
                     bind="form.contactSecondary"
-                    isElectronicAvailable={
-                      helper.isElectronicAvailableForSecondary
-                    }
+                    isElectronicAvailable={isElectronicAvailableForSecondary}
                     validateSequence={validateSequence}
                     validationErrors="validationErrors.contactSecondary"
                   />

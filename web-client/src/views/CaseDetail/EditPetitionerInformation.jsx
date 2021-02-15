@@ -80,7 +80,13 @@ export const EditPetitionerInformation = connect(
               <>
                 <Contacts
                   bind="form"
-                  contactsHelper="editPractitionerContactHelper"
+                  contactsHelper="startCaseInternalContactsHelper"
+                  isElectronicAvailableForPrimary={
+                    editPetitionerInformationHelper.isElectronicAvailableForPrimary
+                  }
+                  isElectronicAvailableForSecondary={
+                    editPetitionerInformationHelper.isElectronicAvailableForSecondary
+                  }
                   showLoginAndServiceInformation={
                     editPetitionerInformationHelper.showLoginAndServiceInformation
                   }
