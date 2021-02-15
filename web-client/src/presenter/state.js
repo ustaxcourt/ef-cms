@@ -35,7 +35,6 @@ import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper
 import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
-import { editPractitionerContactHelper } from './computeds/editPractitionerContactHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -140,7 +139,6 @@ const helpers = {
   editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
-  editPractitionerContactHelper,
   editStatisticFormHelper,
   externalUserCasesHelper,
   fileDocumentHelper,
