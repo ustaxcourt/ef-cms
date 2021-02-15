@@ -165,7 +165,8 @@ const otherPetitionersCase = {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     },
   ],
-  otherPetitioners: times(200, () => otherPetitionerObject),
+  //fixeme try this
+  otherPetitioners: times(2700, () => otherPetitionerObject),
   preferredTrialCity: 'Washington, District of Columbia',
   privatePractitioners: [
     {
