@@ -2,6 +2,7 @@ const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
 
 const { ENV } = process.env;
 const UserPoolCache = {};
+const { v5: uuidv5 } = require('uuid');
 
 /**
  * This function makes it easy to lookup the current version so that we can perform searches against it
@@ -142,6 +143,44 @@ const shuffle = arr => {
   }
 
   return arr;
+};
+
+/**
+ * This let's us fake a real email address because we do not want to
+ * accidentally email someone in a testing environment
+ *
+ * @param {Object} providers
+ * @param {String} domainToUse  This is the suffix email '@example.com' realEmail
+ * @param {String} realEmail    The real email that we want to make into nonsense
+ * @returns {String}            This is the faked email to use
+ */
+exports.fakeEmail = ({ domainToUse = 'example.com', realEmail }) => {
+  const MY_NAMESPACE = '81f7d8bd-18e2-45ce-816a-6e22b66476a6';
+  const faked = uuidv5(realEmail, MY_NAMESPACE);
+  return [faked, '@', domainToUse].join('');
+};
+
+/**
+ * This function replaces all of values for all of the keys that are named 'email'.
+ *
+ * @param {Object} obj The JSON Object to fix and fake emails
+ * @returns {Object} The original object with all of the 'email' keys obfuscated.
+ * @calls exports.fakeEmail
+ */
+exports.findAndMockEmails = jsonObj => {
+  if (!jsonObj) {
+    return jsonObj;
+  }
+
+  const obj = JSON.parse(JSON.stringify(jsonObj));
+  Object.keys(obj).forEach(k => {
+    if (typeof obj[k] === 'object') {
+      obj[k] = exports.findAndMockEmails(obj[k]);
+    } else if (k === 'email') {
+      obj[k] = exports.fakeEmail({ realEmail: obj[k] });
+    }
+  });
+  return obj;
 };
 
 exports.checkEnvVar = checkEnvVar;
