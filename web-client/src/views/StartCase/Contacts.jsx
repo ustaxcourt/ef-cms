@@ -1,5 +1,6 @@
 import { ContactPrimary } from './ContactPrimary';
 import { ContactSecondary } from './ContactSecondary';
+import { EditPetitionerLoginForm } from '../EditPetitionerLoginForm';
 import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import React from 'react';
@@ -33,14 +34,17 @@ export const Contacts = connect(
               onChange={onChange}
             />
             {showPrimaryServiceIndicator && (
-              <div className="margin-bottom-6">
-                <h4 className="margin-top-6">Service Information</h4>
-                <ServiceIndicatorRadios
-                  bind="form.contactPrimary"
-                  validateSequence={validateSequence}
-                  validationErrors="validationErrors.contactPrimary"
-                />
-              </div>
+              <>
+                <h4>Login &amp; Service Information</h4>
+                <div className="blue-container margin-bottom-6">
+                  <ServiceIndicatorRadios
+                    bind="form.contactPrimary"
+                    validateSequence={validateSequence}
+                    validationErrors="validationErrors.contactPrimary"
+                  />
+                  <EditPetitionerLoginForm type="contactPrimary" />
+                </div>
+              </>
             )}
           </>
         )}
@@ -57,12 +61,15 @@ export const Contacts = connect(
             />
             {showSecondaryServiceIndicator && (
               <>
-                <h4 className="margin-top-6">Service Information</h4>
-                <ServiceIndicatorRadios
-                  bind="form.contactSecondary"
-                  validateSequence={validateSequence}
-                  validationErrors="validationErrors.contactSecondary"
-                />
+                <h4>Login &amp; Service Information</h4>
+                <div className="blue-container margin-bottom-6">
+                  <ServiceIndicatorRadios
+                    bind="form.contactSecondary"
+                    validateSequence={validateSequence}
+                    validationErrors="validationErrors.contactSecondary"
+                  />
+                  <EditPetitionerLoginForm type="contactSecondary" />
+                </div>
               </>
             )}
           </>

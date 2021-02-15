@@ -39,39 +39,41 @@ export const EditPetitionerInformation = connect(
           <ErrorNotification />
 
           <h1>Edit Petitioner Information</h1>
-          <div className="blue-container margin-bottom-4">
+          <div className="margin-bottom-4">
             <h4>Party Information</h4>
-            <FormGroup errorText={validationErrors.partyType}>
-              <label className="usa-label" htmlFor="party-type">
-                Party type
-              </label>
-              <select
-                className="usa-select"
-                id="party-type"
-                name="partyType"
-                value={form.partyType}
-                onChange={e => {
-                  updateFormPartyTypeSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                  validatePetitionerInformationFormSequence();
-                }}
-              >
-                {Object.keys(editPetitionerInformationHelper.partyTypes).map(
-                  partyType => (
-                    <option
-                      key={partyType}
-                      value={
-                        editPetitionerInformationHelper.partyTypes[partyType]
-                      }
-                    >
-                      {editPetitionerInformationHelper.partyTypes[partyType]}
-                    </option>
-                  ),
-                )}
-              </select>
-            </FormGroup>
+            <div className="blue-container margin-bottom-4">
+              <FormGroup errorText={validationErrors.partyType}>
+                <label className="usa-label" htmlFor="party-type">
+                  Party type
+                </label>
+                <select
+                  className="usa-select"
+                  id="party-type"
+                  name="partyType"
+                  value={form.partyType}
+                  onChange={e => {
+                    updateFormPartyTypeSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                    validatePetitionerInformationFormSequence();
+                  }}
+                >
+                  {Object.keys(editPetitionerInformationHelper.partyTypes).map(
+                    partyType => (
+                      <option
+                        key={partyType}
+                        value={
+                          editPetitionerInformationHelper.partyTypes[partyType]
+                        }
+                      >
+                        {editPetitionerInformationHelper.partyTypes[partyType]}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </FormGroup>
+            </div>
 
             {(editPetitionerInformationHelper.showPrimaryContact ||
               editPetitionerInformationHelper.showSecondaryContact) && (
@@ -92,7 +94,7 @@ export const EditPetitionerInformation = connect(
                     editPetitionerInformationHelper.showSecondaryContact
                   }
                   validateSequence={validatePetitionerInformationFormSequence}
-                  wrapperClassName="contact-wrapper"
+                  wrapperClassName="contact-wrapper blue-container margin-bottom-4"
                   onBlur="validatePetitionerInformationFormSequence"
                   onChange="updateFormValueSequence"
                 />
