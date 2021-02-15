@@ -80,17 +80,14 @@ export const EditPetitionerInformation = connect(
               <>
                 <Contacts
                   bind="form"
-                  contactsHelper="startCaseInternalContactsHelper"
+                  contactsHelper="editPractitionerContactHelper"
+                  showLoginAndServiceInformation={
+                    editPetitionerInformationHelper.showLoginAndServiceInformation
+                  }
                   showPrimaryContact={
                     editPetitionerInformationHelper.showPrimaryContact
                   }
-                  showPrimaryServiceIndicator={
-                    editPetitionerInformationHelper.showPrimaryContact
-                  }
                   showSecondaryContact={
-                    editPetitionerInformationHelper.showSecondaryContact
-                  }
-                  showSecondaryServiceIndicator={
                     editPetitionerInformationHelper.showSecondaryContact
                   }
                   validateSequence={validatePetitionerInformationFormSequence}

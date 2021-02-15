@@ -3,20 +3,23 @@ import { ContactSecondary } from './ContactSecondary';
 import { EditPetitionerLoginForm } from '../EditPetitionerLoginForm';
 import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
+import { props, state } from 'cerebral';
 import React from 'react';
 
 export const Contacts = connect(
-  {},
+  {
+    helper: state[props.contactsHelper],
+  },
   function Contacts({
     bind,
     contactsHelper,
+    helper,
     onBlur,
     onChange,
     parentView,
+    showLoginAndServiceInformation,
     showPrimaryContact,
-    showPrimaryServiceIndicator,
     showSecondaryContact,
-    showSecondaryServiceIndicator,
     useSameAsPrimary,
     validateSequence,
     wrapperClassName,
@@ -33,16 +36,21 @@ export const Contacts = connect(
               onBlur={onBlur}
               onChange={onChange}
             />
-            {showPrimaryServiceIndicator && (
+            {showLoginAndServiceInformation && (
               <>
                 <h4>Login &amp; Service Information</h4>
                 <div className="blue-container margin-bottom-6">
                   <ServiceIndicatorRadios
                     bind="form.contactPrimary"
+                    isElectronicAvailable={
+                      helper.isElectronicAvailableForPrimary
+                    }
                     validateSequence={validateSequence}
                     validationErrors="validationErrors.contactPrimary"
                   />
-                  <EditPetitionerLoginForm type="contactPrimary" />
+                  <div className="margin-top-4">
+                    <EditPetitionerLoginForm type="contactPrimary" />
+                  </div>
                 </div>
               </>
             )}
@@ -59,16 +67,21 @@ export const Contacts = connect(
               onBlur={onBlur}
               onChange={onChange}
             />
-            {showSecondaryServiceIndicator && (
+            {showLoginAndServiceInformation && (
               <>
                 <h4>Login &amp; Service Information</h4>
                 <div className="blue-container margin-bottom-6">
                   <ServiceIndicatorRadios
                     bind="form.contactSecondary"
+                    isElectronicAvailable={
+                      helper.isElectronicAvailableForSecondary
+                    }
                     validateSequence={validateSequence}
                     validationErrors="validationErrors.contactSecondary"
                   />
-                  <EditPetitionerLoginForm type="contactSecondary" />
+                  <div className="margin-top-4">
+                    <EditPetitionerLoginForm type="contactSecondary" />
+                  </div>
                 </div>
               </>
             )}
