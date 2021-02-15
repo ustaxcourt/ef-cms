@@ -1,1 +1,1 @@
-module.exports = [...require('./efcms-local.js')];
+module.exports = [...require('./efcms-local.json')];
