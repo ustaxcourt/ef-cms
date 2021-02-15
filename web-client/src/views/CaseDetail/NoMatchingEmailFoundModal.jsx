@@ -6,15 +6,20 @@ import React from 'react';
 export const NoMatchingEmailFoundModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
+    confirmSequence: sequences.submitNoMatchingEmailFoundModalSequence,
     modal: state.modal,
   },
-  function NoMatchingEmailFoundModal({ cancelSequence, modal }) {
+  function NoMatchingEmailFoundModal({
+    cancelSequence,
+    confirmSequence,
+    modal,
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         confirmLabel="Yes, Continue"
-        // confirmSequence={confirmSequence}
+        confirmSequence={confirmSequence}
         title="No Matching Email"
       >
         <div>

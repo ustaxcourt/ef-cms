@@ -338,6 +338,8 @@ import { submitEditSecondaryContactSequence } from './sequences/submitEditSecond
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
+import { submitMatchingEmailFoundModalSequence } from './sequences/submitMatchingEmailFoundModalSequence';
+import { submitNoMatchingEmailFoundModalSequence } from './sequences/submitNoMatchingEmailFoundModalSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
 import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
@@ -798,6 +800,8 @@ export const presenter = {
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitLoginSequence,
+    submitMatchingEmailFoundModalSequence,
+    submitNoMatchingEmailFoundModalSequence,
     submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
     submitPetitionFromPaperSequence,
