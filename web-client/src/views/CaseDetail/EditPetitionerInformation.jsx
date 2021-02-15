@@ -3,6 +3,7 @@ import { CaseDetailHeader } from './CaseDetailHeader';
 import { Contacts } from '../StartCase/Contacts';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { MatchingEmailFoundModal } from './MatchingEmailFoundModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -12,6 +13,7 @@ export const EditPetitionerInformation = connect(
     docketNumber: state.caseDetail.docketNumber,
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
+    showModal: state.modal.showModal,
     updateFormPartyTypeSequence: sequences.updateFormPartyTypeSequence,
     updatePetitionerInformationFormSequence:
       sequences.updatePetitionerInformationFormSequence,
@@ -23,6 +25,7 @@ export const EditPetitionerInformation = connect(
     docketNumber,
     editPetitionerInformationHelper,
     form,
+    showModal,
     updateFormPartyTypeSequence,
     updatePetitionerInformationFormSequence,
     validatePetitionerInformationFormSequence,
@@ -30,6 +33,8 @@ export const EditPetitionerInformation = connect(
   }) {
     return (
       <>
+        {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
+
         <CaseDetailHeader />
 
         <section
