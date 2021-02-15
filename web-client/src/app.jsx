@@ -258,6 +258,7 @@ const app = {
 
     router.initialize(cerebralApp, route);
     initializeSocketProvider(cerebralApp, applicationContext);
+    window.cerebralApp = cerebralApp; // TODO: remove
 
     ReactDOM.render(
       <Container app={cerebralApp}>
