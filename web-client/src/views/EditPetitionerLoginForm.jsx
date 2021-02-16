@@ -8,15 +8,15 @@ export const EditPetitionerLoginForm = connect(
     form: state.form,
     type: props.type,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateChangePetitionerLoginAndServiceEmailSequence:
-      sequences.validateChangePetitionerLoginAndServiceEmailSequence,
+    validatePetitionerInformationFormSequence:
+      sequences.validatePetitionerInformationFormSequence,
     validationErrors: state.validationErrors,
   },
   function EditPetitionerLoginForm({
     form,
     type,
     updateFormValueSequence,
-    validateChangePetitionerLoginAndServiceEmailSequence,
+    validatePetitionerInformationFormSequence,
     validationErrors,
   }) {
     return (
@@ -40,7 +40,7 @@ export const EditPetitionerLoginForm = connect(
             type="text"
             value={form[type].email || ''}
             onBlur={() => {
-              validateChangePetitionerLoginAndServiceEmailSequence();
+              validatePetitionerInformationFormSequence();
             }}
             onChange={e =>
               updateFormValueSequence({
@@ -68,7 +68,7 @@ export const EditPetitionerLoginForm = connect(
             type="text"
             value={form[type].confirmEmail || ''}
             onBlur={() => {
-              validateChangePetitionerLoginAndServiceEmailSequence();
+              validatePetitionerInformationFormSequence();
             }}
             onChange={e =>
               updateFormValueSequence({

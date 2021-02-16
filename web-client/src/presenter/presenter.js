@@ -423,7 +423,6 @@ import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequen
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateCaseInventoryReportModalSequence } from './sequences/validateCaseInventoryReportModalSequence';
 import { validateChangeLoginAndServiceEmailSequence } from './sequences/validateChangeLoginAndServiceEmailSequence';
-import { validateChangePetitionerLoginAndServiceEmailSequence } from './sequences/validateChangePetitionerLoginAndServiceEmailSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
@@ -886,7 +885,6 @@ export const presenter = {
     validateCaseDocketNumberSearchFormSequence,
     validateCaseInventoryReportModalSequence,
     validateChangeLoginAndServiceEmailSequence,
-    validateChangePetitionerLoginAndServiceEmailSequence,
     validateCourtIssuedDocketEntrySequence,
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,
