@@ -10,6 +10,10 @@ import {
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { addExistingUserToCaseInteractor } from '../../shared/src/proxies/addExistingUserToCaseProxy';
 import {
+  addNewUserToCaseInteractor,
+  addNewUserToCaseProxy,
+} from '../../shared/src/proxies/addNewUserToCaseProxy';
+import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
@@ -187,6 +191,7 @@ import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users
 const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/proxies/documents/removePdfFromDocketEntryProxy');
+
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/documents/removeSignatureFromDocumentProxy';
 import { replyToMessageInteractor } from '../../shared/src/proxies/messages/replyToMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
@@ -302,6 +307,8 @@ const allUseCases = {
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
   addExistingUserToCaseInteractor,
+  addNewUserToCaseInteractor,
+  addNewUserToCaseProxy,
   archiveCorrespondenceDocumentInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,

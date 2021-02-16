@@ -229,7 +229,7 @@ import { openEditIrsPractitionersModalSequence } from './sequences/openEditIrsPr
 import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleModalSequence';
 import { openEditPrivatePractitionersModalSequence } from './sequences/openEditPrivatePractitionersModalSequence';
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
-import { openMatchingEmailFoundModalSequence } from './sequences/openMatchingEmailFoundModalSequence';
+import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
@@ -693,7 +693,7 @@ export const presenter = {
     openEditOrderTitleModalSequence,
     openEditPrivatePractitionersModalSequence,
     openForwardMessageModalSequence,
-    openMatchingEmailFoundModalSequence,
+    openGainElectronicAccessToCaseModalSequence,
     openPdfPreviewModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
