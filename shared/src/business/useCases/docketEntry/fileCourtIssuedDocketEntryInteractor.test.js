@@ -279,4 +279,30 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       isDraft: false,
     });
   });
+
+  it('should delete the draftOrderState from the docketEntry', async () => {
+    const docketEntryToUpdate = caseRecord.docketEntries[5];
+    await fileCourtIssuedDocketEntryInteractor({
+      applicationContext,
+      documentMeta: {
+        docketEntryId: docketEntryToUpdate.docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: docketEntryToUpdate.documentTitle,
+        documentType: docketEntryToUpdate.documentType,
+        draftOrderState: {
+          documentContents: 'Some content',
+          richText: 'some content',
+        },
+        eventCode: docketEntryToUpdate.eventCode,
+      },
+    });
+
+    const updatedDocketEntry = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        d => d.docketEntryId === docketEntryToUpdate.docketEntryId,
+      );
+
+    expect(updatedDocketEntry).toMatchObject({ draftOrderState: null });
+  });
 });
