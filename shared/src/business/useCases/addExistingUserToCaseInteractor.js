@@ -10,8 +10,10 @@ const { UserCase } = require('../entities/UserCase');
 /**
  * addExistingUserToCaseInteractor
  *
- * @param {object} user the user to get
- * @returns {User} the retrieved user
+ * @param {object} options.docketNumber the docket number for the case we need to update
+ * @param {object} email the email address for the user we are attaching to the case
+ * @param {object} name the name of the user to update the case with
+ * @returns {Case} the updated case
  */
 exports.addExistingUserToCaseInteractor = async ({
   applicationContext,
