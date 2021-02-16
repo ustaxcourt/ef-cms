@@ -37,6 +37,11 @@ describe('editPetitionerInformationHelper', () => {
   it('should return contactPrimaryHasEmail true if the contactPrimary has an email address', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {
+          contactPrimary: {
+            email: 'testpetitioner@example.com',
+          },
+        },
         form: {
           contactPrimary: {
             email: 'testpetitioner@example.com',
@@ -55,6 +60,9 @@ describe('editPetitionerInformationHelper', () => {
   it('should return contactPrimaryHasEmail false if the contactPrimary DOES NOT have an email address', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {
+          contactPrimary: {},
+        },
         form: {
           contactPrimary: {},
           partyType: PARTY_TYPES.petitioner,
@@ -71,6 +79,11 @@ describe('editPetitionerInformationHelper', () => {
   it('should return contactSecondaryHasEmail true if the contactPrimary has an email address', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {
+          contactSecondary: {
+            email: 'testpetitioner@example.com',
+          },
+        },
         form: {
           contactSecondary: {
             email: 'testpetitioner@example.com',
@@ -89,6 +102,9 @@ describe('editPetitionerInformationHelper', () => {
   it('should return contactSecondaryHasEmail false if the contactPrimary DOES NOT have an email address', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {
+          contactSecondary: {},
+        },
         form: {
           contactSecondary: {},
           partyType: PARTY_TYPES.petitionerSpouse,
