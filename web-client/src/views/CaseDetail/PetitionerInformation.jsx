@@ -187,7 +187,7 @@ const PetitionerInformation = connect(
                       'grid-col-3 other-petitioners-information',
                       idx > 3 && 'margin-top-4',
                     )}
-                    key={idx}
+                    key={otherPetitioner.name}
                   >
                     <address aria-labelledby="secondary-label">
                       {otherPetitioner.name && (
@@ -245,7 +245,7 @@ const PetitionerInformation = connect(
                     'tablet:grid-col-3 counsel-information',
                     index > 3 && 'margin-top-3',
                   )}
-                  key={index}
+                  key={practitioner.name}
                 >
                   <address aria-labelledby="practitioner-label">
                     {practitioner.name && (
@@ -307,8 +307,8 @@ const PetitionerInformation = connect(
                       </p>
                     )}
 
-                  {practitioner.representingFormatted.map((item, repIndex) => (
-                    <p key={`representing-${repIndex}`}>
+                  {practitioner.representingFormatted.map(item => (
+                    <p key={`representing-${item.name}`}>
                       <span>{item.name}</span>
                       {item.secondaryName && (
                         <span>

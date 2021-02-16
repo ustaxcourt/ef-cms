@@ -37,8 +37,6 @@ IrsPractitioner.prototype.init = function init(
     Practitioner.getDefaultServiceIndicator(rawUser);
 };
 
-IrsPractitioner.validationName = 'IrsPractitioner';
-
 IrsPractitioner.VALIDATION_RULES = joi.object().keys({
   barNumber: JoiValidationConstants.STRING.max(100)
     .required()

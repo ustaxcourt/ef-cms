@@ -54,6 +54,7 @@ describe('casePublicSearchInteractor', () => {
       {
         caseCaption: 'Test Case Caption One',
         contactPrimary: {
+          entityName: 'PublicContact',
           name: MOCK_CASE.contactPrimary.name,
           state: MOCK_CASE.contactPrimary.state,
         },
@@ -63,6 +64,7 @@ describe('casePublicSearchInteractor', () => {
         docketNumber: '123-19',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         docketNumberWithSuffix: '123-19S',
+        entityName: 'PublicCase',
         hasIrsPractitioner: false,
         isSealed: false,
         partyType: PARTY_TYPES.petitioner,

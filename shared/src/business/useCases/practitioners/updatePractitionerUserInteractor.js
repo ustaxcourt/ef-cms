@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
+const { isEqual, omit } = require('lodash');
 const { Practitioner } = require('../../entities/Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -52,15 +53,18 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
 
+  const userHasAccount = !!oldUserInfo.email;
+  const userIsUpdatingEmail = !!user.updatedEmail;
+
   if (oldUserInfo.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
   }
 
-  if (!oldUserInfo.email && user.email) {
+  if (!userHasAccount && userIsUpdatingEmail) {
     user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
-  if (user.updatedEmail) {
+  if (userHasAccount && userIsUpdatingEmail) {
     await updateUserPendingEmail({ applicationContext, user });
   }
 
@@ -69,7 +73,7 @@ exports.updatePractitionerUserInteractor = async ({
     {
       ...user,
       barNumber: oldUserInfo.barNumber,
-      email: oldUserInfo.email || user.email,
+      email: oldUserInfo.email || user.updatedEmail,
     },
     { applicationContext },
   )
@@ -80,6 +84,7 @@ exports.updatePractitionerUserInteractor = async ({
     .getPersistenceGateway()
     .updatePractitionerUser({
       applicationContext,
+      isNewAccount: !userHasAccount && userIsUpdatingEmail,
       user: validatedUserData,
     });
 
@@ -91,7 +96,7 @@ exports.updatePractitionerUserInteractor = async ({
     userId: requestUser.userId,
   });
 
-  if (user.updatedEmail) {
+  if (userHasAccount && userIsUpdatingEmail) {
     await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
       applicationContext,
       pendingEmail: user.pendingEmail,
@@ -99,16 +104,43 @@ exports.updatePractitionerUserInteractor = async ({
     });
   }
 
-  await generateChangeOfAddress({
+  const updatedPractitionerRaw = new Practitioner(updatedUser, {
     applicationContext,
-    bypassDocketEntry,
-    contactInfo: validatedUserData.contact,
-    requestUserId: requestUser.userId,
-    updatedEmail: validatedUserData.email,
-    updatedName: validatedUserData.name,
-    user: oldUserInfo,
-    websocketMessagePrefix: 'admin',
-  });
+  }).toRawObject();
+  const oldPractitionerRaw = new Practitioner(oldUserInfo, {
+    applicationContext,
+  }).toRawObject();
+
+  const practitionerDetailDiff = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: {
+        ...omit(updatedPractitionerRaw, 'contact'),
+        ...updatedPractitionerRaw.contact,
+      },
+      oldData: {
+        ...omit(oldPractitionerRaw, 'contact'),
+        ...oldPractitionerRaw.contact,
+      },
+    });
+
+  const hasUpdatedEmailOnly = isEqual(
+    Object.keys(practitionerDetailDiff).sort(),
+    ['pendingEmail', 'pendingEmailVerificationToken'],
+  );
+
+  if (!hasUpdatedEmailOnly) {
+    await generateChangeOfAddress({
+      applicationContext,
+      bypassDocketEntry,
+      contactInfo: validatedUserData.contact,
+      requestUserId: requestUser.userId,
+      updatedEmail: validatedUserData.email,
+      updatedName: validatedUserData.name,
+      user: oldUserInfo,
+      websocketMessagePrefix: 'admin',
+    });
+  }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

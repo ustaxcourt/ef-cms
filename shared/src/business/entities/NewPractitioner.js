@@ -22,8 +22,6 @@ NewPractitioner.prototype.init = function init(rawUser) {
   Practitioner.prototype.init.call(this, rawUser);
 };
 
-NewPractitioner.validationName = 'Practitioner';
-
 const VALIDATION_ERROR_MESSAGES = {
   ...Practitioner.VALIDATION_ERROR_MESSAGES,
   email: 'Enter email address',

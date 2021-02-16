@@ -27,8 +27,6 @@ Scan.prototype.init = function init({ applicationContext, rawScan }) {
   this.scanId = rawScan.scanId || applicationContext.getUniqueId();
 };
 
-Scan.validationName = 'Scan';
-
 /**
  * adds a batch to the current scan
  *
