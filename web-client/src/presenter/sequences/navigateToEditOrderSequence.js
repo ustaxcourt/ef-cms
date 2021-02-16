@@ -1,6 +1,7 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getDocumentContentsAction } from '../actions/getDocumentContentsAction';
 import { getDocumentEditUrlAsPathAction } from '../actions/getDocumentEditUrlAsPathAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { removeSignatureAction } from '../actions/removeSignatureAction';
@@ -22,6 +23,7 @@ export const navigateToEditOrderSequence = [
   clearFormAction,
   getCaseAction,
   setCaseAction,
+  getDocumentContentsAction,
   setFormFromDraftStateAction,
   setDocumentToEditAction,
   removeSignatureAction,

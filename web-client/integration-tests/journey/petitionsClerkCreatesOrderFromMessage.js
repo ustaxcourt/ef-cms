@@ -65,11 +65,8 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
-
     const draftOrder = caseDetailFormatted.formattedDraftDocuments.find(
-      document =>
-        document.documentTitle === 'Order' &&
-        document.draftOrderState.richText === '<p>This is a test order.</p>',
+      document => document.documentTitle === 'Order',
     );
 
     expect(draftOrder).toBeTruthy();
