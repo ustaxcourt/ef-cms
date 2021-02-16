@@ -4,6 +4,7 @@ const {
   SERVICE_INDICATOR_TYPES,
   US_STATES,
 } = require('./EntityConstants');
+const { over1000Characters } = require('../test/createTestApplicationContext');
 const { Practitioner } = require('./Practitioner');
 
 describe('Practitioner', () => {
@@ -34,6 +35,7 @@ describe('Practitioner', () => {
     lastName: 'Practitioner',
     name: 'Test Practitioner',
     originalBarState: US_STATES.IL,
+    practitionerNotes: '',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -151,6 +153,28 @@ describe('Practitioner', () => {
       employer: 'Private',
     });
     expect(user.role).toEqual(ROLES.inactivePractitioner);
+  });
+
+  it('should pass validation when practitionerNotes is less than 500 characters', () => {
+    const user = new Practitioner({
+      ...mockPractitioner,
+      practitionerNotes: 'Test notes',
+    });
+
+    expect(user.isValid()).toBeTruthy();
+  });
+
+  it('should fail validation when practitionerNotes is more than 500 characters', () => {
+    const user = new Practitioner({
+      ...mockPractitioner,
+      practitionerNotes: over1000Characters,
+    });
+
+    expect(user.isValid()).toBeFalsy();
+    expect(user.getFormattedValidationErrors()).toEqual({
+      practitionerNotes:
+        Practitioner.VALIDATION_ERROR_MESSAGES.practitionerNotes[0].message,
+    });
   });
 
   it('Combines firstName, middleName, lastName, and suffix properties to set the name property', () => {
