@@ -41,6 +41,41 @@ export const validatePetitionerInformationFormAction = ({
     });
 
   if (
+    contactPrimary.email &&
+    contactPrimary.email !== oldContactPrimary.email
+  ) {
+    const errorsContactPrimary = applicationContext
+      .getUseCases()
+      .validateUpdateUserEmailInteractor({
+        applicationContext,
+        updateUserEmail: contactPrimary,
+      });
+
+    errors.contactPrimary = {
+      ...errors.contactPrimary,
+      ...errorsContactPrimary,
+    };
+  }
+
+  if (
+    contactSecondary &&
+    contactSecondary.email &&
+    contactSecondary.email !== oldContactSecondary?.email
+  ) {
+    const errorsContactSecondary = applicationContext
+      .getUseCases()
+      .validateUpdateUserEmailInteractor({
+        applicationContext,
+        updateUserEmail: contactSecondary,
+      });
+
+    errors.contactSecondary = {
+      ...errors.contactSecondary,
+      ...errorsContactSecondary,
+    };
+  }
+
+  if (
     [
       SERVICE_INDICATOR_TYPES.SI_PAPER,
       SERVICE_INDICATOR_TYPES.SI_NONE,
