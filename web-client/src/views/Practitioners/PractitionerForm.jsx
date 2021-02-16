@@ -424,14 +424,14 @@ export const PractitionerForm = connect(
                       </select>
                     </FormGroup>
                   ) : (
-                      <FormGroup>
-                        <label className="usa-label" htmlFor="admissionStatus">
-                          Admission status
+                    <FormGroup>
+                      <label className="usa-label" htmlFor="admissionStatus">
+                        Admission status
                       </label>
 
-                        <p id="admissionStatus">Active</p>
-                      </FormGroup>
-                    )}
+                      <p id="admissionStatus">Active</p>
+                    </FormGroup>
+                  )}
 
                   <DateInput
                     errorText={validationErrors.admissionsDate}
