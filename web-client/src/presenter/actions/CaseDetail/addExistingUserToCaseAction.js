@@ -5,7 +5,6 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.props the cerebral props object
  * @param {Function} providers.get the cerebral get helper function
  * @returns {Promise} async action
  */
