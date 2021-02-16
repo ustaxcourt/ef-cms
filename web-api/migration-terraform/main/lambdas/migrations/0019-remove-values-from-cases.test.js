@@ -1,4 +1,4 @@
-const { migrateItems } = require('./0017-remove-values-from-cases');
+const { migrateItems } = require('./0019-remove-values-from-cases');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
