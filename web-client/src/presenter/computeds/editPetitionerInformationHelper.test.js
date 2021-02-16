@@ -21,6 +21,7 @@ describe('editPetitionerInformationHelper', () => {
     });
     expect(result.showLoginAndServiceInformation).toEqual(true);
   });
+
   it('returns showLoginAndServiceInformation false if the current user DOES NOT have the EDIT_PETITIONER_EMAIL permission', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
@@ -33,9 +34,14 @@ describe('editPetitionerInformationHelper', () => {
     expect(result.showLoginAndServiceInformation).toEqual(false);
   });
 
-  it('should return isElectronicAvailableForPrimary true if the contactPrimary has an email address', () => {
+  it('should return contactPrimaryHasEmail true if the contactPrimary has an email address', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {
+          contactPrimary: {
+            email: 'testpetitioner@example.com',
+          },
+        },
         form: {
           contactPrimary: {
             email: 'testpetitioner@example.com',
@@ -48,12 +54,15 @@ describe('editPetitionerInformationHelper', () => {
       },
     });
 
-    expect(result.isElectronicAvailableForPrimary).toEqual(true);
+    expect(result.contactPrimaryHasEmail).toEqual(true);
   });
 
-  it('should return isElectronicAvailableForPrimary false if the contactPrimary DOES NOT have an email address', () => {
+  it('should return contactPrimaryHasEmail false if the contactPrimary DOES NOT have an email address', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {
+          contactPrimary: {},
+        },
         form: {
           contactPrimary: {},
           partyType: PARTY_TYPES.petitioner,
@@ -64,12 +73,17 @@ describe('editPetitionerInformationHelper', () => {
       },
     });
 
-    expect(result.isElectronicAvailableForPrimary).toEqual(false);
+    expect(result.contactPrimaryHasEmail).toEqual(false);
   });
 
-  it('should return isElectronicAvailableForSecondary true if the contactPrimary has an email address', () => {
+  it('should return contactSecondaryHasEmail true if the contactPrimary has an email address', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {
+          contactSecondary: {
+            email: 'testpetitioner@example.com',
+          },
+        },
         form: {
           contactSecondary: {
             email: 'testpetitioner@example.com',
@@ -82,12 +96,15 @@ describe('editPetitionerInformationHelper', () => {
       },
     });
 
-    expect(result.isElectronicAvailableForSecondary).toEqual(true);
+    expect(result.contactSecondaryHasEmail).toEqual(true);
   });
 
-  it('should return isElectronicAvailableForSecondary false if the contactPrimary DOES NOT have an email address', () => {
+  it('should return contactSecondaryHasEmail false if the contactPrimary DOES NOT have an email address', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {
+          contactSecondary: {},
+        },
         form: {
           contactSecondary: {},
           partyType: PARTY_TYPES.petitionerSpouse,
@@ -98,7 +115,7 @@ describe('editPetitionerInformationHelper', () => {
       },
     });
 
-    expect(result.isElectronicAvailableForSecondary).toEqual(false);
+    expect(result.contactSecondaryHasEmail).toEqual(false);
   });
   // TODO additional coverage
 });
