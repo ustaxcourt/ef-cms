@@ -52,11 +52,6 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
 
   trialSessionEntity.validate();
 
-  console.log(
-    'trialSessionEntity.generateSortKeyPrefix()',
-    trialSessionEntity.generateSortKeyPrefix(),
-  );
-
   const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
