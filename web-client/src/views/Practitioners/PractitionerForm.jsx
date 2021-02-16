@@ -1,3 +1,4 @@
+import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerContactForm } from './PractitionerContactForm';
@@ -449,6 +450,32 @@ export const PractitionerForm = connect(
                     onBlur={validateAddPractitionerSequence}
                     onChange={updateFormValueSequence}
                   />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="grid-row margin-bottom-4">
+          <div className="grid-col-12">
+            <h2>Practitioner Notes</h2>
+            <div className="blue-container">
+              <div className="grid-row grid-gap-3">
+                <div className="grid-col-12">
+                  <FormGroup errorText={validationErrors.practitionerNotes}>
+                    <label className="usa-label" htmlFor="practitioner-notes">
+                      Practitioner notes{' '}
+                      <span className="usa-hint">(optional)</span>
+                    </label>
+                    <BindedTextarea
+                      bind="form.practitionerNotes"
+                      id="practitioner-notes"
+                      name="practitionerNotes"
+                      required={false}
+                      onChange={() => {
+                        validateAddPractitionerSequence();
+                      }}
+                    ></BindedTextarea>
+                  </FormGroup>
                 </div>
               </div>
             </div>
