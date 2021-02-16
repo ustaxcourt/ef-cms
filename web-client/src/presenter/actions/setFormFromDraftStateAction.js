@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const setFormFromDraftStateAction = ({ props, store }) => {
-  const { caseDetail, docketEntryIdToEdit } = props;
+  const { caseDetail, docketEntryIdToEdit, documentContents, richText } = props;
 
   if (docketEntryIdToEdit) {
     const documentToEdit = caseDetail.docketEntries.find(
@@ -21,5 +21,7 @@ export const setFormFromDraftStateAction = ({ props, store }) => {
       documentTitle: documentToEdit.documentTitle,
       documentType: documentToEdit.documentType,
     });
+    store.set(state.form.documentContents, documentContents);
+    store.set(state.form.richText, richText);
   }
 };
