@@ -128,20 +128,24 @@ describe('refreshExternalDocumentTitleFromEventCodeAction', () => {
     expect(result.state.form.documentTitle).toEqual('[Miscellaneous]');
   });
 
-  it('should set the secondary document title when the eventCode is an internal filing event code', async () => {
+  it('should set the secondary document title when the secondary document eventCode is an internal filing event code', async () => {
     const result = await runAction(
       refreshExternalDocumentTitleFromEventCodeAction,
       {
         modules: { presenter },
         state: {
           form: {
-            category: 'Miscellaneous',
-            eventCode: 'MISC',
+            secondaryDocument: {
+              category: 'Miscellaneous',
+              eventCode: 'MISC',
+            },
           },
         },
       },
     );
 
-    expect(result.state.form.documentTitle).toEqual('[Miscellaneous]');
+    expect(result.state.form.secondaryDocument.documentTitle).toEqual(
+      '[Miscellaneous]',
+    );
   });
 });
