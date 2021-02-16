@@ -1,6 +1,6 @@
 import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../applicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   getOptionsForCategory,
   getPreviouslyFiledDocuments,
@@ -317,6 +317,41 @@ describe('selectDocumentTypeHelper', () => {
 
       expect(result.length).toEqual(1);
       expect(result[0]).toMatchObject(mockCaseDetail.docketEntries[0]);
+    });
+
+    it('should return documentTitle with additionalInfo', () => {
+      const mockSelectedDocketEntryId = 'f9fbccfb-88cb-4bf6-a90d-174b6f4130d0';
+      const mockExhibit = {
+        addToCoversheet: true,
+        additionalInfo: 'First',
+        docketEntryId: '3913f8a9-891a-4c9c-827e-1a02b403fa63',
+        documentTitle: 'Exhibit(s)',
+        documentType: 'Exhibit(s)',
+      };
+
+      const mockCaseDetail = {
+        docketEntries: [
+          mockExhibit,
+          {
+            docketEntryId: mockSelectedDocketEntryId,
+          },
+        ],
+      };
+
+      const result = getPreviouslyFiledDocuments(
+        applicationContext,
+        mockCaseDetail,
+        mockSelectedDocketEntryId,
+      );
+
+      expect(
+        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo
+          .mock.calls[0][0],
+      ).toEqual({ docketEntry: mockExhibit });
+      expect(result[0].documentTitle).toEqual('Exhibit(s) First');
     });
   });
 });
