@@ -464,16 +464,16 @@ export const PractitionerForm = connect(
                   <FormGroup errorText={validationErrors.practitionerNotes}>
                     <label className="usa-label" htmlFor="practitioner-notes">
                       Practitioner notes{' '}
-                    <span className="usa-hint">(optional)</span>
+                      <span className="usa-hint">(optional)</span>
                     </label>
                     <BindedTextarea
                       bind="form.practitionerNotes"
                       id="practitioner-notes"
                       name="practitionerNotes"
                       required={false}
-                      // onChange={() => {
-                      //   validateSequence();
-                      // }}
+                      onChange={() => {
+                        validateAddPractitionerSequence();
+                      }}
                     ></BindedTextarea>
                   </FormGroup>
                 </div>
