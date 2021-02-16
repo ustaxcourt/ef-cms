@@ -23,7 +23,7 @@ export const checkEmailAvailabilityAction = async ({
       email: updatedEmail || email,
     });
 
-  return !isEmailAvailable // TODO: remove this ! negate it
+  return isEmailAvailable
     ? path.emailAvailable()
     : path.emailInUse({
         errors: {
