@@ -23,7 +23,7 @@ export const EditSecondaryContactModal = connect(
             business partners, cannot be updated online at this time. Please
             have them complete and mail a{' '}
             <a
-              href="https://ustaxcourt.gov/forms/NOCOA_Form_10.pdf"
+              href="https://www.ustaxcourt.gov/resources/forms/NOCOA_Form_10.pdf"
               rel="noopener noreferrer"
               target="_blank"
             >
