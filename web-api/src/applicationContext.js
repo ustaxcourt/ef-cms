@@ -442,6 +442,9 @@ const {
   getWorkQueueFilters,
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
 const {
+  getDocumentContentsForDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor');
+const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
 const {
@@ -1613,6 +1616,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCompletedMessagesForSectionInteractor,
         getCompletedMessagesForUserInteractor,
         getConsolidatedCasesByCaseInteractor,
+        getDocumentContentsForDocketEntryInteractor,
         getDocumentQCInboxForSectionInteractor,
         getDocumentQCInboxForUserInteractor,
         getDocumentQCServedForSectionInteractor,
