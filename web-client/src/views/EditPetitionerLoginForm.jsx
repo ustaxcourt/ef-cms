@@ -8,12 +8,15 @@ export const EditPetitionerLoginForm = connect(
     form: state.form,
     type: props.type,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validationErrors: state[props.validationErrors],
+    validateChangePetitionerLoginAndServiceEmailSequence:
+      sequences.validateChangePetitionerLoginAndServiceEmailSequence,
+    validationErrors: state.validationErrors,
   },
   function EditPetitionerLoginForm({
     form,
     type,
     updateFormValueSequence,
+    validateChangePetitionerLoginAndServiceEmailSequence,
     validationErrors,
   }) {
     return (
@@ -23,21 +26,21 @@ export const EditPetitionerLoginForm = connect(
           errorText={
             validationErrors &&
             validationErrors[type] &&
-            validationErrors[type].updatedEmail
+            validationErrors[type].email
           }
         >
-          <label className="usa-label" htmlFor={`${type}.updatedEmail`}>
+          <label className="usa-label" htmlFor={`${type}.email`}>
             New email address
           </label>
           <input
             autoCapitalize="none"
             className="usa-input"
-            id={`${type}.updatedEmail`}
-            name={`${type}.updatedEmail`}
+            id={`${type}.email`}
+            name={`${type}.email`}
             type="text"
-            value={form[type].updatedEmail || ''}
+            value={form[type].email || ''}
             onBlur={() => {
-              // validation sequence
+              validateChangePetitionerLoginAndServiceEmailSequence();
             }}
             onChange={e =>
               updateFormValueSequence({
@@ -65,7 +68,7 @@ export const EditPetitionerLoginForm = connect(
             type="text"
             value={form[type].confirmEmail || ''}
             onBlur={() => {
-              // validation sequence
+              validateChangePetitionerLoginAndServiceEmailSequence();
             }}
             onChange={e =>
               updateFormValueSequence({

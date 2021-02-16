@@ -9,9 +9,11 @@ export const Contacts = connect(
   {},
   function Contacts({
     bind,
+    contactPrimaryDisplayEmail,
+    contactPrimaryHasEmail,
+    contactSecondaryDisplayEmail,
+    contactSecondaryHasEmail,
     contactsHelper,
-    isElectronicAvailableForPrimary,
-    isElectronicAvailableForSecondary,
     onBlur,
     onChange,
     parentView,
@@ -40,12 +42,18 @@ export const Contacts = connect(
                 <div className="blue-container margin-bottom-6">
                   <ServiceIndicatorRadios
                     bind="form.contactPrimary"
-                    hideElectronic={!isElectronicAvailableForPrimary}
+                    hideElectronic={!contactPrimaryHasEmail}
                     validateSequence={validateSequence}
                     validationErrors="validationErrors.contactPrimary"
                   />
                   <div className="margin-top-4">
-                    <EditPetitionerLoginForm type="contactPrimary" />
+                    {contactPrimaryHasEmail && (
+                      <span>{contactPrimaryDisplayEmail}</span>
+                    )}
+
+                    {!contactPrimaryHasEmail && (
+                      <EditPetitionerLoginForm type="contactPrimary" />
+                    )}
                   </div>
                 </div>
               </>
@@ -69,12 +77,18 @@ export const Contacts = connect(
                 <div className="blue-container margin-bottom-6">
                   <ServiceIndicatorRadios
                     bind="form.contactSecondary"
-                    hideElectronic={!isElectronicAvailableForSecondary}
+                    hideElectronic={!contactSecondaryHasEmail}
                     validateSequence={validateSequence}
                     validationErrors="validationErrors.contactSecondary"
                   />
                   <div className="margin-top-4">
-                    <EditPetitionerLoginForm type="contactSecondary" />
+                    {contactSecondaryHasEmail && (
+                      <span>{contactSecondaryDisplayEmail}</span>
+                    )}
+
+                    {!contactSecondaryHasEmail && (
+                      <EditPetitionerLoginForm type="contactSecondary" />
+                    )}
                   </div>
                 </div>
               </>

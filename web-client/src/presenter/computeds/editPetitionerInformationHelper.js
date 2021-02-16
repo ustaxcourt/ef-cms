@@ -18,12 +18,12 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
   const contactPrimaryEmail = get(state.form.contactPrimary.email);
   const contactSecondaryEmail = get(state.form.contactSecondary.email);
 
-  const isElectronicAvailableForPrimary = !!contactPrimaryEmail;
-  const isElectronicAvailableForSecondary = !!contactSecondaryEmail;
+  const contactPrimaryHasEmail = !!contactPrimaryEmail;
+  const contactSecondaryHasEmail = !!contactSecondaryEmail;
 
   return {
-    isElectronicAvailableForPrimary,
-    isElectronicAvailableForSecondary,
+    contactPrimaryHasEmail,
+    contactSecondaryHasEmail,
     partyTypes: PARTY_TYPES,
     showLoginAndServiceInformation,
     showPrimaryContact: showContacts.contactPrimary,

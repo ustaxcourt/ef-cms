@@ -89,13 +89,23 @@ export const EditPetitionerInformation = connect(
               <>
                 <Contacts
                   bind="form"
+                  contactPrimaryDisplayEmail={form.contactPrimary.email}
+                  contactPrimaryHasEmail={
+                    editPetitionerInformationHelper.contactPrimaryHasEmail
+                  }
+                  contactPrimaryHasVerifiedEmail={
+                    editPetitionerInformationHelper.contactPrimaryHasVerifiedEmail
+                  }
+                  contactSecondaryDisplayEmail={
+                    form.contactSecondary && form.contactSecondary.email
+                  }
+                  contactSecondaryHasEmail={
+                    editPetitionerInformationHelper.contactSecondaryHasEmail
+                  }
+                  contactSecondaryHasVerifiedEmail={
+                    editPetitionerInformationHelper.contactSecondaryHasVerifiedEmail
+                  }
                   contactsHelper="startCaseInternalContactsHelper"
-                  isElectronicAvailableForPrimary={
-                    editPetitionerInformationHelper.isElectronicAvailableForPrimary
-                  }
-                  isElectronicAvailableForSecondary={
-                    editPetitionerInformationHelper.isElectronicAvailableForSecondary
-                  }
                   showLoginAndServiceInformation={
                     editPetitionerInformationHelper.showLoginAndServiceInformation
                   }
