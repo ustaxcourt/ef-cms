@@ -10,8 +10,11 @@ const { v5: uuidv5 } = require('uuid');
  * @param {String} environmentName The environment we are going to lookup the current color
  * @returns {String} The current version of the application
  */
-const getVersion = async () => {
-  checkEnvVar(ENV, 'You must have ENV set in your local environment');
+const getVersion = async env => {
+  if (!env) {
+    checkEnvVar(ENV, 'You must have ENV set in your local environment');
+    env = ENV;
+  }
 
   const dynamodb = new DynamoDB({ region: 'us-east-1' });
   const result = await dynamodb
@@ -24,7 +27,7 @@ const getVersion = async () => {
           S: 'source-table-version',
         },
       },
-      TableName: `efcms-deploy-${ENV}`,
+      TableName: `efcms-deploy-${env}`,
     })
     .promise();
 
