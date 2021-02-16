@@ -9,7 +9,7 @@ export const ServiceIndicatorRadios = connect(
     bindKey: props.bind,
     bindObject: state[props.bind],
     getValidationError: props.getValidationError,
-    isElectronicAvailable: props.isElectronicAvailable,
+    hideElectronic: props.hideElectronic,
     updateStateSequence: sequences.updateStateSequence,
     validationErrors: state[props.validationErrors],
   },
@@ -17,7 +17,7 @@ export const ServiceIndicatorRadios = connect(
     bindKey,
     bindObject,
     getValidationError,
-    isElectronicAvailable,
+    hideElectronic,
     SERVICE_INDICATOR_TYPES,
     updateStateSequence,
     validateSequence,
@@ -29,8 +29,6 @@ export const ServiceIndicatorRadios = connect(
       bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
     const selectNone =
       bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_NONE;
-
-    const showElectronic = isElectronicAvailable !== false;
 
     return (
       <FormGroup
@@ -48,7 +46,7 @@ export const ServiceIndicatorRadios = connect(
           <legend htmlFor={`service-type-radios-${bindKey}`}>
             Service preference
           </legend>
-          {showElectronic && (
+          {!hideElectronic && (
             <div className="usa-radio usa-radio__inline">
               <input
                 aria-describedby={`service-type-radios-${bindKey}`}
