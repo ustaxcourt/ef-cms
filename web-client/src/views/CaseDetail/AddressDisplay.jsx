@@ -56,9 +56,7 @@ export const AddressDisplay = connect(
           <p
             className={classNames(
               'no-margin',
-              showSealAddressLink &&
-                contact.isAddressSealed &&
-                'sealed-address',
+              contact.isAddressSealed && 'sealed-address',
             )}
           >
             {[contact.address1, contact.address2, contact.address3].map(
