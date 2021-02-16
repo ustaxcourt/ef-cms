@@ -122,4 +122,52 @@ describe('refreshExternalDocumentTitleFromEventCodeAction', () => {
       entryOfAppearanceDocument.documentTitle,
     );
   });
+
+  it('should set the document title when the eventCode is an internal filing event code', async () => {
+    const internalFilingDocument = {
+      category: 'Miscellaneous',
+      documentTitle: 'Fourth Stipulation of Facts',
+      documentType: 'Miscellaneous',
+      eventCode: 'MISC',
+      scenario: 'Nonstandard B',
+    };
+
+    const result = await runAction(
+      refreshExternalDocumentTitleFromEventCodeAction,
+      {
+        modules: { presenter },
+        state: {
+          form: internalFilingDocument,
+        },
+      },
+    );
+
+    expect(result.state.form.documentTitle).toEqual(
+      internalFilingDocument.documentTitle,
+    );
+  });
+
+  it('should set the secondary document title when the eventCode is an internal filing event code', async () => {
+    const internalFilingDocument = {
+      category: 'Miscellaneous',
+      documentTitle: 'Fourth Stipulation of Facts',
+      documentType: 'Miscellaneous',
+      eventCode: 'MISC',
+      scenario: 'Nonstandard B',
+    };
+
+    const result = await runAction(
+      refreshExternalDocumentTitleFromEventCodeAction,
+      {
+        modules: { presenter },
+        state: {
+          form: internalFilingDocument,
+        },
+      },
+    );
+
+    expect(result.state.form.documentTitle).toEqual(
+      internalFilingDocument.documentTitle,
+    );
+  });
 });
