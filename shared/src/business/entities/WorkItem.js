@@ -51,8 +51,6 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
 };
 
-WorkItem.validationName = 'WorkItem';
-
 joiValidationDecorator(WorkItem, WORK_ITEM_VALIDATION_RULES);
 
 /**

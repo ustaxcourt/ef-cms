@@ -11,15 +11,15 @@ const { pick } = require('lodash');
 
 InternalDocumentSearchResult.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
-InternalDocumentSearchResult.validationName = 'InternalDocumentSearchResult';
-
 /**
  * Public Document Search Result entity
  *
  * @param {object} rawProps the raw document search result data
  * @constructor
  */
-function InternalDocumentSearchResult() {}
+function InternalDocumentSearchResult() {
+  this.entityName = 'InternalDocumentSearchResult';
+}
 
 InternalDocumentSearchResult.prototype.init = function init(rawProps = {}) {
   const propNames = [

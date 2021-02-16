@@ -117,19 +117,17 @@ export const NonstandardForm = connect(
               }}
             >
               <option value="">- Select -</option>
-              {helper[level].previouslyFiledDocuments.map(
-                (previousDocument, idx) => {
-                  return (
-                    <option
-                      key={`previous-doc-${idx}`}
-                      value={previousDocument.docketEntryId}
-                    >
-                      {previousDocument.documentTitle ||
-                        previousDocument.documentType}
-                    </option>
-                  );
-                },
-              )}
+              {helper[level].previouslyFiledDocuments.map(previousDocument => {
+                return (
+                  <option
+                    key={previousDocument.docketEntryId}
+                    value={previousDocument.docketEntryId}
+                  >
+                    {previousDocument.documentTitle ||
+                      previousDocument.documentType}
+                  </option>
+                );
+              })}
             </select>
           </FormGroup>
         )}

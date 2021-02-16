@@ -254,6 +254,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
     formattedResult.showDocumentDescriptionWithoutLink =
       !showDocumentLinks && !formattedResult.showDocumentProcessing;
 
+    formattedResult.editDocketEntryMetaLink = `/case-detail/${docketNumber}/docket-entry/${formattedResult.index}/edit-meta`;
+
     return formattedResult;
   });
 

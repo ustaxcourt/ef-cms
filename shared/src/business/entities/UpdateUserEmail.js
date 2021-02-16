@@ -14,14 +14,14 @@ const {
  * @param {object} providers.rawUpdateUserEmail the raw UpdateUserEmail data
  * @constructor
  */
-function UpdateUserEmail() {}
+function UpdateUserEmail() {
+  this.entityName = 'UpdateUserEmail';
+}
 
 UpdateUserEmail.prototype.init = function init(rawUpdateUserEmail) {
   this.email = rawUpdateUserEmail.email;
   this.confirmEmail = rawUpdateUserEmail.confirmEmail;
 };
-
-UpdateUserEmail.validationName = 'UpdateUserEmail';
 
 UpdateUserEmail.VALIDATION_ERROR_MESSAGES = {
   confirmEmail: [

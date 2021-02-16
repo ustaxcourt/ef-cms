@@ -163,7 +163,7 @@ exports.joiValidationDecorator = function (
 
     if (error) {
       throw new InvalidEntityError(
-        entityConstructor.validationName,
+        this.entityName,
         JSON.stringify(
           error.details.map(detail => {
             return detail.message.replace(/"/g, "'");
@@ -191,7 +191,7 @@ exports.joiValidationDecorator = function (
       };
       const validationErrors = this.getValidationErrors();
       throw new InvalidEntityError(
-        entityConstructor.validationName,
+        this.entityName,
         JSON.stringify(stringifyTransform(validationErrors)),
         validationErrors,
       );

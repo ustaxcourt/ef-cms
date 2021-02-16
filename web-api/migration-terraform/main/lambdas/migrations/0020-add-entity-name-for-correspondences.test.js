@@ -1,7 +1,7 @@
 const {
   validCorrespondence,
 } = require('../../../../../shared/src/business/entities/Correspondence.test');
-const { migrateItems } = require('./0018-add-entity-name-for-correspondences');
+const { migrateItems } = require('./0020-add-entity-name-for-correspondences');
 
 describe('migrateItems', () => {
   let documentClient;

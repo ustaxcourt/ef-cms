@@ -1110,7 +1110,7 @@ const router = {
         const { judgeFilter } = route.query();
         setPageTitle('Pending report');
         return app.getSequence('gotoPrintablePendingReportSequence')({
-          judgeFilter,
+          judgeFilter: decodeURIComponent(judgeFilter),
         });
       }),
     );

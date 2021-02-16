@@ -520,6 +520,44 @@ const CASE_TYPES_MAP = {
 
 const CASE_TYPES = Object.values(CASE_TYPES_MAP);
 
+const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
+  [CASE_TYPES_MAP.deficiency]: 'Notice of Deficiency',
+  [CASE_TYPES_MAP.cdp]: 'Notice of Determination Concerning Collection Action',
+  [CASE_TYPES_MAP.innocentSpouse]:
+    'Notice of Determination Concerning Relief From Joint and Several Liability Under Section 6015',
+  Disclosure1: 'Notice of Intention to Disclose',
+  Disclosure2:
+    'Notice - We Are Going To Make Your Determination Letter Available for Public Inspection',
+  [CASE_TYPES_MAP.partnershipSection6226]:
+    'Readjustment of Partnership Items Code Section 6226',
+  [CASE_TYPES_MAP.partnershipSection6228]:
+    'Adjustment of Partnership Items Code Section 6228',
+  [CASE_TYPES_MAP.partnershipSection1101]:
+    'Partnership Action Under BBA Section 1101',
+  [CASE_TYPES_MAP.whistleblower]:
+    'Notice of Determination Under Section 7623 Concerning Whistleblower Action',
+  [CASE_TYPES_MAP.workerClassification]:
+    'Notice of Determination of Worker Classification',
+  [CASE_TYPES_MAP.passport]:
+    'Notice of Certification of Your Seriously Delinquent Federal Tax Debt to the Department of State',
+  [CASE_TYPES_MAP.interestAbatement]:
+    'Notice of Final Determination for Full or Partial Disallowance of Interest Abatement Claim',
+  [CASE_TYPES_MAP.other]: 'Other',
+};
+
+const CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE = {
+  [CASE_TYPES_MAP.cdp]: 'CDP (Lien/Levy)',
+  [CASE_TYPES_MAP.innocentSpouse]: 'Innocent Spouse',
+  [CASE_TYPES_MAP.whistleblower]: 'Whistleblower',
+  [CASE_TYPES_MAP.workerClassification]: 'Worker Classification',
+  [CASE_TYPES_MAP.djRetirementPlan]: 'Declaratory Judgment (Retirement Plan)',
+  [CASE_TYPES_MAP.djExemptOrg]: 'Declaratory Judgment (Exempt Organization)',
+  [CASE_TYPES_MAP.disclosure]: 'Disclosure',
+  [CASE_TYPES_MAP.interestAbatement]:
+    'Interest Abatement - Failure of IRS to Make Final Determination Within 180 Days After Claim for Abatement',
+  [CASE_TYPES_MAP.other]: 'Other',
+};
+
 const ROLES = {
   adc: 'adc',
   admin: 'admin',
@@ -1110,6 +1148,8 @@ module.exports = deepFreeze({
   CASE_CAPTION_POSTFIX,
   CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
   CASE_SEARCH_MIN_YEAR,
+  CASE_TYPE_DESCRIPTIONS_WITHOUT_IRS_NOTICE,
+  CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,
   CASE_INVENTORY_PAGE_SIZE,
   CASE_SEARCH_PAGE_SIZE,
   CASE_LIST_PAGE_SIZE,

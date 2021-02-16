@@ -13,15 +13,15 @@ const { pick } = require('lodash');
 
 PublicDocumentSearchResult.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
-PublicDocumentSearchResult.validationName = 'PublicDocumentSearchResult';
-
 /**
  * Public Document Search Result entity
  *
  * @param {object} rawProps the raw document search result data
  * @constructor
  */
-function PublicDocumentSearchResult() {}
+function PublicDocumentSearchResult() {
+  this.entityName = 'PublicDocumentSearchResult';
+}
 
 PublicDocumentSearchResult.prototype.init = function init(rawProps = {}) {
   const propNames = [

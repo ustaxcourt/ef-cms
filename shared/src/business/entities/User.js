@@ -16,8 +16,6 @@ const {
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
-User.validationName = 'User';
-
 /**
  * constructor
  *
