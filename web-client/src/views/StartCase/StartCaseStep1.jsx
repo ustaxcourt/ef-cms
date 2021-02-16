@@ -70,7 +70,7 @@ export const StartCaseStep1 = connect(
               <Button
                 link
                 className="usa-link--external text-left mobile-text-wrap"
-                href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
+                href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
                 icon="file-pdf"
                 iconColor="blue"
                 overrideMargin="margin-right-1"

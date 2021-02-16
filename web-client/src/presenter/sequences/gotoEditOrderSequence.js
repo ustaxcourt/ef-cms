@@ -2,6 +2,7 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getDocumentContentsAction } from '../actions/getDocumentContentsAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -23,6 +24,7 @@ const gotoEditOrder = [
   clearFormAction,
   getCaseAction,
   setCaseAction,
+  getDocumentContentsAction,
   setFormFromDraftStateAction,
   setDocumentToEditAction,
   setParentMessageIdAction,
