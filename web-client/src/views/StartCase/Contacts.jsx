@@ -1,5 +1,6 @@
 import { ContactPrimary } from './ContactPrimary';
 import { ContactSecondary } from './ContactSecondary';
+import { EditPetitionerLoginForm } from '../EditPetitionerLoginForm';
 import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import React from 'react';
@@ -9,13 +10,14 @@ export const Contacts = connect(
   function Contacts({
     bind,
     contactsHelper,
+    isElectronicAvailableForPrimary,
+    isElectronicAvailableForSecondary,
     onBlur,
     onChange,
     parentView,
+    showLoginAndServiceInformation,
     showPrimaryContact,
-    showPrimaryServiceIndicator,
     showSecondaryContact,
-    showSecondaryServiceIndicator,
     useSameAsPrimary,
     validateSequence,
     wrapperClassName,
@@ -32,15 +34,21 @@ export const Contacts = connect(
               onBlur={onBlur}
               onChange={onChange}
             />
-            {showPrimaryServiceIndicator && (
-              <div className="margin-bottom-6">
-                <h4 className="margin-top-6">Service Information</h4>
-                <ServiceIndicatorRadios
-                  bind="form.contactPrimary"
-                  validateSequence={validateSequence}
-                  validationErrors="validationErrors.contactPrimary"
-                />
-              </div>
+            {showLoginAndServiceInformation && (
+              <>
+                <h4>Login &amp; Service Information</h4>
+                <div className="blue-container margin-bottom-6">
+                  <ServiceIndicatorRadios
+                    bind="form.contactPrimary"
+                    isElectronicAvailable={isElectronicAvailableForPrimary}
+                    validateSequence={validateSequence}
+                    validationErrors="validationErrors.contactPrimary"
+                  />
+                  <div className="margin-top-4">
+                    <EditPetitionerLoginForm type="contactPrimary" />
+                  </div>
+                </div>
+              </>
             )}
           </>
         )}
@@ -55,14 +63,20 @@ export const Contacts = connect(
               onBlur={onBlur}
               onChange={onChange}
             />
-            {showSecondaryServiceIndicator && (
+            {showLoginAndServiceInformation && (
               <>
-                <h4 className="margin-top-6">Service Information</h4>
-                <ServiceIndicatorRadios
-                  bind="form.contactSecondary"
-                  validateSequence={validateSequence}
-                  validationErrors="validationErrors.contactSecondary"
-                />
+                <h4>Login &amp; Service Information</h4>
+                <div className="blue-container margin-bottom-6">
+                  <ServiceIndicatorRadios
+                    bind="form.contactSecondary"
+                    isElectronicAvailable={isElectronicAvailableForSecondary}
+                    validateSequence={validateSequence}
+                    validationErrors="validationErrors.contactSecondary"
+                  />
+                  <div className="margin-top-4">
+                    <EditPetitionerLoginForm type="contactSecondary" />
+                  </div>
+                </div>
               </>
             )}
           </>
