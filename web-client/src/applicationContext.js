@@ -8,6 +8,7 @@ import {
   isServed,
 } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
+import { addExistingUserToCaseInteractor } from '../../shared/src/proxies/addExistingUserToCaseProxy';
 import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
@@ -300,6 +301,7 @@ const allUseCases = {
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
+  addExistingUserToCaseInteractor,
   archiveCorrespondenceDocumentInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
