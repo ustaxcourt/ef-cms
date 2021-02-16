@@ -4,7 +4,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const openMatchingEmailFoundModalSequence = showProgressSequenceDecorator(
+export const openGainElectronicAccessToCaseModalSequence = showProgressSequenceDecorator(
   [
     stopShowValidationAction,
     clearAlertsAction,
