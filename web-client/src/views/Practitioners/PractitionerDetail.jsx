@@ -189,7 +189,7 @@ export const PractitionerDetail = connect(
             </div>
           </div>
           <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-12 margin-bottom-4">
+            <div className="tablet:grid-col-5 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
                   <h3 className="underlined">Admissions Information</h3>
@@ -238,6 +238,16 @@ export const PractitionerDetail = connect(
                         </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="tablet:grid-col-7 margin-bottom-4">
+              <div className="card height-full margin-bottom-0">
+                <div className="content-wrapper">
+                  <h3 className="underlined">Practitioner Notes</h3>
+                  <div className="tablet:grid-col-12 margin-bottom-1">
+                    {practitionerDetailHelper.practitionerNotes}
                   </div>
                 </div>
               </div>
