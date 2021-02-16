@@ -124,4 +124,22 @@ describe('practitionerDetailHelper', () => {
     });
     expect(showEAccessFlag).toBeFalsy();
   });
+
+  it('should return practitionerNotes when it exists on state.practitioner detail', () => {
+    const mockNote = 'Hi this is a note';
+
+    const { practitionerNotes } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          hasEAccess: false,
+          practitionerNotes: mockNote,
+        },
+        user: { role: 'admissionsclerk' },
+      },
+    });
+    expect(practitionerNotes).toEqual(mockNote);
+  });
 });
