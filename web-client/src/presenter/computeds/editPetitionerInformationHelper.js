@@ -10,11 +10,22 @@ import { state } from 'cerebral';
  */
 export const editPetitionerInformationHelper = (get, applicationContext) => {
   const { PARTY_TYPES } = applicationContext.getConstants();
+  const permissions = get(state.permissions);
   const partyType = get(state.form.partyType);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
+  const showLoginAndServiceInformation = permissions.EDIT_PETITIONER_EMAIL;
+
+  const contactPrimaryEmail = get(state.form.contactPrimary.email);
+  const contactSecondaryEmail = get(state.form.contactSecondary.email);
+
+  const isElectronicAvailableForPrimary = !!contactPrimaryEmail;
+  const isElectronicAvailableForSecondary = !!contactSecondaryEmail;
 
   return {
+    isElectronicAvailableForPrimary,
+    isElectronicAvailableForSecondary,
     partyTypes: PARTY_TYPES,
+    showLoginAndServiceInformation,
     showPrimaryContact: showContacts.contactPrimary,
     showSecondaryContact: showContacts.contactSecondary,
   };
