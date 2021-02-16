@@ -40,7 +40,7 @@ export const Contacts = connect(
                 <div className="blue-container margin-bottom-6">
                   <ServiceIndicatorRadios
                     bind="form.contactPrimary"
-                    isElectronicAvailable={isElectronicAvailableForPrimary}
+                    hideElectronic={!isElectronicAvailableForPrimary}
                     validateSequence={validateSequence}
                     validationErrors="validationErrors.contactPrimary"
                   />
@@ -69,7 +69,7 @@ export const Contacts = connect(
                 <div className="blue-container margin-bottom-6">
                   <ServiceIndicatorRadios
                     bind="form.contactSecondary"
-                    isElectronicAvailable={isElectronicAvailableForSecondary}
+                    hideElectronic={!isElectronicAvailableForSecondary}
                     validateSequence={validateSequence}
                     validationErrors="validationErrors.contactSecondary"
                   />
