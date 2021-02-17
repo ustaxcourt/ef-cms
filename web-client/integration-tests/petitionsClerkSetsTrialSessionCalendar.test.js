@@ -1,4 +1,3 @@
-import { MOCK_CASE } from '../../shared/src/test/mockCase.js';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
@@ -14,40 +13,17 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-import axios from 'axios';
 
 const test = setupTest();
 
 describe('petitions clerk sets a trial session calendar', () => {
-  const {
-    CASE_TYPES_MAP,
-    CHIEF_JUDGE,
-    STATUS_TYPES,
-  } = applicationContext.getConstants();
-  const axiosInstance = axios.create({
-    headers: {
-      Authorization:
-        // mocked admin user
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwibmFtZSI6IlRlc3QgQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJ1c2VySWQiOiI4NmMzZjg3Yi0zNTBiLTQ3N2QtOTJjMy00M2JkMDk1Y2IwMDYiLCJjdXN0b206cm9sZSI6ImFkbWluIiwic3ViIjoiODZjM2Y4N2ItMzUwYi00NzdkLTkyYzMtNDNiZDA5NWNiMDA2IiwiaWF0IjoxNTgyOTIxMTI1fQ.PBmSyb6_E_53FNG0GiEpAFqTNmooSh4rI0ApUQt3UH8',
-      'Content-Type': 'application/json',
-    },
-    timeout: 2000,
-  });
+  const { CASE_TYPES_MAP } = applicationContext.getConstants();
   const trialLocation = `Denver, Colorado, ${Date.now()}`;
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,
     sessionType: 'Small',
     trialLocation,
-  };
-  const caseToMigrate = {
-    ...MOCK_CASE,
-    associatedJudge: CHIEF_JUDGE,
-    caseCaption: 'Migrated Eligible Case',
-    docketNumber: '777-17',
-    preferredTrialCity: trialLocation,
-    procedureType: 'Small',
-    status: STATUS_TYPES.generalDocketReadyForTrial,
   };
 
   beforeAll(() => {
@@ -89,15 +65,6 @@ describe('petitions clerk sets a trial session calendar', () => {
       }
     });
 
-    describe('case #4 - migrated and eligible for trial', () => {
-      it('migrate case', async () => {
-        await axiosInstance.post(
-          'http://localhost:4000/migrate/case',
-          caseToMigrate,
-        );
-      });
-    });
-
     describe('case #5 - manually added to session', () => {
       loginAs(test, 'petitionsclerk@example.com');
       test.casesReadyForTrial = [];
@@ -108,10 +75,7 @@ describe('petitions clerk sets a trial session calendar', () => {
 
   describe('petitions clerk sets calendar for trial session', () => {
     petitionsClerkViewsNewTrialSession(test);
-    markAllCasesAsQCed(test, () => [
-      test.docketNumber,
-      caseToMigrate.docketNumber,
-    ]);
+    markAllCasesAsQCed(test, () => [test.docketNumber]);
     petitionsClerkSetsATrialSessionsSchedule(test);
 
     it('petitions clerk should be redirected to print paper service for the trial session', async () => {
@@ -130,7 +94,7 @@ describe('petitions clerk sets a trial session calendar', () => {
         },
       );
 
-      expect(trialSessionFormatted.openCases.length).toEqual(2);
+      expect(trialSessionFormatted.openCases.length).toEqual(1);
     });
   });
 });
