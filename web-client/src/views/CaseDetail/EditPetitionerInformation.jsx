@@ -93,9 +93,8 @@ export const EditPetitionerInformation = connect(
                     editPetitionerInformationHelper.contactPrimaryHasVerifiedEmail
                   }
                   contactsHelper="startCaseInternalContactsHelper"
-                  showLoginAndServiceInformation={
-                    editPetitionerInformationHelper.showLoginAndServiceInformation
-                  }
+                  showEditEmail={editPetitionerInformationHelper.showEditEmail}
+                  showLoginAndServiceInformation={true}
                   showPrimaryContact={
                     editPetitionerInformationHelper.showPrimaryContact
                   }
