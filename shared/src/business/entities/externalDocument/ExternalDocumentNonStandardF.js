@@ -29,6 +29,9 @@ ExternalDocumentNonStandardF.prototype.init = function init(rawProps) {
 };
 
 ExternalDocumentNonStandardF.prototype.getDocumentTitle = function () {
+  console.log('title', this.documentTitle);
+  console.log('ordinalValue', this.ordinalValue);
+  console.log('previousDocument', this.previousDocument);
   return replaceBracketed(
     this.documentTitle,
     this.ordinalValue,
