@@ -21,7 +21,6 @@ export const PrimaryDocumentForm = connect(
     form,
     validationErrors,
   }) {
-    console.log('form', form);
     return (
       <React.Fragment>
         <h2 className="margin-top-4">{form.documentTitle}</h2>
