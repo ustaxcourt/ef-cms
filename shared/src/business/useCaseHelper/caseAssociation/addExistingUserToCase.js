@@ -1,23 +1,22 @@
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
-const { UnauthorizedError } = require('../../errors/errors');
-const { UserCase } = require('../entities/UserCase');
+} = require('../../../authorization/authorizationClientService');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
+const { UnauthorizedError } = require('../../../errors/errors');
+const { UserCase } = require('../../entities/UserCase');
 
 /**
- * addExistingUserToCaseInteractor
+ * addExistingUserToCase
  *
  * @param {object} options.docketNumber the docket number for the case we need to update
  * @param {object} email the email address for the user we are attaching to the case
  * @param {object} name the name of the user to update the case with
  * @returns {Case} the updated case
  */
-exports.addExistingUserToCaseInteractor = async ({
+exports.addExistingUserToCase = async ({
   applicationContext,
-  docketNumber,
+  caseEntity,
   email,
   name,
 }) => {
@@ -38,14 +37,6 @@ exports.addExistingUserToCaseInteractor = async ({
     throw new Error(`no user found with the provided email of ${email}`);
   }
 
-  const caseToAttachUser = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
-  const caseEntity = new Case(caseToAttachUser, { applicationContext });
   const { contactPrimary } = caseEntity;
   if (contactPrimary.name === name) {
     contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
@@ -54,19 +45,15 @@ exports.addExistingUserToCaseInteractor = async ({
     throw new Error(`no contact primary found with that user name of ${name}`);
   }
 
-  const userCaseEntity = new UserCase(caseToAttachUser);
+  const rawCase = caseEntity.toRawObject();
+  const userCaseEntity = new UserCase(rawCase);
 
   await applicationContext.getPersistenceGateway().associateUserWithCase({
     applicationContext,
-    docketNumber,
+    docketNumber: rawCase.docketNumber,
     userCase: userCaseEntity.validate().toRawObject(),
     userId: userToAdd.userId,
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
-  return caseEntity.validate().toRawObject();
+  return caseEntity.validate();
 };

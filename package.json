@@ -43,7 +43,7 @@
     "dynamodb-streams-readable": "^1.1.0",
     "elasticsearch": "^16.7.2",
     "enzyme": "^3.11.0",
-    "eslint": "^7.19.0",
+    "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-import": "^2.22.1",
