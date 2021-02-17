@@ -46,7 +46,17 @@ export const Contacts = connect(
                   />
                   <div className="margin-top-4">
                     {contactPrimaryHasEmail && (
-                      <span>{contactPrimaryDisplayEmail}</span>
+                      <>
+                        <label
+                          className="usa-label"
+                          htmlFor="current-email-display"
+                        >
+                          Current email address
+                        </label>
+                        <span id="current-email-display">
+                          {contactPrimaryDisplayEmail}
+                        </span>
+                      </>
                     )}
 
                     {!contactPrimaryHasEmail && (
