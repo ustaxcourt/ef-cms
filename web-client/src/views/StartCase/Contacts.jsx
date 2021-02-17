@@ -15,6 +15,7 @@ export const Contacts = connect(
     onBlur,
     onChange,
     parentView,
+    showEditEmail,
     showLoginAndServiceInformation,
     showPrimaryContact,
     showSecondaryContact,
@@ -59,7 +60,7 @@ export const Contacts = connect(
                       </>
                     )}
 
-                    {!contactPrimaryHasEmail && (
+                    {showEditEmail && !contactPrimaryHasEmail && (
                       <EditPetitionerLoginForm type="contactPrimary" />
                     )}
                   </div>
