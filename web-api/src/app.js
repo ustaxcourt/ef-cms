@@ -361,7 +361,6 @@ const {
   verifyUserPendingEmailLambda,
 } = require('./users/verifyUserPendingEmailLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
-const { addNewUserToCaseLambda } = require('./cases/addNewUserToCaseLambda');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
@@ -701,10 +700,6 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.post(
     '/cases/:docketNumber/add-existing-user',
     lambdaWrapper(addExistingUserToCaseLambda),
-  );
-  app.post(
-    '/cases/:docketNumber/add-new-user',
-    lambdaWrapper(addNewUserToCaseLambda),
   );
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',

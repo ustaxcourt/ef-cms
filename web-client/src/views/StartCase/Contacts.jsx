@@ -11,8 +11,6 @@ export const Contacts = connect(
     bind,
     contactPrimaryDisplayEmail,
     contactPrimaryHasEmail,
-    contactSecondaryDisplayEmail,
-    contactSecondaryHasEmail,
     contactsHelper,
     onBlur,
     onChange,
@@ -71,28 +69,6 @@ export const Contacts = connect(
               onBlur={onBlur}
               onChange={onChange}
             />
-            {showLoginAndServiceInformation && (
-              <>
-                <h4>Login &amp; Service Information</h4>
-                <div className="blue-container margin-bottom-6">
-                  <ServiceIndicatorRadios
-                    bind="form.contactSecondary"
-                    hideElectronic={!contactSecondaryHasEmail}
-                    validateSequence={validateSequence}
-                    validationErrors="validationErrors.contactSecondary"
-                  />
-                  <div className="margin-top-4">
-                    {contactSecondaryHasEmail && (
-                      <span>{contactSecondaryDisplayEmail}</span>
-                    )}
-
-                    {!contactSecondaryHasEmail && (
-                      <EditPetitionerLoginForm type="contactSecondary" />
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
           </>
         )}
       </React.Fragment>

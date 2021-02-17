@@ -10,10 +10,6 @@ import {
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { addExistingUserToCaseInteractor } from '../../shared/src/proxies/addExistingUserToCaseProxy';
 import {
-  addNewUserToCaseInteractor,
-  addNewUserToCaseProxy,
-} from '../../shared/src/proxies/addNewUserToCaseProxy';
-import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
@@ -307,8 +303,6 @@ const allUseCases = {
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
   addExistingUserToCaseInteractor,
-  addNewUserToCaseInteractor,
-  addNewUserToCaseProxy,
   archiveCorrespondenceDocumentInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,

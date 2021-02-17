@@ -58,24 +58,6 @@ export const validatePetitionerInformationFormAction = ({
   }
 
   if (
-    contactSecondary &&
-    contactSecondary.email &&
-    contactSecondary.email !== oldContactSecondary?.email
-  ) {
-    const errorsContactSecondary = applicationContext
-      .getUseCases()
-      .validateUpdateUserEmailInteractor({
-        applicationContext,
-        updateUserEmail: contactSecondary,
-      });
-
-    errors.contactSecondary = {
-      ...errors.contactSecondary,
-      ...errorsContactSecondary,
-    };
-  }
-
-  if (
     [
       SERVICE_INDICATOR_TYPES.SI_PAPER,
       SERVICE_INDICATOR_TYPES.SI_NONE,

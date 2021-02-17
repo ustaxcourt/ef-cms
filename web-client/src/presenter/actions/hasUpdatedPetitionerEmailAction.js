@@ -10,20 +10,10 @@ import { state } from 'cerebral';
  * @returns {object} continue path for the sequence
  */
 export const hasUpdatedPetitionerEmailAction = async ({ get, path }) => {
-  const { contactPrimary, contactSecondary } = get(state.caseDetail);
-  const {
-    contactPrimary: formContactPrimary,
-    contactSecondary: formContactSecondary,
-  } = get(state.form);
+  const { contactPrimary } = get(state.caseDetail);
+  const { contactPrimary: formContactPrimary } = get(state.form);
 
-  const contactPrimaryEmailUpdated =
-    contactPrimary.email !== formContactPrimary.email;
-
-  const contactSecondaryEmailUpdated =
-    formContactSecondary &&
-    contactSecondary?.email !== formContactSecondary?.email;
-
-  if (contactPrimaryEmailUpdated || contactSecondaryEmailUpdated) {
+  if (contactPrimary.email !== formContactPrimary.email) {
     return path.yes();
   }
 

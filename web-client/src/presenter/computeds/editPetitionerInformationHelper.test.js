@@ -75,47 +75,4 @@ describe('editPetitionerInformationHelper', () => {
 
     expect(result.contactPrimaryHasEmail).toEqual(false);
   });
-
-  it('should return contactSecondaryHasEmail true if the contactPrimary has an email address', () => {
-    const result = runCompute(editPetitionerInformationHelper, {
-      state: {
-        caseDetail: {
-          contactSecondary: {
-            email: 'testpetitioner@example.com',
-          },
-        },
-        form: {
-          contactSecondary: {
-            email: 'testpetitioner@example.com',
-          },
-          partyType: PARTY_TYPES.petitionerSpouse,
-        },
-        permissions: {
-          EDIT_PETITIONER_EMAIL: true,
-        },
-      },
-    });
-
-    expect(result.contactSecondaryHasEmail).toEqual(true);
-  });
-
-  it('should return contactSecondaryHasEmail false if the contactPrimary DOES NOT have an email address', () => {
-    const result = runCompute(editPetitionerInformationHelper, {
-      state: {
-        caseDetail: {
-          contactSecondary: {},
-        },
-        form: {
-          contactSecondary: {},
-          partyType: PARTY_TYPES.petitionerSpouse,
-        },
-        permissions: {
-          EDIT_PETITIONER_EMAIL: true,
-        },
-      },
-    });
-
-    expect(result.contactSecondaryHasEmail).toEqual(false);
-  });
-  // TODO additional coverage
 });
