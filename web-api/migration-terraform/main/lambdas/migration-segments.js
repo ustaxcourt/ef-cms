@@ -1,18 +1,6 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
-  migrateItems: migration0013,
-} = require('./migrations/0013-trial-session-default-proceedingType');
-const {
-  migrateItems: migration0014,
-} = require('./migrations/0014-practitioner-service-indicator');
-const {
-  migrateItems: migration0015,
-} = require('./migrations/0015-practitioner-case-service-indicator');
-const {
-  migrateItems: migration0016,
-} = require('./migrations/0016-hearings-proceeding-type');
-const {
   migrateItems: migration0017,
 } = require('./migrations/0017-remove-draft-order-state');
 const {
@@ -48,14 +36,6 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 0013');
-  items = await migration0013(items, documentClient);
-  applicationContext.logger.info('about to run migration 0014');
-  items = await migration0014(items, documentClient);
-  applicationContext.logger.info('about to run migration 0015');
-  items = await migration0015(items, documentClient);
-  applicationContext.logger.info('about to run migration 0016');
-  items = await migration0016(items, documentClient);
   applicationContext.logger.info('about to run migration 0017');
   items = await migration0017(items, documentClient);
   applicationContext.logger.info('about to run migration 0018');
