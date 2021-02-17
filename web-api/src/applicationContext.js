@@ -24,6 +24,9 @@ const {
   addDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
+  addExistingUserToCaseInteractor,
+} = require('../../shared/src/business/useCases/addExistingUserToCaseInteractor');
+const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -1553,6 +1556,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        addExistingUserToCaseInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
