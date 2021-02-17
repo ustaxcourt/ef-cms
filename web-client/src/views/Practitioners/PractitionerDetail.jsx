@@ -189,7 +189,7 @@ export const PractitionerDetail = connect(
             </div>
           </div>
           <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-4 margin-bottom-4">
+            <div className="tablet:grid-col-5 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
                   <h3 className="underlined">Admissions Information</h3>
@@ -207,23 +207,23 @@ export const PractitionerDetail = connect(
                         </div>
                         <span
                           className="usa-label usa-label-display"
-                          htmlFor="admissions-status"
+                          htmlFor="original-bar-state"
                         >
-                          Admission status
+                          Original bar state
                         </span>
-                        {practitionerDetailHelper.admissionsStatus}
+                        {practitionerDetailHelper.originalBarState}
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <div className="tablet:margin-bottom-0 margin-bottom-205">
                         <span
                           className="usa-label usa-label-display"
-                          htmlFor="original-bar-state"
+                          htmlFor="admissions-status"
                         >
-                          Original bar state
+                          Admission status
                         </span>
                         <div className="margin-bottom-4">
-                          {practitionerDetailHelper.originalBarState}
+                          {practitionerDetailHelper.admissionsStatus}
                         </div>
                         <span
                           className="usa-label usa-label-display"
@@ -238,7 +238,7 @@ export const PractitionerDetail = connect(
                 </div>
               </div>
             </div>
-            <div className="tablet:grid-col-8 margin-bottom-4">
+            <div className="tablet:grid-col-7 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
                   <h3 className="underlined">Practitioner Notes</h3>
