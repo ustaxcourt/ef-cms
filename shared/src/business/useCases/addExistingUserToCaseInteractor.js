@@ -47,24 +47,11 @@ exports.addExistingUserToCaseInteractor = async ({
 
   const caseEntity = new Case(caseToAttachUser, { applicationContext });
   const { contactPrimary } = caseEntity;
-  let updatedContact = false;
-  if (contactPrimary && contactPrimary.name === name) {
+  if (contactPrimary.name === name) {
     contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     contactPrimary.email = email;
-    updatedContact = true;
-  }
-
-  const { contactSecondary } = caseEntity;
-  if (contactSecondary && contactSecondary.name === name) {
-    contactSecondary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-    contactSecondary.email = email;
-    updatedContact = true;
-  }
-
-  if (!updatedContact) {
-    throw new Error(
-      `no contact primary or secondary found with that user name of ${name}`,
-    );
+  } else {
+    throw new Error(`no contact primary found with that user name of ${name}`);
   }
 
   const userCaseEntity = new UserCase(caseToAttachUser);

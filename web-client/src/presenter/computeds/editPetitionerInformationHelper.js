@@ -16,14 +16,11 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
   const showLoginAndServiceInformation = permissions.EDIT_PETITIONER_EMAIL;
 
   const contactPrimaryEmail = get(state.caseDetail.contactPrimary.email);
-  const contactSecondaryEmail = get(state.caseDetail.contactSecondary.email);
 
   const contactPrimaryHasEmail = !!contactPrimaryEmail;
-  const contactSecondaryHasEmail = !!contactSecondaryEmail;
 
   return {
     contactPrimaryHasEmail,
-    contactSecondaryHasEmail,
     partyTypes: PARTY_TYPES,
     showLoginAndServiceInformation,
     showPrimaryContact: showContacts.contactPrimary,

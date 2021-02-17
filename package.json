@@ -62,7 +62,6 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "faker": "^5.4.0",
-    "generate-password": "^1.6.0",
     "form-data": "^3.0.1",
     "http-aws-es": "^6.0.0",
     "husky": "^5.0.9",

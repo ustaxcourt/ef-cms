@@ -27,82 +27,12 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the yes path when caseDetail.contactSecondary.email is different than form.contactSecondary.email', async () => {
+  it('returns the no path when caseDetail.contactPrimary.email is the same as form.contactPrimary.email', async () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
         caseDetail: {
           contactPrimary: { email: INITIAL_EMAIL },
-          contactSecondary: { email: INITIAL_EMAIL },
-        },
-        form: {
-          contactPrimary: { email: INITIAL_EMAIL },
-          contactSecondary: { email: UPDATED_EMAIL },
-        },
-      },
-    });
-
-    expect(pathYesStub).toHaveBeenCalled();
-  });
-
-  it('returns the no path when caseDetail.contactPrimary.email is the same as form.contactPrimary.email and caseDetail.contactSecondary is undefined', async () => {
-    runAction(hasUpdatedPetitionerEmailAction, {
-      modules: { presenter },
-      state: {
-        caseDetail: {
-          contactPrimary: { email: INITIAL_EMAIL },
-        },
-        form: {
-          contactPrimary: { email: INITIAL_EMAIL },
-        },
-      },
-    });
-
-    expect(pathNoStub).toHaveBeenCalled();
-  });
-
-  it('returns the yes path when caseDetail.contactSecondary is undefined and form.contactSecondary.email is defined', async () => {
-    runAction(hasUpdatedPetitionerEmailAction, {
-      modules: { presenter },
-      state: {
-        caseDetail: {
-          contactPrimary: { email: INITIAL_EMAIL },
-        },
-        form: {
-          contactPrimary: { email: INITIAL_EMAIL },
-          contactSecondary: { email: UPDATED_EMAIL },
-        },
-      },
-    });
-
-    expect(pathYesStub).toHaveBeenCalled();
-  });
-
-  it('returns the no path when caseDetail.contactPrimary.email is the same as form.contactPrimary.email and caseDetail.contactSecondary.email is the same as form.contactSecondary.email', async () => {
-    runAction(hasUpdatedPetitionerEmailAction, {
-      modules: { presenter },
-      state: {
-        caseDetail: {
-          contactPrimary: { email: INITIAL_EMAIL },
-          contactSecondary: { email: INITIAL_EMAIL },
-        },
-        form: {
-          contactPrimary: { email: INITIAL_EMAIL },
-          contactSecondary: { email: INITIAL_EMAIL },
-        },
-      },
-    });
-
-    expect(pathNoStub).toHaveBeenCalled();
-  });
-
-  it('returns the no path when caseDetail.contactSecondary.email is set and form.contactSecondary is undefined', async () => {
-    runAction(hasUpdatedPetitionerEmailAction, {
-      modules: { presenter },
-      state: {
-        caseDetail: {
-          contactPrimary: { email: INITIAL_EMAIL },
-          contactSecondary: { email: INITIAL_EMAIL },
         },
         form: {
           contactPrimary: { email: INITIAL_EMAIL },
