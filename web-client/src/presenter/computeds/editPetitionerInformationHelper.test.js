@@ -10,7 +10,7 @@ const editPetitionerInformationHelper = withAppContextDecorator(
 );
 
 describe('editPetitionerInformationHelper', () => {
-  it('returns showLoginAndServiceInformation true if the current user has the EDIT_PETITIONER_EMAIL permission', () => {
+  it('returns showEditEmail true if the current user has the EDIT_PETITIONER_EMAIL permission', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         form: { partyType: PARTY_TYPES.petitioner },
@@ -19,10 +19,10 @@ describe('editPetitionerInformationHelper', () => {
         },
       },
     });
-    expect(result.showLoginAndServiceInformation).toEqual(true);
+    expect(result.showEditEmail).toEqual(true);
   });
 
-  it('returns showLoginAndServiceInformation false if the current user DOES NOT have the EDIT_PETITIONER_EMAIL permission', () => {
+  it('returns showEditEmail false if the current user DOES NOT have the EDIT_PETITIONER_EMAIL permission', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         form: { partyType: PARTY_TYPES.petitioner },
@@ -31,7 +31,7 @@ describe('editPetitionerInformationHelper', () => {
         },
       },
     });
-    expect(result.showLoginAndServiceInformation).toEqual(false);
+    expect(result.showEditEmail).toEqual(false);
   });
 
   it('should return contactPrimaryHasEmail true if the contactPrimary has an email address', () => {
