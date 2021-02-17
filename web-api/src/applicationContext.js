@@ -25,7 +25,7 @@ const {
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
   addExistingUserToCase,
-} = require('../../shared/src/business/useCases/caseAssociation/addExistingUserToCase');
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
   addressLabelCoverSheet,
   caseInventoryReport,
