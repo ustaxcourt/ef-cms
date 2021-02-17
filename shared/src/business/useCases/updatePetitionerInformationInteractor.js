@@ -394,7 +394,7 @@ exports.updatePetitionerInformationInteractor = async ({
   ) {
     caseEntity = await applicationContext
       .getUseCaseHelpers()
-      .addExistingUserToCaseInteractor({
+      .addExistingUserToCase({
         applicationContext,
         caseEntity,
         email: contactPrimary.email,

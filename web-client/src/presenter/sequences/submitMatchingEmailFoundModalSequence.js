@@ -1,4 +1,3 @@
-import { addExistingUserToCaseAction } from '../actions/CaseDetail/addExistingUserToCaseAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -8,7 +7,6 @@ export const submitMatchingEmailFoundModalSequence = [
   showProgressSequenceDecorator([
     clearModalAction,
     submitUpdatePetitionerInformationSequence,
-    addExistingUserToCaseAction,
     navigateToCaseDetailCaseInformationActionFactory('petitioner'),
   ]),
 ];

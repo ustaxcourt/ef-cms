@@ -1,19 +1,17 @@
 const {
-  addExistingUserToCaseInteractor,
-} = require('./addExistingUserToCaseInteractor');
-const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
+const { addExistingUserToCase } = require('./addExistingUserToCase');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 
-describe('addExistingUserToCaseInteractor', () => {
+describe('addExistingUserToCase', () => {
   it('throws an unauthorized error on non admissionsclerk users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      addExistingUserToCaseInteractor({
+      addExistingUserToCase({
         applicationContext,
         docketNumber: '101-20',
         email: 'testing@example.com',
@@ -32,7 +30,7 @@ describe('addExistingUserToCaseInteractor', () => {
       .getUserByEmail.mockReturnValue(null);
 
     await expect(
-      addExistingUserToCaseInteractor({
+      addExistingUserToCase({
         applicationContext,
         docketNumber: '101-20',
         email: 'testing@example.com',
@@ -57,7 +55,7 @@ describe('addExistingUserToCaseInteractor', () => {
       });
 
     await expect(
-      addExistingUserToCaseInteractor({
+      addExistingUserToCase({
         applicationContext,
         docketNumber: '101-20',
         email: 'testing@example.com',
@@ -92,7 +90,7 @@ describe('addExistingUserToCaseInteractor', () => {
         },
       });
 
-    await addExistingUserToCaseInteractor({
+    await addExistingUserToCase({
       applicationContext,
       docketNumber: '101-20',
       email: UPDATED_EMAIL,

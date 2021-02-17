@@ -58,7 +58,7 @@ describe('update petitioner contact information on a case', () => {
         url: 'https://www.example.com',
       });
 
-    applicationContext.getUseCaseHelpers().addExistingUserToCaseInteractor = jest
+    applicationContext.getUseCaseHelpers().addExistingUserToCase = jest
       .fn()
       .mockImplementation(({ caseEntity }) => caseEntity);
   });
@@ -952,7 +952,7 @@ describe('update petitioner contact information on a case', () => {
   });
 
   describe('update contactPrimary email', () => {
-    it('should call the update addExistingUserToCaseInteractor use case helper if the contactPrimary is adding an email address', async () => {
+    it('should call the update addExistingUserToCase use case helper if the contactPrimary is adding an email address', async () => {
       await updatePetitionerInformationInteractor({
         applicationContext,
         contactPrimary: {
@@ -964,7 +964,7 @@ describe('update petitioner contact information on a case', () => {
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().addExistingUserToCaseInteractor,
+        applicationContext.getUseCaseHelpers().addExistingUserToCase,
       ).toHaveBeenCalled();
 
       expect(
@@ -972,7 +972,7 @@ describe('update petitioner contact information on a case', () => {
       ).toHaveBeenCalledTimes(1);
     });
 
-    it('should not call the update addExistingUserToCaseInteractor use case helper if the contactPrimary is unchanged', async () => {
+    it('should not call the update addExistingUserToCase use case helper if the contactPrimary is unchanged', async () => {
       await updatePetitionerInformationInteractor({
         applicationContext,
         contactPrimary: MOCK_CASE.contactPrimary,
@@ -981,7 +981,7 @@ describe('update petitioner contact information on a case', () => {
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().addExistingUserToCaseInteractor,
+        applicationContext.getUseCaseHelpers().addExistingUserToCase,
       ).not.toHaveBeenCalled();
     });
   });
