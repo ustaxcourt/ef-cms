@@ -1,3 +1,4 @@
+import { checkEmailAvailabilityAction } from '../actions/checkEmailAvailabilityAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -7,6 +8,10 @@ export const openGainElectronicAccessToCaseModalSequence = showProgressSequenceD
   [
     stopShowValidationAction,
     clearAlertsAction,
-    setShowModalFactoryAction('MatchingEmailFoundModal'),
+    checkEmailAvailabilityAction,
+    {
+      emailAvailable: [],
+      emailInUse: [setShowModalFactoryAction('MatchingEmailFoundModal')],
+    },
   ],
 );
