@@ -57,6 +57,10 @@ describe('update petitioner contact information on a case', () => {
       .getDownloadPolicyUrl.mockReturnValue({
         url: 'https://www.example.com',
       });
+
+    applicationContext.getUseCaseHelpers().addExistingUserToCaseInteractor = jest
+      .fn()
+      .mockImplementation(({ caseEntity }) => caseEntity);
   });
 
   beforeEach(() => {
@@ -944,6 +948,41 @@ describe('update petitioner contact information on a case', () => {
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
         'for Test Secondary Petitioner',
       );
+    });
+  });
+
+  describe('update contactPrimary email', () => {
+    it('should call the update addExistingUserToCaseInteractor use case helper if the contactPrimary is adding an email address', async () => {
+      await updatePetitionerInformationInteractor({
+        applicationContext,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          email: 'changed-email@example.com',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+        partyType: PARTY_TYPES.petitioner,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().addExistingUserToCaseInteractor,
+      ).toHaveBeenCalled();
+
+      expect(
+        applicationContext.getPersistenceGateway().updateCase,
+      ).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not call the update addExistingUserToCaseInteractor use case helper if the contactPrimary is unchanged', async () => {
+      await updatePetitionerInformationInteractor({
+        applicationContext,
+        contactPrimary: MOCK_CASE.contactPrimary,
+        docketNumber: MOCK_CASE.docketNumber,
+        partyType: PARTY_TYPES.petitioner,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().addExistingUserToCaseInteractor,
+      ).not.toHaveBeenCalled();
     });
   });
 });

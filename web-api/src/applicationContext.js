@@ -25,7 +25,7 @@ const {
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
   addExistingUserToCaseInteractor,
-} = require('../../shared/src/business/useCases/addExistingUserToCaseInteractor');
+} = require('../../shared/src/business/useCases/caseAssociation/addExistingUserToCaseInteractor');
 const {
   addressLabelCoverSheet,
   caseInventoryReport,
@@ -1532,6 +1532,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUniqueId,
     getUseCaseHelpers: () => {
       return {
+        addExistingUserToCaseInteractor,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
@@ -1560,7 +1561,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
-        addExistingUserToCaseInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
