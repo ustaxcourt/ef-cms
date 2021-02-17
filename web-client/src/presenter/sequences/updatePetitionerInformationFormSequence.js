@@ -1,4 +1,6 @@
+import { hasUpdatedPetitionerEmailAction } from '../actions/hasUpdatedPetitionerEmailAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
+import { openGainElectronicAccessToCaseModalSequence } from './openGainElectronicAccessToCaseModalSequence';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -23,11 +25,17 @@ export const updatePetitionerInformationFormSequence = [
       setValidationAlertErrorsAction,
     ],
     success: showProgressSequenceDecorator([
-      updatePetitionerInformationAction,
-      setPdfPreviewUrlAction,
-      setSaveAlertsForNavigationAction,
-      setAlertSuccessAction,
-      navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+      hasUpdatedPetitionerEmailAction,
+      {
+        no: [
+          updatePetitionerInformationAction,
+          setPdfPreviewUrlAction,
+          setSaveAlertsForNavigationAction,
+          setAlertSuccessAction,
+          navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+        ],
+        yes: [openGainElectronicAccessToCaseModalSequence],
+      },
     ]),
   },
 ];
