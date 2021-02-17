@@ -7,12 +7,12 @@ export const NoMatchingEmailFoundModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitNoMatchingEmailFoundModalSequence,
-    modal: state.modal,
+    form: state.form,
   },
   function NoMatchingEmailFoundModal({
     cancelSequence,
     confirmSequence,
-    modal,
+    form,
   }) {
     return (
       <ModalDialog
@@ -24,9 +24,9 @@ export const NoMatchingEmailFoundModal = connect(
       >
         <div>
           <p>
-            {modal.name}
+            {form.contactPrimary.name}
             <br />
-            {modal.email}
+            {form.contactPrimary.email}
           </p>
 
           <p>

@@ -10,8 +10,7 @@ import { state } from 'cerebral';
  */
 export const addNewUserToCaseAction = async ({ applicationContext, get }) => {
   const { docketNumber } = get(state.caseDetail);
-  const email = get(state.form.email) || 'testing@example.com'; // TODO: remove fallback
-  const name = 'Quentin Bass'; // TODO: no longer hard code
+  const { email, name } = get(state.form.contactPrimary);
 
   await applicationContext.getUseCases().addNewUserToCaseInteractor({
     applicationContext,

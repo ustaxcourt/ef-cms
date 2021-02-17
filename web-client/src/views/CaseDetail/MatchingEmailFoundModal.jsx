@@ -7,9 +7,9 @@ export const MatchingEmailFoundModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitMatchingEmailFoundModalSequence,
-    modal: state.modal,
+    form: state.form,
   },
-  function MatchingEmailFoundModal({ cancelSequence, confirmSequence, modal }) {
+  function MatchingEmailFoundModal({ cancelSequence, confirmSequence, form }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -20,9 +20,9 @@ export const MatchingEmailFoundModal = connect(
       >
         <div>
           <p>
-            {modal.name}
+            {form.contactPrimary.name}
             <br />
-            {modal.email}
+            {form.contactPrimary.email}
           </p>
 
           <p>This case will be added to the matching email account.</p>

@@ -273,8 +273,6 @@ export const baseState = {
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
-    email: 'rickjames@example.com',
-    name: 'Rick James',
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
   },
