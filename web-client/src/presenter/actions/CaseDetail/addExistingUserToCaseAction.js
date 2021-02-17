@@ -13,8 +13,7 @@ export const addExistingUserToCaseAction = async ({
   get,
 }) => {
   const { docketNumber } = get(state.caseDetail);
-  const email = get(state.form.email) || 'petitioner1@example.com'; // TODO: remove fallback
-  const name = 'Noble Burch'; // TODO: no longer hard code
+  const { email, name } = get(state.form.contactPrimary);
 
   await applicationContext.getUseCases().addExistingUserToCaseInteractor({
     applicationContext,
