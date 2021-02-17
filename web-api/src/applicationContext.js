@@ -24,6 +24,9 @@ const {
   addDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
+  addExistingUserToCaseInteractor,
+} = require('../../shared/src/business/useCases/addExistingUserToCaseInteractor');
+const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -687,9 +690,6 @@ const {
 const {
   migrateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseDeadlineInteractor');
-const {
-  migrateCaseInteractor,
-} = require('../../shared/src/business/useCases/migrateCaseInteractor');
 const {
   migrateTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/migrateTrialSessionInteractor');
@@ -1426,7 +1426,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
       migrateCaseDeadlineInteractor,
-      migrateCaseInteractor,
       migrateTrialSessionInteractor,
     }),
     getNodeSass: () => {
@@ -1557,6 +1556,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        addExistingUserToCaseInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,

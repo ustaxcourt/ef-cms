@@ -1,5 +1,4 @@
 const faker = require('faker');
-const uuid = require('uuid');
 const {
   blockCaseFromTrial,
   goToCaseOverview,
@@ -11,8 +10,21 @@ const {
   unblockCaseFromTrial,
 } = require('../support/pages/case-detail');
 const {
-  COUNTRY_TYPES,
-} = require('../../shared/src/business/entities/EntityConstants');
+  completeWizardStep1,
+  completeWizardStep2,
+  completeWizardStep3,
+  completeWizardStep4,
+  filingTypes,
+  goToDashboard,
+  goToStartCreatePetition,
+  goToWizardStep1,
+  goToWizardStep2,
+  goToWizardStep3,
+  goToWizardStep4,
+  goToWizardStep5,
+  hasIrsNotice,
+  submitPetition,
+} = require('../support/pages/create-electronic-petition');
 const {
   createTrialSession,
   goToTrialSession,
@@ -27,45 +39,24 @@ const {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
 } = require('../support/pages/reports');
-const { BASE_CASE } = require('../fixtures/caseMigrations');
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 faker.seed(faker.random.number());
 
-const createDocketNumber = () => {
-  const docketNumberYear = faker.random.number({ max: 99, min: 80 });
-  const docketNumberPrefix = faker.random.number({
-    max: 99999,
-    min: 101,
-  });
-
-  return `${docketNumberPrefix}-${docketNumberYear}`;
-};
-
-const createRandomContact = () => ({
-  address1: faker.address.streetAddress(),
-  city: faker.address.city(),
-  contactId: uuid.v4(),
-  countryType: COUNTRY_TYPES.DOMESTIC,
-  email: `${faker.internet.userName()}@example.com`,
-  name: faker.name.findName(),
-  phone: faker.phone.phoneNumber(),
-  postalCode: faker.address.zipCode(),
-  state: faker.address.stateAbbr(),
-});
-
-let petitionsClerkToken = null;
 let docketClerkToken = null;
+let petitionsClerkToken = null;
 const testData = {
-  preferredTrialCity: 'Cheyenne, Wyoming',
+  preferredTrialCity: 'Mobile, Alabama',
   trialSessionIds: [],
 };
-const firstDocketNumber = createDocketNumber();
-const secondDocketNumber = createDocketNumber();
+
+let firstDocketNumber;
+let secondDocketNumber;
+const caseTestData = { docketNumbers: [] };
 
 describe('Petitions Clerk', () => {
-  const { getRestApi, getUserToken, login } = getEnvironmentSpecificFunctions();
+  const { getUserToken, login } = getEnvironmentSpecificFunctions();
 
   before(async () => {
     let result = await getUserToken(
@@ -80,42 +71,77 @@ describe('Petitions Clerk', () => {
     docketClerkToken = result.AuthenticationResult.IdToken;
   });
 
-  it('should be able to login as petitions clerk', () => {
-    login(petitionsClerkToken);
-  });
+  describe('Petitioner creates cases', () => {
+    let petitionerToken;
 
-  describe('create cases via migration', () => {
-    let migrateUserToken, migrateRestApi;
-    beforeEach(async () => {
-      migrateRestApi = await getRestApi();
-      const results = await getUserToken(
-        'migrator@example.com',
-        DEFAULT_ACCOUNT_PASS,
-      );
-      migrateUserToken = results.AuthenticationResult.IdToken;
-    });
+    describe('Petitioner', () => {
+      before(async () => {
+        const results = await getUserToken(
+          'petitioner1@example.com',
+          DEFAULT_ACCOUNT_PASS,
+        );
+        petitionerToken = results.AuthenticationResult.IdToken;
+      });
 
-    it('should create two cases for use with trial sessions smoke-tests', () => {
-      [firstDocketNumber, secondDocketNumber].forEach(docketNumber => {
-        const migrateCase = {
-          ...BASE_CASE,
-          contactPrimary: {
-            ...BASE_CASE.contactPrimary,
-            ...createRandomContact(),
-          },
-          docketEntries: [{ ...BASE_CASE.docketEntries[0], docketNumber }],
-          docketNumber,
-          docketNumberWithSuffix: docketNumber,
-          preferredTrialCity: testData.preferredTrialCity,
-        };
-        cy.request({
-          body: migrateCase,
-          headers: {
-            Authorization: `Bearer ${migrateUserToken}`,
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-          url: `${migrateRestApi}/migrate/case`,
+      it('should be able to login', () => {
+        login(petitionerToken);
+      });
+
+      describe('should be able to create a case', () => {
+        it('should complete wizard step 1', () => {
+          goToStartCreatePetition();
+          goToWizardStep1();
+          completeWizardStep1();
+        });
+
+        // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
+        it('should go to wizard step 2', () => {
+          goToWizardStep2();
+        });
+
+        it('should complete the form and submit the petition', () => {
+          completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
+          goToWizardStep3();
+          completeWizardStep3(
+            filingTypes.INDIVIDUAL,
+            `${faker.name.firstName()} ${faker.name.lastName()}`,
+          );
+          goToWizardStep4();
+          completeWizardStep4();
+          goToWizardStep5();
+          submitPetition(caseTestData);
+          goToDashboard();
+        });
+      });
+
+      describe('should be able to create another case', () => {
+        after(() => {
+          [firstDocketNumber, secondDocketNumber] = caseTestData.docketNumbers;
+        });
+
+        it('should complete wizard step 1', () => {
+          goToStartCreatePetition();
+          goToWizardStep1();
+          completeWizardStep1();
+        });
+
+        // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
+        it('should go to wizard step 2', () => {
+          goToWizardStep2();
+        });
+
+        it('should complete the form and submit the petition', () => {
+          completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
+          goToWizardStep3();
+          completeWizardStep3(
+            filingTypes.INDIVIDUAL,
+            `${faker.name.firstName()} ${faker.name.lastName()}`,
+          );
+          goToWizardStep4();
+          completeWizardStep4();
+          goToWizardStep5();
+          submitPetition(caseTestData);
+          goToDashboard();
         });
       });
     });
@@ -127,6 +153,10 @@ describe('Petitions Clerk', () => {
       cy.route({ method: 'POST', url: '/trial-sessions' }).as(
         'postTrialSession',
       );
+    });
+
+    it('should be able to login as petitions clerk', () => {
+      login(petitionsClerkToken);
     });
 
     it('creates two trial sessions', () => {
