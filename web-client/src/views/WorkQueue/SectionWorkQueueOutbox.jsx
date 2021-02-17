@@ -43,7 +43,7 @@ export const SectionWorkQueueOutbox = connect(
                 <td className="message-queue-row">
                   <div className="message-document-title">
                     <a className="case-link" href={item.editLink}>
-                      {item.docketEntry.documentTitle ||
+                      {item.docketEntry.descriptionDisplay ||
                         item.docketEntry.documentType}
                     </a>
                   </div>
