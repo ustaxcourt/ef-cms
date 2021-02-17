@@ -1,4 +1,5 @@
 import { hasUpdatedPetitionerEmailAction } from '../actions/hasUpdatedPetitionerEmailAction';
+import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { openGainElectronicAccessToCaseModalSequence } from './openGainElectronicAccessToCaseModalSequence';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -23,7 +24,10 @@ export const updatePetitionerInformationFormSequence = [
     success: showProgressSequenceDecorator([
       hasUpdatedPetitionerEmailAction,
       {
-        no: [submitUpdatePetitionerInformationSequence],
+        no: [
+          submitUpdatePetitionerInformationSequence,
+          navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+        ],
         yes: [openGainElectronicAccessToCaseModalSequence],
       },
     ]),

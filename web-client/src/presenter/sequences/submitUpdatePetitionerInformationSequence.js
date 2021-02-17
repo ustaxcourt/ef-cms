@@ -1,4 +1,3 @@
-import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -9,5 +8,4 @@ export const submitUpdatePetitionerInformationSequence = [
   setPdfPreviewUrlAction,
   setSaveAlertsForNavigationAction,
   setAlertSuccessAction,
-  navigateToCaseDetailCaseInformationActionFactory('petitioner'),
 ];
