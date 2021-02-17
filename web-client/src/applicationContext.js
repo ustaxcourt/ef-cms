@@ -8,6 +8,7 @@ import {
   isServed,
 } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
+import { addExistingUserToCaseInteractor } from '../../shared/src/proxies/addExistingUserToCaseProxy';
 import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
@@ -186,6 +187,7 @@ import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users
 const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/proxies/documents/removePdfFromDocketEntryProxy');
+
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/documents/removeSignatureFromDocumentProxy';
 import { replyToMessageInteractor } from '../../shared/src/proxies/messages/replyToMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
@@ -300,6 +302,7 @@ const allUseCases = {
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
+  addExistingUserToCaseInteractor,
   archiveCorrespondenceDocumentInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
