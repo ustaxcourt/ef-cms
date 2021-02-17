@@ -14,21 +14,17 @@ exports.generateDocumentTitleInteractor = ({
   applicationContext,
   documentMetadata,
 }) => {
-  console.log('documentMetadata', documentMetadata);
   if (documentMetadata.previousDocument) {
-    documentMetadata.documentTitle = applicationContext
+    documentMetadata.previousDocument.documentTitle = applicationContext
       .getUtilities()
-      .getDocumentTitleWithAdditionalInfo({ docketEntry: documentMetadata });
+      .getDocumentTitleWithAdditionalInfo({
+        docketEntry: documentMetadata.previousDocument,
+      });
   }
 
   const externalDocument = ExternalDocumentFactory.get(documentMetadata, {
     applicationContext,
   });
-
-  console.log(
-    'externalDocument.getDocumentTitle',
-    externalDocument.getDocumentTitle(),
-  );
 
   return externalDocument.getDocumentTitle();
 };
