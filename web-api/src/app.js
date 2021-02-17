@@ -31,6 +31,9 @@ const {
   addDeficiencyStatisticLambda,
 } = require('./cases/addDeficiencyStatisticLambda');
 const {
+  addExistingUserToCaseLambda,
+} = require('./cases/addExistingUserToCaseLambda');
+const {
   archiveCorrespondenceDocumentLambda,
 } = require('./correspondence/archiveCorrespondenceDocumentLambda');
 const {
@@ -378,7 +381,6 @@ const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { getUserLambda } = require('./users/getUserLambda');
 const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
-const { migrateCaseLambda } = require('./migrate/migrateCaseLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -694,6 +696,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
+  app.post(
+    '/cases/:docketNumber/add-existing-user',
+    lambdaWrapper(addExistingUserToCaseLambda),
+  );
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
@@ -785,7 +791,6 @@ app.post(
 /**
  * migrate
  */
-app.post('/migrate/case', lambdaWrapper(migrateCaseLambda));
 app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
 app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
 
