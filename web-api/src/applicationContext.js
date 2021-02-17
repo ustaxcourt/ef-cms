@@ -691,9 +691,6 @@ const {
   migrateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/migrateCaseDeadlineInteractor');
 const {
-  migrateCaseInteractor,
-} = require('../../shared/src/business/useCases/migrateCaseInteractor');
-const {
   migrateTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/migrateTrialSessionInteractor');
 const {
@@ -1429,7 +1426,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMigrations: () => ({
       migrateCaseDeadlineInteractor,
-      migrateCaseInteractor,
       migrateTrialSessionInteractor,
     }),
     getNodeSass: () => {
