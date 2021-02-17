@@ -2,20 +2,19 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { UserCase } = require('../../entities/UserCase');
 
 /**
- * addExistingUserToCaseInteractor
+ * addExistingUserToCase
  *
  * @param {object} options.docketNumber the docket number for the case we need to update
  * @param {object} email the email address for the user we are attaching to the case
  * @param {object} name the name of the user to update the case with
  * @returns {Case} the updated case
  */
-exports.addExistingUserToCaseInteractor = async ({
+exports.addExistingUserToCase = async ({
   applicationContext,
   caseEntity,
   email,
