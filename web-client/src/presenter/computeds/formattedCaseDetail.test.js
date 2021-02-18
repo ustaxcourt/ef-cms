@@ -3638,7 +3638,7 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  describe('shouldShowUntouchedStar', () => {
+  describe('qcNeeded', () => {
     const mockDocketEntry = {
       createdAt: '2018-11-21T20:49:28.192Z',
       docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -3663,7 +3663,7 @@ describe('formattedCaseDetail', () => {
       },
     };
 
-    it('should set shouldShowUntouchedStar to true when work item is not read', () => {
+    it('should set qcNeeded to true when work item is not read', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail: {
@@ -3676,11 +3676,11 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
-        shouldShowUntouchedStar: true,
+        qcNeeded: true,
       });
     });
 
-    it('should set shouldShowUntouchedStar to false when qcWorkItemsUntouched is true and work item is read', () => {
+    it('should set qcNeeded to false when qcWorkItemsUntouched is true and work item is read', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail: {
@@ -3701,7 +3701,7 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
-        shouldShowUntouchedStar: false,
+        qcNeeded: false,
       });
     });
   });

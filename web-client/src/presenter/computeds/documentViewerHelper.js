@@ -83,12 +83,16 @@ export const documentViewerHelper = (get, applicationContext) => {
     showStricken = entry.isStricken;
   }
 
+  const showCompleteQcButton =
+    permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
+
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
     documentViewerLink: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
     filedLabel,
     reviewAndServePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.docketEntryId}`,
     servedLabel,
+    showCompleteQcButton,
     showNotServed,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
     showServeCourtIssuedDocumentButton,
