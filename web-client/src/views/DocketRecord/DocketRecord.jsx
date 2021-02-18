@@ -45,7 +45,7 @@ export const DocketRecord = connect(
         );
       }
 
-      if (entry.qcWorkItemsUntouched && !entry.isInProgress) {
+      if (entry.shouldShowUntouchedStar) {
         return <FontAwesomeIcon icon={['fa', 'star']} title="is untouched" />;
       }
 
