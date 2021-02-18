@@ -22,14 +22,11 @@ describe('Modify Practitioner Email', () => {
 
   let caseDetail;
   test.createdDocketNumbers = [];
+  const practitionerEmail = 'privatePractitioner2@example.com';
 
-  loginAs(test, 'privatePractitioner2@example.com');
+  loginAs(test, practitionerEmail);
   it('practitioner creates a case', async () => {
-    caseDetail = await uploadPetition(
-      test,
-      {},
-      'privatePractitioner2@example.com',
-    );
+    caseDetail = await uploadPetition(test, {}, practitionerEmail);
     expect(caseDetail.docketNumber).toBeDefined();
 
     await refreshElasticsearchIndex();
@@ -41,6 +38,6 @@ describe('Modify Practitioner Email', () => {
 
   userVerifiesUpdatedEmailAddress(test, 'practitioner');
 
-  loginAs(test, 'privatePractitioner2@example.com');
+  loginAs(test, practitionerEmail);
   userLogsInAndChecksVerifiedEmailAddress(test, 'practitioner');
 });

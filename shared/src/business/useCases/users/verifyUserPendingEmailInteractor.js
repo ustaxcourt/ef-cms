@@ -218,7 +218,6 @@ exports.verifyUserPendingEmailInteractor = async ({
       });
     }
   } catch (error) {
-    // console.trace(error);
     applicationContext.logger.error(error);
   }
 };
