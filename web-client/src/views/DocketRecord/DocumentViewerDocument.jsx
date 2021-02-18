@@ -135,7 +135,11 @@ export const DocumentViewerDocument = connect(
               )}
 
               {documentViewerHelper.showCompleteQcButton && (
-                <Button link icon="star">
+                <Button
+                  link
+                  href={documentViewerHelper.completeQcLink}
+                  icon="star"
+                >
                   Complete QC
                 </Button>
               )}
