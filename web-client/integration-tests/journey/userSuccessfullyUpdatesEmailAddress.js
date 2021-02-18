@@ -1,12 +1,15 @@
 import { headerHelper as headerHelperComputed } from '../../src/presenter/computeds/headerHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
-const mockUpdatedEmail = 'error@example.com';
 
 const headerHelper = withAppContextDecorator(headerHelperComputed);
 
-export const userSuccessfullyUpdatesEmailAddress = (test, user) =>
-  it(`${user} successfully udpates email address`, async () => {
+export const userSuccessfullyUpdatesEmailAddress = (
+  test,
+  user,
+  mockUpdatedEmail,
+) =>
+  it(`${user} successfully updates email address`, async () => {
     await test.runSequence('gotoChangeLoginAndServiceEmailSequence');
 
     await test.runSequence('updateFormValueSequence', {

@@ -8,6 +8,7 @@ import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAnd
 import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyUpdatesEmailAddress';
 import { userUpdatesEmailAddressToOneAlreadyInUse } from './journey/userUpdatesEmailAddressToOneAlreadyInUse';
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
+import faker from 'faker';
 
 const test = setupTest();
 
@@ -28,16 +29,22 @@ describe('Modify Practitioner Email', () => {
   it('practitioner creates a case', async () => {
     caseDetail = await uploadPetition(test, {}, practitionerEmail);
     expect(caseDetail.docketNumber).toBeDefined();
-
+    console.log('Docket number is', caseDetail.docketNumber);
     await refreshElasticsearchIndex();
   });
 
   userUpdatesEmailAddressToOneAlreadyInUse(test, 'practitioner');
 
-  userSuccessfullyUpdatesEmailAddress(test, 'practitioner');
+  const mockUpdatedEmail = `${faker.internet.userName()}_no_error@example.com`;
+
+  userSuccessfullyUpdatesEmailAddress(test, 'practitioner', mockUpdatedEmail);
 
   userVerifiesUpdatedEmailAddress(test, 'practitioner');
 
   loginAs(test, practitionerEmail);
-  userLogsInAndChecksVerifiedEmailAddress(test, 'practitioner');
+  userLogsInAndChecksVerifiedEmailAddress(
+    test,
+    'practitioner',
+    mockUpdatedEmail,
+  );
 });
