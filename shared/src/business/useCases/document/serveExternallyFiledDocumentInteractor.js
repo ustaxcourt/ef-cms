@@ -109,7 +109,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
 
   return await applicationContext
     .getUseCaseHelpers()
-    .serveDocumentAndGetPaperService({
+    .serveDocumentAndGetPaperServicePdf({
       applicationContext,
       caseEntity,
       docketEntryId: currentDocketEntry.docketEntryId,

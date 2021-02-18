@@ -362,7 +362,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperService,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
@@ -394,12 +394,14 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toBeCalled();
   });
 
-  it('should call serveDocumentAndGetPaperService and return its result', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
     caseRecord.contactPrimary.serviceIndicator =
       SERVICE_INDICATOR_TYPES.SI_PAPER;
     applicationContext
       .getUseCaseHelpers()
-      .serveDocumentAndGetPaperService.mockReturnValue({ pdfUrl: mockPdfUrl });
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: mockPdfUrl,
+      });
 
     const result = await fileAndServeCourtIssuedDocumentInteractor({
       applicationContext,

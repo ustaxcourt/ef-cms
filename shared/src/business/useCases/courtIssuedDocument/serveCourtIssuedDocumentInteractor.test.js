@@ -353,10 +353,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call serveDocumentAndGetPaperService and return its result', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
     applicationContext
       .getUseCaseHelpers()
-      .serveDocumentAndGetPaperService.mockReturnValue({
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
         pdfUrl: 'localhost:1234',
       });
 
@@ -367,7 +367,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperService,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
     expect(result).toEqual({
       pdfUrl: 'localhost:1234',
@@ -439,7 +439,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperService,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,

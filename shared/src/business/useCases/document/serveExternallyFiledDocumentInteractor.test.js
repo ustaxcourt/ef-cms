@@ -141,10 +141,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
   });
 
-  it('should call serveDocumentAndGetPaperService and return its result', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
     applicationContext
       .getUseCaseHelpers()
-      .serveDocumentAndGetPaperService.mockReturnValue({
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
         pdfUrl: 'localhost:123',
       });
 
@@ -155,10 +155,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperService,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperService
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
         .mock.calls[0][0],
     ).toMatchObject({
       docketEntryId: DOCKET_ENTRY_ID,
