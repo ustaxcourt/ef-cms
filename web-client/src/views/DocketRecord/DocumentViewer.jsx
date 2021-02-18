@@ -67,7 +67,7 @@ export const DocumentViewer = connect(
                               )}
                             >
                               {entry.createdAtFormatted}
-                              {entry.shouldShowUntouchedStar && (
+                              {entry.qcNeeded && (
                                 <FontAwesomeIcon
                                   className="top-neg-2px fa-icon-red float-right position-relative"
                                   icon={['fa', 'star']}

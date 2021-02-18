@@ -936,6 +936,116 @@ describe('documentViewerHelper', () => {
     });
   });
 
+  describe('showCompleteQcButton', () => {
+    it('should be true if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isOnDocketRecord: true,
+                servedAt: '2019-08-25T05:00:00.000Z',
+                workItem: {},
+              },
+            ],
+          },
+          permissions: { EDIT_DOCKET_ENTRY: true },
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showCompleteQcButton).toBeTruthy();
+    });
+
+    it('should be false if the user does not have EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isOnDocketRecord: true,
+                servedAt: '2019-08-25T05:00:00.000Z',
+                workItem: {},
+              },
+            ],
+          },
+          permissions: {},
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showCompleteQcButton).toBeFalsy();
+    });
+
+    it('should be false if the user has EDIT_DOCKET_ENTRY permissions and the docket entry does not have an incomplete work item', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isOnDocketRecord: true,
+                servedAt: '2019-08-25T05:00:00.000Z',
+              },
+            ],
+          },
+          permissions: { EDIT_DOCKET_ENTRY: true },
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showCompleteQcButton).toBeFalsy();
+    });
+
+    it('should be false if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item but is in progress', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isFileAttached: false,
+                isOnDocketRecord: true,
+                servedAt: '2019-08-25T05:00:00.000Z',
+                workItem: {},
+              },
+            ],
+          },
+          permissions: { EDIT_DOCKET_ENTRY: true },
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showCompleteQcButton).toBeFalsy();
+    });
+  });
+
   it('should show stricken information if the associated document has been stricken', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
