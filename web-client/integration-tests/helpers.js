@@ -110,7 +110,7 @@ export const getEmailsForAddress = address => {
     applicationContext,
   });
 };
-export const getPendingEmailVerificationTokenForUser = userId => {
+export const getUserRecordById = userId => {
   return client.get({
     Key: {
       pk: `user|${userId}`,
