@@ -3638,6 +3638,74 @@ describe('formattedCaseDetail', () => {
     });
   });
 
+  describe('shouldShowUntouchedStar', () => {
+    const mockDocketEntry = {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-18',
+      documentTitle: 'Petition',
+      documentType: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.documentType,
+      eventCode: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.eventCode,
+      filedBy: 'Test Petitioner',
+      filingDate: '2018-03-01T00:01:00.000Z',
+      index: 1,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T00:01:00.000Z',
+      servedAt: '2020-04-29T15:51:29.168Z',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      workItem: {
+        completedAt: undefined,
+        isRead: false,
+      },
+    };
+
+    it('should set shouldShowUntouchedStar to true when work item is not read', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [mockDocketEntry],
+            docketNumber: '123-45',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        shouldShowUntouchedStar: true,
+      });
+    });
+
+    it('should set shouldShowUntouchedStar to false when qcWorkItemsUntouched is true and work item is read', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                workItem: {
+                  completedAt: '2020-04-29T15:51:29.168Z',
+                  isRead: true,
+                },
+              },
+            ],
+            docketNumber: '123-45',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        shouldShowUntouchedStar: false,
+      });
+    });
+  });
+
   it('should sort hearings by the addedToSessionAt field', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
