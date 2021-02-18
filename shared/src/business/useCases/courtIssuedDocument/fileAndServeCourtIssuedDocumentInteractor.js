@@ -13,9 +13,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  saveFileAndGenerateUrl,
-} = require('../../useCaseHelper/saveFileAndGenerateUrl');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
@@ -166,8 +163,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
   });
 
   // SERVE
-  const { PDFDocument } = await applicationContext.getPdfLib();
-
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -255,35 +250,11 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
     caseToUpdate: caseEntity,
   });
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: docketEntryEntity.docketEntryId,
-    servedParties,
-  });
-
-  if (servedParties.paper.length > 0) {
-    const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
-
-    let newPdfDoc = await PDFDocument.create();
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: courtIssuedOrderDoc,
-        servedParties,
-      });
-
-    const paperServicePdfData = await newPdfDoc.save();
-    const { url } = await saveFileAndGenerateUrl({
+  return await applicationContext
+    .getUseCaseHelpers()
+    .serveDocumentAndGetPaperService({
       applicationContext,
-      file: paperServicePdfData,
-      useTempBucket: true,
+      caseEntity,
+      docketEntryId: docketEntryEntity.docketEntryId,
     });
-
-    return { pdfUrl: url };
-  }
 };

@@ -22,10 +22,6 @@ const {
 } = require('../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { v4: uuidv4 } = require('uuid');
-jest.mock('../../useCaseHelper/saveFileAndGenerateUrl');
-const {
-  saveFileAndGenerateUrl,
-} = require('../../useCaseHelper/saveFileAndGenerateUrl');
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let caseRecord;
@@ -366,7 +362,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperService,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
@@ -398,10 +394,12 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toBeCalled();
   });
 
-  it('should return a pdfUrl when there are paper service parties on the case', async () => {
+  it('should call serveDocumentAndGetPaperService and return its result', async () => {
     caseRecord.contactPrimary.serviceIndicator =
       SERVICE_INDICATOR_TYPES.SI_PAPER;
-    saveFileAndGenerateUrl.mockReturnValue({ url: mockPdfUrl });
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperService.mockReturnValue({ pdfUrl: mockPdfUrl });
 
     const result = await fileAndServeCourtIssuedDocumentInteractor({
       applicationContext,
