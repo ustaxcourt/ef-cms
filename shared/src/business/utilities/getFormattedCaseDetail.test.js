@@ -773,6 +773,82 @@ describe('formatCase', () => {
     expect(result).toMatchObject(mockCaseDetail);
     expect(result).not.toHaveProperty('consolidatedCases');
   });
+
+  describe('qcNeeded', () => {
+    it('should be true for a docket entry that is not in-progress and has an incomplete work item', () => {
+      const docketEntries = [
+        {
+          createdAt: getDateISO(),
+          docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isFileAttached: true,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+          workItem: {
+            completedAt: undefined,
+            isRead: false,
+          },
+        },
+      ];
+
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries,
+      });
+      expect(result.formattedDocketEntries[0].qcNeeded).toBeTruthy();
+    });
+
+    it('should be false for a docket entry that is in-progress and has an incomplete work item', () => {
+      const docketEntries = [
+        {
+          createdAt: getDateISO(),
+          docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isFileAttached: false,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+          workItem: {
+            completedAt: undefined,
+            isRead: false,
+          },
+        },
+      ];
+
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries,
+      });
+      expect(result.formattedDocketEntries[0].qcNeeded).toBeFalsy();
+    });
+
+    it('should be false for a docket entry that is not in-progress and does not have an incomplete work item', () => {
+      const docketEntries = [
+        {
+          createdAt: getDateISO(),
+          docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isFileAttached: true,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+        },
+      ];
+
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries,
+      });
+      expect(result.formattedDocketEntries[0].qcNeeded).toBeFalsy();
+    });
+  });
 });
 
 describe('formatCaseDeadlines', () => {

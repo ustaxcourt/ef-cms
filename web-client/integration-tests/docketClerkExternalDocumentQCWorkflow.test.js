@@ -257,6 +257,8 @@ describe('Create a work item', () => {
 
     await test.runSequence('completeDocketEntryQCAndSendMessageSequence');
 
+    await refreshElasticsearchIndex();
+
     errors = test.getState('validationErrors');
 
     expect(errors).toEqual({});

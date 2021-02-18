@@ -9389,7 +9389,8 @@
       "name": "Stacy Russold",
       "sealedAndUnavailable": false,
       "state": "CO",
-      "countryType": "domestic"
+      "countryType": "domestic",
+      "phone": "1234567890"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",

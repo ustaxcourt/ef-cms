@@ -72,13 +72,6 @@ const PetitionerInformation = connect(
               {formattedCaseDetail.contactPrimary && (
                 <div className="grid-row">
                   <div className="grid-col-6">
-                    <p className="semi-bold margin-top-0 margin-bottom-0">
-                      Party type
-                    </p>
-                    {formattedCaseDetail.partyType}
-                  </div>
-
-                  <div className="grid-col-6">
                     <address aria-labelledby="primary-label">
                       <AddressDisplay
                         contact={formattedCaseDetail.contactPrimary}
@@ -97,13 +90,15 @@ const PetitionerInformation = connect(
                           </p>
                         </div>
                       )}
+                  </div>
+                  <div className="grid-col-6">
                     {formattedCaseDetail.contactPrimary.serviceIndicator && (
-                      <div className="margin-top-4">
-                        <p className="semi-bold margin-bottom-0">
+                      <>
+                        <div className="semi-bold margin-bottom-0">
                           Service preference
-                        </p>
+                        </div>
                         {formattedCaseDetail.contactPrimary.serviceIndicator}
-                      </div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -132,33 +127,43 @@ const PetitionerInformation = connect(
                         </Button>
                       )}
                   </h3>
-                  <div>
-                    <address aria-labelledby="secondary-label">
-                      <AddressDisplay
-                        contact={formattedCaseDetail.contactSecondary}
-                        showEmail={true}
-                        showSealAddressLink={
-                          caseInformationHelper.showSealAddressLink
-                        }
-                      />
-                    </address>
-                    {caseDetailHelper.showEditContacts &&
-                      formattedCaseDetail.contactSecondary.isAddressSealed && (
-                        <div className="max-width-50">
-                          <p className="text-italic">
-                            Call the Tax Court at (202) 521-0700 if you need to
-                            update your contact information
-                          </p>
-                        </div>
+
+                  <div className="grid-row">
+                    <div className="grid-col-6">
+                      <address aria-labelledby="secondary-label">
+                        <AddressDisplay
+                          contact={formattedCaseDetail.contactSecondary}
+                          showEmail={true}
+                          showSealAddressLink={
+                            caseInformationHelper.showSealAddressLink
+                          }
+                        />
+                      </address>
+                      {caseDetailHelper.showEditContacts &&
+                        formattedCaseDetail.contactSecondary
+                          .isAddressSealed && (
+                          <div className="max-width-50">
+                            <p className="text-italic">
+                              Call the Tax Court at (202) 521-0700 if you need
+                              to update your contact information
+                            </p>
+                          </div>
+                        )}
+                    </div>
+                    <div className="grid-col-6">
+                      {formattedCaseDetail.contactSecondary
+                        .serviceIndicator && (
+                        <>
+                          <div className="semi-bold margin-bottom-0">
+                            Service preference
+                          </div>
+                          {
+                            formattedCaseDetail.contactSecondary
+                              .serviceIndicator
+                          }
+                        </>
                       )}
-                    {formattedCaseDetail.contactSecondary.serviceIndicator && (
-                      <div className="margin-top-4">
-                        <p className="semi-bold margin-bottom-0">
-                          Service preference
-                        </p>
-                        {formattedCaseDetail.contactSecondary.serviceIndicator}
-                      </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               </div>

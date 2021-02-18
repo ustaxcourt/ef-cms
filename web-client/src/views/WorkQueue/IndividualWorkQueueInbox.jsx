@@ -72,7 +72,7 @@ export const IndividualWorkQueueInbox = connect(
                         }
                         href={item.editLink}
                       >
-                        {item.docketEntry.documentTitle ||
+                        {item.docketEntry.descriptionDisplay ||
                           item.docketEntry.documentType}
                       </a>
                     </div>
