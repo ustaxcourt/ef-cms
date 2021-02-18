@@ -4,7 +4,7 @@ const {
 const { saveFileAndGenerateUrl } = require('./saveFileAndGenerateUrl');
 
 /**
- * serveDocumentAndGetPaperService
+ * serveDocumentAndGetPaperServicePdf
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -12,7 +12,7 @@ const { saveFileAndGenerateUrl } = require('./saveFileAndGenerateUrl');
  * @param {string} providers.docketEntryId the id of the docket entry to serve
  * @returns {Promise<*>} the updated case entity
  */
-exports.serveDocumentAndGetPaperService = async ({
+exports.serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
   caseEntity,
   docketEntryId,

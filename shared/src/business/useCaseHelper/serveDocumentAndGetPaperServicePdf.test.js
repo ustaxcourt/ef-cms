@@ -3,13 +3,13 @@ const {
   testPdfDoc,
 } = require('../test/createTestApplicationContext');
 const {
-  serveDocumentAndGetPaperService,
-} = require('./serveDocumentAndGetPaperService');
+  serveDocumentAndGetPaperServicePdf,
+} = require('./serveDocumentAndGetPaperServicePdf');
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
-describe('serveDocumentAndGetPaperService', () => {
+describe('serveDocumentAndGetPaperServicePdf', () => {
   let caseEntity;
 
   const mockPdfUrl = 'www.example.com';
@@ -30,7 +30,7 @@ describe('serveDocumentAndGetPaperService', () => {
   });
 
   it('should call sendServedPartiesEmails with the case entity, docket entry id, and aggregated served parties from the case', async () => {
-    await serveDocumentAndGetPaperService({
+    await serveDocumentAndGetPaperServicePdf({
       applicationContext,
       caseEntity,
       docketEntryId: mockDocketEntryId,
@@ -47,7 +47,7 @@ describe('serveDocumentAndGetPaperService', () => {
   });
 
   it('should not call getObject or appendPaperServiceAddressPageToPdf if there are no paper service parties on the case', async () => {
-    await serveDocumentAndGetPaperService({
+    await serveDocumentAndGetPaperServicePdf({
       applicationContext,
       caseEntity, // MOCK_CASE does not have any paper service parties
       docketEntryId: mockDocketEntryId,
@@ -71,7 +71,7 @@ describe('serveDocumentAndGetPaperService', () => {
       { applicationContext },
     );
 
-    const result = await serveDocumentAndGetPaperService({
+    const result = await serveDocumentAndGetPaperServicePdf({
       applicationContext,
       caseEntity,
       docketEntryId: mockDocketEntryId,

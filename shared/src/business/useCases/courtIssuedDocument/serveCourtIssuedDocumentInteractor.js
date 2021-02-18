@@ -211,7 +211,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   return await applicationContext
     .getUseCaseHelpers()
-    .serveDocumentAndGetPaperService({
+    .serveDocumentAndGetPaperServicePdf({
       applicationContext,
       caseEntity,
       docketEntryId: courtIssuedDocument.docketEntryId,
