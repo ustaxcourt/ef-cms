@@ -151,6 +151,9 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   formattedEntry.qcWorkItemsUntouched =
     qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
 
+  formattedEntry.qcNeeded =
+    formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
+
   if (formattedEntry.servedPartiesCode !== SERVED_PARTIES_CODES.PETITIONER) {
     // Served parties code - R = Respondent, P = Petitioner, B = Both
     formattedEntry.servedPartiesCode = getServedPartiesCode(

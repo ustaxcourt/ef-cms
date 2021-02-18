@@ -52,7 +52,7 @@ export const NoticeOfReceiptOfPetition = ({
           To obtain further information about proceeding in the Tax Court,
           please visit{' '}
           <strong>
-            <a href="http://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
+            <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
           </strong>{' '}
           and select &quot;Taxpayer Identification&quot;.
         </div>
@@ -65,7 +65,7 @@ export const NoticeOfReceiptOfPetition = ({
           you filed your petition in paper, see Tax Court Form 10, Notice of
           Change of Address, under “Forms” on the Tax Court’s Website at{' '}
           <strong>
-            <a href="http://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
+            <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
           </strong>
           . If you filed your petition electronically, you may update your
           address under the “Case Information” tab in your case online. Failure

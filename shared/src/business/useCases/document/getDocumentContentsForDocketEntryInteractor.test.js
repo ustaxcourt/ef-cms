@@ -38,6 +38,22 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should allow the logged in internal user with permissions to edit the order', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Test Judge',
+      role: ROLES.judge,
+    });
+
+    await getDocumentContentsForDocketEntryInteractor({
+      applicationContext,
+      documentContentsId: mockDocumentContentsId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
+    ).toMatchObject({ key: mockDocumentContentsId });
+  });
+
   it('should call applicationContext.getPersistenceGateway().getDocument with documentCntentsId as the key', async () => {
     await getDocumentContentsForDocketEntryInteractor({
       applicationContext,

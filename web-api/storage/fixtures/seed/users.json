@@ -298,6 +298,36 @@
     "entityName": "PrivatePractitioner"
   },
   {
+    "role": "privatePractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1952",
+    "employer": "Private",
+    "practitionerType": "Attorney",
+    "name": "Test Private Practitioner 99",
+    "firstName": "Test",
+    "middleName": "Private",
+    "lastName": "Practitioner",
+    "suffix": "",
+    "section": "privatePractitioner",
+    "userId": "a6318a31-8aa4-4002-a7b0-1192af19dbb9",
+    "entityName": "PrivatePractitioner",
+    "email": "privatePractitioner99@example.com",
+    "firmName": "Bogus Barristers",
+    "barNumber": "PT9999",
+    "contact": {
+      "address1": "234 Bogus Ln",
+      "address2": "Apartment 99",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    },
+    "originalBarState": "Oregon"
+  },
+  {
     "role": "irsPractitioner",
     "admissionsDate": "2019-03-01T21:40:46.415Z",
     "admissionsStatus": "Active",
