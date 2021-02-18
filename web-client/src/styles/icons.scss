@@ -70,6 +70,10 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   color: color($theme-color-primary);
 }
 
+.fa-icon-red {
+  color: color($theme-color-secondary-dark);
+}
+
 .fa-icon-blue-vivid {
   color: color($theme-color-primary-vivid);
 }
