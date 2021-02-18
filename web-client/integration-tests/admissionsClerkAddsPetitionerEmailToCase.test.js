@@ -74,5 +74,12 @@ describe('admissions clerk adds petitioner with existing cognito email to case',
 
     const addedCase = openCases.find(c => c.docketNumber === test.docketNumber);
     expect(addedCase).toBeDefined();
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(test.getState('screenMetadata.isAssociated')).toEqual(true);
   });
 });

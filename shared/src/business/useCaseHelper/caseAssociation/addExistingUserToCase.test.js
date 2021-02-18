@@ -92,6 +92,7 @@ describe('addExistingUserToCase', () => {
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
+          contactId: '123',
           email: undefined,
           name: 'Bob Ross',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -115,6 +116,7 @@ describe('addExistingUserToCase', () => {
     });
     expect(updatedCase).toMatchObject({
       contactPrimary: {
+        contactId: USER_ID, // contactId was updated to new userId
         email: UPDATED_EMAIL,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
