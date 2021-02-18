@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { map } = require('lodash');
 const { Practitioner } = require('../../entities/Practitioner');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -27,46 +28,42 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
-  for (let caseInfo of petitionerCases) {
-    try {
-      const { docketNumber } = caseInfo;
+  const casesToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByDocketNumbers({
+      applicationContext,
+      docketNumbers: map(petitionerCases, 'docketNumber'),
+    });
 
-      const userCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
+  const validatedCasesToUpdate = casesToUpdate.map(caseToUpdate => {
+    const caseEntity = new Case(caseToUpdate, {
+      applicationContext,
+    }).toRawObject();
 
-      const caseRaw = new Case(userCase, { applicationContext })
-        .validate()
-        .toRawObject();
-
-      const petitionerObject = [
-        caseRaw.contactPrimary,
-        caseRaw.contactSecondary,
-      ].find(petitioner => petitioner && petitioner.contactId === user.userId);
-
-      if (!petitionerObject) {
-        throw new Error(
-          `Could not find user|${user.userId} on ${docketNumber}`,
-        );
-      }
-
-      // This updates the case by reference!
-      petitionerObject.email = user.email;
-
-      // we do this again so that it will convert '' to null
-      const caseEntity = new Case(caseRaw, { applicationContext }).validate();
-
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
-      });
-    } catch (error) {
-      applicationContext.logger.error(error);
+    const petitionerObject = [
+      caseEntity.contactPrimary,
+      caseEntity.contactSecondary,
+    ].find(petitioner => petitioner && petitioner.contactId === user.userId);
+    if (!petitionerObject) {
+      throw new Error(
+        `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
+      );
     }
-  }
+    // This updates the case by reference!
+    petitionerObject.email = user.email;
+
+    // we do this again so that it will convert '' to null
+    return new Case(caseEntity, { applicationContext }).validate();
+  });
+
+  return Promise.all(
+    validatedCasesToUpdate.map(caseToUpdate =>
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate,
+      }),
+    ),
+  );
 };
 
 exports.updatePetitionerCases = updatePetitionerCases;
@@ -84,65 +81,54 @@ exports.updatePetitionerCases = updatePetitionerCases;
  * @returns {Promise} resolves upon completion of case updates
  */
 const updatePractitionerCases = async ({ applicationContext, user }) => {
-  const docketNumbers = await applicationContext
+  const practitionerCases = await applicationContext
     .getPersistenceGateway()
     .getCasesByUserId({
       applicationContext,
       userId: user.userId,
     });
+  const casesToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByDocketNumbers({
+      applicationContext,
+      docketNumbers: map(practitionerCases, 'docketNumber'),
+    });
 
-  const updatedCases = [];
+  const validCasesToUpdate = casesToUpdate.map(caseToUpdate => {
+    const caseEntity = new Case(caseToUpdate, { applicationContext });
+    const practitionerObject = [
+      ...caseEntity.privatePractitioners,
+      ...caseEntity.irsPractitioners,
+    ].find(practitioner => practitioner.userId === user.userId);
 
-  for (let caseInfo of docketNumbers) {
-    try {
-      const { docketNumber } = caseInfo;
-
-      const userCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
-
-      let caseEntity = new Case(userCase, { applicationContext });
-
-      const practitionerObject = caseEntity.privatePractitioners
-        .concat(caseEntity.irsPractitioners)
-        .find(practitioner => practitioner.userId === user.userId);
-
-      if (!practitionerObject) {
-        throw new Error(
-          `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
-        );
-      }
-
-      // This updates the case by reference!
-      practitionerObject.email = user.email;
-
-      // we do this again so that it will convert '' to null
-      caseEntity = new Case(caseEntity, { applicationContext });
-
-      const updatedCase = await applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        });
-
-      updatedCases.push(updatedCase);
-
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        message: {
-          action: 'user_contact_update_progress',
-          completedCases: updatedCases.length,
-          totalCases: docketNumbers.length,
-        },
-        userId: user.userId,
-      });
-    } catch (error) {
-      applicationContext.logger.error(error);
+    if (!practitionerObject) {
+      throw new Error(
+        `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${caseToUpdate.docketNumber}`,
+      );
     }
+    // This updates the case by reference!
+    practitionerObject.email = user.email;
+
+    // we do this again so that it will convert '' to null
+    return new Case(caseEntity, { applicationContext }).validate();
+  });
+
+  for (let idx = 0; idx < validCasesToUpdate.length; idx++) {
+    const validatedCaseToUpdate = validCasesToUpdate[idx];
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: validatedCaseToUpdate,
+    });
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_update_progress',
+        completedCases: idx + 1,
+        totalCases: validCasesToUpdate.length,
+      },
+      userId: user.userId,
+    });
   }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -153,7 +139,7 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
     userId: user.userId,
   });
 
-  return updatedCases;
+  return validCasesToUpdate;
 };
 
 /**
@@ -219,15 +205,20 @@ exports.verifyUserPendingEmailInteractor = async ({
     user: updatedRawUser,
   });
 
-  if (userEntity.role === ROLES.petitioner) {
-    await updatePetitionerCases({
-      applicationContext,
-      user: updatedRawUser,
-    });
-  } else {
-    await updatePractitionerCases({
-      applicationContext,
-      user: updatedRawUser,
-    });
+  try {
+    if (userEntity.role === ROLES.petitioner) {
+      await updatePetitionerCases({
+        applicationContext,
+        user: updatedRawUser,
+      });
+    } else {
+      await updatePractitionerCases({
+        applicationContext,
+        user: updatedRawUser,
+      });
+    }
+  } catch (error) {
+    // console.trace(error);
+    applicationContext.logger.error(error);
   }
 };
