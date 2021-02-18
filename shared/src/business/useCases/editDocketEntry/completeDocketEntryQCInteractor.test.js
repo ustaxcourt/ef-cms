@@ -140,6 +140,12 @@ describe('completeDocketEntryQCInteractor', () => {
       .getDownloadPolicyUrl.mockReturnValue({
         url: 'www.example.com',
       });
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: 'www.example.com',
+      });
   });
 
   it('should throw an error if not authorized', async () => {

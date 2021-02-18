@@ -17,8 +17,6 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
   caseEntity,
   docketEntryId,
 }) => {
-  const { PDFDocument } = await applicationContext.getPdfLib();
-
   const servedParties = aggregatePartiesForService(caseEntity);
 
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
@@ -29,6 +27,8 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
   });
 
   if (servedParties.paper.length > 0) {
+    const { PDFDocument } = await applicationContext.getPdfLib();
+
     const { Body: pdfData } = await applicationContext
       .getStorageClient()
       .getObject({
