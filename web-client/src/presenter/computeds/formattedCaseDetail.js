@@ -178,24 +178,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
     let showDocumentLinks = false;
 
     if (isExternalUser) {
-      formattedResult.isInProgress = false;
       formattedResult.hideIcons = true;
-      formattedResult.qcWorkItemsUntouched = false;
     } else {
-      formattedResult.isInProgress = entry.isInProgress;
-
-      formattedResult.qcWorkItemsUntouched =
-        !formattedResult.isInProgress &&
-        entry.qcWorkItemsUntouched &&
-        !entry.isCourtIssuedDocument;
-
       formattedResult.showLoadingIcon =
         !permissions.UPDATE_CASE &&
         entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
     }
-
-    formattedResult.shouldShowUntouchedStar =
-      formattedResult.qcWorkItemsUntouched && !formattedResult.isInProgress;
 
     formattedResult.isPaper =
       !formattedResult.isInProgress &&
