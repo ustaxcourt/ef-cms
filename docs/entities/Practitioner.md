@@ -709,6 +709,23 @@
           name: "max"
           args: 
             limit: 100
+    practitionerNotes: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The optional notes of the practitioner."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 500
+      allow: 
+        - null
+        - ""
     practitionerType: 
       type: "string"
       flags: 
