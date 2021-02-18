@@ -10,6 +10,22 @@ const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('addExistingUserToCase', () => {
+  const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
+
+  beforeEach(() => {
+    const mockUser = {
+      userId: USER_ID,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCognitoUserIdByEmail.mockReturnValue(mockUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockUser);
+  });
+
   it('throws an unauthorized error on non admissionsclerk users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
@@ -30,7 +46,7 @@ describe('addExistingUserToCase', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getUserByEmail.mockReturnValue(null);
+      .getCognitoUserIdByEmail.mockReturnValue(null);
 
     await expect(
       addExistingUserToCase({
@@ -45,10 +61,6 @@ describe('addExistingUserToCase', () => {
   it('throws an error if contact not found with name provided', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.admissionsClerk,
-    });
-
-    applicationContext.getPersistenceGateway().getUserByEmail.mockReturnValue({
-      userId: '07d932a1-94e1-4b42-8090-20eedd90c8ac',
     });
 
     const caseEntity = new Case(
@@ -69,15 +81,10 @@ describe('addExistingUserToCase', () => {
   });
 
   it('should call associateUserWithCase and return the updated case with contact primary email', async () => {
-    const USER_ID = '07d932a1-94e1-4b42-8090-20eedd90c8ac';
     const UPDATED_EMAIL = 'testing@example.com';
 
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.admissionsClerk,
-    });
-
-    applicationContext.getPersistenceGateway().getUserByEmail.mockReturnValue({
-      userId: USER_ID,
     });
 
     const caseEntity = new Case(
