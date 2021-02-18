@@ -47,4 +47,16 @@ describe('menuHelper', () => {
 
     expect(isCaseDetailMenuOpen).toEqual(true);
   });
+
+  it('should indicate Edit Trial Session Information Menu is open according to state', () => {
+    const { isTrialSessionInformationMenuOpen } = runCompute(menuHelper, {
+      state: {
+        navigation: {
+          openMenu: 'TrialSessionInformationMenu',
+        },
+      },
+    });
+
+    expect(isTrialSessionInformationMenuOpen).toEqual(true);
+  });
 });

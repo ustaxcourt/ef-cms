@@ -69,7 +69,7 @@ export const CaseDetailHeaderMenu = connect(
     const reset = e => {
       const clickedWithinComponent = menuRef.current.contains(e.target);
       const clickedOnMenuButton = e.target.closest('.usa-accordion__button');
-      const clickedOnSubNav = e.target.closest('.usa-nav__primary-item');
+      const clickedOnSubNav = e.target.closest('.usa-nav__submenu-item');
       if (!clickedWithinComponent) {
         return resetCaseMenuSequence();
       } else if (!clickedOnMenuButton && !clickedOnSubNav) {

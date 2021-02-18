@@ -8,7 +8,8 @@ import { SetForHearingModal } from './SetForHearingModal';
 import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
 
 const PetitionDetails = ({
   caseDetail,
@@ -132,300 +133,414 @@ const DisplayHearings = ({
   ));
 };
 
+const TrialSessionInformationMenu = ({
+  openRemoveFromTrialSessionModalSequence,
+  resetTrialSessionInformationMenuSequence,
+  toggleFlag,
+  toggleMenuSequence,
+  trialSessionId,
+}) => {
+  const menuRef = useRef(null);
+  const keydown = event => {
+    const pressedESC = event.keyCode === 27;
+    if (pressedESC) {
+      resetTrialSessionInformationMenuSequence();
+    }
+  };
+
+  const reset = e => {
+    const clickedWithinComponent = menuRef.current.contains(e.target);
+    const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
+    const clickedOnSubNav = e.target.closest('.usa-nav__primary-item');
+    if (!clickedWithinComponent) {
+      resetTrialSessionInformationMenuSequence();
+    } else if (!clickedOnMenuButton && !clickedOnSubNav) {
+      resetTrialSessionInformationMenuSequence();
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    window.document.addEventListener('mousedown', reset, false);
+    window.document.addEventListener('keydown', keydown, false);
+    return () => {
+      resetTrialSessionInformationMenuSequence();
+      window.document.removeEventListener('mousedown', reset, false);
+      window.document.removeEventListener('keydown', keydown, false);
+    };
+  }, []);
+
+  return (
+    <div ref={menuRef}>
+      <Button
+        link
+        className={'trial-session-edit-btn'}
+        id="remove-from-trial-session-btn"
+        onClick={() => {
+          toggleMenuSequence({
+            openMenu: 'TrialSessionInformationMenu',
+          });
+        }}
+      >
+        Editt{' '}
+        <FontAwesomeIcon
+          className="margin-left-105"
+          icon={toggleFlag ? 'caret-up' : 'caret-down'}
+          size="lg"
+        />
+      </Button>
+      {/* add toggle hide logic here */}
+      <ul className="usa-nav__submenu position-right-0">
+        <li className="usa-nav__submenu-item row-button">
+          Add/Edit Calendar Note
+        </li>
+        <li
+          className="usa-nav__submenu-item row-button"
+          onClick={() => {
+            openRemoveFromTrialSessionModalSequence({
+              trialSessionId: trialSessionId,
+            });
+          }}
+        >
+          Remove From Trial
+        </li>
+      </ul>
+    </div>
+  );
+};
+
 const TrialInformation = ({
   caseDetail,
+  isTrialSessionInformationMenuOpen,
   openAddToTrialModalSequence,
   openBlockFromTrialModalSequence,
   openPrioritizeCaseModalSequence,
   openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
+  resetTrialSessionInformationMenuSequence,
+  toggleMenuSequence,
   trialSessionJudge,
-}) => (
-  <React.Fragment>
-    {caseDetail.showPrioritized && (
-      <>
-        <h3 className="underlined">
-          Trial - Not Scheduled - High Priority
-          <FontAwesomeIcon
-            className="margin-left-1 text-secondary-dark"
-            icon={['fas', 'exclamation-circle']}
-            size="1x"
-          />
-        </h3>
-        <div className="grid-row">
-          <table className="usa-table ustc-table trial-list">
-            <thead>
-              <tr>
-                <th>Place of Trial</th>
-                <th>Trial date</th>
-                <th>Judge</th>
-                <th>&nbsp;</th>
-              </tr>
-            </thead>
-            <tbody className="hoverable">
-              <tr>
-                <td>{caseDetail.formattedPreferredTrialCity}</td>
-                <td>{caseDetail.formattedTrialDate}</td>
-                <td>{caseDetail.formattedAssociatedJudge}</td>
-                <td>&nbsp;</td>
-              </tr>
-              {caseDetail.highPriorityReason && (
+}) => {
+  return (
+    <React.Fragment>
+      {caseDetail.showPrioritized && (
+        <>
+          <h3 className="underlined">
+            Trial - Not Scheduled - High Priority
+            <FontAwesomeIcon
+              className="margin-left-1 text-secondary-dark"
+              icon={['fas', 'exclamation-circle']}
+              size="1x"
+            />
+          </h3>
+          <div className="grid-row">
+            <table className="usa-table ustc-table trial-list">
+              <thead>
                 <tr>
-                  <td colSpan="4">{caseDetail.highPriorityReason}</td>
+                  <th>Place of Trial</th>
+                  <th>Trial date</th>
+                  <th>Judge</th>
+                  <th>&nbsp;</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="hoverable">
+                <tr>
+                  <td>{caseDetail.formattedPreferredTrialCity}</td>
+                  <td>{caseDetail.formattedTrialDate}</td>
+                  <td>{caseDetail.formattedAssociatedJudge}</td>
+                  <td>&nbsp;</td>
+                </tr>
+                {caseDetail.highPriorityReason && (
+                  <tr>
+                    <td colSpan="4">{caseDetail.highPriorityReason}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
 
-        <Button
-          link
-          className="red-warning"
-          icon="trash"
-          id="remove-high-priority-btn"
-          onClick={() => {
-            openUnprioritizeCaseModalSequence();
-          }}
-        >
-          Remove High Priority
-        </Button>
-      </>
-    )}
+          <Button
+            link
+            className="red-warning"
+            icon="trash"
+            id="remove-high-priority-btn"
+            onClick={() => {
+              openUnprioritizeCaseModalSequence();
+            }}
+          >
+            Remove High Priority
+          </Button>
+        </>
+      )}
 
-    {caseDetail.showTrialCalendared && (
-      <>
-        <h3 className="underlined">
-          Trial - Calendared
-          <FontAwesomeIcon
-            className="margin-left-1 mini-success"
-            icon="check-circle"
-            size="1x"
-          />
-        </h3>
-        <div className="grid-row">
-          <table className="usa-table ustc-table trial-list">
-            <thead>
-              <tr>
-                <th>Place of Trial</th>
-                <th>Trial date</th>
-                <th>Judge</th>
-                <th>&nbsp;</th>
-              </tr>
-            </thead>
-            <tbody className="hoverable">
-              <tr>
-                <td>
-                  <a
-                    href={
-                      caseDetail.userIsAssignedToSession
-                        ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
-                        : `/trial-session-detail/${caseDetail.trialSessionId}`
-                    }
-                  >
-                    {caseDetail.formattedTrialCity}
-                  </a>
-                </td>
-                <td>{caseDetail.formattedTrialDate}</td>
-                <td>{caseDetail.formattedAssociatedJudge}</td>
-                <td>
-                  <Button
-                    link
-                    className="red-warning"
-                    icon="trash"
-                    id="remove-from-trial-session-btn"
-                    onClick={() => {
-                      openRemoveFromTrialSessionModalSequence({
-                        trialSessionId: caseDetail.trialSessionId,
-                      });
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </td>
-              </tr>
-              {caseDetail.trialSessionNotes && (
+      {caseDetail.showTrialCalendared && (
+        <>
+          <h3 className="underlined">
+            Trial - Calendared
+            <FontAwesomeIcon
+              className="margin-left-1 mini-success"
+              icon="check-circle"
+              size="1x"
+            />
+          </h3>
+          <div className="grid-row">
+            <table className="usa-table ustc-table trial-list">
+              <thead>
                 <tr>
-                  <td colSpan="4">{caseDetail.trialSessionNotes}</td>
+                  <th>Place of Trial</th>
+                  <th>Trial date</th>
+                  <th>Judge</th>
+                  <th>&nbsp;</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </>
-    )}
-    {caseDetail.showBlockedFromTrial && (
-      <>
-        <h3 className="underlined" id="blocked-from-trial-header">
-          Trial - Blocked From Trial
-          <FontAwesomeIcon
-            className="text-secondary-dark margin-left-1"
-            icon={['fas', 'hand-paper']}
-            size="1x"
-          />
-        </h3>
-        {caseDetail.blocked && (
-          <div className="grid-row">
-            <div className="grid-col-8">
-              <p className="label">
-                Manually blocked from trial {caseDetail.blockedDateFormatted}:{' '}
-              </p>
-              <p>{caseDetail.blockedReason}</p>
-            </div>
-            <div className="grid-col-4">
-              <Button
-                link
-                className="red-warning margin-top-0 padding-0 push-right"
-                icon="trash"
-                id="remove-block"
-                onClick={() => {
-                  openUnblockFromTrialModalSequence();
-                }}
-              >
-                Remove Block
-              </Button>
-            </div>
-          </div>
-        )}
-        {!caseDetail.blocked && (
-          <div className="grid-row">
-            <div className="grid-col-8">
-              <Button
-                link
-                className="block-from-trial-btn red-warning margin-bottom-3"
-                icon="hand-paper"
-                onClick={() => {
-                  openBlockFromTrialModalSequence();
-                }}
-              >
-                Add Manual Block
-              </Button>
-            </div>
-          </div>
-        )}
-        {caseDetail.automaticBlocked && (
-          <div className="grid-row">
-            <div className="grid-col-12">
-              <p className="label">
-                System blocked from trial{' '}
-                {caseDetail.automaticBlockedDateFormatted}:{' '}
-              </p>
-              <p>{caseDetail.automaticBlockedReason}</p>
-              <Hint exclamation className="margin-bottom-0 block">
-                You must remove any pending item or due date to make this case
-                eligible for trial
-              </Hint>
-            </div>
-          </div>
-        )}
-        {caseDetail.showAutomaticBlockedAndHighPriority && (
-          <div className="grid-row margin-top-3">
-            <h4 className="margin-bottom-0">
-              <FontAwesomeIcon
-                className="text-secondary-darker"
-                icon="exclamation-circle"
-              />{' '}
-              Trial - Not Scheduled - High Priority
-            </h4>
-          </div>
-        )}
-      </>
-    )}
-    {caseDetail.showNotScheduled && (
-      <>
-        <h3 className="underlined">Trial - Not Scheduled</h3>
-        <div className="margin-bottom-1">
-          <Button
-            link
-            icon="plus-circle"
-            id="add-to-trial-session-btn"
-            onClick={() => {
-              openAddToTrialModalSequence();
-            }}
-          >
-            Add to Trial
-          </Button>
-        </div>
-        <div className="margin-bottom-1">
-          <Button
-            link
-            className="high-priority-btn"
-            icon="exclamation-circle"
-            onClick={() => {
-              openPrioritizeCaseModalSequence();
-            }}
-          >
-            Mark High Priority
-          </Button>
-        </div>
-        <div>
-          <Button
-            link
-            className="block-from-trial-btn red-warning"
-            icon="hand-paper"
-            onClick={() => {
-              openBlockFromTrialModalSequence();
-            }}
-          >
-            Add Manual Block
-          </Button>
-        </div>
-      </>
-    )}
-    {caseDetail.showScheduled && (
-      <>
-        <h3 className="underlined">Trial - Scheduled</h3>
-        <div className="grid-row">
-          <table className="usa-table ustc-table trial-list">
-            <thead>
-              <tr>
-                <th>Place of Trial</th>
-                <th>Trial date</th>
-                <th>Judge</th>
-                <th>&nbsp;</th>
-              </tr>
-            </thead>
-            <tbody className="hoverable">
-              <tr>
-                <td>
-                  <a
-                    href={
-                      caseDetail.userIsAssignedToSession
-                        ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
-                        : `/trial-session-detail/${caseDetail.trialSessionId}`
-                    }
-                  >
-                    {caseDetail.formattedTrialCity}
-                  </a>
-                </td>
-                <td>{caseDetail.formattedTrialDate}</td>
-                <td>{trialSessionJudge.name}</td>
-                <td>
-                  <Button
-                    link
-                    className="red-warning"
-                    icon="trash"
-                    id="remove-from-trial-session-btn"
-                    onClick={() => {
-                      openRemoveFromTrialSessionModalSequence();
-                    }}
-                  >
-                    Remove
-                  </Button>
-                </td>
-              </tr>
-              {caseDetail.trialSessionNotes && (
+              </thead>
+              <tbody className="hoverable">
                 <tr>
-                  <td colSpan="4">{caseDetail.trialSessionNotes}</td>
+                  <td>
+                    <a
+                      href={
+                        caseDetail.userIsAssignedToSession
+                          ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
+                          : `/trial-session-detail/${caseDetail.trialSessionId}`
+                      }
+                    >
+                      {caseDetail.formattedTrialCity}
+                    </a>
+                  </td>
+                  <td>{caseDetail.formattedTrialDate}</td>
+                  <td>{caseDetail.formattedAssociatedJudge}</td>
+                  <td>
+                    {/* fixMe: rename TrialSessionInformationMenu to TrialSessionEditMenu? */}
+                    <Button
+                      link
+                      id="remove-from-trial-session-btn"
+                      onClick={() => {
+                        console.log('calling togglemenuseq');
+                        toggleMenuSequence({
+                          openMenu: 'TrialSessionInformationMenu',
+                        });
+                      }}
+                    >
+                      Editt{' '}
+                      <FontAwesomeIcon
+                        className="margin-left-105"
+                        icon={
+                          isTrialSessionInformationMenuOpen
+                            ? 'caret-up'
+                            : 'caret-down'
+                        }
+                        size="lg"
+                      />
+                    </Button>
+                    {isTrialSessionInformationMenuOpen && (
+                      <TrialSessionInformationMenu
+                        caseDetail={caseDetail.trialSessionId}
+                        openRemoveFromTrialSessionModalSequence={
+                          openRemoveFromTrialSessionModalSequence
+                        }
+                        resetTrialSessionInformationMenuSequence={
+                          resetTrialSessionInformationMenuSequence
+                        }
+                        toggleFlag={isTrialSessionInformationMenuOpen}
+                        toggleMenuSequence={toggleMenuSequence}
+                      />
+                    )}
+                  </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </>
-    )}
-  </React.Fragment>
-);
+                {caseDetail.trialSessionNotes && (
+                  <tr>
+                    <td colSpan="4">{caseDetail.trialSessionNotes}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+      {caseDetail.showBlockedFromTrial && (
+        <>
+          <h3 className="underlined" id="blocked-from-trial-header">
+            Trial - Blocked From Trial
+            <FontAwesomeIcon
+              className="text-secondary-dark margin-left-1"
+              icon={['fas', 'hand-paper']}
+              size="1x"
+            />
+          </h3>
+          {caseDetail.blocked && (
+            <div className="grid-row">
+              <div className="grid-col-8">
+                <p className="label">
+                  Manually blocked from trial {caseDetail.blockedDateFormatted}:{' '}
+                </p>
+                <p>{caseDetail.blockedReason}</p>
+              </div>
+              <div className="grid-col-4">
+                <Button
+                  link
+                  className="red-warning margin-top-0 padding-0 push-right"
+                  icon="trash"
+                  id="remove-block"
+                  onClick={() => {
+                    openUnblockFromTrialModalSequence();
+                  }}
+                >
+                  Remove Block
+                </Button>
+              </div>
+            </div>
+          )}
+          {!caseDetail.blocked && (
+            <div className="grid-row">
+              <div className="grid-col-8">
+                <Button
+                  link
+                  className="block-from-trial-btn red-warning margin-bottom-3"
+                  icon="hand-paper"
+                  onClick={() => {
+                    openBlockFromTrialModalSequence();
+                  }}
+                >
+                  Add Manual Block
+                </Button>
+              </div>
+            </div>
+          )}
+          {caseDetail.automaticBlocked && (
+            <div className="grid-row">
+              <div className="grid-col-12">
+                <p className="label">
+                  System blocked from trial{' '}
+                  {caseDetail.automaticBlockedDateFormatted}:{' '}
+                </p>
+                <p>{caseDetail.automaticBlockedReason}</p>
+                <Hint exclamation className="margin-bottom-0 block">
+                  You must remove any pending item or due date to make this case
+                  eligible for trial
+                </Hint>
+              </div>
+            </div>
+          )}
+          {caseDetail.showAutomaticBlockedAndHighPriority && (
+            <div className="grid-row margin-top-3">
+              <h4 className="margin-bottom-0">
+                <FontAwesomeIcon
+                  className="text-secondary-darker"
+                  icon="exclamation-circle"
+                />{' '}
+                Trial - Not Scheduled - High Priority
+              </h4>
+            </div>
+          )}
+        </>
+      )}
+      {caseDetail.showNotScheduled && (
+        <>
+          <h3 className="underlined">Trial - Not Scheduled</h3>
+          <div className="margin-bottom-1">
+            <Button
+              link
+              icon="plus-circle"
+              id="add-to-trial-session-btn"
+              onClick={() => {
+                openAddToTrialModalSequence();
+              }}
+            >
+              Add to Trial
+            </Button>
+          </div>
+          <div className="margin-bottom-1">
+            <Button
+              link
+              className="high-priority-btn"
+              icon="exclamation-circle"
+              onClick={() => {
+                openPrioritizeCaseModalSequence();
+              }}
+            >
+              Mark High Priority
+            </Button>
+          </div>
+          <div>
+            <Button
+              link
+              className="block-from-trial-btn red-warning"
+              icon="hand-paper"
+              onClick={() => {
+                openBlockFromTrialModalSequence();
+              }}
+            >
+              Add Manual Block
+            </Button>
+          </div>
+        </>
+      )}
+      {caseDetail.showScheduled && (
+        <>
+          <h3 className="underlined">Trial - Scheduled</h3>
+          <div className="grid-row">
+            <table className="usa-table ustc-table trial-list">
+              <thead>
+                <tr>
+                  <th>Place of Trial</th>
+                  <th>Trial date</th>
+                  <th>Judge</th>
+                  <th>&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody className="hoverable">
+                <tr>
+                  <td>
+                    <a
+                      href={
+                        caseDetail.userIsAssignedToSession
+                          ? `/trial-session-working-copy/${caseDetail.trialSessionId}`
+                          : `/trial-session-detail/${caseDetail.trialSessionId}`
+                      }
+                    >
+                      {caseDetail.formattedTrialCity}
+                    </a>
+                  </td>
+                  <td>{caseDetail.formattedTrialDate}</td>
+                  <td>{trialSessionJudge.name}</td>
+                  <td>
+                    <TrialSessionInformationMenu
+                      caseDetail={caseDetail.trialSessionId}
+                      openRemoveFromTrialSessionModalSequence={
+                        openRemoveFromTrialSessionModalSequence
+                      }
+                      resetTrialSessionInformationMenuSequence={
+                        resetTrialSessionInformationMenuSequence
+                      }
+                      toggleFlag={isTrialSessionInformationMenuOpen}
+                      toggleMenuSequence={toggleMenuSequence}
+                    />
+                    {/* <Button
+                      link
+                      className="red-warning"
+                      icon="trash"
+                      id="remove-from-trial-session-btn"
+                      onClick={() => {
+                        openRemoveFromTrialSessionModalSequence();
+                      }}
+                    >
+                      Remove
+                    </Button> */}
+                  </td>
+                </tr>
+                {caseDetail.trialSessionNotes && (
+                  <tr>
+                    <td colSpan="4">{caseDetail.trialSessionNotes}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </React.Fragment>
+  );
+};
 
 export const CaseInformationInternal = connect(
   {
@@ -433,6 +548,8 @@ export const CaseInformationInternal = connect(
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    isTrialSessionInformationMenuOpen:
+      state.menuHelper.isTrialSessionInformationMenuOpen,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
@@ -448,7 +565,10 @@ export const CaseInformationInternal = connect(
       sequences.openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
+    resetTrialSessionInformationMenuSequence:
+      sequences.resetHeaderAccordionsSequence,
     showModal: state.modal.showModal,
+    toggleMenuSequence: sequences.toggleMenuSequence,
     trialSessionJudge: state.trialSessionJudge,
   },
 
@@ -457,6 +577,7 @@ export const CaseInformationInternal = connect(
     caseDetailHelper,
     caseInformationHelper,
     formattedCaseDetail,
+    isTrialSessionInformationMenuOpen,
     navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
@@ -468,7 +589,9 @@ export const CaseInformationInternal = connect(
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
+    resetTrialSessionInformationMenuSequence,
     showModal,
+    toggleMenuSequence,
     trialSessionJudge,
   }) {
     return (
@@ -539,6 +662,9 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <TrialInformation
                     caseDetail={formattedCaseDetail}
+                    isTrialSessionInformationMenuOpen={
+                      isTrialSessionInformationMenuOpen
+                    }
                     openAddToTrialModalSequence={openAddToTrialModalSequence}
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
@@ -556,6 +682,10 @@ export const CaseInformationInternal = connect(
                     openUnprioritizeCaseModalSequence={
                       openUnprioritizeCaseModalSequence
                     }
+                    resetTrialSessionInformationMenuSequence={
+                      resetTrialSessionInformationMenuSequence
+                    }
+                    toggleMenuSequence={toggleMenuSequence}
                     trialSessionJudge={trialSessionJudge}
                   />
                 </div>
