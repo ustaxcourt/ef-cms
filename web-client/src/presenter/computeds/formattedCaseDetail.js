@@ -194,6 +194,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
         entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
     }
 
+    formattedResult.shouldShowUntouchedStar =
+      formattedResult.qcWorkItemsUntouched && !formattedResult.isInProgress;
+
     formattedResult.isPaper =
       !formattedResult.isInProgress &&
       !formattedResult.qcWorkItemsUntouched &&
