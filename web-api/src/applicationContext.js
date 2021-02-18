@@ -417,8 +417,8 @@ const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
-  getCognitoUserByEmail,
-} = require('../../shared/src/persistence/cognito/getCognitoUserByEmail');
+  getCognitoUserIdByEmail,
+} = require('../../shared/src/persistence/cognito/getCognitoUserIdByEmail');
 const {
   getCompletedMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor');
@@ -1230,7 +1230,7 @@ const gatewayMethods = {
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getClientId,
-  getCognitoUserByEmail,
+  getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1323,11 +1323,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
           adminGetUser: ({ Username = '' }) => ({
             promise: () => {
               const users = require('../storage/fixtures/seed/users.json');
-              if (!users.find(({ email }) => email === Username)) {
+              const foundUser = users.find(({ email }) => email === Username);
+              if (!foundUser) {
                 throw new Error('User does not exist');
               }
 
-              return { Username };
+              return { UserAttributes: [], Username: foundUser.userId };
             },
           }),
           adminUpdateUserAttributes: () => ({
