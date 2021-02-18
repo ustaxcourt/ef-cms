@@ -9,10 +9,10 @@ const { UserCase } = require('../../entities/UserCase');
 /**
  * addExistingUserToCase
  *
- * @param {object} options.docketNumber the docket number for the case we need to update
- * @param {object} email the email address for the user we are attaching to the case
- * @param {object} name the name of the user to update the case with
- * @returns {Case} the updated case
+ * @param {object} options.caseEntity the case entity to modify and return
+ * @param {string} options.email the email address for the user we are attaching to the case
+ * @param {string} options.name the name of the user to update the case with
+ * @returns {Case} the updated case entity
  */
 exports.addExistingUserToCase = async ({
   applicationContext,
