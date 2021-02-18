@@ -63,12 +63,12 @@ describe('admissions clerk practitioner journey', () => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
-      value: 'alreadyexists@example.com',
+      value: 'privatePractitioner99@example.com',
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
-      value: 'alreadyexists@example.com',
+      value: 'privatePractitioner99@example.com',
     });
 
     await test.runSequence('submitUpdatePractitionerUserSequence');
