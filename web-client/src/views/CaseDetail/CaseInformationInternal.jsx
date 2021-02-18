@@ -182,29 +182,30 @@ const TrialSessionInformationMenu = ({
           });
         }}
       >
-        Editt{' '}
+        Edit{' '}
         <FontAwesomeIcon
           className="margin-left-105"
           icon={toggleFlag ? 'caret-up' : 'caret-down'}
           size="lg"
         />
       </Button>
-      {/* add toggle hide logic here */}
-      <ul className="usa-nav__submenu position-right-0">
-        <li className="usa-nav__submenu-item row-button">
-          Add/Edit Calendar Note
-        </li>
-        <li
-          className="usa-nav__submenu-item row-button"
-          onClick={() => {
-            openRemoveFromTrialSessionModalSequence({
-              trialSessionId: trialSessionId,
-            });
-          }}
-        >
-          Remove From Trial
-        </li>
-      </ul>
+      {toggleFlag && (
+        <ul className="usa-nav__submenu position-right-0">
+          <li className="usa-nav__submenu-item row-button">
+            Add/Edit Calendar Note
+          </li>
+          <li
+            className="usa-nav__submenu-item row-button"
+            onClick={() => {
+              openRemoveFromTrialSessionModalSequence({
+                trialSessionId: trialSessionId,
+              });
+            }}
+          >
+            Remove From Trial
+          </li>
+        </ul>
+      )}
     </div>
   );
 };
@@ -311,40 +312,17 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedAssociatedJudge}</td>
                   <td>
                     {/* fixMe: rename TrialSessionInformationMenu to TrialSessionEditMenu? */}
-                    <Button
-                      link
-                      id="remove-from-trial-session-btn"
-                      onClick={() => {
-                        console.log('calling togglemenuseq');
-                        toggleMenuSequence({
-                          openMenu: 'TrialSessionInformationMenu',
-                        });
-                      }}
-                    >
-                      Editt{' '}
-                      <FontAwesomeIcon
-                        className="margin-left-105"
-                        icon={
-                          isTrialSessionInformationMenuOpen
-                            ? 'caret-up'
-                            : 'caret-down'
-                        }
-                        size="lg"
-                      />
-                    </Button>
-                    {isTrialSessionInformationMenuOpen && (
-                      <TrialSessionInformationMenu
-                        caseDetail={caseDetail.trialSessionId}
-                        openRemoveFromTrialSessionModalSequence={
-                          openRemoveFromTrialSessionModalSequence
-                        }
-                        resetTrialSessionInformationMenuSequence={
-                          resetTrialSessionInformationMenuSequence
-                        }
-                        toggleFlag={isTrialSessionInformationMenuOpen}
-                        toggleMenuSequence={toggleMenuSequence}
-                      />
-                    )}
+                    <TrialSessionInformationMenu
+                      caseDetail={caseDetail.trialSessionId}
+                      openRemoveFromTrialSessionModalSequence={
+                        openRemoveFromTrialSessionModalSequence
+                      }
+                      resetTrialSessionInformationMenuSequence={
+                        resetTrialSessionInformationMenuSequence
+                      }
+                      toggleFlag={isTrialSessionInformationMenuOpen}
+                      toggleMenuSequence={toggleMenuSequence}
+                    />
                   </td>
                 </tr>
                 {caseDetail.trialSessionNotes && (
