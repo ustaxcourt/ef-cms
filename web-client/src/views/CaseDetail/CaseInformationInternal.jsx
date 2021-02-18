@@ -135,61 +135,60 @@ const DisplayHearings = ({
 
 const TrialSessionInformationMenu = ({
   openRemoveFromTrialSessionModalSequence,
-  resetTrialSessionInformationMenuSequence,
-  toggleFlag,
+  isTrialSessionInformationMenuOpen,
   toggleMenuSequence,
   trialSessionId,
 }) => {
-  const menuRef = useRef(null);
-  const keydown = event => {
-    const pressedESC = event.keyCode === 27;
-    if (pressedESC) {
-      resetTrialSessionInformationMenuSequence();
-    }
-  };
+  // const menuRef = useRef(null);
+  // const keydown = event => {
+  //   const pressedESC = event.keyCode === 27;
+  //   if (pressedESC) {
+    // new sequencE?
+  //   }
+  // };
 
-  const reset = e => {
-    const clickedWithinComponent = menuRef.current.contains(e.target);
-    const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
-    const clickedOnSubNav = e.target.closest('.usa-nav__primary-item');
-    if (!clickedWithinComponent) {
-      resetTrialSessionInformationMenuSequence();
-    } else if (!clickedOnMenuButton && !clickedOnSubNav) {
-      resetTrialSessionInformationMenuSequence();
-    }
-    return true;
-  };
+  // const reset = e => {
+  //   const clickedWithinComponent = menuRef.current.contains(e.target);
+  //   const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
+  //   const clickedOnSubNav = e.target.closest('.usa-nav__primary-item');
+  //   if (!clickedWithinComponent) {
+    // new sequencE?
+  //   } else if (!clickedOnMenuButton && !clickedOnSubNav) {
+    // new sequencE?
+  //   }
+  //   return true;
+  // };
 
-  useEffect(() => {
-    window.document.addEventListener('mousedown', reset, false);
-    window.document.addEventListener('keydown', keydown, false);
-    return () => {
-      resetTrialSessionInformationMenuSequence();
-      window.document.removeEventListener('mousedown', reset, false);
-      window.document.removeEventListener('keydown', keydown, false);
-    };
-  }, []);
+  // useEffect(() => {
+  //   window.document.addEventListener('mousedown', reset, false);
+  //   window.document.addEventListener('keydown', keydown, false);
+  //   return () => {
+    // new sequencE?
+  //     window.document.removeEventListener('mousedown', reset, false);
+  //     window.document.removeEventListener('keydown', keydown, false);
+  //   };
+  // }, []);
 
   return (
-    <div ref={menuRef}>
+    <div>
       <Button
         link
         className={'trial-session-edit-btn'}
         id="remove-from-trial-session-btn"
         onClick={() => {
           toggleMenuSequence({
-            openMenu: 'TrialSessionInformationMenu',
+            editTrialSessionMenu: 'TrialSessionInformationMenu',
           });
         }}
       >
         Edit{' '}
         <FontAwesomeIcon
           className="margin-left-105"
-          icon={toggleFlag ? 'caret-up' : 'caret-down'}
+          icon={isTrialSessionInformationMenuOpen ? 'caret-up' : 'caret-down'}
           size="lg"
         />
       </Button>
-      {toggleFlag && (
+      {isTrialSessionInformationMenuOpen && (
         <ul className="usa-nav__submenu position-right-0">
           <li className="usa-nav__submenu-item row-button">
             Add/Edit Calendar Note
@@ -219,7 +218,6 @@ const TrialInformation = ({
   openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
-  resetTrialSessionInformationMenuSequence,
   toggleMenuSequence,
   trialSessionJudge,
 }) => {
@@ -317,10 +315,7 @@ const TrialInformation = ({
                       openRemoveFromTrialSessionModalSequence={
                         openRemoveFromTrialSessionModalSequence
                       }
-                      resetTrialSessionInformationMenuSequence={
-                        resetTrialSessionInformationMenuSequence
-                      }
-                      toggleFlag={isTrialSessionInformationMenuOpen}
+                      isTrialSessionInformationMenuOpen={isTrialSessionInformationMenuOpen}
                       toggleMenuSequence={toggleMenuSequence}
                     />
                   </td>
@@ -487,10 +482,7 @@ const TrialInformation = ({
                       openRemoveFromTrialSessionModalSequence={
                         openRemoveFromTrialSessionModalSequence
                       }
-                      resetTrialSessionInformationMenuSequence={
-                        resetTrialSessionInformationMenuSequence
-                      }
-                      toggleFlag={isTrialSessionInformationMenuOpen}
+                      isTrialSessionInformationMenuOpen={isTrialSessionInformationMenuOpen}
                       toggleMenuSequence={toggleMenuSequence}
                     />
                     {/* <Button
@@ -543,8 +535,6 @@ export const CaseInformationInternal = connect(
       sequences.openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
-    resetTrialSessionInformationMenuSequence:
-      sequences.resetHeaderAccordionsSequence,
     showModal: state.modal.showModal,
     toggleMenuSequence: sequences.toggleMenuSequence,
     trialSessionJudge: state.trialSessionJudge,
@@ -567,7 +557,6 @@ export const CaseInformationInternal = connect(
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
-    resetTrialSessionInformationMenuSequence,
     showModal,
     toggleMenuSequence,
     trialSessionJudge,
@@ -659,9 +648,6 @@ export const CaseInformationInternal = connect(
                     }
                     openUnprioritizeCaseModalSequence={
                       openUnprioritizeCaseModalSequence
-                    }
-                    resetTrialSessionInformationMenuSequence={
-                      resetTrialSessionInformationMenuSequence
                     }
                     toggleMenuSequence={toggleMenuSequence}
                     trialSessionJudge={trialSessionJudge}
