@@ -1322,13 +1322,20 @@ module.exports = (appContextUser, logger = createLogger()) => {
           }),
           adminGetUser: ({ Username = '' }) => ({
             promise: () => {
-              const users = require('../storage/fixtures/seed/users.json');
-              const foundUser = users.find(({ email }) => email === Username);
-              if (!foundUser) {
+              if (Username.includes('error')) {
                 throw new Error('User does not exist');
               }
 
-              return { UserAttributes: [], Username: foundUser.userId };
+              const users = require('../storage/fixtures/seed/users.json');
+              const foundUser = users.find(({ email }) => email === Username);
+
+              if (foundUser) {
+                return {
+                  UserAttributes: [],
+                  Username: foundUser.userId,
+                };
+              }
+              return { Username };
             },
           }),
           adminUpdateUserAttributes: () => ({
