@@ -25,7 +25,6 @@ const { v4: uuidv4 } = require('uuid');
 describe('serveCourtIssuedDocumentInteractor', () => {
   let extendCase;
 
-  const mockPdfUrl = 'www.example.com';
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
 
   const mockUser = {
@@ -197,9 +196,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
-    applicationContext
-      .getPersistenceGateway()
       .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
     applicationContext
       .getUseCaseHelpers()
@@ -357,7 +353,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call sendBulkTemplatedEmail, sending an email to all electronically-served parties, and should not return paperServicePdfData', async () => {
+  it('should call serveDocumentAndGetPaperService and return its result', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperService.mockReturnValue({
+        pdfUrl: 'localhost:1234',
+      });
+
     const result = await serveCourtIssuedDocumentInteractor({
       applicationContext,
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -365,19 +367,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperService,
     ).toHaveBeenCalled();
-    expect(result).toBeUndefined();
-  });
-
-  it('should return paperServicePdfData when there are paper service parties on the case', async () => {
-    const result = await serveCourtIssuedDocumentInteractor({
-      applicationContext,
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumber: '102-20',
+    expect(result).toEqual({
+      pdfUrl: 'localhost:1234',
     });
-
-    expect(result.pdfUrl).toBe(mockPdfUrl.url);
   });
 
   it('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
@@ -445,7 +439,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperService,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
