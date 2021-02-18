@@ -9,7 +9,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 const updatePetitionerCases = async ({ applicationContext, user }) => {
-  let petitionerCases = await applicationContext
+  const petitionerCases = await applicationContext
     .getPersistenceGateway()
     .getIndexedCasesForUser({
       applicationContext,
@@ -28,7 +28,7 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
           docketNumber,
         });
 
-      let caseRaw = new Case(userCase, { applicationContext })
+      const caseRaw = new Case(userCase, { applicationContext })
         .validate()
         .toRawObject();
 
