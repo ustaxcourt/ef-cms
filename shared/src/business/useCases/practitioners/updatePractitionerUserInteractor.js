@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
-const { isEqual, omit } = require('lodash');
+const { omit, union } = require('lodash');
 const { Practitioner } = require('../../entities/Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -124,12 +124,17 @@ exports.updatePractitionerUserInteractor = async ({
       },
     });
 
-  const hasUpdatedEmailOnly = isEqual(
-    Object.keys(practitionerDetailDiff).sort(),
-    ['pendingEmail', 'pendingEmailVerificationToken'],
+  const propertiesNotRequiringChangeOfAddress = [
+    'pendingEmail',
+    'pendingEmailVerificationToken',
+    'practitionerNotes',
+  ];
+  const combinedDiffKeys = union(
+    Object.keys(practitionerDetailDiff),
+    propertiesNotRequiringChangeOfAddress,
   );
 
-  if (!hasUpdatedEmailOnly) {
+  if (combinedDiffKeys.length > propertiesNotRequiringChangeOfAddress.length) {
     await generateChangeOfAddress({
       applicationContext,
       bypassDocketEntry,

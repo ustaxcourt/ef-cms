@@ -270,6 +270,32 @@ describe('updatePractitionerUserInteractor', () => {
       expect(generateChangeOfAddress).not.toHaveBeenCalled();
     });
 
+    it('should NOT call generateChangeOfAddress if ONLY the notes are being updated', async () => {
+      await updatePractitionerUserInteractor({
+        applicationContext,
+        user: {
+          ...mockPractitioner,
+          practitionerNotes: 'wow, real good notes',
+        },
+      });
+
+      expect(generateChangeOfAddress).not.toHaveBeenCalled();
+    });
+
+    it('should NOT call generateChangeOfAddress if ONLY the notes and email are being updated', async () => {
+      await updatePractitionerUserInteractor({
+        applicationContext,
+        user: {
+          ...mockPractitioner,
+          confirmEmail: 'free-email-to-use@example.com',
+          practitionerNotes: 'wow, real good notes',
+          updatedEmail: 'free-email-to-use@example.com',
+        },
+      });
+
+      expect(generateChangeOfAddress).not.toHaveBeenCalled();
+    });
+
     it('should call generateChangeOfAddress if the email is being updated along with the address1', async () => {
       await updatePractitionerUserInteractor({
         applicationContext,
