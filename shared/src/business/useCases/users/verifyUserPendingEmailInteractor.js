@@ -8,6 +8,16 @@ const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
+/**
+ * updatePetitionerCases
+ * for the provided user, update their email address on all cases
+ * where they are the contactPrimary or contactSecondary
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.user the user who is a primary or secondary contact on a case
+ * @returns {Promise} resolves upon completion of case updates
+ */
 const updatePetitionerCases = async ({ applicationContext, user }) => {
   const petitionerCases = await applicationContext
     .getPersistenceGateway()
@@ -61,6 +71,18 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
 
 exports.updatePetitionerCases = updatePetitionerCases;
 
+/**
+ * updatePractitionerCases
+ * for the provided user, update their email address on all cases
+ * where they are an IRS practitioner or private practitioner, sending an
+ * update to the practitioner for each case updated, as well as a final email when
+ * all case updates have been completed.
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.user the user who is a primary or secondary contact on a case
+ * @returns {Promise} resolves upon completion of case updates
+ */
 const updatePractitionerCases = async ({ applicationContext, user }) => {
   const docketNumbers = await applicationContext
     .getPersistenceGateway()
