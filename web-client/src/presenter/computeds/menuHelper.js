@@ -4,7 +4,7 @@ export const menuHelper = get => {
   const isAccountMenuOpen = get(state.navigation.openMenu) === 'AccountMenu';
   const isReportsMenuOpen = get(state.navigation.openMenu) === 'ReportsMenu';
   const isTrialSessionInformationMenuOpen =
-    get(state.navigation.openMenu) === 'TrialSessionInformationMenu';
+    get(state.navigation.editTrialSessionMenu) === 'TrialSessionInformationMenu';
   const isCaseDetailMenuOpen =
     get(state.navigation.caseDetailMenu) === 'CaseDetailMenu';
   return {
