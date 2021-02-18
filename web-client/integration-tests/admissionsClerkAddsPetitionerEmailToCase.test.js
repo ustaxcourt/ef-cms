@@ -14,6 +14,10 @@ describe('admissions clerk adds petitioner with existing cognito email to case',
 
   const EMAIL_TO_ADD = 'petitioner2@example.com';
 
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile);
 
