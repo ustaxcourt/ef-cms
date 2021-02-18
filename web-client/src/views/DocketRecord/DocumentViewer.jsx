@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DocumentViewerDocument } from './DocumentViewerDocument';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
@@ -66,6 +67,9 @@ export const DocumentViewer = connect(
                               )}
                             >
                               {entry.createdAtFormatted}
+                              {entry.qcWorkItemsUntouched && !entry.isInProgress && 
+                                <FontAwesomeIcon icon={['fa', 'star']} className="fa-icon-red margin-left-05 padding-1" title="is untouched" />
+                              }
                             </div>
                             <div className="grid-col-5">
                               <span
