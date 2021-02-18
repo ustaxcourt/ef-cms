@@ -371,7 +371,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       .getCasesByDocketNumbers.mockReturnValueOnce(userCases);
     applicationContext
       .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockRejectedValue(
+      .updateCaseAndAssociations.mockRejectedValueOnce(
         new Error('updateCaseAndAssociations failure'),
       );
 
