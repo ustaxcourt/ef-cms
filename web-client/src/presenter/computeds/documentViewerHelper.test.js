@@ -1128,6 +1128,33 @@ describe('documentViewerHelper', () => {
     );
   });
 
+  it('should return completeQcLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        permissions: {},
+        viewerDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.completeQcLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/documents/${DOCKET_ENTRY_ID}/edit`,
+    );
+  });
+
   it('should return reviewAndServePetitionLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
     const result = runCompute(documentViewerHelper, {
       state: {

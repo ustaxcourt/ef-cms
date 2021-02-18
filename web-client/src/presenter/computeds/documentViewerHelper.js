@@ -87,6 +87,7 @@ export const documentViewerHelper = (get, applicationContext) => {
     permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
 
   return {
+    completeQcLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/edit`,
     description: formattedDocumentToDisplay.descriptionDisplay,
     documentViewerLink: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
     filedLabel,
