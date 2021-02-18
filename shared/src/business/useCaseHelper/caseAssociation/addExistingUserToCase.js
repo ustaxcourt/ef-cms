@@ -26,16 +26,23 @@ exports.addExistingUserToCase = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const userToAdd = await applicationContext
+  const userIdFromCognito = await applicationContext
     .getPersistenceGateway()
-    .getUserByEmail({
+    .getCognitoUserIdByEmail({
       applicationContext,
       email,
     });
 
-  if (!userToAdd) {
+  if (!userIdFromCognito) {
     throw new Error(`no user found with the provided email of ${email}`);
   }
+
+  const userToAdd = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({
+      applicationContext,
+      userId: userIdFromCognito,
+    });
 
   const { contactPrimary } = caseEntity;
   if (contactPrimary.name === name) {
