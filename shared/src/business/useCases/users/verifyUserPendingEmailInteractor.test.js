@@ -226,9 +226,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     });
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      new Error(
-        'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-21',
-      ),
+      'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-21',
     );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
@@ -507,7 +505,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       ).toHaveBeenCalled();
     });
 
-    it('should throw an error if the petitioner is not found on a case returned by getIndexedCasesForUser and prevent updateCaseAndAssociations from being called', async () => {
+    it('should log an error if the petitioner is not found on a case returned by getIndexedCasesForUser and call updateCaseAndAssociations only once', async () => {
       userCases = [
         {
           ...MOCK_CASE,
@@ -529,23 +527,23 @@ describe('verifyUserPendingEmailInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(userCases[0]);
+        .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
+        .mockReturnValueOnce(userCases[1]);
 
       await expect(
         updatePetitionerCases({
           applicationContext,
           user: mockPetitionerUser,
         }),
-      ).rejects.toThrow(
-        `Could not find user|${mockPetitionerUser.userId} on 101-21`,
-      );
+      ).resolves.not.toThrow();
 
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
       expect(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-      ).not.toHaveBeenCalled();
+      ).toHaveBeenCalledTimes(1);
     });
 
-    it('should throw an error if any case update is invalid and prevent updateCaseAndAssociations from being called', async () => {
+    it('should log an error if any case update is invalid and prevent updateCaseAndAssociations from being called', async () => {
       userCases = [
         {
           ...MOCK_CASE,

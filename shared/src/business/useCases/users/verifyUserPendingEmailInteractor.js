@@ -36,26 +36,29 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
     ),
   );
 
-  const validatedCasesToUpdate = casesToUpdate.map(caseToUpdate => {
-    const caseEntity = new Case(caseToUpdate, {
-      applicationContext,
-    }).toRawObject();
+  const validatedCasesToUpdate = casesToUpdate
+    .map(caseToUpdate => {
+      const caseEntity = new Case(caseToUpdate, {
+        applicationContext,
+      }).toRawObject();
 
-    const petitionerObject = [
-      caseEntity.contactPrimary,
-      caseEntity.contactSecondary,
-    ].find(petitioner => petitioner && petitioner.contactId === user.userId);
-    if (!petitionerObject) {
-      throw new Error(
-        `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
-      );
-    }
-    // This updates the case by reference!
-    petitionerObject.email = user.email;
+      const petitionerObject = [
+        caseEntity.contactPrimary,
+        caseEntity.contactSecondary,
+      ].find(petitioner => petitioner && petitioner.contactId === user.userId);
+      if (!petitionerObject) {
+        applicationContext.logger.error(
+          `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
+        );
+        return;
+      }
+      // This updates the case by reference!
+      petitionerObject.email = user.email;
 
-    // we do this again so that it will convert '' to null
-    return new Case(caseEntity, { applicationContext }).validate();
-  });
+      // we do this again so that it will convert '' to null
+      return new Case(caseEntity, { applicationContext }).validate();
+    })
+    .filter(Boolean);
 
   return Promise.all(
     validatedCasesToUpdate.map(caseToUpdate =>
@@ -97,24 +100,27 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
     ),
   );
 
-  const validCasesToUpdate = casesToUpdate.map(caseToUpdate => {
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
-    const practitionerObject = [
-      ...caseEntity.privatePractitioners,
-      ...caseEntity.irsPractitioners,
-    ].find(practitioner => practitioner.userId === user.userId);
+  const validCasesToUpdate = casesToUpdate
+    .map(caseToUpdate => {
+      const caseEntity = new Case(caseToUpdate, { applicationContext });
+      const practitionerObject = [
+        ...caseEntity.privatePractitioners,
+        ...caseEntity.irsPractitioners,
+      ].find(practitioner => practitioner.userId === user.userId);
 
-    if (!practitionerObject) {
-      throw new Error(
-        `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${caseToUpdate.docketNumber}`,
-      );
-    }
-    // This updates the case by reference!
-    practitionerObject.email = user.email;
+      if (!practitionerObject) {
+        applicationContext.logger.error(
+          `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${caseToUpdate.docketNumber}`,
+        );
+        return;
+      }
+      // This updates the case by reference!
+      practitionerObject.email = user.email;
 
-    // we do this again so that it will convert '' to null
-    return new Case(caseEntity, { applicationContext }).validate();
-  });
+      // we do this again so that it will convert '' to null
+      return new Case(caseEntity, { applicationContext }).validate();
+    })
+    .filter(Boolean);
 
   for (let idx = 0; idx < validCasesToUpdate.length; idx++) {
     const validatedCaseToUpdate = validCasesToUpdate[idx];
