@@ -20,6 +20,8 @@ const axiosInstance = axios.create({
 const mockUserId = faker.random.uuid();
 const mockBarNumber = `ZZ${faker.random.number({ max: 9999, min: 1000 })}`;
 
+console.log('mockBarNumber', mockBarNumber);
+
 const practitionerWithoutEmail = {
   user: {
     admissionsDate: '1991-01-11T05:00:00.000Z',
