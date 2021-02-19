@@ -28,12 +28,14 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
-  const casesToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByDocketNumbers({
-      applicationContext,
-      docketNumbers: map(petitionerCases, 'docketNumber'),
-    });
+  const casesToUpdate = await Promise.all(
+    petitionerCases.map(({ docketNumber }) =>
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      }),
+    ),
+  );
 
   const validatedCasesToUpdate = casesToUpdate.map(caseToUpdate => {
     const caseEntity = new Case(caseToUpdate, {
@@ -87,12 +89,14 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
       applicationContext,
       userId: user.userId,
     });
-  const casesToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByDocketNumbers({
-      applicationContext,
-      docketNumbers: map(practitionerCases, 'docketNumber'),
-    });
+  const casesToUpdate = await Promise.all(
+    practitionerCases.map(({ docketNumber }) =>
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      }),
+    ),
+  );
 
   const validCasesToUpdate = casesToUpdate.map(caseToUpdate => {
     const caseEntity = new Case(caseToUpdate, { applicationContext });
