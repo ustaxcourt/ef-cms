@@ -285,7 +285,7 @@ export const CaseDetailHeaderMenu = connect(
           <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteSequence" />
         )}
         {showModal === 'AddEditCalendarNoteModal' && (
-          <AddEditCalendarNoteModal />
+          <AddEditCalendarNoteModal onConfirmSequence="updateCalendarNoteSequence" />
         )}
         {showModal === 'AddToTrialModal' && (
           <AddToTrialModal
