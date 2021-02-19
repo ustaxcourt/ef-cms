@@ -1,18 +1,12 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { validateTrialSessionNoteAction } from '../actions/TrialSession/validateTrialSessionNoteAction';
+// import { shouldValidateAction } from '../actions/shouldValidateAction';
+import { validateNoteAction } from '../actions/validateNoteAction';
 
 export const validateTrialSessionNoteSequence = [
-  shouldValidateAction,
+  validateNoteAction,
   {
-    ignore: [],
-    validate: [
-      validateTrialSessionNoteAction,
-      {
-        error: [setValidationErrorsAction],
-        success: [clearAlertsAction],
-      },
-    ],
+    error: [setValidationErrorsAction],
+    success: [clearAlertsAction],
   },
 ];

@@ -39,9 +39,9 @@ export const AddEditCalendarNoteModal = connect(
             bind="modal.note"
             id="calendar-note"
             onBlur={() => validateTrialSessionNoteSequence()}
-            onChange={() => {
-              validateTrialSessionNoteSequence();
-            }}
+            // onChange={() => {
+            //   validateTrialSessionNoteSequence();
+            // }}
           />
         </FormGroup>
       </ConfirmModal>
