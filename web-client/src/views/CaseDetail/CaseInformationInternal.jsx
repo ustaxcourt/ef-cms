@@ -150,7 +150,7 @@ const TrialSessionInformationMenu = ({
   const reset = e => {
     const clickedWithinComponent = menuRef.current.contains(e.target);
     const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
-    const clickedOnSubNav = e.target.closest('.usa-nav__primary-item');
+    const clickedOnSubNav = e.target.closest('.edit-case-trial-menu');
     if (!clickedWithinComponent) {
       return resetEditCaseTrialInfoMenuSequence();
     } else if (!clickedOnMenuButton && !clickedOnSubNav) {
@@ -174,7 +174,7 @@ const TrialSessionInformationMenu = ({
       <Button
         link
         className={'trial-session-edit-btn'}
-        id="remove-from-trial-session-btn"
+        id="edit-case-trial-information-btn"
         onClick={() => {
           toggleEditCaseTrialInfoMenuSequence({
             editCaseTrialInfoMenu: 'EditCaseTrialInformationMenu',
@@ -189,12 +189,11 @@ const TrialSessionInformationMenu = ({
         />
       </Button>
       {isTrialSessionInformationMenuOpen && (
-        <ul className="usa-nav__submenu position-right-0">
-          <li className="usa-nav__submenu-item row-button">
-            Add/Edit Calendar Note
-          </li>
-          <li
-            className="usa-nav__submenu-item row-button"
+        <div className="edit-case-trial-menu">
+          <Button link>Add/Edit Calendar Notes</Button>
+          <Button
+            link
+            id="remove-from-trial-session-btn"
             onClick={() => {
               openRemoveFromTrialSessionModalSequence({
                 trialSessionId: trialSessionId,
@@ -202,8 +201,8 @@ const TrialSessionInformationMenu = ({
             }}
           >
             Remove From Trial
-          </li>
-        </ul>
+          </Button>
+        </div>
       )}
     </div>
   );
@@ -643,6 +642,7 @@ export const CaseInformationInternal = connect(
                 </div>
               </div>
             </div>
+
             <div className="tablet:grid-col-6">
               <div className="card height-full">
                 <div className="content-wrapper">
