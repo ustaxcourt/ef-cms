@@ -395,7 +395,7 @@ const TrialInformation = ({
                 </tr>
                 {caseDetail.trialSessionNotes && (
                   <tr>
-                    <td colSpan="4">{caseDetail.trialSessionNotes}</td>
+                    <td colSpan="4">le notes {caseDetail.trialSessionNotes}</td>
                   </tr>
                 )}
               </tbody>

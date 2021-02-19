@@ -183,6 +183,7 @@ import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigat
 import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToPrintableDocketRecordSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
+import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
@@ -593,6 +594,7 @@ export const presenter = {
     gotoEditPractitionerUserSequence,
     gotoEditTrialSessionSequence,
     gotoEditUploadCourtIssuedDocumentSequence,
+    gotoEditUploadCourtIssuedDocumentSequence,
     gotoFileDocumentSequence,
     gotoFilePetitionSuccessSequence,
     gotoIdleLogoutSequence,
@@ -601,7 +603,9 @@ export const presenter = {
     gotoMessagesSequence,
     gotoMyAccountSequence,
     gotoPdfPreviewSequence,
+    openAddEditCalendarNoteModalSequence,
     gotoPendingReportSequence,
+    openAddEditCalendarNoteModalSequence,
     gotoPetitionQcSequence,
     gotoPractitionerDetailSequence,
     gotoPrimaryContactEditSequence,
