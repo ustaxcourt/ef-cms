@@ -352,6 +352,7 @@ import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePr
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
+import { toggleEditCaseTrialInfoMenuSequence } from './sequences/toggleEditCaseTrialInfoMenuSequence';
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
@@ -814,6 +815,7 @@ export const presenter = {
     submitUpdateUserContactInformationSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
+    toggleEditCaseTrialInfoMenuSequence,
     toggleMenuSequence,
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,

@@ -136,7 +136,7 @@ const TrialSessionInformationMenu = ({
   isTrialSessionInformationMenuOpen,
   openRemoveFromTrialSessionModalSequence,
   resetEditCaseTrialInfoMenuSequence,
-  toggleMenuSequence,
+  toggleEditCaseTrialInfoMenuSequence,
   trialSessionId,
 }) => {
   const menuRef = useRef(null);
@@ -176,7 +176,7 @@ const TrialSessionInformationMenu = ({
         className={'trial-session-edit-btn'}
         id="remove-from-trial-session-btn"
         onClick={() => {
-          toggleMenuSequence({
+          toggleEditCaseTrialInfoMenuSequence({
             editCaseTrialInfoMenu: 'EditCaseTrialInformationMenu',
           });
         }}
@@ -219,7 +219,7 @@ const TrialInformation = ({
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
   resetEditCaseTrialInfoMenuSequence,
-  toggleMenuSequence,
+  toggleEditCaseTrialInfoMenuSequence,
   trialSessionJudge,
 }) => {
   return (
@@ -322,7 +322,9 @@ const TrialInformation = ({
                       resetEditCaseTrialInfoMenuSequence={
                         resetEditCaseTrialInfoMenuSequence
                       }
-                      toggleMenuSequence={toggleMenuSequence}
+                      toggleEditCaseTrialInfoMenuSequence={
+                        toggleEditCaseTrialInfoMenuSequence
+                      }
                     />
                   </td>
                 </tr>
@@ -494,7 +496,9 @@ const TrialInformation = ({
                       resetEditCaseTrialInfoMenuSequence={
                         resetEditCaseTrialInfoMenuSequence
                       }
-                      toggleMenuSequence={toggleMenuSequence}
+                      toggleEditCaseTrialInfoMenuSequence={
+                        toggleEditCaseTrialInfoMenuSequence
+                      }
                     />
                     {/* <Button
                       link
@@ -549,7 +553,8 @@ export const CaseInformationInternal = connect(
     resetEditCaseTrialInfoMenuSequence:
       sequences.resetEditCaseTrialInfoMenuSequence,
     showModal: state.modal.showModal,
-    toggleMenuSequence: sequences.toggleMenuSequence,
+    toggleEditCaseTrialInfoMenuSequence:
+      sequences.toggleEditCaseTrialInfoMenuSequence,
     trialSessionJudge: state.trialSessionJudge,
   },
 
@@ -572,7 +577,7 @@ export const CaseInformationInternal = connect(
     resetCaseMenuSequence,
     resetEditCaseTrialInfoMenuSequence,
     showModal,
-    toggleMenuSequence,
+    toggleEditCaseTrialInfoMenuSequence,
     trialSessionJudge,
   }) {
     return (
@@ -666,7 +671,9 @@ export const CaseInformationInternal = connect(
                     resetEditCaseTrialInfoMenuSequence={
                       resetEditCaseTrialInfoMenuSequence
                     }
-                    toggleMenuSequence={toggleMenuSequence}
+                    toggleEditCaseTrialInfoMenuSequence={
+                      toggleEditCaseTrialInfoMenuSequence
+                    }
                     trialSessionJudge={trialSessionJudge}
                   />
                 </div>
