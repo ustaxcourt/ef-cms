@@ -13,6 +13,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.calendarNote the note to update
  * @param {string} providers.docketNumber the docket number of the case to update calendar note
  * @param {string} providers.trialSessionId the id of the trial session containing the case with the note
+ * @returns {object} trial session entity
  */
 exports.saveCalendarNoteInteractor = async ({
   applicationContext,
@@ -38,12 +39,16 @@ exports.saveCalendarNoteInteractor = async ({
     }
   });
 
-  const trialSessionEntity = new TrialSession(trialSession, {
+  const rawTrialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
-  });
+  })
+    .validate()
+    .toRawObject();
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    trialSessionToUpdate: rawTrialSessionEntity,
   });
+
+  return rawTrialSessionEntity;
 };

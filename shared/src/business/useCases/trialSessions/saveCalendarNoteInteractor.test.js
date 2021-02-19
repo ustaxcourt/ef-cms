@@ -23,6 +23,7 @@ describe('saveCalendarNotes', () => {
     term: 'Fall',
     termYear: '2025',
     trialLocation: 'Birmingham, Alabama',
+    trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
   };
 
   beforeEach(() => {
@@ -98,13 +99,14 @@ describe('saveCalendarNotes', () => {
       },
     ];
 
-    await saveCalendarNoteInteractor({
+    const result = await saveCalendarNoteInteractor({
       applicationContext,
       calendarNote: 'this is a calendarNote',
       docketNumber: mockCase.docketNumber,
-      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
+      trialSessionId: mockTrialSession.trialSessionId,
     });
 
+    expect(result.trialSessionId).toEqual(mockTrialSession.trialSessionId);
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
     ).toHaveBeenCalled();
