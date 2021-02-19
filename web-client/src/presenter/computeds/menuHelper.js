@@ -8,6 +8,7 @@ export const menuHelper = get => {
     'EditCaseTrialInformationMenu';
   const isCaseDetailMenuOpen =
     get(state.navigation.caseDetailMenu) === 'CaseDetailMenu';
+
   return {
     isAccountMenuOpen,
     isCaseDetailMenuOpen,
