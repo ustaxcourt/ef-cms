@@ -132,8 +132,8 @@ const DisplayHearings = ({
   ));
 };
 
-const TrialSessionInformationMenu = ({
-  isTrialSessionInformationMenuOpen,
+const EditCaseTrialInformationMenu = ({
+  isEditCaseTrialInformationMenuOpen,
   openRemoveFromTrialSessionModalSequence,
   resetEditCaseTrialInfoMenuSequence,
   toggleEditCaseTrialInfoMenuSequence,
@@ -173,7 +173,7 @@ const TrialSessionInformationMenu = ({
     <div ref={menuRef}>
       <Button
         link
-        className={'trial-session-edit-btn'}
+        className={'trial-session-edit-btn margin-right-0'}
         id="edit-case-trial-information-btn"
         onClick={() => {
           toggleEditCaseTrialInfoMenuSequence({
@@ -184,11 +184,11 @@ const TrialSessionInformationMenu = ({
         Edit{' '}
         <FontAwesomeIcon
           className="margin-left-105"
-          icon={isTrialSessionInformationMenuOpen ? 'caret-up' : 'caret-down'}
+          icon={isEditCaseTrialInformationMenuOpen ? 'caret-up' : 'caret-down'}
           size="lg"
         />
       </Button>
-      {isTrialSessionInformationMenuOpen && (
+      {isEditCaseTrialInformationMenuOpen && (
         <div className="edit-case-trial-menu">
           <Button link>Add/Edit Calendar Notes</Button>
           <Button
@@ -210,7 +210,7 @@ const TrialSessionInformationMenu = ({
 
 const TrialInformation = ({
   caseDetail,
-  isTrialSessionInformationMenuOpen,
+  isEditCaseTrialInformationMenuOpen,
   openAddToTrialModalSequence,
   openBlockFromTrialModalSequence,
   openPrioritizeCaseModalSequence,
@@ -309,11 +309,10 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{caseDetail.formattedAssociatedJudge}</td>
                   <td>
-                    {/* todo: rename TrialSessionInformationMenu to TrialSessionEditMenu? */}
-                    <TrialSessionInformationMenu
+                    <EditCaseTrialInformationMenu
                       caseDetail={caseDetail.trialSessionId}
-                      isTrialSessionInformationMenuOpen={
-                        isTrialSessionInformationMenuOpen
+                      isEditCaseTrialInformationMenuOpen={
+                        isEditCaseTrialInformationMenuOpen
                       }
                       openRemoveFromTrialSessionModalSequence={
                         openRemoveFromTrialSessionModalSequence
@@ -484,10 +483,10 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{trialSessionJudge.name}</td>
                   <td>
-                    <TrialSessionInformationMenu
+                    <EditCaseTrialInformationMenu
                       caseDetail={caseDetail.trialSessionId}
-                      isTrialSessionInformationMenuOpen={
-                        isTrialSessionInformationMenuOpen
+                      isEditCaseTrialInformationMenuOpen={
+                        isEditCaseTrialInformationMenuOpen
                       }
                       openRemoveFromTrialSessionModalSequence={
                         openRemoveFromTrialSessionModalSequence
@@ -532,8 +531,8 @@ export const CaseInformationInternal = connect(
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    isTrialSessionInformationMenuOpen:
-      state.menuHelper.isTrialSessionInformationMenuOpen,
+    isEditCaseTrialInformationMenuOpen:
+      state.menuHelper.isEditCaseTrialInformationMenuOpen,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
@@ -562,7 +561,7 @@ export const CaseInformationInternal = connect(
     caseDetailHelper,
     caseInformationHelper,
     formattedCaseDetail,
-    isTrialSessionInformationMenuOpen,
+    isEditCaseTrialInformationMenuOpen,
     navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
@@ -648,8 +647,8 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <TrialInformation
                     caseDetail={formattedCaseDetail}
-                    isTrialSessionInformationMenuOpen={
-                      isTrialSessionInformationMenuOpen
+                    isEditCaseTrialInformationMenuOpen={
+                      isEditCaseTrialInformationMenuOpen
                     }
                     openAddToTrialModalSequence={openAddToTrialModalSequence}
                     openBlockFromTrialModalSequence={

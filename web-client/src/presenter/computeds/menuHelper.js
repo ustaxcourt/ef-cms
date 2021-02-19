@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 export const menuHelper = get => {
   const isAccountMenuOpen = get(state.navigation.openMenu) === 'AccountMenu';
   const isReportsMenuOpen = get(state.navigation.openMenu) === 'ReportsMenu';
-  const isTrialSessionInformationMenuOpen =
+  const isEditCaseTrialInformationMenuOpen =
     get(state.navigation.editCaseTrialInfoMenu) ===
     'EditCaseTrialInformationMenu';
   const isCaseDetailMenuOpen =
@@ -11,7 +11,7 @@ export const menuHelper = get => {
   return {
     isAccountMenuOpen,
     isCaseDetailMenuOpen,
+    isEditCaseTrialInformationMenuOpen,
     isReportsMenuOpen,
-    isTrialSessionInformationMenuOpen,
   };
 };
