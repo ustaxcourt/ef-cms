@@ -183,6 +183,7 @@ import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigat
 import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToPrintableDocketRecordSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
+import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
@@ -648,6 +649,7 @@ export const presenter = {
     navigateToPrintableDocketRecordSequence,
     notFoundErrorSequence,
     noticeGenerationCompleteSequence,
+    openAddEditCalendarNoteModalSequence,
     openAddEditCaseNoteModalSequence,
     openAddEditSessionNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
