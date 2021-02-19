@@ -245,6 +245,7 @@ import { validateAddDeficiencyStatisticsInteractor } from '../../shared/src/busi
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
 import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerInteractor';
 import { validateAddPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPrivatePractitionerInteractor';
+import { validateCalendarNoteInteractor } from '../../shared/src/business/useCases/validateCalendarNoteInteractor';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
@@ -459,6 +460,7 @@ const allUseCases = {
   validateAddIrsPractitionerInteractor,
   validateAddPractitionerInteractor,
   validateAddPrivatePractitionerInteractor,
+  validateCalendarNoteInteractor,
   validateCaseAdvancedSearchInteractor,
   validateCaseAssociationRequestInteractor,
   validateCaseDeadlineInteractor,

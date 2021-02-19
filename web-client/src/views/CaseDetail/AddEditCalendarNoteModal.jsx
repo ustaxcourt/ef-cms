@@ -32,7 +32,7 @@ export const AddEditCalendarNoteModal = connect(
       >
         <FormGroup
           className="margin-bottom-2"
-          errorText={validationErrors.calendarNotes}
+          errorText={validationErrors.note}
         >
           <BindedTextarea
             aria-label="note"
