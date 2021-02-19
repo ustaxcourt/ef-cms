@@ -171,23 +171,6 @@ const EditCaseTrialInformationMenu = ({
 
   return (
     <div ref={menuRef}>
-      <Button
-        link
-        className={'trial-session-edit-btn margin-right-0'}
-        id="edit-case-trial-information-btn"
-        onClick={() => {
-          toggleEditCaseTrialInfoMenuSequence({
-            editCaseTrialInfoMenu: 'EditCaseTrialInformationMenu',
-          });
-        }}
-      >
-        Edit{' '}
-        <FontAwesomeIcon
-          className="margin-left-105"
-          icon={isEditCaseTrialInformationMenuOpen ? 'caret-up' : 'caret-down'}
-          size="lg"
-        />
-      </Button>
       {isEditCaseTrialInformationMenuOpen && (
         <div className="edit-case-trial-menu">
           <Button link>Add/Edit Calendar Notes</Button>
@@ -287,7 +270,7 @@ const TrialInformation = ({
             <table className="usa-table ustc-table trial-list">
               <thead>
                 <tr>
-                  <th>Place of Trial</th>
+                  <th>Place of Trisfgdfal</th>
                   <th>Trial date</th>
                   <th>Judge</th>
                   <th>&nbsp;</th>
@@ -309,21 +292,27 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{caseDetail.formattedAssociatedJudge}</td>
                   <td>
-                    <EditCaseTrialInformationMenu
-                      caseDetail={caseDetail.trialSessionId}
-                      isEditCaseTrialInformationMenuOpen={
-                        isEditCaseTrialInformationMenuOpen
-                      }
-                      openRemoveFromTrialSessionModalSequence={
-                        openRemoveFromTrialSessionModalSequence
-                      }
-                      resetEditCaseTrialInfoMenuSequence={
-                        resetEditCaseTrialInfoMenuSequence
-                      }
-                      toggleEditCaseTrialInfoMenuSequence={
-                        toggleEditCaseTrialInfoMenuSequence
-                      }
-                    />
+                    <Button
+                      link
+                      className={'trial-session-edit-btn margin-right-0'}
+                      id="edit-case-trial-information-btn"
+                      onClick={() => {
+                        toggleEditCaseTrialInfoMenuSequence({
+                          editCaseTrialInfoMenu: 'EditCaseTrialInformationMenu',
+                        });
+                      }}
+                    >
+                      Edit{' '}
+                      <FontAwesomeIcon
+                        className="margin-left-105"
+                        icon={
+                          isEditCaseTrialInformationMenuOpen
+                            ? 'caret-up'
+                            : 'caret-down'
+                        }
+                        size="lg"
+                      />
+                    </Button>
                   </td>
                 </tr>
                 {caseDetail.trialSessionNotes && (
@@ -333,6 +322,24 @@ const TrialInformation = ({
                 )}
               </tbody>
             </table>
+            <div className="grid-col-7"></div>
+            <div className="grid-col-5">
+              <EditCaseTrialInformationMenu
+                caseDetail={caseDetail.trialSessionId}
+                isEditCaseTrialInformationMenuOpen={
+                  isEditCaseTrialInformationMenuOpen
+                }
+                openRemoveFromTrialSessionModalSequence={
+                  openRemoveFromTrialSessionModalSequence
+                }
+                resetEditCaseTrialInfoMenuSequence={
+                  resetEditCaseTrialInfoMenuSequence
+                }
+                toggleEditCaseTrialInfoMenuSequence={
+                  toggleEditCaseTrialInfoMenuSequence
+                }
+              />
+            </div>
           </div>
         </>
       )}
