@@ -82,7 +82,7 @@ exports.updatePractitionerUserInteractor = async ({
     .validate()
     .toRawObject();
 
-  let updatedUser = oldUserInfo;
+  let updatedUser = validatedUserData;
   if (oldUserInfo.email) {
     updatedUser = await applicationContext
       .getPersistenceGateway()
@@ -98,6 +98,13 @@ exports.updatePractitionerUserInteractor = async ({
         applicationContext,
         user: validatedUserData,
       });
+  } else {
+    await applicationContext.getUseCaseHelpers().updateUserRecords({
+      applicationContext,
+      oldUser: oldUserInfo,
+      updatedUser: validatedUserData,
+      userId: oldUserInfo.userId,
+    });
   }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -116,6 +123,7 @@ exports.updatePractitionerUserInteractor = async ({
     });
   }
 
+  console.log('updatedUser', updatedUser);
   const updatedPractitionerRaw = new Practitioner(updatedUser, {
     applicationContext,
   }).toRawObject();

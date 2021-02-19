@@ -1000,6 +1000,9 @@ const {
   updateUserPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserPendingEmailInteractor');
 const {
+  updateUserRecords,
+} = require('../../shared/src/persistence/dynamo/users/updateUserRecords');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -1330,10 +1333,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
           adminGetUser: ({ Username }) => ({
             promise: () => {
               // TODO - fix?, throw an error when Username is undefined
-              if (Username.includes('error')) {
+              if (Username.includes('available')) {
                 throw new Error('User does not exist');
               }
-              throw new Error('User does not exist');
 
               const users = require('../storage/fixtures/seed/users.json');
               const foundUser = users.find(({ email }) => email === Username);
@@ -1572,6 +1574,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
         updateInitialFilingDocuments,
+        updateUserRecords,
       };
     },
     getUseCases: () => {
