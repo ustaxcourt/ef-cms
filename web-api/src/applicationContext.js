@@ -1323,8 +1323,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
           adminDisableUser: () => ({
             promise: () => {},
           }),
-          adminGetUser: ({ Username = '' }) => ({
+          adminGetUser: ({ Username }) => ({
             promise: () => {
+              // TODO - fix?, throw an error when Username is undefined
               if (Username.includes('error')) {
                 throw new Error('User does not exist');
               }
