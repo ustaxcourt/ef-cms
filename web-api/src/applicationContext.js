@@ -829,6 +829,9 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
 const {
+  serveDocumentAndGetPaperServicePdf,
+} = require('../../shared/src/business/useCaseHelper/serveDocumentAndGetPaperServicePdf');
+const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
@@ -1559,6 +1562,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
+        serveDocumentAndGetPaperServicePdf,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
         updateInitialFilingDocuments,
