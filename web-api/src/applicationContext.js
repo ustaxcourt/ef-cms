@@ -176,6 +176,9 @@ const {
   createMigratedPetitionerUser,
 } = require('../../shared/src/persistence/dynamo/users/createMigratedPetitionerUser');
 const {
+  createNewPractitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createNewPractitionerUser');
+const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
@@ -1208,6 +1211,7 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  createNewPractitionerUser,
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
@@ -1329,6 +1333,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
               if (Username.includes('error')) {
                 throw new Error('User does not exist');
               }
+              throw new Error('User does not exist');
 
               const users = require('../storage/fixtures/seed/users.json');
               const foundUser = users.find(({ email }) => email === Username);

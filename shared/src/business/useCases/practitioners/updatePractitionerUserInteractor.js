@@ -82,18 +82,23 @@ exports.updatePractitionerUserInteractor = async ({
     .validate()
     .toRawObject();
 
-  // if oldUser.email
-  // getPersistenceGateway().updateUser
-  // else
-  // getPersistenceGateway().createUser
-
-  const updatedUser = await applicationContext
-    .getPersistenceGateway()
-    .updatePractitionerUser({
-      applicationContext,
-      isNewAccount: !userHasAccount && userIsUpdatingEmail,
-      user: validatedUserData,
-    });
+  let updatedUser = oldUserInfo;
+  if (oldUserInfo.email) {
+    updatedUser = await applicationContext
+      .getPersistenceGateway()
+      .updatePractitionerUser({
+        applicationContext,
+        user: validatedUserData,
+      });
+  } else if (!oldUserInfo.email && user.updatedEmail) {
+    console.log('creating a new practitioner');
+    updatedUser = await applicationContext
+      .getPersistenceGateway()
+      .createNewPractitionerUser({
+        applicationContext,
+        user: validatedUserData,
+      });
+  }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

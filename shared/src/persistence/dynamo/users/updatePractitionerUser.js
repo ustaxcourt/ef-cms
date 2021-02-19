@@ -63,11 +63,7 @@ exports.updateUserRecords = async ({
   };
 };
 
-exports.updatePractitionerUser = async ({
-  applicationContext,
-  isNewAccount,
-  user,
-}) => {
+exports.updatePractitionerUser = async ({ applicationContext, user }) => {
   const { userId } = user;
 
   const oldUser = await getUserById({
@@ -75,65 +71,33 @@ exports.updatePractitionerUser = async ({
     userId,
   });
 
-  if (isNewAccount) {
-    await applicationContext
+  try {
+    const response = await applicationContext
       .getCognito()
-      .adminCreateUser({
-        UserAttributes: [
-          {
-            Name: 'email_verified',
-            Value: 'True',
-          },
-          {
-            Name: 'email',
-            Value: user.email,
-          },
-          {
-            Name: 'custom:role',
-            Value: user.role,
-          },
-          {
-            Name: 'name',
-            Value: user.name,
-          },
-          {
-            Name: 'custom:userId',
-            Value: user.userId,
-          },
-        ],
+      .adminGetUser({
         UserPoolId: process.env.USER_POOL_ID,
         Username: user.email,
       })
       .promise();
-  } else {
-    try {
-      const response = await applicationContext
+
+    if (response) {
+      await applicationContext
         .getCognito()
-        .adminGetUser({
+        .adminUpdateUserAttributes({
+          UserAttributes: [
+            {
+              Name: 'custom:role',
+              Value: user.role,
+            },
+          ],
           UserPoolId: process.env.USER_POOL_ID,
-          Username: user.email,
+          Username: response.Username,
         })
         .promise();
-
-      if (response) {
-        await applicationContext
-          .getCognito()
-          .adminUpdateUserAttributes({
-            UserAttributes: [
-              {
-                Name: 'custom:role',
-                Value: user.role,
-              },
-            ],
-            UserPoolId: process.env.USER_POOL_ID,
-            Username: response.Username,
-          })
-          .promise();
-      }
-    } catch (error) {
-      applicationContext.logger.error(error);
-      throw error;
     }
+  } catch (error) {
+    applicationContext.logger.error(error);
+    throw error;
   }
 
   const updatedUser = await exports.updateUserRecords({
