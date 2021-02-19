@@ -87,18 +87,18 @@ describe('admissions clerk practitioner journey', () => {
     SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
 
-  // loginAs(test, 'petitionsclerk@example.com');
-  // petitionsClerkViewsCaseDetail(test);
-  // petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(test);
+  petitionsClerkAddsPractitionersToCase(test, true);
 
-  // it('wait for ES index', async () => {
-  //   await refreshElasticsearchIndex();
-  // });
+  it('wait for ES index', async () => {
+    await refreshElasticsearchIndex();
+  });
 
-  // loginAs(test, 'admissionsclerk@example.com');
-  // admissionsClerkAddsPractitionerEmail(test);
-  // admissionsClerVerifiesPractitionerServiceIndicator(
-  //   test,
-  //   SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-  // );
+  loginAs(test, 'admissionsclerk@example.com');
+  admissionsClerkAddsPractitionerEmail(test);
+  admissionsClerVerifiesPractitionerServiceIndicator(
+    test,
+    SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  );
 });
