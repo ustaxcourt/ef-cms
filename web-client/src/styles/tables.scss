@@ -651,7 +651,9 @@ table.case-list tbody tr:nth-child(even) td {
 
   .edit-case-trial-menu {
     position: absolute;
+    max-width: 30%;
     padding-top: 4px;
+    margin-left: -80px;
     background-color: color($theme-color-primary);
 
     button {
