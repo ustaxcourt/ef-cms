@@ -369,6 +369,7 @@ import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/update
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
+import { updateCalendarNoteSequence } from './sequences/updateCalendarNoteSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
@@ -834,6 +835,7 @@ export const presenter = {
     updateAdvancedOrderSearchFormValueSequence,
     updateAdvancedSearchFormValueSequence,
     updateBatchDownloadProgressSequence,
+    updateCalendarNoteSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
     updateCaseNoteSequence,

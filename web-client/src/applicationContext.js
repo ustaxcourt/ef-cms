@@ -190,6 +190,7 @@ const {
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/documents/removeSignatureFromDocumentProxy';
 import { replyToMessageInteractor } from '../../shared/src/proxies/messages/replyToMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
+import { saveCalendarNoteInteractor } from '../../shared/src/proxies/trialSessions/saveCalendarNoteProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
 import { saveSignedDocumentInteractor } from '../../shared/src/proxies/documents/saveSignedDocumentProxy';
@@ -409,6 +410,7 @@ const allUseCases = {
   removeSignatureFromDocumentInteractor,
   replyToMessageInteractor,
   runTrialSessionPlanningReportInteractor,
+  saveCalendarNoteInteractor,
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,
   saveSignedDocumentInteractor,
