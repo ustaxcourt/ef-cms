@@ -13,6 +13,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.calendarNote the note to update
  * @param {string} providers.docketNumber the docket number of the case to update calendar note
  * @param {string} providers.trialSessionId the id of the trial session containing the case with the note
+ * @returns {object} trial session entity
  */
 exports.saveCalendarNoteInteractor = async ({
   applicationContext,
