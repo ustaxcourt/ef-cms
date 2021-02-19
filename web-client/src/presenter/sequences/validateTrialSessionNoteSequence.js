@@ -1,10 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-// import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { validateNoteAction } from '../actions/validateNoteAction';
+import { validateCalendarNoteAction } from '../actions/validateCalendarNoteAction';
 
 export const validateTrialSessionNoteSequence = [
-  validateNoteAction,
+  validateCalendarNoteAction,
   {
     error: [setValidationErrorsAction],
     success: [clearAlertsAction],
