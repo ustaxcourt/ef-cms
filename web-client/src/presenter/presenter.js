@@ -448,6 +448,7 @@ import { validateSecondaryContactSequence } from './sequences/validateSecondaryC
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
+import { validateTrialSessionNoteSequence } from './sequences/validateTrialSessionNoteSequence';
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { validateUpdateCaseModalSequence } from './sequences/validateUpdateCaseModalSequence';
@@ -912,6 +913,7 @@ export const presenter = {
     validateSelectDocumentTypeSequence,
     validateSetForHearingSequence,
     validateStartCaseWizardSequence,
+    validateTrialSessionNoteSequence,
     validateTrialSessionPlanningSequence,
     validateTrialSessionSequence,
     validateUpdateCaseModalSequence,
