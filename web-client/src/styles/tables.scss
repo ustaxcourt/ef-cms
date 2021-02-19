@@ -644,28 +644,27 @@ table.case-list tbody tr:nth-child(even) td {
   }
 }
 
-.trial-session-edit-btn {
-  position: relative;
-}
+.trial-list {
+  .trial-session-edit-btn {
+    position: relative;
+  }
 
-.edit-case-trial-menu {
-  position: absolute;
-  padding-top: 4px;
-  background-color: color($theme-color-primary);
+  .edit-case-trial-menu {
+    position: absolute;
+    padding-top: 4px;
+    background-color: color($theme-color-primary);
 
-  button {
-    padding: 12px;
-    color: $color-white;
-    float: right;
-    text-decoration: none;
-    &:hover {
+    button {
+      min-width: 200px;
+      padding: 12px;
       color: $color-white;
+      text-align: right;
+      text-decoration: none;
+      &:hover {
+        color: $color-white;
+      }
     }
   }
-}
-
-.trial-list {
-  margin-bottom: unset;
 
   tbody tr:first-child td {
     padding-top: 9px;
