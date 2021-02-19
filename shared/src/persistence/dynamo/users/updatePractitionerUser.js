@@ -9,8 +9,6 @@ exports.updatePractitionerUser = async ({ applicationContext, user }) => {
     userId,
   });
 
-  console.log('userrrr', user);
-
   try {
     const response = await applicationContext
       .getCognito()
