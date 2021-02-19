@@ -80,12 +80,12 @@ describe('admissions clerk practitioner journey', () => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
-      value: 'error@example.com',
+      value: 'available@example.com',
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
-      value: 'error@example.com',
+      value: 'available@example.com',
     });
 
     await test.runSequence('submitUpdatePractitionerUserSequence');
@@ -104,7 +104,7 @@ describe('admissions clerk practitioner journey', () => {
       barNumber: test.barNumber,
     });
 
-    expect(test.getState('form.pendingEmail')).toBe('error@example.com');
+    expect(test.getState('form.pendingEmail')).toBe('available@example.com');
     expect(test.getState('form.originalEmail')).toBe(
       'privatePractitioner3@example.com',
     );

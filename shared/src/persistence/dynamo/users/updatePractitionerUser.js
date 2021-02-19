@@ -1,67 +1,5 @@
-const client = require('../../dynamodbClientService');
 const { getUserById } = require('./getUserById');
-
-exports.updateUserRecords = async ({
-  applicationContext,
-  oldUser,
-  updatedUser,
-  userId,
-}) => {
-  await client.delete({
-    applicationContext,
-    key: {
-      pk: `section|${oldUser.section}`,
-      sk: `user|${userId}`,
-    },
-  });
-
-  await client.put({
-    Item: {
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-      ...updatedUser,
-      userId,
-    },
-    applicationContext,
-  });
-
-  await client.delete({
-    applicationContext,
-    key: {
-      pk: `${oldUser.role}|${oldUser.name}`,
-      sk: `user|${userId}`,
-    },
-  });
-
-  await client.delete({
-    applicationContext,
-    key: {
-      pk: `${oldUser.role}|${oldUser.barNumber}`,
-      sk: `user|${userId}`,
-    },
-  });
-
-  await client.put({
-    Item: {
-      pk: `${updatedUser.role}|${updatedUser.name}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-
-  await client.put({
-    Item: {
-      pk: `${updatedUser.role}|${updatedUser.barNumber}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-
-  return {
-    ...updatedUser,
-    userId,
-  };
-};
+const { updateUserRecords } = require('./updateUserRecords');
 
 exports.updatePractitionerUser = async ({ applicationContext, user }) => {
   const { userId } = user;
@@ -70,6 +8,8 @@ exports.updatePractitionerUser = async ({ applicationContext, user }) => {
     applicationContext,
     userId,
   });
+
+  console.log('userrrr', user);
 
   try {
     const response = await applicationContext
@@ -100,7 +40,7 @@ exports.updatePractitionerUser = async ({ applicationContext, user }) => {
     throw error;
   }
 
-  const updatedUser = await exports.updateUserRecords({
+  const updatedUser = await updateUserRecords({
     applicationContext,
     oldUser,
     updatedUser: user,

@@ -1,7 +1,7 @@
 import { headerHelper as headerHelperComputed } from '../../src/presenter/computeds/headerHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
-const mockUpdatedEmail = 'error@example.com';
+const mockUpdatedEmail = 'available@example.com';
 
 const headerHelper = withAppContextDecorator(headerHelperComputed);
 
