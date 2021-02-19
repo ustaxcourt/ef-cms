@@ -18,6 +18,6 @@ exports.saveCalendarNoteInteractor = ({
   return put({
     applicationContext,
     body: { calendarNote, docketNumber },
-    endpoint: `/trial-session/${trialSessionId}/set-calendar-note`,
+    endpoint: `/trial-sessions/${trialSessionId}/set-calendar-note`,
   });
 };
