@@ -24,12 +24,5 @@ export const checkEmailAvailabilityAction = async ({
       email: updatedEmail || email,
     });
 
-  return isEmailAvailable
-    ? path.emailAvailable()
-    : path.emailInUse({
-        errors: {
-          email:
-            'An account with this email already exists. Enter a new email address.',
-        },
-      });
+  return isEmailAvailable ? path.emailAvailable() : path.emailInUse();
 };
