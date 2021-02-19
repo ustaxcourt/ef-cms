@@ -9,6 +9,7 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAndChecksVerifiedEmailAddress';
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
+import faker from 'faker';
 
 const test = setupTest();
 
@@ -48,14 +49,16 @@ describe('admissions clerk practitioner journey', () => {
   petitionsClerkAddsPractitionersToCase(test, true);
 
   loginAs(test, 'admissionsclerk@example.com');
-  it('admissions clerk updates practitioner email', async () => {
-    await refreshElasticsearchIndex();
 
+  it('admissions clerk navigates to edit form', async () => {
+    await refreshElasticsearchIndex();
     await test.runSequence('gotoEditPractitionerUserSequence', {
       barNumber: test.barNumber,
     });
-
     expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+  });
+
+  it('admissions clerk updates practitioner email but it already exists', async () => {
     expect(test.getState('form.pendingEmail')).toBeUndefined();
     expect(test.getState('form.originalEmail')).toBe(
       'privatePractitioner3@example.com',
@@ -77,15 +80,18 @@ describe('admissions clerk practitioner journey', () => {
       email:
         'An account with this email already exists. Enter a new email address.',
     });
+  });
 
+  const validEmail = `${faker.internet.userName()}_no_error@example.com`;
+  it('admissions clerk updates practitioner email', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
-      value: 'error@example.com',
+      value: validEmail,
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
-      value: 'error@example.com',
+      value: validEmail,
     });
 
     await test.runSequence('submitUpdatePractitionerUserSequence');
@@ -104,7 +110,7 @@ describe('admissions clerk practitioner journey', () => {
       barNumber: test.barNumber,
     });
 
-    expect(test.getState('form.pendingEmail')).toBe('error@example.com');
+    expect(test.getState('form.pendingEmail')).toBe(validEmail);
     expect(test.getState('form.originalEmail')).toBe(
       'privatePractitioner3@example.com',
     );
@@ -112,9 +118,11 @@ describe('admissions clerk practitioner journey', () => {
     expect(test.getState('form.confirmEmail')).toBeUndefined();
   });
 
-  loginAs(test, 'privatePractitioner3@example.com');
-  userVerifiesUpdatedEmailAddress(test, 'practitioner');
+  describe('private practitioner logs in and verifies email address', () => {
+    loginAs(test, 'privatePractitioner3@example.com');
+    userVerifiesUpdatedEmailAddress(test, 'practitioner');
 
-  loginAs(test, 'privatePractitioner3@example.com');
-  userLogsInAndChecksVerifiedEmailAddress(test, 'practitioner');
+    loginAs(test, 'privatePractitioner3@example.com');
+    userLogsInAndChecksVerifiedEmailAddress(test, 'practitioner', validEmail);
+  });
 });
