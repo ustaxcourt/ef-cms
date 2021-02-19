@@ -5,6 +5,7 @@ import { saveCalendarNoteAction } from '../actions/TrialSession/saveCalendarNote
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { updateTrialSessionInTrialSessionsAction } from '../actions/updateTrialSessionInTrialSessionsAction';
 import { validateCalendarNoteAction } from '../actions/validateCalendarNoteAction';
 
 export const updateCalendarNoteSequence = [
@@ -14,6 +15,7 @@ export const updateCalendarNoteSequence = [
     success: showProgressSequenceDecorator([
       clearAlertsAction,
       saveCalendarNoteAction,
+      updateTrialSessionInTrialSessionsAction,
       setAlertSuccessAction,
       clearModalAction,
       clearModalStateAction,

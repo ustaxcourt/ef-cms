@@ -38,12 +38,16 @@ exports.saveCalendarNoteInteractor = async ({
     }
   });
 
-  const trialSessionEntity = new TrialSession(trialSession, {
+  const rawTrialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
-  });
+  })
+    .validate()
+    .toRawObject();
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    trialSessionToUpdate: rawTrialSessionEntity,
   });
+
+  return rawTrialSessionEntity;
 };
