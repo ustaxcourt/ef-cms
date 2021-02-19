@@ -56,6 +56,8 @@ exports.updatePractitionerUserInteractor = async ({
   const userHasAccount = !!oldUserInfo.email;
   const userIsUpdatingEmail = !!user.updatedEmail;
 
+  console.log(userHasAccount, userIsUpdatingEmail);
+
   if (oldUserInfo.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
   }
@@ -79,6 +81,11 @@ exports.updatePractitionerUserInteractor = async ({
   )
     .validate()
     .toRawObject();
+
+  // if oldUser.email
+  // getPersistenceGateway().updateUser
+  // else
+  // getPersistenceGateway().createUser
 
   const updatedUser = await applicationContext
     .getPersistenceGateway()
