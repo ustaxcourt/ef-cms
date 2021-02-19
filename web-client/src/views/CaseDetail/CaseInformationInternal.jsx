@@ -190,9 +190,12 @@ const EditCaseTrialInformationMenu = ({
       </Button>
       {isEditCaseTrialInformationMenuOpen && (
         <div className="edit-case-trial-menu">
-          <Button link>Add/Edit Calendar Notes</Button>
+          <Button link className="margin-right-0">
+            Add/Edit Calendar Note
+          </Button>
           <Button
             link
+            className="margin-right-0"
             id="remove-from-trial-session-btn"
             onClick={() => {
               openRemoveFromTrialSessionModalSequence({
