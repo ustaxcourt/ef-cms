@@ -277,6 +277,8 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
+      'wait for #edit-case-trial-information-btn to be visible',
+      'click element #edit-case-trial-information-btn',
       'wait for #remove-from-trial-session-btn to be visible',
       'click element #remove-from-trial-session-btn',
       'wait for #remove-from-trial-session-modal to be visible',

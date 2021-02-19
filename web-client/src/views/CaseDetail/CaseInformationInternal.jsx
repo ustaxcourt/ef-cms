@@ -1,6 +1,7 @@
 import { AddConsolidatedCaseModal } from './AddConsolidatedCaseModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { EditCaseTrialInformationMenu } from './EditCaseTrialInformationMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
@@ -8,7 +9,7 @@ import { SetForHearingModal } from './SetForHearingModal';
 import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 const PetitionDetails = ({
   caseDetail,
@@ -132,96 +133,13 @@ const DisplayHearings = ({
   ));
 };
 
-const EditCaseTrialInformationMenu = ({
-  isEditCaseTrialInformationMenuOpen,
-  openRemoveFromTrialSessionModalSequence,
-  resetEditCaseTrialInfoMenuSequence,
-  toggleEditCaseTrialInfoMenuSequence,
-  trialSessionId,
-}) => {
-  const menuRef = useRef(null);
-  const keydown = event => {
-    const pressedESC = event.keyCode === 27;
-    if (pressedESC) {
-      return resetEditCaseTrialInfoMenuSequence();
-    }
-  };
-
-  const reset = e => {
-    const clickedWithinComponent = menuRef.current.contains(e.target);
-    const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
-    const clickedOnSubNav = e.target.closest('.edit-case-trial-menu');
-    if (!clickedWithinComponent) {
-      return resetEditCaseTrialInfoMenuSequence();
-    } else if (!clickedOnMenuButton && !clickedOnSubNav) {
-      return resetEditCaseTrialInfoMenuSequence();
-    }
-    return true;
-  };
-
-  useEffect(() => {
-    window.document.addEventListener('mousedown', reset, false);
-    window.document.addEventListener('keydown', keydown, false);
-    return () => {
-      window.document.removeEventListener('mousedown', reset, false);
-      window.document.removeEventListener('keydown', keydown, false);
-      return resetEditCaseTrialInfoMenuSequence();
-    };
-  }, []);
-
-  return (
-    <div ref={menuRef}>
-      <Button
-        link
-        className={'trial-session-edit-btn margin-right-0'}
-        id="edit-case-trial-information-btn"
-        onClick={() => {
-          toggleEditCaseTrialInfoMenuSequence({
-            editCaseTrialInfoMenu: 'EditCaseTrialInformationMenu',
-          });
-        }}
-      >
-        Edit{' '}
-        <FontAwesomeIcon
-          className="margin-left-105"
-          icon={isEditCaseTrialInformationMenuOpen ? 'caret-up' : 'caret-down'}
-          size="lg"
-        />
-      </Button>
-      {isEditCaseTrialInformationMenuOpen && (
-        <div className="edit-case-trial-menu">
-          <Button link className="margin-right-0">
-            Add/Edit Calendar Note
-          </Button>
-          <Button
-            link
-            className="margin-right-0"
-            id="remove-from-trial-session-btn"
-            onClick={() => {
-              openRemoveFromTrialSessionModalSequence({
-                trialSessionId: trialSessionId,
-              });
-            }}
-          >
-            Remove From Trial
-          </Button>
-        </div>
-      )}
-    </div>
-  );
-};
-
 const TrialInformation = ({
   caseDetail,
-  isEditCaseTrialInformationMenuOpen,
   openAddToTrialModalSequence,
   openBlockFromTrialModalSequence,
   openPrioritizeCaseModalSequence,
-  openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
-  resetEditCaseTrialInfoMenuSequence,
-  toggleEditCaseTrialInfoMenuSequence,
   trialSessionJudge,
 }) => {
   return (
@@ -312,21 +230,7 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{caseDetail.formattedAssociatedJudge}</td>
                   <td>
-                    <EditCaseTrialInformationMenu
-                      caseDetail={caseDetail.trialSessionId}
-                      isEditCaseTrialInformationMenuOpen={
-                        isEditCaseTrialInformationMenuOpen
-                      }
-                      openRemoveFromTrialSessionModalSequence={
-                        openRemoveFromTrialSessionModalSequence
-                      }
-                      resetEditCaseTrialInfoMenuSequence={
-                        resetEditCaseTrialInfoMenuSequence
-                      }
-                      toggleEditCaseTrialInfoMenuSequence={
-                        toggleEditCaseTrialInfoMenuSequence
-                      }
-                    />
+                    <EditCaseTrialInformationMenu />
                   </td>
                 </tr>
                 {caseDetail.trialSessionNotes && (
@@ -486,32 +390,7 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{trialSessionJudge.name}</td>
                   <td>
-                    <EditCaseTrialInformationMenu
-                      caseDetail={caseDetail.trialSessionId}
-                      isEditCaseTrialInformationMenuOpen={
-                        isEditCaseTrialInformationMenuOpen
-                      }
-                      openRemoveFromTrialSessionModalSequence={
-                        openRemoveFromTrialSessionModalSequence
-                      }
-                      resetEditCaseTrialInfoMenuSequence={
-                        resetEditCaseTrialInfoMenuSequence
-                      }
-                      toggleEditCaseTrialInfoMenuSequence={
-                        toggleEditCaseTrialInfoMenuSequence
-                      }
-                    />
-                    {/* <Button
-                      link
-                      className="red-warning"
-                      icon="trash"
-                      id="remove-from-trial-session-btn"
-                      onClick={() => {
-                        openRemoveFromTrialSessionModalSequence();
-                      }}
-                    >
-                      Remove
-                    </Button> */}
+                    <EditCaseTrialInformationMenu />
                   </td>
                 </tr>
                 {caseDetail.trialSessionNotes && (
@@ -534,8 +413,6 @@ export const CaseInformationInternal = connect(
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    isEditCaseTrialInformationMenuOpen:
-      state.menuHelper.isEditCaseTrialInformationMenuOpen,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
@@ -551,11 +428,7 @@ export const CaseInformationInternal = connect(
       sequences.openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
-    resetEditCaseTrialInfoMenuSequence:
-      sequences.resetEditCaseTrialInfoMenuSequence,
     showModal: state.modal.showModal,
-    toggleEditCaseTrialInfoMenuSequence:
-      sequences.toggleEditCaseTrialInfoMenuSequence,
     trialSessionJudge: state.trialSessionJudge,
   },
 
@@ -564,7 +437,6 @@ export const CaseInformationInternal = connect(
     caseDetailHelper,
     caseInformationHelper,
     formattedCaseDetail,
-    isEditCaseTrialInformationMenuOpen,
     navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
@@ -576,9 +448,7 @@ export const CaseInformationInternal = connect(
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
-    resetEditCaseTrialInfoMenuSequence,
     showModal,
-    toggleEditCaseTrialInfoMenuSequence,
     trialSessionJudge,
   }) {
     return (
@@ -650,31 +520,18 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <TrialInformation
                     caseDetail={formattedCaseDetail}
-                    isEditCaseTrialInformationMenuOpen={
-                      isEditCaseTrialInformationMenuOpen
-                    }
                     openAddToTrialModalSequence={openAddToTrialModalSequence}
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }
-                    openCleanModalSequence={openCleanModalSequence}
                     openPrioritizeCaseModalSequence={
                       openPrioritizeCaseModalSequence
-                    }
-                    openRemoveFromTrialSessionModalSequence={
-                      openRemoveFromTrialSessionModalSequence
                     }
                     openUnblockFromTrialModalSequence={
                       openUnblockFromTrialModalSequence
                     }
                     openUnprioritizeCaseModalSequence={
                       openUnprioritizeCaseModalSequence
-                    }
-                    resetEditCaseTrialInfoMenuSequence={
-                      resetEditCaseTrialInfoMenuSequence
-                    }
-                    toggleEditCaseTrialInfoMenuSequence={
-                      toggleEditCaseTrialInfoMenuSequence
                     }
                     trialSessionJudge={trialSessionJudge}
                   />
