@@ -21,7 +21,7 @@ exports.saveCalendarNoteInteractor = async ({
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_NOTES)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
