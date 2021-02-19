@@ -35,7 +35,6 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
     const categoryInformation = internalAndExternalFilingEventForCategory.find(
       eventCodeMatches,
     );
-
     store.set(state.form.documentTitle, categoryInformation.documentTitle);
   }
 

@@ -26,8 +26,8 @@ export const MessagesCompleted = connect(
             </thead>
 
             <tbody>
-              {formattedCompletedMessages.map((message, idx) => (
-                <tr key={idx}>
+              {formattedCompletedMessages.map(message => (
+                <tr key={message.messageId}>
                   <td className="responsive-title padding-extra">
                     {message.completedAtFormatted}
                   </td>
@@ -36,7 +36,7 @@ export const MessagesCompleted = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={message.messageDetailLink}
                       >
                         {message.subject}
                       </Button>

@@ -52,6 +52,9 @@ const {
   caseAdvancedSearchLambda,
 } = require('./cases/caseAdvancedSearchLambda');
 const {
+  checkEmailAvailabilityLambda,
+} = require('./users/checkEmailAvailabilityLambda');
+const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
@@ -346,8 +349,14 @@ const {
   updateUserContactInformationLambda,
 } = require('./users/updateUserContactInformationLambda');
 const {
+  updateUserPendingEmailLambda,
+} = require('./users/updateUserPendingEmailLambda');
+const {
   verifyPendingCaseForUserLambda,
 } = require('./cases/verifyPendingCaseForUserLambda');
+const {
+  verifyUserPendingEmailLambda,
+} = require('./users/verifyUserPendingEmailLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
@@ -928,6 +937,15 @@ app.get(
 app.put(
   '/async/users/:userId/contact-info',
   lambdaWrapper(updateUserContactInformationLambda),
+);
+app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
+app.put(
+  '/async/users/verify-email',
+  lambdaWrapper(verifyUserPendingEmailLambda),
+);
+app.get(
+  '/users/email-availability',
+  lambdaWrapper(checkEmailAvailabilityLambda),
 );
 app.get(
   '/users/privatePractitioners/search',

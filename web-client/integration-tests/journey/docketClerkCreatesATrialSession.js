@@ -113,5 +113,16 @@ export const docketClerkCreatesATrialSession = (test, overrides = {}) => {
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('submitTrialSessionSequence');
+
+    expect(test.getState('alertSuccess')).toEqual({
+      message: 'Trial session added.',
+    });
+
+    const lastCreatedTrialSessionId = test.getState(
+      'lastCreatedTrialSessionId',
+    );
+    expect(lastCreatedTrialSessionId).toBeDefined();
+
+    test.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
   });
 };

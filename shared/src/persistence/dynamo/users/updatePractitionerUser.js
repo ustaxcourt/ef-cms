@@ -63,7 +63,11 @@ exports.updateUserRecords = async ({
   };
 };
 
-exports.updatePractitionerUser = async ({ applicationContext, user }) => {
+exports.updatePractitionerUser = async ({
+  applicationContext,
+  isNewAccount,
+  user,
+}) => {
   const { userId } = user;
 
   const oldUser = await getUserById({
@@ -71,7 +75,7 @@ exports.updatePractitionerUser = async ({ applicationContext, user }) => {
     userId,
   });
 
-  if (!oldUser.email && user.email) {
+  if (isNewAccount) {
     await applicationContext
       .getCognito()
       .adminCreateUser({
@@ -128,14 +132,16 @@ exports.updatePractitionerUser = async ({ applicationContext, user }) => {
       }
     } catch (error) {
       applicationContext.logger.error(error);
-      await applicationContext.notifyHoneybadger(error);
+      throw error;
     }
   }
 
-  return await exports.updateUserRecords({
+  const updatedUser = await exports.updateUserRecords({
     applicationContext,
     oldUser,
     updatedUser: user,
     userId,
   });
+
+  return updatedUser;
 };

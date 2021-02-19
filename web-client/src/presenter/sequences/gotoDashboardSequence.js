@@ -20,6 +20,7 @@ import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsActio
 import { setMessagesAction } from '../actions/setMessagesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
+import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
@@ -63,10 +64,21 @@ const goToDashboard = [
     general: [navigateToSectionDocumentQCAction],
     inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
     irsPractitioner: [
-      setDefaultCaseTypeToDisplayAction,
-      getOpenAndClosedCasesByUserAction,
-      setCasesAction,
-      setCurrentPageAction('DashboardRespondent'),
+      startWebSocketConnectionAction,
+      {
+        error: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesByUserAction,
+          setCasesAction,
+          setCurrentPageAction('DashboardRespondent'),
+        ],
+        success: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesByUserAction,
+          setCasesAction,
+          setCurrentPageAction('DashboardRespondent'),
+        ],
+      },
     ],
     irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
     judge: [
@@ -83,10 +95,21 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPetitioner'),
     ],
     privatePractitioner: [
-      setDefaultCaseTypeToDisplayAction,
-      getOpenAndClosedCasesByUserAction,
-      setCasesAction,
-      setCurrentPageAction('DashboardPractitioner'),
+      startWebSocketConnectionAction,
+      {
+        error: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesByUserAction,
+          setCasesAction,
+          setCurrentPageAction('DashboardPractitioner'),
+        ],
+        success: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesByUserAction,
+          setCasesAction,
+          setCurrentPageAction('DashboardPractitioner'),
+        ],
+      },
     ],
   },
 ];

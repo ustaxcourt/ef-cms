@@ -117,7 +117,7 @@ export const RequestAccessReview = connect(
 
                   {form.supportingDocuments &&
                     form.supportingDocuments.map((item, idx) => (
-                      <React.Fragment key={idx}>
+                      <React.Fragment key={item.documentTitle}>
                         <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
                           <div className="tablet:grid-col-6 margin-bottom-1">
                             <div className="tablet:margin-bottom-0 margin-bottom-205">

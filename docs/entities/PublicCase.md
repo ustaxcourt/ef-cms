@@ -952,6 +952,10 @@
       type: "boolean"
       flags: 
         presence: "required"
+    isPaper: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     isSealed: 
       type: "boolean"
     partyType: 

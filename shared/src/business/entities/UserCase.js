@@ -30,8 +30,6 @@ UserCase.prototype.init = function init(rawUserCase) {
   this.closedDate = rawUserCase.closedDate;
 };
 
-UserCase.validationName = 'UserCase';
-
 joiValidationDecorator(
   UserCase,
   joi.object().keys({

@@ -5,7 +5,6 @@ const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/ba
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
-const Honeybadger = require('honeybadger');
 const pdfLib = require('pdf-lib');
 const sass = require('sass');
 const util = require('util');
@@ -99,11 +98,17 @@ const {
   caseAdvancedSearchInteractor,
 } = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
+  CaseDeadline,
+} = require('../../shared/src/business/entities/CaseDeadline');
+const {
   casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
+const {
+  checkEmailAvailabilityInteractor,
+} = require('../../shared/src/business/useCases/users/checkEmailAvailabilityInteractor');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -125,6 +130,9 @@ const {
 const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
+const {
+  Correspondence,
+} = require('../../shared/src/business/entities/Correspondence');
 const {
   countPagesInDocument,
 } = require('../../shared/src/business/useCaseHelper/countPagesInDocument');
@@ -668,6 +676,9 @@ const {
   isAuthorized,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
+  isEmailAvailable,
+} = require('../../shared/src/persistence/cognito/isEmailAvailable');
+const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
 const {
@@ -797,6 +808,9 @@ const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
+  sendEmailVerificationLink,
+} = require('../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink');
+const {
   sendIrsSuperuserPetitionEmail,
 } = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
 const {
@@ -853,6 +867,12 @@ const {
 const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
+const {
+  TrialSession,
+} = require('../../shared/src/business/entities/trialSessions/TrialSession');
+const {
+  TrialSessionWorkingCopy,
+} = require('../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy');
 const {
   unblockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/unblockCaseFromTrialInteractor');
@@ -965,11 +985,20 @@ const {
   updateUserContactInformationInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
 const {
+  updateUserEmail,
+} = require('../../shared/src/persistence/dynamo/users/updateUserEmail');
+const {
+  updateUserPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/updateUserPendingEmailInteractor');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
+const {
+  UserCaseNote,
+} = require('../../shared/src/business/entities/notes/UserCaseNote');
 const {
   validatePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
@@ -983,6 +1012,9 @@ const {
   verifyPendingCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
 const {
+  verifyUserPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/verifyUserPendingEmailInteractor');
+const {
   virusScanPdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
 const {
@@ -993,8 +1025,11 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
+const { Message } = require('../../shared/src/business/entities/Message');
 const { User } = require('../../shared/src/business/entities/User');
+const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
+const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
@@ -1027,20 +1062,6 @@ const environment = {
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
-};
-
-const initHoneybadger = () => {
-  if (process.env.NODE_ENV === 'production') {
-    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
-    if (apiKey) {
-      const config = {
-        apiKey,
-        environment: 'api',
-      };
-      Honeybadger.configure(config);
-      return Honeybadger;
-    }
-  }
 };
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
@@ -1077,11 +1098,19 @@ let searchClientCache;
 
 const entitiesByName = {
   Case,
+  CaseDeadline,
+  Correspondence,
   DocketEntry,
   IrsPractitioner,
+  Message,
   Practitioner,
   PrivatePractitioner,
+  TrialSession,
+  TrialSessionWorkingCopy,
   User,
+  UserCase,
+  UserCaseNote,
+  WorkItem,
 };
 
 const isValidatedDecorator = persistenceGatewayMethods => {
@@ -1165,6 +1194,7 @@ const gatewayMethods = {
     updateTrialSessionWorkingCopy,
     updateUser,
     updateUserCaseNote,
+    updateUserEmail,
     updateWorkItem,
     updateWorkItemInCase,
   }),
@@ -1236,6 +1266,7 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
+  isEmailAvailable,
   isFileExists,
   updateCaseCorrespondence,
   verifyCaseForUser,
@@ -1285,10 +1316,14 @@ module.exports = (appContextUser, logger = createLogger()) => {
           adminDisableUser: () => ({
             promise: () => {},
           }),
-          adminGetUser: ({ Username }) => ({
-            promise: () => ({
-              Username,
-            }),
+          adminGetUser: ({ Username = '' }) => ({
+            promise: () => {
+              if (Username.includes('error')) {
+                throw new Error('User does not exist');
+              }
+
+              return { Username };
+            },
           }),
           adminUpdateUserAttributes: () => ({
             promise: () => {},
@@ -1302,6 +1337,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getConstants: () => ({
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
+      CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
@@ -1507,6 +1543,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         parseAndScrapePdfContents,
         processUserAssociatedCases,
         saveFileAndGenerateUrl,
+        sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         updateCaseAndAssociations,
@@ -1529,6 +1566,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         blockCaseFromTrialInteractor,
         caseAdvancedSearchInteractor,
         casePublicSearchInteractor,
+        checkEmailAvailabilityInteractor,
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeMessageInteractor,
@@ -1671,8 +1709,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateTrialSessionWorkingCopyInteractor,
         updateUserCaseNoteInteractor,
         updateUserContactInformationInteractor,
+        updateUserPendingEmailInteractor,
         validatePdfInteractor,
         verifyPendingCaseForUserInteractor,
+        verifyUserPendingEmailInteractor,
         virusScanPdfInteractor: args =>
           process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
       };
@@ -1699,38 +1739,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         setServiceIndicatorsForCase,
       };
     },
-    initHoneybadger,
     isAuthorized,
     logger: {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),
       info: logger.info.bind(logger),
-    },
-    notifyHoneybadger: async (message, context) => {
-      const honeybadger = initHoneybadger();
-
-      const notifyAsync = messageForNotification => {
-        return new Promise(resolve => {
-          honeybadger.notify(messageForNotification, null, null, resolve);
-        });
-      };
-
-      if (honeybadger) {
-        const { role, userId } = getCurrentUser() || {};
-
-        const errorContext = {
-          role,
-          userId,
-        };
-
-        if (context) {
-          Object.assign(errorContext, context);
-        }
-
-        honeybadger.setContext(errorContext);
-
-        await notifyAsync(message);
-      }
     },
     runVirusScan: async ({ filePath }) => {
       return execPromise(

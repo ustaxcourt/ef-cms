@@ -181,13 +181,6 @@ export const PractitionerDetail = connect(
                         <div className="margin-bottom-4">
                           {practitionerDetailHelper.additionalPhone}
                         </div>
-                        <span
-                          className="usa-label usa-label-display"
-                          htmlFor="practitioner-practitioner-type"
-                        >
-                          Alternate email address
-                        </span>
-                        {practitionerDetailHelper.alternateEmail}
                       </div>
                     </div>
                   </div>
