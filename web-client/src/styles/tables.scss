@@ -645,17 +645,20 @@ table.case-list tbody tr:nth-child(even) td {
 }
 
 .trial-list {
-  .edit-case-trial-menu {
+  .trial-session-edit-btn {
     position: relative;
-    background-color: color($theme-color-primary);
-    padding-top: 4px;
+  }
+
+  .edit-case-trial-menu {
     position: absolute;
+    padding-top: 4px;
+    background-color: color($theme-color-primary);
 
     button {
-      text-align: right;
       min-width: 200px;
-      text-decoration: none;
+      text-align: right;
       padding: 12px;
+      text-decoration: none;
       color: $color-white;
       &:hover {
         color: $color-white;
