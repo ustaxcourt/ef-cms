@@ -34,14 +34,13 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const dynamsoftUrlStaging = 'https://dynamsoft-lib.stg.ef-cms.ustaxcourt.gov';
   const dynamsoftUrlProd = 'https://dynamsoft-lib.dawson.ustaxcourt.gov';
   const websocketUrl = `wss://*.${allowedDomainString}`;
-  const honeybadgerApiUrl = 'https://api.honeybadger.io';
   const localUrl = 'https://127.0.0.1:*';
   const localWebsocketUrl = 'ws://127.0.0.1:*';
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
   const statuspageUrl = 'https://lynmjtcq5px1.statuspage.io';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${honeybadgerApiUrl}`,
+    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,

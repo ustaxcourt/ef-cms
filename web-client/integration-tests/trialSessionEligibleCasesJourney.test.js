@@ -36,7 +36,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   describe(`Create trial session with Small session type for '${trialLocation}' with max case count = 1`, () => {
     loginAs(test, 'docketclerk@example.com');
     docketClerkCreatesATrialSession(test, overrides);
-    docketClerkViewsTrialSessionList(test, overrides);
+    docketClerkViewsTrialSessionList(test);
     docketClerkViewsNewTrialSession(test);
   });
 

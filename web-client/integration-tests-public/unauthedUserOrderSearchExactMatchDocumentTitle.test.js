@@ -26,7 +26,7 @@ const nonExactDocumentTitleKeyword = `${documentTitleKeyword}y`;
 describe.skip(`Create and serve a case with an order with exact keyword (${documentTitleKeyword})`, () => {
   describe('Petitioner creates case', () => {
     beforeAll(() => {
-      jest.setTimeout(10000);
+      jest.setTimeout(30000);
     });
 
     loginAs(testClient, 'petitioner@example.com');

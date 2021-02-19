@@ -278,6 +278,77 @@ export const PractitionerForm = connect(
           </div>
         </div>
 
+        {createPractitionerUserHelper.isEditingPractitioner && (
+          <div className="margin-bottom-4">
+            <h2>Login & Service Email</h2>
+            <div className="blue-container">
+              <div className="grid-row margin-bottom-6">
+                <div className="desktop:grid-col-3">
+                  <p className="usa-label margin-bottom-05">
+                    Current email address
+                  </p>
+                  {createPractitionerUserHelper.formattedOriginalEmail}
+                </div>
+                {form.pendingEmail && (
+                  <div className="desktop:grid-col-3 padding-top-2 desktop:padding-top-0">
+                    <p className="usa-label margin-bottom-05">
+                      Pending email address
+                    </p>
+                    {form.pendingEmail}
+                  </div>
+                )}
+              </div>
+              <div>
+                <h4>Change Login & Service Email</h4>
+                <FormGroup
+                  errorText={
+                    validationErrors.updatedEmail || validationErrors.email
+                  }
+                >
+                  <label className="usa-label" htmlFor="updatedEmail">
+                    New email address
+                  </label>
+                  <input
+                    autoCapitalize="none"
+                    className="usa-input"
+                    id="updatedEmail"
+                    name="updatedEmail"
+                    type="text"
+                    value={form.updatedEmail || ''}
+                    onBlur={() => validateAddPractitionerSequence()}
+                    onChange={e =>
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </FormGroup>
+                <FormGroup errorText={validationErrors.confirmEmail}>
+                  <label className="usa-label" htmlFor="confirm-email">
+                    Re-enter new email address
+                  </label>
+                  <input
+                    autoCapitalize="none"
+                    className="usa-input"
+                    id="confirm-email"
+                    name="confirmEmail"
+                    type="text"
+                    value={form.confirmEmail || ''}
+                    onBlur={() => validateAddPractitionerSequence()}
+                    onChange={e =>
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </FormGroup>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid-row margin-bottom-4">
           <div className="grid-col-12">
             <h2>Admissions Information</h2>
@@ -344,8 +415,8 @@ export const PractitionerForm = connect(
                         }}
                       >
                         <option value="">- Select -</option>
-                        {ADMISSIONS_STATUS_OPTIONS.map((status, idx) => (
-                          <option key={idx} value={status}>
+                        {ADMISSIONS_STATUS_OPTIONS.map(status => (
+                          <option key={status} value={status}>
                             {status}
                           </option>
                         ))}

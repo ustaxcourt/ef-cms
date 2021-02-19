@@ -35,7 +35,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test, overrides);
+  docketClerkViewsTrialSessionList(test);
   docketClerkViewsNewTrialSession(test);
 
   const caseOverrides = {

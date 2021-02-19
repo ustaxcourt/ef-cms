@@ -135,4 +135,41 @@ describe('IrsPractitioner', () => {
 
     expect(user.serviceIndicator).toEqual('CARRIER_PIGEON');
   });
+
+  it('should filter out pendingEmailVerificationToken if filtered is true', () => {
+    const user = new IrsPractitioner(
+      {
+        admissionsDate: '2019-03-01T21:40:46.415Z',
+        admissionsStatus: 'Active',
+        barNumber: 'PT20001',
+        birthYear: 2019,
+        contact: {
+          address1: '234 Main St',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          country: 'Brazil',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        email: 'test.irs.practitioner@example.com',
+        employer: 'IRS',
+        firmName: 'GW Law Offices',
+        firstName: 'Test',
+        lastName: 'Practitioner',
+        name: 'Test Practitioner',
+        originalBarState: US_STATES.IL,
+        pendingEmailVerificationToken: 'ac4fe2e7-52cf-4084-84de-d8e8d151e927',
+        practitionerType: 'Attorney',
+        role: ROLES.privatePractitioner,
+        serviceIndicator: 'CARRIER_PIGEON',
+        userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
+      },
+      { filtered: true },
+    );
+
+    expect(user.pendingEmailVerificationToken).toBeUndefined();
+  });
 });

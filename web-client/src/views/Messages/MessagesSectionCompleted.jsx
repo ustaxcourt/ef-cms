@@ -21,10 +21,10 @@ export const MessagesSectionCompleted = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {formattedMessages.map((message, idx) => {
+          {formattedMessages.map(message => {
             return (
-              <tbody key={idx}>
-                <tr key={idx}>
+              <tbody key={message.messageId}>
+                <tr key={message.messageId}>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
@@ -39,7 +39,7 @@ export const MessagesSectionCompleted = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={message.messageDetailLink}
                       >
                         {message.subject}
                       </Button>

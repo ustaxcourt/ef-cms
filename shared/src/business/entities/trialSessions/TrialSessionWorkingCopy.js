@@ -8,8 +8,6 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { DOCKET_NUMBER_MATCHER } = require('../EntityConstants');
 
-TrialSessionWorkingCopy.validationName = 'TrialSessionWorkingCopy';
-
 /**
  * constructor
  *

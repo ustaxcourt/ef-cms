@@ -48,7 +48,6 @@ const formatRecord = record => {
 
   returnData.additionalPhone = record.additionalPhone;
   returnData.admissionsStatus = record.admissionsStatus;
-  returnData.alternateEmail = record.alternateEmail;
   returnData.barNumber = record.barNumber;
   returnData.email = record.email;
   returnData.firmName = record.firmName;
@@ -99,7 +98,6 @@ const formatRecord = record => {
     'suffix',
     'email',
     'firmName',
-    'alternateEmail',
     'additionalPhone',
     'originalBarState',
     'barNumber',

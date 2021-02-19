@@ -163,7 +163,6 @@
     "entityName": "PrivatePractitioner",
     "email": "privatePractitioner@example.com",
     "firmName": "GW Law Offices",
-    "alternateEmail": "privatePractitioner@example.com",
     "additionalPhone": "111-111-1111",
     "originalBarState": "Maryland",
     "barNumber": "PT1234",

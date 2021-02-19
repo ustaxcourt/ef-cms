@@ -104,7 +104,7 @@ describe('Migrate legacy cases that are ready for trial', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, options);
-  docketClerkViewsTrialSessionList(test, options);
+  docketClerkViewsTrialSessionList(test);
 
   it('docket clerk should see migrated case as eligible for trial on session', async () => {
     await test.runSequence('gotoTrialSessionDetailSequence', {

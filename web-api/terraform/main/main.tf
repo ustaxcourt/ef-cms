@@ -35,7 +35,6 @@ module "ef-cms_apis" {
   email_dmarc_policy         = var.email_dmarc_policy
   es_instance_count          = var.es_instance_count
   es_instance_type           = var.es_instance_type
-  honeybadger_key            = var.honeybadger_key
   irs_superuser_email        = var.irs_superuser_email
   deploying_color            = var.deploying_color
   blue_table_name            = var.blue_table_name

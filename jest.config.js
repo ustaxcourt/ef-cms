@@ -15,5 +15,6 @@ module.exports = {
     },
   },
   setupFilesAfterEnv: [`${__dirname}/enzyme.config.js`],
+  testSequencer: `${__dirname}/jestSequencer.js`,
   verbose: false,
 };

@@ -55,7 +55,7 @@ function createCaseWithCaption(captionString) {
   describe(`Create and serve a case with "${captionString}" in the case caption`, () => {
     describe('Petitioner creates the case with the desired caption string', () => {
       beforeAll(() => {
-        jest.setTimeout(10000);
+        jest.setTimeout(30000);
       });
 
       loginAs(testClient, 'petitioner@example.com');

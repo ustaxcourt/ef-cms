@@ -24,23 +24,23 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   # These can not use null_data_source.locals due to circular dep
   environment {
     variables = {
-      S3_ENDPOINT                    = "s3.us-east-1.amazonaws.com"
-      DOCUMENTS_BUCKET_NAME          = "${var.dns_domain}-documents-${var.environment}-us-east-1"
-      TEMP_DOCUMENTS_BUCKET_NAME     = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
-      DYNAMODB_ENDPOINT              = "dynamodb.us-east-1.amazonaws.com"
-      MASTER_DYNAMODB_ENDPOINT       = "dynamodb.us-east-1.amazonaws.com"
-      MASTER_REGION                  = "us-east-1"
-      STAGE                          = var.environment
-      NODE_ENV                       = "production"
-      BOUNCED_EMAIL_RECIPIENT        = var.bounced_email_recipient
-      EMAIL_SOURCE                   = "noreply@${var.dns_domain}"
-      EMAIL_DOCUMENT_SERVED_TEMPLATE = "document_served_${var.environment}"
-      EMAIL_SERVED_PETITION_TEMPLATE = "petition_served_${var.environment}"
-      EFCMS_DOMAIN                   = var.dns_domain
-      CLAMAV_DEF_DIR                 = "/opt/var/lib/clamav"
-      CIRCLE_HONEYBADGER_API_KEY     = var.honeybadger_key
-      IRS_SUPERUSER_EMAIL            = var.irs_superuser_email
-      DYNAMODB_TABLE_NAME            = var.destination_table
+      S3_ENDPOINT                        = "s3.us-east-1.amazonaws.com"
+      DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
+      TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
+      DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
+      MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
+      MASTER_REGION                      = "us-east-1"
+      STAGE                              = var.environment
+      NODE_ENV                           = "production"
+      BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
+      EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
+      EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
+      EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
+      EMAIL_SERVED_PETITION_TEMPLATE     = "petition_served_${var.environment}"
+      EFCMS_DOMAIN                       = var.dns_domain
+      CLAMAV_DEF_DIR                     = "/opt/var/lib/clamav"
+      IRS_SUPERUSER_EMAIL                = var.irs_superuser_email
+      DYNAMODB_TABLE_NAME                = var.destination_table
     }
   }
 }

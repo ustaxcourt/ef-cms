@@ -76,24 +76,6 @@ describe('Case entity', () => {
     ]);
   });
 
-  describe('init', () => {
-    it('should set contactPrimary.contactId to currentUser.userId when the logged in user is the same as the user on the case and they are a petitioner', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
-      ); //petitioner user
-
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.contactPrimary.contactId).toBe(myCase.userId);
-    });
-  });
-
   describe('archivedDocketEntries', () => {
     let myCase;
     beforeEach(() => {
@@ -114,7 +96,6 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           archivedDocketEntries: [...MOCK_DOCUMENTS],
-          userId: applicationContext.getCurrentUser().userId,
         },
         { applicationContext, filtered: true },
       );
@@ -256,25 +237,6 @@ describe('Case entity', () => {
           name: 'Slim Shady',
         });
       });
-    });
-  });
-
-  describe('conditionally sets userId on entity', () => {
-    it('sets userId to current user if authenticated userId matches the userId in the case', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, userId: applicationContext.getCurrentUser().userId },
-        { applicationContext },
-      );
-      expect(myCase.userId).toEqual(applicationContext.getCurrentUser().userId);
-    });
-    it('does NOT set userId to if current user does not match rawCase', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, userId: '9999' },
-        { applicationContext },
-      );
-      expect(myCase.userId).not.toEqual(
-        applicationContext.getCurrentUser().userId,
-      );
     });
   });
 
@@ -3896,7 +3858,6 @@ describe('Case entity', () => {
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
-      userId: '"userId" is required',
     });
   });
 

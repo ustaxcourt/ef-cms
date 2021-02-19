@@ -51,6 +51,5 @@ exports.sendBulkTemplatedEmail = async ({
     applicationContext.logger.info('Bulk Email Response', response);
   } catch (err) {
     applicationContext.logger.error(`Error sending email: ${err.message}`, err);
-    await applicationContext.notifyHoneybadger(err);
   }
 };
