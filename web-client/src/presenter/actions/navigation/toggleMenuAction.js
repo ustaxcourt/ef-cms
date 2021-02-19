@@ -15,11 +15,14 @@ export const toggleMenuAction = ({ get, props, store }) => {
     store.set(state.navigation.openMenu, props.openMenu);
   }
 
-  const editTrialSessionMenu = get(state.navigation.editTrialSessionMenu);
-  if (editTrialSessionMenu === props.editTrialSessionMenu) {
-    store.unset(state.navigation.editTrialSessionMenu);
+  const editCaseTrialInfoMenu = get(state.navigation.editCaseTrialInfoMenu);
+  if (editCaseTrialInfoMenu === props.editCaseTrialInfoMenu) {
+    store.unset(state.navigation.editCaseTrialInfoMenu);
   } else {
-    store.set(state.navigation.editTrialSessionMenu, props.editTrialSessionMenu);
+    store.set(
+      state.navigation.editCaseTrialInfoMenu,
+      props.editCaseTrialInfoMenu,
+    );
   }
 
   const caseDetailMenu = get(state.navigation.caseDetailMenu);

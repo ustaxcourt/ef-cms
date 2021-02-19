@@ -52,7 +52,7 @@ describe('menuHelper', () => {
     const { isTrialSessionInformationMenuOpen } = runCompute(menuHelper, {
       state: {
         navigation: {
-          openMenu: 'TrialSessionInformationMenu',
+          openMenu: 'EditCaseTrialInformationMenu',
         },
       },
     });

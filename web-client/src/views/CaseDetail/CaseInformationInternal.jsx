@@ -9,7 +9,6 @@ import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
-import classNames from 'classnames';
 
 const PetitionDetails = ({
   caseDetail,
@@ -134,50 +133,51 @@ const DisplayHearings = ({
 };
 
 const TrialSessionInformationMenu = ({
-  openRemoveFromTrialSessionModalSequence,
   isTrialSessionInformationMenuOpen,
+  openRemoveFromTrialSessionModalSequence,
+  resetEditCaseTrialInfoMenuSequence,
   toggleMenuSequence,
   trialSessionId,
 }) => {
-  // const menuRef = useRef(null);
-  // const keydown = event => {
-  //   const pressedESC = event.keyCode === 27;
-  //   if (pressedESC) {
-    // new sequencE?
-  //   }
-  // };
+  const menuRef = useRef(null);
+  const keydown = event => {
+    const pressedESC = event.keyCode === 27;
+    if (pressedESC) {
+      return resetEditCaseTrialInfoMenuSequence();
+    }
+  };
 
-  // const reset = e => {
-  //   const clickedWithinComponent = menuRef.current.contains(e.target);
-  //   const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
-  //   const clickedOnSubNav = e.target.closest('.usa-nav__primary-item');
-  //   if (!clickedWithinComponent) {
-    // new sequencE?
-  //   } else if (!clickedOnMenuButton && !clickedOnSubNav) {
-    // new sequencE?
-  //   }
-  //   return true;
-  // };
+  const reset = e => {
+    const clickedWithinComponent = menuRef.current.contains(e.target);
+    const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
+    const clickedOnSubNav = e.target.closest('.usa-nav__primary-item');
+    if (!clickedWithinComponent) {
+      return resetEditCaseTrialInfoMenuSequence();
+    } else if (!clickedOnMenuButton && !clickedOnSubNav) {
+      return resetEditCaseTrialInfoMenuSequence();
+    }
+    return true;
+  };
 
-  // useEffect(() => {
-  //   window.document.addEventListener('mousedown', reset, false);
-  //   window.document.addEventListener('keydown', keydown, false);
-  //   return () => {
-    // new sequencE?
-  //     window.document.removeEventListener('mousedown', reset, false);
-  //     window.document.removeEventListener('keydown', keydown, false);
-  //   };
-  // }, []);
+  useEffect(() => {
+    window.document.addEventListener('mousedown', reset, false);
+    window.document.addEventListener('keydown', keydown, false);
+    return () => {
+      window.document.removeEventListener('mousedown', reset, false);
+      window.document.removeEventListener('keydown', keydown, false);
+      return resetEditCaseTrialInfoMenuSequence();
+    };
+  }, []);
 
   return (
-    <div>
+    <div ref={menuRef}>
       <Button
         link
         className={'trial-session-edit-btn'}
         id="remove-from-trial-session-btn"
         onClick={() => {
           toggleMenuSequence({
-            editTrialSessionMenu: 'TrialSessionInformationMenu',
+            editCaseTrialInfoMenu: 'EditCaseTrialInformationMenu',
           });
         }}
       >
@@ -218,6 +218,7 @@ const TrialInformation = ({
   openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
+  resetEditCaseTrialInfoMenuSequence,
   toggleMenuSequence,
   trialSessionJudge,
 }) => {
@@ -309,13 +310,18 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{caseDetail.formattedAssociatedJudge}</td>
                   <td>
-                    {/* fixMe: rename TrialSessionInformationMenu to TrialSessionEditMenu? */}
+                    {/* todo: rename TrialSessionInformationMenu to TrialSessionEditMenu? */}
                     <TrialSessionInformationMenu
                       caseDetail={caseDetail.trialSessionId}
+                      isTrialSessionInformationMenuOpen={
+                        isTrialSessionInformationMenuOpen
+                      }
                       openRemoveFromTrialSessionModalSequence={
                         openRemoveFromTrialSessionModalSequence
                       }
-                      isTrialSessionInformationMenuOpen={isTrialSessionInformationMenuOpen}
+                      resetEditCaseTrialInfoMenuSequence={
+                        resetEditCaseTrialInfoMenuSequence
+                      }
                       toggleMenuSequence={toggleMenuSequence}
                     />
                   </td>
@@ -479,10 +485,15 @@ const TrialInformation = ({
                   <td>
                     <TrialSessionInformationMenu
                       caseDetail={caseDetail.trialSessionId}
+                      isTrialSessionInformationMenuOpen={
+                        isTrialSessionInformationMenuOpen
+                      }
                       openRemoveFromTrialSessionModalSequence={
                         openRemoveFromTrialSessionModalSequence
                       }
-                      isTrialSessionInformationMenuOpen={isTrialSessionInformationMenuOpen}
+                      resetEditCaseTrialInfoMenuSequence={
+                        resetEditCaseTrialInfoMenuSequence
+                      }
                       toggleMenuSequence={toggleMenuSequence}
                     />
                     {/* <Button
@@ -535,6 +546,8 @@ export const CaseInformationInternal = connect(
       sequences.openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
+    resetEditCaseTrialInfoMenuSequence:
+      sequences.resetEditCaseTrialInfoMenuSequence,
     showModal: state.modal.showModal,
     toggleMenuSequence: sequences.toggleMenuSequence,
     trialSessionJudge: state.trialSessionJudge,
@@ -557,6 +570,7 @@ export const CaseInformationInternal = connect(
     openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
+    resetEditCaseTrialInfoMenuSequence,
     showModal,
     toggleMenuSequence,
     trialSessionJudge,
@@ -648,6 +662,9 @@ export const CaseInformationInternal = connect(
                     }
                     openUnprioritizeCaseModalSequence={
                       openUnprioritizeCaseModalSequence
+                    }
+                    resetEditCaseTrialInfoMenuSequence={
+                      resetEditCaseTrialInfoMenuSequence
                     }
                     toggleMenuSequence={toggleMenuSequence}
                     trialSessionJudge={trialSessionJudge}
