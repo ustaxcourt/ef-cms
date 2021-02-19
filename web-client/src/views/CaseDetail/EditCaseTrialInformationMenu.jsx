@@ -6,8 +6,11 @@ import React, { useEffect, useRef } from 'react';
 
 export const EditCaseTrialInformationMenu = connect(
   {
+    caseDetail: state.formattedCaseDetail,
     isEditCaseTrialInformationMenuOpen:
       state.menuHelper.isEditCaseTrialInformationMenuOpen,
+    openAddEditCalendarNoteModalSequence:
+      sequences.openAddEditCalendarNoteModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
     resetEditCaseTrialInfoMenuSequence:
@@ -17,7 +20,9 @@ export const EditCaseTrialInformationMenu = connect(
     trialSessionId: state.caseDetail.trialSessionId,
   },
   function EditCaseTrialInformationMenu({
+    caseDetail,
     isEditCaseTrialInformationMenuOpen,
+    openAddEditCalendarNoteModalSequence,
     openRemoveFromTrialSessionModalSequence,
     resetEditCaseTrialInfoMenuSequence,
     toggleEditCaseTrialInfoMenuSequence,
@@ -76,7 +81,15 @@ export const EditCaseTrialInformationMenu = connect(
         </Button>
         {isEditCaseTrialInformationMenuOpen && (
           <div className="edit-case-trial-menu">
-            <Button link className="margin-right-0">
+            <Button
+              link
+              className="margin-right-0"
+              onClick={() => {
+                openAddEditCalendarNoteModalSequence({
+                  note: caseDetail.trialSessionNotes,
+                });
+              }}
+            >
               Add/Edit Calendar Note
             </Button>
             <Button
