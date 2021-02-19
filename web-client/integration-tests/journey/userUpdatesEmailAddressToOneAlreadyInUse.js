@@ -4,12 +4,12 @@ export const userUpdatesEmailAddressToOneAlreadyInUse = (test, user) =>
 
     await test.runSequence('updateFormValueSequence', {
       key: 'email',
-      value: 'emailexists@example.com',
+      value: 'petitioner1@example.com',
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
-      value: 'emailexists@example.com',
+      value: 'petitioner1@example.com',
     });
 
     await test.runSequence('submitChangeLoginAndServiceEmailSequence');
