@@ -73,4 +73,9 @@ describe('Case from Paper Document Scan journey', () => {
 
   loginAs(test, 'irsPractitioner@example.com');
   practitionerViewsCaseDetailWithPaperService(test);
+
+  // TODO: REMOVE ME 7806
+  it('print', () => {
+    console.log('docketNumber --- ', test.docketNumber);
+  });
 });
