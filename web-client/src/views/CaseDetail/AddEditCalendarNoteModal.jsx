@@ -2,7 +2,7 @@ import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const AddEditCalendarNoteModal = connect(
@@ -12,7 +12,6 @@ export const AddEditCalendarNoteModal = connect(
     validationErrors: state.validationErrors,
   },
   function AddEditCalendarNoteModal({
-    onConfirmSequence,
     validateTrialSessionNoteSequence,
     validationErrors,
   }) {
@@ -25,7 +24,7 @@ export const AddEditCalendarNoteModal = connect(
         preventCancelOnBlur={true}
         title="Add/Edit Calendar Note"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence={onConfirmSequence}
+        onConfirmSequence="updateCalendarNoteSequence"
         onDeleteSequence={() => {
           console.log('delete!');
         }}

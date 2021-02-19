@@ -256,6 +256,9 @@ const {
   runTrialSessionPlanningReportLambda,
 } = require('./trialSessions/runTrialSessionPlanningReportLambda');
 const {
+  saveCalendarNoteLambda,
+} = require('./trialSessions/saveCalendarNoteLambda');
+const {
   saveCaseDetailInternalEditLambda,
 } = require('./cases/saveCaseDetailInternalEditLambda');
 const {
@@ -890,6 +893,10 @@ app.get(
   app.post(
     '/trial-sessions/:trialSessionId/cases/:docketNumber',
     lambdaWrapper(addCaseToTrialSessionLambda),
+  );
+  app.put(
+    '/trial-sessions/:trialSessionId/set-calendar-note',
+    lambdaWrapper(saveCalendarNoteLambda),
   );
   app.get(
     '/trial-sessions/:trialSessionId',
