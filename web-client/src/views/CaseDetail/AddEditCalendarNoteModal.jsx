@@ -12,7 +12,6 @@ export const AddEditCalendarNoteModal = connect(
     validationErrors: state.validationErrors,
   },
   function AddEditCalendarNoteModal({
-    onConfirmSequence,
     validateTrialSessionNoteSequence,
     validationErrors,
   }) {
@@ -25,7 +24,7 @@ export const AddEditCalendarNoteModal = connect(
         preventCancelOnBlur={true}
         title="Add/Edit Calendar Note"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence={onConfirmSequence}
+        onConfirmSequence="updateCalendarNoteSequence"
         onDeleteSequence={() => {
           console.log('delete!');
         }}
