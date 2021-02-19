@@ -10,9 +10,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case to update case note
- * @param {string} providers.caseNote the note to update
- * @returns {object} the updated case note returned from persistence
+ * @param {string} providers.calendarNote the note to update
+ * @param {string} providers.docketNumber the docket number of the case to update calendar note
+ * @param {string} providers.trialSessionId the id of the trial session containing the case with the note
  */
 exports.saveCalendarNoteInteractor = async ({
   applicationContext,
