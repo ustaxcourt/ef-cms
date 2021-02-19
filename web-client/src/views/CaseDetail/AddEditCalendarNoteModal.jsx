@@ -7,13 +7,11 @@ import React from 'react';
 
 export const AddEditCalendarNoteModal = connect(
   {
-    modal: state.modal,
     validateTrialSessionNoteSequence:
       sequences.validateTrialSessionNoteSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditCalendarNoteModal({
-    modal,
     onConfirmSequence,
     validateTrialSessionNoteSequence,
     validationErrors,
