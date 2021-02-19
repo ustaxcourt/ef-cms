@@ -25,6 +25,7 @@ export const AddEditCalendarNoteModal = connect(
         title="Add/Edit Calendar Note"
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence="updateCalendarNoteSequence"
+        onDeleteSequence="deleteCalendarNoteSequence"
       >
         <FormGroup
           className="margin-bottom-2"
