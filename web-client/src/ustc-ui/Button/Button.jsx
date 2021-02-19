@@ -8,6 +8,7 @@ export const Button = props => {
     children,
     className,
     icon,
+    iconCls,
     iconColor, // e.g. blue
     iconRight = false,
     iconSize = '1x',
@@ -39,6 +40,7 @@ export const Button = props => {
   const iconClasses = classNames(
     iconRight ? 'margin-left-05' : 'margin-right-05',
     iconColor && `fa-icon-${iconColor}`,
+    iconCls || null,
   );
 
   return (
