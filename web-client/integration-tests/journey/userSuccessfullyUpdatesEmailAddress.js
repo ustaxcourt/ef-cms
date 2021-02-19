@@ -6,7 +6,7 @@ const mockUpdatedEmail = 'available@example.com';
 const headerHelper = withAppContextDecorator(headerHelperComputed);
 
 export const userSuccessfullyUpdatesEmailAddress = (test, user) =>
-  it(`${user} successfully udpates email address`, async () => {
+  it(`${user} successfully updates email address`, async () => {
     await test.runSequence('gotoChangeLoginAndServiceEmailSequence');
 
     await test.runSequence('updateFormValueSequence', {
