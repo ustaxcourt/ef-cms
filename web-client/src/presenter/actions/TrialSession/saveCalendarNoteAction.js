@@ -13,19 +13,16 @@ export const saveCalendarNoteAction = async ({ applicationContext, get }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const trialSessionId = get(state.caseDetail.trialSessionId);
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .saveCalendarNoteInteractor({
-      applicationContext,
-      calendarNote,
-      docketNumber,
-      trialSessionId,
-    });
+  await applicationContext.getUseCases().saveCalendarNoteInteractor({
+    applicationContext,
+    calendarNote,
+    docketNumber,
+    trialSessionId,
+  });
 
   return {
     alertSuccess: {
       message: 'Note saved.',
     },
-    caseDetail,
   };
 };
