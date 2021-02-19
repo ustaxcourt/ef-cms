@@ -14,15 +14,15 @@ describe('createNewPractitionerUser', () => {
   it('should not log an error when creating a new cognito account for a practitioner user', async () => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: () => ({
-        Username: 'admissionsclerkUsername',
+        Username: 'practitionerusername',
       }),
     });
     applicationContext.getDocumentClient().get.mockReturnValue({
       promise: async () => ({
         Item: {
-          name: 'Test Admissions Clerk',
-          role: ROLES.admissionsclerk,
-          section: 'admissionsclerk',
+          name: 'Test Private Practitioner',
+          role: ROLES.privatePractitioner,
+          section: 'practitioner',
         },
       }),
     });
@@ -31,9 +31,9 @@ describe('createNewPractitionerUser', () => {
       applicationContext,
       user: {
         email: 'practitioner@example.com',
-        name: 'Test Admissions Clerk',
-        role: ROLES.admissionsclerk,
-        section: 'admissionsclerk',
+        name: 'Test Private Practitioner',
+        role: ROLES.privatePractitioner,
+        section: 'practitioner',
       },
     });
 
@@ -53,11 +53,11 @@ describe('createNewPractitionerUser', () => {
           },
           {
             Name: 'custom:role',
-            Value: ROLES.admissionsclerk,
+            Value: ROLES.privatePractitioner,
           },
           {
             Name: 'name',
-            Value: 'Test Admissions Clerk',
+            Value: 'Test Private Practitioner',
           },
         ]),
         Username: 'practitioner@example.com',
