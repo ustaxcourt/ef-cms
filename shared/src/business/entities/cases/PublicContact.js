@@ -19,13 +19,14 @@ const {
  * @param {object} rawContact the raw case data
  * @constructor
  */
-function PublicContact() {}
+function PublicContact() {
+  this.entityName = 'PublicContact';
+}
+
 PublicContact.prototype.init = function init(rawContact) {
   this.name = rawContact.name;
   this.state = rawContact.state;
 };
-
-PublicContact.validationName = 'PublicContact';
 
 PublicContact.VALIDATION_RULES = joi.object().keys({
   name: JoiValidationConstants.STRING.max(500).optional(),

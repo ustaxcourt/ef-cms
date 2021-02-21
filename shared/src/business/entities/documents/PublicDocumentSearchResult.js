@@ -6,12 +6,12 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
+const {
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+} = require('../../entities/EntityConstants');
 const { pick } = require('lodash');
 
 PublicDocumentSearchResult.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
-
-PublicDocumentSearchResult.validationName = 'PublicDocumentSearchResult';
 
 /**
  * Public Document Search Result entity
@@ -19,7 +19,9 @@ PublicDocumentSearchResult.validationName = 'PublicDocumentSearchResult';
  * @param {object} rawProps the raw document search result data
  * @constructor
  */
-function PublicDocumentSearchResult() {}
+function PublicDocumentSearchResult() {
+  this.entityName = 'PublicDocumentSearchResult';
+}
 
 PublicDocumentSearchResult.prototype.init = function init(rawProps = {}) {
   const propNames = [
@@ -61,7 +63,9 @@ PublicDocumentSearchResult.schema = joi.object().keys({
   eventCode: joi.when('isSealed', {
     is: true,
     otherwise: JoiValidationConstants.STRING,
-    then: JoiValidationConstants.STRING.valid(...OPINION_EVENT_CODES),
+    then: JoiValidationConstants.STRING.valid(
+      ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+    ),
   }),
   isSealed: joi.boolean(),
   isStricken: joi.boolean().invalid(true),

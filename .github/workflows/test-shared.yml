@@ -1,13 +1,9 @@
 name: Node.js CI
 
-on:
-  push:
-    branches: [develop, experimental1, master]
-  pull_request:
-    branches: [develop, experimental1, master]
+on: [pull_request]
 
 jobs:
-  linting:
+  TestShared:
     runs-on: ubuntu-latest
 
     strategy:
@@ -21,8 +17,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: NPM Install
-        run: npm ci --no-optional  && npm rebuild
-      - name: Lint
-        run: npm run lint
-      - name: Shellcheck
-        run: ./run-shellcheck.sh
+        run: npm ci --no-optional && npm rebuild
+      - name: Unit Test Shared
+        run: npm run test:shared

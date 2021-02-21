@@ -7,7 +7,11 @@ const documentViewerHelper = withAppContextDecorator(
   documentViewerHelperComputed,
   applicationContext,
 );
+
 describe('documentViewerHelper', () => {
+  const DOCKET_NUMBER = '101-20';
+  const DOCKET_ENTRY_ID = 'b8947b11-19b3-4c96-b7a1-fa6a5654e2d5';
+
   beforeAll(() => {
     applicationContext.getCurrentUser = jest.fn().mockReturnValue({
       role: 'docketclerk',
@@ -985,5 +989,86 @@ describe('documentViewerHelper', () => {
     });
 
     expect(result.showStricken).toEqual(true);
+  });
+
+  it('should return documentViewerLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        permissions: {},
+        viewerDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.documentViewerLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/document-view?docketEntryId=${DOCKET_ENTRY_ID}`,
+    );
+  });
+
+  it('should return reviewAndServePetitionLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        permissions: {},
+        viewerDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.reviewAndServePetitionLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/petition-qc/document-view/${DOCKET_ENTRY_ID}`,
+    );
+  });
+
+  it('should return signStipulatedDecisionLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        permissions: {},
+        viewerDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.signStipulatedDecisionLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/edit-order/${DOCKET_ENTRY_ID}/sign`,
+    );
   });
 });

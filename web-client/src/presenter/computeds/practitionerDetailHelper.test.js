@@ -24,19 +24,6 @@ describe('practitionerDetailHelper', () => {
     expect(additionalPhone).toEqual('Not provided');
   });
 
-  it('should fall back to Not provided when alternateEmail is not set', () => {
-    const { alternateEmail } = runCompute(practitionerDetailHelper, {
-      state: {
-        permissions: {},
-        practitionerDetail: {
-          alternateEmail: null,
-        },
-        user: { role: 'petitioner' },
-      },
-    });
-    expect(alternateEmail).toEqual('Not provided');
-  });
-
   it('should fall back to Not provided when email is not set', () => {
     const { emailFormatted } = runCompute(practitionerDetailHelper, {
       state: {

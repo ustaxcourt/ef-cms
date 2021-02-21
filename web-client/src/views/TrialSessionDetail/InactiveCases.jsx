@@ -26,8 +26,8 @@ export const InactiveCases = connect(
               <th>Disposition Date</th>
             </tr>
           </thead>
-          {inactiveCases.map((item, idx) => (
-            <tbody key={idx}>
+          {inactiveCases.map(item => (
+            <tbody key={item.docketNumber}>
               <tr className="eligible-cases-row">
                 <td>
                   <CaseLink formattedCase={item} />

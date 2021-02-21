@@ -9,8 +9,6 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
 - [SonarCloud](https://sonarcloud.io/) — static code analysis.
   - Create a [organization](https://sonarcloud.io/create-organization). Make note of the name chosen for CircleCI configuration later.
   - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Make note of each project’s key and token for CircleCI configuration later.
-- [Honeybadger](https://www.honeybadger.io/plans/) — exception monitoring.
-  - Make note of the key for CircleCI configuration later.
 
 ## 2. Configure your local developer machine.
 
@@ -76,9 +74,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `DYNAMSOFT_PRODUCT_KEYS_TEST` | Dynamsoft Web TWAIN product key used for TEST |
   | `DYNAMSOFT_PRODUCT_KEYS_PROD` | Dynamsoft Web TWAIN product key used for PROD |
   | `DYNAMSOFT_S3_ZIP_PATH` | Dynamsoft Web TWAIN full S3 path ZIP configured above, e.g. `s3://bucketname/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz` |
-  | `CIRCLE_HONEYBADGER_API_KEY_STG` | Honeybadger key used for STG |
-  | `CIRCLE_HONEYBADGER_API_KEY_TEST` | Honeybadger key used for TEST |
-  | `CIRCLE_HONEYBADGER_API_KEY_PROD` | Honeybadger key used for PROD |
   | `EFCMS_DOMAIN` | Domain name chosen above |
   | `COGNITO_SUFFIX` | Suffix of your choice for the Cognito URL |
   | `USTC_ADMIN_PASS` | Password of your choice used by the Cognito admin user |
@@ -88,6 +83,8 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `IRS_SUPERUSER_EMAIL_PROD` | Email address used to serve all new petitions to the IRS for PROD |
   | `DEFAULT_ACCOUNT_PASS` | Default password for all test accounts and some password resets |
   | `STATUSPAGE_DNS_RECORD` | DNS record for Statuspage of CNAME `status.${EFCMS_DOMAIN}` (optional) |
+  | `SESSION_MODAL_TIMEOUT` | Time in ms to wait before logging the user out after the idle timeout modal displays (optional, default: `300000` / 5 mins) |
+  | `SESSION_TIMEOUT` | Time in ms to wait displaying the idle timeout modal (optional, default: `3300000` / 55 mins) |
   | `CLIENT_STAGE` | The `process.env.STAGE` for the React application |
   | `BOUNCED_EMAIL_RECIPIENT` | An email to which email bounced should be sent (defaults to noreply@`EFCMS_DOMAIN`) |
 

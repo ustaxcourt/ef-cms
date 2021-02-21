@@ -15,23 +15,17 @@ describe('Docket Clerk Creates A Trial', () => {
   docketClerkCreatesATrialSession(test, {
     trialLocation: 'Peoria, Illinois',
   });
-  docketClerkViewsTrialSessionList(test, {
-    trialLocation: 'Peoria, Illinois',
-  });
+  docketClerkViewsTrialSessionList(test);
   docketClerkEditsTrialSession(test);
 
   const trialLocation = `San Diego, California, ${Date.now()}`;
   docketClerkCreatesARemoteTrialSession(test, {
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test, {
-    trialLocation,
-  });
+  docketClerkViewsTrialSessionList(test);
 
   docketClerkCreatesARemoteTrialSession(test, {
     sessionType: SESSION_TYPES.special,
   });
-  docketClerkViewsTrialSessionList(test, {
-    sessionType: SESSION_TYPES.special,
-  });
+  docketClerkViewsTrialSessionList(test);
 });

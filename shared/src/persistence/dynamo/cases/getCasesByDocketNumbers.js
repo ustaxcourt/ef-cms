@@ -1,4 +1,5 @@
-const { getCaseByDocketNumber } = require('./getCaseByDocketNumber');
+const client = require('../../dynamodbClientService');
+const { uniq } = require('lodash');
 
 /**
  * getCasesByDocketNumbers
@@ -12,9 +13,11 @@ exports.getCasesByDocketNumbers = async ({
   applicationContext,
   docketNumbers,
 }) => {
-  return await Promise.all(
-    docketNumbers.map(docketNumber =>
-      getCaseByDocketNumber({ applicationContext, docketNumber }),
-    ),
-  );
+  return await client.batchGet({
+    applicationContext,
+    keys: uniq(docketNumbers).map(docketNumber => ({
+      pk: `case|${docketNumber}`,
+      sk: `case|${docketNumber}`,
+    })),
+  });
 };

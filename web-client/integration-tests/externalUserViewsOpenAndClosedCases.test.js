@@ -14,6 +14,10 @@ describe('external user views open and closed cases', () => {
     loginAs(test, 'docketclerk@example.com');
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('login as a petitioner and create the case to close', async () => {
     const caseDetail = await uploadPetition(test);

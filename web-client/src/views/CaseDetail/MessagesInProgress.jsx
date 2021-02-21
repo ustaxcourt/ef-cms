@@ -25,8 +25,8 @@ export const MessagesInProgress = connect(
             </thead>
 
             <tbody>
-              {formattedInProgressMessages.map((message, idx) => (
-                <tr key={idx}>
+              {formattedInProgressMessages.map(message => (
+                <tr key={message.messageId}>
                   <td className="responsive-title padding-extra">
                     {message.to}
                   </td>
@@ -41,7 +41,7 @@ export const MessagesInProgress = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={message.messageDetailLink}
                       >
                         {message.subject}
                       </Button>

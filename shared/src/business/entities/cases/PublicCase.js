@@ -33,6 +33,7 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
  */
 function PublicCase() {}
 PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
+  this.entityName = 'PublicCase';
   this.caseCaption = rawCase.caseCaption;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -41,6 +42,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
   this.hasIrsPractitioner =
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
+  this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
   this._score = rawCase['_score'];
@@ -91,8 +93,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
 };
 
-PublicCase.validationName = 'PublicCase';
-
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
   contactPrimary: PublicContact.VALIDATION_RULES.required(),
@@ -113,6 +113,7 @@ const publicCaseSchema = {
     'Auto-generated from docket number and the suffix.',
   ),
   hasIrsPractitioner: joi.boolean().required(),
+  isPaper: joi.boolean().optional(),
   isSealed: joi.boolean(),
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()

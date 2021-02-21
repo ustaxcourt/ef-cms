@@ -5,6 +5,8 @@ module.exports = [
   'http://localhost:1234/mock-login?token=privatePractitioner&path=/file-a-petition/step-1',
   'http://localhost:1234/mock-login?token=privatePractitioner&path=/case-detail/102-19/request-access',
   'http://localhost:1234/mock-login?token=privatePractitioner&path=/search/no-matches',
+  'http://localhost:1234/mock-login?token=privatePractitioner&path=/my-account',
+  'http://localhost:1234/mock-login?token=privatePractitioner&path=/change-login-and-service-email',
   {
     actions: [
       'wait for #tab-closed to be visible',

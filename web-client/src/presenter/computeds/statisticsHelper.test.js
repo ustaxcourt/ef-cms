@@ -59,6 +59,50 @@ describe('statisticsHelper', () => {
     });
   });
 
+  it('returns an editStatisticLink with each formatted statistic', () => {
+    const DOCKET_NUMBER = '101-20';
+    const STATISTIC_ID_1 = '7b6603d6-bef4-43e1-b013-b7f7fd340fa5';
+    const STATISTIC_ID_2 = '8594c82e-fb41-45c5-bb3b-637afb985342';
+
+    const result = runCompute(statisticsHelper, {
+      state: {
+        caseDetail: {
+          docketNumber: DOCKET_NUMBER,
+          statistics: [
+            {
+              irsDeficiencyAmount: 123,
+              irsTotalPenalties: 30000,
+              statisticId: STATISTIC_ID_1,
+              year: '2012',
+              yearOrPeriod: 'Year',
+            },
+            {
+              determinationDeficiencyAmount: 1234,
+              determinationTotalPenalties: 33.45,
+              irsDeficiencyAmount: 0,
+              irsTotalPenalties: 21,
+              lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
+              statisticId: STATISTIC_ID_2,
+              yearOrPeriod: 'Period',
+            },
+          ],
+        },
+        permissions: {},
+      },
+    });
+
+    expect(result).toMatchObject({
+      formattedStatistics: [
+        {
+          editStatisticLink: `/case-detail/${DOCKET_NUMBER}/edit-deficiency-statistic/${STATISTIC_ID_1}`,
+        },
+        {
+          editStatisticLink: `/case-detail/${DOCKET_NUMBER}/edit-deficiency-statistic/${STATISTIC_ID_2}`,
+        },
+      ],
+    });
+  });
+
   it('sorts formatted statistics by year / lastDateOfPeriod', () => {
     const result = runCompute(statisticsHelper, {
       state: {

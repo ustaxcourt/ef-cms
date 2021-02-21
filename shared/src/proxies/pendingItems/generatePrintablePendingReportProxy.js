@@ -1,3 +1,4 @@
+const qs = require('qs');
 const { get } = require('../requests');
 
 /**
@@ -14,15 +15,10 @@ exports.generatePrintablePendingReportInteractor = ({
   docketNumber,
   judge,
 }) => {
-  let queryString = '';
+  const queryString = qs.stringify({ docketNumber, judge });
 
-  if (docketNumber) {
-    queryString = '?docketNumber=' + encodeURIComponent(docketNumber);
-  } else if (judge) {
-    queryString = '?judge=' + encodeURIComponent(judge);
-  }
   return get({
     applicationContext,
-    endpoint: `/reports/pending-report${queryString}`,
+    endpoint: `/reports/pending-report?${queryString}`,
   });
 };

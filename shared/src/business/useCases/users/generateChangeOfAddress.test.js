@@ -220,7 +220,7 @@ describe('generateChangeOfAddress', () => {
     });
   });
 
-  it('should notify honeybadger and continue processing the next case if the case currently being processed is invalid', async () => {
+  it('should call applicationContext.logger.error and continue processing the next case if the case currently being processed is invalid', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByUserId.mockReturnValue([
@@ -244,7 +244,7 @@ describe('generateChangeOfAddress', () => {
       user: mockPrivatePractitioner,
     });
 
-    expect(applicationContext.notifyHoneybadger).toBeCalled();
+    expect(applicationContext.logger.error).toBeCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toBeCalledTimes(1);

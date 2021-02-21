@@ -378,6 +378,41 @@ describe('formattedCaseDetail', () => {
     ]);
   });
 
+  it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
+    const DOCKET_NUMBER = '101-20';
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      contactSecondary: {
+        name: 'Bill',
+      },
+      correspondence: [],
+      docketEntries: simpleDocketEntries,
+      docketNumber: DOCKET_NUMBER,
+      hasVerifiedIrsNotice: false,
+      otherFilers: [],
+      otherPetitioners: [],
+      petitioners: [{ name: 'bob' }],
+      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
+    };
+
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        validationErrors: {},
+      },
+    });
+
+    expect(result.formattedDocketEntries).toMatchObject([
+      {
+        editDocketEntryMetaLink: `/case-detail/${DOCKET_NUMBER}/docket-entry/${simpleDocketEntries[0].index}/edit-meta`,
+      },
+    ]);
+  });
+
   describe('createdAtFormatted', () => {
     const baseCaseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
@@ -2026,6 +2061,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2377,6 +2413,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2478,6 +2515,7 @@ describe('formattedCaseDetail', () => {
         docketEntries: [mockDocketEntry],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 

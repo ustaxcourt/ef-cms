@@ -27,7 +27,7 @@ testClient.draftOrders = [];
 
 describe('Petitioner creates case to search for', () => {
   beforeAll(() => {
-    jest.setTimeout(10000);
+    jest.setTimeout(30000);
   });
 
   loginAs(testClient, 'petitioner@example.com');

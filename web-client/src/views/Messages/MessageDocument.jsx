@@ -44,11 +44,7 @@ export const MessageDocument = connect(
     const messageDocumentActions = () => (
       <div className="message-document-actions">
         {messageDocumentHelper.showEditButtonNotSigned && (
-          <Button
-            link
-            href={`${messageDocumentHelper.editUrl}/${parentMessageId}`}
-            icon="edit"
-          >
+          <Button link href={messageDocumentHelper.editUrl} icon="edit">
             Edit
           </Button>
         )}
@@ -62,7 +58,7 @@ export const MessageDocument = connect(
                 docketEntryIdToEdit: viewerDocumentToDisplay.documentId,
                 docketNumber: caseDetail.docketNumber,
                 parentMessageId,
-                redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                redirectUrl: messageDocumentHelper.messageDetailLink,
               })
             }
           >
@@ -73,7 +69,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showEditCorrespondenceButton && (
           <Button
             link
-            href={`/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplay.documentId}/${parentMessageId}`}
+            href={messageDocumentHelper.editCorrespondenceLink}
             icon="edit"
           >
             Edit
@@ -83,7 +79,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showApplySignatureButton && (
           <Button
             link
-            href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/sign/${parentMessageId}`}
+            href={messageDocumentHelper.signOrderLink}
             icon="pencil-alt"
           >
             Apply Signature
@@ -107,7 +103,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showAddDocketEntryButton && (
           <Button
             link
-            href={`/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.documentId}/add-court-issued-docket-entry/${parentMessageId}`}
+            href={messageDocumentHelper.addDocketEntryLink}
             icon="plus-circle"
           >
             Add Docket Entry
@@ -122,7 +118,7 @@ export const MessageDocument = connect(
             onClick={() => {
               openConfirmServeCourtIssuedDocumentSequence({
                 docketEntryId: viewerDocumentToDisplay.documentId,
-                redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                redirectUrl: messageDocumentHelper.messageDetailLink,
               });
             }}
           >
@@ -138,7 +134,7 @@ export const MessageDocument = connect(
             onClick={() => {
               openConfirmServePaperFiledDocumentSequence({
                 docketEntryId: viewerDocumentToDisplay.documentId,
-                redirectUrl: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+                redirectUrl: messageDocumentHelper.messageDetailLink,
               });
             }}
           >
@@ -149,7 +145,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showServePetitionButton && (
           <Button
             link
-            href={`/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`}
+            href={messageDocumentHelper.servePetitionLink}
             icon="paper-plane"
             iconColor="white"
           >
@@ -160,7 +156,7 @@ export const MessageDocument = connect(
         {messageDocumentHelper.showSignStipulatedDecisionButton && (
           <Button
             link
-            href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.documentId}/sign/${parentMessageId}`}
+            href={messageDocumentHelper.signOrderLink}
             icon="pencil-alt"
           >
             Sign Stipulated Decision
