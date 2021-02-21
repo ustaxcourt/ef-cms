@@ -18,7 +18,6 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 
-DocketEntry.validationName = 'DocketEntry';
 /**
  * constructor
  *

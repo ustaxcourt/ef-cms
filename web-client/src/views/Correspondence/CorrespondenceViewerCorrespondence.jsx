@@ -8,7 +8,6 @@ export const CorrespondenceViewerCorrespondence = connect(
   {
     caseDetail: state.caseDetail,
     correspondenceViewerHelper: state.correspondenceViewerHelper,
-    formattedCaseDetail: state.formattedCaseDetail,
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
@@ -19,7 +18,6 @@ export const CorrespondenceViewerCorrespondence = connect(
   function CorrespondenceViewerCorrespondence({
     caseDetail,
     correspondenceViewerHelper,
-    formattedCaseDetail,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
     openConfirmDeleteCorrespondenceModalSequence,
@@ -53,7 +51,7 @@ export const CorrespondenceViewerCorrespondence = connect(
                 <Button
                   link
                   className="edit-correspondence-button"
-                  href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-correspondence/${viewerCorrespondenceToDisplay.correspondenceId}`}
+                  href={correspondenceViewerHelper.editCorrespondenceLink}
                   icon="edit"
                   iconColor="white"
                 >

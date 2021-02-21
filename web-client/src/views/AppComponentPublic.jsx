@@ -1,4 +1,6 @@
 import { Contact } from './Contact';
+import { EmailVerificationInstructions } from './Public/EmailVerificationInstructions';
+import { EmailVerificationSuccess } from './Public/EmailVerificationSuccess';
 import { ErrorView } from './Error';
 import { Footer } from './Footer';
 import { HeaderPublic } from './Header/HeaderPublic';
@@ -19,6 +21,8 @@ import React, { useEffect } from 'react';
 
 const pages = {
   Contact,
+  EmailVerificationInstructions,
+  EmailVerificationSuccess,
   ErrorView,
   HealthCheck,
   Interstitial,

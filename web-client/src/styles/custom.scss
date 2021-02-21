@@ -1764,3 +1764,11 @@ button.change-scanner-button {
   margin-top: auto;
   margin-bottom: auto;
 }
+
+.verify-email-notification {
+  background: color($theme-color-warning-lighter);
+
+  svg {
+    color: color($theme-color-warning);
+  }
+}

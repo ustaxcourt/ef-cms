@@ -40,10 +40,10 @@ describe('trial hearings journey', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides1);
-  docketClerkViewsTrialSessionList(test, overrides1);
+  docketClerkViewsTrialSessionList(test);
   docketClerkViewsNewTrialSession(test);
   docketClerkCreatesATrialSession(test, overrides2);
-  docketClerkViewsTrialSessionList(test, overrides2);
+  docketClerkViewsTrialSessionList(test);
   docketClerkViewsNewTrialSession(test);
 
   loginAs(test, 'petitioner@example.com');

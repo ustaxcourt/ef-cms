@@ -8,6 +8,6 @@ export const docketClerkViewsCaseDetail = (test, docketNumber = null) => {
 
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
-    expect(caseDetail.userId).toBeDefined();
+    expect(caseDetail.contactPrimary.contactId).toBeDefined();
   });
 };

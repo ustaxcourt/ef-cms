@@ -7,34 +7,57 @@ const {
 const { Practitioner } = require('./Practitioner');
 
 describe('Practitioner', () => {
+  const mockUpdatedEmail = 'hello@example.com';
+  const invalidEmail = 'hello@';
+  let validPractitioner;
+
+  const mockPractitioner = {
+    admissionsDate: '2019-03-01T21:40:46.415Z',
+    admissionsStatus: 'Active',
+    barNumber: 'PT20001',
+    birthYear: 2019,
+    contact: {
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
+      city: 'Chicago',
+      country: 'Brazil',
+      countryType: COUNTRY_TYPES.INTERNATIONAL,
+      phone: '+1 (555) 555-5555',
+      postalCode: '61234',
+      state: 'IL',
+    },
+    email: 'test.practitioner@example.com',
+    employer: 'Private',
+    firmName: 'GW Law Offices',
+    firstName: 'Test',
+    lastName: 'Practitioner',
+    name: 'Test Practitioner',
+    originalBarState: US_STATES.IL,
+    practitionerType: 'Attorney',
+    role: ROLES.privatePractitioner,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
+  };
+
+  beforeEach(() => {
+    validPractitioner = new Practitioner(mockPractitioner);
+  });
+
   it('Creates a valid Practitioner with all required fields', () => {
-    const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
-      role: ROLES.Practitioner,
-      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
-    });
+    const user = new Practitioner(mockPractitioner);
     expect(user.isValid()).toBeTruthy();
+  });
+
+  it('should filter out the pendingEmailVerificationToken when filtered is true', () => {
+    const user = new Practitioner(
+      {
+        ...mockPractitioner,
+        pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
+      },
+      { filtered: true },
+    );
+    expect(user.pendingEmailVerificationToken).toBeUndefined();
   });
 
   it('Creates an invalid Practitioner with missing required fields', () => {
@@ -46,86 +69,24 @@ describe('Practitioner', () => {
 
   it('Creates an invalid Practitioner with invalid employer option', () => {
     const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
+      ...mockPractitioner,
       employer: 'Something else',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
-      practitionerType: 'Attorney',
-      role: ROLES.Practitioner,
-      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeFalsy();
   });
 
   it('Creates an invalid Practitioner with invalid practitionerType option', () => {
     const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      employer: 'Something else',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
+      ...mockPractitioner,
       practitionerType: 'Purple',
-      role: ROLES.Practitioner,
-      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
     expect(user.isValid()).toBeFalsy();
   });
 
   it('Creates an invalid Practitioner with invalid admissionsStatus option', () => {
     const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      ...mockPractitioner,
       admissionsStatus: 'Invalid',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      employer: 'Something else',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
-      practitionerType: 'Purple',
-      role: ROLES.Practitioner,
-      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
     expect(user.isValid()).toBeFalsy();
   });
@@ -142,30 +103,9 @@ describe('Practitioner', () => {
 
   it('should pass validation when role is "inactivePractitioner" and admissionsStatus is not Active', () => {
     const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      ...mockPractitioner,
       admissionsStatus: 'Deceased',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
       role: ROLES.inactivePractitioner,
-      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
 
     expect(user.isValid()).toBeTruthy();
@@ -173,30 +113,9 @@ describe('Practitioner', () => {
 
   it('should pass validation when role is "privatePractitioner" and admissionsStatus is Active', () => {
     const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      ...mockPractitioner,
       admissionsStatus: 'Active',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
-      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
 
     expect(user.isValid()).toBeTruthy();
@@ -236,61 +155,20 @@ describe('Practitioner', () => {
 
   it('Combines firstName, middleName, lastName, and suffix properties to set the name property', () => {
     const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      employer: 'Private',
-      firmName: 'GW Law Offices',
+      ...mockPractitioner,
       firstName: 'Test',
       lastName: 'Practitioner',
       middleName: 'Middle',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
-      role: ROLES.Practitioner,
       suffix: 'Sfx',
-      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
     expect(user.name).toEqual('Test Middle Practitioner Sfx');
   });
 
   it('should default the serviceIndicator to paper if the user does not have an email address and no serviceIndicator value is already set', () => {
     const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
-      role: ROLES.privatePractitioner,
-      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
+      ...mockPractitioner,
+      email: undefined,
+      serviceIndicator: undefined,
     });
 
     expect(user.serviceIndicator).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
@@ -298,31 +176,9 @@ describe('Practitioner', () => {
 
   it('should default the serviceIndicator to electronic if the user does have an email address and no serviceIndicator value is already set', () => {
     const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
+      ...mockPractitioner,
       email: 'test.practitioner@example.com',
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
-      role: ROLES.privatePractitioner,
-      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
+      serviceIndicator: undefined,
     });
 
     expect(user.serviceIndicator).toEqual(
@@ -332,87 +188,125 @@ describe('Practitioner', () => {
 
   it('should default the serviceIndicator to the already existing serviceIndicator value if present', () => {
     const user = new Practitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      barNumber: 'PT20001',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        country: 'Brazil',
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      email: 'test.practitioner@example.com',
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Practitioner',
-      name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
-      practitionerType: 'Attorney',
-      role: ROLES.privatePractitioner,
+      ...mockPractitioner,
       serviceIndicator: 'CARRIER_PIGEON',
-      userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
     });
 
     expect(user.serviceIndicator).toEqual('CARRIER_PIGEON');
   });
 
-  describe('getFullName', () => {
-    let userData;
+  describe('updatedEmail/confirmEmail', () => {
+    it('passes validation when updatedEmail and confirmEmail are undefined', () => {
+      validPractitioner.updatedEmail = undefined;
+      validPractitioner.confirmEmail = undefined;
 
-    beforeEach(() => {
-      userData = {
-        admissionsDate: '2019-03-01T21:40:46.415Z',
-        admissionsStatus: 'Active',
-        barNumber: 'PT20001',
-        birthYear: 2019,
-        contact: {
-          address1: '234 Main St',
-          address2: 'Apartment 4',
-          address3: 'Under the stairs',
-          city: 'Chicago',
-          country: 'Brazil',
-          countryType: COUNTRY_TYPES.INTERNATIONAL,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        employer: 'Private',
-        firmName: 'GW Law Offices',
-        firstName: 'Test',
-        lastName: 'Practitioner',
-        originalBarState: US_STATES.IL,
-        practitionerType: 'Attorney',
-        role: ROLES.Practitioner,
-        userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
-      };
+      expect(validPractitioner.isValid()).toBeTruthy();
     });
 
+    it('passes validation when updatedEmail and confirmEmail match and are valid email addresses', () => {
+      validPractitioner.confirmEmail = mockUpdatedEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
+
+      expect(validPractitioner.isValid()).toBeTruthy();
+    });
+
+    it('fails validation when updatedEmail is not a valid email address and confirmEmail is a valid email address', () => {
+      validPractitioner.confirmEmail = mockUpdatedEmail;
+      validPractitioner.updatedEmail = invalidEmail;
+
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
+        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+      });
+    });
+
+    it('fails validation when updatedEmail is defined and valid and confirmEmail is undefined', () => {
+      validPractitioner.confirmEmail = undefined;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
+
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+      });
+    });
+
+    it('fails validation when updatedEmail is defined and valid and confirmEmail is not a valid email address', () => {
+      validPractitioner.confirmEmail = invalidEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
+
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+      });
+    });
+
+    it('fails validation when updatedEmail and confirmEmail do not match and both are valid', () => {
+      validPractitioner.confirmEmail = 'abc' + mockUpdatedEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
+
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
+      });
+    });
+
+    it('should fail validation when updatedEmail is undefined and confirmEmail is a valid email address', () => {
+      validPractitioner.confirmEmail = mockUpdatedEmail;
+      validPractitioner.updatedEmail = undefined;
+
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
+        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+      });
+    });
+
+    it('should fail validation when updatedEmail is invalid and confirmEmail is undefined', () => {
+      validPractitioner.confirmEmail = undefined;
+      validPractitioner.updatedEmail = invalidEmail;
+
+      expect(validPractitioner.isValid()).toBeFalsy();
+      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
+        confirmEmail:
+          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+      });
+    });
+  });
+
+  describe('getFullName', () => {
     it('should return the first and last names if only they are provided in the practitioner data', () => {
-      expect(Practitioner.getFullName(userData)).toEqual('Test Practitioner');
+      expect(
+        Practitioner.getFullName({
+          firstName: 'Test',
+          lastName: 'Practitioner',
+        }),
+      ).toEqual('Test Practitioner');
     });
 
     it('should return the first, middle, and last names if only they are provided in the practitioner data', () => {
-      userData.middleName = 'Foo';
-
-      expect(Practitioner.getFullName(userData)).toEqual(
-        'Test Foo Practitioner',
-      );
+      expect(
+        Practitioner.getFullName({
+          firstName: 'Test',
+          lastName: 'Practitioner',
+          middleName: 'Foo',
+        }),
+      ).toEqual('Test Foo Practitioner');
     });
 
     it('should return the first, middle, and last names with suffix if they are provided in the practitioner data', () => {
-      userData.middleName = 'Foo';
-      userData.suffix = 'Bar';
-
-      expect(Practitioner.getFullName(userData)).toEqual(
-        'Test Foo Practitioner Bar',
-      );
+      expect(
+        Practitioner.getFullName({
+          firstName: 'Test',
+          lastName: 'Practitioner',
+          middleName: 'Foo',
+          suffix: 'Bar',
+        }),
+      ).toEqual('Test Foo Practitioner Bar');
     });
   });
 
@@ -429,6 +323,20 @@ describe('Practitioner', () => {
       expect(
         Practitioner.getDefaultServiceIndicator({ email: undefined }),
       ).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
+    });
+  });
+
+  describe('toRawObject', () => {
+    it('returns a raw practitioner object with updatedEmail and confirmEmail set to undefined', () => {
+      const rawPractitionerObject = new Practitioner(
+        validPractitioner,
+      ).toRawObject();
+
+      expect(rawPractitionerObject).toMatchObject({
+        ...validPractitioner,
+        confirmEmail: undefined,
+        updatedEmail: undefined,
+      });
     });
   });
 });

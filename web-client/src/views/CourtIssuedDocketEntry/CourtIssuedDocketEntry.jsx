@@ -158,7 +158,7 @@ export const CourtIssuedDocketEntry = connect(
                       {constants.SERVICE_STAMP_OPTIONS.map((option, idx) => (
                         <div
                           className="usa-radio usa-radio__inline"
-                          key={`stamp_${idx}`}
+                          key={`stamp_${option}`}
                         >
                           <input
                             checked={form.serviceStamp === option}

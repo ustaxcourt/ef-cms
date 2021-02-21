@@ -397,6 +397,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     incrementCounter,
+    isEmailAvailable: jest.fn(),
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
@@ -440,6 +441,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
   };
 
+  const mockBroadcastGateway = {
+    postMessage: jest.fn(),
+  };
+
   const applicationContext = {
     ...sharedAppContext,
     barNumberGenerator: {
@@ -459,6 +464,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
+    getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
     getChiefJudgeNameForSigning: jest.fn(),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
@@ -531,13 +537,11 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
-    initHoneybadger: appContextProxy(),
     logger: {
       debug: jest.fn(),
       error: jest.fn(),
       info: jest.fn(),
     },
-    notifyHoneybadger: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
   };
