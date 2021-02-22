@@ -21,5 +21,13 @@ describe('CalendarNote', () => {
       expect(entity.getFormattedValidationErrors()).toEqual(null);
       expect(entity.note).toEqual('some notes');
     });
+
+    it('should be valid note if it is an empty string', () => {
+      const entity = new CalendarNote({
+        note: '',
+      });
+      expect(entity.getFormattedValidationErrors()).toEqual(null);
+      expect(entity.note).toEqual('');
+    });
   });
 });
