@@ -7,7 +7,7 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 export const docketClerkDeletesCalendarNote = test => {
-  return it('Docket Clerk Views trial session with note', async () => {
+  return it('Docket Clerk deletes calendar note', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
