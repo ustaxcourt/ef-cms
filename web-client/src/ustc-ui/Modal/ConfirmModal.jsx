@@ -131,7 +131,6 @@ export const ConfirmModal = connect(
                 link
                 className="red-warning float-right no-wrap"
                 icon="trash"
-                iconCls="margin-right-05"
                 id="confirm-modal-delete-btn"
                 onClick={runDeleteSequence}
               >
