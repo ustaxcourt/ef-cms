@@ -220,9 +220,6 @@ const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
 const {
-  migrateCaseDeadlineLambda,
-} = require('./migrate/migrateCaseDeadlineLambda');
-const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
 const {
@@ -780,11 +777,6 @@ app.post(
   );
   app.post('/messages', lambdaWrapper(createMessageLambda));
 }
-
-/**
- * migrate
- */
-app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
 
 /**
  * practitioners
