@@ -18,7 +18,7 @@ export const MatchingEmailFoundModal = connect(
         confirmSequence={confirmSequence}
         title="Matching Email Found"
       >
-        <div>
+        <div id="matching-email-modal">
           <p>
             {form.contactPrimary.name}
             <br />

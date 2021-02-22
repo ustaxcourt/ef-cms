@@ -16,7 +16,7 @@ export const servePaperFiledDocumentAction = async ({
   const docketEntryId = get(state.docketEntryId);
 
   const {
-    paperServicePdfUrl,
+    pdfUrl,
   } = await applicationContext
     .getUseCases()
     .serveExternallyFiledDocumentInteractor({
@@ -29,7 +29,7 @@ export const servePaperFiledDocumentAction = async ({
     alertSuccess: {
       message: 'Document served.',
     },
-    hasPaper: !!paperServicePdfUrl,
-    pdfUrl: paperServicePdfUrl,
+    hasPaper: !!pdfUrl,
+    pdfUrl,
   };
 };

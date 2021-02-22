@@ -10,7 +10,7 @@ export const openGainElectronicAccessToCaseModalSequence = showProgressSequenceD
     clearAlertsAction,
     checkEmailAvailabilityAction,
     {
-      emailAvailable: [],
+      emailAvailable: [setShowModalFactoryAction('NoMatchingEmailFoundModal')],
       emailInUse: [setShowModalFactoryAction('MatchingEmailFoundModal')],
     },
   ],
