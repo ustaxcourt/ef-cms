@@ -31,6 +31,9 @@ describe('updatePractitionerUserInteractor', () => {
       .updatePractitionerUser.mockImplementation(({ user }) => user);
     applicationContext
       .getPersistenceGateway()
+      .createNewPractitionerUser.mockImplementation(({ user }) => user);
+    applicationContext
+      .getPersistenceGateway()
       .isEmailAvailable.mockReturnValue(true);
   });
 
@@ -135,10 +138,10 @@ describe('updatePractitionerUserInteractor', () => {
 
     expect(updatedUser).toBeDefined();
     expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser,
+      applicationContext.getPersistenceGateway().createNewPractitionerUser,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser.mock
+      applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
         .calls[0][0].user.email,
     ).toEqual('admissionsclerk@example.com');
   });

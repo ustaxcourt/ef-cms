@@ -26,7 +26,7 @@ CalendarNote.VALIDATION_ERROR_MESSAGES = {
 };
 
 CalendarNote.schema = joi.object().keys({
-  note: JoiValidationConstants.STRING.max(200).allow(null).optional(),
+  note: JoiValidationConstants.STRING.max(200).allow('', null).optional(),
 });
 
 joiValidationDecorator(
