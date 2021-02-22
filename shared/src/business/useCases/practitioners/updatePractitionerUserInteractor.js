@@ -105,14 +105,14 @@ exports.updatePractitionerUserInteractor = async ({
     .toRawObject();
 
   let updatedUser = validatedUserData;
-  if (oldUserInfo.email) {
+  if (oldUser.email) {
     updatedUser = await applicationContext
       .getPersistenceGateway()
       .updatePractitionerUser({
         applicationContext,
         user: validatedUserData,
       });
-  } else if (!oldUserInfo.email && user.updatedEmail) {
+  } else if (!oldUser.email && user.updatedEmail) {
     updatedUser = await applicationContext
       .getPersistenceGateway()
       .createNewPractitionerUser({
@@ -122,9 +122,9 @@ exports.updatePractitionerUserInteractor = async ({
   } else {
     await applicationContext.getUseCaseHelpers().updateUserRecords({
       applicationContext,
-      oldUser: oldUserInfo,
+      oldUser,
       updatedUser: validatedUserData,
-      userId: oldUserInfo.userId,
+      userId: oldUser.userId,
     });
   }
 
