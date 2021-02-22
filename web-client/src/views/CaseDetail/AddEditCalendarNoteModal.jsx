@@ -7,11 +7,13 @@ import React from 'react';
 
 export const AddEditCalendarNoteModal = connect(
   {
+    isEditing: state.modal.isEditing,
     validateTrialSessionNoteSequence:
       sequences.validateTrialSessionNoteSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditCalendarNoteModal({
+    isEditing,
     validateTrialSessionNoteSequence,
     validationErrors,
   }) {
@@ -21,6 +23,7 @@ export const AddEditCalendarNoteModal = connect(
         className="add-edit-calendar-note-modal"
         confirmLabel="Save"
         deleteLabel="Delete Note"
+        noDelete={!isEditing}
         preventCancelOnBlur={true}
         title="Add/Edit Calendar Note"
         onCancelSequence="clearModalFormSequence"
