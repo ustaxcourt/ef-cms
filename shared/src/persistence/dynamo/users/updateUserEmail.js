@@ -27,7 +27,6 @@ exports.updateUserEmail = async ({ applicationContext, user }) => {
       })
       .promise();
   } catch (err) {
-    console.log(username, err);
     applicationContext.logger.error(`Error updating user ${username}`);
   }
 };
