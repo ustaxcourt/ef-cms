@@ -8,43 +8,15 @@ import {
 } from './helpers';
 import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
-import axios from 'axios';
 
 const test = setupTest();
-
-const axiosInstance = axios.create({
-  headers: {
-    Authorization:
-      // mocked admin user
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwibmFtZSI6IlRlc3QgQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJ1c2VySWQiOiI4NmMzZjg3Yi0zNTBiLTQ3N2QtOTJjMy00M2JkMDk1Y2IwMDYiLCJjdXN0b206cm9sZSI6ImFkbWluIiwic3ViIjoiODZjM2Y4N2ItMzUwYi00NzdkLTkyYzMtNDNiZDA5NWNiMDA2IiwiaWF0IjoxNTgyOTIxMTI1fQ.PBmSyb6_E_53FNG0GiEpAFqTNmooSh4rI0ApUQt3UH8',
-    'Content-Type': 'application/json',
-  },
-  timeout: 2000,
-});
-
-const { TRIAL_SESSION_PROCEEDING_TYPES } = applicationContext.getConstants();
-
-const calendaredTrialSession = {
-  address1: 'some random street',
-  city: 'elm street',
-  isCalendared: true,
-  judge: 'Cohen',
-  maxCases: 100,
-  postalCode: '33333',
-  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-  sessionType: 'Hybrid',
-  startDate: '2020-08-10',
-  state: 'FL',
-  term: 'Summer',
-  termYear: '2020',
-  trialLocation: 'Memphis, Tennessee',
-  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
-};
 
 let caseDetail;
 
 describe('Trial session migration journey', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
+  const trialLocation = 'Memphis, Tennessee';
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -54,12 +26,9 @@ describe('Trial session migration journey', () => {
     await refreshElasticsearchIndex();
   });
 
-  it('should migrate trial sessions', async () => {
-    await axiosInstance.post(
-      'http://localhost:4000/migrate/trial-session',
-      calendaredTrialSession,
-    );
-    test.trialSessionId = calendaredTrialSession.trialSessionId;
+  it('should use migrated trial session from seed data', async () => {
+    // from web-api/storage/fixtures/seed/integration-test-data/migrated-trial-session.json
+    test.trialSessionId = '959c4338-0fac-42eb-b0eb-d53b8d0195fb';
   });
 
   it('should create a new case and calendar it', async () => {
@@ -96,8 +65,6 @@ describe('Trial session migration journey', () => {
     });
     caseDetail = test.getState('caseDetail');
     expect(test.getState('caseDetail.trialSessionId')).toBeDefined();
-    expect(test.getState('caseDetail.trialLocation')).toEqual(
-      calendaredTrialSession.trialLocation,
-    );
+    expect(test.getState('caseDetail.trialLocation')).toEqual(trialLocation);
   });
 });
