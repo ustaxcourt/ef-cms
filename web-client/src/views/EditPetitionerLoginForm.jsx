@@ -29,13 +29,13 @@ export const EditPetitionerLoginForm = connect(
             validationErrors[type].email
           }
         >
-          <label className="usa-label" htmlFor={`${type}.email`}>
+          <label className="usa-label" htmlFor={`${type}-email`}>
             New email address
           </label>
           <input
             autoCapitalize="none"
             className="usa-input"
-            id={`${type}.email`}
+            id={`${type}-email`}
             name={`${type}.email`}
             type="text"
             value={form[type].email || ''}
@@ -57,13 +57,13 @@ export const EditPetitionerLoginForm = connect(
             validationErrors[type].confirmEmail
           }
         >
-          <label className="usa-label" htmlFor={`${type}.confirmEmail`}>
+          <label className="usa-label" htmlFor={`${type}-confirmEmail`}>
             Re-enter new email address
           </label>
           <input
             autoCapitalize="none"
             className="usa-input"
-            id={`${type}.confirmEmail`}
+            id={`${type}-confirmEmail`}
             name={`${type}.confirmEmail`}
             type="text"
             value={form[type].confirmEmail || ''}

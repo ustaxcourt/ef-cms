@@ -24,8 +24,8 @@ const {
   addDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
-  addExistingUserToCaseInteractor,
-} = require('../../shared/src/business/useCases/addExistingUserToCaseInteractor');
+  addExistingUserToCase,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
   addressLabelCoverSheet,
   caseInventoryReport,
@@ -417,6 +417,9 @@ const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
+  getCognitoUserIdByEmail,
+} = require('../../shared/src/persistence/cognito/getCognitoUserIdByEmail');
+const {
   getCompletedMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor');
 const {
@@ -766,6 +769,9 @@ const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
+  saveCalendarNoteInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor');
+const {
   saveCaseDetailInternalEditInteractor,
 } = require('../../shared/src/business/useCases/saveCaseDetailInternalEditInteractor');
 const {
@@ -825,6 +831,9 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
+const {
+  serveDocumentAndGetPaperServicePdf,
+} = require('../../shared/src/business/useCaseHelper/serveDocumentAndGetPaperServicePdf');
 const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
@@ -1227,6 +1236,7 @@ const gatewayMethods = {
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getClientId,
+  getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
@@ -1322,6 +1332,15 @@ module.exports = (appContextUser, logger = createLogger()) => {
                 throw new Error('User does not exist');
               }
 
+              const users = require('../storage/fixtures/seed/users.json');
+              const foundUser = users.find(({ email }) => email === Username);
+
+              if (foundUser) {
+                return {
+                  UserAttributes: [],
+                  Username: foundUser.userId,
+                };
+              }
               return { Username };
             },
           }),
@@ -1528,6 +1547,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUniqueId,
     getUseCaseHelpers: () => {
       return {
+        addExistingUserToCase,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
@@ -1545,6 +1565,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
+        serveDocumentAndGetPaperServicePdf,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
         updateInitialFilingDocuments,
@@ -1556,7 +1577,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
-        addExistingUserToCaseInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
@@ -1669,6 +1689,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,
+        saveCalendarNoteInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
         saveSignedDocumentInteractor,

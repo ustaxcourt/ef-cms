@@ -1,21 +1,38 @@
 const {
-  addExistingUserToCaseInteractor,
-} = require('./addExistingUserToCaseInteractor');
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
+} = require('../../entities/EntityConstants');
+const { addExistingUserToCase } = require('./addExistingUserToCase');
+const { Case } = require('../../entities/cases/Case');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
-describe('addExistingUserToCaseInteractor', () => {
+describe('addExistingUserToCase', () => {
+  const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
+
+  beforeEach(() => {
+    const mockUser = {
+      userId: USER_ID,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCognitoUserIdByEmail.mockReturnValue(mockUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockUser);
+  });
+
   it('throws an unauthorized error on non admissionsclerk users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      addExistingUserToCaseInteractor({
+      addExistingUserToCase({
         applicationContext,
-        docketNumber: '101-20',
+        caseEntity: new Case(MOCK_CASE, { applicationContext }),
         email: 'testing@example.com',
         name: 'Bob Ross',
       }),
@@ -29,12 +46,12 @@ describe('addExistingUserToCaseInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getUserByEmail.mockReturnValue(null);
+      .getCognitoUserIdByEmail.mockReturnValue(null);
 
     await expect(
-      addExistingUserToCaseInteractor({
+      addExistingUserToCase({
         applicationContext,
-        docketNumber: '101-20',
+        caseEntity: new Case(MOCK_CASE, { applicationContext }),
         email: 'testing@example.com',
         name: 'Bob Ross',
       }),
@@ -46,20 +63,15 @@ describe('addExistingUserToCaseInteractor', () => {
       role: ROLES.admissionsClerk,
     });
 
-    applicationContext.getPersistenceGateway().getUserByEmail.mockReturnValue({
-      userId: '07d932a1-94e1-4b42-8090-20eedd90c8ac',
-    });
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        contactPrimary: {},
-      });
+    const caseEntity = new Case(
+      { ...MOCK_CASE, contactPrimary: {} },
+      { applicationContext },
+    );
 
     await expect(
-      addExistingUserToCaseInteractor({
+      addExistingUserToCase({
         applicationContext,
-        docketNumber: '101-20',
+        caseEntity,
         email: 'testing@example.com',
         name: 'Bob Ross',
       }),
@@ -68,33 +80,30 @@ describe('addExistingUserToCaseInteractor', () => {
     );
   });
 
-  it('should call associateUserWithCase and updateCase with the updated email for the contact primary', async () => {
-    const USER_ID = '07d932a1-94e1-4b42-8090-20eedd90c8ac';
+  it('should call associateUserWithCase and return the updated case with contact primary email', async () => {
     const UPDATED_EMAIL = 'testing@example.com';
 
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.admissionsClerk,
     });
 
-    applicationContext.getPersistenceGateway().getUserByEmail.mockReturnValue({
-      userId: USER_ID,
-    });
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
+    const caseEntity = new Case(
+      {
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
+          contactId: '123',
           email: undefined,
           name: 'Bob Ross',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
-      });
+      },
+      { applicationContext },
+    );
 
-    await addExistingUserToCaseInteractor({
+    const updatedCase = await addExistingUserToCase({
       applicationContext,
-      docketNumber: '101-20',
+      caseEntity,
       email: UPDATED_EMAIL,
       name: 'Bob Ross',
     });
@@ -105,11 +114,9 @@ describe('addExistingUserToCaseInteractor', () => {
     ).toMatchObject({
       userId: USER_ID,
     });
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({
+    expect(updatedCase).toMatchObject({
       contactPrimary: {
+        contactId: USER_ID, // contactId was updated to new userId
         email: UPDATED_EMAIL,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },

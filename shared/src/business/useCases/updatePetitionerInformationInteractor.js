@@ -311,7 +311,7 @@ exports.updatePetitionerInformationInteractor = async ({
         })
       : undefined;
 
-  const caseEntity = new Case(
+  let caseEntity = new Case(
     {
       ...oldCase,
       contactPrimary: {
@@ -386,6 +386,20 @@ exports.updatePetitionerInformationInteractor = async ({
         servedParties,
       });
     }
+  }
+
+  if (
+    contactPrimary.email &&
+    contactPrimary.email !== oldCase.contactPrimary.email
+  ) {
+    caseEntity = await applicationContext
+      .getUseCaseHelpers()
+      .addExistingUserToCase({
+        applicationContext,
+        caseEntity,
+        email: contactPrimary.email,
+        name: contactPrimary.name,
+      });
   }
 
   const updatedCase = await applicationContext

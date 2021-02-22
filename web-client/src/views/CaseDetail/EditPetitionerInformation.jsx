@@ -4,6 +4,7 @@ import { Contacts } from '../StartCase/Contacts';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { MatchingEmailFoundModal } from './MatchingEmailFoundModal';
+import { NoMatchingEmailFoundModal } from './NoMatchingEmailFoundModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -34,7 +35,9 @@ export const EditPetitionerInformation = connect(
     return (
       <>
         {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
-
+        {showModal === 'NoMatchingEmailFoundModal' && (
+          <NoMatchingEmailFoundModal />
+        )}
         <CaseDetailHeader />
 
         <section
@@ -93,9 +96,8 @@ export const EditPetitionerInformation = connect(
                     editPetitionerInformationHelper.contactPrimaryHasVerifiedEmail
                   }
                   contactsHelper="startCaseInternalContactsHelper"
-                  showLoginAndServiceInformation={
-                    editPetitionerInformationHelper.showLoginAndServiceInformation
-                  }
+                  showEditEmail={editPetitionerInformationHelper.showEditEmail}
+                  showLoginAndServiceInformation={true}
                   showPrimaryContact={
                     editPetitionerInformationHelper.showPrimaryContact
                   }

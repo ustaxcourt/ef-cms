@@ -71975,25 +71975,5 @@
       flags: 
         presence: "optional"
         description: "Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process)."
-    userId: 
-      type: "string"
-      flags: 
-        presence: "required"
-        description: "The unique ID of the User who added the case to the system."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
 
  ```
