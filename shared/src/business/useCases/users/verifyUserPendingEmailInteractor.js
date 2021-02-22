@@ -8,8 +8,18 @@ const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
+/**
+ * updatePetitionerCases
+ * for the provided user, update their email address on all cases
+ * where they are the contactPrimary or contactSecondary
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.user the user who is a primary or secondary contact on a case
+ * @returns {Promise} resolves upon completion of case updates
+ */
 const updatePetitionerCases = async ({ applicationContext, user }) => {
-  let petitionerCases = await applicationContext
+  const petitionerCases = await applicationContext
     .getPersistenceGateway()
     .getIndexedCasesForUser({
       applicationContext,
@@ -17,110 +27,117 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
-  for (let caseInfo of petitionerCases) {
-    try {
-      const { docketNumber } = caseInfo;
+  const casesToUpdate = await Promise.all(
+    petitionerCases.map(({ docketNumber }) =>
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      }),
+    ),
+  );
 
-      const userCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
-
-      let caseRaw = new Case(userCase, { applicationContext })
-        .validate()
-        .toRawObject();
+  const validatedCasesToUpdate = casesToUpdate
+    .map(caseToUpdate => {
+      const caseEntity = new Case(caseToUpdate, {
+        applicationContext,
+      }).toRawObject();
 
       const petitionerObject = [
-        caseRaw.contactPrimary,
-        caseRaw.contactSecondary,
+        caseEntity.contactPrimary,
+        caseEntity.contactSecondary,
       ].find(petitioner => petitioner && petitioner.contactId === user.userId);
-
       if (!petitionerObject) {
-        throw new Error(
-          `Could not find user|${user.userId} on ${docketNumber}`,
+        applicationContext.logger.error(
+          `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
         );
+        return;
       }
-
       // This updates the case by reference!
       petitionerObject.email = user.email;
 
       // we do this again so that it will convert '' to null
-      const caseEntity = new Case(caseRaw, { applicationContext }).validate();
+      return new Case(caseEntity, { applicationContext }).validate();
+    })
+    .filter(Boolean);
 
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+  return Promise.all(
+    validatedCasesToUpdate.map(caseToUpdate =>
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
-      });
-    } catch (error) {
-      applicationContext.logger.error(error);
-    }
-  }
+        caseToUpdate,
+      }),
+    ),
+  );
 };
 
 exports.updatePetitionerCases = updatePetitionerCases;
 
+/**
+ * updatePractitionerCases
+ * for the provided user, update their email address on all cases
+ * where they are an IRS practitioner or private practitioner, sending an
+ * update to the practitioner for each case updated, as well as a final email when
+ * all case updates have been completed.
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.user the user who is a primary or secondary contact on a case
+ * @returns {Promise} resolves upon completion of case updates
+ */
 const updatePractitionerCases = async ({ applicationContext, user }) => {
-  const docketNumbers = await applicationContext
+  const practitionerCases = await applicationContext
     .getPersistenceGateway()
     .getCasesByUserId({
       applicationContext,
       userId: user.userId,
     });
+  const casesToUpdate = await Promise.all(
+    practitionerCases.map(({ docketNumber }) =>
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      }),
+    ),
+  );
 
-  const updatedCases = [];
-
-  for (let caseInfo of docketNumbers) {
-    try {
-      const { docketNumber } = caseInfo;
-
-      const userCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
-
-      let caseEntity = new Case(userCase, { applicationContext });
-
-      const practitionerObject = caseEntity.privatePractitioners
-        .concat(caseEntity.irsPractitioners)
-        .find(practitioner => practitioner.userId === user.userId);
+  const validCasesToUpdate = casesToUpdate
+    .map(caseToUpdate => {
+      const caseEntity = new Case(caseToUpdate, { applicationContext });
+      const practitionerObject = [
+        ...caseEntity.privatePractitioners,
+        ...caseEntity.irsPractitioners,
+      ].find(practitioner => practitioner.userId === user.userId);
 
       if (!practitionerObject) {
-        throw new Error(
-          `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
+        applicationContext.logger.error(
+          `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${caseToUpdate.docketNumber}`,
         );
+        return;
       }
-
       // This updates the case by reference!
       practitionerObject.email = user.email;
 
       // we do this again so that it will convert '' to null
-      caseEntity = new Case(caseEntity, { applicationContext });
+      return new Case(caseEntity, { applicationContext }).validate();
+    })
+    .filter(Boolean);
 
-      const updatedCase = await applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        });
+  for (let idx = 0; idx < validCasesToUpdate.length; idx++) {
+    const validatedCaseToUpdate = validCasesToUpdate[idx];
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: validatedCaseToUpdate,
+    });
 
-      updatedCases.push(updatedCase);
-
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        message: {
-          action: 'user_contact_update_progress',
-          completedCases: updatedCases.length,
-          totalCases: docketNumbers.length,
-        },
-        userId: user.userId,
-      });
-    } catch (error) {
-      applicationContext.logger.error(error);
-    }
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_update_progress',
+        completedCases: idx + 1,
+        totalCases: validCasesToUpdate.length,
+      },
+      userId: user.userId,
+    });
   }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -131,7 +148,7 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
     userId: user.userId,
   });
 
-  return updatedCases;
+  return validCasesToUpdate;
 };
 
 /**
@@ -197,15 +214,19 @@ exports.verifyUserPendingEmailInteractor = async ({
     user: updatedRawUser,
   });
 
-  if (userEntity.role === ROLES.petitioner) {
-    await updatePetitionerCases({
-      applicationContext,
-      user: updatedRawUser,
-    });
-  } else {
-    await updatePractitionerCases({
-      applicationContext,
-      user: updatedRawUser,
-    });
+  try {
+    if (userEntity.role === ROLES.petitioner) {
+      await updatePetitionerCases({
+        applicationContext,
+        user: updatedRawUser,
+      });
+    } else {
+      await updatePractitionerCases({
+        applicationContext,
+        user: updatedRawUser,
+      });
+    }
+  } catch (error) {
+    applicationContext.logger.error(error);
   }
 };
