@@ -17,6 +17,8 @@ export const PractitionerForm = connect(
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
     validateAddPractitionerSequence: sequences.validateAddPractitionerSequence,
+    validateUpdatePractitionerSequence:
+      sequences.validateUpdatePractitionerSequence,
     validationErrors: state.validationErrors,
   },
   function PractitionerForm({
@@ -29,6 +31,7 @@ export const PractitionerForm = connect(
     usStates,
     usStatesOther,
     validateAddPractitionerSequence,
+    validateUpdatePractitionerSequence,
     validationErrors,
   }) {
     return (
@@ -316,7 +319,7 @@ export const PractitionerForm = connect(
                     name="updatedEmail"
                     type="text"
                     value={form.updatedEmail || ''}
-                    onBlur={() => validateAddPractitionerSequence()}
+                    onBlur={() => validateUpdatePractitionerSequence()}
                     onChange={e =>
                       updateFormValueSequence({
                         key: e.target.name,
@@ -336,7 +339,7 @@ export const PractitionerForm = connect(
                     name="confirmEmail"
                     type="text"
                     value={form.confirmEmail || ''}
-                    onBlur={() => validateAddPractitionerSequence()}
+                    onBlur={() => validateUpdatePractitionerSequence()}
                     onChange={e =>
                       updateFormValueSequence({
                         key: e.target.name,
