@@ -11,4 +11,5 @@ export const setCalendarNoteModalAction = ({ props, store }) => {
   const { note } = props;
 
   store.set(state.modal.note, note);
+  store.set(state.modal.isEditing, !!note);
 };

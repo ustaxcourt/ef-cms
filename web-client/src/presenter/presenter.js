@@ -71,6 +71,7 @@ import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequen
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createMessageSequence } from './sequences/createMessageSequence';
+import { deleteCalendarNoteSequence } from './sequences/deleteCalendarNoteSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
 import { deleteCorrespondenceDocumentSequence } from './sequences/deleteCorrespondenceDocumentSequence';
@@ -539,6 +540,7 @@ export const presenter = {
     countryTypeUserContactChangeSequence,
     createCaseDeadlineSequence,
     createMessageSequence,
+    deleteCalendarNoteSequence,
     deleteCaseDeadlineSequence,
     deleteCaseNoteSequence,
     deleteCorrespondenceDocumentSequence,
