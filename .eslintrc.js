@@ -19,8 +19,7 @@ module.exports = {
     'plugin:promise/recommended',
     'plugin:react/recommended',
     'plugin:security/recommended',
-    'prettier/react',
-    'prettier/standard',
+    'prettier',
     // 'plugin:jsx-a11y/recommended', // todo
   ],
   overrides: [
