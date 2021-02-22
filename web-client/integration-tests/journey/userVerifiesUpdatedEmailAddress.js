@@ -1,11 +1,9 @@
-import { getPendingEmailVerificationTokenForUser } from '../helpers';
+import { getUserRecordById } from '../helpers';
 
 export const userVerifiesUpdatedEmailAddress = (test, user) =>
   it(`${user} verifies updated email address`, async () => {
     const userFromState = test.getState('user');
-    const userFromPersistence = await getPendingEmailVerificationTokenForUser(
-      userFromState.userId,
-    );
+    const userFromPersistence = await getUserRecordById(userFromState.userId);
 
     const emailVerificationToken =
       userFromPersistence.pendingEmailVerificationToken;
