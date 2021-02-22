@@ -7,6 +7,14 @@ const {
 const { ROLES } = require('../../entities/EntityConstants');
 
 describe('uploadExternalDocumentsInteractor', () => {
+  beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .fileExternalDocumentForConsolidatedInteractor.mockReturnValue({});
+    applicationContext
+      .getUseCases()
+      .fileExternalDocumentInteractor.mockReturnValue({});
+  });
   it('throws an error when an unauthorized user tries to access the use case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
@@ -32,20 +40,22 @@ describe('uploadExternalDocumentsInteractor', () => {
       userId: 'irsPractitioner',
     });
 
-    await expect(
-      uploadExternalDocumentsInteractor({
-        applicationContext,
-        documentFiles: {
-          primary: 'something',
-        },
-        documentMetadata: {
-          primaryDocumentFile: {},
-        },
-        progressFunctions: {
-          primary: 'something',
-        },
-      }),
-    ).resolves.not.toThrow();
+    const result = await uploadExternalDocumentsInteractor({
+      applicationContext,
+      documentFiles: {
+        primary: 'something',
+      },
+      documentMetadata: {
+        primaryDocumentFile: {},
+      },
+      progressFunctions: {
+        primary: 'something',
+      },
+    });
+    expect(result).toMatchObject({
+      caseDetail: expect.anything(),
+      docketEntryIdsAdded: expect.any(Array),
+    });
   });
 
   it('runs successfully with no errors with all data and valid user', async () => {
