@@ -281,7 +281,7 @@ module.exports = [
       'click element #edit-case-trial-information-btn',
       'wait for #add-edit-calendar-note to be visible',
       'click element #add-edit-calendar-note',
-      'wait for #add-edit-calendar-note-modal to be visible',
+      'wait for .add-edit-calendar-note-modal to be visible',
     ],
     notes: 'checks the add edit calendar note modal',
     url:
