@@ -27,6 +27,9 @@ const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
+  addNewUserToCase,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/addNewUserToCase');
+const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -1551,6 +1554,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUseCaseHelpers: () => {
       return {
         addExistingUserToCase,
+        addNewUserToCase,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
