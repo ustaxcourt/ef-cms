@@ -84,6 +84,7 @@ export const EditCaseTrialInformationMenu = connect(
             <Button
               link
               className="margin-right-0"
+              id="add-edit-calendar-note"
               onClick={() => {
                 openAddEditCalendarNoteModalSequence({
                   note: caseDetail.trialSessionNotes,
