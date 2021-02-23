@@ -176,6 +176,9 @@ const {
   createMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createMessageInteractor');
 const {
+  createNewPetitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createNewPetitionerUser');
+const {
   createNewPractitionerUser,
 } = require('../../shared/src/persistence/dynamo/users/createNewPractitionerUser');
 const {
@@ -1211,6 +1214,7 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  createNewPetitionerUser,
   createNewPractitionerUser,
   deleteCaseByDocketNumber,
   deleteCaseDeadline,

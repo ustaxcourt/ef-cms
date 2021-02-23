@@ -13,16 +13,10 @@ describe('addNewUserToCase', () => {
   const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
 
   beforeEach(() => {
-    const mockUser = {
-      userId: USER_ID,
-    };
-
-    applicationContext
-      .getPersistenceGateway()
-      .createUser.mockReturnValue(mockUser);
+    applicationContext.getUniqueId.mockReturnValue(USER_ID);
   });
 
-  it('throws an unauthorized error on non admissionsclerk users', async () => {
+  it('should throw an unauthorized error for non admissionsclerk users', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
@@ -35,48 +29,7 @@ describe('addNewUserToCase', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('throws an error if no user exists with that email', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admissionsClerk,
-    });
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCognitoUserIdByEmail.mockReturnValue(null);
-
-    await expect(
-      addNewUserToCase({
-        applicationContext,
-        caseEntity: new Case(MOCK_CASE, { applicationContext }),
-        email: 'testing@example.com',
-        name: 'Bob Ross',
-      }),
-    ).rejects.toThrow('no user found with the provided email of');
-  });
-
-  it('throws an error if contact not found with name provided', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.admissionsClerk,
-    });
-
-    const caseEntity = new Case(
-      { ...MOCK_CASE, contactPrimary: {} },
-      { applicationContext },
-    );
-
-    await expect(
-      addNewUserToCase({
-        applicationContext,
-        caseEntity,
-        email: 'testing@example.com',
-        name: 'Bob Ross',
-      }),
-    ).rejects.toThrow(
-      'no contact primary found with that user name of Bob Ross',
-    );
-  });
-
-  it('should call associateUserWithCase and return the updated case with contact primary email', async () => {
+  it('should call createNewPetitionerUser with the new user entity', async () => {
     const UPDATED_EMAIL = 'testing@example.com';
 
     applicationContext.getCurrentUser.mockReturnValue({
@@ -97,7 +50,7 @@ describe('addNewUserToCase', () => {
       { applicationContext },
     );
 
-    const updatedCase = await addNewUserToCase({
+    await addNewUserToCase({
       applicationContext,
       caseEntity,
       email: UPDATED_EMAIL,
@@ -105,17 +58,14 @@ describe('addNewUserToCase', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().createNewPetitionerUser.mock
+        .calls[0][0].user,
     ).toMatchObject({
+      contact: {},
+      email: UPDATED_EMAIL,
+      name: 'Bob Ross',
+      role: ROLES.petitioner,
       userId: USER_ID,
-    });
-    expect(updatedCase).toMatchObject({
-      contactPrimary: {
-        contactId: USER_ID, // contactId was updated to new userId
-        email: UPDATED_EMAIL,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
     });
   });
 });
