@@ -27,6 +27,9 @@ const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
+  addNewUserToCase,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/addNewUserToCase');
+const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -172,6 +175,9 @@ const {
 const {
   createMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createMessageInteractor');
+const {
+  createNewPetitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createNewPetitionerUser');
 const {
   createNewPractitionerUser,
 } = require('../../shared/src/persistence/dynamo/users/createNewPractitionerUser');
@@ -1208,6 +1214,7 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  createNewPetitionerUser,
   createNewPractitionerUser,
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
@@ -1551,6 +1558,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUseCaseHelpers: () => {
       return {
         addExistingUserToCase,
+        addNewUserToCase,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,

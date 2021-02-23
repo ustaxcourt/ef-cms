@@ -5,28 +5,7 @@ const { createNewPractitionerUser } = require('./createNewPractitionerUser');
 const { ROLES } = require('../../../business/entities/EntityConstants');
 
 describe('createNewPractitionerUser', () => {
-  beforeEach(() => {
-    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
-      promise: () => null,
-    });
-  });
-
   it('should not log an error when creating a new cognito account for a practitioner user', async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => ({
-        Username: 'practitionerusername',
-      }),
-    });
-    applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: async () => ({
-        Item: {
-          name: 'Test Private Practitioner',
-          role: ROLES.privatePractitioner,
-          section: 'practitioner',
-        },
-      }),
-    });
-
     await createNewPractitionerUser({
       applicationContext,
       user: {
@@ -37,7 +16,6 @@ describe('createNewPractitionerUser', () => {
       },
     });
 
-    expect(applicationContext.logger.error).not.toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).toHaveBeenCalledWith(
