@@ -1,14 +1,14 @@
 const createApplicationContext = require('../../src/applicationContext');
 const users = require('../fixtures/seed/users.json');
 const {
-  createUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createUser.js');
+  createPetitionerUserRecords,
+} = require('../../../shared/src/persistence/dynamo/users/createPetitionerUserRecords');
 const {
-  createUserRecords: createPetitionerUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createMigratedPetitionerUser.js');
+  createUserRecords,
+} = require('../../../shared/src/persistence/dynamo/users/createUser');
 const {
   createUserRecords: createPractitionerUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createPractitionerUser.js');
+} = require('../../../shared/src/persistence/dynamo/users/createPractitionerUser');
 const {
   ROLES,
 } = require('../../../shared/src/business/entities/EntityConstants');

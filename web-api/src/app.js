@@ -220,12 +220,6 @@ const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
 const {
-  migrateCaseDeadlineLambda,
-} = require('./migrate/migrateCaseDeadlineLambda');
-const {
-  migrateTrialSessionLambda,
-} = require('./migrate/migrateTrialSessionLambda');
-const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
 const {
@@ -783,12 +777,6 @@ app.post(
   );
   app.post('/messages', lambdaWrapper(createMessageLambda));
 }
-
-/**
- * migrate
- */
-app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
-app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
 
 /**
  * practitioners
