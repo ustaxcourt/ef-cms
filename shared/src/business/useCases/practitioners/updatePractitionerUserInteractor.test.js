@@ -2,53 +2,25 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  COUNTRY_TYPES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
   updatePractitionerUserInteractor,
 } = require('./updatePractitionerUserInteractor');
+const { MOCK_PRACTITIONER } = require('../../../test/mockUsers');
 const { ROLES } = require('../../entities/EntityConstants');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 jest.mock('../users/generateChangeOfAddress');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;
-  let mockPractitioner;
+  let mockPractitioner = MOCK_PRACTITIONER;
 
   beforeEach(() => {
     testUser = {
       role: ROLES.admissionsClerk,
       userId: 'admissionsclerk',
     };
-
-    mockPractitioner = {
-      admissionsDate: '2019-03-01T21:40:46.415Z',
-      admissionsStatus: 'Active',
-      barNumber: 'AB1111',
-      birthYear: 2019,
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      email: 'ab@example.com',
-      employer: 'Private',
-      firmName: 'GW Law Offices',
-      firstName: 'Test',
-      lastName: 'Attorney',
-      name: 'Test Attorney',
-      originalBarState: 'Oklahoma',
-      practitionerType: 'Attorney',
-      role: ROLES.privatePractitioner,
-      userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
-    };
+    mockPractitioner = { ...MOCK_PRACTITIONER };
 
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
     applicationContext
