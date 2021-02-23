@@ -53,3 +53,4 @@ assignees: ''
  - [ ] Rebuild entity documentation
  - [ ] Acceptance criteria for the story has been met
  - [ ] Deployed to the dev environment
+ - [ ] Deployed to the prod environment
