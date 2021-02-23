@@ -40,7 +40,6 @@ assignees: ''
 **Engineering**
  - [ ] Automated test scripts have been written
  - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning
- - [ ] Paired w/Mark on data migration work (if applicable)
  - [ ] Verify that language for docket record for internal users and external users is identical
  - [ ] New screens have been added to pa11y scripts
  - [ ] All new functionality verified to work with keyboard and macOS voiceover https://www.apple.com/voiceover/info/guide/_1124.html 
@@ -53,6 +52,4 @@ assignees: ''
  - [ ] Code refactored for clarity and to remove any known technical debt
  - [ ] Rebuild entity documentation
  - [ ] Acceptance criteria for the story has been met
- - [ ] Code toggle has been implemented (“On” for items that are QA’d)
  - [ ] Deployed to the dev environment
- - [ ] Deployed to the prod environment
