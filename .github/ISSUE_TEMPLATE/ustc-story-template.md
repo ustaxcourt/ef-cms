@@ -26,8 +26,7 @@ assignees: ''
 
 ## Tasks
 
-## Definition of Done (Updated 10-26-20)
-
+## Definition of Done (Updated 2-23-21)
 **Product Owner**
  - [ ]  Acceptance criteria have been met and validated on the Flexion Prod env
 
@@ -36,6 +35,7 @@ assignees: ''
  - [ ] Usability has been validated
  - [ ] Wiki has been updated (if applicable) 
  - [ ] Story has been tested on a mobile device (for external users only)
+ - [ ] Add scenario to testing document, if applicable (https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA/edit?usp=sharing)
 
 **Engineering**
  - [ ] Automated test scripts have been written
@@ -53,4 +53,4 @@ assignees: ''
  - [ ] Rebuild entity documentation
  - [ ] Acceptance criteria for the story has been met
  - [ ] Deployed to the dev environment
- - [ ] Deployed to the prod environment
+ - [ ] Deployed to the Court's migration environment
