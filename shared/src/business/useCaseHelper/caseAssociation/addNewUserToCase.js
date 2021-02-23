@@ -43,4 +43,6 @@ exports.addNewUserToCase = async ({
     applicationContext,
     user: userEntity.validate().toRawObject(),
   });
+
+  return caseEntity;
 };
