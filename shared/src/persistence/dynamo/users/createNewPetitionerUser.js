@@ -26,7 +26,7 @@ exports.createNewPetitionerUser = async ({ applicationContext, user }) => {
     .adminCreateUser({
       UserAttributes: [
         {
-          Name: 'email_verified',
+          Name: 'email_verified', // TODO: remove this probably
           Value: 'True',
         },
         {
