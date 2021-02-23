@@ -27,8 +27,6 @@ exports.sendBulkTemplatedEmail = async ({
   destinations,
   templateName,
 }) => {
-  const SES = applicationContext.getEmailClient();
-
   try {
     const params = {
       DefaultTemplateData: JSON.stringify(defaultTemplateData),
@@ -44,12 +42,46 @@ exports.sendBulkTemplatedEmail = async ({
       Template: templateName,
     };
 
-    applicationContext.logger.info('Bulk Email Params', params);
-
-    const response = await SES.sendBulkTemplatedEmail(params).promise();
-
-    applicationContext.logger.info('Bulk Email Response', response);
+    await exports.sendWithRetry(applicationContext, { params });
   } catch (err) {
     applicationContext.logger.error(`Error sending email: ${err.message}`, err);
+  }
+};
+
+const MAX_RETRIES = 10;
+
+/**
+ *
+ */
+exports.sendWithRetry = async (
+  applicationContext,
+  { params, retryCount = 0 },
+) => {
+  const SES = applicationContext.getEmailClient();
+
+  applicationContext.logger.info('Bulk Email Params', params);
+  const response = await SES.sendBulkTemplatedEmail(params).promise();
+  applicationContext.logger.info('Bulk Email Response', response);
+
+  const needToRetry = response.Status.map((attempt, index) => {
+    if (attempt.Status !== 'Success') {
+      return params.Destinations[index];
+    }
+    return false;
+  }).filter(row => !!row);
+
+  if (needToRetry.length) {
+    params.Destinations = needToRetry;
+
+    if (retryCount >= MAX_RETRIES) {
+      const failures = retryCount.map(dest => dest.ToAddresses[0]);
+      throw `Could not complete service to email addresses ${failures.join(
+        ',',
+      )}}`;
+    }
+    await exports.sendWithRetry(applicationContext, {
+      params,
+      retryCount: retryCount + 1,
+    });
   }
 };
