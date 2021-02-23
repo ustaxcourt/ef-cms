@@ -392,14 +392,32 @@ exports.updatePetitionerInformationInteractor = async ({
     contactPrimary.email &&
     contactPrimary.email !== oldCase.contactPrimary.email
   ) {
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .addExistingUserToCase({
+    const isEmailAvailable = await applicationContext
+      .getPersistenceGateway()
+      .isEmailAvailable({
         applicationContext,
-        caseEntity,
         email: contactPrimary.email,
-        name: contactPrimary.name,
       });
+
+    if (isEmailAvailable) {
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .addNewUserToCase({
+          applicationContext,
+          caseEntity,
+          email: contactPrimary.email,
+          name: contactPrimary.name,
+        });
+    } else {
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .addExistingUserToCase({
+          applicationContext,
+          caseEntity,
+          email: contactPrimary.email,
+          name: contactPrimary.name,
+        });
+    }
   }
 
   const updatedCase = await applicationContext
