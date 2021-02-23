@@ -6,9 +6,11 @@ const { updatePractitionerUser } = require('./updatePractitionerUser');
 
 describe('updatePractitionerUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+  const updatedEmail = 'test@example.com';
 
   const updatedUser = {
     barNumber: 'PT1234',
+    email: updatedEmail,
     name: 'Test Practitioner',
     role: ROLES.inactivePractitioner,
     section: 'inactivePractitioner',
@@ -21,7 +23,7 @@ describe('updatePractitionerUser', () => {
   });
 
   it("should log an error when an error occurs while updating the user's cognito attributes", async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
+    applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
       promise: () => Promise.reject(new Error('User not found')),
     });
     applicationContext.getDocumentClient().get.mockReturnValue({
@@ -40,9 +42,6 @@ describe('updatePractitionerUser', () => {
   });
 
   it('should return updated practitioner data when the update was successful', async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => null,
-    });
     applicationContext.getDocumentClient().get.mockReturnValue({
       promise: async () => ({
         Item: { ...updatedUser, userId },
@@ -65,11 +64,6 @@ describe('updatePractitionerUser', () => {
   });
 
   it("should not log an error when updating an existing practitioner user's Cognito attributes", async () => {
-    applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => ({
-        Username: 'inactivePractitionerUsername',
-      }),
-    });
     applicationContext.getDocumentClient().get.mockReturnValue({
       promise: async () => ({
         Item: updatedUser,
@@ -87,7 +81,7 @@ describe('updatePractitionerUser', () => {
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).toHaveBeenCalledWith(
       expect.objectContaining({
-        Username: 'inactivePractitionerUsername',
+        Username: updatedEmail,
       }),
     );
   });
