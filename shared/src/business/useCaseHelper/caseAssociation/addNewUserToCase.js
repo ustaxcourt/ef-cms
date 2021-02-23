@@ -39,13 +39,8 @@ exports.addNewUserToCase = async ({
     { applicationContext },
   );
 
-  const {
-    userId,
-  } = await applicationContext.getPersistenceGateway().createUser({
+  await applicationContext.getPersistenceGateway().createNewPetitionerUser({
     applicationContext,
-    disableCognitoUser: false,
     user: userEntity.validate().toRawObject(),
   });
-
-  return userId;
 };
