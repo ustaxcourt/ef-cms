@@ -10,29 +10,19 @@ exports.updatePractitionerUser = async ({ applicationContext, user }) => {
   });
 
   try {
-    const response = await applicationContext
+    await applicationContext
       .getCognito()
-      .adminGetUser({
+      .adminUpdateUserAttributes({
+        UserAttributes: [
+          {
+            Name: 'custom:role',
+            Value: user.role,
+          },
+        ],
         UserPoolId: process.env.USER_POOL_ID,
         Username: user.email,
       })
       .promise();
-
-    if (response) {
-      await applicationContext
-        .getCognito()
-        .adminUpdateUserAttributes({
-          UserAttributes: [
-            {
-              Name: 'custom:role',
-              Value: user.role,
-            },
-          ],
-          UserPoolId: process.env.USER_POOL_ID,
-          Username: response.Username,
-        })
-        .promise();
-    }
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;
