@@ -660,10 +660,11 @@ table.case-list tbody tr:nth-child(even) td {
       min-width: 200px;
       padding: 12px;
       color: $color-white;
-      text-align: right;
+      text-align: left;
       text-decoration: none;
       &:hover {
         color: $color-white;
+        text-decoration: underline;
       }
     }
   }
