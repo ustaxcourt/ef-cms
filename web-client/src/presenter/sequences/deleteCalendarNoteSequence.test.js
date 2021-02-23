@@ -25,12 +25,13 @@ describe('deleteCalendarNoteSequence', () => {
     applicationContext
       .getUseCases()
       .saveCalendarNoteInteractor.mockReturnValue({
+        caseOrder: [caseOrderItemWithoutNote],
         trialSessionId: mockTrialSessionId,
       });
 
     test.setState('caseDetail', {
       docketNumber: mockDocketNumber,
-      trialsSessionId: mockTrialSessionId,
+      trialSessionId: mockTrialSessionId,
     });
 
     test.setState('trialSessions', [
@@ -45,7 +46,10 @@ describe('deleteCalendarNoteSequence', () => {
     await test.runSequence('deleteCalendarNoteSequence');
 
     expect(test.getState('trialSessions')).toEqual([
-      { trialSessionId: mockTrialSessionId },
+      {
+        caseOrder: [{ calendarNote: null, docketNumber: mockDocketNumber }],
+        trialSessionId: mockTrialSessionId,
+      },
     ]);
   });
 });
