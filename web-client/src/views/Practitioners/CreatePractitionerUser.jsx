@@ -9,13 +9,13 @@ import React from 'react';
 export const CreatePractitionerUser = connect(
   {
     navigateBackSequence: sequences.navigateBackSequence,
-    validateAddPractitionerSequence: sequences.validateAddPractitionerSequence,
     submitAddPractitionerSequence: sequences.submitAddPractitionerSequence,
+    validateAddPractitionerSequence: sequences.validateAddPractitionerSequence,
   },
   function CreatePractitionerUser({
     navigateBackSequence,
     submitAddPractitionerSequence,
-    validateAddPractitionerSequence
+    validateAddPractitionerSequence,
   }) {
     return (
       <>
@@ -29,7 +29,9 @@ export const CreatePractitionerUser = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <PractitionerForm validateSequence={validateAddPractitionerSequence} />
+          <PractitionerForm
+            validateSequence={validateAddPractitionerSequence}
+          />
 
           <div className="grid-row margin-bottom-6">
             <div className="grid-col-12">

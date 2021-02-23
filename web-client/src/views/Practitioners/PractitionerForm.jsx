@@ -27,8 +27,8 @@ export const PractitionerForm = connect(
     updateFormValueSequence,
     usStates,
     usStatesOther,
+    validateSequence,
     validationErrors,
-    validateSequence
   }) {
     return (
       <>
