@@ -9,6 +9,7 @@ const { User } = require('../../entities/User');
 
 /**
  * updateUserPendingEmailInteractor
+ * Allows a user to request an update their own email address if they have permission.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context

@@ -25,6 +25,30 @@ const updateUserPendingEmail = async ({ applicationContext, user }) => {
   user.pendingEmail = user.updatedEmail;
 };
 
+const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
+  const updatedPractitionerRaw = new Practitioner(updatedUser, {
+    applicationContext,
+  }).toRawObject();
+  const oldPractitionerRaw = new Practitioner(oldUser, {
+    applicationContext,
+  }).toRawObject();
+
+  const practitionerDetailDiff = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: {
+        ...omit(updatedPractitionerRaw, 'contact'),
+        ...updatedPractitionerRaw.contact,
+      },
+      oldData: {
+        ...omit(oldPractitionerRaw, 'contact'),
+        ...oldPractitionerRaw.contact,
+      },
+    });
+
+  return Object.keys(practitionerDetailDiff);
+};
+
 /**
  * updatePractitionerUserInteractor
  *
@@ -49,14 +73,14 @@ exports.updatePractitionerUserInteractor = async ({
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
-  const oldUserInfo = await applicationContext
+  const oldUser = await applicationContext
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
 
-  const userHasAccount = !!oldUserInfo.email;
+  const userHasAccount = !!oldUser.email;
   const userIsUpdatingEmail = !!user.updatedEmail;
 
-  if (oldUserInfo.userId !== user.userId) {
+  if (oldUser.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
   }
 
@@ -72,8 +96,8 @@ exports.updatePractitionerUserInteractor = async ({
   const validatedUserData = new Practitioner(
     {
       ...user,
-      barNumber: oldUserInfo.barNumber,
-      email: oldUserInfo.email || user.updatedEmail,
+      barNumber: oldUser.barNumber,
+      email: oldUser.email || user.updatedEmail,
     },
     { applicationContext },
   )
@@ -81,14 +105,14 @@ exports.updatePractitionerUserInteractor = async ({
     .toRawObject();
 
   let updatedUser = validatedUserData;
-  if (oldUserInfo.email) {
+  if (oldUser.email) {
     updatedUser = await applicationContext
       .getPersistenceGateway()
       .updatePractitionerUser({
         applicationContext,
         user: validatedUserData,
       });
-  } else if (!oldUserInfo.email && user.updatedEmail) {
+  } else if (!oldUser.email && user.updatedEmail) {
     updatedUser = await applicationContext
       .getPersistenceGateway()
       .createNewPractitionerUser({
@@ -98,9 +122,9 @@ exports.updatePractitionerUserInteractor = async ({
   } else {
     await applicationContext.getUseCaseHelpers().updateUserRecords({
       applicationContext,
-      oldUser: oldUserInfo,
+      oldUser,
       updatedUser: validatedUserData,
-      userId: oldUserInfo.userId,
+      userId: oldUser.userId,
     });
   }
 
@@ -120,25 +144,11 @@ exports.updatePractitionerUserInteractor = async ({
     });
   }
 
-  const updatedPractitionerRaw = new Practitioner(updatedUser, {
+  const updatedFields = getUpdatedFieldNames({
     applicationContext,
-  }).toRawObject();
-  const oldPractitionerRaw = new Practitioner(oldUserInfo, {
-    applicationContext,
-  }).toRawObject();
-
-  const practitionerDetailDiff = applicationContext
-    .getUtilities()
-    .getAddressPhoneDiff({
-      newData: {
-        ...omit(updatedPractitionerRaw, 'contact'),
-        ...updatedPractitionerRaw.contact,
-      },
-      oldData: {
-        ...omit(oldPractitionerRaw, 'contact'),
-        ...oldPractitionerRaw.contact,
-      },
-    });
+    oldUser,
+    updatedUser,
+  });
 
   const propertiesNotRequiringChangeOfAddress = [
     'pendingEmail',
@@ -146,7 +156,7 @@ exports.updatePractitionerUserInteractor = async ({
     'practitionerNotes',
   ];
   const combinedDiffKeys = union(
-    Object.keys(practitionerDetailDiff),
+    updatedFields,
     propertiesNotRequiringChangeOfAddress,
   );
 
@@ -158,7 +168,7 @@ exports.updatePractitionerUserInteractor = async ({
       requestUserId: requestUser.userId,
       updatedEmail: validatedUserData.email,
       updatedName: validatedUserData.name,
-      user: oldUserInfo,
+      user: oldUser,
       websocketMessagePrefix: 'admin',
     });
   }

@@ -2,7 +2,6 @@ const AWS = require('aws-sdk');
 const { getClient } = require('../elasticsearch/client');
 
 // const mappings = require('../elasticsearch/elasticsearch-mappings');
-// const migratedCase = require('./migratedCase.json');
 // const { settings } = require('../elasticsearch/elasticsearch-settings');
 
 const environmentName = process.argv[2] || 'exp1';
