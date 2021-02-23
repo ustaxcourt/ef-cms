@@ -1,3 +1,5 @@
+const MAX_SES_RETRIES = 10;
+
 /**
  * calls SES.sendBulkTemplatedEmail
  *
@@ -42,46 +44,52 @@ exports.sendBulkTemplatedEmail = async ({
       Template: templateName,
     };
 
-    await exports.sendWithRetry(applicationContext, { params });
+    await exports.sendWithRetry({ applicationContext, params });
   } catch (err) {
     applicationContext.logger.error(`Error sending email: ${err.message}`, err);
   }
 };
 
-const MAX_RETRIES = 10;
-
 /**
+ * Sends the email via SES with a MAX_SES_RETRIES = 10;
  *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext application context
+ * @param {object} providers.params the parameters to send to SES
+ * @param {number} providers.retryCount the number of retries attempted
  */
-exports.sendWithRetry = async (
+exports.sendWithRetry = async ({
   applicationContext,
-  { params, retryCount = 0 },
-) => {
+  params,
+  retryCount = 0,
+}) => {
   const SES = applicationContext.getEmailClient();
 
   applicationContext.logger.info('Bulk Email Params', params);
   const response = await SES.sendBulkTemplatedEmail(params).promise();
   applicationContext.logger.info('Bulk Email Response', response);
 
+  // parse response from AWS
   const needToRetry = response.Status.map((attempt, index) => {
-    if (attempt.Status !== 'Success') {
-      return params.Destinations[index];
-    }
-    return false;
+    // AWS returns 'Success' and helpful identifier upon successful send
+    return attempt.Status !== 'Success' ? params.Destinations[index] : false;
   }).filter(row => !!row);
 
-  if (needToRetry.length) {
-    params.Destinations = needToRetry;
-
-    if (retryCount >= MAX_RETRIES) {
-      const failures = retryCount.map(dest => dest.ToAddresses[0]);
-      throw `Could not complete service to email addresses ${failures.join(
-        ',',
-      )}}`;
-    }
-    await exports.sendWithRetry(applicationContext, {
-      params,
-      retryCount: retryCount + 1,
-    });
+  if (needToRetry.length === 0) {
+    return;
   }
+
+  if (retryCount >= MAX_SES_RETRIES) {
+    const failures = retryCount.map(dest => dest.ToAddresses[0]).join(',');
+    throw `Could not complete service to email addresses ${failures}}`;
+  }
+
+  await exports.sendWithRetry({
+    applicationContext,
+    params: {
+      ...params,
+      Destinations: needToRetry,
+    },
+    retryCount: retryCount + 1,
+  });
 };
