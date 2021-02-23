@@ -2,13 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
-const { UserCase } = require('../../entities/UserCase');
 
 /**
  * addNewUserToCase
@@ -29,6 +25,7 @@ exports.addNewUserToCase = async ({
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_PETITIONER_TO_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
   const { contactPrimary } = caseEntity;
 
   const userEntity = new User(
@@ -50,19 +47,5 @@ exports.addNewUserToCase = async ({
     user: userEntity.validate().toRawObject(),
   });
 
-  contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_PAPER;
-  contactPrimary.email = email;
-  contactPrimary.contactId = userId;
-
-  const rawCase = caseEntity.toRawObject();
-  const userCaseEntity = new UserCase(rawCase);
-
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
-    applicationContext,
-    docketNumber: rawCase.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId,
-  });
-
-  return caseEntity.validate();
+  return userId;
 };
