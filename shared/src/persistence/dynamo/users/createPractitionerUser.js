@@ -19,9 +19,10 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   });
 
   if (user.name && user.barNumber) {
+    const upperCaseName = user.name.toUpperCase();
     await client.put({
       Item: {
-        pk: `${user.role}|${user.name}`,
+        pk: `${user.role}|${upperCaseName}`,
         sk: `user|${userId}`,
       },
       applicationContext,

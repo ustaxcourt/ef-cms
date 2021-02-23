@@ -13,6 +13,9 @@ const {
   migrateItems: migration0020,
 } = require('./migrations/0020-add-entity-name-for-correspondences');
 const {
+  migrateItems: migration0021,
+} = require('./migrations/0021-practitioner-search-upper-case');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
@@ -44,6 +47,8 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0019(items, documentClient);
   applicationContext.logger.info('about to run migration 0020');
   items = await migration0020(items, documentClient);
+  applicationContext.logger.info('about to run migration 0021');
+  items = await migration0021(items, documentClient);
 
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
