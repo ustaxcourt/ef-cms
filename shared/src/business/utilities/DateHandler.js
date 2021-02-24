@@ -126,14 +126,17 @@ const dateStringsCompared = (a, b) => {
     }
   }
 
-  const secondsDifference = 30 * 1000;
-  const aDate = new Date(a);
-  const bDate = new Date(b);
-  if (Math.abs(aDate - bDate) < secondsDifference) {
+  const millisecondsDifferenceThreshold = 30 * 1000;
+
+  const moment1 = prepareDateFromString(a);
+  const moment2 = prepareDateFromString(b);
+  const differenceInMillis = moment1.diff(moment2, 'millisecond', true);
+
+  if (Math.abs(differenceInMillis) < millisecondsDifferenceThreshold) {
     // treat as equal time stamps
     return 0;
   }
-  return aDate - bDate;
+  return differenceInMillis;
 };
 
 /**
