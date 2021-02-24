@@ -163,16 +163,16 @@ const PetitionerInformation = connect(
                     <div className="grid-col-6">
                       {formattedCaseDetail.contactSecondary
                         .serviceIndicator && (
-                          <>
-                            <div className="semi-bold margin-bottom-0">
-                              Service preference
+                        <>
+                          <div className="semi-bold margin-bottom-0">
+                            Service preference
                           </div>
-                            {
-                              formattedCaseDetail.contactSecondary
-                                .serviceIndicator
-                            }
-                          </>
-                        )}
+                          {
+                            formattedCaseDetail.contactSecondary
+                              .serviceIndicator
+                          }
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -380,7 +380,7 @@ const PetitionerInformation = connect(
                   className={classNames(
                     'usa-input margin-bottom-0',
                     validationErrors.practitionerSearchError &&
-                    'usa-input--error',
+                      'usa-input--error',
                   )}
                   id="practitioner-search-field"
                   name="practitionerSearch"
