@@ -658,6 +658,9 @@ const {
   getUserOutboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getUserOutboxMessages');
 const {
+  getUserPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/getUserPendingEmailInteractor');
+const {
   getUsersBySearchKey,
 } = require('../../shared/src/persistence/dynamo/users/getUsersBySearchKey');
 const {
@@ -1683,6 +1686,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUserCaseNoteForCasesInteractor,
         getUserCaseNoteInteractor,
         getUserInteractor,
+        getUserPendingEmailInteractor,
         getUsersInSectionInteractor,
         getWorkItemInteractor,
         onConnectInteractor,

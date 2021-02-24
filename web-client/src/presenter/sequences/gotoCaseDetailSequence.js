@@ -44,6 +44,7 @@ const gotoCaseDetailInternal = [
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
   getMessagesForCaseAction,
+  getUserPendingEmailAction,
   setCurrentPageAction('CaseDetailInternal'),
 ];
 
