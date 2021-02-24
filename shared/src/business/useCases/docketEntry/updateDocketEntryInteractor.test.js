@@ -25,7 +25,7 @@ describe('updateDocketEntryInteractor', () => {
     docketNumber: '45678-18',
     section: DOCKET_SECTION,
     sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    updatedAt: new Date().toISOString(),
+    updatedAt: applicationContext.getUtilities().createISODateString(),
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
