@@ -29,9 +29,6 @@ exports.getUserPendingEmailInteractor = async ({
     userId,
   });
 
-  console.log('userraw', userRaw);
-  console.log('userId', userId);
-
   if (!userRaw) return;
 
   const validatedUserRaw = new User(userRaw).validate().toRawObject();

@@ -15,8 +15,8 @@ describe('createNewPetitionerUser', () => {
     await createNewPetitionerUser({
       applicationContext,
       user: {
-        email: mockEmail,
         name: mockName,
+        pendingEmail: mockEmail,
         role: ROLES.petitioner,
         section: 'petitioner',
         userId: mockUserId,
@@ -47,8 +47,8 @@ describe('createNewPetitionerUser', () => {
   it('should call client.put with the petitioner user record', async () => {
     const mockUserId = 'e6df170d-bc7d-428b-b0f2-decb3f9b83a8';
     const mockUser = {
-      email: 'petitioner@example.com',
       name: 'Bob Ross',
+      pendingEmail: 'petitioner@example.com',
       role: ROLES.petitioner,
       section: 'petitioner',
       userId: mockUserId,
