@@ -2,7 +2,7 @@ import { ContactPrimary } from './ContactPrimary';
 import { ContactSecondary } from './ContactSecondary';
 import { EditPetitionerLoginForm } from '../EditPetitionerLoginForm';
 import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
-import { WarningNotification } from '../WarningNotification';
+import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
@@ -41,8 +41,12 @@ export const Contacts = connect(
               <>
                 <h4>Login &amp; Service Information</h4>
                 {userPendingEmail && (
-                  <WarningNotification
-                    alertWarning={{ message: 'Hi', title: 'Hello there' }}
+                  <WarningNotificationComponent
+                    alertWarning={{
+                      title: `${userPendingEmail} is not verified. When petitioner verifies email, service will update to electronic at the verified email address.`,
+                    }}
+                    dismissable={false}
+                    scrollToTop={false}
                   />
                 )}
                 <div className="blue-container margin-bottom-6">
