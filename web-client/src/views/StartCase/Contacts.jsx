@@ -85,11 +85,9 @@ export const Contacts = connect(
                       </>
                     )}
 
-                    {!userPendingEmail &&
-                      showEditEmail &&
-                      !contactPrimaryHasEmail && (
-                        <EditPetitionerLoginForm type="contactPrimary" />
-                      )}
+                    {showEditEmail && !contactPrimaryHasEmail && (
+                      <EditPetitionerLoginForm type="contactPrimary" />
+                    )}
                   </div>
                 </div>
               </>
