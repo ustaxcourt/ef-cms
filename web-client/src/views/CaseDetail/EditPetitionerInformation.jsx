@@ -104,6 +104,9 @@ export const EditPetitionerInformation = connect(
                   showSecondaryContact={
                     editPetitionerInformationHelper.showSecondaryContact
                   }
+                  userPendingEmail={
+                    editPetitionerInformationHelper.userPendingEmail
+                  }
                   validateSequence={validatePetitionerInformationFormSequence}
                   wrapperClassName="contact-wrapper blue-container margin-bottom-4"
                   onBlur="validatePetitionerInformationFormSequence"
