@@ -54,7 +54,7 @@ describe('validate petition from paper', () => {
         petitionFileSize: 100,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         procedureType: 'Regular',
-        receivedAt: new Date().toISOString(),
+        receivedAt: applicationContext.getUtilities().createISODateString(),
       },
     });
 

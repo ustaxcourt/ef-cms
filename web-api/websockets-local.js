@@ -1,3 +1,4 @@
+/* eslint-disable @miovision/disallow-date/no-new-date */
 const http = require('http');
 const uuid = require('uuid').v4;
 const WebSocketServer = require('websocket').server;

@@ -7,6 +7,8 @@ exports.createTrialSession = testData => {
     const month = faker.random.number({ max: 12, min: 1 });
     const day = faker.random.number({ max: 28, min: 1 });
     const year =
+      // disabled because we're generating a random year for testing.
+      // eslint-disable-next-line @miovision/disallow-date/no-new-date
       new Date().getUTCFullYear() + faker.random.number({ max: 5, min: 1 });
     return `${month}/${day}/${year}`;
   };

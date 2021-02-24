@@ -27,17 +27,18 @@ const { MOCK_USERS } = require('../../test/mockUsers');
 applicationContext.getCurrentUser = () =>
   MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
 
+const getDateISO = () =>
+  applicationContext.getUtilities().createISODateString();
+
 const mockCaseDetailBase = {
   correspondence: [],
-  createdAt: new Date(),
+  createdAt: getDateISO(),
   docketEntries: [],
   docketNumber: '123-45',
   docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
-  receivedAt: new Date(),
+  receivedAt: getDateISO(),
 };
-
-const getDateISO = () => new Date().toISOString();
 
 describe('formatCase', () => {
   let mockCaseDetail;
