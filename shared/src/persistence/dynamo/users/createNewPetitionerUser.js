@@ -12,8 +12,6 @@ const createUserRecords = async ({ applicationContext, newUser, userId }) => {
     applicationContext,
   });
 
-  console.log('userId!!', userId);
-
   return {
     ...newUser,
     userId,
@@ -33,7 +31,7 @@ exports.createNewPetitionerUser = async ({ applicationContext, user }) => {
         },
         {
           Name: 'email',
-          Value: user.email,
+          Value: user.pendingEmail,
         },
         {
           Name: 'custom:role',
@@ -49,7 +47,7 @@ exports.createNewPetitionerUser = async ({ applicationContext, user }) => {
         },
       ],
       UserPoolId: process.env.USER_POOL_ID,
-      Username: user.email,
+      Username: user.pendingEmail,
     })
     .promise();
 

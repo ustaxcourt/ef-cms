@@ -39,8 +39,6 @@ exports.addNewUserToCase = async ({
     { applicationContext },
   );
 
-  console.log('contactPrimary contactId', contactPrimary.contactId);
-
   await applicationContext.getPersistenceGateway().createNewPetitionerUser({
     applicationContext,
     user: userEntity.validate().toRawObject(),

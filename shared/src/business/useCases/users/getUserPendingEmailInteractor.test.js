@@ -68,4 +68,17 @@ describe('getUserPendingEmailInteractor', () => {
 
     expect(result).toBeUndefined();
   });
+
+  it('should return undefined when the user is not found in persistence', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockResolvedValue(undefined);
+
+    const result = await getUserPendingEmailInteractor({
+      applicationContext,
+      userId: USER_ID,
+    });
+
+    expect(result).toBeUndefined();
+  });
 });
