@@ -85,35 +85,35 @@ export const EditPetitionerInformation = connect(
 
             {(editPetitionerInformationHelper.showPrimaryContact ||
               editPetitionerInformationHelper.showSecondaryContact) && (
-                <>
-                  <Contacts
-                    bind="form"
-                    contactPrimaryDisplayEmail={form.contactPrimary.email}
-                    contactPrimaryHasEmail={
-                      editPetitionerInformationHelper.contactPrimaryHasEmail
-                    }
-                    contactPrimaryHasVerifiedEmail={
-                      editPetitionerInformationHelper.contactPrimaryHasVerifiedEmail
-                    }
-                    contactsHelper="startCaseInternalContactsHelper"
-                    showEditEmail={editPetitionerInformationHelper.showEditEmail}
-                    showLoginAndServiceInformation={true}
-                    showPrimaryContact={
-                      editPetitionerInformationHelper.showPrimaryContact
-                    }
-                    showSecondaryContact={
-                      editPetitionerInformationHelper.showSecondaryContact
-                    }
-                    userPendingEmail={
-                      editPetitionerInformationHelper.userPendingEmail
-                    }
-                    validateSequence={validatePetitionerInformationFormSequence}
-                    wrapperClassName="contact-wrapper blue-container margin-bottom-4"
-                    onBlur="validatePetitionerInformationFormSequence"
-                    onChange="updateFormValueSequence"
-                  />
-                </>
-              )}
+              <>
+                <Contacts
+                  bind="form"
+                  contactPrimaryDisplayEmail={form.contactPrimary.email}
+                  contactPrimaryHasEmail={
+                    editPetitionerInformationHelper.contactPrimaryHasEmail
+                  }
+                  contactPrimaryHasVerifiedEmail={
+                    editPetitionerInformationHelper.contactPrimaryHasVerifiedEmail
+                  }
+                  contactsHelper="startCaseInternalContactsHelper"
+                  showEditEmail={editPetitionerInformationHelper.showEditEmail}
+                  showLoginAndServiceInformation={true}
+                  showPrimaryContact={
+                    editPetitionerInformationHelper.showPrimaryContact
+                  }
+                  showSecondaryContact={
+                    editPetitionerInformationHelper.showSecondaryContact
+                  }
+                  userPendingEmail={
+                    editPetitionerInformationHelper.userPendingEmail
+                  }
+                  validateSequence={validatePetitionerInformationFormSequence}
+                  wrapperClassName="contact-wrapper blue-container margin-bottom-4"
+                  onBlur="validatePetitionerInformationFormSequence"
+                  onChange="updateFormValueSequence"
+                />
+              </>
+            )}
           </div>
 
           <Button
