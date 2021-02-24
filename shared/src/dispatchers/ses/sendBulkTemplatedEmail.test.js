@@ -163,7 +163,7 @@ describe('sendBulkTemplatedEmail', () => {
     ).toHaveBeenCalledTimes(2);
   });
 
-  it('should retry a failed mailing', async () => {
+  it('should retry a failed mailing 10 times, and then throw an error', async () => {
     applicationContext.getEmailClient().sendBulkTemplatedEmail.mockReturnValue({
       promise: () =>
         Promise.resolve({
@@ -222,5 +222,8 @@ describe('sendBulkTemplatedEmail', () => {
       applicationContext.getEmailClient().sendBulkTemplatedEmail,
     ).toHaveBeenCalledTimes(11);
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      'Error sending email: Could not complete service to test.email@example.com,test.email2@example.com,test.email3@example.com',
+    );
   });
 });

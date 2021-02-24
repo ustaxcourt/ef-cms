@@ -46,7 +46,7 @@ exports.sendBulkTemplatedEmail = async ({
 
     await exports.sendWithRetry({ applicationContext, params });
   } catch (err) {
-    applicationContext.logger.error(`Error sending email: ${err.message}`, err);
+    applicationContext.logger.error(`Error sending email: ${err}`, err);
   }
 };
 
@@ -80,8 +80,10 @@ exports.sendWithRetry = async ({
   }
 
   if (retryCount >= MAX_SES_RETRIES) {
-    const failures = retryCount.map(dest => dest.ToAddresses[0]).join(',');
-    throw `Could not complete service to email addresses ${failures}}`;
+    const failures = needToRetry
+      .map(dest => dest.Destination.ToAddresses[0])
+      .join(',');
+    throw `Could not complete service to ${failures}`;
   }
 
   await exports.sendWithRetry({
