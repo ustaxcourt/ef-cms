@@ -23,5 +23,7 @@ export const practitionerViewsCaseDetailWithPaperService = test => {
     expect(formattedCase.contactPrimary.serviceIndicator).toEqual(
       test.getState('constants.SERVICE_INDICATOR_TYPES.SI_PAPER'),
     );
+
+    console.log('docketNum', test.docketNumber);
   });
 };

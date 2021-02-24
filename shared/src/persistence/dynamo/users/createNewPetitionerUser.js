@@ -12,6 +12,8 @@ const createUserRecords = async ({ applicationContext, newUser, userId }) => {
     applicationContext,
   });
 
+  console.log('userId!!', userId);
+
   return {
     ...newUser,
     userId,

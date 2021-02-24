@@ -34,10 +34,12 @@ exports.addNewUserToCase = async ({
       name,
       pendingEmail: email,
       role: ROLES.petitioner,
-      userId: applicationContext.getUniqueId(),
+      userId: contactPrimary.contactId,
     },
     { applicationContext },
   );
+
+  console.log('contactPrimary contactId', contactPrimary.contactId);
 
   await applicationContext.getPersistenceGateway().createNewPetitionerUser({
     applicationContext,
