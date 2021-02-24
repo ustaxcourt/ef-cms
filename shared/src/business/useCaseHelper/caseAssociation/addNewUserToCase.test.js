@@ -41,7 +41,7 @@ describe('addNewUserToCase', () => {
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
-          contactId: '123',
+          contactId: USER_ID,
           email: undefined,
           name: 'Bob Ross',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -62,8 +62,8 @@ describe('addNewUserToCase', () => {
         .calls[0][0].user,
     ).toMatchObject({
       contact: {},
-      email: UPDATED_EMAIL,
       name: 'Bob Ross',
+      pendingEmail: UPDATED_EMAIL,
       role: ROLES.petitioner,
       userId: USER_ID,
     });
@@ -81,7 +81,7 @@ describe('addNewUserToCase', () => {
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
-          contactId: '123',
+          contactId: USER_ID,
           email: undefined,
           name: 'Bob Ross',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
