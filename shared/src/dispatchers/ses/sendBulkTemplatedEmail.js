@@ -1,4 +1,6 @@
-const MAX_SES_RETRIES = 10;
+const { backOff } = require('../../tools/helpers');
+
+const MAX_SES_RETRIES = 6;
 
 /**
  * calls SES.sendBulkTemplatedEmail
@@ -85,6 +87,9 @@ exports.sendWithRetry = async ({
       .join(',');
     throw `Could not complete service to ${failures}`;
   }
+
+  // exponential back-off
+  await backOff(retryCount);
 
   await exports.sendWithRetry({
     applicationContext,

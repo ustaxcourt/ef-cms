@@ -220,10 +220,10 @@ describe('sendBulkTemplatedEmail', () => {
     });
     expect(
       applicationContext.getEmailClient().sendBulkTemplatedEmail,
-    ).toHaveBeenCalledTimes(11);
+    ).toHaveBeenCalledTimes(7);
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'Error sending email: Could not complete service to test.email@example.com,test.email2@example.com,test.email3@example.com',
     );
-  });
+  }, 30000);
 });
