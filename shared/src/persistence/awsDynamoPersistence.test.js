@@ -21,7 +21,7 @@ describe('awsDynamoPersistence', function () {
         applicationContext,
         key: 'docketNumberCounter',
       });
-      const year = new Date().getFullYear().toString();
+      const { year } = applicationContext.getUtilities().getMonthDayYearObj();
 
       expect(client.updateConsistent.mock.calls[0][0].Key.pk).toEqual(
         `docketNumberCounter-${year}`,

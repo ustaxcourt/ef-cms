@@ -75,7 +75,7 @@ describe('create user', () => {
     });
 
     const userToCreate = {
-      admissionsDate: new Date().toISOString(),
+      admissionsDate: applicationContext.getUtilities().createISODateString(),
       admissionsStatus: 'Active',
       birthYear: '1993',
       employer: 'Private',

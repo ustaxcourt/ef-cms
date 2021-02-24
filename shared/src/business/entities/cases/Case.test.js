@@ -3779,7 +3779,9 @@ describe('Case entity', () => {
     });
 
     it('should set noticeOfTrialDate when passed through Case constructor', () => {
-      const isoDateString = new Date().toISOString();
+      const isoDateString = applicationContext
+        .getUtilities()
+        .createISODateString();
 
       const caseEntity = new Case(
         {
@@ -4597,7 +4599,11 @@ describe('Case entity', () => {
 
     it('returns true if the object has truthy values for isSealed or isSealedDate', () => {
       expect(isSealedCase({ isSealed: true })).toBe(true);
-      expect(isSealedCase({ sealedDate: new Date().toISOString() })).toBe(true);
+      expect(
+        isSealedCase({
+          sealedDate: applicationContext.getUtilities().createISODateString(),
+        }),
+      ).toBe(true);
     });
 
     it('returns true if the object has a docket entry with truthy values for isSealed or isLegacySealed', () => {
