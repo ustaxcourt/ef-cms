@@ -39,16 +39,15 @@ describe('verify old sent work items do not show up in the outbox', () => {
     });
     applicationContext.environment.dynamoDbTableName = 'efcms-local';
 
-    const currentTime = applicationContext.getUtilities().createISODateString();
     const CREATED_8_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate(currentTime, -8, 'days');
+      .calculateISODate({ howMuch: -8, unit: 'days' });
     const CREATED_7_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate(currentTime, -7, 'days');
+      .calculateISODate({ howMuch: -7, unit: 'days' });
     const CREATED_6_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate(currentTime, -6, 'days');
+      .calculateISODate({ howMuch: -6, unit: 'days' });
 
     workItemId6 = applicationContext.getUniqueId();
     workItemId7 = applicationContext.getUniqueId();
