@@ -13,7 +13,7 @@ resource "aws_lambda_function" "api_lambda" {
     aws_lambda_layer_version.puppeteer_layer.arn
   ]
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
 
   environment {
     variables = var.lambda_environment
@@ -289,12 +289,12 @@ resource "aws_route53_record" "api_route53_record" {
       type   = dvo.resource_record_type
     }
   }
-  name    = each.value.name
-  type    = each.value.type
-  zone_id = var.zone_id
-  records = [each.value.record]
-  ttl     = 60
-    allow_overwrite = true
+  name            = each.value.name
+  type            = each.value.type
+  zone_id         = var.zone_id
+  records         = [each.value.record]
+  ttl             = 60
+  allow_overwrite = true
 }
 
 resource "aws_api_gateway_domain_name" "api_custom" {
