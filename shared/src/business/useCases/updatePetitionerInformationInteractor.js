@@ -403,7 +403,7 @@ exports.updatePetitionerInformationInteractor = async ({
     if (isEmailAvailable) {
       caseEntity = await applicationContext
         .getUseCaseHelpers()
-        .addNewUserToCase({
+        .createUserForContactPrimary({
           applicationContext,
           caseEntity,
           email: contactPrimary.email,
