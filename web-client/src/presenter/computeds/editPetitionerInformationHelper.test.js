@@ -75,4 +75,17 @@ describe('editPetitionerInformationHelper', () => {
 
     expect(result.contactPrimaryHasEmail).toEqual(false);
   });
+
+  it('returns userPendingEmail from state', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        form: { partyType: PARTY_TYPES.petitioner },
+        permissions: {
+          EDIT_PETITIONER_EMAIL: true,
+        },
+        screenMetadata: { userPendingEmail: 'email@example.com' },
+      },
+    });
+    expect(result.userPendingEmail).toEqual('email@example.com');
+  });
 });

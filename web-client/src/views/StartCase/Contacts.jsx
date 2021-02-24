@@ -2,6 +2,7 @@ import { ContactPrimary } from './ContactPrimary';
 import { ContactSecondary } from './ContactSecondary';
 import { EditPetitionerLoginForm } from '../EditPetitionerLoginForm';
 import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
+import { WarningNotification } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
@@ -39,6 +40,11 @@ export const Contacts = connect(
             {showLoginAndServiceInformation && (
               <>
                 <h4>Login &amp; Service Information</h4>
+                {userPendingEmail && (
+                  <WarningNotification
+                    alertWarning={{ message: 'Hi', title: 'Hello there' }}
+                  />
+                )}
                 <div className="blue-container margin-bottom-6">
                   <ServiceIndicatorRadios
                     bind="form.contactPrimary"
