@@ -89,6 +89,13 @@ const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  prepareDateFromString,
+} = require('../../shared/src/business/utilities/DateHandler');
+const {
   CASE_STATUS_TYPES,
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
@@ -160,12 +167,6 @@ const {
 const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
-const {
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} = require('../../shared/src/business/utilities/DateHandler');
 const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
@@ -1756,6 +1757,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
+        calculateISODate,
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,

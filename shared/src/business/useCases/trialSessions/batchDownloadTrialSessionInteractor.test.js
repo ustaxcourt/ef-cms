@@ -68,7 +68,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        startDate: new Date('2019-09-26T12:00:00.000Z'),
+        startDate: '2019-09-26T12:00:00.000Z',
         trialLocation: 'Birmingham',
       });
 
