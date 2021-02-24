@@ -3,6 +3,14 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const { sendBulkTemplatedEmail } = require('./sendBulkTemplatedEmail');
 
+// testApplicationContext relies on getConstants.js -- not web-api's
+// https://trello.com/c/xi5TPQYl/908-getconstants-for-applicationcontext-is-markedly-different-for-testapplicationcontext
+const appConstants = applicationContext.getConstants();
+applicationContext.getConstants = () => ({
+  ...appConstants,
+  MAX_SES_RETRIES: 6,
+});
+
 describe('sendBulkTemplatedEmail', () => {
   it('sends the bulk email given a template', async () => {
     applicationContext.getEmailClient().sendBulkTemplatedEmail.mockReturnValue({
@@ -163,7 +171,9 @@ describe('sendBulkTemplatedEmail', () => {
     ).toHaveBeenCalledTimes(2);
   });
 
-  it('should retry a failed mailing 10 times, and then throw an error', async () => {
+  it('should retry a failed mailing MAX_SES_RETRIES times (MAX_SES_RETRIES + 1 total attempts), and then log an error', async () => {
+    const { MAX_SES_RETRIES } = applicationContext.getConstants();
+
     applicationContext.getEmailClient().sendBulkTemplatedEmail.mockReturnValue({
       promise: () =>
         Promise.resolve({
@@ -220,7 +230,7 @@ describe('sendBulkTemplatedEmail', () => {
     });
     expect(
       applicationContext.getEmailClient().sendBulkTemplatedEmail,
-    ).toHaveBeenCalledTimes(7);
+    ).toHaveBeenCalledTimes(MAX_SES_RETRIES + 1);
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'Error sending email: Could not complete service to test.email@example.com,test.email2@example.com,test.email3@example.com',
