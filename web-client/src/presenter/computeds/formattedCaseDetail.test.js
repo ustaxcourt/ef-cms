@@ -943,7 +943,7 @@ describe('formattedCaseDetail', () => {
       };
       const caseDeadlines = [
         {
-          deadlineDate: new Date(),
+          deadlineDate: applicationContext.getUtilities().createISODateString(),
         },
       ];
 

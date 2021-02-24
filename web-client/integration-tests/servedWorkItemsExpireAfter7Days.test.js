@@ -44,12 +44,16 @@ describe('verify old served work items do not show up in the outbox', () => {
     });
     appContext.environment.dynamoDbTableName = 'efcms-local';
 
-    const CREATED_8_DAYS_AGO = new Date();
-    const CREATED_7_DAYS_AGO = new Date();
-    const CREATED_6_DAYS_AGO = new Date();
-    CREATED_8_DAYS_AGO.setDate(new Date().getDate() - 8);
-    CREATED_7_DAYS_AGO.setDate(new Date().getDate() - 7);
-    CREATED_6_DAYS_AGO.setDate(new Date().getDate() - 6);
+    const currentTime = applicationContext.getUtilities().createISODateString();
+    const CREATED_8_DAYS_AGO = applicationContext
+      .getUtilities()
+      .calculateISODate(currentTime, -8, 'days');
+    const CREATED_7_DAYS_AGO = applicationContext
+      .getUtilities()
+      .calculateISODate(currentTime, -7, 'days');
+    const CREATED_6_DAYS_AGO = applicationContext
+      .getUtilities()
+      .calculateISODate(currentTime, -6, 'days');
 
     workItemId6 = appContext.getUniqueId();
     workItemId7 = appContext.getUniqueId();
