@@ -66,7 +66,7 @@ exports.getOpenConsolidatedCasesInteractor = async ({ applicationContext }) => {
   const foundCases = Object.values(casesAssociatedWithUserOrLeadCaseMap);
 
   return foundCases.map(c => {
-    // explicitly unset the entityName because this is returning a franken-entity and if an entityName
+    // explicitly unset the entityName because this is returning a composite entity and if an entityName
     // is set, the genericHandler will send it through the entity constructor for that entity and strip
     // out necessary data
     c.entityName = undefined;
