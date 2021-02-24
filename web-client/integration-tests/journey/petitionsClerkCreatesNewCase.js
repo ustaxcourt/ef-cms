@@ -206,14 +206,16 @@ export const petitionsClerkCreatesNewCase = (
       await test.runSequence('serveCaseToIrsSequence');
     }
 
-    await test.runSequence('gotoCaseDetailSequence');
+    console.log('docketNumber!!', docketNumber);
 
-    test.docketNumber = test.getState('caseDetail.docketNumber');
-    expect(test.getState('caseDetail.preferredTrialCity')).toEqual(
-      trialLocation,
-    );
-    if (test.casesReadyForTrial) {
-      test.casesReadyForTrial.push(test.docketNumber);
-    }
+    // await test.runSequence('gotoCaseDetailSequence');
+
+    // test.docketNumber = test.getState('caseDetail.docketNumber');
+    // expect(test.getState('caseDetail.preferredTrialCity')).toEqual(
+    //   trialLocation,
+    // );
+    // if (test.casesReadyForTrial) {
+    //   test.casesReadyForTrial.push(test.docketNumber);
+    // }
   });
 };

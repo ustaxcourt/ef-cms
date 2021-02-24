@@ -19,21 +19,21 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
-    documentTitle: 'Order to do something',
-    eventCode: 'O',
-    expectedDocumentType: 'Order',
-  });
+  // loginAs(test, 'docketclerk@example.com');
+  // docketClerkCreatesAnOrder(test, {
+  //   documentTitle: 'Order to do something',
+  //   eventCode: 'O',
+  //   expectedDocumentType: 'Order',
+  // });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesOrderWithPaperService(test, 0);
-  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(
-    test,
-    0,
-    CASE_STATUS_TYPES.generalDocket,
-  );
+  // loginAs(test, 'docketclerk@example.com');
+  // docketClerkViewsDraftOrder(test, 0);
+  // docketClerkSignsOrder(test, 0);
+  // docketClerkAddsDocketEntryFromOrder(test, 0);
+  // docketClerkServesOrderWithPaperService(test, 0);
+  // docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(
+  //   test,
+  //   0,
+  //   CASE_STATUS_TYPES.generalDocket,
+  // );
 });
