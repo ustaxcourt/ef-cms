@@ -1,13 +1,5 @@
 exports.updateUserEmail = async ({ applicationContext, user }) => {
   try {
-    const response = await applicationContext
-      .getCognito()
-      .adminGetUser({
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email,
-      })
-      .promise();
-
     await applicationContext
       .getCognito()
       .adminUpdateUserAttributes({
@@ -22,10 +14,12 @@ exports.updateUserEmail = async ({ applicationContext, user }) => {
           },
         ],
         UserPoolId: process.env.USER_POOL_ID,
-        Username: response.Username,
+        Username: user.email,
       })
       .promise();
   } catch (err) {
-    applicationContext.logger.error('Error updating user');
+    applicationContext.logger.error(
+      `Error updating user with original email ${user.email}`,
+    );
   }
 };

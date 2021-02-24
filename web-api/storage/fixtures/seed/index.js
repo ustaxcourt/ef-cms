@@ -6,4 +6,5 @@ module.exports = [
   ...require('./integration-test-data/150-12.json'),
   ...require('./integration-test-data/151-12.json'),
   ...require('./integration-test-data/152-12.json'),
+  ...require('./integration-test-data/migrated-trial-session.json'),
 ];

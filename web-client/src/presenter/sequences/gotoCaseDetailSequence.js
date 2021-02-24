@@ -12,6 +12,7 @@ import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudge
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { parallel, set } from 'cerebral/factories';
+import { resetHeaderAccordionsSequence } from './resetHeaderAccordionsSequence';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
@@ -33,6 +34,7 @@ import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
 
 const gotoCaseDetailInternal = [
+  resetHeaderAccordionsSequence,
   getTrialSessionsAction,
   setTrialSessionsAction,
   setTrialSessionJudgeAction,

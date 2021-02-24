@@ -173,8 +173,8 @@ const {
   createMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/createMessageInteractor');
 const {
-  createMigratedPetitionerUser,
-} = require('../../shared/src/persistence/dynamo/users/createMigratedPetitionerUser');
+  createNewPractitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createNewPractitionerUser');
 const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
@@ -691,12 +691,6 @@ const {
   markMessageThreadRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markMessageThreadRepliedTo');
 const {
-  migrateCaseDeadlineInteractor,
-} = require('../../shared/src/business/useCases/migrateCaseDeadlineInteractor');
-const {
-  migrateTrialSessionInteractor,
-} = require('../../shared/src/business/useCases/migrateTrialSessionInteractor');
-const {
   onConnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
 const {
@@ -769,6 +763,9 @@ const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
+  saveCalendarNoteInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor');
+const {
   saveCaseDetailInternalEditInteractor,
 } = require('../../shared/src/business/useCases/saveCaseDetailInternalEditInteractor');
 const {
@@ -828,6 +825,9 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
+const {
+  serveDocumentAndGetPaperServicePdf,
+} = require('../../shared/src/business/useCaseHelper/serveDocumentAndGetPaperServicePdf');
 const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
@@ -994,6 +994,9 @@ const {
   updateUserPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserPendingEmailInteractor');
 const {
+  updateUserRecords,
+} = require('../../shared/src/persistence/dynamo/users/updateUserRecords');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -1029,6 +1032,7 @@ const { exec } = require('child_process');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 const { Message } = require('../../shared/src/business/entities/Message');
+const { scan } = require('../../shared/src/persistence/dynamodbClientService');
 const { User } = require('../../shared/src/business/entities/User');
 const { UserCase } = require('../../shared/src/business/entities/UserCase');
 const { v4: uuidv4 } = require('uuid');
@@ -1163,7 +1167,6 @@ const gatewayMethods = {
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createMessage,
-    createMigratedPetitionerUser,
     createPractitionerUser,
     createSectionInboxRecord,
     createTrialSession,
@@ -1205,6 +1208,7 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  createNewPractitionerUser,
   deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
@@ -1320,13 +1324,21 @@ module.exports = (appContextUser, logger = createLogger()) => {
           adminDisableUser: () => ({
             promise: () => {},
           }),
-          adminGetUser: ({ Username = '' }) => ({
-            promise: () => {
-              if (Username.includes('error')) {
-                throw new Error('User does not exist');
-              }
+          adminGetUser: ({ Username }) => ({
+            promise: async () => {
+              // TODO: this scan might become REALLY slow while doing a full integration
+              // test run.
+              const items = await scan({
+                applicationContext: {
+                  environment,
+                  getDocumentClient,
+                },
+              });
+              const users = items.filter(
+                ({ pk, sk }) =>
+                  pk.startsWith('user|') && sk.startsWith('user|'),
+              );
 
-              const users = require('../storage/fixtures/seed/users.json');
               const foundUser = users.find(({ email }) => email === Username);
 
               if (foundUser) {
@@ -1334,8 +1346,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
                   UserAttributes: [],
                   Username: foundUser.userId,
                 };
+              } else {
+                throw new Error('User does not exist');
               }
-              return { Username };
             },
           }),
           adminUpdateUserAttributes: () => ({
@@ -1437,10 +1450,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
-    getMigrations: () => ({
-      migrateCaseDeadlineInteractor,
-      migrateTrialSessionInteractor,
-    }),
     getNodeSass: () => {
       return sass;
     },
@@ -1559,9 +1568,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
+        serveDocumentAndGetPaperServicePdf,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
         updateInitialFilingDocuments,
+        updateUserRecords,
       };
     },
     getUseCases: () => {
@@ -1682,6 +1693,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,
+        saveCalendarNoteInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
         saveSignedDocumentInteractor,

@@ -220,12 +220,6 @@ const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
 const {
-  migrateCaseDeadlineLambda,
-} = require('./migrate/migrateCaseDeadlineLambda');
-const {
-  migrateTrialSessionLambda,
-} = require('./migrate/migrateTrialSessionLambda');
-const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
 const {
@@ -255,6 +249,9 @@ const {
 const {
   runTrialSessionPlanningReportLambda,
 } = require('./trialSessions/runTrialSessionPlanningReportLambda');
+const {
+  saveCalendarNoteLambda,
+} = require('./trialSessions/saveCalendarNoteLambda');
 const {
   saveCaseDetailInternalEditLambda,
 } = require('./cases/saveCaseDetailInternalEditLambda');
@@ -782,12 +779,6 @@ app.post(
 }
 
 /**
- * migrate
- */
-app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
-app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
-
-/**
  * practitioners
  */
 {
@@ -890,6 +881,10 @@ app.get(
   app.post(
     '/trial-sessions/:trialSessionId/cases/:docketNumber',
     lambdaWrapper(addCaseToTrialSessionLambda),
+  );
+  app.put(
+    '/trial-sessions/:trialSessionId/set-calendar-note',
+    lambdaWrapper(saveCalendarNoteLambda),
   );
   app.get(
     '/trial-sessions/:trialSessionId',

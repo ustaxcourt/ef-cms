@@ -1,3 +1,4 @@
+import { AddEditCalendarNoteModal } from './AddEditCalendarNoteModal';
 import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddToTrialModal } from './AddToTrialModal';
 import { BlockFromTrialModal } from './BlockFromTrialModal';
@@ -282,6 +283,9 @@ export const CaseDetailHeaderMenu = connect(
         )}
         {showModal === 'AddEditCaseNoteModal' && (
           <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteSequence" />
+        )}
+        {showModal === 'AddEditCalendarNoteModal' && (
+          <AddEditCalendarNoteModal />
         )}
         {showModal === 'AddToTrialModal' && (
           <AddToTrialModal
