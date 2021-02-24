@@ -7,12 +7,11 @@ const { User } = require('../../entities/User');
 
 /**
  * getUserPendingEmailInteractor
- * Allows a user to request an update their own email address if they have permission.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.pendingEmail the pending email
- * @returns {Promise} the updated user object
+ * @param {string} providers.userId the userId
+ * @returns {Promise} the user's pending email
  */
 exports.getUserPendingEmailInteractor = async ({
   applicationContext,
