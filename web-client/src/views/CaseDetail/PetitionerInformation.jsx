@@ -21,6 +21,7 @@ const PetitionerInformation = connect(
       sequences.openAddPrivatePractitionerModalSequence,
     openEditPrivatePractitionersModalSequence:
       sequences.openEditPrivatePractitionersModalSequence,
+    screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     toggleShowAdditionalPetitionersSequence:
       sequences.toggleShowAdditionalPetitionersSequence,
@@ -34,6 +35,7 @@ const PetitionerInformation = connect(
     formattedCaseDetail,
     openAddPrivatePractitionerModalSequence,
     openEditPrivatePractitionersModalSequence,
+    screenMetadata,
     showModal,
     toggleShowAdditionalPetitionersSequence,
     updateFormValueSequence,
@@ -100,12 +102,12 @@ const PetitionerInformation = connect(
                         {formattedCaseDetail.contactPrimary.serviceIndicator}
                       </>
                     )}
-                    {formattedCaseDetail.contactPrimary.pendingEmail && (
+                    {screenMetadata.userPendingEmail && (
                       <>
                         <div className="semi-bold margin-bottom-0">
                           Pending Email
                         </div>
-                        {formattedCaseDetail.contactPrimary.serviceIndicator}
+                        {screenMetadata.userPendingEmail}
                       </>
                     )}
                   </div>
