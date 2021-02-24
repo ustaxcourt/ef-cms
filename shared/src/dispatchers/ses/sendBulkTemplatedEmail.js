@@ -1,7 +1,5 @@
 const { backOff } = require('../../tools/helpers');
 
-const MAX_SES_RETRIES = 6;
-
 /**
  * calls SES.sendBulkTemplatedEmail
  *
@@ -53,7 +51,7 @@ exports.sendBulkTemplatedEmail = async ({
 };
 
 /**
- * Sends the email via SES with a MAX_SES_RETRIES = 10;
+ * Sends the email via SES, and retry `MAX_SES_RETRIES` number of times
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext application context
@@ -66,6 +64,7 @@ exports.sendWithRetry = async ({
   retryCount = 0,
 }) => {
   const SES = applicationContext.getEmailClient();
+  const { MAX_SES_RETRIES } = applicationContext.getConstants();
 
   applicationContext.logger.info('Bulk Email Params', params);
   const response = await SES.sendBulkTemplatedEmail(params).promise();
