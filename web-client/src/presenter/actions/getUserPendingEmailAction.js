@@ -5,6 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} props.applicationContext the applicationContext
  * @param {function} props.get the cerebral get function
+ * @returns {object} the userPendingEmail
  */
 export const getUserPendingEmailAction = async ({
   applicationContext,

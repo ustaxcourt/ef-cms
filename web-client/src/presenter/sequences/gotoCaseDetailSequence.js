@@ -11,6 +11,7 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
+import { getUserPendingEmailAction } from '../actions/getUserPendingEmailAction';
 import { parallel, set } from 'cerebral/factories';
 import { resetHeaderAccordionsSequence } from './resetHeaderAccordionsSequence';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
@@ -27,6 +28,7 @@ import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
+import { setUserPendingEmailAction } from '../actions/setUserPendingEmailAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
@@ -45,6 +47,7 @@ const gotoCaseDetailInternal = [
   getCaseDeadlinesForCaseAction,
   getMessagesForCaseAction,
   getUserPendingEmailAction,
+  setUserPendingEmailAction,
   setCurrentPageAction('CaseDetailInternal'),
 ];
 
