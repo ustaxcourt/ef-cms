@@ -31,8 +31,8 @@ exports.addNewUserToCase = async ({
   const userEntity = new User(
     {
       contact: contactPrimary,
-      email,
       name,
+      pendingEmail: email,
       role: ROLES.petitioner,
       userId: applicationContext.getUniqueId(),
     },
