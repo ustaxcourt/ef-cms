@@ -329,48 +329,16 @@ exports.completeDocketEntryQCInteractor = async ({
       key: noticeUpdatedDocketEntry.docketEntryId,
     });
 
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
-      caseEntity,
-      docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
-      servedParties,
-    });
-
-    if (servedParties.paper.length > 0) {
-      const noticeDoc = await PDFDocument.load(newPdfData);
-      let newPdfDoc = await PDFDocument.create();
-
-      await applicationContext
-        .getUseCaseHelpers()
-        .appendPaperServiceAddressPageToPdf({
-          applicationContext,
-          caseEntity,
-          newPdfDoc,
-          noticeDoc,
-          servedParties,
-        });
-
-      const paperServicePdfData = await newPdfDoc.save();
-      const paperServicePdfId = applicationContext.getUniqueId();
-
-      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    const paperServiceResult = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
         applicationContext,
-        document: paperServicePdfData,
-        key: paperServicePdfId,
-        useTempBucket: true,
+        caseEntity,
+        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
       });
 
-      const {
-        url,
-      } = await applicationContext
-        .getPersistenceGateway()
-        .getDownloadPolicyUrl({
-          applicationContext,
-          key: paperServicePdfId,
-          useTempBucket: true,
-        });
-
-      paperServicePdfUrl = url;
+    if (servedParties.paper.length > 0) {
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
       paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
     }
   }
