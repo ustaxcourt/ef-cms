@@ -204,7 +204,7 @@ module.exports = {
         identifiers: false,
         lang: 'en_US',
         minLength: 4,
-        skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$'],
+        skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$', 'eslint\\-.*$'],
         skipWords: [
           'anthony',
           'apigateway',
