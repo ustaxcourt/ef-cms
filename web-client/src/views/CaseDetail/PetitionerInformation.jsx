@@ -100,6 +100,14 @@ const PetitionerInformation = connect(
                         {formattedCaseDetail.contactPrimary.serviceIndicator}
                       </>
                     )}
+                    {formattedCaseDetail.contactPrimary.pendingEmail && (
+                      <>
+                        <div className="semi-bold margin-bottom-0">
+                          Pending Email
+                        </div>
+                        {formattedCaseDetail.contactPrimary.serviceIndicator}
+                      </>
+                    )}
                   </div>
                 </div>
               )}
