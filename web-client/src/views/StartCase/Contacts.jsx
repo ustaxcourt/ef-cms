@@ -19,6 +19,7 @@ export const Contacts = connect(
     showLoginAndServiceInformation,
     showPrimaryContact,
     showSecondaryContact,
+    userPendingEmail,
     useSameAsPrimary,
     validateSequence,
     wrapperClassName,
@@ -45,7 +46,7 @@ export const Contacts = connect(
                     validateSequence={validateSequence}
                     validationErrors="validationErrors.contactPrimary"
                   />
-                  <div className="margin-top-4">
+                  <div className="margin-top-4 margin-bottom-2">
                     {contactPrimaryHasEmail && (
                       <>
                         <label
@@ -60,9 +61,25 @@ export const Contacts = connect(
                       </>
                     )}
 
-                    {showEditEmail && !contactPrimaryHasEmail && (
-                      <EditPetitionerLoginForm type="contactPrimary" />
+                    {userPendingEmail && (
+                      <>
+                        <label
+                          className="usa-label"
+                          htmlFor="pending-email-display"
+                        >
+                          Pending email address
+                        </label>
+                        <span id="pending-email-display">
+                          {userPendingEmail}
+                        </span>
+                      </>
                     )}
+
+                    {!userPendingEmail &&
+                      showEditEmail &&
+                      !contactPrimaryHasEmail && (
+                        <EditPetitionerLoginForm type="contactPrimary" />
+                      )}
                   </div>
                 </div>
               </>
