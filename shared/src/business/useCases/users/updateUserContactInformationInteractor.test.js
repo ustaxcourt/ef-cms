@@ -43,7 +43,7 @@ describe('updateUserContactInformationInteractor', () => {
   beforeEach(() => {
     mockUser = {
       ...MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
-      admissionsDate: new Date(),
+      admissionsDate: applicationContext.getUtilities().createISODateString(),
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
       employer: EMPLOYER_OPTIONS[2],
@@ -136,7 +136,7 @@ describe('updateUserContactInformationInteractor', () => {
   it('should update the user with the new contact information and mark it as having an update in progress', async () => {
     mockUser = {
       ...MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
-      admissionsDate: new Date(),
+      admissionsDate: applicationContext.getUtilities().createISODateString(),
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
       employer: EMPLOYER_OPTIONS[1],
