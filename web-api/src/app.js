@@ -220,6 +220,9 @@ const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
 const {
+  getUserPendingEmailLambda,
+} = require('./users/getUserPendingEmailLambda');
+const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
 const {
@@ -930,6 +933,10 @@ app.get(
 app.put(
   '/async/users/:userId/contact-info',
   lambdaWrapper(updateUserContactInformationLambda),
+);
+app.get(
+  '/users/:userId/pending-email',
+  lambdaWrapper(getUserPendingEmailLambda),
 );
 app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
 app.put(
