@@ -10,12 +10,15 @@ const editPetitionerInformationHelper = withAppContextDecorator(
 );
 
 describe('editPetitionerInformationHelper', () => {
-  it('returns showEditEmail true if the current user has the EDIT_PETITIONER_EMAIL permission', () => {
+  it('returns showEditEmail true if the current user has the EDIT_PETITIONER_EMAIL permission and state.screenMetadata.userPendingEmail is undefined', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: true,
+        },
+        screenMetadata: {
+          userPendingEmail: undefined,
         },
       },
     });
@@ -28,6 +31,21 @@ describe('editPetitionerInformationHelper', () => {
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: false,
+        },
+      },
+    });
+    expect(result.showEditEmail).toEqual(false);
+  });
+
+  it('returns showEditEmail false if the current user DOES have the EDIT_PETITIONER_EMAIL permission but state.screenMetadata.userPendingEmail is defined', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        form: { partyType: PARTY_TYPES.petitioner },
+        permissions: {
+          EDIT_PETITIONER_EMAIL: false,
+        },
+        screenMetadata: {
+          userPendingEmail: 'error@example.com',
         },
       },
     });

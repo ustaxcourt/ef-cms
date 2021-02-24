@@ -13,8 +13,8 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const partyType = get(state.form.partyType);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
-  const showEditEmail = permissions.EDIT_PETITIONER_EMAIL;
   const userPendingEmail = get(state.screenMetadata.userPendingEmail);
+  const showEditEmail = permissions.EDIT_PETITIONER_EMAIL && !userPendingEmail;
 
   const contactPrimaryEmail = get(state.caseDetail.contactPrimary.email);
 
