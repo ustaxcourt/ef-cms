@@ -131,7 +131,7 @@ const DisplayHearings = ({
                   label: 'Remove from Hearing',
                 },
               ]}
-              menuState="caseInformationHearingsEdit"
+              menuState={`caseInformationHearingsEdit-${hearing.trialSessionId}`}
             ></DropdownMenu>
           </td>
         )}
