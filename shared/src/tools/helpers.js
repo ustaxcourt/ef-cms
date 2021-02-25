@@ -36,9 +36,29 @@ const whitespaceCleanup = str => {
   return str;
 };
 
+/**
+ * Returns a promise that resolves itself after the specified number of milliseconds
+ *
+ * @param {number} ms The number of milliseconds to wait before resolving the promise
+ * @returns {Promise} resolves itself after the specified number of ms
+ */
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
+ * To improve the success rate of retry attempts, this function is available to
+ * pause the application before attempting to retry a failed operation with AWS.
+ * The higher the retryCount, the longer we wait.
+ *
+ * @param {number} retryCount how many times we have retried this task
+ * @returns {Promise} resolves once the sleep timeout has elapsed
+ */
+const backOff = retryCount => sleep(Math.pow(2, retryCount) * 100);
+
 module.exports = {
+  backOff,
   gatherRecords,
   getCsvOptions,
+  sleep,
   sortableTitle,
   whitespaceCleanup,
 };
