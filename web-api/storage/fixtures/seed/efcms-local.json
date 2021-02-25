@@ -1102,7 +1102,8 @@
       "address1": "123 Teachers Way",
       "postalCode": "123456",
       "name": "Hanan Al Hroub",
-      "countryType": "international"
+      "countryType": "international",
+      "phone": "1234567890"
     },
     "highPriority": false,
     "noticeOfAttachments": false,

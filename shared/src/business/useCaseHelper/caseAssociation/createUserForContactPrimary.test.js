@@ -2,14 +2,16 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  createUserForContactPrimary,
+} = require('./createUserForContactPrimary');
+const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const { addNewUserToCase } = require('./addNewUserToCase');
 const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-describe('addNewUserToCase', () => {
+describe('createUserForContactPrimary', () => {
   const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
 
   beforeEach(() => {
@@ -20,7 +22,7 @@ describe('addNewUserToCase', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      addNewUserToCase({
+      createUserForContactPrimary({
         applicationContext,
         caseEntity: new Case(MOCK_CASE, { applicationContext }),
         email: 'testing@example.com',
@@ -41,7 +43,7 @@ describe('addNewUserToCase', () => {
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
-          contactId: '123',
+          contactId: USER_ID,
           email: undefined,
           name: 'Bob Ross',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -50,7 +52,7 @@ describe('addNewUserToCase', () => {
       { applicationContext },
     );
 
-    await addNewUserToCase({
+    await createUserForContactPrimary({
       applicationContext,
       caseEntity,
       email: UPDATED_EMAIL,
@@ -62,8 +64,8 @@ describe('addNewUserToCase', () => {
         .calls[0][0].user,
     ).toMatchObject({
       contact: {},
-      email: UPDATED_EMAIL,
       name: 'Bob Ross',
+      pendingEmail: UPDATED_EMAIL,
       role: ROLES.petitioner,
       userId: USER_ID,
     });
@@ -81,7 +83,7 @@ describe('addNewUserToCase', () => {
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
-          contactId: '123',
+          contactId: USER_ID,
           email: undefined,
           name: 'Bob Ross',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -90,7 +92,7 @@ describe('addNewUserToCase', () => {
       { applicationContext },
     );
 
-    const updatedCase = await addNewUserToCase({
+    const updatedCase = await createUserForContactPrimary({
       applicationContext,
       caseEntity,
       email: UPDATED_EMAIL,

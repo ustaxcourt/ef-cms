@@ -75,7 +75,7 @@ describe('create user', () => {
     });
 
     const userToCreate = {
-      admissionsDate: new Date().toISOString(),
+      admissionsDate: applicationContext.getUtilities().createISODateString(),
       admissionsStatus: 'Active',
       birthYear: '1993',
       employer: 'Private',
@@ -108,7 +108,7 @@ describe('create user', () => {
       role: ROLES.irsPractitioner,
       userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
     });
-    const mockAdmissionsDate = new Date('1876/02/19').toISOString();
+    const mockAdmissionsDate = '1876-02-19T00:00:00.000Z';
 
     const user = await createUserInteractor({
       applicationContext,
@@ -142,7 +142,7 @@ describe('create user', () => {
       role: ROLES.inactivePractitioner,
       userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
     });
-    const mockAdmissionsDate = new Date('1876/02/19').toISOString();
+    const mockAdmissionsDate = '1876-02-19T00:00:00.000Z';
 
     const user = await createUserInteractor({
       applicationContext,

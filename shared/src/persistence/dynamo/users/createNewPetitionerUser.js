@@ -26,12 +26,12 @@ exports.createNewPetitionerUser = async ({ applicationContext, user }) => {
     .adminCreateUser({
       UserAttributes: [
         {
-          Name: 'email_verified', // TODO: remove this probably
+          Name: 'email_verified',
           Value: 'True',
         },
         {
           Name: 'email',
-          Value: user.email,
+          Value: user.pendingEmail,
         },
         {
           Name: 'custom:role',
@@ -47,7 +47,7 @@ exports.createNewPetitionerUser = async ({ applicationContext, user }) => {
         },
       ],
       UserPoolId: process.env.USER_POOL_ID,
-      Username: user.email,
+      Username: user.pendingEmail,
     })
     .promise();
 

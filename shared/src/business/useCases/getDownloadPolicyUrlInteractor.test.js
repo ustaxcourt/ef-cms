@@ -234,7 +234,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
             )[0],
             documentType: 'Order that case is assigned',
             eventCode: 'O',
-            servedAt: new Date().toISOString(),
+            servedAt: applicationContext.getUtilities().createISODateString(),
           },
         ],
       });
@@ -366,7 +366,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
             documentType: 'Stipulated Decision',
             eventCode: STIPULATED_DECISION_EVENT_CODE,
             isOnDocketRecord: true,
-            servedAt: new Date().toISOString(),
+            servedAt: applicationContext.getUtilities().createISODateString(),
           },
         ],
       });
@@ -402,7 +402,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
             eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
             isLegacySealed: true,
             isOnDocketRecord: true,
-            servedAt: new Date().toISOString(),
+            servedAt: applicationContext.getUtilities().createISODateString(),
           },
         ],
       });
@@ -437,7 +437,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
             eventCode: 'O',
             isLegacySealed: true,
             isOnDocketRecord: true,
-            servedAt: new Date().toISOString(),
+            servedAt: applicationContext.getUtilities().createISODateString(),
           },
         ],
       });
@@ -471,7 +471,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
             documentType: 'Stipulated Decision',
             eventCode: STIPULATED_DECISION_EVENT_CODE,
             isOnDocketRecord: true,
-            servedAt: new Date().toISOString(),
+            servedAt: applicationContext.getUtilities().createISODateString(),
           },
         ],
       });
@@ -505,7 +505,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
             documentType: 'Stipulated Decision',
             eventCode: STIPULATED_DECISION_EVENT_CODE,
             isOnDocketRecord: true,
-            servedAt: new Date().toISOString(),
+            servedAt: applicationContext.getUtilities().createISODateString(),
           },
         ],
       });
@@ -704,7 +704,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
     mockCase.docketEntries.map(entry => {
       if (entry.documentType === 'Petition') {
-        entry.servedAt = new Date().toISOString();
+        entry.servedAt = applicationContext
+          .getUtilities()
+          .createISODateString();
       }
     });
     applicationContext

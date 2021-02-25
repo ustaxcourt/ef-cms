@@ -3,12 +3,12 @@ name: Node.js CI
 on: [pull_request]
 
 jobs:
-  TestShared:
+  Shared:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
 
     steps:
       - uses: actions/checkout@v2

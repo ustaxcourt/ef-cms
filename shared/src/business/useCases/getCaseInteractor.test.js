@@ -227,7 +227,7 @@ describe('getCaseInteractor', () => {
             ...MOCK_CASE,
             caseCaption: 'a case caption',
             caseType: CASE_TYPES_MAP.other,
-            createdAt: new Date().toISOString(),
+            createdAt: applicationContext.getUtilities().createISODateString(),
             docketEntries: sealedDocketEntries,
             docketNumber: '101-18',
             irsPractitioners: [

@@ -1,7 +1,6 @@
 resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-east-1.lambdas"
   acl    = "private"
-  region = "us-east-1"
 
   tags = {
     environment = var.environment

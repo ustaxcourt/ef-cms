@@ -50,19 +50,22 @@ export const headerHelper = (get, applicationContext) => {
     showDocumentQC: isInternalUser,
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
     showMessages: isInternalUser && userRole !== USER_ROLES.general,
-    showMyAccount:
-      userRole === USER_ROLES.privatePractitioner ||
-      userRole === USER_ROLES.irsPractitioner ||
-      userRole === USER_ROLES.petitioner,
+    showMyAccount: [
+      USER_ROLES.privatePractitioner,
+      USER_ROLES.irsPractitioner,
+      USER_ROLES.petitioner,
+    ].includes(userRole),
     showMyCases:
       isExternalUser && userRole && userRole !== USER_ROLES.irsSuperuser,
     showReports: isInternalUser,
     showSearchInHeader:
       userRole &&
-      userRole !== USER_ROLES.petitioner &&
-      userRole !== USER_ROLES.privatePractitioner &&
-      userRole !== USER_ROLES.irsPractitioner &&
-      userRole !== USER_ROLES.irsSuperuser,
+      ![
+        USER_ROLES.petitioner,
+        USER_ROLES.privatePractitioner,
+        USER_ROLES.irsPractitioner,
+        USER_ROLES.irsSuperuser,
+      ].includes(userRole),
     showSearchNavItem: userRole && userRole === USER_ROLES.irsSuperuser,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
     showVerifyEmailWarningNotification: !!user?.pendingEmail,
