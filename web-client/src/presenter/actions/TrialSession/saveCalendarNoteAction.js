@@ -11,7 +11,8 @@ import { state } from 'cerebral';
 export const saveCalendarNoteAction = async ({ applicationContext, get }) => {
   const calendarNote = get(state.modal.note);
   const docketNumber = get(state.caseDetail.docketNumber);
-  const trialSessionId = get(state.caseDetail.trialSessionId);
+  const trialSessionId =
+    get(state.modal.trialSessionId) || get(state.caseDetail.trialSessionId);
 
   const trialSession = await applicationContext
     .getUseCases()
