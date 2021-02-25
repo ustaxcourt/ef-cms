@@ -32,9 +32,13 @@ resource "aws_iam_role_policy" "iam_cognito_post_authentication_lambda_policy" {
             "Effect": "Allow",
             "Action": [
                 "dynamodb:PutItem",
-                "dynamodb:GetItem"
+                "dynamodb:GetItem",
+                "dynamodb:Query",
             ],
-            "Resource": "*"
+            "Resource": [
+                "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*",
+                "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*"
+            ],
         },
         {
             "Effect": "Allow",
@@ -44,7 +48,16 @@ resource "aws_iam_role_policy" "iam_cognito_post_authentication_lambda_policy" {
               "logs:PutLogEvents"
             ],
             "Resource": "arn:aws:logs:*:*:*"
-        }
+        },
+        {
+            "Action": [
+                "es:ESHttpGet"
+            ],
+            "Resource": [
+                "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*"
+            ],
+            "Effect": "Allow"
+        }  
     ]
 }
 EOF
