@@ -563,7 +563,6 @@
       type: "date"
       flags: 
         format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "required"
         description: "The date the practitioner was admitted to the Tax Court bar."
