@@ -12,11 +12,11 @@
   ],
   "license": "CC0-1.0",
   "dependencies": {
-    "chrome-aws-lambda": "^5.5.0",
+    "chrome-aws-lambda": "6.0.0",
     "handlebars": "^4.7.6",
     "npm-force-resolutions": "0.0.3",
     "pug": "^3.0.0",
-    "puppeteer-core": "^5.5.0",
+    "puppeteer-core": "6.0.0",
     "sass": "^1.29.0"
   },
   "resolutions": {
