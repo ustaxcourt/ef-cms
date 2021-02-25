@@ -63,6 +63,10 @@ PUT _template/cwl
           "headers": {
             "type": "object",
             "dynamic": true
+          },
+          "body": {
+            "type": "text",
+            "index": false
           }
         }
       },
