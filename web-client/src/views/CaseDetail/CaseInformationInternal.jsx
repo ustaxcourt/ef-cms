@@ -1,6 +1,7 @@
 import { AddConsolidatedCaseModal } from './AddConsolidatedCaseModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { DropdownMenu } from '../../ustc-ui/DropdownMenu/DropdownMenu';
 import { EditCaseTrialInformationMenu } from './EditCaseTrialInformationMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
@@ -88,7 +89,7 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
 const DisplayHearings = ({
   caseDetailHelper,
   hearings,
-  removeHearingSequence,
+  //removeHearingSequence,
 }) => {
   return hearings.map(hearing => (
     <tbody className="hoverable" key={hearing.trialSessionId}>
@@ -108,19 +109,30 @@ const DisplayHearings = ({
         <td>{hearing.formattedAssociatedJudge}</td>
         {caseDetailHelper.showAddRemoveFromHearingButtons && (
           <td>
-            <Button
-              link
-              className="red-warning"
-              icon="trash"
-              id="remove-from-trial-session-btn"
-              onClick={() => {
-                removeHearingSequence({
-                  trialSessionId: hearing.trialSessionId,
-                });
-              }}
-            >
-              Remove
-            </Button>
+            <DropdownMenu
+              menuItems={[
+                {
+                  label: 'Add/Edit Calendar Note',
+                },
+                {
+                  label: 'Remove from Hearing',
+                },
+              ]}
+              menuState={'caseInformationHearingsEdit'}
+            ></DropdownMenu>
+            {/*<Button*/}
+            {/*  link*/}
+            {/*  className="red-warning"*/}
+            {/*  icon="trash"*/}
+            {/*  id="remove-from-trial-session-btn"*/}
+            {/*  onClick={() => {*/}
+            {/*    removeHearingSequence({*/}
+            {/*      trialSessionId: hearing.trialSessionId,*/}
+            {/*    });*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  Remove*/}
+            {/*</Button>*/}
           </td>
         )}
       </tr>
