@@ -7,6 +7,7 @@ import React, { useEffect, useRef } from 'react';
 export const DropdownMenu = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
     isEditCaseTrialInformationMenuOpen:
       state.menuHelper.isEditCaseTrialInformationMenuOpen,
     isMenuOpen: state[props.menuState],
@@ -24,6 +25,7 @@ export const DropdownMenu = connect(
     trialSessionId: state.caseDetail.trialSessionId,
   },
   function EditCaseTrialInformationMenu({
+    clearDropDownMenuStateSequence,
     isEditCaseTrialInformationMenuOpen,
     isMenuOpen,
     menuItems,
@@ -32,10 +34,14 @@ export const DropdownMenu = connect(
     toggleMenuStateSequence,
   }) {
     const menuRef = useRef(null);
+
     const keydown = event => {
       const pressedESC = event.keyCode === 27;
       if (pressedESC) {
-        return resetEditCaseTrialInfoMenuSequence();
+        // TODO: this doesn't work
+        return clearDropDownMenuStateSequence({
+          menuState,
+        });
       }
     };
 
@@ -44,9 +50,15 @@ export const DropdownMenu = connect(
       const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
       const clickedOnSubNav = e.target.closest('.edit-case-trial-menu');
       if (!clickedWithinComponent) {
-        return resetEditCaseTrialInfoMenuSequence();
+        // TODO: this doesn't work
+        return clearDropDownMenuStateSequence({
+          menuState,
+        });
       } else if (!clickedOnMenuButton && !clickedOnSubNav) {
-        return resetEditCaseTrialInfoMenuSequence();
+        // TODO: this doesn't work
+        return clearDropDownMenuStateSequence({
+          menuState,
+        });
       }
       return true;
     };
@@ -85,34 +97,20 @@ export const DropdownMenu = connect(
         {isMenuOpen && (
           <div className="edit-case-trial-menu">
             {menuItems.map(item => (
-              <Button key={item.label} onClick={item.click}>
+              <Button
+                link
+                className="margin-right-0"
+                key={item.label}
+                onClick={() => {
+                  clearDropDownMenuStateSequence({
+                    menuState,
+                  });
+                  item.click();
+                }}
+              >
                 {item.label}
               </Button>
             ))}
-            {/*<Button*/}
-            {/*  link*/}
-            {/*  className="margin-right-0"*/}
-            {/*  id="add-edit-calendar-note"*/}
-            {/*  onClick={() => {*/}
-            {/*    openAddEditCalendarNoteModalSequence({*/}
-            {/*      note: caseDetail.trialSessionNotes,*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  Add/Edit Calendar Note*/}
-            {/*</Button>*/}
-            {/*<Button*/}
-            {/*  link*/}
-            {/*  className="margin-right-0"*/}
-            {/*  id="remove-from-trial-session-btn"*/}
-            {/*  onClick={() => {*/}
-            {/*    openRemoveFromTrialSessionModalSequence({*/}
-            {/*      trialSessionId: trialSessionId,*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  Remove From Trial*/}
-            {/*</Button>*/}
           </div>
         )}
       </div>

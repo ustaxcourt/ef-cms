@@ -86,14 +86,6 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
   </React.Fragment>
 );
 
-// TODO: Refactor this!
-const getNoteFromHearing = ({ docketNumber, hearing }) => {
-  const caseOnHearing = hearing.caseOrder.find(
-    hearingCase => hearingCase.docketNumber === docketNumber,
-  );
-  return caseOnHearing && caseOnHearing.calendarNotes;
-};
-
 const DisplayHearings = ({
   caseDetailHelper,
   hearings,
@@ -124,10 +116,7 @@ const DisplayHearings = ({
                   click: () => {
                     openAddEditCalendarNoteModalSequence({
                       docketNumber: caseDetailHelper.docketNumber,
-                      note: getNoteFromHearing({
-                        docketNumber: caseDetailHelper.docketNumber,
-                        hearing,
-                      }),
+                      note: hearing.calendarNotes,
                       trialSessionId: hearing.trialSessionId,
                     });
                   },
@@ -144,19 +133,6 @@ const DisplayHearings = ({
               ]}
               menuState="caseInformationHearingsEdit"
             ></DropdownMenu>
-            {/*<Button*/}
-            {/*  link*/}
-            {/*  className="red-warning"*/}
-            {/*  icon="trash"*/}
-            {/*  id="remove-from-trial-session-btn"*/}
-            {/*  onClick={() => {*/}
-            {/*    removeHearingSequence({*/}
-            {/*      trialSessionId: hearing.trialSessionId,*/}
-            {/*    });*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  Remove*/}
-            {/*</Button>*/}
           </td>
         )}
       </tr>
