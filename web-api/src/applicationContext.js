@@ -866,6 +866,9 @@ const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
 const {
+  setUserEmailFromPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
+const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
@@ -1720,6 +1723,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
+        setUserEmailFromPendingEmailInteractor,
         setWorkItemAsReadInteractor,
         strikeDocketEntryInteractor,
         submitCaseAssociationRequestInteractor,
