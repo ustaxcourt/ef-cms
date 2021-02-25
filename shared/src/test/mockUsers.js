@@ -67,7 +67,7 @@ exports.MOCK_USERS = {
 };
 
 exports.MOCK_PRACTITIONER = {
-  admissionsDate: '2019-03-01T21:40:46.415Z',
+  admissionsDate: '2019-03-01',
   admissionsStatus: 'Active',
   barNumber: 'AB1111',
   birthYear: 2019,

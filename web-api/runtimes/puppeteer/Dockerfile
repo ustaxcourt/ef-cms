@@ -10,4 +10,4 @@ COPY package-lock.json /home/build/nodejs/package-lock.json
 RUN cd /home/build/nodejs/ && npm ci
 RUN zip -r puppeteer_lambda_layer.zip nodejs
 
-CMD echo "zip has been created"
+CMD echo "puppeteer zip has been created"
