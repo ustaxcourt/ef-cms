@@ -23,8 +23,6 @@ const migrateItems = async items => {
         ROLES.inactivePractitioner,
       ].includes(item.role)
     ) {
-      console.log('*** before', item.admissionsDate);
-
       item.admissionsDate = formatDateString(
         item.admissionsDate,
         FORMATS.YYYYMMDD,
@@ -35,8 +33,6 @@ const migrateItems = async items => {
       })
         .validate()
         .toRawObject();
-
-      console.log('*** after', item.admissionsDate);
 
       itemsAfter.push({ ...item, ...practitioner });
     } else {
