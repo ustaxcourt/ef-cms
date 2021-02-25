@@ -102,9 +102,7 @@ export const CaseListPetitioner = connect(
 
     return (
       <>
-        <WarningNotification
-          alertWarning={{ message: 'Hi', title: 'Hello there' }}
-        />
+        <WarningNotification />
         <NonMobile>
           <div className="grid-container padding-x-0">
             <div className="grid-row">

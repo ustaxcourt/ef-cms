@@ -105,7 +105,7 @@ const PetitionerInformation = connect(
                     {screenMetadata.userPendingEmail && (
                       <>
                         <div className="semi-bold margin-bottom-0 margin-top-6">
-                          Pending Email
+                          Pending email address
                         </div>
                         {screenMetadata.userPendingEmail}
                       </>
