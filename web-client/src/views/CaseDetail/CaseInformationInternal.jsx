@@ -89,7 +89,7 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
 const DisplayHearings = ({
   caseDetailHelper,
   hearings,
-  //removeHearingSequence,
+  removeHearingSequence,
 }) => {
   return hearings.map(hearing => (
     <tbody className="hoverable" key={hearing.trialSessionId}>
@@ -115,10 +115,15 @@ const DisplayHearings = ({
                   label: 'Add/Edit Calendar Note',
                 },
                 {
+                  click: () => {
+                    removeHearingSequence({
+                      trialSessionId: hearing.trialSessionId,
+                    });
+                  },
                   label: 'Remove from Hearing',
                 },
               ]}
-              menuState={'caseInformationHearingsEdit'}
+              menuState="caseInformationHearingsEdit"
             ></DropdownMenu>
             {/*<Button*/}
             {/*  link*/}

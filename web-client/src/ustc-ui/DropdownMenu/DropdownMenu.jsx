@@ -9,8 +9,9 @@ export const DropdownMenu = connect(
     caseDetail: state.formattedCaseDetail,
     isEditCaseTrialInformationMenuOpen:
       state.menuHelper.isEditCaseTrialInformationMenuOpen,
+    isMenuOpen: state[props.menuState],
     menuItems: props.menuItems,
-    menuState: state[props.menuState],
+    menuState: props.menuState,
     openAddEditCalendarNoteModalSequence:
       sequences.openAddEditCalendarNoteModalSequence,
     openRemoveFromTrialSessionModalSequence:
@@ -24,6 +25,7 @@ export const DropdownMenu = connect(
   },
   function EditCaseTrialInformationMenu({
     isEditCaseTrialInformationMenuOpen,
+    isMenuOpen,
     menuItems,
     menuState,
     resetEditCaseTrialInfoMenuSequence,
@@ -80,10 +82,12 @@ export const DropdownMenu = connect(
             size="lg"
           />
         </Button>
-        {menuState && (
+        {isMenuOpen && (
           <div className="edit-case-trial-menu">
             {menuItems.map(item => (
-              <Button key={item.label}>{item.label}</Button>
+              <Button key={item.label} onClick={item.click}>
+                {item.label}
+              </Button>
             ))}
             {/*<Button*/}
             {/*  link*/}
