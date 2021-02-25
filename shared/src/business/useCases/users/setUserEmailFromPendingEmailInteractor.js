@@ -83,21 +83,21 @@ exports.setUserEmailFromPendingEmailInteractor = async ({
     pendingEmail: undefined,
   });
 
-  const updatedUser = await applicationContext
-    .getPersistenceGateway()
-    .updateUser({
-      applicationContext,
-      user: userEntity.validate().toRawObject(),
-    });
+  const rawUser = userEntity.validate().toRawObject();
+
+  await applicationContext.getPersistenceGateway().updateUser({
+    applicationContext,
+    user: rawUser,
+  });
 
   try {
     await updatePetitionerCases({
       applicationContext,
-      user: updatedUser,
+      user: rawUser,
     });
   } catch (error) {
     applicationContext.logger.error(error);
   }
 
-  return updatedUser;
+  return rawUser;
 };
