@@ -7,6 +7,7 @@ import React, { useEffect, useRef } from 'react';
 export const DropdownMenu = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    id: props.id,
     clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
     isMenuOpen: state[props.menuState],
     menuItems: props.menuItems,
@@ -22,9 +23,10 @@ export const DropdownMenu = connect(
     toggleMenuStateSequence: sequences.toggleMenuStateSequence,
     trialSessionId: state.caseDetail.trialSessionId,
   },
-  function EditCaseTrialInformationMenu({
+  function DropdownMenu({
     clearDropDownMenuStateSequence,
     isMenuOpen,
+    id,
     menuItems,
     menuState,
     resetEditCaseTrialInfoMenuSequence,
@@ -71,6 +73,7 @@ export const DropdownMenu = connect(
       <div ref={menuRef}>
         <Button
           link
+          id={id}
           className={'trial-session-edit-btn margin-right-0'}
           id="edit-case-trial-information-btn"
           onClick={() => {
@@ -91,6 +94,7 @@ export const DropdownMenu = connect(
             {menuItems.map(item => (
               <Button
                 link
+                id={item.id}
                 className="margin-right-0"
                 key={item.label}
                 onClick={() => {

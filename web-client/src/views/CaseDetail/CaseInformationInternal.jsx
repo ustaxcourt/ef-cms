@@ -2,7 +2,6 @@ import { AddConsolidatedCaseModal } from './AddConsolidatedCaseModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DropdownMenu } from '../../ustc-ui/DropdownMenu/DropdownMenu';
-import { EditCaseTrialInformationMenu } from './EditCaseTrialInformationMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
@@ -117,6 +116,7 @@ const DisplayHearings = ({
                     openAddEditCalendarNoteModalSequence({
                       docketNumber: caseDetailHelper.docketNumber,
                       note: hearing.calendarNotes,
+                      hideDelete: 'true',
                       trialSessionId: hearing.trialSessionId,
                     });
                   },
@@ -145,9 +145,48 @@ const DisplayHearings = ({
   ));
 };
 
+const EditCaseTrialInformationMenu = ({
+  resetEditCaseTrialInfoMenuSequence,
+  openAddEditCalendarNoteModalSequence,
+  openRemoveFromTrialSessionModalSequence,
+  caseDetail,
+  trialSessionId,
+}) => {
+  return (
+    <DropdownMenu
+      menuItems={[
+        {
+          click: () => {
+            resetEditCaseTrialInfoMenuSequence();
+            openAddEditCalendarNoteModalSequence({
+              note: caseDetail.trialSessionNotes,
+            });
+          },
+          id: 'add-edit-calendar-note',
+          label: 'Add/Edit Calendar Note',
+        },
+        {
+          click: () => {
+            resetEditCaseTrialInfoMenuSequence();
+            openRemoveFromTrialSessionModalSequence({
+              trialSessionId: trialSessionId,
+            });
+          },
+          id: 'remove-from-trial-session-btn',
+          label: 'Remove From Trial',
+        },
+      ]}
+      menuState="caseInformationTrialEdit"
+    ></DropdownMenu>
+  );
+};
+
 const TrialInformation = ({
   caseDetail,
+  resetEditCaseTrialInfoMenuSequence,
+  openRemoveFromTrialSessionModalSequence,
   openAddToTrialModalSequence,
+  openAddEditCalendarNoteModalSequence,
   openBlockFromTrialModalSequence,
   openPrioritizeCaseModalSequence,
   openUnblockFromTrialModalSequence,
@@ -242,7 +281,25 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{caseDetail.formattedAssociatedJudge}</td>
                   <td>
-                    <EditCaseTrialInformationMenu />
+                    <EditCaseTrialInformationMenu
+                      openRemoveFromTrialSessionModalSequence={
+                        openRemoveFromTrialSessionModalSequence
+                      }
+                      openAddEditCalendarNoteModalSequence={
+                        openAddEditCalendarNoteModalSequence
+                      }
+                      resetEditCaseTrialInfoMenuSequence={
+                        resetEditCaseTrialInfoMenuSequence
+                      }
+                      openAddEditCalendarNoteModalSequence={
+                        openAddEditCalendarNoteModalSequence
+                      }
+                      openRemoveFromTrialSessionModalSequence={
+                        openRemoveFromTrialSessionModalSequence
+                      }
+                      caseDetail={caseDetail}
+                      trialSessionId={caseDetail.trialSessionId}
+                    />
                   </td>
                 </tr>
                 {caseDetail.trialSessionNotes && (
@@ -402,7 +459,19 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{trialSessionJudge.name}</td>
                   <td>
-                    <EditCaseTrialInformationMenu />
+                    <EditCaseTrialInformationMenu
+                      resetEditCaseTrialInfoMenuSequence={
+                        resetEditCaseTrialInfoMenuSequence
+                      }
+                      openAddEditCalendarNoteModalSequence={
+                        openAddEditCalendarNoteModalSequence
+                      }
+                      openRemoveFromTrialSessionModalSequence={
+                        openRemoveFromTrialSessionModalSequence
+                      }
+                      caseDetail={caseDetail}
+                      trialSessionId={caseDetail.trialSessionId}
+                    />
                   </td>
                 </tr>
                 {caseDetail.trialSessionNotes && (
@@ -440,6 +509,8 @@ export const CaseInformationInternal = connect(
       sequences.openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence:
       sequences.openUnprioritizeCaseModalSequence,
+    resetEditCaseTrialInfoMenuSequence:
+      sequences.resetEditCaseTrialInfoMenuSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
     showModal: state.modal.showModal,
@@ -454,6 +525,7 @@ export const CaseInformationInternal = connect(
     navigateToPrintableCaseConfirmationSequence,
     openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence,
+    resetEditCaseTrialInfoMenuSequence,
     openBlockFromTrialModalSequence,
     openCleanModalSequence,
     openPrioritizeCaseModalSequence,
@@ -534,13 +606,22 @@ export const CaseInformationInternal = connect(
               <div className="card height-full">
                 <div className="content-wrapper">
                   <TrialInformation
+                    resetEditCaseTrialInfoMenuSequence={
+                      resetEditCaseTrialInfoMenuSequence
+                    }
                     caseDetail={formattedCaseDetail}
                     openAddToTrialModalSequence={openAddToTrialModalSequence}
+                    openAddEditCalendarNoteModalSequence={
+                      openAddEditCalendarNoteModalSequence
+                    }
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }
                     openPrioritizeCaseModalSequence={
                       openPrioritizeCaseModalSequence
+                    }
+                    openRemoveFromTrialSessionModalSequence={
+                      openRemoveFromTrialSessionModalSequence
                     }
                     openUnblockFromTrialModalSequence={
                       openUnblockFromTrialModalSequence

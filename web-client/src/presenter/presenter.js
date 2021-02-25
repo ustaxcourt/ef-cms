@@ -355,7 +355,6 @@ import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePr
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
-import { toggleEditCaseTrialInfoMenuSequence } from './sequences/toggleEditCaseTrialInfoMenuSequence';
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
 import { toggleMenuStateSequence } from './sequences/toggleMenuStateSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
@@ -825,7 +824,6 @@ export const presenter = {
     submitUpdateUserContactInformationSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
-    toggleEditCaseTrialInfoMenuSequence,
     toggleMenuSequence,
     toggleMenuStateSequence,
     toggleMobileDocketSortSequence,
