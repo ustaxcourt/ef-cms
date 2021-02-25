@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  */
 export const setCalendarNoteModalAction = ({ props, store }) => {
   const { note } = props;
-
   store.set(state.modal.note, note);
+  store.set(state.modal.trialSessionId, props.trialSessionId);
   store.set(state.modal.isEditing, !!note);
 };
