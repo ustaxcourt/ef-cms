@@ -3,6 +3,7 @@
 .DS_Store
 .dynamodb/
 .elasticsearch/
+.idea/
 .nova/
 .scannerwork/
 .serverless/
