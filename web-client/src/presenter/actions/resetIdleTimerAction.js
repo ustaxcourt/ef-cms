@@ -3,8 +3,8 @@ import { state } from 'cerebral';
 /**
  * obtains the idleTimeRef ref and calls its reset() method to reset the idle timer
  *
- * @param {object} providers
- * @param {function} providers.get cerebral get function
+ * @param {object} providers the providers object
+ * @param {Function} providers.get the cerebral get function used for getting state
  */
 export const resetIdleTimerAction = ({ get }) => {
   const ref = get(state.idleTimerRef);
