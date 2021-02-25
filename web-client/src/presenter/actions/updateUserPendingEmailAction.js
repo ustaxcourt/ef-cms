@@ -5,6 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} props.applicationContext the applicationContext
  * @param {function} props.get the cerebral get function
+ * @returns {object} containing updated user information to props
  */
 export const updateUserPendingEmailAction = async ({
   applicationContext,
