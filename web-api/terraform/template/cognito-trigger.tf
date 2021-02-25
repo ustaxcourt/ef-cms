@@ -12,7 +12,7 @@ resource "aws_lambda_permission" "allow_trigger" {
   source_arn    = aws_cognito_user_pool.pool.arn
 }
 
-resource "aws_lambda_permission" "allow_trigger" {
+resource "aws_lambda_permission" "allow_post_auth_trigger" {
   statement_id  = "AllowPostAuthenticationExecutionFromCognito"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.cognito_post_authentication_lambda.function_name
