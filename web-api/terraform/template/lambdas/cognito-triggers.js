@@ -11,6 +11,9 @@ const {
 const {
   persistUser,
 } = require('../../../../shared/src/persistence/dynamo/users/persistUser');
+const {
+  setUserEmailFromPendingEmailInteractor,
+} = require('../../../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
 
 const { DynamoDB } = AWS;
 const logger = createLogger({
@@ -38,7 +41,7 @@ const applicationContext = {
   }),
   getUseCases: () => ({
     createPetitionerAccountInteractor,
-    // setUserEmailFromPendingEmailInteractor,
+    setUserEmailFromPendingEmailInteractor,
   }),
   logger: {
     debug: logger.debug.bind(logger),
