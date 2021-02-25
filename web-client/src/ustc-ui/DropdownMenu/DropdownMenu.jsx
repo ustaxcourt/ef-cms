@@ -8,8 +8,6 @@ export const DropdownMenu = connect(
   {
     caseDetail: state.formattedCaseDetail,
     clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
-    isEditCaseTrialInformationMenuOpen:
-      state.menuHelper.isEditCaseTrialInformationMenuOpen,
     isMenuOpen: state[props.menuState],
     menuItems: props.menuItems,
     menuState: props.menuState,
@@ -26,7 +24,6 @@ export const DropdownMenu = connect(
   },
   function EditCaseTrialInformationMenu({
     clearDropDownMenuStateSequence,
-    isEditCaseTrialInformationMenuOpen,
     isMenuOpen,
     menuItems,
     menuState,
@@ -38,7 +35,6 @@ export const DropdownMenu = connect(
     const keydown = event => {
       const pressedESC = event.keyCode === 27;
       if (pressedESC) {
-        // TODO: this doesn't work
         return clearDropDownMenuStateSequence({
           menuState,
         });
@@ -50,12 +46,10 @@ export const DropdownMenu = connect(
       const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
       const clickedOnSubNav = e.target.closest('.edit-case-trial-menu');
       if (!clickedWithinComponent) {
-        // TODO: this doesn't work
         return clearDropDownMenuStateSequence({
           menuState,
         });
       } else if (!clickedOnMenuButton && !clickedOnSubNav) {
-        // TODO: this doesn't work
         return clearDropDownMenuStateSequence({
           menuState,
         });
@@ -88,9 +82,7 @@ export const DropdownMenu = connect(
           Edit{' '}
           <FontAwesomeIcon
             className="margin-left-105"
-            icon={
-              isEditCaseTrialInformationMenuOpen ? 'caret-up' : 'caret-down'
-            }
+            icon={isMenuOpen ? 'caret-up' : 'caret-down'}
             size="lg"
           />
         </Button>
