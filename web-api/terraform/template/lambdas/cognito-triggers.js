@@ -61,6 +61,12 @@ exports.handler = async event => {
       event,
       user,
     });
+  } else if (event.triggerSource === 'PostAuthentication_InitiateAuth') {
+    const { email } = event.request.userAttributes;
+    applicationContext.logger.info('Petitioner post authentication processed', {
+      email,
+      event,
+    });
   }
 
   return event;
