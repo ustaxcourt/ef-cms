@@ -13,7 +13,7 @@ const applicationContext = createApplicationContext({});
 
 const migrateItems = async items => {
   const itemsAfter = [];
-  for (let item of items) {
+  for (const item of items) {
     if (
       item.sk.startsWith('user|') &&
       item.pk.startsWith('user|') &&
@@ -38,10 +38,10 @@ const migrateItems = async items => {
 
       console.log('*** after', item.admissionsDate);
 
-      item = { ...item, ...practitioner };
+      itemsAfter.push({ ...item, ...practitioner });
+    } else {
       itemsAfter.push(item);
     }
-    itemsAfter.push(item);
   }
   return itemsAfter;
 };
