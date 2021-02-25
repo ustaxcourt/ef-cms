@@ -1,5 +1,5 @@
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 /**
@@ -13,16 +13,15 @@ const { User } = require('../../entities/User');
  * @returns {Promise} resolves upon completion of case updates
  */
 const updatePetitionerCases = async ({ applicationContext, user }) => {
-  const petitionerCases = await applicationContext
+  const petitionerDocketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getIndexedCasesForUser({
+    .getDocketNumbersByUser({
       applicationContext,
-      statuses: Object.values(CASE_STATUS_TYPES),
       userId: user.userId,
     });
 
   const casesToUpdate = await Promise.all(
-    petitionerCases.map(({ docketNumber }) =>
+    petitionerDocketNumbers.map(docketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber,
@@ -34,7 +33,7 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
     .map(caseToUpdate => {
       const caseEntity = new Case(caseToUpdate, {
         applicationContext,
-      }).toRawObject();
+      });
 
       if (caseEntity.contactPrimary.contactId !== user.userId) {
         applicationContext.logger.error(
@@ -44,6 +43,8 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       }
       // This updates the case by reference!
       caseEntity.contactPrimary.email = user.email;
+      caseEntity.contactPrimary.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
       // we do this again so that it will convert '' to null
       return new Case(caseEntity, { applicationContext }).validate();

@@ -33,12 +33,12 @@ resource "aws_iam_role_policy" "iam_cognito_post_authentication_lambda_policy" {
             "Action": [
                 "dynamodb:PutItem",
                 "dynamodb:GetItem",
-                "dynamodb:Query",
+                "dynamodb:Query"
             ],
             "Resource": [
                 "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*",
                 "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*"
-            ],
+            ]
         },
         {
             "Effect": "Allow",
