@@ -7,14 +7,14 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 /**
- * addNewUserToCase
+ * createUserForContactPrimary
  *
  * @param {object} options.caseEntity the case entity to modify and return
  * @param {string} options.email the email address for the user we are attaching to the case
  * @param {string} options.name the name of the user to update the case with
  * @returns {Case} the updated case entity
  */
-exports.addNewUserToCase = async ({
+exports.createUserForContactPrimary = async ({
   applicationContext,
   caseEntity,
   email,
@@ -31,10 +31,10 @@ exports.addNewUserToCase = async ({
   const userEntity = new User(
     {
       contact: contactPrimary,
-      email,
       name,
+      pendingEmail: email,
       role: ROLES.petitioner,
-      userId: applicationContext.getUniqueId(),
+      userId: contactPrimary.contactId,
     },
     { applicationContext },
   );

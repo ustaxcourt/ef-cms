@@ -12,7 +12,7 @@ resource "aws_lambda_function" "migration_segments_lambda" {
   handler          = "migration-segments.handler"
   source_code_hash = data.archive_file.migration_segments_zip.output_base64sha256
 
-  runtime     = "nodejs12.x"
+  runtime     = "nodejs14.x"
   timeout     = "900"
   memory_size = "768"
 

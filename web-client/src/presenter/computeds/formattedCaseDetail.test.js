@@ -10,7 +10,8 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const getDateISO = () => new Date().toISOString();
+const getDateISO = () =>
+  applicationContext.getUtilities().createISODateString();
 
 describe('formattedCaseDetail', () => {
   let globalUser;
@@ -942,7 +943,7 @@ describe('formattedCaseDetail', () => {
       };
       const caseDeadlines = [
         {
-          deadlineDate: new Date(),
+          deadlineDate: applicationContext.getUtilities().createISODateString(),
         },
       ];
 

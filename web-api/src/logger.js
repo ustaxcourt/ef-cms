@@ -1,3 +1,4 @@
+/* eslint-disable @miovision/disallow-date/no-new-date */
 const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { get } = require('lodash');
 const { transports } = require('winston');
