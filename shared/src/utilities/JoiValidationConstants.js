@@ -21,7 +21,6 @@ exports.JoiValidationConstants = deepFreeze({
         a.index !== undefined && b.index !== undefined && a.index === b.index,
     ),
   DOCUMENT_TITLE: STRING.max(3000),
-
   EMAIL: STRING.email({ tlds: false }).max(100),
   // eslint-disable-next-line spellcheck/spell-checker
   // TODO: remove FORMATS.YYYYMMDD from valid timestamp formats after devex task
