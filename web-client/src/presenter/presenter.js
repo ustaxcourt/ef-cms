@@ -261,7 +261,6 @@ import { removeSupportingDocumentSequence } from './sequences/removeSupportingDo
 import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
-import { resetEditCaseTrialInfoMenuSequence } from './sequences/resetEditCaseTrialInfoMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -732,7 +731,6 @@ export const presenter = {
     replyToMessageSequence,
     rescanBatchSequence,
     resetCaseMenuSequence,
-    resetEditCaseTrialInfoMenuSequence,
     resetHeaderAccordionsSequence,
     resetIdleTimerSequence,
     reviewExternalDocumentInformationSequence,

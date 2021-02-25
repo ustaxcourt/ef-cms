@@ -116,7 +116,7 @@ const DisplayHearings = ({
                     openAddEditCalendarNoteModalSequence({
                       docketNumber: caseDetailHelper.docketNumber,
                       note: hearing.calendarNotes,
-                      hideDelete: 'true',
+                      hideDelete: true,
                       trialSessionId: hearing.trialSessionId,
                     });
                   },
@@ -146,7 +146,6 @@ const DisplayHearings = ({
 };
 
 const EditCaseTrialInformationMenu = ({
-  resetEditCaseTrialInfoMenuSequence,
   openAddEditCalendarNoteModalSequence,
   openRemoveFromTrialSessionModalSequence,
   caseDetail,
@@ -157,7 +156,6 @@ const EditCaseTrialInformationMenu = ({
       menuItems={[
         {
           click: () => {
-            resetEditCaseTrialInfoMenuSequence();
             openAddEditCalendarNoteModalSequence({
               note: caseDetail.trialSessionNotes,
             });
@@ -167,7 +165,6 @@ const EditCaseTrialInformationMenu = ({
         },
         {
           click: () => {
-            resetEditCaseTrialInfoMenuSequence();
             openRemoveFromTrialSessionModalSequence({
               trialSessionId: trialSessionId,
             });
@@ -183,7 +180,6 @@ const EditCaseTrialInformationMenu = ({
 
 const TrialInformation = ({
   caseDetail,
-  resetEditCaseTrialInfoMenuSequence,
   openRemoveFromTrialSessionModalSequence,
   openAddToTrialModalSequence,
   openAddEditCalendarNoteModalSequence,
@@ -282,15 +278,6 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedAssociatedJudge}</td>
                   <td>
                     <EditCaseTrialInformationMenu
-                      openRemoveFromTrialSessionModalSequence={
-                        openRemoveFromTrialSessionModalSequence
-                      }
-                      openAddEditCalendarNoteModalSequence={
-                        openAddEditCalendarNoteModalSequence
-                      }
-                      resetEditCaseTrialInfoMenuSequence={
-                        resetEditCaseTrialInfoMenuSequence
-                      }
                       openAddEditCalendarNoteModalSequence={
                         openAddEditCalendarNoteModalSequence
                       }
@@ -460,9 +447,6 @@ const TrialInformation = ({
                   <td>{trialSessionJudge.name}</td>
                   <td>
                     <EditCaseTrialInformationMenu
-                      resetEditCaseTrialInfoMenuSequence={
-                        resetEditCaseTrialInfoMenuSequence
-                      }
                       openAddEditCalendarNoteModalSequence={
                         openAddEditCalendarNoteModalSequence
                       }
@@ -509,8 +493,6 @@ export const CaseInformationInternal = connect(
       sequences.openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence:
       sequences.openUnprioritizeCaseModalSequence,
-    resetEditCaseTrialInfoMenuSequence:
-      sequences.resetEditCaseTrialInfoMenuSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
     showModal: state.modal.showModal,
@@ -525,7 +507,6 @@ export const CaseInformationInternal = connect(
     navigateToPrintableCaseConfirmationSequence,
     openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence,
-    resetEditCaseTrialInfoMenuSequence,
     openBlockFromTrialModalSequence,
     openCleanModalSequence,
     openPrioritizeCaseModalSequence,
@@ -606,9 +587,6 @@ export const CaseInformationInternal = connect(
               <div className="card height-full">
                 <div className="content-wrapper">
                   <TrialInformation
-                    resetEditCaseTrialInfoMenuSequence={
-                      resetEditCaseTrialInfoMenuSequence
-                    }
                     caseDetail={formattedCaseDetail}
                     openAddToTrialModalSequence={openAddToTrialModalSequence}
                     openAddEditCalendarNoteModalSequence={
