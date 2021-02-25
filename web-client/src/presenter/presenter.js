@@ -356,6 +356,7 @@ import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
 import { toggleEditCaseTrialInfoMenuSequence } from './sequences/toggleEditCaseTrialInfoMenuSequence';
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
+import { toggleMenuStateSequence } from './sequences/toggleMenuStateSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { toggleShowAdditionalPetitionersSequence } from './sequences/toggleShowAdditionalPetitionersSequence';
@@ -824,6 +825,7 @@ export const presenter = {
     toggleCaseDifferenceSequence,
     toggleEditCaseTrialInfoMenuSequence,
     toggleMenuSequence,
+    toggleMenuStateSequence,
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     toggleShowAdditionalPetitionersSequence,
