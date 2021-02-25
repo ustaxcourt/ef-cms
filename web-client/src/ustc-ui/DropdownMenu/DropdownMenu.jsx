@@ -1,28 +1,19 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '../Button/Button';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
 
 export const DropdownMenu = connect(
   {
-    caseDetail: state.formattedCaseDetail,
     clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
     isMenuOpen: state[props.menuState],
     menuItems: props.menuItems,
     menuState: props.menuState,
-    openAddEditCalendarNoteModalSequence:
-      sequences.openAddEditCalendarNoteModalSequence,
-    openRemoveFromTrialSessionModalSequence:
-      sequences.openRemoveFromTrialSessionModalSequence,
     resetEditCaseTrialInfoMenuSequence:
       sequences.resetEditCaseTrialInfoMenuSequence,
-    toggleEditCaseTrialInfoMenuSequence:
-      sequences.toggleEditCaseTrialInfoMenuSequence,
     toggleMenuStateSequence: sequences.toggleMenuStateSequence,
-    trialSessionId: state.caseDetail.trialSessionId,
   },
-  function EditCaseTrialInformationMenu({
+  function DropdownMenu({
     clearDropDownMenuStateSequence,
     isMenuOpen,
     menuItems,
@@ -72,7 +63,9 @@ export const DropdownMenu = connect(
         <Button
           link
           className={'trial-session-edit-btn margin-right-0'}
-          id="edit-case-trial-information-btn"
+          icon={isMenuOpen ? 'caret-up' : 'caret-down'}
+          iconRight={true}
+          iconSize="lg"
           onClick={() => {
             toggleMenuStateSequence({
               menuState,
@@ -80,11 +73,6 @@ export const DropdownMenu = connect(
           }}
         >
           Edit{' '}
-          <FontAwesomeIcon
-            className="margin-left-105"
-            icon={isMenuOpen ? 'caret-up' : 'caret-down'}
-            size="lg"
-          />
         </Button>
         {isMenuOpen && (
           <div className="edit-case-trial-menu">
