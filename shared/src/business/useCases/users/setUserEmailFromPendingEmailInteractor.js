@@ -1,9 +1,5 @@
-const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 /**
@@ -21,7 +17,7 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
     .getPersistenceGateway()
     .getIndexedCasesForUser({
       applicationContext,
-      statuses: applicationContext.getConstants().CASE_STATUSES,
+      statuses: Object.values(CASE_STATUS_TYPES),
       userId: user.userId,
     });
 
@@ -40,18 +36,14 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
         applicationContext,
       }).toRawObject();
 
-      const petitionerObject = [
-        caseEntity.contactPrimary,
-        caseEntity.contactSecondary,
-      ].find(petitioner => petitioner && petitioner.contactId === user.userId);
-      if (!petitionerObject) {
+      if (caseEntity.contactPrimary.contactId !== user.userId) {
         applicationContext.logger.error(
           `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
         );
         return;
       }
       // This updates the case by reference!
-      petitionerObject.email = user.email;
+      caseEntity.contactPrimary.email = user.email;
 
       // we do this again so that it will convert '' to null
       return new Case(caseEntity, { applicationContext }).validate();
@@ -85,12 +77,6 @@ exports.setUserEmailFromPendingEmailInteractor = async ({
   applicationContext,
   user,
 }) => {
-  const authorizedUser = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {
-    throw new UnauthorizedError('Unauthorized to manage emails.');
-  }
-
   const userEntity = new User({
     ...user,
     email: user.pendingEmail,
@@ -112,4 +98,6 @@ exports.setUserEmailFromPendingEmailInteractor = async ({
   } catch (error) {
     applicationContext.logger.error(error);
   }
+
+  return updatedUser;
 };

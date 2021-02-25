@@ -6,6 +6,12 @@ const {
   createPetitionerAccountInteractor,
 } = require('../../../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
+  getCaseByDocketNumber,
+} = require('../../../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
+const {
+  getIndexedCasesForUser,
+} = require('../../../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
+const {
   getUserById,
 } = require('../../../../shared/src/persistence/dynamo/users/getUserById');
 const {
@@ -14,6 +20,15 @@ const {
 const {
   setUserEmailFromPendingEmailInteractor,
 } = require('../../../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
+const {
+  updateCase,
+} = require('../../../../shared/src/persistence/dynamo/cases/updateCase');
+const {
+  updateCaseAndAssociations,
+} = require('../../../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations');
+const {
+  updateUser,
+} = require('../../../../shared/src/persistence/dynamo/users/updateUser');
 
 const { DynamoDB } = AWS;
 const logger = createLogger({
@@ -25,6 +40,7 @@ const logger = createLogger({
 });
 
 const applicationContext = {
+  getCurrentUser: () => ({}),
   getDocumentClient: () => {
     return new DynamoDB.DocumentClient({
       endpoint: process.env.DYNAMODB_ENDPOINT,
@@ -36,9 +52,14 @@ const applicationContext = {
     stage: process.env.STAGE,
   }),
   getPersistenceGateway: () => ({
+    getCaseByDocketNumber,
+    getIndexedCasesForUser,
     getUserById,
     persistUser,
+    updateCase,
+    updateUser,
   }),
+  getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
   getUseCases: () => ({
     createPetitionerAccountInteractor,
     setUserEmailFromPendingEmailInteractor,
