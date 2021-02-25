@@ -65,7 +65,7 @@ describe('PrivatePractitioner', () => {
 
   it('should default the serviceIndicator to paper if the user does not have an email address and no serviceIndicator value is already set', () => {
     const user = new PrivatePractitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'PT20001',
       birthYear: 2019,
@@ -96,7 +96,7 @@ describe('PrivatePractitioner', () => {
 
   it('should default the serviceIndicator to electronic if the user does have an email address and no serviceIndicator value is already set', () => {
     const user = new PrivatePractitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'PT20001',
       birthYear: 2019,
@@ -130,7 +130,7 @@ describe('PrivatePractitioner', () => {
 
   it('should default the serviceIndicator to the already existing serviceIndicator value if present', () => {
     const user = new PrivatePractitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'PT20001',
       birthYear: 2019,

@@ -40,7 +40,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockReturnValue({
-        admissionsDate: '2019-03-01T21:42:29.073Z',
+        admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PP1234',
         birthYear: '1983',
@@ -65,7 +65,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
 
     expect(practitioner).toEqual({
       additionalPhone: undefined,
-      admissionsDate: '2019-03-01T21:42:29.073Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'PP1234',
       birthYear: '1983',
@@ -101,7 +101,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockReturnValue({
-        admissionsDate: '2019-03-01T21:42:29.073Z',
+        admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PI5678',
         birthYear: '1983',
@@ -124,7 +124,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
 
     expect(practitioner).toEqual({
       additionalPhone: undefined,
-      admissionsDate: '2019-03-01T21:42:29.073Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'PI5678',
       birthYear: '1983',
