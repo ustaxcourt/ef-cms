@@ -33,8 +33,8 @@ export const IndividualWorkQueueOutbox = connect(
               <th>{workQueueHelper.sentTitle} Date</th>
             </tr>
           </thead>
-          {formattedWorkQueue.map((item, idx) => (
-            <tbody key={idx}>
+          {formattedWorkQueue.map(item => (
+            <tbody key={item.workItemId}>
               <tr>
                 <td aria-hidden="true" className="focus-toggle" />
                 <td className="message-queue-row small">
