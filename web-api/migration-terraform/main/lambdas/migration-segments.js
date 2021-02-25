@@ -16,6 +16,9 @@ const {
   migrateItems: migration0021,
 } = require('./migrations/0021-practitioner-search-upper-case');
 const {
+  migrateItems: migration0022,
+} = require('./migrations/0022-practitioner-admissions-date');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
@@ -49,6 +52,8 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0020(items, documentClient);
   applicationContext.logger.info('about to run migration 0021');
   items = await migration0021(items, documentClient);
+  applicationContext.logger.info('about to run migration 0022');
+  items = await migration0022(items, documentClient);
 
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
