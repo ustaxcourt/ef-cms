@@ -3,7 +3,7 @@ const { createPractitionerUser } = require('./createPractitionerUser');
 const { ROLES } = require('../entities/EntityConstants');
 
 describe('createPractitionerUser', () => {
-  const mockAdmissionsDate = '1876-02-19T00:00:00.000Z';
+  const mockAdmissionsDate = '1876-02-19';
 
   it('should generate a bar number and userId when they are not provided', async () => {
     const mockUser = {
