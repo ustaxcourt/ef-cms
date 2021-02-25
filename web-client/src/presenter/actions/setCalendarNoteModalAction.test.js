@@ -38,4 +38,42 @@ describe('setCalendarNoteModalAction', () => {
     expect(state.modal.note).toEqual(mockNote);
     expect(state.modal.trialSessionId).toEqual('123');
   });
+
+  it('sets state.modal.isEditing to false if hideDelete is true and a note is defined', async () => {
+    const mockNote = 'defined';
+    const { state } = await runAction(setCalendarNoteModalAction, {
+      props: {
+        note: mockNote,
+        hideDelete: true,
+        trialSessionId: '123',
+      },
+    });
+
+    expect(state.modal.isEditing).toBeFalsy();
+  });
+
+  it('sets state.modal.isEditing to true if hideDelete is false and note is defined', async () => {
+    const mockNote = 'defined';
+    const { state } = await runAction(setCalendarNoteModalAction, {
+      props: {
+        note: mockNote,
+        hideDelete: false,
+        trialSessionId: '123',
+      },
+    });
+
+    expect(state.modal.isEditing).toBeTruthy();
+  });
+
+  it('sets state.modal.isEditing to false if hideDelete is false and note is not defined', async () => {
+    const { state } = await runAction(setCalendarNoteModalAction, {
+      props: {
+        note: null,
+        hideDelete: false,
+        trialSessionId: '123',
+      },
+    });
+
+    expect(state.modal.isEditing).toBeFalsy();
+  });
 });

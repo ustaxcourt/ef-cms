@@ -16,8 +16,6 @@ export const DropdownMenu = connect(
       sequences.openAddEditCalendarNoteModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
-    resetEditCaseTrialInfoMenuSequence:
-      sequences.resetEditCaseTrialInfoMenuSequence,
     toggleEditCaseTrialInfoMenuSequence:
       sequences.toggleEditCaseTrialInfoMenuSequence,
     toggleMenuStateSequence: sequences.toggleMenuStateSequence,
@@ -29,7 +27,6 @@ export const DropdownMenu = connect(
     id,
     menuItems,
     menuState,
-    resetEditCaseTrialInfoMenuSequence,
     toggleMenuStateSequence,
   }) {
     const menuRef = useRef(null);
@@ -65,7 +62,9 @@ export const DropdownMenu = connect(
       return () => {
         window.document.removeEventListener('mousedown', reset, false);
         window.document.removeEventListener('keydown', keydown, false);
-        return resetEditCaseTrialInfoMenuSequence();
+        return clearDropDownMenuStateSequence({
+          menuState,
+        });
       };
     }, []);
 
