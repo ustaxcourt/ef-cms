@@ -1876,7 +1876,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
-          servedAt: Date.now(),
+          servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: [
             {
               email: 'me@example.com',
@@ -1902,7 +1902,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
-          servedAt: Date.now(),
+          servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: {
             email: 'me@example.com',
             extra: 'extra',
@@ -1945,7 +1945,7 @@ describe('DocketEntry entity', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
-          filingDate: new Date('9000-01-01').toISOString(),
+          filingDate: '9000-01-01T00:00:00.000Z',
           index: 1,
         },
         { applicationContext },
@@ -1962,7 +1962,7 @@ describe('DocketEntry entity', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
-          filingDate: new Date('9000-01-01').toISOString(),
+          filingDate: '9000-01-01T00:00:00.000Z',
           index: 1,
           isOnDocketRecord: true,
         },
@@ -1986,7 +1986,7 @@ describe('DocketEntry entity', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
-          filingDate: new Date('9000-01-01').toISOString(),
+          filingDate: '9000-01-01T00:00:00.000Z',
           index: 1,
           isOnDocketRecord: false,
         },

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { b64toBlob } from '../../cypress/helpers';
+import { b64toBlob } from '../../cypress/support/helpers';
 
 // ***********************************************
 // This example commands.js shows you how to

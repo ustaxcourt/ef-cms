@@ -70,8 +70,8 @@ export const SessionAssignmentsForm = connect(
               }}
             >
               <option value="">- Select -</option>
-              {trialClerks.map((trialClerk, idx) => (
-                <option key={`trialClerkId-${idx}`} value={trialClerk.userId}>
+              {trialClerks.map(trialClerk => (
+                <option key={trialClerk.userId} value={trialClerk.userId}>
                   {trialClerk.name}
                 </option>
               ))}

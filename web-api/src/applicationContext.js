@@ -27,9 +27,6 @@ const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
-  addNewUserToCase,
-} = require('../../shared/src/business/useCaseHelper/caseAssociation/addNewUserToCase');
-const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -91,6 +88,13 @@ const {
 const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
+const {
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  prepareDateFromString,
+} = require('../../shared/src/business/utilities/DateHandler');
 const {
   CASE_STATUS_TYPES,
   MAX_SEARCH_CLIENT_RESULTS,
@@ -164,12 +168,6 @@ const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} = require('../../shared/src/business/utilities/DateHandler');
-const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
 const {
@@ -208,6 +206,9 @@ const {
 const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
+const {
+  createUserForContactPrimary,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContactPrimary');
 const {
   createUserInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
@@ -1561,11 +1562,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUseCaseHelpers: () => {
       return {
         addExistingUserToCase,
-        addNewUserToCase,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         createTrialSessionAndWorkingCopy,
+        createUserForContactPrimary,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
@@ -1756,6 +1757,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
+        calculateISODate,
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,
