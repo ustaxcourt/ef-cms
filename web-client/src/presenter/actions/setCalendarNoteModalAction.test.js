@@ -25,4 +25,17 @@ describe('setCalendarNoteModalAction', () => {
     expect(state.modal.note).toEqual(mockNote);
     expect(state.modal.isEditing).toEqual(false);
   });
+
+  it('sets state.modal.trialSessionId to the value of props.trialSessionId', async () => {
+    const mockNote = null;
+    const { state } = await runAction(setCalendarNoteModalAction, {
+      props: {
+        note: mockNote,
+        trialSessionId: '123',
+      },
+    });
+
+    expect(state.modal.note).toEqual(mockNote);
+    expect(state.modal.trialSessionId).toEqual('123');
+  });
 });
