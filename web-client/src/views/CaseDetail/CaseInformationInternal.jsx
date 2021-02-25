@@ -86,9 +86,18 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
   </React.Fragment>
 );
 
+// TODO: Refactor this!
+const getNoteFromHearing = ({ docketNumber, hearing }) => {
+  const caseOnHearing = hearing.caseOrder.find(
+    hearingCase => hearingCase.docketNumber === docketNumber,
+  );
+  return caseOnHearing && caseOnHearing.calendarNotes;
+};
+
 const DisplayHearings = ({
   caseDetailHelper,
   hearings,
+  openAddEditCalendarNoteModalSequence,
   removeHearingSequence,
 }) => {
   return hearings.map(hearing => (
@@ -112,6 +121,16 @@ const DisplayHearings = ({
             <DropdownMenu
               menuItems={[
                 {
+                  click: () => {
+                    openAddEditCalendarNoteModalSequence({
+                      docketNumber: caseDetailHelper.docketNumber,
+                      note: getNoteFromHearing({
+                        docketNumber: caseDetailHelper.docketNumber,
+                        hearing,
+                      }),
+                      trialSessionId: hearing.trialSessionId,
+                    });
+                  },
                   label: 'Add/Edit Calendar Note',
                 },
                 {
@@ -432,6 +451,8 @@ export const CaseInformationInternal = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
+    openAddEditCalendarNoteModalSequence:
+      sequences.openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -455,6 +476,7 @@ export const CaseInformationInternal = connect(
     caseInformationHelper,
     formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence,
+    openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCleanModalSequence,
@@ -647,6 +669,9 @@ export const CaseInformationInternal = connect(
                       <DisplayHearings
                         caseDetailHelper={caseDetailHelper}
                         hearings={formattedCaseDetail.hearings}
+                        openAddEditCalendarNoteModalSequence={
+                          openAddEditCalendarNoteModalSequence
+                        }
                         removeHearingSequence={
                           openRemoveFromTrialSessionModalSequence
                         }
