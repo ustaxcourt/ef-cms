@@ -114,7 +114,7 @@ exports.saveSignedDocumentInteractor = async ({
         .getPersistenceGateway()
         .getMessageThreadByParentId({
           applicationContext,
-          parentMessageId: parentMessageId,
+          parentMessageId,
         });
 
       const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];

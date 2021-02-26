@@ -19,6 +19,7 @@ const testClient = setupTestClient();
 testClient.draftOrders = [];
 const createdDocketNumbers = [];
 
+// eslint-disable-next-line @miovision/disallow-date/no-new-date
 const documentTitleKeyword = `Sunglasses_${new Date().getTime()}`;
 const nonExactDocumentTitleKeyword = `${documentTitleKeyword}y`;
 

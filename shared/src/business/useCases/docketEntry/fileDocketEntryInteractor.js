@@ -188,7 +188,7 @@ exports.fileDocketEntryInteractor = async ({
     workItem,
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });

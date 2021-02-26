@@ -6,7 +6,8 @@ import React from 'react';
 export const MatchingEmailFoundModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.submitMatchingEmailFoundModalSequence,
+    confirmSequence:
+      sequences.submitUpdatePetitionerInformationFromModalSequence,
     form: state.form,
   },
   function MatchingEmailFoundModal({ cancelSequence, confirmSequence, form }) {

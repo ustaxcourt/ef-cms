@@ -68,8 +68,8 @@ module.exports = {
   ],
   rules: {
     '@miovision/disallow-date/no-new-date': 1,
-    '@miovision/disallow-date/no-static-date': 1,
-    '@miovision/disallow-date/no-to-date': 1,
+    '@miovision/disallow-date/no-static-date': 0,
+    '@miovision/disallow-date/no-to-date': 0,
     'arrow-parens': ['error', 'as-needed'],
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],
@@ -132,6 +132,7 @@ module.exports = {
       'error',
       { location: 'anywhere', terms: ['fixme', 'xxx'] },
     ],
+    'object-shorthand': 'warn',
     'prefer-destructuring': [
       'error',
       {
@@ -204,7 +205,7 @@ module.exports = {
         identifiers: false,
         lang: 'en_US',
         minLength: 4,
-        skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$'],
+        skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$', 'eslint\\-.*$'],
         skipWords: [
           'anthony',
           'apigateway',

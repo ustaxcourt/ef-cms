@@ -84,7 +84,7 @@ exports.completeWorkItemInteractor = async ({
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseToUpdate,
+    caseToUpdate,
   });
 
   return completedWorkItem;
