@@ -68,6 +68,7 @@ export function TabsComponent({
       iconColor,
       id: tabId,
       showIcon,
+      showNotificationIcon,
       tabName,
       title,
     } = child.props;
@@ -99,10 +100,11 @@ export function TabsComponent({
           {showIcon && (
             <FontAwesomeIcon color={iconColor || null} icon={icon} />
           )}
-          {/* <span className="icon-tracked-items">!</span> */}
-          <svg className="usa-icon" focusable="false">
-            <use xlinkHref="/assets/img/sprite.svg#error"></use>
-          </svg>
+          {showNotificationIcon && (
+            <div className="icon-tab-notification">
+              <div className="icon-tab-notification-exclamation">!</div>
+            </div>
+          )}
         </button>
       </li>
     );
