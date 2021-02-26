@@ -153,6 +153,7 @@ const EditCaseTrialInformationMenu = ({
 }) => {
   return (
     <DropdownMenu
+      id="edit-case-trial-information-btn"
       menuItems={[
         {
           click: () => {
