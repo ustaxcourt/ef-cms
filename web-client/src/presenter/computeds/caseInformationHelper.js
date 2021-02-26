@@ -33,12 +33,14 @@ export const caseInformationHelper = (get, applicationContext) => {
   const showSealAddressLink = permissions.SEAL_ADDRESS;
   const showHearingsTable = !!caseDetail.hearings?.length;
 
+  const showEmail = isInternalUser && caseDetail.contactPrimary.email;
+
   return {
     formattedOtherPetitioners,
     showAddCounsel,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
-    showEmail: isInternalUser,
+    showEmail,
     showHearingsTable,
     showOtherPetitioners,
     showSealAddressLink,
