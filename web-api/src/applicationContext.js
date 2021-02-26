@@ -27,9 +27,6 @@ const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
-  addNewUserToCase,
-} = require('../../shared/src/business/useCaseHelper/caseAssociation/addNewUserToCase');
-const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -91,6 +88,13 @@ const {
 const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
+const {
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  prepareDateFromString,
+} = require('../../shared/src/business/utilities/DateHandler');
 const {
   CASE_STATUS_TYPES,
   MAX_SEARCH_CLIENT_RESULTS,
@@ -164,12 +168,6 @@ const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} = require('../../shared/src/business/utilities/DateHandler');
-const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
 const {
@@ -208,6 +206,9 @@ const {
 const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
+const {
+  createUserForContactPrimary,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContactPrimary');
 const {
   createUserInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
@@ -865,6 +866,9 @@ const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
 const {
+  setUserEmailFromPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
+const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
@@ -1376,6 +1380,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
+      MAX_SES_RETRIES: 6,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
         status => status !== CASE_STATUS_TYPES.closed,
       ),
@@ -1529,7 +1534,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
             },
             apiVersion: '7.4',
             awsConfig: new AWS.Config({ region: 'us-east-1' }),
-            connectionClass: connectionClass,
+            connectionClass,
             host: environment.elasticsearchEndpoint,
             log: 'warning',
             port: 443,
@@ -1561,11 +1566,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUseCaseHelpers: () => {
       return {
         addExistingUserToCase,
-        addNewUserToCase,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
         createTrialSessionAndWorkingCopy,
+        createUserForContactPrimary,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
@@ -1719,6 +1724,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
+        setUserEmailFromPendingEmailInteractor,
         setWorkItemAsReadInteractor,
         strikeDocketEntryInteractor,
         submitCaseAssociationRequestInteractor,
@@ -1756,6 +1762,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
+        calculateISODate,
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,

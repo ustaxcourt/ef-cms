@@ -1,5 +1,5 @@
-import { isServed } from '../../../../shared/src/business/entities/DocketEntry';
 import { state } from 'cerebral';
+import DocketEntry from '../../../../shared/src/business/entities/DocketEntry';
 
 export const formattedOpenCases = (get, applicationContext) => {
   const { formatCase } = applicationContext.getUtilities();
@@ -27,8 +27,8 @@ const getUserIsAssignedToSession = ({ currentUser, get, trialSessionId }) => {
   const isJudgeUserAssigned = session?.judge?.userId === currentUser.userId;
   const isChambersUserAssigned =
     judge &&
-    session?.judge?.userId === judge?.userId &&
-    judge?.section === currentUser.section;
+    session?.judge?.userId === judge.userId &&
+    judge.section === currentUser.section;
   const isTrialClerkUserAssigned =
     session?.trialClerk?.userId === currentUser.userId;
 
@@ -216,7 +216,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       ),
       isInitialDocument,
       isLegacySealed: entry.isLegacySealed,
-      isServed: isServed(entry),
+      isServed: DocketEntry.isServed(entry),
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
@@ -255,7 +255,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && isServed(d),
+    d => d.pending && DocketEntry.isServed(d),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(

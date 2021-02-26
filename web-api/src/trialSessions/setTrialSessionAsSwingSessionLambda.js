@@ -15,6 +15,6 @@ exports.setTrialSessionAsSwingSessionLambda = event =>
       .setTrialSessionAsSwingSessionInteractor({
         applicationContext,
         swingSessionId: JSON.parse(event.body).swingSessionId,
-        trialSessionId: trialSessionId,
+        trialSessionId,
       });
   });

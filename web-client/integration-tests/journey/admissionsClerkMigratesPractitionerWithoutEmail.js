@@ -22,7 +22,7 @@ const mockBarNumber = `ZZ${faker.random.number({ max: 9999, min: 1000 })}`;
 
 const practitionerWithoutEmail = {
   user: {
-    admissionsDate: '1991-01-11T05:00:00.000Z',
+    admissionsDate: '1991-01-11',
     admissionsStatus: 'Active',
     barNumber: mockBarNumber,
     birthYear: 1970,

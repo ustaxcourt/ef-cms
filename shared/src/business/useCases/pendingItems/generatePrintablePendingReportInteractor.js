@@ -100,7 +100,7 @@ exports.generatePrintablePendingReportInteractor = async ({
     url,
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    key: key,
+    key,
     useTempBucket: true,
   });
 

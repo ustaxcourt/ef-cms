@@ -61,7 +61,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     applicationContext,
     caseEntity,
     docketEntryEntity: currentDocketEntry,
-    pdfData: pdfData,
+    pdfData,
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({

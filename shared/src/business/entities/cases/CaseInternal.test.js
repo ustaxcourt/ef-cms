@@ -199,7 +199,7 @@ describe('CaseInternal entity', () => {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: { anObject: true },
           petitionFileSize: 1,
-          receivedAt: new Date(Date.parse('9999-01-01')).toISOString(),
+          receivedAt: '9999-01-01T00:00:00.000Z',
         },
         { applicationContext },
       );

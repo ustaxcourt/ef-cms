@@ -8,7 +8,7 @@ const { ROLES, US_STATES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const mockUser = {
-  admissionsDate: '2019-03-01T21:40:46.415Z',
+  admissionsDate: '2019-03-01',
   admissionsStatus: 'Active',
   barNumber: 'AT5678',
   birthYear: 2019,

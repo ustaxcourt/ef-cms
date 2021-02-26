@@ -42,6 +42,7 @@ import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearDocumentViewerDataSequence } from './sequences/clearDocumentViewerDataSequence';
+import { clearDropDownMenuStateSequence } from './sequences/clearDropDownMenuStateSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
@@ -260,7 +261,6 @@ import { removeSupportingDocumentSequence } from './sequences/removeSupportingDo
 import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
-import { resetEditCaseTrialInfoMenuSequence } from './sequences/resetEditCaseTrialInfoMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -341,7 +341,6 @@ import { submitEditSecondaryContactSequence } from './sequences/submitEditSecond
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
-import { submitMatchingEmailFoundModalSequence } from './sequences/submitMatchingEmailFoundModalSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
 import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
@@ -350,12 +349,13 @@ import { submitPractitionerNameSearchSequence } from './sequences/submitPractiti
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
+import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
 import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePractitionerUserSequence';
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
-import { toggleEditCaseTrialInfoMenuSequence } from './sequences/toggleEditCaseTrialInfoMenuSequence';
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
+import { toggleMenuStateSequence } from './sequences/toggleMenuStateSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { toggleShowAdditionalPetitionersSequence } from './sequences/toggleShowAdditionalPetitionersSequence';
@@ -512,6 +512,7 @@ export const presenter = {
     clearAdvancedSearchFormSequence,
     clearAlertSequence,
     clearDocumentViewerDataSequence,
+    clearDropDownMenuStateSequence,
     clearExistingDocumentSequence,
     clearModalFormSequence,
     clearModalSequence,
@@ -730,7 +731,6 @@ export const presenter = {
     replyToMessageSequence,
     rescanBatchSequence,
     resetCaseMenuSequence,
-    resetEditCaseTrialInfoMenuSequence,
     resetHeaderAccordionsSequence,
     resetIdleTimerSequence,
     reviewExternalDocumentInformationSequence,
@@ -809,7 +809,6 @@ export const presenter = {
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitLoginSequence,
-    submitMatchingEmailFoundModalSequence,
     submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
     submitPetitionFromPaperSequence,
@@ -818,12 +817,13 @@ export const presenter = {
     submitRemoveConsolidatedCasesSequence,
     submitTrialSessionSequence,
     submitUpdateCaseModalSequence,
+    submitUpdatePetitionerInformationFromModalSequence,
     submitUpdatePractitionerUserSequence,
     submitUpdateUserContactInformationSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
-    toggleEditCaseTrialInfoMenuSequence,
     toggleMenuSequence,
+    toggleMenuStateSequence,
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     toggleShowAdditionalPetitionersSequence,
