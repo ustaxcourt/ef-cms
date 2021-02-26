@@ -63,7 +63,6 @@ export function TabsComponent({
 
   const renderTab = child => {
     const {
-      children,
       disabled,
       icon,
       iconColor,
@@ -100,7 +99,10 @@ export function TabsComponent({
           {showIcon && (
             <FontAwesomeIcon color={iconColor || null} icon={icon} />
           )}
-          {children}
+          {/* <span className="icon-tracked-items">!</span> */}
+          <svg className="usa-icon" focusable="false">
+            <use xlinkHref="/assets/img/sprite.svg#error"></use>
+          </svg>
         </button>
       </li>
     );
