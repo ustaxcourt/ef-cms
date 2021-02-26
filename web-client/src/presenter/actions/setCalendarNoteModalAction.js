@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.caseDetail
  */
 export const setCalendarNoteModalAction = ({ props, store }) => {
-  const { note, hideDelete } = props;
+  const { hideDelete, note } = props;
   store.set(state.modal.note, note);
   store.set(state.modal.trialSessionId, props.trialSessionId);
   if (hideDelete) {

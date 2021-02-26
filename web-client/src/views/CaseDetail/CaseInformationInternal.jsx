@@ -115,8 +115,8 @@ const DisplayHearings = ({
                   click: () => {
                     openAddEditCalendarNoteModalSequence({
                       docketNumber: caseDetailHelper.docketNumber,
-                      note: hearing.calendarNotes,
                       hideDelete: true,
+                      note: hearing.calendarNotes,
                       trialSessionId: hearing.trialSessionId,
                     });
                   },
@@ -146,9 +146,9 @@ const DisplayHearings = ({
 };
 
 const EditCaseTrialInformationMenu = ({
+  caseDetail,
   openAddEditCalendarNoteModalSequence,
   openRemoveFromTrialSessionModalSequence,
-  caseDetail,
   trialSessionId,
 }) => {
   return (
@@ -180,11 +180,11 @@ const EditCaseTrialInformationMenu = ({
 
 const TrialInformation = ({
   caseDetail,
-  openRemoveFromTrialSessionModalSequence,
-  openAddToTrialModalSequence,
   openAddEditCalendarNoteModalSequence,
+  openAddToTrialModalSequence,
   openBlockFromTrialModalSequence,
   openPrioritizeCaseModalSequence,
+  openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
   trialSessionJudge,
@@ -278,13 +278,13 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedAssociatedJudge}</td>
                   <td>
                     <EditCaseTrialInformationMenu
+                      caseDetail={caseDetail}
                       openAddEditCalendarNoteModalSequence={
                         openAddEditCalendarNoteModalSequence
                       }
                       openRemoveFromTrialSessionModalSequence={
                         openRemoveFromTrialSessionModalSequence
                       }
-                      caseDetail={caseDetail}
                       trialSessionId={caseDetail.trialSessionId}
                     />
                   </td>
@@ -447,13 +447,13 @@ const TrialInformation = ({
                   <td>{trialSessionJudge.name}</td>
                   <td>
                     <EditCaseTrialInformationMenu
+                      caseDetail={caseDetail}
                       openAddEditCalendarNoteModalSequence={
                         openAddEditCalendarNoteModalSequence
                       }
                       openRemoveFromTrialSessionModalSequence={
                         openRemoveFromTrialSessionModalSequence
                       }
-                      caseDetail={caseDetail}
                       trialSessionId={caseDetail.trialSessionId}
                     />
                   </td>
@@ -588,10 +588,10 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <TrialInformation
                     caseDetail={formattedCaseDetail}
-                    openAddToTrialModalSequence={openAddToTrialModalSequence}
                     openAddEditCalendarNoteModalSequence={
                       openAddEditCalendarNoteModalSequence
                     }
+                    openAddToTrialModalSequence={openAddToTrialModalSequence}
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }

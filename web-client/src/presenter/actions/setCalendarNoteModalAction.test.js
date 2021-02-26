@@ -43,8 +43,8 @@ describe('setCalendarNoteModalAction', () => {
     const mockNote = 'defined';
     const { state } = await runAction(setCalendarNoteModalAction, {
       props: {
-        note: mockNote,
         hideDelete: true,
+        note: mockNote,
         trialSessionId: '123',
       },
     });
@@ -56,8 +56,8 @@ describe('setCalendarNoteModalAction', () => {
     const mockNote = 'defined';
     const { state } = await runAction(setCalendarNoteModalAction, {
       props: {
-        note: mockNote,
         hideDelete: false,
+        note: mockNote,
         trialSessionId: '123',
       },
     });
@@ -68,8 +68,8 @@ describe('setCalendarNoteModalAction', () => {
   it('sets state.modal.isEditing to false if hideDelete is false and note is not defined', async () => {
     const { state } = await runAction(setCalendarNoteModalAction, {
       props: {
-        note: null,
         hideDelete: false,
+        note: null,
         trialSessionId: '123',
       },
     });
