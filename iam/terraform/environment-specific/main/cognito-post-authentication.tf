@@ -1,4 +1,3 @@
-
 resource "aws_iam_role" "iam_cognito_post_authentication_lambda_role" {
   name = "iam_cognito_post_authentication_lambda_role_${var.environment}"
 

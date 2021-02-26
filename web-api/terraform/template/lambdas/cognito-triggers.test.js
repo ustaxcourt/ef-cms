@@ -57,7 +57,7 @@ describe('cognito-triggers', () => {
       });
     });
 
-    it('should retreieve the user from persistence with custom:userId when one is defined', async () => {
+    it('should retrieve the user from persistence with custom:userId when one is defined', async () => {
       const mockEvent = {
         request: {
           userAttributes: {
@@ -74,7 +74,7 @@ describe('cognito-triggers', () => {
       expect(getUserById.mock.calls[0][0].userId).toEqual(mockUserId);
     });
 
-    it('should retreieve the user from persistence with sub as the userId when custom:userId is not defined', async () => {
+    it('should retrieve the user from persistence with sub as the userId when custom:userId is not defined', async () => {
       const mockEvent = {
         request: {
           userAttributes: {

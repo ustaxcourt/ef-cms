@@ -5,11 +5,11 @@ const { User } = require('../../entities/User');
 /**
  * updatePetitionerCases
  * for the provided user, update their email address on all cases
- * where they are the contactPrimary or contactSecondary
+ * where they are the contactPrimary
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.user the user who is a primary or secondary contact on a case
+ * @param {string} providers.user the user who is a primary contact on a case
  * @returns {Promise} resolves upon completion of case updates
  */
 const updatePetitionerCases = async ({ applicationContext, user }) => {
@@ -91,14 +91,10 @@ exports.setUserEmailFromPendingEmailInteractor = async ({
     user: rawUser,
   });
 
-  try {
-    await updatePetitionerCases({
-      applicationContext,
-      user: rawUser,
-    });
-  } catch (error) {
-    applicationContext.logger.error(error);
-  }
+  await updatePetitionerCases({
+    applicationContext,
+    user: rawUser,
+  });
 
   return rawUser;
 };
