@@ -30,7 +30,7 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
     showDraftsTab: isInternalUser,
     showMessagesTab: isInternalUser,
     showNotesTab: isInternalUser,
-    showTrackedItemsNotification: hasPendingItems || caseDeadlines.length,
+    showTrackedItemsNotification: hasPendingItems || !!caseDeadlines?.length,
     showTrackedItemsTab: isInternalUser,
   };
 };
