@@ -132,6 +132,7 @@ module.exports = {
       'error',
       { location: 'anywhere', terms: ['fixme', 'xxx'] },
     ],
+    'object-shorthand': 'warn',
     'prefer-destructuring': [
       'error',
       {

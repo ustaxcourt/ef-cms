@@ -101,7 +101,7 @@ export const EditCaseTrialInformationMenu = connect(
               onClick={() => {
                 resetEditCaseTrialInfoMenuSequence();
                 openRemoveFromTrialSessionModalSequence({
-                  trialSessionId: trialSessionId,
+                  trialSessionId,
                 });
               }}
             >
