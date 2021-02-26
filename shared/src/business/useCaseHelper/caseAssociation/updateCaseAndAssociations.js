@@ -16,12 +16,20 @@ exports.updateCaseAndAssociations = async ({
     ? caseToUpdate
     : new Case(caseToUpdate, { applicationContext });
 
+  const oldCaseEntity = await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: caseToUpdate.docketNumber,
+  });
+
   const validRawCaseEntity = caseEntity.validate().toRawObject();
+
+  const validRawOldCaseEntity = new Case(oldCaseEntity, {applicationContext}).validate().toRawObject();
 
   // TODO: hoist logic from persistence method below to this use case helper.
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: validRawCaseEntity,
+    oldCase: validRawOldCaseEntity,
   });
 };
