@@ -156,7 +156,7 @@ describe('updatePartyTypeAction', () => {
         },
         {
           constants: {
-            COUNTRY_TYPES: COUNTRY_TYPES,
+            COUNTRY_TYPES,
             PARTY_TYPES: [],
           },
           form: {
@@ -181,7 +181,7 @@ describe('updatePartyTypeAction', () => {
         },
         {
           constants: {
-            COUNTRY_TYPES: COUNTRY_TYPES,
+            COUNTRY_TYPES,
             PARTY_TYPES: [],
           },
           form: {
@@ -206,7 +206,7 @@ describe('updatePartyTypeAction', () => {
         },
         {
           constants: {
-            COUNTRY_TYPES: COUNTRY_TYPES,
+            COUNTRY_TYPES,
             PARTY_TYPES: [],
           },
           form: {

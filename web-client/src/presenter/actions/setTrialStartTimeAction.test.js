@@ -20,7 +20,7 @@ describe('setTrialStartTimeAction', () => {
 
     const { state } = await runAction(setTrialStartTimeAction, {
       props: {
-        startTimeHours: startTimeHours,
+        startTimeHours,
       },
       state: {},
     });
@@ -33,7 +33,7 @@ describe('setTrialStartTimeAction', () => {
 
     const { state } = await runAction(setTrialStartTimeAction, {
       props: {
-        startTimeMinutes: startTimeMinutes,
+        startTimeMinutes,
       },
       state: {},
     });

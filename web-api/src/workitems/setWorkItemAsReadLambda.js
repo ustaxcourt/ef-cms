@@ -12,6 +12,6 @@ exports.setWorkItemAsReadLambda = event =>
 
     return await applicationContext.getUseCases().setWorkItemAsReadInteractor({
       applicationContext,
-      workItemId: workItemId,
+      workItemId,
     });
   });
