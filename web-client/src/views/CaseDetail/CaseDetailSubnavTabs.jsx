@@ -37,6 +37,7 @@ export const CaseDetailSubnavTabs = connect(
             {caseDetailSubnavHelper.showTrackedItemsTab && (
               <Tab
                 id="tab-tracked-items"
+                showNotificationIcon={true}
                 tabName="trackedItems"
                 title="Tracked Items"
               />
