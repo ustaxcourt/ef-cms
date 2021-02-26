@@ -15,7 +15,7 @@ describe('setPractitionerDetailOnFormAction', () => {
       },
       props: {
         practitionerDetail: {
-          admissionsDate: '2019-03-01T04:00:00.000Z',
+          admissionsDate: '2019-03-01',
           firstName: 'Chandler',
           lastName: 'Bing',
         },
@@ -23,7 +23,7 @@ describe('setPractitionerDetailOnFormAction', () => {
       state: { form: {} },
     });
     expect(result.state.form).toEqual({
-      admissionsDate: '2019-03-01T04:00:00.000Z',
+      admissionsDate: '2019-03-01',
       day: '1',
       firstName: 'Chandler',
       lastName: 'Bing',

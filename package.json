@@ -22,7 +22,7 @@
     "archiver": "^5.2.0",
     "async-test-util": "^1.7.3",
     "autoprefixer": "^9.8.6",
-    "aws-sdk": "^2.851.0",
+    "aws-sdk": "^2.852.0",
     "axios": "^0.21.1",
     "axios-retry": "^3.1.9",
     "babel-eslint": "^10.0.3",
