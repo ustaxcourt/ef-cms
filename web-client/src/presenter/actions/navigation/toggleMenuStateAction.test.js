@@ -35,7 +35,7 @@ describe('toggleMenuStateAction', () => {
     expect(result.state.foo).toEqual(true);
   });
 
-  it('sets the value of the given props.menuState to true if it is currently falsy', async () => {
+  it('sets the value of the given props.menuState to true if it is currently undefined', async () => {
     const result = await runAction(toggleMenuStateAction, {
       modules: {
         presenter,
