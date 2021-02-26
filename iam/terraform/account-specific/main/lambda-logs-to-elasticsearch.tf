@@ -68,3 +68,11 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_post_confirmation_lam
   name            = "cognito_post_confirmation_lambda_${element(var.log_group_environments, count.index)}_filter"
   log_group_name  = "/aws/lambda/cognito_post_confirmation_lambda_${element(var.log_group_environments, count.index)}"
 }
+
+resource "aws_cloudwatch_log_subscription_filter" "cognito_post_authentication_lambda_filter" {
+  count           = length(var.log_group_environments)
+  destination_arn = aws_lambda_function.logs_to_es.arn
+  filter_pattern  = ""
+  name            = "cognito_post_authentication_lambda_${element(var.log_group_environments, count.index)}_filter"
+  log_group_name  = "/aws/lambda/cognito_post_authentication_lambda_${element(var.log_group_environments, count.index)}"
+}
