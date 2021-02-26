@@ -69,6 +69,10 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: 'www.example.com' });
+
+    // await applicationContext
+    //   .getUseCases()
+    //   .addCoversheetInteractor.mock
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
