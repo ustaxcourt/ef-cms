@@ -3,7 +3,7 @@ import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/nav
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { submitUpdatePetitionerInformationSequence } from './submitUpdatePetitionerInformationSequence';
 
-export const submitMatchingEmailFoundModalSequence = [
+export const submitUpdatePetitionerInformationFromModalSequence = [
   showProgressSequenceDecorator([
     clearModalAction,
     submitUpdatePetitionerInformationSequence,
