@@ -50,7 +50,7 @@ describe('servePaperFiledDocumentAction', () => {
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
       hasPaper: true,
-      pdfUrl: pdfUrl,
+      pdfUrl,
     });
   });
 

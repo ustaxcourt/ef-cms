@@ -184,7 +184,7 @@ exports.serveCaseToIrsInteractor = async ({
 
   initializeCaseWorkItem.setAsCompleted({
     message: 'Served to IRS',
-    user: user,
+    user,
   });
 
   await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
