@@ -77,7 +77,7 @@ const PetitionerInformation = connect(
                     <address aria-labelledby="primary-label">
                       <AddressDisplay
                         contact={formattedCaseDetail.contactPrimary}
-                        showEmail={true}
+                        showEmail={caseInformationHelper.showEmail}
                         showSealAddressLink={
                           caseInformationHelper.showSealAddressLink
                         }
