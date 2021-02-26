@@ -10,7 +10,7 @@ describe('getCaseCaptionMeta', () => {
       caseCaption: 'Eve Brewer, Petitioner',
     };
     expect(getCaseCaptionMeta(caseDetail)).toMatchObject({
-      CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
+      CASE_CAPTION_POSTFIX,
       caseCaption: 'Eve Brewer, Petitioner',
       caseCaptionWithPostfix: `Eve Brewer, Petitioner ${CASE_CAPTION_POSTFIX}`,
     });

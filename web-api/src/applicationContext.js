@@ -1534,7 +1534,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
             },
             apiVersion: '7.4',
             awsConfig: new AWS.Config({ region: 'us-east-1' }),
-            connectionClass: connectionClass,
+            connectionClass,
             host: environment.elasticsearchEndpoint,
             log: 'warning',
             port: 443,
