@@ -32,7 +32,7 @@ describe('setDocumentToEditAction', () => {
           ],
           docketNumber: '123-45',
         },
-        docketEntryIdToEdit: docketEntryIdToEdit,
+        docketEntryIdToEdit,
       },
     });
     expect(result.state.documentToEdit).toEqual(documentToMatch);
