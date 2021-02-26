@@ -101,4 +101,41 @@ describe('createUserForContactPrimary', () => {
 
     expect(updatedCase).toMatchObject(caseEntity);
   });
+
+  it('should call associateUserWithCase', async () => {
+    const UPDATED_EMAIL = 'testing@example.com';
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.admissionsClerk,
+    });
+
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          contactId: USER_ID,
+          email: undefined,
+          name: 'Bob Ross',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      },
+      { applicationContext },
+    );
+
+    await createUserForContactPrimary({
+      applicationContext,
+      caseEntity,
+      email: UPDATED_EMAIL,
+      name: 'Bob Ross',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase.mock
+        .calls[0][0],
+    ).toMatchObject({
+      docketNumber: caseEntity.docketNumber,
+      userId: USER_ID,
+    });
+  });
 });
