@@ -9,7 +9,7 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 
 const test = setupTest();
 
-describe('admissions clerk adds petitioner with existing cognito email to case', () => {
+describe('admissions clerk adds petitioner with existing cognito account to case', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   const EMAIL_TO_ADD = 'petitioner2@example.com';
@@ -22,7 +22,7 @@ describe('admissions clerk adds petitioner with existing cognito email to case',
   petitionsClerkCreatesNewCase(test, fakeFile);
 
   loginAs(test, 'admissionsclerk@example.com');
-  it('admissions clerk adds petitioner email to case', async () => {
+  it('admissions clerk adds petitioner email with existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
     await test.runSequence('gotoEditPetitionerInformationSequence', {
@@ -50,7 +50,9 @@ describe('admissions clerk adds petitioner with existing cognito email to case',
     expect(test.getState('modal.showModal')).toBe('MatchingEmailFoundModal');
     expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
 
-    await test.runSequence('submitMatchingEmailFoundModalSequence');
+    await test.runSequence(
+      'submitUpdatePetitionerInformationFromModalSequence',
+    );
 
     expect(test.getState('modal.showModal')).toBeUndefined();
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
