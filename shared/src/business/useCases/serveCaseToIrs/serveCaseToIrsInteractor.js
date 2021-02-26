@@ -209,7 +209,7 @@ exports.serveCaseToIrsInteractor = async ({
     applicationContext,
   });
 
-  for (let doc of caseEntityToUpdate.docketEntries) {
+  for (const doc of caseEntityToUpdate.docketEntries) {
     if (doc.isFileAttached) {
       const updatedDocketEntry = await applicationContext
         .getUseCases()
