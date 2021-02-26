@@ -307,7 +307,9 @@ describe('case information helper', () => {
   });
 
   describe('showEmail', () => {
+    const mockEmail = 'error@example.com';
     let user;
+
     beforeEach(() => {
       user = {
         role: ROLES.docketClerk,
@@ -317,15 +319,34 @@ describe('case information helper', () => {
       applicationContext.getCurrentUser.mockImplementation(() => user);
     });
 
-    it('should be true when the current user is an internal user', () => {
+    it('should be true when the current user is an internal user and the case contact primary has an email', () => {
       const { showEmail } = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
-          caseDetail: {},
+          caseDetail: {
+            contactPrimary: {
+              email: mockEmail,
+            },
+          },
           form: {},
         },
       });
       expect(showEmail).toBeTruthy();
+    });
+
+    it('should be false when the current user is an internal user and the case contact primary does not have an email', () => {
+      const { showEmail } = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            contactPrimary: {
+              pendingEmail: mockEmail,
+            },
+          },
+          form: {},
+        },
+      });
+      expect(showEmail).toBeFalsy();
     });
 
     it('should be false when the current user is NOT an internal user', () => {
