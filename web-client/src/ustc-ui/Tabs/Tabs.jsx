@@ -63,6 +63,7 @@ export function TabsComponent({
 
   const renderTab = child => {
     const {
+      children,
       disabled,
       icon,
       iconColor,
@@ -99,6 +100,7 @@ export function TabsComponent({
           {showIcon && (
             <FontAwesomeIcon color={iconColor || null} icon={icon} />
           )}
+          {children}
         </button>
       </li>
     );

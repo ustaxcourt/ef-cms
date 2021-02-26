@@ -39,7 +39,11 @@ export const CaseDetailSubnavTabs = connect(
                 id="tab-tracked-items"
                 tabName="trackedItems"
                 title="Tracked Items"
-              />
+              >
+                <div className="icon-tracked-items display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center">
+                  !
+                </div>
+              </Tab>
             )}
             {caseDetailSubnavHelper.showDraftsTab && (
               <Tab id="tab-drafts" tabName="drafts" title="Drafts" />
