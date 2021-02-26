@@ -5,20 +5,26 @@ import React, { useEffect, useRef } from 'react';
 
 export const DropdownMenu = connect(
   {
+    caseDetail: state.formattedCaseDetail,
     clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
+    id: props.id,
     isMenuOpen: state[props.menuState],
     menuItems: props.menuItems,
     menuState: props.menuState,
-    resetEditCaseTrialInfoMenuSequence:
-      sequences.resetEditCaseTrialInfoMenuSequence,
+    openAddEditCalendarNoteModalSequence:
+      sequences.openAddEditCalendarNoteModalSequence,
+    openRemoveFromTrialSessionModalSequence:
+      sequences.openRemoveFromTrialSessionModalSequence,
+    toggleEditCaseTrialInfoMenuSequence:
+      sequences.toggleEditCaseTrialInfoMenuSequence,
     toggleMenuStateSequence: sequences.toggleMenuStateSequence,
   },
   function DropdownMenu({
     clearDropDownMenuStateSequence,
+    id,
     isMenuOpen,
     menuItems,
     menuState,
-    resetEditCaseTrialInfoMenuSequence,
     toggleMenuStateSequence,
   }) {
     const menuRef = useRef(null);
@@ -54,7 +60,9 @@ export const DropdownMenu = connect(
       return () => {
         window.document.removeEventListener('mousedown', reset, false);
         window.document.removeEventListener('keydown', keydown, false);
-        return resetEditCaseTrialInfoMenuSequence();
+        return clearDropDownMenuStateSequence({
+          menuState,
+        });
       };
     }, []);
 
@@ -66,6 +74,7 @@ export const DropdownMenu = connect(
           icon={isMenuOpen ? 'caret-up' : 'caret-down'}
           iconRight={true}
           iconSize="lg"
+          id={id}
           onClick={() => {
             toggleMenuStateSequence({
               menuState,
@@ -80,6 +89,7 @@ export const DropdownMenu = connect(
               <Button
                 link
                 className="margin-right-0"
+                id={item.id}
                 key={item.label}
                 onClick={() => {
                   clearDropDownMenuStateSequence({
