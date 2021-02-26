@@ -469,7 +469,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toEqual('1ccd40c6-a949-43ce-936e-7c92d36aaa40');
   });
 
-  it('should make 2 calls to updateCase, once before adding a coversheet, and once after', async () => {
+  it('should have processingStatus pending when calling updateCase the first time and processingStatus complete when calling updateCase the second time', async () => {
     mockCase = {
       ...MOCK_CASE,
       docketEntries: [
