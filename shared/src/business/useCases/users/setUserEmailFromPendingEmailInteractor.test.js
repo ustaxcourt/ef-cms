@@ -24,28 +24,47 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       admissionsStatus: 'Active',
       barNumber: 'RA3333',
       birthYear: '1950',
+      email: undefined,
       employer: 'Private',
       firstName: 'Alden',
       lastName: 'Rivas',
       name: 'Alden Rivas',
       originalBarState: 'Florida',
+      pendingEmail: UPDATED_EMAIL,
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       userId: USER_ID,
     };
 
+    userCases = [
+      {
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          contactId: USER_ID,
+          email: undefined,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        docketNumber: '101-21',
+      },
+    ];
+
     applicationContext
       .getPersistenceGateway()
       .updateUser.mockImplementation(() => mockUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockImplementation(() => [
+        userCases[0].docketNumber,
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(() => userCases[0]);
   });
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {
-    mockUser = {
-      ...mockUser,
-      email: undefined,
-      pendingEmail: UPDATED_EMAIL,
-    };
-
     await setUserEmailFromPendingEmailInteractor({
       applicationContext,
       user: mockUser,
@@ -61,34 +80,6 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should update the user cases with the new email and electronic service', async () => {
-    mockUser = {
-      ...mockUser,
-      email: undefined,
-      pendingEmail: UPDATED_EMAIL,
-    };
-
-    userCases = [
-      {
-        ...MOCK_CASE,
-        contactPrimary: [
-          {
-            ...MOCK_CASE.contactPrimary,
-            contactId: USER_ID,
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        docketNumber: '101-21',
-      },
-    ];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue([userCases[0].docketNumber]);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
-
     await setUserEmailFromPendingEmailInteractor({
       applicationContext,
       user: mockUser,
@@ -103,6 +94,87 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
         email: UPDATED_EMAIL,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
+    });
+  });
+
+  it('should throw an error when the user does not match the contactPrimary on the case', async () => {
+    userCases = [
+      {
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          email: undefined,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        docketNumber: '101-21',
+      },
+    ];
+
+    await setUserEmailFromPendingEmailInteractor({
+      applicationContext,
+      user: mockUser,
+    });
+
+    expect(applicationContext.logger.error.mock.calls[0][0]).toBe(
+      `Could not find user|${USER_ID} on 101-21`,
+    );
+  });
+
+  it('should continue updating other cases when one of the cases contact primary does not match the user', async () => {
+    userCases = [
+      {
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          contactId: USER_ID,
+          email: undefined,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        docketNumber: '101-21',
+      },
+      {
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          email: undefined,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        docketNumber: '105-21',
+      },
+    ];
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockReturnValue([
+        userCases[0].docketNumber,
+        userCases[1].docketNumber,
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(userCases[1]);
+
+    await setUserEmailFromPendingEmailInteractor({
+      applicationContext,
+      user: mockUser,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate,
+    ).toMatchObject({
+      contactPrimary: {
+        email: UPDATED_EMAIL,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      },
+      docketNumber: '101-21',
     });
   });
 });
