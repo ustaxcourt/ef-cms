@@ -86,6 +86,7 @@ export const EditCaseTrialInformationMenu = connect(
               className="margin-right-0"
               id="add-edit-calendar-note"
               onClick={() => {
+                resetEditCaseTrialInfoMenuSequence();
                 openAddEditCalendarNoteModalSequence({
                   note: caseDetail.trialSessionNotes,
                 });
@@ -98,6 +99,7 @@ export const EditCaseTrialInformationMenu = connect(
               className="margin-right-0"
               id="remove-from-trial-session-btn"
               onClick={() => {
+                resetEditCaseTrialInfoMenuSequence();
                 openRemoveFromTrialSessionModalSequence({
                   trialSessionId: trialSessionId,
                 });
