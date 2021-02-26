@@ -211,20 +211,17 @@ exports.serveCaseToIrsInteractor = async ({
 
   for (const doc of caseEntityToUpdate.docketEntries) {
     if (doc.isFileAttached) {
-      await applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        docketEntryId: doc.docketEntryId,
-        docketNumber: caseEntityToUpdate.docketNumber,
-        replaceCoversheet: !caseEntityToUpdate.isPaper,
-        useInitialData: !caseEntityToUpdate.isPaper,
-      });
-
-      doc.numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({
+      const updatedDocketEntry = await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor({
           applicationContext,
           docketEntryId: doc.docketEntryId,
+          docketNumber: caseEntityToUpdate.docketNumber,
+          replaceCoversheet: !caseEntityToUpdate.isPaper,
+          useInitialData: !caseEntityToUpdate.isPaper,
         });
+
+      caseEntityToUpdate.updateDocketEntry(updatedDocketEntry);
     }
   }
 

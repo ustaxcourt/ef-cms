@@ -227,11 +227,13 @@ exports.addCoversheetInteractor = async ({
   docketEntryEntity.setAsProcessingStatusAsCompleted();
   docketEntryEntity.setNumberOfPages(numberOfPages);
 
+  const updatedDocketEntryEntity = docketEntryEntity.validate();
+
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
     docketEntryId,
     docketNumber: caseEntity.docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
+    document: updatedDocketEntryEntity.toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -239,4 +241,6 @@ exports.addCoversheetInteractor = async ({
     document: newPdfData,
     key: docketEntryId,
   });
+
+  return updatedDocketEntryEntity;
 };
