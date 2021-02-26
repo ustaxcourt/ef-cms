@@ -1,9 +1,8 @@
 /**
- * Toggles visibility of expanded menu in header
+ * Toggles visibility of expanded menu in DropdownMenu
  *
- * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function to retrieve state values
- * @param {object} providers.store the cerebral store object used for setting or unsetting open menu
+ * @param {object} get the cerebral get function to retrieve state values
+ * @param {object} store the cerebral store object used for setting or unsetting open menu
  */
 export const toggleMenuStateAction = ({ props, store }) => {
   store.toggle(props.menuState);
