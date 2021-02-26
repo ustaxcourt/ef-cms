@@ -261,7 +261,6 @@ import { removeSupportingDocumentSequence } from './sequences/removeSupportingDo
 import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
-import { resetEditCaseTrialInfoMenuSequence } from './sequences/resetEditCaseTrialInfoMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -355,7 +354,6 @@ import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePr
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
-import { toggleEditCaseTrialInfoMenuSequence } from './sequences/toggleEditCaseTrialInfoMenuSequence';
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
 import { toggleMenuStateSequence } from './sequences/toggleMenuStateSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
@@ -733,7 +731,6 @@ export const presenter = {
     replyToMessageSequence,
     rescanBatchSequence,
     resetCaseMenuSequence,
-    resetEditCaseTrialInfoMenuSequence,
     resetHeaderAccordionsSequence,
     resetIdleTimerSequence,
     reviewExternalDocumentInformationSequence,
@@ -825,7 +822,6 @@ export const presenter = {
     submitUpdateUserContactInformationSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
-    toggleEditCaseTrialInfoMenuSequence,
     toggleMenuSequence,
     toggleMenuStateSequence,
     toggleMobileDocketSortSequence,
