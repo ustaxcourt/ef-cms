@@ -128,14 +128,17 @@ describe('updatePetitionDetailsInteractor', () => {
   it('should call updateCaseTrialSortMappingRecords if the updated case is high priority and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(generalDocketReadyForTrialCase);
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase, 
+        highPriority: true,
+        highPriorityReason: 'roll out',
+      });
 
     const result = await updatePetitionDetailsInteractor({
       applicationContext,
       docketNumber: generalDocketReadyForTrialCase.docketNumber,
       petitionDetails: {
         ...generalDocketReadyForTrialCase,
-        highPriority: true,
         preferredTrialCity: 'Cheyenne, Wyoming',
         status: CASE_STATUS_TYPES.rule155,
       },
@@ -224,5 +227,34 @@ describe('updatePetitionDetailsInteractor', () => {
     );
 
     expect(wavedDocument).toBeTruthy();
+  });
+
+  it('should call updateCaseTrialSortMappingRecords if the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase, 
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-11-30T09:10:11.000Z',
+        automaticBlockedReason: 'Pending Item',
+        highPriority: true,
+        highPriorityReason: 'roll out'
+      });
+
+    const result = await updatePetitionDetailsInteractor({
+      applicationContext,
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+        highPriority: true,
+        preferredTrialCity: 'Cheyenne, Wyoming',
+        status: CASE_STATUS_TYPES.rule155,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
   });
 });
