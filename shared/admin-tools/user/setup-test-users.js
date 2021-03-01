@@ -104,7 +104,7 @@ const setupPractitioners = async () => {
       const email = `${role}${i + 1}@example.com`;
       const user = {
         ...baseUser,
-        admissionsDate: '2019-03-01T21:40:46.415Z',
+        admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber,
         email,
