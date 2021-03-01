@@ -1,5 +1,6 @@
 import { AddEditCalendarNoteModal } from './AddEditCalendarNoteModal';
 import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
+import { AddEditHearingNoteModal } from './AddEditHearingNoteModal';
 import { AddToTrialModal } from './AddToTrialModal';
 import { BlockFromTrialModal } from './BlockFromTrialModal';
 import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
@@ -287,6 +288,7 @@ export const CaseDetailHeaderMenu = connect(
         {showModal === 'AddEditCalendarNoteModal' && (
           <AddEditCalendarNoteModal />
         )}
+        {showModal === 'AddEditHearingNoteModal' && <AddEditHearingNoteModal />}
         {showModal === 'AddToTrialModal' && (
           <AddToTrialModal
             confirmSequence={addCaseToTrialSessionSequence}
