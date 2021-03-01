@@ -187,6 +187,7 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
+import { openAddEditHearingNoteModalSequence } from './sequences/openAddEditHearingNoteModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
 import { openAddEditUserCaseNoteModalFromListSequence } from './sequences/openAddEditUserCaseNoteModalFromListSequence';
@@ -387,6 +388,7 @@ import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequ
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
+import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
@@ -450,6 +452,7 @@ import { validateSecondaryContactSequence } from './sequences/validateSecondaryC
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
+import { validateTrialSessionHearingNoteSequence } from './sequences/validateTrialSessionHearingNoteSequence';
 import { validateTrialSessionNoteSequence } from './sequences/validateTrialSessionNoteSequence';
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
@@ -657,6 +660,7 @@ export const presenter = {
     noticeGenerationCompleteSequence,
     openAddEditCalendarNoteModalSequence,
     openAddEditCaseNoteModalSequence,
+    openAddEditHearingNoteModalSequence,
     openAddEditSessionNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
     openAddEditUserCaseNoteModalFromListSequence,
@@ -855,6 +859,7 @@ export const presenter = {
     updateFormValueAndCaseCaptionSequence,
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
+    updateHearingNoteSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,
     updateMessageModalAttachmentsSequence,
     updateModalFormValueSequence,
@@ -918,6 +923,7 @@ export const presenter = {
     validateSelectDocumentTypeSequence,
     validateSetForHearingSequence,
     validateStartCaseWizardSequence,
+    validateTrialSessionHearingNoteSequence,
     validateTrialSessionNoteSequence,
     validateTrialSessionPlanningSequence,
     validateTrialSessionSequence,
