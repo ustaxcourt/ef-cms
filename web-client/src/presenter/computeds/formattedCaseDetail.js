@@ -84,6 +84,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
+    STATUS_TYPES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -339,7 +340,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
     trialSessionId: caseDetail.trialSessionId,
   });
 
-  result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;
+  result.showBlockedTag =
+    caseDetail.blocked ||
+    (caseDetail.automaticBlocked &&
+      caseDetail.status !== STATUS_TYPES.calendared);
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;
