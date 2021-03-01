@@ -24,17 +24,10 @@ HearingNote.prototype.init = function (rawProps) {
 HearingNote.VALIDATION_ERROR_MESSAGES = {
   note: [
     {
-      contains: 'ength must be less than or equal',
+      contains: 'length must be less than or equal',
       message: 'Limit is 200 characters. Enter 200 or fewer characters.',
     },
-    {
-      contains: 'is required',
-      message: 'Add a note',
-    },
-    {
-      contains: 'not allowed to be empty',
-      message: 'Add a note',
-    },
+    'Add a note',
   ],
 };
 
