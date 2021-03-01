@@ -14,7 +14,7 @@ export const validateSetForHearingAction = ({
   get,
   path,
 }) => {
-  const { note, trialSessionId } = get(state.modal);
+  const { calendarNotes, note, trialSessionId } = get(state.modal);
 
   let errors = {};
   if (!trialSessionId) {
@@ -25,7 +25,7 @@ export const validateSetForHearingAction = ({
     .getUseCases()
     .validateHearingNoteInteractor({
       applicationContext,
-      note,
+      note: note || calendarNotes,
     });
 
   if (noteEntityErrors?.note) {

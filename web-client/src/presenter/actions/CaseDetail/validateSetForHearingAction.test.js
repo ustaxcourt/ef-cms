@@ -33,6 +33,20 @@ describe('validateSetForHearingAction', () => {
     expect(errorStub).not.toHaveBeenCalled();
   });
 
+  it('should call path.success and not path.error if note and trialSessionId is on state.modal', async () => {
+    await runAction(validateSetForHearingAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        modal: { note: 'this is my note', trialSessionId: '123' },
+      },
+    });
+
+    expect(successStub).toHaveBeenCalled();
+    expect(errorStub).not.toHaveBeenCalled();
+  });
+
   it('should call path.error with an error message and not call path.success if trialSessionId is not on state.modal', async () => {
     await runAction(validateSetForHearingAction, {
       modules: {
