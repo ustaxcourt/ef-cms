@@ -109,7 +109,8 @@ exports.updatePetitionDetailsInteractor = async ({
       newCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
     newCase.preferredTrialCity &&
     !newCase.blocked &&
-    !newCase.automaticBlocked
+    (!newCase.automaticBlocked ||
+      (newCase.automaticBlocked && newCase.highPriority))
   ) {
     await applicationContext
       .getPersistenceGateway()

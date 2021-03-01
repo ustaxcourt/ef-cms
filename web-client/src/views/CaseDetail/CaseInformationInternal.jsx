@@ -3,7 +3,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DropdownMenu } from '../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
 import { SetForHearingModal } from './SetForHearingModal';
 import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
@@ -167,7 +166,7 @@ const EditCaseTrialInformationMenu = ({
         {
           click: () => {
             openRemoveFromTrialSessionModalSequence({
-              trialSessionId: trialSessionId,
+              trialSessionId,
             });
           },
           id: 'remove-from-trial-session-btn',
@@ -347,32 +346,6 @@ const TrialInformation = ({
                   Add Manual Block
                 </Button>
               </div>
-            </div>
-          )}
-          {caseDetail.automaticBlocked && (
-            <div className="grid-row">
-              <div className="grid-col-12">
-                <p className="label">
-                  System blocked from trial{' '}
-                  {caseDetail.automaticBlockedDateFormatted}:{' '}
-                </p>
-                <p>{caseDetail.automaticBlockedReason}</p>
-                <Hint exclamation className="margin-bottom-0 block">
-                  You must remove any pending item or due date to make this case
-                  eligible for trial
-                </Hint>
-              </div>
-            </div>
-          )}
-          {caseDetail.showAutomaticBlockedAndHighPriority && (
-            <div className="grid-row margin-top-3">
-              <h4 className="margin-bottom-0">
-                <FontAwesomeIcon
-                  className="text-secondary-darker"
-                  icon="exclamation-circle"
-                />{' '}
-                Trial - Not Scheduled - High Priority
-              </h4>
             </div>
           )}
         </>
