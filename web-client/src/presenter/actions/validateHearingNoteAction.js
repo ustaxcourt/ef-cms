@@ -23,8 +23,6 @@ export const validateHearingNoteAction = ({
       note,
     });
 
-  console.log('errors', errors);
-
   if (!errors) {
     return path.success();
   } else {
