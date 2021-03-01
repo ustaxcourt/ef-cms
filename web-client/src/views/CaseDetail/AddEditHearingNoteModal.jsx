@@ -11,7 +11,7 @@ export const AddEditHearingNoteModal = connect(
       sequences.validateTrialSessionHearingNoteSequence,
     validationErrors: state.validationErrors,
   },
-  function AddEditCalendarNoteModal({
+  function AddEditHearingNoteModal({
     validateTrialSessionHearingNoteSequence,
     validationErrors,
   }) {
