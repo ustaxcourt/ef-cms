@@ -50,5 +50,29 @@ exports.saveCalendarNoteInteractor = async ({
     trialSessionToUpdate: rawTrialSessionEntity,
   });
 
+  const caseDetail = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  if (
+    caseDetail.trialSessionId !== trialSessionId &&
+    caseDetail.hearings?.length
+  ) {
+    const hearing = caseDetail.hearings.find(
+      caseHearing => caseHearing.trialSessionId === trialSessionId,
+    );
+
+    if (hearing) {
+      applicationContext.getPersistenceGateway().updateCaseHearing({
+        applicationContext,
+        docketNumber,
+        hearingToUpdate: rawTrialSessionEntity,
+      });
+    }
+  }
+
   return rawTrialSessionEntity;
 };
