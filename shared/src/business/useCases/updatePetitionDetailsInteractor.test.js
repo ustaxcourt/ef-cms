@@ -129,7 +129,7 @@ describe('updatePetitionDetailsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        ...generalDocketReadyForTrialCase, 
+        ...generalDocketReadyForTrialCase,
         highPriority: true,
         highPriorityReason: 'roll out',
       });
@@ -233,15 +233,15 @@ describe('updatePetitionDetailsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        ...generalDocketReadyForTrialCase, 
+        ...generalDocketReadyForTrialCase,
         automaticBlocked: true,
         automaticBlockedDate: '2019-11-30T09:10:11.000Z',
         automaticBlockedReason: 'Pending Item',
         highPriority: true,
-        highPriorityReason: 'roll out'
+        highPriorityReason: 'roll out',
       });
 
-    const result = await updatePetitionDetailsInteractor({
+    await updatePetitionDetailsInteractor({
       applicationContext,
       docketNumber: generalDocketReadyForTrialCase.docketNumber,
       petitionDetails: {
