@@ -28,6 +28,16 @@ export const docketClerkEditsHearingNote = (test, updatedNote) => {
       trialSessionId: hearing.trialSessionId,
     });
 
+    await test.runSequence('updateModalValueSequence', {
+      key: 'note',
+      value: '',
+    });
+
+    await test.runSequence('updateHearingNoteSequence');
+    expect(test.getState('validationErrors')).toEqual({
+      note: 'Add a note',
+    });
+
     const textWithCountOverLimit = getTextByCount(201);
 
     await test.runSequence('updateModalValueSequence', {
@@ -35,7 +45,7 @@ export const docketClerkEditsHearingNote = (test, updatedNote) => {
       value: textWithCountOverLimit,
     });
 
-    await test.runSequence('updateCalendarNoteSequence');
+    await test.runSequence('updateHearingNoteSequence');
     expect(test.getState('validationErrors')).toEqual({
       note: 'Limit is 200 characters. Enter 200 or fewer characters.',
     });
@@ -45,7 +55,7 @@ export const docketClerkEditsHearingNote = (test, updatedNote) => {
       value: updatedNote,
     });
 
-    await test.runSequence('updateCalendarNoteSequence');
+    await test.runSequence('updateHearingNoteSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertSuccess').message).toEqual('Note saved.');

@@ -87,7 +87,7 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
 const DisplayHearings = ({
   caseDetailHelper,
   hearings,
-  openAddEditCalendarNoteModalSequence,
+  openAddEditHearingNoteModalSequence,
   removeHearingSequence,
 }) => {
   return hearings.map(hearing => (
@@ -112,9 +112,8 @@ const DisplayHearings = ({
               menuItems={[
                 {
                   click: () => {
-                    openAddEditCalendarNoteModalSequence({
+                    openAddEditHearingNoteModalSequence({
                       docketNumber: caseDetailHelper.docketNumber,
-                      hideDelete: true,
                       note: hearing.calendarNotes,
                       trialSessionId: hearing.trialSessionId,
                     });
@@ -456,6 +455,8 @@ export const CaseInformationInternal = connect(
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddEditCalendarNoteModalSequence:
       sequences.openAddEditCalendarNoteModalSequence,
+    openAddEditHearingNoteModalSequence:
+      sequences.openAddEditHearingNoteModalSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -480,6 +481,7 @@ export const CaseInformationInternal = connect(
     formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence,
     openAddEditCalendarNoteModalSequence,
+    openAddEditHearingNoteModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCleanModalSequence,
@@ -678,8 +680,8 @@ export const CaseInformationInternal = connect(
                       <DisplayHearings
                         caseDetailHelper={caseDetailHelper}
                         hearings={formattedCaseDetail.hearings}
-                        openAddEditCalendarNoteModalSequence={
-                          openAddEditCalendarNoteModalSequence
+                        openAddEditHearingNoteModalSequence={
+                          openAddEditHearingNoteModalSequence
                         }
                         removeHearingSequence={
                           openRemoveFromTrialSessionModalSequence

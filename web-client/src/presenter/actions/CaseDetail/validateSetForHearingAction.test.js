@@ -1,6 +1,9 @@
+import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateSetForHearingAction } from './validateSetForHearingAction';
+
+presenter.providers.applicationContext = applicationContextForClient;
 
 describe('validateSetForHearingAction', () => {
   let successStub;
@@ -30,6 +33,20 @@ describe('validateSetForHearingAction', () => {
     expect(errorStub).not.toHaveBeenCalled();
   });
 
+  it('should call path.success and not path.error if note and trialSessionId is on state.modal', async () => {
+    await runAction(validateSetForHearingAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        modal: { note: 'this is my note', trialSessionId: '123' },
+      },
+    });
+
+    expect(successStub).toHaveBeenCalled();
+    expect(errorStub).not.toHaveBeenCalled();
+  });
+
   it('should call path.error with an error message and not call path.success if trialSessionId is not on state.modal', async () => {
     await runAction(validateSetForHearingAction, {
       modules: {
@@ -49,7 +66,13 @@ describe('validateSetForHearingAction', () => {
     expect(successStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error with an error message and not call path.success if calendarNotes is not on state.modal', async () => {
+  it('should call path.error with an error message and not call path.success if the calendar note is not valid', async () => {
+    presenter.providers.applicationContext.getUseCases().validateHearingNoteInteractor = jest
+      .fn()
+      .mockReturnValue({
+        note: 'That would be invalid, man.',
+      });
+
     await runAction(validateSetForHearingAction, {
       modules: {
         presenter,
@@ -62,29 +85,7 @@ describe('validateSetForHearingAction', () => {
     expect(errorStub).toHaveBeenCalled();
     expect(errorStub.mock.calls[0][0]).toEqual({
       errors: {
-        calendarNotes: 'Add a note.',
-      },
-    });
-    expect(successStub).not.toHaveBeenCalled();
-  });
-
-  it('should call path.error with and error message and not call path.success if the length of state.modal.calendarNotes is over 200', async () => {
-    await runAction(validateSetForHearingAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        modal: {
-          calendarNotes: '0'.repeat(201),
-          trialSessionId: '6e3a34d9-262a-486b-86c8-7862c4522ab4',
-        },
-      },
-    });
-
-    expect(errorStub).toHaveBeenCalled();
-    expect(errorStub.mock.calls[0][0]).toEqual({
-      errors: {
-        calendarNotes: 'The length of the note must not be over 200',
+        calendarNotes: 'That would be invalid, man.',
       },
     });
     expect(successStub).not.toHaveBeenCalled();
