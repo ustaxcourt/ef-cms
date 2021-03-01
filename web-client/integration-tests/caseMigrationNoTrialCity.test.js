@@ -27,7 +27,7 @@ describe('migrated case that is missing a preferred trial city journey', () => {
       state: test.getState(),
     });
 
-    expect(formattedCase.showBlockedFromTrial).toBeTruthy();
+    expect(formattedCase.showBlockedTag).toBeTruthy();
   });
 
   it('remove the deadline and verify the case is no longer blocked', async () => {
@@ -44,6 +44,6 @@ describe('migrated case that is missing a preferred trial city journey', () => {
       state: test.getState(),
     });
 
-    expect(formattedCase.showBlockedFromTrial).toBeFalsy();
+    expect(formattedCase.showBlockedTag).toBeFalsy();
   });
 });
