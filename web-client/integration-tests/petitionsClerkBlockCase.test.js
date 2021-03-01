@@ -10,6 +10,7 @@ import {
   uploadProposedStipulatedDecision,
   viewCaseDetail,
 } from './helpers';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
@@ -19,6 +20,12 @@ import { petitionsClerkRemovesPendingItemFromCase } from './journey/petitionsCle
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase';
 import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 const test = setupTest();
 
@@ -53,8 +60,19 @@ describe('Blocking a Case', () => {
   petitionsClerkUnblocksCase(test, trialLocation);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
 
-  // //automatic block with a due date
+  // automatic block with a due date
   petitionsClerkCreatesACaseDeadline(test);
+
+  it('should be able to add a trial session to an automatically blocked case', async () => {
+    const formattedCase = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(formattedCase.showBlockedTag).toBeTruthy();
+    expect(formattedCase.showNotScheduled).toBeTruthy();
+    expect(formattedCase.automaticBlocked).toBeTruthy();
+  });
+
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
     await refreshElasticsearchIndex();
 
