@@ -4380,38 +4380,8 @@ describe('Case entity', () => {
     });
   });
 
-  describe('blocked/automatic blocked status validation for calendared cases', () => {
+  describe('blocked status validation for calendared cases', () => {
     const mockTrialSessionId = '9e29b116-58a0-40f5-afe6-e3a0ba4f226a';
-
-    it('fails validation when the case status is calendared and automaticBlocked is true', () => {
-      let blockedCalendaredCase = {
-        ...MOCK_CASE,
-        automaticBlocked: true,
-        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: mockTrialSessionId,
-      };
-      const myCase = new Case(blockedCalendaredCase, { applicationContext });
-      expect(myCase.getFormattedValidationErrors()).toEqual({
-        automaticBlocked: '"automaticBlocked" contains an invalid value',
-      });
-    });
-
-    it('passes validation when the case status is calendared and automaticBlocked is undefined', () => {
-      let blockedCalendaredCase = {
-        ...MOCK_CASE,
-        automaticBlocked: undefined,
-        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: mockTrialSessionId,
-      };
-      const myCase = new Case(blockedCalendaredCase, { applicationContext });
-      expect(myCase.getFormattedValidationErrors()).toBe(null);
-    });
 
     it('fails validation when the case status is calendared and blocked is true', () => {
       let blockedCalendaredCase = {
@@ -4429,18 +4399,6 @@ describe('Case entity', () => {
       });
     });
 
-    it('passes validation when the case status is calendared and automaticBlocked is false', () => {
-      let calendaredCase = {
-        ...MOCK_CASE,
-        automaticBlocked: false,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: mockTrialSessionId,
-      };
-      const myCase = new Case(calendaredCase, { applicationContext });
-      expect(myCase.getFormattedValidationErrors()).toBe(null);
-    });
-
     it('passes validation when the case status is calendared and blocked is false', () => {
       let calendaredCase = {
         ...MOCK_CASE,
@@ -4450,20 +4408,6 @@ describe('Case entity', () => {
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(calendaredCase, { applicationContext });
-      expect(myCase.getFormattedValidationErrors()).toBe(null);
-    });
-
-    it('passes validation when the case status is not calendared and automaticBlocked is true', () => {
-      let blockedNewCase = {
-        ...MOCK_CASE,
-        automaticBlocked: true,
-        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-        status: CASE_STATUS_TYPES.new,
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: mockTrialSessionId,
-      };
-      const myCase = new Case(blockedNewCase, { applicationContext });
       expect(myCase.getFormattedValidationErrors()).toBe(null);
     });
 
