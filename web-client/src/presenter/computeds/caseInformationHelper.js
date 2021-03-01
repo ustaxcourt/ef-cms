@@ -1,14 +1,8 @@
 import { state } from 'cerebral';
 
-export const caseInformationHelper = (get, applicationContext) => {
-  const user = applicationContext.getCurrentUser();
+export const caseInformationHelper = get => {
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
-
-  const isInternalUser = applicationContext
-    .getUtilities()
-    .isInternalUser(user.role);
-
   const showEditPrivatePractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
     caseDetail.privatePractitioners &&
@@ -33,7 +27,8 @@ export const caseInformationHelper = (get, applicationContext) => {
   const showSealAddressLink = permissions.SEAL_ADDRESS;
   const showHearingsTable = !!caseDetail.hearings?.length;
 
-  const showEmail = isInternalUser && caseDetail.contactPrimary.email;
+  const showEmail =
+    caseDetail.contactPrimary && caseDetail.contactPrimary.email;
 
   return {
     formattedOtherPetitioners,
