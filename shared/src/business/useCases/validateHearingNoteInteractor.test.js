@@ -4,7 +4,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('validateHearingNoteInteractor', () => {
-  it('returns the expected errors object on an empty docket record', () => {
+  it('returns a defined errors object if the note is null', () => {
     const errors = validateHearingNoteInteractor({
       applicationContext,
       note: null,
@@ -13,7 +13,7 @@ describe('validateHearingNoteInteractor', () => {
     expect(Object.keys(errors).length).toBeGreaterThan(0);
   });
 
-  it('returns null when there are no errors', () => {
+  it('returns null when note is defined', () => {
     const result = validateHearingNoteInteractor({
       applicationContext,
       note: 'this is a note',

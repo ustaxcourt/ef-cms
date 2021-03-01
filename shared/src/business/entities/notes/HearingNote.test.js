@@ -2,14 +2,14 @@ const { HearingNote } = require('./HearingNote');
 
 describe('HearingNote', () => {
   describe('validation', () => {
-    it('should has errors if note is undefined', () => {
+    it('should have errors if note is undefined', () => {
       const entity = new HearingNote({});
       expect(entity.getFormattedValidationErrors()).toEqual({
         note: HearingNote.VALIDATION_ERROR_MESSAGES.note[1],
       });
     });
 
-    it('should has errors if note is undefined', () => {
+    it('should have errors if note is an empty string', () => {
       const entity = new HearingNote({ note: '' });
       expect(entity.getFormattedValidationErrors()).toEqual({
         note: HearingNote.VALIDATION_ERROR_MESSAGES.note[1],
