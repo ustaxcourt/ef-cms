@@ -68,6 +68,7 @@ export function TabsComponent({
       iconColor,
       id: tabId,
       showIcon,
+      showNotificationIcon,
       tabName,
       title,
     } = child.props;
@@ -98,6 +99,11 @@ export function TabsComponent({
           <span>{title}</span>{' '}
           {showIcon && (
             <FontAwesomeIcon color={iconColor || null} icon={icon} />
+          )}
+          {showNotificationIcon && (
+            <div className="icon-tab-notification">
+              <div className="icon-tab-notification-exclamation">!</div>
+            </div>
           )}
         </button>
       </li>
