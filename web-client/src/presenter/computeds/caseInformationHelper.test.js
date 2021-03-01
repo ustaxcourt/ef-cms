@@ -322,8 +322,8 @@ describe('case information helper', () => {
     it('should be false when the case contact primary does not have an email', () => {
       const { showEmail } = runCompute(caseInformationHelper, {
         state: {
+          ...getBaseState(user),
           caseDetail: {
-            ...getBaseState(user),
             contactPrimary: {
               pendingEmail: mockEmail,
             },
