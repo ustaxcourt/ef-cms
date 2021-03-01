@@ -2,11 +2,11 @@
   const AWS = require('aws-sdk');
   const {
     elasticsearchIndexes,
-  } = require('./web-api/elasticsearch/elasticsearch-indexes');
+  } = require('./elasticsearch/elasticsearch-indexes');
   AWS.config.region = 'us-east-1';
   const {
     ELASTICSEARCH_API_VERSION,
-  } = require('./web-api/elasticsearch-settings');
+  } = require('./elasticsearch/elasticsearch-settings');
 
   const connectionClass = require('http-aws-es');
   const elasticsearch = require('elasticsearch');
