@@ -2,6 +2,7 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseDetailSubnavTabs = connect(
   {
@@ -36,6 +37,10 @@ export const CaseDetailSubnavTabs = connect(
             />
             {caseDetailSubnavHelper.showTrackedItemsTab && (
               <Tab
+                className={classNames(
+                  caseDetailSubnavHelper.showTrackedItemsNotification &&
+                    'tracked-items-padding-right',
+                )}
                 id="tab-tracked-items"
                 showNotificationIcon={
                   caseDetailSubnavHelper.showTrackedItemsNotification
