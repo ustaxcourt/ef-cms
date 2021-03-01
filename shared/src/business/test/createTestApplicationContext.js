@@ -418,6 +418,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateCaseHearing: jest.fn(),
     updateCaseTrialSortMappingRecords: jest.fn(),
     updateWorkItem,
     updateWorkItemInCase,
