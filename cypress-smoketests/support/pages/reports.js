@@ -6,6 +6,7 @@ exports.viewBlockedCaseOnBlockedReport = testData => {
 };
 
 exports.runTrialSessionPlanningReport = () => {
+  // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const nextYear = new Date().getUTCFullYear() + 1;
   cy.get('#reports-btn').click();
   cy.get('#trial-session-planning-btn').click();

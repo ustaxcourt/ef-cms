@@ -119,10 +119,10 @@ const getTrialSessionPlanningReportData = async ({
     });
 
     trialLocationData.push({
-      allCaseCount: allCaseCount,
+      allCaseCount,
       previousTermsData,
-      regularCaseCount: regularCaseCount,
-      smallCaseCount: smallCaseCount,
+      regularCaseCount,
+      smallCaseCount,
       stateAbbreviation,
       trialCityState,
     });

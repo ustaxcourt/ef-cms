@@ -115,7 +115,7 @@ const practitionerValidation = {
     .optional()
     .allow(null)
     .description('An alternate phone number for the practitioner.'),
-  admissionsDate: JoiValidationConstants.ISO_DATE.max('now')
+  admissionsDate: JoiValidationConstants.DATE.max('now')
     .required()
     .description(
       'The date the practitioner was admitted to the Tax Court bar.',

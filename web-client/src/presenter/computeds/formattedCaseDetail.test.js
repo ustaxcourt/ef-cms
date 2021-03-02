@@ -10,7 +10,8 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const getDateISO = () => new Date().toISOString();
+const getDateISO = () =>
+  applicationContext.getUtilities().createISODateString();
 
 describe('formattedCaseDetail', () => {
   let globalUser;
@@ -942,7 +943,7 @@ describe('formattedCaseDetail', () => {
       };
       const caseDeadlines = [
         {
-          deadlineDate: new Date(),
+          deadlineDate: applicationContext.getUtilities().createISODateString(),
         },
       ];
 
@@ -3787,6 +3788,58 @@ describe('formattedCaseDetail', () => {
       addedToSessionAt: '2020-04-19T17:29:13.120Z',
       calendarNotes: 'THIRD',
       trialSessionId: '345',
+    });
+  });
+
+  describe('showBlockedTag', () => {
+    it('should be true when blocked is true', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            blocked: true,
+            blockedDate: '2019-04-19T17:29:13.120Z',
+            blockedReason: 'because',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be true when blocked is false, automaticBlocked is true, and case status is NOT calendared', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: STATUS_TYPES.new,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be false when blocked is false, automaticBlocked is true, and case status is calendared', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: STATUS_TYPES.calendared,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeFalsy();
     });
   });
 });

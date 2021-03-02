@@ -20,7 +20,7 @@ class v1ApiError extends Error {
       : 500;
     this.message = {
       message: error.message || 'An unexpected error occurred',
-      toString: function () {
+      toString() {
         return this.message;
       },
     };
