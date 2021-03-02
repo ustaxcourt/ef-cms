@@ -1,9 +1,8 @@
 import { AddConsolidatedCaseModal } from './AddConsolidatedCaseModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { EditCaseTrialInformationMenu } from './EditCaseTrialInformationMenu';
+import { DropdownMenu } from '../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
 import { SetForHearingModal } from './SetForHearingModal';
 import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
@@ -88,6 +87,7 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
 const DisplayHearings = ({
   caseDetailHelper,
   hearings,
+  openAddEditHearingNoteModalSequence,
   removeHearingSequence,
 }) => {
   return hearings.map(hearing => (
@@ -108,19 +108,29 @@ const DisplayHearings = ({
         <td>{hearing.formattedAssociatedJudge}</td>
         {caseDetailHelper.showAddRemoveFromHearingButtons && (
           <td>
-            <Button
-              link
-              className="red-warning"
-              icon="trash"
-              id="remove-from-trial-session-btn"
-              onClick={() => {
-                removeHearingSequence({
-                  trialSessionId: hearing.trialSessionId,
-                });
-              }}
-            >
-              Remove
-            </Button>
+            <DropdownMenu
+              menuItems={[
+                {
+                  click: () => {
+                    openAddEditHearingNoteModalSequence({
+                      docketNumber: caseDetailHelper.docketNumber,
+                      note: hearing.calendarNotes,
+                      trialSessionId: hearing.trialSessionId,
+                    });
+                  },
+                  label: 'Add/Edit Calendar Note',
+                },
+                {
+                  click: () => {
+                    removeHearingSequence({
+                      trialSessionId: hearing.trialSessionId,
+                    });
+                  },
+                  label: 'Remove from Hearing',
+                },
+              ]}
+              menuState={`caseInformationHearingsEdit-${hearing.trialSessionId}`}
+            ></DropdownMenu>
           </td>
         )}
       </tr>
@@ -133,11 +143,47 @@ const DisplayHearings = ({
   ));
 };
 
+const EditCaseTrialInformationMenu = ({
+  caseDetail,
+  openAddEditCalendarNoteModalSequence,
+  openRemoveFromTrialSessionModalSequence,
+  trialSessionId,
+}) => {
+  return (
+    <DropdownMenu
+      id="edit-case-trial-information-btn"
+      menuItems={[
+        {
+          click: () => {
+            openAddEditCalendarNoteModalSequence({
+              note: caseDetail.trialSessionNotes,
+            });
+          },
+          id: 'add-edit-calendar-note',
+          label: 'Add/Edit Calendar Note',
+        },
+        {
+          click: () => {
+            openRemoveFromTrialSessionModalSequence({
+              trialSessionId,
+            });
+          },
+          id: 'remove-from-trial-session-btn',
+          label: 'Remove From Trial',
+        },
+      ]}
+      menuState="caseInformationTrialEdit"
+    ></DropdownMenu>
+  );
+};
+
 const TrialInformation = ({
   caseDetail,
+  openAddEditCalendarNoteModalSequence,
   openAddToTrialModalSequence,
   openBlockFromTrialModalSequence,
   openPrioritizeCaseModalSequence,
+  openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
   openUnprioritizeCaseModalSequence,
   trialSessionJudge,
@@ -230,7 +276,16 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{caseDetail.formattedAssociatedJudge}</td>
                   <td>
-                    <EditCaseTrialInformationMenu />
+                    <EditCaseTrialInformationMenu
+                      caseDetail={caseDetail}
+                      openAddEditCalendarNoteModalSequence={
+                        openAddEditCalendarNoteModalSequence
+                      }
+                      openRemoveFromTrialSessionModalSequence={
+                        openRemoveFromTrialSessionModalSequence
+                      }
+                      trialSessionId={caseDetail.trialSessionId}
+                    />
                   </td>
                 </tr>
                 {caseDetail.trialSessionNotes && (
@@ -290,32 +345,6 @@ const TrialInformation = ({
                   Add Manual Block
                 </Button>
               </div>
-            </div>
-          )}
-          {caseDetail.automaticBlocked && (
-            <div className="grid-row">
-              <div className="grid-col-12">
-                <p className="label">
-                  System blocked from trial{' '}
-                  {caseDetail.automaticBlockedDateFormatted}:{' '}
-                </p>
-                <p>{caseDetail.automaticBlockedReason}</p>
-                <Hint exclamation className="margin-bottom-0 block">
-                  You must remove any pending item or due date to make this case
-                  eligible for trial
-                </Hint>
-              </div>
-            </div>
-          )}
-          {caseDetail.showAutomaticBlockedAndHighPriority && (
-            <div className="grid-row margin-top-3">
-              <h4 className="margin-bottom-0">
-                <FontAwesomeIcon
-                  className="text-secondary-darker"
-                  icon="exclamation-circle"
-                />{' '}
-                Trial - Not Scheduled - High Priority
-              </h4>
             </div>
           )}
         </>
@@ -390,7 +419,16 @@ const TrialInformation = ({
                   <td>{caseDetail.formattedTrialDate}</td>
                   <td>{trialSessionJudge.name}</td>
                   <td>
-                    <EditCaseTrialInformationMenu />
+                    <EditCaseTrialInformationMenu
+                      caseDetail={caseDetail}
+                      openAddEditCalendarNoteModalSequence={
+                        openAddEditCalendarNoteModalSequence
+                      }
+                      openRemoveFromTrialSessionModalSequence={
+                        openRemoveFromTrialSessionModalSequence
+                      }
+                      trialSessionId={caseDetail.trialSessionId}
+                    />
                   </td>
                 </tr>
                 {caseDetail.trialSessionNotes && (
@@ -415,6 +453,10 @@ export const CaseInformationInternal = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
+    openAddEditCalendarNoteModalSequence:
+      sequences.openAddEditCalendarNoteModalSequence,
+    openAddEditHearingNoteModalSequence:
+      sequences.openAddEditHearingNoteModalSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -438,6 +480,8 @@ export const CaseInformationInternal = connect(
     caseInformationHelper,
     formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence,
+    openAddEditCalendarNoteModalSequence,
+    openAddEditHearingNoteModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCleanModalSequence,
@@ -520,12 +564,18 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <TrialInformation
                     caseDetail={formattedCaseDetail}
+                    openAddEditCalendarNoteModalSequence={
+                      openAddEditCalendarNoteModalSequence
+                    }
                     openAddToTrialModalSequence={openAddToTrialModalSequence}
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }
                     openPrioritizeCaseModalSequence={
                       openPrioritizeCaseModalSequence
+                    }
+                    openRemoveFromTrialSessionModalSequence={
+                      openRemoveFromTrialSessionModalSequence
                     }
                     openUnblockFromTrialModalSequence={
                       openUnblockFromTrialModalSequence
@@ -630,6 +680,9 @@ export const CaseInformationInternal = connect(
                       <DisplayHearings
                         caseDetailHelper={caseDetailHelper}
                         hearings={formattedCaseDetail.hearings}
+                        openAddEditHearingNoteModalSequence={
+                          openAddEditHearingNoteModalSequence
+                        }
                         removeHearingSequence={
                           openRemoveFromTrialSessionModalSequence
                         }

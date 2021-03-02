@@ -30,7 +30,7 @@ describe('validateAddPractitionerInteractor', () => {
     const errors = validateAddPractitionerInteractor({
       applicationContext,
       practitioner: {
-        admissionsDate: '2019-03-01T21:40:46.415Z',
+        admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         birthYear: '2009',
         email: 'test@example.com',

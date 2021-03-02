@@ -129,7 +129,7 @@ describe('getUserInteractor', () => {
 
   it('should return a Practitioner entity when the entity returned from persistence is a Practitioner', async () => {
     const mockPractitioner = {
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       birthYear: '1976',
       employer: 'IRS',

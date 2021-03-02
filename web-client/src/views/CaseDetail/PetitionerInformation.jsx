@@ -21,6 +21,7 @@ const PetitionerInformation = connect(
       sequences.openAddPrivatePractitionerModalSequence,
     openEditPrivatePractitionersModalSequence:
       sequences.openEditPrivatePractitionersModalSequence,
+    screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     toggleShowAdditionalPetitionersSequence:
       sequences.toggleShowAdditionalPetitionersSequence,
@@ -34,6 +35,7 @@ const PetitionerInformation = connect(
     formattedCaseDetail,
     openAddPrivatePractitionerModalSequence,
     openEditPrivatePractitionersModalSequence,
+    screenMetadata,
     showModal,
     toggleShowAdditionalPetitionersSequence,
     updateFormValueSequence,
@@ -75,7 +77,7 @@ const PetitionerInformation = connect(
                     <address aria-labelledby="primary-label">
                       <AddressDisplay
                         contact={formattedCaseDetail.contactPrimary}
-                        showEmail={true}
+                        showEmail={false}
                         showSealAddressLink={
                           caseInformationHelper.showSealAddressLink
                         }
@@ -98,6 +100,22 @@ const PetitionerInformation = connect(
                           Service preference
                         </div>
                         {formattedCaseDetail.contactPrimary.serviceIndicator}
+                      </>
+                    )}
+                    {caseInformationHelper.showEmail && (
+                      <>
+                        <div className="semi-bold margin-bottom-0 margin-top-6">
+                          Current email address
+                        </div>
+                        {formattedCaseDetail.contactPrimary.email}
+                      </>
+                    )}
+                    {screenMetadata.userPendingEmail && (
+                      <>
+                        <div className="semi-bold margin-bottom-0 margin-top-6">
+                          Pending email address
+                        </div>
+                        {screenMetadata.userPendingEmail}
                       </>
                     )}
                   </div>

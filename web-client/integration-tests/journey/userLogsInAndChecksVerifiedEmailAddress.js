@@ -5,9 +5,12 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const headerHelper = withAppContextDecorator(headerHelperComputed);
 
-const mockUpdatedEmail = 'error@example.com';
-export const userLogsInAndChecksVerifiedEmailAddress = (test, user) =>
-  it(`${user} logs in and checks verified email address`, async () => {
+export const userLogsInAndChecksVerifiedEmailAddress = (
+  test,
+  user,
+  mockUpdatedEmail,
+) =>
+  it(`${user} logs in and checks verified email address of ${mockUpdatedEmail}`, async () => {
     const userFromState = test.getState('user');
 
     expect(userFromState.email).toEqual(mockUpdatedEmail);

@@ -8,7 +8,8 @@ const {
   ROLES,
 } = require('../shared/src/business/entities/EntityConstants');
 const {
-  createISODateString,
+  formatDateString,
+  FORMATS,
 } = require('../shared/src/business/utilities/DateHandler');
 const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
 const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
@@ -27,9 +28,9 @@ const formatRecord = record => {
   returnData.lastName = record.lastName;
   returnData.suffix = record.suffix;
 
-  returnData.admissionsDate = createISODateString(
+  returnData.admissionsDate = formatDateString(
     record.admissionsDate,
-    'MM-DD-YYYY',
+    FORMATS.YYYYMMDD,
   );
 
   returnData.birthYear =

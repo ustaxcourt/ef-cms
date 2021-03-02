@@ -7,7 +7,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 export const admissionsClerkAddsPractitionerEmail = test => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
   const mockAddress2 = 'A Place';
-  const mockAvailableEmail = 'test+error@example.com';
+  const mockAvailableEmail = 'test+available@example.com';
 
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();

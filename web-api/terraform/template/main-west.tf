@@ -1,9 +1,6 @@
-
-
 resource "aws_s3_bucket" "api_lambdas_bucket_west" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-west-1.lambdas"
   acl    = "private"
-  region = "us-west-1"
 
   provider = aws.us-west-1
   tags = {
@@ -184,7 +181,7 @@ resource "aws_route53_record" "api_route53_main_west_regional_record" {
   type           = "A"
   zone_id        = data.aws_route53_zone.zone.id
   set_identifier = "api_main_us_west_1"
-  provider                 = aws.us-west-1
+  provider       = aws.us-west-1
 
   alias {
     name                   = aws_api_gateway_domain_name.api_custom_main_west.regional_domain_name
@@ -203,7 +200,7 @@ resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
   type           = "A"
   zone_id        = data.aws_route53_zone.zone.id
   set_identifier = "public_api_main_us_west_1"
-  provider                 = aws.us-west-1
+  provider       = aws.us-west-1
 
   alias {
     name                   = aws_api_gateway_domain_name.public_api_custom_main_west.regional_domain_name
