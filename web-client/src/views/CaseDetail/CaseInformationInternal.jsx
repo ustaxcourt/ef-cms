@@ -3,7 +3,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DropdownMenu } from '../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Hint } from '../../ustc-ui/Hint/Hint';
 import { If } from '../../ustc-ui/If/If';
 import { SetForHearingModal } from './SetForHearingModal';
 import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
@@ -88,7 +87,7 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
 const DisplayHearings = ({
   caseDetailHelper,
   hearings,
-  openAddEditCalendarNoteModalSequence,
+  openAddEditHearingNoteModalSequence,
   removeHearingSequence,
 }) => {
   return hearings.map(hearing => (
@@ -113,9 +112,8 @@ const DisplayHearings = ({
               menuItems={[
                 {
                   click: () => {
-                    openAddEditCalendarNoteModalSequence({
+                    openAddEditHearingNoteModalSequence({
                       docketNumber: caseDetailHelper.docketNumber,
-                      hideDelete: true,
                       note: hearing.calendarNotes,
                       trialSessionId: hearing.trialSessionId,
                     });
@@ -167,7 +165,7 @@ const EditCaseTrialInformationMenu = ({
         {
           click: () => {
             openRemoveFromTrialSessionModalSequence({
-              trialSessionId: trialSessionId,
+              trialSessionId,
             });
           },
           id: 'remove-from-trial-session-btn',
@@ -349,32 +347,6 @@ const TrialInformation = ({
               </div>
             </div>
           )}
-          {caseDetail.automaticBlocked && (
-            <div className="grid-row">
-              <div className="grid-col-12">
-                <p className="label">
-                  System blocked from trial{' '}
-                  {caseDetail.automaticBlockedDateFormatted}:{' '}
-                </p>
-                <p>{caseDetail.automaticBlockedReason}</p>
-                <Hint exclamation className="margin-bottom-0 block">
-                  You must remove any pending item or due date to make this case
-                  eligible for trial
-                </Hint>
-              </div>
-            </div>
-          )}
-          {caseDetail.showAutomaticBlockedAndHighPriority && (
-            <div className="grid-row margin-top-3">
-              <h4 className="margin-bottom-0">
-                <FontAwesomeIcon
-                  className="text-secondary-darker"
-                  icon="exclamation-circle"
-                />{' '}
-                Trial - Not Scheduled - High Priority
-              </h4>
-            </div>
-          )}
         </>
       )}
       {caseDetail.showNotScheduled && (
@@ -483,6 +455,8 @@ export const CaseInformationInternal = connect(
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddEditCalendarNoteModalSequence:
       sequences.openAddEditCalendarNoteModalSequence,
+    openAddEditHearingNoteModalSequence:
+      sequences.openAddEditHearingNoteModalSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -507,6 +481,7 @@ export const CaseInformationInternal = connect(
     formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence,
     openAddEditCalendarNoteModalSequence,
+    openAddEditHearingNoteModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCleanModalSequence,
@@ -705,8 +680,8 @@ export const CaseInformationInternal = connect(
                       <DisplayHearings
                         caseDetailHelper={caseDetailHelper}
                         hearings={formattedCaseDetail.hearings}
-                        openAddEditCalendarNoteModalSequence={
-                          openAddEditCalendarNoteModalSequence
+                        openAddEditHearingNoteModalSequence={
+                          openAddEditHearingNoteModalSequence
                         }
                         removeHearingSequence={
                           openRemoveFromTrialSessionModalSequence
