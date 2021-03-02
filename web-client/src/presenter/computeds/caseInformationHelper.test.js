@@ -1,18 +1,9 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { caseInformationHelper as caseInformationHelperComputed } from './caseInformationHelper';
+import { caseInformationHelper } from './caseInformationHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../withAppContext';
 
 describe('case information helper', () => {
-  const caseInformationHelper = withAppContextDecorator(
-    caseInformationHelperComputed,
-    {
-      ...applicationContext,
-    },
-  );
-
   const getBaseState = user => {
     return {
       permissions: getUserPermissions(user),
@@ -308,18 +299,12 @@ describe('case information helper', () => {
 
   describe('showEmail', () => {
     const mockEmail = 'error@example.com';
-    let user;
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
 
-    beforeEach(() => {
-      user = {
-        role: ROLES.docketClerk,
-        userId: '789',
-      };
-
-      applicationContext.getCurrentUser.mockImplementation(() => user);
-    });
-
-    it('should be true when the current user is an internal user and the case contact primary has an email', () => {
+    it('should be true when the case contact primary has an email', () => {
       const { showEmail } = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
@@ -334,7 +319,7 @@ describe('case information helper', () => {
       expect(showEmail).toBeTruthy();
     });
 
-    it('should be false when the current user is an internal user and the case contact primary does not have an email', () => {
+    it('should be false when the case contact primary does not have an email', () => {
       const { showEmail } = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
@@ -343,21 +328,6 @@ describe('case information helper', () => {
               pendingEmail: mockEmail,
             },
           },
-          form: {},
-        },
-      });
-      expect(showEmail).toBeFalsy();
-    });
-
-    it('should be false when the current user is NOT an internal user', () => {
-      user = {
-        role: ROLES.petitioner,
-        userId: '789',
-      };
-      const { showEmail } = runCompute(caseInformationHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {},
           form: {},
         },
       });

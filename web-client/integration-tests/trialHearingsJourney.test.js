@@ -1,5 +1,6 @@
 import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHearing';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkEditsHearingNote } from './journey/docketClerkEditsHearingNote';
 import { docketClerkManuallyAddsCaseToTrialSessionWithNote } from './journey/docketClerkManuallyAddsCaseToTrialSessionWithNote';
 import { docketClerkRemovesCaseFromHearing } from './journey/docketClerkRemovesCaseFromHearing';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -100,5 +101,6 @@ describe('trial hearings journey', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsCaseToHearing(test, 'Test hearing note four.');
+  docketClerkEditsHearingNote(test, 'Updated test hearing note four.');
   docketClerkRemovesCaseFromHearing(test);
 });

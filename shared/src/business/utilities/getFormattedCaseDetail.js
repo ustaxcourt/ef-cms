@@ -313,20 +313,12 @@ const formatTrialSessionScheduling = ({
     );
 
     // TODO: get trial session note
-  } else if (formattedCase.blocked || formattedCase.automaticBlocked) {
+  } else if (formattedCase.blocked) {
     formattedCase.showBlockedFromTrial = true;
     if (formattedCase.blocked) {
       formattedCase.blockedDateFormatted = applicationContext
         .getUtilities()
         .formatDateString(formattedCase.blockedDate, 'MMDDYY');
-    }
-    if (formattedCase.automaticBlocked) {
-      formattedCase.automaticBlockedDateFormatted = applicationContext
-        .getUtilities()
-        .formatDateString(formattedCase.automaticBlockedDate, 'MMDDYY');
-      if (formattedCase.highPriority) {
-        formattedCase.showAutomaticBlockedAndHighPriority = true;
-      }
     }
   } else if (formattedCase.highPriority) {
     formattedCase.formattedTrialDate = 'Not scheduled';
