@@ -163,6 +163,9 @@ const {
   getDocumentDownloadUrlLambda: v1GetDocumentDownloadUrlLambda,
 } = require('./v1/getDocumentDownloadUrlLambda');
 const {
+  getDocumentDownloadUrlLambda: v2GetDocumentDownloadUrlLambda,
+} = require('./v2/getDocumentDownloadUrlLambda');
+const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
 const {
@@ -368,6 +371,7 @@ const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
+const { getCaseLambda: v2GetCaseLambda } = require('./v2/getCaseLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
@@ -966,6 +970,15 @@ app.get('/v1/cases/:docketNumber', lambdaWrapper(v1GetCaseLambda));
 app.get(
   '/v1/cases/:docketNumber/entries/:key/document-download-url',
   lambdaWrapper(v1GetDocumentDownloadUrlLambda),
+);
+
+/**
+ * v2 API
+ */
+app.get('/v2/cases/:docketNumber', lambdaWrapper(v2GetCaseLambda));
+app.get(
+  '/v2/cases/:docketNumber/entries/:key/document-download-url',
+  lambdaWrapper(v2GetDocumentDownloadUrlLambda),
 );
 
 /**
