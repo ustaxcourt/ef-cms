@@ -1,5 +1,33 @@
 # Release Notes
 
+## PR 63 Release Notes
+
+### Internal Only
+
+**Improvement** Admissions clerks can add notes for practitioners that are visible to all Court users when viewing practitioner information.
+
+**Improvement** Docket clerks can now directly access the QC screen for e-filed documents from the Docket Record Document View.
+
+**Improvement** Docket clerks can add Calendar Notes after a case has been set for trial, and edit Calendar Notes for both trials and hearing anytime while the case is still on the trial session.
+
+**Improvement** Docket clerks can manually add cases with due dates and pending documents to a trial session and mark them as high priority.
+
+**Improvement** Admissions clerks can give petitioners electronic access to a case by adding a new or existing email to the petitioner on a case-by-case level.
+
+**Bug Fix** Document title now displays correctly in dropdown menus throughout the application.
+
+**Bug Fix** Document QC boxes for Processed / Served documents now include pagination to display documents from the last seven days.
+
+**Bug Fix** Users can now preview PDF documents that are larger than 2MB.
+
+**Bug Fix** Large cases (over 1 MB) were not displaying some case information due to the case size. Users are now able to view all case information, regardless of case size.
+
+### External / Public
+
+**Improvement** Petitioners can provide a new or existing email address to the Court to gain electronic access to their case.
+
+**Improvement** The Printable Docket Record now includes counsel information for both parties.
+
 ## PR 62 Release Notes
 
 ### Internal Only
@@ -27,7 +55,7 @@
 **Improvement**: Admissions clerks can edit the profile for a practitioner without an email address.
 * Clerks can make changes to practitioner information for practitioners with or without an email address on record.
 
-**Bug Fix**: Docket clerks will not be prompted to print paper service after completing QC and sending a message.
+**Bug Fix**: Docket clerks will now be prompted to print paper service after completing QC and sending a message.
 * When completing QC and sending a message for a document to be served via paper service, clerks are now prompted immediately to print and mail the necessary documents.
 
 **Bug Fix**: Document titles will now display correctly across the application
