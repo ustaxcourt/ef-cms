@@ -8,17 +8,20 @@ const { CASE_CAPTION_POSTFIX } = require('../entities/EntityConstants');
  * @returns {object} case caption parts
  */
 
-const getCaseCaptionMeta = ({ caseCaption }) => {
+const getCaseCaptionMeta = ({ caseCaption = '' }) => {
   const caseTitle = Case.getCaseTitle(caseCaption);
   const caseCaptionExtension = caseCaption
     .replace(caseTitle, '')
     .replace(', ', '');
 
+  const caseCaptionWithPostfix =
+    caseCaption.length > 0 ? `${caseCaption} ${CASE_CAPTION_POSTFIX}` : '';
+
   return {
     CASE_CAPTION_POSTFIX,
     caseCaption,
     caseCaptionExtension,
-    caseCaptionWithPostfix: `${caseCaption} ${CASE_CAPTION_POSTFIX}`,
+    caseCaptionWithPostfix,
     caseTitle,
   };
 };
