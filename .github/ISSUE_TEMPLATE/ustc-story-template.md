@@ -28,7 +28,7 @@ assignees: ''
 
 ## Definition of Done (Updated 2-23-21)
 **Product Owner**
- - [ ]  Acceptance criteria have been met and validated on the Flexion Prod env
+ - [ ]  Acceptance criteria have been met and validated on the Flexion mig env
 
 **UX**
  - [ ] Business test scenarios to meet all acceptance criteria have been written
