@@ -4,7 +4,7 @@
 
 ### Internal Only
 
-**Improvement** Admission clerks can add notes for practitioners that are visible to all Court users when viewing practitioner information.
+**Improvement** Admissions clerks can add notes for practitioners that are visible to all Court users when viewing practitioner information.
 
 **Improvement** Docket clerks can now directly access the QC screen for e-filed documents from the Docket Record Document View.
 
@@ -26,7 +26,7 @@
 
 **Improvement** Petitioners can provide a new or existing email address to the Court to gain electronic access to their case.
 
-**Improvement** The Printable Docket Record now includes counsel information for both parties. 
+**Improvement** The Printable Docket Record now includes counsel information for both parties.
 
 ## PR 62 Release Notes
 
