@@ -50,4 +50,5 @@ if [[ "${CURRENT_STATE}" == "\"Disabled\"" && "${DEPLOYING_STATE}" == "\"Disable
   echo "ERROR"
   echo "ERROR: Both streams were disabled!  Something went wrong when switching colors!"
   echo "ERROR"
+  exit 1;
 fi
