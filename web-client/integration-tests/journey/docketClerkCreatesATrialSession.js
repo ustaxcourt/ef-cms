@@ -11,10 +11,6 @@ export const docketClerkCreatesATrialSession = (test, overrides = {}) => {
 
     await test.runSequence('submitTrialSessionSequence');
 
-    console.log(
-      "test.getState('validationErrors')",
-      test.getState('validationErrors'),
-    );
     expect(test.getState('validationErrors')).toEqual({
       maxCases: errorMessages.maxCases,
       sessionType: errorMessages.sessionType,

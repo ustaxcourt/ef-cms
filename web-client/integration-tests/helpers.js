@@ -406,7 +406,6 @@ export const uploadPetition = async (
     },
   });
 
-  console.log('caseDetail state!!!', response.data);
   test.setState('caseDetail', response.data);
 
   return response.data;
