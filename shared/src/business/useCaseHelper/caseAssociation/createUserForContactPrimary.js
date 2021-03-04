@@ -32,6 +32,7 @@ exports.createUserForContactPrimary = async ({
   const userEntity = new User(
     {
       contact: contactPrimary,
+      hasEAccess: true,
       name,
       pendingEmail: email,
       role: ROLES.petitioner,
