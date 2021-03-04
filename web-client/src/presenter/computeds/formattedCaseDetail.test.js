@@ -218,6 +218,10 @@ describe('formattedCaseDetail', () => {
     },
   ];
 
+  beforeEach(() => {
+    applicationContext.getUtilities().isServed.mockReturnValue(true);
+  });
+
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -1449,7 +1453,7 @@ describe('formattedCaseDetail', () => {
     });
 
     it('should show the edit button if the docket entry has a system generated document', () => {
-      // applicationContext.getUtilities().isServed
+      applicationContext.getUtilities().isServed.mockReturnValue(true);
 
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -1485,6 +1489,8 @@ describe('formattedCaseDetail', () => {
     });
 
     it('should NOT show the edit button if the docket entry has an unserved court issued document', () => {
+      applicationContext.getUtilities().isServed.mockReturnValue(false);
+
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
@@ -1961,6 +1967,8 @@ describe('formattedCaseDetail', () => {
     });
 
     it('should NOT show the link to an associated external user when the document has isLegacyServed undefined and servedAt undefined', () => {
+      applicationContext.getUtilities().isServed.mockReturnValue(false);
+
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionerUser),
@@ -2604,6 +2612,13 @@ describe('formattedCaseDetail', () => {
 
   describe('formattedDocketEntriesOnDocketRecord and formattedPendingDocketEntriesOnDocketRecord', () => {
     it('should return formatted docket entries that are on the docket record, and in the pending list', () => {
+      applicationContext
+        .getUtilities()
+        .isServed.mockReturnValueOnce(false)
+        .mockReturnValueOnce(false)
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(false);
+
       const caseDetail = {
         archivedCorrespondences: [],
         archivedDocketEntries: [],
