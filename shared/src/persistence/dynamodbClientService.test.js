@@ -2,8 +2,8 @@ const {
   applicationContext,
 } = require('../business/test/createTestApplicationContext');
 const {
+  batchDelete,
   batchGet,
-  batchWrite,
   delete: deleteObj,
   describeDeployTable,
   describeTable,
@@ -179,32 +179,33 @@ describe('dynamodbClientService', function () {
     });
   });
 
-  describe('batchWrite', () => {
+  describe('batchDelete', () => {
     it('should call client.batchWrite with the expected arguments', async () => {
       const item = {
         pk: '123-20',
         sk: '123-20',
         ...MOCK_ITEM,
       };
-      await batchWrite({
+
+      await batchDelete({
         applicationContext,
         items: [item],
-        tableName: 'a',
       });
+
+      expect(applicationContext.getDocumentClient().batchWrite).toBeCalledTimes(
+        1,
+      );
       expect(
         applicationContext.getDocumentClient().batchWrite.mock.calls[0][0],
       ).toEqual({
         RequestItems: {
           'efcms-local': [
             {
-              PutRequest: {
-                ConditionExpression:
-                  'attribute_not_exists(#pk) and attribute_not_exists(#sk)',
-                ExpressionAttributeNames: {
-                  '#pk': item.pk,
-                  '#sk': item.sk,
+              DeleteRequest: {
+                Key: {
+                  pk: item.pk,
+                  sk: item.sk,
                 },
-                Item: item,
               },
             },
           ],
@@ -212,12 +213,103 @@ describe('dynamodbClientService', function () {
       });
     });
 
-    it('should NOT call client.batchWrite if when items is undefined', async () => {
-      await batchWrite({
-        applicationContext,
-        item: undefined,
-        tableName: 'a',
+    it('should retry call to client.batchWrite with any UnprocessedItems returned from the first batchWrite call', async () => {
+      const items = [
+        {
+          pk: '123-20',
+          sk: '123-20',
+          ...MOCK_ITEM,
+        },
+        {
+          pk: '345-20',
+          sk: '345-20',
+          ...MOCK_ITEM,
+        },
+      ];
+
+      applicationContext.getDocumentClient().batchWrite.mockReturnValueOnce({
+        promise: () => ({
+          UnprocessedItems: [items[1]],
+        }),
       });
+
+      await batchDelete({
+        applicationContext,
+        items,
+      });
+
+      expect(
+        applicationContext.getDocumentClient().batchWrite.mock.calls[0][0],
+      ).toEqual({
+        RequestItems: {
+          'efcms-local': [
+            {
+              DeleteRequest: {
+                Key: {
+                  pk: items[0].pk,
+                  sk: items[0].pk,
+                },
+              },
+            },
+            {
+              DeleteRequest: {
+                Key: {
+                  pk: items[1].pk,
+                  sk: items[1].pk,
+                },
+              },
+            },
+          ],
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().batchWrite.mock.calls[1][0],
+      ).toEqual({
+        RequestItems: {
+          'efcms-local': [
+            {
+              DeleteRequest: {
+                Key: {
+                  pk: items[1].pk,
+                  sk: items[1].pk,
+                },
+              },
+            },
+          ],
+        },
+      });
+      expect(applicationContext.logger.error).not.toBeCalled();
+    });
+
+    it('should log an error if second attempt to batchWrite results in UnprocessedItems', async () => {
+      const items = [
+        {
+          pk: '123-20',
+          sk: '123-20',
+          ...MOCK_ITEM,
+        },
+      ];
+
+      applicationContext.getDocumentClient().batchWrite.mockReturnValue({
+        promise: () => ({
+          UnprocessedItems: items,
+        }),
+      });
+
+      await batchDelete({
+        applicationContext,
+        items,
+      });
+
+      expect(applicationContext.logger.error).toBeCalled();
+    });
+
+    it('should NOT call client.batchWrite when items is undefined', async () => {
+      await batchDelete({
+        applicationContext,
+        items: undefined,
+      });
+
       expect(
         applicationContext.getDocumentClient().batchWrite,
       ).not.toHaveBeenCalled();
