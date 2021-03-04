@@ -1,33 +1,17 @@
-import { sortBy } from 'lodash';
-
+import { state } from 'cerebral';
 /**
- * TODO
+ *  returns a callback function that sets isEditingDocketEntry on state
  *
- * @param {string} section the section to fetch users from
- * @returns {Function} a function which should fetch the users in that section
+ * @param {string} isEditingDocketEntry the value of isEditingDocketEntry to be set
+ * @returns {Function} returns a callback function that sets isEditingDocketEntry on state
  */
-export const setIsEditingDocketEntryAction = ({ section }) =>
+export const setIsEditingDocketEntryAction = isEditingDocketEntry =>
   /**
-   * TODO
+   * sets the value of state.isEditingDocket entry to the value passed in
    *
    * @param {object} providers the providers object
-   * @param {object} providers.applicationContext the cerebral get function used for getting the state.user
-   * @returns {object} the list of users in a section
+   * @param {object} providers.store the cerebral store object
    */
-  async ({ applicationContext }) => 
-
-    if (!sectionToGet) {
-      const user = applicationContext.getCurrentUser();
-      sectionToGet = user.section;
-    }
-    const users = await applicationContext
-      .getUseCases()
-      .getUsersInSectionInteractor({
-        applicationContext,
-        section: sectionToGet,
-      });
-
-    return {
-      users: sortBy(users, 'name'),
-    };
+  async ({ store }) => {
+    store.set(state.isEditingDocketEntry, isEditingDocketEntry);
   };
