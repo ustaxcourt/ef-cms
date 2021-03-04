@@ -35,3 +35,19 @@ aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --it
 
 DESTINATION_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"}}' | jq -r ".Item.current.S")
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"'$DESTINATION_TABLE_VERSION'"}}'
+
+# check if both streams are disabled
+UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${CURRENT_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
+CURRENT_STATE=$(aws lambda get-event-source-mapping --uuid "${UUID}" --region us-east-1 | jq ".State")
+
+UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${DEPLOYING_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
+DEPLOYING_STATE=$(aws lambda get-event-source-mapping --uuid "${UUID}" --region us-east-1 | jq ".State")
+
+echo "CURRENT COLOR dynamodb stream is currently ${CURRENT_STATE}";
+echo "DEPLOYING COLOR dynamodb stream is currently ${DEPLOYING_STATE}";
+
+if [[ "${CURRENT_STATE}" == "\"Disabled\"" && "${DEPLOYING_STATE}" == "\"Disabled\"" ]]; then
+  echo "ERROR"
+  echo "ERROR: Both streams were disabled!  Something went wrong when switching colors!"
+  echo "ERROR"
+fi
