@@ -1490,8 +1490,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
       sendNotificationToUser,
     }),
     getPdfJs: async () => {
-      const pdfjsLib = require('pdfjs-dist');
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+      const pdfjsLib = require('pdfjs-dist/es5/build/pdf');
+      const { pdfjsworker } = require('pdfjs-dist/es5/build/pdf.worker.entry');
+
+      pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsworker;
 
       return pdfjsLib;
     },
