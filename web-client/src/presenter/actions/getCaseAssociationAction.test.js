@@ -251,8 +251,6 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and the petition document is not served', async () => {
-    applicationContext.getUtilities().isServed.mockReturnValue(false);
-
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
@@ -277,8 +275,6 @@ describe('getCaseAssociation', () => {
   });
 
   it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and the petition document is served', async () => {
-    applicationContext.getUtilities().isServed.mockReturnValue(true);
-
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
