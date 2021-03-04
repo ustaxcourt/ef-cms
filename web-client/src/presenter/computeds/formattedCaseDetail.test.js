@@ -1449,6 +1449,8 @@ describe('formattedCaseDetail', () => {
     });
 
     it('should show the edit button if the docket entry has a system generated document', () => {
+      // applicationContext.getUtilities().isServed
+
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
