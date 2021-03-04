@@ -1433,28 +1433,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
               }),
             };
           },
-          sendBulkTemplatedEmail: params => {
+          sendBulkTemplatedEmail: () => {
             return {
-              promise: () => ({
-                Status: [
-                  Promise.all(
-                    params.Destinations.map(Destination => {
-                      const address = Destination.Destination.ToAddresses[0];
-                      const template = Destination.ReplacementTemplateData;
-                      return getDocumentClient()
-                        .put({
-                          Item: {
-                            pk: `email-${address}`,
-                            sk: getUniqueId(),
-                            template,
-                          },
-                          TableName: process.env.DYNAMODB_TABLE_NAME,
-                        })
-                        .promise();
-                    }),
-                  ),
-                ],
-              }),
+              promise: async () => {
+                return { Status: [] };
+              },
             };
           },
         };
