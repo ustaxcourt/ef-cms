@@ -1,4 +1,5 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
+import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
@@ -11,7 +12,6 @@ import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { set } from 'cerebral/factories';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -21,8 +21,8 @@ import { setMessagesAction } from '../actions/setMessagesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
 import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
-import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
+
 const { USER_ROLES } = getConstants();
 
 const proceedToMessages = [navigateToMessagesAction];
@@ -34,7 +34,7 @@ const goToDashboard = [
   closeMobileMenuAction,
   getUserAction,
   setUserAction,
-  set(state.selectedWorkItems, []),
+  clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   runPathForUserRoleAction,
   {
