@@ -1,14 +1,14 @@
 import { runAction } from 'cerebral/test';
-import { unsetRequestAccessWizardStepAction } from './unsetRequestAccessWizardStepAction';
+import { unsetDocumentToEditAction } from './unsetDocumentToEditAction';
 
-describe('unsetRequestAccessWizardStepAction', () => {
-  it('should clear wizardStep from state', async () => {
-    const { state } = await runAction(unsetRequestAccessWizardStepAction, {
+describe('unsetDocumentToEditAction', () => {
+  it('should unset documentToEdit from state', async () => {
+    const { state } = await runAction(unsetDocumentToEditAction, {
       state: {
-        wizardStep: 'TestWizardStep',
+        documentToEdit: 'bloooop',
       },
     });
 
-    expect(state.wizardStep).toBeUndefined();
+    expect(state.documentToEdit).toBeUndefined();
   });
 });

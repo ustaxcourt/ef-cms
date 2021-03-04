@@ -3,15 +3,12 @@ import { setIsEditingDocketEntryAction } from './setIsEditingDocketEntryAction';
 
 describe('setIsEditingDocketEntryAction', () => {
   it('should set the value of state.isEditingDocketEntry to the value passed in to the action', async () => {
-    const { state } = await runAction(
-      await setIsEditingDocketEntryAction(true),
-      {
-        modules: {},
-        state: {
-          isEditingDocketEntry: false,
-        },
+    const { state } = await runAction(setIsEditingDocketEntryAction(true), {
+      modules: {},
+      state: {
+        isEditingDocketEntry: false,
       },
-    );
+    });
 
     expect(state.isEditingDocketEntry).toBeTruthy();
   });
