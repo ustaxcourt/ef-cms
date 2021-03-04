@@ -42,12 +42,13 @@ Deep dive interviews with 2 IRS attorneys and 2 administrative staff probing on 
 
 These document the user flow of the new system we are building. It's a work-in-progress, that's updated to include the new workflows that we developed.
 
-[Create a New Case (Paper Petition)](https://app.lucidchart.com/invitations/accept/fe5aa2db-f488-4709-a282-9e66614ab58d)
+[Create a New Case (Paper Petition)](./Create-a-new-case.pdf)
 
 [Create and Save Order/Notice](https://www.lucidchart.com/invitations/accept/aff34e34-75ad-487f-8993-db7791a47698)
 
 ### Add Docket Entry User Flows
 [Add Docket Entry and Serve - Court-Issued Documents](https://www.lucidchart.com/invitations/accept/aff34e34-75ad-487f-8993-db7791a47698)
+
 [Add Docket Entry - Externally Filed Paper Documents](https://www.lucidchart.com/invitations/accept/274f4958-92c5-4d5f-9e20-b75ef92ba74a)
 
 ### Messaging User Flows
