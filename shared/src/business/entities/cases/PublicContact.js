@@ -30,11 +30,7 @@ PublicContact.prototype.init = function init(rawContact) {
 
 PublicContact.VALIDATION_RULES = joi.object().keys({
   name: JoiValidationConstants.STRING.max(500).optional(),
-  state: JoiValidationConstants.STRING.valid(
-    ...Object.keys(US_STATES),
-    ...US_STATES_OTHER,
-    STATE_NOT_AVAILABLE,
-  ).optional(),
+  state: JoiValidationConstants.STRING.optional(),
 });
 
 joiValidationDecorator(PublicContact, PublicContact.VALIDATION_RULES, {});
