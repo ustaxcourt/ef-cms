@@ -2,10 +2,10 @@ import { CerebralTest } from 'cerebral/test';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { gotoEditCourtIssuedDocketEntrySequence } from './gotoEditCourtIssuedDocketEntrySequence';
+import { gotoEditDocketEntryMetaSequence } from './gotoEditDocketEntryMetaSequence';
 import { presenter } from '../presenter-mock';
 
-describe('gotoEditCourtIssuedDocketEntrySequence', () => {
+describe('gotoEditDocketEntryMetaSequence', () => {
   const mockDocketEntryId = '4e544995-92a9-45e4-af0a-149dd9c24458';
   const mockDocketNumber = '999-99';
   const mockDocketEntry = {
@@ -18,6 +18,7 @@ describe('gotoEditCourtIssuedDocketEntrySequence', () => {
     eventCode: 'O',
     filingDate: '2019-06-22T17:29:13.120Z',
     freeText: 'to do something',
+    index: 1,
     isOnDocketRecord: true,
     lodged: false,
   };
@@ -28,7 +29,7 @@ describe('gotoEditCourtIssuedDocketEntrySequence', () => {
     presenter.providers.applicationContext = applicationContext;
 
     presenter.sequences = {
-      gotoEditCourtIssuedDocketEntrySequence,
+      gotoEditDocketEntryMetaSequence,
     };
     test = CerebralTest(presenter);
 
@@ -53,19 +54,21 @@ describe('gotoEditCourtIssuedDocketEntrySequence', () => {
   });
 
   it('should set up state for editing court issued docket entry', async () => {
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketEntryId: mockDocketEntryId,
+    await test.runSequence('gotoEditDocketEntryMetaSequence', {
       docketNumber: mockDocketNumber,
+      docketRecordIndex: 1,
     });
 
     expect(test.getState()).toMatchObject({
       docketEntryId: mockDocketEntryId,
+      docketRecordIndex: 1,
       form: {
         ...mockDocketEntry,
+        documentTitle: '[Anything]',
         generatedDocumentTitle: 'Order to do something',
       },
-      isEditingDocketEntry: true,
       judges: [{ name: 'Bob Barker', role: ROLES.judge }],
+      screenMetadata: { editType: 'CourtIssued' },
     });
   });
 });
