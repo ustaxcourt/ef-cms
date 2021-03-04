@@ -10,13 +10,12 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setupConfirmWithPropsAction } from '../actions/setupConfirmWithPropsAction';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unset } from 'cerebral/factories';
+import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
 export const navigateToEditOrderSequence = [
   setupConfirmWithPropsAction,
-  unset(state.documentToEdit),
+  unsetDocumentToEditAction,
   clearModalAction,
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
