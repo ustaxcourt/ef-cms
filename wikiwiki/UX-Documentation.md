@@ -38,6 +38,11 @@ Deep dive interviews with 2 IRS attorneys and 2 administrative staff probing on 
 
 [Judge User Interviews (June 2019) - Findings](https://docs.google.com/presentation/d/1HBD21K_sKtOnuJTu6aXse8qt8bSn5ImpX649YmyOzZ0/edit?usp=sharing)
 
+## Continuous Research
+Post-launch, the team continues with research and testing activities.
+
+[Continuous Research Plan](./Continuous-research-plan.pdf)
+
 ## User Flows
 
 These document the user flow of the new system we are building. It's a work-in-progress, that's updated to include the new workflows that we developed.
