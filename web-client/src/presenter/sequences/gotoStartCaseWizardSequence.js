@@ -8,9 +8,11 @@ import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultStartCaseInternalFormAction } from '../actions/StartCaseInternal/setDefaultStartCaseInternalFormAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
+import { setWizardStepAction } from '../actions/setWizardStepAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
 import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOrderForDesignatingPlaceOfTrialAction';
+
 const { USER_ROLES } = getConstants();
 
 const gotoStartCaseInternal = [
@@ -23,7 +25,7 @@ const gotoStartCaseInternal = [
 ];
 
 const gotoStartCaseExternal = [
-  set(state.wizardStep, props.wizardStep),
+  setWizardStepAction(props.wizardStep),
   set(state.form.wizardStep, props.step),
   setCurrentPageAction('StartCaseWizard'),
 ];
