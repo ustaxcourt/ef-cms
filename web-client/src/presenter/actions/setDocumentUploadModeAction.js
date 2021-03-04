@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 /**
- *  returns a callback function that sets currentViewMetadata.documentUploadMode on state
+ *  returns a callback function that sets the value of state.currentViewMetadata.documentUploadMode
  *
  * @param {string} documentUploadMode the value of documentUploadMode to be set
  * @returns {Function} returns a callback function that sets currentViewMetadata.documentUploadMode on state
