@@ -6,11 +6,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  STATE_NOT_AVAILABLE,
-  US_STATES,
-  US_STATES_OTHER,
-} = require('../EntityConstants');
 
 /**
  * PublicContact
