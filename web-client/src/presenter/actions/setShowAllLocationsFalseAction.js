@@ -1,13 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * initiates the document to be served
+ * set the value of modal.showAllLocations on state to false
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context used for getting the getUser use case
- * @param {Function} providers.get the cerebral get function
- * @param {object} providers.router the riot.router object containing the createObjectURL function
- * @returns {object} the user
+ * @param {object} providers.store the cerebral store object
+ * @returns {void}
  */
 export const setShowAllLocationsFalseAction = async ({ store }) => {
   store.set(state.modal.showAllLocations, false);
