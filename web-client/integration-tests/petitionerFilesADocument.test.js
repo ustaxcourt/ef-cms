@@ -16,6 +16,10 @@ describe('petitioner files document', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   petitionerCancelsCreateCase(test);
   petitionerChoosesProcedureType(test);

@@ -30,6 +30,10 @@ describe.skip(`Create and serve a case with an order with exact keyword (${docum
       jest.setTimeout(30000);
     });
 
+    afterAll(() => {
+      test.closeSocket();
+    });
+
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {

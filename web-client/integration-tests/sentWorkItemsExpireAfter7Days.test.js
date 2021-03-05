@@ -22,8 +22,12 @@ describe('verify old sent work items do not show up in the outbox', () => {
   let workItemId8;
   let caseDetail;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
