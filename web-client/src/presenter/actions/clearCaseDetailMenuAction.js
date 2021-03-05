@@ -1,8 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * resets the state.form which is used throughout the app for storing html form values
- * state.form is used throughout the app for storing html form values
+ * resets the state.navigation.caseDetailMenu
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object used for clearing the form
