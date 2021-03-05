@@ -100,6 +100,10 @@ describe('Create and serve a case to test contactPrimary.secondaryName', () => {
       jest.setTimeout(30000);
     });
 
+    afterAll(() => {
+      test.closeSocket();
+    });
+
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {

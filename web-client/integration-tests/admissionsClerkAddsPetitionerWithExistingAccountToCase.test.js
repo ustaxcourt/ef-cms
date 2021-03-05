@@ -18,6 +18,10 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile);
 
