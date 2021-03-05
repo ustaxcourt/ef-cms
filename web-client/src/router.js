@@ -962,15 +962,15 @@ const router = {
         if (app.getState('currentPage') === 'StartCaseWizard') {
           return app.getSequence('chooseStartCaseWizardStepSequence')({
             step: `${step}`,
-            value: `StartCaseStep${step}`,
+            wizardStep: `StartCaseStep${step}`,
           });
         } else {
           if (app.getState('currentPage') !== 'StartCaseInternal') {
             switch (step) {
               case '1':
                 return app.getSequence('gotoStartCaseWizardSequence')({
-                  step,
-                  value: `StartCaseStep${step}`,
+                  step: `${step}`,
+                  wizardStep: `StartCaseStep${step}`,
                 });
               default:
                 return app.getSequence('navigateToPathSequence')({
