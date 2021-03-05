@@ -1,13 +1,13 @@
 import { state } from 'cerebral';
 /**
- *  returns a callback function that sets isEditingDocketEntry on state
+ *  returns a callback function that sets advancedSearchForm on state
  *
- * @param {string} isEditingDocketEntry the value of isEditingDocketEntry to be set
- * @returns {Function} returns a callback function that sets isEditingDocketEntry on state
+ * @param {string} formName the value of formName to be set
+ * @returns {Function} returns a callback function that sets advancedSearchForm on state
  */
 export const updateAdvancedSearchFormAction = formName =>
   /**
-   * sets the value of state.isEditingDocket entry to the value passed in
+   * sets the value of state.advancedSearchForm entry to the value passed in
    *
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store object
