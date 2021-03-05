@@ -2,11 +2,17 @@ import { runAction } from 'cerebral/test';
 import { setCaseDetailShowEditPetitionFalseAction } from './setCaseDetailShowEditPetitionFalseAction';
 
 describe('setCaseDetailShowEditPetitionFalseAction', () => {
-  it('sets state.currentViewMetadata.caseDetail.showEditPetition to true', async () => {
+  it('sets state.currentViewMetadata.caseDetail.showEditPetition to false', async () => {
     const { state } = await runAction(
       setCaseDetailShowEditPetitionFalseAction,
       {
-        state: {},
+        state: {
+          currentViewMetadata: {
+            caseDetail: {
+              showEditPetition: true,
+            },
+          },
+        },
       },
     );
 
