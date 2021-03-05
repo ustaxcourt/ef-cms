@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * Sets the value of state.form
+ * clears state.form.irsDate values and sets state.form.hasVerifiedIrsNotice to false
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object
