@@ -28,7 +28,10 @@ export const AddressDisplay = connect(
       <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
         <p className="no-margin position-relative">
           {contact.isAddressSealed && (
-            <span className="sealed-address sealed-contact-icon">
+            <span
+              aria-label="sealed address"
+              className="sealed-address sealed-contact-icon"
+            >
               <FontAwesomeIcon
                 className="margin-right-05"
                 icon={['fas', 'lock']}
@@ -89,6 +92,7 @@ export const AddressDisplay = connect(
                 {contact.email}
                 {contact.showEAccessFlag && (
                   <FontAwesomeIcon
+                    aria-label="has e-access"
                     className="margin-left-05 fa-icon-blue"
                     icon="flag"
                     size="1x"

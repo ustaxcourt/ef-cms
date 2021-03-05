@@ -67,8 +67,16 @@ export const WorkingCopySessionList = connect(
                     Docket No.
                   </span>
                   {(sort === 'docket' && sortOrder === 'desc' && (
-                    <FontAwesomeIcon icon="caret-up" />
-                  )) || <FontAwesomeIcon icon="caret-down" />}
+                    <FontAwesomeIcon
+                      icon="caret-up"
+                      title="in ascending order"
+                    />
+                  )) || (
+                    <FontAwesomeIcon
+                      icon="caret-down"
+                      title="in descending order"
+                    />
+                  )}
                 </Button>
               </th>
               <th aria-label="manually added indicator"></th>
@@ -92,8 +100,16 @@ export const WorkingCopySessionList = connect(
                     Petitioner Counsel
                   </span>
                   {(sort === 'practitioner' && sortOrder === 'desc' && (
-                    <FontAwesomeIcon icon="caret-up" />
-                  )) || <FontAwesomeIcon icon="caret-down" />}
+                    <FontAwesomeIcon
+                      icon="caret-up"
+                      title="in ascending order"
+                    />
+                  )) || (
+                    <FontAwesomeIcon
+                      icon="caret-down"
+                      title="in descending order"
+                    />
+                  )}
                 </Button>
               </th>
               <th className="no-wrap">Respondent Counsel</th>
