@@ -4,7 +4,7 @@ import { updateSearchTermAction } from './updateSearchTermAction';
 describe('updateSearchTermAction', () => {
   const mockSearchTerm = 'order search';
 
-  it('state.header.searchTerm to the value of props.searchTerm', async () => {
+  it('should seet state.header.searchTerm to the value of props.searchTerm', async () => {
     const { state } = await runAction(updateSearchTermAction, {
       props: {
         searchTerm: mockSearchTerm,
