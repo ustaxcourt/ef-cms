@@ -8,5 +8,9 @@ describe('Unauthed user views health check', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   unauthedUserViewsHealthCheck(test);
 });

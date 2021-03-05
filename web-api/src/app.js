@@ -223,11 +223,8 @@ const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
 const {
-  migrateCaseDeadlineLambda,
-} = require('./migrate/migrateCaseDeadlineLambda');
-const {
-  migrateTrialSessionLambda,
-} = require('./migrate/migrateTrialSessionLambda');
+  getUserPendingEmailLambda,
+} = require('./users/getUserPendingEmailLambda');
 const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
@@ -258,6 +255,9 @@ const {
 const {
   runTrialSessionPlanningReportLambda,
 } = require('./trialSessions/runTrialSessionPlanningReportLambda');
+const {
+  saveCalendarNoteLambda,
+} = require('./trialSessions/saveCalendarNoteLambda');
 const {
   saveCaseDetailInternalEditLambda,
 } = require('./cases/saveCaseDetailInternalEditLambda');
@@ -382,7 +382,6 @@ const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { getUserLambda } = require('./users/getUserLambda');
 const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
-const { migrateCaseLambda } = require('./migrate/migrateCaseLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -787,13 +786,6 @@ app.post(
 }
 
 /**
- * migrate
- */
-app.post('/migrate/case', lambdaWrapper(migrateCaseLambda));
-app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
-app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
-
-/**
  * practitioners
  */
 {
@@ -897,6 +889,10 @@ app.get(
     '/trial-sessions/:trialSessionId/cases/:docketNumber',
     lambdaWrapper(addCaseToTrialSessionLambda),
   );
+  app.put(
+    '/trial-sessions/:trialSessionId/set-calendar-note',
+    lambdaWrapper(saveCalendarNoteLambda),
+  );
   app.get(
     '/trial-sessions/:trialSessionId',
     lambdaWrapper(getTrialSessionDetailsLambda),
@@ -941,6 +937,10 @@ app.get(
 app.put(
   '/async/users/:userId/contact-info',
   lambdaWrapper(updateUserContactInformationLambda),
+);
+app.get(
+  '/users/:userId/pending-email',
+  lambdaWrapper(getUserPendingEmailLambda),
 );
 app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
 app.put(

@@ -3,7 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
-const { isEqual, omit } = require('lodash');
+const { omit, union } = require('lodash');
 const { Practitioner } = require('../../entities/Practitioner');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -46,7 +46,7 @@ const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
       },
     });
 
-  return Object.keys(practitionerDetailDiff).sort();
+  return Object.keys(practitionerDetailDiff);
 };
 
 /**
@@ -104,13 +104,29 @@ exports.updatePractitionerUserInteractor = async ({
     .validate()
     .toRawObject();
 
-  const updatedUser = await applicationContext
-    .getPersistenceGateway()
-    .updatePractitionerUser({
+  let updatedUser = validatedUserData;
+  if (oldUser.email) {
+    updatedUser = await applicationContext
+      .getPersistenceGateway()
+      .updatePractitionerUser({
+        applicationContext,
+        user: validatedUserData,
+      });
+  } else if (!oldUser.email && user.updatedEmail) {
+    updatedUser = await applicationContext
+      .getPersistenceGateway()
+      .createNewPractitionerUser({
+        applicationContext,
+        user: validatedUserData,
+      });
+  } else {
+    await applicationContext.getUseCaseHelpers().updateUserRecords({
       applicationContext,
-      isNewAccount: !userHasAccount && userIsUpdatingEmail,
-      user: validatedUserData,
+      oldUser,
+      updatedUser: validatedUserData,
+      userId: oldUser.userId,
     });
+  }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
@@ -134,12 +150,17 @@ exports.updatePractitionerUserInteractor = async ({
     updatedUser,
   });
 
-  const hasUpdatedEmailOnly = isEqual(updatedFields, [
+  const propertiesNotRequiringChangeOfAddress = [
     'pendingEmail',
     'pendingEmailVerificationToken',
-  ]);
+    'practitionerNotes',
+  ];
+  const combinedDiffKeys = union(
+    updatedFields,
+    propertiesNotRequiringChangeOfAddress,
+  );
 
-  if (!hasUpdatedEmailOnly) {
+  if (combinedDiffKeys.length > propertiesNotRequiringChangeOfAddress.length) {
     await generateChangeOfAddress({
       applicationContext,
       bypassDocketEntry,

@@ -10,7 +10,7 @@ describe('uploadExternalDocumentsInteractor', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .fileExternalDocumentForConsolodatedInteractor.mockReturnValue({});
+      .fileExternalDocumentForConsolidatedInteractor.mockReturnValue({});
     applicationContext
       .getUseCases()
       .fileExternalDocumentInteractor.mockReturnValue({});

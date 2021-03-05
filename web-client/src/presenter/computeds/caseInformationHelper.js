@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 export const caseInformationHelper = get => {
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
-
   const showEditPrivatePractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
     caseDetail.privatePractitioners &&
@@ -28,11 +27,15 @@ export const caseInformationHelper = get => {
   const showSealAddressLink = permissions.SEAL_ADDRESS;
   const showHearingsTable = !!caseDetail.hearings?.length;
 
+  const showEmail =
+    caseDetail.contactPrimary && caseDetail.contactPrimary.email;
+
   return {
     formattedOtherPetitioners,
     showAddCounsel,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
+    showEmail,
     showHearingsTable,
     showOtherPetitioners,
     showSealAddressLink,

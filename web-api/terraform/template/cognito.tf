@@ -15,6 +15,7 @@ resource "aws_cognito_user_pool" "pool" {
 
   lambda_config {
     post_confirmation = aws_lambda_function.cognito_post_confirmation_lambda.arn
+    post_authentication = aws_lambda_function.cognito_post_authentication_lambda.arn
   }
 
   admin_create_user_config {

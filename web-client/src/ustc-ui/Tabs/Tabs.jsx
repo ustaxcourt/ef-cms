@@ -63,11 +63,13 @@ export function TabsComponent({
 
   const renderTab = child => {
     const {
+      className: childClassName,
       disabled,
       icon,
       iconColor,
       id: tabId,
       showIcon,
+      showNotificationIcon,
       tabName,
       title,
     } = child.props;
@@ -89,6 +91,7 @@ export function TabsComponent({
         <button
           aria-controls={tabContentId}
           aria-selected={isActiveTab}
+          className={childClassName}
           disabled={disabled}
           id={tabId}
           role="tab"
@@ -98,6 +101,11 @@ export function TabsComponent({
           <span>{title}</span>{' '}
           {showIcon && (
             <FontAwesomeIcon color={iconColor || null} icon={icon} />
+          )}
+          {showNotificationIcon && (
+            <div className="icon-tab-notification">
+              <div className="icon-tab-notification-exclamation">!</div>
+            </div>
           )}
         </button>
       </li>

@@ -12,6 +12,7 @@ const { FORMATS } = require('../business/utilities/DateHandler');
 const STRING = joi.string().min(1);
 exports.JoiValidationConstants = deepFreeze({
   CASE_CAPTION: STRING.max(4700),
+  DATE: joi.date().iso().format([FORMATS.YYYYMMDD]),
   DOCKET_NUMBER: STRING.regex(DOCKET_NUMBER_MATCHER),
   DOCKET_RECORD: joi
     .array()

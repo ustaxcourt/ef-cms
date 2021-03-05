@@ -76,11 +76,10 @@ describe('set for hearing modal helper', () => {
     });
   });
 
-  it('should exclude the trial session and hearings that are already assigned to the case', () => {
+  it('should exclude the trial session that is already assigned to the case', () => {
     const result = runCompute(setForHearingModalHelper, {
       state: {
         caseDetail: {
-          hearings: [{ trialSessionId: '2' }],
           preferredTrialCity: 'Birmingham, Alabama',
           trialSessionId: '1',
         },
@@ -103,6 +102,63 @@ describe('set for hearing modal helper', () => {
           optionText: 'Birmingham, Alabama 01/01/19 (SP)',
           trialLocationState: US_STATES.AL,
           trialSessionId: '3',
+        },
+        {
+          sessionType: 'Hybrid',
+          startDate: '2018-02-01T21:40:46.415Z',
+          trialLocation: 'Mobile, Alabama',
+          trialSessionId: '2',
+        },
+        {
+          optionText: 'Mobile, Alabama 12/01/18 (M/H)',
+          trialSessionId: '5',
+        },
+      ],
+      Idaho: [
+        {
+          optionText: 'Boise, Idaho 05/01/19 (S)',
+          trialSessionId: '4',
+        },
+      ],
+    });
+    expect(result.trialSessionStatesSorted).toEqual([
+      US_STATES.AL,
+      US_STATES.ID,
+    ]);
+  });
+
+  it('should exclude the hearings that are already assigned to the case', () => {
+    const result = runCompute(setForHearingModalHelper, {
+      state: {
+        caseDetail: {
+          hearings: [{ trialSessionId: '2' }],
+          preferredTrialCity: 'Birmingham, Alabama',
+        },
+        form: {},
+        modal: {
+          showAllLocations: true,
+          trialSessions: trialSessions.map(trialSession => ({
+            ...trialSession,
+            isCalendared: true,
+          })),
+        },
+      },
+    });
+
+    expect(result.showSessionNotSetAlert).toBeFalsy();
+    expect(result.trialSessionsFormatted).toBeFalsy();
+    expect(result.trialSessionsFormattedByState).toMatchObject({
+      Alabama: [
+        {
+          optionText: 'Birmingham, Alabama 01/01/19 (SP)',
+          trialLocationState: US_STATES.AL,
+          trialSessionId: '3',
+        },
+        {
+          sessionType: 'Regular',
+          startDate: '2019-03-01T21:40:46.415Z',
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '1',
         },
         {
           optionText: 'Mobile, Alabama 12/01/18 (M/H)',

@@ -43,6 +43,7 @@
   * [Case Information](./Case-Information.md)
 
 #### Petitioners
+* [Petitioner Access](./PetitionerAccess.md)
 * [External Filings](./External-Filings.md)
 
 #### [Search](./Search.md)

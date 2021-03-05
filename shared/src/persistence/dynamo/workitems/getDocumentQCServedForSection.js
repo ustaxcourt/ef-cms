@@ -1,7 +1,7 @@
 const {
   prepareDateFromString,
 } = require('../../../business/utilities/DateHandler');
-const { query } = require('../../dynamodbClientService');
+const { queryFull } = require('../../dynamodbClientService');
 
 exports.getDocumentQCServedForSection = async ({
   applicationContext,
@@ -13,7 +13,7 @@ exports.getDocumentQCServedForSection = async ({
     .utc()
     .format();
 
-  const workItems = await query({
+  const workItems = await queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -26,5 +26,5 @@ exports.getDocumentQCServedForSection = async ({
     applicationContext,
   });
 
-  return workItems.filter(workItem => !!workItem.completedAt);
+  return workItems;
 };

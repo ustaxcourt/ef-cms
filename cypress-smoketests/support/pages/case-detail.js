@@ -136,6 +136,7 @@ exports.manuallyAddCaseToCalendaredTrialSession = trialSessionId => {
 };
 
 exports.removeCaseFromTrialSession = () => {
+  cy.get('#edit-case-trial-information-btn').should('exist').click();
   cy.get('#remove-from-trial-session-btn').should('exist').click();
   cy.get('#disposition').type(faker.company.catchPhrase());
   cy.get('#modal-root .modal-button-confirm').click();

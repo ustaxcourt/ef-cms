@@ -175,6 +175,32 @@ exports.query = params => {
     });
 };
 
+exports.scan = async params => {
+  let hasMoreResults = true;
+  let lastKey = null;
+  const allItems = [];
+  while (hasMoreResults) {
+    hasMoreResults = false;
+
+    await params.applicationContext
+      .getDocumentClient()
+      .scan({
+        ExclusiveStartKey: lastKey,
+        TableName: getTableName({
+          applicationContext: params.applicationContext,
+        }),
+        ...params,
+      })
+      .promise()
+      .then(async results => {
+        hasMoreResults = !!results.LastEvaluatedKey;
+        lastKey = results.LastEvaluatedKey;
+        allItems.push(...results.Items);
+      });
+  }
+  return allItems;
+};
+
 /**
  * GET for aws-sdk dynamodb client
  *
