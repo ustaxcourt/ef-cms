@@ -20,6 +20,11 @@ const migrateItems = async items => {
 
       new DocketEntry(item, { applicationContext }).validate();
 
+      applicationContext.logger.info(
+        'Updating processing status to complete for docketEntry',
+        { pk: item.pk, processingStatus: item.processingStatus, sk: item.sk },
+      );
+
       itemsAfter.push(item);
     } else {
       itemsAfter.push(item);
