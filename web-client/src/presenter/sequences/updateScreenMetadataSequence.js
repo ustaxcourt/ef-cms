@@ -1,6 +1,3 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { setScreenMetadataValueAction } from '../actions/setScreenMetadataValueAction';
 
-export const updateScreenMetadataSequence = [
-  set(state.screenMetadata[props.key], props.value),
-];
+export const updateScreenMetadataSequence = [setScreenMetadataValueAction];
