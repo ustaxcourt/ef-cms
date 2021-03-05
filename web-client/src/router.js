@@ -970,7 +970,7 @@ const router = {
               case '1':
                 return app.getSequence('gotoStartCaseWizardSequence')({
                   step,
-                  wizardStep: `StartCaseStep${step}`,
+                  value: `StartCaseStep${step}`,
                 });
               default:
                 return app.getSequence('navigateToPathSequence')({
