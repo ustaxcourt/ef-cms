@@ -1,6 +1,3 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { setSessionMetadataValueAction } from '../actions/setSessionMetadataValueAction';
 
-export const updateSessionMetadataSequence = [
-  set(state.sessionMetadata[props.key], props.value),
-];
+export const updateSessionMetadataSequence = [setSessionMetadataValueAction];
