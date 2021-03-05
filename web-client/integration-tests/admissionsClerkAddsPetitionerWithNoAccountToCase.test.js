@@ -63,6 +63,10 @@ describe('admissions clerk adds petitioner without existing cognito account to c
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile);
 

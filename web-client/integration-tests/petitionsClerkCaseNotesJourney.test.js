@@ -9,6 +9,10 @@ describe('petitions clerk case notes journey', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
