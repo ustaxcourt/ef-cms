@@ -7,6 +7,7 @@ import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultStartCaseInternalFormAction } from '../actions/StartCaseInternal/setDefaultStartCaseInternalFormAction';
+import { setDocumentSelectedForScanAction } from '../actions/setDocumentSelectedForScanAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
 import { setWizardStepAction } from '../actions/setWizardStepAction';
@@ -21,7 +22,7 @@ const gotoStartCaseInternal = [
   setDefaultStartCaseInternalFormAction,
   updateOrderForDesignatingPlaceOfTrialAction,
   setDocumentUploadModeAction('scan'),
-  set(state.currentViewMetadata.documentSelectedForScan, 'petitionFile'),
+  setDocumentSelectedForScanAction('petitionFile'),
   setCurrentPageAction('StartCaseInternal'),
 ];
 
