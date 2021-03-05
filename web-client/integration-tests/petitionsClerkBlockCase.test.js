@@ -53,8 +53,9 @@ describe('Blocking a Case', () => {
   petitionsClerkUnblocksCase(test, trialLocation);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
 
-  // //automatic block with a due date
+  // automatic block with a due date
   petitionsClerkCreatesACaseDeadline(test);
+
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
     await refreshElasticsearchIndex();
 

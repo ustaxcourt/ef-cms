@@ -43,7 +43,7 @@ export const MessagesIndividualInbox = connect(
                   <td className="message-unread-column">
                     {!message.isRead && (
                       <Icon
-                        aria-label="create message"
+                        aria-label="unread message"
                         className="fa-icon-blue"
                         icon="envelope"
                         size="1x"

@@ -51,7 +51,7 @@ export const Contact = connect(
 
           <div className="display-flex margin-top-3 margin-bottom-5">
             <Icon
-              aria-label="email"
+              aria-label="phone"
               className="dark-icon margin-right-1"
               icon={['fas', 'phone']}
               size="lg"

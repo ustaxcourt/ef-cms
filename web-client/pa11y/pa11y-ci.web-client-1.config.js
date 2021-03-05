@@ -1,3 +1,5 @@
+const { getOnly } = require('./helpers');
+
 const chambers = require('./pa11y-chambers');
 const docketclerk = require('./pa11y-docketclerk');
 const floater = require('./pa11y-floater');
@@ -35,5 +37,5 @@ const urls = [...initialUrls, ...userUrls].map(jsCheckDecorator);
 
 module.exports = {
   defaults,
-  urls,
+  urls: getOnly(urls),
 };

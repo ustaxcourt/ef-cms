@@ -34,6 +34,7 @@ export const docketClerkAddsCaseToHearing = (
     });
 
     await test.runSequence('setForHearingSequence');
+    expect(test.getState('validationErrors')).toEqual({});
 
     const formattedCase = runCompute(formattedCaseDetail, {
       state: test.getState(),

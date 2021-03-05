@@ -5,7 +5,6 @@ const {
 const { Case, isSealedCase } = require('../entities/cases/Case');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
 
 /**
  * generateDocketRecordPdfInteractor
@@ -29,10 +28,6 @@ exports.generateDocketRecordPdfInteractor = async ({
       docketNumber,
       userId: user.userId,
     });
-  const isInternal = User.isInternalUser(user.role);
-
-  const shouldIncludePartyDetail =
-    includePartyDetail && (isAssociated || isInternal);
 
   const caseSource = await applicationContext
     .getPersistenceGateway()
@@ -85,7 +80,7 @@ exports.generateDocketRecordPdfInteractor = async ({
       entries: formattedCaseDetail.formattedDocketEntries.filter(
         d => d.isOnDocketRecord,
       ),
-      includePartyDetail: shouldIncludePartyDetail,
+      includePartyDetail,
     },
   });
 

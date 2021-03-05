@@ -75,7 +75,7 @@ const computeIsInProgress = ({ formattedEntry }) => {
       !formattedEntry.isMinuteEntry &&
       !formattedEntry.isUnservable) ||
     (formattedEntry.isFileAttached === true &&
-      !formattedEntry.servedAt &&
+      !isServed(formattedEntry) &&
       !formattedEntry.isUnservable)
   );
 };
@@ -313,20 +313,12 @@ const formatTrialSessionScheduling = ({
     );
 
     // TODO: get trial session note
-  } else if (formattedCase.blocked || formattedCase.automaticBlocked) {
+  } else if (formattedCase.blocked) {
     formattedCase.showBlockedFromTrial = true;
     if (formattedCase.blocked) {
       formattedCase.blockedDateFormatted = applicationContext
         .getUtilities()
         .formatDateString(formattedCase.blockedDate, 'MMDDYY');
-    }
-    if (formattedCase.automaticBlocked) {
-      formattedCase.automaticBlockedDateFormatted = applicationContext
-        .getUtilities()
-        .formatDateString(formattedCase.automaticBlockedDate, 'MMDDYY');
-      if (formattedCase.highPriority) {
-        formattedCase.showAutomaticBlockedAndHighPriority = true;
-      }
     }
   } else if (formattedCase.highPriority) {
     formattedCase.formattedTrialDate = 'Not scheduled';
@@ -386,7 +378,7 @@ const formatCase = (applicationContext, caseDetail) => {
     result.formattedDocketEntries.sort(byIndexSortFunction);
 
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-      entry => entry.pending && (entry.servedAt || entry.isLegacyServed),
+      entry => entry.pending && isServed(entry),
     );
   }
 

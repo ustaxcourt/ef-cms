@@ -34,7 +34,7 @@ describe('CoverSheet', () => {
     const wrapper = shallow(<CoverSheet />);
     const dateReceivedDiv = wrapper.find('#date-received');
 
-    expect(dateReceivedDiv).toEqual({});
+    expect(dateReceivedDiv.length).toEqual(0);
   });
 
   it('renders a filed or lodged label along with the associated date', () => {

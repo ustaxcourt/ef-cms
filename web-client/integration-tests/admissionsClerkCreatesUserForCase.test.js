@@ -81,7 +81,9 @@ describe('admissions clerk creates user for case', () => {
 
     expect(test.getState('modal.showModal')).toBe('NoMatchingEmailFoundModal');
 
-    await test.runSequence('submitMatchingEmailFoundModalSequence');
+    await test.runSequence(
+      'submitUpdatePetitionerInformationFromModalSequence',
+    );
 
     expect(test.getState('modal.showModal')).toBeUndefined();
   });

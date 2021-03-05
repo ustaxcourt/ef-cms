@@ -187,6 +187,7 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
+import { openAddEditHearingNoteModalSequence } from './sequences/openAddEditHearingNoteModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
 import { openAddEditUserCaseNoteModalFromListSequence } from './sequences/openAddEditUserCaseNoteModalFromListSequence';
@@ -261,7 +262,6 @@ import { removeSupportingDocumentSequence } from './sequences/removeSupportingDo
 import { replyToMessageSequence } from './sequences/replyToMessageSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
-import { resetEditCaseTrialInfoMenuSequence } from './sequences/resetEditCaseTrialInfoMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -342,7 +342,6 @@ import { submitEditSecondaryContactSequence } from './sequences/submitEditSecond
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
-import { submitMatchingEmailFoundModalSequence } from './sequences/submitMatchingEmailFoundModalSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
 import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
@@ -351,11 +350,11 @@ import { submitPractitionerNameSearchSequence } from './sequences/submitPractiti
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
+import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
 import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePractitionerUserSequence';
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
-import { toggleEditCaseTrialInfoMenuSequence } from './sequences/toggleEditCaseTrialInfoMenuSequence';
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
 import { toggleMenuStateSequence } from './sequences/toggleMenuStateSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
@@ -389,6 +388,7 @@ import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequ
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
+import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
@@ -404,7 +404,6 @@ import { updateSectionInCreateMessageModalSequence } from './sequences/updateSec
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
-import { updateStateSequence } from './sequences/updateStateSequence';
 import { updateStatisticsFormValueSequence } from './sequences/updateStatisticsFormValueSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
@@ -452,6 +451,7 @@ import { validateSecondaryContactSequence } from './sequences/validateSecondaryC
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
+import { validateTrialSessionHearingNoteSequence } from './sequences/validateTrialSessionHearingNoteSequence';
 import { validateTrialSessionNoteSequence } from './sequences/validateTrialSessionNoteSequence';
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
@@ -659,6 +659,7 @@ export const presenter = {
     noticeGenerationCompleteSequence,
     openAddEditCalendarNoteModalSequence,
     openAddEditCaseNoteModalSequence,
+    openAddEditHearingNoteModalSequence,
     openAddEditSessionNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
     openAddEditUserCaseNoteModalFromListSequence,
@@ -733,7 +734,6 @@ export const presenter = {
     replyToMessageSequence,
     rescanBatchSequence,
     resetCaseMenuSequence,
-    resetEditCaseTrialInfoMenuSequence,
     resetHeaderAccordionsSequence,
     resetIdleTimerSequence,
     reviewExternalDocumentInformationSequence,
@@ -812,7 +812,6 @@ export const presenter = {
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitLoginSequence,
-    submitMatchingEmailFoundModalSequence,
     submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
     submitPetitionFromPaperSequence,
@@ -821,11 +820,11 @@ export const presenter = {
     submitRemoveConsolidatedCasesSequence,
     submitTrialSessionSequence,
     submitUpdateCaseModalSequence,
+    submitUpdatePetitionerInformationFromModalSequence,
     submitUpdatePractitionerUserSequence,
     submitUpdateUserContactInformationSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
-    toggleEditCaseTrialInfoMenuSequence,
     toggleMenuSequence,
     toggleMenuStateSequence,
     toggleMobileDocketSortSequence,
@@ -859,6 +858,7 @@ export const presenter = {
     updateFormValueAndCaseCaptionSequence,
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
+    updateHearingNoteSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,
     updateMessageModalAttachmentsSequence,
     updateModalFormValueSequence,
@@ -874,7 +874,6 @@ export const presenter = {
     updateSessionMetadataSequence,
     updateStartCaseFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
-    updateStateSequence,
     updateStatisticsFormValueSequence,
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
@@ -922,6 +921,7 @@ export const presenter = {
     validateSelectDocumentTypeSequence,
     validateSetForHearingSequence,
     validateStartCaseWizardSequence,
+    validateTrialSessionHearingNoteSequence,
     validateTrialSessionNoteSequence,
     validateTrialSessionPlanningSequence,
     validateTrialSessionSequence,
