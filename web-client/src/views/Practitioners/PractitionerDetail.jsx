@@ -137,6 +137,7 @@ export const PractitionerDetail = connect(
                             className="margin-left-05 fa-icon-blue"
                             icon="flag"
                             size="1x"
+                            title="has e-access"
                           />
                         )}
                       </div>
