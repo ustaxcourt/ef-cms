@@ -12,14 +12,12 @@ import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseIntern
 import { setWizardStepAction } from '../actions/setWizardStepAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
-import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOrderForDesignatingPlaceOfTrialAction';
 
 const { USER_ROLES } = getConstants();
 
 const gotoStartCaseInternal = [
   setStartInternalCaseDefaultTabAction,
   setDefaultStartCaseInternalFormAction,
-  updateOrderForDesignatingPlaceOfTrialAction,
   setDocumentUploadModeAction('scan'),
   set(state.currentViewMetadata.documentSelectedForScan, 'petitionFile'),
   setCurrentPageAction('StartCaseInternal'),

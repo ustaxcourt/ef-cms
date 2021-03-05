@@ -42,7 +42,6 @@ const gotoTrialSessionDetails = [
     ],
     [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
   ]),
-
   setCurrentPageAction('TrialSessionDetail'),
 ];
 
