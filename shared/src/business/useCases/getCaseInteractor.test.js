@@ -34,7 +34,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
+      .getFullCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           archivedCorrespondences: [],
           archivedDocketEntries: [],
@@ -53,7 +53,7 @@ describe('getCaseInteractor', () => {
       }),
     ).rejects.toThrow('Case 123-19 was not found.');
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber.mock
         .calls.length,
     ).toBe(1);
   });
@@ -66,7 +66,7 @@ describe('getCaseInteractor', () => {
     const mockInvalidCase = { ...MOCK_CASE, caseCaption: undefined };
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockInvalidCase);
+      .getFullCaseByDocketNumber.mockReturnValue(mockInvalidCase);
 
     await expect(
       getCaseInteractor({
@@ -85,7 +85,7 @@ describe('getCaseInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue({
+      .getFullCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
@@ -109,7 +109,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
+      .getFullCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           ...MOCK_CASE,
           contactPrimary: {
@@ -135,7 +135,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue({
+      .getFullCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
@@ -172,7 +172,7 @@ describe('getCaseInteractor', () => {
       );
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
+        .getFullCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
     });
 
     it(`allows unfiltered view of sealed contact addresses when role is ${ROLES.docketClerk}`, async () => {
@@ -222,12 +222,12 @@ describe('getCaseInteractor', () => {
       sealedDocketEntries[0].isSealed = true;
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(
+        .getFullCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
             ...MOCK_CASE,
             caseCaption: 'a case caption',
             caseType: CASE_TYPES_MAP.other,
-            createdAt: new Date().toISOString(),
+            createdAt: applicationContext.getUtilities().createISODateString(),
             docketEntries: sealedDocketEntries,
             docketNumber: '101-18',
             irsPractitioners: [
@@ -317,7 +317,7 @@ describe('getCaseInteractor', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(
+        .getFullCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
             ...MOCK_CASE,
             privatePractitioners: [

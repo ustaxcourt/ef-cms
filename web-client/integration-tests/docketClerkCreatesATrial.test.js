@@ -11,6 +11,11 @@ describe('Docket Clerk Creates A Trial', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
   });
+
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, {
     trialLocation: 'Peoria, Illinois',

@@ -180,11 +180,6 @@ export const petitionsClerkCreatesNewCase = (
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
-      value: 'test@example.com',
-    });
-
-    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.phone',
       value: '1234567890',
     });

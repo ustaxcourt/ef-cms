@@ -523,7 +523,6 @@
       type: "date"
       flags: 
         format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "required"
         description: "The date the practitioner was admitted to the Tax Court bar."
@@ -666,6 +665,23 @@
           name: "max"
           args: 
             limit: 100
+    practitionerNotes: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The optional notes of the practitioner."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 500
+      allow: 
+        - null
+        - ""
     practitionerType: 
       type: "string"
       flags: 

@@ -9,7 +9,7 @@ describe('servePaperFiledDocumentAction', () => {
   let caseDetail;
   const docketNumber = '123-45';
   const docketEntryId = '456';
-  const paperServicePdfUrl = 'www.example.com';
+  const pdfUrl = 'www.example.com';
 
   beforeAll(() => {
     caseDetail = {
@@ -22,7 +22,7 @@ describe('servePaperFiledDocumentAction', () => {
     applicationContext
       .getUseCases()
       .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
-        return { paperServicePdfUrl };
+        return { pdfUrl };
       });
 
     const result = await runAction(servePaperFiledDocumentAction, {
@@ -50,11 +50,11 @@ describe('servePaperFiledDocumentAction', () => {
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
       hasPaper: true,
-      pdfUrl: paperServicePdfUrl,
+      pdfUrl,
     });
   });
 
-  it('returns hasPaper false when there is no paperServicePdfUrl after the document has been served', async () => {
+  it('returns hasPaper false when there is no pdfUrl after the document has been served', async () => {
     applicationContext
       .getUseCases()
       .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {

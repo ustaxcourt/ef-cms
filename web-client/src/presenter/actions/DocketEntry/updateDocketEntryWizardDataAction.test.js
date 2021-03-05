@@ -88,7 +88,9 @@ describe('updateDocketEntryWizardDataAction', () => {
               freeText: 'Guy Fieri is my spirit animal.',
               ordinalValue: 'asdf',
               previousDocument: {},
-              serviceDate: new Date(),
+              serviceDate: applicationContext
+                .getUtilities()
+                .createISODateString(),
               trialLocation: 'Flavortown',
             },
           },
@@ -112,7 +114,9 @@ describe('updateDocketEntryWizardDataAction', () => {
               freeText: 'Guy Fieri is my spirit animal.',
               ordinalValue: 'asdf',
               previousDocument: {},
-              serviceDate: new Date(),
+              serviceDate: applicationContext
+                .getUtilities()
+                .createISODateString(),
               trialLocation: 'Flavortown',
             },
           },
@@ -156,7 +160,9 @@ describe('updateDocketEntryWizardDataAction', () => {
               freeText: 'Guy Fieri is my spirit animal.',
               ordinalValue: 'asdf',
               previousDocument: {},
-              serviceDate: new Date(),
+              serviceDate: applicationContext
+                .getUtilities()
+                .createISODateString(),
               trialLocation: 'Flavortown',
             },
           },
@@ -188,7 +194,9 @@ describe('updateDocketEntryWizardDataAction', () => {
               freeText: 'Guy Fieri is my spirit animal.',
               ordinalValue: 'asdf',
               previousDocument: {},
-              serviceDate: new Date(),
+              serviceDate: applicationContext
+                .getUtilities()
+                .createISODateString(),
               trialLocation: 'Flavortown',
             },
           },

@@ -32,7 +32,7 @@ describe('setFormFromDraftStateAction', () => {
           ],
           docketNumber: '123-45',
         },
-        docketEntryIdToEdit: docketEntryIdToEdit,
+        docketEntryIdToEdit,
         documentContents: 'some content',
         richText: 'some content',
       },

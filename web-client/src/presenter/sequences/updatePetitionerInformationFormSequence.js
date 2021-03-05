@@ -1,13 +1,12 @@
+import { hasUpdatedPetitionerEmailAction } from '../actions/hasUpdatedPetitionerEmailAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
+import { openGainElectronicAccessToCaseModalSequence } from './openGainElectronicAccessToCaseModalSequence';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
-import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { updatePetitionerInformationAction } from '../actions/updatePetitionerInformationAction';
+import { submitUpdatePetitionerInformationSequence } from './submitUpdatePetitionerInformationSequence';
 import { validatePetitionerInformationFormAction } from '../actions/validatePetitionerInformationFormAction';
 
 /**
@@ -23,11 +22,14 @@ export const updatePetitionerInformationFormSequence = [
       setValidationAlertErrorsAction,
     ],
     success: showProgressSequenceDecorator([
-      updatePetitionerInformationAction,
-      setPdfPreviewUrlAction,
-      setSaveAlertsForNavigationAction,
-      setAlertSuccessAction,
-      navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+      hasUpdatedPetitionerEmailAction,
+      {
+        no: [
+          submitUpdatePetitionerInformationSequence,
+          navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+        ],
+        yes: [openGainElectronicAccessToCaseModalSequence],
+      },
     ]),
   },
 ];

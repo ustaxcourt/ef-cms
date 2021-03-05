@@ -1056,7 +1056,7 @@ describe('formatted work queue computed', () => {
     });
 
     it('should return docketEntry.createdAt for receivedAt when docketEntry.receivedAt is today', () => {
-      const now = new Date().toISOString();
+      const now = applicationContext.getUtilities().createISODateString();
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         docketEntry: {

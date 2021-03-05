@@ -134,6 +134,16 @@ export const DocumentViewerDocument = connect(
                 </Button>
               )}
 
+              {documentViewerHelper.showCompleteQcButton && (
+                <Button
+                  link
+                  href={documentViewerHelper.completeQcLink}
+                  icon="star"
+                >
+                  Complete QC
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
