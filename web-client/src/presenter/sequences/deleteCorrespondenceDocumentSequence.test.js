@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteCorrespondenceDocumentSequence } from './deleteCorrespondenceDocumentSequence';
 import { presenter } from '../presenter-mock';
@@ -17,31 +16,24 @@ describe('deleteCorrespondenceDocumentSequence', () => {
   let test;
 
   beforeAll(() => {
-    //state has case with 2 correspondi, delete first one, expect 2nd one to be in the viewer
-
     presenter.providers.applicationContext = applicationContext;
+
     presenter.sequences = {
       deleteCorrespondenceDocumentSequence,
     };
+
     test = CerebralTest(presenter);
-
-    applicationContext
-      .getUseCases()
-      .getNotificationsInteractor.mockReturnValue({
-        userInboxCount: mockUserInboxCount,
-        userSectionCount: mockUserSectionCount,
-      });
-
-    applicationContext
-      .getUseCases()
-      .getInboxMessagesForUserInteractor.mockReturnValue(mockMessages);
   });
 
-  it('should change the page to CaseDetail and close the opened menu', async () => {
-    const caseDetail = {
-      ...MOCK_CASE,
-      correspondences: [mockCorrespondence1, mockCorrespondence2],
-    };
+  it('should set viewerCorrespondenceToDisplay to the remaining correspondence after deleting', async () => {
+    applicationContext
+      .getUtilities()
+      .formatCase.mockReturnValue({ correspondence: [mockCorrespondence2] });
+    applicationContext
+      .getUseCases()
+      .getDocumentDownloadUrlInteractor.mockReturnValue({
+        url: 'www.example.com',
+      });
 
     const modal = {
       correspondenceToDelete: {
@@ -49,19 +41,12 @@ describe('deleteCorrespondenceDocumentSequence', () => {
       },
     };
 
-    test.setState('caseDetail', caseDetail);
     test.setState('modal', modal);
 
     await test.runSequence('deleteCorrespondenceDocumentSequence');
 
     expect(test.getState()).toMatchObject({
-      messages: mockMessages,
-      messagesInboxCount: mockUserInboxCount,
-      messagesSectionCount: mockUserSectionCount,
-      notifications: {
-        userInboxCount: mockUserInboxCount,
-        userSectionCount: mockUserSectionCount,
-      },
+      viewerCorrespondenceToDisplay: mockCorrespondence2,
     });
   });
 });
