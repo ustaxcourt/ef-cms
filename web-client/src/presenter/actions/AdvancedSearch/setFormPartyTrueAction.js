@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  */
 export const setFormPartyTrueAction = party =>
   /**
-   * sets the value of state.isEditingDocket entry to the value passed in
+   * sets the value of state.form[party] to true
    *
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store object
