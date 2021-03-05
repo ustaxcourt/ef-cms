@@ -136,7 +136,7 @@ const getDocketEntryEditLink = ({
   let editLink;
   if (
     formattedDocument.isCourtIssuedDocument &&
-    !formattedDocument.servedAt &&
+    !applicationContext.getUtilities().isServed(formattedDocument) &&
     !UNSERVABLE_EVENT_CODES.includes(formattedDocument.eventCode)
   ) {
     editLink = '/edit-court-issued';
@@ -199,7 +199,7 @@ export const getWorkItemDocumentLink = ({
       }
     } else if (
       formattedDocketEntry.isPetition &&
-      !formattedDocketEntry.servedAt
+      !applicationContext.getUtilities().isServed(formattedDocketEntry)
     ) {
       if (result.caseIsInProgress) {
         editLink = `${baseDocumentLink}/review`;

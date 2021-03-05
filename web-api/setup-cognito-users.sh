@@ -52,7 +52,7 @@ generate_post_data() {
   "lastName": "$lastName",
   "suffix": "$suffix",
   "barNumber": "$barNumber",
-  "admissionsDate": "2019-03-01T21:40:46.415Z",
+  "admissionsDate": "2019-03-01",
   "admissionsStatus": "Active",
   "birthYear": "1950",
   "employer": "$employer",

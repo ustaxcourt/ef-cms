@@ -8,6 +8,9 @@ export const setForHearingModalHelper = (get, applicationContext) => {
 
   if (caseDetail.trialSessionId) {
     excludedTrialSessionIds.push(caseDetail.trialSessionId);
+  }
+
+  if (caseDetail.hearings?.length) {
     caseDetail.hearings.forEach(trialSession => {
       excludedTrialSessionIds.push(trialSession.trialSessionId);
     });

@@ -73,7 +73,7 @@ export const presenter = {
     notFoundErrorSequence,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
-    submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,

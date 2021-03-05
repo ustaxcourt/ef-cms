@@ -5,6 +5,7 @@ const {
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
+const { UserCase } = require('../../entities/UserCase');
 
 /**
  * createUserForContactPrimary
@@ -39,9 +40,21 @@ exports.createUserForContactPrimary = async ({
     { applicationContext },
   );
 
+  const userRaw = userEntity.validate().toRawObject();
+
   await applicationContext.getPersistenceGateway().createNewPetitionerUser({
     applicationContext,
-    user: userEntity.validate().toRawObject(),
+    user: userRaw,
+  });
+
+  const rawCase = caseEntity.toRawObject();
+  const userCaseEntity = new UserCase(rawCase);
+
+  await applicationContext.getPersistenceGateway().associateUserWithCase({
+    applicationContext,
+    docketNumber: rawCase.docketNumber,
+    userCase: userCaseEntity.validate().toRawObject(),
+    userId: userRaw.userId,
   });
 
   return caseEntity;

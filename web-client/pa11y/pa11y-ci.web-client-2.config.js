@@ -1,3 +1,5 @@
+const { getOnly } = require('./helpers');
+
 const irsPractitioner = require('./pa11y-irs-practitioner');
 const petitionsclerk = require('./pa11y-petitionsclerk');
 const privatePractitioner = require('./pa11y-private-practitioner');
@@ -11,5 +13,5 @@ const urls = [
 
 module.exports = {
   defaults,
-  urls,
+  urls: getOnly(urls),
 };

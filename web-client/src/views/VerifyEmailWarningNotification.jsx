@@ -12,7 +12,7 @@ export const VerifyEmailWarningNotification = connect(
           <div className="grid-row">
             <div className="desktop:grid-col-auto grid-col-1">
               <Icon
-                aria-label="warning-icon"
+                aria-label="warning icon"
                 className="margin-right-2"
                 icon={['fas', 'exclamation-triangle']}
                 size="lg"

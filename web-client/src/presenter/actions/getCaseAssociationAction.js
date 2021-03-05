@@ -1,5 +1,6 @@
 import { some } from 'lodash';
 import { state } from 'cerebral';
+
 /**
  * Determines if the user is associated with the case or not, and if there is a
  * pending association to the case for privatePractitioners
@@ -14,9 +15,11 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   const { USER_ROLES } = applicationContext.getConstants();
   let isAssociated = false;
   let pendingAssociation = false;
+
   if (user.role === USER_ROLES.privatePractitioner) {
     const caseDetailPractitioners = get(state.caseDetail.privatePractitioners);
     const docketNumber = get(state.caseDetail.docketNumber);
+
     isAssociated = some(caseDetailPractitioners, { userId: user.userId });
     if (!isAssociated) {
       pendingAssociation = await applicationContext
@@ -29,21 +32,28 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     }
   } else if (user.role === USER_ROLES.irsPractitioner) {
     const caseDetailRespondents = get(state.caseDetail.irsPractitioners);
+
     isAssociated = some(caseDetailRespondents, { userId: user.userId });
   } else if (user.role === USER_ROLES.petitioner) {
     const caseContactPrimaryId = get(state.caseDetail.contactPrimary.contactId);
     const caseContactSecondaryId = get(
       state.caseDetail.contactSecondary.contactId,
     );
+
     isAssociated =
       caseContactPrimaryId === user.userId ||
       (!!caseContactSecondaryId && caseContactSecondaryId === user.userId);
   } else if (user.role === USER_ROLES.irsSuperuser) {
-    const documents = get(state.caseDetail.docketEntries);
-    const isPetitionServed = !!documents.find(
+    const docketEntries = get(state.caseDetail.docketEntries);
+    const petitionDocketEntry = docketEntries.find(
       doc => doc.documentType === 'Petition',
-    ).servedAt;
+    );
+    const isPetitionServed = applicationContext
+      .getUtilities()
+      .isServed(petitionDocketEntry);
+
     isAssociated = isPetitionServed;
   }
+
   return { isAssociated, pendingAssociation };
 };

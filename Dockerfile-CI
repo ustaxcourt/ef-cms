@@ -1,5 +1,7 @@
 FROM cypress/base:14.15.4
 
+CMD echo "Building CI Image"
+
 WORKDIR /home/app/ef-cms
 
 RUN sh -c 'echo "deb [check-valid-until=no] http://ftp.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list'

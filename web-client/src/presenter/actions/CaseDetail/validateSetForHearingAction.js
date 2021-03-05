@@ -9,7 +9,11 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateSetForHearingAction = ({ get, path }) => {
+export const validateSetForHearingAction = ({
+  applicationContext,
+  get,
+  path,
+}) => {
   const { calendarNotes, trialSessionId } = get(state.modal);
 
   let errors = {};
@@ -17,12 +21,15 @@ export const validateSetForHearingAction = ({ get, path }) => {
     errors.trialSessionId = 'Select a Trial Session';
   }
 
-  if (!calendarNotes) {
-    errors.calendarNotes = 'Add a note.';
-  }
+  const noteEntityErrors = applicationContext
+    .getUseCases()
+    .validateHearingNoteInteractor({
+      applicationContext,
+      note: calendarNotes,
+    });
 
-  if (calendarNotes && calendarNotes.length > 200) {
-    errors.calendarNotes = 'The length of the note must not be over 200';
+  if (noteEntityErrors?.note) {
+    errors.calendarNotes = noteEntityErrors.note;
   }
 
   if (isEmpty(errors)) {
