@@ -113,7 +113,10 @@ export const FilingsAndProceedings = connect(
             >
               {entry.isPaper && (
                 <span className="filing-type-icon-mobile">
-                  <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                  <FontAwesomeIcon
+                    icon={['fas', 'file-alt']}
+                    title="is paper"
+                  />
                 </span>
               )}
               {entry.descriptionDisplay}
