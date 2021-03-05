@@ -15,10 +15,10 @@ export const validatePetitionFromPaperSequence = [
       setComputeFormDateFactoryAction('receivedAt'),
       getComputedFormDateFactoryAction('irsNotice', true),
       setComputeFormDateFactoryAction('irsNoticeDate'),
-      getComputedFormDateFactoryAction('petitionPayment', true),
-      setComputeFormDateFactoryAction('petitionPayment'),
+      getComputedFormDateFactoryAction('paymentDate', true),
+      setComputeFormDateFactoryAction('petitionPaymentDate'),
       getComputedFormDateFactoryAction('paymentDateWaived', true),
-      setComputeFormDateFactoryAction('paymentDateWaived'),
+      setComputeFormDateFactoryAction('petitionPaymentWaivedDate'),
       computeStatisticDatesAction,
       validatePetitionFromPaperAction,
       {
