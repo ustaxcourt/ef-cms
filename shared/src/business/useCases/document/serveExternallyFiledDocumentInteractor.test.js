@@ -8,7 +8,6 @@ const {
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
-  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   serveExternallyFiledDocumentInteractor,
@@ -142,45 +141,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
   });
 
-  it('should send electronic-service parties emails', async () => {
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toBeCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
-        .calls[0][0],
-    ).toMatchObject({
-      servedParties: {
-        all: [
-          {
-            email: 'fieri@example.com',
-            name: 'Guy Fieri',
-          },
-        ],
-        electronic: [
-          {
-            email: 'fieri@example.com',
-            name: 'Guy Fieri',
-          },
-        ],
-        paper: [],
-      },
-    });
-  });
-
-  it('should generate and return a paper-service PDF if there are paper service parties on the case', async () => {
-    caseRecord.contactPrimary.serviceIndicator =
-      SERVICE_INDICATOR_TYPES.SI_PAPER;
-
+  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: 'localhost:123',
+      });
 
     const result = await serveExternallyFiledDocumentInteractor({
       applicationContext,
@@ -189,9 +155,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toBeCalled();
-    expect(result.paperServicePdfUrl).toEqual('www.example.com');
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
+        .mock.calls[0][0],
+    ).toMatchObject({
+      docketEntryId: DOCKET_ENTRY_ID,
+    });
+    expect(result).toEqual({ pdfUrl: 'localhost:123' });
   });
 
   it('if the workItem exists, it should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {

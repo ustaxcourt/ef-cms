@@ -56,7 +56,7 @@ describe('CaseInternal entity', () => {
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: { anObject: true },
           requestForPlaceOfTrialFileSize: 1,
           statistics: [
@@ -106,7 +106,7 @@ describe('CaseInternal entity', () => {
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: { anObject: true },
           requestForPlaceOfTrialFileSize: 1,
           statistics: [
@@ -151,7 +151,7 @@ describe('CaseInternal entity', () => {
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -185,7 +185,7 @@ describe('CaseInternal entity', () => {
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -199,7 +199,7 @@ describe('CaseInternal entity', () => {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: { anObject: true },
           petitionFileSize: 1,
-          receivedAt: new Date(Date.parse('9999-01-01')).toISOString(),
+          receivedAt: '9999-01-01T00:00:00.000Z',
         },
         { applicationContext },
       );
@@ -211,7 +211,7 @@ describe('CaseInternal entity', () => {
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: new File([], 'test.pdf'),
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -226,7 +226,7 @@ describe('CaseInternal entity', () => {
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -269,7 +269,7 @@ describe('CaseInternal entity', () => {
         {
           applicationForWaiverOfFilingFeeFile: new File([], 'test.pdf'),
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -286,7 +286,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           stinFile: new File([], 'test.pdf'),
         },
         { applicationContext },
@@ -302,7 +302,7 @@ describe('CaseInternal entity', () => {
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           ownershipDisclosureFile: new File([], 'test.pdf'),
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -316,7 +316,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File([], 'test.pdf'),
         },
         { applicationContext },
@@ -332,7 +332,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File([], 'test.pdf'),
         },
         { applicationContext },
@@ -348,7 +348,7 @@ describe('CaseInternal entity', () => {
         {
           caseCaption: 'Dr. Guy Fieri, Petitioner',
           preferredTrialCity: 'Flavortown, AR',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -384,7 +384,7 @@ describe('CaseInternal entity', () => {
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           stinFile: { anObject: true },
           stinFileSize: 1,
         },
@@ -423,7 +423,7 @@ describe('CaseInternal entity', () => {
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           stinFile: { anObject: true },
           stinFileSize: 1,
         },
@@ -468,7 +468,7 @@ describe('CaseInternal entity', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Boise, Idaho',
         procedureType: 'Small',
-        receivedAt: new Date().toISOString(),
+        receivedAt: applicationContext.getUtilities().createISODateString(),
         requestForPlaceOfTrialFile: { anObject: true },
         requestForPlaceOfTrialFileSize: 1,
         statistics: [

@@ -39,6 +39,10 @@ describe('messages journey', () => {
     jest.setTimeout(40000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create test case to send messages', async () => {
     const caseDetail = await uploadPetition(test);

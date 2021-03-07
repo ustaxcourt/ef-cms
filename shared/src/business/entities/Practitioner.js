@@ -49,6 +49,7 @@ Practitioner.prototype.init = function init(
   this.middleName = rawUser.middleName;
   this.name = Practitioner.getFullName(rawUser);
   this.originalBarState = rawUser.originalBarState;
+  this.practitionerNotes = rawUser.practitionerNotes;
   this.practitionerType = rawUser.practitionerType;
   this.section = this.role;
   this.suffix = rawUser.suffix;
@@ -97,6 +98,13 @@ const VALIDATION_ERROR_MESSAGES = {
   ],
   employer: 'Select an employer',
   originalBarState: 'Select an original bar state',
+  practitionerNotes: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters',
+    },
+    'Enter valid notes',
+  ],
   practitionerType: 'Select a practitioner type',
   updatedEmail: 'Enter a valid email address',
 };
@@ -107,7 +115,7 @@ const practitionerValidation = {
     .optional()
     .allow(null)
     .description('An alternate phone number for the practitioner.'),
-  admissionsDate: JoiValidationConstants.ISO_DATE.max('now')
+  admissionsDate: JoiValidationConstants.DATE.max('now')
     .required()
     .description(
       'The date the practitioner was admitted to the Tax Court bar.',
@@ -153,6 +161,10 @@ const practitionerValidation = {
     .description(
       'The state in which the practitioner passed their bar examination.',
     ),
+  practitionerNotes: JoiValidationConstants.STRING.max(500)
+    .optional()
+    .allow(null, '')
+    .description('The optional notes of the practitioner.'),
   practitionerType: JoiValidationConstants.STRING.valid(
     ...PRACTITIONER_TYPE_OPTIONS,
   )

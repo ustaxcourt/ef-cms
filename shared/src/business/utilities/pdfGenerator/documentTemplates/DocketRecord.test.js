@@ -121,21 +121,19 @@ describe('DocketRecord', () => {
     );
     expect(contacts.find('.party-details').length).toEqual(1);
 
-    const contactPrimaryEl = contacts.find('.party-details');
+    const contactPrimaryEl = contacts.find('.party-details').text();
 
-    expect(contactPrimaryEl.text()).toContain(contactPrimary.name);
-    expect(contactPrimaryEl.text()).toContain(
-      `c/o ${contactPrimary.secondaryName}`,
-    );
-    expect(contactPrimaryEl.text()).toContain(contactPrimary.address1);
-    expect(contactPrimaryEl.text()).toContain(contactPrimary.address2);
-    expect(contactPrimaryEl.text()).toContain(contactPrimary.address3);
-    expect(contactPrimaryEl.text()).toContain(contactPrimary.city);
-    expect(contactPrimaryEl.text()).toContain(contactPrimary.state);
-    expect(contactPrimaryEl.text()).toContain(contactPrimary.postalCode);
-    expect(contactPrimaryEl.text()).toContain(contactPrimary.phone);
+    expect(contactPrimaryEl).toContain(contactPrimary.name);
+    expect(contactPrimaryEl).toContain(`c/o ${contactPrimary.secondaryName}`);
+    expect(contactPrimaryEl).toContain(contactPrimary.address1);
+    expect(contactPrimaryEl).toContain(contactPrimary.address2);
+    expect(contactPrimaryEl).toContain(contactPrimary.address3);
+    expect(contactPrimaryEl).toContain(contactPrimary.city);
+    expect(contactPrimaryEl).toContain(contactPrimary.state);
+    expect(contactPrimaryEl).toContain(contactPrimary.postalCode);
+    expect(contactPrimaryEl).toContain(contactPrimary.phone);
 
-    expect(contactPrimaryEl.text()).not.toContain(contactPrimary.country);
+    expect(contactPrimaryEl).not.toContain(contactPrimary.country);
   });
 
   it('does not render the primary contact information when options.includePartyDetail is false', () => {
@@ -151,7 +149,7 @@ describe('DocketRecord', () => {
     );
 
     const contacts = wrapper.find('#petitioner-contacts');
-    expect(contacts).toEqual({});
+    expect(contacts.length).toEqual(0);
   });
 
   it("displays a party's country if international", () => {
@@ -209,11 +207,10 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).toContain(`c/o ${contactPrimary.inCareOf}`);
   });
 
-  it('renders private practitioner contact information when present and options.includePartyDetail is true', () => {
-    options.includePartyDetail = true;
+  it('renders "Pro Se" when no private practitioner is given', () => {
     caseDetail.privatePractitioners = []; // No private practitioners
 
-    let wrapper = mount(
+    const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
         countryTypes={COUNTRY_TYPES}
@@ -222,11 +219,16 @@ describe('DocketRecord', () => {
       />,
     );
 
-    expect(wrapper.find('#private-practitioner-contacts').length).toEqual(0);
+    expect(wrapper.find('#private-practitioner-contacts').length).toEqual(1);
 
+    const contacts = wrapper.find('#private-practitioner-contacts');
+    expect(contacts.find('.party-info-content').text()).toEqual('Pro Se');
+  });
+
+  it('renders private practitioner contact info when present', () => {
     caseDetail.privatePractitioners = [privatePractitioner];
 
-    wrapper = mount(
+    const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
         countryTypes={COUNTRY_TYPES}
@@ -236,38 +238,23 @@ describe('DocketRecord', () => {
     );
 
     const contacts = wrapper.find('#private-practitioner-contacts');
+    expect(contacts.length).toEqual(1);
     expect(contacts.find('.party-info-header').text()).toEqual(
       'Petitioner Counsel',
     );
 
-    const contactEl = contacts.find('.party-details');
+    const contactEl = contacts.find('.party-details').text();
 
-    expect(contactEl.text()).toContain(privatePractitioner.formattedName);
-    expect(contactEl.text()).toContain(privatePractitioner.contact.address1);
-    expect(contactEl.text()).toContain(privatePractitioner.contact.address2);
-    expect(contactEl.text()).toContain(privatePractitioner.contact.address3);
-    expect(contactEl.text()).toContain(privatePractitioner.contact.city);
-    expect(contactEl.text()).toContain(privatePractitioner.contact.state);
-    expect(contactEl.text()).toContain(privatePractitioner.contact.postalCode);
-    expect(contactEl.text()).toContain(privatePractitioner.contact.phone);
+    expect(contactEl).toContain(privatePractitioner.formattedName);
+    expect(contactEl).toContain(privatePractitioner.contact.address1);
+    expect(contactEl).toContain(privatePractitioner.contact.address2);
+    expect(contactEl).toContain(privatePractitioner.contact.address3);
+    expect(contactEl).toContain(privatePractitioner.contact.city);
+    expect(contactEl).toContain(privatePractitioner.contact.state);
+    expect(contactEl).toContain(privatePractitioner.contact.postalCode);
+    expect(contactEl).toContain(privatePractitioner.contact.phone);
 
-    expect(contactEl.text()).not.toContain('Representing');
-  });
-
-  it('does not render private practitioner contact information when present and options.includePartyDetail is false', () => {
-    options.includePartyDetail = false;
-    caseDetail.privatePractitioners = [privatePractitioner];
-
-    let wrapper = mount(
-      <DocketRecord
-        caseDetail={caseDetail}
-        countryTypes={COUNTRY_TYPES}
-        entries={entries}
-        options={options}
-      />,
-    );
-
-    expect(wrapper.find('#private-practitioner-contacts')).toEqual({});
+    expect(contactEl).not.toContain('Representing');
   });
 
   it('displays represented parties with each practitioner', () => {
@@ -309,11 +296,10 @@ describe('DocketRecord', () => {
     expect(practitioner2El.text()).toContain(contactSecondary.name);
   });
 
-  it('renders irs practitioner contact information when present and options.includePartyDetail is true', () => {
-    options.includePartyDetail = true;
+  it('renders "None" when no IRS practitioner is given', () => {
     caseDetail.irsPractitioners = []; // No irs practitioners
 
-    let wrapper = mount(
+    const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
         countryTypes={COUNTRY_TYPES}
@@ -322,11 +308,16 @@ describe('DocketRecord', () => {
       />,
     );
 
-    expect(wrapper.find('#irs-practitioner-contacts').length).toEqual(0);
+    expect(wrapper.find('#irs-practitioner-contacts').length).toEqual(1);
 
+    const contacts = wrapper.find('#irs-practitioner-contacts');
+    expect(contacts.find('.party-info-content').text()).toEqual('None');
+  });
+
+  it('renders irs practitioner contact information when present', () => {
     caseDetail.irsPractitioners = [irsPractitioner];
 
-    wrapper = mount(
+    const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
         countryTypes={COUNTRY_TYPES}
@@ -340,34 +331,18 @@ describe('DocketRecord', () => {
       'Respondent Counsel',
     );
 
-    const contactEl = contacts.find('.party-details');
+    const contactEl = contacts.find('.party-details').text();
 
-    expect(contactEl.text()).toContain(irsPractitioner.name);
-    expect(contactEl.text()).toContain(irsPractitioner.contact.address1);
-    expect(contactEl.text()).toContain(irsPractitioner.contact.address2);
-    expect(contactEl.text()).toContain(irsPractitioner.contact.address3);
-    expect(contactEl.text()).toContain(irsPractitioner.contact.city);
-    expect(contactEl.text()).toContain(irsPractitioner.contact.state);
-    expect(contactEl.text()).toContain(irsPractitioner.contact.postalCode);
-    expect(contactEl.text()).toContain(irsPractitioner.contact.phone);
+    expect(contactEl).toContain(irsPractitioner.name);
+    expect(contactEl).toContain(irsPractitioner.contact.address1);
+    expect(contactEl).toContain(irsPractitioner.contact.address2);
+    expect(contactEl).toContain(irsPractitioner.contact.address3);
+    expect(contactEl).toContain(irsPractitioner.contact.city);
+    expect(contactEl).toContain(irsPractitioner.contact.state);
+    expect(contactEl).toContain(irsPractitioner.contact.postalCode);
+    expect(contactEl).toContain(irsPractitioner.contact.phone);
 
-    expect(contactEl.text()).not.toContain('Representing');
-  });
-
-  it('does not render irs practitioner contact information when present and options.includePartyDetail is false', () => {
-    options.includePartyDetail = false;
-    caseDetail.irsPractitioners = [irsPractitioner];
-
-    let wrapper = mount(
-      <DocketRecord
-        caseDetail={caseDetail}
-        countryTypes={COUNTRY_TYPES}
-        entries={entries}
-        options={options}
-      />,
-    );
-
-    expect(wrapper.find('#irs-practitioner-contacts')).toEqual({});
+    expect(contactEl).not.toContain('Representing');
   });
 
   it('renders a table with docket record data', () => {
@@ -383,17 +358,17 @@ describe('DocketRecord', () => {
     const docketRecord = wrapper.find('#documents');
     expect(docketRecord.find('tbody tr').length).toEqual(entries.length);
 
-    const rowEl = docketRecord.find('tbody tr').at(0);
+    const rowEl = docketRecord.find('tbody tr').at(0).text();
 
-    expect(rowEl.text()).toContain(entries[0].index);
-    expect(rowEl.text()).toContain(entries[0].createdAtFormatted);
-    expect(rowEl.text()).toContain(entries[0].eventCode);
-    expect(rowEl.text()).toContain(entries[0].descriptionDisplay);
-    expect(rowEl.text()).toContain(entries[0].filingsAndProceedings);
-    expect(rowEl.text()).toContain(entries[0].filedBy);
-    expect(rowEl.text()).toContain(entries[0].action);
-    expect(rowEl.text()).toContain(entries[0].servedAtFormatted);
-    expect(rowEl.text()).toContain(entries[0].servedPartiesCode);
+    expect(rowEl).toContain(entries[0].index);
+    expect(rowEl).toContain(entries[0].createdAtFormatted);
+    expect(rowEl).toContain(entries[0].eventCode);
+    expect(rowEl).toContain(entries[0].descriptionDisplay);
+    expect(rowEl).toContain(entries[0].filingsAndProceedings);
+    expect(rowEl).toContain(entries[0].filedBy);
+    expect(rowEl).toContain(entries[0].action);
+    expect(rowEl).toContain(entries[0].servedAtFormatted);
+    expect(rowEl).toContain(entries[0].servedPartiesCode);
   });
 
   it('displays the record description, filingsAndProceedings, and additionalInfo2', () => {

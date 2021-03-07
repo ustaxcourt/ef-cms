@@ -19,6 +19,7 @@ const testClient = setupTestClient();
 testClient.draftOrders = [];
 const createdDocketNumbers = [];
 
+// eslint-disable-next-line @miovision/disallow-date/no-new-date
 const documentTitleKeyword = `Sunglasses_${new Date().getTime()}`;
 const nonExactDocumentTitleKeyword = `${documentTitleKeyword}y`;
 
@@ -27,6 +28,10 @@ describe.skip(`Create and serve a case with an order with exact keyword (${docum
   describe('Petitioner creates case', () => {
     beforeAll(() => {
       jest.setTimeout(30000);
+    });
+
+    afterAll(() => {
+      test.closeSocket();
     });
 
     loginAs(testClient, 'petitioner@example.com');

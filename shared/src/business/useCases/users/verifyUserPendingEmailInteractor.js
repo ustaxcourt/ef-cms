@@ -58,6 +58,9 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       // we do this again so that it will convert '' to null
       return new Case(caseEntity, { applicationContext }).validate();
     })
+    // if petitioner is not found on the case, function exits early and returns `undefined`.
+    // if this happens, continue with remaining cases and do not throw exception, but discard
+    // any undefined values by filtering for truthy objects.
     .filter(Boolean);
 
   return Promise.all(
@@ -120,6 +123,9 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
       // we do this again so that it will convert '' to null
       return new Case(caseEntity, { applicationContext }).validate();
     })
+    // if practitioner is not found on the case, function exits early and returns `undefined`.
+    // if this happens, continue with remaining cases and do not throw exception, but discard
+    // any undefined values by filtering for truthy objects.
     .filter(Boolean);
 
   for (let idx = 0; idx < validCasesToUpdate.length; idx++) {

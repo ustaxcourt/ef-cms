@@ -272,10 +272,10 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 ### Prerequisites
 
-- Node v12.13.1
-- npm v6.12.1
+- Node v14.16.0
+- npm v6.14.11
 - ClamAV v0.101.2 (see Setup below)
--  Java 11
+- Java 11
 - jq
 
 ### Setup
