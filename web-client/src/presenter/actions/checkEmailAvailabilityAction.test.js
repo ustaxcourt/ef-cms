@@ -53,6 +53,22 @@ describe('checkEmailAvailabilityAction', () => {
     ).toMatchObject({ email: mockEmail });
   });
 
+  it('should call checkEmailAvailabilityInteractor with state.form.contactPrimary.email', async () => {
+    await runAction(checkEmailAvailabilityAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { contactPrimary: { email: mockEmail } },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({ email: mockEmail });
+  });
+
   it('should call path.emailAvailable when checkEmailAvailabilityInteractor returns true', async () => {
     applicationContext
       .getUseCases()
@@ -70,7 +86,7 @@ describe('checkEmailAvailabilityAction', () => {
     expect(pathEmailAvailableStub).toHaveBeenCalled();
   });
 
-  it('should call path.emailInUse with an error message when checkEmailAvailabilityInteractor returns false', async () => {
+  it('should call path.emailInUse with an error when checkEmailAvailabilityInteractor returns false', async () => {
     applicationContext
       .getUseCases()
       .checkEmailAvailabilityInteractor.mockReturnValue(false);
@@ -84,6 +100,7 @@ describe('checkEmailAvailabilityAction', () => {
       },
     });
 
+    expect(pathEmailInUseStub).toHaveBeenCalled();
     expect(pathEmailInUseStub.mock.calls[0][0]).toMatchObject({
       errors: {
         email:

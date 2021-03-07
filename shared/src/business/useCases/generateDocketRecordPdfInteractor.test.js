@@ -77,60 +77,6 @@ describe('generateDocketRecordPdfInteractor', () => {
     ).toMatchObject({ includePartyDetail: true });
   });
 
-  describe('party detail is requested', () => {
-    it('user is associated with the case', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(true);
-      await generateDocketRecordPdfInteractor({
-        applicationContext,
-        docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
-      });
-
-      expect(
-        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-          .data,
-      ).toMatchObject({ includePartyDetail: true });
-    });
-
-    it('user has an internal role', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'], // docket clerk
-      );
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(false);
-      await generateDocketRecordPdfInteractor({
-        applicationContext,
-        docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
-      });
-
-      expect(
-        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-          .data,
-      ).toMatchObject({ includePartyDetail: true });
-    });
-
-    it('user is NOT associated with the case and does NOT have an internal role', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({});
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(false);
-      await generateDocketRecordPdfInteractor({
-        applicationContext,
-        docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
-      });
-
-      expect(
-        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-          .data,
-      ).toMatchObject({ includePartyDetail: false });
-    });
-  });
-
   it('Returns a file ID and url to the generated file', async () => {
     const result = await generateDocketRecordPdfInteractor({
       applicationContext,

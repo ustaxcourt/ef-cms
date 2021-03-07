@@ -25,6 +25,7 @@ describe('case inventory report journey', () => {
 
   const initialCaseInventoryCounts = {};
   const createdDocketNumbers = [];
+  // eslint-disable-next-line @miovision/disallow-date/no-static-date
   const trialLocation = `Indianapolis, Indiana, ${Date.now()}`;
 
   loginAs(test, 'docketclerk@example.com');

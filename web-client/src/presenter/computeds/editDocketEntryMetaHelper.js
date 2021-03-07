@@ -24,7 +24,7 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
   let categoryInformation;
   find(
     INTERNAL_CATEGORY_MAP,
-    entries => (categoryInformation = find(entries, { eventCode: eventCode })),
+    entries => (categoryInformation = find(entries, { eventCode })),
   );
 
   const selectedDocketEntryId = get(state.docketEntryId);

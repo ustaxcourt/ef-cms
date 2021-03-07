@@ -42,8 +42,8 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
-      caseCaptionExtension: caseCaptionExtension,
-      caseTitle: caseTitle,
+      caseCaptionExtension,
+      caseTitle,
       docketNumberWithSuffix,
       orderContent: contentHtml,
       orderTitle: documentTitle,

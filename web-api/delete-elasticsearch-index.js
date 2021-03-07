@@ -4,7 +4,9 @@
     elasticsearchIndexes,
   } = require('./elasticsearch/elasticsearch-indexes');
   AWS.config.region = 'us-east-1';
-  const { ELASTICSEARCH_API_VERSION } = require('./elasticsearch-settings');
+  const {
+    ELASTICSEARCH_API_VERSION,
+  } = require('./elasticsearch/elasticsearch-settings');
 
   const connectionClass = require('http-aws-es');
   const elasticsearch = require('elasticsearch');
@@ -33,7 +35,7 @@
       region: environment.region,
     },
     apiVersion: ELASTICSEARCH_API_VERSION,
-    connectionClass: connectionClass,
+    connectionClass,
     host: {
       host: environment.elasticsearchEndpoint,
       port: 443,

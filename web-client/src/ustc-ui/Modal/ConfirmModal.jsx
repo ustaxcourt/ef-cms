@@ -10,6 +10,7 @@ export const ConfirmModal = connect(
   {
     onCancel: sequences[props.onCancelSequence],
     onConfirm: sequences[props.onConfirmSequence],
+    onDelete: sequences[props.onDeleteSequence],
     showModal: state.modal.showModal,
   },
   function ConfirmModal({
@@ -17,6 +18,7 @@ export const ConfirmModal = connect(
     children,
     className,
     confirmLabel,
+    deleteLabel,
     displaySuccessBanner,
     hasErrorState,
     headerIcon,
@@ -24,9 +26,11 @@ export const ConfirmModal = connect(
     noCancel,
     noCloseBtn,
     noConfirm,
+    noDelete,
     onCancel,
     onCancelSequence,
     onConfirm,
+    onDelete,
     preventCancelOnBlur,
     showModal,
     showModalWhen,
@@ -37,6 +41,7 @@ export const ConfirmModal = connect(
     headerIconClassName = headerIconClassName || '';
     confirmLabel = confirmLabel || 'Ok';
     cancelLabel = cancelLabel || 'Cancel';
+    deleteLabel = deleteLabel || 'Delete';
 
     const runCancelSequence = event => {
       event.stopPropagation();
@@ -46,6 +51,11 @@ export const ConfirmModal = connect(
     const runConfirmSequence = event => {
       event.stopPropagation();
       onConfirm?.call();
+    };
+
+    const runDeleteSequence = event => {
+      event.stopPropagation();
+      onDelete?.call();
     };
 
     useEffect(() => {
@@ -104,7 +114,7 @@ export const ConfirmModal = connect(
           </div>
         </div>
         <div className="margin-bottom-2">{children}</div>
-        {(!noConfirm || !noCancel) && (
+        {(!noConfirm || !noCancel || !noDelete) && (
           <div className="margin-top-5">
             {!noConfirm && (
               <Button id="confirm" onClick={runConfirmSequence}>
@@ -114,6 +124,17 @@ export const ConfirmModal = connect(
             {!noCancel && (
               <Button secondary onClick={runCancelSequence}>
                 {cancelLabel}
+              </Button>
+            )}
+            {!noDelete && (
+              <Button
+                link
+                className="red-warning float-right no-wrap"
+                icon="trash"
+                id="confirm-modal-delete-btn"
+                onClick={runDeleteSequence}
+              >
+                {deleteLabel}
               </Button>
             )}
           </div>

@@ -12,6 +12,10 @@ testClient.draftOrders = [];
 
 // user searches for case by "ZeroMatches DoNotMatchThis"
 describe('Petitioner searches for exact name match', () => {
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   unauthedUserNavigatesToPublicSite(test);
 
   it('returns zero search results when there are no matches', async () => {

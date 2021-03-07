@@ -14,6 +14,10 @@ describe('Petitions Clerk Serves Paper Petition From Message Detail & Document V
     jest.setTimeout(40000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
   createNewMessageOnCase(test);
