@@ -9,6 +9,10 @@ describe('docket clerk edits the petitioner information', () => {
     jest.setTimeout(50000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   let caseDetail;
 
   loginAs(test, 'petitioner@example.com');

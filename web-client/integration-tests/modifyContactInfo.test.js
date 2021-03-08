@@ -25,6 +25,10 @@ describe('Modify Petitioner Contact Information', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   let caseDetail;
 
   loginAs(test, 'petitioner@example.com');

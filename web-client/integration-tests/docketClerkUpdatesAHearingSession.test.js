@@ -12,6 +12,10 @@ describe('Docket Clerk updates a hearing session', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   test.createdTrialSessions = [];
 
   loginAs(test, 'petitioner@example.com');
