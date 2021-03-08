@@ -106,15 +106,21 @@ export const SignOrder = connect(
       let y;
 
       // canvas width / 2 - width of signature warning
+      const sigWarnWidth = sigWarnEl.getBoundingClientRect().width;
 
-      console.log(
-        'canvas ',
+      console.table(
+        'canvasBounds.width',
         canvasBounds.width,
-        ' signature warning ',
+        'canvasBounds.x',
+        canvasBounds.x,
+        ' signature warning rect width',
         sigWarnEl.getBoundingClientRect().width,
+        'sigWarnWidth',
+        sigWarnWidth,
       );
 
-      sigWarnEl.style.left = canvasBounds.width + 'px';
+      sigWarnEl.style.left =
+        canvasBounds.x + canvasBounds.width / 2 - sigWarnWidth / 2 - 42 + 'px';
 
       setSignatureData({
         signatureApplied: true,
@@ -226,18 +232,20 @@ export const SignOrder = connect(
                   <br />
                   {pdfForSigning.nameForSigningLine2}
                 </span>
-                <span id="signature-warning" ref={signatureWarningRef}>
-                  You cannot apply a signature here.
-                </span>
-                <canvas
-                  className={
-                    !signatureData && signatureApplied
-                      ? 'cursor-grabbing'
-                      : 'cursor-grab'
-                  }
-                  id="sign-pdf-canvas"
-                  ref={canvasRef}
-                ></canvas>
+                <div id="parent">
+                  <canvas
+                    className={
+                      !signatureData && signatureApplied
+                        ? 'cursor-grabbing'
+                        : 'cursor-grab'
+                    }
+                    id="sign-pdf-canvas"
+                    ref={canvasRef}
+                  ></canvas>
+                  <span id="signature-warning" ref={signatureWarningRef}>
+                    You cannot apply a signature here.
+                  </span>
+                </div>
               </div>
             </div>
           </div>
