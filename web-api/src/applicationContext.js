@@ -1433,25 +1433,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
               }),
             };
           },
-          sendBulkTemplatedEmail: params => {
+          sendBulkTemplatedEmail: () => {
             return {
-              promise: () =>
-                Promise.all(
-                  params.Destinations.map(Destination => {
-                    const address = Destination.Destination.ToAddresses[0];
-                    const template = Destination.ReplacementTemplateData;
-                    return getDocumentClient()
-                      .put({
-                        Item: {
-                          pk: `email-${address}`,
-                          sk: getUniqueId(),
-                          template,
-                        },
-                        TableName: process.env.DYNAMODB_TABLE_NAME,
-                      })
-                      .promise();
-                  }),
-                ),
+              promise: async () => {
+                return { Status: [] };
+              },
             };
           },
         };
@@ -1487,8 +1473,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
       sendNotificationToUser,
     }),
     getPdfJs: async () => {
-      const pdfjsLib = require('pdfjs-dist');
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+      const pdfjsLib = require('pdfjs-dist/es5/build/pdf');
+      const { pdfjsworker } = require('pdfjs-dist/es5/build/pdf.worker.entry');
+
+      pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsworker;
 
       return pdfjsLib;
     },
