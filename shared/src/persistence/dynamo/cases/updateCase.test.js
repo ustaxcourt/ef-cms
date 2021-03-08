@@ -908,46 +908,4 @@ describe('updateCase', () => {
       });
     });
   });
-
-  describe('hearings', () => {
-    it('removes hearing from case if the updated case has none and the old case has one', async () => {
-      await updateCase({
-        applicationContext,
-        caseToUpdate: {
-          docketNumber: '101-18',
-          docketNumberSuffix: null,
-          hearings: [],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        oldCase: {
-          ...oldCase,
-          hearings: [
-            {
-              maxCases: 100,
-              pk: 'case|101-18',
-              sessionType: 'Regular',
-              sk: 'hearing|a-document-id-123',
-              startDate: '3000-03-01T00:00:00.000Z',
-              term: 'Fall',
-              termYear: '3000',
-              trialLocation: 'Birmingham, Alabama',
-              trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
-            },
-          ],
-        },
-      });
-
-      expect(applicationContext.getDocumentClient().delete).toHaveBeenCalled();
-      expect(
-        applicationContext.getDocumentClient().delete,
-      ).toHaveBeenCalledWith(
-        expect.objectContaining({
-          Key: {
-            pk: 'case|101-18',
-            sk: 'hearing|208a959f-9526-4db5-b262-e58c476a4604',
-          },
-        }),
-      );
-    });
-  });
 });
