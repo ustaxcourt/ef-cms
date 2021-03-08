@@ -1,16 +1,14 @@
+import { chooseStartCaseWizardStepAction } from '../actions/chooseStartCaseWizardStepAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getConstants } from '../../getConstants';
 import { prepareFormAction } from '../actions/StartCase/prepareFormAction';
-import { props, state } from 'cerebral';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultStartCaseInternalFormAction } from '../actions/StartCaseInternal/setDefaultStartCaseInternalFormAction';
 import { setDocumentSelectedForScanAction } from '../actions/setDocumentSelectedForScanAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
-import { setWizardStepAction } from '../actions/setWizardStepAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
 
@@ -25,8 +23,7 @@ const gotoStartCaseInternal = [
 ];
 
 const gotoStartCaseExternal = [
-  setWizardStepAction(props.wizardStep),
-  set(state.form.wizardStep, props.step),
+  chooseStartCaseWizardStepAction,
   setCurrentPageAction('StartCaseWizard'),
 ];
 
