@@ -8,6 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const chooseStartCaseWizardStepAction = ({ props, store }) => {
-  store.set(state.wizardStep, props.value);
+  store.set(state.wizardStep, props.wizardStep);
   store.set(state.form.wizardStep, props.step);
 };

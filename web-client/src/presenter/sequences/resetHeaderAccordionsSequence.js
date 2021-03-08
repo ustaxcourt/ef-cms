@@ -1,4 +1,3 @@
-import { state } from 'cerebral';
-import { unset } from 'cerebral/factories';
+import { clearOpenMenuAction } from '../actions/clearOpenMenuAction';
 
-export const resetHeaderAccordionsSequence = [unset(state.navigation.openMenu)];
+export const resetHeaderAccordionsSequence = [clearOpenMenuAction];

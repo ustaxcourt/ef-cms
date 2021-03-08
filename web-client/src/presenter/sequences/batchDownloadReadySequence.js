@@ -1,10 +1,9 @@
 import { displayDownloadLinkAction } from '../actions/batchDownload/displayDownloadLinkAction';
-import { state } from 'cerebral';
 import { stopWebSocketConnectionAction } from '../actions/webSocketConnection/stopWebSocketConnectionAction';
-import { unset } from 'cerebral/factories';
+import { unsetBatchDownloadsAction } from '../actions/unsetBatchDownloadsAction';
 
 export const batchDownloadReadySequence = [
   displayDownloadLinkAction,
   stopWebSocketConnectionAction,
-  unset(state.batchDownloads),
+  unsetBatchDownloadsAction,
 ];
