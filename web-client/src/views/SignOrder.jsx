@@ -212,6 +212,9 @@ export const SignOrder = connect(
                   <br />
                   {pdfForSigning.nameForSigningLine2}
                 </span>
+                <span id="signature-warning">
+                  You cannot apply a signature here.
+                </span>
                 <canvas
                   className={
                     !signatureData && signatureApplied

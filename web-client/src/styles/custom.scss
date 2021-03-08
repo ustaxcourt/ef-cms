@@ -1123,6 +1123,15 @@ hr.lighter {
     font-weight: $font-bold;
     text-align: center;
   }
+  #signature-warning {
+    position: absolute;
+    bottom: 50px;
+    padding: 20px;
+    border: 1px solid #eee;
+    background-color: color($theme-color-secondary-dark);
+    font-weight: $font-bold;
+    text-align: center;
+  }
   #sign-pdf-canvas {
     display: block;
     margin: auto;
