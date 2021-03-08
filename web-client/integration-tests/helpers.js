@@ -548,6 +548,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
+  test = CerebralTest(presenter);
   test.getSequence = seqName => async obj =>
     await test.runSequence(seqName, obj);
   test.closeSocket = stopSocket;
