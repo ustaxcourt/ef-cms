@@ -1,5 +1,6 @@
 const diff = require('diff-arrays-of-objects');
 const { Case } = require('../../entities/cases/Case');
+const { differenceWith, isEqual } = require('lodash');
 
 /**
  * Identifies hearings to be removed, and issues persistence calls
@@ -23,6 +24,36 @@ const updateHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
       trialSessionId,
+    }),
+  );
+};
+
+/**
+ * Identifies documents which have been updated and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<Promise>} the persistence request promises
+ */
+const updateCaseDocuments = ({ applicationContext, caseToUpdate, oldCase }) => {
+  const updatedDocuments = differenceWith(
+    caseToUpdate.docketEntries,
+    oldCase.docketEntries,
+    isEqual,
+  );
+  const updatedArchivedDocketEntries = differenceWith(
+    caseToUpdate.archivedDocketEntries,
+    oldCase.archivedDocketEntries,
+    isEqual,
+  );
+  return [...updatedDocuments, ...updatedArchivedDocketEntries].map(doc =>
+    applicationContext.getPersistenceGateway().updateDocketEntry({
+      applicationContext,
+      docketEntryId: doc.docketEntryId,
+      docketNumber: caseToUpdate.docketNumber,
+      document: doc,
     }),
   );
 };
@@ -56,19 +87,14 @@ exports.updateCaseAndAssociations = async ({
     .validate()
     .toRawObject();
 
-  const requests = [];
-
-  requests.push(
-    ...updateHearings({
-      applicationContext,
-      caseToUpdate,
-      oldCase: validRawOldCaseEntity,
-    }),
+  const relatedCaseOperations = [updateHearings, updateCaseDocuments];
+  const requests = relatedCaseOperations.map(fn =>
+    fn({ applicationContext, caseToUpdate, oldCase: validRawOldCaseEntity }),
   );
 
   // TODO: hoist logic from persistence method below to this use case helper.
 
-  await Promise.all(requests);
+  await Promise.all(requests.flat());
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

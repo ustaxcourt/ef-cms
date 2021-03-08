@@ -5,6 +5,7 @@ const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { updateCaseAndAssociations } = require('./updateCaseAndAssociations');
 
 describe('updateCaseAndAssociations', () => {
@@ -130,5 +131,44 @@ describe('updateCaseAndAssociations', () => {
       [{ docketNumber, trialSessionId: trialSessionIds[1] }],
       [{ docketNumber, trialSessionId: trialSessionIds[2] }],
     ]);
+  });
+
+  describe.only('documents', () => {
+    it('adds a case documents which have changed', async () => {
+      const { docketNumber } = MOCK_CASE;
+      const oldCase = {
+        ...MOCK_CASE,
+        archivedDocketEntries: [],
+        docketEntries: [],
+      };
+      const caseToUpdate = {
+        ...oldCase,
+        archivedDocketEntries: [MOCK_DOCUMENTS[0], MOCK_DOCUMENTS[1]],
+        docketEntries: [MOCK_DOCUMENTS[0]],
+      };
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(oldCase);
+
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
+      ).toMatchObject({ applicationContext, caseToUpdate, oldCase });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateDocketEntry,
+      ).toHaveBeenCalledTimes(2);
+
+      expect(
+        applicationContext.getPersistenceGateway().updateDocketEntry.mock.calls,
+      ).toMatchObject([
+        [{ docketNumber, trialSessionId: 'hi' }],
+        [{ docketNumber, trialSessionId: 'ho' }],
+      ]);
+    });
   });
 });

@@ -28,29 +28,6 @@ const { fieldsToOmitBeforePersisting } = require('./createCase');
 const { omit, pick } = require('lodash');
 const { updateMessage } = require('../messages/updateMessage');
 
-const updateCaseDocuments = ({ applicationContext, caseToUpdate, oldCase }) => {
-  const updatedDocuments = differenceWith(
-    caseToUpdate.docketEntries,
-    oldCase.docketEntries,
-    isEqual,
-  );
-  const updatedArchivedDocketEntries = differenceWith(
-    caseToUpdate.archivedDocketEntries,
-    oldCase.archivedDocketEntries,
-    isEqual,
-  );
-  return [...updatedDocuments, ...updatedArchivedDocketEntries].map(doc =>
-    client.put({
-      Item: {
-        pk: `case|${caseToUpdate.docketNumber}`,
-        sk: `docket-entry|${doc.docketEntryId}`,
-        ...doc,
-      },
-      applicationContext,
-    }),
-  );
-};
-
 const updateCorrespondence = ({
   applicationContext,
   caseToUpdate,
@@ -210,10 +187,6 @@ const updateUserCaseMappings = ({
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
   const requests = [];
-
-  requests.push(
-    ...updateCaseDocuments({ applicationContext, caseToUpdate, oldCase }),
-  );
 
   requests.push(
     ...updateCorrespondence({ applicationContext, caseToUpdate, oldCase }),
