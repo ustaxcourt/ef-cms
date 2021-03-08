@@ -26,6 +26,10 @@ describe('Trial session migration journey', () => {
     await refreshElasticsearchIndex();
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   it('should use migrated trial session from seed data', async () => {
     // from web-api/storage/fixtures/seed/integration-test-data/migrated-trial-session.json
     test.trialSessionId = '959c4338-0fac-42eb-b0eb-d53b8d0195fb';

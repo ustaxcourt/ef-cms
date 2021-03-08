@@ -27,6 +27,10 @@ describe('Create a work item', () => {
     jest.setTimeout(40000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   let caseDetail;
   let qcMyInboxCountBefore;
   let qcSectionInboxCountBefore;

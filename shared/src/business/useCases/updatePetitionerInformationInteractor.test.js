@@ -15,6 +15,7 @@ const {
 } = require('./updatePetitionerInformationInteractor');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
+const { UserCase } = require('../entities/UserCase');
 jest.mock('./addCoversheetInteractor');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 
@@ -979,6 +980,74 @@ describe('update petitioner contact information on a case', () => {
         docketNumber: MOCK_CASE.docketNumber,
         partyType: PARTY_TYPES.petitioner,
       });
+
+      expect(
+        applicationContext.getUseCaseHelpers().addExistingUserToCase,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should not call createUserForContactPrimary when the new email address is not available', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isEmailAvailable.mockImplementation(() => false);
+
+      applicationContext
+        .getUseCaseHelpers()
+        .addExistingUserToCase.mockImplementation(() => new UserCase(mockCase));
+
+      applicationContext
+        .getUseCaseHelpers()
+        .createUserForContactPrimary.mockImplementation(
+          () => new UserCase(mockCase),
+        );
+
+      await updatePetitionerInformationInteractor({
+        applicationContext,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          email: 'changed-email@example.com',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+        partyType: PARTY_TYPES.petitioner,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().createUserForContactPrimary,
+      ).not.toHaveBeenCalled();
+
+      expect(
+        applicationContext.getUseCaseHelpers().addExistingUserToCase,
+      ).toHaveBeenCalled();
+    });
+
+    it('should call createUserForContactPrimary when the new email address is available', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isEmailAvailable.mockImplementation(() => true);
+
+      applicationContext
+        .getUseCaseHelpers()
+        .addExistingUserToCase.mockImplementation(() => new UserCase(mockCase));
+
+      applicationContext
+        .getUseCaseHelpers()
+        .createUserForContactPrimary.mockImplementation(
+          () => new UserCase(mockCase),
+        );
+
+      await updatePetitionerInformationInteractor({
+        applicationContext,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          email: 'changed-email@example.com',
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+        partyType: PARTY_TYPES.petitioner,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().createUserForContactPrimary,
+      ).toHaveBeenCalled();
 
       expect(
         applicationContext.getUseCaseHelpers().addExistingUserToCase,
