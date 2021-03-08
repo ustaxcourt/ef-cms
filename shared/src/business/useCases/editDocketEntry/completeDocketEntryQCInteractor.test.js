@@ -255,7 +255,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
-  it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
+  it.only('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
     //test first that doc title changes when a. csdate changes or b.attachments value changes
     await completeDocketEntryQCInteractor({
       applicationContext,
