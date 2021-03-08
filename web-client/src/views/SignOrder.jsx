@@ -62,6 +62,7 @@ export const SignOrder = connect(
     };
 
     const moveSig = (sig, x, y) => {
+      console.log('x, y: ', x, y);
       sig.style.top = y + 'px';
       sig.style.left = x + 'px';
     };
@@ -80,15 +81,19 @@ export const SignOrder = connect(
     };
 
     const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
-      setSignatureData({
-        signatureApplied: true,
-        signatureData: { scale, x, y },
-      });
+      const yLimitToPreventServedStampOverlay = 675;
 
-      canvasEl.onmousemove = null;
-      canvasEl.onmousedown = null;
-      sigEl.onmousemove = null;
-      sigEl.onmousedown = null;
+      if (y < yLimitToPreventServedStampOverlay) {
+        setSignatureData({
+          signatureApplied: true,
+          signatureData: { scale, x, y },
+        });
+
+        canvasEl.onmousemove = null;
+        canvasEl.onmousedown = null;
+        sigEl.onmousemove = null;
+        sigEl.onmousedown = null;
+      }
     };
 
     const start = () => {
