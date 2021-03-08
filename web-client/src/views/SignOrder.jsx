@@ -83,17 +83,15 @@ export const SignOrder = connect(
     };
 
     const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
-      if (y < yLimitToPreventServedStampOverlay) {
-        setSignatureData({
-          signatureApplied: true,
-          signatureData: { scale, x, y },
-        });
+      setSignatureData({
+        signatureApplied: true,
+        signatureData: { scale, x, y },
+      });
 
-        canvasEl.onmousemove = null;
-        canvasEl.onmousedown = null;
-        sigEl.onmousemove = null;
-        sigEl.onmousedown = null;
-      }
+      canvasEl.onmousemove = null;
+      canvasEl.onmousedown = null;
+      sigEl.onmousemove = null;
+      sigEl.onmousedown = null;
     };
 
     const start = () => {
@@ -131,7 +129,9 @@ export const SignOrder = connect(
           scrollYOffset +
           (canvasBounds.y - sigParentBounds.y);
 
-        moveSig(sigEl, uiPosX, uiPosY);
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          moveSig(sigEl, uiPosX, uiPosY);
+        }
       };
 
       canvasEl.onmousedown = () => {
