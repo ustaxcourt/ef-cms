@@ -44,7 +44,7 @@ const handleIrsSuperUser = ({
   key,
   petitionDocketEntry,
 }) => {
-  if (petitionDocketEntry && !petitionDocketEntry.servedAt) {
+  if (petitionDocketEntry && !isServed(petitionDocketEntry)) {
     throw new UnauthorizedError(
       'Unauthorized to view case documents until the petition has been served.',
     );

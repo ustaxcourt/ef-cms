@@ -3,6 +3,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
+
 describe('getCaseAssociation', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -14,6 +15,7 @@ describe('getCaseAssociation', () => {
       userId: '123',
     });
   });
+
   it('should return that practitioner is associated', async () => {
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -31,6 +33,7 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
   it('should return that practitioner has pending association', async () => {
     applicationContext
       .getUseCases()
@@ -55,6 +58,7 @@ describe('getCaseAssociation', () => {
       pendingAssociation: true,
     });
   });
+
   it('should return that practitioner not associated', async () => {
     applicationContext
       .getUseCases()
@@ -79,6 +83,7 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
   it('should return that respondent is associated', async () => {
     applicationContext
       .getUseCases()
@@ -103,6 +108,7 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
   it('should return that respondent is not associated', async () => {
     applicationContext
       .getUseCases()
@@ -127,6 +133,7 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
   it('should return that petitioner is associated when the contactPrimaryId is equal to currentUser.userId', async () => {
     applicationContext
       .getUseCases()
@@ -153,6 +160,7 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
   it('should return that petitioner is associated when the contactSecondaryId is equal to currentUser.userId', async () => {
     applicationContext
       .getUseCases()
@@ -182,6 +190,7 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
   it('should return that petitioner is not associated', async () => {
     applicationContext
       .getUseCases()
@@ -215,6 +224,7 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
   it('should return false for isAssociated and pendingAssociation if the user is not an external user', async () => {
     applicationContext
       .getUseCases()
@@ -239,11 +249,13 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
   it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and the petition document is not served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -255,11 +267,13 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
     });
   });
+
   it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and the petition document is served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,

@@ -101,7 +101,7 @@ export const CaseDetailHeaderMenu = connect(
           }}
         >
           <Icon
-            aria-label="create message"
+            aria-label="new tab"
             className="margin-right-1"
             icon="arrow-right"
             size="1x"
@@ -219,7 +219,7 @@ export const CaseDetailHeaderMenu = connect(
             }}
           >
             <Icon
-              aria-label="create pdf upload"
+              aria-label="create correspondence"
               className="margin-right-1 fa-icon-blue"
               icon="mail-bulk"
               size="1x"
@@ -238,7 +238,7 @@ export const CaseDetailHeaderMenu = connect(
           }}
         >
           <Icon
-            aria-label="create order or notice"
+            aria-label="create case note"
             className="margin-right-1"
             icon="sticky-note"
             size="1x"

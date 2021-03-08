@@ -15,6 +15,10 @@ describe('Docket Clerk edits a calendared trial session', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   const trialLocation = `Helena, Montana, ${Date.now()}`;
 
   loginAs(test, 'docketclerk@example.com');

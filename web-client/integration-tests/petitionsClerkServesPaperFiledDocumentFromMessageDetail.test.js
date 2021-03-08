@@ -13,6 +13,10 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
     jest.setTimeout(40000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);

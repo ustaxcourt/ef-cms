@@ -13,6 +13,10 @@ describe('Case Confirmation', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   describe('Petitioner creates a case / Petitionsclerk Sends to Holding Queue / Petitionsclerk then has access to case confirmation', () => {
     loginAs(test, 'petitioner@example.com');
     petitionerChoosesProcedureType(test);

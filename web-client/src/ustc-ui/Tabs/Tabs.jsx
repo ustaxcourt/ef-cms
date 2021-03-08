@@ -63,7 +63,7 @@ export function TabsComponent({
 
   const renderTab = child => {
     const {
-      className,
+      className: childClassName,
       disabled,
       icon,
       iconColor,
@@ -91,7 +91,7 @@ export function TabsComponent({
         <button
           aria-controls={tabContentId}
           aria-selected={isActiveTab}
-          className={className}
+          className={childClassName}
           disabled={disabled}
           id={tabId}
           role="tab"
