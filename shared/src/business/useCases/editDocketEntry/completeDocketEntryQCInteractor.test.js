@@ -253,6 +253,36 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
+  it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
+    await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        addToCoversheet: true,
+        additionalInfo: '123',
+        additionalInfo2: 'abc',
+        certificateOfService: true,
+        certificateOfServiceDate: '1987-08-06T07:53:09.001Z',
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: caseRecord.docketEntries[0].documentTitle,
+        documentType: caseRecord.docketEntries[0].documentType,
+        eventCode: caseRecord.docketEntries[0].eventCode,
+        partyPrimary: true,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after: 'Answer 123 abc',
+      before: 'Answer',
+    });
+  });
+
   it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
