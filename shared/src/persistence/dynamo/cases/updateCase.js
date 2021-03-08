@@ -25,7 +25,6 @@ const { Case } = require('../../../business/entities/cases/Case');
 const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 const { differenceWith, isEqual } = require('lodash');
 const { fieldsToOmitBeforePersisting } = require('./createCase');
-const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
 const { omit, pick } = require('lodash');
 const { updateMessage } = require('../messages/updateMessage');
 
@@ -232,12 +231,7 @@ const updateUserCaseMappings = ({
  * @param {object} providers.caseToUpdate the case data to update
  * @returns {Promise} the promise of the persistence calls
  */
-exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
-  const oldCase = await getCaseByDocketNumber({
-    applicationContext,
-    docketNumber: caseToUpdate.docketNumber,
-  });
-
+exports.updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
   const requests = [];
 
   requests.push(
