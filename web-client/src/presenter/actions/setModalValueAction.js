@@ -1,13 +1,12 @@
 import { state } from 'cerebral';
 
 /**
- * setup the state for the start case wizard
+ * sets the state.modal to the props.value passed in
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
  */
-export const chooseStartCaseWizardStepAction = ({ props, store }) => {
-  store.set(state.wizardStep, props.wizardStep);
-  store.set(state.form.wizardStep, props.step);
+export const setModalValueAction = ({ props, store }) => {
+  store.set(state.modal[props.key], props.value);
 };
