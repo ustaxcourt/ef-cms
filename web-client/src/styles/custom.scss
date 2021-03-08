@@ -1129,8 +1129,13 @@ hr.lighter {
     padding: 20px;
     border: 1px solid #eee;
     margin: auto;
-    background-color: color($theme-color-secondary-dark);
+    margin-top: -60px;
+    background-color: $color-error;
+    &:hover {
+      background-color: color($theme-color-secondary-dark);
+    }
     font-weight: $font-bold;
+    overflow-y: overlay;
     text-align: center;
   }
   #sign-pdf-canvas {
@@ -1138,10 +1143,6 @@ hr.lighter {
     margin: auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
-}
-
-#parent {
-  display: flex;
 }
 
 .ql-editor {
