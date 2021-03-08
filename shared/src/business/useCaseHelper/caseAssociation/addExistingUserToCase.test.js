@@ -118,6 +118,7 @@ describe('addExistingUserToCase', () => {
       contactPrimary: {
         contactId: USER_ID, // contactId was updated to new userId
         email: UPDATED_EMAIL,
+        hasEAccess: true,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
     });

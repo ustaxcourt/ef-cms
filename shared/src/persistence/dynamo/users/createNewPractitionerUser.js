@@ -1,6 +1,6 @@
 const client = require('../../dynamodbClientService');
 
-const updateUserRecords = async ({
+exports.updateUserRecords = async ({
   applicationContext,
   updatedUser,
   userId,
@@ -17,7 +17,7 @@ const updateUserRecords = async ({
 
   await client.put({
     Item: {
-      pk: `${updatedUser.role}|${updatedUser.name}`,
+      pk: `${updatedUser.role}|${updatedUser.name.toUpperCase()}`,
       sk: `user|${userId}`,
     },
     applicationContext,
@@ -25,7 +25,7 @@ const updateUserRecords = async ({
 
   await client.put({
     Item: {
-      pk: `${updatedUser.role}|${updatedUser.barNumber}`,
+      pk: `${updatedUser.role}|${updatedUser.barNumber.toUpperCase()}`,
       sk: `user|${userId}`,
     },
     applicationContext,
@@ -70,7 +70,7 @@ exports.createNewPractitionerUser = async ({ applicationContext, user }) => {
     })
     .promise();
 
-  const updatedUser = await updateUserRecords({
+  const updatedUser = await exports.updateUserRecords({
     applicationContext,
     updatedUser: user,
     userId,

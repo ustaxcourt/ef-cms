@@ -8,6 +8,11 @@ describe('Docket clerk saves and then edits a paper filing', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
+
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
