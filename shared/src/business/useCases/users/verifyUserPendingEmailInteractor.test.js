@@ -14,7 +14,11 @@ describe('verifyUserPendingEmailInteractor', () => {
   let userCases;
 
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
-
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  });
   beforeEach(() => {
     mockUser = {
       ...validUser,
@@ -528,7 +532,8 @@ describe('verifyUserPendingEmailInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
-        .mockReturnValueOnce(userCases[1]);
+        .mockReturnValueOnce(userCases[1])
+        .mockReturnValueOnce(MOCK_CASE);
 
       await expect(
         updatePetitionerCases({
@@ -596,7 +601,7 @@ describe('verifyUserPendingEmailInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
+        .getCaseByDocketNumber.mockReturnValue(userCases[0]);
 
       await updatePetitionerCases({
         applicationContext,

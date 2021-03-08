@@ -568,7 +568,7 @@ const applicationContext = createTestApplicationContext();
   applicationContextForClient.
 */
 const applicationContextForClient = {};
-Object.entries(applicationContext).map(([key, value]) => {
+Object.entries(applicationContext).forEach(([key, value]) => {
   if (typeof value === 'function') {
     applicationContextForClient[key] = value;
   }
