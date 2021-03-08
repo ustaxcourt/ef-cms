@@ -4,6 +4,8 @@ import { deleteCorrespondenceDocumentSequence } from './deleteCorrespondenceDocu
 import { presenter } from '../presenter-mock';
 
 describe('deleteCorrespondenceDocumentSequence', () => {
+  let test;
+
   const mockCorrespondence1 = {
     correspondenceId: '1234',
     documentTitle: 'a lovely correspondence',
@@ -12,8 +14,6 @@ describe('deleteCorrespondenceDocumentSequence', () => {
     correspondenceId: '2345',
     documentTitle: 'a lovely second correspondence',
   };
-
-  let test;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
