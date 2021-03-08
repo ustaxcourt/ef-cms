@@ -61,11 +61,13 @@ describe('completeDocketEntryQCInteractor', () => {
         {
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info 2',
+          certificateOfService: true,
+          certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
           docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          filedBy: 'Test Petitioner',
+          filedBy: 'Petr. Guy Fieri',
           index: 42,
           isOnDocketRecord: true,
           servedAt: '2019-08-25T05:00:00.000Z',
@@ -254,19 +256,14 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
+    //test first that doc title changes when a. csdate changes or b.attachments value changes
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
-        addToCoversheet: true,
-        additionalInfo: '123',
-        additionalInfo2: 'abc',
+        ...caseRecord.docketEntries[0],
         certificateOfService: true,
-        certificateOfServiceDate: '1987-08-06T07:53:09.001Z',
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: caseRecord.docketEntries[0].documentTitle,
-        documentType: caseRecord.docketEntries[0].documentType,
-        eventCode: caseRecord.docketEntries[0].eventCode,
+        certificateOfServiceDate: '2019-08-06T07:53:09.001Z',
+        filedBy: 'Petr. Guy Fieri',
         partyPrimary: true,
       },
     });
