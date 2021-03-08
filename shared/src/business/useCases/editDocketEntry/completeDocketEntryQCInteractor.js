@@ -43,12 +43,7 @@ const getNeedsNewCoversheet = ({ currentDocketEntry, updatedDocketEntry }) => {
   const documentTitleUpdated =
     getDocumentTitleWithAdditionalInfo({ docketEntry: currentDocketEntry }) !==
     getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocketEntry });
-  // receivedAt
-  // filedBy
-  // certificateOfService (boolean value only, not date)
-  // additionalInfo
-  // addToCoversheet
-  // documentTitle
+
   return (
     receivedAtUpdated ||
     filedByUpdated ||
