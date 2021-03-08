@@ -13,10 +13,12 @@ const {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../../entities/EntityConstants');
-
 const {
   generateNoticeOfDocketChangePdf,
 } = require('../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf');
+const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../utilities/getDocumentTitleWithAdditionalInfo');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -29,6 +31,33 @@ const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getDocumentTitle } = require('../../utilities/getDocumentTitle');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
+
+const getNeedsNewCoversheet = ({ currentDocketEntry, updatedDocketEntry }) => {
+  const receivedAtUpdated =
+    currentDocketEntry.receivedAt !== updatedDocketEntry.receivedAt;
+  const filedByUpdated =
+    currentDocketEntry.filedBy !== updatedDocketEntry.filedBy;
+  const certificateOfServiceUpdated =
+    currentDocketEntry.certificateOfService !==
+    updatedDocketEntry.certificateOfService;
+  const documentTitleUpdated =
+    getDocumentTitleWithAdditionalInfo({ docketEntry: currentDocketEntry }) !==
+    getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocketEntry });
+  // receivedAt
+  // filedBy
+  // certificateOfService (boolean value only, not date)
+  // additionalInfo
+  // addToCoversheet
+  // documentTitle
+  return (
+    receivedAtUpdated ||
+    filedByUpdated ||
+    certificateOfServiceUpdated ||
+    documentTitleUpdated
+  );
+};
+
+exports.getNeedsNewCoversheet = getNeedsNewCoversheet;
 
 /**
  * completeDocketEntryQCInteractor
@@ -132,9 +161,10 @@ exports.completeDocketEntryQCInteractor = async ({
     docketEntry: currentDocketEntry,
   });
 
-  const needsNewCoversheet =
-    updatedDocumentTitle !== currentDocumentTitle ||
-    updatedDocketEntry.addToCoversheet;
+  const needsNewCoversheet = getNeedsNewCoversheet({
+    currentDocketEntry,
+    updatedDocketEntry,
+  });
 
   const needsNoticeOfDocketChange =
     updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||

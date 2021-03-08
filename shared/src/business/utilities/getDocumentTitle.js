@@ -17,14 +17,13 @@ const getDocumentTitle = ({ applicationContext, docketEntry }) => {
     formatDocketEntry(applicationContext, docketEntry),
   );
 
-  if (docketEntry.addToCoversheet) {
-    documentTitle = `${documentTitle} ${
-      docketEntry.additionalInfo || ''
-    } ${filingsAndProceedings} ${docketEntry.additionalInfo2 || ''}`
-      .trim()
-      .replace('   ', ' ')
-      .replace('  ', ' ');
-  }
+  documentTitle = `${documentTitle} ${
+    docketEntry.additionalInfo || ''
+  } ${filingsAndProceedings} ${docketEntry.additionalInfo2 || ''}`
+    .trim()
+    .replace('   ', ' ')
+    .replace('  ', ' ');
+
   return documentTitle;
 };
 
