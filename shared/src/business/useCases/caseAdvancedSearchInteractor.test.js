@@ -86,6 +86,31 @@ describe('caseAdvancedSearchInteractor', () => {
     expect(results).toEqual([]);
   });
 
+  it('filters out sealed cases that do not have a sealedDate for non associated, non authorized users', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.irsPractitioner,
+      userId: 'b45a0633-acda-499e-8fab-8785baeafed7',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .caseAdvancedSearch.mockResolvedValue([
+        {
+          contactPrimary: {},
+          docketNumber: '101-20',
+          isSealed: true,
+          userId: '28e908f6-edf0-4289-9372-5b8fe8d2265c',
+        },
+      ]);
+
+    const results = await caseAdvancedSearchInteractor({
+      applicationContext,
+      petitionerName: 'test person',
+    });
+
+    expect(results).toEqual([]);
+  });
+
   it('returns no more than MAX_SEARCH_RESULTS', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsPractitioner,
