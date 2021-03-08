@@ -116,6 +116,8 @@ export const SignOrder = connect(
 
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
+        const canvasBounds = canvasEl.getBoundingClientRect();
+
         const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
         const scrollYOffset = window.scrollY;
 
