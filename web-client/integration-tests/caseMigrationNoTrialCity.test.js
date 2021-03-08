@@ -16,6 +16,10 @@ describe('migrated case that is missing a preferred trial city journey', () => {
     seededDocketNumber = '1338-20';
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'docketclerk@example.com');
 
   it('verify the case is blocked because it has a deadline', async () => {

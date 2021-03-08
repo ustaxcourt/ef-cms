@@ -19,6 +19,10 @@ describe('Adds correspondence to a case', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('create case', async () => {
     caseDetail = await uploadPetition(test);

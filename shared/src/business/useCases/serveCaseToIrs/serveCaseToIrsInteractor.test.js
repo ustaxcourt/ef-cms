@@ -62,8 +62,8 @@ describe('serveCaseToIrsInteractor', () => {
   let mockCase;
 
   beforeEach(() => {
-    mockCase = MOCK_CASE;
-    mockCase.docketEntries[0].workItem = MOCK_WORK_ITEM;
+    mockCase = { ...MOCK_CASE };
+    mockCase.docketEntries[0].workItem = { ...MOCK_WORK_ITEM };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
 
     applicationContext.getStorageClient.mockReturnValue({
@@ -142,7 +142,7 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    mockCase = MOCK_CASE;
+    mockCase = { ...MOCK_CASE };
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -167,7 +167,7 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    mockCase = MOCK_CASE;
+    mockCase = { ...MOCK_CASE };
 
     await serveCaseToIrsInteractor({
       applicationContext,
