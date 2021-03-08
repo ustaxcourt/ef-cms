@@ -35,6 +35,8 @@ export const SignOrder = connect(
     signatureData,
     skipSigningOrderSequence,
   }) {
+    const yLimitToPreventServedStampOverlay = 675;
+
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
     const signatureWarningRef = useRef(null);
@@ -82,8 +84,6 @@ export const SignOrder = connect(
     };
 
     const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
-      const yLimitToPreventServedStampOverlay = 675;
-
       if (y < yLimitToPreventServedStampOverlay) {
         setSignatureData({
           signatureApplied: true,
@@ -105,7 +105,16 @@ export const SignOrder = connect(
       let x;
       let y;
 
-      sigWarnEl.style.top = canvasBounds.y - 50 + 'px';
+      // canvas width / 2 - width of signature warning
+
+      console.log(
+        'canvas ',
+        canvasBounds.width,
+        ' signature warning ',
+        sigWarnEl.getBoundingClientRect().width,
+      );
+
+      sigWarnEl.style.left = canvasBounds.width + 'px';
 
       setSignatureData({
         signatureApplied: true,
