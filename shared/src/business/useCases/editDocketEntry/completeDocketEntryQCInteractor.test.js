@@ -70,6 +70,7 @@ describe('completeDocketEntryQCInteractor', () => {
           filedBy: 'Petr. Guy Fieri',
           index: 42,
           isOnDocketRecord: true,
+          receivedAt: '2019-08-25T05:00:00.000Z',
           servedAt: '2019-08-25T05:00:00.000Z',
           servedParties: [{ name: 'Bernard Lowe' }],
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -255,8 +256,7 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
-  it.only('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
-    //test first that doc title changes when a. csdate changes or b.attachments value changes
+  it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
@@ -275,8 +275,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
-      after: 'Answer 123 abc',
-      before: 'Answer',
+      after: 'Answer additional info (C/S 08/06/19) additional info 2',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
   });
 
