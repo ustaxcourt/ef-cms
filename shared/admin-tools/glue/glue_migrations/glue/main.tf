@@ -5,10 +5,6 @@ resource "aws_s3_bucket" "job_scripts" {
   force_destroy = true
 }
 
-resource "aws_s3_bucket" "python_libs" {
-  bucket_prefix = "aws-glue-efcms-python-libs"
-  force_destroy = true
-}
 
 resource "aws_s3_bucket" "job_temp_files" {
   bucket_prefix = "aws-glue-efcms-temp"
@@ -76,24 +72,6 @@ resource "aws_s3_bucket_object" "python_mock_emails" {
   etag   = filemd5("${path.module}/python_scripts/mock_emails.py")
 }
 
-resource "aws_s3_bucket_object" "python_lib_dateutil" {
-  bucket = aws_s3_bucket.python_libs.id
-  key    = "dateutil.zip"
-  source = "${path.module}/python_lib/dateutil.zip"
-}
-
-resource "aws_s3_bucket_object" "python_lib_faker" {
-  bucket = aws_s3_bucket.python_libs.id
-  key    = "faker.zip"
-  source = "${path.module}/python_lib/faker.zip"
-}
-
-resource "aws_s3_bucket_object" "python_lib_text_unidecode" {
-  bucket = aws_s3_bucket.python_libs.id
-  key    = "text_unidecode.zip"
-  source = "${path.module}/python_lib/text_unidecode.zip"
-}
-
 resource "aws_glue_job" "mock_emails" {
   name              = "mock_emails"
   role_arn          = aws_iam_role.glue_role.arn
@@ -108,7 +86,6 @@ resource "aws_glue_job" "mock_emails" {
     "--external_role_arn" = var.external_role_arn
     "--TempDir"           = "s3://${aws_s3_bucket.job_temp_files.bucket}",
     "--enable-metrics"    = "true",
-    "--extra-py-files"    = "s3://${aws_s3_bucket.python_libs.bucket}/${aws_s3_bucket_object.python_lib_dateutil.id}, s3://${aws_s3_bucket.python_libs.bucket}/${aws_s3_bucket_object.python_lib_faker.id}, s3://${aws_s3_bucket.python_libs.bucket}/${aws_s3_bucket_object.python_lib_text_unidecode.id}"
   }
 
   command {

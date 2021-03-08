@@ -58,6 +58,10 @@ function createCaseWithCaption(captionString) {
         jest.setTimeout(30000);
       });
 
+      afterAll(() => {
+        test.closeSocket();
+      });
+
       loginAs(testClient, 'petitioner@example.com');
 
       it('Creates the case', async () => {

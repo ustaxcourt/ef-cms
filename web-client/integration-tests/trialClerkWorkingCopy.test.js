@@ -16,8 +16,12 @@ const test = setupTest();
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('Trial Clerk Views Trial Session Working Copy', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   const trialLocation = `Boise, Idaho, ${Date.now()}`;

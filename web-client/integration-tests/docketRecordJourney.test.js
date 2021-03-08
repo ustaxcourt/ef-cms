@@ -32,6 +32,10 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile, 'Birmingham, Alabama', false);
   it('verifies docket entries exist for petition for an unserved case', async () => {
