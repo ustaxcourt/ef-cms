@@ -65,7 +65,6 @@ export const SignOrder = connect(
     };
 
     const moveSig = (sig, x, y) => {
-      console.log('x, y: ', x, y);
       sig.style.top = y + 'px';
       sig.style.left = x + 'px';
     };
@@ -105,19 +104,7 @@ export const SignOrder = connect(
       let x;
       let y;
 
-      // canvas width / 2 - width of signature warning
       const sigWarnWidth = sigWarnEl.getBoundingClientRect().width;
-
-      console.table(
-        'canvasBounds.width',
-        canvasBounds.width,
-        'canvasBounds.x',
-        canvasBounds.x,
-        ' signature warning rect width',
-        sigWarnEl.getBoundingClientRect().width,
-        'sigWarnWidth',
-        sigWarnWidth,
-      );
 
       sigWarnEl.style.left =
         canvasBounds.x + canvasBounds.width / 2 - sigWarnWidth / 2 - 42 + 'px';
@@ -129,7 +116,6 @@ export const SignOrder = connect(
 
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
-        const canvasBounds = canvasEl.getBoundingClientRect();
         const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
         const scrollYOffset = window.scrollY;
 
