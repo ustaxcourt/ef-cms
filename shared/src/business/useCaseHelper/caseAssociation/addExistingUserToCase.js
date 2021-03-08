@@ -49,6 +49,7 @@ exports.addExistingUserToCase = async ({
     contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     contactPrimary.email = email;
     contactPrimary.contactId = userToAdd.userId;
+    contactPrimary.hasEAccess = true;
   } else {
     throw new Error(`no contact primary found with that user name of ${name}`);
   }

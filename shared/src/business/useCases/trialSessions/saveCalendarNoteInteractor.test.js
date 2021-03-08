@@ -32,9 +32,9 @@ describe('saveCalendarNotes', () => {
       userId: '8675309b-18d0-43ec-bafb-654e83405411',
     };
 
-    mockTrialSession = MOCK_TRIAL;
+    mockTrialSession = { ...MOCK_TRIAL };
 
-    mockCase = MOCK_CASE;
+    mockCase = { ...MOCK_CASE };
 
     applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext
@@ -156,7 +156,7 @@ describe('saveCalendarNotes', () => {
           caseOrder: [
             {
               calendarNotes: 'just a hearing note',
-              docketNumber: mockCase.docketNumber,
+              docketNumber: MOCK_CASE.docketNumber,
             },
             {
               calendarNotes: 'another hearing note',

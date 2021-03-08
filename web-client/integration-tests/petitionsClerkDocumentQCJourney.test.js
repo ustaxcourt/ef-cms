@@ -18,6 +18,10 @@ describe('Petitions Clerk Document QC Journey', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   const createdCases = [];
 
   const caseCreationCount = 3;

@@ -60,6 +60,10 @@ describe('docket clerk order advanced search', () => {
     test.draftOrders = [];
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   describe('performing data entry', () => {
     loginAs(test, 'petitioner@example.com');
     it('create case', async () => {

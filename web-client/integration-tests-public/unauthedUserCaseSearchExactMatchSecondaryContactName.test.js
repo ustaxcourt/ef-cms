@@ -49,6 +49,10 @@ function createCaseWithSecondaryName(name) {
         jest.setTimeout(30000);
       });
 
+      afterAll(() => {
+        test.closeSocket();
+      });
+
       loginAs(testClient, 'petitioner@example.com');
 
       it('Create case', async () => {
