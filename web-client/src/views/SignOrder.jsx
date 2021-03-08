@@ -35,6 +35,8 @@ export const SignOrder = connect(
     signatureData,
     skipSigningOrderSequence,
   }) {
+    const yLimitToPreventServedStampOverlay = 675;
+
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 
@@ -105,6 +107,7 @@ export const SignOrder = connect(
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
         const canvasBounds = canvasEl.getBoundingClientRect();
+
         const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
         const scrollYOffset = window.scrollY;
 
@@ -118,7 +121,9 @@ export const SignOrder = connect(
           scrollYOffset +
           (canvasBounds.y - sigParentBounds.y);
 
-        moveSig(sigEl, uiPosX, uiPosY);
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          moveSig(sigEl, uiPosX, uiPosY);
+        }
       };
 
       canvasEl.onmousedown = () => {
@@ -216,6 +221,9 @@ export const SignOrder = connect(
                   id="sign-pdf-canvas"
                   ref={canvasRef}
                 ></canvas>
+                <span id="signature-warning">
+                  You cannot apply a signature here.
+                </span>
               </div>
             </div>
           </div>
