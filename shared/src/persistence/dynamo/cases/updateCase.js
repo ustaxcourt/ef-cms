@@ -167,29 +167,6 @@ const updatePrivatePractitioners = ({
   return [...deletePractitionerRequests, ...updatePractitionerRequests];
 };
 
-const deleteOldHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
-  const oldHearings = oldCase.hearings.map(trialSession =>
-    omit(trialSession, ['pk', 'sk']),
-  );
-
-  const { removed: deletedHearings } = diff(
-    oldHearings,
-    caseToUpdate.hearings,
-    'trialSessionId',
-  );
-
-  const deletedHearingRequests = deletedHearings.map(hearing =>
-    client.delete({
-      applicationContext,
-      key: {
-        pk: `case|${caseToUpdate.docketNumber}`,
-        sk: `hearing|${hearing.trialSessionId}`,
-      },
-    }),
-  );
-  return deletedHearingRequests;
-};
-
 const updateUserCaseMappings = ({
   applicationContext,
   caseToUpdate,
@@ -252,10 +229,6 @@ exports.updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
       caseToUpdate,
       oldCase,
     }),
-  );
-
-  requests.push(
-    ...deleteOldHearings({ applicationContext, caseToUpdate, oldCase }),
   );
 
   if (
