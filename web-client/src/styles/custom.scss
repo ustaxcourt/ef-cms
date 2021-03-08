@@ -1127,12 +1127,13 @@ hr.lighter {
     display: block;
     width: 612px;
     padding: 20px;
-    border: 1px solid #eee;
     margin: auto;
     margin-top: -60px;
-    background-color: $color-error;
+    background-color: transparent;
+    color: transparent;
     &:hover {
-      background-color: color($theme-color-secondary-dark);
+      background-color: $color-error;
+      color: black;
     }
     font-weight: $font-bold;
     overflow-y: overlay;

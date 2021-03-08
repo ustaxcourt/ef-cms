@@ -218,20 +218,18 @@ export const SignOrder = connect(
                   <br />
                   {pdfForSigning.nameForSigningLine2}
                 </span>
-                <div id="parent">
-                  <canvas
-                    className={
-                      !signatureData && signatureApplied
-                        ? 'cursor-grabbing'
-                        : 'cursor-grab'
-                    }
-                    id="sign-pdf-canvas"
-                    ref={canvasRef}
-                  ></canvas>
-                  <span id="signature-warning" ref={signatureWarningRef}>
-                    You cannot apply a signature here.
-                  </span>
-                </div>
+                <canvas
+                  className={
+                    !signatureData && signatureApplied
+                      ? 'cursor-grabbing'
+                      : 'cursor-grab'
+                  }
+                  id="sign-pdf-canvas"
+                  ref={canvasRef}
+                ></canvas>
+                <span id="signature-warning" ref={signatureWarningRef}>
+                  You cannot apply a signature here.
+                </span>
               </div>
             </div>
           </div>
