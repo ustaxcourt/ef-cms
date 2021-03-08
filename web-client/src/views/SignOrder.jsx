@@ -39,7 +39,6 @@ export const SignOrder = connect(
 
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
-    const signatureWarningRef = useRef(null);
 
     const renderPDFPage = pageNumber => {
       const canvas = canvasRef.current;
@@ -97,15 +96,8 @@ export const SignOrder = connect(
     const start = () => {
       const sigEl = signatureRef.current;
       const canvasEl = canvasRef.current;
-      const sigWarnEl = signatureWarningRef.current;
-      const canvasBounds = canvasEl.getBoundingClientRect();
       let x;
       let y;
-
-      const sigWarnWidth = sigWarnEl.getBoundingClientRect().width;
-
-      sigWarnEl.style.left =
-        canvasBounds.x + canvasBounds.width / 2 - sigWarnWidth / 2 - 42 + 'px';
 
       setSignatureData({
         signatureApplied: true,
@@ -229,7 +221,7 @@ export const SignOrder = connect(
                   id="sign-pdf-canvas"
                   ref={canvasRef}
                 ></canvas>
-                <span id="signature-warning" ref={signatureWarningRef}>
+                <span id="signature-warning">
                   You cannot apply a signature here.
                 </span>
               </div>
