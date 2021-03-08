@@ -26,6 +26,10 @@ describe('Unauthed user views todays opinions', () => {
     test.draftOrders = [];
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(testClient, 'petitioner@example.com');
   it('Create test case to add an opinion to', async () => {
     const caseDetail = await uploadPetition(testClient);

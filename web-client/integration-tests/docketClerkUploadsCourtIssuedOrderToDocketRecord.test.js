@@ -22,6 +22,10 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
     test.draftOrders = [];
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);

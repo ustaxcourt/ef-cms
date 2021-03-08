@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import DocketEntry from '../../../../shared/src/business/entities/DocketEntry';
 
 export const formattedOpenCases = (get, applicationContext) => {
   const { formatCase } = applicationContext.getUtilities();
@@ -151,7 +150,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
       entry && systemGeneratedEventCodes.includes(entry.eventCode);
     const hasCourtIssuedDocument = entry && entry.isCourtIssuedDocument;
     const hasServedCourtIssuedDocument =
-      hasCourtIssuedDocument && !!entry.servedAt;
+      hasCourtIssuedDocument &&
+      applicationContext.getUtilities().isServed(entry);
     const hasUnservableCourtIssuedDocument =
       entry && UNSERVABLE_EVENT_CODES.includes(entry.eventCode);
 
@@ -217,7 +217,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       ),
       isInitialDocument,
       isLegacySealed: entry.isLegacySealed,
-      isServed: DocketEntry.isServed(entry),
+      isServed: applicationContext.getUtilities().isServed(entry),
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
@@ -256,7 +256,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && DocketEntry.isServed(d),
+    d => d.pending && applicationContext.getUtilities().isServed(d),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
