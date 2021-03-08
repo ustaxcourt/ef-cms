@@ -117,6 +117,7 @@ module.exports = {
     'irsPractitioners.L.M.userId.S': {
       type: 'text',
     },
+    'isSealed.BOOL': { type: 'boolean' },
     'pk.S': {
       type: 'text',
     },
