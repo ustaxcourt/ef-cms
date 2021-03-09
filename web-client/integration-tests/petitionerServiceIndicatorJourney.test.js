@@ -29,7 +29,7 @@ describe('Petitioner Service Indicator Journey', () => {
   // verify it is paper
 
   loginAs(test, 'docketclerk@example.com');
-  it('Docket Clerk verifies petitioner service indicator', async () => {
+  it('Docket Clerk verifies petitioner service indicator is paper', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -75,7 +75,7 @@ describe('Petitioner Service Indicator Journey', () => {
   // verify it is electronic
 
   loginAs(test, 'docketclerk@example.com');
-  it('Docket Clerk verifies petitioner service indicator', async () => {
+  it('Docket Clerk verifies petitioner service indicator is now electronic', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -90,7 +90,7 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   loginAs(test, 'irsPractitioner@example.com');
-  it('IRS Practitioner verifies service indicator', async () => {
+  it('IRS Practitioner verifies service indicator is electronic', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -106,7 +106,7 @@ describe('Petitioner Service Indicator Journey', () => {
 
   // seal address
   loginAs(test, 'docketclerk@example.com');
-  it('Docket Clerk seals address and verifies petitioner service indicator', async () => {
+  it('Docket Clerk seals address and verifies petitioner service indicator is electronic', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -132,7 +132,7 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   loginAs(test, 'irsPractitioner@example.com');
-  it('IRS Practitioner verifies service indicator for contact with sealed address', async () => {
+  it('IRS Practitioner verifies service indicator for contact is electronic, with sealed address', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -154,7 +154,7 @@ describe('Petitioner Service Indicator Journey', () => {
   // verify None for irsPractitioner
 
   loginAs(test, 'docketclerk@example.com');
-  it('Docket Clerk verifies petitioner service indicator', async () => {
+  it('Docket Clerk verifies petitioner service indicator shows none, with sealed address', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -169,7 +169,7 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   loginAs(test, 'irsPractitioner1@example.com'); // unassociated practitioner
-  it('IRS Practitioner verifies service indicator for contact with sealed address', async () => {
+  it('IRS Practitioner verifies service indicator for contact shows none with sealed address', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -185,7 +185,7 @@ describe('Petitioner Service Indicator Journey', () => {
 
   // explicitly set petitioner to Paper
   loginAs(test, 'docketclerk@example.com');
-  it('Udpates petitioner service indicator', async () => {
+  it('Updates petitioner service indicator to paper', async () => {
     await test.runSequence('gotoEditPetitionerInformationSequence', {
       docketNumber: test.docketNumber,
     });
@@ -210,7 +210,7 @@ describe('Petitioner Service Indicator Journey', () => {
 
   // verify Paper for irsPractitioner
   loginAs(test, 'irsPractitioner@example.com');
-  it('IRS Practitioner verifies service indicator for contact with sealed address', async () => {
+  it('IRS Practitioner verifies service indicator for contact is paper, with sealed address', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -226,7 +226,7 @@ describe('Petitioner Service Indicator Journey', () => {
 
   // remove private practitioner
   loginAs(test, 'docketclerk@example.com');
-  it('Removes private practitioner from case', async () => {
+  it('Removes private practitioner from case and check service indicator is paper', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -251,7 +251,7 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   loginAs(test, 'irsPractitioner@example.com');
-  it('IRS Practitioner verifies service indicator for contact with sealed address', async () => {
+  it('IRS Practitioner verifies service indicator for contact is paper, with sealed address', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
