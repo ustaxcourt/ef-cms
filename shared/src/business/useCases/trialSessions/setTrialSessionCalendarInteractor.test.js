@@ -31,6 +31,11 @@ describe('setTrialSessionCalendarInteractor', () => {
     termYear: '2025',
     trialLocation: 'Birmingham, Alabama',
   };
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  });
 
   beforeEach(() => {
     user = new User({
