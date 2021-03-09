@@ -1,7 +1,11 @@
 const diff = require('diff-arrays-of-objects');
+const {
+  PrivatePractitioner,
+} = require('../../business/entities/PrivatePractitioner');
 const { Case } = require('../../entities/cases/Case');
 const { Correspondence } = require('../../entities/Correspondence');
 const { DocketEntry } = require('../../entities/DocketEntry');
+const { IrsPractitioner } = require('../../business/entities/IrsPractitioner');
 
 /**
  * Identifies documents which have been updated and issues persistence calls
@@ -123,6 +127,108 @@ const updateHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
 };
 
 /**
+ * Identifies IRS practitioners to be updated or removed, and issues persistence calls
+ * where needed
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated IRS practitioner data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<Promise>} the persistence request promises
+ */
+const updateIrsPractitioners = ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const {
+    added: addedIrsPractitioners,
+    removed: deletedIrsPractitioners,
+    updated: updatedIrsPractitioners,
+  } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
+
+  const deletePractitionerRequests = deletedIrsPractitioners.map(practitioner =>
+    applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+      userId: practitioner.userId,
+    }),
+  );
+
+  const validIrsPractitioners = IrsPractitioner.validateRawCollection(
+    [...addedIrsPractitioners, ...updatedIrsPractitioners],
+    { applicationContext },
+  );
+
+  const updatePractitionerRequests = validIrsPractitioners.map(practitioner =>
+    applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+      practitioner,
+      userId: practitioner.userId,
+    }),
+  );
+
+  return [...deletePractitionerRequests, ...updatePractitionerRequests];
+};
+
+/**
+ * Identifies private practitioners to be updated or removed, and issues persistence calls
+ * where needed
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated private practitioner data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<Promise>} the persistence request promises
+ */
+const updatePrivatePractitioners = ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const {
+    added: addedPrivatePractitioners,
+    removed: deletedPrivatePractitioners,
+    updated: updatedPrivatePractitioners,
+  } = diff(
+    oldCase.privatePractitioners,
+    caseToUpdate.privatePractitioners,
+    'userId',
+  );
+
+  const deletePractitionerRequests = deletedPrivatePractitioners.map(
+    practitioner =>
+      applicationContext
+        .getPersistenceGateway()
+        .removePrivatePractitionerOnCase({
+          applicationContext,
+          docketNumber: caseToUpdate.docketNumber,
+          userId: practitioner.userId,
+        }),
+  );
+
+  const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
+    [...addedPrivatePractitioners, ...updatedPrivatePractitioners],
+    { applicationContext },
+  );
+
+  const updatePractitionerRequests = validPrivatePractitioners.map(
+    practitioner =>
+      applicationContext
+        .getPersistenceGateway()
+        .updatePrivatePractitionerOnCase({
+          applicationContext,
+          docketNumber: caseToUpdate.docketNumber,
+          practitioner,
+          userId: practitioner.userId,
+        }),
+  );
+
+  return [...deletePractitionerRequests, ...updatePractitionerRequests];
+};
+
+/**
  * updateCaseAndAssociations
  *
  * @param {object} providers the providers object
@@ -155,6 +261,8 @@ exports.updateCaseAndAssociations = async ({
     updateCaseDocuments,
     updateCorrespondence,
     updateHearings,
+    updateIrsPractitioners,
+    updatePrivatePractitioners,
   ];
 
   const requests = RELATED_CASE_OPERATIONS.map(fn =>

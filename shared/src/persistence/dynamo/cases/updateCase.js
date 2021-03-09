@@ -3,6 +3,7 @@ const diff = require('diff-arrays-of-objects');
 const {
   getCaseDeadlinesByDocketNumber,
 } = require('../caseDeadlines/getCaseDeadlinesByDocketNumber');
+
 const {
   updateWorkItemAssociatedJudge,
 } = require('../workitems/updateWorkItemAssociatedJudge');
@@ -26,93 +27,6 @@ const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 const { fieldsToOmitBeforePersisting } = require('./createCase');
 const { omit, pick } = require('lodash');
 const { updateMessage } = require('../messages/updateMessage');
-
-const updateIrsPractitioners = ({
-  applicationContext,
-  caseToUpdate,
-  oldCase,
-}) => {
-  const oldIrsPractitioners = oldCase.irsPractitioners.map(irsPractitioner =>
-    omit(irsPractitioner, ['pk', 'sk']),
-  );
-  const {
-    added: addedIrsPractitioners,
-    removed: deletedIrsPractitioners,
-    updated: updatedIrsPractitioners,
-  } = diff(oldIrsPractitioners, caseToUpdate.irsPractitioners, 'userId');
-
-  const deletePractitionerRequests = deletedIrsPractitioners.map(practitioner =>
-    client.delete({
-      applicationContext,
-      key: {
-        pk: `case|${caseToUpdate.docketNumber}`,
-        sk: `irsPractitioner|${practitioner.userId}`,
-      },
-    }),
-  );
-
-  const updatePractitionerRequests = [
-    ...addedIrsPractitioners,
-    ...updatedIrsPractitioners,
-  ].map(practitioner =>
-    client.put({
-      Item: {
-        pk: `case|${caseToUpdate.docketNumber}`,
-        sk: `irsPractitioner|${practitioner.userId}`,
-        ...practitioner,
-      },
-      applicationContext,
-    }),
-  );
-
-  return [...deletePractitionerRequests, ...updatePractitionerRequests];
-};
-
-const updatePrivatePractitioners = ({
-  applicationContext,
-  caseToUpdate,
-  oldCase,
-}) => {
-  const oldPrivatePractitioners = oldCase.privatePractitioners.map(
-    privatePractitioner => omit(privatePractitioner, ['pk', 'sk']),
-  );
-  const {
-    added: addedPrivatePractitioners,
-    removed: deletedPrivatePractitioners,
-    updated: updatedPrivatePractitioners,
-  } = diff(
-    oldPrivatePractitioners,
-    caseToUpdate.privatePractitioners,
-    'userId',
-  );
-
-  const deletePractitionerRequests = deletedPrivatePractitioners.map(
-    practitioner =>
-      client.delete({
-        applicationContext,
-        key: {
-          pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `privatePractitioner|${practitioner.userId}`,
-        },
-      }),
-  );
-
-  const updatePractitionerRequests = [
-    ...addedPrivatePractitioners,
-    ...updatedPrivatePractitioners,
-  ].map(practitioner =>
-    client.put({
-      Item: {
-        pk: `case|${caseToUpdate.docketNumber}`,
-        sk: `privatePractitioner|${practitioner.userId}`,
-        ...practitioner,
-      },
-      applicationContext,
-    }),
-  );
-
-  return [...deletePractitionerRequests, ...updatePractitionerRequests];
-};
 
 const updateUserCaseMappings = ({
   applicationContext,
@@ -157,18 +71,6 @@ const updateUserCaseMappings = ({
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
   const requests = [];
-
-  requests.push(
-    ...updateIrsPractitioners({ applicationContext, caseToUpdate, oldCase }),
-  );
-
-  requests.push(
-    ...updatePrivatePractitioners({
-      applicationContext,
-      caseToUpdate,
-      oldCase,
-    }),
-  );
 
   if (
     oldCase.status !== caseToUpdate.status ||
