@@ -12,6 +12,7 @@ const {
 } = require('../../entities/EntityConstants');
 const {
   completeDocketEntryQCInteractor,
+  getNeedsNewCoversheet,
 } = require('./completeDocketEntryQCInteractor');
 
 describe('completeDocketEntryQCInteractor', () => {
@@ -59,6 +60,7 @@ describe('completeDocketEntryQCInteractor', () => {
       createdAt: '',
       docketEntries: [
         {
+          addToCoversheet: false,
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info 2',
           certificateOfService: true,
@@ -252,7 +254,7 @@ describe('completeDocketEntryQCInteractor', () => {
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
       after: 'Answer 123 abc',
-      before: 'Answer',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
   });
 
@@ -280,6 +282,30 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
+  it('should generate a notice of docket change without a new coversheet when attachments has been updated', async () => {
+    await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        ...caseRecord.docketEntries[0],
+        attachments: true,
+        filedBy: 'Petr. Guy Fieri',
+        partyPrimary: true,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after:
+        'Answer additional info (C/S 08/25/19) (Attachment(s)) additional info 2',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
+    });
+  });
+
   it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
@@ -302,7 +328,7 @@ describe('completeDocketEntryQCInteractor', () => {
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
       after: 'Answer',
-      before: 'Answer',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
   });
 
@@ -328,7 +354,7 @@ describe('completeDocketEntryQCInteractor', () => {
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
       after: 'Something Different',
-      before: 'Answer',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
   });
 
@@ -336,14 +362,10 @@ describe('completeDocketEntryQCInteractor', () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
       entryMetadata: {
+        ...caseRecord.docketEntries[0],
         addToCoversheet: false,
         additionalInfo: 'additional info',
         additionalInfo2: 'additional info 2',
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: caseRecord.docketEntries[0].documentTitle,
-        documentType: caseRecord.docketEntries[0].documentType,
-        eventCode: caseRecord.docketEntries[0].eventCode,
         partyPrimary: true,
       },
     });
@@ -352,12 +374,8 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toBeCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
-    ).toEqual({
-      after: 'Answer',
-      before: 'Answer',
-    });
+      applicationContext.getDocumentGenerators().noticeOfDocketChange,
+    ).not.toBeCalled();
   });
 
   it('should generate a new coversheet when additionalInfo is changed and addToCoversheet is true', async () => {
@@ -384,7 +402,7 @@ describe('completeDocketEntryQCInteractor', () => {
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
       after: 'Answer additional info additional info 221',
-      before: 'Answer',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
   });
 
@@ -412,7 +430,7 @@ describe('completeDocketEntryQCInteractor', () => {
         .calls[0][0].data.filingsAndProceedings,
     ).toEqual({
       after: 'Answer additional info additional info',
-      before: 'Answer',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
   });
 
@@ -612,5 +630,59 @@ describe('completeDocketEntryQCInteractor', () => {
         .deleteCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(caseDetail.automaticBlocked).toBeTruthy();
+  });
+
+  describe('getNeedsNewCoversheet', () => {
+    it('should return true when receivedAt is updated', () => {
+      const needsNewCoversheet = getNeedsNewCoversheet({
+        currentDocketEntry: {
+          receivedAt: '2019-08-25T05:00:00.000Z',
+        },
+        updatedDocketEntry: {
+          receivedAt: '2020-08-26T05:00:00.000Z',
+        },
+      });
+
+      expect(needsNewCoversheet).toBeTruthy();
+    });
+
+    it('should return true when certificateOfService is updated', () => {
+      const needsNewCoversheet = getNeedsNewCoversheet({
+        currentDocketEntry: {
+          certificateOfService: false,
+        },
+        updatedDocketEntry: {
+          certificateOfService: true,
+        },
+      });
+
+      expect(needsNewCoversheet).toBeTruthy();
+    });
+
+    it('should return true when filedBy is updated', () => {
+      const needsNewCoversheet = getNeedsNewCoversheet({
+        currentDocketEntry: {
+          filedBy: 'petitioner.smith',
+        },
+        updatedDocketEntry: {
+          filedBy: 'petitioner.high',
+        },
+      });
+
+      expect(needsNewCoversheet).toBeTruthy();
+    });
+
+    it('should return true when documentTitle is updated', () => {
+      const needsNewCoversheet = getNeedsNewCoversheet({
+        currentDocketEntry: {
+          documentTitle: 'fake title',
+        },
+        updatedDocketEntry: {
+          documentTitle: 'fake title 2!!!',
+        },
+      });
+
+      expect(needsNewCoversheet).toBeTruthy();
+    });
   });
 });
