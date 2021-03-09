@@ -126,8 +126,21 @@ export const SignOrder = connect(
         }
       };
 
-      canvasEl.onmousedown = () => {
-        stopCanvasEvents(canvasEl, sigEl, x, y);
+      canvasEl.onmousedown = e => {
+        const { pageY } = e;
+        const canvasBounds = canvasEl.getBoundingClientRect();
+        const scrollYOffset = window.scrollY;
+        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+
+        const uiPosY =
+          pageY -
+          canvasBounds.y -
+          scrollYOffset +
+          (canvasBounds.y - sigParentBounds.y);
+
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          stopCanvasEvents(canvasEl, sigEl, x, y);
+        }
       };
 
       // sometimes the cursor falls on top of the signature
