@@ -20,6 +20,7 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'name',
   'otherFilerType',
   'secondaryName',
+  'serviceIndicator',
   'title',
 ];
 
