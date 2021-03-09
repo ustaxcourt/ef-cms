@@ -1,5 +1,7 @@
 export const docketClerkManuallyAddsCaseToTrialSessionWithNote = test => {
   return it('docket clerk manually adds case to trial session with a note', async () => {
+    const mockTestNote = 'test note';
+
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -18,7 +20,7 @@ export const docketClerkManuallyAddsCaseToTrialSessionWithNote = test => {
 
     await test.runSequence('updateModalValueSequence', {
       key: 'calendarNotes',
-      value: 'test note',
+      value: mockTestNote,
     });
 
     await test.runSequence('addCaseToTrialSessionSequence');
@@ -33,6 +35,7 @@ export const docketClerkManuallyAddsCaseToTrialSessionWithNote = test => {
       c => c.docketNumber === test.docketNumber,
     );
 
-    expect(caseFromCaseOrder.calendarNotes).toEqual('test note');
+    expect(caseFromCaseOrder.calendarNotes).toEqual(mockTestNote);
+    test.calendarNote = mockTestNote;
   });
 };

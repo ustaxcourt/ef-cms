@@ -22,7 +22,6 @@ const { cloneDeep } = require('lodash');
 describe('getCaseInteractor', () => {
   const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
   const docketClerkId = '44c4d382-1136-492f-b1f4-45e893c34771';
-  const petitionerId = '273f5d19-3707-41c0-bccc-449c52dfe54e';
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
   const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
   const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
@@ -35,7 +34,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
+      .getFullCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           archivedCorrespondences: [],
           archivedDocketEntries: [],
@@ -54,7 +53,7 @@ describe('getCaseInteractor', () => {
       }),
     ).rejects.toThrow('Case 123-19 was not found.');
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber.mock
         .calls.length,
     ).toBe(1);
   });
@@ -67,7 +66,7 @@ describe('getCaseInteractor', () => {
     const mockInvalidCase = { ...MOCK_CASE, caseCaption: undefined };
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockInvalidCase);
+      .getFullCaseByDocketNumber.mockReturnValue(mockInvalidCase);
 
     await expect(
       getCaseInteractor({
@@ -75,63 +74,6 @@ describe('getCaseInteractor', () => {
         docketNumber: '00101-08',
       }),
     ).rejects.toThrow('The Case entity was invalid');
-  });
-
-  it('successfully retrieves a case with docketEntries that have documentContents', async () => {
-    const mockCaseWithDocumentContents = {
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          docketNumber: '101-18',
-          documentContentsId: '0098d177-78ef-4210-88aa-4bbb45c4f048',
-          documentTitle: 'Petition',
-          documentType: 'Petition',
-          draftOrderState: {},
-          eventCode: 'P',
-          filedBy: 'Test Petitioner',
-          processingStatus: 'pending',
-          userId: petitionerId,
-        },
-      ],
-    };
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: petitionsclerkId,
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCaseWithDocumentContents);
-    applicationContext.getPersistenceGateway().getDocument.mockReturnValue(
-      Buffer.from(
-        JSON.stringify({
-          documentContents: 'the contents!',
-          richText: '<b>the contents!</b>',
-        }),
-      ),
-    );
-
-    const caseRecord = await getCaseInteractor({
-      applicationContext,
-      docketNumber: '123-19',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      key: '0098d177-78ef-4210-88aa-4bbb45c4f048',
-      protocol: 'S3',
-      useTempBucket: false,
-    });
-    expect(caseRecord.docketEntries[0]).toMatchObject({
-      documentContents: 'the contents!',
-      draftOrderState: {
-        documentContents: 'the contents!',
-        richText: '<b>the contents!</b>',
-      },
-    });
   });
 
   it('should return the case when the currentUser is an unassociated IRS practitioner', async () => {
@@ -143,7 +85,7 @@ describe('getCaseInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue({
+      .getFullCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
@@ -167,7 +109,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
+      .getFullCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           ...MOCK_CASE,
           contactPrimary: {
@@ -193,7 +135,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue({
+      .getFullCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CASE,
         contactPrimary: {
           ...MOCK_CASE.contactPrimary,
@@ -230,7 +172,7 @@ describe('getCaseInteractor', () => {
       );
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
+        .getFullCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
     });
 
     it(`allows unfiltered view of sealed contact addresses when role is ${ROLES.docketClerk}`, async () => {
@@ -280,12 +222,12 @@ describe('getCaseInteractor', () => {
       sealedDocketEntries[0].isSealed = true;
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(
+        .getFullCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
             ...MOCK_CASE,
             caseCaption: 'a case caption',
             caseType: CASE_TYPES_MAP.other,
-            createdAt: new Date().toISOString(),
+            createdAt: applicationContext.getUtilities().createISODateString(),
             docketEntries: sealedDocketEntries,
             docketNumber: '101-18',
             irsPractitioners: [
@@ -330,6 +272,7 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
+        entityName: 'PublicCase',
         hasIrsPractitioner: false,
         isSealed: true,
         partyType: undefined,
@@ -374,7 +317,7 @@ describe('getCaseInteractor', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(
+        .getFullCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
             ...MOCK_CASE,
             privatePractitioners: [

@@ -8,15 +8,15 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { TrialSession } = require('./TrialSession');
 
-NewTrialSession.validationName = 'TrialSession';
-
 /**
  * constructor
  *
  * @param {object} rawSession the raw session data
  * @constructor
  */
-function NewTrialSession() {}
+function NewTrialSession() {
+  this.entityName = 'TrialSession';
+}
 
 NewTrialSession.prototype.init = function init(
   rawSession,

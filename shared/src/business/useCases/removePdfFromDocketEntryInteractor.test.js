@@ -24,7 +24,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       postalCode: '12345',
       state: 'CA',
     },
-    createdAt: new Date().toISOString(),
+    createdAt: applicationContext.getUtilities().createISODateString(),
     docketEntries: [
       {
         docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',

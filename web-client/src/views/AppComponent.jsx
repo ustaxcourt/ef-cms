@@ -14,6 +14,7 @@ import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
 import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
+import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { Contact } from './Contact';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
@@ -47,6 +48,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
+import { MyAccount } from './MyAccount';
 import { OtherFilerInformation } from './CaseDetail/OtherFilerInformation';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
@@ -99,6 +101,7 @@ const pages = {
   CaseDetailInternal,
   CaseInventoryReport,
   CaseSearchNoMatches,
+  ChangeLoginAndServiceEmail,
   Contact,
   CourtIssuedDocketEntry,
   CreateOrder,
@@ -129,6 +132,7 @@ const pages = {
   LogIn,
   MessageDetail,
   Messages,
+  MyAccount,
   OtherFilerInformation,
   PendingReport,
   PetitionQc,

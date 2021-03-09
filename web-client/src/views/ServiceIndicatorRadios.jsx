@@ -9,6 +9,7 @@ export const ServiceIndicatorRadios = connect(
     bindKey: props.bind,
     bindObject: state[props.bind],
     getValidationError: props.getValidationError,
+    hideElectronic: props.hideElectronic,
     updateStateSequence: sequences.updateStateSequence,
     validationErrors: state[props.validationErrors],
   },
@@ -16,6 +17,7 @@ export const ServiceIndicatorRadios = connect(
     bindKey,
     bindObject,
     getValidationError,
+    hideElectronic,
     SERVICE_INDICATOR_TYPES,
     updateStateSequence,
     validateSequence,
@@ -44,31 +46,33 @@ export const ServiceIndicatorRadios = connect(
           <legend htmlFor={`service-type-radios-${bindKey}`}>
             Service preference
           </legend>
-          <div className="usa-radio usa-radio__inline">
-            <input
-              aria-describedby={`service-type-radios-${bindKey}`}
-              checked={selectElectronic}
-              className="usa-radio__input"
-              id={`service-type-electronic-${bindKey}`}
-              name={`${bindKey}.serviceIndicator`}
-              type="radio"
-              value="Electronic"
-              onChange={e => {
-                updateStateSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                validateSequence && validateSequence();
-              }}
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor={`service-type-electronic-${bindKey}`}
-              id={`service-type-electronic-label-${bindKey}`}
-            >
-              Electronic
-            </label>
-          </div>
+          {!hideElectronic && (
+            <div className="usa-radio usa-radio__inline">
+              <input
+                aria-describedby={`service-type-radios-${bindKey}`}
+                checked={selectElectronic}
+                className="usa-radio__input"
+                id={`service-type-electronic-${bindKey}`}
+                name={`${bindKey}.serviceIndicator`}
+                type="radio"
+                value="Electronic"
+                onChange={e => {
+                  updateStateSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateSequence && validateSequence();
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                htmlFor={`service-type-electronic-${bindKey}`}
+                id={`service-type-electronic-label-${bindKey}`}
+              >
+                Electronic
+              </label>
+            </div>
+          )}
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby={`service-type-radios-${bindKey}`}

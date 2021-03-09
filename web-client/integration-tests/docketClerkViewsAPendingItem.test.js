@@ -32,6 +32,10 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   let caseDetail;
   let pendingItemsCount;
 

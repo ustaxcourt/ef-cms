@@ -72,7 +72,7 @@ exports.deleteCaseByDocketNumber = async ({
           applicationContext,
           key: {
             pk: sk,
-            sk: sk,
+            sk,
           },
         }),
       );

@@ -65,7 +65,7 @@ describe('PrivatePractitioner', () => {
 
   it('should default the serviceIndicator to paper if the user does not have an email address and no serviceIndicator value is already set', () => {
     const user = new PrivatePractitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'PT20001',
       birthYear: 2019,
@@ -96,7 +96,7 @@ describe('PrivatePractitioner', () => {
 
   it('should default the serviceIndicator to electronic if the user does have an email address and no serviceIndicator value is already set', () => {
     const user = new PrivatePractitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'PT20001',
       birthYear: 2019,
@@ -130,7 +130,7 @@ describe('PrivatePractitioner', () => {
 
   it('should default the serviceIndicator to the already existing serviceIndicator value if present', () => {
     const user = new PrivatePractitioner({
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'PT20001',
       birthYear: 2019,
@@ -287,5 +287,31 @@ describe('PrivatePractitioner', () => {
 
       expect(representingSecondary).toBeFalsy();
     });
+  });
+
+  it('should filter out pendingEmailVerificationToken when filtered is true', () => {
+    const user = new PrivatePractitioner(
+      {
+        barNumber: 'BN1234',
+        contact: {
+          address1: '234 Main St',
+          address2: 'Apartment 4',
+          address3: 'Under the stairs',
+          city: 'Chicago',
+          country: 'Brazil',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          phone: '+1 (555) 555-5555',
+          postalCode: '61234',
+          state: 'IL',
+        },
+        name: 'Saul Goodman',
+        pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
+        role: ROLES.privatePractitioner,
+        userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+      },
+      { filtered: true },
+    );
+
+    expect(user.pendingEmailVerificationToken).toBeUndefined();
   });
 });

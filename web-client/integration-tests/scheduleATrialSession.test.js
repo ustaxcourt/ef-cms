@@ -59,7 +59,7 @@ describe('Schedule A Trial Session', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test, overrides);
+  docketClerkViewsTrialSessionList(test);
   docketClerkViewsNewTrialSession(test);
 
   for (let i = 0; i < caseCount; i++) {
@@ -94,7 +94,7 @@ describe('Schedule A Trial Session', () => {
   // create a trial session without a judge
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides2);
-  docketClerkViewsTrialSessionList(test, overrides2);
+  docketClerkViewsTrialSessionList(test);
 
   loginAs(test, 'petitionsclerk@example.com');
   makeCaseReadyForTrial(test, caseCount + 2, overrides2);

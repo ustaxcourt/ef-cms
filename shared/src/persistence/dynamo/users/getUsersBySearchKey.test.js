@@ -18,6 +18,7 @@ describe('getUsersBySearchKey', () => {
         userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);
+
     client.query = jest.fn().mockReturnValue([
       {
         pk: 'Test Practitioner|privatePractitioner',
@@ -32,6 +33,7 @@ describe('getUsersBySearchKey', () => {
       searchKey: 'Test Practitioner',
       type: 'privatePractitioner',
     });
+
     expect(result).toEqual([
       {
         barNumber: 'PT1234',
@@ -52,6 +54,22 @@ describe('getUsersBySearchKey', () => {
       searchKey: 'Test Practitioner',
       type: 'privatePractitioner',
     });
+
     expect(result).toEqual([]);
+  });
+
+  it('should convert search key to upper case before calling dynamo', async () => {
+    client.query = jest.fn().mockReturnValue([]);
+    await getUsersBySearchKey({
+      applicationContext,
+      searchKey: 'pt1234',
+      type: 'privatePractitioner',
+    });
+
+    expect(client.query.mock.calls[0][0]).toMatchObject({
+      ExpressionAttributeValues: {
+        ':pk': 'privatePractitioner|PT1234',
+      },
+    });
   });
 });

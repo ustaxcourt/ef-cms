@@ -56,9 +56,9 @@ export const WhatDocumentIsThis = connect(
           </div>
         </div>
 
-        {reasons.map(({ categories, reason }, reasonIndex) => {
+        {reasons.map(({ categories, reason }) => {
           return (
-            <React.Fragment key={`reason-${reasonIndex}`}>
+            <React.Fragment key={`reason-${reason}`}>
               <div className="grid-container">
                 <div className="grid-row">
                   <div className="grid-col-12">
@@ -69,11 +69,11 @@ export const WhatDocumentIsThis = connect(
                 </div>
               </div>
               <div>
-                {categories.map(({ category }, categoryIndex) => {
+                {categories.map(({ category }) => {
                   return (
                     <div
                       className="category-view grid-container padding-bottom-1 padding-top-1"
-                      key={`${reasonIndex}-${categoryIndex}`}
+                      key={`${reason}-${category}`}
                     >
                       <Button
                         link

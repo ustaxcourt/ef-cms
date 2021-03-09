@@ -119,10 +119,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       value: '23-skidoo',
     },
     {
-      key: 'contactPrimary.email',
-      value: 'test@example.com',
-    },
-    {
       key: 'contactPrimary.phone',
       value: '1234567890',
     },

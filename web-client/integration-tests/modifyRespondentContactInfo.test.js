@@ -15,6 +15,10 @@ describe('Modify Respondent Contact Information', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   let caseDetail;
   test.createdDocketNumbers = [];
 

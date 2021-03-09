@@ -75,20 +75,3 @@ If Address is changed in DB:
 If primary Phone number is changed in DB:
 * a Notice of Telephone Number is generated and displays on docket record for all cases associated with the practitioner
 * Updated phone number displays on "Practitioner Dashboard" , "Edit Contact Information" form, and on the Case Detail > Petitioner Counsel section of all cases the practitioner is associated with
-
-### Practitioner edits their own contact info from dashboard
-If Address is changed by practitioner user on Edit Contact Information screen:
-* a Notice of Address Change is generated and displays on docket record for all cases associated with the practitioner
-* Updated address displays in Practitioner DB
-
-If primary Phone number is changed by practitioner user on Edit Contact Information screen:
-* a Notice of Telephone Number is generated and displays on docket record for all cases associated with the practitioner
-* Updated phone number displays on Practitioner DB
-
-If Address and primary Telephone number are changed by practitioner user on Edit Contact Information screen
-* a Notice of Address and Telephone Number Change is generated and displays on docket record for all cases associated with the practitioner
-* Updated address and phone number displays on Practitioner Database
-
-If Address and primary Telephone number are changed in DB:
-* a Notice of Address and Telephone Number Change is generated and displays on docket record for all cases associated with the practitioner
-* Updated address and phone number displays on "Practitioner Dashboard" , "Edit Contact Information" form, and on the Case Detail > Petitioner Counsel section of all cases the practitioner is associated with

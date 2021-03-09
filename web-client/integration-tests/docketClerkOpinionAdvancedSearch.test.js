@@ -9,6 +9,10 @@ describe('docket clerk opinion advanced search', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'docketclerk@example.com');
 
   it('go to advanced opinion search tab', async () => {

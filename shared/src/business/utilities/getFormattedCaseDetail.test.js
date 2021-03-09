@@ -27,17 +27,18 @@ const { MOCK_USERS } = require('../../test/mockUsers');
 applicationContext.getCurrentUser = () =>
   MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
 
+const getDateISO = () =>
+  applicationContext.getUtilities().createISODateString();
+
 const mockCaseDetailBase = {
   correspondence: [],
-  createdAt: new Date(),
+  createdAt: getDateISO(),
   docketEntries: [],
   docketNumber: '123-45',
   docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
-  receivedAt: new Date(),
+  receivedAt: getDateISO(),
 };
-
-const getDateISO = () => new Date().toISOString();
 
 describe('formatCase', () => {
   let mockCaseDetail;
@@ -541,27 +542,6 @@ describe('formatCase', () => {
   });
 
   describe('should indicate blocked status', () => {
-    it('should format blockedDate and automaticBlockedDate when blocked and automaticBlocked are true', () => {
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        automaticBlocked: true,
-        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
-        automaticBlockedReason: 'for reasons',
-        blocked: true,
-        blockedDate: getDateISO(),
-        blockedReason: 'for reasons',
-      });
-
-      expect(result).toMatchObject({
-        automaticBlockedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString('2020-01-06T11:12:13.007Z', 'MMDDYY'),
-        blockedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(getDateISO(), 'MMDDYY'),
-        showBlockedFromTrial: true,
-      });
-    });
     it('should format blockedDate and when blocked is true', () => {
       const result = formatCase(applicationContext, {
         ...mockCaseDetail,
@@ -576,30 +556,6 @@ describe('formatCase', () => {
           .formatDateString(getDateISO(), 'MMDDYY'),
         showBlockedFromTrial: true,
       });
-    });
-
-    it('should show automatic blocked and high priority indicator if the case is automaticBlocked and highPriority', () => {
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        automaticBlocked: true,
-        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
-        automaticBlockedReason: 'for reasons',
-        highPriority: true,
-      });
-
-      expect(result.showAutomaticBlockedAndHighPriority).toBeTruthy();
-    });
-
-    it('should not show automatic blocked and high priority indicator if the case is automaticBlocked but not highPriority', () => {
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        automaticBlocked: true,
-        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
-        automaticBlockedReason: 'for reasons',
-        highPriority: false,
-      });
-
-      expect(result.showAutomaticBlockedAndHighPriority).toBeFalsy();
     });
   });
 
@@ -772,6 +728,82 @@ describe('formatCase', () => {
 
     expect(result).toMatchObject(mockCaseDetail);
     expect(result).not.toHaveProperty('consolidatedCases');
+  });
+
+  describe('qcNeeded', () => {
+    it('should be true for a docket entry that is not in-progress and has an incomplete work item', () => {
+      const docketEntries = [
+        {
+          createdAt: getDateISO(),
+          docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isFileAttached: true,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+          workItem: {
+            completedAt: undefined,
+            isRead: false,
+          },
+        },
+      ];
+
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries,
+      });
+      expect(result.formattedDocketEntries[0].qcNeeded).toBeTruthy();
+    });
+
+    it('should be false for a docket entry that is in-progress and has an incomplete work item', () => {
+      const docketEntries = [
+        {
+          createdAt: getDateISO(),
+          docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isFileAttached: false,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+          workItem: {
+            completedAt: undefined,
+            isRead: false,
+          },
+        },
+      ];
+
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries,
+      });
+      expect(result.formattedDocketEntries[0].qcNeeded).toBeFalsy();
+    });
+
+    it('should be false for a docket entry that is not in-progress and does not have an incomplete work item', () => {
+      const docketEntries = [
+        {
+          createdAt: getDateISO(),
+          docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isFileAttached: true,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+        },
+      ];
+
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries,
+      });
+      expect(result.formattedDocketEntries[0].qcNeeded).toBeFalsy();
+    });
   });
 });
 

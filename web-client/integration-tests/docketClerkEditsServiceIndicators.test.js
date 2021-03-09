@@ -22,6 +22,10 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {

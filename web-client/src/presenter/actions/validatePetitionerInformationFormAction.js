@@ -41,6 +41,23 @@ export const validatePetitionerInformationFormAction = ({
     });
 
   if (
+    contactPrimary.email &&
+    contactPrimary.email !== oldContactPrimary.email
+  ) {
+    const errorsContactPrimary = applicationContext
+      .getUseCases()
+      .validateUpdateUserEmailInteractor({
+        applicationContext,
+        updateUserEmail: contactPrimary,
+      });
+
+    errors.contactPrimary = {
+      ...errors.contactPrimary,
+      ...errorsContactPrimary,
+    };
+  }
+
+  if (
     [
       SERVICE_INDICATOR_TYPES.SI_PAPER,
       SERVICE_INDICATOR_TYPES.SI_NONE,

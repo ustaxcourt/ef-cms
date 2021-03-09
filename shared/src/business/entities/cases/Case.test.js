@@ -76,24 +76,6 @@ describe('Case entity', () => {
     ]);
   });
 
-  describe('init', () => {
-    it('should set contactPrimary.contactId to currentUser.userId when the logged in user is the same as the user on the case and they are a petitioner', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
-      ); //petitioner user
-
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.contactPrimary.contactId).toBe(myCase.userId);
-    });
-  });
-
   describe('archivedDocketEntries', () => {
     let myCase;
     beforeEach(() => {
@@ -114,7 +96,6 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           archivedDocketEntries: [...MOCK_DOCUMENTS],
-          userId: applicationContext.getCurrentUser().userId,
         },
         { applicationContext, filtered: true },
       );
@@ -256,25 +237,6 @@ describe('Case entity', () => {
           name: 'Slim Shady',
         });
       });
-    });
-  });
-
-  describe('conditionally sets userId on entity', () => {
-    it('sets userId to current user if authenticated userId matches the userId in the case', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, userId: applicationContext.getCurrentUser().userId },
-        { applicationContext },
-      );
-      expect(myCase.userId).toEqual(applicationContext.getCurrentUser().userId);
-    });
-    it('does NOT set userId to if current user does not match rawCase', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, userId: '9999' },
-        { applicationContext },
-      );
-      expect(myCase.userId).not.toEqual(
-        applicationContext.getCurrentUser().userId,
-      );
     });
   });
 
@@ -3817,7 +3779,9 @@ describe('Case entity', () => {
     });
 
     it('should set noticeOfTrialDate when passed through Case constructor', () => {
-      const isoDateString = new Date().toISOString();
+      const isoDateString = applicationContext
+        .getUtilities()
+        .createISODateString();
 
       const caseEntity = new Case(
         {
@@ -3896,7 +3860,6 @@ describe('Case entity', () => {
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
-      userId: '"userId" is required',
     });
   });
 
@@ -4417,38 +4380,8 @@ describe('Case entity', () => {
     });
   });
 
-  describe('blocked/automatic blocked status validation for calendared cases', () => {
+  describe('blocked status validation for calendared cases', () => {
     const mockTrialSessionId = '9e29b116-58a0-40f5-afe6-e3a0ba4f226a';
-
-    it('fails validation when the case status is calendared and automaticBlocked is true', () => {
-      let blockedCalendaredCase = {
-        ...MOCK_CASE,
-        automaticBlocked: true,
-        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: mockTrialSessionId,
-      };
-      const myCase = new Case(blockedCalendaredCase, { applicationContext });
-      expect(myCase.getFormattedValidationErrors()).toEqual({
-        automaticBlocked: '"automaticBlocked" contains an invalid value',
-      });
-    });
-
-    it('passes validation when the case status is calendared and automaticBlocked is undefined', () => {
-      let blockedCalendaredCase = {
-        ...MOCK_CASE,
-        automaticBlocked: undefined,
-        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: mockTrialSessionId,
-      };
-      const myCase = new Case(blockedCalendaredCase, { applicationContext });
-      expect(myCase.getFormattedValidationErrors()).toBe(null);
-    });
 
     it('fails validation when the case status is calendared and blocked is true', () => {
       let blockedCalendaredCase = {
@@ -4466,18 +4399,6 @@ describe('Case entity', () => {
       });
     });
 
-    it('passes validation when the case status is calendared and automaticBlocked is false', () => {
-      let calendaredCase = {
-        ...MOCK_CASE,
-        automaticBlocked: false,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: mockTrialSessionId,
-      };
-      const myCase = new Case(calendaredCase, { applicationContext });
-      expect(myCase.getFormattedValidationErrors()).toBe(null);
-    });
-
     it('passes validation when the case status is calendared and blocked is false', () => {
       let calendaredCase = {
         ...MOCK_CASE,
@@ -4487,20 +4408,6 @@ describe('Case entity', () => {
         trialSessionId: mockTrialSessionId,
       };
       const myCase = new Case(calendaredCase, { applicationContext });
-      expect(myCase.getFormattedValidationErrors()).toBe(null);
-    });
-
-    it('passes validation when the case status is not calendared and automaticBlocked is true', () => {
-      let blockedNewCase = {
-        ...MOCK_CASE,
-        automaticBlocked: true,
-        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
-        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-        status: CASE_STATUS_TYPES.new,
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: mockTrialSessionId,
-      };
-      const myCase = new Case(blockedNewCase, { applicationContext });
       expect(myCase.getFormattedValidationErrors()).toBe(null);
     });
 
@@ -4636,7 +4543,11 @@ describe('Case entity', () => {
 
     it('returns true if the object has truthy values for isSealed or isSealedDate', () => {
       expect(isSealedCase({ isSealed: true })).toBe(true);
-      expect(isSealedCase({ sealedDate: new Date().toISOString() })).toBe(true);
+      expect(
+        isSealedCase({
+          sealedDate: applicationContext.getUtilities().createISODateString(),
+        }),
+      ).toBe(true);
     });
 
     it('returns true if the object has a docket entry with truthy values for isSealed or isLegacySealed', () => {

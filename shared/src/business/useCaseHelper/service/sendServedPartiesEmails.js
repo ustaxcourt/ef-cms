@@ -49,8 +49,8 @@ exports.sendServedPartiesEmails = async ({
         data: {
           caseDetail: {
             caseTitle: Case.getCaseTitle(caseCaption),
-            docketNumber: docketNumber,
-            docketNumberWithSuffix: docketNumberWithSuffix,
+            docketNumber,
+            docketNumberWithSuffix,
           },
           currentDate,
           docketEntryNumber,

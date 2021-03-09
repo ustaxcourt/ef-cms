@@ -1,3 +1,4 @@
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { set } from 'cerebral/factories';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -7,6 +8,7 @@ import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const openSetForHearingModalSequence = showProgressSequenceDecorator([
+  clearAlertsAction,
   stopShowValidationAction,
   getTrialSessionsAction,
   setTrialSessionsOnModalAction,

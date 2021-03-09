@@ -7,6 +7,10 @@ describe('Docket Clerk edits a paper filing journey', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('create case', async () => {
     const caseDetail = await uploadPetition(test);

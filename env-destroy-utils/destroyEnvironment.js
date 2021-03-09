@@ -6,6 +6,13 @@ const { readdirSync } = require('fs');
 
 const environmentName = process.argv[2] || 'exp1';
 
+if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+  console.error(
+    'Missing required AWS credentials in environment - AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY',
+  );
+  process.exit(1);
+}
+
 const environmentEast = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   apiVersion: 'latest',

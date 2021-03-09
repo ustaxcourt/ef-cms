@@ -400,32 +400,24 @@ ContactFactory.createContacts = ({
   let otherPetitioners = [];
   if (Array.isArray(contactInfo.otherPetitioners)) {
     otherPetitioners = contactInfo.otherPetitioners.map(otherPetitioner => {
-      const otherPetitionerConstructor = constructorMap.otherPetitioners
-        ? constructorMap.otherPetitioners({
-            countryType: otherPetitioner.countryType,
-            isPaper,
-          })
-        : undefined;
-      return otherPetitionerConstructor
-        ? new otherPetitionerConstructor(otherPetitioner, {
-            applicationContext,
-          })
-        : {};
+      const otherPetitionerConstructor = constructorMap.otherPetitioners({
+        countryType: otherPetitioner.countryType,
+        isPaper,
+      });
+      return new otherPetitionerConstructor(otherPetitioner, {
+        applicationContext,
+      });
     });
   }
 
   let otherFilers = [];
   if (Array.isArray(contactInfo.otherFilers)) {
     otherFilers = contactInfo.otherFilers.map(otherFiler => {
-      const otherFilerConstructor = constructorMap.otherFilers
-        ? constructorMap.otherFilers({
-            countryType: otherFiler.countryType,
-            isPaper,
-          })
-        : undefined;
-      return otherFilerConstructor
-        ? new otherFilerConstructor(otherFiler, { applicationContext })
-        : {};
+      const otherFilerConstructor = constructorMap.otherFilers({
+        countryType: otherFiler.countryType,
+        isPaper,
+      });
+      return new otherFilerConstructor(otherFiler, { applicationContext });
     });
   }
 
