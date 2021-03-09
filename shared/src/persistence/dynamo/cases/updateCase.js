@@ -23,39 +23,9 @@ const {
 } = require('../workitems/updateWorkItemTrialDate');
 const { Case } = require('../../../business/entities/cases/Case');
 const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
-const { differenceWith, isEqual } = require('lodash');
 const { fieldsToOmitBeforePersisting } = require('./createCase');
 const { omit, pick } = require('lodash');
 const { updateMessage } = require('../messages/updateMessage');
-
-const updateCorrespondence = ({
-  applicationContext,
-  caseToUpdate,
-  oldCase,
-}) => {
-  const updatedArchivedCorrespondences = differenceWith(
-    caseToUpdate.archivedCorrespondences,
-    oldCase.archivedCorrespondences,
-    isEqual,
-  );
-  const updatedCorrespondence = differenceWith(
-    caseToUpdate.correspondence,
-    oldCase.correspondence,
-    isEqual,
-  );
-
-  return [...updatedArchivedCorrespondences, ...updatedCorrespondence].map(
-    correspondence =>
-      client.put({
-        Item: {
-          pk: `case|${caseToUpdate.docketNumber}`,
-          sk: `correspondence|${correspondence.correspondenceId}`,
-          ...correspondence,
-        },
-        applicationContext,
-      }),
-  );
-};
 
 const updateIrsPractitioners = ({
   applicationContext,
@@ -187,10 +157,6 @@ const updateUserCaseMappings = ({
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
   const requests = [];
-
-  requests.push(
-    ...updateCorrespondence({ applicationContext, caseToUpdate, oldCase }),
-  );
 
   requests.push(
     ...updateIrsPractitioners({ applicationContext, caseToUpdate, oldCase }),
