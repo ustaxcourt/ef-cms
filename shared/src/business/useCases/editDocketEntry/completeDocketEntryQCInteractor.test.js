@@ -282,6 +282,30 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
+  it('should generate a notice of docket change without a new coversheet when attachments has been updated', async () => {
+    await completeDocketEntryQCInteractor({
+      applicationContext,
+      entryMetadata: {
+        ...caseRecord.docketEntries[0],
+        attachments: true,
+        filedBy: 'Petr. Guy Fieri',
+        partyPrimary: true,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after:
+        'Answer additional info (C/S 08/25/19) (Attachment(s)) additional info 2',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
+    });
+  });
+
   it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor({
       applicationContext,
@@ -615,7 +639,46 @@ describe('completeDocketEntryQCInteractor', () => {
           receivedAt: '2019-08-25T05:00:00.000Z',
         },
         updatedDocketEntry: {
-          receivedAt: '2020-08-25T05:00:00.000Z',
+          receivedAt: '2020-08-26T05:00:00.000Z',
+        },
+      });
+
+      expect(needsNewCoversheet).toBeTruthy();
+    });
+
+    it('should return true when certificateOfService is updated', () => {
+      const needsNewCoversheet = getNeedsNewCoversheet({
+        currentDocketEntry: {
+          certificateOfService: false,
+        },
+        updatedDocketEntry: {
+          certificateOfService: true,
+        },
+      });
+
+      expect(needsNewCoversheet).toBeTruthy();
+    });
+
+    it('should return true when filedBy is updated', () => {
+      const needsNewCoversheet = getNeedsNewCoversheet({
+        currentDocketEntry: {
+          filedBy: 'petitioner.smith',
+        },
+        updatedDocketEntry: {
+          filedBy: 'petitioner.high',
+        },
+      });
+
+      expect(needsNewCoversheet).toBeTruthy();
+    });
+
+    it('should return true when documentTitle is updated', () => {
+      const needsNewCoversheet = getNeedsNewCoversheet({
+        currentDocketEntry: {
+          documentTitle: 'fake title',
+        },
+        updatedDocketEntry: {
+          documentTitle: 'fake title 2!!!',
         },
       });
 
