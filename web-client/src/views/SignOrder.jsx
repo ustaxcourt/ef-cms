@@ -64,7 +64,7 @@ export const SignOrder = connect(
     };
 
     const moveSig = (sig, x, y) => {
-      sig.style.top = y + 'px';
+      sig.style.bottom = y + 'px';
       sig.style.left = x + 'px';
     };
 
