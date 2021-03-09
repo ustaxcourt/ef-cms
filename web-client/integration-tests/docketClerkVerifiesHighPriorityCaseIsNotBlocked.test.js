@@ -14,6 +14,10 @@ describe('Docket clerk verifies high priority case is not blocked', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
     caseDetail = await uploadPetition(test, {

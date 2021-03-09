@@ -26,7 +26,7 @@ export const PublicDocketRecordHeader = connect(
             icon="print"
             onClick={() => {
               gotoPublicPrintableDocketRecordSequence({
-                docketNumber: docketNumber,
+                docketNumber,
               });
             }}
           >
@@ -43,7 +43,7 @@ export const PublicDocketRecordHeader = connect(
                 icon="print"
                 onClick={() => {
                   gotoPublicPrintableDocketRecordSequence({
-                    docketNumber: docketNumber,
+                    docketNumber,
                   });
                 }}
               >

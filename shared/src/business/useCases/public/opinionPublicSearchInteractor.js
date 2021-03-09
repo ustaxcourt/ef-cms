@@ -1,6 +1,6 @@
 const {
   MAX_SEARCH_RESULTS,
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } = require('../../entities/EntityConstants');
 const {
   PublicDocumentSearchResult,
@@ -40,7 +40,7 @@ exports.opinionPublicSearchInteractor = async ({
     await applicationContext.getPersistenceGateway().advancedDocumentSearch({
       applicationContext,
       ...rawSearch,
-      documentEventCodes: OPINION_EVENT_CODES,
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       judgeType: 'judge',
     })
   ).results.slice(0, MAX_SEARCH_RESULTS);

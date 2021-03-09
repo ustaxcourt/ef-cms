@@ -22,6 +22,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   afterAll(() => {
     test.closeSocket();
   });
+
   const trialLocation = `Boise, Idaho, ${Date.now()}`;
   const overrides = {
     maxCases: 3,
@@ -33,7 +34,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test, overrides);
+  docketClerkViewsTrialSessionList(test);
   docketClerkViewsNewTrialSession(test);
 
   const caseOverrides = {

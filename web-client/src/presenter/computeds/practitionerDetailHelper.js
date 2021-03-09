@@ -14,7 +14,6 @@ export const practitionerDetailHelper = (get, applicationContext) => {
     admissionsDateFormatted: applicationContext
       .getUtilities()
       .formatDateString(practitionerDetail.admissionsDate, 'MM/DD/YYYY'),
-    alternateEmail: practitionerDetail.alternateEmail || 'Not provided',
     emailFormatted: practitionerDetail.email || 'Not provided',
     firmNameFormatted: practitionerDetail.firmName || 'None',
     showEAccessFlag: isInternalUser && practitionerDetail.hasEAccess,

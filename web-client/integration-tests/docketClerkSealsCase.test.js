@@ -23,6 +23,10 @@ describe('Docket Clerk seals a case', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
     const caseDetail = await uploadPetition(test, {

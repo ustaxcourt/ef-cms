@@ -32,7 +32,7 @@ describe('validatePractitionerInteractor', () => {
     const errors = validatePractitionerInteractor({
       applicationContext,
       practitioner: {
-        admissionsDate: '2019-03-01T21:40:46.415Z',
+        admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PT7890',
         birthYear: '2009',

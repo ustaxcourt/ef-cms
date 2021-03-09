@@ -15,6 +15,7 @@ const { ROLES } = require('./EntityConstants');
 function PublicUser() {}
 
 PublicUser.prototype.init = function init(rawUser) {
+  this.entityName = 'PublicUser';
   userDecorator(this, rawUser);
 };
 
@@ -26,8 +27,6 @@ const userDecorator = (obj, rawObj) => {
     obj.judgeTitle = rawObj.judgeTitle;
   }
 };
-
-PublicUser.validationName = 'PublicUser';
 
 const VALIDATION_ERROR_MESSAGES = {
   role: 'Role is required',

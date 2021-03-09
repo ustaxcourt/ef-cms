@@ -37,7 +37,7 @@ describe('docket clerk update case journey', () => {
   loginAs(test, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(test);
   docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test, overrides);
+  docketClerkViewsTrialSessionList(test);
   docketClerkViewsEligibleCasesForTrialSession(test);
 
   loginAs(test, 'petitionsclerk@example.com');

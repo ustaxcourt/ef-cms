@@ -19,12 +19,13 @@ module.exports = {
   ],
   coverageDirectory: './coverage',
   globals: {
+    Blob: function () {},
     File: function () {},
     FileReader: () => {},
     atob: x => x,
   },
   testEnvironment: 'node',
-  testTimeout: 30000,
+  testTimeout: 60000,
   // this is to ignore imported html files
   transform: {
     '^.+\\.html?$': './htmlLoader.js',

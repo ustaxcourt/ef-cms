@@ -1,7 +1,9 @@
+const {
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+} = require('../../entities/EntityConstants');
 const { Case, isSealedCase } = require('../../entities/cases/Case');
 const { isPrivateDocument } = require('../../entities/cases/PublicCase');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { OPINION_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * getPublicDownloadPolicyUrlInteractor
@@ -52,7 +54,7 @@ exports.getPublicDownloadPolicyUrlInteractor = async ({
     throw new UnauthorizedError('Unauthorized to access private document');
   }
 
-  const isOpinionDocument = OPINION_EVENT_CODES.includes(
+  const isOpinionDocument = OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
     docketEntryEntity.eventCode,
   );
 

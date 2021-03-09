@@ -32,9 +32,9 @@ export const IndividualWorkQueueInbox = connect(
               <th>Case Status</th>
             </tr>
           </thead>
-          {formattedWorkQueue.map((item, idx) => {
+          {formattedWorkQueue.map(item => {
             return (
-              <tbody key={idx}>
+              <tbody key={item.workItemId}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
@@ -72,7 +72,7 @@ export const IndividualWorkQueueInbox = connect(
                         }
                         href={item.editLink}
                       >
-                        {item.docketEntry.documentTitle ||
+                        {item.docketEntry.descriptionDisplay ||
                           item.docketEntry.documentType}
                       </a>
                     </div>

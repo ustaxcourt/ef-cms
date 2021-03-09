@@ -6,6 +6,7 @@ import { computeStatisticDatesAction } from '../actions/StartCaseInternal/comput
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { getPetitionIdAction } from '../actions/getPetitionIdAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -13,7 +14,6 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
-import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -60,7 +60,7 @@ export const submitPetitionFromPaperSequence = [
               success: [
                 setCaseAction,
                 assignPetitionToAuthenticatedUserAction,
-                setPetitionIdAction,
+                getPetitionIdAction,
                 setDocketEntryIdAction,
                 closeFileUploadStatusModalAction,
                 navigateToReviewSavedPetitionAction,

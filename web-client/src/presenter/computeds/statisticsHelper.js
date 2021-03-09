@@ -1,6 +1,10 @@
 import { state } from 'cerebral';
 
-export const formatStatistic = ({ applicationContext, statistic }) => {
+export const formatStatistic = ({
+  applicationContext,
+  docketNumber,
+  statistic,
+}) => {
   const formattedDate =
     statistic.year ||
     applicationContext
@@ -27,8 +31,11 @@ export const formatStatistic = ({ applicationContext, statistic }) => {
         .formatDollars(statistic.determinationTotalPenalties)
     : 'TBD';
 
+  const editStatisticLink = `/case-detail/${docketNumber}/edit-deficiency-statistic/${statistic.statisticId}`;
+
   return {
     ...statistic,
+    editStatisticLink,
     formattedDate,
     formattedDeterminationDeficiencyAmount,
     formattedDeterminationTotalPenalties,
@@ -45,7 +52,7 @@ export const formatStatistic = ({ applicationContext, statistic }) => {
  * @returns {object} formatted statistics
  */
 export const statisticsHelper = (get, applicationContext) => {
-  const { caseType, damages, litigationCosts, statistics } = get(
+  const { caseType, damages, docketNumber, litigationCosts, statistics } = get(
     state.caseDetail,
   );
   const permissions = get(state.permissions);
@@ -67,7 +74,9 @@ export const statisticsHelper = (get, applicationContext) => {
 
   if (statistics && statistics.length > 0) {
     formattedStatistics = statistics
-      .map(statistic => formatStatistic({ applicationContext, statistic }))
+      .map(statistic =>
+        formatStatistic({ applicationContext, docketNumber, statistic }),
+      )
       .sort((a, b) =>
         applicationContext
           .getUtilities()

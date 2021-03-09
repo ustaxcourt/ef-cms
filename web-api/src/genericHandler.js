@@ -72,7 +72,6 @@ exports.genericHandler = (awsEvent, cb, options = {}) => {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
         applicationContext.logger.error(e);
-        await applicationContext.notifyHoneybadger(e);
       }
       throw e;
     }

@@ -51,10 +51,11 @@ export const uploadExternalDocumentsAction = async ({
 
   const progressFunctions = setupPercentDone(documentFiles, store);
 
-  let caseDetail;
-
   try {
-    caseDetail = await applicationContext
+    const {
+      caseDetail,
+      docketEntryIdsAdded,
+    } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
@@ -62,30 +63,25 @@ export const uploadExternalDocumentsAction = async ({
         documentMetadata,
         progressFunctions,
       });
+
+    const addCoversheet = docketEntryId => {
+      return applicationContext.getUseCases().addCoversheetInteractor({
+        applicationContext,
+        docketEntryId,
+        docketNumber: caseDetail.docketNumber,
+      });
+    };
+
+    for (let docketEntryId of docketEntryIdsAdded) {
+      await addCoversheet(docketEntryId);
+    }
+
+    return path.success({
+      caseDetail,
+      docketNumber,
+      documentsFiled: documentMetadata,
+    });
   } catch (err) {
     return path.error();
   }
-
-  const pendingDocuments = caseDetail.docketEntries.filter(
-    document =>
-      document.processingStatus === 'pending' &&
-      document.isFileAttached !== false,
-  );
-  const addCoversheet = document => {
-    return applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId: document.docketEntryId,
-      docketNumber: caseDetail.docketNumber,
-    });
-  };
-
-  for (let pendingDocument of pendingDocuments) {
-    await addCoversheet(pendingDocument);
-  }
-
-  return path.success({
-    caseDetail,
-    docketNumber,
-    documentsFiled: documentMetadata,
-  });
 };

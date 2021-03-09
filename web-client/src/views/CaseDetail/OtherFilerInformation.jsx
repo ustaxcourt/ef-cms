@@ -35,36 +35,34 @@ export const OtherFilerInformation = connect(
                     </div>
                     <Mobile>
                       <div className="grid-row">
-                        {formattedCaseDetail.otherFilers.map(
-                          (otherFiler, idx) => {
-                            return (
-                              <div
-                                className="grid-col-12 margin-top-1 margin-bottom-1"
-                                key={`otherFilers-${idx}`}
-                              >
-                                <address aria-labelledby="primary-label">
-                                  <AddressDisplay
-                                    contact={otherFiler}
-                                    nameOverride={`${otherFiler.name}, ${otherFiler.otherFilerType}`}
-                                    noMargin={true}
-                                    showEmail={true}
-                                    showSealAddressLink={
-                                      caseInformationHelper.showSealAddressLink
-                                    }
-                                  />
-                                </address>
-                                {otherFiler.serviceIndicator && (
-                                  <div className="margin-top-4">
-                                    <p className="semi-bold margin-bottom-0">
-                                      Service preference
-                                    </p>
-                                    {otherFiler.serviceIndicator}
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          },
-                        )}
+                        {formattedCaseDetail.otherFilers.map(otherFiler => {
+                          return (
+                            <div
+                              className="grid-col-12 margin-top-1 margin-bottom-1"
+                              key={`otherFilers-${otherFiler.name}`}
+                            >
+                              <address aria-labelledby="primary-label">
+                                <AddressDisplay
+                                  contact={otherFiler}
+                                  nameOverride={`${otherFiler.name}, ${otherFiler.otherFilerType}`}
+                                  noMargin={true}
+                                  showEmail={true}
+                                  showSealAddressLink={
+                                    caseInformationHelper.showSealAddressLink
+                                  }
+                                />
+                              </address>
+                              {otherFiler.serviceIndicator && (
+                                <div className="margin-top-4">
+                                  <p className="semi-bold margin-bottom-0">
+                                    Service preference
+                                  </p>
+                                  {otherFiler.serviceIndicator}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </Mobile>
                     <NonMobile>
@@ -77,7 +75,7 @@ export const OtherFilerInformation = connect(
                                   'grid-col-3',
                                   idx > 3 && 'margin-top-4',
                                 )}
-                                key={`otherFilers-${idx}`}
+                                key={`otherFilers-${otherFiler.name}`}
                               >
                                 <address aria-labelledby="primary-label">
                                   <AddressDisplay

@@ -64,6 +64,7 @@ describe('draftDocumentViewerHelper', () => {
       documentTitle: '',
     });
   });
+
   it('should return the document title', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
@@ -672,5 +673,65 @@ describe('draftDocumentViewerHelper', () => {
     });
 
     expect(result.showDocumentNotSignedAlert).toEqual(true);
+  });
+
+  it('should return addDocketEntryLink with docketNumer and viewerDraftDocumentToDisplay.docketEntryId', () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+    const DOCKET_NUMBER = '101-20';
+    const DOCKET_ENTRY_ID = '77a3d50e-e101-435d-a389-99cf5fe2f1f1';
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+              isDraft: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        viewerDraftDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.addDocketEntryLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/documents/${DOCKET_ENTRY_ID}/add-court-issued-docket-entry`,
+    );
+  });
+
+  it('should return applySignatureLink with docketNumer and viewerDraftDocumentToDisplay.docketEntryId', () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+    const DOCKET_NUMBER = '101-20';
+    const DOCKET_ENTRY_ID = '77a3d50e-e101-435d-a389-99cf5fe2f1f1';
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Order to do something',
+              documentType: 'Order',
+              isDraft: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        viewerDraftDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.applySignatureLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/edit-order/${DOCKET_ENTRY_ID}/sign`,
+    );
   });
 });

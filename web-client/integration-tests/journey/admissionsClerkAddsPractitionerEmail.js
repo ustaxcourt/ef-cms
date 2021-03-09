@@ -6,7 +6,8 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const admissionsClerkAddsPractitionerEmail = test => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
-  const mockEmail = 'test@example.com';
+  const mockAddress2 = 'A Place';
+  const mockAvailableEmail = 'test+available@example.com';
 
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
@@ -16,8 +17,6 @@ export const admissionsClerkAddsPractitionerEmail = test => {
     });
 
     expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
-
-    const mockAddress2 = 'A Place';
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.address2',
@@ -39,8 +38,12 @@ export const admissionsClerkAddsPractitionerEmail = test => {
     expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'email',
-      value: mockEmail,
+      key: 'updatedEmail',
+      value: mockAvailableEmail,
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'confirmEmail',
+      value: mockAvailableEmail,
     });
 
     let practitionerDetailHelperComputed = runCompute(
@@ -50,15 +53,21 @@ export const admissionsClerkAddsPractitionerEmail = test => {
       },
     );
 
-    expect(practitionerDetailHelperComputed.emailFormatted).not.toBe(mockEmail);
+    expect(practitionerDetailHelperComputed.emailFormatted).not.toBe(
+      mockAvailableEmail,
+    );
 
     await test.runSequence('gotoEditPractitionerUserSequence', {
       barNumber: test.barNumber,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'email',
-      value: mockEmail,
+      key: 'updatedEmail',
+      value: mockAvailableEmail,
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'confirmEmail',
+      value: mockAvailableEmail,
     });
 
     test.setState('practitionerDetail', {});
@@ -76,7 +85,9 @@ export const admissionsClerkAddsPractitionerEmail = test => {
       },
     );
 
-    expect(practitionerDetailHelperComputed.emailFormatted).toBe(mockEmail);
+    expect(practitionerDetailHelperComputed.emailFormatted).toBe(
+      mockAvailableEmail,
+    );
     expect(practitionerDetailHelperComputed.serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
@@ -95,7 +106,7 @@ export const admissionsClerkAddsPractitionerEmail = test => {
       .getState('caseDetail.privatePractitioners')
       .find(x => x.barNumber === test.barNumber);
 
-    expect(foundPractitioner.email).toBe(mockEmail);
+    expect(foundPractitioner.email).toBe(mockAvailableEmail);
     expect(foundPractitioner.serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );

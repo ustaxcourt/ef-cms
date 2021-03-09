@@ -32,7 +32,7 @@ import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/com
 import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import queryString from 'query-string';
+import qs from 'qs';
 import riotRoute from 'riot-route';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
@@ -107,6 +107,15 @@ export const getEmailsForAddress = address => {
       ':pk': `email-${address}`,
     },
     KeyConditionExpression: '#pk = :pk',
+    applicationContext,
+  });
+};
+export const getUserRecordById = userId => {
+  return client.get({
+    Key: {
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
+    },
     applicationContext,
   });
 };
@@ -403,7 +412,6 @@ export const uploadPetition = async (
 };
 
 export const loginAs = (test, user) => {
-  // eslint-disable-next-line jest/expect-expect
   return it(`login as ${user}`, async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
@@ -413,6 +421,10 @@ export const loginAs = (test, user) => {
     await test.runSequence('submitLoginSequence', {
       path: '/',
     });
+
+    await wait(500);
+
+    expect(test.getState('user.email')).toBeDefined();
   });
 };
 
@@ -489,7 +501,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
       removeItem: () => null,
       setItem: () => null,
     },
-    location: {},
+    location: { replace: jest.fn() },
     open: url => {
       test.setState('openedUrl', url);
     },
@@ -557,10 +569,10 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
 const mockQuery = routeToGoTo => {
   const paramsString = routeToGoTo.split('?')[1];
-  return queryString.parse(paramsString);
+  return qs.parse(paramsString);
 };
 
-export const gotoRoute = (routes, routeToGoTo) => {
+export const gotoRoute = async (routes, routeToGoTo) => {
   for (let route of routes) {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(
@@ -635,4 +647,19 @@ export const getPetitionDocumentForCase = caseDetail => {
 export const getPetitionWorkItemForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
   return petitionDocument.workItem;
+};
+
+export const getTextByCount = count => {
+  const baseText =
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate efficitur ante, at placerat.';
+  const baseCount = baseText.length;
+
+  let resultText = baseText;
+  if (count > baseCount) {
+    for (let i = 1; i < Math.ceil(count / baseCount); i++) {
+      resultText += baseText;
+    }
+  }
+
+  return resultText.slice(0, count);
 };

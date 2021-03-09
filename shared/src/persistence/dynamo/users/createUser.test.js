@@ -168,7 +168,7 @@ describe('createUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[1][0],
     ).toMatchObject({
       Item: {
-        pk: 'privatePractitioner|Test Private Practitioner',
+        pk: 'privatePractitioner|TEST PRIVATE PRACTITIONER',
         sk: `user|${userId}`,
       },
     });
@@ -341,7 +341,7 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[1][0],
       ).toMatchObject({
         Item: {
-          pk: 'privatePractitioner|Test Private Practitioner',
+          pk: 'privatePractitioner|TEST PRIVATE PRACTITIONER',
           sk: `user|${userId}`,
         },
       });

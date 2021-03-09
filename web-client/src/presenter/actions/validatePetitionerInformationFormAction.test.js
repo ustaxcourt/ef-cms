@@ -105,4 +105,158 @@ describe('validatePetitionerInformationFormAction', () => {
 
     expect(errorStub).toBeCalled();
   });
+
+  it('should not validate the contactPrimary email if it is not being changed', async () => {
+    applicationContext
+      .getUseCases()
+      .validatePetitionerInformationFormInteractor.mockReturnValue({
+        contactPrimary: null,
+        contactSecondary: null,
+      });
+
+    applicationContext
+      .getUseCases()
+      .validateUpdateUserEmailInteractor.mockReturnValue(undefined);
+
+    presenter.providers.applicationContext = applicationContext;
+
+    await runAction(validatePetitionerInformationFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          contactPrimary: {
+            email: 'testing@example.com',
+          },
+          contactSecondary: {},
+        },
+        form: {
+          contactPrimary: {
+            email: 'testing@example.com',
+          },
+          contactSecondary: {},
+          partyType: PARTY_TYPES.petitioner,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateUpdateUserEmailInteractor,
+    ).not.toBeCalled();
+  });
+
+  it('should not validate the contactPrimary email if it is empty', async () => {
+    applicationContext
+      .getUseCases()
+      .validatePetitionerInformationFormInteractor.mockReturnValue({
+        contactPrimary: null,
+        contactSecondary: null,
+      });
+
+    applicationContext
+      .getUseCases()
+      .validateUpdateUserEmailInteractor.mockReturnValue(undefined);
+
+    presenter.providers.applicationContext = applicationContext;
+
+    await runAction(validatePetitionerInformationFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          contactPrimary: {},
+          contactSecondary: {},
+        },
+        form: {
+          contactPrimary: {},
+          contactSecondary: {},
+          partyType: PARTY_TYPES.petitioner,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateUpdateUserEmailInteractor,
+    ).not.toBeCalled();
+  });
+
+  it('should validate the contactPrimary email if being changed', async () => {
+    applicationContext
+      .getUseCases()
+      .validatePetitionerInformationFormInteractor.mockReturnValue({
+        contactPrimary: null,
+        contactSecondary: null,
+      });
+
+    applicationContext
+      .getUseCases()
+      .validateUpdateUserEmailInteractor.mockReturnValue(undefined);
+
+    presenter.providers.applicationContext = applicationContext;
+
+    await runAction(validatePetitionerInformationFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          contactPrimary: {},
+          contactSecondary: {},
+        },
+        form: {
+          contactPrimary: {
+            email: 'new@example.com',
+          },
+          contactSecondary: {},
+          partyType: PARTY_TYPES.petitioner,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateUpdateUserEmailInteractor,
+    ).toHaveBeenCalledTimes(1);
+    expect(successStub).toBeCalled();
+  });
+
+  it('should return an error if the contactPrimary email is not valid', async () => {
+    applicationContext
+      .getUseCases()
+      .validatePetitionerInformationFormInteractor.mockReturnValue({
+        contactPrimary: null,
+        contactSecondary: null,
+      });
+
+    applicationContext
+      .getUseCases()
+      .validateUpdateUserEmailInteractor.mockReturnValue('validation errors');
+
+    presenter.providers.applicationContext = applicationContext;
+
+    await runAction(validatePetitionerInformationFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          contactPrimary: {},
+          contactSecondary: {},
+        },
+        form: {
+          contactPrimary: {
+            email: 'new@example.com',
+          },
+          contactSecondary: {},
+          partyType: PARTY_TYPES.petitioner,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateUpdateUserEmailInteractor,
+    ).toHaveBeenCalledTimes(1);
+    expect(errorStub).toBeCalled();
+  });
 });

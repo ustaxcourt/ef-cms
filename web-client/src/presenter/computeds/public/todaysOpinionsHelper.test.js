@@ -3,13 +3,14 @@ import { runCompute } from 'cerebral/test';
 import { todaysOpinionsHelper as todaysOpinionsHelperComputed } from './todaysOpinionsHelper';
 import { withAppContextDecorator } from '../../../withAppContext';
 
-const todaysOpinionsHelper = withAppContextDecorator(
-  todaysOpinionsHelperComputed,
-  applicationContextPublic,
-);
-
-let state;
 describe('todaysOpinionsHelper', () => {
+  const todaysOpinionsHelper = withAppContextDecorator(
+    todaysOpinionsHelperComputed,
+    applicationContextPublic,
+  );
+
+  let state;
+
   beforeEach(() => {
     state = {
       todaysOpinions: [
@@ -48,5 +49,22 @@ describe('todaysOpinionsHelper', () => {
       .formatDateString(currentDate, 'MMMM D, YYYY');
 
     expect(result.formattedCurrentDate).toEqual(formattedCurrentDate);
+  });
+
+  describe('formattedJudgeName', () => {
+    it('should be set to opinion.judge when it is defined', () => {
+      const result = runCompute(todaysOpinionsHelper, { state });
+
+      expect(result.formattedOpinions[0].formattedJudgeName).toEqual('Fieri');
+    });
+
+    it('should be set to opinion.signedJudgeName when opinion.judge is undefined', () => {
+      state.todaysOpinions[0].judge = undefined;
+      state.todaysOpinions[0].signedJudgeName = 'Judge Dredd';
+
+      const result = runCompute(todaysOpinionsHelper, { state });
+
+      expect(result.formattedOpinions[0].formattedJudgeName).toEqual('Dredd');
+    });
   });
 });

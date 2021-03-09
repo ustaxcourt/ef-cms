@@ -100,7 +100,6 @@ export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
-export TF_VAR_honeybadger_key=$CIRCLE_HONEYBADGER_API_KEY
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_deploying_color=$DEPLOYING_COLOR
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
