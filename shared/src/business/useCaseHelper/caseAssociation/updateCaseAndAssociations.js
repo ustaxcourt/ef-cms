@@ -1,5 +1,7 @@
 const diff = require('diff-arrays-of-objects');
 const { Case } = require('../../entities/cases/Case');
+const { Correspondence } = require('../../entities/Correspondence');
+const { DocketEntry } = require('../../entities/DocketEntry');
 
 /**
  * Identifies documents which have been updated and issues persistence calls
@@ -26,12 +28,17 @@ const updateCaseDocuments = ({ applicationContext, caseToUpdate, oldCase }) => {
     'docketEntryId',
   );
 
-  return [
-    ...addedDocketEntries,
-    ...updatedDocketEntries,
-    ...addedArchivedDocketEntries,
-    ...updatedArchivedDocketEntries,
-  ].map(doc =>
+  const validDocketEntries = DocketEntry.validateRawCollection(
+    [
+      ...addedDocketEntries,
+      ...updatedDocketEntries,
+      ...addedArchivedDocketEntries,
+      ...updatedArchivedDocketEntries,
+    ],
+    { applicationContext },
+  );
+
+  return validDocketEntries.map(doc =>
     applicationContext.getPersistenceGateway().updateDocketEntry({
       applicationContext,
       docketEntryId: doc.docketEntryId,
@@ -70,12 +77,17 @@ const updateCorrespondence = ({
     'correspondenceId',
   );
 
-  return [
-    ...addedCorrespondences,
-    ...updatedCorrespondences,
-    ...addedArchivedCorrespondences,
-    ...updatedArchivedCorrespondences,
-  ].map(correspondence =>
+  const validCorrespondence = Correspondence.validateRawCollection(
+    [
+      ...addedCorrespondences,
+      ...updatedCorrespondences,
+      ...addedArchivedCorrespondences,
+      ...updatedArchivedCorrespondences,
+    ],
+    { applicationContext },
+  );
+
+  return validCorrespondence.map(correspondence =>
     applicationContext.getPersistenceGateway().updateCaseCorrespondence({
       applicationContext,
       correspondence,
