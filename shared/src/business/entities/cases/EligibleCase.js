@@ -6,7 +6,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { DOCKET_NUMBER_SUFFIXES } = require('../EntityConstants');
+const { CASE_TYPES, DOCKET_NUMBER_SUFFIXES } = require('../EntityConstants');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 
@@ -45,12 +45,17 @@ EligibleCase.prototype.init = function init(rawCase) {
 
 const eligibleCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
+  caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
   docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
+  highPriority: joi
+    .boolean()
+    .optional()
+    .meta({ tags: ['Restricted'] }),
   irsPractitioners: joi
     .array()
     .items(IrsPractitioner.VALIDATION_RULES)
@@ -58,8 +63,11 @@ const eligibleCaseSchema = {
     .description(
       'List of IRS practitioners (also known as respondents) associated with the case.',
     ),
-  isPaper: joi.boolean().optional(),
-  isSealed: joi.boolean(),
+  privatePractitioners: joi
+    .array()
+    .items(PrivatePractitioner.VALIDATION_RULES)
+    .optional()
+    .description('List of private practitioners associated with the case.'),
 };
 
 joiValidationDecorator(EligibleCase, joi.object(eligibleCaseSchema), {});
