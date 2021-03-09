@@ -667,15 +667,33 @@ describe('formatCase', () => {
     });
   });
 
-  it('should show not scheduled section if case status is closed', () => {
+  it('should return showNotScheduled as true when the case has not been added to a trial session', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       status: CASE_STATUS_TYPES.closed,
     });
 
-    expect(result).toMatchObject({
-      showNotScheduled: true,
+    expect(result.showNotScheduled).toBeTruthy();
+  });
+
+  it('should return showNotScheduled as false when the case status is closed and has been added to a trial session', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: CASE_STATUS_TYPES.closed,
+      trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
     });
+
+    expect(result.showNotScheduled).toBeFalsy();
+  });
+
+  it('should return showScheduled as true when case status is closed and has been added to a trial session', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: CASE_STATUS_TYPES.closed,
+      trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
+    });
+
+    expect(result.showScheduled).toBeTruthy();
   });
 
   it('should set defaults for formattedTrialDate and formattedAssociatedJudge and show the prioritized section if case is high priority', () => {
