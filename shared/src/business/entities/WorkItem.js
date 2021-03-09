@@ -4,8 +4,8 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
-const { omit } = require('lodash');
 const { WORK_ITEM_VALIDATION_RULES } = require('./EntityValidationConstants');
+const { WorkItemDocketEntry } = require('./WorkItemDocketEntry');
 
 /**
  * constructor
@@ -32,7 +32,9 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.completedByUserId = rawWorkItem.completedByUserId;
   this.completedMessage = rawWorkItem.completedMessage;
   this.createdAt = rawWorkItem.createdAt || createISODateString();
-  this.docketEntry = omit(rawWorkItem.docketEntry, 'workItem');
+  this.docketEntry = rawWorkItem.docketEntry
+    ? new WorkItemDocketEntry(rawWorkItem.docketEntry, { applicationContext })
+    : undefined;
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
