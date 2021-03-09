@@ -4,7 +4,7 @@ const { Correspondence } = require('../../entities/Correspondence');
 const { DocketEntry } = require('../../entities/DocketEntry');
 
 /**
- * Identifies documents which have been updated and issues persistence calls
+ * Identifies docket entries which have been updated and issues persistence calls
  *
  * @param {object} args the arguments for updating the case
  * @param {object} args.applicationContext the application context
@@ -12,7 +12,11 @@ const { DocketEntry } = require('../../entities/DocketEntry');
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
  * @returns {Array<Promise>} the persistence request promises
  */
-const updateCaseDocuments = ({ applicationContext, caseToUpdate, oldCase }) => {
+const updateCaseDocketEntries = ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries,
     caseToUpdate.docketEntries,
@@ -152,7 +156,7 @@ exports.updateCaseAndAssociations = async ({
     .toRawObject();
 
   const RELATED_CASE_OPERATIONS = [
-    updateCaseDocuments,
+    updateCaseDocketEntries,
     updateCorrespondence,
     updateHearings,
   ];
