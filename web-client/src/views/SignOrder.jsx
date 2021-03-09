@@ -64,7 +64,8 @@ export const SignOrder = connect(
     };
 
     const moveSig = (sig, x, y) => {
-      sig.style.bottom = y + 'px';
+      const sigBox = sig.getBoundingClientRect();
+      sig.style.top = y - sigBox.height + 'px';
       sig.style.left = x + 'px';
     };
 
@@ -107,6 +108,7 @@ export const SignOrder = connect(
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
         const canvasBounds = canvasEl.getBoundingClientRect();
+        const sigBox = sigEl.getBoundingClientRect();
 
         const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
         const scrollYOffset = window.scrollY;
@@ -115,11 +117,7 @@ export const SignOrder = connect(
         y = pageY - canvasBounds.y - scrollYOffset;
 
         const uiPosX = pageX - sigParentBounds.x;
-        const uiPosY =
-          pageY -
-          canvasBounds.y -
-          scrollYOffset +
-          (canvasBounds.y - sigParentBounds.y);
+        const uiPosY = y + (canvasBounds.y - sigParentBounds.y) - sigBox.height;
 
         if (uiPosY < yLimitToPreventServedStampOverlay) {
           moveSig(sigEl, uiPosX, uiPosY);
