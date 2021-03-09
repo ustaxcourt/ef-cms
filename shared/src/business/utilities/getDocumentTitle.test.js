@@ -45,7 +45,7 @@ describe('getDocumentTitle', () => {
     ).toEqual(docketEntry.documentTitle);
   });
 
-  it('appends additionalInfo to docketEntry.documentTitle when docketEntry.addToCoversheet is true', () => {
+  it('appends additionalInfo to docketEntry.documentTitle when it is defined', () => {
     docketEntry.addToCoversheet = true;
     docketEntry.additionalInfo2 = undefined;
 
@@ -57,7 +57,7 @@ describe('getDocumentTitle', () => {
     );
   });
 
-  it('appends additionalInfo2 to docketEntry.documentTitle + additionalInfo when docketEntry.addToCoversheet is true', () => {
+  it('appends additionalInfo2 to docketEntry.documentTitle + additionalInfo when they are defined', () => {
     docketEntry.addToCoversheet = true;
     docketEntry.additionalInfo2 = 'Another one (DJ Khaled)';
 
@@ -69,7 +69,7 @@ describe('getDocumentTitle', () => {
     );
   });
 
-  it('appends additionalInfo2 to docketEntry.documentTitle when docketEntry.addToCoversheet is true', () => {
+  it('appends additionalInfo2 to docketEntry.documentTitle when it is defined', () => {
     docketEntry.addToCoversheet = true;
     docketEntry.additionalInfo = undefined;
     docketEntry.additionalInfo2 = 'Another one (DJ Khaled)';
