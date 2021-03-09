@@ -752,6 +752,9 @@ const {
   putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
 const {
+  removeCaseFromHearing,
+} = require('../../shared/src/persistence/dynamo/trialSessions/removeCaseFromHearing');
+const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
 const {
@@ -1197,6 +1200,7 @@ const gatewayMethods = {
     persistUser,
     putWorkItemInOutbox,
     putWorkItemInUsersOutbox,
+    removeCaseFromHearing,
     saveDocumentFromLambda,
     saveUserConnection,
     saveWorkItemAndAddToSectionInbox,
