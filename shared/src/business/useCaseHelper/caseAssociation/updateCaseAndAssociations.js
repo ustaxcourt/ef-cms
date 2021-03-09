@@ -1,6 +1,88 @@
 const diff = require('diff-arrays-of-objects');
 const { Case } = require('../../entities/cases/Case');
-const { differenceWith, isEqual } = require('lodash');
+
+/**
+ * Identifies documents which have been updated and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<Promise>} the persistence request promises
+ */
+const updateCaseDocuments = ({ applicationContext, caseToUpdate, oldCase }) => {
+  const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
+    oldCase.docketEntries,
+    caseToUpdate.docketEntries,
+    'docketEntryId',
+  );
+
+  const {
+    added: addedArchivedDocketEntries,
+    updated: updatedArchivedDocketEntries,
+  } = diff(
+    oldCase.archivedDocketEntries,
+    caseToUpdate.archivedDocketEntries,
+    'docketEntryId',
+  );
+
+  return [
+    ...addedDocketEntries,
+    ...updatedDocketEntries,
+    ...addedArchivedDocketEntries,
+    ...updatedArchivedDocketEntries,
+  ].map(doc =>
+    applicationContext.getPersistenceGateway().updateDocketEntry({
+      applicationContext,
+      docketEntryId: doc.docketEntryId,
+      docketNumber: caseToUpdate.docketNumber,
+      document: doc,
+    }),
+  );
+};
+
+/**
+ * Identifies correspondences which have been updated and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated correspondence data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<Promise>} the persistence request promises
+ */
+const updateCorrespondence = ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const {
+    added: addedArchivedCorrespondences,
+    updated: updatedArchivedCorrespondences,
+  } = diff(
+    oldCase.archivedCorrespondences,
+    caseToUpdate.archivedCorrespondences,
+    'correspondenceId',
+  );
+
+  const { added: addedCorrespondences, updated: updatedCorrespondences } = diff(
+    oldCase.correspondence,
+    caseToUpdate.correspondence,
+    'correspondenceId',
+  );
+
+  return [
+    ...addedCorrespondences,
+    ...updatedCorrespondences,
+    ...addedArchivedCorrespondences,
+    ...updatedArchivedCorrespondences,
+  ].map(correspondence =>
+    applicationContext.getPersistenceGateway().updateCaseCorrespondence({
+      applicationContext,
+      correspondence,
+      docketNumber: caseToUpdate.docketNumber,
+    }),
+  );
+};
 
 /**
  * Identifies hearings to be removed, and issues persistence calls
@@ -24,36 +106,6 @@ const updateHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
       trialSessionId,
-    }),
-  );
-};
-
-/**
- * Identifies documents which have been updated and issues persistence calls
- *
- * @param {object} args the arguments for updating the case
- * @param {object} args.applicationContext the application context
- * @param {object} args.caseToUpdate the case with its updated document data
- * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<Promise>} the persistence request promises
- */
-const updateCaseDocuments = ({ applicationContext, caseToUpdate, oldCase }) => {
-  const updatedDocuments = differenceWith(
-    caseToUpdate.docketEntries,
-    oldCase.docketEntries,
-    isEqual,
-  );
-  const updatedArchivedDocketEntries = differenceWith(
-    caseToUpdate.archivedDocketEntries,
-    oldCase.archivedDocketEntries,
-    isEqual,
-  );
-  return [...updatedDocuments, ...updatedArchivedDocketEntries].map(doc =>
-    applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: doc.docketEntryId,
-      docketNumber: caseToUpdate.docketNumber,
-      document: doc,
     }),
   );
 };
@@ -87,14 +139,23 @@ exports.updateCaseAndAssociations = async ({
     .validate()
     .toRawObject();
 
-  const relatedCaseOperations = [updateHearings, updateCaseDocuments];
-  const requests = relatedCaseOperations.map(fn =>
-    fn({ applicationContext, caseToUpdate, oldCase: validRawOldCaseEntity }),
-  );
+  const RELATED_CASE_OPERATIONS = [
+    updateCaseDocuments,
+    updateCorrespondence,
+    updateHearings,
+  ];
+
+  const requests = RELATED_CASE_OPERATIONS.map(fn =>
+    fn({
+      applicationContext,
+      caseToUpdate: validRawCaseEntity,
+      oldCase: validRawOldCaseEntity,
+    }),
+  ).flat();
 
   // TODO: hoist logic from persistence method below to this use case helper.
 
-  await Promise.all(requests.flat());
+  await Promise.all(requests);
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
