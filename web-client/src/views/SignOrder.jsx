@@ -35,7 +35,7 @@ export const SignOrder = connect(
     signatureData,
     skipSigningOrderSequence,
   }) {
-    const yLimitToPreventServedStampOverlay = 675;
+    const yLimitToPreventServedStampOverlay = 705;
 
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
@@ -64,8 +64,7 @@ export const SignOrder = connect(
     };
 
     const moveSig = (sig, x, y) => {
-      const sigBox = sig.getBoundingClientRect();
-      sig.style.top = y - sigBox.height + 'px';
+      sig.style.top = y + 'px';
       sig.style.left = x + 'px';
     };
 
@@ -83,9 +82,10 @@ export const SignOrder = connect(
     };
 
     const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
+      const yWithoutSigBox = y - sigEl.getBoundingClientRect().height;
       setSignatureData({
         signatureApplied: true,
-        signatureData: { scale, x, y },
+        signatureData: { scale, x, y: yWithoutSigBox },
       });
 
       canvasEl.onmousemove = null;
@@ -134,7 +134,8 @@ export const SignOrder = connect(
           pageY -
           canvasBounds.y -
           scrollYOffset +
-          (canvasBounds.y - sigParentBounds.y);
+          (canvasBounds.y - sigParentBounds.y) -
+          sigEl.getBoundingClientRect().height;
 
         if (uiPosY < yLimitToPreventServedStampOverlay) {
           stopCanvasEvents(canvasEl, sigEl, x, y);
