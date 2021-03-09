@@ -16,7 +16,7 @@ describe('setFormFromDraftStateAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets state.form with the draft state of the documentToEdit', async () => {
+  it('sets state.form with the draft state of the documentToEdit and documentContents & richText from props', async () => {
     const result = await runAction(setFormFromDraftStateAction, {
       modules: {
         presenter,
@@ -32,7 +32,9 @@ describe('setFormFromDraftStateAction', () => {
           ],
           docketNumber: '123-45',
         },
-        docketEntryIdToEdit: docketEntryIdToEdit,
+        docketEntryIdToEdit,
+        documentContents: 'some content',
+        richText: 'some content',
       },
     });
     expect(result.state.form.documentType).toEqual(
@@ -56,6 +58,8 @@ describe('setFormFromDraftStateAction', () => {
           ],
           docketNumber: '123-45',
         },
+        documentContents: 'some content',
+        richText: 'some content',
       },
     });
     expect(result.state.documentToEdit).toBeUndefined();
@@ -72,17 +76,23 @@ describe('setFormFromDraftStateAction', () => {
           docketEntries: [
             {
               docketEntryId: '321',
+              documentTitle: 'A title',
               documentType: 'Petition',
             },
           ],
           docketNumber: '123-45',
         },
         docketEntryIdToEdit: '321',
+        documentContents: 'some content',
+        richText: 'some content',
       },
     });
     expect(result.state.form).toEqual({
       docketEntryIdToEdit: '321',
+      documentContents: 'some content',
+      documentTitle: 'A title',
       documentType: 'Petition',
+      richText: 'some content',
     });
   });
 });

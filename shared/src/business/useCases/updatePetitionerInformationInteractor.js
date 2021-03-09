@@ -219,6 +219,7 @@ const createDocketEntryAndWorkItem = async ({
   }
   return changeDocs;
 };
+
 /**
  * updatePetitionerInformationInteractor
  *
@@ -311,7 +312,7 @@ exports.updatePetitionerInformationInteractor = async ({
         })
       : undefined;
 
-  const caseEntity = new Case(
+  let caseEntity = new Case(
     {
       ...oldCase,
       contactPrimary: {
@@ -385,6 +386,38 @@ exports.updatePetitionerInformationInteractor = async ({
         secondaryChangeDocs,
         servedParties,
       });
+    }
+  }
+
+  if (
+    contactPrimary.email &&
+    contactPrimary.email !== oldCase.contactPrimary.email
+  ) {
+    const isEmailAvailable = await applicationContext
+      .getPersistenceGateway()
+      .isEmailAvailable({
+        applicationContext,
+        email: contactPrimary.email,
+      });
+
+    if (isEmailAvailable) {
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .createUserForContactPrimary({
+          applicationContext,
+          caseEntity,
+          email: contactPrimary.email,
+          name: contactPrimary.name,
+        });
+    } else {
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .addExistingUserToCase({
+          applicationContext,
+          caseEntity,
+          email: contactPrimary.email,
+          name: contactPrimary.name,
+        });
     }
   }
 

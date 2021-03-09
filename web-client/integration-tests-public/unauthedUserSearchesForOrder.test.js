@@ -24,7 +24,7 @@ const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 // Temporarily disabled for story 7387
 describe.skip('Petitioner creates case', () => {
   beforeAll(() => {
-    jest.setTimeout(10000);
+    jest.setTimeout(30000);
   });
 
   loginAs(testClient, 'petitioner@example.com');

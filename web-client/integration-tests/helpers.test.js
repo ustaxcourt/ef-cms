@@ -1,4 +1,4 @@
-import { gotoRoute } from './helpers';
+import { getTextByCount, gotoRoute } from './helpers';
 
 describe('helpers', () => {
   describe('gotoRoute', () => {
@@ -46,6 +46,18 @@ describe('helpers', () => {
       const results = await gotoRoute(routes, '/');
       expect(results).toEqual('awesome');
       expect(cbSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('getTextByCount', () => {
+    it('should return dummy text with the given character count', () => {
+      const dummyText1 = getTextByCount(100);
+      const dummyText2 = getTextByCount(202);
+      const dummyText3 = getTextByCount(3003);
+
+      expect(dummyText1.length).toEqual(100);
+      expect(dummyText2.length).toEqual(202);
+      expect(dummyText3.length).toEqual(3003);
     });
   });
 });

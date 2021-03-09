@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.modal.showModal to whatever is pass in the factory function
+ * sets the state.modal.showModal to whatever is passed in the factory function
  *
  * @param {string } showModal the value to set the modal to
  * @returns {Function} the primed action

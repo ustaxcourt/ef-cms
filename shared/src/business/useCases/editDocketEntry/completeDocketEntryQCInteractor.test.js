@@ -39,7 +39,7 @@ describe('completeDocketEntryQCInteractor', () => {
       section: DOCKET_SECTION,
       sentBy: 'Test User',
       sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      updatedAt: new Date().toISOString(),
+      updatedAt: applicationContext.getUtilities().createISODateString(),
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
@@ -139,6 +139,12 @@ describe('completeDocketEntryQCInteractor', () => {
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({
         url: 'www.example.com',
+      });
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: 'www.example.com',
       });
   });
 

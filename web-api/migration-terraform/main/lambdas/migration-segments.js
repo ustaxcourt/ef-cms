@@ -1,17 +1,29 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
-  migrateItems: migration0013,
-} = require('./migrations/0013-trial-session-default-proceedingType');
+  migrateItems: migration0017,
+} = require('./migrations/0017-remove-draft-order-state');
 const {
-  migrateItems: migration0014,
-} = require('./migrations/0014-practitioner-service-indicator');
+  migrateItems: migration0018,
+} = require('./migrations/0018-remove-nested-draft-order-state');
 const {
-  migrateItems: migration0015,
-} = require('./migrations/0015-practitioner-case-service-indicator');
+  migrateItems: migration0019,
+} = require('./migrations/0019-remove-values-from-cases');
 const {
-  migrateItems: migration0016,
-} = require('./migrations/0016-hearings-proceeding-type');
+  migrateItems: migration0020,
+} = require('./migrations/0020-add-entity-name-for-correspondences');
+const {
+  migrateItems: migration0021,
+} = require('./migrations/0021-practitioner-search-upper-case');
+const {
+  migrateItems: migration0022,
+} = require('./migrations/0022-practitioner-admissions-date');
+const {
+  migrateItems: migration0023,
+} = require('./migrations/0023-set-served-docket-entries-as-completed');
+const {
+  migrateItems: validationMigration,
+} = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -33,14 +45,24 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 0013');
-  items = await migration0013(items, documentClient);
-  applicationContext.logger.info('about to run migration 0014');
-  items = await migration0014(items, documentClient);
-  applicationContext.logger.info('about to run migration 0015');
-  items = await migration0015(items, documentClient);
-  applicationContext.logger.info('about to run migration 0016');
-  items = await migration0016(items, documentClient);
+  applicationContext.logger.info('about to run migration 0017');
+  items = await migration0017(items, documentClient);
+  applicationContext.logger.info('about to run migration 0018');
+  items = await migration0018(items, documentClient);
+  applicationContext.logger.info('about to run migration 0019');
+  items = await migration0019(items, documentClient);
+  applicationContext.logger.info('about to run migration 0020');
+  items = await migration0020(items, documentClient);
+  applicationContext.logger.info('about to run migration 0021');
+  items = await migration0021(items, documentClient);
+  applicationContext.logger.info('about to run migration 0022');
+  items = await migration0022(items, documentClient);
+  applicationContext.logger.info('about to run migration 0023');
+  items = await migration0023(items, documentClient);
+
+  applicationContext.logger.info('about to run validation migration');
+  items = await validationMigration(items, documentClient);
+
   return items;
 };
 

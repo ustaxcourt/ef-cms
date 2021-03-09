@@ -1,7 +1,7 @@
 const {
   prepareDateFromString,
 } = require('../../../business/utilities/DateHandler');
-const { query } = require('../../dynamodbClientService');
+const { queryFull } = require('../../dynamodbClientService');
 
 exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
   const afterDate = prepareDateFromString()
@@ -10,7 +10,7 @@ exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
     .utc()
     .format();
 
-  const workItems = await query({
+  const workItems = await queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -23,10 +23,5 @@ exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
     applicationContext,
   });
 
-  return workItems.filter(
-    workItem =>
-      workItem.completedByUserId &&
-      workItem.completedByUserId === userId &&
-      !!workItem.completedAt,
-  );
+  return workItems;
 };

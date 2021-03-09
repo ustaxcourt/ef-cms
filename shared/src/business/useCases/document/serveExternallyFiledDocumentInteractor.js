@@ -29,8 +29,6 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
-
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -63,7 +61,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     applicationContext,
     caseEntity,
     docketEntryEntity: currentDocketEntry,
-    pdfData: pdfData,
+    pdfData,
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -71,44 +69,6 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     document: servedDocWithCover,
     key: docketEntryId,
   });
-
-  let paperServicePdfUrl;
-  if (servedParties.paper.length > 0) {
-    const originalDoc = await PDFDocument.load(servedDocWithCover);
-
-    let newPdfDoc = await PDFDocument.create();
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: originalDoc,
-        servedParties,
-      });
-
-    const paperServicePdfData = await newPdfDoc.save();
-
-    const paperServicePdfId = applicationContext.getUniqueId();
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: paperServicePdfData,
-      key: paperServicePdfId,
-      useTempBucket: true,
-    });
-
-    const {
-      url,
-    } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-      applicationContext,
-      key: paperServicePdfId,
-      useTempBucket: true,
-    });
-
-    paperServicePdfUrl = url;
-  }
 
   const workItemToUpdate = currentDocketEntry.workItem;
 
@@ -142,19 +102,16 @@ exports.serveExternallyFiledDocumentInteractor = async ({
 
   caseEntity.updateDocketEntry(currentDocketEntry);
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: currentDocketEntry.docketEntryId,
-    servedParties,
-  });
-
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     caseToUpdate: caseEntity,
   });
 
-  return {
-    paperServicePdfUrl,
-  };
+  return await applicationContext
+    .getUseCaseHelpers()
+    .serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntity,
+      docketEntryId: currentDocketEntry.docketEntryId,
+    });
 };

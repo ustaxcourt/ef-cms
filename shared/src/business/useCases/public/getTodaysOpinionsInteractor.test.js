@@ -4,7 +4,7 @@ const {
 const {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -56,7 +56,7 @@ describe('getTodaysOpinionsInteractor', () => {
       });
   });
 
-  it('should only search for opinion document types', async () => {
+  it('should only search for opinion event codes', async () => {
     await getTodaysOpinionsInteractor({
       applicationContext,
     });
@@ -69,7 +69,7 @@ describe('getTodaysOpinionsInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: OPINION_EVENT_CODES,
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       endDate: currentDateEnd,
       startDate: currentDateStart,
     });

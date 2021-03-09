@@ -51,17 +51,15 @@ export const Statistics = connect(
                   </tr>
                 </thead>
                 <tbody>
-                  {statisticsHelper.formattedStatistics.map(
-                    (statistic, index) => (
-                      <tr key={index}>
-                        <td>{statistic.formattedDate}</td>
-                        <td>{statistic.formattedIrsDeficiencyAmount}</td>
-                        <td>
-                          {statistic.formattedDeterminationDeficiencyAmount}
-                        </td>
-                      </tr>
-                    ),
-                  )}
+                  {statisticsHelper.formattedStatistics.map(statistic => (
+                    <tr key={statistic.statisticId}>
+                      <td>{statistic.formattedDate}</td>
+                      <td>{statistic.formattedIrsDeficiencyAmount}</td>
+                      <td>
+                        {statistic.formattedDeterminationDeficiencyAmount}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -77,28 +75,24 @@ export const Statistics = connect(
                   </tr>
                 </thead>
                 <tbody>
-                  {statisticsHelper.formattedStatistics.map(
-                    (statistic, index) => (
-                      <tr key={index}>
-                        <td>{statistic.formattedIrsTotalPenalties}</td>
-                        <td>
-                          {statistic.formattedDeterminationTotalPenalties}
-                        </td>
-                        <td>
-                          {statisticsHelper.showEditButtons && (
-                            <Button
-                              link
-                              className="padding-0 margin-left-2"
-                              href={`/case-detail/${caseDetail.docketNumber}/edit-deficiency-statistic/${statistic.statisticId}`}
-                              icon="edit"
-                            >
-                              Edit Year/Period
-                            </Button>
-                          )}
-                        </td>
-                      </tr>
-                    ),
-                  )}
+                  {statisticsHelper.formattedStatistics.map(statistic => (
+                    <tr key={statistic.statisticId}>
+                      <td>{statistic.formattedIrsTotalPenalties}</td>
+                      <td>{statistic.formattedDeterminationTotalPenalties}</td>
+                      <td>
+                        {statisticsHelper.showEditButtons && (
+                          <Button
+                            link
+                            className="padding-0 margin-left-2"
+                            href={statistic.editStatisticLink}
+                            icon="edit"
+                          >
+                            Edit Year/Period
+                          </Button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

@@ -48,3 +48,35 @@ Some fields are optional when creating a trial session but must be fulfilled to 
 * Adding a case for hearing does not change the case status or the associated judge. The case remains "Calendared" with the trial judge of the first session as the associated judge
 * Other than the case status and judge, the case behaves the same way on the subsequent trial sessions as it does on the first trial session. Case appears on the Trial Session Detail and the Working Copy
 * A "Calendar Note" is required when setting a case for hearing so the judge is aware why the case was added. This note displays on the Case Detail > Trial Information card, the Trial Session Detail screen, the Working Copy, and the Printable Trial Session PDF.
+
+### Adding a Case to Trial that is blocked via Tracked Items or Manual Block
+
+**Docket clerk adds case with tracked items to Open trial session**
+* Deadline remains on case 
+* Tracked item indicator displays 
+* Case is added to the trial session and displays on trial session list
+* Case status updates to Calendared 
+* Blocked label no longer displays in header 
+* Trial Information card now displays as Calendared 
+
+**Docket clerk adds case with tracked items to New trial session** 
+* Deadline remains on case 
+* Tracked item indicator displays 
+* Case is added to the trial session and displays on trial session list
+* Case status does not change
+* Blocked label no longer displays in header 
+* Trial Information card now displays as Scheduled
+ 
+**Docket clerk marks case with tracked items as High Priority** 
+* Deadline remains on case 
+* Tracked item indicator displays 
+* Case is added to the eligible list for the next available trial session 
+* Case status does not change
+* Blocked label no longer displays in header 
+* Trial Information card now displays as High Priority
+
+**Docket clerk adds manual block to case with tracked items** 
+* Trial card shows Blocked from Trial
+* System block information does not display
+* Blocked label remains in header
+* Tracked item indicator remains in navigation

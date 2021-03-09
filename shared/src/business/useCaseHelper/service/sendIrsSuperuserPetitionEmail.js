@@ -61,8 +61,8 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     data: {
       caseDetail: {
         caseTitle: Case.getCaseTitle(caseCaption),
-        docketNumber: docketNumber,
-        docketNumberWithSuffix: docketNumberWithSuffix,
+        docketNumber,
+        docketNumberWithSuffix,
         trialLocation: preferredTrialCity || 'No requested place of trial',
       },
       contactPrimary,

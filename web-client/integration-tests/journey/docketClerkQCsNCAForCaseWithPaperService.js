@@ -1,4 +1,4 @@
-import { addDocketEntryHelper as addDocketEnryHelperComputed } from '../../src/presenter/computeds/addDocketEntryHelper';
+import { addDocketEntryHelper as addDocketEntryHelperComputed } from '../../src/presenter/computeds/addDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
@@ -7,7 +7,6 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
-const addDocketEntryHelper = withAppContextDecorator(addDocketEntryHelper);
 
 export const docketClerkQCsNCAForCaseWithPaperService = test => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
@@ -71,11 +70,11 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
       docketNumber: caseDetailFormatted.docketNumber,
     });
 
-    const addDocketEnryHelper = withAppContextDecorator(
-      addDocketEnryHelperComputed,
+    const addDocketEntryHelper = withAppContextDecorator(
+      addDocketEntryHelperComputed,
     );
 
-    const { showFilingPartiesForm } = runCompute(addDocketEnryHelper, {
+    const { showFilingPartiesForm } = runCompute(addDocketEntryHelper, {
       state: test.getState(),
     });
 
