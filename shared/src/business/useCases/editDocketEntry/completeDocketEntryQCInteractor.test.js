@@ -648,6 +648,19 @@ describe('completeDocketEntryQCInteractor', () => {
       expect(needsNewCoversheet).toBeTruthy();
     });
 
+    it('should return false when receivedAt format is different but the date is the same', () => {
+      const needsNewCoversheet = getNeedsNewCoversheet({
+        currentDocketEntry: {
+          receivedAt: '2019-08-25',
+        },
+        updatedDocketEntry: {
+          receivedAt: '2019-08-25T05:00:00.000Z',
+        },
+      });
+
+      expect(needsNewCoversheet).toBeFalsy();
+    });
+
     it('should return true when certificateOfService is updated', () => {
       const needsNewCoversheet = getNeedsNewCoversheet({
         currentDocketEntry: {
