@@ -9,13 +9,13 @@ describe('EligibleCase', () => {
     expect(eligibleCase.getFormattedValidationErrors()).toBe(null);
     expect(eligibleCase.docketEntries).toBeUndefined();
     expect(eligibleCase.otherPetitioners).toBeUndefined();
-    expect(eligibleCase.irsPractitioners).toBeDefined();
+    expect(eligibleCase.irsPractitioners.length).toEqual(0);
   });
 
   it('retains irsPractitioners and privatePractitioners', () => {
     const eligibleCase = new EligibleCase(MOCK_COMPLEX_CASE);
 
-    expect(eligibleCase.irsPractitioners).toBeDefined();
-    expect(eligibleCase.privatePractitioners).toBeDefined();
+    expect(eligibleCase.irsPractitioners.length).toBeTruthy();
+    expect(eligibleCase.privatePractitioners.length).toEqual(0);
   });
 });
