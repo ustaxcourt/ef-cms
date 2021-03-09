@@ -101,7 +101,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
-        receivedAt: new Date().toISOString(),
+        receivedAt: applicationContext.getUtilities().createISODateString(),
         requestForPlaceOfTrialFile: new File(
           [],
           'requestForPlaceOfTrialFile.pdf',
@@ -149,7 +149,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
-        receivedAt: new Date().toISOString(),
+        receivedAt: applicationContext.getUtilities().createISODateString(),
         requestForPlaceOfTrialFile: new File(
           [],
           'requestForPlaceOfTrialFile.pdf',
@@ -211,7 +211,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
-        receivedAt: new Date().toISOString(),
+        receivedAt: applicationContext.getUtilities().createISODateString(),
         requestForPlaceOfTrialFile: new File(
           [],
           'requestForPlaceOfTrialFile.pdf',
@@ -259,7 +259,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
-        receivedAt: new Date().toISOString(),
+        receivedAt: applicationContext.getUtilities().createISODateString(),
         requestForPlaceOfTrialFile: new File(
           [],
           'requestForPlaceOfTrialFile.pdf',
@@ -308,7 +308,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
-        receivedAt: new Date().toISOString(),
+        receivedAt: applicationContext.getUtilities().createISODateString(),
         requestForPlaceOfTrialFile: new File(
           [],
           'requestForPlaceOfTrialFile.pdf',

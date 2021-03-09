@@ -11,6 +11,10 @@ describe('Docket Clerk Serves Paper Filed Document From Case Detail Documents Vi
     jest.setTimeout(40000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);

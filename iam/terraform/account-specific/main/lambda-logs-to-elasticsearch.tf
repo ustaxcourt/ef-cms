@@ -9,7 +9,7 @@ resource "aws_lambda_function" "logs_to_es" {
   function_name = "LogsToElasticSearch_info"
   handler       = "index.handler"
   role          = aws_iam_role.lambda_elasticsearch_execution_role.arn
-  runtime       = "nodejs10.x"
+  runtime       = "nodejs14.x"
 
   source_code_hash = "${filebase64sha256(data.archive_file.zip_logs_to_es_lambda.output_path)}-${aws_iam_role.lambda_elasticsearch_execution_role.name}"
 
@@ -34,8 +34,8 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
 
 
 module "regional-log-subscription-filters-east" {
-  source = "./regional-log-subscription-filters"
-  log_group_environments = var.log_group_environments
+  source                           = "./regional-log-subscription-filters"
+  log_group_environments           = var.log_group_environments
   logs_to_elasticsearch_lambda_arn = aws_lambda_function.logs_to_es.arn
 
   providers = {
@@ -44,8 +44,8 @@ module "regional-log-subscription-filters-east" {
 }
 
 module "regional-log-subscription-filters-west" {
-  source = "./regional-log-subscription-filters"
-  log_group_environments = var.log_group_environments
+  source                           = "./regional-log-subscription-filters"
+  log_group_environments           = var.log_group_environments
   logs_to_elasticsearch_lambda_arn = aws_lambda_function.logs_to_es.arn
 
   providers = {
@@ -67,4 +67,12 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_post_confirmation_lam
   filter_pattern  = ""
   name            = "cognito_post_confirmation_lambda_${element(var.log_group_environments, count.index)}_filter"
   log_group_name  = "/aws/lambda/cognito_post_confirmation_lambda_${element(var.log_group_environments, count.index)}"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "cognito_post_authentication_lambda_filter" {
+  count           = length(var.log_group_environments)
+  destination_arn = aws_lambda_function.logs_to_es.arn
+  filter_pattern  = ""
+  name            = "cognito_post_authentication_lambda_${element(var.log_group_environments, count.index)}_filter"
+  log_group_name  = "/aws/lambda/cognito_post_authentication_lambda_${element(var.log_group_environments, count.index)}"
 }

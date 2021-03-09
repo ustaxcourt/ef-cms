@@ -52,6 +52,9 @@ const {
   caseAdvancedSearchLambda,
 } = require('./cases/caseAdvancedSearchLambda');
 const {
+  checkEmailAvailabilityLambda,
+} = require('./users/checkEmailAvailabilityLambda');
+const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
@@ -151,11 +154,17 @@ const {
   getConsolidatedCasesByCaseLambda,
 } = require('./cases/getConsolidatedCasesByCaseLambda');
 const {
+  getDocumentContentsForDocketEntryLambda,
+} = require('./documents/getDocumentContentsForDocketEntryLambda');
+const {
   getDocumentDownloadUrlLambda,
 } = require('./documents/getDocumentDownloadUrlLambda');
 const {
   getDocumentDownloadUrlLambda: v1GetDocumentDownloadUrlLambda,
 } = require('./v1/getDocumentDownloadUrlLambda');
+const {
+  getDocumentDownloadUrlLambda: v2GetDocumentDownloadUrlLambda,
+} = require('./v2/getDocumentDownloadUrlLambda');
 const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
@@ -214,11 +223,8 @@ const {
   getUserCaseNoteForCasesLambda,
 } = require('./caseNote/getUserCaseNoteForCasesLambda');
 const {
-  migrateCaseDeadlineLambda,
-} = require('./migrate/migrateCaseDeadlineLambda');
-const {
-  migrateTrialSessionLambda,
-} = require('./migrate/migrateTrialSessionLambda');
+  getUserPendingEmailLambda,
+} = require('./users/getUserPendingEmailLambda');
 const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
@@ -249,6 +255,9 @@ const {
 const {
   runTrialSessionPlanningReportLambda,
 } = require('./trialSessions/runTrialSessionPlanningReportLambda');
+const {
+  saveCalendarNoteLambda,
+} = require('./trialSessions/saveCalendarNoteLambda');
 const {
   saveCaseDetailInternalEditLambda,
 } = require('./cases/saveCaseDetailInternalEditLambda');
@@ -343,8 +352,14 @@ const {
   updateUserContactInformationLambda,
 } = require('./users/updateUserContactInformationLambda');
 const {
+  updateUserPendingEmailLambda,
+} = require('./users/updateUserPendingEmailLambda');
+const {
   verifyPendingCaseForUserLambda,
 } = require('./cases/verifyPendingCaseForUserLambda');
+const {
+  verifyUserPendingEmailLambda,
+} = require('./users/verifyUserPendingEmailLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
@@ -356,6 +371,7 @@ const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
+const { getCaseLambda: v2GetCaseLambda } = require('./v2/getCaseLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
@@ -366,7 +382,6 @@ const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { getUserLambda } = require('./users/getUserLambda');
 const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
-const { migrateCaseLambda } = require('./migrate/migrateCaseLambda');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -439,6 +454,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
  */
 {
   //GET
+  app.get(
+    '/case-documents/:documentContentsId/document-contents',
+    lambdaWrapper(getDocumentContentsForDocketEntryLambda),
+  );
   app.get(
     '/case-documents/:docketNumber/:key/document-download-url',
     lambdaWrapper(getDocumentDownloadUrlLambda),
@@ -767,13 +786,6 @@ app.post(
 }
 
 /**
- * migrate
- */
-app.post('/migrate/case', lambdaWrapper(migrateCaseLambda));
-app.post('/migrate/case-deadline', lambdaWrapper(migrateCaseDeadlineLambda));
-app.post('/migrate/trial-session', lambdaWrapper(migrateTrialSessionLambda));
-
-/**
  * practitioners
  */
 {
@@ -877,6 +889,10 @@ app.get(
     '/trial-sessions/:trialSessionId/cases/:docketNumber',
     lambdaWrapper(addCaseToTrialSessionLambda),
   );
+  app.put(
+    '/trial-sessions/:trialSessionId/set-calendar-note',
+    lambdaWrapper(saveCalendarNoteLambda),
+  );
   app.get(
     '/trial-sessions/:trialSessionId',
     lambdaWrapper(getTrialSessionDetailsLambda),
@@ -923,6 +939,19 @@ app.put(
   lambdaWrapper(updateUserContactInformationLambda),
 );
 app.get(
+  '/users/:userId/pending-email',
+  lambdaWrapper(getUserPendingEmailLambda),
+);
+app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
+app.put(
+  '/async/users/verify-email',
+  lambdaWrapper(verifyUserPendingEmailLambda),
+);
+app.get(
+  '/users/email-availability',
+  lambdaWrapper(checkEmailAvailabilityLambda),
+);
+app.get(
   '/users/privatePractitioners/search',
   lambdaWrapper(getPrivatePractitionersBySearchKeyLambda),
 );
@@ -941,6 +970,15 @@ app.get('/v1/cases/:docketNumber', lambdaWrapper(v1GetCaseLambda));
 app.get(
   '/v1/cases/:docketNumber/entries/:key/document-download-url',
   lambdaWrapper(v1GetDocumentDownloadUrlLambda),
+);
+
+/**
+ * v2 API
+ */
+app.get('/v2/cases/:docketNumber', lambdaWrapper(v2GetCaseLambda));
+app.get(
+  '/v2/cases/:docketNumber/entries/:key/document-download-url',
+  lambdaWrapper(v2GetDocumentDownloadUrlLambda),
 );
 
 /**

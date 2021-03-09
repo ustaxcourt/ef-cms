@@ -49,7 +49,7 @@ export const SelectScannerSourceModal = connect(
                 <option
                   data-index={index}
                   id={`scanner-id-${index}`}
-                  key={index}
+                  key={source}
                   value={source}
                 >
                   {source}
@@ -74,9 +74,9 @@ export const SelectScannerSourceModal = connect(
               });
             }}
           >
-            {scanModeOptions.map((scanMode, index) => {
+            {scanModeOptions.map(scanMode => {
               return (
-                <option key={index} value={scanMode.value}>
+                <option key={scanMode.value} value={scanMode.value}>
                   - {scanMode.label} -
                 </option>
               );

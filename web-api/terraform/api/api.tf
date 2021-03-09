@@ -1,19 +1,19 @@
 resource "aws_lambda_function" "api_lambda" {
-  depends_on    = [var.api_object]
-  function_name = "api_${var.environment}_${var.current_color}"
-  role          = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler       = "api.handler"
-  s3_bucket     = var.lambda_bucket_id
-  s3_key        = "api_${var.current_color}.js.zip"
+  depends_on       = [var.api_object]
+  function_name    = "api_${var.environment}_${var.current_color}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler          = "api.handler"
+  s3_bucket        = var.lambda_bucket_id
+  s3_key           = "api_${var.current_color}.js.zip"
   source_code_hash = var.api_object_hash
-  timeout     = "29"
-  memory_size = "3008"
+  timeout          = "29"
+  memory_size      = "3008"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
   ]
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
 
   environment {
     variables = var.lambda_environment
@@ -199,7 +199,7 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_integration.api_integration_options,
     aws_api_gateway_authorizer.custom_authorizer
   ]
-  rest_api_id       = aws_api_gateway_rest_api.gateway_for_api.id
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
 
   lifecycle {
     create_before_destroy = true
@@ -216,7 +216,7 @@ resource "aws_api_gateway_stage" "api_stage" {
     destination_arn = aws_cloudwatch_log_group.api_stage_logs.arn
 
     format = jsonencode({
-      level = "info"
+      level   = "info"
       message = "API Gateway Access Log"
 
       environment = {
@@ -226,34 +226,34 @@ resource "aws_api_gateway_stage" "api_stage" {
 
       requestId = {
         apiGateway = "$context.requestId"
-        lambda = "$context.integration.requestId"
+        lambda     = "$context.integration.requestId"
         authorizer = "$context.authorizer.requestId"
       }
 
       request = {
         headers = {
           x-forwarded-for = "$context.identity.sourceIp"
-          user-agent = "$context.identity.userAgent"
+          user-agent      = "$context.identity.userAgent"
         }
         method = "$context.httpMethod"
       }
 
       authorizer = {
-        error = "$context.authorizer.error"
+        error          = "$context.authorizer.error"
         responseTimeMs = "$context.authorizer.integrationLatency"
-        statusCode = "$context.authorizer.status"
+        statusCode     = "$context.authorizer.status"
       }
 
       response = {
         responseTimeMs = "$context.responseLatency"
         responseLength = "$context.responseLength"
-        statusCode = "$context.status"
+        statusCode     = "$context.status"
       }
 
       metadata = {
-        apiId = "$context.apiId"
+        apiId        = "$context.apiId"
         resourcePath = "$context.resourcePath"
-        resourceId = "$context.resourceId"
+        resourceId   = "$context.resourceId"
       }
     })
   }
@@ -278,19 +278,23 @@ resource "aws_acm_certificate" "api_gateway_cert" {
 
 resource "aws_acm_certificate_validation" "validate_api_gateway_cert" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert.arn
-  validation_record_fqdns = [aws_route53_record.api_route53_record.0.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.api_route53_record : record.fqdn]
   count                   = var.validate
 }
-
 resource "aws_route53_record" "api_route53_record" {
-  name    = aws_acm_certificate.api_gateway_cert.domain_validation_options.0.resource_record_name
-  type    = aws_acm_certificate.api_gateway_cert.domain_validation_options.0.resource_record_type
-  zone_id = var.zone_id
-  count   = var.validate
-  records = [
-    aws_acm_certificate.api_gateway_cert.domain_validation_options.0.resource_record_value,
-  ]
-  ttl = 60
+  for_each = {
+    for dvo in aws_acm_certificate.api_gateway_cert.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+  name            = each.value.name
+  type            = each.value.type
+  zone_id         = var.zone_id
+  records         = [each.value.record]
+  ttl             = 60
+  allow_overwrite = true
 }
 
 resource "aws_api_gateway_domain_name" "api_custom" {

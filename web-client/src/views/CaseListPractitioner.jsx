@@ -3,7 +3,6 @@ import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
 import { CaseSearchBox } from './CaseSearchBox';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
-import { MyContactInformation } from './MyContactInformation';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -182,7 +181,7 @@ export const CaseListPractitioner = connect(
                         <Button
                           link
                           className="usa-link--external text-left"
-                          href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                          href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
                           icon="file-pdf"
                           iconColor="blue"
                           rel="noopener noreferrer"
@@ -195,7 +194,6 @@ export const CaseListPractitioner = connect(
                     </Accordion>
                   </div>
                 </div>
-                <MyContactInformation />
               </div>
             </div>
           </div>
@@ -280,7 +278,7 @@ export const CaseListPractitioner = connect(
                       <Button
                         link
                         className="usa-link--external text-left"
-                        href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                        href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
                         icon="file-pdf"
                         iconColor="blue"
                         rel="noopener noreferrer"
@@ -293,7 +291,6 @@ export const CaseListPractitioner = connect(
                   </Accordion>
                 </div>
               </div>
-              <MyContactInformation />
             </div>
           </div>
         </Mobile>

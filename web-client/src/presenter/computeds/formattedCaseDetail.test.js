@@ -10,7 +10,8 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const getDateISO = () => new Date().toISOString();
+const getDateISO = () =>
+  applicationContext.getUtilities().createISODateString();
 
 describe('formattedCaseDetail', () => {
   let globalUser;
@@ -374,6 +375,41 @@ describe('formattedCaseDetail', () => {
         showDocumentViewerLink: true,
         showEditDocketRecordEntry: false,
         showLinkToDocument: false,
+      },
+    ]);
+  });
+
+  it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
+    const DOCKET_NUMBER = '101-20';
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      contactSecondary: {
+        name: 'Bill',
+      },
+      correspondence: [],
+      docketEntries: simpleDocketEntries,
+      docketNumber: DOCKET_NUMBER,
+      hasVerifiedIrsNotice: false,
+      otherFilers: [],
+      otherPetitioners: [],
+      petitioners: [{ name: 'bob' }],
+      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
+    };
+
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        validationErrors: {},
+      },
+    });
+
+    expect(result.formattedDocketEntries).toMatchObject([
+      {
+        editDocketEntryMetaLink: `/case-detail/${DOCKET_NUMBER}/docket-entry/${simpleDocketEntries[0].index}/edit-meta`,
       },
     ]);
   });
@@ -907,7 +943,7 @@ describe('formattedCaseDetail', () => {
       };
       const caseDeadlines = [
         {
-          deadlineDate: new Date(),
+          deadlineDate: applicationContext.getUtilities().createISODateString(),
         },
       ];
 
@@ -2026,6 +2062,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2377,6 +2414,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2478,6 +2516,7 @@ describe('formattedCaseDetail', () => {
         docketEntries: [mockDocketEntry],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -3600,6 +3639,74 @@ describe('formattedCaseDetail', () => {
     });
   });
 
+  describe('qcNeeded', () => {
+    const mockDocketEntry = {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-18',
+      documentTitle: 'Petition',
+      documentType: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.documentType,
+      eventCode: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.eventCode,
+      filedBy: 'Test Petitioner',
+      filingDate: '2018-03-01T00:01:00.000Z',
+      index: 1,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T00:01:00.000Z',
+      servedAt: '2020-04-29T15:51:29.168Z',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      workItem: {
+        completedAt: undefined,
+        isRead: false,
+      },
+    };
+
+    it('should set qcNeeded to true when work item is not read', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [mockDocketEntry],
+            docketNumber: '123-45',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        qcNeeded: true,
+      });
+    });
+
+    it('should set qcNeeded to false when qcWorkItemsUntouched is true and work item is read', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                workItem: {
+                  completedAt: '2020-04-29T15:51:29.168Z',
+                  isRead: true,
+                },
+              },
+            ],
+            docketNumber: '123-45',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        qcNeeded: false,
+      });
+    });
+  });
+
   it('should sort hearings by the addedToSessionAt field', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -3681,6 +3788,58 @@ describe('formattedCaseDetail', () => {
       addedToSessionAt: '2020-04-19T17:29:13.120Z',
       calendarNotes: 'THIRD',
       trialSessionId: '345',
+    });
+  });
+
+  describe('showBlockedTag', () => {
+    it('should be true when blocked is true', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            blocked: true,
+            blockedDate: '2019-04-19T17:29:13.120Z',
+            blockedReason: 'because',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be true when blocked is false, automaticBlocked is true, and case status is NOT calendared', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: STATUS_TYPES.new,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be false when blocked is false, automaticBlocked is true, and case status is calendared', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: STATUS_TYPES.calendared,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeFalsy();
     });
   });
 });

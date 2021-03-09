@@ -13,7 +13,7 @@ resource "aws_lambda_function" "api_public_lambda" {
     aws_lambda_layer_version.puppeteer_layer.arn
   ]
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
 
   environment {
     variables = var.lambda_environment
@@ -165,19 +165,24 @@ resource "aws_acm_certificate" "api_gateway_cert_public" {
 
 resource "aws_acm_certificate_validation" "validate_api_gateway_cert_public" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert_public.arn
-  validation_record_fqdns = [aws_route53_record.api_public_route53_record.0.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.api_public_route53_record : record.fqdn]
   count                   = var.validate
 }
 
 resource "aws_route53_record" "api_public_route53_record" {
-  name    = aws_acm_certificate.api_gateway_cert_public.domain_validation_options.0.resource_record_name
-  type    = aws_acm_certificate.api_gateway_cert_public.domain_validation_options.0.resource_record_type
-  zone_id = var.zone_id
-  count   = var.validate
-  records = [
-    aws_acm_certificate.api_gateway_cert_public.domain_validation_options.0.resource_record_value,
-  ]
-  ttl = 60
+  for_each = {
+    for dvo in aws_acm_certificate.api_gateway_cert_public.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+  name            = each.value.name
+  type            = each.value.type
+  zone_id         = var.zone_id
+  records         = [each.value.record]
+  ttl             = 60
+  allow_overwrite = true
 }
 
 resource "aws_api_gateway_domain_name" "api_public_custom" {

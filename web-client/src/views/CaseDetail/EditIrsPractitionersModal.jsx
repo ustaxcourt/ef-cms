@@ -35,7 +35,7 @@ export const EditIrsPractitionersModal = connect(
           {modal.irsPractitioners.map((respondent, idx) => (
             <div
               className="border border-base-light padding-2 margin-bottom-2 grid-row"
-              key={idx}
+              key={respondent.barNumber}
             >
               <div className="grid-col-8">
                 <label

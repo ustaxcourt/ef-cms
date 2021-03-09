@@ -45,7 +45,7 @@ describe('bulkDeleteRecords', () => {
 
     const result = await bulkDeleteRecords({
       applicationContext,
-      records: records,
+      records,
     });
     expect(applicationContext.getSearchClient().bulk).toBeCalled();
     expect(result.failedRecords).toEqual([]);
@@ -92,7 +92,7 @@ describe('bulkDeleteRecords', () => {
 
     const result = await bulkDeleteRecords({
       applicationContext,
-      records: records,
+      records,
     });
     expect(applicationContext.getSearchClient().bulk).toBeCalled();
     expect(result.failedRecords).toEqual([

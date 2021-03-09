@@ -1,4 +1,5 @@
 import { AppComponent } from './views/AppComponent';
+import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import {
@@ -109,7 +110,6 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
-    applicationContext.initHoneybadger();
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
@@ -261,8 +261,15 @@ const app = {
 
     ReactDOM.render(
       <Container app={cerebralApp}>
-        <IdleActivityMonitor />
+        {!process.env.CI && (
+          <>
+            <IdleActivityMonitor />
+            <AppInstanceManager />
+          </>
+        )}
+
         <AppComponent />
+
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
       window.document.querySelector('#app'),

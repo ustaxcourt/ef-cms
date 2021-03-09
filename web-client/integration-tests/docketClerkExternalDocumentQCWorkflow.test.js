@@ -27,6 +27,10 @@ describe('Create a work item', () => {
     jest.setTimeout(40000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   let caseDetail;
   let qcMyInboxCountBefore;
   let qcSectionInboxCountBefore;
@@ -256,6 +260,8 @@ describe('Create a work item', () => {
     });
 
     await test.runSequence('completeDocketEntryQCAndSendMessageSequence');
+
+    await refreshElasticsearchIndex();
 
     errors = test.getState('validationErrors');
 

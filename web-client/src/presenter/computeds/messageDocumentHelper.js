@@ -23,6 +23,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
   const caseDetail = get(state.caseDetail);
+  const parentMessageId = get(state.parentMessageId);
 
   const { docketEntries } = caseDetail;
 
@@ -54,6 +55,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   if (formattedDocument) {
     ({ editUrl } = formattedDocument);
+    editUrl += `/${parentMessageId}`;
   }
 
   const isNotice = NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
@@ -126,8 +128,12 @@ export const messageDocumentHelper = (get, applicationContext) => {
     );
 
   return {
+    addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
     archived: documentIsArchived,
+    editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
     editUrl,
+    messageDetailLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+    servePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`,
     showAddDocketEntryButton,
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
@@ -152,5 +158,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showServePaperFiledDocumentButton,
     showServePetitionButton,
     showSignStipulatedDecisionButton,
+    signOrderLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentIdToDisplay}/sign/${parentMessageId}`,
   };
 };

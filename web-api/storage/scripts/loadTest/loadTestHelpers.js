@@ -1,3 +1,4 @@
+/* eslint-disable @miovision/disallow-date/no-new-date */
 const faker = require('faker');
 const {
   CASE_TYPES_MAP,

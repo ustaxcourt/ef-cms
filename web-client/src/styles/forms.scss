@@ -88,7 +88,6 @@ select {
   margin: 0;
   -webkit-appearance: none;
   appearance: none;
-  background-image: url('/images/arrow-both-base.svg');
   &:disabled {
     border-color: color($theme-color-base-light);
     background-color: color($theme-color-base-lighter);
