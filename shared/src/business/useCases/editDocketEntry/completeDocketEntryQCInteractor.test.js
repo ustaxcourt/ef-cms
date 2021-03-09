@@ -83,6 +83,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          receivedAt: '2019-08-27T05:00:00.000Z',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItem,
         },
@@ -91,6 +92,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          receivedAt: '2019-08-29T05:00:00.000Z',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItem,
         },
@@ -650,9 +652,11 @@ describe('completeDocketEntryQCInteractor', () => {
       const needsNewCoversheet = getNeedsNewCoversheet({
         currentDocketEntry: {
           certificateOfService: false,
+          receivedAt: '2019-08-12T05:00:00.000Z',
         },
         updatedDocketEntry: {
           certificateOfService: true,
+          receivedAt: '2019-08-12T05:00:00.000Z',
         },
       });
 
@@ -663,9 +667,11 @@ describe('completeDocketEntryQCInteractor', () => {
       const needsNewCoversheet = getNeedsNewCoversheet({
         currentDocketEntry: {
           filedBy: 'petitioner.smith',
+          receivedAt: '2019-08-12T05:00:00.000Z',
         },
         updatedDocketEntry: {
           filedBy: 'petitioner.high',
+          receivedAt: '2019-08-12T05:00:00.000Z',
         },
       });
 
@@ -676,9 +682,11 @@ describe('completeDocketEntryQCInteractor', () => {
       const needsNewCoversheet = getNeedsNewCoversheet({
         currentDocketEntry: {
           documentTitle: 'fake title',
+          receivedAt: '2019-08-12T05:00:00.000Z',
         },
         updatedDocketEntry: {
           documentTitle: 'fake title 2!!!',
+          receivedAt: '2019-08-12T05:00:00.000Z',
         },
       });
 
