@@ -228,6 +228,9 @@ describe('updateCaseAndAssociations', () => {
 
   describe('correspondences', () => {
     it('does not call updateCaseCorrespondence if all docket entries are unchanged', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(validMockCase);
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: validMockCase,
