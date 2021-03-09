@@ -23,6 +23,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   const docketEntryId2 = 'd2d2d2d2-b37b-479d-9201-067ec6e335bb';
   const docketEntryId3 = 'd3d3d3d3-b37b-479d-9201-067ec6e335bb';
 
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  });
   beforeEach(() => {
     caseRecords = [
       {

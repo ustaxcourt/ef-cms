@@ -35,6 +35,8 @@ export const SignOrder = connect(
     signatureData,
     skipSigningOrderSequence,
   }) {
+    const yLimitToPreventServedStampOverlay = 675;
+
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 
@@ -105,6 +107,7 @@ export const SignOrder = connect(
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
         const canvasBounds = canvasEl.getBoundingClientRect();
+
         const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
         const scrollYOffset = window.scrollY;
 
@@ -118,11 +121,26 @@ export const SignOrder = connect(
           scrollYOffset +
           (canvasBounds.y - sigParentBounds.y);
 
-        moveSig(sigEl, uiPosX, uiPosY);
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          moveSig(sigEl, uiPosX, uiPosY);
+        }
       };
 
-      canvasEl.onmousedown = () => {
-        stopCanvasEvents(canvasEl, sigEl, x, y);
+      canvasEl.onmousedown = e => {
+        const { pageY } = e;
+        const canvasBounds = canvasEl.getBoundingClientRect();
+        const scrollYOffset = window.scrollY;
+        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+
+        const uiPosY =
+          pageY -
+          canvasBounds.y -
+          scrollYOffset +
+          (canvasBounds.y - sigParentBounds.y);
+
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          stopCanvasEvents(canvasEl, sigEl, x, y);
+        }
       };
 
       // sometimes the cursor falls on top of the signature
@@ -216,6 +234,9 @@ export const SignOrder = connect(
                   id="sign-pdf-canvas"
                   ref={canvasRef}
                 ></canvas>
+                <span id="signature-warning">
+                  You cannot apply a signature here.
+                </span>
               </div>
             </div>
           </div>
