@@ -277,4 +277,227 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledTimes(4);
     });
   });
+
+  describe('irs practitioners', () => {
+    beforeAll(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...validMockCase,
+          irsPractitioners: [],
+        });
+    });
+    it('does not call updateIrsPractitionersOnCase if all IRS practitioners are unchanged', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(validMockCase);
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: validMockCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway().updateIrsPractitionersOnCase,
+      ).not.toHaveBeenCalled();
+    });
+
+    // FIXME
+    it('calls updateIrsPractitionersOnCase FIXME existing irsPractitioners', async () => {
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          irsPractitioners: [
+            {
+              name: 'Bobby Flay',
+              userId: 'user-id-new-321',
+            },
+            { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+            { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        oldCase,
+      });
+    });
+
+    it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
+      await updateCase({
+        applicationContext,
+        caseToUpdate: {
+          docketNumber: '101-18',
+          docketNumberSuffix: null,
+          irsPractitioners: [
+            {
+              name: 'Rachel Ray',
+              userId: 'user-id-existing-234',
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        oldCase: {
+          ...oldCase,
+          irsPractitioners: [
+            {
+              name: 'Guy Fieri',
+              userId: 'user-id-existing-123',
+            },
+            {
+              name: 'Rachel Ray',
+              userId: 'user-id-existing-234',
+            },
+          ],
+        },
+      });
+
+      expect(applicationContext.getDocumentClient().delete).toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls.length,
+      ).toEqual(1);
+      expect(
+        applicationContext.getDocumentClient().delete.mock.calls[0][0].Key,
+      ).toMatchObject({
+        pk: 'case|101-18',
+        sk: 'irsPractitioner|user-id-existing-123',
+      });
+    });
+  });
+
+  // describe('privatePractitioners', () => {
+  //   it('adds a privatePractitioner to a case with no existing privatePractitioners', async () => {
+  //     await updateCase({
+  //       applicationContext,
+  //       caseToUpdate: {
+  //         docketNumber: '101-18',
+  //         docketNumberSuffix: null,
+  //         privatePractitioners: [
+  //           { name: 'Guy Fieri', userId: 'user-id-existing-234' },
+  //         ],
+  //         status: CASE_STATUS_TYPES.generalDocket,
+  //       },
+  //       oldCase,
+  //     });
+
+  //     expect(
+  //       applicationContext.getDocumentClient().delete,
+  //     ).not.toHaveBeenCalled();
+  //     expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+  //     expect(
+  //       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+  //     ).toMatchObject({
+  //       pk: 'case|101-18',
+  //       sk: 'privatePractitioner|user-id-existing-234',
+  //       userId: 'user-id-existing-234',
+  //     });
+  //   });
+
+  //   it('adds a privatePractitioner to a case with existing privatePractitioners', async () => {
+  //     await updateCase({
+  //       applicationContext,
+  //       caseToUpdate: {
+  //         docketNumber: '101-18',
+  //         docketNumberSuffix: null,
+  //         privatePractitioners: [
+  //           {
+  //             name: 'Bobby Flay',
+  //             userId: 'user-id-new-321',
+  //           },
+  //           { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+  //           { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+  //         ],
+  //         status: CASE_STATUS_TYPES.generalDocket,
+  //       },
+  //       oldCase: {
+  //         ...oldCase,
+  //         privatePractitioners: [
+  //           { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+  //           { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+  //         ],
+  //       },
+  //     });
+
+  //     expect(
+  //       applicationContext.getDocumentClient().delete,
+  //     ).not.toHaveBeenCalled();
+  //     expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+  //     expect(
+  //       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+  //     ).toMatchObject({
+  //       pk: 'case|101-18',
+  //       sk: 'privatePractitioner|user-id-new-321',
+  //       userId: 'user-id-new-321',
+  //     });
+  //   });
+
+  //   it('updates a privatePractitioner on a case', async () => {
+  //     await updateCase({
+  //       applicationContext,
+  //       caseToUpdate: {
+  //         docketNumber: '101-18',
+  //         docketNumberSuffix: null,
+  //         privatePractitioners: [
+  //           {
+  //             motto: 'Welcome to Flavortown!',
+  //             name: 'Guy Fieri',
+  //             userId: 'user-id-existing-123',
+  //           },
+  //           { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+  //         ],
+  //         status: CASE_STATUS_TYPES.generalDocket,
+  //       },
+  //       oldCase: {
+  //         ...oldCase,
+  //         privatePractitioners: [
+  //           { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+  //           { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+  //         ],
+  //       },
+  //     });
+
+  //     expect(
+  //       applicationContext.getDocumentClient().delete,
+  //     ).not.toHaveBeenCalled();
+  //     expect(applicationContext.getDocumentClient().put).toHaveBeenCalled();
+  //     expect(
+  //       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+  //     ).toMatchObject({
+  //       motto: 'Welcome to Flavortown!',
+  //       pk: 'case|101-18',
+  //       sk: 'privatePractitioner|user-id-existing-123',
+  //       userId: 'user-id-existing-123',
+  //     });
+  //   });
+
+  //   it('removes a privatePractitioner from a case with existing privatePractitioners', async () => {
+  //     await updateCase({
+  //       applicationContext,
+  //       caseToUpdate: {
+  //         docketNumber: '101-18',
+  //         docketNumberSuffix: null,
+  //         privatePractitioners: [
+  //           { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+  //         ],
+  //         status: CASE_STATUS_TYPES.generalDocket,
+  //       },
+  //       oldCase: {
+  //         ...oldCase,
+  //         privatePractitioners: [
+  //           { name: 'Rachel Ray', userId: 'user-id-existing-234' },
+  //           { name: 'Guy Fieri', userId: 'user-id-existing-123' },
+  //         ],
+  //       },
+  //     });
+
+  //     expect(applicationContext.getDocumentClient().delete).toHaveBeenCalled();
+  //     expect(
+  //       applicationContext.getDocumentClient().delete.mock.calls.length,
+  //     ).toEqual(1);
+  //     expect(
+  //       applicationContext.getDocumentClient().delete.mock.calls[0][0].Key,
+  //     ).toMatchObject({
+  //       pk: 'case|101-18',
+  //       sk: 'privatePractitioner|user-id-existing-123',
+  //     });
+  //   });
+  // });
 });
