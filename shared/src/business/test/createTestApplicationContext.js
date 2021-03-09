@@ -135,6 +135,9 @@ const {
   updateCaseAutomaticBlock,
 } = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const {
+  updateDocketEntry,
+} = require('../../persistence/dynamo/documents/updateDocketEntry');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -422,6 +425,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseHearing: jest.fn(),
     updateCaseTrialSortMappingRecords: jest.fn(),
+    updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     updateWorkItem,
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
