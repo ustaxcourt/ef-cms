@@ -22,7 +22,7 @@
     "archiver": "^5.3.0",
     "async-test-util": "^1.7.3",
     "autoprefixer": "^9.8.6",
-    "aws-sdk": "^2.859.0",
+    "aws-sdk": "^2.860.0",
     "axios": "^0.21.1",
     "axios-retry": "^3.1.9",
     "babel-eslint": "^10.0.3",
@@ -94,7 +94,7 @@
     "parcel-plugin-static-files-copy": "^2.5.1",
     "parse-full-name": "^1.2.5",
     "pdf-lib": "^1.16.0",
-    "pdfjs-dist": "2.3.200",
+    "pdfjs-dist": "^2.6.347",
     "pixelmatch": "^5.2.1",
     "pngjs": "^6.0.0",
     "postcss": "^8.2.7",
@@ -121,7 +121,7 @@
     "sass": "^1.32.8",
     "stylelint": "^13.12.0",
     "stylelint-config-idiomatic-order": "^8.1.0",
-    "stylelint-config-standard": "^20.0.0",
+    "stylelint-config-standard": "^21.0.0",
     "swagger-cli": "^4.0.4",
     "tmp": "^0.2.1",
     "uswds": "^2.10.2",
@@ -252,7 +252,7 @@
   },
   "staticFiles": {
     "staticPath": [
-      "node_modules/pdfjs-dist/build",
+      "node_modules/pdfjs-dist/es5/build",
       "node_modules/react-quill/dist",
       "node_modules/pdf-lib/dist"
     ],
