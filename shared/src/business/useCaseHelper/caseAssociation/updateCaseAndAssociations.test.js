@@ -158,7 +158,7 @@ describe('updateCaseAndAssociations', () => {
     ]);
   });
 
-  describe('documents', () => {
+  describe('docket entries', () => {
     it('does not call updateDocketEntry if all docket entries are unchanged', async () => {
       const oldCase = {
         ...validMockCase,
@@ -188,7 +188,7 @@ describe('updateCaseAndAssociations', () => {
       ).toMatchObject({ applicationContext, caseToUpdate, oldCase });
     });
 
-    it('calls updateDocketEntry for each case document which has been added or changed', async () => {
+    it('calls updateDocketEntry for each docket entry which has been added or changed', async () => {
       const oldCase = {
         ...MOCK_CASE,
         archivedDocketEntries: [MOCK_DOCUMENTS[0]],
@@ -227,7 +227,7 @@ describe('updateCaseAndAssociations', () => {
   });
 
   describe('correspondences', () => {
-    it('does not call updateCaseCorrespondence if all docket entries are unchanged', async () => {
+    it('does not call updateCaseCorrespondence if all correspondences are unchanged', async () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(validMockCase);
@@ -240,7 +240,7 @@ describe('updateCaseAndAssociations', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('calls updateCaseCorrespondence for each case document which has been added or changed', async () => {
+    it('calls updateCaseCorrespondence for each correspondence which has been added or changed', async () => {
       const caseToUpdate = {
         ...validMockCase,
         archivedCorrespondences: [
