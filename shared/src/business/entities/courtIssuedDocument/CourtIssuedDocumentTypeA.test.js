@@ -40,6 +40,34 @@ describe('CourtIssuedDocumentTypeA', () => {
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
     });
 
+    it('should be valid when serviceStamp is undefined, eventCode is a generic order, and isLegacy is true', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: '[Anything]',
+        documentType: 'Order',
+        freeText: 'Some free text',
+        scenario: 'Type A',
+        serviceStamp: 'Served',
+      });
+
+      expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when serviceStamp is undefined, eventCode is a generic order, and isLegacy is false', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: '[Anything]',
+        documentType: 'Order',
+        freeText: 'Some free text',
+        scenario: 'Type A',
+        serviceStamp: 'Served',
+      });
+
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        serviceStamp: 'blah',
+      });
+    });
+
     describe('requiring filing dates on unservable documents', () => {
       it('should be invalid when filingDate is undefined on an unservable document', () => {
         const documentInstance = CourtIssuedDocumentFactory.get({
