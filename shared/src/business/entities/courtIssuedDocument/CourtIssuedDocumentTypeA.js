@@ -25,6 +25,7 @@ function CourtIssuedDocumentTypeA() {}
 CourtIssuedDocumentTypeA.prototype.init = function init(rawProps) {
   courtIssuedDocumentDecorator(this, rawProps);
   this.freeText = rawProps.freeText;
+  this.isLegacy = rawProps.isLegacy;
   this.serviceStamp = rawProps.serviceStamp;
 };
 
@@ -44,7 +45,11 @@ CourtIssuedDocumentTypeA.schema = {
   ).when('documentType', {
     is: GENERIC_ORDER_DOCUMENT_TYPE,
     otherwise: joi.optional().allow(null),
-    then: joi.required(),
+    then: joi.when('isLegacy', {
+      is: true,
+      otherwise: joi.required(),
+      then: joi.optional().allow(null),
+    }),
   }),
 };
 
