@@ -4,7 +4,6 @@ const { WorkItemDocketEntry } = require('./WorkItemDocketEntry');
 describe('WorkItemDocketEntry', () => {
   it('should white lists the fields set within the entity, removing those not defined', () => {
     const mockDocketEntry = MOCK_DOCUMENTS[0];
-
     const workItemDocketEntry = new WorkItemDocketEntry(mockDocketEntry);
 
     expect(workItemDocketEntry.getFormattedValidationErrors()).toBe(null);
