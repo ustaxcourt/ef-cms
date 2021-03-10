@@ -62,8 +62,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    const createdCase = await getCaseInteractor({
-      applicationContext,
+    const createdCase = await getCaseInteractor(applicationContext, {
       docketNumber,
     });
 

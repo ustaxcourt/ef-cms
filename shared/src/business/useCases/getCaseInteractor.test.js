@@ -47,8 +47,7 @@ describe('getCaseInteractor', () => {
       );
 
     await expect(
-      getCaseInteractor({
-        applicationContext,
+      getCaseInteractor(applicationContext, {
         docketNumber: '123-19',
       }),
     ).rejects.toThrow('Case 123-19 was not found.');
@@ -69,8 +68,7 @@ describe('getCaseInteractor', () => {
       .getFullCaseByDocketNumber.mockReturnValue(mockInvalidCase);
 
     await expect(
-      getCaseInteractor({
-        applicationContext,
+      getCaseInteractor(applicationContext, {
         docketNumber: '00101-08',
       }),
     ).rejects.toThrow('The Case entity was invalid');
@@ -95,8 +93,7 @@ describe('getCaseInteractor', () => {
         userId: '320fce0e-b050-4e04-8720-db25da3ca598',
       });
 
-    const result = await getCaseInteractor({
-      applicationContext,
+    const result = await getCaseInteractor(applicationContext, {
       docketNumber: '00101-00',
     });
 
@@ -121,8 +118,7 @@ describe('getCaseInteractor', () => {
         }),
       );
 
-    const result = await getCaseInteractor({
-      applicationContext,
+    const result = await getCaseInteractor(applicationContext, {
       docketNumber: '00101-00',
     });
 
@@ -150,8 +146,7 @@ describe('getCaseInteractor', () => {
         userId: '320fce0e-b050-4e04-8720-db25da3ca598',
       });
 
-    const result = await getCaseInteractor({
-      applicationContext,
+    const result = await getCaseInteractor(applicationContext, {
       docketNumber: '00101-00',
     });
 
@@ -181,8 +176,7 @@ describe('getCaseInteractor', () => {
         role: ROLES.docketClerk,
         userId: docketClerkId,
       });
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
       expect(result.contactPrimary.city).toBeDefined();
@@ -206,8 +200,7 @@ describe('getCaseInteractor', () => {
         userId: applicationContext.getUniqueId(),
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -259,8 +252,7 @@ describe('getCaseInteractor', () => {
         userId: practitioner2Id,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -287,8 +279,7 @@ describe('getCaseInteractor', () => {
         userId: docketClerkId,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -303,8 +294,7 @@ describe('getCaseInteractor', () => {
         userId: practitionerId,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -339,8 +329,7 @@ describe('getCaseInteractor', () => {
         userId: docketClerkId,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -355,8 +344,7 @@ describe('getCaseInteractor', () => {
         userId: practitionerId,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -371,8 +359,7 @@ describe('getCaseInteractor', () => {
         userId: practitioner2Id,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
