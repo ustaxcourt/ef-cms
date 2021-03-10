@@ -1142,6 +1142,13 @@ describe('getFormattedCaseDetail', () => {
 });
 
 describe('documentMeetsAgeRequirements', () => {
+  const oldTranscriptDate = '2010-01-01T01:02:03.007Z';
+  const aShortTimeAgo = calculateISODate({
+    dateString: createISODateString(),
+    howMuch: -12,
+    units: 'hours',
+  });
+
   it('indicates success if document is not a transcript', () => {
     const nonTranscriptEventCode = 'BANANA'; // this is not a transcript event code - to think otherwise would just be bananas.
     const result = documentMeetsAgeRequirements({
@@ -1152,16 +1159,33 @@ describe('documentMeetsAgeRequirements', () => {
   it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
       eventCode: TRANSCRIPT_EVENT_CODE,
-      secondaryDate: '2010-01-01T01:02:03.007Z', // 10yr old transcript
+      secondaryDate: oldTranscriptDate,
     });
     expect(result).toBeTruthy();
   });
-  it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
-    const aShortTimeAgo = calculateISODate({
-      dateString: createISODateString(),
-      howMuch: -12,
-      units: 'hours',
+
+  it(`indicates success if document is a legacy transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
+    const result = documentMeetsAgeRequirements({
+      eventCode: TRANSCRIPT_EVENT_CODE,
+      filingDate: oldTranscriptDate,
+      isLegacy: true,
+      secondaryDate: undefined,
     });
+    expect(result).toBeTruthy();
+  });
+
+  it(`indicates failure if document is a legacy transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
+    const result = documentMeetsAgeRequirements({
+      eventCode: TRANSCRIPT_EVENT_CODE,
+      filingDate: aShortTimeAgo,
+      isLegacy: true,
+      secondaryDate: undefined,
+    });
+
+    expect(result).toBeFalsy();
+  });
+
+  it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
       eventCode: TRANSCRIPT_EVENT_CODE,
       secondaryDate: aShortTimeAgo,
