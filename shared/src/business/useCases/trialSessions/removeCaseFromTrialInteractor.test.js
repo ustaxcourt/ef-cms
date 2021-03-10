@@ -52,8 +52,9 @@ describe('remove case from trial session', () => {
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         associatedJudge: 'someone',
+        trialDate: '2018-03-01T00:00:00.000Z',
         trialLocation: 'Boise, Idaho',
-        trialSessionId: 'abcd',
+        trialSessionId: '9047d1ab-18d0-43ec-bafb-654e83405416',
       });
     applicationContext
       .getPersistenceGateway()
@@ -235,8 +236,10 @@ describe('remove case from trial session', () => {
         ...MOCK_CASE,
         associatedJudge: 'someone',
         preferredTrialCity: null,
+        trialDate: '2018-03-01T00:00:00.000Z',
         trialLocation: 'Boise, Idaho',
-        trialSessionId: 'abcd',
+
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       });
 
     await removeCaseFromTrialInteractor({

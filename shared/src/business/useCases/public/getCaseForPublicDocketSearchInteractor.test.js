@@ -13,6 +13,21 @@ describe('Get case for public docket record search', () => {
       .getCaseByDocketNumber.mockResolvedValue(Promise.resolve(MOCK_CASE));
   });
 
+  it('should format the given docket number, removing leading zeroes and suffix', async () => {
+    await getCaseForPublicDocketSearchInteractor({
+      applicationContext,
+      docketNumber: '0000123-19S',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+        .calls[0][0],
+    ).toEqual({
+      applicationContext,
+      docketNumber: '123-19',
+    });
+  });
+
   it('should throw an unauthorized error when the found case is sealed', async () => {
     applicationContext
       .getPersistenceGateway()
