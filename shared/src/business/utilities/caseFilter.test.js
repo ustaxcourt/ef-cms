@@ -39,6 +39,7 @@ describe('caseFilter', () => {
         name: 'Joe Dirt',
         otherFilerType: 'Nail File',
         secondaryName: 'Cheeseburgers',
+        serviceIndicator: 'Electronic',
         title: 'Emperor',
         transmission: 'manual',
       });
@@ -66,6 +67,7 @@ describe('caseFilter', () => {
           'otherFilerType',
           'sealedAndUnavailable',
           'secondaryName',
+          'serviceIndicator',
           'title',
         ]);
       });

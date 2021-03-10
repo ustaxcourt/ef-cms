@@ -291,10 +291,7 @@ const formatTrialSessionScheduling = ({
 }) => {
   formattedCase.formattedPreferredTrialCity =
     formattedCase.preferredTrialCity || 'No location selected';
-  if (
-    formattedCase.trialSessionId &&
-    formattedCase.status !== CASE_STATUS_TYPES.closed
-  ) {
+  if (formattedCase.trialSessionId) {
     if (formattedCase.status === CASE_STATUS_TYPES.calendared) {
       formattedCase.showTrialCalendared = true;
     } else {
