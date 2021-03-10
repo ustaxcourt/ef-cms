@@ -75,6 +75,11 @@ export const petitionerFilesADocumentForCase = (test, fakeFile) => {
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'primaryDocumentFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'partyPrimary',
       value: true,
     });
