@@ -35,7 +35,6 @@ joiValidationDecorator(
   joi.object().keys({
     additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
     createdAt: DOCKET_ENTRY_VALIDATION_RULE_KEYS.createdAt,
-    descriptionDisplay: DOCKET_ENTRY_VALIDATION_RULE_KEYS.descriptionDisplay,
     docketEntryId: DOCKET_ENTRY_VALIDATION_RULE_KEYS.docketEntryId,
     documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentTitle,
     documentType: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentType,
