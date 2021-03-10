@@ -7,7 +7,7 @@ import { petitionerFilesANonstardardDDocumentForCase } from './journey/petitione
 const test = setupTest();
 test.draftOrders = [];
 
-describe("Docket Clerk Edits a Docket Entry's Nonstardard D Metadata", () => {
+describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
