@@ -25,6 +25,8 @@ export const generateTitlePreviewAction = ({
       documentMetadata,
     });
 
+  console.log('le updatedDocumentTitle', updatedDocumentTitle);
+
   if (formattedDocketEntry.additionalInfo) {
     updatedDocumentTitle += ` ${formattedDocketEntry.additionalInfo}`;
   }

@@ -15,6 +15,11 @@ export const EditDocketEntryMetaDocketEntryPreview = connect(
     editType,
     noDocumentDescription,
   }) {
+    console.log('documentTitlePreview', documentTitlePreview);
+    console.log(
+      'addCourtIssuedDocketEntryHelper.formattedDocumentTitle',
+      addCourtIssuedDocketEntryHelper.formattedDocumentTitle,
+    );
     return (
       <>
         {(editType === 'CourtIssued' &&

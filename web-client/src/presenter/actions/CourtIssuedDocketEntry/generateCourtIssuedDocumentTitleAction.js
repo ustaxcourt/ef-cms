@@ -26,6 +26,9 @@ export const generateCourtIssuedDocumentTitleAction = ({
       applicationContext,
       documentMetadata,
     });
+
+  console.log('le documentTitle', documentTitle);
+
   if (documentTitle) {
     store.set(state.form.generatedDocumentTitle, documentTitle);
   } else {
