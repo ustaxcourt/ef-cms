@@ -74,9 +74,26 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     // first transcript should be available to the user
     expect(transcriptDocuments[0].showLinkToDocument).toEqual(true);
     expect(transcriptDocuments[0].isUnservable).toEqual(true);
+
+    await expect(
+      test.runSequence('openCaseDocumentDownloadUrlSequence', {
+        docketEntryId: transcriptDocuments[0].docketEntryId,
+        docketNumber: test.docketNumber,
+        isPublic: false,
+      }),
+    ).not.toThrow();
+
     // second transcript should NOT be available to the user
     expect(transcriptDocuments[1].showLinkToDocument).toEqual(false);
     expect(transcriptDocuments[1].isUnservable).toEqual(true);
+
+    await expect(
+      test.runSequence('openCaseDocumentDownloadUrlSequence', {
+        docketEntryId: transcriptDocuments[1].docketEntryId,
+        docketNumber: test.docketNumber,
+        isPublic: false,
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time.');
 
     const transDocketRecord = formattedCase.docketEntries.find(
       record => record.eventCode === TRANSCRIPT_EVENT_CODE,
