@@ -297,6 +297,7 @@ describe('updateTrialSessionInteractor', () => {
       notes: 'some notes',
       password: '444444',
       postalCode: '12345',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       sessionType: SESSION_TYPES.motionHearing,
       startDate: '2025-12-02T00:00:00.000Z',
       startTime: '10:00',
