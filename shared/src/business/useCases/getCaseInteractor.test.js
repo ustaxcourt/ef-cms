@@ -31,8 +31,7 @@ describe('getCaseInteractor', () => {
       .getPersistenceGateway()
       .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    await getCaseInteractor({
-      applicationContext,
+    await getCaseInteractor(applicationContext, {
       docketNumber: '000123-19S',
     });
 
