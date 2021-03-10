@@ -61,6 +61,10 @@ const handleIrsSuperUser = ({
 };
 
 const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
+  // look for other event_codes that are unservable
+  // formattedEntry.isUnservable =
+  // UNSERVABLE_EVENT_CODES.includes(formattedEntry.eventCode) ||
+  // formattedEntry.isLegacyServed;
   if (!isServed(docketEntryEntity)) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   } else if (
