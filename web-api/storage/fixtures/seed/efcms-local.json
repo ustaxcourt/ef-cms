@@ -113,7 +113,7 @@
         "email": "petitioner@example.com"
       }
     ],
-    "isLegacy": true,
+    "serviceStamp": "Served",
     "attachments": false,
     "isStricken": false,
     "documentType": "Order",

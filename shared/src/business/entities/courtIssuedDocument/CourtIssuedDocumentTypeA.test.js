@@ -1,8 +1,11 @@
 const {
+  GENERIC_ORDER_DOCUMENT_TYPE,
+  VALIDATION_ERROR_MESSAGES,
+} = require('./CourtIssuedDocumentConstants');
+const {
   over1000Characters,
 } = require('../../test/createTestApplicationContext');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeA', () => {
   describe('constructor', () => {
@@ -40,31 +43,33 @@ describe('CourtIssuedDocumentTypeA', () => {
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
     });
 
-    it('should be valid when serviceStamp is undefined, eventCode is a generic order, and isLegacy is true', () => {
+    it('should be valid when serviceStamp is undefined, documentType is a generic order, and isLegacy is true', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: '[Anything]',
-        documentType: 'Order',
+        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
         freeText: 'Some free text',
+        isLegacy: true,
         scenario: 'Type A',
-        serviceStamp: 'Served',
+        serviceStamp: undefined,
       });
 
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
     });
 
-    it('should be invalid when serviceStamp is undefined, eventCode is a generic order, and isLegacy is false', () => {
+    it('should be invalid when serviceStamp is undefined, documentType is a generic order, and isLegacy is false', () => {
       const documentInstance = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: '[Anything]',
-        documentType: 'Order',
+        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
         freeText: 'Some free text',
+        isLegacy: false,
         scenario: 'Type A',
-        serviceStamp: 'Served',
+        serviceStamp: undefined,
       });
 
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        serviceStamp: 'blah',
+        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
       });
     });
 
