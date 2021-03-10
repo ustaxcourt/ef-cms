@@ -33,16 +33,16 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.completedMessage = rawWorkItem.completedMessage;
   this.createdAt = rawWorkItem.createdAt || createISODateString();
   this.docketEntry = pick(rawWorkItem.docketEntry, [
-    'receivedAt',
-    'servedAt',
-    'createdAt',
-    'eventCode',
-    'documentType',
-    'documentTitle',
     'additionalInfo',
+    'createdAt',
     'descriptionDisplay',
     'docketEntryId',
+    'documentTitle',
+    'documentType',
+    'eventCode',
     'isFileAttached',
+    'receivedAt',
+    'servedAt',
   ]);
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
