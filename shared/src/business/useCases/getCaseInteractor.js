@@ -95,7 +95,7 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
     .getPersistenceGateway()
     .getFullCaseByDocketNumber({
       applicationContext,
-      docketNumber: Case.stripLeadingZeros(docketNumber),
+      docketNumber: Case.formatDocketNumber(docketNumber),
     });
 
   if (!caseRecord.docketNumber && !caseRecord.entityName) {

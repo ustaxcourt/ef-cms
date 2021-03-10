@@ -22,7 +22,7 @@ exports.getPublicCaseInteractor = async ({
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber: Case.stripLeadingZeros(docketNumber),
+      docketNumber: Case.formatDocketNumber(docketNumber),
     });
 
   if (!rawCaseRecord.docketNumber && !rawCaseRecord.entityName) {
