@@ -253,7 +253,7 @@ describe('getCaseLambda', () => {
             postalCode: '68117',
             state: 'NE',
           },
-          email: 'adam22@yahoo.com',
+          email: 'adam22@example.com',
           name: 'Isaac Benson',
           serviceIndicator: 'Electronic',
         },
