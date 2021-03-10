@@ -4,7 +4,9 @@ const {
 const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { updateCaseAndAssociations } = require('./updateCaseAndAssociations');
 
 describe('updateCaseAndAssociations', () => {
@@ -32,10 +34,34 @@ describe('updateCaseAndAssociations', () => {
   };
 
   let updateCaseMock = jest.fn();
+  let validMockCase;
+
   beforeAll(() => {
+    validMockCase = new Case(
+      {
+        ...MOCK_CASE,
+        archivedCorrespondences: [
+          {
+            correspondenceId: applicationContext.getUniqueId(),
+            documentTitle: 'Inverted Yield Curve',
+            userId: applicationContext.getUniqueId(),
+          },
+        ],
+        correspondence: [
+          {
+            correspondenceId: applicationContext.getUniqueId(),
+            documentTitle: 'Deflationary Spending',
+            userId: applicationContext.getUniqueId(),
+          },
+        ],
+      },
+      { applicationContext },
+    )
+      .validate()
+      .toRawObject();
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(validMockCase);
 
     applicationContext
       .getPersistenceGateway()
@@ -44,10 +70,10 @@ describe('updateCaseAndAssociations', () => {
 
   it('gets the old case before passing it to updateCase persistence method', async () => {
     const caseToUpdate = {
-      ...MOCK_CASE,
+      ...validMockCase,
     };
     const oldCase = {
-      ...MOCK_CASE,
+      ...validMockCase,
     };
     applicationContext
       .getPersistenceGateway()
@@ -73,7 +99,7 @@ describe('updateCaseAndAssociations', () => {
   it('always sends valid entities to the updateCase persistence method', async () => {
     await updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: MOCK_CASE,
+      caseToUpdate: validMockCase,
     });
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -92,14 +118,14 @@ describe('updateCaseAndAssociations', () => {
       applicationContext.getUniqueId(),
     ];
 
-    const { docketNumber } = MOCK_CASE;
+    const { docketNumber } = validMockCase;
     const caseToUpdate = {
-      ...MOCK_CASE,
+      ...validMockCase,
       docketNumber,
       hearings: [{ ...MOCK_TRIAL_SESSION, trialSessionId: trialSessionIds[0] }],
     };
     const oldCase = {
-      ...MOCK_CASE,
+      ...validMockCase,
       docketNumber,
       hearings: [
         { ...MOCK_TRIAL_SESSION, trialSessionId: trialSessionIds[0] },
@@ -130,5 +156,125 @@ describe('updateCaseAndAssociations', () => {
       [{ docketNumber, trialSessionId: trialSessionIds[1] }],
       [{ docketNumber, trialSessionId: trialSessionIds[2] }],
     ]);
+  });
+
+  describe('docket entries', () => {
+    it('does not call updateDocketEntry if all docket entries are unchanged', async () => {
+      const oldCase = {
+        ...validMockCase,
+        archivedDocketEntries: MOCK_DOCUMENTS,
+        docketEntries: MOCK_DOCUMENTS,
+      };
+      const caseToUpdate = {
+        ...oldCase,
+        archivedDocketEntries: MOCK_DOCUMENTS,
+        docketEntries: MOCK_DOCUMENTS,
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(caseToUpdate);
+
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateDocketEntry,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
+      ).toMatchObject({ applicationContext, caseToUpdate, oldCase });
+    });
+
+    it('calls updateDocketEntry for each docket entry which has been added or changed', async () => {
+      const oldCase = {
+        ...MOCK_CASE,
+        archivedDocketEntries: [MOCK_DOCUMENTS[0]],
+        docketEntries: [MOCK_DOCUMENTS[0]],
+      };
+
+      const caseToUpdate = {
+        ...oldCase,
+        archivedDocketEntries: [
+          { ...MOCK_DOCUMENTS[0], documentTitle: 'Updated Archived Entry' },
+          { ...MOCK_DOCUMENTS[1], documentTitle: 'New Archived Entry' },
+        ],
+        docketEntries: [
+          { ...MOCK_DOCUMENTS[0], documentTitle: 'Updated Docket Entry' },
+          { ...MOCK_DOCUMENTS[1], documentTitle: 'New Docket Entry' },
+        ],
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(oldCase);
+
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
+      ).toMatchObject({ applicationContext, caseToUpdate, oldCase });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateDocketEntry,
+      ).toHaveBeenCalledTimes(4);
+    });
+  });
+
+  describe('correspondences', () => {
+    it('does not call updateCaseCorrespondence if all correspondences are unchanged', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(validMockCase);
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: validMockCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway().updateCaseCorrespondence,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('calls updateCaseCorrespondence for each correspondence which has been added or changed', async () => {
+      const caseToUpdate = {
+        ...validMockCase,
+        archivedCorrespondences: [
+          {
+            ...validMockCase.archivedCorrespondences[0],
+            documentTitle: 'Updated Archived Correspondence',
+          },
+          {
+            correspondenceId: applicationContext.getUniqueId(),
+            documentTitle: 'New Archived Correspondence',
+            userId: applicationContext.getUniqueId(),
+          },
+        ],
+        correspondence: [
+          {
+            ...validMockCase.correspondence[0],
+            documentTitle: 'Updated Correspondence',
+          },
+          {
+            correspondenceId: applicationContext.getUniqueId(),
+            documentTitle: 'New Correspondence',
+            userId: applicationContext.getUniqueId(),
+          },
+        ],
+      };
+
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateCaseCorrespondence,
+      ).toHaveBeenCalledTimes(4);
+    });
   });
 });

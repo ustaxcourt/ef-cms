@@ -35,7 +35,7 @@ export const SignOrder = connect(
     signatureData,
     skipSigningOrderSequence,
   }) {
-    const yLimitToPreventServedStampOverlay = 675;
+    const yLimitToPreventServedStampOverlay = 705;
 
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
@@ -107,6 +107,7 @@ export const SignOrder = connect(
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
         const canvasBounds = canvasEl.getBoundingClientRect();
+        const sigBox = sigEl.getBoundingClientRect();
 
         const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
         const scrollYOffset = window.scrollY;
@@ -115,11 +116,7 @@ export const SignOrder = connect(
         y = pageY - canvasBounds.y - scrollYOffset;
 
         const uiPosX = pageX - sigParentBounds.x;
-        const uiPosY =
-          pageY -
-          canvasBounds.y -
-          scrollYOffset +
-          (canvasBounds.y - sigParentBounds.y);
+        const uiPosY = y + (canvasBounds.y - sigParentBounds.y) - sigBox.height;
 
         if (uiPosY < yLimitToPreventServedStampOverlay) {
           moveSig(sigEl, uiPosX, uiPosY);
@@ -131,15 +128,16 @@ export const SignOrder = connect(
         const canvasBounds = canvasEl.getBoundingClientRect();
         const scrollYOffset = window.scrollY;
         const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
-
+        const sigBoxHeight = sigEl.getBoundingClientRect().height;
         const uiPosY =
           pageY -
           canvasBounds.y -
           scrollYOffset +
-          (canvasBounds.y - sigParentBounds.y);
+          (canvasBounds.y - sigParentBounds.y) -
+          sigBoxHeight;
 
         if (uiPosY < yLimitToPreventServedStampOverlay) {
-          stopCanvasEvents(canvasEl, sigEl, x, y);
+          stopCanvasEvents(canvasEl, sigEl, x, y - sigBoxHeight);
         }
       };
 
