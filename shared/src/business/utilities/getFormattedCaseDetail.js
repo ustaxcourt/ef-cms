@@ -39,7 +39,7 @@ const documentMeetsAgeRequirements = doc => {
   const isTranscript = transcriptCodes.includes(doc.eventCode);
   if (!isTranscript) return true;
   const availableOnDate = calculateISODate({
-    dateString: doc.secondaryDate,
+    dateString: doc.secondaryDate || (doc.isLegacy && doc.filingDate),
     howMuch: TRANSCRIPT_AGE_DAYS_MIN,
     units: 'days',
   });
