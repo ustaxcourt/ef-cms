@@ -5,7 +5,7 @@ const {
 const {
   TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
 } = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
+const { EligibleCase } = require('../../entities/cases/EligibleCase');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -66,7 +66,9 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
   let eligibleCasesFiltered = calendaredCases
     .concat(eligibleCases)
     .map(rawCase => {
-      return new Case(rawCase, { applicationContext }).validate().toRawObject();
+      return new EligibleCase(rawCase, { applicationContext })
+        .validate()
+        .toRawObject();
     });
 
   return eligibleCasesFiltered;

@@ -423,6 +423,8 @@ jobs:
             sleep 5
             npm run cypress
       - store_artifacts:
+          path: /root/project/cypress-smoketests/videos/
+      - store_artifacts:
           path: /root/project/cypress/videos/
       - store_artifacts:
           path: /tmp/cypress

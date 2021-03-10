@@ -135,6 +135,12 @@ const {
   updateCaseAutomaticBlock,
 } = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const {
+  updateCaseCorrespondence,
+} = require('../../persistence/dynamo/correspondence/updateCaseCorrespondence');
+const {
+  updateDocketEntry,
+} = require('../../persistence/dynamo/documents/updateDocketEntry');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -420,8 +426,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateCaseCorrespondence: jest
+      .fn()
+      .mockImplementation(updateCaseCorrespondence),
     updateCaseHearing: jest.fn(),
     updateCaseTrialSortMappingRecords: jest.fn(),
+    updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     updateWorkItem,
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
