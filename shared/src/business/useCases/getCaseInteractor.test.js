@@ -26,6 +26,25 @@ describe('getCaseInteractor', () => {
   const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
   const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
 
+  it('should format the given docket number, removing leading zeroes and suffix', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+    await getCaseInteractor({
+      applicationContext,
+      docketNumber: '000123-19S',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber.mock
+        .calls[0][0],
+    ).toEqual({
+      applicationContext,
+      docketNumber: '123-19',
+    });
+  });
+
   it('should throw an error when a case with the provided docketNumber is not found', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Tasha Yar',

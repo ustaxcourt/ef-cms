@@ -1227,17 +1227,6 @@ Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
 };
 
 /**
- * stripLeadingZeros
- *
- * @param {string} docketNumber the docket number
- * @returns {string} the updated docket number
- */
-Case.stripLeadingZeros = docketNumber => {
-  const [number, year] = docketNumber.split('-');
-  return `${parseInt(number)}-${year}`;
-};
-
-/**
  * check a case to see whether it should change to ready for trial and update the
  * status to General Docket - Ready for Trial if so
  *
@@ -1784,15 +1773,14 @@ Case.findLeadCaseForCases = function (cases) {
 };
 
 /**
- * re-formats docket number with any leading zeroes removed
+ * re-formats docket number with any leading zeroes and suffix removed
  *
  * @param {string} docketNumber the docket number to re-format
  * @returns {string} the formatted docket Number
  */
 Case.formatDocketNumber = function formatDocketNumber(docketNumber) {
-  const leadingZeroes = /^0+/;
-  const formattedDocketNumber = docketNumber.replace(leadingZeroes, '');
-  return formattedDocketNumber;
+  const regex = /^0*(\d+-\d{2}).*/;
+  return docketNumber.replace(regex, '$1');
 };
 
 /**
