@@ -4,8 +4,8 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
+const { pick } = require('lodash');
 const { WORK_ITEM_VALIDATION_RULES } = require('./EntityValidationConstants');
-const { WorkItemDocketEntry } = require('./WorkItemDocketEntry');
 
 /**
  * constructor
@@ -32,9 +32,18 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.completedByUserId = rawWorkItem.completedByUserId;
   this.completedMessage = rawWorkItem.completedMessage;
   this.createdAt = rawWorkItem.createdAt || createISODateString();
-  this.docketEntry = rawWorkItem.docketEntry
-    ? new WorkItemDocketEntry(rawWorkItem.docketEntry)
-    : undefined;
+  this.docketEntry = pick(rawWorkItem.docketEntry, [
+    'receivedAt',
+    'servedAt',
+    'createdAt',
+    'eventCode',
+    'documentType',
+    'documentTitle',
+    'additionalInfo',
+    'descriptionDisplay',
+    'docketEntryId',
+    'isFileAttached',
+  ]);
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
