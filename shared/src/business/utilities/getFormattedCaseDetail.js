@@ -38,12 +38,15 @@ const documentMeetsAgeRequirements = doc => {
   const transcriptCodes = [TRANSCRIPT_EVENT_CODE];
   const isTranscript = transcriptCodes.includes(doc.eventCode);
   if (!isTranscript) return true;
+
+  const dateStringToCheck = doc.isLegacy ? doc.filingDate : doc.secondaryDate;
   const availableOnDate = calculateISODate({
-    dateString: doc.secondaryDate,
+    dateString: dateStringToCheck,
     howMuch: TRANSCRIPT_AGE_DAYS_MIN,
     units: 'days',
   });
   const rightNow = createISODateString();
+
   const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
   return meetsTranscriptAgeRequirements;
 };
