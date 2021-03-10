@@ -25,6 +25,7 @@ EligibleCase.prototype.init = function init(rawCase) {
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.highPriority = rawCase.highPriority;
   this.caseType = rawCase.caseType;
+  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
 
   if (Array.isArray(rawCase.privatePractitioners)) {
     this.privatePractitioners = rawCase.privatePractitioners.map(
@@ -68,6 +69,13 @@ const eligibleCaseSchema = {
     .items(PrivatePractitioner.VALIDATION_RULES)
     .optional()
     .description('List of private practitioners associated with the case.'),
+  qcCompleteForTrial: joi
+    .object()
+    .optional()
+    .meta({ tags: ['Restricted'] })
+    .description(
+      'QC Checklist object that must be completed before the case can go to trial.',
+    ),
 };
 
 joiValidationDecorator(EligibleCase, joi.object(eligibleCaseSchema), {});
