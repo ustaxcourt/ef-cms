@@ -119,8 +119,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       },
     });
 
-    const caseAfterDocument = await getCaseInteractor({
-      applicationContext,
+    const caseAfterDocument = await getCaseInteractor(applicationContext, {
       docketNumber,
     });
 
@@ -430,8 +429,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       },
     });
 
-    const caseAfterDocument = await getCaseInteractor({
-      applicationContext,
+    const caseAfterDocument = await getCaseInteractor(applicationContext, {
       docketNumber,
     });
     const filedDocument = caseAfterDocument.docketEntries.find(
