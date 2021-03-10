@@ -33,7 +33,7 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.completedMessage = rawWorkItem.completedMessage;
   this.createdAt = rawWorkItem.createdAt || createISODateString();
   this.docketEntry = rawWorkItem.docketEntry
-    ? new WorkItemDocketEntry(rawWorkItem.docketEntry, { applicationContext })
+    ? new WorkItemDocketEntry(rawWorkItem.docketEntry)
     : undefined;
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
