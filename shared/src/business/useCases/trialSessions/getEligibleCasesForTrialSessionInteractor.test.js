@@ -5,10 +5,14 @@ const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('./getEligibleCasesForTrialSessionInteractor');
 const {
+  MOCK_CASE,
+  MOCK_ELIGIBLE_CASE,
+  MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+} = require('../../../test/mockCase');
+const {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
 describe('getEligibleCasesForTrialSessionInteractor', () => {
@@ -27,6 +31,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
 
   const MOCK_ASSOCIATED_CASE = {
     ...MOCK_CASE,
+    ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
   };
 
   beforeEach(() => {
@@ -44,7 +49,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       .getTrialSessionById.mockImplementation(() => mockTrial);
     applicationContext
       .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_CASE]);
+      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_ELIGIBLE_CASE]);
     applicationContext
       .getUseCases()
       .getCalendaredCasesForTrialSessionInteractor.mockImplementation(() => [
@@ -111,6 +116,9 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     }
 
     expect(error).toBeUndefined();
-    expect(result).toMatchObject([MOCK_ASSOCIATED_CASE, MOCK_CASE]);
+    expect(result).toMatchObject([
+      MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+      MOCK_ELIGIBLE_CASE,
+    ]);
   });
 });

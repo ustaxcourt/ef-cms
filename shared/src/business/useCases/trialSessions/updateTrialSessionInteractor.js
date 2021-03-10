@@ -57,6 +57,7 @@ exports.updateTrialSessionInteractor = async ({
     notes: trialSession.notes,
     password: trialSession.password,
     postalCode: trialSession.postalCode,
+    proceedingType: trialSession.proceedingType,
     sessionType: trialSession.sessionType,
     startDate: trialSession.startDate,
     startTime: trialSession.startTime,

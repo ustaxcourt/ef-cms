@@ -586,6 +586,7 @@ describe('serveCaseToIrsInteractor', () => {
       .getCaseByDocketNumber.mockReturnValueOnce(
         mockCaseWithoutServedDocketEntries,
       )
+      .mockReturnValueOnce(mockCase)
       .mockReturnValueOnce(mockCaseWithServedDocketEntries)
       .mockReturnValueOnce(mockCaseWithServedDocketEntries);
 

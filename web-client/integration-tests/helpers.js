@@ -457,7 +457,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
   presenter.providers.applicationContext = applicationContext;
 
-  presenter.providers.applicationContext = applicationContext;
   const {
     initialize: initializeSocketProvider,
     start,

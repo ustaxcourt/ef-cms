@@ -34,6 +34,14 @@ describe('updateTrialSessionInteractor', () => {
   const MOCK_TRIAL_ID_5 = '5674b900-517d-4ffc-81c0-140302c10010';
   const MOCK_TRIAL_ID_6 = 'd0293e71-155d-4cdd-9f3d-b21a72b64e51';
 
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+      });
+  });
+
   beforeEach(() => {
     mockTrialsById = {
       [MOCK_TRIAL_ID_1]: {
@@ -234,7 +242,12 @@ describe('updateTrialSessionInteractor', () => {
 
   it('should update the calendared case with new trial session info when the trialSessionId matches the case.trialSessionId', async () => {
     const mockCalendaredCase = new Case(
-      { ...MOCK_CASE, docketNumber: '123-45', trialSessionId: MOCK_TRIAL_ID_4 },
+      {
+        ...MOCK_CASE,
+        docketNumber: '123-45',
+        trialDate: '2045-12-01T00:00:00.000Z',
+        trialSessionId: MOCK_TRIAL_ID_4,
+      },
       { applicationContext },
     );
     const calendaredTrialSession = {
@@ -284,6 +297,7 @@ describe('updateTrialSessionInteractor', () => {
       notes: 'some notes',
       password: '444444',
       postalCode: '12345',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       sessionType: SESSION_TYPES.motionHearing,
       startDate: '2025-12-02T00:00:00.000Z',
       startTime: '10:00',

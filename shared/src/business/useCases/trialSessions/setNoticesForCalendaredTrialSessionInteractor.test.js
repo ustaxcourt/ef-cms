@@ -51,6 +51,11 @@ let calendaredCases;
 let trialSession;
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  });
   beforeEach(() => {
     const case0 = {
       // should get electronic service
