@@ -13,8 +13,9 @@ exports.saveCaseNoteLambda = event =>
       ...JSON.parse(event.body),
     };
 
-    return await applicationContext.getUseCases().saveCaseNoteInteractor({
-      applicationContext,
-      ...lambdaArguments,
-    });
+    return await applicationContext
+      .getUseCases()
+      .saveCaseNoteInteractor(applicationContext, {
+        ...lambdaArguments,
+      });
   });
