@@ -12,8 +12,7 @@ exports.checkEmailAvailabilityLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .checkEmailAvailabilityInteractor({
-        applicationContext,
+      .checkEmailAvailabilityInteractor(applicationContext, {
         email,
       });
   });
