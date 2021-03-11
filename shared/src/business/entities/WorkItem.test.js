@@ -180,6 +180,7 @@ describe('WorkItem', () => {
           docketNumber: '101-18',
           documentTitle: 'Proposed Stipulated Decision',
           documentType: 'Proposed Stipulated Decision',
+          editState: {},
           eventCode: 'PSDE',
           filedBy: 'Test Petitioner',
           filingDate: '2018-03-01T00:01:00.000Z',
@@ -196,7 +197,8 @@ describe('WorkItem', () => {
       },
       { applicationContext },
     );
-    expect(workItem.docketEntry.index).toBeUndefined();
+    expect(workItem.docketEntry.docketNumber).toBeUndefined();
+    expect(workItem.docketEntry.editState).toBeUndefined();
     expect(workItem.docketEntry.processingStatus).toBeUndefined();
     expect(workItem.docketEntry.documentTitle).toEqual(
       'Proposed Stipulated Decision',
