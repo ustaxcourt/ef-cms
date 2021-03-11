@@ -10,8 +10,7 @@ exports.updateQcCompleteForTrialLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateQcCompleteForTrialInteractor({
-        applicationContext,
+      .updateQcCompleteForTrialInteractor(applicationContext, {
         ...event.pathParameters,
         ...JSON.parse(event.body),
       });

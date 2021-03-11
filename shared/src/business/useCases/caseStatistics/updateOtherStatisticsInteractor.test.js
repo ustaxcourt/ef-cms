@@ -23,16 +23,14 @@ describe('updateOtherStatisticsInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateOtherStatisticsInteractor({
-        applicationContext,
+      updateOtherStatisticsInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
   it('should call updateCase with the updated case statistics and return the updated case', async () => {
-    const result = await updateOtherStatisticsInteractor({
-      applicationContext,
+    const result = await updateOtherStatisticsInteractor(applicationContext, {
       damages: 1234,
       docketNumber: MOCK_CASE.docketNumber,
       litigationCosts: 5678,
