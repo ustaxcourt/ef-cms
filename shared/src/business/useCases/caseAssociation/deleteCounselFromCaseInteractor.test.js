@@ -96,8 +96,7 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('deletes a practitioner with the given userId from the associated case', async () => {
-    await deleteCounselFromCaseInteractor({
-      applicationContext,
+    await deleteCounselFromCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
     });
