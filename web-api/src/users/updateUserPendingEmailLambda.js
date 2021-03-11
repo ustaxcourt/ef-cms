@@ -10,8 +10,7 @@ exports.updateUserPendingEmailLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateUserPendingEmailInteractor({
-        applicationContext,
+      .updateUserPendingEmailInteractor(applicationContext, {
         ...JSON.parse(event.body),
       });
   });
