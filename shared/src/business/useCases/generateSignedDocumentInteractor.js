@@ -4,7 +4,27 @@
  */
 exports.getPageDimensions = page => {
   const size = page.getSize();
-  return [size.width, size.height];
+
+  let pageWidth = size.width;
+  let pageHeight = size.height;
+
+  return [pageWidth, pageHeight];
+};
+
+/**
+ * @param {PDFPage} page the page to get CropBox for
+ * @returns {Number} width value of the CropBox or 0
+ */
+exports.getCropBoxOffset = page => {
+  const [pageWidth] = exports.getPageDimensions(page);
+
+  const cropBox = page.getCropBox();
+
+  if (cropBox && cropBox.width) {
+    return pageWidth - cropBox.width;
+  } else {
+    return 0;
+  }
 };
 
 const computeCoordinates = ({
@@ -86,7 +106,15 @@ const computeCoordinates = ({
       (boxHeight - textHeight * 2 - lineHeight) / 2 -
       boxHeight;
   }
-  return { rectangleX, rectangleY, sigNameX, sigNameY, sigTitleX, sigTitleY };
+
+  return {
+    rectangleX,
+    rectangleY,
+    sigNameX,
+    sigNameY,
+    sigTitleX,
+    sigTitleY,
+  };
 };
 
 exports.computeCoordinates = computeCoordinates;
@@ -124,6 +152,9 @@ exports.generateSignedDocumentInteractor = async ({
   const page = pages[pageIndex];
 
   const [pageWidth, pageHeight] = exports.getPageDimensions(page);
+  const cropBoxOffset = exports.getCropBoxOffset(page);
+
+  const posXWithCropBoxOffset = posX + cropBoxOffset;
 
   const { signatureName, signatureTitle } = sigTextData;
 
@@ -165,7 +196,7 @@ exports.generateSignedDocumentInteractor = async ({
     pageHeight,
     pageRotation: rotationAngle,
     pageWidth,
-    posX,
+    posX: posXWithCropBoxOffset,
     posY,
     scale,
     textHeight,

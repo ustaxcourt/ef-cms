@@ -5,6 +5,8 @@ const {
 const {
   computeCoordinates,
   generateSignedDocumentInteractor,
+  getCropBoxOffset,
+  getPageDimensions,
 } = require('./generateSignedDocumentInteractor');
 const { degrees, PDFDocument } = require('pdf-lib');
 
@@ -113,6 +115,38 @@ describe('generateSignedDocument', () => {
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
     expect(newPdfDocPages.length).toEqual(1);
+  });
+});
+
+describe('getPageDimensions', () => {
+  it('returns the page dimensions for the given pdf', async () => {
+    const pdfDoc = await PDFDocument.load(testPdfDoc);
+    const pages = pdfDoc.getPages();
+    const page = pages[0];
+
+    expect(getPageDimensions(page)).toMatchObject([612, 792]);
+  });
+});
+
+describe('getCropBoxOffset', () => {
+  it('returns 0 if there is no CropBox data for the given page', async () => {
+    const pdfDoc = await PDFDocument.load(testPdfDoc);
+    const pages = pdfDoc.getPages();
+    const page = pages[0];
+
+    expect(getCropBoxOffset(page)).toEqual(0);
+  });
+
+  it('returns the CropBox offset if present on the page metadata', async () => {
+    const pdfDoc = await PDFDocument.load(testPdfDoc);
+    const pages = pdfDoc.getPages();
+    const page = pages[0];
+
+    // edit the metadata to simulate a pdf we encountered with MediaBox and CropBox values
+    page.setMediaBox(0, 0, 1217, 790); // MediaBox is where the PDF gets its actual width/height dimensions from when using page.getSize() method
+    page.setCropBox(0, 0, 557, 0);
+
+    expect(getCropBoxOffset(page)).toEqual(660);
   });
 });
 
