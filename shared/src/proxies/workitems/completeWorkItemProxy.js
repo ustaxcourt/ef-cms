@@ -9,10 +9,11 @@ const { put } = require('../requests');
  * @param {string} providers.workItemId the id of the work item to complete
  * @returns {Promise<*>} the promise of the api call
  */
-exports.completeWorkItemInteractor = (
+exports.completeWorkItemInteractor = ({
   applicationContext,
-  { completedMessage, workItemId },
-) => {
+  completedMessage,
+  workItemId,
+}) => {
   return put({
     applicationContext,
     body: { completedMessage },
