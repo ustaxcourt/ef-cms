@@ -3,12 +3,9 @@ const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
+ * @param {object} applicationContext the application context
  */
-exports.checkForReadyForTrialCasesInteractor = async ({
-  applicationContext,
-}) => {
+exports.checkForReadyForTrialCasesInteractor = async applicationContext => {
   applicationContext.logger.debug('Time', createISODateString());
 
   const caseCatalog = await applicationContext
