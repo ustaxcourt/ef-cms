@@ -45,18 +45,19 @@ const createTrialSession = async ({ applicationContext }) => {
 
   let trialLocation = faker.random.arrayElement(TRIAL_CITY_STRINGS);
 
-  return await applicationContext.getUseCases().createTrialSessionInteractor({
-    applicationContext,
-    trialSession: {
-      isCalendared: false,
-      maxCases: 100,
-      sessionType: 'Hybrid',
-      startDate: startDate.toISOString(),
-      term,
-      termYear: `${startDateObj.getFullYear()}`,
-      trialLocation,
-    },
-  });
+  return await applicationContext
+    .getUseCases()
+    .createTrialSessionInteractor(applicationContext, {
+      trialSession: {
+        isCalendared: false,
+        maxCases: 100,
+        sessionType: 'Hybrid',
+        startDate: startDate.toISOString(),
+        term,
+        termYear: `${startDateObj.getFullYear()}`,
+        trialLocation,
+      },
+    });
 };
 
 const createCase = async ({
@@ -162,8 +163,7 @@ const addCaseToTrialSession = async ({
 }) => {
   return await applicationContext
     .getUseCases()
-    .addCaseToTrialSessionInteractor({
-      applicationContext,
+    .addCaseToTrialSessionInteractor(applicationContext, {
       docketNumber,
       trialSessionId,
     });
