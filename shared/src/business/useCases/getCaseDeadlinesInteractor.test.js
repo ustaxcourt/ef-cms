@@ -98,16 +98,12 @@ describe('getCaseDeadlinesInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(new User({}));
 
     await expect(
-      getCaseDeadlinesInteractor({
-        applicationContext,
-      }),
+      getCaseDeadlinesInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('gets all the case deadlines and combines them with case data', async () => {
-    const result = await getCaseDeadlinesInteractor({
-      applicationContext,
-    });
+    const result = await getCaseDeadlinesInteractor(applicationContext, {});
 
     expect(result).toEqual({
       deadlines: [
@@ -143,8 +139,7 @@ describe('getCaseDeadlinesInteractor', () => {
   });
 
   it('passes date and filtering params to getCaseDeadlinesByDateRange persistence call', async () => {
-    await getCaseDeadlinesInteractor({
-      applicationContext,
+    await getCaseDeadlinesInteractor(applicationContext, {
       endDate: END_DATE,
       from: 20,
       judge: 'Buch',
@@ -229,9 +224,7 @@ describe('getCaseDeadlinesInteractor', () => {
         totalCount: 3,
       });
 
-    const result = await getCaseDeadlinesInteractor({
-      applicationContext,
-    });
+    const result = await getCaseDeadlinesInteractor(applicationContext, {});
 
     expect(result).toEqual({
       deadlines: [

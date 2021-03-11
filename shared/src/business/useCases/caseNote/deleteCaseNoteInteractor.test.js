@@ -13,8 +13,7 @@ describe('deleteCaseNoteInteractor', () => {
 
     let error;
     try {
-      await deleteCaseNoteInteractor({
-        applicationContext,
+      await deleteCaseNoteInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
       });
     } catch (err) {
@@ -51,8 +50,7 @@ describe('deleteCaseNoteInteractor', () => {
     let result;
 
     try {
-      result = await deleteCaseNoteInteractor({
-        applicationContext,
+      result = await deleteCaseNoteInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
       });
     } catch (e) {

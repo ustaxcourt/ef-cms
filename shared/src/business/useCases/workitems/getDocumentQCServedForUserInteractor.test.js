@@ -74,18 +74,19 @@ describe('getDocumentQCServedForUserInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
-      getDocumentQCServedForUserInteractor({
-        applicationContext,
+      getDocumentQCServedForUserInteractor(applicationContext, {
         section: DOCKET_SECTION,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('successfully returns the work item for a petitions clerk', async () => {
-    const result = await getDocumentQCServedForUserInteractor({
+    const result = await getDocumentQCServedForUserInteractor(
       applicationContext,
-      section: DOCKET_SECTION,
-    });
+      {
+        section: DOCKET_SECTION,
+      },
+    );
     expect(result).toMatchObject([
       {
         docketEntry: { sentBy: 'petitioner' },
@@ -112,10 +113,12 @@ describe('getDocumentQCServedForUserInteractor', () => {
 
     applicationContext.getCurrentUser.mockReturnValue(user);
 
-    const result = await getDocumentQCServedForUserInteractor({
+    const result = await getDocumentQCServedForUserInteractor(
       applicationContext,
-      section: DOCKET_SECTION,
-    });
+      {
+        section: DOCKET_SECTION,
+      },
+    );
     expect(result).toMatchObject([
       {
         docketEntry: { sentBy: 'petitioner' },
