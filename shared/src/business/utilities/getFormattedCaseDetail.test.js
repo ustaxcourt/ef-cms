@@ -667,15 +667,33 @@ describe('formatCase', () => {
     });
   });
 
-  it('should show not scheduled section if case status is closed', () => {
+  it('should return showNotScheduled as true when the case has not been added to a trial session', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       status: CASE_STATUS_TYPES.closed,
     });
 
-    expect(result).toMatchObject({
-      showNotScheduled: true,
+    expect(result.showNotScheduled).toBeTruthy();
+  });
+
+  it('should return showNotScheduled as false when the case status is closed and has been added to a trial session', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: CASE_STATUS_TYPES.closed,
+      trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
     });
+
+    expect(result.showNotScheduled).toBeFalsy();
+  });
+
+  it('should return showScheduled as true when case status is closed and has been added to a trial session', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: CASE_STATUS_TYPES.closed,
+      trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
+    });
+
+    expect(result.showScheduled).toBeTruthy();
   });
 
   it('should set defaults for formattedTrialDate and formattedAssociatedJudge and show the prioritized section if case is high priority', () => {
@@ -1124,6 +1142,13 @@ describe('getFormattedCaseDetail', () => {
 });
 
 describe('documentMeetsAgeRequirements', () => {
+  const oldTranscriptDate = '2010-01-01T01:02:03.007Z';
+  const aShortTimeAgo = calculateISODate({
+    dateString: createISODateString(),
+    howMuch: -12,
+    units: 'hours',
+  });
+
   it('indicates success if document is not a transcript', () => {
     const nonTranscriptEventCode = 'BANANA'; // this is not a transcript event code - to think otherwise would just be bananas.
     const result = documentMeetsAgeRequirements({
@@ -1134,16 +1159,33 @@ describe('documentMeetsAgeRequirements', () => {
   it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
       eventCode: TRANSCRIPT_EVENT_CODE,
-      secondaryDate: '2010-01-01T01:02:03.007Z', // 10yr old transcript
+      secondaryDate: oldTranscriptDate,
     });
     expect(result).toBeTruthy();
   });
-  it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
-    const aShortTimeAgo = calculateISODate({
-      dateString: createISODateString(),
-      howMuch: -12,
-      units: 'hours',
+
+  it(`indicates success if document is a legacy transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
+    const result = documentMeetsAgeRequirements({
+      eventCode: TRANSCRIPT_EVENT_CODE,
+      filingDate: oldTranscriptDate,
+      isLegacy: true,
+      secondaryDate: undefined,
     });
+    expect(result).toBeTruthy();
+  });
+
+  it(`indicates failure if document is a legacy transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
+    const result = documentMeetsAgeRequirements({
+      eventCode: TRANSCRIPT_EVENT_CODE,
+      filingDate: aShortTimeAgo,
+      isLegacy: true,
+      secondaryDate: undefined,
+    });
+
+    expect(result).toBeFalsy();
+  });
+
+  it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
       eventCode: TRANSCRIPT_EVENT_CODE,
       secondaryDate: aShortTimeAgo,

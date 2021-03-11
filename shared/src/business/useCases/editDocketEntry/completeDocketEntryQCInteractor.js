@@ -25,6 +25,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
+const { dateStringsCompared } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
@@ -34,7 +35,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 const getNeedsNewCoversheet = ({ currentDocketEntry, updatedDocketEntry }) => {
   const receivedAtUpdated =
-    currentDocketEntry.receivedAt !== updatedDocketEntry.receivedAt;
+    dateStringsCompared(
+      currentDocketEntry.receivedAt,
+      updatedDocketEntry.receivedAt,
+    ) !== 0;
   const filedByUpdated =
     currentDocketEntry.filedBy !== updatedDocketEntry.filedBy;
   const certificateOfServiceUpdated =

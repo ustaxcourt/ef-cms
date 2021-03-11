@@ -7,5 +7,5 @@ export const notFoundErrorSequence = [
   unsetWaitingForResponseOnErrorAction,
   setAlertFromExceptionAction,
   clearModalAction,
-  setCurrentPageAction('Error'),
+  setCurrentPageAction('ErrorView'),
 ];
