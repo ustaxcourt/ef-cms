@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getBlockedCasesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().getBlockedCasesInteractor({
-      applicationContext,
-      trialLocation: event.pathParameters.trialLocation,
-    });
+    return await applicationContext
+      .getUseCases()
+      .getBlockedCasesInteractor(applicationContext, {
+        trialLocation: event.pathParameters.trialLocation,
+      });
   });
