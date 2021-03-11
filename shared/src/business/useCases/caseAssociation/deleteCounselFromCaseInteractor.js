@@ -9,17 +9,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * deleteCounselFromCaseInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case the user is attached to
  * @param {string} providers.userId the id of the user to be removed from the case
  * @returns {Promise} the promise of the update case call
  */
-exports.deleteCounselFromCaseInteractor = async ({
+exports.deleteCounselFromCaseInteractor = async (
   applicationContext,
-  docketNumber,
-  userId,
-}) => {
+  { docketNumber, userId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {

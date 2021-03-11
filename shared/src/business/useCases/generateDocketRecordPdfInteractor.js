@@ -9,17 +9,15 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * generateDocketRecordPdfInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number for the docket record to be generated
  * @returns {Uint8Array} docket record pdf
  */
-exports.generateDocketRecordPdfInteractor = async ({
+exports.generateDocketRecordPdfInteractor = async (
   applicationContext,
-  docketNumber,
-  docketRecordSort,
-  includePartyDetail = false,
-}) => {
+  { docketNumber, docketRecordSort, includePartyDetail = false },
+) => {
   const user = applicationContext.getCurrentUser();
   const isAssociated = await applicationContext
     .getPersistenceGateway()
