@@ -12,8 +12,7 @@ exports.getEligibleCasesForTrialSessionLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getEligibleCasesForTrialSessionInteractor({
-        applicationContext,
+      .getEligibleCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId,
       });
   });
