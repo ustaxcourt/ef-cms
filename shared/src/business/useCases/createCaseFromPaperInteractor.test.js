@@ -65,7 +65,7 @@ describe('createCaseFromPaperInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      createCaseFromPaperInteractor({ applicationContext }),
+      createCaseFromPaperInteractor(applicationContext, {}),
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 

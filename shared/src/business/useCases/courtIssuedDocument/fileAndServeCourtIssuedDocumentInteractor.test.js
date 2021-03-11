@@ -531,8 +531,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should delete the draftOrderState from the docketEntry', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
         docketNumber: caseRecord.docketNumber,
