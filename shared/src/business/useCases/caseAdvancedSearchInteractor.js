@@ -9,17 +9,14 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * caseAdvancedSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.caseAdvancedSearchInteractor = async ({
+exports.caseAdvancedSearchInteractor = async (
   applicationContext,
-  countryType,
-  petitionerName,
-  petitionerState,
-  yearFiledMax,
-  yearFiledMin,
-}) => {
+  { countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
