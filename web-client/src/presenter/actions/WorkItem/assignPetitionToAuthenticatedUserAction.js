@@ -24,12 +24,11 @@ export const assignPetitionToAuthenticatedUserAction = async ({
     petitionDocument && petitionDocument.workItem;
 
   if (petitionDocumentQCWorkItem) {
-    await applicationContext
-      .getUseCases()
-      .assignWorkItemsInteractor(applicationContext, {
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        workItemId: petitionDocumentQCWorkItem.workItemId,
-      });
+    await applicationContext.getUseCases().assignWorkItemsInteractor({
+      applicationContext,
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      workItemId: petitionDocumentQCWorkItem.workItemId,
+    });
   }
 };

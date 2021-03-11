@@ -22,13 +22,12 @@ export const assignSelectedWorkItemsAction = async ({
 
   await Promise.all(
     selectedWorkItems.map(workItem =>
-      applicationContext
-        .getUseCases()
-        .assignWorkItemsInteractor(applicationContext, {
-          assigneeId,
-          assigneeName,
-          workItemId: workItem.workItemId,
-        }),
+      applicationContext.getUseCases().assignWorkItemsInteractor({
+        applicationContext,
+        assigneeId,
+        assigneeName,
+        workItemId: workItem.workItemId,
+      }),
     ),
   );
 
