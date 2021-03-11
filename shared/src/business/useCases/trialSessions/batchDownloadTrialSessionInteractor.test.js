@@ -78,8 +78,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('skips DocketEntry that are not in docketrecord or have documents in S3', async () => {
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
@@ -108,8 +107,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       userId: 'abc-123',
     };
 
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
@@ -129,8 +127,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('calls persistence functions to fetch trial sessions and associated cases and then zips their associated documents', async () => {
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
@@ -156,8 +153,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         },
       ]);
 
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 

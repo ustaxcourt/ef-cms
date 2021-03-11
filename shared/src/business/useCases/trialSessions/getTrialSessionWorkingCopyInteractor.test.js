@@ -64,8 +64,7 @@ describe('Get trial session working copy', () => {
     };
 
     await expect(
-      getTrialSessionWorkingCopyInteractor({
-        applicationContext,
+      getTrialSessionWorkingCopyInteractor(applicationContext, {
         trialSessionId: MOCK_WORKING_COPY.trialSessionId,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -79,18 +78,19 @@ describe('Get trial session working copy', () => {
       );
 
     await expect(
-      getTrialSessionWorkingCopyInteractor({
-        applicationContext,
+      getTrialSessionWorkingCopyInteractor(applicationContext, {
         trialSessionId: MOCK_WORKING_COPY.trialSessionId,
       }),
     ).rejects.toThrow('The TrialSessionWorkingCopy entity was invalid');
   });
 
   it('correctly returns data from persistence for a judge user (default user for test)', async () => {
-    const result = await getTrialSessionWorkingCopyInteractor({
+    const result = await getTrialSessionWorkingCopyInteractor(
       applicationContext,
-      trialSessionId: MOCK_WORKING_COPY.trialSessionId,
-    });
+      {
+        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+      },
+    );
     expect(result).toMatchObject(MOCK_WORKING_COPY);
   });
 
@@ -108,8 +108,7 @@ describe('Get trial session working copy', () => {
       .getJudgeForUserChambersInteractor.mockReturnValue(undefined);
 
     await expect(
-      getTrialSessionWorkingCopyInteractor({
-        applicationContext,
+      getTrialSessionWorkingCopyInteractor(applicationContext, {
         trialSessionId: MOCK_WORKING_COPY.trialSessionId,
       }),
     ).rejects.toThrow('Trial session working copy not found');
@@ -124,10 +123,12 @@ describe('Get trial session working copy', () => {
       .getUseCases()
       .getJudgeForUserChambersInteractor.mockImplementation(() => {});
 
-    const result = await getTrialSessionWorkingCopyInteractor({
+    const result = await getTrialSessionWorkingCopyInteractor(
       applicationContext,
-      trialSessionId: MOCK_WORKING_COPY.trialSessionId,
-    });
+      {
+        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+      },
+    );
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionWorkingCopy.mock
         .calls[0][0],
@@ -188,10 +189,12 @@ describe('Get trial session working copy', () => {
         role: ROLES.judge,
         userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
       });
-      const result = await getTrialSessionWorkingCopyInteractor({
+      const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      );
       expect(
         applicationContext.getPersistenceGateway().getTrialSessionById,
       ).toHaveBeenCalled();
@@ -213,10 +216,12 @@ describe('Get trial session working copy', () => {
         role: ROLES.trialClerk,
         userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
       });
-      const result = await getTrialSessionWorkingCopyInteractor({
+      const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      );
       expect(
         applicationContext.getPersistenceGateway().getTrialSessionById,
       ).toHaveBeenCalled();
@@ -235,10 +240,12 @@ describe('Get trial session working copy', () => {
         role: ROLES.chambers,
         userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
       });
-      const result = await getTrialSessionWorkingCopyInteractor({
+      const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
+        {
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      );
       expect(
         applicationContext.getPersistenceGateway().getTrialSessionById,
       ).toHaveBeenCalled();
