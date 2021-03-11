@@ -26,15 +26,15 @@ const { WorkItem } = require('../../entities/WorkItem');
 /**
  * fileAndServeCourtIssuedDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.documentMeta the document metadata
  * @returns {object} the url of the document that was served
  */
-exports.fileAndServeCourtIssuedDocumentInteractor = async ({
+exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
-  documentMeta,
-}) => {
+  { documentMeta },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =
