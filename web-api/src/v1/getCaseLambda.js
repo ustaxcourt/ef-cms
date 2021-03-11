@@ -16,8 +16,7 @@ exports.getCaseLambda = (event, options = {}) =>
       return v1ApiWrapper(async () => {
         const caseObject = await applicationContext
           .getUseCases()
-          .getCaseInteractor({
-            applicationContext,
+          .getCaseInteractor(applicationContext, {
             docketNumber: event.pathParameters.docketNumber,
           });
 

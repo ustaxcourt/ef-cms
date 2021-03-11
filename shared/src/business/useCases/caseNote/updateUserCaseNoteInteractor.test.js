@@ -19,8 +19,7 @@ describe('updateUserCaseNoteInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateUserCaseNoteInteractor({
-        applicationContext,
+      updateUserCaseNoteInteractor(applicationContext, {
         docketNumber: mockCaseNote.docketNumber,
         notes: mockCaseNote.notes,
       }),
@@ -44,8 +43,7 @@ describe('updateUserCaseNoteInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
-    const caseNote = await updateUserCaseNoteInteractor({
-      applicationContext,
+    const caseNote = await updateUserCaseNoteInteractor(applicationContext, {
       docketNumber: mockCaseNote.docketNumber,
       notes: mockCaseNote.notes,
     });
