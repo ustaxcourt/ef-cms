@@ -33,8 +33,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
 
     let error;
     try {
-      await getDocumentQCInboxForUserInteractor({
-        applicationContext,
+      await getDocumentQCInboxForUserInteractor(applicationContext, {
         userId: '123',
       });
     } catch (e) {
@@ -49,8 +48,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       userId: 'docketClerk',
     });
 
-    await getDocumentQCInboxForUserInteractor({
-      applicationContext,
+    await getDocumentQCInboxForUserInteractor(applicationContext, {
       userId: 'docketClerk',
     });
 
@@ -66,8 +64,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       userId: 'docketClerk',
     });
 
-    await getDocumentQCInboxForUserInteractor({
-      applicationContext,
+    await getDocumentQCInboxForUserInteractor(applicationContext, {
       userId: 'docketClerk',
     });
 
@@ -108,8 +105,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       .getUtilities()
       .filterWorkItemsForUser.mockImplementation(({ workItems }) => workItems);
 
-    await getDocumentQCInboxForUserInteractor({
-      applicationContext,
+    await getDocumentQCInboxForUserInteractor(applicationContext, {
       userId: 'docketClerk',
     });
 
