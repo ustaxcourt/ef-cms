@@ -609,5 +609,62 @@ describe('updateDocketEntryMetaInteractor', () => {
 
       expect(result).toBe(true);
     });
+
+    it('should return true when the certificateOfService changes', async () => {
+      mockDocketEntry.isMinuteEntry = false;
+      shouldAddNewCoverSheet = false;
+      entryRequiresCoverSheet = true;
+
+      const result = shouldGenerateCoversheetForDocketEntry({
+        certificateOfServiceUpdated: true,
+        entryRequiresCoverSheet,
+        filingDateUpdated,
+        originalDocketEntry,
+        servedAtUpdated,
+        shouldAddNewCoverSheet,
+      });
+
+      expect(result).toBe(true);
+    });
+
+    it('should return true when the documentTitle changes', async () => {
+      mockDocketEntry.isMinuteEntry = false;
+      shouldAddNewCoverSheet = false;
+      entryRequiresCoverSheet = true;
+
+      const result = shouldGenerateCoversheetForDocketEntry({
+        certificateOfServiceUpdated: false,
+        documentTitleUpdated: true,
+        entryRequiresCoverSheet,
+        filingDateUpdated,
+        originalDocketEntry,
+        servedAtUpdated,
+        shouldAddNewCoverSheet,
+      });
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false if nothing related to the coversheet has changed on the metadata', async () => {
+      mockDocketEntry.isMinuteEntry = false;
+      shouldAddNewCoverSheet = false;
+      entryRequiresCoverSheet = true;
+      servedAtUpdated = false;
+      filingDateUpdated = false;
+      servedAtUpdated = false;
+      shouldAddNewCoverSheet = false;
+
+      const result = shouldGenerateCoversheetForDocketEntry({
+        certificateOfServiceUpdated: false,
+        documentTitleUpdated: false,
+        entryRequiresCoverSheet,
+        filingDateUpdated,
+        originalDocketEntry,
+        servedAtUpdated,
+        shouldAddNewCoverSheet,
+      });
+
+      expect(result).toBe(false);
+    });
   });
 });

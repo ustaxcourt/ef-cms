@@ -12,8 +12,7 @@ exports.getDocumentQCServedForUserLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getDocumentQCServedForUserInteractor({
-        applicationContext,
+      .getDocumentQCServedForUserInteractor(applicationContext, {
         userId,
       });
   });

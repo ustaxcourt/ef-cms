@@ -38,19 +38,20 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      deleteDeficiencyStatisticInteractor({
-        applicationContext,
+      deleteDeficiencyStatisticInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
   it('should call updateCase with the removed case statistics and return the updated case', async () => {
-    const result = await deleteDeficiencyStatisticInteractor({
+    const result = await deleteDeficiencyStatisticInteractor(
       applicationContext,
-      docketNumber: MOCK_CASE.docketNumber,
-      statisticId,
-    });
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        statisticId,
+      },
+    );
     expect(result).toMatchObject({
       statistics: [],
     });
@@ -62,11 +63,13 @@ describe('deleteDeficiencyStatisticInteractor', () => {
   });
 
   it('should call updateCase with the original case statistics and return the original case if statisticId is not present on the case', async () => {
-    const result = await deleteDeficiencyStatisticInteractor({
+    const result = await deleteDeficiencyStatisticInteractor(
       applicationContext,
-      docketNumber: MOCK_CASE.docketNumber,
-      statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
-    });
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        statisticId: '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
+      },
+    );
     expect(result).toMatchObject({
       statistics: [statistic],
     });
@@ -90,8 +93,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
       );
 
     await expect(
-      deleteDeficiencyStatisticInteractor({
-        applicationContext,
+      deleteDeficiencyStatisticInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         statisticId: statistic.statisticId,
       }),
