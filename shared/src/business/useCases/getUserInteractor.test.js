@@ -26,9 +26,7 @@ describe('getUserInteractor', () => {
       section: PETITIONS_SECTION,
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toEqual({
       ...mockPetitionsClerk,
@@ -54,9 +52,7 @@ describe('getUserInteractor', () => {
       section: 'judge',
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toEqual({
       ...mockJudge,
@@ -84,9 +80,7 @@ describe('getUserInteractor', () => {
       barNumber: 'PT1234',
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toMatchObject({
       ...mockPrivatePractitioner,
@@ -114,9 +108,7 @@ describe('getUserInteractor', () => {
       barNumber: 'PT5678',
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toMatchObject({
       ...mockIrsPractitioner,
@@ -151,9 +143,7 @@ describe('getUserInteractor', () => {
       barNumber: 'PT9012',
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toMatchObject({
       ...mockPractitioner,
