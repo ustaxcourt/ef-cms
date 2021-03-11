@@ -48,8 +48,7 @@ describe('Get users in section', () => {
       .getUsersInSection.mockReturnValue(MOCK_SECTION);
     const sectionToGet = { section: PETITIONS_SECTION };
 
-    const section = await getUsersInSectionInteractor({
-      applicationContext,
+    const section = await getUsersInSectionInteractor(applicationContext, {
       sectionToGet,
     });
 
@@ -68,8 +67,7 @@ describe('Get users in section', () => {
     let result = 'error';
     try {
       const sectionToGet = { section: 'unknown' };
-      await getUsersInSectionInteractor({
-        applicationContext,
+      await getUsersInSectionInteractor(applicationContext, {
         sectionToGet,
       });
     } catch (e) {
@@ -92,8 +90,7 @@ describe('Get users in section', () => {
     let result = 'error';
     try {
       const sectionToGet = { section: 'unknown' };
-      await getUsersInSectionInteractor({
-        applicationContext,
+      await getUsersInSectionInteractor(applicationContext, {
         sectionToGet,
       });
     } catch (e) {
@@ -113,8 +110,7 @@ describe('Get users in section', () => {
       .getPersistenceGateway()
       .getUsersInSection.mockReturnValue(MOCK_JUDGE_SECTION);
     const sectionToGet = { section: 'judge' };
-    const section = await getUsersInSectionInteractor({
-      applicationContext,
+    const section = await getUsersInSectionInteractor(applicationContext, {
       sectionToGet,
     });
     expect(section.length).toEqual(2);
@@ -131,8 +127,7 @@ describe('Get users in section', () => {
       .getUsersInSection.mockReturnValue(MOCK_JUDGE_SECTION);
     const sectionToGet = { section: 'judge' };
     await expect(
-      getUsersInSectionInteractor({
-        applicationContext,
+      getUsersInSectionInteractor(applicationContext, {
         sectionToGet,
       }),
     ).rejects.toThrow('Unauthorized');
