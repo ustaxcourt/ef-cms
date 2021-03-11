@@ -10,8 +10,7 @@ exports.getUserPendingEmailLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
+      .getUserPendingEmailInteractor(applicationContext, {
         userId: event.pathParameters.userId,
       });
   });

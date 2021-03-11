@@ -71,8 +71,7 @@ describe('updateUserContactInformationInteractor', () => {
     };
 
     await expect(
-      updateUserContactInformationInteractor({
-        applicationContext,
+      updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
         userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
       }),
@@ -81,8 +80,7 @@ describe('updateUserContactInformationInteractor', () => {
 
   it('should throw unauthorized error when the user attempts to modify contact information for a different user', async () => {
     await expect(
-      updateUserContactInformationInteractor({
-        applicationContext,
+      updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       }),
@@ -90,8 +88,7 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should return without updating user or cases when the contact information has not changed', async () => {
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo: {},
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -118,8 +115,7 @@ describe('updateUserContactInformationInteractor', () => {
         throw new Error('something wicked');
       });
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: mockUser.userId,
     });
@@ -147,8 +143,7 @@ describe('updateUserContactInformationInteractor', () => {
       practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
       role: ROLES.irsPractitioner,
     };
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -185,8 +180,7 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.privatePractitioner,
     };
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -210,8 +204,7 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.irsPractitioner,
     };
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -235,8 +228,7 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.privatePractitioner,
     };
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -259,8 +251,7 @@ describe('updateUserContactInformationInteractor', () => {
       entityName: 'notapractitioner',
     };
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -281,8 +272,7 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should generate a change of address document', async () => {
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -291,8 +281,7 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should notify the user that the update is complete and mark the user as not having an update in progress', async () => {
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
