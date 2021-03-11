@@ -41,8 +41,7 @@ describe('deleteCaseDeadlineInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
     user = {};
     await expect(
-      deleteCaseDeadlineInteractor({
-        applicationContext,
+      deleteCaseDeadlineInteractor(applicationContext, {
         caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         docketNumber: '123-20',
       }),
@@ -52,8 +51,7 @@ describe('deleteCaseDeadlineInteractor', () => {
   it('calls persistence to delete a case deadline and sets the case as no longer automatically blocked if there are no more deadlines', async () => {
     mockDeadlines = [];
 
-    await deleteCaseDeadlineInteractor({
-      applicationContext,
+    await deleteCaseDeadlineInteractor(applicationContext, {
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       docketNumber: '123-20',
     });
@@ -82,8 +80,7 @@ describe('deleteCaseDeadlineInteractor', () => {
   it('calls persistence to delete a case deadline and leaves the case automatically blocked if there are more deadlines', async () => {
     mockDeadlines = [{ deadline: 'something' }];
 
-    await deleteCaseDeadlineInteractor({
-      applicationContext,
+    await deleteCaseDeadlineInteractor(applicationContext, {
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       docketNumber: '123-20',
     });
