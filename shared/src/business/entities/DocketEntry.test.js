@@ -20,9 +20,12 @@ const { WorkItem } = require('./WorkItem');
 
 describe('DocketEntry entity', () => {
   const A_VALID_DOCKET_ENTRY = {
+    createdAt: '2020-07-17T19:28:29.675Z',
+    docketEntryId: '0f5e035c-efa8-49e4-ba69-daf8a166a98f',
     documentType: 'Petition',
     eventCode: 'A',
     filedBy: 'Test Petitioner',
+    receivedAt: '2020-07-17T19:28:29.675Z',
     role: ROLES.petitioner,
     userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
   };
@@ -251,7 +254,7 @@ describe('DocketEntry entity', () => {
           assigneeName: 'bob',
           caseStatus: CASE_STATUS_TYPES.NEW,
           caseTitle: 'Johnny Joe Jacobson',
-          docketEntry: {},
+          docketEntry: A_VALID_DOCKET_ENTRY,
           docketNumber: '101-18',
           section: PETITIONS_SECTION,
           sentBy: 'bob',
