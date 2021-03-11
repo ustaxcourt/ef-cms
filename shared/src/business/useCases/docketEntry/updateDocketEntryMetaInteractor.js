@@ -2,6 +2,9 @@ const {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
 } = require('../../entities/EntityConstants');
 const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../utilities/getDocumentTitleWithAdditionalInfo');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -11,6 +14,8 @@ const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const shouldGenerateCoversheetForDocketEntry = ({
+  certificateOfServiceUpdated,
+  documentTitleUpdated,
   entryRequiresCoverSheet,
   filingDateUpdated,
   originalDocketEntry,
@@ -18,7 +23,11 @@ const shouldGenerateCoversheetForDocketEntry = ({
   shouldAddNewCoverSheet,
 }) => {
   return (
-    (servedAtUpdated || filingDateUpdated || shouldAddNewCoverSheet) &&
+    (servedAtUpdated ||
+      filingDateUpdated ||
+      certificateOfServiceUpdated ||
+      shouldAddNewCoverSheet ||
+      documentTitleUpdated) &&
     (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
     !originalDocketEntry.isMinuteEntry
   );
@@ -119,7 +128,17 @@ exports.updateDocketEntryMetaInteractor = async ({
   const shouldAddNewCoverSheet =
     originalEntryDoesNotRequireCoversheet && entryRequiresCoverSheet;
 
+  const documentTitleUpdated =
+    getDocumentTitleWithAdditionalInfo({ docketEntry: originalDocketEntry }) !==
+    getDocumentTitleWithAdditionalInfo({ docketEntry: docketEntryMeta });
+
+  const certificateOfServiceUpdated =
+    originalDocketEntry.certificateOfService !==
+    docketEntryMeta.certificateOfService;
+
   const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry({
+    certificateOfServiceUpdated,
+    documentTitleUpdated,
     entryRequiresCoverSheet,
     filingDateUpdated,
     originalDocketEntry,
