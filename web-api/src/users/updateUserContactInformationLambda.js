@@ -10,8 +10,7 @@ exports.updateUserContactInformationLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateUserContactInformationInteractor({
-        applicationContext,
+      .updateUserContactInformationInteractor(applicationContext, {
         contactInfo: JSON.parse(event.body),
         userId: (event.pathParameters || event.path).userId,
       });
