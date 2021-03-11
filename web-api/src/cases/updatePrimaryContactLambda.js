@@ -10,8 +10,7 @@ exports.updatePrimaryContactLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updatePrimaryContactInteractor({
-        applicationContext,
+      .updatePrimaryContactInteractor(applicationContext, {
         ...JSON.parse(event.body),
       });
   });
