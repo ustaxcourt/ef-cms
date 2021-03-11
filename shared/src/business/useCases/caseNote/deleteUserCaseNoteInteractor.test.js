@@ -13,8 +13,7 @@ describe('deleteUserCaseNoteInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      deleteUserCaseNoteInteractor({
-        applicationContext,
+      deleteUserCaseNoteInteractor(applicationContext, {
         docketNumber: '123-45',
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
@@ -36,8 +35,7 @@ describe('deleteUserCaseNoteInteractor', () => {
       }),
     });
 
-    const caseNote = await deleteUserCaseNoteInteractor({
-      applicationContext,
+    const caseNote = await deleteUserCaseNoteInteractor(applicationContext, {
       docketNumber: '123-45',
     });
 
