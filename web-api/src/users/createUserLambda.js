@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.createUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().createUserInteractor({
-      applicationContext,
-      user: JSON.parse(event.body),
-    });
+    return await applicationContext
+      .getUseCases()
+      .createUserInteractor(applicationContext, {
+        user: JSON.parse(event.body),
+      });
   });

@@ -12,8 +12,7 @@ exports.getIrsPractitionersBySearchKeyLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getIrsPractitionersBySearchKeyInteractor({
-        applicationContext,
+      .getIrsPractitionersBySearchKeyInteractor(applicationContext, {
         searchKey,
       });
   });
