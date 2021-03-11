@@ -68,8 +68,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
-      fileCorrespondenceDocumentInteractor({
-        applicationContext,
+      fileCorrespondenceDocumentInteractor(applicationContext, {
         documentMetadata: { docketNumber: mockCase.docketNumber },
         primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       }),
@@ -82,8 +81,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
-      fileCorrespondenceDocumentInteractor({
-        applicationContext,
+      fileCorrespondenceDocumentInteractor(applicationContext, {
         documentMetadata: { docketNumber: mockCase.docketNumber },
         primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       }),
@@ -99,8 +97,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    await fileCorrespondenceDocumentInteractor({
-      applicationContext,
+    await fileCorrespondenceDocumentInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: mockCase.docketNumber,
         documentTitle: 'A title',
@@ -128,15 +125,17 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    const result = await fileCorrespondenceDocumentInteractor({
+    const result = await fileCorrespondenceDocumentInteractor(
       applicationContext,
-      documentMetadata: {
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'A title',
-        filingDate: '2001-02-01',
+      {
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'A title',
+          filingDate: '2001-02-01',
+        },
+        primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       },
-      primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
-    });
+    );
     expect(result).toMatchObject({
       ...mockCase,
       correspondence: [

@@ -10,8 +10,7 @@ exports.updateCorrespondenceDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateCorrespondenceDocumentInteractor({
+      .updateCorrespondenceDocumentInteractor(applicationContext, {
         ...JSON.parse(event.body),
-        applicationContext,
       });
   });
