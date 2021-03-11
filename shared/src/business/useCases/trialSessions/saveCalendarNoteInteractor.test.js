@@ -54,8 +54,7 @@ describe('saveCalendarNotes', () => {
     mockCase.trialSessionId = mockTrialSessionId;
 
     await expect(
-      saveCalendarNoteInteractor({
-        applicationContext,
+      saveCalendarNoteInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         trialSessionId: mockTrialSessionId,
       }),
@@ -71,8 +70,7 @@ describe('saveCalendarNotes', () => {
       '8675309b-18d0-43ec-bafb-654e83405411',
     );
 
-    await saveCalendarNoteInteractor({
-      applicationContext,
+    await saveCalendarNoteInteractor(applicationContext, {
       calendarNote: 'whatever',
       docketNumber: mockCase.docketNumber,
       trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
@@ -103,8 +101,7 @@ describe('saveCalendarNotes', () => {
 
     mockCase.trialSessionId = mockTrialSession.trialSessionId;
 
-    const result = await saveCalendarNoteInteractor({
-      applicationContext,
+    const result = await saveCalendarNoteInteractor(applicationContext, {
       calendarNote: 'this is a calendarNote',
       docketNumber: mockCase.docketNumber,
       trialSessionId: mockTrialSession.trialSessionId,
@@ -132,8 +129,7 @@ describe('saveCalendarNotes', () => {
   });
 
   it('does not update the case hearing record if the given trial session is not a hearing on the case', async () => {
-    await saveCalendarNoteInteractor({
-      applicationContext,
+    await saveCalendarNoteInteractor(applicationContext, {
       calendarNote: 'this is a calendarNote',
       docketNumber: mockCase.docketNumber,
       trialSessionId: mockTrialSession.trialSessionId,
@@ -168,8 +164,7 @@ describe('saveCalendarNotes', () => {
       ],
     };
 
-    await saveCalendarNoteInteractor({
-      applicationContext,
+    await saveCalendarNoteInteractor(applicationContext, {
       calendarNote: 'just updating the hearing note',
       docketNumber: mockCase.docketNumber,
       trialSessionId: '9995309b-18d0-43ec-bafb-654e83405412',
