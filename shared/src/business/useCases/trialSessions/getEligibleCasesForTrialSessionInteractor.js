@@ -12,15 +12,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * get eligible cases for trial session
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session to get the eligible cases
  * @returns {Promise} the promise of the getEligibleCasesForTrialSession call
  */
-exports.getEligibleCasesForTrialSessionInteractor = async ({
+exports.getEligibleCasesForTrialSessionInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -40,8 +40,7 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
     calendaredCases = await applicationContext
       .getUseCases()
-      .getCalendaredCasesForTrialSessionInteractor({
-        applicationContext,
+      .getCalendaredCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId,
       });
   }
