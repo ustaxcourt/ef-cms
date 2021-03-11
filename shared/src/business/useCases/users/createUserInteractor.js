@@ -13,12 +13,12 @@ const { User } = require('../../entities/User');
 /**
  * createUserInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
-exports.createUserInteractor = async ({ applicationContext, user }) => {
+exports.createUserInteractor = async (applicationContext, { user }) => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.CREATE_USER)) {

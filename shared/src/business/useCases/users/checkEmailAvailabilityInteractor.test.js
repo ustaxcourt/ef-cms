@@ -21,16 +21,14 @@ describe('checkEmailAvailabilityInteractor', () => {
     });
 
     await expect(
-      checkEmailAvailabilityInteractor({
-        applicationContext,
+      checkEmailAvailabilityInteractor(applicationContext, {
         email: mockEmail,
       }),
     ).rejects.toThrow('Unauthorized to manage emails.');
   });
 
   it('should attempt to retrieve the user by email', async () => {
-    await checkEmailAvailabilityInteractor({
-      applicationContext,
+    await checkEmailAvailabilityInteractor(applicationContext, {
       email: mockEmail,
     });
 
@@ -47,8 +45,7 @@ describe('checkEmailAvailabilityInteractor', () => {
       .getPersistenceGateway()
       .isEmailAvailable.mockReturnValue(true);
 
-    const result = await checkEmailAvailabilityInteractor({
-      applicationContext,
+    const result = await checkEmailAvailabilityInteractor(applicationContext, {
       email: mockEmail,
     });
 
@@ -60,8 +57,7 @@ describe('checkEmailAvailabilityInteractor', () => {
       .getPersistenceGateway()
       .isEmailAvailable.mockReturnValue(false);
 
-    const result = await checkEmailAvailabilityInteractor({
-      applicationContext,
+    const result = await checkEmailAvailabilityInteractor(applicationContext, {
       email: mockEmail,
     });
 
