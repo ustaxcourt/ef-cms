@@ -12,9 +12,7 @@ exports.checkForReadyForTrialCasesLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .checkForReadyForTrialCasesInteractor({
-          applicationContext,
-        });
+        .checkForReadyForTrialCasesInteractor(applicationContext);
     },
     {
       user: {},

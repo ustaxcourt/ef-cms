@@ -29,7 +29,7 @@ describe('Get internal users', () => {
   });
 
   it('returns the same users that were returned from mocked persistence', async () => {
-    const users = await getInternalUsersInteractor({ applicationContext });
+    const users = await getInternalUsersInteractor(applicationContext);
     expect(users).toMatchObject([
       {
         name: 'Saul Goodman',
@@ -54,9 +54,7 @@ describe('Get internal users', () => {
     });
     let error;
     try {
-      await getInternalUsersInteractor({
-        applicationContext,
-      });
+      await getInternalUsersInteractor(applicationContext);
     } catch (err) {
       error = err;
     }

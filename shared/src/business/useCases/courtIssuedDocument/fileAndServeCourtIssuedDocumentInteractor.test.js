@@ -187,8 +187,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      fileAndServeCourtIssuedDocumentInteractor({
-        applicationContext,
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
@@ -206,8 +205,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     await expect(
-      fileAndServeCourtIssuedDocumentInteractor({
-        applicationContext,
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           docketNumber: caseRecord.docketNumber,
@@ -218,8 +216,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -251,8 +248,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the number of pages present in the document to be served', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -285,8 +281,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .saveDocumentFromLambda.mockImplementation(() => {});
 
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: caseRecord.docketNumber,
@@ -346,8 +341,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -370,8 +364,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should call updateCaseAutomaticBlock and deleteCaseTrialSortMappingRecords', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -403,20 +396,22 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    const result = await fileAndServeCourtIssuedDocumentInteractor({
+    const result = await fileAndServeCourtIssuedDocumentInteractor(
       applicationContext,
-      documentMeta: {
-        date: '2019-03-01T21:40:46.415Z',
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order',
-        documentType: 'Order',
-        eventCode: 'OD',
-        freeText: 'Dogs',
-        pending: true,
-        serviceStamp: 'Served',
+      {
+        documentMeta: {
+          date: '2019-03-01T21:40:46.415Z',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order',
+          documentType: 'Order',
+          eventCode: 'OD',
+          freeText: 'Dogs',
+          pending: true,
+          serviceStamp: 'Served',
+        },
       },
-    });
+    );
 
     expect(result.pdfUrl).toBe(mockPdfUrl);
   });
@@ -429,8 +424,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: caseRecord.docketNumber,
@@ -464,8 +458,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
@@ -493,8 +486,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
@@ -523,8 +515,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it("should delete the work item from the user's inbox when a work item previously existed on the docket entry", async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
         docketNumber: caseRecord.docketNumber,
@@ -540,8 +531,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should delete the draftOrderState from the docketEntry', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
         docketNumber: caseRecord.docketNumber,
@@ -566,8 +556,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
-      await fileAndServeCourtIssuedDocumentInteractor({
-        applicationContext,
+      await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         documentMeta: {
           date: '2019-03-01T21:40:46.415Z',
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',

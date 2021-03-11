@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.createCaseDeadlineLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().createCaseDeadlineInteractor({
-      ...JSON.parse(event.body),
-      applicationContext,
-    });
+    return await applicationContext
+      .getUseCases()
+      .createCaseDeadlineInteractor(applicationContext, {
+        ...JSON.parse(event.body),
+      });
   });

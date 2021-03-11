@@ -39,31 +39,32 @@ describe('createCaseFromPaperInteractor integration test', () => {
       state: 'CA',
     };
 
-    const { docketNumber } = await createCaseFromPaperInteractor({
+    const { docketNumber } = await createCaseFromPaperInteractor(
       applicationContext,
-      petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
-      petitionMetadata: {
-        ...MOCK_CASE,
-        caseCaption: 'Bob Jones2, Petitioner',
-        createdAt: RECEIVED_DATE,
-        mailingDate: 'testing',
-        petitionFile: { name: 'something' },
-        petitionFileSize: 1,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-        receivedAt: RECEIVED_DATE,
-        requestForPlaceOfTrialFile: new File(
-          [],
-          'requestForPlaceOfTrialFile.pdf',
-        ),
-        requestForPlaceOfTrialFileSize: 1,
-        stinFile: { name: 'something else' },
-        stinFileSize: 1,
+      {
+        petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
+        petitionMetadata: {
+          ...MOCK_CASE,
+          caseCaption: 'Bob Jones2, Petitioner',
+          createdAt: RECEIVED_DATE,
+          mailingDate: 'testing',
+          petitionFile: { name: 'something' },
+          petitionFileSize: 1,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          receivedAt: RECEIVED_DATE,
+          requestForPlaceOfTrialFile: new File(
+            [],
+            'requestForPlaceOfTrialFile.pdf',
+          ),
+          requestForPlaceOfTrialFileSize: 1,
+          stinFile: { name: 'something else' },
+          stinFileSize: 1,
+        },
+        stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
       },
-      stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
-    });
+    );
 
-    const createdCase = await getCaseInteractor({
-      applicationContext,
+    const createdCase = await getCaseInteractor(applicationContext, {
       docketNumber,
     });
 

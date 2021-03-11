@@ -160,15 +160,15 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
 /**
  * verifyUserPendingEmailInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.pendingEmail the pending email
  * @returns {Promise} the updated user object
  */
-exports.verifyUserPendingEmailInteractor = async ({
+exports.verifyUserPendingEmailInteractor = async (
   applicationContext,
-  token,
-}) => {
+  { token },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {

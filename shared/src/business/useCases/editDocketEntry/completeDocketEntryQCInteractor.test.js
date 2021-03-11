@@ -676,7 +676,7 @@ describe('completeDocketEntryQCInteractor', () => {
       expect(needsNewCoversheet).toBeTruthy();
     });
 
-    it('should return true when filedBy is updated', () => {
+    it('should return false when filedBy is updated', () => {
       const needsNewCoversheet = getNeedsNewCoversheet({
         currentDocketEntry: {
           filedBy: 'petitioner.smith',
@@ -688,7 +688,7 @@ describe('completeDocketEntryQCInteractor', () => {
         },
       });
 
-      expect(needsNewCoversheet).toBeTruthy();
+      expect(needsNewCoversheet).toBeFalsy();
     });
 
     it('should return true when documentTitle is updated', () => {
