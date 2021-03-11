@@ -16,11 +16,10 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.workItemId the id of the work item to complete
  * @returns {object} the completed work item
  */
-exports.completeWorkItemInteractor = async ({
+exports.completeWorkItemInteractor = async (
   applicationContext,
-  completedMessage,
-  workItemId,
-}) => {
+  { completedMessage, workItemId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
