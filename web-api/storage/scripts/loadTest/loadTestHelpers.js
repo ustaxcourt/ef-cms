@@ -162,8 +162,7 @@ const addCaseToTrialSession = async ({
 }) => {
   return await applicationContext
     .getUseCases()
-    .addCaseToTrialSessionInteractor({
-      applicationContext,
+    .addCaseToTrialSessionInteractor(applicationContext, {
       docketNumber,
       trialSessionId,
     });
