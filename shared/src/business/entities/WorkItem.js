@@ -40,9 +40,15 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
     'documentTitle',
     'documentType',
     'eventCode',
+    'filedBy',
+    'index',
     'isFileAttached',
+    'isPaper',
+    'otherFilingParty',
     'receivedAt',
+    'sentBy',
     'servedAt',
+    'userId',
   ]);
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
