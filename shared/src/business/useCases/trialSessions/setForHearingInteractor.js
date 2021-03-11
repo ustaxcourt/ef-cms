@@ -14,7 +14,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.calendarNotes notes for why the trial session/hearing was added
  * @param {string} providers.trialSessionId the id of the trial session
  * @param {string} providers.docketNumber the docket number of the case
- * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
+ * @returns {Promise} the promise of the setForHearingInteractor call
  */
 exports.setForHearingInteractor = async ({
   applicationContext,
