@@ -98,8 +98,7 @@ describe('serveCaseToIrsInteractor', () => {
     });
 
     await expect(
-      serveCaseToIrsInteractor({
-        applicationContext,
+      serveCaseToIrsInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -119,8 +118,7 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     );
 
-    await serveCaseToIrsInteractor({
-      applicationContext,
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -144,8 +142,7 @@ describe('serveCaseToIrsInteractor', () => {
     );
     mockCase = { ...MOCK_CASE };
 
-    await serveCaseToIrsInteractor({
-      applicationContext,
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -169,8 +166,7 @@ describe('serveCaseToIrsInteractor', () => {
     );
     mockCase = { ...MOCK_CASE };
 
-    await serveCaseToIrsInteractor({
-      applicationContext,
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -213,8 +209,7 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     );
 
-    await serveCaseToIrsInteractor({
-      applicationContext,
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
     expect(
@@ -253,8 +248,7 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     );
 
-    await serveCaseToIrsInteractor({
-      applicationContext,
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
     expect(
@@ -278,8 +272,7 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     );
 
-    await serveCaseToIrsInteractor({
-      applicationContext,
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -302,8 +295,7 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     );
 
-    const result = await serveCaseToIrsInteractor({
-      applicationContext,
+    const result = await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -324,8 +316,7 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     );
 
-    const result = await serveCaseToIrsInteractor({
-      applicationContext,
+    const result = await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -383,8 +374,7 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     );
 
-    const result = await serveCaseToIrsInteractor({
-      applicationContext,
+    const result = await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -455,8 +445,7 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    await serveCaseToIrsInteractor({
-      applicationContext,
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -509,8 +498,7 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     );
 
-    await serveCaseToIrsInteractor({
-      applicationContext,
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -590,8 +578,7 @@ describe('serveCaseToIrsInteractor', () => {
       .mockReturnValueOnce(mockCaseWithServedDocketEntries)
       .mockReturnValueOnce(mockCaseWithServedDocketEntries);
 
-    await serveCaseToIrsInteractor({
-      applicationContext,
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
