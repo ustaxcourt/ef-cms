@@ -24,8 +24,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
 
   it('should throw an error for a document that is not public accessible', async () => {
     await expect(
-      getPublicDownloadPolicyUrlInteractor({
-        applicationContext,
+      getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -38,8 +37,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
 
     await expect(
-      getPublicDownloadPolicyUrlInteractor({
-        applicationContext,
+      getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -69,8 +67,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       ),
     );
     await expect(
-      getPublicDownloadPolicyUrlInteractor({
-        applicationContext,
+      getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
       }),
@@ -99,11 +96,13 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
         { applicationContext },
       ),
     );
-    const result = await getPublicDownloadPolicyUrlInteractor({
+    const result = await getPublicDownloadPolicyUrlInteractor(
       applicationContext,
-      docketNumber: '123-20',
-      key: '83813a24-7687-418e-a186-c416b4bb0ad4',
-    });
+      {
+        docketNumber: '123-20',
+        key: '83813a24-7687-418e-a186-c416b4bb0ad4',
+      },
+    );
     expect(result).toEqual('localhost');
   });
 
@@ -123,18 +122,19 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       ),
     );
 
-    const result = await getPublicDownloadPolicyUrlInteractor({
+    const result = await getPublicDownloadPolicyUrlInteractor(
       applicationContext,
-      docketNumber: '123-20',
-      key: '8008b288-8b6b-48e3-8239-599266b13b8b',
-    });
+      {
+        docketNumber: '123-20',
+        key: '8008b288-8b6b-48e3-8239-599266b13b8b',
+      },
+    );
     expect(result).toEqual('localhost');
   });
 
   it('should throw a not found error for a document that is not found on the case', async () => {
     await expect(
-      getPublicDownloadPolicyUrlInteractor({
-        applicationContext,
+      getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: 'b907f4e5-4d4d-44b3-bcfd-224a6f31d889',
       }),
@@ -160,8 +160,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     );
 
     await expect(
-      getPublicDownloadPolicyUrlInteractor({
-        applicationContext,
+      getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: '8205c4bc-879f-4648-a3ba-9280384c4c00',
       }),

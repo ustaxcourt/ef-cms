@@ -60,9 +60,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should only search for order document types for today', async () => {
-    await getTodaysOrdersInteractor({
-      applicationContext,
-    });
+    await getTodaysOrdersInteractor(applicationContext, {});
 
     const { day, month, year } = deconstructDate(createISODateString());
     const currentDateStart = createStartOfDayISO({ day, month, year });
@@ -81,8 +79,7 @@ describe('getTodaysOrdersInteractor', () => {
   it('should search for the next set of results starting from the current result page', async () => {
     const mockCurrentPage = 3;
 
-    await getTodaysOrdersInteractor({
-      applicationContext,
+    await getTodaysOrdersInteractor(applicationContext, {
       page: mockCurrentPage,
     });
 
@@ -93,8 +90,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should make a call to advancedDocumentSearch with judgeType set to signedJudgeName', async () => {
-    await getTodaysOrdersInteractor({
-      applicationContext,
+    await getTodaysOrdersInteractor(applicationContext, {
       page: 1,
     });
 
@@ -105,9 +101,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should filter out order documents belonging to sealed cases', async () => {
-    await getTodaysOrdersInteractor({
-      applicationContext,
-    });
+    await getTodaysOrdersInteractor(applicationContext, {});
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -116,8 +110,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should make a call to advancedDocumentSearch with the result page size and sort overridden', async () => {
-    await getTodaysOrdersInteractor({
-      applicationContext,
+    await getTodaysOrdersInteractor(applicationContext, {
       page: 1,
     });
 
@@ -132,8 +125,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should return the results and totalCount of results', async () => {
-    const result = await getTodaysOrdersInteractor({
-      applicationContext,
+    const result = await getTodaysOrdersInteractor(applicationContext, {
       page: 1,
     });
 
