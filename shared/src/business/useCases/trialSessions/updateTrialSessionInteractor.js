@@ -13,15 +13,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * updateTrialSessionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.trialSession the trial session data
  * @returns {object} the created trial session
  */
-exports.updateTrialSessionInteractor = async ({
+exports.updateTrialSessionInteractor = async (
   applicationContext,
-  trialSession,
-}) => {
+  { trialSession },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {

@@ -73,8 +73,7 @@ describe('remove case from trial session', () => {
     mockTrialSession = MOCK_TRIAL_SESSION;
 
     await expect(
-      removeCaseFromTrialInteractor({
-        applicationContext,
+      removeCaseFromTrialInteractor(applicationContext, {
         disposition: 'because',
         docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
@@ -85,8 +84,7 @@ describe('remove case from trial session', () => {
   it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, and updateCase persistence methods with correct parameters for a calendared session', async () => {
     mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: true };
 
-    await removeCaseFromTrialInteractor({
-      applicationContext,
+    await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
@@ -147,8 +145,7 @@ describe('remove case from trial session', () => {
   it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, updateCaseAutomaticBlock, and updateCase persistence methods with correct parameters for a not calendared session', async () => {
     mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: false };
 
-    await removeCaseFromTrialInteractor({
-      applicationContext,
+    await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
@@ -209,8 +206,7 @@ describe('remove case from trial session', () => {
   it('updates work items to be not high priority', async () => {
     mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: true };
 
-    await removeCaseFromTrialInteractor({
-      applicationContext,
+    await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
@@ -242,8 +238,7 @@ describe('remove case from trial session', () => {
         trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       });
 
-    await removeCaseFromTrialInteractor({
-      applicationContext,
+    await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
@@ -268,8 +263,7 @@ describe('remove case from trial session', () => {
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       });
 
-    await removeCaseFromTrialInteractor({
-      applicationContext,
+    await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
@@ -319,8 +313,7 @@ describe('remove case from trial session', () => {
   it('sets the associatedJudge and caseStatus when provided', async () => {
     mockTrialSession = { ...MOCK_TRIAL_SESSION, isCalendared: true };
 
-    const result = await removeCaseFromTrialInteractor({
-      applicationContext,
+    const result = await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: 'Judge Dredd',
       caseStatus: CASE_STATUS_TYPES.cav,
       disposition: 'because',

@@ -12,8 +12,7 @@ exports.setTrialSessionCalendarLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .setTrialSessionCalendarInteractor({
-        applicationContext,
+      .setTrialSessionCalendarInteractor(applicationContext, {
         trialSessionId,
       });
   });
