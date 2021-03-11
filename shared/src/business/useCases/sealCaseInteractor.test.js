@@ -12,8 +12,7 @@ describe('sealCaseInteractor', () => {
 
   it('should throw an error if the user is unauthorized to seal a case', async () => {
     await expect(
-      sealCaseInteractor({
-        applicationContext,
+      sealCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         qcCompleteForTrial: true,
         trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
@@ -27,8 +26,7 @@ describe('sealCaseInteractor', () => {
       userId: 'docketClerk',
     });
 
-    const result = await sealCaseInteractor({
-      applicationContext,
+    const result = await sealCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
     expect(result.sealedDate).toBeTruthy();
