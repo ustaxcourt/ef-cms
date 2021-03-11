@@ -5,6 +5,7 @@ const {
   INITIAL_DOCUMENT_TYPES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
+  UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const {
   isAuthorized,
@@ -61,7 +62,11 @@ const handleIrsSuperUser = ({
 };
 
 const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
-  if (!isServed(docketEntryEntity)) {
+  const isUnservable = UNSERVABLE_EVENT_CODES.includes(
+    docketEntryEntity.eventCode,
+  );
+
+  if (!isServed(docketEntryEntity) && !isUnservable) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   } else if (
     docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
