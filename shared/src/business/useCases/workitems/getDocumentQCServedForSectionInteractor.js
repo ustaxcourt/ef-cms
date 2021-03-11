@@ -13,10 +13,10 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.section the section to get the document qc served box
  * @returns {object} the work items in the section document served inbox
  */
-exports.getDocumentQCServedForSectionInteractor = async ({
+exports.getDocumentQCServedForSectionInteractor = async (
   applicationContext,
-  section,
-}) => {
+  { section },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
