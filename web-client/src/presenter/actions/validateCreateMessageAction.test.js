@@ -46,7 +46,7 @@ describe('validateCreateMessageAction', () => {
     });
     expect(
       applicationContext.getUseCases().validateCreateMessageInteractor.mock
-        .calls[0][0].message,
+        .calls[0][1].message,
     ).toMatchObject({
       docketNumber: '123-45',
       from: 'yup',
