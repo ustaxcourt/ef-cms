@@ -28,7 +28,7 @@ resource "null_resource" "api_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -45,7 +45,7 @@ resource "null_resource" "websockets_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -62,7 +62,7 @@ resource "null_resource" "api_public_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -74,7 +74,7 @@ resource "null_resource" "puppeteer_layer_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -91,7 +91,7 @@ resource "null_resource" "cron_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -108,7 +108,7 @@ resource "null_resource" "streams_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
