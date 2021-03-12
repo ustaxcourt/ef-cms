@@ -10,8 +10,7 @@ exports.orderAdvancedSearchLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .orderAdvancedSearchInteractor({
-        applicationContext,
+      .orderAdvancedSearchInteractor(applicationContext, {
         ...event.queryStringParameters,
       });
   });
