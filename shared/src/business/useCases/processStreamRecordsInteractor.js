@@ -303,15 +303,15 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
 };
 
 /**
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {Array<object>} providers.recordsToProcess the records to process
  * @returns {object} the results of all the index calls for logging
  */
-exports.processStreamRecordsInteractor = async ({
+exports.processStreamRecordsInteractor = async (
   applicationContext,
-  recordsToProcess,
-}) => {
+  { recordsToProcess },
+) => {
   const getCase = ({ applicationContext: appContext, docketNumber }) =>
     appContext.getPersistenceGateway().getFullCaseByDocketNumber({
       applicationContext: appContext,
