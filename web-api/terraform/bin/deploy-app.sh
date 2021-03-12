@@ -113,5 +113,5 @@ export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform plan
-terraform apply --auto-approve
+terraform plan -out execution-plan
+terraform apply --auto-approve execution-plan
