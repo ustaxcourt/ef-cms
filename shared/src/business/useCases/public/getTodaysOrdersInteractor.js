@@ -15,6 +15,7 @@ const {
  *
  * @param {object} applicationContext application context object
  * @param {object} providers the providers object containing page
+ * @param {string} providers.page the page of the order to get
  * @returns {array} an array of orders (if any)
  */
 exports.getTodaysOrdersInteractor = async (applicationContext, { page }) => {
