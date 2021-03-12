@@ -159,16 +159,13 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      completeDocketEntryQCInteractor({
-        applicationContext,
-      }),
+      completeDocketEntryQCInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('adds documents and workitems', async () => {
     await expect(
-      completeDocketEntryQCInteractor({
-        applicationContext,
+      completeDocketEntryQCInteractor(applicationContext, {
         entryMetadata: {
           docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: caseRecord.docketNumber,
@@ -205,8 +202,7 @@ describe('completeDocketEntryQCInteractor', () => {
       state: 'AK',
     };
 
-    const result = await completeDocketEntryQCInteractor({
-      applicationContext,
+    const result = await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
@@ -233,8 +229,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change with a new coversheet when additional info fields are added and addToCoversheet is true', async () => {
-    await completeDocketEntryQCInteractor({
-      applicationContext,
+    await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         addToCoversheet: true,
         additionalInfo: '123',
@@ -261,8 +256,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
-    await completeDocketEntryQCInteractor({
-      applicationContext,
+    await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         ...caseRecord.docketEntries[0],
         certificateOfService: true,
@@ -285,8 +279,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change without a new coversheet when attachments has been updated', async () => {
-    await completeDocketEntryQCInteractor({
-      applicationContext,
+    await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         ...caseRecord.docketEntries[0],
         attachments: true,
@@ -309,8 +302,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
-    await completeDocketEntryQCInteractor({
-      applicationContext,
+    await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         addToCoversheet: true,
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
@@ -335,8 +327,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a notice of docket change with a new coversheet when documentTitle has changed and addToCoversheeet is false', async () => {
-    await completeDocketEntryQCInteractor({
-      applicationContext,
+    await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         addToCoversheet: false,
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
@@ -361,8 +352,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should not generate a new coversheet when the documentTitle has not changed and addToCoversheet is false', async () => {
-    await completeDocketEntryQCInteractor({
-      applicationContext,
+    await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         ...caseRecord.docketEntries[0],
         addToCoversheet: false,
@@ -381,8 +371,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a new coversheet when additionalInfo is changed and addToCoversheet is true', async () => {
-    await completeDocketEntryQCInteractor({
-      applicationContext,
+    await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         addToCoversheet: true,
         additionalInfo: 'additional info',
@@ -409,8 +398,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should generate a new coversheet when additionalInfo is NOT changed and addToCoversheet is true', async () => {
-    await completeDocketEntryQCInteractor({
-      applicationContext,
+    await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         addToCoversheet: true,
         additionalInfo: 'additional info',
@@ -455,8 +443,7 @@ describe('completeDocketEntryQCInteractor', () => {
         return mockNumberOfPages;
       });
 
-    const result = await completeDocketEntryQCInteractor({
-      applicationContext,
+    const result = await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
@@ -508,8 +495,7 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.isPaper = true;
     caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
 
-    const result = await completeDocketEntryQCInteractor({
-      applicationContext,
+    const result = await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
@@ -547,8 +533,7 @@ describe('completeDocketEntryQCInteractor', () => {
       state: 'AK',
     };
 
-    const result = await completeDocketEntryQCInteractor({
-      applicationContext,
+    const result = await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
@@ -575,8 +560,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('should update only allowed editable fields on a docket entry document', async () => {
-    await completeDocketEntryQCInteractor({
-      applicationContext,
+    await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
@@ -607,22 +591,24 @@ describe('completeDocketEntryQCInteractor', () => {
   it('updates automaticBlocked on a case and all associated case trial sort mappings', async () => {
     expect(caseRecord.automaticBlocked).toBeFalsy();
 
-    const { caseDetail } = await completeDocketEntryQCInteractor({
+    const { caseDetail } = await completeDocketEntryQCInteractor(
       applicationContext,
-      entryMetadata: {
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'My Edited Document',
-        documentType: 'Notice of Change of Address',
-        eventCode: 'NCA',
-        freeText: 'Some text about this document',
-        hasOtherFilingParty: true,
-        isPaper: true,
-        otherFilingParty: 'Bert Brooks',
-        partyPrimary: true,
-        pending: true,
+      {
+        entryMetadata: {
+          docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'My Edited Document',
+          documentType: 'Notice of Change of Address',
+          eventCode: 'NCA',
+          freeText: 'Some text about this document',
+          hasOtherFilingParty: true,
+          isPaper: true,
+          otherFilingParty: 'Bert Brooks',
+          partyPrimary: true,
+          pending: true,
+        },
       },
-    });
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
