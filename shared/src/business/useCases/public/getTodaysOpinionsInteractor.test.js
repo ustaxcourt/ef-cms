@@ -57,9 +57,7 @@ describe('getTodaysOpinionsInteractor', () => {
   });
 
   it('should only search for opinion event codes', async () => {
-    await getTodaysOpinionsInteractor({
-      applicationContext,
-    });
+    await getTodaysOpinionsInteractor(applicationContext);
 
     const { day, month, year } = deconstructDate(createISODateString());
     const currentDateStart = createStartOfDayISO({ day, month, year });
@@ -79,11 +77,7 @@ describe('getTodaysOpinionsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
-    const results = await getTodaysOpinionsInteractor({
-      applicationContext,
-      keyword: 'fish',
-      startDate: '2001-01-01',
-    });
+    const results = await getTodaysOpinionsInteractor(applicationContext);
     expect(results.length).toBe(1);
   });
 });

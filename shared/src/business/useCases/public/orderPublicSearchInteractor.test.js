@@ -36,8 +36,7 @@ describe('orderPublicSearchInteractor', () => {
   });
 
   it('should only search for order document types', async () => {
-    const result = await orderPublicSearchInteractor({
-      applicationContext,
+    const result = await orderPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
       startDate: '2001-01-01',
     });
@@ -83,8 +82,7 @@ describe('orderPublicSearchInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
-    const results = await orderPublicSearchInteractor({
-      applicationContext,
+    const results = await orderPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
       startDate: '2001-01-01',
     });
@@ -109,8 +107,7 @@ describe('orderPublicSearchInteractor', () => {
         ],
       });
     await expect(
-      orderPublicSearchInteractor({
-        applicationContext,
+      orderPublicSearchInteractor(applicationContext, {
         keyword: 'fish',
         startDate: '2001-01-01',
       }),
@@ -121,8 +118,7 @@ describe('orderPublicSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
-    const results = await orderPublicSearchInteractor({
-      applicationContext,
+    const results = await orderPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
       startDate: '2001-01-01',
     });
