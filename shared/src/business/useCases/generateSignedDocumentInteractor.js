@@ -4,32 +4,18 @@
  */
 exports.getPageDimensions = page => {
   const size = page.getSize();
-
-  let pageWidth = size.width;
-  let pageHeight = size.height;
-
-  return [pageWidth, pageHeight];
+  return [size.width, size.height];
 };
 
-/**
- * @param {PDFPage} page the page to get CropBox for
- * @returns {Number} width value of the CropBox or 0
- */
-exports.getCropBoxOffset = page => {
-  const [pageWidth] = exports.getPageDimensions(page);
-
-  const cropBox = page.getCropBox();
-
-  if (cropBox && cropBox.width) {
-    return pageWidth - cropBox.width;
-  } else {
-    return 0;
-  }
+exports.getCropBoxCoordinates = page => {
+  const { x = 0, y = 0 } = page.getCropBox();
+  return { x, y };
 };
 
 const computeCoordinates = ({
   boxHeight,
   boxWidth,
+  cropBoxCoordinates,
   lineHeight,
   nameTextWidth,
   pageHeight,
@@ -106,14 +92,13 @@ const computeCoordinates = ({
       (boxHeight - textHeight * 2 - lineHeight) / 2 -
       boxHeight;
   }
-
   return {
-    rectangleX,
-    rectangleY,
-    sigNameX,
-    sigNameY,
-    sigTitleX,
-    sigTitleY,
+    rectangleX: rectangleX + cropBoxCoordinates.x,
+    rectangleY: rectangleY + cropBoxCoordinates.y,
+    sigNameX: sigNameX + cropBoxCoordinates.x,
+    sigNameY: sigNameY + cropBoxCoordinates.y,
+    sigTitleX: sigTitleX + cropBoxCoordinates.x,
+    sigTitleY: sigTitleY + cropBoxCoordinates.y,
   };
 };
 
@@ -152,9 +137,6 @@ exports.generateSignedDocumentInteractor = async ({
   const page = pages[pageIndex];
 
   const [pageWidth, pageHeight] = exports.getPageDimensions(page);
-  const cropBoxOffset = exports.getCropBoxOffset(page);
-
-  const posXWithCropBoxOffset = posX + cropBoxOffset;
 
   const { signatureName, signatureTitle } = sigTextData;
 
@@ -191,12 +173,13 @@ exports.generateSignedDocumentInteractor = async ({
   } = computeCoordinates({
     boxHeight,
     boxWidth,
+    cropBoxCoordinates: exports.getCropBoxCoordinates(page),
     lineHeight,
     nameTextWidth,
     pageHeight,
     pageRotation: rotationAngle,
     pageWidth,
-    posX: posXWithCropBoxOffset,
+    posX,
     posY,
     scale,
     textHeight,
