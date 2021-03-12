@@ -143,9 +143,7 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    const result = await getNotificationsInteractor({
-      applicationContext,
-    });
+    const result = await getNotificationsInteractor(applicationContext, {});
     expect(result).toEqual({
       qcIndividualInProgressCount: 0,
       qcIndividualInboxCount: 1,
@@ -159,25 +157,25 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns the total user inbox count', async () => {
-    const result = await await getNotificationsInteractor({
+    const result = await await getNotificationsInteractor(
       applicationContext,
-    });
+      {},
+    );
 
     expect(result.userInboxCount).toEqual(1);
   });
 
   it('returns the total section messages count', async () => {
-    const result = await await getNotificationsInteractor({
+    const result = await await getNotificationsInteractor(
       applicationContext,
-    });
+      {},
+    );
 
     expect(result.userSectionCount).toEqual(2);
   });
 
   it('returns an accurate unread count for legacy items marked complete', async () => {
-    const result = await getNotificationsInteractor({
-      applicationContext,
-    });
+    const result = await getNotificationsInteractor(applicationContext, {});
 
     expect(result.qcUnreadCount).toEqual(1);
   });
@@ -221,8 +219,7 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    const result = await getNotificationsInteractor({
-      applicationContext,
+    const result = await getNotificationsInteractor(applicationContext, {
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -268,8 +265,7 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    const result = await getNotificationsInteractor({
-      applicationContext,
+    const result = await getNotificationsInteractor(applicationContext, {
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -333,8 +329,7 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    const result = await getNotificationsInteractor({
-      applicationContext,
+    const result = await getNotificationsInteractor(applicationContext, {
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -367,8 +362,7 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    const result = await getNotificationsInteractor({
-      applicationContext,
+    const result = await getNotificationsInteractor(applicationContext, {
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -389,8 +383,7 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    const result = await getNotificationsInteractor({
-      applicationContext,
+    const result = await getNotificationsInteractor(applicationContext, {
       userId: 'docketclerk',
     });
 
@@ -400,8 +393,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('should fetch the qc section items for the provided judgeUserId', async () => {
-    await getNotificationsInteractor({
-      applicationContext,
+    await getNotificationsInteractor(applicationContext, {
       judgeUserId: 'ee577e31-d6d5-4c4a-adc6-520075f3dde5',
     });
 
@@ -414,9 +406,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('should fetch the qc section items without a judgeName when a judgeUserId is not provided', async () => {
-    await getNotificationsInteractor({
-      applicationContext,
-    });
+    await getNotificationsInteractor(applicationContext, {});
 
     expect(
       applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
@@ -432,9 +422,7 @@ describe('getNotificationsInteractor', () => {
       userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
     });
 
-    await getNotificationsInteractor({
-      applicationContext,
-    });
+    await getNotificationsInteractor(applicationContext, {});
 
     expect(
       applicationContext.getPersistenceGateway().getDocumentQCInboxForSection

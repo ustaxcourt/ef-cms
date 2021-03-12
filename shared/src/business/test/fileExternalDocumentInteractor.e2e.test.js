@@ -39,8 +39,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should attach the expected documents to the case', async () => {
-    const { docketNumber } = await createCaseInteractor({
-      applicationContext,
+    const { docketNumber } = await createCaseInteractor(applicationContext, {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseCaption: 'Caption',
@@ -318,8 +317,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
   });
 
   it('should set partyPrimary to representingPrimary when partyPrimary is not provided', async () => {
-    const { docketNumber } = await createCaseInteractor({
-      applicationContext,
+    const { docketNumber } = await createCaseInteractor(applicationContext, {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseCaption: 'Caption',

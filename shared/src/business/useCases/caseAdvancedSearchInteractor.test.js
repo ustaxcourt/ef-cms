@@ -24,16 +24,12 @@ describe('caseAdvancedSearchInteractor', () => {
     mockUser.role = ROLES.petitioner;
 
     await expect(
-      caseAdvancedSearchInteractor({
-        applicationContext,
-      }),
+      caseAdvancedSearchInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('returns empty array if no search params are passed in', async () => {
-    const results = await caseAdvancedSearchInteractor({
-      applicationContext,
-    });
+    const results = await caseAdvancedSearchInteractor(applicationContext, {});
 
     expect(results).toEqual([]);
   });
@@ -50,8 +46,7 @@ describe('caseAdvancedSearchInteractor', () => {
         },
       ]);
 
-    const results = await caseAdvancedSearchInteractor({
-      applicationContext,
+    const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
     });
 
@@ -78,8 +73,7 @@ describe('caseAdvancedSearchInteractor', () => {
         },
       ]);
 
-    const results = await caseAdvancedSearchInteractor({
-      applicationContext,
+    const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
     });
 
@@ -103,8 +97,7 @@ describe('caseAdvancedSearchInteractor', () => {
         },
       ]);
 
-    const results = await caseAdvancedSearchInteractor({
-      applicationContext,
+    const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
     });
 
@@ -127,8 +120,7 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue(maxPlusOneResults);
 
-    const results = await caseAdvancedSearchInteractor({
-      applicationContext,
+    const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
     });
 
@@ -156,8 +148,7 @@ describe('caseAdvancedSearchInteractor', () => {
         },
       ]);
 
-    const results = await caseAdvancedSearchInteractor({
-      applicationContext,
+    const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
     });
 
@@ -190,8 +181,7 @@ describe('caseAdvancedSearchInteractor', () => {
         },
       ]);
 
-    const results = await caseAdvancedSearchInteractor({
-      applicationContext,
+    const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
     });
 

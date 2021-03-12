@@ -8,9 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.addConsolidatedCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    await applicationContext.getUseCases().addConsolidatedCaseInteractor({
-      applicationContext,
-      ...event.pathParameters,
-      ...JSON.parse(event.body),
-    });
+    await applicationContext
+      .getUseCases()
+      .addConsolidatedCaseInteractor(applicationContext, {
+        ...event.pathParameters,
+        ...JSON.parse(event.body),
+      });
   });

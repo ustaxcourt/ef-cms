@@ -47,17 +47,16 @@ const completeWorkItem = async ({
 /**
  * serveCourtIssuedDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document to serve
  * @param {string} providers.docketEntryId the id of the docket entry to serve
  * @returns {object} the updated case after the document was served
  */
-exports.serveCourtIssuedDocumentInteractor = async ({
+exports.serveCourtIssuedDocumentInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-}) => {
+  { docketEntryId, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {

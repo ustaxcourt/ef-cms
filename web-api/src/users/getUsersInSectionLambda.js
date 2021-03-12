@@ -10,8 +10,9 @@ exports.getUsersInSectionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { section } = event.pathParameters || {};
 
-    return await applicationContext.getUseCases().getUsersInSectionInteractor({
-      applicationContext,
-      section,
-    });
+    return await applicationContext
+      .getUseCases()
+      .getUsersInSectionInteractor(applicationContext, {
+        section,
+      });
   });

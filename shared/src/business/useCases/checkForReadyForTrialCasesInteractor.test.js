@@ -28,9 +28,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(
@@ -48,9 +46,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(
@@ -68,9 +64,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(
@@ -100,9 +94,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(
@@ -132,9 +124,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       .getReadyForTrialCases.mockReturnValue([{ docketNumber: '101-20' }]);
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
@@ -156,9 +146,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       .getPersistenceGateway()
       .getReadyForTrialCases.mockReturnValue([{ docketNumber: '101-20' }]);
 
-    await checkForReadyForTrialCasesInteractor({
-      applicationContext,
-    });
+    await checkForReadyForTrialCasesInteractor(applicationContext);
 
     expect(
       applicationContext.getPersistenceGateway()

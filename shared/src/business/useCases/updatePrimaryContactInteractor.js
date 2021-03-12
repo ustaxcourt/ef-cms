@@ -15,17 +15,16 @@ const { WorkItem } = require('../entities/WorkItem');
 /**
  * updatePrimaryContactInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update the primary contact
  * @param {object} providers.contactInfo the contact info to update on the case
  * @returns {object} the updated case
  */
-exports.updatePrimaryContactInteractor = async ({
+exports.updatePrimaryContactInteractor = async (
   applicationContext,
-  contactInfo,
-  docketNumber,
-}) => {
+  { contactInfo, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   const editableFields = {

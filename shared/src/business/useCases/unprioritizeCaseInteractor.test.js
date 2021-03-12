@@ -25,8 +25,7 @@ describe('unprioritizeCaseInteractor', () => {
     mockUser = {};
 
     await expect(
-      unprioritizeCaseInteractor({
-        applicationContext,
+      unprioritizeCaseInteractor(applicationContext, {
         docketNumber: '123-20',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -37,8 +36,7 @@ describe('unprioritizeCaseInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
 
-    await unprioritizeCaseInteractor({
-      applicationContext,
+    await unprioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -59,8 +57,7 @@ describe('unprioritizeCaseInteractor', () => {
         }),
       );
 
-    const result = await unprioritizeCaseInteractor({
-      applicationContext,
+    const result = await unprioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -94,8 +91,7 @@ describe('unprioritizeCaseInteractor', () => {
         }),
       );
 
-    const result = await unprioritizeCaseInteractor({
-      applicationContext,
+    const result = await unprioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
