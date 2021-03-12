@@ -373,11 +373,12 @@ exports.completeDocketEntryQCInteractor = async (
   });
 
   if (needsNewCoversheet) {
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseEntity.docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+      });
   }
 
   return {
