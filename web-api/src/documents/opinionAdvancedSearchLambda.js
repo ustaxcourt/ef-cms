@@ -10,8 +10,7 @@ exports.opinionAdvancedSearchLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .opinionAdvancedSearchInteractor({
-        applicationContext,
+      .opinionAdvancedSearchInteractor(applicationContext, {
         ...event.queryStringParameters,
       });
   });
