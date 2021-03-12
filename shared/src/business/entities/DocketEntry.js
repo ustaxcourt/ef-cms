@@ -125,7 +125,6 @@ DocketEntry.prototype.init = function init(
   this.receivedAt = rawDocketEntry.receivedAt || createISODateString();
   this.relationship = rawDocketEntry.relationship;
   this.scenario = rawDocketEntry.scenario;
-  this.secondaryDate = rawDocketEntry.secondaryDate;
   if (rawDocketEntry.scenario === 'Nonstandard H') {
     this.secondaryDocument = rawDocketEntry.secondaryDocument;
   }

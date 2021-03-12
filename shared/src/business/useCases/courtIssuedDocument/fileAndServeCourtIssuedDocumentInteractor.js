@@ -19,7 +19,6 @@ const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
-const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -72,11 +71,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let secondaryDate;
-  if (documentMeta.eventCode === TRANSCRIPT_EVENT_CODE) {
-    secondaryDate = documentMeta.date;
-  }
-
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
@@ -103,7 +97,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       judge: documentMeta.judge,
       numberOfPages,
       scenario: documentMeta.scenario,
-      secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
       userId: user.userId,
     },
