@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const diff = require('diff-arrays-of-objects');
 const {
   getCaseDeadlinesByDocketNumber,
 } = require('../caseDeadlines/getCaseDeadlinesByDocketNumber');

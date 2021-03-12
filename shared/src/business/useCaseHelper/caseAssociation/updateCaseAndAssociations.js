@@ -1,11 +1,9 @@
 const diff = require('diff-arrays-of-objects');
-const {
-  PrivatePractitioner,
-} = require('../../business/entities/PrivatePractitioner');
 const { Case } = require('../../entities/cases/Case');
 const { Correspondence } = require('../../entities/Correspondence');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { IrsPractitioner } = require('../../business/entities/IrsPractitioner');
+const { IrsPractitioner } = require('../../entities/IrsPractitioner');
+const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 
 /**
  * Identifies documents which have been updated and issues persistence calls
