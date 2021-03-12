@@ -8,15 +8,15 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 /**
  * getTrialSessionDetailsInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session to get the details
  * @returns {object} the trial session details
  */
-exports.getTrialSessionDetailsInteractor = async ({
+exports.getTrialSessionDetailsInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');

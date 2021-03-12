@@ -37,8 +37,7 @@ describe('Get trial session details', () => {
       .getTrialSessionById.mockReturnValue({});
 
     await expect(
-      getTrialSessionDetailsInteractor({
-        applicationContext,
+      getTrialSessionDetailsInteractor(applicationContext, {
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -52,8 +51,7 @@ describe('Get trial session details', () => {
       );
 
     await expect(
-      getTrialSessionDetailsInteractor({
-        applicationContext,
+      getTrialSessionDetailsInteractor(applicationContext, {
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       }),
     ).rejects.toThrow('The TrialSession entity was invalid');
@@ -65,8 +63,7 @@ describe('Get trial session details', () => {
       .getTrialSessionById.mockResolvedValue(null);
 
     await expect(
-      getTrialSessionDetailsInteractor({
-        applicationContext,
+      getTrialSessionDetailsInteractor(applicationContext, {
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       }),
     ).rejects.toThrow(
@@ -79,8 +76,7 @@ describe('Get trial session details', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(MOCK_TRIAL_SESSION);
 
-    const result = await getTrialSessionDetailsInteractor({
-      applicationContext,
+    const result = await getTrialSessionDetailsInteractor(applicationContext, {
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
     });
     expect(result).toMatchObject(MOCK_TRIAL_SESSION);

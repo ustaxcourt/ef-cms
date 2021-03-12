@@ -245,8 +245,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
-      serveCourtIssuedDocumentInteractor({
-        applicationContext,
+      serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
         docketNumber: '101-20',
       }),
@@ -259,8 +258,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
-      serveCourtIssuedDocumentInteractor({
-        applicationContext,
+      serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
         docketNumber: '000-00',
       }),
@@ -269,8 +267,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   it('should throw a Not Found error if the document can not be found', async () => {
     await expect(
-      serveCourtIssuedDocumentInteractor({
-        applicationContext,
+      serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
         docketNumber: '101-20',
       }),
@@ -278,8 +275,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       docketNumber: '101-20',
     });
@@ -305,8 +301,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the number of pages present in the document to be served', async () => {
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: '101-20',
     });
@@ -329,8 +324,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .saveDocumentFromLambda.mockImplementation(() => {});
 
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: '101-20',
     });
@@ -360,11 +354,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         pdfUrl: 'localhost:1234',
       });
 
-    const result = await serveCourtIssuedDocumentInteractor({
+    const result = await serveCourtIssuedDocumentInteractor(
       applicationContext,
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumber: '101-20',
-    });
+      {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        docketNumber: '101-20',
+      },
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
@@ -375,8 +371,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       docketNumber: '102-20',
     });
@@ -432,8 +427,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
     extendCase.trialDate = '2019-11-27T05:00:00.000Z';
 
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
       docketNumber: '101-20',
     });
@@ -448,8 +442,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
-      await serveCourtIssuedDocumentInteractor({
-        applicationContext,
+      await serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: docketEntry.docketEntryId,
         docketNumber: '101-20',
       });

@@ -8,11 +8,10 @@ const { User } = require('../../entities/User');
 /**
  * getInternalUsersInteractor
  *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
+ * @param {object} applicationContext the application context
  * @returns {Promise<User[]>} the internal users
  */
-exports.getInternalUsersInteractor = async ({ applicationContext }) => {
+exports.getInternalUsersInteractor = async applicationContext => {
   if (
     !isAuthorized(
       applicationContext.getCurrentUser(),

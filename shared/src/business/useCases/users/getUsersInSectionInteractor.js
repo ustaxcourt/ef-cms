@@ -8,15 +8,15 @@ const { User } = require('../../entities/User');
 /**
  * getUsersInSectionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.section the section to get the users
  * @returns {Promise} the promise of the getUsersInSection call
  */
-exports.getUsersInSectionInteractor = async ({
+exports.getUsersInSectionInteractor = async (
   applicationContext,
-  section,
-}) => {
+  { section },
+) => {
   const user = applicationContext.getCurrentUser();
   let rolePermission;
 
