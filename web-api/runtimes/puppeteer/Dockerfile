@@ -1,4 +1,4 @@
-FROM cypress/base:14.16
+FROM cypress/base:14.16.0
 
 WORKDIR /home/build
 
