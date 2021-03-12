@@ -10,8 +10,7 @@ exports.getCompletedMessagesForSectionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getCompletedMessagesForSectionInteractor({
-        applicationContext,
+      .getCompletedMessagesForSectionInteractor(applicationContext, {
         section: event.pathParameters.section,
       });
   });
