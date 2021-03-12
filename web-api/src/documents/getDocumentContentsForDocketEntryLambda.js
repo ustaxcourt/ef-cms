@@ -10,8 +10,7 @@ exports.getDocumentContentsForDocketEntryLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getDocumentContentsForDocketEntryInteractor({
-        applicationContext,
+      .getDocumentContentsForDocketEntryInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });
