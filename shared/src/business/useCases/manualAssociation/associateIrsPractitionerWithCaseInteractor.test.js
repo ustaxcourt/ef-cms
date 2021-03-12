@@ -55,8 +55,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
     mockCurrentUser = {};
 
     await expect(
-      associateIrsPractitionerWithCaseInteractor({
-        applicationContext,
+      associateIrsPractitionerWithCaseInteractor(applicationContext, {
         docketNumber: caseRecord.docketNumber,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -81,8 +80,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    await associateIrsPractitionerWithCaseInteractor({
-      applicationContext,
+    await associateIrsPractitionerWithCaseInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
