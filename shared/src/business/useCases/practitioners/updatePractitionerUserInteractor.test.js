@@ -44,8 +44,7 @@ describe('updatePractitionerUserInteractor', () => {
     };
 
     await expect(
-      updatePractitionerUserInteractor({
-        applicationContext,
+      updatePractitionerUserInteractor(applicationContext, {
         user: mockPractitioner,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -60,8 +59,7 @@ describe('updatePractitionerUserInteractor', () => {
       });
 
     await expect(
-      updatePractitionerUserInteractor({
-        applicationContext,
+      updatePractitionerUserInteractor(applicationContext, {
         barNumber: 'AB1111',
         user: {
           ...mockPractitioner,
@@ -80,16 +78,18 @@ describe('updatePractitionerUserInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    const updatedUser = await updatePractitionerUserInteractor({
+    const updatedUser = await updatePractitionerUserInteractor(
       applicationContext,
-      barNumber: 'AB1111',
-      user: {
-        ...mockPractitioner,
-        barNumber: 'AB2222',
-        confirmEmail: 'bc@example.com',
-        updatedEmail: 'bc@example.com',
+      {
+        barNumber: 'AB1111',
+        user: {
+          ...mockPractitioner,
+          barNumber: 'AB2222',
+          confirmEmail: 'bc@example.com',
+          updatedEmail: 'bc@example.com',
+        },
       },
-    });
+    );
 
     expect(updatedUser.serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -97,16 +97,18 @@ describe('updatePractitionerUserInteractor', () => {
   });
 
   it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {
-    const updatedUser = await updatePractitionerUserInteractor({
+    const updatedUser = await updatePractitionerUserInteractor(
       applicationContext,
-      barNumber: 'AB1111',
-      user: {
-        ...mockPractitioner,
-        barNumber: 'AB2222',
-        confirmEmail: 'bc@example.com',
-        updatedEmail: 'bc@example.com',
+      {
+        barNumber: 'AB1111',
+        user: {
+          ...mockPractitioner,
+          barNumber: 'AB2222',
+          confirmEmail: 'bc@example.com',
+          updatedEmail: 'bc@example.com',
+        },
       },
-    });
+    );
 
     expect(updatedUser).toBeDefined();
     expect(
@@ -126,15 +128,17 @@ describe('updatePractitionerUserInteractor', () => {
         email: undefined,
       });
 
-    const updatedUser = await updatePractitionerUserInteractor({
+    const updatedUser = await updatePractitionerUserInteractor(
       applicationContext,
-      barNumber: 'AB1111',
-      user: {
-        ...mockPractitioner,
-        confirmEmail: 'admissionsclerk@example.com',
-        updatedEmail: 'admissionsclerk@example.com',
+      {
+        barNumber: 'AB1111',
+        user: {
+          ...mockPractitioner,
+          confirmEmail: 'admissionsclerk@example.com',
+          updatedEmail: 'admissionsclerk@example.com',
+        },
       },
-    });
+    );
 
     expect(updatedUser).toBeDefined();
     expect(
@@ -154,8 +158,7 @@ describe('updatePractitionerUserInteractor', () => {
       };
 
       await expect(
-        updatePractitionerUserInteractor({
-          applicationContext,
+        updatePractitionerUserInteractor(applicationContext, {
           user: mockPractitioner,
         }),
       ).rejects.toThrow('Unauthorized for updating practitioner user');
@@ -167,8 +170,7 @@ describe('updatePractitionerUserInteractor', () => {
         .isEmailAvailable.mockReturnValue(false);
 
       await expect(
-        updatePractitionerUserInteractor({
-          applicationContext,
+        updatePractitionerUserInteractor(applicationContext, {
           user: {
             ...mockPractitioner,
             confirmEmail: 'exists@example.com',
@@ -179,8 +181,7 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should update the user with the new user.updatedEmail value', async () => {
-      await updatePractitionerUserInteractor({
-        applicationContext,
+      await updatePractitionerUserInteractor(applicationContext, {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -198,8 +199,7 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it("should send the verification email when the user's email is being changed", async () => {
-      await updatePractitionerUserInteractor({
-        applicationContext,
+      await updatePractitionerUserInteractor(applicationContext, {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -218,8 +218,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     it("should NOT send the verification email when the user's email is being added for the first time", async () => {
       mockPractitioner.email = undefined;
-      await updatePractitionerUserInteractor({
-        applicationContext,
+      await updatePractitionerUserInteractor(applicationContext, {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -233,8 +232,7 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the email is being updated', async () => {
-      await updatePractitionerUserInteractor({
-        applicationContext,
+      await updatePractitionerUserInteractor(applicationContext, {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -246,8 +244,7 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes are being updated', async () => {
-      await updatePractitionerUserInteractor({
-        applicationContext,
+      await updatePractitionerUserInteractor(applicationContext, {
         user: {
           ...mockPractitioner,
           practitionerNotes: 'wow, real good notes',
@@ -258,8 +255,7 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes and email are being updated', async () => {
-      await updatePractitionerUserInteractor({
-        applicationContext,
+      await updatePractitionerUserInteractor(applicationContext, {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -272,8 +268,7 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the address1', async () => {
-      await updatePractitionerUserInteractor({
-        applicationContext,
+      await updatePractitionerUserInteractor(applicationContext, {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -289,8 +284,7 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the practitioner name', async () => {
-      await updatePractitionerUserInteractor({
-        applicationContext,
+      await updatePractitionerUserInteractor(applicationContext, {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
