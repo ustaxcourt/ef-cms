@@ -7,17 +7,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * generatePrintablePendingReportInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.judge the optional judge filter
  * @param {string} providers.docketNumber the optional docketNumber filter
  * @returns {Array} the url of the document
  */
-exports.generatePrintablePendingReportInteractor = async ({
+exports.generatePrintablePendingReportInteractor = async (
   applicationContext,
-  docketNumber,
-  judge,
-}) => {
+  { docketNumber, judge },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
