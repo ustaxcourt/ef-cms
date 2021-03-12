@@ -16,7 +16,7 @@ resource "null_resource" "api_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -28,7 +28,7 @@ resource "null_resource" "websockets_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -40,7 +40,7 @@ resource "null_resource" "api_public_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -52,7 +52,7 @@ resource "null_resource" "puppeteer_layer_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -63,7 +63,7 @@ resource "null_resource" "cron_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -288,5 +288,3 @@ module "api-west-blue" {
   create_streams         = 0
   stream_arn             = ""
 }
-
-
