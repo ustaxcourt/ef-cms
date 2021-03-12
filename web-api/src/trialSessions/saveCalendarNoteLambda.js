@@ -13,8 +13,9 @@ exports.saveCalendarNoteLambda = event =>
       ...JSON.parse(event.body),
     };
 
-    return await applicationContext.getUseCases().saveCalendarNoteInteractor({
-      applicationContext,
-      ...lambdaArguments,
-    });
+    return await applicationContext
+      .getUseCases()
+      .saveCalendarNoteInteractor(applicationContext, {
+        ...lambdaArguments,
+      });
   });

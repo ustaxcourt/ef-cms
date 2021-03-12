@@ -13,8 +13,7 @@ exports.removeCaseFromTrialLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .removeCaseFromTrialInteractor({
-        applicationContext,
+      .removeCaseFromTrialInteractor(applicationContext, {
         associatedJudge,
         caseStatus,
         disposition,

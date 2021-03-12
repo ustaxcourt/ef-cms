@@ -102,8 +102,7 @@ describe('updateTrialSessionInteractor', () => {
     });
 
     await expect(
-      updateTrialSessionInteractor({
-        applicationContext,
+      updateTrialSessionInteractor(applicationContext, {
         trialSession: MOCK_TRIAL,
       }),
     ).rejects.toThrow();
@@ -111,8 +110,7 @@ describe('updateTrialSessionInteractor', () => {
 
   it('throws an error if the trial session start date has passed', async () => {
     await expect(
-      updateTrialSessionInteractor({
-        applicationContext,
+      updateTrialSessionInteractor(applicationContext, {
         trialSession: mockTrialsById[MOCK_TRIAL_ID_1],
       }),
     ).rejects.toThrow();
@@ -126,16 +124,14 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await expect(
-      updateTrialSessionInteractor({
-        applicationContext,
+      updateTrialSessionInteractor(applicationContext, {
         trialSession: MOCK_TRIAL,
       }),
     ).rejects.toThrow();
   });
 
   it('updates a trial session successfully', async () => {
-    await updateTrialSessionInteractor({
-      applicationContext,
+    await updateTrialSessionInteractor(applicationContext, {
       trialSession: mockTrialsById[MOCK_TRIAL_ID_2],
     });
 
@@ -153,8 +149,7 @@ describe('updateTrialSessionInteractor', () => {
       },
     };
 
-    await updateTrialSessionInteractor({
-      applicationContext,
+    await updateTrialSessionInteractor(applicationContext, {
       trialSession: trialSessionWithJudge,
     });
 
@@ -175,8 +170,7 @@ describe('updateTrialSessionInteractor', () => {
       }, // different judge id
     };
 
-    await updateTrialSessionInteractor({
-      applicationContext,
+    await updateTrialSessionInteractor(applicationContext, {
       trialSession: trialSessionWithJudge,
     });
 
@@ -197,8 +191,7 @@ describe('updateTrialSessionInteractor', () => {
       },
     };
 
-    await updateTrialSessionInteractor({
-      applicationContext,
+    await updateTrialSessionInteractor(applicationContext, {
       trialSession: trialSessionWithTrialClerk,
     });
 
@@ -223,8 +216,7 @@ describe('updateTrialSessionInteractor', () => {
       }, // different trial clerk id
     };
 
-    await updateTrialSessionInteractor({
-      applicationContext,
+    await updateTrialSessionInteractor(applicationContext, {
       trialSession: trialSessionWithTrialClerk,
     });
 
@@ -259,8 +251,7 @@ describe('updateTrialSessionInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
     mockCalendaredCase.updateTrialSessionInformation(MOCK_TRIAL);
 
-    await updateTrialSessionInteractor({
-      applicationContext,
+    await updateTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...calendaredTrialSession,
         startDate: '2025-12-02T00:00:00.000Z',
@@ -313,8 +304,7 @@ describe('updateTrialSessionInteractor', () => {
       trialLocation: 'Boise, Idaho',
     };
 
-    await updateTrialSessionInteractor({
-      applicationContext,
+    await updateTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...mockTrialsById[MOCK_TRIAL_ID_6],
         ...updatedFields,
@@ -352,8 +342,7 @@ describe('updateTrialSessionInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
     mockCalendaredCase.updateTrialSessionInformation(MOCK_TRIAL);
 
-    await updateTrialSessionInteractor({
-      applicationContext,
+    await updateTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...calendaredTrialSession,
         startDate: '2025-12-02T00:00:00.000Z',
@@ -366,8 +355,7 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   it('does not update non-editable fields', async () => {
-    await updateTrialSessionInteractor({
-      applicationContext,
+    await updateTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...mockTrialsById[MOCK_TRIAL_ID_6],
         isCalendared: true,

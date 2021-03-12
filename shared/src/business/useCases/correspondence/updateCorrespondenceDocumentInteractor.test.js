@@ -75,16 +75,14 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     mockUser = { ...mockUser, role: ROLES.petitioner };
 
     await expect(
-      updateCorrespondenceDocumentInteractor({
-        applicationContext,
+      updateCorrespondenceDocumentInteractor(applicationContext, {
         documentMetadata: { docketNumber: mockCase.docketNumber },
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should update the specified correspondence document title when the case entity is valid', async () => {
-    await updateCorrespondenceDocumentInteractor({
-      applicationContext,
+    await updateCorrespondenceDocumentInteractor(applicationContext, {
       documentMetadata: {
         correspondenceId: mockCorrespondence.correspondenceId,
         docketNumber: mockCase.docketNumber,
@@ -105,14 +103,16 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   });
 
   it('should return an updated raw case object', async () => {
-    const result = await updateCorrespondenceDocumentInteractor({
+    const result = await updateCorrespondenceDocumentInteractor(
       applicationContext,
-      documentMetadata: {
-        correspondenceId: mockCorrespondence.correspondenceId,
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'A title that has been updated',
+      {
+        documentMetadata: {
+          correspondenceId: mockCorrespondence.correspondenceId,
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'A title that has been updated',
+        },
       },
-    });
+    );
 
     expect(result).toMatchObject({
       ...mockCase,

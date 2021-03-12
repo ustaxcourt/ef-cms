@@ -10,8 +10,7 @@ exports.getPractitionerByBarNumberLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getPractitionerByBarNumberInteractor({
-        applicationContext,
+      .getPractitionerByBarNumberInteractor(applicationContext, {
         barNumber: event.pathParameters.barNumber,
       });
   });

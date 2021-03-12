@@ -33,8 +33,7 @@ describe('opinionPublicSearchInteractor', () => {
   });
 
   it('should only search for opinion document types, allowing opinions within sealed cases', async () => {
-    await opinionPublicSearchInteractor({
-      applicationContext,
+    await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
       startDate: '2001-01-01',
     });
@@ -61,8 +60,7 @@ describe('opinionPublicSearchInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
-    const results = await opinionPublicSearchInteractor({
-      applicationContext,
+    const results = await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
       startDate: '2001-01-01',
     });
@@ -71,8 +69,7 @@ describe('opinionPublicSearchInteractor', () => {
   });
 
   it('should return search results based on the supplied opinion keyword', async () => {
-    const result = await opinionPublicSearchInteractor({
-      applicationContext,
+    const result = await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'memorandum',
       startDate: '2001-01-01',
     });
@@ -84,8 +81,7 @@ describe('opinionPublicSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
-    const results = await opinionPublicSearchInteractor({
-      applicationContext,
+    const results = await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
       startDate: '2001-01-01',
     });

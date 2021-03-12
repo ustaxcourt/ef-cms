@@ -40,8 +40,7 @@ describe('Update trial session working copy', () => {
       .updateTrialSessionWorkingCopy.mockReturnValue({});
 
     await expect(
-      updateTrialSessionWorkingCopyInteractor({
-        applicationContext,
+      updateTrialSessionWorkingCopyInteractor(applicationContext, {
         trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -60,8 +59,7 @@ describe('Update trial session working copy', () => {
       );
 
     await expect(
-      updateTrialSessionWorkingCopyInteractor({
-        applicationContext,
+      updateTrialSessionWorkingCopyInteractor(applicationContext, {
         trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
       }),
     ).rejects.toThrow('The TrialSessionWorkingCopy entity was invalid');
@@ -77,10 +75,12 @@ describe('Update trial session working copy', () => {
       .getPersistenceGateway()
       .updateTrialSessionWorkingCopy.mockResolvedValue(MOCK_WORKING_COPY);
 
-    const result = await updateTrialSessionWorkingCopyInteractor({
+    const result = await updateTrialSessionWorkingCopyInteractor(
       applicationContext,
-      trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
-    });
+      {
+        trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
+      },
+    );
     expect(result).toMatchObject(MOCK_WORKING_COPY);
   });
 });
