@@ -50,8 +50,7 @@ describe('setForHearingInteractor', () => {
     };
 
     await expect(
-      setForHearingInteractor({
-        applicationContext,
+      setForHearingInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
@@ -64,8 +63,7 @@ describe('setForHearingInteractor', () => {
     };
 
     await expect(
-      setForHearingInteractor({
-        applicationContext,
+      setForHearingInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         isHearing: true,
         trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
@@ -82,8 +80,7 @@ describe('setForHearingInteractor', () => {
       '8675309b-18d0-43ec-bafb-654e83405411',
     );
 
-    await setForHearingInteractor({
-      applicationContext,
+    await setForHearingInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       isHearing: true,
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
@@ -115,8 +112,7 @@ describe('setForHearingInteractor', () => {
       '8675309b-18d0-43ec-bafb-654e83405411',
     );
 
-    await setForHearingInteractor({
-      applicationContext,
+    await setForHearingInteractor(applicationContext, {
       calendarNotes: 'this is a calendarNote',
       docketNumber: mockCase.docketNumber,
       isHearing: true,

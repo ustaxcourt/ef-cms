@@ -10,8 +10,7 @@ exports.privatePractitionerCaseAssociationLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .submitCaseAssociationRequestInteractor({
-        applicationContext,
+      .submitCaseAssociationRequestInteractor(applicationContext, {
         ...event.pathParameters,
         ...JSON.parse(event.body),
       });

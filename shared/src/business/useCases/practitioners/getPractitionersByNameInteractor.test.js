@@ -21,17 +21,13 @@ describe('getPractitionersByNameInteractor', () => {
     });
 
     await expect(
-      getPractitionersByNameInteractor({
-        applicationContext,
-      }),
+      getPractitionersByNameInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized for searching practitioners');
   });
 
   it('throws an error if name is not passed in', async () => {
     await expect(
-      getPractitionersByNameInteractor({
-        applicationContext,
-      }),
+      getPractitionersByNameInteractor(applicationContext, {}),
     ).rejects.toThrow('Name must be provided to search');
   });
 
@@ -47,8 +43,7 @@ describe('getPractitionersByNameInteractor', () => {
       .getPersistenceGateway()
       .getPractitionersByName.mockResolvedValue(maxPlusOneResults);
 
-    const results = await getPractitionersByNameInteractor({
-      applicationContext,
+    const results = await getPractitionersByNameInteractor(applicationContext, {
       name: 'some name',
     });
 
@@ -75,8 +70,7 @@ describe('getPractitionersByNameInteractor', () => {
         },
       ]);
 
-    const results = await getPractitionersByNameInteractor({
-      applicationContext,
+    const results = await getPractitionersByNameInteractor(applicationContext, {
       name: 'Test Practitioner',
     });
 

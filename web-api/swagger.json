@@ -4344,7 +4344,7 @@
           }
         }
       }
-    },    
+    },
     "/users/{userId}/document-qc/inbox": {
       "parameters": [
         {

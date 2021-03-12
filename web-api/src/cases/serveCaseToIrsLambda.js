@@ -10,10 +10,11 @@ exports.serveCaseToIrsLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext.getUseCases().serveCaseToIrsInteractor({
-        ...event.pathParameters,
-        applicationContext,
-      });
+      return await applicationContext
+        .getUseCases()
+        .serveCaseToIrsInteractor(applicationContext, {
+          ...event.pathParameters,
+        });
     },
     { logResults: false },
   );

@@ -5,17 +5,15 @@ const { PublicCase } = require('../../entities/cases/PublicCase');
 /**
  * casePublicSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.casePublicSearchInteractor = async ({
+
+exports.casePublicSearchInteractor = async (
   applicationContext,
-  countryType,
-  petitionerName,
-  petitionerState,
-  yearFiledMax,
-  yearFiledMin,
-}) => {
+  { countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin },
+) => {
   const foundCases = await applicationContext
     .getPersistenceGateway()
     .casePublicSearchExactMatch({

@@ -21,8 +21,7 @@ describe('unblockCaseFromTrialInteractor', () => {
         }),
       );
 
-    const result = await unblockCaseFromTrialInteractor({
-      applicationContext,
+    const result = await unblockCaseFromTrialInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
@@ -45,8 +44,7 @@ describe('unblockCaseFromTrialInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      unblockCaseFromTrialInteractor({
-        applicationContext,
+      unblockCaseFromTrialInteractor(applicationContext, {
         docketNumber: '123-45',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -68,8 +66,7 @@ describe('unblockCaseFromTrialInteractor', () => {
         }),
       );
 
-    await unblockCaseFromTrialInteractor({
-      applicationContext,
+    await unblockCaseFromTrialInteractor(applicationContext, {
       docketNumber: '123-45',
     });
 

@@ -58,8 +58,7 @@ describe('submitCaseAssociationRequest', () => {
     };
 
     await expect(
-      submitCaseAssociationRequestInteractor({
-        applicationContext,
+      submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber: caseRecord.docketNumber,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
@@ -93,8 +92,7 @@ describe('submitCaseAssociationRequest', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
 
-    await submitCaseAssociationRequestInteractor({
-      applicationContext,
+    await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
       representingPrimary: true,
       representingSecondary: false,
@@ -127,8 +125,7 @@ describe('submitCaseAssociationRequest', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    await submitCaseAssociationRequestInteractor({
-      applicationContext,
+    await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
       representingPrimary: true,
       representingSecondary: false,
@@ -170,8 +167,7 @@ describe('submitCaseAssociationRequest', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    await submitCaseAssociationRequestInteractor({
-      applicationContext,
+    await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

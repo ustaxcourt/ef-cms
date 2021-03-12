@@ -39,8 +39,6 @@ const getNeedsNewCoversheet = ({ currentDocketEntry, updatedDocketEntry }) => {
       currentDocketEntry.receivedAt,
       updatedDocketEntry.receivedAt,
     ) !== 0;
-  const filedByUpdated =
-    currentDocketEntry.filedBy !== updatedDocketEntry.filedBy;
   const certificateOfServiceUpdated =
     currentDocketEntry.certificateOfService !==
     updatedDocketEntry.certificateOfService;
@@ -49,10 +47,7 @@ const getNeedsNewCoversheet = ({ currentDocketEntry, updatedDocketEntry }) => {
     getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocketEntry });
 
   return (
-    receivedAtUpdated ||
-    filedByUpdated ||
-    certificateOfServiceUpdated ||
-    documentTitleUpdated
+    receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
   );
 };
 

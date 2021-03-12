@@ -10,10 +10,11 @@ exports.todaysOrdersLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext.getUseCases().getTodaysOrdersInteractor({
-        applicationContext,
-        ...event.pathParameters,
-      });
+      return await applicationContext
+        .getUseCases()
+        .getTodaysOrdersInteractor(applicationContext, {
+          ...event.pathParameters,
+        });
     },
     { user: {} },
   );

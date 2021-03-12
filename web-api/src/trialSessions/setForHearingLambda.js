@@ -12,10 +12,11 @@ exports.setForHearingLambda = event =>
       event.pathParameters || event.path || {};
     const { calendarNotes } = JSON.parse(event.body);
 
-    return await applicationContext.getUseCases().setForHearingInteractor({
-      applicationContext,
-      calendarNotes,
-      docketNumber,
-      trialSessionId,
-    });
+    return await applicationContext
+      .getUseCases()
+      .setForHearingInteractor(applicationContext, {
+        calendarNotes,
+        docketNumber,
+        trialSessionId,
+      });
   });

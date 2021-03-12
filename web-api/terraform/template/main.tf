@@ -65,4 +65,3 @@ module "elasticsearch_beta" {
     aws.us-east-1 = aws.us-east-1
   }
 }
-

@@ -17,8 +17,7 @@ describe('sealCaseContactAddressInteractor', () => {
 
   it('should throw an error if the user is unauthorized to seal a case contact address', async () => {
     await expect(
-      sealCaseContactAddressInteractor({
-        applicationContext,
+      sealCaseContactAddressInteractor(applicationContext, {
         contactId: '10aa100f-0330-442b-8423-b01690c76e3f',
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -31,8 +30,7 @@ describe('sealCaseContactAddressInteractor', () => {
       userId: 'docketClerk',
     });
     await expect(
-      sealCaseContactAddressInteractor({
-        applicationContext,
+      sealCaseContactAddressInteractor(applicationContext, {
         contactId: '23-skidoo',
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -55,8 +53,7 @@ describe('sealCaseContactAddressInteractor', () => {
       userId: 'docketClerk',
     });
     await expect(
-      sealCaseContactAddressInteractor({
-        applicationContext,
+      sealCaseContactAddressInteractor(applicationContext, {
         contactId: '23-skidoo',
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -69,8 +66,7 @@ describe('sealCaseContactAddressInteractor', () => {
       userId: 'docketClerk',
     });
 
-    const result = await sealCaseContactAddressInteractor({
-      applicationContext,
+    const result = await sealCaseContactAddressInteractor(applicationContext, {
       contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -91,8 +87,7 @@ describe('sealCaseContactAddressInteractor', () => {
       userId: 'docketClerk',
     });
 
-    const result = await sealCaseContactAddressInteractor({
-      applicationContext,
+    const result = await sealCaseContactAddressInteractor(applicationContext, {
       contactId: '2226050f-a423-47bb-943b-a5661fe08a6b', // contactSecondary
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -112,8 +107,7 @@ describe('sealCaseContactAddressInteractor', () => {
       role: ROLES.docketClerk,
       userId: 'docketClerk',
     });
-    const result = await sealCaseContactAddressInteractor({
-      applicationContext,
+    const result = await sealCaseContactAddressInteractor(applicationContext, {
       contactId: '4446050f-a423-47bb-943b-a5661fe08a6b', // otherFilers[1]
       docketNumber: MOCK_CASE.docketNumber,
     });

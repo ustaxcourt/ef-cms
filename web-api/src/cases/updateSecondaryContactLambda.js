@@ -10,8 +10,7 @@ exports.updateSecondaryContactLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateSecondaryContactInteractor({
-        applicationContext,
+      .updateSecondaryContactInteractor(applicationContext, {
         ...JSON.parse(event.body),
       });
   });

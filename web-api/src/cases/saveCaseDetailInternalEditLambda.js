@@ -10,8 +10,7 @@ exports.saveCaseDetailInternalEditLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .saveCaseDetailInternalEditInteractor({
-        applicationContext,
+      .saveCaseDetailInternalEditInteractor(applicationContext, {
         ...event.pathParameters,
         ...JSON.parse(event.body),
         caseToUpdate: JSON.parse(event.body),

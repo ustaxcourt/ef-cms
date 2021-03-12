@@ -123,8 +123,7 @@ describe('updateCounselOnCaseInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateCounselOnCaseInteractor({
-        applicationContext,
+      updateCounselOnCaseInteractor(applicationContext, {
         docketNumber: '123-19',
         userData: {
           representingPrimary: true,
@@ -135,8 +134,7 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates a practitioner with the given userId on the associated case', async () => {
-    await updateCounselOnCaseInteractor({
-      applicationContext,
+    await updateCounselOnCaseInteractor(applicationContext, {
       docketNumber: '123-19',
       userData: {
         name: 'Saul Goodman',
@@ -153,8 +151,7 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates an irsPractitioner with the given userId on the associated case', async () => {
-    await updateCounselOnCaseInteractor({
-      applicationContext,
+    await updateCounselOnCaseInteractor(applicationContext, {
       docketNumber: '123-19',
       userData: {
         name: 'Saul Goodman',
@@ -171,8 +168,7 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates only editable practitioner fields on the case', async () => {
-    await updateCounselOnCaseInteractor({
-      applicationContext,
+    await updateCounselOnCaseInteractor(applicationContext, {
       docketNumber: '123-19',
       userData: {
         email: 'not.editable@example.com',
@@ -198,8 +194,7 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('updates the service indicator on the contacts when they are being represented', async () => {
-    const results = await updateCounselOnCaseInteractor({
-      applicationContext,
+    const results = await updateCounselOnCaseInteractor(applicationContext, {
       docketNumber: '123-19',
       userData: {
         email: 'not.editable@example.com',
@@ -221,8 +216,7 @@ describe('updateCounselOnCaseInteractor', () => {
 
   it('throws an error if the userId is not a privatePractitioner or irsPractitioner role', async () => {
     await expect(
-      updateCounselOnCaseInteractor({
-        applicationContext,
+      updateCounselOnCaseInteractor(applicationContext, {
         docketNumber: '123-19',
         userData: {
           email: 'petitioner@example.com',
