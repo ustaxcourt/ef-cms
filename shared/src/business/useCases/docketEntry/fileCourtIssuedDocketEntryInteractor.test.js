@@ -116,8 +116,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      fileCourtIssuedDocketEntryInteractor({
-        applicationContext,
+      fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
@@ -135,8 +134,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     });
 
     await expect(
-      fileCourtIssuedDocketEntryInteractor({
-        applicationContext,
+      fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           docketNumber: caseRecord.docketNumber,
@@ -154,8 +152,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
@@ -185,8 +182,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: caseRecord.docketNumber,
@@ -222,8 +218,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
@@ -251,8 +246,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
@@ -282,8 +276,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   it('should delete the draftOrderState from the docketEntry', async () => {
     const docketEntryToUpdate = caseRecord.docketEntries[5];
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: docketEntryToUpdate.docketEntryId,
         docketNumber: caseRecord.docketNumber,
