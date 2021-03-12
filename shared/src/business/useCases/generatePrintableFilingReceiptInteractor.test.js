@@ -23,8 +23,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('should call the Receipt of Filing document generator', async () => {
-    await generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         primaryDocumentId: mockPrimaryDocketEntryId,
@@ -43,8 +42,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('should populate filedBy on the receipt of filing', async () => {
-    await generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
@@ -66,8 +64,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('acquires document information', async () => {
-    await generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
