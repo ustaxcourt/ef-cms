@@ -9,7 +9,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * getPractitionerByBarNumberInteractor
  *
  * @param {object} applicationContext the application context
- * @param {object} barNumber the bar number for the practitioner to get
+ * @param {object} providers the providers object
+ * @param {object} providers.barNumber the bar number for the practitioner to get
  * @returns {Practitioner} the retrieved practitioner
  */
 exports.getPractitionerByBarNumberInteractor = async (
