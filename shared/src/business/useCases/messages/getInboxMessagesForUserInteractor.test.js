@@ -22,9 +22,7 @@ describe('getInboxMessagesForUserInteractor', () => {
     });
 
     await expect(
-      getInboxMessagesForUserInteractor({
-        applicationContext,
-      }),
+      getInboxMessagesForUserInteractor(applicationContext, {}),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -59,10 +57,12 @@ describe('getInboxMessagesForUserInteractor', () => {
       .getPersistenceGateway()
       .getUserInboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessages = await getInboxMessagesForUserInteractor({
+    const returnedMessages = await getInboxMessagesForUserInteractor(
       applicationContext,
-      messageId: messageData.messageId,
-    });
+      {
+        messageId: messageData.messageId,
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getUserInboxMessages,
