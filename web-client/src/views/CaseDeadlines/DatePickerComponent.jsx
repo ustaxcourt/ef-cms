@@ -18,10 +18,12 @@ export const DatePickerComponent = ({
 }) => {
   const datePickerRef = useRef();
   const inputRef = useRef();
+
   // YYYY-MM-DD is indeed the format required by `data-default-value`
   const defaultValue = values
     ? `${values.year}-${values.month}-${values.day}`
     : value;
+
   useEffect(() => {
     if (datePickerRef.current) {
       datePicker.on(datePickerRef.current);
