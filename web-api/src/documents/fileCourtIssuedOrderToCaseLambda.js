@@ -10,8 +10,7 @@ exports.fileCourtIssuedOrderToCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .fileCourtIssuedOrderInteractor({
+      .fileCourtIssuedOrderInteractor(applicationContext, {
         ...JSON.parse(event.body),
-        applicationContext,
       });
   });

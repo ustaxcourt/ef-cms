@@ -116,8 +116,7 @@ exports.uploadExternalDocumentsInteractor = async ({
     return {
       caseDetail: await applicationContext
         .getUseCases()
-        .fileExternalDocumentInteractor({
-          applicationContext,
+        .fileExternalDocumentInteractor(applicationContext, {
           documentMetadata,
         }),
       docketEntryIdsAdded,

@@ -175,8 +175,7 @@ exports.updateDocketEntryMetaInteractor = async ({
 
     const updatedDocketEntry = await applicationContext
       .getUseCases()
-      .addCoversheetInteractor({
-        applicationContext,
+      .addCoversheetInteractor(applicationContext, {
         docketEntryId: originalDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         filingDateUpdated,
