@@ -4,7 +4,7 @@
 
 ### Internal Only
 
-**Bug Fix** Waived date form error on Petition QC is removed when error is corrected
+**Bug Fix** Waived date form error on Petition QC is removed when error is corrected.
 
 **Bug Fix** Practitioners can no longer see unassociated sealed cases when searching by petitioner name.
 
