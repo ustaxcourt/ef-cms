@@ -1,9 +1,20 @@
 const {
+  formatNow,
+  FORMATS,
+  PATTERNS,
+} = require('../../business/utilities/DateHandler');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { PATTERNS } = require('../../business/utilities/DateHandler');
 const { UnauthorizedError } = require('../../errors/errors');
+
+const isValidDate = dateString => {
+  const dateInputValid = PATTERNS.YYYYMMDD.test(dateString);
+  const todayDate = formatNow(FORMATS.YYYYMMDD);
+  const dateLessthanOrEqualToToday = dateString <= todayDate;
+  return dateInputValid && dateLessthanOrEqualToToday;
+};
 
 /**
  * getReconciliationReportInteractor
@@ -23,20 +34,21 @@ exports.getReconciliationReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const dateInputValid = PATTERNS.YYYYMMDD.test(reconciliationDate);
+  const dateInputValid = isValidDate(reconciliationDate);
   if (!dateInputValid) {
-    throw new Error('Date format must be YYYY-MM-DD');
+    throw new Error(
+      'Date must be formatted as YYYY-MM-DD and not later than today',
+    );
   }
 
-  const docketEntries = [];
-  /*
-  await applicationContext
+  const docketEntries = await applicationContext
     .getPersistenceGateway()
     .getReconciliationReport({
       applicationContext,
       reconciliationDate,
     });
-    */
+
+  // TODO: push docket entries through validation?
 
   const report = {
     docketEntries,

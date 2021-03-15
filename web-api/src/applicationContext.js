@@ -584,6 +584,9 @@ const {
   getReadyForTrialCases,
 } = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
 const {
+  getReconciliationReport,
+} = require('../../shared/src/persistence/elasticsearch/getReconciliationReport');
+const {
   getReconciliationReportInteractor,
 } = require('../../shared/src/business/useCases/getReconciliationReportInteractor');
 const {
@@ -1281,6 +1284,7 @@ const gatewayMethods = {
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
+  getReconciliationReport,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
