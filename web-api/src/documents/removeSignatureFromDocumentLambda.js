@@ -10,8 +10,7 @@ exports.removeSignatureFromDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .removeSignatureFromDocumentInteractor({
-        applicationContext,
+      .removeSignatureFromDocumentInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });
