@@ -40,8 +40,7 @@ describe('create practitioner user', () => {
   });
 
   it('creates the practitioner user', async () => {
-    const user = await createPractitionerUserInteractor({
-      applicationContext,
+    const user = await createPractitionerUserInteractor(applicationContext, {
       user: mockUser,
     });
     expect(user).not.toBeUndefined();
@@ -54,8 +53,7 @@ describe('create practitioner user', () => {
     };
 
     await expect(
-      createPractitionerUserInteractor({
-        applicationContext,
+      createPractitionerUserInteractor(applicationContext, {
         user: mockUser,
       }),
     ).rejects.toThrow(UnauthorizedError);

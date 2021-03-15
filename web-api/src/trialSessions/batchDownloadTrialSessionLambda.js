@@ -12,8 +12,7 @@ exports.batchDownloadTrialSessionLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .batchDownloadTrialSessionInteractor({
-        applicationContext,
+      .batchDownloadTrialSessionInteractor(applicationContext, {
         trialSessionId,
       });
   });

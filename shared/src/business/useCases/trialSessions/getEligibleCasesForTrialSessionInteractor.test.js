@@ -61,8 +61,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     mockCurrentUser = {};
 
     await expect(
-      getEligibleCasesForTrialSessionInteractor({
-        applicationContext,
+      getEligibleCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).rejects.toThrow();
@@ -70,16 +69,14 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
 
   it('should find the cases for a trial session successfully', async () => {
     await expect(
-      getEligibleCasesForTrialSessionInteractor({
-        applicationContext,
+      getEligibleCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).resolves.not.toThrow();
   });
 
   it('should call getEligibleCasesForTrialSession with correct limit', async () => {
-    await getEligibleCasesForTrialSessionInteractor({
-      applicationContext,
+    await getEligibleCasesForTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -107,10 +104,12 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     let result;
 
     try {
-      result = await getEligibleCasesForTrialSessionInteractor({
+      result = await getEligibleCasesForTrialSessionInteractor(
         applicationContext,
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      });
+        {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      );
     } catch (e) {
       error = e;
     }

@@ -12,8 +12,7 @@ exports.getPublicDocumentDownloadUrlLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .getPublicDownloadPolicyUrlInteractor({
-          applicationContext,
+        .getPublicDownloadPolicyUrlInteractor(applicationContext, {
           ...event.pathParameters,
         });
     },

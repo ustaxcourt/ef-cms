@@ -11,8 +11,7 @@ exports.updatePetitionDetailsLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updatePetitionDetailsInteractor({
-        applicationContext,
+      .updatePetitionDetailsInteractor(applicationContext, {
         ...event.pathParameters,
         ...JSON.parse(event.body),
       });

@@ -64,8 +64,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getEligibleCasesForTrialSession.mockReturnValue([MOCK_CASE]);
 
     await expect(
-      setTrialSessionCalendarInteractor({
-        applicationContext,
+      setTrialSessionCalendarInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -98,8 +97,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getPersistenceGateway()
       .setPriorityOnAllWorkItems.mockReturnValue({});
 
-    await setTrialSessionCalendarInteractor({
-      applicationContext,
+    await setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -133,8 +131,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor({
-      applicationContext,
+    await setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -172,8 +169,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor({
-      applicationContext,
+    await setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -205,8 +201,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([]);
 
-    await setTrialSessionCalendarInteractor({
-      applicationContext,
+    await setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -231,8 +226,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor({
-      applicationContext,
+    await setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 

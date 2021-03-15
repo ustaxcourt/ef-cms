@@ -10,8 +10,7 @@ exports.updateTrialSessionWorkingCopyLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateTrialSessionWorkingCopyInteractor({
-        applicationContext,
+      .updateTrialSessionWorkingCopyInteractor(applicationContext, {
         trialSessionWorkingCopyToUpdate: JSON.parse(event.body),
       });
   });
