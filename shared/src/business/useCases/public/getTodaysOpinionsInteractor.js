@@ -11,11 +11,10 @@ const {
 /**
  * getTodaysOpinionsInteractor
  *
- * @param {object} providers the providers object containing applicationContext
- * @param {object} providers.applicationContext application context object
+ * @param {object} applicationContext application context object
  * @returns {array} an array of opinions (if any)
  */
-exports.getTodaysOpinionsInteractor = async ({ applicationContext }) => {
+exports.getTodaysOpinionsInteractor = async applicationContext => {
   const { day, month, year } = deconstructDate(createISODateString());
   const currentDateStart = createStartOfDayISO({ day, month, year });
   const currentDateEnd = createEndOfDayISO({ day, month, year });

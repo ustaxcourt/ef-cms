@@ -40,15 +40,15 @@ const removeManuallyAddedCaseFromTrialSession = ({
 /**
  * set trial session calendar
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session to set the calendar
  * @returns {Promise} the promise of the updateTrialSession call
  */
-exports.setTrialSessionCalendarInteractor = async ({
+exports.setTrialSessionCalendarInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)) {

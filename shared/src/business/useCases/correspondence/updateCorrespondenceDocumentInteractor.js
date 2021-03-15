@@ -7,16 +7,17 @@ const { Correspondence } = require('../../entities/Correspondence');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
+ * updateCorrespondenceDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the updated case entity after the correspondence document is updated
  */
-exports.updateCorrespondenceDocumentInteractor = async ({
+exports.updateCorrespondenceDocumentInteractor = async (
   applicationContext,
-  documentMetadata,
-}) => {
+  { documentMetadata },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 

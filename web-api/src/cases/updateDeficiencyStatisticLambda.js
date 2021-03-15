@@ -10,8 +10,7 @@ exports.updateDeficiencyStatisticLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateDeficiencyStatisticInteractor({
-        applicationContext,
+      .updateDeficiencyStatisticInteractor(applicationContext, {
         ...event.pathParameters,
         ...JSON.parse(event.body),
       });
