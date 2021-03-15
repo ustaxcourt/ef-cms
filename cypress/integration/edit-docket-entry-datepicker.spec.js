@@ -4,7 +4,6 @@ describe('Edit Docket Entry- Change Doc Type', function () {
   });
   it('should clear service date input when a new doc type is selected', () => {
     cy.visit('case-detail/104-19/docket-entry/3/edit-meta');
-    // cy.get('input#react-select-4-input').click();
     cy.get('#document-type .select-react-element__input input')
       .clear()
       .type('Certificate of Service');
