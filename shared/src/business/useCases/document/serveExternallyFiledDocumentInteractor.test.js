@@ -106,15 +106,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      serveExternallyFiledDocumentInteractor({
-        applicationContext,
-      }),
+      serveExternallyFiledDocumentInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should update the document with a servedAt date', async () => {
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
     });
@@ -132,8 +129,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should add a coversheet to the document', async () => {
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
     });
@@ -148,11 +144,13 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         pdfUrl: 'localhost:123',
       });
 
-    const result = await serveExternallyFiledDocumentInteractor({
+    const result = await serveExternallyFiledDocumentInteractor(
       applicationContext,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumber: DOCKET_NUMBER,
-    });
+      {
+        docketEntryId: DOCKET_ENTRY_ID,
+        docketNumber: DOCKET_NUMBER,
+      },
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
@@ -199,8 +197,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       },
     ];
 
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
       docketNumber: DOCKET_NUMBER,
     });
@@ -269,8 +266,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       },
     ];
 
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
       docketNumber: DOCKET_NUMBER,
     });
