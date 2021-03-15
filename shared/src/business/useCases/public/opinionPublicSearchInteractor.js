@@ -10,20 +10,29 @@ const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 /**
  * opinionPublicSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, keyword
- * @param {object} providers.applicationContext application context object
+ * @param {object} applicationContext application context object
+ * @param {object} providers the providers object
+ * @param {string} providers.caseTitleOrPetitioner case title or petitioner to search for
+ * @param {string} providers.docketNumber docket number
+ * @param {string} providers.endDate ending date for date range
+ * @param {string} providers.judge judge name to filter by
+ * @param {string} providers.keyword keyword to search for
+ * @param {string} providers.opinionType opinion type to filter by
+ * @param {string} providers.startDate start date for date range
  * @returns {object} the opinion search results
  */
-exports.opinionPublicSearchInteractor = async ({
+exports.opinionPublicSearchInteractor = async (
   applicationContext,
-  caseTitleOrPetitioner,
-  docketNumber,
-  endDate,
-  judge,
-  keyword,
-  opinionType,
-  startDate,
-}) => {
+  {
+    caseTitleOrPetitioner,
+    docketNumber,
+    endDate,
+    judge,
+    keyword,
+    opinionType,
+    startDate,
+  },
+) => {
   const opinionSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     docketNumber,

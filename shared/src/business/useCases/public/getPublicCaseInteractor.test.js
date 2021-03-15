@@ -57,8 +57,7 @@ describe('getPublicCaseInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    await getPublicCaseInteractor({
-      applicationContext,
+    await getPublicCaseInteractor(applicationContext, {
       docketNumber: '0000123-19S',
     });
 
@@ -77,8 +76,7 @@ describe('getPublicCaseInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({ archivedCorrespondences: [] });
 
     await expect(
-      getPublicCaseInteractor({
-        applicationContext,
+      getPublicCaseInteractor(applicationContext, {
         docketNumber: '999',
       }),
     ).rejects.toThrow('Case 999 was not found.');
@@ -87,8 +85,7 @@ describe('getPublicCaseInteractor', () => {
   it('Should search by docketNumber when docketNumber parameter is a valid docketNumber', async () => {
     const docketNumber = '123-45';
 
-    const result = await getPublicCaseInteractor({
-      applicationContext,
+    const result = await getPublicCaseInteractor(applicationContext, {
       docketNumber,
     });
 
@@ -106,8 +103,7 @@ describe('getPublicCaseInteractor', () => {
 
   it('should return minimal information when the requested case has been sealed', async () => {
     const docketNumber = '102-20';
-    const result = await getPublicCaseInteractor({
-      applicationContext,
+    const result = await getPublicCaseInteractor(applicationContext, {
       docketNumber,
     });
 
@@ -119,8 +115,7 @@ describe('getPublicCaseInteractor', () => {
 
   it('should return minimal information when the requested case has a sealed docket entry', async () => {
     const docketNumber = '120-20';
-    const result = await getPublicCaseInteractor({
-      applicationContext,
+    const result = await getPublicCaseInteractor(applicationContext, {
       docketNumber,
     });
 
@@ -133,8 +128,7 @@ describe('getPublicCaseInteractor', () => {
   it('should return minimal information when the requested case contact address has been sealed', async () => {
     const docketNumber = '188-88';
 
-    const result = await getPublicCaseInteractor({
-      applicationContext,
+    const result = await getPublicCaseInteractor(applicationContext, {
       docketNumber,
     });
 
