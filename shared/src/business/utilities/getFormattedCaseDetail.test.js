@@ -1156,30 +1156,31 @@ describe('documentMeetsAgeRequirements', () => {
     });
     expect(result).toBeTruthy();
   });
+
   it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
+      date: oldTranscriptDate,
       eventCode: TRANSCRIPT_EVENT_CODE,
-      secondaryDate: oldTranscriptDate,
     });
     expect(result).toBeTruthy();
   });
 
   it(`indicates success if document is a legacy transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
     const result = documentMeetsAgeRequirements({
+      date: undefined,
       eventCode: TRANSCRIPT_EVENT_CODE,
       filingDate: oldTranscriptDate,
       isLegacy: true,
-      secondaryDate: undefined,
     });
     expect(result).toBeTruthy();
   });
 
   it(`indicates failure if document is a legacy transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
     const result = documentMeetsAgeRequirements({
+      date: undefined,
       eventCode: TRANSCRIPT_EVENT_CODE,
       filingDate: aShortTimeAgo,
       isLegacy: true,
-      secondaryDate: undefined,
     });
 
     expect(result).toBeFalsy();
@@ -1187,8 +1188,8 @@ describe('documentMeetsAgeRequirements', () => {
 
   it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
+      date: aShortTimeAgo,
       eventCode: TRANSCRIPT_EVENT_CODE,
-      secondaryDate: aShortTimeAgo,
     });
     expect(result).toBeFalsy();
   });

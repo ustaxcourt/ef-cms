@@ -8,6 +8,8 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
       docketRecordIndex,
     });
 
+    expect(test.getState('form.numberOfPages')).toEqual(2);
+
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
     expect(test.getState('screenMetadata.documentTitlePreview')).toEqual(
       'Certificate of Service of Petition 03-03-2003',
@@ -31,5 +33,74 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
       'Certificate of Service of Petition 05-10-2005',
     );
     expect(test.getState('form.serviceDate')).toEqual('2005-05-10');
+
+    await test.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({});
+
+    expect(test.getState('alertSuccess')).toMatchObject({
+      message: 'Docket entry changes saved.',
+    });
+
+    await test.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: test.docketNumber,
+      docketRecordIndex,
+    });
+
+    expect(test.getState('form.numberOfPages')).toEqual(3);
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'filingDateDay',
+      value: '13',
+    });
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'filingDateMonth',
+      value: '07',
+    });
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'filingDateYear',
+      value: '2002',
+    });
+
+    await test.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({});
+
+    expect(test.getState('alertSuccess')).toMatchObject({
+      message: 'Docket entry changes saved.',
+    });
+
+    await test.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: test.docketNumber,
+      docketRecordIndex,
+    });
+
+    expect(test.getState('form.numberOfPages')).toEqual(4);
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'eventCode',
+      value: 'BND',
+    });
+
+    await test.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('validationErrors')).toEqual({});
+
+    expect(test.getState('alertSuccess')).toMatchObject({
+      message: 'Docket entry changes saved.',
+    });
+
+    await test.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: test.docketNumber,
+      docketRecordIndex,
+    });
+
+    expect(test.getState('form.numberOfPages')).toEqual(5);
   });
 };

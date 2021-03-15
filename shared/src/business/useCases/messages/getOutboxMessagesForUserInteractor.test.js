@@ -22,9 +22,7 @@ describe('getOutboxMessagesForUserInteractor', () => {
     });
 
     await expect(
-      getOutboxMessagesForUserInteractor({
-        applicationContext,
-      }),
+      getOutboxMessagesForUserInteractor(applicationContext, {}),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -59,10 +57,12 @@ describe('getOutboxMessagesForUserInteractor', () => {
       .getPersistenceGateway()
       .getUserOutboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessages = await getOutboxMessagesForUserInteractor({
+    const returnedMessages = await getOutboxMessagesForUserInteractor(
       applicationContext,
-      userId: messageData.userId,
-    });
+      {
+        userId: messageData.userId,
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getUserOutboxMessages,

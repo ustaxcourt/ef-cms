@@ -5,8 +5,7 @@ const { onConnectInteractor } = require('./onConnectInteractor');
 
 describe('onConnectInteractor', () => {
   it('attempts to save the user connection', async () => {
-    await onConnectInteractor({
-      applicationContext,
+    await onConnectInteractor(applicationContext, {
       connectionId: 'abc',
       endpoint: {},
     });

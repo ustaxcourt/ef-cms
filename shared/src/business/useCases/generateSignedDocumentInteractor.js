@@ -7,9 +7,15 @@ exports.getPageDimensions = page => {
   return [size.width, size.height];
 };
 
+exports.getCropBoxCoordinates = page => {
+  const { x = 0, y = 0 } = page.getCropBox();
+  return { x, y };
+};
+
 const computeCoordinates = ({
   boxHeight,
   boxWidth,
+  cropBoxCoordinates,
   lineHeight,
   nameTextWidth,
   pageHeight,
@@ -86,7 +92,14 @@ const computeCoordinates = ({
       (boxHeight - textHeight * 2 - lineHeight) / 2 -
       boxHeight;
   }
-  return { rectangleX, rectangleY, sigNameX, sigNameY, sigTitleX, sigTitleY };
+  return {
+    rectangleX: rectangleX + cropBoxCoordinates.x,
+    rectangleY: rectangleY + cropBoxCoordinates.y,
+    sigNameX: sigNameX + cropBoxCoordinates.x,
+    sigNameY: sigNameY + cropBoxCoordinates.y,
+    sigTitleX: sigTitleX + cropBoxCoordinates.x,
+    sigTitleY: sigTitleY + cropBoxCoordinates.y,
+  };
 };
 
 exports.computeCoordinates = computeCoordinates;
@@ -160,6 +173,7 @@ exports.generateSignedDocumentInteractor = async ({
   } = computeCoordinates({
     boxHeight,
     boxWidth,
+    cropBoxCoordinates: exports.getCropBoxCoordinates(page),
     lineHeight,
     nameTextWidth,
     pageHeight,
