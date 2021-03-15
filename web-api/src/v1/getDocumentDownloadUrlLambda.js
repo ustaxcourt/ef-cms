@@ -18,8 +18,7 @@ exports.getDocumentDownloadUrlLambda = (event, options = {}) =>
       return v1ApiWrapper(async () => {
         const urlObject = await applicationContext
           .getUseCases()
-          .getDownloadPolicyUrlInteractor({
-            applicationContext,
+          .getDownloadPolicyUrlInteractor(applicationContext, {
             ...event.pathParameters,
           });
 
