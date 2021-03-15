@@ -19,9 +19,7 @@ describe('createMessageInteractor', () => {
     });
 
     await expect(
-      createMessageInteractor({
-        applicationContext,
-      }),
+      createMessageInteractor(applicationContext, {}),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -66,8 +64,7 @@ describe('createMessageInteractor', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       });
 
-    await createMessageInteractor({
-      applicationContext,
+    await createMessageInteractor(applicationContext, {
       ...messageData,
     });
 

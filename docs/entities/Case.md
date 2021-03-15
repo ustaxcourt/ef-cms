@@ -2253,14 +2253,6 @@
                 - "Type F"
                 - "Type G"
                 - "Type H"
-            secondaryDate: 
-              type: "date"
-              flags: 
-                format: 
-                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
-                description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
             secondaryDocument: 
               type: "object"
               flags: 
@@ -5929,14 +5921,6 @@
                 - "Type F"
                 - "Type G"
                 - "Type H"
-            secondaryDate: 
-              type: "date"
-              flags: 
-                format: 
-                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
-                description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
             secondaryDocument: 
               type: "object"
               flags: 

@@ -17,9 +17,7 @@ describe('getMessageThreadInteractor', () => {
     });
 
     await expect(
-      getMessageThreadInteractor({
-        applicationContext,
-      }),
+      getMessageThreadInteractor(applicationContext, {}),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -52,10 +50,12 @@ describe('getMessageThreadInteractor', () => {
       .getPersistenceGateway()
       .getMessageThreadByParentId.mockReturnValue([mockMessage]);
 
-    const returnedMessage = await getMessageThreadInteractor({
+    const returnedMessage = await getMessageThreadInteractor(
       applicationContext,
-      messageId: mockMessage.messageId,
-    });
+      {
+        messageId: mockMessage.messageId,
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getMessageThreadByParentId,

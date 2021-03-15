@@ -128,6 +128,25 @@ describe('updateDocketEntryMetaInteractor', () => {
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
         return caseByDocketNumber[docketNumber];
       });
+
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockImplementation(() => ({
+        createdAt: '2011-02-22T00:01:00.000Z',
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        documentTitle: 'Summary Opinion',
+        documentType: 'Summary Opinion',
+        entityName: 'DocketEntry',
+        eventCode: 'SOP',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 7,
+        isDraft: false,
+        isMinuteEntry: false,
+        isOnDocketRecord: false,
+        judge: 'Buch',
+        processingStatus: 'complete',
+        userId: mockUserId,
+      }));
   });
 
   it('should throw an Unauthorized error if the user is not authorized', async () => {
@@ -404,7 +423,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
     ).toMatchObject({
       docketNumber: '101-20',
       filingDateUpdated: true,

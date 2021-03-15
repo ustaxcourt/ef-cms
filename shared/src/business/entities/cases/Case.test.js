@@ -299,7 +299,7 @@ describe('Case entity', () => {
     });
 
     it('does not alter properly-formatted docket numbers', () => {
-      expect(Case.formatDocketNumber('123456-19')).toEqual('123456-19'); // samesies
+      expect(Case.formatDocketNumber('123456-19')).toEqual('123456-19'); // unchanged
     });
 
     it('strips letters from docket numbers', () => {

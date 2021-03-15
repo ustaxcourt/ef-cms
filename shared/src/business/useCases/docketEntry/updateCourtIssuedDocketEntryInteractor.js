@@ -5,7 +5,6 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 
 /**
  *
@@ -51,11 +50,6 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let secondaryDate;
-  if (documentMeta.eventCode === TRANSCRIPT_EVENT_CODE) {
-    secondaryDate = documentMeta.date;
-  }
-
   const editableFields = {
     attachments: documentMeta.attachments,
     date: documentMeta.date,
@@ -77,7 +71,6 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
       documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
-      secondaryDate,
       userId: user.userId,
     },
     { applicationContext },

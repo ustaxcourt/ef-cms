@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.fetchPendingItemsLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().fetchPendingItemsInteractor({
-      applicationContext,
-      ...event.queryStringParameters,
-    });
+    return await applicationContext
+      .getUseCases()
+      .fetchPendingItemsInteractor(applicationContext, {
+        ...event.queryStringParameters,
+      });
   });
