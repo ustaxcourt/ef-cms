@@ -36,8 +36,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
   });
 
   it('should retrieve the original, unsigned document from S3', async () => {
-    await removeSignatureFromDocumentInteractor({
-      applicationContext,
+    await removeSignatureFromDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
     });
@@ -52,8 +51,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
   });
 
   it('should overwrite the current, signed document in S3 with the original, unsigned document', async () => {
-    await removeSignatureFromDocumentInteractor({
-      applicationContext,
+    await removeSignatureFromDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
     });
@@ -67,11 +65,13 @@ describe('removeSignatureFromDocumentInteractor', () => {
   });
 
   it('should unsign the document and save the updated document to the case', async () => {
-    const updatedCase = await removeSignatureFromDocumentInteractor({
+    const updatedCase = await removeSignatureFromDocumentInteractor(
       applicationContext,
-      docketEntryId: mockDocketEntryId,
-      docketNumber: mockCase.docketNumber,
-    });
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCase.docketNumber,
+      },
+    );
 
     const unsignedDocument = updatedCase.docketEntries.find(
       doc => doc.docketEntryId === mockDocketEntryId,
