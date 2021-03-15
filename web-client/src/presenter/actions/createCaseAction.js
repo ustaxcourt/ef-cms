@@ -58,12 +58,11 @@ export const createCaseAction = async ({
   const { caseDetail, stinFileId } = filePetitionResult;
 
   const addCoversheet = docketEntryId => {
-    return applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
-        docketEntryId,
-        docketNumber: caseDetail.docketNumber,
-      });
+    return applicationContext.getUseCases().addCoversheetInteractor({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseDetail.docketNumber,
+    });
   };
 
   const documentsThatNeedCoverSheet = caseDetail.docketEntries
