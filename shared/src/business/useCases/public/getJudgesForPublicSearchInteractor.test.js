@@ -31,9 +31,9 @@ describe('getJudgesForPublicSearchInteractor', () => {
         },
       ]);
 
-    const results = await getJudgesForPublicSearchInteractor({
+    const results = await getJudgesForPublicSearchInteractor(
       applicationContext,
-    });
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getUsersInSection,

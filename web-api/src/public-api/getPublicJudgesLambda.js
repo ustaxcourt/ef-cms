@@ -12,9 +12,7 @@ exports.getPublicJudgesLambda = event => {
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .getJudgesForPublicSearchInteractor({
-          applicationContext,
-        });
+        .getJudgesForPublicSearchInteractor(applicationContext);
     },
     { user: {} },
   );

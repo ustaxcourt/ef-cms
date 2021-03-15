@@ -10,8 +10,7 @@ exports.associateIrsPractitionerWithCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .associateIrsPractitionerWithCaseInteractor({
+      .associateIrsPractitionerWithCaseInteractor(applicationContext, {
         ...JSON.parse(event.body),
-        applicationContext,
       });
   });

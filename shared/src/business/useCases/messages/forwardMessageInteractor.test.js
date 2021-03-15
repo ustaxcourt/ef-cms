@@ -5,7 +5,7 @@ const { forwardMessageInteractor } = require('./forwardMessageInteractor');
 
 describe('forwardMessageInteractor', () => {
   it('should call the replyToMessageInteractor with the given params', async () => {
-    await forwardMessageInteractor({});
+    await forwardMessageInteractor({}, {});
 
     expect(replyToMessage).toHaveBeenCalled();
   });
