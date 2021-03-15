@@ -1,5 +1,5 @@
 const {
-  CASE_STATUS_TYPES,
+  SERVED_PARTIES_CODES,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
@@ -13,32 +13,52 @@ const { search } = require('./searchClient');
  */
 exports.getReconciliationReport = async ({
   applicationContext,
-  reconciliationDate,
+  reconciliationDateEnd,
+  reconciliationDateStart,
 }) => {
   const { results } = await search({
     applicationContext,
     searchParameters: {
       body: {
-        _source: ['docketNumber'],
+        _source: [
+          'docketNumber',
+          'description',
+          'docketEntryId',
+          'eventCode',
+          'filedBy',
+          'filingDate',
+          'caseCaption',
+          'servedAt',
+        ],
         query: {
           bool: {
+            filter: {
+              terms: {
+                'servedPartiesCode.S': [
+                  SERVED_PARTIES_CODES.RESPONDENT,
+                  SERVED_PARTIES_CODES.BOTH,
+                ],
+              },
+            },
             must: [
               {
-                match: {
-                  'status.S': {
-                    operator: 'and',
-                    query: CASE_STATUS_TYPES.generalDocket,
+                range: {
+                  'servedAt.S': {
+                    format: 'strict_date_time', // ISO-8601 time stamp
+                    gte: reconciliationDateStart,
+                    lte: reconciliationDateEnd,
                   },
                 },
               },
               { match: { 'pk.S': 'case|' } },
-              { match: { 'sk.S': 'case|' } },
+              { match: { 'sk.S': 'docket-entry|' } },
             ],
           },
         },
         size: 5000,
+        sort: [{ 'servedAt.S': { order: 'asc' } }],
       },
-      index: 'efcms-case',
+      index: 'efcms-docket-entry',
     },
   });
 

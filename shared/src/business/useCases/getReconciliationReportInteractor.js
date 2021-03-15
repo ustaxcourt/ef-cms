@@ -1,4 +1,6 @@
 const {
+  createEndOfDayISO,
+  createStartOfDayISO,
   formatNow,
   FORMATS,
   PATTERNS,
@@ -30,9 +32,9 @@ exports.getReconciliationReportInteractor = async (
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVICE_SUMMARY_REPORT)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
+  // if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVICE_SUMMARY_REPORT)) {
+  //   throw new UnauthorizedError('Unauthorized');
+  // }
 
   const dateInputValid = isValidDate(reconciliationDate);
   if (!dateInputValid) {
@@ -41,11 +43,16 @@ exports.getReconciliationReportInteractor = async (
     );
   }
 
+  const [year, month, day] = reconciliationDate.split('-');
+  const reconciliationDateStart = createStartOfDayISO({ day, month, year });
+  const reconciliationDateEnd = createEndOfDayISO({ day, month, year });
+
   const docketEntries = await applicationContext
     .getPersistenceGateway()
     .getReconciliationReport({
       applicationContext,
-      reconciliationDate,
+      reconciliationDateEnd,
+      reconciliationDateStart,
     });
 
   // TODO: push docket entries through validation?

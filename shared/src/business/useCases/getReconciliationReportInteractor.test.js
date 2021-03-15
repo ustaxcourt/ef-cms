@@ -57,7 +57,7 @@ describe('getReconciliationReportInteractor', () => {
     expect(result.docketEntries.length).toBe(0);
   });
 
-  it('should return a report with zero docket entries if none are found in persistence', async () => {
+  it('should return a report with docket entries if some are found in persistence', async () => {
     const docketEntries = [
       {
         caseCaption: 'Kaitlin Chaney, Petitioner',
@@ -87,5 +87,12 @@ describe('getReconciliationReportInteractor', () => {
       totalDocketEntries: docketEntries.length,
     });
     expect(result.docketEntries.length).toBe(docketEntries.length);
+    expect(
+      applicationContext.getPersistenceGateway().getReconciliationReport,
+    ).toBeCalledWith({
+      applicationContext,
+      reconciliationDateEnd: '2021-01-02T04:59:59.999Z',
+      reconciliationDateStart: '2021-01-01T05:00:00.000Z',
+    });
   });
 });
