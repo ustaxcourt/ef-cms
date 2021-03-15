@@ -167,7 +167,7 @@ const {
 } = require('./v2/getDocumentDownloadUrlLambda');
 const {
   getReconciliationReportLambda: v2GetReconciliationReportLambda,
-} = require('./v2/v2GetReconciliationReportLambda');
+} = require('./v2/getReconciliationReportLambda');
 
 const {
   getDocumentQCInboxForSectionLambda,
