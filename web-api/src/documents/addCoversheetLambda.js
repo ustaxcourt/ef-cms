@@ -10,10 +10,11 @@ exports.addCoversheetLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      await applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        ...event.pathParameters,
-      });
+      await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          ...event.pathParameters,
+        });
     },
     { logResults: false },
   );

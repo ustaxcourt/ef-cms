@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.fileDocketEntryToCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().fileDocketEntryInteractor({
-      ...JSON.parse(event.body),
-      applicationContext,
-    });
+    return await applicationContext
+      .getUseCases()
+      .fileDocketEntryInteractor(applicationContext, {
+        ...JSON.parse(event.body),
+      });
   });

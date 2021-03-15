@@ -423,7 +423,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
     ).toMatchObject({
       docketNumber: '101-20',
       filingDateUpdated: true,
