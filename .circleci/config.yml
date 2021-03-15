@@ -722,11 +722,7 @@ jobs:
           path: /home/app/cypress-smoketests/videos/
       - run:
           name: 'Deploy - Pending Color Switch'
-          command: |
-            docker run \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             --rm efcms /bin/sh -c "npm run pending-color-switch -- ${ENV}"
+          command: npm run pending-color-switch
 
   migrate:
     machine:
