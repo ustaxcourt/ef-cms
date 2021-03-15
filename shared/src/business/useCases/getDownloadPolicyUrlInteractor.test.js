@@ -88,6 +88,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     mockCase.docketEntries.push({
       createdAt: '2018-01-21T20:49:28.192Z',
+      date: '2200-01-21T20:49:28.192Z',
       docketEntryId: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
       docketNumber: '101-18',
       documentTitle: 'Transcript of [anything] on [date]',
@@ -95,7 +96,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       eventCode: TRANSCRIPT_EVENT_CODE,
       isFileAttached: true,
       processingStatus: 'pending',
-      secondaryDate: '2200-01-21T20:49:28.192Z',
       userId: 'petitioner',
     });
     applicationContext
@@ -790,6 +790,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     mockCase.docketEntries.push({
       createdAt: '2018-01-21T20:49:28.192Z',
+      date: '2000-01-21T20:49:28.192Z',
       docketEntryId: mockDocketEntryId,
       docketNumber: '101-18',
       documentTitle: 'Transcript of [anything] on [date]',
@@ -797,7 +798,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       eventCode: TRANSCRIPT_EVENT_CODE,
       isFileAttached: true,
       processingStatus: 'pending',
-      secondaryDate: '2000-01-21T20:49:28.192Z',
       userId: 'petitioner',
     });
     applicationContext
@@ -825,6 +825,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     mockCase.docketEntries.push({
       createdAt: '2018-01-21T20:49:28.192Z',
+      date: undefined,
       docketEntryId: mockDocketEntryId,
       docketNumber: '101-18',
       documentTitle: 'Transcript of [anything] on [date]',
@@ -834,7 +835,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       isFileAttached: true,
       isLegacy: true,
       processingStatus: 'pending',
-      secondaryDate: undefined,
       userId: 'petitioner',
     });
     applicationContext
@@ -867,6 +867,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     mockCase.docketEntries.push({
       createdAt: '2018-01-21T20:49:28.192Z',
+      date: aShortTimeAgo,
       docketEntryId: mockDocketEntryId,
       docketNumber: '101-18',
       documentTitle: 'Transcript of [anything] on [date]',
@@ -874,7 +875,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       eventCode: TRANSCRIPT_EVENT_CODE,
       isFileAttached: true,
       processingStatus: 'pending',
-      secondaryDate: aShortTimeAgo,
       userId: 'petitioner',
     });
     applicationContext
@@ -907,6 +907,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     mockCase.docketEntries.push({
       createdAt: '2018-01-21T20:49:28.192Z',
+      date: undefined,
       docketEntryId: mockDocketEntryId,
       docketNumber: '101-18',
       documentTitle: 'Transcript of [anything] on [date]',
@@ -916,7 +917,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       isFileAttached: true,
       isLegacy: true,
       processingStatus: 'pending',
-      secondaryDate: undefined,
       userId: 'petitioner',
     });
     applicationContext
