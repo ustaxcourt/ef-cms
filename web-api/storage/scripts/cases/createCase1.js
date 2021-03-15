@@ -59,11 +59,12 @@ module.exports.createCase1 = async () => {
       });
 
       const addCoversheet = docketEntry => {
-        return applicationContext.getUseCases().addCoversheetInteractor({
-          applicationContext,
-          docketEntryId: docketEntry.docketEntryId,
-          docketNumber: caseDetail.docketNumber,
-        });
+        return applicationContext
+          .getUseCases()
+          .addCoversheetInteractor(applicationContext, {
+            docketEntryId: docketEntry.docketEntryId,
+            docketNumber: caseDetail.docketNumber,
+          });
       };
 
       const coversheets = [];
