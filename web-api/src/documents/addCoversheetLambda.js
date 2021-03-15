@@ -12,9 +12,7 @@ exports.addCoversheetLambda = event =>
     async ({ applicationContext }) => {
       await applicationContext
         .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          ...event.pathParameters,
-        });
+        .addCoversheetInteractor(applicationContext, event.pathParameters);
     },
     { logResults: false },
   );
