@@ -647,7 +647,10 @@ Case.VALIDATION_RULES = {
       then: JoiValidationConstants.ISO_DATE.max('now').required(),
     },
   ).description('When the case fee was waived.'),
-  petitioners: joi.array().required(),
+  petitioners: joi
+    .array()
+    .items(ContactFactory.getValidationRules('primary'))
+    .required(),
   preferredTrialCity: joi
     .alternatives()
     .try(
@@ -1418,7 +1421,6 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 
 // 7839 TODO - docs
 const getContactPrimary = function (rawCase) {
-  console.log('rawcase', rawCase);
   return rawCase.petitioners.find(p => p.isContactPrimary);
 };
 
