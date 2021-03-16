@@ -123,8 +123,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateCourtIssuedDocketEntryInteractor({
-        applicationContext,
+      updateCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
@@ -143,8 +142,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     });
 
     await expect(
-      updateCourtIssuedDocketEntryInteractor({
-        applicationContext,
+      updateCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
@@ -165,8 +163,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await updateCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await updateCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
@@ -196,8 +193,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await updateCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await updateCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
