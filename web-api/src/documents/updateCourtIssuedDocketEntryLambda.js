@@ -10,8 +10,8 @@ exports.updateCourtIssuedDocketEntryLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateCourtIssuedDocketEntryInteractor({
-        ...JSON.parse(event.body),
+      .updateCourtIssuedDocketEntryInteractor(
         applicationContext,
-      });
+        JSON.parse(event.body),
+      );
   });

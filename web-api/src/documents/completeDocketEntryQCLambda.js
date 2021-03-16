@@ -10,7 +10,8 @@ exports.completeDocketEntryQCLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .completeDocketEntryQCInteractor(applicationContext, {
-        ...JSON.parse(event.body),
-      });
+      .completeDocketEntryQCInteractor(
+        applicationContext,
+        JSON.parse(event.body),
+      );
   });
