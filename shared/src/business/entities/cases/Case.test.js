@@ -22,6 +22,7 @@ const {
 const {
   Case,
   caseHasServedDocketEntries,
+  getContactPrimary,
   isAssociatedUser,
   isSealedCase,
 } = require('./Case');
@@ -1369,8 +1370,12 @@ describe('Case entity', () => {
       const mockCase = {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.survivingSpouse,
+        petitioners: [{ ...MOCK_CASE.contactPrimary, isContactPrimary: true }],
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+
+      console.log('mock case', mockCase);
+
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
       const caseCaption = Case.getCaseCaption(mockCase);
       expect(caseCaption).toEqual(
         'Test Petitioner, Deceased, Test Petitioner 2, Surviving Spouse, Petitioner',
