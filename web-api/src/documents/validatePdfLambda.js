@@ -10,8 +10,9 @@ exports.validatePdfLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { key } = event.pathParameters || {};
 
-    return await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      key,
-    });
+    return await applicationContext
+      .getUseCases()
+      .validatePdfInteractor(applicationContext, {
+        key,
+      });
   });

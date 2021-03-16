@@ -13,10 +13,11 @@ exports.saveSignedDocumentLambda = event =>
       pathParameters: { docketEntryId: originalDocketEntryId, docketNumber },
     } = event;
 
-    return await applicationContext.getUseCases().saveSignedDocumentInteractor({
-      applicationContext,
-      docketNumber,
-      originalDocketEntryId,
-      ...JSON.parse(body),
-    });
+    return await applicationContext
+      .getUseCases()
+      .saveSignedDocumentInteractor(applicationContext, {
+        ...JSON.parse(body),
+        docketNumber,
+        originalDocketEntryId,
+      });
   });
