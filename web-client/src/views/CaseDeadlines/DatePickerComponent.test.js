@@ -6,24 +6,6 @@ import App from 'cerebral';
 import React from 'react';
 
 describe('DatePickerComponent', () => {
-  it.skip('should set the input value to whatever the value was passed in', () => {
-    const app = App({});
-
-    const wrapper = mount(
-      <Container app={app}>
-        <DatePickerComponent
-          name="test"
-          value="05/02/2002"
-        ></DatePickerComponent>
-      </Container>,
-    );
-
-    wrapper.update();
-    const input = wrapper.find('input');
-    wrapper.update();
-    expect(input.instance().value).toEqual('05/02/2002');
-  });
-
   it('should reset the input value to an empty string if day, month, or year is null', () => {
     const app = App({});
 
@@ -44,7 +26,7 @@ describe('DatePickerComponent', () => {
         ></DatePickerComponent>
       </Container>,
     );
-    expect(wrapper.find('input').instance().value).toEqual('2001-05-04');
+    expect(wrapper.find('input').instance().value).toEqual('05/04/2001');
 
     wrapper.setProps({
       children: (
