@@ -9,6 +9,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  ReconciliationReportEntry,
+} = require('../entities/ReconciliationReportEntry');
 const { UnauthorizedError } = require('../../errors/errors');
 
 const isValidDate = dateString => {
@@ -59,14 +62,17 @@ exports.getReconciliationReportInteractor = async (
       reconciliationDateStart,
     });
 
-  // TODO: push docket entries through validation?
-
   const report = {
-    docketEntries,
+    docketEntries: ReconciliationReportEntry.validateRawCollection(
+      docketEntries,
+      { applicationContext },
+    ),
     reconciliationDate,
     reportTitle: 'Reconciliation Report',
     totalDocketEntries: docketEntries.length,
   };
+
+  console.log('report---', report.docketEntries);
 
   return report;
 };
