@@ -18,7 +18,7 @@ fi
 
 export AWS_PAGER="" # Don’t show `less` on AWS CLI responses
 
-echo "Retriving log groups…"
+echo "Retrieving log groups…"
 
 EAST_GROUPS=$(aws logs describe-log-groups --region="us-east-1" --log-group-name-prefix="/aws/" --query="logGroups[].logGroupName" --output=text)
 WEST_GROUPS=$(aws logs describe-log-groups --region="us-west-1" --log-group-name-prefix="/aws/" --query="logGroups[].logGroupName" --output=text)
