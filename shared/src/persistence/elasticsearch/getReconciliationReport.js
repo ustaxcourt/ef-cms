@@ -16,6 +16,32 @@ exports.getReconciliationReport = async ({
   reconciliationDateEnd,
   reconciliationDateStart,
 }) => {
+  const query = {
+    bool: {
+      must: [
+        {
+          terms: {
+            'servedPartiesCode.S': [
+              SERVED_PARTIES_CODES.RESPONDENT,
+              SERVED_PARTIES_CODES.BOTH,
+            ],
+          },
+        },
+        {
+          range: {
+            'servedAt.S': {
+              format: 'strict_date_time', // ISO-8601 time stamp
+              gte: reconciliationDateStart,
+              lte: reconciliationDateEnd,
+            },
+          },
+        },
+        { match: { 'pk.S': 'case|' } },
+        { match: { 'sk.S': 'docket-entry|' } },
+      ],
+    },
+  };
+
   const { results } = await search({
     applicationContext,
     searchParameters: {
@@ -30,31 +56,7 @@ exports.getReconciliationReport = async ({
           'caseCaption',
           'servedAt',
         ],
-        query: {
-          bool: {
-            filter: {
-              terms: {
-                'servedPartiesCode.S': [
-                  SERVED_PARTIES_CODES.RESPONDENT,
-                  SERVED_PARTIES_CODES.BOTH,
-                ],
-              },
-            },
-            must: [
-              {
-                range: {
-                  'servedAt.S': {
-                    format: 'strict_date_time', // ISO-8601 time stamp
-                    gte: reconciliationDateStart,
-                    lte: reconciliationDateEnd,
-                  },
-                },
-              },
-              { match: { 'pk.S': 'case|' } },
-              { match: { 'sk.S': 'docket-entry|' } },
-            ],
-          },
-        },
+        query,
         size: 5000,
         sort: [{ 'servedAt.S': { order: 'asc' } }],
       },
