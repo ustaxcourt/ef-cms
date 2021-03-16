@@ -26,14 +26,17 @@ module.exports = {
     },
   },
   globals: {
-    File: function () {},
-    FileReader: function () {},
+    File() {},
+    FileReader() {},
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
-    window: { document: {} },
+    // window: {
+    //   document: {},
+    //   location: {},
+    // },
   },
+  testEnvironment: 'jsdom',
   //this is to ignore imported html files
-  testEnvironment: 'node',
   transform: {
     '^.+\\.html?$': './htmlLoader.js',
     '^.+\\.js$': 'babel-jest',
