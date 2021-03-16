@@ -12,9 +12,10 @@ exports.strikeDocketEntryLambda = event =>
       pathParameters: { docketEntryId, docketNumber },
     } = event;
 
-    return await applicationContext.getUseCases().strikeDocketEntryInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber,
-    });
+    return await applicationContext
+      .getUseCases()
+      .strikeDocketEntryInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber,
+      });
   });

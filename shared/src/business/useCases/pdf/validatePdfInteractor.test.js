@@ -23,8 +23,7 @@ describe('validatePdfInteractor', () => {
   });
 
   it('validates a clean PDF', async () => {
-    const result = await validatePdfInteractor({
-      applicationContext,
+    const result = await validatePdfInteractor(applicationContext, {
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(result).toBeTruthy();
@@ -41,8 +40,7 @@ describe('validatePdfInteractor', () => {
 
     let error;
     try {
-      await validatePdfInteractor({
-        applicationContext,
+      await validatePdfInteractor(applicationContext, {
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       });
     } catch (err) {
@@ -60,8 +58,7 @@ describe('validatePdfInteractor', () => {
 
     let error;
     try {
-      await validatePdfInteractor({
-        applicationContext,
+      await validatePdfInteractor(applicationContext, {
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       });
     } catch (err) {
