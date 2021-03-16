@@ -22,7 +22,7 @@ exports.getReconciliationReportLambda = (event, options = {}) =>
             event.pathParameters,
           );
 
-        return report; // FIXME: do we need to use a "marshall" function here for the return value?
+        return report;
       });
     },
     options,
