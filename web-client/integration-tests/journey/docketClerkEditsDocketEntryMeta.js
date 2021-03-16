@@ -105,6 +105,8 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
       state: test.getState(),
     });
 
+    test.updatedDocketEntryId = pendingDocketEntry.docketEntryId;
+
     expect(
       caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
     ).toEqual(

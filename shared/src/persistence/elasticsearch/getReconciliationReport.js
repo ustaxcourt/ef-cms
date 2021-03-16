@@ -55,6 +55,7 @@ exports.getReconciliationReport = async ({
           'filingDate',
           'caseCaption',
           'servedAt',
+          'servedPartiesCode',
         ],
         query,
         size: 5000,

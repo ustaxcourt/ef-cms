@@ -1,7 +1,6 @@
 import { docketClerkUpdatesCaseCaption } from './journey/docketClerkUpdatesCaseCaption';
 import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import { irsSuperuserGetsReconciliationReport } from './journey/irsSuperuserGetsReconciliationReport';
 import { petitionerCancelsCreateCase } from './journey/petitionerCancelsCreateCase';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
@@ -67,13 +66,4 @@ describe('Case journey', () => {
   loginAs(test, 'docketclerk@example.com');
   docketClerkViewsCaseDetail(test);
   docketClerkUpdatesCaseCaption(test);
-
-  // docketClerk serves case
-  // have to serve document with servedPartiesCode (B or R)
-  // login as irsSuperuser
-  // verify on certain day that retrieve back:
-  //    - docketEntries from day with B or R servedPartiesCode
-  irsSuperuserGetsReconciliationReport();
-
-  // verify endpoint?
 });

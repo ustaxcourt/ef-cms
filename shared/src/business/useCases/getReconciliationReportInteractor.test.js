@@ -1,4 +1,10 @@
 const {
+  createEndOfDayISO,
+  createStartOfDayISO,
+  formatNow,
+  FORMATS,
+} = require('../../business/utilities/DateHandler');
+const {
   getReconciliationReportInteractor,
 } = require('./getReconciliationReportInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
@@ -38,6 +44,29 @@ describe('getReconciliationReportInteractor', () => {
       }),
     ).rejects.toThrow('not later than today');
   });
+  it('should call the persistence method with current date if "today" is provided as a parameter', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getReconciliationReport.mockReturnValue([]);
+
+    await getReconciliationReportInteractor(applicationContext, {
+      reconciliationDate: 'today',
+    });
+
+    const reconciliationDateNow = formatNow(FORMATS.YYYYMMDD);
+    const [year, month, day] = reconciliationDateNow.split('-');
+    const reconciliationDateStart = createStartOfDayISO({ day, month, year });
+    const reconciliationDateEnd = createEndOfDayISO({ day, month, year });
+
+    expect(
+      applicationContext.getPersistenceGateway().getReconciliationReport,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      reconciliationDateEnd,
+      reconciliationDateStart,
+    });
+  });
+
   it('should return a report with zero docket entries if none are found in persistence', async () => {
     applicationContext
       .getPersistenceGateway()
