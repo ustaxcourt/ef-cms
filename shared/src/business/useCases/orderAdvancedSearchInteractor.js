@@ -20,7 +20,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * orderAdvancedSearchInteractor
  *
  * @param {object} applicationContext the application context
- * @param {object} providers
+ * @param {object} providers the providers object
  * @param {string} providers.caseTitleOrPetitioner case title or petitioner to search for
  * @param {string} providers.docketNumber docket number
  * @param {string} providers.endDate ending date for date range
