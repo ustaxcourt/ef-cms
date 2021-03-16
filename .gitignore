@@ -8,6 +8,7 @@
 .scannerwork/
 .serverless/
 .terraform/
+.terraform.lock.hcl
 .vscode
 **/*_.js
 /policy.json
