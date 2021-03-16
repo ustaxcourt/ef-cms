@@ -56,15 +56,15 @@ exports.getNeedsNewCoversheet = getNeedsNewCoversheet;
 /**
  * completeDocketEntryQCInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.entryMetadata the entry metadata
  * @returns {object} the updated case after the documents are added
  */
-exports.completeDocketEntryQCInteractor = async ({
+exports.completeDocketEntryQCInteractor = async (
   applicationContext,
-  entryMetadata,
-}) => {
+  { entryMetadata },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const { PDFDocument } = await applicationContext.getPdfLib();
@@ -373,11 +373,12 @@ exports.completeDocketEntryQCInteractor = async ({
   });
 
   if (needsNewCoversheet) {
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseEntity.docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+      });
   }
 
   return {

@@ -89,6 +89,9 @@ module.exports = {
     'servedAt.S': {
       type: 'date',
     },
+    'servedPartiesCode.S': {
+      type: 'keyword',
+    },
     'signedJudgeName.S': {
       type: 'text',
     },

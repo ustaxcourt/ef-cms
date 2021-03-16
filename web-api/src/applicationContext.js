@@ -584,6 +584,12 @@ const {
   getReadyForTrialCases,
 } = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
 const {
+  getReconciliationReport,
+} = require('../../shared/src/persistence/elasticsearch/getReconciliationReport');
+const {
+  getReconciliationReportInteractor,
+} = require('../../shared/src/business/useCases/getReconciliationReportInteractor');
+const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
 const {
@@ -763,6 +769,10 @@ const {
 const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
+const {
+  removeIrsPractitionerOnCase,
+  removePrivatePractitionerOnCase,
+} = require('../../shared/src/persistence/dynamo/cases/removePractitionerOnCase');
 const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/removePdfFromDocketEntryInteractor');
@@ -955,6 +965,10 @@ const {
 const {
   updateInitialFilingDocuments,
 } = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
+const {
+  updateIrsPractitionerOnCase,
+  updatePrivatePractitionerOnCase,
+} = require('../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
 const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
@@ -1215,8 +1229,10 @@ const gatewayMethods = {
     updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
+    updateIrsPractitionerOnCase,
     updateMessage,
     updatePractitionerUser,
+    updatePrivatePractitionerOnCase,
     updateTrialSession,
     updateTrialSessionWorkingCopy,
     updateUser,
@@ -1278,6 +1294,7 @@ const gatewayMethods = {
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
+  getReconciliationReport,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
@@ -1298,6 +1315,8 @@ const gatewayMethods = {
   getWorkItemById,
   isEmailAvailable,
   isFileExists,
+  removeIrsPractitionerOnCase,
+  removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
   verifyCaseForUser,
   verifyPendingCaseForUser,
@@ -1675,6 +1694,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getPrivatePractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,
+        getReconciliationReportInteractor,
         getTodaysOpinionsInteractor,
         getTodaysOrdersInteractor,
         getTrialSessionDetailsInteractor,

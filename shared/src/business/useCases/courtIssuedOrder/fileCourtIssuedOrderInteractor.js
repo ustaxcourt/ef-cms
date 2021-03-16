@@ -11,17 +11,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the updated case entity after the document is added
  */
-exports.fileCourtIssuedOrderInteractor = async ({
+exports.fileCourtIssuedOrderInteractor = async (
   applicationContext,
-  documentMetadata,
-  primaryDocumentFileId,
-}) => {
+  { documentMetadata, primaryDocumentFileId },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
