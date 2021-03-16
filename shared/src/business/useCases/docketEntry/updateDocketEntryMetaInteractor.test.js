@@ -153,8 +153,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateDocketEntryMetaInteractor({
-        applicationContext,
+      updateDocketEntryMetaInteractor(applicationContext, {
         docketNumber: '101-20',
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -162,16 +161,14 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   it('should throw a Not Found error if the case does not exist', async () => {
     await expect(
-      updateDocketEntryMetaInteractor({
-        applicationContext,
+      updateDocketEntryMetaInteractor(applicationContext, {
         docketNumber: '999-99',
       }),
     ).rejects.toThrow(NotFoundError);
   });
 
   it('should call the persistence method to load the case by its docket number', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
       },
@@ -184,8 +181,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the docket record action', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
+    const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         action: 'Updated Action',
@@ -200,8 +196,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the docket record description', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
+    const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         documentTitle: 'Updated Description',
@@ -216,8 +211,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the docket record and document filedBy', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
+    const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         partyPrimary: true,
@@ -236,8 +230,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the docket record filingDate', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
+    const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         filingDate: '2020-01-01T00:01:00.000Z',
@@ -252,8 +245,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document servedAt', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
+    const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         servedAt: '2020-01-01T00:01:00.000Z',
@@ -271,8 +263,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document hasOtherFilingParty and otherFilingParty values', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
+    const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         hasOtherFilingParty: true,
@@ -292,8 +283,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update a non-required field to undefined if undefined value is passed in', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
+    const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         freeText: undefined,
@@ -311,8 +301,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         servedAt: '2020-01-01T00:01:00.000Z',
@@ -326,8 +315,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[3], // originally an Order
         documentType: 'U.S.C.A',
@@ -343,8 +331,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[4], // was already a USCA - which DOES require a coversheet
         filingDate: '2012-02-22T02:22:00.000Z',
@@ -358,8 +345,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should not generate a coversheet for the document if the filingDate field is changed on a document that does NOT require a coversheet', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[5], // HEAR - which does NOT require a coversheet
         filingDate: '2012-02-22T02:22:00.000Z',
@@ -373,8 +359,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should not generate a new coversheet for a court-issued docket entry if the servedAt field is changed', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[1],
         filingDate: '2019-01-02T00:01:00.000Z',
@@ -388,8 +373,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should make a call to update the docketEntryEntity before adding a coversheet when the filingDate field is changed', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         filingDate: '2020-08-01T00:01:00.000Z',
@@ -410,8 +394,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should add a new coversheet when filingDate field is changed', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         filingDate: '2020-01-01T00:01:00.000Z',
@@ -431,8 +414,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should NOT generate a new coversheet for the document if the servedAt and filingDate fields are NOT changed', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         filingDate: '2019-01-01T00:01:00.000Z', // unchanged from current filingDate
@@ -447,8 +429,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should not call addCoversheetInteractor if filingDate field is changed and the docket entry is a minute entry', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[2], // minute entry
         filingDate: '2020-01-01T00:01:00.000Z',
@@ -462,8 +443,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should call the updateCase persistence method', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         documentTitle: 'Updated Description',
@@ -478,8 +458,7 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   it('should not throw an error when a null certificate of service date is passed for a docket entry without an associated document', async () => {
     await expect(
-      updateDocketEntryMetaInteractor({
-        applicationContext,
+      updateDocketEntryMetaInteractor(applicationContext, {
         docketEntryMeta: {
           ...docketEntries[0],
           action: 'asdf',
@@ -494,8 +473,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document pending status', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
+    const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         pending: true,
@@ -513,8 +491,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the automatic blocked status of the case', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         pending: true,
@@ -528,8 +505,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the previousDocument', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
+    const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
         previousDocument: {
@@ -547,8 +523,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should add a coversheet when the docket entry event code changes to one requiring a coversheet', async () => {
-    await updateDocketEntryMetaInteractor({
-      applicationContext,
+    await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[6],
         docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
@@ -564,8 +539,7 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   it('should throw an error when the docket entry is not found on the case', async () => {
     await expect(
-      updateDocketEntryMetaInteractor({
-        applicationContext,
+      updateDocketEntryMetaInteractor(applicationContext, {
         docketEntryMeta: {
           ...docketEntries[6],
           docketEntryId: 'not-a-guid',
