@@ -2,9 +2,6 @@ const {
   DOCKET_ENTRY_VALIDATION_RULES,
 } = require('./EntityValidationConstants');
 const {
-  JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -41,7 +38,6 @@ ReconciliationReportEntry.prototype.init = function init(rawDocketEntry) {
 
 joiValidationDecorator(ReconciliationReportEntry, {
   ...pick(DOCKET_ENTRY_VALIDATION_RULES, REPORT_PROPERTIES),
-  // caseCaption: JoiValidationConstants.CASE_CAPTION.required(), // TODO: persistence method does not return caseCaption currently unless we do a join with the parent
 });
 
 module.exports = {

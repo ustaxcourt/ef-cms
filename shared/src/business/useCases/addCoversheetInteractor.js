@@ -177,6 +177,7 @@ exports.addCoverToPdf = async ({
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.docketEntryId the docket entry id
+ * @returns {Promise<object>} the updated docket entry
  */
 exports.addCoversheetInteractor = async ({
   applicationContext,
