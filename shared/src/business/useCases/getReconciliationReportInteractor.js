@@ -32,15 +32,19 @@ exports.getReconciliationReportInteractor = async (
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  // if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVICE_SUMMARY_REPORT)) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVICE_SUMMARY_REPORT)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
-  const dateInputValid = isValidDate(reconciliationDate);
-  if (!dateInputValid) {
-    throw new Error(
-      'Date must be formatted as YYYY-MM-DD and not later than today',
-    );
+  if (reconciliationDate === 'today') {
+    reconciliationDate = formatNow(FORMATS.YYYYMMDD);
+  } else {
+    const dateInputValid = isValidDate(reconciliationDate);
+    if (!dateInputValid) {
+      throw new Error(
+        'Date must be formatted as YYYY-MM-DD and not later than today',
+      );
+    }
   }
 
   const [year, month, day] = reconciliationDate.split('-');
