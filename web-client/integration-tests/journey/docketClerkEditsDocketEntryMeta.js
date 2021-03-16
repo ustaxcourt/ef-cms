@@ -17,6 +17,11 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'servedPartiesCode',
+      value: 'B',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'ordinalValue',
       value: 'First',
     });
