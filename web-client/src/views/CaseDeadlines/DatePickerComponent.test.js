@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import { Container } from '@cerebral/react';
 import { DatePickerComponent } from './DatePickerComponent';
 import { mount } from 'enzyme';

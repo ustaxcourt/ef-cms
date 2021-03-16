@@ -30,10 +30,6 @@ module.exports = {
     FileReader() {},
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
-    // window: {
-    //   document: {},
-    //   location: {},
-    // },
   },
   testEnvironment: 'jsdom',
   //this is to ignore imported html files
