@@ -26,12 +26,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileExternalDocumentForConsolidatedInteractor = async (
   applicationContext,
-  {
-    docketNumbersForFiling,
-    documentMetadata,
-    leadDocketNumber,
-    //filingPartyNames? filingPartyMap?,
-  },
+  { docketNumbersForFiling, documentMetadata, leadDocketNumber },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
