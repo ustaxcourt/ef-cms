@@ -12,6 +12,7 @@ const {
 const {
   ReconciliationReportEntry,
 } = require('../entities/ReconciliationReportEntry');
+const { map } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
 
 const isValidDate = dateString => {
@@ -62,6 +63,8 @@ exports.getReconciliationReportInteractor = async (
       reconciliationDateStart,
     });
 
+  await assignCaseCaptionFromPersistence(applicationContext, docketEntries);
+
   const report = {
     docketEntries: ReconciliationReportEntry.validateRawCollection(
       docketEntries,
@@ -72,7 +75,27 @@ exports.getReconciliationReportInteractor = async (
     totalDocketEntries: docketEntries.length,
   };
 
-  console.log('report---', report.docketEntries);
-
   return report;
+};
+
+/**
+ * assignCaseCaptionFromPersistence
+ *  modifies docket entries by reference
+ *
+ * @param {object} applicationContext the application context
+ * @param {string} docketEntries the docketEntries to assign case captions
+ */
+const assignCaseCaptionFromPersistence = async (
+  applicationContext,
+  docketEntries,
+) => {
+  const docketNumbers = map(docketEntries, 'docketNumber');
+  const casesDetails = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByDocketNumbers({ applicationContext, docketNumbers });
+  docketEntries.forEach(docketEntry => {
+    docketEntry.caseCaption = casesDetails.find(
+      detail => detail.docketNumber === docketEntry.docketNumber,
+    ).caseCaption;
+  });
 };
