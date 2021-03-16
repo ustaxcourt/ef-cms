@@ -11,7 +11,17 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { ROLES } = require('../entities/EntityConstants');
 
 describe('getReconciliationReportInteractor', () => {
+  const mockCaseCaption = 'Kaitlin Chaney, Petitioner';
+
   beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByDocketNumbers.mockReturnValue([
+        {
+          caseCaption: mockCaseCaption,
+          docketNumber: '135-20',
+        },
+      ]);
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -89,10 +99,9 @@ describe('getReconciliationReportInteractor', () => {
   it('should return a report with docket entries if some are found in persistence', async () => {
     const docketEntries = [
       {
-        caseCaption: 'Kaitlin Chaney, Petitioner',
-        description: 'Petition',
         docketEntryId: '3d27e02e-6954-4595-8b3f-0e91bbc1b51e',
         docketNumber: '135-20',
+        documentTitle: 'Petition',
         eventCode: 'P',
         filedBy: 'Petr. Kaitlin Chaney',
         filingDate: '2021-01-05T21:14:09.031Z',
@@ -115,6 +124,7 @@ describe('getReconciliationReportInteractor', () => {
       reportTitle: 'Reconciliation Report',
       totalDocketEntries: docketEntries.length,
     });
+    expect(docketEntries[0].caseCaption).toBe(mockCaseCaption);
     expect(result.docketEntries.length).toBe(docketEntries.length);
     expect(
       applicationContext.getPersistenceGateway().getReconciliationReport,
