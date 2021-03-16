@@ -584,6 +584,12 @@ const {
   getReadyForTrialCases,
 } = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
 const {
+  getReconciliationReport,
+} = require('../../shared/src/persistence/elasticsearch/getReconciliationReport');
+const {
+  getReconciliationReportInteractor,
+} = require('../../shared/src/business/useCases/getReconciliationReportInteractor');
+const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
 const {
@@ -1288,6 +1294,7 @@ const gatewayMethods = {
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
+  getReconciliationReport,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
@@ -1687,6 +1694,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getPrivatePractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,
+        getReconciliationReportInteractor,
         getTodaysOpinionsInteractor,
         getTodaysOrdersInteractor,
         getTrialSessionDetailsInteractor,
