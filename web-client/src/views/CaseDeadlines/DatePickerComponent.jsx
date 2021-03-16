@@ -44,6 +44,8 @@ export const DatePickerComponent = ({
     if (!input) return;
     if (values && values.month && values.day && values.year) {
       input.value = `${values.month}/${values.day}/${values.year}`;
+    } else {
+      input.value = null;
     }
   }, [values]);
 
