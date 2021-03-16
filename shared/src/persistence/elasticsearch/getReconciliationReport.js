@@ -1,6 +1,7 @@
 const {
   SERVED_PARTIES_CODES,
 } = require('../../business/entities/EntityConstants');
+const { omit } = require('lodash');
 const { search } = require('./searchClient');
 
 /**
@@ -48,7 +49,7 @@ exports.getReconciliationReport = async ({
       body: {
         _source: [
           'docketNumber',
-          'description',
+          'documentTitle',
           'docketEntryId',
           'eventCode',
           'filedBy',
@@ -65,5 +66,5 @@ exports.getReconciliationReport = async ({
     },
   });
 
-  return results;
+  return results.map(result => omit(result, ['_score']));
 };
