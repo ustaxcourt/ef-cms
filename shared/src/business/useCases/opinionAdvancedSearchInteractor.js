@@ -17,21 +17,23 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * opinionAdvancedSearchInteractor
  *
+ * @param {object} applicationContext api applicationContext
  * @param {object} providers providers object
- * @param {object} providers.applicationContext api applicationContext
  * @param {object} providers.keyword keyword used for searching opinions
  * @returns {object} the opinions data
  */
-exports.opinionAdvancedSearchInteractor = async ({
+exports.opinionAdvancedSearchInteractor = async (
   applicationContext,
-  caseTitleOrPetitioner,
-  docketNumber,
-  endDate,
-  judge,
-  keyword,
-  opinionType,
-  startDate,
-}) => {
+  {
+    caseTitleOrPetitioner,
+    docketNumber,
+    endDate,
+    judge,
+    keyword,
+    opinionType,
+    startDate,
+  },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {

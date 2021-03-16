@@ -126,7 +126,7 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
     ).toMatchObject({
       replaceCoversheet: false,
     });
@@ -150,7 +150,7 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
     ).toMatchObject({
       replaceCoversheet: true,
     });
@@ -174,7 +174,7 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
     ).toMatchObject({
       replaceCoversheet: true,
       useInitialData: true,

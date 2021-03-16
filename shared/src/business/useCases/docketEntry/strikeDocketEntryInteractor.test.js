@@ -64,8 +64,7 @@ describe('strikeDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      strikeDocketEntryInteractor({
-        applicationContext,
+      strikeDocketEntryInteractor(applicationContext, {
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
       }),
@@ -80,8 +79,7 @@ describe('strikeDocketEntryInteractor', () => {
     });
 
     await expect(
-      strikeDocketEntryInteractor({
-        applicationContext,
+      strikeDocketEntryInteractor(applicationContext, {
         docketEntryId: 'does-not-exist',
         docketNumber: caseRecord.docketNumber,
       }),
@@ -95,8 +93,7 @@ describe('strikeDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await strikeDocketEntryInteractor({
-      applicationContext,
+    await strikeDocketEntryInteractor(applicationContext, {
       docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
       docketNumber: caseRecord.docketNumber,
     });
@@ -120,8 +117,7 @@ describe('strikeDocketEntryInteractor', () => {
     caseRecord.docketEntries[0].isOnDocketRecord = false;
 
     await expect(
-      strikeDocketEntryInteractor({
-        applicationContext,
+      strikeDocketEntryInteractor(applicationContext, {
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
       }),
