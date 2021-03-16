@@ -16,8 +16,8 @@ exports.saveSignedDocumentLambda = event =>
     return await applicationContext
       .getUseCases()
       .saveSignedDocumentInteractor(applicationContext, {
+        ...JSON.parse(body),
         docketNumber,
         originalDocketEntryId,
-        ...JSON.parse(body),
       });
   });
