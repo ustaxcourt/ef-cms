@@ -87,12 +87,67 @@ resource "aws_api_gateway_deployment" "api_public_deployment" {
     aws_api_gateway_integration.api_public_integration
   ]
   rest_api_id       = aws_api_gateway_rest_api.gateway_for_api_public.id
-  stage_name        = var.environment
-  stage_description = "Deployed at ${timestamp()}"
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_api_gateway_stage" "api_public_stage" {
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api_public.id
+  stage_name    = var.environment
+  description   = "Deployed at ${timestamp()}"
+  deployment_id = aws_api_gateway_deployment.api_public_deployment.id
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_public_stage_logs.arn
+
+    format = jsonencode({
+      level = "info"
+      message = "API Gateway Access Log"
+
+      environment = {
+        stage = var.environment
+        color = var.current_color
+      }
+
+      requestId = {
+        apiGateway = "$context.requestId"
+        lambda = "$context.integration.requestId"
+        authorizer = "$context.authorizer.requestId"
+      }
+
+      request = {
+        headers = {
+          x-forwarded-for = "$context.identity.sourceIp"
+          user-agent = "$context.identity.userAgent"
+        }
+        method = "$context.httpMethod"
+      }
+
+      authorizer = {
+        error = "$context.authorizer.error"
+        responseTimeMs = "$context.authorizer.integrationLatency"
+        statusCode = "$context.authorizer.status"
+      }
+
+      response = {
+        responseTimeMs = "$context.responseLatency"
+        responseLength = "$context.responseLength"
+        statusCode = "$context.status"
+      }
+
+      metadata = {
+        apiId = "$context.apiId"
+        resourcePath = "$context.resourcePath"
+        resourceId = "$context.resourceId"
+      }
+    })
+  }
+}
+
+resource "aws_cloudwatch_log_group" "api_public_stage_logs" {
+  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api_public.name}"
 }
 
 resource "aws_acm_certificate" "api_gateway_cert_public" {
@@ -161,17 +216,22 @@ resource "aws_route53_record" "api_public_route53_regional_record" {
 
 resource "aws_api_gateway_base_path_mapping" "api_public_mapping" {
   api_id      = aws_api_gateway_rest_api.gateway_for_api_public.id
-  stage_name  = aws_api_gateway_deployment.api_public_deployment.stage_name
+  stage_name  = aws_api_gateway_stage.api_public_stage.stage_name
   domain_name = aws_api_gateway_domain_name.api_public_custom.domain_name
 }
 
 resource "aws_api_gateway_method_settings" "api_public_default" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api_public.id
-  stage_name  = aws_api_gateway_deployment.api_public_deployment.stage_name
+  stage_name  = aws_api_gateway_stage.api_public_stage.stage_name
   method_path = "*/*"
 
   settings {
-    throttling_burst_limit = 5000
-    throttling_rate_limit  = 10000
+    throttling_burst_limit = 5000 // concurrent request limit
+    throttling_rate_limit = 10000 // per second
   }
+}
+
+resource "aws_wafv2_web_acl_association" "api_public_association" {
+  resource_arn = aws_api_gateway_stage.api_public_stage.arn
+  web_acl_arn  = aws_wafv2_web_acl.apis.arn
 }

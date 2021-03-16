@@ -770,6 +770,10 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
+  removeIrsPractitionerOnCase,
+  removePrivatePractitionerOnCase,
+} = require('../../shared/src/persistence/dynamo/cases/removePractitionerOnCase');
+const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/removePdfFromDocketEntryInteractor');
 const {
@@ -961,6 +965,10 @@ const {
 const {
   updateInitialFilingDocuments,
 } = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
+const {
+  updateIrsPractitionerOnCase,
+  updatePrivatePractitionerOnCase,
+} = require('../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
 const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
@@ -1221,8 +1229,10 @@ const gatewayMethods = {
     updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
+    updateIrsPractitionerOnCase,
     updateMessage,
     updatePractitionerUser,
+    updatePrivatePractitionerOnCase,
     updateTrialSession,
     updateTrialSessionWorkingCopy,
     updateUser,
@@ -1305,6 +1315,8 @@ const gatewayMethods = {
   getWorkItemById,
   isEmailAvailable,
   isFileExists,
+  removeIrsPractitionerOnCase,
+  removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
   verifyCaseForUser,
   verifyPendingCaseForUser,

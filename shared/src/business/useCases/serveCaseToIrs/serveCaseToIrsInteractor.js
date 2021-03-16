@@ -213,8 +213,7 @@ exports.serveCaseToIrsInteractor = async (
     if (doc.isFileAttached) {
       const updatedDocketEntry = await applicationContext
         .getUseCases()
-        .addCoversheetInteractor({
-          applicationContext,
+        .addCoversheetInteractor(applicationContext, {
           docketEntryId: doc.docketEntryId,
           docketNumber: caseEntityToUpdate.docketNumber,
           replaceCoversheet: !caseEntityToUpdate.isPaper,
