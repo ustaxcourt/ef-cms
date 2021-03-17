@@ -13,6 +13,7 @@ const {
 const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
+const { getContactPrimary } = require('../entities/cases/Case');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 const { UserCase } = require('../entities/UserCase');
@@ -29,11 +30,13 @@ describe('update petitioner contact information on a case', () => {
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   };
 
+  const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
+
   const basePractitioner = {
     barNumber: 'PT1234',
     email: 'practitioner1@example.com',
     name: 'Test Practitioner',
-    representing: [MOCK_CASE.contactPrimary.contactId],
+    representing: [mockCaseContactPrimary.contactId],
     role: ROLES.privatePractitioner,
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     userId: '898bbe4b-84ee-40a1-ad05-a1e2e8484c72',
@@ -71,7 +74,7 @@ describe('update petitioner contact information on a case', () => {
 
   it('updates case even if no change of address or phone is detected', async () => {
     await updatePetitionerInformationInteractor(applicationContext, {
-      contactPrimary: MOCK_CASE.contactPrimary,
+      contactPrimary: mockCaseContactPrimary,
       docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitioner,
     });
@@ -87,7 +90,7 @@ describe('update petitioner contact information on a case', () => {
   it('throws an error if contactSecondary is required for the party type and is not valid', async () => {
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: mockCaseContactPrimary,
         contactSecondary: { countryType: COUNTRY_TYPES.DOMESTIC },
         docketNumber: MOCK_CASE.docketNumber,
         partyType: PARTY_TYPES.petitionerSpouse,
@@ -152,17 +155,6 @@ describe('update petitioner contact information on a case', () => {
   it('ensures updates to fields with null values are persisted', async () => {
     mockCase = {
       ...MOCK_CASE,
-      contactPrimary: {
-        address1: '989 Division St',
-        address2: 'Lights out',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Test Primary Petitioner',
-        phone: '1234567',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
       contactSecondary: {
         address1: '789 Division St',
         address2: 'Apt B',
@@ -175,6 +167,20 @@ describe('update petitioner contact information on a case', () => {
         title: 'Executor',
       },
       partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          address1: '989 Division St',
+          address2: 'Lights out',
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          isContactPrimary: true,
+          name: 'Test Primary Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          state: 'TN',
+          title: 'Executor',
+        },
+      ],
       privatePractitioners: [],
     };
 
@@ -206,8 +212,10 @@ describe('update petitioner contact information on a case', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.contactPrimary.address2,
+      getContactPrimary(
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+          .caseToUpdate,
+      ).address2,
     ).toBeUndefined();
 
     expect(
@@ -236,7 +244,7 @@ describe('update petitioner contact information on a case', () => {
     const result = await updatePetitionerInformationInteractor(
       applicationContext,
       {
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: mockCaseContactPrimary,
         contactSecondary: {
           address1: '789 Division St APT 123', //changed address1
           city: 'Somewhere',
@@ -261,7 +269,7 @@ describe('update petitioner contact information on a case', () => {
 
   it('updates petitioner contact when secondary contact info changes and does not generate or serve a notice if the secondary contact was not previously present', async () => {
     await updatePetitionerInformationInteractor(applicationContext, {
-      contactPrimary: MOCK_CASE.contactPrimary,
+      contactPrimary: mockCaseContactPrimary,
       contactSecondary: {
         address1: '789 Division St',
         city: 'Somewhere',
@@ -306,7 +314,7 @@ describe('update petitioner contact information on a case', () => {
     const result = await updatePetitionerInformationInteractor(
       applicationContext,
       {
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: mockCaseContactPrimary,
         contactSecondary: {
           address1: '789 Division St APT 123', //changed address1
           city: 'Somewhere',
@@ -339,7 +347,7 @@ describe('update petitioner contact information on a case', () => {
       applicationContext,
       {
         contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
+          ...mockCaseContactPrimary,
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
         docketNumber: MOCK_CASE.docketNumber,
@@ -362,7 +370,7 @@ describe('update petitioner contact information on a case', () => {
   it('does not update contactPrimary email if it is passed in', async () => {
     await updatePetitionerInformationInteractor(applicationContext, {
       contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
+        ...mockCaseContactPrimary,
         email: 'test@example.com',
       },
       docketNumber: MOCK_CASE.docketNumber,
@@ -370,8 +378,10 @@ describe('update petitioner contact information on a case', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.contactPrimary.email,
+      getContactPrimary(
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+          .caseToUpdate,
+      ).email,
     ).not.toBe('test@example.com');
   });
 
@@ -381,7 +391,7 @@ describe('update petitioner contact information on a case', () => {
 
     await updatePetitionerInformationInteractor(applicationContext, {
       contactPrimary: {
-        ...MOCK_CASE_WITH_SECONDARY_OTHERS.contactPrimary,
+        ...getContactPrimary(MOCK_CASE_WITH_SECONDARY_OTHERS),
         email: 'test@example.com',
       },
       contactSecondary: {
@@ -402,7 +412,7 @@ describe('update petitioner contact information on a case', () => {
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
         contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
+          ...mockCaseContactPrimary,
           countryType: 'alien',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
@@ -430,19 +440,22 @@ describe('update petitioner contact information on a case', () => {
     mockUser.role = ROLES.docketClerk;
     mockCase = {
       ...MOCK_CASE,
-      contactPrimary: {
-        address1: '456 Center St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'test@example.com',
-        isAddressSealed: true,
-        name: 'Test Petitioner',
-        phone: '1234567',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '456 Center St',
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'test@example.com',
+          isAddressSealed: true,
+          isContactPrimary: true,
+          name: 'Test Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          state: 'TN',
+          title: 'Executor',
+        },
+      ],
     };
 
     await updatePetitionerInformationInteractor(applicationContext, {
@@ -471,7 +484,7 @@ describe('update petitioner contact information on a case', () => {
     mockUser.role = ROLES.docketClerk;
     mockCase = {
       ...MOCK_CASE,
-      contactPrimary: MOCK_CASE.contactPrimary,
+      contactPrimary: mockCaseContactPrimary,
       contactSecondary: {
         address1: '789 Division St APT 123',
         city: 'Somewhere',
@@ -487,7 +500,7 @@ describe('update petitioner contact information on a case', () => {
     };
 
     await updatePetitionerInformationInteractor(applicationContext, {
-      contactPrimary: MOCK_CASE.contactPrimary,
+      contactPrimary: mockCaseContactPrimary,
       contactSecondary: {
         address1: '789 Division St APT 123 TEST',
         city: 'Somewhere',
@@ -589,7 +602,7 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: MOCK_CASE.contactPrimary,
+          contactPrimary: mockCaseContactPrimary,
           contactSecondary: {
             address1: '789 Division St APT 123', //changed address1
             city: 'Somewhere',
@@ -622,19 +635,22 @@ describe('update petitioner contact information on a case', () => {
     it('should NOT create a work item for the NCA when the primary contact is represented and their service preference is NOT paper', async () => {
       mockCase = {
         ...MOCK_CASE,
-        contactPrimary: {
-          address1: '789 Division St',
-          city: 'Somewhere',
-          contactId: PRIMARY_CONTACT_ID,
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          name: 'Test Petitioner',
-          phone: '1234567',
-          postalCode: '12345',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-          state: 'TN',
-          title: 'Executor',
-        },
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            address1: '789 Division St',
+            city: 'Somewhere',
+            contactId: PRIMARY_CONTACT_ID,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            isContactPrimary: true,
+            name: 'Test Petitioner',
+            phone: '1234567',
+            postalCode: '12345',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+            state: 'TN',
+            title: 'Executor',
+          },
+        ],
         privatePractitioners: [
           { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
         ],
@@ -675,7 +691,7 @@ describe('update petitioner contact information on a case', () => {
     it('should NOT create a work item for the NCA when the secondary contact is represented and their service preference is NOT paper', async () => {
       mockCase = {
         ...MOCK_CASE,
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: mockCaseContactPrimary,
         contactSecondary: {
           address1: '789 Division St',
           city: 'Somewhere',
@@ -697,7 +713,7 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: MOCK_CASE.contactPrimary,
+          contactPrimary: mockCaseContactPrimary,
           contactSecondary: {
             address1: '789 Division St APT 123', //changed address1
             city: 'Somewhere',
@@ -783,7 +799,7 @@ describe('update petitioner contact information on a case', () => {
     it('should create a work item for the NCA when the secondary contact is represented and their service preference is paper', async () => {
       mockCase = {
         ...MOCK_CASE,
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: mockCaseContactPrimary,
         contactSecondary: {
           address1: '789 Division St',
           city: 'Somewhere',
@@ -804,7 +820,7 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: MOCK_CASE.contactPrimary,
+          contactPrimary: mockCaseContactPrimary,
           contactSecondary: {
             address1: '789 Division St APT 123', //changed address1
             city: 'Somewhere',
@@ -838,7 +854,7 @@ describe('update petitioner contact information on a case', () => {
     it('should create a work item for the NCA when the primary contact is represented and a private practitioner on the case requests paper service', async () => {
       mockCase = {
         ...MOCK_CASE,
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: mockCaseContactPrimary,
         contactSecondary: {
           address1: '789 Division St',
           city: 'Somewhere',
@@ -863,7 +879,7 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: MOCK_CASE.contactPrimary,
+          contactPrimary: mockCaseContactPrimary,
           contactSecondary: {
             address1: '789 Division St APT 123', //changed address1
             city: 'Somewhere',
@@ -897,7 +913,7 @@ describe('update petitioner contact information on a case', () => {
     it('should create a work item for the NCA when the secondary contact is represented and a IRS practitioner on the case requests paper service', async () => {
       mockCase = {
         ...MOCK_CASE,
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: mockCaseContactPrimary,
         contactSecondary: {
           address1: '789 Division St',
           city: 'Somewhere',
@@ -931,7 +947,7 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: MOCK_CASE.contactPrimary,
+          contactPrimary: mockCaseContactPrimary,
           contactSecondary: {
             address1: '789 Division St APT 123', //changed address1
             city: 'Somewhere',
@@ -967,7 +983,7 @@ describe('update petitioner contact information on a case', () => {
     it('should call the update addExistingUserToCase use case helper if the contactPrimary is adding an email address', async () => {
       await updatePetitionerInformationInteractor(applicationContext, {
         contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
+          ...mockCaseContactPrimary,
           email: 'changed-email@example.com',
         },
         docketNumber: MOCK_CASE.docketNumber,
@@ -985,7 +1001,7 @@ describe('update petitioner contact information on a case', () => {
 
     it('should not call the update addExistingUserToCase use case helper if the contactPrimary is unchanged', async () => {
       await updatePetitionerInformationInteractor(applicationContext, {
-        contactPrimary: MOCK_CASE.contactPrimary,
+        contactPrimary: mockCaseContactPrimary,
         docketNumber: MOCK_CASE.docketNumber,
         partyType: PARTY_TYPES.petitioner,
       });
@@ -1012,7 +1028,7 @@ describe('update petitioner contact information on a case', () => {
 
       await updatePetitionerInformationInteractor(applicationContext, {
         contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
+          ...mockCaseContactPrimary,
           email: 'changed-email@example.com',
         },
         docketNumber: MOCK_CASE.docketNumber,
@@ -1045,7 +1061,7 @@ describe('update petitioner contact information on a case', () => {
 
       await updatePetitionerInformationInteractor(applicationContext, {
         contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
+          ...mockCaseContactPrimary,
           email: 'changed-email@example.com',
         },
         docketNumber: MOCK_CASE.docketNumber,
