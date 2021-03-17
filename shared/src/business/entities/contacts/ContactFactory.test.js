@@ -7,7 +7,7 @@ const {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } = require('../EntityConstants');
-const { Case } = require('../cases/Case');
+const { Case, getContactPrimary } = require('../cases/Case');
 const { CaseExternal } = require('../cases/CaseExternal');
 const { CaseInternal } = require('../cases/CaseInternal');
 const { ContactFactory } = require('./ContactFactory');
@@ -868,16 +868,11 @@ describe('ContactFactory', () => {
     const partyTypeKeys = Object.keys(PARTY_TYPES);
     partyTypeKeys.forEach(partyType => {
       it(`can validate valid contacts for a case with otherPetitioners for party type ${partyType}`, () => {
-        let caseWithOtherPetitioners = new Case(
+        const caseWithOtherPetitioners = new Case(
           {
             ...MOCK_CASE,
-            contactPrimary: {
-              ...MOCK_CASE.contactPrimary,
-              inCareOf: 'Peter Parker',
-              secondaryName: 'Trustee Name',
-            },
             contactSecondary: {
-              ...MOCK_CASE.contactPrimary,
+              ...getContactPrimary(MOCK_CASE),
               inCareOf: 'Peter Parker',
               secondaryName: 'Trustee Name',
             },
@@ -908,6 +903,13 @@ describe('ContactFactory', () => {
               },
             ],
             partyType: PARTY_TYPES[partyType],
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                inCareOf: 'Peter Parker',
+                secondaryName: 'Trustee Name',
+              },
+            ],
           },
           { applicationContext },
         );
