@@ -1984,4 +1984,5 @@ module.exports = {
   getContactPrimary,
   isAssociatedUser,
   isSealedCase,
+  updatePetitioner,
 };
