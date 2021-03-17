@@ -467,6 +467,7 @@ ContactFactory.createContactFactory = ({
       if (!applicationContext) {
         throw new TypeError('applicationContext must be defined');
       }
+
       this.contactId = rawContact.contactId || applicationContext.getUniqueId();
       this.address1 = rawContact.address1;
       this.address2 = rawContact.address2 || undefined;
