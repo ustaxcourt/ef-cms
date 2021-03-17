@@ -29,16 +29,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
   });
 
   it('should persist the paper case into the database', async () => {
-    MOCK_CASE.contactPrimary = {
-      address1: '123 Abc Ln',
-      city: 'something',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Bob Jones',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    };
-
     const { docketNumber } = await createCaseFromPaperInteractor(
       applicationContext,
       {
@@ -51,6 +41,18 @@ describe('createCaseFromPaperInteractor integration test', () => {
           petitionFile: { name: 'something' },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '123 Abc Ln',
+              city: 'something',
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              isContactPrimary: true,
+              name: 'Bob Jones',
+              phone: '1234567890',
+              postalCode: '12345',
+              state: 'CA',
+            },
+          ],
           receivedAt: RECEIVED_DATE,
           requestForPlaceOfTrialFile: new File(
             [],
@@ -70,11 +72,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
 
     expect(createdCase).toMatchObject({
       caseCaption: 'Bob Jones2, Petitioner',
-      contactPrimary: {
-        contactId: expect.not.stringContaining(
-          'a805d1ab-18d0-43ec-bafb-654e83405416',
-        ), // should NOT be the petitionsclerk who is logged in
-      },
       createdAt: RECEIVED_DATE,
       docketEntries: [
         {
@@ -119,6 +116,13 @@ describe('createCaseFromPaperInteractor integration test', () => {
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
+      petitioners: [
+        {
+          contactId: expect.not.stringContaining(
+            'a805d1ab-18d0-43ec-bafb-654e83405416',
+          ), // should NOT be the petitionsclerk who is logged in
+        },
+      ],
       receivedAt: RECEIVED_DATE,
       status: CASE_STATUS_TYPES.new,
     });
