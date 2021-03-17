@@ -36,7 +36,7 @@ export const DocumentSearchResults = connect(
               />
             )}
 
-            <table className="usa-table search-results docket-record responsive-table row-border-only">
+            <table className="usa-table search-results ustc-table responsive-table">
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
