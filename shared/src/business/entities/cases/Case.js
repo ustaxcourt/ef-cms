@@ -1429,6 +1429,21 @@ Case.prototype.getContactPrimary = function () {
   return getContactPrimary(this);
 };
 
+const updatePetitioner = function (rawCase, updatedPetitioner) {
+  const foundPetitioner = rawCase.petitioners.find(
+    p => p.contactId === updatedPetitioner.contactId,
+  );
+
+  if (foundPetitioner) {
+    Object.assign(foundPetitioner, updatedPetitioner);
+  }
+};
+
+// 7839 TODO - docs
+Case.prototype.updatePetitioner = function (updatedPetitioner) {
+  return updatePetitioner(this, updatedPetitioner);
+};
+
 /**
  * Determines if provided user is associated with the case
  *
