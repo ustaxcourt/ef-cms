@@ -1,4 +1,5 @@
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
+import { getContactPrimary } from '../entities/cases/Case';
 import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
 let baseCaseDetail;
@@ -26,12 +27,15 @@ const baseRespondent = {
 describe('setServiceIndicatorsForCases', () => {
   beforeEach(() => {
     baseCaseDetail = {
-      contactPrimary: {
-        contactId: PRIMARY_CONTACT_ID,
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner',
-      },
       isPaper: false,
+      petitioners: [
+        {
+          contactId: PRIMARY_CONTACT_ID,
+          email: 'petitioner@example.com',
+          isContactPrimary: true,
+          name: 'Test Petitioner',
+        },
+      ],
     };
   });
 
@@ -43,7 +47,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
@@ -53,7 +57,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
@@ -61,16 +65,19 @@ describe('setServiceIndicatorsForCases', () => {
   it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with ${SERVICE_INDICATOR_TYPES.SI_NONE} already set as an override`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
-      contactPrimary: {
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-      },
+      petitioners: [
+        {
+          email: 'petitioner@example.com',
+          isContactPrimary: true,
+          name: 'Test Petitioner',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+      ],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });
@@ -86,7 +93,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });
@@ -102,7 +109,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });
