@@ -43,6 +43,12 @@ CaseExternalIncomplete.prototype.initContacts = function (
   this.petitioners = [];
   this.petitioners.push(contacts.primary);
   this.contactSecondary = contacts.secondary;
+
+  Object.defineProperty(this, 'contactPrimary', {
+    get() {
+      return contacts.primary;
+    },
+  });
 };
 
 CaseExternalIncomplete.prototype.initSelf = function (rawCase) {

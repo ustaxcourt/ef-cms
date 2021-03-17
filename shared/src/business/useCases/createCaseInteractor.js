@@ -127,7 +127,7 @@ exports.createCaseInteractor = async (
   );
 
   if (user.role === ROLES.petitioner) {
-    caseToAdd.contactPrimary.contactId = user.userId;
+    caseToAdd.getContactPrimary().contactId = user.userId;
   }
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
