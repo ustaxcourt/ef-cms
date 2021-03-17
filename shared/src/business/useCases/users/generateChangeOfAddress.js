@@ -251,7 +251,7 @@ const generateAndServeDocketEntry = async ({
   });
 
   const paperServiceRequested =
-    userCase.contactPrimary.serviceIndicator ===
+    userCase.getContactPrimary().serviceIndicator ===
       SERVICE_INDICATOR_TYPES.SI_PAPER ||
     (userCase.contactSecondary &&
       userCase.contactSecondary.serviceIndicator ===

@@ -8,6 +8,7 @@ const {
 } = require('../../entities/EntityConstants');
 const { calculateISODate } = require('../../utilities/DateHandler');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
+const { getPrimaryContact } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
@@ -256,14 +257,16 @@ describe('generateChangeOfAddress', () => {
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by the practitioner", async () => {
     const mockPaperServiceCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
         ...MOCK_CASE.contactSecondary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
+      petitioners: [
+        {
+          ...getPrimaryContact(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
 
@@ -303,14 +306,16 @@ describe('generateChangeOfAddress', () => {
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by a primary contact on the case", async () => {
     const mockPaperServiceCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      },
       contactSecondary: {
         ...MOCK_CASE.contactSecondary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
+      petitioners: [
+        {
+          ...getPrimaryContact(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
 
@@ -347,14 +352,16 @@ describe('generateChangeOfAddress', () => {
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by a secondary contact on the case", async () => {
     const mockPaperServiceCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
         ...MOCK_CASE.contactSecondary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
+      petitioners: [
+        {
+          ...getPrimaryContact(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
 
@@ -391,14 +398,16 @@ describe('generateChangeOfAddress', () => {
   it("should NOT create a work item for an associated practitioner's the notice of change of address when there is no paper service for the case", async () => {
     const mockElectronicServiceCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
         ...MOCK_CASE.contactSecondary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
+      petitioners: [
+        {
+          ...getPrimaryContact(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
 
@@ -435,14 +444,16 @@ describe('generateChangeOfAddress', () => {
   it('should not create a docket entry, work item, or serve anything if the bypassDocketEntry flag is true', async () => {
     const mockPaperServiceCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
         ...MOCK_CASE.contactSecondary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
+      petitioners: [
+        {
+          ...getPrimaryContact(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
 
@@ -512,14 +523,16 @@ describe('generateChangeOfAddress', () => {
         howMuch: -1,
         units: 'months',
       }),
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
         ...MOCK_CASE.contactSecondary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
+      petitioners: [
+        {
+          ...getPrimaryContact(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       status: CASE_STATUS_TYPES.closed,
     };
