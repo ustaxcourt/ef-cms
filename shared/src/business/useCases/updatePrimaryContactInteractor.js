@@ -53,10 +53,18 @@ exports.updatePrimaryContactInteractor = async (
   const caseEntity = new Case(
     {
       ...caseToUpdate,
-      contactPrimary: { ...caseToUpdate.contactPrimary, ...editableFields },
     },
     { applicationContext },
   );
+
+  const updatedPrimaryContact = {
+    ...caseEntity.getPrimaryContact(),
+    ...editableFields,
+  };
+
+  caseEntity.updatePetitioner(updatedPrimaryContact);
+
+  const contactPrimary = caseEntity.getContactPrimary();
 
   const userIsAssociated = caseEntity.isAssociatedUser({
     user,
@@ -70,10 +78,10 @@ exports.updatePrimaryContactInteractor = async (
     .getUtilities()
     .getDocumentTypeForAddressChange({
       newData: editableFields,
-      oldData: caseToUpdate.contactPrimary,
+      oldData: contactPrimary,
     });
 
-  if (!caseEntity.contactPrimary.isAddressSealed && documentType) {
+  if (!contactPrimary.isAddressSealed && documentType) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
     const changeOfAddressPdf = await applicationContext
@@ -88,7 +96,7 @@ exports.updatePrimaryContactInteractor = async (
           documentTitle: documentType.title,
           name: contactInfo.name,
           newData: contactInfo,
-          oldData: caseToUpdate.contactPrimary,
+          oldData: contactPrimary,
         },
       });
 
@@ -97,7 +105,7 @@ exports.updatePrimaryContactInteractor = async (
     const changeOfAddressDocketEntry = new DocketEntry(
       {
         addToCoversheet: true,
-        additionalInfo: `for ${caseToUpdate.contactPrimary.name}`,
+        additionalInfo: `for ${contactPrimary.name}`,
         docketEntryId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
         documentTitle: documentType.title,
