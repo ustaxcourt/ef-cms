@@ -69,10 +69,6 @@ table,
     }
 
     tr {
-      // &:not(:first-child) {
-      //   border-top-width: 0;
-      // }
-
       &.queue-message {
         td {
           background-color: $color-primary-alt-lightest;
