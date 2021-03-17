@@ -3394,8 +3394,7 @@ describe('Case entity', () => {
     });
   });
 
-  // 7839
-  describe.skip('getCaseContacts', () => {
+  describe('getCaseContacts', () => {
     const contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
@@ -3492,6 +3491,7 @@ describe('Case entity', () => {
       );
 
       const caseContacts = testCase.getCaseContacts();
+
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
@@ -3997,10 +3997,6 @@ describe('Case entity', () => {
       caseEntity = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: CONTACT_PRIMARY_ID,
-          },
           contactSecondary: {
             ...MOCK_CASE.contactPrimary,
             contactId: CONTACT_SECONDARY_ID,
@@ -4009,6 +4005,12 @@ describe('Case entity', () => {
             { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
           ],
           partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactId: CONTACT_PRIMARY_ID,
+            },
+          ],
           privatePractitioners: [
             { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
           ],
@@ -4091,7 +4093,7 @@ describe('Case entity', () => {
       expect(isAssociated).toBeFalsy();
     });
 
-    it.only('returns true if the user is the primary contact on the case', () => {
+    it('returns true if the user is the primary contact on the case', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: { userId: CONTACT_PRIMARY_ID },
@@ -4566,10 +4568,12 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            },
+          ],
         },
         { applicationContext },
       );

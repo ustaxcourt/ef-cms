@@ -1661,6 +1661,11 @@ Case.prototype.getCaseContacts = function (shape) {
     'otherFilers',
   ].forEach(contact => {
     if (!shape || (shape && shape[contact] === true)) {
+      if (contact === 'contactPrimary') {
+        caseContacts[contact] = this.getContactPrimary();
+        return;
+      }
+
       caseContacts[contact] = this[contact];
     }
   });
