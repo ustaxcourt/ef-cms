@@ -2,7 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
+const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { Practitioner } = require('../../entities/Practitioner');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -38,17 +38,17 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
 
   const validatedCasesToUpdate = casesToUpdate
     .map(caseToUpdate => {
-      const caseEntity = new Case(caseToUpdate, {
+      const caseRaw = new Case(caseToUpdate, {
         applicationContext,
       }).toRawObject();
 
       const petitionerObject = [
-        caseEntity.contactPrimary,
-        caseEntity.contactSecondary,
+        getContactPrimary(caseRaw),
+        caseRaw.contactSecondary,
       ].find(petitioner => petitioner && petitioner.contactId === user.userId);
       if (!petitionerObject) {
         applicationContext.logger.error(
-          `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
+          `Could not find user|${user.userId} on ${caseRaw.docketNumber}`,
         );
         return;
       }
@@ -56,7 +56,7 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       petitionerObject.email = user.email;
 
       // we do this again so that it will convert '' to null
-      return new Case(caseEntity, { applicationContext }).validate();
+      return new Case(caseRaw, { applicationContext }).validate();
     })
     // if petitioner is not found on the case, function exits early and returns `undefined`.
     // if this happens, continue with remaining cases and do not throw exception, but discard
