@@ -7,6 +7,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../entities/EntityConstants');
+const { getContactPrimary } = require('../entities/cases/Case');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -44,7 +45,9 @@ describe('caseFilter', () => {
         transmission: 'manual',
       });
       const caseDetail = {};
-      caseDetail.contactPrimary = createContactInfo();
+      caseDetail.petitioners = [
+        { ...createContactInfo(), isContactPrimary: true },
+      ];
       caseDetail.contactSecondary = createContactInfo();
       caseDetail.otherFilers = [createContactInfo(), createContactInfo()];
       caseDetail.otherPetitioners = [createContactInfo(), createContactInfo()];
@@ -53,7 +56,6 @@ describe('caseFilter', () => {
         role: ROLES.petitioner,
       });
       [
-        result.contactPrimary,
         result.contactSecondary,
         ...result.otherFilers,
         ...result.otherPetitioners,
@@ -71,6 +73,20 @@ describe('caseFilter', () => {
           'title',
         ]);
       });
+
+      expect(Object.keys(getContactPrimary(result)).sort()).toMatchObject([
+        'additionalName',
+        'contactId',
+        'inCareOf',
+        'isAddressSealed',
+        'isContactPrimary',
+        'name',
+        'otherFilerType',
+        'sealedAndUnavailable',
+        'secondaryName',
+        'serviceIndicator',
+        'title',
+      ]);
     });
   });
 
@@ -78,42 +94,44 @@ describe('caseFilter', () => {
     const caseSearchResults = [
       {
         baz: 'quux',
-        contactPrimary: {},
         docketEntries: [{ documentType: 'Petition' }],
         docketNumber: '101-20',
         foo: 'baz',
+        petitioners: [],
         sealedDate: undefined,
       },
       {
         baz: 'quux',
-        contactPrimary: {},
         docketEntries: [{ documentType: 'Petition' }],
         docketNumber: '102-20',
         foo: 'bar',
         irsPractitioners: [{ userId: 'authRespondent' }],
+        petitioners: [],
         privatePractitioners: [{ userId: 'authPractitioner' }],
         sealedDate: '2020-01-02T03:04:05.007Z',
       },
       {
         baz: 'quux',
-        contactPrimary: {
-          address1: '1 Eagle Way',
-          city: 'Hotel California',
-          isAddressSealed: true,
-          name: 'Joe Walsh',
-          state: 'CA',
-        },
         docketEntries: [
           { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
         ],
         docketNumber: '102-20',
         foo: 'bar',
         irsPractitioners: [{ userId: 'authRespondent' }],
+        petitioners: [
+          {
+            address1: '1 Eagle Way',
+            city: 'Hotel California',
+            isAddressSealed: true,
+            isContactPrimary: true,
+            name: 'Joe Walsh',
+            state: 'CA',
+          },
+        ],
         privatePractitioners: [{ userId: 'authPractitioner' }],
         sealedDate: '2020-01-02T03:04:05.007Z',
       },
       {
-        contactPrimary: {},
         docketEntries: [
           {
             documentType: 'Petition',
@@ -122,6 +140,7 @@ describe('caseFilter', () => {
           },
         ],
         docketNumber: '120-20',
+        petitioners: [],
       },
     ];
 
@@ -145,7 +164,7 @@ describe('caseFilter', () => {
       });
 
       expect(result.length).toEqual(4);
-      expect(result[2].contactPrimary).toMatchObject({
+      expect(getContactPrimary(result[2])).toMatchObject({
         isAddressSealed: true,
         name: 'Joe Walsh',
         sealedAndUnavailable: true,
