@@ -4,6 +4,9 @@ const {
   SERVICE_INDICATOR_TYPES,
   US_STATES,
 } = require('./EntityConstants');
+const { applicationContext } = require('../test/createTestApplicationContext');
+const { Case, getContactPrimary } = require('./cases/Case');
+const { MOCK_CASE } = require('../../test/mockCase');
 const { PrivatePractitioner } = require('./PrivatePractitioner');
 
 describe('PrivatePractitioner', () => {
@@ -185,9 +188,20 @@ describe('PrivatePractitioner', () => {
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
       });
 
-      const representingPrimary = privatePractitioner.getRepresentingPrimary({
-        contactPrimary: { contactId: CONTACT_ID },
-      });
+      const representingPrimary = privatePractitioner.getRepresentingPrimary(
+        new Case(
+          {
+            ...MOCK_CASE,
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: CONTACT_ID,
+              },
+            ],
+          },
+          { applicationContext },
+        ),
+      );
 
       expect(representingPrimary).toBeTruthy();
     });
@@ -213,9 +227,20 @@ describe('PrivatePractitioner', () => {
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
       });
 
-      const representingPrimary = privatePractitioner.getRepresentingPrimary({
-        contactPrimary: { contactId: '0fa1a4ac-1b91-4fc0-85bf-c0a22be411ad' },
-      });
+      const representingPrimary = privatePractitioner.getRepresentingPrimary(
+        new Case(
+          {
+            ...MOCK_CASE,
+            petitioners: [
+              {
+                ...MOCK_CASE.petitioners[0],
+                contactId: '0fa1a4ac-1b91-4fc0-85bf-c0a22be411ad',
+              },
+            ],
+          },
+          { applicationContext },
+        ),
+      );
 
       expect(representingPrimary).toBeFalsy();
     });
