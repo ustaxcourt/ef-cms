@@ -93,6 +93,91 @@ table,
   border-right: 1px solid color($theme-color-base-lighter);
   border-bottom: 1px solid color($theme-color-base-lighter);
   border-left: 1px solid color($theme-color-base-lighter);
+
+  /* big screens */
+  @media only screen and (min-width: $medium-screen) {
+    &.mobile-only-extra-table {
+      display: none;
+    }
+
+    .center-column {
+      text-align: center;
+    }
+
+    .filing-type-icon {
+      padding-right: 0;
+      text-align: right;
+
+      svg {
+        margin-top: 4px;
+        margin-right: 0;
+      }
+    }
+
+    .filing-type-icon-mobile {
+      display: none;
+    }
+
+    tr.in-progress {
+      td {
+        background: $color-yellow;
+      }
+      .fa-thumbtack {
+        color: color($theme-color-warning);
+      }
+    }
+
+    tr.qc-untouched {
+      td {
+        font-weight: $font-semibold;
+      }
+      .fa-star {
+        color: color($theme-color-secondary-dark);
+      }
+    }
+
+    tr.in-progress:hover {
+      td {
+        background: $color-primary-alt-lightest;
+      }
+    }
+
+    button.view-pdf-link {
+      padding: 0;
+    }
+  }
+
+  /* little screens */
+  @media only screen and (max-width: $medium-screen - 1px) {
+    line-height: 1.4em;
+
+    .hide-on-mobile {
+      display: none;
+    }
+
+    .filing-type-icon {
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    &.responsive-table tr {
+      display: table-row;
+    }
+
+    td {
+      display: table-cell;
+    }
+
+    .filings-and-proceedings {
+      display: block;
+    }
+
+    tbody tr {
+      border-top: none;
+      border-right: none;
+      border-left: none;
+    }
+  }
 }
 
 table.trial-sessions {
