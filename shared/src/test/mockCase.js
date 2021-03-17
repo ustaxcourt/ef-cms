@@ -13,6 +13,7 @@ exports.MOCK_CASE = {
   // contactPrimary: {
   //   address1: '123 Main St',
   //   city: 'Somewhere',
+  // eslint-disable-next-line spellcheck/spell-checker
   //   contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   //   countryType: COUNTRY_TYPES.DOMESTIC,
   //   email: 'petitioner@example.com',
@@ -183,9 +184,9 @@ exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
       contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'petitioner@example.com',
+      isContactPrimary: true,
       name: 'Test Petitioner',
       phone: '1234567',
-      isContactPrimary: true,
       postalCode: '12345',
       state: 'TN',
       title: 'Executor',
