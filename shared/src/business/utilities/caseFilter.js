@@ -1,9 +1,13 @@
 const {
+  getContactPrimary,
+  isAssociatedUser,
+  isSealedCase,
+} = require('../entities/cases/Case');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { cloneDeep, pick } = require('lodash');
-const { isAssociatedUser, isSealedCase } = require('../entities/cases/Case');
 const CASE_ATTRIBUTE_WHITELIST = [
   'docketNumber',
   'docketNumberSuffix',
@@ -22,6 +26,7 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'secondaryName',
   'serviceIndicator',
   'title',
+  'isContactPrimary',
 ];
 
 const caseSealedFormatter = caseRaw => {
@@ -54,7 +59,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
     return result;
   };
   const caseContactsToBeSealed = [
-    formattedCase.contactPrimary,
+    getContactPrimary(formattedCase),
     formattedCase.contactSecondary,
     ...(formattedCase.otherFilers || []),
     ...(formattedCase.otherPetitioners || []),
