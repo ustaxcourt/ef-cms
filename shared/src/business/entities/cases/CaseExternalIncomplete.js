@@ -3,7 +3,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { Case } = require('./Case');
+const { Case, getContactPrimary } = require('./Case');
 const { CaseExternal } = require('./CaseExternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
@@ -35,12 +35,13 @@ CaseExternalIncomplete.prototype.initContacts = function (
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
-      primary: rawCase.contactPrimary,
+      primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
     partyType: rawCase.partyType,
   });
-  this.contactPrimary = contacts.primary;
+  this.petitioners = [];
+  this.petitioners.push(contacts.primary);
   this.contactSecondary = contacts.secondary;
 };
 
@@ -65,12 +66,16 @@ joiValidationDecorator(
   joi.object().keys({
     businessType: CaseExternal.commonRequirements.businessType,
     caseType: CaseExternal.commonRequirements.caseType,
-    contactPrimary: joi.object().optional(),
     contactSecondary: joi.object().optional(),
     countryType: CaseExternal.commonRequirements.countryType,
     filingType: CaseExternal.commonRequirements.filingType,
     hasIrsNotice: CaseExternal.commonRequirements.hasIrsNotice,
     partyType: CaseExternal.commonRequirements.partyType,
+    petitioners: joi
+      .array()
+      .items(ContactFactory.getValidationRules('primary'))
+      .description('List of Contact Entities for the case.')
+      .optional(),
     preferredTrialCity: CaseExternal.commonRequirements.preferredTrialCity,
     procedureType: CaseExternal.commonRequirements.procedureType,
   }),
