@@ -318,7 +318,7 @@ Case.prototype.assignContacts = function assignContacts({
     contactInfo: {
       otherFilers: rawCase.otherFilers,
       otherPetitioners: rawCase.otherPetitioners,
-      primary: rawCase.contactPrimary,
+      primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
     isPaper: rawCase.isPaper,
@@ -1421,7 +1421,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 
 // 7839 TODO - docs
 const getContactPrimary = function (rawCase) {
-  return rawCase.petitioners.find(p => p.isContactPrimary);
+  return rawCase.petitioners?.find(p => p.isContactPrimary);
 };
 
 // 7839 TODO - docs
