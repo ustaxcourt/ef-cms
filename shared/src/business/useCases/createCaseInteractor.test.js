@@ -7,6 +7,7 @@ const {
 } = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('./createCaseInteractor');
+const { getContactPrimary } = require('../entities/cases/Case');
 const { PrivatePractitioner } = require('../entities/PrivatePractitioner');
 const { User } = require('../entities/User');
 
@@ -66,24 +67,27 @@ describe('createCaseInteractor', () => {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,
-        contactPrimary: {
-          address1: '99 South Oak Lane',
-          address2: 'Culpa numquam saepe ',
-          address3: 'Eaque voluptates com',
-          city: 'Dignissimos voluptat',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'petitioner1@example.com',
-          name: 'Diana Prince',
-          phone: '+1 (215) 128-6587',
-          postalCode: '69580',
-          state: 'AR',
-        },
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: PARTY_TYPES.petitioner,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: 1,
+        petitioners: [
+          {
+            address1: '99 South Oak Lane',
+            address2: 'Culpa numquam saepe ',
+            address3: 'Eaque voluptates com',
+            city: 'Dignissimos voluptat',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'petitioner1@example.com',
+            isContactPrimary: true,
+            name: 'Diana Prince',
+            phone: '+1 (215) 128-6587',
+            postalCode: '69580',
+            state: 'AR',
+          },
+        ],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
         signature: true,
@@ -184,7 +188,7 @@ describe('createCaseInteractor', () => {
 
     expect(result).toBeDefined();
     expect(result.privatePractitioners[0].representing).toEqual([
-      result.contactPrimary.contactId,
+      getContactPrimary(result).contactId,
     ]);
     expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
     expect(
@@ -246,7 +250,7 @@ describe('createCaseInteractor', () => {
 
     expect(result).toBeDefined();
     expect(result.privatePractitioners[0].representing).toEqual([
-      result.contactPrimary.contactId,
+      getContactPrimary(result).contactId,
       result.contactSecondary.contactId,
     ]);
     expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
