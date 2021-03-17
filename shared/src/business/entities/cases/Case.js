@@ -1397,7 +1397,8 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isPrivatePractitioner =
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
-  const isPrimaryContact = getContactPrimary(caseRaw).contactId === user.userId;
+  const isPrimaryContact =
+    getContactPrimary(caseRaw)?.contactId === user.userId;
   const isSecondaryContact =
     caseRaw.contactSecondary &&
     caseRaw.contactSecondary.contactId === user.userId;
