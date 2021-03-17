@@ -21,25 +21,17 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     role: ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
+
   const mockCorrespondence = new Correspondence({
     correspondenceId: '74e36bf7-dcbd-4ee7-a9ec-6d7446096df8',
     documentTitle: 'old document title',
     filedBy: 'docket clerk',
     userId: '5980d666-641d-455a-8386-18908d50c98e',
   });
+
   const mockCase = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'contact@example.com',
-      name: 'Contact Primary',
-      phone: '123123134',
-      postalCode: '12345',
-      state: 'TN',
-    },
     correspondence: [mockCorrespondence],
     docketEntries: [
       {
@@ -58,6 +50,19 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     docketNumber: '123-45',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'contact@example.com',
+        isContactPrimary: true,
+        name: 'Contact Primary',
+        phone: '123123134',
+        postalCode: '12345',
+        state: 'TN',
+      },
+    ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };
