@@ -1,3 +1,4 @@
+const { getContactPrimary } = require('../entities/cases/Case');
 const { isEmpty } = require('lodash');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
@@ -8,17 +9,12 @@ const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
  * @returns {object} service indicators for petitioner, privatePractitioners, and irsPractitioners
  */
 const setServiceIndicatorsForCase = caseDetail => {
-  const {
-    contactPrimary,
-    contactSecondary,
-    isPaper,
-    privatePractitioners,
-  } = caseDetail;
+  const { contactSecondary, isPaper, privatePractitioners } = caseDetail;
+  const contactPrimary = getContactPrimary(caseDetail);
 
   let hasPrimaryPractitioner = false;
   let hasSecondaryPractitioner = false;
 
-  // privatePractitioners
   if (privatePractitioners && privatePractitioners.length) {
     privatePractitioners.forEach(practitioner => {
       const representingPrimary = practitioner.representing.find(
@@ -38,7 +34,6 @@ const setServiceIndicatorsForCase = caseDetail => {
     });
   }
 
-  // contactPrimary
   if (contactPrimary && !contactPrimary.serviceIndicator) {
     if (hasPrimaryPractitioner) {
       contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
@@ -49,7 +44,6 @@ const setServiceIndicatorsForCase = caseDetail => {
     }
   }
 
-  // contactSecondary
   if (!isEmpty(contactSecondary) && !contactSecondary.serviceIndicator) {
     contactSecondary.serviceIndicator = hasSecondaryPractitioner
       ? SERVICE_INDICATOR_TYPES.SI_NONE

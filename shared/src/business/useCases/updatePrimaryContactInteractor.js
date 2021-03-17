@@ -58,7 +58,7 @@ exports.updatePrimaryContactInteractor = async (
   );
 
   const updatedPrimaryContact = {
-    ...caseEntity.getPrimaryContact(),
+    ...caseEntity.getContactPrimary(),
     ...editableFields,
   };
 
