@@ -65,7 +65,7 @@ export const DocketRecord = connect(
         <DocketRecordHeader />
         <table
           aria-label="docket record"
-          className="usa-table case-detail docket-record responsive-table row-border-only"
+          className="usa-table case-detail ustc-table responsive-table"
         >
           <thead>
             <tr>
@@ -104,7 +104,7 @@ export const DocketRecord = connect(
                     <td>
                       <span
                         className={classNames(
-                          entry.isStricken && 'stricken-docket-record',
+                          entry.isStricken && 'stricken-ustc-table',
                           'no-wrap',
                         )}
                       >
