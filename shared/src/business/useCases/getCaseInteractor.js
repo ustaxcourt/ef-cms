@@ -39,7 +39,7 @@ const getSealedCase = async ({
   let isAuthorizedToViewSealedCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-    caseRecord.contactPrimary.contactId,
+    getContactPrimary(caseRecord).contactId,
   );
 
   // check secondary contact if existent
