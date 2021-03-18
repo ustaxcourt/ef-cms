@@ -16,9 +16,10 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
   const userPendingEmail = get(state.screenMetadata.userPendingEmail);
   const showEditEmail = permissions.EDIT_PETITIONER_EMAIL && !userPendingEmail;
 
+  const caseDetail = get(state.caseDetail);
   const contactPrimaryEmail = applicationContext
     .getUtilities()
-    .getContactPrimary(get(state.caseDetail)).email;
+    .getContactPrimary(caseDetail)?.email;
 
   const contactPrimaryHasEmail = !!contactPrimaryEmail;
 
