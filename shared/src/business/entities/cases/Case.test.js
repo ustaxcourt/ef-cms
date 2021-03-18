@@ -1272,6 +1272,30 @@ describe('Case entity', () => {
   });
 
   describe('getCaseCaption', () => {
+    it('gets the primary contact from the petitioners array', () => {
+      const caseCaption = Case.getCaseCaption({
+        partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            isContactPrimary: true,
+            name: 'Bob Smith',
+          },
+        ],
+      });
+      expect(caseCaption).toEqual('Bob Smith, Petitioner');
+    });
+
+    it('gets the primary contact from contactPrimary property if petitioners array does not exist', () => {
+      const caseCaption = Case.getCaseCaption({
+        contactPrimary: {
+          isContactPrimary: true,
+          name: 'Bob Smith',
+        },
+        partyType: PARTY_TYPES.petitioner,
+      });
+      expect(caseCaption).toEqual('Bob Smith, Petitioner');
+    });
+
     it('party type Petitioner', () => {
       const caseCaption = Case.getCaseCaption(MOCK_CASE);
 

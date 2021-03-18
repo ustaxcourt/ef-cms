@@ -765,7 +765,7 @@ joiValidationDecorator(
  */
 Case.getCaseCaption = function (rawCase) {
   let caseCaption;
-  const primaryContact = getContactPrimary(rawCase);
+  const primaryContact = getContactPrimary(rawCase) || rawCase.contactPrimary;
 
   switch (rawCase.partyType) {
     case PARTY_TYPES.corporation:
