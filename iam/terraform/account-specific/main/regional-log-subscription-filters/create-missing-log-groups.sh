@@ -18,7 +18,7 @@ fi
 
 export AWS_PAGER="" # Don’t show `less` on AWS CLI responses
 
-echo "Retriving log groups…"
+echo "Retrieving log groups…"
 
 EAST_GROUPS=$(aws logs describe-log-groups --region="us-east-1" --log-group-name-prefix="/aws/" --query="logGroups[].logGroupName" --output=text)
 WEST_GROUPS=$(aws logs describe-log-groups --region="us-west-1" --log-group-name-prefix="/aws/" --query="logGroups[].logGroupName" --output=text)
@@ -59,6 +59,8 @@ for ENV in $ENVIRONMENTS; do
     process_group "/aws/lambda/websockets_disconnect_${ENV}_${COLOR}"
   done
 
+  process_group "/aws/lambda/cognito_post_confirmation_lambda_${ENV}"
+  process_group "/aws/lambda/cognito_post_authentication_lambda_${ENV}"
   process_group "/aws/lambda/legacy_documents_migration_lambda_${ENV}"
 done
 
