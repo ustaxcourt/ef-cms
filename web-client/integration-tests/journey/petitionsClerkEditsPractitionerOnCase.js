@@ -1,4 +1,5 @@
 import { EditPrivatePractitionerFactory } from '../../../shared/src/business/entities/caseAssociation/EditPrivatePractitionerFactory';
+import { contactPrimaryFromState } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = EditPrivatePractitionerFactory;
 
@@ -46,7 +47,7 @@ export const petitionsClerkEditsPractitionerOnCase = test => {
     expect(
       test.getState('caseDetail.privatePractitioners.1.representing'),
     ).toEqual([
-      test.getState('caseDetail.contactPrimary.contactId'),
+      contactPrimaryFromState.contactId,
       test.getState('caseDetail.contactSecondary.contactId'),
     ]);
   });
