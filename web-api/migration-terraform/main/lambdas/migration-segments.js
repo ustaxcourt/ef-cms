@@ -22,6 +22,9 @@ const {
   migrateItems: migration0023,
 } = require('./migrations/0023-set-served-docket-entries-as-completed');
 const {
+  migrateItems: migration0024,
+} = require('./migrations/0024-add-contact-primary-to-petitioners-array');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
@@ -59,6 +62,8 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0022(items, documentClient);
   applicationContext.logger.info('about to run migration 0023');
   items = await migration0023(items, documentClient);
+  applicationContext.logger.info('about to run migration 0024');
+  items = await migration0024(items, documentClient);
 
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
