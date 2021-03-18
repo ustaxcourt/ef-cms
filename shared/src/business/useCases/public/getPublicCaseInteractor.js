@@ -41,7 +41,5 @@ exports.getPublicCaseInteractor = async (
     applicationContext,
   });
 
-  console.log('--publicCaseDetail', publicCaseDetail);
-
   return publicCaseDetail.validate().toRawObject();
 };

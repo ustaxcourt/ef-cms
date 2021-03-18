@@ -108,6 +108,10 @@
       allow: 
         - null
       keys: 
+        isContactPrimary: 
+          type: "boolean"
+          flags: 
+            presence: "optional"
         name: 
           type: "string"
           flags: 
@@ -839,6 +843,10 @@
         - 
           type: "object"
           keys: 
+            isContactPrimary: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
             name: 
               type: "string"
               flags: 

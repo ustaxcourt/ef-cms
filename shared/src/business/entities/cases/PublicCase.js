@@ -53,7 +53,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   const currentUser = applicationContext.getCurrentUser();
 
   if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
-    console.log('im in the irs');
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {
@@ -78,9 +77,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       practitioner => new PrivatePractitioner(practitioner),
     );
   } else {
-    console.log('anywerheree', rawCase);
     if (getContactPrimary(rawCase) || rawCase.contactPrimary) {
-      console.log('rawCase.contactPrimary pew pew');
       this.petitioners.push(
         new PublicContact(getContactPrimary(rawCase) || rawCase.contactPrimary),
       );
