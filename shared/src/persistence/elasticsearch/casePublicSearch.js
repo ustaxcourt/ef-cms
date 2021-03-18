@@ -31,7 +31,7 @@ exports.casePublicSearchExactMatch = async ({
 
   const sourceFields = [
     'caseCaption',
-    'contactPrimary',
+    'petitioners',
     'contactSecondary',
     'docketNumber',
     'docketNumberSuffix',

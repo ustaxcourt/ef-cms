@@ -27,21 +27,6 @@ module.exports = {
     'closedDate.S': {
       type: 'date',
     },
-    'contactPrimary.M.contactId.S': {
-      type: 'text',
-    },
-    'contactPrimary.M.countryType.S': {
-      type: 'text',
-    },
-    'contactPrimary.M.name.S': {
-      type: 'text',
-    },
-    'contactPrimary.M.secondaryName.S': {
-      type: 'text',
-    },
-    'contactPrimary.M.state.S': {
-      type: 'text',
-    },
     'contactSecondary.M.contactId.S': {
       type: 'text',
     },
@@ -118,6 +103,21 @@ module.exports = {
       type: 'text',
     },
     'isSealed.BOOL': { type: 'boolean' },
+    'petitioners.L.M.contactId.S': {
+      type: 'text',
+    },
+    'petitioners.L.M.countryType.S': {
+      type: 'text',
+    },
+    'petitioners.L.M.name.S': {
+      type: 'text',
+    },
+    'petitioners.L.M.secondaryName.S': {
+      type: 'text',
+    },
+    'petitioners.L.M.state.S': {
+      type: 'text',
+    },
     'pk.S': {
       type: 'text',
     },

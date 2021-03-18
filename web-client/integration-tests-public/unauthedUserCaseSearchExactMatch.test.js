@@ -93,6 +93,8 @@ describe('Petitioner searches for exact name match', () => {
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 
+    console.log(createdDocketNumbers);
+
     expect(searchResults.length).toBe(3);
     expect(searchResults[0]).toMatchObject({
       docketNumber: createdDocketNumbers[0],
