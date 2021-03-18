@@ -275,6 +275,14 @@ resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
   }
 }
 
+module "api-east-waf" {
+  environment = var.environment
+  providers = {
+    aws = aws.us-east-1
+  }
+  source = "./waf/"
+}
+
 module "api-east-green" {
   api_object             = null_resource.api_east_object
   api_public_object      = null_resource.api_public_east_object
@@ -311,6 +319,7 @@ module "api-east-green" {
   create_cron            = 1
   create_streams         = 1
   stream_arn             = data.aws_dynamodb_table.green_dynamo_table.stream_arn
+  web_acl_arn            = module.api-east-waf.web_acl_arn
 }
 
 module "api-east-blue" {
@@ -349,6 +358,7 @@ module "api-east-blue" {
   create_cron            = 1
   create_streams         = 1
   stream_arn             = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
+  web_acl_arn            = module.api-east-waf.web_acl_arn
 }
 
 
