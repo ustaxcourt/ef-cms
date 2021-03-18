@@ -1,6 +1,9 @@
+const {
+  getContactPrimary,
+} = require('../../../../shared/src/business/entities/cases/Case');
 const { marshallContact } = require('./marshallContact');
 const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
-const MOCK_CONTACT = Object.assign({}, MOCK_CASE.contactPrimary, {
+const MOCK_CONTACT = Object.assign({}, getContactPrimary(MOCK_CASE), {
   serviceIndicator: 'Electronic',
 });
 
@@ -12,6 +15,7 @@ describe('marshallContact', () => {
       'address3',
       'city',
       'email',
+      'isContactPrimary',
       'name',
       'phone',
       'postalCode',
