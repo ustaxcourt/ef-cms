@@ -35,7 +35,9 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
 
     isAssociated = some(caseDetailRespondents, { userId: user.userId });
   } else if (user.role === USER_ROLES.petitioner) {
-    const caseContactPrimaryId = get(state.caseDetail.contactPrimary.contactId);
+    const caseContactPrimaryId = applicationContext
+      .getUtilities()
+      .getContactPrimary(get(state.caseDetail)).contactId;
     const caseContactSecondaryId = get(
       state.caseDetail.contactSecondary.contactId,
     );
