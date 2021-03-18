@@ -1,7 +1,4 @@
 const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../../../../../shared/src/business/entities/EntityConstants');
-const {
   getContactPrimary,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const {
@@ -30,6 +27,21 @@ describe('migrateItems', () => {
     ]);
   });
 
+  it('should return and not modify records already have a petitioners array', async () => {
+    const unmodifiedItem = {
+      ...MOCK_CASE, // has petitioners array
+      pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+      sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+    };
+
+    const items = [unmodifiedItem];
+
+    const results = await migrateItems(items);
+
+    expect(results[0].petitioners).toMatchObject(unmodifiedItem.petitioners);
+    expect(results[0].contactPrimary).toBeUndefined();
+  });
+
   it('should add contactPrimary to the petitioners array when the item is a case record', async () => {
     const items = [
       {
@@ -40,7 +52,7 @@ describe('migrateItems', () => {
           isContactPrimary: undefined,
         },
         petitioners: undefined,
-        sk: 'docket-entry|6d74eadc-0181-4ff5-826c-305200e8733d',
+        sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
       },
     ];
 
@@ -49,12 +61,11 @@ describe('migrateItems', () => {
     expect(results[0].contactPrimary).toBeUndefined();
     expect(results[0].petitioners).toEqual(
       expect.arrayContaining([
-        {
+        expect.objectContaining({
           ...getContactPrimary(MOCK_CASE),
-          isContactPrimary: undefined,
-        },
+          isContactPrimary: true,
+        }),
       ]),
     );
-    expect(results[0].getFormattedValidationErrors()).toBeNull();
   });
 });
