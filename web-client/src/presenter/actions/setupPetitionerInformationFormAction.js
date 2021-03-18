@@ -21,10 +21,14 @@ export const setupPetitionerInformationFormAction = ({
       ...caseDetail,
     });
 
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(formattedCaseDetail);
+
   store.set(
     state.form,
     cloneDeep({
-      contactPrimary: formattedCaseDetail.contactPrimary,
+      contactPrimary,
       contactSecondary: formattedCaseDetail.contactSecondary,
       partyType: formattedCaseDetail.partyType,
     }),

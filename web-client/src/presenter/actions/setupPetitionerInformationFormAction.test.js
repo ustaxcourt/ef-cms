@@ -26,16 +26,16 @@ describe('setupPetitionerInformationFormAction', () => {
   it('should set contactPrimary, contactSecondary, and partyType on state.form from the result of setServiceIndicatorsForCase', async () => {
     const { PARTY_TYPES } = applicationContext.getConstants();
 
-    const mockContactPrimary = { name: 'Test Primary' };
+    const mockContactPrimary = { isContactPrimary: true, name: 'Test Primary' };
     const mockContactSecondary = { name: 'Test Secondary' };
     const mockPartyType = PARTY_TYPES.nextFriendForMinor;
 
     applicationContext
       .getUtilities()
       .setServiceIndicatorsForCase.mockReturnValue({
-        contactPrimary: mockContactPrimary,
         contactSecondary: mockContactSecondary,
         partyType: mockPartyType,
+        petitioners: [mockContactPrimary],
       });
 
     const { state } = await runAction(setupPetitionerInformationFormAction, {
