@@ -1,3 +1,4 @@
+import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -88,6 +89,26 @@ describe('formattedCaseDetail', () => {
     section: TRIAL_CLERKS_SECTION,
     userId: '777',
   };
+
+  const mockPetitioners = [
+    {
+      address1: '734 Cowley Parkway',
+      address2: 'Cum aut velit volupt',
+      address3: 'Et sunt veritatis ei',
+      city: 'Et id aut est velit',
+      contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
+      countryType: 'domestic',
+      email: 'petitioner@example.com',
+      isAddressSealed: false,
+      isContactPrimary: true,
+      name: 'Mona Schultz',
+      phone: '+1 (884) 358-9729',
+      postalCode: '77546',
+      sealedAndUnavailable: false,
+      serviceIndicator: 'Electronic',
+      state: 'CT',
+    },
+  ];
 
   const simpleDocketEntries = [
     {
@@ -224,7 +245,7 @@ describe('formattedCaseDetail', () => {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
           docketEntries: [],
-          petitioners: [],
+          petitioners: mockPetitioners,
         },
       },
     });
@@ -240,7 +261,7 @@ describe('formattedCaseDetail', () => {
       correspondence: [],
       docketEntries: simpleDocketEntries,
       hasVerifiedIrsNotice: false,
-      petitioners: [],
+      petitioners: mockPetitioners,
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -261,7 +282,7 @@ describe('formattedCaseDetail', () => {
       correspondence: [],
       docketEntries: simpleDocketEntries,
       hasVerifiedIrsNotice: false,
-      petitioners: [],
+      petitioners: mockPetitioners,
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -273,7 +294,7 @@ describe('formattedCaseDetail', () => {
     expect(result.formattedDocketEntries[0].docketEntryId).toEqual('123');
   });
 
-  it('formats docket record document data strings and descriptions and docket entry fields correctly', () => {
+  fit('formats docket record document data strings and descriptions and docket entry fields correctly', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       contactSecondary: {
@@ -284,7 +305,7 @@ describe('formattedCaseDetail', () => {
       hasVerifiedIrsNotice: false,
       otherFilers: [],
       otherPetitioners: [],
-      petitioners: [{ isContactPrimary: true, name: 'bob' }],
+      petitioners: mockPetitioners,
       privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
     const result = runCompute(formattedCaseDetail, {
@@ -374,7 +395,7 @@ describe('formattedCaseDetail', () => {
     ]);
   });
 
-  it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
+  fit('returns editDocketEntryMetaLinks with formatted docket entries', () => {
     const DOCKET_NUMBER = '101-20';
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
@@ -387,7 +408,7 @@ describe('formattedCaseDetail', () => {
       hasVerifiedIrsNotice: false,
       otherFilers: [],
       otherPetitioners: [],
-      petitioners: [{ isContactPrimary: true, name: 'bob' }],
+      petitioners: mockPetitioners,
       privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
 
@@ -508,7 +529,7 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  it('should format only lodged documents with overridden eventCode MISCL', () => {
+  fit('should format only lodged documents with overridden eventCode MISCL', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       correspondence: [],
@@ -532,7 +553,7 @@ describe('formattedCaseDetail', () => {
       ],
       otherFilers: [],
       otherPetitioners: [],
-      petitioners: [{ isContactPrimary: true, name: 'bob' }],
+      petitioners: mockPetitioners,
       privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
 
@@ -610,7 +631,7 @@ describe('formattedCaseDetail', () => {
         ],
         docketNumber: '123-45',
         hasVerifiedIrsNotice: false,
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
     });
 
@@ -721,7 +742,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -738,7 +759,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -755,7 +776,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo and friends,  Petitioners ',
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -772,7 +793,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -793,7 +814,7 @@ describe('formattedCaseDetail', () => {
         docketEntries: [],
         otherFilers: [],
         otherPetitioners: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
         privatePractitioners: [
           { barNumber: '9999', name: 'Jackie Chan', representing: [] },
         ],
@@ -816,7 +837,7 @@ describe('formattedCaseDetail', () => {
         docketEntries: [],
         otherFilers: [],
         otherPetitioners: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
         privatePractitioners: [{ name: 'Jackie Chan', representing: [] }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -838,7 +859,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -862,7 +883,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -886,7 +907,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
       const caseDeadlines = [
         {
@@ -931,7 +952,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
       const caseDeadlines = [
         {
@@ -956,7 +977,7 @@ describe('formattedCaseDetail', () => {
         caseDeadlines: [],
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -1014,7 +1035,7 @@ describe('formattedCaseDetail', () => {
         correspondence: [],
         docketEntries,
         hasVerifiedIrsNotice: false,
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
     });
 
@@ -1092,7 +1113,7 @@ describe('formattedCaseDetail', () => {
         ],
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1116,7 +1137,7 @@ describe('formattedCaseDetail', () => {
         associatedJudge: 'Judge Judy',
         correspondence: [],
         docketEntries: [],
-        petitioners: [],
+        petitioners: mockPetitioners,
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1143,7 +1164,7 @@ describe('formattedCaseDetail', () => {
         correspondence: [],
         docketEntries: [],
         docketNumber: '123-45',
-        petitioners: [],
+        petitioners: mockPetitioners,
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1186,7 +1207,7 @@ describe('formattedCaseDetail', () => {
             trialSessionId: '345',
           },
         ],
-        petitioners: [],
+        petitioners: mockPetitioners,
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -2023,7 +2044,6 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  //start here
   describe('showEAccessFlag', () => {
     let baseContact;
     let contactPrimary;
@@ -2566,7 +2586,7 @@ describe('formattedCaseDetail', () => {
         createdAt: '2020-02-02T17:29:13.120Z',
         docketEntries: simpleDocketEntries,
         hasVerifiedIrsNotice: false,
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
 
       const result = runCompute(formattedOpenCases, {
@@ -2587,7 +2607,7 @@ describe('formattedCaseDetail', () => {
         createdAt: '2020-02-02T17:29:13.120Z',
         docketEntries: simpleDocketEntries,
         hasVerifiedIrsNotice: false,
-        petitioners: [],
+        petitioners: mockPetitioners,
       };
 
       const result = runCompute(formattedClosedCases, {
