@@ -23,15 +23,16 @@ export const todaysOrdersHelper = (get, applicationContext) => {
   const hasResults = formattedOrders.length > 0;
 
   const showLoadMoreButton = formattedOrders.length < totalCount;
-  const sortOrder =
-    get(state.screenMetadata.todaysOrdersSort) || TODAYS_ORDER_SORT;
+  const todaysOrdersSort =
+    get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDER_SORT;
+
 
   return {
     formattedCurrentDate,
     formattedOrders,
     hasResults,
     showLoadMoreButton,
-    sortOrder,
+    todaysOrdersSort,
     totalCount,
   };
 };

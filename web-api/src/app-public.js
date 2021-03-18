@@ -61,7 +61,7 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 
 app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
 app.get(
-  '/public-api/todays-orders/:page/:sortOrder',
+  '/public-api/todays-orders/:page/:todaysOrdersSort',
   lambdaWrapper(todaysOrdersLambda),
 );
 
