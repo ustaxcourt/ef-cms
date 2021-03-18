@@ -843,7 +843,7 @@ describe('ContactFactory', () => {
             country: 'USA',
             countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'someone@example.com',
-            isContactPriary: true,
+            isContactPrimary: true,
             name: 'Jimmy Dean',
             postalCode: '05198',
             state: 'AK',
