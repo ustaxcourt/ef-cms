@@ -12,6 +12,7 @@ exports.marshallContact = contactObject => {
     address3: contactObject.address3,
     city: contactObject.city,
     email: contactObject.email,
+    isContactPrimary: contactObject.isContactPrimary,
     name: contactObject.name,
     phone: contactObject.phone,
     postalCode: contactObject.postalCode,
