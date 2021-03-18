@@ -180,7 +180,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       state: testState,
     });
     expect(result).toMatchObject({
-      freeTextLabel: 'Enter description',
+      freeTextLabel: 'Description',
     });
   });
 });

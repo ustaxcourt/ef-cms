@@ -64,7 +64,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   } else if (selectedEventCode === 'NOT') {
     freeTextLabel = 'What is this notice for?';
   } else {
-    freeTextLabel = 'Enter description';
+    freeTextLabel = 'Description';
   }
 
   let dateLabel = 'Date';
