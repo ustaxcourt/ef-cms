@@ -28,6 +28,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,
@@ -42,6 +43,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.privatePractitioner,
       userId: '1234',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -53,6 +55,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: true,
@@ -67,6 +70,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.privatePractitioner,
       userId: '1234',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -78,6 +82,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
@@ -92,6 +97,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.irsPractitioner,
       userId: '789',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -103,6 +109,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,
@@ -117,6 +124,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.irsPractitioner,
       userId: '789',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -128,6 +136,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
@@ -142,6 +151,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.petitioner,
       userId: '123',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -149,12 +159,16 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          contactPrimary: {
-            contactId: '123',
-          },
+          petitioners: [
+            {
+              contactId: '123',
+              isContactPrimary: true,
+            },
+          ],
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,
@@ -169,6 +183,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.petitioner,
       userId: '234',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -176,15 +191,19 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          contactPrimary: {
-            contactId: '123',
-          },
           contactSecondary: {
             contactId: '234',
           },
+          petitioners: [
+            {
+              contactId: '123',
+              isContactPrimary: true,
+            },
+          ],
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,
@@ -206,19 +225,17 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          contactPrimary: {
-            contactId: '456',
-          },
+          petitioners: [
+            {
+              contactId: '456',
+              isContactPrimary: true,
+            },
+          ],
           userId: '123',
-        },
-        contactPrimary: {
-          userId: '123',
-        },
-        contactSecondary: {
-          userId: '234',
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
@@ -233,6 +250,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.petitionsClerk,
       userId: '123',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -244,6 +262,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
@@ -279,6 +298,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.irsSuperuser,
       userId: '123',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -292,6 +312,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,
