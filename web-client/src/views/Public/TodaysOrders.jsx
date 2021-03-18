@@ -11,11 +11,13 @@ export const TodaysOrders = connect(
     loadMoreTodaysOrdersSequence: sequences.loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
+    sortTodaysOrdersSequence: sequences.sortTodaysOrdersSequence,
     todaysOrdersHelper: state.todaysOrdersHelper,
   },
   function TodaysOrders({
     loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence,
+    sortTodaysOrdersSequence,
     todaysOrdersHelper,
   }) {
     return (
@@ -45,6 +47,44 @@ export const TodaysOrders = connect(
           {todaysOrdersHelper.hasResults && (
             <>
               <NonMobile>
+                <div className="tablet:grid-col-2">
+                  <select
+                    aria-label="Today’s Orders Sort"
+                    className="usa-select margin-top-0 margin-bottom-2 sort"
+                    name="todaysOrdersSort"
+                    value={todaysOrdersHelper.todaysOrdersSort}
+                    onChange={e => {
+                      sortTodaysOrdersSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  >
+                    {[
+                      {
+                        label: 'newest',
+                        value: 'byDateDesc',
+                      },
+                      {
+                        label: 'oldest',
+                        value: 'byDate',
+                      },
+
+                      {
+                        label: 'pages (descending)',
+                        value: 'numberOfPagesDesc',
+                      },
+                      {
+                        label: 'pages (ascending)',
+                        value: 'numberOfPages',
+                      },
+                    ].map(item => (
+                      <option key={item.value} value={item.value}>
+                        Sort by {item.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <table
                   aria-label="todays orders"
                   className="usa-table gray-header todays-orders responsive-table row-border-only"

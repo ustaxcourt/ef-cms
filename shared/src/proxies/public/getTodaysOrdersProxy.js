@@ -7,9 +7,13 @@ const { get } = require('../requests');
  * @param {object} providers.applicationContext the application context
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getTodaysOrdersInteractor = ({ applicationContext, page }) => {
+exports.getTodaysOrdersInteractor = ({
+  applicationContext,
+  page,
+  sortOrder,
+}) => {
   return get({
     applicationContext,
-    endpoint: `/public-api/todays-orders/${page}`,
+    endpoint: `/public-api/todays-orders/${page}/${sortOrder}`,
   });
 };
