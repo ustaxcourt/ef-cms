@@ -8,7 +8,7 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
+const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('createUserForContactPrimary', () => {
@@ -41,13 +41,16 @@ describe('createUserForContactPrimary', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
-        contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
-          contactId: USER_ID,
-          email: undefined,
-          name: 'Bob Ross',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            contactId: USER_ID,
+            email: undefined,
+            isContactPrimary: true,
+            name: 'Bob Ross',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
       },
       { applicationContext },
     );
@@ -81,13 +84,15 @@ describe('createUserForContactPrimary', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
-        contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
-          contactId: USER_ID,
-          email: undefined,
-          name: 'Bob Ross',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            contactId: USER_ID,
+            email: undefined,
+            name: 'Bob Ross',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
       },
       { applicationContext },
     );
@@ -112,13 +117,15 @@ describe('createUserForContactPrimary', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
-        contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
-          contactId: USER_ID,
-          email: undefined,
-          name: 'Bob Ross',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            contactId: USER_ID,
+            email: undefined,
+            name: 'Bob Ross',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
       },
       { applicationContext },
     );

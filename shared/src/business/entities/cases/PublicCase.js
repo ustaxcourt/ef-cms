@@ -34,7 +34,6 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
 function PublicCase() {}
 PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.entityName = 'PublicCase';
-  this.petitioners = [];
   this.caseCaption = rawCase.caseCaption;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -46,6 +45,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
+  this.petitioners = rawCase.petitioners;
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
@@ -58,7 +58,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       contactInfo: {
         otherFilers: rawCase.otherFilers,
         otherPetitioners: rawCase.otherPetitioners,
-        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
+        primary: getContactPrimary(rawCase),
         secondary: rawCase.contactSecondary,
       },
       isPaper: rawCase.isPaper,
@@ -67,7 +67,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
     this.otherPetitioners = contacts.otherPetitioners;
     this.otherFilers = contacts.otherFilers;
-    this.petitioners.push(contacts.primary);
+    this.petitioners = [contacts.primary];
     this.contactSecondary = contacts.secondary;
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
@@ -77,11 +77,10 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       practitioner => new PrivatePractitioner(practitioner),
     );
   } else {
-    if (getContactPrimary(rawCase) || rawCase.contactPrimary) {
-      this.petitioners.push(
-        new PublicContact(getContactPrimary(rawCase) || rawCase.contactPrimary),
-      );
+    if (getContactPrimary(rawCase)) {
+      this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
     }
+
     this.contactSecondary = rawCase.contactSecondary
       ? new PublicContact(rawCase.contactSecondary)
       : undefined;
