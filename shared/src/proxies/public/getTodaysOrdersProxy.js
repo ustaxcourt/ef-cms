@@ -11,10 +11,10 @@ const { get } = require('../requests');
 exports.getTodaysOrdersInteractor = ({
   applicationContext,
   page,
-  sortOrder,
+  todaysOrdersSort,
 }) => {
   return get({
     applicationContext,
-    endpoint: `/public-api/todays-orders/${page}/${sortOrder}`,
+    endpoint: `/public-api/todays-orders/${page}/${todaysOrdersSort}`,
   });
 };

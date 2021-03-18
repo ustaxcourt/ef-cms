@@ -184,12 +184,12 @@ exports.advancedDocumentSearch = async ({
   switch (sortOrder) {
     case 'numberOfPages': // fall through
     case 'numberOfPagesDesc':
-      sort = [{ 'numberOfPages.S': { order: sortType } }];
+      sort = [{ 'numberOfPages.N': sortType }];
       break;
     case 'filingDate': // fall through
     case 'filingDateDesc': // fall through
     default:
-      sort = [{ 'filingDate.S': { order: sortType } }];
+      sort = [{ 'filingDate.S': sortType }];
       break;
   }
 
