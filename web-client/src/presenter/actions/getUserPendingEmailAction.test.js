@@ -18,7 +18,7 @@ describe('getUserPendingEmailAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: { contactId: mockUserId },
+          petitioners: [{ contactId: mockUserId, isContactPrimary: true }],
         },
       },
     });
@@ -40,7 +40,7 @@ describe('getUserPendingEmailAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: { contactId: mockUserId },
+          petitioners: [{ contactId: mockUserId, isContactPrimary: true }],
         },
       },
     });
@@ -59,7 +59,7 @@ describe('getUserPendingEmailAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: { contactId: mockUserId },
+          petitioners: [{ contactId: mockUserId, isContactPrimary: true }],
         },
       },
     });

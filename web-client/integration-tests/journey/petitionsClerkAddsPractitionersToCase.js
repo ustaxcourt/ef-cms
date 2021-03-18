@@ -1,5 +1,5 @@
+import { contactPrimaryFromState, refreshElasticsearchIndex } from '../helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -55,7 +55,7 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing'),
-    ).toEqual([test.getState('caseDetail.contactPrimary.contactId')]);
+    ).toEqual([contactPrimaryFromState.contactId]);
     expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
       practitionerMatch.name,
     );

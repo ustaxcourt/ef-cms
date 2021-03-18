@@ -1,3 +1,4 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { hasUpdatedPetitionerEmailAction } from './hasUpdatedPetitionerEmailAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -9,6 +10,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
   const UPDATED_EMAIL = 'updated@example.com';
 
   beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       no: pathNoStub,
       yes: pathYesStub,
@@ -19,7 +21,9 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
-        caseDetail: { contactPrimary: { email: INITIAL_EMAIL } },
+        caseDetail: {
+          petitioners: [{ email: INITIAL_EMAIL, isContactPrimary: true }],
+        },
         form: { contactPrimary: { email: UPDATED_EMAIL } },
       },
     });
@@ -32,7 +36,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
       modules: { presenter },
       state: {
         caseDetail: {
-          contactPrimary: { email: INITIAL_EMAIL },
+          petitioners: [{ email: INITIAL_EMAIL, isContactPrimary: true }],
         },
         form: {
           contactPrimary: { email: INITIAL_EMAIL },

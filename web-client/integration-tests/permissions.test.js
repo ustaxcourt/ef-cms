@@ -1,4 +1,9 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -13,7 +18,7 @@ const publicFieldsVisible = () => {
 };
 
 const associatedFieldsVisible = () => {
-  expect(test.getState('caseDetail.contactPrimary')).toMatchObject({
+  expect(contactPrimaryFromState).toMatchObject({
     address1: expect.anything(),
     city: expect.anything(),
     name: expect.anything(),
@@ -23,14 +28,14 @@ const associatedFieldsVisible = () => {
 };
 
 const associatedFieldsBlocked = () => {
-  expect(test.getState('caseDetail.contactPrimary')).toEqual({
+  expect(contactPrimaryFromState).toEqual({
     entityName: 'PublicContact',
     name: expect.anything(),
     state: expect.anything(),
   });
-  expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
+  expect(contactPrimaryFromState.address1).toBeUndefined();
   expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
-  expect(test.getState('caseDetail.contactPrimary.contactId')).toBeUndefined();
+  expect(contactPrimaryFromState.contactId).toBeUndefined();
 };
 
 const internalFieldsVisible = () => {

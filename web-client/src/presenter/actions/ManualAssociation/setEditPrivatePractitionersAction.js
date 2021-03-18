@@ -1,4 +1,5 @@
 import { cloneDeep } from 'lodash';
+import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
 import { state } from 'cerebral';
 
 /**
@@ -13,10 +14,11 @@ import { state } from 'cerebral';
 export const setEditPrivatePractitionersAction = async ({ get, store }) => {
   const caseDetail = get(state.caseDetail);
   const modalPrivatePractitioners = cloneDeep(caseDetail.privatePractitioners);
+  const contactPrimary = getContactPrimary(caseDetail);
 
   modalPrivatePractitioners.forEach(privatePractitioner => {
     privatePractitioner.representingPrimary = !!privatePractitioner.representing.find(
-      r => r === caseDetail.contactPrimary.contactId,
+      r => r === contactPrimary.contactId,
     );
     privatePractitioner.representingSecondary =
       !!caseDetail.contactSecondary &&

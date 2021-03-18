@@ -17,6 +17,11 @@ const {
   bulkIndexRecords,
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
+  Case,
+  caseHasServedDocketEntries,
+  getContactPrimary,
+} = require('../entities/cases/Case');
+const {
   compareCasesByDocketNumber,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
@@ -149,7 +154,6 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
-const { Case, caseHasServedDocketEntries } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
@@ -263,6 +267,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(Case.getAttachmentDocumentById),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
