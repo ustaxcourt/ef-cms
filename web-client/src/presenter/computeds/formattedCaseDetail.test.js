@@ -223,8 +223,8 @@ describe('formattedCaseDetail', () => {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
-          contactPrimary: {},
           docketEntries: [],
+          petitioners: [],
         },
       },
     });
@@ -237,11 +237,10 @@ describe('formattedCaseDetail', () => {
   it('maps docket record dates', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
-      contactPrimary: {},
       correspondence: [],
       docketEntries: simpleDocketEntries,
       hasVerifiedIrsNotice: false,
-      petitioners: [{ name: 'bob' }],
+      petitioners: [],
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -259,11 +258,10 @@ describe('formattedCaseDetail', () => {
   it('maps docket record documents', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
-      contactPrimary: {},
       correspondence: [],
       docketEntries: simpleDocketEntries,
       hasVerifiedIrsNotice: false,
-      petitioners: [{ name: 'bob' }],
+      petitioners: [],
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -278,9 +276,6 @@ describe('formattedCaseDetail', () => {
   it('formats docket record document data strings and descriptions and docket entry fields correctly', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
-      contactPrimary: {
-        name: 'Bob',
-      },
       contactSecondary: {
         name: 'Bill',
       },
@@ -289,7 +284,7 @@ describe('formattedCaseDetail', () => {
       hasVerifiedIrsNotice: false,
       otherFilers: [],
       otherPetitioners: [],
-      petitioners: [{ name: 'bob' }],
+      petitioners: [{ isContactPrimary: true, name: 'bob' }],
       privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
     const result = runCompute(formattedCaseDetail, {
@@ -383,9 +378,6 @@ describe('formattedCaseDetail', () => {
     const DOCKET_NUMBER = '101-20';
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
-      contactPrimary: {
-        name: 'Bob',
-      },
       contactSecondary: {
         name: 'Bill',
       },
@@ -395,7 +387,7 @@ describe('formattedCaseDetail', () => {
       hasVerifiedIrsNotice: false,
       otherFilers: [],
       otherPetitioners: [],
-      petitioners: [{ name: 'bob' }],
+      petitioners: [{ isContactPrimary: true, name: 'bob' }],
       privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
 
@@ -417,14 +409,17 @@ describe('formattedCaseDetail', () => {
   describe('createdAtFormatted', () => {
     const baseCaseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
-      contactPrimary: {
-        name: 'Bob',
-      },
       contactSecondary: {
         name: 'Bill',
       },
       correspondence: [],
       hasVerifiedIrsNotice: false,
+      petitioners: [
+        {
+          isContactPrimary: true,
+          name: 'Bob',
+        },
+      ],
       privatePractitioners: [],
     };
 
@@ -516,9 +511,6 @@ describe('formattedCaseDetail', () => {
   it('should format only lodged documents with overridden eventCode MISCL', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
-      contactPrimary: {
-        name: 'Bob',
-      },
       correspondence: [],
       docketEntries: [
         {
@@ -540,7 +532,7 @@ describe('formattedCaseDetail', () => {
       ],
       otherFilers: [],
       otherPetitioners: [],
-      petitioners: [{ name: 'bob' }],
+      petitioners: [{ isContactPrimary: true, name: 'bob' }],
       privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
 
@@ -569,7 +561,6 @@ describe('formattedCaseDetail', () => {
     beforeAll(() => {
       sortedCaseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [
           {
@@ -619,6 +610,7 @@ describe('formattedCaseDetail', () => {
         ],
         docketNumber: '123-45',
         hasVerifiedIrsNotice: false,
+        petitioners: [],
       };
     });
 
@@ -727,9 +719,9 @@ describe('formattedCaseDetail', () => {
   describe('case name mapping', () => {
     it('should not error if caseCaption does not exist', () => {
       const caseDetail = {
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -744,9 +736,9 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioner' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -761,9 +753,9 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioners' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo and friends,  Petitioners ',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -778,9 +770,9 @@ describe('formattedCaseDetail', () => {
     it("should remove ', Petitioner(s)' from caseCaption", () => {
       const caseDetail = {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -797,11 +789,11 @@ describe('formattedCaseDetail', () => {
     it('should add barNumber into formatted name if available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
         otherFilers: [],
         otherPetitioners: [],
+        petitioners: [],
         privatePractitioners: [
           { barNumber: '9999', name: 'Jackie Chan', representing: [] },
         ],
@@ -820,11 +812,11 @@ describe('formattedCaseDetail', () => {
     it('should not add barNumber into formatted name if not available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
         otherFilers: [],
         otherPetitioners: [],
+        petitioners: [],
         privatePractitioners: [{ name: 'Jackie Chan', representing: [] }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -844,9 +836,9 @@ describe('formattedCaseDetail', () => {
     it('should format trial information if a trial session id exists', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -868,9 +860,9 @@ describe('formattedCaseDetail', () => {
     it('should not add time if no time stamp exists', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -892,9 +884,9 @@ describe('formattedCaseDetail', () => {
   describe('formats case deadlines', () => {
     it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
       const caseDetail = {
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
       };
       const caseDeadlines = [
         {
@@ -937,9 +929,9 @@ describe('formattedCaseDetail', () => {
 
     it('formats deadline dates and does not set overdue to true if the deadlineDate is today', () => {
       const caseDetail = {
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
       };
       const caseDeadlines = [
         {
@@ -962,9 +954,9 @@ describe('formattedCaseDetail', () => {
     it('does not format empty caseDeadlines array', () => {
       const caseDetail = {
         caseDeadlines: [],
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -1019,10 +1011,10 @@ describe('formattedCaseDetail', () => {
 
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary: {},
         correspondence: [],
         docketEntries,
         hasVerifiedIrsNotice: false,
+        petitioners: [],
       };
     });
 
@@ -1098,9 +1090,9 @@ describe('formattedCaseDetail', () => {
             trialSessionId: '123',
           },
         ],
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1122,9 +1114,9 @@ describe('formattedCaseDetail', () => {
     it('should default consolidatedCases to an empty array if they do not exist', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
+        petitioners: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1148,10 +1140,10 @@ describe('formattedCaseDetail', () => {
     it('adds the calendarNotes from the trialSession caseOrder if a trialSessionId is set on the case', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
         docketNumber: '123-45',
+        petitioners: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1183,7 +1175,6 @@ describe('formattedCaseDetail', () => {
     it('adds calendarNotes and addedToSessionAt fields from trialSessions to case hearings', () => {
       const caseDetail = {
         associatedJudge: 'Judge Judy',
-        contactPrimary: {},
         correspondence: [],
         docketEntries: [],
         docketNumber: '123-45',
@@ -1195,6 +1186,7 @@ describe('formattedCaseDetail', () => {
             trialSessionId: '345',
           },
         ],
+        petitioners: [],
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -1260,10 +1252,13 @@ describe('formattedCaseDetail', () => {
     beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary: {
-          name: 'Bob',
-        },
         correspondence: [],
+        petitioners: [
+          {
+            isContactPrimary: true,
+            name: 'Bob',
+          },
+        ],
       };
     });
 
@@ -1598,9 +1593,6 @@ describe('formattedCaseDetail', () => {
     beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary: {
-          name: 'Bob',
-        },
         correspondence: [],
         docketEntries: [
           {
@@ -1671,6 +1663,12 @@ describe('formattedCaseDetail', () => {
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
             workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+          },
+        ],
+        petitioners: [
+          {
+            isContactPrimary: true,
+            name: 'Bob',
           },
         ],
       };
@@ -1774,9 +1772,6 @@ describe('formattedCaseDetail', () => {
     beforeAll(() => {
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary: {
-          name: 'Bob',
-        },
         correspondence: [],
         docketEntries: [
           {
@@ -1850,6 +1845,12 @@ describe('formattedCaseDetail', () => {
             servedAt: '2019-06-19T17:29:13.120Z',
             status: 'served',
             workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
+          },
+        ],
+        petitioners: [
+          {
+            isContactPrimary: true,
+            name: 'Bob',
           },
         ],
       };
@@ -2022,6 +2023,7 @@ describe('formattedCaseDetail', () => {
     });
   });
 
+  //start here
   describe('showEAccessFlag', () => {
     let baseContact;
     let contactPrimary;
@@ -2041,7 +2043,6 @@ describe('formattedCaseDetail', () => {
 
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary,
         contactSecondary,
         correspondence: [],
         docketEntries: [
@@ -2063,6 +2064,7 @@ describe('formattedCaseDetail', () => {
         otherFilers,
         otherPetitioners,
         partyType: 'Petitioner',
+        petitioners: [{ ...contactPrimary, isContactPrimary: true }],
       };
     });
 
@@ -2510,13 +2512,13 @@ describe('formattedCaseDetail', () => {
 
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary,
         contactSecondary,
         correspondence: [],
         docketEntries: [mockDocketEntry],
         otherFilers,
         otherPetitioners,
         partyType: 'Petitioner',
+        petitioners: [{ ...contactPrimary, isContactPrimary: true }],
       };
     });
 
@@ -2560,12 +2562,11 @@ describe('formattedCaseDetail', () => {
     it('should return formatted open cases', () => {
       const caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary: {},
         correspondence: [],
         createdAt: '2020-02-02T17:29:13.120Z',
         docketEntries: simpleDocketEntries,
         hasVerifiedIrsNotice: false,
-        petitioners: [{ name: 'bob' }],
+        petitioners: [],
       };
 
       const result = runCompute(formattedOpenCases, {
@@ -2582,12 +2583,11 @@ describe('formattedCaseDetail', () => {
     it('should return formatted closed cases', () => {
       const caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary: {},
         correspondence: [],
         createdAt: '2020-02-02T17:29:13.120Z',
         docketEntries: simpleDocketEntries,
         hasVerifiedIrsNotice: false,
-        petitioners: [{ name: 'bob' }],
+        petitioners: [],
       };
 
       const result = runCompute(formattedClosedCases, {
@@ -2611,22 +2611,6 @@ describe('formattedCaseDetail', () => {
         automaticBlockedReason: 'Pending Item',
         caseCaption: 'Mona Schultz, Petitioner',
         caseType: 'CDP (Lien/Levy)',
-        contactPrimary: {
-          address1: '734 Cowley Parkway',
-          address2: 'Cum aut velit volupt',
-          address3: 'Et sunt veritatis ei',
-          city: 'Et id aut est velit',
-          contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
-          countryType: 'domestic',
-          email: 'petitioner@example.com',
-          isAddressSealed: false,
-          name: 'Mona Schultz',
-          phone: '+1 (884) 358-9729',
-          postalCode: '77546',
-          sealedAndUnavailable: false,
-          serviceIndicator: 'Electronic',
-          state: 'CT',
-        },
         correspondence: [],
         createdAt: '2020-09-18T17:38:31.772Z',
         docketEntries: [
@@ -2891,6 +2875,25 @@ describe('formattedCaseDetail', () => {
         otherPetitioners: [],
         partyType: 'Petitioner',
         petitionPaymentStatus: 'Not Paid',
+        petitioners: [
+          {
+            address1: '734 Cowley Parkway',
+            address2: 'Cum aut velit volupt',
+            address3: 'Et sunt veritatis ei',
+            city: 'Et id aut est velit',
+            contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
+            countryType: 'domestic',
+            email: 'petitioner@example.com',
+            isAddressSealed: false,
+            isContactPrimary: true,
+            name: 'Mona Schultz',
+            phone: '+1 (884) 358-9729',
+            postalCode: '77546',
+            sealedAndUnavailable: false,
+            serviceIndicator: 'Electronic',
+            state: 'CT',
+          },
+        ],
         preferredTrialCity: 'Seattle, Washington',
         privatePractitioners: [],
         procedureType: 'Regular',
@@ -3008,22 +3011,6 @@ describe('formattedCaseDetail', () => {
       automaticBlockedReason: 'Pending Item',
       caseCaption: 'Mona Schultz, Petitioner',
       caseType: 'CDP (Lien/Levy)',
-      contactPrimary: {
-        address1: '734 Cowley Parkway',
-        address2: 'Cum aut velit volupt',
-        address3: 'Et sunt veritatis ei',
-        city: 'Et id aut est velit',
-        contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
-        countryType: 'domestic',
-        email: 'petitioner@example.com',
-        isAddressSealed: false,
-        name: 'Mona Schultz',
-        phone: '+1 (884) 358-9729',
-        postalCode: '77546',
-        sealedAndUnavailable: false,
-        serviceIndicator: 'Electronic',
-        state: 'CT',
-      },
       correspondence: [],
       createdAt: '2020-09-18T17:38:31.772Z',
       docketEntries: [
@@ -3257,6 +3244,25 @@ describe('formattedCaseDetail', () => {
       otherPetitioners: [],
       partyType: 'Petitioner',
       petitionPaymentStatus: 'Not Paid',
+      petitioners: [
+        {
+          address1: '734 Cowley Parkway',
+          address2: 'Cum aut velit volupt',
+          address3: 'Et sunt veritatis ei',
+          city: 'Et id aut est velit',
+          contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
+          countryType: 'domestic',
+          email: 'petitioner@example.com',
+          isAddressSealed: false,
+          isContactPrimary: true,
+          name: 'Mona Schultz',
+          phone: '+1 (884) 358-9729',
+          postalCode: '77546',
+          sealedAndUnavailable: false,
+          serviceIndicator: 'Electronic',
+          state: 'CT',
+        },
+      ],
       preferredTrialCity: 'Seattle, Washington',
       privatePractitioners: [],
       procedureType: 'Regular',
