@@ -25,7 +25,7 @@ exports.advancedDocumentSearch = async ({
 }) => {
   const sourceFields = [
     'caseCaption',
-    'contactPrimary',
+    'petitioners',
     'contactSecondary',
     'docketEntryId',
     'docketNumber',
@@ -102,8 +102,8 @@ exports.advancedDocumentSearch = async ({
 
         fields: [
           'caseCaption.S',
-          'contactPrimary.M.name.S',
-          'contactSecondary.M.name.S',
+          'petitioners.M.name.S',
+          'petitioners.M.name.S',
         ],
         query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
       },

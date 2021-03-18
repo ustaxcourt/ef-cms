@@ -32,34 +32,35 @@ module.exports.createCase1 = async () => {
         key: stinFileId,
       });
 
-      caseDetail = await applicationContext.getUseCases().createCaseInteractor({
-        applicationContext,
-        petitionFileId,
-        petitionMetadata: {
-          caseType: CASE_TYPES_MAP.whistleblower,
-          filingType: 'Myself',
-          hasIrsNotice: false,
-          partyType: PARTY_TYPES.petitioner,
-          petitioners: [
-            {
-              address1: '68 Fabien Freeway',
-              address2: 'Suscipit animi solu',
-              address3: 'Architecto assumenda',
-              city: 'Aspernatur nostrum s',
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              email: 'petitioner@example.com',
-              isContactPrimary: true,
-              name: 'Brett Osborne',
-              phone: '+1 (537) 235-6147',
-              postalCode: '89499',
-              state: 'AK',
-            },
-          ],
-          preferredTrialCity: 'Birmingham, Alabama',
-          procedureType: 'Regular',
-        },
-        stinFileId,
-      });
+      caseDetail = await applicationContext
+        .getUseCases()
+        .createCaseInteractor(applicationContext, {
+          petitionFileId,
+          petitionMetadata: {
+            caseType: CASE_TYPES_MAP.whistleblower,
+            filingType: 'Myself',
+            hasIrsNotice: false,
+            partyType: PARTY_TYPES.petitioner,
+            petitioners: [
+              {
+                address1: '68 Fabien Freeway',
+                address2: 'Suscipit animi solu',
+                address3: 'Architecto assumenda',
+                city: 'Aspernatur nostrum s',
+                countryType: COUNTRY_TYPES.DOMESTIC,
+                email: 'petitioner@example.com',
+                isContactPrimary: true,
+                name: 'Brett Osborne',
+                phone: '+1 (537) 235-6147',
+                postalCode: '89499',
+                state: 'AK',
+              },
+            ],
+            preferredTrialCity: 'Birmingham, Alabama',
+            procedureType: 'Regular',
+          },
+          stinFileId,
+        });
 
       const addCoversheet = docketEntry => {
         return applicationContext
