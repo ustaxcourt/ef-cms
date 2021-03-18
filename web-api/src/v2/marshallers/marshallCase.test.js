@@ -1,3 +1,6 @@
+const {
+  getContactPrimary,
+} = require('../../../../shared/src/business/entities/cases/Case');
 const { marshallCase } = require('./marshallCase');
 const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
 
@@ -6,7 +9,6 @@ describe('marshallCase', () => {
     expect(Object.keys(marshallCase(MOCK_CASE)).sort()).toEqual([
       'caseCaption',
       'caseType',
-      'contactPrimary',
       'contactSecondary',
       'docketEntries',
       'docketNumber',
@@ -14,6 +16,7 @@ describe('marshallCase', () => {
       'filingType',
       'leadDocketNumber',
       'partyType',
+      'petitioners',
       'practitioners',
       'preferredTrialCity',
       'respondents',
@@ -26,7 +29,7 @@ describe('marshallCase', () => {
 
   it('marshalls from the current case format', () => {
     const mock = Object.assign({}, MOCK_CASE, {
-      contactSecondary: Object.assign({}, MOCK_CASE.contactPrimary),
+      contactSecondary: Object.assign({}, getContactPrimary(MOCK_CASE)),
       docketEntries: [],
       docketNumber: '123-19L',
       docketNumberSuffix: 'L',
@@ -51,7 +54,7 @@ describe('marshallCase', () => {
     expect(mock.trialDate).toBeDefined();
     expect(mock.trialLocation).toBeDefined();
 
-    expect(mock.contactPrimary).toBeDefined();
+    expect(mock.petitioners).toBeDefined();
     expect(mock.contactSecondary).toBeDefined();
     expect(mock.docketEntries).toBeDefined();
     expect(mock.irsPractitioners).toBeDefined();
@@ -73,7 +76,7 @@ describe('marshallCase', () => {
     expect(marshalled.trialLocation).toEqual(mock.trialLocation);
 
     // Exact format asserted in other tests.
-    expect(marshalled.contactPrimary).toBeDefined();
+    expect(marshalled.petitioners).toBeDefined();
     expect(marshalled.contactSecondary).toBeDefined();
     expect(marshalled.docketEntries).toBeDefined();
     expect(marshalled.practitioners).toBeDefined();
