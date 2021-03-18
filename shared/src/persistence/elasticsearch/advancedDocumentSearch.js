@@ -20,7 +20,7 @@ exports.advancedDocumentSearch = async ({
   omitSealed,
   opinionType,
   overrideResultSize,
-  overrideSort = false,
+  sortOrder,
   startDate,
 }) => {
   const sourceFields = [
@@ -175,9 +175,22 @@ exports.advancedDocumentSearch = async ({
   }
 
   let sort;
+  let sortType = 'desc';
 
-  if (overrideSort) {
-    sort = [{ 'filingDate.S': { order: 'desc' } }];
+  if (sortOrder === ('filingDate' || 'numberOfPages')) {
+    sortType = 'asc';
+  }
+
+  switch (sortOrder) {
+    case 'numberOfPages': // fall through
+    case 'numberOfPagesDesc':
+      sort = [{ 'numberOfPages.S': { order: sortType } }];
+      break;
+    case 'filingDate': // fall through
+    case 'filingDateDesc': // fall through
+    default:
+      sort = [{ 'filingDate.S': { order: sortType } }];
+      break;
   }
 
   const documentQuery = {
@@ -203,7 +216,10 @@ exports.advancedDocumentSearch = async ({
     },
     index: 'efcms-docket-entry',
   };
-
+  console.log(
+    'docketEntryQueryParams',
+    JSON.stringify(docketEntryQueryParams, null, 2),
+  );
   const { results, total } = await search({
     applicationContext,
     searchParameters: documentQuery,

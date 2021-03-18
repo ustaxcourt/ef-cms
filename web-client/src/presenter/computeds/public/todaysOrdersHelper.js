@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 export const todaysOrdersHelper = (get, applicationContext) => {
   const todaysOrders = get(state.todaysOrders.results);
   const totalCount = get(state.todaysOrders.totalCount);
+  const { TODAYS_ORDER_SORT } = get(state.constants);
 
   const currentDate = applicationContext.getUtilities().createISODateString();
   const formattedCurrentDate = applicationContext
@@ -22,12 +23,15 @@ export const todaysOrdersHelper = (get, applicationContext) => {
   const hasResults = formattedOrders.length > 0;
 
   const showLoadMoreButton = formattedOrders.length < totalCount;
+  const sortOrder =
+    get(state.screenMetadata.todaysOrdersSort) || TODAYS_ORDER_SORT;
 
   return {
     formattedCurrentDate,
     formattedOrders,
     hasResults,
     showLoadMoreButton,
+    sortOrder,
     totalCount,
   };
 };
