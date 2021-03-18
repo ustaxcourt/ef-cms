@@ -26,7 +26,9 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     value: type.eventCode,
   }));
 
-  const petitioners = [caseDetail.contactPrimary];
+  const petitioners = [
+    applicationContext.getUtilities().getContactPrimary(caseDetail),
+  ];
 
   if (!isEmpty(caseDetail.contactSecondary)) {
     petitioners.push(caseDetail.contactSecondary);

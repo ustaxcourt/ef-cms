@@ -1,6 +1,7 @@
 import { DynamoDB } from 'aws-sdk';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
+  contactPrimaryFromState,
   fakeFile,
   getUserRecordById,
   loginAs,
@@ -106,12 +107,12 @@ describe('admissions clerk adds petitioner without existing cognito account to c
     expect(test.getState('modal.showModal')).toBeUndefined();
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(test.getState('caseDetail.contactPrimary.email')).toBeUndefined();
-    expect(test.getState('caseDetail.contactPrimary.serviceIndicator')).toEqual(
+    expect(contactPrimaryFromState.email).toBeUndefined();
+    expect(contactPrimaryFromState.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
-    test.userId = test.getState('caseDetail.contactPrimary.contactId');
+    test.userId = contactPrimaryFromState.contactId;
 
     await refreshElasticsearchIndex();
   });
@@ -128,10 +129,8 @@ describe('admissions clerk adds petitioner without existing cognito account to c
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(test.getState('caseDetail.contactPrimary.email')).toEqual(
-      EMAIL_TO_ADD,
-    );
-    expect(test.getState('caseDetail.contactPrimary.serviceIndicator')).toEqual(
+    expect(contactPrimaryFromState.email).toEqual(EMAIL_TO_ADD);
+    expect(contactPrimaryFromState.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });

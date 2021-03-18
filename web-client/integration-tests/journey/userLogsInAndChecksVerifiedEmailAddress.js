@@ -1,5 +1,6 @@
+import { contactPrimaryFromState, refreshElasticsearchIndex } from '../helpers';
 import { headerHelper as headerHelperComputed } from '../../src/presenter/computeds/headerHelper';
-import { refreshElasticsearchIndex } from '../helpers';
+
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -28,7 +29,7 @@ export const userLogsInAndChecksVerifiedEmailAddress = (
     });
 
     if (user === 'petitioner') {
-      const petitionerEmail = test.getState('caseDetail.contactPrimary.email');
+      const petitionerEmail = contactPrimaryFromState.email;
 
       expect(petitionerEmail).toEqual(mockUpdatedEmail);
     } else {
