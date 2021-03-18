@@ -1,4 +1,9 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
@@ -114,7 +119,7 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     await test.runSequence('openSealAddressModalSequence', {
-      contactToSeal: test.getState('caseDetail.contactPrimary'),
+      contactToSeal: contactPrimaryFromState,
     });
 
     expect(test.getState('modal.showModal')).toEqual('SealAddressModal');
