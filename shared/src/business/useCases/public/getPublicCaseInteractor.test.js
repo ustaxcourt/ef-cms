@@ -8,10 +8,10 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES } = require('../../entities/EntityConstants');
 
 const mockCase = {
-  contactPrimary: getContactPrimary(MOCK_CASE),
   docketNumber: '123-45',
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
+  petitioners: [getContactPrimary(MOCK_CASE)],
 };
 
 const sealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
@@ -24,10 +24,10 @@ const sealedContactPrimary = cloneDeep({
 
 const mockCases = {
   '102-20': {
-    contactPrimary: getContactPrimary(MOCK_CASE),
     docketNumber: '102-20',
     irsPractitioners: [],
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [getContactPrimary(MOCK_CASE)],
     sealedDate: '2020-01-02T03:04:05.007Z',
   },
   '120-20': {
@@ -37,10 +37,10 @@ const mockCases = {
   },
   '123-45': cloneDeep(mockCase),
   '188-88': {
-    contactPrimary: sealedContactPrimary,
     docketNumber: '188-88',
     irsPractitioners: [],
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [sealedContactPrimary],
   },
 };
 
@@ -106,6 +106,7 @@ describe('getPublicCaseInteractor', () => {
 
   it('should return minimal information when the requested case has been sealed', async () => {
     const docketNumber = '102-20';
+
     const result = await getPublicCaseInteractor(applicationContext, {
       docketNumber,
     });
@@ -118,6 +119,7 @@ describe('getPublicCaseInteractor', () => {
 
   it('should return minimal information when the requested case has a sealed docket entry', async () => {
     const docketNumber = '120-20';
+
     const result = await getPublicCaseInteractor(applicationContext, {
       docketNumber,
     });
@@ -138,7 +140,6 @@ describe('getPublicCaseInteractor', () => {
     expect(result).toMatchObject({
       docketNumber,
     });
-
-    expect(result.contactPrimary.address1).toBeUndefined();
+    expect(getContactPrimary(result).address1).toBeUndefined();
   });
 });
