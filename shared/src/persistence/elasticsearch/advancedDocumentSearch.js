@@ -216,10 +216,7 @@ exports.advancedDocumentSearch = async ({
     },
     index: 'efcms-docket-entry',
   };
-  console.log(
-    'docketEntryQueryParams',
-    JSON.stringify(docketEntryQueryParams, null, 2),
-  );
+
   const { results, total } = await search({
     applicationContext,
     searchParameters: documentQuery,
