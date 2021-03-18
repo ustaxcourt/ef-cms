@@ -2,12 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { getPublicCaseInteractor } = require('./getPublicCaseInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES } = require('../../entities/EntityConstants');
 
 const mockCase = {
-  contactPrimary: MOCK_CASE.contactPrimary,
+  contactPrimary: getContactPrimary(MOCK_CASE),
   docketNumber: '123-45',
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
@@ -17,13 +18,13 @@ const sealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
 sealedDocketEntries[0].isLegacySealed = true;
 
 const sealedContactPrimary = cloneDeep({
-  ...MOCK_CASE.contactPrimary,
+  ...getContactPrimary(MOCK_CASE),
   isSealed: true,
 });
 
 const mockCases = {
   '102-20': {
-    contactPrimary: MOCK_CASE.contactPrimary,
+    contactPrimary: getContactPrimary(MOCK_CASE),
     docketNumber: '102-20',
     irsPractitioners: [],
     partyType: PARTY_TYPES.petitioner,
@@ -93,11 +94,13 @@ describe('getPublicCaseInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(result).toMatchObject({
-      contactPrimary: {
-        name: MOCK_CASE.contactPrimary.name,
-        state: MOCK_CASE.contactPrimary.state,
-      },
       docketNumber: '123-45',
+      petitioners: [
+        {
+          name: getContactPrimary(MOCK_CASE).name,
+          state: getContactPrimary(MOCK_CASE).state,
+        },
+      ],
     });
   });
 
