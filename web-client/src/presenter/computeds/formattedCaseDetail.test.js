@@ -1,4 +1,3 @@
-import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -294,7 +293,7 @@ describe('formattedCaseDetail', () => {
     expect(result.formattedDocketEntries[0].docketEntryId).toEqual('123');
   });
 
-  fit('formats docket record document data strings and descriptions and docket entry fields correctly', () => {
+  it('formats docket record document data strings and descriptions and docket entry fields correctly', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       contactSecondary: {
@@ -308,6 +307,7 @@ describe('formattedCaseDetail', () => {
       petitioners: mockPetitioners,
       privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
+
     const result = runCompute(formattedCaseDetail, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -315,6 +315,7 @@ describe('formattedCaseDetail', () => {
         validationErrors: {},
       },
     });
+
     expect(result.formattedDocketEntries).toMatchObject([
       {
         descriptionDisplay: 'Amended Petition',
@@ -395,7 +396,7 @@ describe('formattedCaseDetail', () => {
     ]);
   });
 
-  fit('returns editDocketEntryMetaLinks with formatted docket entries', () => {
+  it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
     const DOCKET_NUMBER = '101-20';
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
@@ -529,7 +530,7 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  fit('should format only lodged documents with overridden eventCode MISCL', () => {
+  it('should format only lodged documents with overridden eventCode MISCL', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       correspondence: [],
@@ -2056,7 +2057,7 @@ describe('formattedCaseDetail', () => {
       baseContact = {
         hasEAccess: true,
       };
-      contactPrimary = baseContact;
+      contactPrimary = { ...baseContact, isContactPrimary: true };
       contactSecondary = baseContact;
       otherPetitioners = [baseContact];
       otherFilers = [baseContact];
@@ -2084,12 +2085,13 @@ describe('formattedCaseDetail', () => {
         otherFilers,
         otherPetitioners,
         partyType: 'Petitioner',
-        petitioners: [{ ...contactPrimary, isContactPrimary: true }],
+        petitioners: [contactPrimary],
       };
     });
 
     it('sets the showEAccessFlag to false for internal users when a contact does not have legacy access', () => {
       baseContact.hasEAccess = false;
+      contactPrimary.hasEAccess = false;
 
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -2397,7 +2399,6 @@ describe('formattedCaseDetail', () => {
 
   describe('showNotServed', () => {
     let baseContact;
-    let contactPrimary;
     let contactSecondary;
     let otherPetitioners;
     let otherFilers;
@@ -2407,14 +2408,13 @@ describe('formattedCaseDetail', () => {
       baseContact = {
         hasEAccess: true,
       };
-      contactPrimary = baseContact;
+
       contactSecondary = baseContact;
       otherPetitioners = [baseContact];
       otherFilers = [baseContact];
 
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactPrimary,
         contactSecondary,
         correspondence: [],
         docketEntries: [
@@ -2437,6 +2437,7 @@ describe('formattedCaseDetail', () => {
         otherFilers,
         otherPetitioners,
         partyType: 'Petitioner',
+        petitioners: [{ ...baseContact, isContactPrimary: true }],
       };
     });
 
