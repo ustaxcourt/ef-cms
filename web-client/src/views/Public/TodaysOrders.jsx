@@ -63,11 +63,11 @@ export const TodaysOrders = connect(
                     {[
                       {
                         label: 'newest',
-                        value: 'byDateDesc',
+                        value: 'filingDateDesc',
                       },
                       {
                         label: 'oldest',
-                        value: 'byDate',
+                        value: 'filingDate',
                       },
 
                       {

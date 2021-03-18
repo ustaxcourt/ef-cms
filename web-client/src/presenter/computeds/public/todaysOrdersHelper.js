@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 export const todaysOrdersHelper = (get, applicationContext) => {
   const todaysOrders = get(state.todaysOrders.results);
   const totalCount = get(state.todaysOrders.totalCount);
-  const { TODAYS_ORDER_SORT } = get(state.constants);
+  const { TODAYS_ORDER_SORT } = applicationContext.getConstants();
 
   const currentDate = applicationContext.getUtilities().createISODateString();
   const formattedCurrentDate = applicationContext

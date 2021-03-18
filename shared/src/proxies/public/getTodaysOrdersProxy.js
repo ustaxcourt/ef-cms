@@ -5,6 +5,7 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {object} providers.sortOrder the requested order of search results
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getTodaysOrdersInteractor = ({
