@@ -18,7 +18,6 @@ describe('PublicCase', () => {
       const entity = new PublicCase(
         {
           caseCaption: 'testing',
-          contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
           docketEntries: [{}],
@@ -26,6 +25,7 @@ describe('PublicCase', () => {
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           irsPractitioners: [{ name: 'Bob' }],
           partyType: PARTY_TYPES.petitioner,
+          petitioners: [],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
@@ -38,12 +38,12 @@ describe('PublicCase', () => {
       const entity = new PublicCase(
         {
           caseCaption: 'testing',
-          contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
           docketEntries: [{ any: 'thing' }],
           docketNumber: '111-12',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          petitioners: [],
           receivedAt: '2020-01-05T03:30:45.007Z',
           sealedDate: '2020-01-05T03:30:45.007Z',
         },
@@ -55,8 +55,8 @@ describe('PublicCase', () => {
         // docketNumberSuffix is permitted
         // isSealed is permitted
         caseCaption: expect.anything(),
-        contactPrimary: expect.anything(),
         contactSecondary: expect.anything(),
+        petitioners: expect.anything(),
         receivedAt: expect.anything(),
       });
     });
@@ -66,7 +66,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        contactPrimary: {},
         contactSecondary: {},
         createdAt: 'testing',
         docketEntries: [],
@@ -76,6 +75,7 @@ describe('PublicCase', () => {
         isPaper: true,
         otherFilers: [],
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [],
         privatePractitioners: [],
         receivedAt: 'testing',
       },
@@ -84,11 +84,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      contactPrimary: {
-        entityName: 'PublicContact',
-        name: undefined,
-        state: undefined,
-      },
       contactSecondary: {
         entityName: 'PublicContact',
         name: undefined,
@@ -103,6 +98,7 @@ describe('PublicCase', () => {
       isPaper: true,
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [],
       receivedAt: 'testing',
     });
   });
@@ -111,7 +107,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: 'testing',
         docketEntries: null,
@@ -119,6 +114,7 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'testing',
         irsPractitioners: [],
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [],
         receivedAt: 'testing',
       },
       { applicationContext },
@@ -126,7 +122,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      contactPrimary: undefined,
       contactSecondary: undefined,
       docketEntries: [],
       docketNumber: 'testing',
@@ -136,6 +131,7 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [],
       receivedAt: 'testing',
     });
   });
@@ -144,7 +140,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        contactPrimary: undefined,
         contactSecondary: undefined,
         createdAt: 'testing',
         docketEntries: [
@@ -162,6 +157,7 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'testing',
         irsPractitioners: [],
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [],
         receivedAt: 'testing',
       },
       { applicationContext },
@@ -169,7 +165,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      contactPrimary: undefined,
       contactSecondary: undefined,
       docketEntries: [
         {
@@ -197,6 +192,7 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [],
       receivedAt: 'testing',
     });
   });
@@ -529,7 +525,6 @@ describe('PublicCase', () => {
       };
       const rawCase = {
         caseCaption: 'testing',
-        contactPrimary: { ...rawContactPrimary, isPaper: true },
         contactSecondary: {
           address1: '907 West Rocky Cowley Parkway',
           address2: '104 West 120th Street',
@@ -589,6 +584,9 @@ describe('PublicCase', () => {
           },
         ],
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        petitioners: [
+          { ...rawContactPrimary, isContactPrimary: true, isPaper: true },
+        ],
         privatePractitioners: [
           {
             barNumber: 'PT1234',
@@ -618,7 +616,6 @@ describe('PublicCase', () => {
       expect(entity.toRawObject()).toMatchObject({
         ...rawCase,
         caseCaption: 'testing',
-        contactPrimary: expect.objectContaining(rawContactPrimary),
         docketEntries: [],
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
@@ -626,6 +623,11 @@ describe('PublicCase', () => {
         hasIrsPractitioner: true,
         isSealed: false,
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        petitioners: expect.arrayContaining([
+          expect.objectContaining({
+            ...rawContactPrimary,
+          }),
+        ]),
         receivedAt: 'testing',
       });
     });
