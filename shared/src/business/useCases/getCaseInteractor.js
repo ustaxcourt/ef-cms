@@ -106,6 +106,7 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
   }
 
   const currentUser = applicationContext.getCurrentUser();
+  console.log('------caseRecord', caseRecord);
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
