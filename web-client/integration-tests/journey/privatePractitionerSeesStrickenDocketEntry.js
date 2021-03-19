@@ -17,7 +17,9 @@ export const privatePractitionerSeesStrickenDocketEntry = (
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    expect(contactPrimaryFromState.name).toBeDefined();
+
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.name).toBeDefined();
 
     const { formattedDocketEntriesOnDocketRecord } = runCompute(
       formattedCaseDetail,

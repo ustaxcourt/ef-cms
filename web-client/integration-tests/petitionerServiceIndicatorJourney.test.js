@@ -118,8 +118,10 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
+    const contactPrimary = contactPrimaryFromState(test);
+
     await test.runSequence('openSealAddressModalSequence', {
-      contactToSeal: contactPrimaryFromState,
+      contactToSeal: contactPrimary,
     });
 
     expect(test.getState('modal.showModal')).toEqual('SealAddressModal');
