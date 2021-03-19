@@ -37,8 +37,8 @@ describe('createCaseFromPaperInteractor', () => {
     );
 
     applicationContext
-      .getPersistenceGateway()
-      .createCase.mockResolvedValue(null);
+      .getUseCaseHelpers()
+      .createCaseAndAssociations.mockResolvedValue(null);
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Test Petitionsclerk',

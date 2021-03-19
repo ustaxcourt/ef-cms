@@ -53,7 +53,7 @@ describe('createCaseInteractor', () => {
       }),
     ).rejects.toThrow('Unauthorized');
     expect(
-      applicationContext.getPersistenceGateway().createCase,
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).not.toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -94,7 +94,9 @@ describe('createCaseInteractor', () => {
     });
 
     expect(result).toBeDefined();
-    expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations,
+    ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toBeCalled();
@@ -186,7 +188,9 @@ describe('createCaseInteractor', () => {
     expect(result.privatePractitioners[0].representing).toEqual([
       result.contactPrimary.contactId,
     ]);
-    expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations,
+    ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemAndAddToSectionInbox,
@@ -249,7 +253,9 @@ describe('createCaseInteractor', () => {
       result.contactPrimary.contactId,
       result.contactSecondary.contactId,
     ]);
-    expect(applicationContext.getPersistenceGateway().createCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().createCaseAndAssociations,
+    ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemAndAddToSectionInbox,
