@@ -1,3 +1,6 @@
+// This utility is used to create signed documents for visual inspection
+// without the need to run the entire application.
+
 // To directly run via node:
 //   npm install -g  @babel/core @babel/node
 //   npx babel-node shared/src/business/utilities/createSignedDocumentsForInspection.js
