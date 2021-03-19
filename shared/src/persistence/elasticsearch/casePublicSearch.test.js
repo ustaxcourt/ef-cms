@@ -1,15 +1,15 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
-const { casePublicSearchExactMatch } = require('./casePublicSearch');
+const { casePublicSearch } = require('./casePublicSearch');
 jest.mock('./searchClient');
 const { search } = require('./searchClient');
 
-describe('casePublicSearchExactMatch', () => {
+describe('casePublicSearch', () => {
   it('returns results from an exact-matches query', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
 
-    const results = await casePublicSearchExactMatch({
+    const results = await casePublicSearch({
       applicationContext,
       searchTerms: 'search for this',
     });

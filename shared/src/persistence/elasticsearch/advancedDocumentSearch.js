@@ -102,8 +102,8 @@ exports.advancedDocumentSearch = async ({
 
         fields: [
           'caseCaption.S',
-          'petitioners.M.name.S',
-          'petitioners.M.name.S',
+          'petitioners.L.M.name.S',
+          'contactSecondary.M.name.S',
         ],
         query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
       },
