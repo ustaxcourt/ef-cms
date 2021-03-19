@@ -56,8 +56,8 @@ describe('todaysOrdersHelper', () => {
     it('should return todaysOrdersSort either from state if defined', () => {
       const result = runCompute(todaysOrdersHelper, {
         state: {
-          screenMetadata: {
-            todaysOrdersSort: 'filingDateDesc',
+          sessionMetadata: {
+            todaysOrdersSort: 'meatloaf',
           },
           todaysOrders: {
             results: [],
@@ -65,20 +65,20 @@ describe('todaysOrdersHelper', () => {
         },
       });
 
-      expect(result.todaysOrdersSort).toEqual('filingDateDesc');
+      expect(result.todaysOrdersSort).toEqual('meatloaf');
     });
 
     it('should return todaysOrdersSort from constants when not defined in state', () => {
       const result = runCompute(todaysOrdersHelper, {
         state: {
-          screenMetadata: {},
+          sessionMetadata: {},
           todaysOrders: {
             results: [],
           },
         },
       });
       expect(result.todaysOrdersSort).toEqual(
-        applicationContextPublic.getConstants().TODAYS_ORDER_SORT,
+        applicationContextPublic.getConstants().TODAYS_ORDERS_SORT_DEFAULT,
       );
     });
   });

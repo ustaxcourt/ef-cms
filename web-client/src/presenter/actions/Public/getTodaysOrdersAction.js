@@ -9,9 +9,9 @@ import { state } from 'cerebral';
  */
 export const getTodaysOrdersAction = async ({ applicationContext, get }) => {
   const page = get(state.todaysOrders.page) || 1;
-  const { TODAYS_ORDER_SORT } = applicationContext.getConstants();
+  const { TODAYS_ORDERS_SORT_DEFAULT } = applicationContext.getConstants();
   const todaysOrdersSort =
-    get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDER_SORT;
+    get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDERS_SORT_DEFAULT;
 
   const {
     results,
