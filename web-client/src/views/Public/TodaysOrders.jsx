@@ -60,13 +60,11 @@ export const TodaysOrders = connect(
                       });
                     }}
                   >
-                    {Object.entries(todaysOrdersHelper.sortOptions).map(
-                      ([value, label]) => (
-                        <option key={value} value={value}>
-                          Sort by {label}
-                        </option>
-                      ),
-                    )}
+                    {todaysOrdersHelper.sortOptions.map(({ label, value }) => (
+                      <option key={value} value={value}>
+                        Sort by {label}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <table

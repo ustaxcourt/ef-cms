@@ -1,18 +1,29 @@
 import { state } from 'cerebral';
 
 export const todaysOrdersHelper = (get, applicationContext) => {
-  const sortOptions = {
-    filingDate: 'oldest',
-    filingDateDesc: 'newest',
+  const { TODAYS_ORDER_SORT } = applicationContext.getConstants();
+
+  const sortOptions = [
+    { label: 'newest', value: 'filingDateDesc' }, // equal to TODAYS_ORDER_SORT default
+    {
+      label: 'oldest',
+      value: 'filingDate',
+    },
     /*
     Uncomment once ES mapping has changes to make numberOfPages an integer field...
-    numberOfPages: 'pages (ascending)',
-    numberOfPagesDesc: 'pages (descending)',
+    {
+      label: 'pages (ascending)',
+      value: 'numberOfPages',
+    },
+    {
+      label: 'pages (descending)',
+      value: 'numberOfPagesDesc',
+    },
     */
-  };
+  ];
+
   const todaysOrders = get(state.todaysOrders.results);
   const totalCount = get(state.todaysOrders.totalCount);
-  const { TODAYS_ORDER_SORT } = applicationContext.getConstants();
 
   const currentDate = applicationContext.getUtilities().createISODateString();
   const formattedCurrentDate = applicationContext

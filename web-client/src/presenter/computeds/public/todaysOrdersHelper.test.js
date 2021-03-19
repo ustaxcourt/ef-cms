@@ -53,7 +53,7 @@ describe('todaysOrdersHelper', () => {
   });
 
   describe('proxy sort order parameter', () => {
-    it('should return sortOrder either from state if defined', () => {
+    it('should return todaysOrdersSort either from state if defined', () => {
       const result = runCompute(todaysOrdersHelper, {
         state: {
           screenMetadata: {
@@ -65,10 +65,10 @@ describe('todaysOrdersHelper', () => {
         },
       });
 
-      expect(result.sortOrder).toEqual('filingDateDesc');
+      expect(result.todaysOrdersSort).toEqual('filingDateDesc');
     });
 
-    it('should return sortOrder from constants when not defined in state', () => {
+    it('should return todaysOrdersSort from constants when not defined in state', () => {
       const result = runCompute(todaysOrdersHelper, {
         state: {
           screenMetadata: {},
@@ -77,7 +77,7 @@ describe('todaysOrdersHelper', () => {
           },
         },
       });
-      expect(result.sortOrder).toEqual(
+      expect(result.todaysOrdersSort).toEqual(
         applicationContextPublic.getConstants().TODAYS_ORDER_SORT,
       );
     });
@@ -94,6 +94,19 @@ describe('todaysOrdersHelper', () => {
     const result = runCompute(todaysOrdersHelper, { state });
 
     expect(result.totalCount).toBe(21);
+  });
+
+  it('should return a list of sort options', () => {
+    const result = runCompute(todaysOrdersHelper, {
+      state: {
+        todaysOrders: {
+          results: state.todaysOrders.results,
+          totalCount: 21,
+        },
+      },
+    });
+
+    expect(result.sortOptions.length).toBe(2);
   });
 
   describe('hasResults', () => {
