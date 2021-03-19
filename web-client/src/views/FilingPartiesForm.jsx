@@ -47,7 +47,7 @@ export const FilingPartiesForm = connect(
               className="usa-checkbox__label inline-block"
               htmlFor="party-primary"
             >
-              {caseDetail.contactPrimary.name}
+              {filingPartiesFormHelper.contactPrimaryName}
             </label>
           </div>
           {filingPartiesFormHelper.showSecondaryParty && (
