@@ -103,7 +103,7 @@ describe('aggregateCommonQueryParams', () => {
             should: [
               {
                 match: {
-                  'contactPrimary.M.countryType.S': COUNTRY_TYPES.DOMESTIC,
+                  'petitioners.L.M.countryType.S': COUNTRY_TYPES.DOMESTIC,
                 },
               },
               {
@@ -136,7 +136,7 @@ describe('aggregateCommonQueryParams', () => {
             should: [
               {
                 match: {
-                  'contactPrimary.M.state.S': US_STATES.AR,
+                  'petitioners.L.M.state.S': US_STATES.AR,
                 },
               },
               {

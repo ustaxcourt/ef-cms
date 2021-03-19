@@ -146,6 +146,11 @@ CaseExternal.commonRequirements = {
     }),
 };
 
+// 7839 TODO - docs
+CaseExternal.prototype.getContactPrimary = function () {
+  return getContactPrimary(this);
+};
+
 joiValidationDecorator(
   CaseExternal,
   joi.object().keys(CaseExternal.commonRequirements),
