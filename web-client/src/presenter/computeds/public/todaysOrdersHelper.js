@@ -9,8 +9,6 @@ export const todaysOrdersHelper = (get, applicationContext) => {
       label: 'oldest',
       value: 'filingDate',
     },
-    /*
-    Uncomment once ES mapping has changes to make numberOfPages an integer field...
     {
       label: 'pages (ascending)',
       value: 'numberOfPages',
@@ -19,7 +17,6 @@ export const todaysOrdersHelper = (get, applicationContext) => {
       label: 'pages (descending)',
       value: 'numberOfPagesDesc',
     },
-    */
   ];
 
   const todaysOrders = get(state.todaysOrders.results);
