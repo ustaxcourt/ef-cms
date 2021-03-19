@@ -10,10 +10,11 @@ export const practitionerViewsCaseDetailOfOwnedCase = test => {
     expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
       'Test Private Practitioner',
     );
+    const contactPrimary = contactPrimaryFromState(test);
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing'),
     ).toEqual([
-      contactPrimaryFromState.contactId,
+      contactPrimary.contactId,
       test.getState('caseDetail.contactSecondary.contactId'),
     ]);
   });
