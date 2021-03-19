@@ -404,6 +404,9 @@ const formatCase = (applicationContext, caseDetail) => {
       const contactPrimary = applicationContext
         .getUtilities()
         .getContactPrimary(caseDetail);
+
+      console.log('------contactp', contactPrimary);
+
       if (counsel.representing.includes(contactPrimary.contactId)) {
         counsel.representingFormatted.push({
           name: contactPrimary.name,
