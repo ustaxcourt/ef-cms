@@ -38,7 +38,7 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
+          petitioners: [{ isContactPrimary: true }],
         },
         form: {
           contactPrimary: {},
@@ -63,7 +63,7 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
+          petitioners: [{ isContactPrimary: true }],
         },
         form: {
           contactPrimary: {},
@@ -84,12 +84,15 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
           contactSecondary: {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
+          petitioners: [
+            {
+              isContactPrimary: true,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            },
+          ],
         },
         form: {
           contactPrimary: {
@@ -126,10 +129,13 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {
-            email: 'testing@example.com',
-          },
           contactSecondary: {},
+          petitioners: [
+            {
+              email: 'testing@example.com',
+              isContactPrimary: true,
+            },
+          ],
         },
         form: {
           contactPrimary: {
@@ -166,8 +172,8 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
           contactSecondary: {},
+          petitioners: [{ isContactPrimary: true }],
         },
         form: {
           contactPrimary: {},
@@ -202,8 +208,8 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
           contactSecondary: {},
+          petitioners: [{ isContactPrimary: true }],
         },
         form: {
           contactPrimary: {
@@ -241,8 +247,8 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
           contactSecondary: {},
+          petitioners: [{ isContactPrimary: true }],
         },
         form: {
           contactPrimary: {
