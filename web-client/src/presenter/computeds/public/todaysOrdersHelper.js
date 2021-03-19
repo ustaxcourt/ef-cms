@@ -1,21 +1,24 @@
 import { state } from 'cerebral';
 
 export const todaysOrdersHelper = (get, applicationContext) => {
-  const { TODAYS_ORDER_SORT } = applicationContext.getConstants();
+  const {
+    TODAYS_ORDERS_SORT_DEFAULT,
+    TODAYS_ORDERS_SORTS,
+  } = applicationContext.getConstants();
 
   const sortOptions = [
-    { label: 'newest', value: 'filingDateDesc' }, // equal to TODAYS_ORDER_SORT default
+    { label: 'newest', value: TODAYS_ORDERS_SORTS.FILING_DATE_DESC }, // equal to TODAYS_ORDERS_SORT_DEFAULT
     {
       label: 'oldest',
-      value: 'filingDate',
+      value: TODAYS_ORDERS_SORTS.FILING_DATE_ASC,
     },
     {
       label: 'pages (ascending)',
-      value: 'numberOfPages',
+      value: TODAYS_ORDERS_SORTS.NUMBER_OF_PAGES_ASC,
     },
     {
       label: 'pages (descending)',
-      value: 'numberOfPagesDesc',
+      value: TODAYS_ORDERS_SORTS.NUMBER_OF_PAGES_DESC,
     },
   ];
 
@@ -41,7 +44,7 @@ export const todaysOrdersHelper = (get, applicationContext) => {
 
   const showLoadMoreButton = formattedOrders.length < totalCount;
   const todaysOrdersSort =
-    get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDER_SORT;
+    get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDERS_SORT_DEFAULT;
 
   return {
     formattedCurrentDate,
