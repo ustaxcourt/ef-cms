@@ -150,6 +150,9 @@ const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
+  createCaseAndAssociations,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations');
+const {
   createCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline');
 const {
@@ -1582,6 +1585,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
+        createCaseAndAssociations,
         createTrialSessionAndWorkingCopy,
         createUserForContactPrimary,
         fetchPendingItems,

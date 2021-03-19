@@ -29,6 +29,9 @@ const {
   compareStrings,
 } = require('../utilities/sortFunctions');
 const {
+  createCaseAndAssociations,
+} = require('../useCaseHelper/caseAssociation/createCaseAndAssociations');
+const {
   createDocketNumber,
 } = require('../../persistence/dynamo/cases/docketNumberGenerator');
 const {
@@ -317,6 +320,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
+    createCaseAndAssociations: jest
+      .fn()
+      .mockImplementation(createCaseAndAssociations),
     updateCaseAndAssociations: jest
       .fn()
       .mockImplementation(updateCaseAndAssociations),
