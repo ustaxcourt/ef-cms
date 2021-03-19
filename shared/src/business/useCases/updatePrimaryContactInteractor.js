@@ -7,6 +7,7 @@ const {
 } = require('../entities/EntityConstants');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
+const { cloneDeep } = require('lodash');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
@@ -57,8 +58,10 @@ exports.updatePrimaryContactInteractor = async (
     { applicationContext },
   );
 
+  const oldContactPrimary = cloneDeep(caseEntity.getContactPrimary());
+
   const updatedPrimaryContact = {
-    ...caseEntity.getContactPrimary(),
+    ...oldContactPrimary,
     ...editableFields,
   };
 
@@ -78,12 +81,10 @@ exports.updatePrimaryContactInteractor = async (
     .getUtilities()
     .getDocumentTypeForAddressChange({
       newData: editableFields,
-      oldData: contactPrimary,
+      oldData: oldContactPrimary,
     });
 
-  console.log('*****', contactInfo, documentType);
-
-  if (!contactPrimary.isAddressSealed && documentType) {
+  if (!oldContactPrimary.isAddressSealed && documentType) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
     const changeOfAddressPdf = await applicationContext
@@ -98,7 +99,7 @@ exports.updatePrimaryContactInteractor = async (
           documentTitle: documentType.title,
           name: contactInfo.name,
           newData: contactInfo,
-          oldData: contactPrimary,
+          oldData: oldContactPrimary,
         },
       });
 
