@@ -20,7 +20,7 @@ exports.advancedDocumentSearch = async ({
   omitSealed,
   opinionType,
   overrideResultSize,
-  sortOrder,
+  sortOrder: sortField,
   startDate,
 }) => {
   const sourceFields = [
@@ -175,21 +175,21 @@ exports.advancedDocumentSearch = async ({
   }
 
   let sort;
-  let sortType = 'desc';
+  let sortOrder = 'desc';
 
-  if (['filingDate', 'numberOfPages'].includes(sortOrder)) {
-    sortType = 'asc';
+  if (['filingDate', 'numberOfPages'].includes(sortField)) {
+    sortOrder = 'asc';
   }
 
-  switch (sortOrder) {
+  switch (sortField) {
     case 'numberOfPages': // fall through
     case 'numberOfPagesDesc':
-      sort = [{ 'numberOfPages.N': sortType }];
+      sort = [{ 'numberOfPages.N': sortOrder }];
       break;
     case 'filingDate': // fall through
     case 'filingDateDesc': // fall through
     default:
-      sort = [{ 'filingDate.S': sortType }];
+      sort = [{ 'filingDate.S': sortOrder }];
       break;
   }
 
