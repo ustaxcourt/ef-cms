@@ -9,6 +9,7 @@ export const EditPrivatePractitionersModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     caseDetail: state.caseDetail,
+    caseDetailContactPrimaryHelper: state.caseDetailContactPrimaryHelper,
     confirmSequence: sequences.submitEditPrivatePractitionersModalSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
@@ -19,6 +20,7 @@ export const EditPrivatePractitionersModal = connect(
   function EditPrivatePractitionersModal({
     cancelSequence,
     caseDetail,
+    caseDetailContactPrimaryHelper,
     confirmSequence,
     modal,
     updateModalValueSequence,
@@ -85,7 +87,7 @@ export const EditPrivatePractitionersModal = connect(
                         className="usa-checkbox__label inline-block"
                         htmlFor={`representing-primary-${idx}`}
                       >
-                        {caseDetail.contactPrimary.name}
+                        {caseDetailContactPrimaryHelper.contactPrimary.name}
                       </label>
                     </div>
 
