@@ -16,8 +16,9 @@ export const unauthedUserViewsCaseDetail = test => {
       docketNumber: test.docketNumber,
     });
     expect(test.currentRouteUrl.includes('/case-detail')).toBeTruthy();
-    expect(contactPrimaryFromState.name).toBeDefined();
-    expect(contactPrimaryFromState.address1).toBeUndefined();
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.name).toBeDefined();
+    expect(contactPrimary.address1).toBeUndefined();
 
     const helper = runCompute(publicCaseDetailHelper, {
       state: test.getState(),
