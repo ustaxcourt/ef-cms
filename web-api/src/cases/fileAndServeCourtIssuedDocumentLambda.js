@@ -10,8 +10,7 @@ exports.fileAndServeCourtIssuedDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .fileAndServeCourtIssuedDocumentInteractor({
+      .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         ...JSON.parse(event.body),
-        applicationContext,
       });
   });

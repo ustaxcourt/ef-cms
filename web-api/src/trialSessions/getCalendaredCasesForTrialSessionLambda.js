@@ -12,8 +12,7 @@ exports.getCalendaredCasesForTrialSessionLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getCalendaredCasesForTrialSessionInteractor({
-        applicationContext,
+      .getCalendaredCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId,
       });
   });

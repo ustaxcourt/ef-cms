@@ -12,8 +12,7 @@ exports.generatePublicDocketRecordPdfLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .generateDocketRecordPdfInteractor({
-          applicationContext,
+        .generateDocketRecordPdfInteractor(applicationContext, {
           ...JSON.parse(event.body),
           includePartyDetail: false,
         });

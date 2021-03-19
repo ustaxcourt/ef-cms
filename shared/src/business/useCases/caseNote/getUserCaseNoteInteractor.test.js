@@ -35,8 +35,7 @@ describe('Get case note', () => {
     });
 
     await expect(
-      getUserCaseNoteInteractor({
-        applicationContext,
+      getUserCaseNoteInteractor(applicationContext, {
         docketNumber: MOCK_NOTE.docketNumber,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -52,8 +51,7 @@ describe('Get case note', () => {
     });
 
     await expect(
-      getUserCaseNoteInteractor({
-        applicationContext,
+      getUserCaseNoteInteractor(applicationContext, {
         docketNumber: MOCK_NOTE.docketNumber,
       }),
     ).rejects.toThrow('The UserCaseNote entity was invalid');
@@ -69,8 +67,7 @@ describe('Get case note', () => {
       getJudgeForUserChambersInteractor: () => mockJudge,
     });
 
-    const result = await getUserCaseNoteInteractor({
-      applicationContext,
+    const result = await getUserCaseNoteInteractor(applicationContext, {
       docketNumber: MOCK_NOTE.docketNumber,
     });
 
@@ -86,8 +83,7 @@ describe('Get case note', () => {
       getJudgeForUserChambersInteractor: () => mockJudge,
     });
 
-    const result = await getUserCaseNoteInteractor({
-      applicationContext,
+    const result = await getUserCaseNoteInteractor(applicationContext, {
       docketNumber: MOCK_NOTE.docketNumber,
     });
 

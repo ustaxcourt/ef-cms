@@ -17,17 +17,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * Generates notices for all calendared cases for the given trialSessionId
  *
+ * @param {object} applicationContext the applicationContext
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext
  * @param {string} providers.trialSessionId the trial session id
  * @param {string} providers.docketNumber optional docketNumber to explicitly set the notice on the ONE specified case
  * @returns {Promise} the promises for the updateCase calls
  */
-exports.setNoticesForCalendaredTrialSessionInteractor = async ({
+exports.setNoticesForCalendaredTrialSessionInteractor = async (
   applicationContext,
-  docketNumber,
-  trialSessionId,
-}) => {
+  { docketNumber, trialSessionId },
+) => {
   let shouldSetNoticesIssued = true;
   const user = applicationContext.getCurrentUser();
 

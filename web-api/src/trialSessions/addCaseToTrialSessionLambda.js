@@ -13,8 +13,7 @@ exports.addCaseToTrialSessionLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .addCaseToTrialSessionInteractor({
-        applicationContext,
+      .addCaseToTrialSessionInteractor(applicationContext, {
         calendarNotes,
         docketNumber,
         trialSessionId,

@@ -10,15 +10,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * updateTrialSessionWorkingCopyInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.trialSessionWorkingCopyToUpdate the trial session working copy data to update
  * @returns {TrialSessionWorkingCopy} the updated trial session working copy returned from persistence
  */
-exports.updateTrialSessionWorkingCopyInteractor = async ({
+exports.updateTrialSessionWorkingCopyInteractor = async (
   applicationContext,
-  trialSessionWorkingCopyToUpdate,
-}) => {
+  { trialSessionWorkingCopyToUpdate },
+) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');

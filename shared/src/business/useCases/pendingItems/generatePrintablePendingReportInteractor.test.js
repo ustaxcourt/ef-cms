@@ -75,17 +75,17 @@ describe('generatePrintablePendingReportInteractor', () => {
     };
 
     await expect(
-      generatePrintablePendingReportInteractor({
-        applicationContext,
+      generatePrintablePendingReportInteractor(applicationContext, {
         judge: 'Colvin',
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should call fetchPendingItems from persistence and return the results', async () => {
-    const results = await generatePrintablePendingReportInteractor({
+    const results = await generatePrintablePendingReportInteractor(
       applicationContext,
-    });
+      {},
+    );
 
     expect(
       applicationContext.getPersistenceGateway().fetchPendingItems,
@@ -97,9 +97,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should format the pending items', async () => {
-    await generatePrintablePendingReportInteractor({
-      applicationContext,
-    });
+    await generatePrintablePendingReportInteractor(applicationContext, {});
 
     const {
       pendingItems,
@@ -125,7 +123,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should generate a subtitle with All Judges if no judge filter is applied', async () => {
-    await generatePrintablePendingReportInteractor({ applicationContext });
+    await generatePrintablePendingReportInteractor(applicationContext, {});
 
     const {
       subtitle,
@@ -134,8 +132,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should generate a subtitle with the judge name if a judge filter is applied', async () => {
-    await generatePrintablePendingReportInteractor({
-      applicationContext,
+    await generatePrintablePendingReportInteractor(applicationContext, {
       judge: 'Colvin',
     });
 
@@ -146,8 +143,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should get case information from persistence and generate a subtitle with the docket number if a docketNumber is present', async () => {
-    await generatePrintablePendingReportInteractor({
-      applicationContext,
+    await generatePrintablePendingReportInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -161,8 +157,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   it('should generate a subtitle with the docket number suffix if present', async () => {
     MOCK_CASE.docketNumberSuffix = DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
-    await generatePrintablePendingReportInteractor({
-      applicationContext,
+    await generatePrintablePendingReportInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -173,9 +168,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('calls the document generator function', async () => {
-    await generatePrintablePendingReportInteractor({
-      applicationContext,
-    });
+    await generatePrintablePendingReportInteractor(applicationContext, {});
 
     expect(
       applicationContext.getDocumentGenerators().pendingReport,
@@ -183,18 +176,17 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('uploads the pdf to s3', async () => {
-    await generatePrintablePendingReportInteractor({
-      applicationContext,
-    });
+    await generatePrintablePendingReportInteractor(applicationContext, {});
 
     expect(applicationContext.getStorageClient).toHaveBeenCalled();
     expect(applicationContext.getStorageClient().upload).toHaveBeenCalled();
   });
 
   it('should return the document url', async () => {
-    const results = await generatePrintablePendingReportInteractor({
+    const results = await generatePrintablePendingReportInteractor(
       applicationContext,
-    });
+      {},
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getDownloadPolicyUrl,

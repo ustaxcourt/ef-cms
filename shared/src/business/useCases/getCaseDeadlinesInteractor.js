@@ -10,8 +10,8 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * getCaseDeadlinesInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.endDate the end date
  * @param {string} providers.startDate the start date
  * @param {string} providers.from the index to start from
@@ -19,14 +19,10 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {number} providers.pageSize the page size
  * @returns {Promise} the promise of the getCaseDeadlinesByDateRange call
  */
-exports.getCaseDeadlinesInteractor = async ({
+exports.getCaseDeadlinesInteractor = async (
   applicationContext,
-  endDate,
-  from,
-  judge,
-  pageSize,
-  startDate,
-}) => {
+  { endDate, from, judge, pageSize, startDate },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {

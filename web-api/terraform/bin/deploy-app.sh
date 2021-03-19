@@ -33,8 +33,8 @@ echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
 
 tf_version=$(terraform --version)
 
-if [[ ${tf_version} != *"0.12.28"* ]]; then
-  echo "Please set your terraform version to 0.12.28 before deploying."
+if [[ ${tf_version} != *"0.13.6"* ]]; then
+  echo "Please set your terraform version to 0.13.6 before deploying."
   exit 1
 fi
 
@@ -63,7 +63,7 @@ npm run build:assets
 set -eo pipefail
 # build the cognito authorizer, api, and api-public with parcel
 pushd ../template/lambdas
-npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-minify --no-source-maps
+npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-source-maps
 popd
 
 

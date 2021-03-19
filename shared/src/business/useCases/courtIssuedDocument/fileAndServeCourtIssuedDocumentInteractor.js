@@ -19,22 +19,21 @@ const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
-const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.documentMeta the document metadata
  * @returns {object} the url of the document that was served
  */
-exports.fileAndServeCourtIssuedDocumentInteractor = async ({
+exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
-  documentMeta,
-}) => {
+  { documentMeta },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =
@@ -72,11 +71,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let secondaryDate;
-  if (documentMeta.eventCode === TRANSCRIPT_EVENT_CODE) {
-    secondaryDate = documentMeta.date;
-  }
-
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
@@ -103,7 +97,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
       judge: documentMeta.judge,
       numberOfPages,
       scenario: documentMeta.scenario,
-      secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
       userId: user.userId,
     },

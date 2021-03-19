@@ -31,8 +31,7 @@ describe('getUserPendingEmailInteractor', () => {
     };
 
     await expect(
-      getUserPendingEmailInteractor({
-        applicationContext,
+      getUserPendingEmailInteractor(applicationContext, {
         userId: USER_ID,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -46,8 +45,7 @@ describe('getUserPendingEmailInteractor', () => {
       userId: USER_ID,
     });
 
-    const result = await getUserPendingEmailInteractor({
-      applicationContext,
+    const result = await getUserPendingEmailInteractor(applicationContext, {
       userId: USER_ID,
     });
 
@@ -61,8 +59,7 @@ describe('getUserPendingEmailInteractor', () => {
       userId: USER_ID,
     });
 
-    const result = await getUserPendingEmailInteractor({
-      applicationContext,
+    const result = await getUserPendingEmailInteractor(applicationContext, {
       userId: USER_ID,
     });
 
@@ -74,8 +71,7 @@ describe('getUserPendingEmailInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockResolvedValue(undefined);
 
-    const result = await getUserPendingEmailInteractor({
-      applicationContext,
+    const result = await getUserPendingEmailInteractor(applicationContext, {
       userId: USER_ID,
     });
 

@@ -13,8 +13,8 @@ REGION=us-east-1
 
 tf_version=$(terraform --version)
 
-if [[ ${tf_version} != *"0.12.28"* ]]; then
-  echo "Please set your terraform version to 0.12.28 before deploying."
+if [[ ${tf_version} != *"0.13.6"* ]]; then
+  echo "Please set your terraform version to 0.13.6 before deploying."
   exit 1
 fi
 
