@@ -1,4 +1,3 @@
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * Toggles visibility of expanded menu in DropdownMenu
  *

@@ -309,7 +309,7 @@ exports.batchDelete = ({ applicationContext, items }) => {
     if (!isEmpty(retryResults.UnprocessedItems)) {
       applicationContext.logger.error(
         'Unable to batch delete',
-        JSON.stringify(retryResults.UnprocessedItems, null, 2),
+        retryResults.UnprocessedItems,
       );
     }
   }
