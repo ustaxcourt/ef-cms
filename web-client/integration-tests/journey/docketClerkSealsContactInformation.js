@@ -1,3 +1,5 @@
+const { contactPrimaryFromState } = require('../helpers');
+
 export const docketClerkSealsContactInformation = (
   test,
   contactType,
@@ -9,10 +11,10 @@ export const docketClerkSealsContactInformation = (
     });
 
     let contactToSeal;
-    if (
-      contactType === 'contactPrimary' ||
-      contactType === 'contactSecondary'
-    ) {
+
+    if (contactType === 'contactPrimary') {
+      contactToSeal = contactPrimaryFromState(test);
+    } else if (contactType === 'contactSecondary') {
       contactToSeal = test.getState(`caseDetail.${contactType}`);
     } else {
       contactToSeal = test
@@ -34,10 +36,9 @@ export const docketClerkSealsContactInformation = (
       `Address sealed for ${contactToSeal.name}.`,
     );
 
-    if (
-      contactType === 'contactPrimary' ||
-      contactType === 'contactSecondary'
-    ) {
+    if (contactType === 'contactPrimary') {
+      contactToSeal = contactPrimaryFromState(test);
+    } else if (contactType === 'contactSecondary') {
       contactToSeal = test.getState(`caseDetail.${contactType}`);
     } else {
       contactToSeal = test
