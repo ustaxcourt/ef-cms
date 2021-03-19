@@ -93,23 +93,4 @@ describe('filingPartiesFormHelper', () => {
     const result = runCompute(filingPartiesFormHelper, { state });
     expect(result.noMargin).toBeFalsy();
   });
-
-  it('returns contactPrimaryName from case detail petitioners array', () => {
-    state.form = {
-      documentType: 'Amended',
-      eventCode: 'AMAT',
-      previousDocument: {
-        documentType: 'Answer',
-        eventCode: 'A',
-        scenario: 'Standard',
-      },
-      scenario: 'Nonstandard F',
-    };
-
-    const { contactPrimaryName } = runCompute(filingPartiesFormHelper, {
-      state,
-    });
-
-    expect(contactPrimaryName).toEqual('Test Petitioner');
-  });
 });
