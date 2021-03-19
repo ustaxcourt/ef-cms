@@ -1,11 +1,15 @@
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
   fakeFile,
   loginAs,
   setupTest,
 } from './helpers';
+import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -32,7 +36,17 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const caseDetailFormatted = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
+    );
+
+    const contactPrimary = applicationContext
+      .getUtilities()
+      .getContactPrimary(caseDetailFormatted);
+
     expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
