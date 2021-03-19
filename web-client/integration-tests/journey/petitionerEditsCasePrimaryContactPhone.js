@@ -12,7 +12,9 @@ export const petitionerEditsCasePrimaryContactPhone = test => {
 
     await test.runSequence('submitEditPrimaryContactSequence');
 
-    expect(contactPrimaryFromState.phone).toEqual('9999999999');
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.phone).toEqual('9999999999');
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),

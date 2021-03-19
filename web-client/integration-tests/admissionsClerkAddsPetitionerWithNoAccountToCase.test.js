@@ -107,12 +107,14 @@ describe('admissions clerk adds petitioner without existing cognito account to c
     expect(test.getState('modal.showModal')).toBeUndefined();
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(contactPrimaryFromState.email).toBeUndefined();
-    expect(contactPrimaryFromState.serviceIndicator).toEqual(
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.email).toBeUndefined();
+    expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
-    test.userId = contactPrimaryFromState.contactId;
+    test.userId = contactPrimary.contactId;
 
     await refreshElasticsearchIndex();
   });
@@ -129,8 +131,10 @@ describe('admissions clerk adds petitioner without existing cognito account to c
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(contactPrimaryFromState.email).toEqual(EMAIL_TO_ADD);
-    expect(contactPrimaryFromState.serviceIndicator).toEqual(
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.email).toEqual(EMAIL_TO_ADD);
+    expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });

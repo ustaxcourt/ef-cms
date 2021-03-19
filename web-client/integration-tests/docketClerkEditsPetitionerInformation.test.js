@@ -46,7 +46,9 @@ describe('docket clerk edits the petitioner information', () => {
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(contactPrimaryFromState.address1).toEqual('734 Cowley Parkway');
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.address1).toEqual('734 Cowley Parkway');
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
@@ -117,10 +119,12 @@ describe('docket clerk edits the petitioner information', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(contactPrimaryFromState.address1).toEqual('123 Some Street');
+    const contactPrimary = contactPrimaryFromState(test);
 
-    expect(contactPrimaryFromState.address2).toBeUndefined();
-    expect(contactPrimaryFromState.address3).toBeUndefined();
+    expect(contactPrimary.address1).toEqual('123 Some Street');
+
+    expect(contactPrimary.address2).toBeUndefined();
+    expect(contactPrimary.address3).toBeUndefined();
 
     const noticeDocument = test
       .getState('caseDetail.docketEntries')

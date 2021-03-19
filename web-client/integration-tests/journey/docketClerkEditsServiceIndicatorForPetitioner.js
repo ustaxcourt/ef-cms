@@ -27,7 +27,9 @@ export const docketClerkEditsServiceIndicatorForPetitioner = (
         },
       });
 
-      expect(contactPrimaryFromState.serviceIndicator).toEqual(
+      const contactPrimary = contactPrimaryFromState(test);
+
+      expect(contactPrimary.serviceIndicator).toEqual(
         SERVICE_INDICATOR_TYPES.SI_NONE,
       );
     }
@@ -39,7 +41,9 @@ export const docketClerkEditsServiceIndicatorForPetitioner = (
 
     await test.runSequence('updatePetitionerInformationFormSequence');
 
-    expect(contactPrimaryFromState.serviceIndicator).toEqual(
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });

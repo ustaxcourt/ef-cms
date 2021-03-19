@@ -18,7 +18,9 @@ const publicFieldsVisible = () => {
 };
 
 const associatedFieldsVisible = () => {
-  expect(contactPrimaryFromState).toMatchObject({
+  const contactPrimary = contactPrimaryFromState(test);
+
+  expect(contactPrimary).toMatchObject({
     address1: expect.anything(),
     city: expect.anything(),
     name: expect.anything(),
@@ -28,14 +30,16 @@ const associatedFieldsVisible = () => {
 };
 
 const associatedFieldsBlocked = () => {
-  expect(contactPrimaryFromState).toEqual({
+  const contactPrimary = contactPrimaryFromState(test);
+
+  expect(contactPrimary).toEqual({
     entityName: 'PublicContact',
     name: expect.anything(),
     state: expect.anything(),
   });
-  expect(contactPrimaryFromState.address1).toBeUndefined();
+  expect(contactPrimary.address1).toBeUndefined();
   expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
-  expect(contactPrimaryFromState.contactId).toBeUndefined();
+  expect(contactPrimary.contactId).toBeUndefined();
 };
 
 const internalFieldsVisible = () => {
