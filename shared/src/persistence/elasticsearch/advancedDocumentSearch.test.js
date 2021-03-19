@@ -480,7 +480,7 @@ describe('advancedDocumentSearch', () => {
     });
 
     expect(search.mock.calls[0][0].searchParameters.body.sort).toEqual([
-      { 'filingDate.S': { order: 'asc' } },
+      { 'filingDate.S': 'asc' },
     ]);
   });
 
@@ -493,7 +493,7 @@ describe('advancedDocumentSearch', () => {
     });
 
     expect(search.mock.calls[0][0].searchParameters.body.sort).toEqual([
-      { 'filingDate.S': { order: 'desc' } },
+      { 'filingDate.S': 'desc' },
     ]);
   });
 
