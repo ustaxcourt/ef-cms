@@ -22,9 +22,10 @@ export const petitionerEditsCasePrimaryContactAddress = test => {
 
     await test.runSequence('submitEditPrimaryContactSequence');
 
-    expect(contactPrimaryFromState.address1).toEqual('100 Main St.');
-    expect(contactPrimaryFromState.address2).toEqual('Grand View Apartments');
-    expect(contactPrimaryFromState.address3).toEqual('Apt. 104');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.address1).toEqual('100 Main St.');
+    expect(contactPrimary.address2).toEqual('Grand View Apartments');
+    expect(contactPrimary.address3).toEqual('Apt. 104');
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
