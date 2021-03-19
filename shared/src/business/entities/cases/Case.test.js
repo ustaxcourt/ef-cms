@@ -295,12 +295,23 @@ describe('Case entity', () => {
 
   describe('formattedDocketNumber', () => {
     it('formats docket numbers with leading zeroes', () => {
-      const docketNumber = '00000456-19';
-      expect(Case.formatDocketNumber(docketNumber)).toEqual('456-19');
+      expect(Case.formatDocketNumber('00000456-19')).toEqual('456-19');
     });
+
     it('does not alter properly-formatted docket numbers', () => {
-      const docketNumber = '123456-19';
-      expect(Case.formatDocketNumber(docketNumber)).toEqual(docketNumber);
+      expect(Case.formatDocketNumber('123456-19')).toEqual('123456-19'); // unchanged
+    });
+
+    it('strips letters from docket numbers', () => {
+      expect(Case.formatDocketNumber('456-19L')).toEqual('456-19');
+    });
+
+    it('strips both leading zeroes and letters from docket numbers', () => {
+      expect(Case.formatDocketNumber('00000456-19L')).toEqual('456-19');
+    });
+
+    it('does not error when a non docket number is given', () => {
+      expect(Case.formatDocketNumber('FRED')).toEqual('FRED');
     });
   });
 
@@ -2546,13 +2557,6 @@ describe('Case entity', () => {
       );
       const result = myCase.getIrsSendDate();
       expect(result).toBeUndefined();
-    });
-  });
-
-  describe('stripLeadingZeros', () => {
-    it('should remove leading zeros', () => {
-      const result = Case.stripLeadingZeros('000101-19');
-      expect(result).toEqual('101-19');
     });
   });
 

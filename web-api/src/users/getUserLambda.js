@@ -8,7 +8,7 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().getUserInteractor({
-      applicationContext,
-    });
+    return await applicationContext
+      .getUseCases()
+      .getUserInteractor(applicationContext);
   });

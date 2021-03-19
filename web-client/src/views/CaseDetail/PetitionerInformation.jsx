@@ -108,6 +108,14 @@ const PetitionerInformation = connect(
                           Current email address
                         </div>
                         {formattedCaseDetail.contactPrimary.email}
+                        {formattedCaseDetail.contactPrimary.showEAccessFlag && (
+                          <FontAwesomeIcon
+                            aria-label="has e-access"
+                            className="margin-left-05 fa-icon-blue"
+                            icon="flag"
+                            size="1x"
+                          />
+                        )}
                       </>
                     )}
                     {screenMetadata.userPendingEmail && (

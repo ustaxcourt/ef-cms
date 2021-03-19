@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.deleteCaseDeadlineLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().deleteCaseDeadlineInteractor({
-      applicationContext,
-      ...event.pathParameters,
-    });
+    return await applicationContext
+      .getUseCases()
+      .deleteCaseDeadlineInteractor(applicationContext, {
+        ...event.pathParameters,
+      });
   });

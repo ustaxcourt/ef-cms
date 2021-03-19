@@ -7,17 +7,16 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * used for setting a case as blocked
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.reason the reason the case is being blocked
  * @param {string} providers.docketNumber the docket number to block
  * @returns {object} the case data
  */
-exports.blockCaseFromTrialInteractor = async ({
+exports.blockCaseFromTrialInteractor = async (
   applicationContext,
-  docketNumber,
-  reason,
-}) => {
+  { docketNumber, reason },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {

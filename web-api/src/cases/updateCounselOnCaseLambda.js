@@ -10,8 +10,7 @@ exports.updateCounselOnCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateCounselOnCaseInteractor({
-        applicationContext,
+      .updateCounselOnCaseInteractor(applicationContext, {
         ...event.pathParameters,
         userData: JSON.parse(event.body),
       });

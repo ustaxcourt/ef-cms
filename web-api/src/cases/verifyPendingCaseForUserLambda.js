@@ -10,8 +10,7 @@ exports.verifyPendingCaseForUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .verifyPendingCaseForUserInteractor({
-        applicationContext,
+      .verifyPendingCaseForUserInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });

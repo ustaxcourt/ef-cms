@@ -8,15 +8,15 @@ const { User } = require('../../entities/User');
 /**
  * getUserPendingEmailInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.userId the userId
  * @returns {Promise} the user's pending email
  */
-exports.getUserPendingEmailInteractor = async ({
+exports.getUserPendingEmailInteractor = async (
   applicationContext,
-  userId,
-}) => {
+  { userId },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_USER_PENDING_EMAIL)) {

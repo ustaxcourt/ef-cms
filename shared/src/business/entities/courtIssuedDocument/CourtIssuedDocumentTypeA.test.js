@@ -1,8 +1,11 @@
 const {
+  GENERIC_ORDER_DOCUMENT_TYPE,
+  VALIDATION_ERROR_MESSAGES,
+} = require('./CourtIssuedDocumentConstants');
+const {
   over1000Characters,
 } = require('../../test/createTestApplicationContext');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeA', () => {
   describe('constructor', () => {
@@ -38,6 +41,36 @@ describe('CourtIssuedDocumentTypeA', () => {
         serviceStamp: 'Served',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be valid when serviceStamp is undefined, documentType is a generic order, and isLegacy is true', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: '[Anything]',
+        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
+        freeText: 'Some free text',
+        isLegacy: true,
+        scenario: 'Type A',
+        serviceStamp: undefined,
+      });
+
+      expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when serviceStamp is undefined, documentType is a generic order, and isLegacy is false', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: '[Anything]',
+        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
+        freeText: 'Some free text',
+        isLegacy: false,
+        scenario: 'Type A',
+        serviceStamp: undefined,
+      });
+
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+      });
     });
 
     describe('requiring filing dates on unservable documents', () => {

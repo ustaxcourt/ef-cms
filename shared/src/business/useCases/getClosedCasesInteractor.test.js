@@ -29,17 +29,13 @@ describe('getClosedCasesInteractor', () => {
   });
 
   it('should retrieve the current user information', async () => {
-    await getClosedCasesInteractor({
-      applicationContext,
-    });
+    await getClosedCasesInteractor(applicationContext);
 
     expect(applicationContext.getCurrentUser).toBeCalled();
   });
 
   it('should make a call to retrieve closed cases by user', async () => {
-    await getClosedCasesInteractor({
-      applicationContext,
-    });
+    await getClosedCasesInteractor(applicationContext);
 
     expect(
       applicationContext.getPersistenceGateway().getIndexedCasesForUser,
@@ -53,25 +49,19 @@ describe('getClosedCasesInteractor', () => {
   it('should return an empty list when no closed cases are found', async () => {
     mockFoundCasesList = null;
 
-    const result = await getClosedCasesInteractor({
-      applicationContext,
-    });
+    const result = await getClosedCasesInteractor(applicationContext);
 
     expect(result).toEqual([]);
   });
 
   it('should validate the found closed cases', async () => {
-    await getClosedCasesInteractor({
-      applicationContext,
-    });
+    await getClosedCasesInteractor(applicationContext);
 
     expect(UserCase.validateRawCollection).toBeCalled();
   });
 
   it('should return a list of closed cases', async () => {
-    const result = await getClosedCasesInteractor({
-      applicationContext,
-    });
+    const result = await getClosedCasesInteractor(applicationContext);
 
     expect(result).toMatchObject([
       {

@@ -25,8 +25,7 @@ describe('fetchPendingItemsInteractor', () => {
     };
 
     await expect(
-      fetchPendingItemsInteractor({
-        applicationContext,
+      fetchPendingItemsInteractor(applicationContext, {
         judge: 'Judge Colvin',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -34,8 +33,7 @@ describe('fetchPendingItemsInteractor', () => {
 
   it('should throw an error when the judge is not defined', async () => {
     await expect(
-      fetchPendingItemsInteractor({
-        applicationContext,
+      fetchPendingItemsInteractor(applicationContext, {
         judge: undefined,
       }),
     ).rejects.toThrow('judge is required');
@@ -49,8 +47,7 @@ describe('fetchPendingItemsInteractor', () => {
         { docketEntryId: 'abc', docketNumber: '201-20', pending: true },
       ]);
 
-    const results = await fetchPendingItemsInteractor({
-      applicationContext,
+    const results = await fetchPendingItemsInteractor(applicationContext, {
       judge: 'Judge Colvin',
     });
 

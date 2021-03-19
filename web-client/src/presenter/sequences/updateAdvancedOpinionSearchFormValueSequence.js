@@ -1,6 +1,5 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { updateAdvancedSearchFormAction } from '../actions/AdvancedSearch/updateAdvancedSearchFormAction';
 
 export const updateAdvancedOpinionSearchFormValueSequence = [
-  set(state.advancedSearchForm['opinionSearch'][props.key], props.value),
+  updateAdvancedSearchFormAction('opinionSearch'),
 ];

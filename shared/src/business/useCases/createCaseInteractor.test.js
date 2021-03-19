@@ -39,8 +39,7 @@ describe('createCaseInteractor', () => {
     user = {};
 
     await expect(
-      createCaseInteractor({
-        applicationContext,
+      createCaseInteractor(applicationContext, {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseType: CASE_TYPES_MAP.other,
@@ -63,8 +62,7 @@ describe('createCaseInteractor', () => {
   });
 
   it('should create a case successfully as a petitioner', async () => {
-    const result = await createCaseInteractor({
-      applicationContext,
+    const result = await createCaseInteractor(applicationContext, {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,
@@ -107,8 +105,7 @@ describe('createCaseInteractor', () => {
   });
 
   it('should create a STIN docket entry on the case with index 0', async () => {
-    const result = await createCaseInteractor({
-      applicationContext,
+    const result = await createCaseInteractor(applicationContext, {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.other,
@@ -153,8 +150,7 @@ describe('createCaseInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    const result = await createCaseInteractor({
-      applicationContext,
+    const result = await createCaseInteractor(applicationContext, {
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {
@@ -205,8 +201,7 @@ describe('createCaseInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    const result = await createCaseInteractor({
-      applicationContext,
+    const result = await createCaseInteractor(applicationContext, {
       ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: {

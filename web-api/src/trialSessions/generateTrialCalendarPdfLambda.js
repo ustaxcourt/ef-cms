@@ -14,8 +14,7 @@ exports.generateTrialCalendarPdfLambda = event =>
 
       return await applicationContext
         .getUseCases()
-        .generateTrialCalendarPdfInteractor({
-          applicationContext,
+        .generateTrialCalendarPdfInteractor(applicationContext, {
           trialSessionId,
         });
     },

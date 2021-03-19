@@ -1117,10 +1117,26 @@ hr.lighter {
   background-color: color($theme-color-base);
   #signature {
     position: absolute;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #eee;
     background-color: rgba(255, 255, 255, 0.8);
     font-weight: $font-bold;
+    text-align: center;
+  }
+  #signature-warning {
+    display: block;
+    width: 612px;
+    padding: 20px;
+    margin: auto;
+    margin-top: -60px;
+    background-color: transparent;
+    color: transparent;
+    &:hover {
+      background-color: $color-error;
+      color: black;
+    }
+    font-weight: $font-bold;
+    overflow-y: overlay;
     text-align: center;
   }
   #sign-pdf-canvas {

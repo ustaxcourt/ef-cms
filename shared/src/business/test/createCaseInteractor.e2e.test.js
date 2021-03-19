@@ -33,8 +33,7 @@ describe('createCase integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { docketNumber } = await createCaseInteractor({
-      applicationContext,
+    const { docketNumber } = await createCaseInteractor(applicationContext, {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.innocentSpouse,
@@ -60,8 +59,7 @@ describe('createCase integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    const createdCase = await getCaseInteractor({
-      applicationContext,
+    const createdCase = await getCaseInteractor(applicationContext, {
       docketNumber,
     });
 

@@ -12,19 +12,20 @@ const { filterForPublic } = require('./publicHelpers');
 /**
  * orderPublicSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, keyword, caseTitleOrPetitioner, docketNumber, judge, startDate, endDate
- * @param {object} providers.applicationContext application context object
+ * @param {object} applicationContext application context object
+ * @param {object} providers the providers object
+ * @param {string} providers.caseTitleOrPetitioner case title or petitioner to search for
+ * @param {string} providers.docketNumber docket number
+ * @param {string} providers.endDate ending date for date range
+ * @param {string} providers.judge judge name to filter by
+ * @param {string} providers.keyword keyword to search for
+ * @param {string} providers.startDate start date for date range
  * @returns {object} the order search results
  */
-exports.orderPublicSearchInteractor = async ({
+exports.orderPublicSearchInteractor = async (
   applicationContext,
-  caseTitleOrPetitioner,
-  docketNumber,
-  endDate,
-  judge,
-  keyword,
-  startDate,
-}) => {
+  { caseTitleOrPetitioner, docketNumber, endDate, judge, keyword, startDate },
+) => {
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     docketNumber,

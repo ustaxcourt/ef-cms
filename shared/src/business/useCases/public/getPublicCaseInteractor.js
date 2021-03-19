@@ -9,20 +9,20 @@ const { PublicCase } = require('../../entities/cases/PublicCase');
 /**
  * getPublicCaseInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to get
  * @returns {object} the case data
  */
-exports.getPublicCaseInteractor = async ({
+exports.getPublicCaseInteractor = async (
   applicationContext,
-  docketNumber,
-}) => {
+  { docketNumber },
+) => {
   let rawCaseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber: Case.stripLeadingZeros(docketNumber),
+      docketNumber: Case.formatDocketNumber(docketNumber),
     });
 
   if (!rawCaseRecord.docketNumber && !rawCaseRecord.entityName) {
