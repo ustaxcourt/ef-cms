@@ -37,7 +37,7 @@ export const irsPractitionerViewsPetitionerInfoForUnassociatedCase = (
     if (isSealed) {
       expect(caseDetailHelperResult.userCanViewCase).toEqual(false);
     } else {
-      const contactPrimary = contactPrimaryFromState(test);
+      const contactPrimary = contactPrimaryFromState(testObj);
 
       expect(caseDetailHelperResult.userCanViewCase).toEqual(true);
       expect(helper.showCaseInformationTab).toBeTruthy();
