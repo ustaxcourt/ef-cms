@@ -81,6 +81,8 @@ exports.updatePrimaryContactInteractor = async (
       oldData: contactPrimary,
     });
 
+  console.log('*****', contactInfo, documentType);
+
   if (!contactPrimary.isAddressSealed && documentType) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
