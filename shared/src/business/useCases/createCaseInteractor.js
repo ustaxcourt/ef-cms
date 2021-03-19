@@ -227,7 +227,7 @@ exports.createCaseInteractor = async (
     caseToAdd.addDocketEntry(odsDocketEntryEntity);
   }
 
-  await applicationContext.getPersistenceGateway().createCase({
+  await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
