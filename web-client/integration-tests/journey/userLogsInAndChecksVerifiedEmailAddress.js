@@ -29,7 +29,7 @@ export const userLogsInAndChecksVerifiedEmailAddress = (
     });
 
     if (user === 'petitioner') {
-      const petitionerEmail = contactPrimaryFromState.email;
+      const petitionerEmail = contactPrimaryFromState(test).email;
 
       expect(petitionerEmail).toEqual(mockUpdatedEmail);
     } else {
