@@ -34,8 +34,6 @@ export const petitionerEditsCasePrimaryContactAddress = test => {
       },
     );
 
-    console.log(caseDetailFormatted);
-
     const noticeDocument = caseDetailFormatted.formattedDocketEntries.find(
       entry =>
         entry.descriptionDisplay ===
