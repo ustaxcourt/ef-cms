@@ -177,7 +177,7 @@ exports.advancedDocumentSearch = async ({
   let sort;
   let sortType = 'desc';
 
-  if (sortOrder === ('filingDate' || 'numberOfPages')) {
+  if (['filingDate', 'numberOfPages'].includes(sortOrder)) {
     sortType = 'asc';
   }
 
