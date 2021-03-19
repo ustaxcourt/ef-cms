@@ -17,7 +17,7 @@ describe('advancedDocumentSearch', () => {
   const SOURCE = {
     includes: [
       'caseCaption',
-      'contactPrimary',
+      'petitioners',
       'contactSecondary',
       'docketEntryId',
       'docketNumber',
@@ -124,7 +124,7 @@ describe('advancedDocumentSearch', () => {
           default_operator: 'and',
           fields: [
             'caseCaption.S',
-            'contactPrimary.M.name.S',
+            'petitioners.L.M.name.S',
             'contactSecondary.M.name.S',
           ],
           query: caseTitleOrPetitioner,

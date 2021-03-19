@@ -17,7 +17,7 @@ describe('casePublicSearchInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
-      .casePublicSearchExactMatch.mockReturnValue([]);
+      .casePublicSearch.mockReturnValue([]);
   });
 
   it('returns empty array if no search params are passed in', async () => {
@@ -29,7 +29,7 @@ describe('casePublicSearchInteractor', () => {
   it('strips out all non public data', async () => {
     applicationContext
       .getPersistenceGateway()
-      .casePublicSearchExactMatch.mockReturnValue([
+      .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
           docketNumber: '123-19',
@@ -89,7 +89,7 @@ describe('casePublicSearchInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .casePublicSearchExactMatch.mockResolvedValue(maxPlusOneResults);
+      .casePublicSearch.mockResolvedValue(maxPlusOneResults);
 
     const results = await casePublicSearchInteractor(applicationContext, {});
 
@@ -102,7 +102,7 @@ describe('casePublicSearchInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({ sealedDate: 'some date' });
     applicationContext
       .getPersistenceGateway()
-      .casePublicSearchExactMatch.mockReturnValue([
+      .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
           contactPrimary: MOCK_CASE.contactPrimary,
