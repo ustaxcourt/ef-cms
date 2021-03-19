@@ -13,7 +13,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
+const { Case, getContactPrimary } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
 const { isServed } = require('../entities/DocketEntry');
 const { ROLES } = require('../entities/EntityConstants');
@@ -589,6 +589,9 @@ const getFormattedCaseDetail = ({
   );
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
+
+  result.contactPrimary = getContactPrimary(caseDetail);
+
   return result;
 };
 

@@ -34,6 +34,7 @@ const associatedFieldsBlocked = () => {
 
   expect(contactPrimary).toEqual({
     entityName: 'PublicContact',
+    isContactPrimary: true,
     name: expect.anything(),
     state: expect.anything(),
   });
