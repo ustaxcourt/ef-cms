@@ -143,6 +143,34 @@ export const CourtIssuedNonstandardForm = connect(
           </FormGroup>
         )}
 
+        {addCourtIssuedDocketEntryNonstandardHelper.showOptionalFreeText && (
+          <FormGroup errorText={validationErrors.freeText}>
+            <label
+              className="usa-label"
+              htmlFor="free-text"
+              id="free-text-label"
+            >
+              {addCourtIssuedDocketEntryNonstandardHelper.freeTextLabel}{' '}
+              <span className="usa-hint">(optional)</span>
+            </label>
+
+            <textarea
+              aria-describedby="free-text-label"
+              className="usa-textarea height-8"
+              id="free-text"
+              name="freeText"
+              value={form.freeText || ''}
+              onBlur={() => validateCourtIssuedDocketEntrySequence()}
+              onChange={e => {
+                updateCourtIssuedDocketEntryFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
+        )}
+
         {addCourtIssuedDocketEntryNonstandardHelper.showDocketNumbers && (
           <FormGroup errorText={validationErrors.docketNumbers}>
             <label
