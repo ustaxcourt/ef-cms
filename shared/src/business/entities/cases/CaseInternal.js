@@ -98,7 +98,7 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
-      primary: getContactPrimary(rawCase),
+      primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
     isPaper: true,

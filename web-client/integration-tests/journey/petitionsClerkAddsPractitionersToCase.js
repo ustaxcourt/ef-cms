@@ -55,7 +55,7 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing'),
-    ).toEqual([contactPrimaryFromState.contactId]);
+    ).toEqual([contactPrimaryFromState(test).contactId]);
     expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
       practitionerMatch.name,
     );
