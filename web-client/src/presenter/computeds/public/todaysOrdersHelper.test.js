@@ -106,7 +106,7 @@ describe('todaysOrdersHelper', () => {
       },
     });
 
-    expect(result.sortOptions.length).toBe(2);
+    expect(result.sortOptions.length).toBe(4);
   });
 
   describe('hasResults', () => {
