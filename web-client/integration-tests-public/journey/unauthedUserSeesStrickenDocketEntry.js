@@ -18,7 +18,8 @@ export const unauthedUserSeesStrickenDocketEntry = (
       docketNumber: test.docketNumber,
     });
     expect(test.currentRouteUrl.includes('/case-detail')).toBeTruthy();
-    expect(contactPrimaryFromState.name).toBeDefined();
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.name).toBeDefined();
 
     const { formattedDocketEntriesOnDocketRecord } = runCompute(
       publicCaseDetailHelper,
