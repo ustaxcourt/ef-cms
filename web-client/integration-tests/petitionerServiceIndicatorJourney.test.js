@@ -4,24 +4,15 @@ import {
   loginAs,
   setupTest,
 } from './helpers';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
 
 const test = setupTest();
 test.draftOrders = [];
 
-let formattedCaseDetail;
-
 describe('Petitioner Service Indicator Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-  });
-
-  beforeEach(() => {
-    formattedCaseDetail = withAppContextDecorator(formattedCaseDetailComputed);
   });
 
   afterAll(() => {
@@ -41,11 +32,8 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Paper');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
   loginAs(test, 'admissionsclerk@example.com');
@@ -87,11 +75,8 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Electronic');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
   loginAs(test, 'irsPractitioner@example.com');
@@ -102,11 +87,8 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Electronic');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
   // seal address
@@ -118,7 +100,7 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    let contactPrimary = contactPrimaryFromState(test);
 
     await test.runSequence('openSealAddressModalSequence', {
       contactToSeal: contactPrimary,
@@ -131,11 +113,8 @@ describe('Petitioner Service Indicator Journey', () => {
       'Address sealed for',
     );
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Electronic');
+    contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
   loginAs(test, 'irsPractitioner@example.com');
@@ -146,11 +125,8 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Electronic');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
   // add private practitioner
@@ -168,11 +144,8 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('None');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
   loginAs(test, 'irsPractitioner1@example.com'); // unassociated practitioner
@@ -183,11 +156,8 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('None');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
   // explicitly set petitioner to Paper
@@ -208,11 +178,8 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Paper');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
   // verify Paper for irsPractitioner
@@ -224,11 +191,8 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Paper');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
   // remove private practitioner
@@ -250,11 +214,8 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Paper');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
   loginAs(test, 'irsPractitioner@example.com');
@@ -265,10 +226,7 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Paper');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 });
