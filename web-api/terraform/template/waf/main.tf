@@ -1,5 +1,5 @@
 resource "aws_wafv2_web_acl" "apis" {
-  name  = "apis_${var.environment}_${var.current_color}"
+  name  = "apis_${var.environment}"
   scope = "REGIONAL"
 
   default_action {
@@ -23,7 +23,7 @@ resource "aws_wafv2_web_acl" "apis" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "per_ip_request_limit_${var.environment}_${var.current_color}"
+      metric_name                = "per_ip_request_limit_${var.environment}"
       sampled_requests_enabled   = false
     }
   }
@@ -60,20 +60,20 @@ resource "aws_wafv2_web_acl" "apis" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "per_ip_expensive_request_limit_${var.environment}_${var.current_color}"
+      metric_name                = "per_ip_expensive_request_limit_${var.environment}"
       sampled_requests_enabled   = false
     }
   }
 
   visibility_config {
     cloudwatch_metrics_enabled = false
-    metric_name                = "wafv2_${var.environment}_${var.current_color}"
+    metric_name                = "wafv2_${var.environment}"
     sampled_requests_enabled   = false
   }
 }
 
 resource "aws_wafv2_regex_pattern_set" "expensive_requests" {
-  name = "expensive_requests_${var.environment}_${var.current_color}"
+  name = "expensive_requests_${var.environment}"
   scope = "REGIONAL"
 
   regular_expression {
