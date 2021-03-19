@@ -60,29 +60,13 @@ export const TodaysOrders = connect(
                       });
                     }}
                   >
-                    {[
-                      {
-                        label: 'newest',
-                        value: 'filingDateDesc',
-                      },
-                      {
-                        label: 'oldest',
-                        value: 'filingDate',
-                      },
-
-                      {
-                        label: 'pages (descending)',
-                        value: 'numberOfPagesDesc',
-                      },
-                      {
-                        label: 'pages (ascending)',
-                        value: 'numberOfPages',
-                      },
-                    ].map(item => (
-                      <option key={item.value} value={item.value}>
-                        Sort by {item.label}
-                      </option>
-                    ))}
+                    {Object.entries(todaysOrdersHelper.sortOptions).map(
+                      ([value, label]) => (
+                        <option key={value} value={value}>
+                          Sort by {label}
+                        </option>
+                      ),
+                    )}
                   </select>
                 </div>
                 <table

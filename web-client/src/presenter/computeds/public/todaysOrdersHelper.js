@@ -1,6 +1,15 @@
 import { state } from 'cerebral';
 
 export const todaysOrdersHelper = (get, applicationContext) => {
+  const sortOptions = {
+    filingDate: 'oldest',
+    filingDateDesc: 'newest',
+    /*
+    Uncomment once ES mapping has changes to make numberOfPages an integer field...
+    numberOfPages: 'pages (ascending)',
+    numberOfPagesDesc: 'pages (descending)',
+    */
+  };
   const todaysOrders = get(state.todaysOrders.results);
   const totalCount = get(state.todaysOrders.totalCount);
   const { TODAYS_ORDER_SORT } = applicationContext.getConstants();
@@ -26,12 +35,12 @@ export const todaysOrdersHelper = (get, applicationContext) => {
   const todaysOrdersSort =
     get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDER_SORT;
 
-
   return {
     formattedCurrentDate,
     formattedOrders,
     hasResults,
     showLoadMoreButton,
+    sortOptions,
     todaysOrdersSort,
     totalCount,
   };
