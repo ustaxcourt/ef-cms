@@ -17,7 +17,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { Case } = require('./Case');
+const { Case, getContactPrimary } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
@@ -42,19 +42,18 @@ CaseExternal.prototype.initContacts = function (
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
-      primary: rawCase.contactPrimary,
+      primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
     partyType: rawCase.partyType,
   });
-  this.contactPrimary = contacts.primary;
+  this.petitioners = [contacts.primary];
   this.contactSecondary = contacts.secondary;
 };
 
 CaseExternal.prototype.initSelf = function (rawCase) {
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
-  this.contactPrimary = rawCase.contactPrimary;
   this.contactSecondary = rawCase.contactSecondary;
   this.countryType = rawCase.countryType;
   this.filingType = rawCase.filingType;

@@ -73,8 +73,6 @@ const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
-  console.log('****', caseEntityRecords);
-
   applicationContext.logger.debug(
     `going to index ${caseEntityRecords.length} caseEntityRecords`,
   );
