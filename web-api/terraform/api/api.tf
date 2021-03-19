@@ -344,5 +344,5 @@ resource "aws_api_gateway_method_settings" "api_default" {
 
 resource "aws_wafv2_web_acl_association" "association" {
   resource_arn = aws_api_gateway_stage.api_stage.arn
-  web_acl_arn  = aws_wafv2_web_acl.apis.arn
+  web_acl_arn  = var.web_acl_arn
 }
