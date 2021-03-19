@@ -5,6 +5,7 @@ const {
 const {
   MAX_SEARCH_CLIENT_RESULTS,
   ORDER_JUDGE_FIELD,
+  TODAYS_ORDERS_SORTS,
 } = require('../../business/entities/EntityConstants');
 const { advancedDocumentSearch } = require('./advancedDocumentSearch');
 const { search } = require('./searchClient');
@@ -475,7 +476,7 @@ describe('advancedDocumentSearch', () => {
       applicationContext,
       documentEventCodes: opinionEventCodes,
       endDate: '2020-02-21T04:59:59.999Z',
-      sortOrder: 'filingDate',
+      sortOrder: TODAYS_ORDERS_SORTS.FILING_DATE_ASC,
       startDate: '2020-02-20T05:00:00.000Z',
     });
 
