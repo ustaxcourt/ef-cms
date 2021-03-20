@@ -1,5 +1,21 @@
 # Release Notes
 
+## PR 65 Release Notes
+
+### Internal Only
+
+**Bug Fix** The Service Date field now clears when updating a docket entry to Certificate of Service or Amended Certificate of Service.
+
+**Bug Fix** On the Judge’s Working Copy, you can now reset the trial status to unselected without an error.
+
+**New Feature** Docket clerks can now enter optional additional text as part of the docket entry for all Minute Sheets.
+
+### External / Public
+
+**New Feature** A summary of all documents served on Respondent is now available to the IRS.
+
+**New Feature** Today’s Orders can now be sorted by time served and page count.
+
 ## PR 64 Release Notes
 
 ### Internal Only
