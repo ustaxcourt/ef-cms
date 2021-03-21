@@ -88,8 +88,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     });
 
     await expect(
-      deleteCounselFromCaseInteractor({
-        applicationContext,
+      deleteCounselFromCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
       }),
@@ -97,8 +96,7 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('deletes a practitioner with the given userId from the associated case', async () => {
-    await deleteCounselFromCaseInteractor({
-      applicationContext,
+    await deleteCounselFromCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
     });
@@ -112,8 +110,7 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('deletes an irsPractitioner with the given userId from the associated case', async () => {
-    await deleteCounselFromCaseInteractor({
-      applicationContext,
+    await deleteCounselFromCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       userId: 'bfd97089-cda0-45e0-8454-dd879023d0af',
     });
@@ -128,8 +125,7 @@ describe('deleteCounselFromCaseInteractor', () => {
 
   it('throws an error if the userId is not a privatePractitioner or irsPractitioner role', async () => {
     await expect(
-      deleteCounselFromCaseInteractor({
-        applicationContext,
+      deleteCounselFromCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         userId: '835f072c-5ea1-493c-acb8-d67b05c96f85',
       }),

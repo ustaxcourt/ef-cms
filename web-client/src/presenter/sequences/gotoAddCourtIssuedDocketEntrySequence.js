@@ -5,15 +5,14 @@ import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJud
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCourtIssuedDocumentInitialDataAction } from '../actions/CourtIssuedDocketEntry/setCourtIssuedDocumentInitialDataAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultServiceStampAction } from '../actions/CourtIssuedDocketEntry/setDefaultServiceStampAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
+import { setIsEditingDocketEntryAction } from '../actions/setIsEditingDocketEntryAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoAddCourtIssuedDocketEntrySequence = [
@@ -33,7 +32,7 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
       setCourtIssuedDocumentInitialDataAction,
       setDefaultServiceStampAction,
       generateCourtIssuedDocumentTitleAction,
-      set(state.isEditingDocketEntry, false),
+      setIsEditingDocketEntryAction(false),
       setCurrentPageAction('CourtIssuedDocketEntry'),
     ],
     unauthorized: [redirectToCognitoAction],

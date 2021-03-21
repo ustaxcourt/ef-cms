@@ -27,6 +27,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
     'docketNumberSuffix',
     'docketNumberWithSuffix',
     'irsPractitioners',
+    'isSealed',
     'privatePractitioners',
     'receivedAt',
     'sealedDate',

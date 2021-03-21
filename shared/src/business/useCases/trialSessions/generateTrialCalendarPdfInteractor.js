@@ -5,15 +5,15 @@ const {
 /**
  * generateTrialCalendarPdfInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {string} trial session calendar pdf url
  */
-exports.generateTrialCalendarPdfInteractor = async ({
+exports.generateTrialCalendarPdfInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({

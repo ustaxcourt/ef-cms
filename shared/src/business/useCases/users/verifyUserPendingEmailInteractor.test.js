@@ -14,7 +14,11 @@ describe('verifyUserPendingEmailInteractor', () => {
   let userCases;
 
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
-
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  });
   beforeEach(() => {
     mockUser = {
       ...validUser,
@@ -59,8 +63,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     };
 
     await expect(
-      verifyUserPendingEmailInteractor({
-        applicationContext,
+      verifyUserPendingEmailInteractor(applicationContext, {
         token: 'abc',
       }),
     ).rejects.toThrow('Unauthorized to manage emails');
@@ -73,8 +76,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     };
 
     await expect(
-      verifyUserPendingEmailInteractor({
-        applicationContext,
+      verifyUserPendingEmailInteractor(applicationContext, {
         token: 'abc',
       }),
     ).rejects.toThrow('Tokens do not match');
@@ -87,8 +89,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     };
 
     await expect(
-      verifyUserPendingEmailInteractor({
-        applicationContext,
+      verifyUserPendingEmailInteractor(applicationContext, {
         token: undefined,
       }),
     ).rejects.toThrow('Tokens do not match');
@@ -106,8 +107,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     };
 
     await expect(
-      verifyUserPendingEmailInteractor({
-        applicationContext,
+      verifyUserPendingEmailInteractor(applicationContext, {
         token: TOKEN,
       }),
     ).rejects.toThrow('Email is not available');
@@ -128,8 +128,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         privatePractitioners: [mockUser],
       });
 
-    await verifyUserPendingEmailInteractor({
-      applicationContext,
+    await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
     });
 
@@ -175,8 +174,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
 
-    await verifyUserPendingEmailInteractor({
-      applicationContext,
+    await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
     });
 
@@ -220,8 +218,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(userCases[0]);
 
-    await verifyUserPendingEmailInteractor({
-      applicationContext,
+    await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
     });
 
@@ -259,8 +256,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
       .mockReturnValueOnce(userCases[1]);
-    await verifyUserPendingEmailInteractor({
-      applicationContext,
+    await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
     });
 
@@ -309,8 +305,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
       .mockReturnValueOnce(userCases[1]);
 
-    await verifyUserPendingEmailInteractor({
-      applicationContext,
+    await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
     });
 
@@ -359,8 +354,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
       .mockReturnValueOnce(userCases[1]);
 
-    await verifyUserPendingEmailInteractor({
-      applicationContext,
+    await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
     });
 
@@ -404,8 +398,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         new Error('updateCaseAndAssociations failure'),
       );
 
-    await verifyUserPendingEmailInteractor({
-      applicationContext,
+    await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
     });
 
@@ -528,7 +521,8 @@ describe('verifyUserPendingEmailInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
-        .mockReturnValueOnce(userCases[1]);
+        .mockReturnValueOnce(userCases[1])
+        .mockReturnValueOnce(MOCK_CASE);
 
       await expect(
         updatePetitionerCases({
@@ -596,7 +590,7 @@ describe('verifyUserPendingEmailInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
+        .getCaseByDocketNumber.mockReturnValue(userCases[0]);
 
       await updatePetitionerCases({
         applicationContext,

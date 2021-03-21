@@ -8,18 +8,19 @@ export const ServiceIndicatorRadios = connect(
     SERVICE_INDICATOR_TYPES: state.constants.SERVICE_INDICATOR_TYPES,
     bindKey: props.bind,
     bindObject: state[props.bind],
+    cerebralBindSimpleSetStateSequence:
+      sequences.cerebralBindSimpleSetStateSequence,
     getValidationError: props.getValidationError,
     hideElectronic: props.hideElectronic,
-    updateStateSequence: sequences.updateStateSequence,
     validationErrors: state[props.validationErrors],
   },
   function ServiceIndicatorRadios({
     bindKey,
     bindObject,
+    cerebralBindSimpleSetStateSequence,
     getValidationError,
     hideElectronic,
     SERVICE_INDICATOR_TYPES,
-    updateStateSequence,
     validateSequence,
     validationErrors,
   }) {
@@ -57,7 +58,7 @@ export const ServiceIndicatorRadios = connect(
                 type="radio"
                 value="Electronic"
                 onChange={e => {
-                  updateStateSequence({
+                  cerebralBindSimpleSetStateSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -83,7 +84,7 @@ export const ServiceIndicatorRadios = connect(
               type="radio"
               value="Paper"
               onChange={e => {
-                updateStateSequence({
+                cerebralBindSimpleSetStateSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -108,7 +109,7 @@ export const ServiceIndicatorRadios = connect(
               type="radio"
               value="None"
               onChange={e => {
-                updateStateSequence({
+                cerebralBindSimpleSetStateSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });

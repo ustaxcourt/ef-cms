@@ -36,8 +36,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
 
     let error;
     try {
-      await getDocumentQCInboxForSectionInteractor({
-        applicationContext,
+      await getDocumentQCInboxForSectionInteractor(applicationContext, {
         section: DOCKET_SECTION,
       });
     } catch (e) {
@@ -52,8 +51,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'docketclerk',
     });
 
-    await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
+    await getDocumentQCInboxForSectionInteractor(applicationContext, {
       section: DOCKET_SECTION,
     });
 
@@ -69,8 +67,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'docketclerk',
     });
 
-    await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
+    await getDocumentQCInboxForSectionInteractor(applicationContext, {
       section: PETITIONS_SECTION,
     });
 
@@ -86,8 +83,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'docketclerk',
     });
 
-    await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
+    await getDocumentQCInboxForSectionInteractor(applicationContext, {
       section: 'ANY_OTHER_SECTION',
     });
 
@@ -103,8 +99,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'judge',
     });
 
-    await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
+    await getDocumentQCInboxForSectionInteractor(applicationContext, {
       judgeUserName: 'Ashford',
       section: JUDGES_CHAMBERS.ASHFORDS_CHAMBERS_SECTION.section,
     });

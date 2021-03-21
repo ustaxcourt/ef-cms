@@ -8,17 +8,16 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 /**
  * getPublicDownloadPolicyUrlInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document
  * @param {string} providers.key the key of the document to get
  * @returns {string} the document download url
  */
-exports.getPublicDownloadPolicyUrlInteractor = async ({
+exports.getPublicDownloadPolicyUrlInteractor = async (
   applicationContext,
-  docketNumber,
-  key,
-}) => {
+  { docketNumber, key },
+) => {
   const caseToCheck = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({

@@ -12,8 +12,7 @@ exports.updatePractitionerUserLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .updatePractitionerUserInteractor({
-        applicationContext,
+      .updatePractitionerUserInteractor(applicationContext, {
         barNumber: event.pathParameters.barNumber,
         bypassDocketEntry: bypassDocketEntry || false,
         user,

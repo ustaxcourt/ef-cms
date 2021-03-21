@@ -22,8 +22,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     );
 
     await expect(
-      getPractitionerByBarNumberInteractor({
-        applicationContext,
+      getPractitionerByBarNumberInteractor(applicationContext, {
         barNumber: 'BN0000',
       }),
     ).rejects.toThrow('Unauthorized for getting attorney user');
@@ -58,10 +57,12 @@ describe('getPractitionerByBarNumberInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
-    const practitioner = await getPractitionerByBarNumberInteractor({
+    const practitioner = await getPractitionerByBarNumberInteractor(
       applicationContext,
-      barNumber: 'PP1234',
-    });
+      {
+        barNumber: 'PP1234',
+      },
+    );
 
     expect(practitioner).toEqual({
       additionalPhone: undefined,
@@ -117,10 +118,12 @@ describe('getPractitionerByBarNumberInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
-    const practitioner = await getPractitionerByBarNumberInteractor({
+    const practitioner = await getPractitionerByBarNumberInteractor(
       applicationContext,
-      barNumber: 'PI5678',
-    });
+      {
+        barNumber: 'PI5678',
+      },
+    );
 
     expect(practitioner).toEqual({
       additionalPhone: undefined,
@@ -160,10 +163,12 @@ describe('getPractitionerByBarNumberInteractor', () => {
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockReturnValue(undefined);
 
-    const practitioner = await getPractitionerByBarNumberInteractor({
+    const practitioner = await getPractitionerByBarNumberInteractor(
       applicationContext,
-      barNumber: 'BN0000',
-    });
+      {
+        barNumber: 'BN0000',
+      },
+    );
 
     expect(practitioner).toBeUndefined();
   });

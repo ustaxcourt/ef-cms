@@ -58,6 +58,7 @@ export const setDocketEntryMetaFormForEditAction = ({
         documentDetail.certificateOfServiceDate,
         'certificateOfService',
       ),
+      ...deconstructDateWrapper(documentDetail.serviceDate, 'serviceDate'),
       ...deconstructDateWrapper(documentDetail.date),
     });
 

@@ -8,15 +8,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getPractitionersByNameInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} params the params object
- * @param {object} params.applicationContext the application context
  * @param {string} params.name the name to search by
  * @returns {*} the result
  */
-exports.getPractitionersByNameInteractor = async ({
+exports.getPractitionersByNameInteractor = async (
   applicationContext,
-  name,
-}) => {
+  { name },
+) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
   if (

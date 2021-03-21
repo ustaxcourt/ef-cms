@@ -12,8 +12,7 @@ exports.generatePrintableCaseInventoryReportLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .generatePrintableCaseInventoryReportInteractor({
-          applicationContext,
+        .generatePrintableCaseInventoryReportInteractor(applicationContext, {
           ...event.queryStringParameters,
         });
     },
