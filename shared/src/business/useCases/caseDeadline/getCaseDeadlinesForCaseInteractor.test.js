@@ -32,10 +32,10 @@ describe('getCaseDeadlinesForCaseInteractor', () => {
       '6ba578e7-5736-435b-a41b-2de3eec29fe7',
     );
 
-    const caseDeadlines = await getCaseDeadlinesForCaseInteractor({
+    const caseDeadlines = await getCaseDeadlinesForCaseInteractor(
       applicationContext,
-      docketNumber: mockCaseDeadline.docketNumber,
-    });
+      { docketNumber: mockCaseDeadline.docketNumber },
+    );
 
     expect(caseDeadlines).toBeDefined();
   });

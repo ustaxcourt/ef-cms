@@ -14,8 +14,7 @@ exports.removeConsolidatedCasesLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .removeConsolidatedCasesInteractor({
-        applicationContext,
+      .removeConsolidatedCasesInteractor(applicationContext, {
         ...event.pathParameters,
         docketNumbersToRemove,
       });

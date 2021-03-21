@@ -23,7 +23,7 @@ exports.getJudgeForUserChambersInteractor = async ({
     } else {
       const chamberUser = await applicationContext
         .getUseCases()
-        .getUserInteractor({ applicationContext });
+        .getUserInteractor(applicationContext);
       chambersSection = chamberUser.section;
     }
 

@@ -38,33 +38,35 @@ Deep dive interviews with 2 IRS attorneys and 2 administrative staff probing on 
 
 [Judge User Interviews (June 2019) - Findings](https://docs.google.com/presentation/d/1HBD21K_sKtOnuJTu6aXse8qt8bSn5ImpX649YmyOzZ0/edit?usp=sharing)
 
+## Continuous Research
+Post-launch, the team continues with research and testing activities.
+
+[Continuous Research Plan](./Continuous-research-plan.pdf)
+
 ## User Flows
 
 These document the user flow of the new system we are building. It's a work-in-progress, that's updated to include the new workflows that we developed.
 
-[Create a New Case (Paper Petition)](https://app.lucidchart.com/invitations/accept/fe5aa2db-f488-4709-a282-9e66614ab58d)
+[Create a New Case (Paper Petition)](./Create-a-new-case.pdf)
 
-[Create and Save Order/Notice](https://www.lucidchart.com/invitations/accept/aff34e34-75ad-487f-8993-db7791a47698)
+[Create and Save Order/Notice](./Court-Issued-Orders-Notices.pdf)
 
 ### Add Docket Entry User Flows
-[Add Docket Entry and Serve - Court-Issued Documents](https://www.lucidchart.com/invitations/accept/aff34e34-75ad-487f-8993-db7791a47698)
-[Add Docket Entry - Externally Filed Paper Documents](https://www.lucidchart.com/invitations/accept/274f4958-92c5-4d5f-9e20-b75ef92ba74a)
+[Add Docket Entry and Serve - Court-Issued Documents](./Court-Issued-Orders-Notices.pdf)
+
+[Add Docket Entry - Externally Filed Paper Documents](./Add-Docket-Entry-External-Paper-Document.pdf)
 
 ### Messaging User Flows
-[Messaging User Flows ](https://www.lucidchart.com/invitations/accept/e5ba5b28-1357-4b35-a1bc-465f5946dad3)
-Includes:
-* Create New Message
-* Reply/Forward/Complete Message
-* Create Order from Message
-* Take Action on Document from Message
-* Complete and Send Message from QC
+* [Create New Message](./Create=new-message.pdf)
+* [Reply/Forward/Complete Message](./Reply-forward-complete-message.pdf)
+* [Create Order from Message](./create-order-from-message.pdf)
+* [Take Action on Document from Message](./take-action-from-message.pdf)
+* [Complete and Send Message from QC](./complete-and-send-message-from-QC.pdf)
 
 ### Trial Session User Flows
-[Trial Session User Flows ](https://www.lucidchart.com/invitations/accept/4d470f04-7511-4e1a-8fea-c85cf2e457c5)
-Includes:
-* Create Trial Session
-* QC Eligible Cases
-* Set Calendar
+* [Create Trial Session](./create-trial-session.pdf)
+* [QC Eligible Cases](./QC-trial-session-eligible-cases.pdf)
+* [Set Calendar](./set-calendar.pdf)
 
 
 # Usability Testing

@@ -135,6 +135,12 @@ const {
   updateCaseAutomaticBlock,
 } = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const {
+  updateCaseCorrespondence,
+} = require('../../persistence/dynamo/correspondence/updateCaseCorrespondence');
+const {
+  updateDocketEntry,
+} = require('../../persistence/dynamo/documents/updateDocketEntry');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -150,6 +156,7 @@ const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
+const { isServed } = require('../entities/DocketEntry');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
@@ -277,6 +284,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
+    isServed: jest.fn().mockImplementation(isServed),
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
@@ -418,8 +426,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
+    updateCaseCorrespondence: jest
+      .fn()
+      .mockImplementation(updateCaseCorrespondence),
     updateCaseHearing: jest.fn(),
     updateCaseTrialSortMappingRecords: jest.fn(),
+    updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     updateWorkItem,
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
@@ -566,7 +578,7 @@ const applicationContext = createTestApplicationContext();
   applicationContextForClient.
 */
 const applicationContextForClient = {};
-Object.entries(applicationContext).map(([key, value]) => {
+Object.entries(applicationContext).forEach(([key, value]) => {
   if (typeof value === 'function') {
     applicationContextForClient[key] = value;
   }

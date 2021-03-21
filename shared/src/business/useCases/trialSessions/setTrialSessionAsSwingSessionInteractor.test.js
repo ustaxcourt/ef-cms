@@ -52,8 +52,7 @@ describe('Set trial session as swing session', () => {
     };
 
     await expect(
-      setTrialSessionAsSwingSessionInteractor({
-        applicationContext,
+      setTrialSessionAsSwingSessionInteractor(applicationContext, {
         swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
         trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
       }),
@@ -66,8 +65,7 @@ describe('Set trial session as swing session', () => {
       userId: 'petitionsclerk',
     };
 
-    await setTrialSessionAsSwingSessionInteractor({
-      applicationContext,
+    await setTrialSessionAsSwingSessionInteractor(applicationContext, {
       swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
     });

@@ -10,8 +10,7 @@ exports.deleteDeficiencyStatisticLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .deleteDeficiencyStatisticInteractor({
-        applicationContext,
+      .deleteDeficiencyStatisticInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });

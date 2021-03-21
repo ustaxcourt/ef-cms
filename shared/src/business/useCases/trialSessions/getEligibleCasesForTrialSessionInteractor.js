@@ -5,22 +5,22 @@ const {
 const {
   TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
 } = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
+const { EligibleCase } = require('../../entities/cases/EligibleCase');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * get eligible cases for trial session
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session to get the eligible cases
  * @returns {Promise} the promise of the getEligibleCasesForTrialSession call
  */
-exports.getEligibleCasesForTrialSessionInteractor = async ({
+exports.getEligibleCasesForTrialSessionInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -40,8 +40,7 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
     calendaredCases = await applicationContext
       .getUseCases()
-      .getCalendaredCasesForTrialSessionInteractor({
-        applicationContext,
+      .getCalendaredCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId,
       });
   }
@@ -66,7 +65,9 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
   let eligibleCasesFiltered = calendaredCases
     .concat(eligibleCases)
     .map(rawCase => {
-      return new Case(rawCase, { applicationContext }).validate().toRawObject();
+      return new EligibleCase(rawCase, { applicationContext })
+        .validate()
+        .toRawObject();
     });
 
   return eligibleCasesFiltered;

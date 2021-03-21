@@ -47,8 +47,7 @@ describe('updateUserPendingEmailInteractor', () => {
     };
 
     await expect(
-      updateUserPendingEmailInteractor({
-        applicationContext,
+      updateUserPendingEmailInteractor(applicationContext, {
         pendingEmail,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -60,16 +59,14 @@ describe('updateUserPendingEmailInteractor', () => {
       .isEmailAvailable.mockReturnValue(false);
 
     await expect(
-      updateUserPendingEmailInteractor({
-        applicationContext,
+      updateUserPendingEmailInteractor(applicationContext, {
         pendingEmail,
       }),
     ).rejects.toThrow('Email is not available');
   });
 
   it('should make a call to get the current user', async () => {
-    await updateUserPendingEmailInteractor({
-      applicationContext,
+    await updateUserPendingEmailInteractor(applicationContext, {
       pendingEmail,
     });
 
@@ -77,8 +74,7 @@ describe('updateUserPendingEmailInteractor', () => {
   });
 
   it('should make a call to getUserById with the logged in user.userId', async () => {
-    await updateUserPendingEmailInteractor({
-      applicationContext,
+    await updateUserPendingEmailInteractor(applicationContext, {
       pendingEmail,
     });
 
@@ -88,8 +84,7 @@ describe('updateUserPendingEmailInteractor', () => {
   });
 
   it('should update the user record in persistence with the pendingEmail value', async () => {
-    await updateUserPendingEmailInteractor({
-      applicationContext,
+    await updateUserPendingEmailInteractor(applicationContext, {
       pendingEmail,
     });
 
@@ -102,8 +97,7 @@ describe('updateUserPendingEmailInteractor', () => {
   it('should return the updated User entity when currentUser.role is petitioner', async () => {
     mockUser = validUser;
 
-    const results = await updateUserPendingEmailInteractor({
-      applicationContext,
+    const results = await updateUserPendingEmailInteractor(applicationContext, {
       pendingEmail,
     });
 
@@ -116,8 +110,7 @@ describe('updateUserPendingEmailInteractor', () => {
   });
 
   it('should return the updated Practitioner entity when currentUser.role is NOT petitioner', async () => {
-    const results = await updateUserPendingEmailInteractor({
-      applicationContext,
+    const results = await updateUserPendingEmailInteractor(applicationContext, {
       pendingEmail,
     });
 
@@ -130,8 +123,7 @@ describe('updateUserPendingEmailInteractor', () => {
   });
 
   it('should call applicationContext.getUseCaseHelpers().sendEmailVerificationLink to send the verification link to the user', async () => {
-    await updateUserPendingEmailInteractor({
-      applicationContext,
+    await updateUserPendingEmailInteractor(applicationContext, {
       pendingEmail,
     });
 

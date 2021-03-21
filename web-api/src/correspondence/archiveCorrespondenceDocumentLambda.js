@@ -10,8 +10,7 @@ exports.archiveCorrespondenceDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .archiveCorrespondenceDocumentInteractor({
-        applicationContext,
+      .archiveCorrespondenceDocumentInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });

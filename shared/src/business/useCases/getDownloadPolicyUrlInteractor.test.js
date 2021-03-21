@@ -1,4 +1,8 @@
 const {
+  calculateISODate,
+  createISODateString,
+} = require('../utilities/DateHandler');
+const {
   getDownloadPolicyUrlInteractor,
 } = require('./getDownloadPolicyUrlInteractor');
 const {
@@ -86,6 +90,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     mockCase.docketEntries.push({
       createdAt: '2018-01-21T20:49:28.192Z',
+      date: '2200-01-21T20:49:28.192Z',
       docketEntryId: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
       docketNumber: '101-18',
       documentTitle: 'Transcript of [anything] on [date]',
@@ -93,7 +98,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       eventCode: TRANSCRIPT_EVENT_CODE,
       isFileAttached: true,
       processingStatus: 'pending',
-      secondaryDate: '2200-01-21T20:49:28.192Z',
       userId: 'petitioner',
     });
     applicationContext
@@ -801,5 +805,163 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     expect(url).toEqual('localhost');
+  });
+
+  it('should not throw an error if the user is associated with the case and the document is a transcript > 90 days old', async () => {
+    const mockDocketEntryId = applicationContext.getUniqueId();
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.irsPractitioner,
+      userId: 'irsPractitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+
+    mockCase.docketEntries.push({
+      createdAt: '2018-01-21T20:49:28.192Z',
+      date: '2000-01-21T20:49:28.192Z',
+      docketEntryId: mockDocketEntryId,
+      docketNumber: '101-18',
+      documentTitle: 'Transcript of [anything] on [date]',
+      documentType: 'Transcript',
+      eventCode: TRANSCRIPT_EVENT_CODE,
+      isFileAttached: true,
+      processingStatus: 'pending',
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+      docketNumber: mockCase.docketNumber,
+      key: mockDocketEntryId,
+    });
+
+    expect(url).toEqual('localhost');
+  });
+
+  it('should not throw an error if the user is associated with the case and the document is a legacy transcript > 90 days old', async () => {
+    const mockDocketEntryId = applicationContext.getUniqueId();
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.irsPractitioner,
+      userId: 'irsPractitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+
+    mockCase.docketEntries.push({
+      createdAt: '2018-01-21T20:49:28.192Z',
+      date: undefined,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: '101-18',
+      documentTitle: 'Transcript of [anything] on [date]',
+      documentType: 'Transcript',
+      eventCode: TRANSCRIPT_EVENT_CODE,
+      filingDate: '2000-01-21T20:49:28.192Z',
+      isFileAttached: true,
+      isLegacy: true,
+      processingStatus: 'pending',
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+      docketNumber: mockCase.docketNumber,
+      key: mockDocketEntryId,
+    });
+
+    expect(url).toEqual('localhost');
+  });
+
+  it('should throw an error if the user is associated with the case and the document is a transcript < 90 days old', async () => {
+    const mockDocketEntryId = applicationContext.getUniqueId();
+    const aShortTimeAgo = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -12,
+      units: 'hours',
+    });
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.irsPractitioner,
+      userId: 'irsPractitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+
+    mockCase.docketEntries.push({
+      createdAt: '2018-01-21T20:49:28.192Z',
+      date: aShortTimeAgo,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: '101-18',
+      documentTitle: 'Transcript of [anything] on [date]',
+      documentType: 'Transcript',
+      eventCode: TRANSCRIPT_EVENT_CODE,
+      isFileAttached: true,
+      processingStatus: 'pending',
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: mockDocketEntryId,
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time.');
+  });
+
+  it('should throw an error if the user is associated with the case and the document is a legacy transcript < 90 days old', async () => {
+    const mockDocketEntryId = applicationContext.getUniqueId();
+    const aShortTimeAgo = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -12,
+      units: 'hours',
+    });
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.irsPractitioner,
+      userId: 'irsPractitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+
+    mockCase.docketEntries.push({
+      createdAt: '2018-01-21T20:49:28.192Z',
+      date: undefined,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: '101-18',
+      documentTitle: 'Transcript of [anything] on [date]',
+      documentType: 'Transcript',
+      eventCode: TRANSCRIPT_EVENT_CODE,
+      filingDate: aShortTimeAgo,
+      isFileAttached: true,
+      isLegacy: true,
+      processingStatus: 'pending',
+      userId: 'petitioner',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
+
+    await expect(
+      getDownloadPolicyUrlInteractor({
+        applicationContext,
+        docketNumber: mockCase.docketNumber,
+        key: mockDocketEntryId,
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time.');
   });
 });

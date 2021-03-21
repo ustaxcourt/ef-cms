@@ -19,8 +19,7 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    const result = await prioritizeCaseInteractor({
-      applicationContext,
+    const result = await prioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
@@ -53,8 +52,7 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    await prioritizeCaseInteractor({
-      applicationContext,
+    await prioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
@@ -69,8 +67,7 @@ describe('prioritizeCaseInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      prioritizeCaseInteractor({
-        applicationContext,
+      prioritizeCaseInteractor(applicationContext, {
         docketNumber: '123-20',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -91,8 +88,7 @@ describe('prioritizeCaseInteractor', () => {
       );
 
     await expect(
-      prioritizeCaseInteractor({
-        applicationContext,
+      prioritizeCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         reason: 'just because',
       }),
@@ -112,8 +108,7 @@ describe('prioritizeCaseInteractor', () => {
       );
 
     await expect(
-      prioritizeCaseInteractor({
-        applicationContext,
+      prioritizeCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         reason: 'just because',
       }),
@@ -130,8 +125,7 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    await prioritizeCaseInteractor({
-      applicationContext,
+    await prioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
@@ -158,8 +152,7 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    await prioritizeCaseInteractor({
-      applicationContext,
+    await prioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });

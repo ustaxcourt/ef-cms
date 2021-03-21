@@ -30,8 +30,7 @@ describe('run trial session planning report', () => {
       .getEligibleCasesForTrialCity.mockReturnValue([]);
 
     await expect(
-      runTrialSessionPlanningReportInteractor({
-        applicationContext,
+      runTrialSessionPlanningReportInteractor(applicationContext, {
         term: 'winter',
         year: '2020',
       }),
@@ -64,11 +63,13 @@ describe('run trial session planning report', () => {
         },
       ]);
 
-    const result = await runTrialSessionPlanningReportInteractor({
+    const result = await runTrialSessionPlanningReportInteractor(
       applicationContext,
-      term: 'winter',
-      year: '2020',
-    });
+      {
+        term: 'winter',
+        year: '2020',
+      },
+    );
 
     expect(result).toBe(mockPdfUrl);
     expect(

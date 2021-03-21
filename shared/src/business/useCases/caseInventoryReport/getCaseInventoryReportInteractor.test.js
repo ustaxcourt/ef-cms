@@ -26,8 +26,7 @@ describe('getCaseInventoryReportInteractor', () => {
     });
 
     await expect(
-      getCaseInventoryReportInteractor({
-        applicationContext,
+      getCaseInventoryReportInteractor(applicationContext, {
         associatedJudge: CHIEF_JUDGE,
       }),
     ).rejects.toThrow('Unauthorized for case inventory report');
@@ -35,9 +34,7 @@ describe('getCaseInventoryReportInteractor', () => {
 
   it('throws an error if associatedJudge and status are not passed in', async () => {
     await expect(
-      getCaseInventoryReportInteractor({
-        applicationContext,
-      }),
+      getCaseInventoryReportInteractor(applicationContext, {}),
     ).rejects.toThrow('Either judge or status must be provided');
   });
 
@@ -54,8 +51,7 @@ describe('getCaseInventoryReportInteractor', () => {
         },
       ]);
 
-    const result = await getCaseInventoryReportInteractor({
-      applicationContext,
+    const result = await getCaseInventoryReportInteractor(applicationContext, {
       associatedJudge: CHIEF_JUDGE,
       status: CASE_STATUS_TYPES.NEW,
     });

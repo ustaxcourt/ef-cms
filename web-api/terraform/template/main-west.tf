@@ -16,7 +16,7 @@ resource "null_resource" "api_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -28,7 +28,7 @@ resource "null_resource" "websockets_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -40,7 +40,7 @@ resource "null_resource" "api_public_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -52,7 +52,7 @@ resource "null_resource" "puppeteer_layer_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -63,7 +63,7 @@ resource "null_resource" "cron_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -213,6 +213,14 @@ resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
   }
 }
 
+module "api-west-waf" {
+  environment = var.environment
+  providers = {
+    aws = aws.us-west-1
+  }
+  source = "./waf/"
+}
+
 module "api-west-green" {
   api_object             = null_resource.api_west_object
   api_public_object      = null_resource.api_public_west_object
@@ -249,6 +257,7 @@ module "api-west-green" {
   create_cron            = 0
   create_streams         = 0
   stream_arn             = ""
+  web_acl_arn            = module.api-west-waf.web_acl_arn
 }
 
 module "api-west-blue" {
@@ -287,6 +296,5 @@ module "api-west-blue" {
   create_cron            = 0
   create_streams         = 0
   stream_arn             = ""
+  web_acl_arn            = module.api-west-waf.web_acl_arn
 }
-
-

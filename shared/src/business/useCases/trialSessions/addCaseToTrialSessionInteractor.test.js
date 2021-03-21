@@ -57,8 +57,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await expect(
-      addCaseToTrialSessionInteractor({
-        applicationContext,
+      addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
@@ -72,8 +71,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await expect(
-      addCaseToTrialSessionInteractor({
-        applicationContext,
+      addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
@@ -88,8 +86,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await expect(
-      addCaseToTrialSessionInteractor({
-        applicationContext,
+      addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
@@ -106,11 +103,13 @@ describe('addCaseToTrialSessionInteractor', () => {
       '8675309b-18d0-43ec-bafb-654e83405411',
     );
 
-    const latestCase = await addCaseToTrialSessionInteractor({
+    const latestCase = await addCaseToTrialSessionInteractor(
       applicationContext,
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
-    });
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+      },
+    );
 
     expect(latestCase).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
@@ -132,8 +131,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       '8675309b-18d0-43ec-bafb-654e83405411',
     );
 
-    await addCaseToTrialSessionInteractor({
-      applicationContext,
+    await addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes: 'Test',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
@@ -154,8 +152,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       isCalendared: true,
     };
 
-    await addCaseToTrialSessionInteractor({
-      applicationContext,
+    await addCaseToTrialSessionInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
     });

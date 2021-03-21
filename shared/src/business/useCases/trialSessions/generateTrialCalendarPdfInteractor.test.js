@@ -65,8 +65,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
 
   it('should find the cases for a trial session successfully', async () => {
     await expect(
-      generateTrialCalendarPdfInteractor({
-        applicationContext,
+      generateTrialCalendarPdfInteractor(applicationContext, {
         content: {
           trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
@@ -111,12 +110,14 @@ describe('generateTrialCalendarPdfInteractor', () => {
   });
 
   it('should return the trial session calendar pdf url', async () => {
-    const result = await generateTrialCalendarPdfInteractor({
+    const result = await generateTrialCalendarPdfInteractor(
       applicationContext,
-      content: {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      {
+        content: {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
       },
-    });
+    );
 
     expect(result.url).toBe(mockPdfUrl.url);
   });
@@ -148,8 +149,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
         zip: '10108',
       });
 
-    await generateTrialCalendarPdfInteractor({
-      applicationContext,
+    await generateTrialCalendarPdfInteractor(applicationContext, {
       content: {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       },
