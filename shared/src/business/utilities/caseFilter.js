@@ -1,5 +1,6 @@
 const {
   getContactPrimary,
+  getOtherFilers,
   isAssociatedUser,
   isSealedCase,
 } = require('../entities/cases/Case');
@@ -61,7 +62,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   const caseContactsToBeSealed = [
     getContactPrimary(formattedCase),
     formattedCase.contactSecondary,
-    ...(formattedCase.otherFilers || []),
+    ...getOtherFilers(formattedCase),
     ...(formattedCase.otherPetitioners || []),
   ].filter(caseContact => caseContact && caseContact.isAddressSealed);
   caseContactsToBeSealed.forEach(caseContact => {
