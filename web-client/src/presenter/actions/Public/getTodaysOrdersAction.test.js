@@ -34,4 +34,22 @@ describe('getTodaysOrdersAction', () => {
     expect(result.output.todaysOrders).toMatchObject(mockTodaysOrders);
     expect(result.output.totalCount).toBe(mockTotalCount);
   });
+
+  it('should use default values for page and sortOrder if not provided', async () => {
+    await runAction(getTodaysOrdersAction, {
+      modules: {
+        presenter,
+      },
+      state: {},
+    });
+    const todaysOrdersSort = applicationContext.getConstants()
+      .TODAYS_ORDER_SORT;
+    expect(
+      applicationContext.getUseCases().getTodaysOrdersInteractor,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      page: 1,
+      todaysOrdersSort,
+    });
+  });
 });

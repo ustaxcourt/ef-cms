@@ -30,7 +30,7 @@ describe('setTodaysOrdersAction', () => {
         totalCount: 17,
       },
       state: {
-        todaysOrders: { results: mockTodaysOrdersFromState },
+        todaysOrders: { page: 2, results: mockTodaysOrdersFromState },
       },
     });
 
@@ -70,13 +70,28 @@ describe('setTodaysOrdersAction', () => {
   it('should set state.todaysOrders.page to the value in state + 1', async () => {
     const { state } = await runAction(setTodaysOrdersAction, {
       props: {
-        todaysOrders: [],
+        todaysOrders: [{ some: 'result' }],
       },
       state: {
-        todaysOrders: { page: 4, results: [] },
+        todaysOrders: { page: 4, results: [{ some: 'other' }] },
       },
     });
 
     expect(state.todaysOrders.page).toBe(5);
+    expect(state.todaysOrders.results.length).toBe(2);
+  });
+
+  it('should set state.todaysOrders.results to the props.todaysOrders if page is 1', async () => {
+    const { state } = await runAction(setTodaysOrdersAction, {
+      props: {
+        todaysOrders: [{ some: 'result' }],
+      },
+      state: {
+        todaysOrders: { page: 1, results: [{ some: 'other' }] },
+      },
+    });
+
+    expect(state.todaysOrders.results.length).toBe(1);
+    expect(state.todaysOrders.results).toEqual([{ some: 'result' }]);
   });
 });
