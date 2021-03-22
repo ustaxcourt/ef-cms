@@ -7980,6 +7980,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -8309,6 +8322,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -8551,6 +8577,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -8880,6 +8919,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -9140,6 +9192,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -9469,6 +9534,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -9711,6 +9789,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -10040,6 +10131,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -10300,6 +10404,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -10629,6 +10746,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -10871,6 +11001,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -11200,6 +11343,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -11460,6 +11616,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -11789,6 +11958,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -12031,6 +12213,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -12360,6 +12555,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -12620,6 +12828,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -12949,6 +13170,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -13191,6 +13425,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -13520,6 +13767,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -13780,6 +14040,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -14109,6 +14382,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -14351,6 +14637,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -14680,6 +14979,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -14940,6 +15252,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -15269,6 +15594,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -15511,6 +15849,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -15840,6 +16191,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -16100,6 +16464,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -16429,6 +16806,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -16671,6 +17061,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -17000,6 +17403,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -17260,6 +17676,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -17589,6 +18018,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -17831,6 +18273,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -18160,6 +18615,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -18420,6 +18888,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -18749,6 +19230,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -18991,6 +19485,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -19320,6 +19827,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -19580,6 +20100,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -19909,6 +20442,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -20151,6 +20697,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -20480,6 +21039,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -20740,6 +21312,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -21069,6 +21654,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -21311,6 +21909,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -21640,6 +22251,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -21900,6 +22524,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -22229,6 +22866,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -22471,6 +23121,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -22800,6 +23463,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -23060,6 +23736,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -23389,6 +24078,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -23631,6 +24333,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -23960,6 +24675,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -24220,6 +24948,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -24549,6 +25290,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -24791,6 +25545,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -25120,6 +25887,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -25380,6 +26160,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -25709,6 +26502,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -25951,6 +26757,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -26280,6 +27099,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -26540,6 +27372,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -26869,6 +27714,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -27111,6 +27969,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -27440,6 +28311,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -27700,6 +28584,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -28029,6 +28926,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -28271,6 +29181,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -28600,6 +29523,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -28869,6 +29805,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -29183,6 +30132,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -29410,6 +30372,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -29724,6 +30699,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -29969,6 +30957,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -30283,6 +31284,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -30510,6 +31524,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -30824,6 +31851,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -31069,6 +32109,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -31383,6 +32436,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -31610,6 +32676,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -31924,6 +33003,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -32169,6 +33261,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -32483,6 +33588,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -32710,6 +33828,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -33024,6 +34155,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -33269,6 +34413,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -33583,6 +34740,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -33810,6 +34980,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -34124,6 +35307,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -34369,6 +35565,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -34683,6 +35892,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -34910,6 +36132,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -35224,6 +36459,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -35469,6 +36717,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -35783,6 +37044,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -36010,6 +37284,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -36324,6 +37611,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -36569,6 +37869,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -36883,6 +38196,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -37110,6 +38436,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -37424,6 +38763,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -37669,6 +39021,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -37983,6 +39348,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -38210,6 +39588,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -38524,6 +39915,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -38769,6 +40173,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -39083,6 +40500,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -39310,6 +40740,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -39624,6 +41067,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -39869,6 +41325,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -40183,6 +41652,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -40410,6 +41892,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -40724,6 +42219,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -40969,6 +42477,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -41283,6 +42804,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -41510,6 +43044,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -41824,6 +43371,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -42069,6 +43629,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -42383,6 +43956,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -42610,6 +44196,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -42924,6 +44523,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -43169,6 +44781,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -43483,6 +45108,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -43710,6 +45348,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -44024,6 +45675,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -44269,6 +45933,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -44583,6 +46260,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -44810,6 +46500,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -45124,6 +46827,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -45369,6 +47085,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -45683,6 +47412,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -45910,6 +47652,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -46224,6 +47979,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -46469,6 +48237,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -46783,6 +48564,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -47010,6 +48804,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -47324,6 +49131,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -47569,6 +49389,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -47883,6 +49716,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -48110,6 +49956,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -48424,6 +50283,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -48706,6 +50578,19 @@
                             options: 
                               version: 
                                 - "uuidv4"
+                    contactType: 
+                      type: "string"
+                      flags: 
+                        only: true
+                        presence: "required"
+                      rules: 
+                        - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                      allow: 
+                        - "PRIMARY"
+                        - "SECONDARY"
                     inCareOf: 
                       type: "string"
                       flags: 
@@ -49022,6 +50907,19 @@
                             options: 
                               version: 
                                 - "uuidv4"
+                    contactType: 
+                      type: "string"
+                      flags: 
+                        only: true
+                        presence: "required"
+                      rules: 
+                        - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                      allow: 
+                        - "PRIMARY"
+                        - "SECONDARY"
                     inCareOf: 
                       type: "string"
                       flags: 
@@ -49251,6 +51149,19 @@
                             options: 
                               version: 
                                 - "uuidv4"
+                    contactType: 
+                      type: "string"
+                      flags: 
+                        only: true
+                        presence: "required"
+                      rules: 
+                        - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                      allow: 
+                        - "PRIMARY"
+                        - "SECONDARY"
                     inCareOf: 
                       type: "string"
                       flags: 
@@ -49567,6 +51478,19 @@
                             options: 
                               version: 
                                 - "uuidv4"
+                    contactType: 
+                      type: "string"
+                      flags: 
+                        only: true
+                        presence: "required"
+                      rules: 
+                        - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                      allow: 
+                        - "PRIMARY"
+                        - "SECONDARY"
                     inCareOf: 
                       type: "string"
                       flags: 
@@ -49814,6 +51738,19 @@
                             options: 
                               version: 
                                 - "uuidv4"
+                    contactType: 
+                      type: "string"
+                      flags: 
+                        only: true
+                        presence: "required"
+                      rules: 
+                        - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                      allow: 
+                        - "PRIMARY"
+                        - "SECONDARY"
                     inCareOf: 
                       type: "string"
                       flags: 
@@ -50128,6 +52065,19 @@
                             options: 
                               version: 
                                 - "uuidv4"
+                    contactType: 
+                      type: "string"
+                      flags: 
+                        only: true
+                        presence: "required"
+                      rules: 
+                        - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                      allow: 
+                        - "PRIMARY"
+                        - "SECONDARY"
                     inCareOf: 
                       type: "string"
                       flags: 
@@ -50355,6 +52305,19 @@
                             options: 
                               version: 
                                 - "uuidv4"
+                    contactType: 
+                      type: "string"
+                      flags: 
+                        only: true
+                        presence: "required"
+                      rules: 
+                        - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                      allow: 
+                        - "PRIMARY"
+                        - "SECONDARY"
                     inCareOf: 
                       type: "string"
                       flags: 
@@ -50669,6 +52632,19 @@
                             options: 
                               version: 
                                 - "uuidv4"
+                    contactType: 
+                      type: "string"
+                      flags: 
+                        only: true
+                        presence: "required"
+                      rules: 
+                        - 
+                          name: "min"
+                          args: 
+                            limit: 1
+                      allow: 
+                        - "PRIMARY"
+                        - "SECONDARY"
                     inCareOf: 
                       type: "string"
                       flags: 
@@ -51052,6 +53028,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -51366,6 +53355,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -51593,6 +53595,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -51907,6 +53922,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -52152,6 +54180,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -52466,6 +54507,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -52693,6 +54747,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -53007,6 +55074,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -53252,6 +55332,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -53566,6 +55659,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -53793,6 +55899,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -54107,6 +56226,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -54352,6 +56484,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -54666,6 +56811,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -54893,6 +57051,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -55207,6 +57378,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -55452,6 +57636,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -55766,6 +57963,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -55993,6 +58203,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -56307,6 +58530,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -56552,6 +58788,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -56866,6 +59115,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -57093,6 +59355,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -57407,6 +59682,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -57652,6 +59940,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -57966,6 +60267,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -58193,6 +60507,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -58507,6 +60834,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -58752,6 +61092,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -59066,6 +61419,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -59293,6 +61659,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -59607,6 +61986,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -59852,6 +62244,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -60166,6 +62571,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -60393,6 +62811,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -60707,6 +63138,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -60952,6 +63396,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -61266,6 +63723,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -61493,6 +63963,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -61807,6 +64290,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -62052,6 +64548,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -62366,6 +64875,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -62593,6 +65115,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -62907,6 +65442,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -63152,6 +65700,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -63466,6 +66027,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -63693,6 +66267,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -64007,6 +66594,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -64252,6 +66852,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -64566,6 +67179,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -64793,6 +67419,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -65107,6 +67746,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -65352,6 +68004,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -65666,6 +68331,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -65893,6 +68571,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -66207,6 +68898,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -66452,6 +69156,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -66766,6 +69483,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -66993,6 +69723,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -67307,6 +70050,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -67552,6 +70308,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -67866,6 +70635,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -68093,6 +70875,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -68407,6 +71202,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -68652,6 +71460,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -68966,6 +71787,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -69193,6 +72027,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -69507,6 +72354,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -69752,6 +72612,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -70066,6 +72939,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -70293,6 +73179,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
@@ -70607,6 +73506,19 @@
                                 options: 
                                   version: 
                                     - "uuidv4"
+                        contactType: 
+                          type: "string"
+                          flags: 
+                            only: true
+                            presence: "required"
+                          rules: 
+                            - 
+                              name: "min"
+                              args: 
+                                limit: 1
+                          allow: 
+                            - "PRIMARY"
+                            - "SECONDARY"
                         inCareOf: 
                           type: "string"
                           flags: 
