@@ -3,11 +3,13 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CONTACT_TYPES,
+  COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
+  UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const { isPrivateDocument, PublicCase } = require('./PublicCase');
 const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
@@ -423,6 +425,21 @@ describe('PublicCase', () => {
     });
 
     it('an irsPractitioner should be able to see otherPetitioners and otherFilers', () => {
+      const mockOtherFiler = {
+        address1: '42 Lamb Sauce Blvd',
+        city: 'Nashville',
+        contactType: CONTACT_TYPES.otherFiler,
+        country: 'USA',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'gordon@example.com',
+        name: 'Gordon Ramsay',
+        otherFilerType: null,
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+        title: UNIQUE_OTHER_FILER_TYPE,
+      };
+
       const entity = new PublicCase(
         {
           caseCaption: 'testing',
@@ -434,14 +451,17 @@ describe('PublicCase', () => {
           docketNumberSuffix: null,
           docketNumberWithSuffix: null,
           irsPractitioners: [],
-          otherFilers: [],
           otherPetitioners: [],
+          partyType: PARTY_TYPES.petitioner,
+          petitioners: [mockOtherFiler],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
       );
 
-      expect(entity.otherFilers).toBeTruthy();
+      expect(entity.petitioners).toEqual(
+        expect.arrayContaining([expect.objectContaining(mockOtherFiler)]),
+      );
       expect(entity.otherPetitioners).toBeTruthy();
       expect(entity.irsPractitioners).toBeTruthy();
     });
@@ -566,13 +586,20 @@ describe('PublicCase', () => {
             userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
-        otherFilers: [
+        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        petitioners: [
+          {
+            ...rawContactPrimary,
+            contactType: CONTACT_TYPES.primary,
+            isPaper: true,
+          },
           {
             address1: '907 West Rocky Cowley Parkway',
             address2: '104 West 120th Street',
             address3: 'Nisi quisquam ea har',
             city: 'Ut similique id erro',
             contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            contactType: CONTACT_TYPES.otherFiler,
             countryType: 'domestic',
             email: 'petitioner@example.com',
             isAddressSealed: false,
@@ -582,14 +609,6 @@ describe('PublicCase', () => {
             sealedAndUnavailable: false,
             secondaryName: 'Leslie Bullock',
             state: 'MD',
-          },
-        ],
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: [
-          {
-            ...rawContactPrimary,
-            contactType: CONTACT_TYPES.primary,
-            isPaper: true,
           },
         ],
         privatePractitioners: [
@@ -631,6 +650,9 @@ describe('PublicCase', () => {
         petitioners: expect.arrayContaining([
           expect.objectContaining({
             ...rawContactPrimary,
+          }),
+          expect.objectContaining({
+            contactType: CONTACT_TYPES.otherFiler,
           }),
         ]),
         receivedAt: 'testing',
