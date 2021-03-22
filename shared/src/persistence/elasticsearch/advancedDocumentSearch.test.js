@@ -38,8 +38,7 @@ describe('advancedDocumentSearch', () => {
   };
 
   const orderQueryParams = [
-    { match: { 'pk.S': 'case|' } },
-    { match: { 'sk.S': 'docket-entry|' } },
+    { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {
         field: 'servedAt',
@@ -47,30 +46,20 @@ describe('advancedDocumentSearch', () => {
     },
     {
       bool: {
-        must_not: [
+        must: [
           {
-            term: { 'isStricken.BOOL': true },
-          },
-        ],
-        should: [
-          {
-            match: {
-              'eventCode.S': orderEventCodes[0],
-            },
-          },
-          {
-            match: {
-              'eventCode.S': orderEventCodes[1],
+            terms: {
+              'eventCode.S': [orderEventCodes[0], orderEventCodes[1]],
             },
           },
         ],
+        must_not: [{ term: { 'isStricken.BOOL': true } }],
       },
     },
   ];
 
   const opinionQueryParams = [
-    { match: { 'pk.S': 'case|' } },
-    { match: { 'sk.S': 'docket-entry|' } },
+    { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {
         field: 'servedAt',
@@ -78,21 +67,16 @@ describe('advancedDocumentSearch', () => {
     },
     {
       bool: {
+        must: [
+          {
+            terms: {
+              'eventCode.S': [opinionEventCodes[0], opinionEventCodes[1]],
+            },
+          },
+        ],
         must_not: [
           {
             term: { 'isStricken.BOOL': true },
-          },
-        ],
-        should: [
-          {
-            match: {
-              'eventCode.S': opinionEventCodes[0],
-            },
-          },
-          {
-            match: {
-              'eventCode.S': opinionEventCodes[1],
-            },
           },
         ],
       },
@@ -134,8 +118,8 @@ describe('advancedDocumentSearch', () => {
 
     if (docketNumber) {
       query.bool.must = {
-        match: {
-          'docketNumber.S': { operator: 'and', query: docketNumber },
+        term: {
+          'docketNumber.S': docketNumber,
         },
       };
     }
@@ -258,15 +242,12 @@ describe('advancedDocumentSearch', () => {
       ...orderQueryParams,
       getCaseMappingQueryParams(), // match all parents
       {
-        match: {
-          'documentType.S': {
-            operator: 'and',
-            query: 'Summary Opinion',
-          },
+        term: {
+          'documentType.S': 'Summary Opinion',
         },
       },
     ];
-    expectation[4].has_parent.query.bool.must_not = [
+    expectation[3].has_parent.query.bool.must_not = [
       { term: { 'isSealed.BOOL': true } },
     ];
 
@@ -287,15 +268,12 @@ describe('advancedDocumentSearch', () => {
       ...orderQueryParams,
       getCaseMappingQueryParams(), // match all parents
       {
-        match: {
-          'documentType.S': {
-            operator: 'and',
-            query: 'Summary Opinion',
-          },
+        term: {
+          'documentType.S': 'Summary Opinion',
         },
       },
     ];
-    expectation[4].has_parent.query.bool.must_not = [
+    expectation[3].has_parent.query.bool.must_not = [
       { term: { 'isSealed.BOOL': true } },
     ];
     expect(
