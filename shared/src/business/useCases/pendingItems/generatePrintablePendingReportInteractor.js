@@ -78,7 +78,7 @@ exports.generatePrintablePendingReportInteractor = async (
 
   const key = `pending-report-${applicationContext.getUniqueId()}.pdf`;
 
-  await new Promise(resolve => {
+  await new Promise((resolve, reject) => {
     const documentsBucket =
       applicationContext.environment.tempDocumentsBucketName;
     const s3Client = applicationContext.getStorageClient();
@@ -90,7 +90,11 @@ exports.generatePrintablePendingReportInteractor = async (
       Key: key,
     };
 
-    s3Client.upload(params, function () {
+    s3Client.upload(params, function (err) {
+      //todo: verify if this should also be thrown
+      if (err) {
+        reject(err);
+      }
       resolve();
     });
   });
