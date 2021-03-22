@@ -12,9 +12,7 @@ exports.todaysOrdersLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .getTodaysOrdersInteractor(applicationContext, {
-          ...event.pathParameters,
-        });
+        .getTodaysOrdersInteractor(applicationContext, event.pathParameters);
     },
     { user: {} },
   );
