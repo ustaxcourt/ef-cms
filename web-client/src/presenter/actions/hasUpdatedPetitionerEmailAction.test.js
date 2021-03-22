@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { hasUpdatedPetitionerEmailAction } from './hasUpdatedPetitionerEmailAction';
 import { presenter } from '../presenter-mock';
@@ -22,7 +23,9 @@ describe('hasUpdatedPetitionerEmailAction', () => {
       modules: { presenter },
       state: {
         caseDetail: {
-          petitioners: [{ email: INITIAL_EMAIL, isContactPrimary: true }],
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
+          ],
         },
         form: { contactPrimary: { email: UPDATED_EMAIL } },
       },
@@ -36,7 +39,9 @@ describe('hasUpdatedPetitionerEmailAction', () => {
       modules: { presenter },
       state: {
         caseDetail: {
-          petitioners: [{ email: INITIAL_EMAIL, isContactPrimary: true }],
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
+          ],
         },
         form: {
           contactPrimary: { email: INITIAL_EMAIL },

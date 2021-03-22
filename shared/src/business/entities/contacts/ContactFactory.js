@@ -1,5 +1,6 @@
 const joi = require('joi');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
@@ -94,6 +95,9 @@ const commonValidationRequirements = {
   contactId: JoiValidationConstants.UUID.required().description(
     'Unique contact ID only used by the system.',
   ),
+  contactType: JoiValidationConstants.STRING.valid(
+    Object.keys(CONTACT_TYPES),
+  ).required(),
   email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
     then: joi.required(),
@@ -426,7 +430,7 @@ ContactFactory.createContacts = ({
     otherPetitioners,
     primary: constructors.primary
       ? new constructors.primary(
-          { ...contactInfo.primary, isContactPrimary: true } || {},
+          { ...contactInfo.primary, contactType: CONTACT_TYPES.primary } || {},
           {
             applicationContext,
           },
@@ -473,12 +477,12 @@ ContactFactory.createContactFactory = ({
       this.address2 = rawContact.address2 || undefined;
       this.address3 = rawContact.address3 || undefined;
       this.city = rawContact.city;
+      this.contactType = rawContact.contactType;
       this.country = rawContact.country;
       this.countryType = rawContact.countryType;
       this.email = rawContact.email;
       this.inCareOf = rawContact.inCareOf;
       this.isAddressSealed = rawContact.isAddressSealed || false;
-      this.isContactPrimary = rawContact.isContactPrimary || false;
       this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
       this.name = rawContact.name;
       this.phone = rawContact.phone;

@@ -6,6 +6,7 @@ const {
 } = require('./associatePrivatePractitionerToCase');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -57,9 +58,9 @@ describe('associatePrivatePractitionerToCase', () => {
         {
           address1: '123 Main St',
           city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          isContactPrimary: true,
           name: 'Test Petitioner',
           phone: '1234567',
           postalCode: '12345',

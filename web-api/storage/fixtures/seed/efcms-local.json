@@ -45,7 +45,7 @@
       "name": "Astra Santiago",
       "state": "NY",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "entityName": "Case",
     "caseCaption": "Astra Santiago, Petitioner",
@@ -535,7 +535,7 @@
       "state": "PA",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true    }],
+      "contactType": "PRIMARY"    }],
     "createdAt": "2020-01-02T16:05:45.978Z",
     "noticeOfAttachments": false,
     "trialTime": "10:00",
@@ -837,7 +837,7 @@
       "state": "AL",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -1106,7 +1106,7 @@
       "name": "Hanan Al Hroub",
       "countryType": "international",
       "phone": "1234567890",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "highPriority": false,
     "noticeOfAttachments": false,
@@ -1575,7 +1575,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -1756,7 +1756,7 @@
       "state": "DC",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2020-01-23T21:44:54.034Z",
     "noticeOfAttachments": false,
@@ -2467,7 +2467,7 @@
       "state": "CA",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2019-12-11T16:02:31.173Z",
     "noticeOfAttachments": false,
@@ -3245,7 +3245,7 @@
       "state": "MD",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2019-08-16T19:21:46.146Z",
     "noticeOfAttachments": false,
@@ -4190,7 +4190,7 @@
         "state": "HI",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "isContactPrimary": true
+        "contactType": "PRIMARY"
       },
       {
         "role": "petitioner",
@@ -5174,7 +5174,7 @@
       "state": "AL",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2019-03-27T21:53:00.297Z",
     "noticeOfAttachments": false,
@@ -5538,7 +5538,7 @@
         "state": "AL",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "isContactPrimary": true
+        "contactType": "PRIMARY"
       },
       {
         "role": "petitioner",
@@ -6022,7 +6022,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2020-10-16T15:19:38.084Z",
     "noticeOfAttachments": false,
@@ -6229,7 +6229,7 @@
       "state": "AR",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2019-12-11T15:25:09.284Z",
     "noticeOfAttachments": false,
@@ -6376,7 +6376,7 @@
       "state": "MA",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2019-03-01T22:53:50.097Z",
     "noticeOfAttachments": false,
@@ -6683,7 +6683,7 @@
       "state": "NM",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
@@ -7755,7 +7755,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2020-11-30T21:58:13.406Z",
     "noticeOfAttachments": false,
@@ -7999,7 +7999,7 @@
         "state": "AL",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "isContactPrimary": true
+        "contactType": "PRIMARY"
       },
       {
         "role": "petitioner",
@@ -8166,7 +8166,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2020-11-18T19:32:11.463Z",
     "noticeOfAttachments": false,
@@ -8449,7 +8449,7 @@
       "name": "Idola Flowers",
       "state": "VA",
       "countryType": "domestic",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -8684,7 +8684,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -9238,7 +9238,7 @@
       "state": "TN",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -9410,7 +9410,7 @@
       "state": "CO",
       "countryType": "domestic",
       "phone": "1234567890",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -10225,7 +10225,7 @@
       "state": "TN",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -10447,7 +10447,7 @@
       "phone": "+1 (677) 974-4448",
       "name": "Valentine Holman",
       "state": "CO",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2020-11-30T22:57:58.402Z",
     "noticeOfAttachments": false,
@@ -10982,7 +10982,7 @@
         "state": "AL",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "isContactPrimary": true
+        "contactType": "PRIMARY"
       },
       {
         "role": "petitioner",
@@ -11299,7 +11299,7 @@
       "state": "CA",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2019-12-11T15:25:55.006Z",
     "noticeOfAttachments": false,
@@ -11633,7 +11633,7 @@
         "state": "DE",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "isContactPrimary": true
+        "contactType": "PRIMARY"
       },
       {
         "role": "petitioner",
@@ -11797,7 +11797,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2020-10-13T20:23:17.556Z",
     "noticeOfAttachments": false,
@@ -12023,7 +12023,7 @@
       "state": "MS",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "isContactPrimary": true
+      "contactType": "PRIMARY"
     }],
     "createdAt": "2019-07-12T17:09:41.026Z",
     "noticeOfAttachments": false,

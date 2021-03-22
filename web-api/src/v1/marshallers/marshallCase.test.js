@@ -1,4 +1,7 @@
 const {
+  CONTACT_TYPES,
+} = require('../../../../shared/src/business/entities/EntityConstants');
+const {
   getContactPrimary,
 } = require('../../../../shared/src/business/entities/cases/Case');
 const { marshallCase } = require('./marshallCase');
@@ -29,7 +32,7 @@ describe('marshallCase', () => {
 
   it('marshalls from the current case format', () => {
     const contactSecondary = { ...getContactPrimary(MOCK_CASE) };
-    delete contactSecondary.isContactPrimary;
+    contactSecondary.contactType = CONTACT_TYPES.secondary;
 
     const mock = Object.assign({}, MOCK_CASE, {
       contactSecondary,

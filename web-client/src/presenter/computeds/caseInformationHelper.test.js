@@ -1,4 +1,7 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseInformationHelper as caseInformationHelperComputed } from './caseInformationHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -318,8 +321,8 @@ describe('caseInformationHelper', () => {
           caseDetail: {
             petitioners: [
               {
+                contactType: CONTACT_TYPES.primary,
                 email: mockEmail,
-                isContactPrimary: true,
               },
             ],
           },
@@ -336,7 +339,7 @@ describe('caseInformationHelper', () => {
           caseDetail: {
             petitioners: [
               {
-                isContactPrimary: true,
+                contactType: CONTACT_TYPES.primary,
                 pendingEmail: mockEmail,
               },
             ],

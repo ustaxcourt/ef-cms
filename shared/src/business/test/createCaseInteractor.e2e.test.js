@@ -1,6 +1,7 @@
 const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   INITIAL_DOCUMENT_TYPES,
@@ -47,9 +48,9 @@ describe('createCase integration test', () => {
             address2: 'Ad cumque quidem lau',
             address3: 'Anim est dolor animi',
             city: 'Rerum eaque cupidata',
+            contactType: CONTACT_TYPES.primary,
             countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'petitioner@example.com',
-            isContactPrimary: true,
             name: 'Rick Petitioner',
             phone: '+1 (599) 681-5435',
             postalCode: '89614',
@@ -116,7 +117,7 @@ describe('createCase integration test', () => {
       petitioners: [
         {
           contactId: PETITIONER_USER_ID,
-          isContactPrimary: true,
+          contactType: CONTACT_TYPES.primary,
         },
       ],
       status: CASE_STATUS_TYPES.new,

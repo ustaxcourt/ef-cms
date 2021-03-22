@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCaseAssociationTitleAction } from './generateCaseAssociationTitleAction';
 import { presenter } from '../../presenter';
@@ -25,7 +26,7 @@ describe('generateCaseAssociationTitleAction', () => {
       props: { isAssociated: false },
       state: {
         caseDetail: {
-          petitioners: [{ isContactPrimary: true, name: 'Daphne' }],
+          petitioners: [{ contactType: CONTACT_TYPES.primary, name: 'Daphne' }],
         },
         contactSecondary: { name: 'Hastings' },
         form: {},
@@ -49,7 +50,7 @@ describe('generateCaseAssociationTitleAction', () => {
       props: { isAssociated: false },
       state: {
         caseDetail: {
-          petitioners: [{ isContactPrimary: true, name: 'Daphne' }],
+          petitioners: [{ contactType: CONTACT_TYPES.primary, name: 'Daphne' }],
         },
         contactSecondary: { name: 'Hastings' },
         form: { supportingDocumentMetadata: { name: 'Hello' } },

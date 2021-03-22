@@ -1,4 +1,7 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter-mock';
@@ -162,7 +165,7 @@ describe('getCaseAssociation', () => {
           petitioners: [
             {
               contactId: '123',
-              isContactPrimary: true,
+              contactType: CONTACT_TYPES.primary,
             },
           ],
         },
@@ -197,7 +200,7 @@ describe('getCaseAssociation', () => {
           petitioners: [
             {
               contactId: '123',
-              isContactPrimary: true,
+              contactType: CONTACT_TYPES.primary,
             },
           ],
         },
@@ -228,7 +231,7 @@ describe('getCaseAssociation', () => {
           petitioners: [
             {
               contactId: '456',
-              isContactPrimary: true,
+              contactType: CONTACT_TYPES.primary,
             },
           ],
           userId: '123',

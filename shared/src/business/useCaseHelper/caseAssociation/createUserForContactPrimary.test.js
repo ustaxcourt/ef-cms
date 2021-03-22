@@ -2,12 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  createUserForContactPrimary,
-} = require('./createUserForContactPrimary');
-const {
+  CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
+const {
+  createUserForContactPrimary,
+} = require('./createUserForContactPrimary');
 const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
@@ -45,8 +46,8 @@ describe('createUserForContactPrimary', () => {
           {
             ...getContactPrimary(MOCK_CASE),
             contactId: USER_ID,
+            contactType: CONTACT_TYPES.primary,
             email: undefined,
-            isContactPrimary: true,
             name: 'Bob Ross',
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },

@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -33,8 +34,8 @@ const associatedFieldsBlocked = () => {
   const contactPrimary = contactPrimaryFromState(test);
 
   expect(contactPrimary).toEqual({
+    contactType: CONTACT_TYPES.primary,
     entityName: 'PublicContact',
-    isContactPrimary: true,
     name: expect.anything(),
     state: expect.anything(),
   });

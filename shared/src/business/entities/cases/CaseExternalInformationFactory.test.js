@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
@@ -621,8 +622,8 @@ describe('CaseExternalInformationFactory entity', () => {
             {
               address1: '123 Main St',
               city: 'Somewhere',
+              contactType: CONTACT_TYPES.primary,
               countryType: COUNTRY_TYPES.DOMESTIC,
-              isContactPrimary: true,
               name: 'Test Primary',
               phone: '1234567890',
               postalCode: '12345',
