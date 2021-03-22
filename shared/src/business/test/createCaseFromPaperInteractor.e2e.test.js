@@ -15,6 +15,7 @@ const { ROLES } = require('../entities/EntityConstants');
 
 describe('createCaseFromPaperInteractor integration test', () => {
   const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
+  const mockUserId = 'a805d1ab-18d0-43ec-bafb-654e83405416';
 
   beforeAll(() => {
     window.Date.prototype.toISOString = jest
@@ -24,7 +25,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Alex Petitionsclerk',
       role: ROLES.petitionsClerk,
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: mockUserId,
     });
   });
 
@@ -81,7 +82,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           filedBy: 'Petr. Bob Jones',
           receivedAt: RECEIVED_DATE,
           workItem: {
-            assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            assigneeId: mockUserId,
             assigneeName: 'Alex Petitionsclerk',
             caseStatus: CASE_STATUS_TYPES.new,
             createdAt: RECEIVED_DATE,
@@ -94,7 +95,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
             isInitializeCase: true,
             section: PETITIONS_SECTION,
             sentBy: 'Alex Petitionsclerk',
-            sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            sentByUserId: mockUserId,
           },
         },
         {
@@ -118,9 +119,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       orderToShowCause: false,
       petitioners: [
         {
-          contactId: expect.not.stringContaining(
-            'a805d1ab-18d0-43ec-bafb-654e83405416',
-          ), // should NOT be the petitionsclerk who is logged in
+          contactId: expect.not.stringContaining(mockUserId), // should NOT be the petitionsclerk who is logged in
         },
       ],
       receivedAt: RECEIVED_DATE,

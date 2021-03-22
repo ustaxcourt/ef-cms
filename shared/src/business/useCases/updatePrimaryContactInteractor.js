@@ -65,7 +65,11 @@ exports.updatePrimaryContactInteractor = async (
     ...editableFields,
   };
 
-  caseEntity.updatePetitioner(updatedPrimaryContact);
+  try {
+    caseEntity.updatePetitioner(updatedPrimaryContact);
+  } catch (e) {
+    throw new NotFoundError(e);
+  }
 
   const contactPrimary = caseEntity.getContactPrimary();
 

@@ -7,18 +7,20 @@ const { getPublicCaseInteractor } = require('./getPublicCaseInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES } = require('../../entities/EntityConstants');
 
+const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
+
 const mockCase = {
   docketNumber: '123-45',
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
-  petitioners: [getContactPrimary(MOCK_CASE)],
+  petitioners: [mockCaseContactPrimary],
 };
 
 const sealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
 sealedDocketEntries[0].isLegacySealed = true;
 
 const sealedContactPrimary = cloneDeep({
-  ...getContactPrimary(MOCK_CASE),
+  ...mockCaseContactPrimary,
   isSealed: true,
 });
 
@@ -27,7 +29,7 @@ const mockCases = {
     docketNumber: '102-20',
     irsPractitioners: [],
     partyType: PARTY_TYPES.petitioner,
-    petitioners: [getContactPrimary(MOCK_CASE)],
+    petitioners: [mockCaseContactPrimary],
     sealedDate: '2020-01-02T03:04:05.007Z',
   },
   '120-20': {
@@ -97,8 +99,8 @@ describe('getPublicCaseInteractor', () => {
       docketNumber: '123-45',
       petitioners: [
         {
-          name: getContactPrimary(MOCK_CASE).name,
-          state: getContactPrimary(MOCK_CASE).state,
+          name: mockCaseContactPrimary.name,
+          state: mockCaseContactPrimary.state,
         },
       ],
     });

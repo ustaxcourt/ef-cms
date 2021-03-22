@@ -50,7 +50,7 @@ describe('CaseExternal', () => {
       });
     });
 
-    it('can validate the primary contact in the petitioners arrray', () => {
+    it('can validate the primary contact in the petitioners array', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
