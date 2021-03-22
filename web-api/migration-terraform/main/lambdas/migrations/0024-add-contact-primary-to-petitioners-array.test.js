@@ -1,4 +1,7 @@
 const {
+  CONTACT_TYPES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
+const {
   getContactPrimary,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const {
@@ -49,7 +52,7 @@ describe('migrateItems', () => {
         ...MOCK_CASE,
         contactPrimary: {
           ...getContactPrimary(MOCK_CASE),
-          isContactPrimary: undefined,
+          contactType: undefined,
         },
         petitioners: undefined,
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
@@ -63,7 +66,7 @@ describe('migrateItems', () => {
       expect.arrayContaining([
         expect.objectContaining({
           ...getContactPrimary(MOCK_CASE),
-          isContactPrimary: true,
+          contactType: CONTACT_TYPES.primary,
         }),
       ]),
     );

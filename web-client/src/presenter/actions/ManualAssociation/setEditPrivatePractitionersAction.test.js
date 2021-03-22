@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { runAction } from 'cerebral/test';
 import { setEditPrivatePractitionersAction } from './setEditPrivatePractitionersAction';
 
@@ -38,7 +39,9 @@ describe('setEditPrivatePractitionersAction', () => {
     const result = await runAction(setEditPrivatePractitionersAction, {
       state: {
         caseDetail: {
-          petitioners: [{ contactId: CONTACT_ID, isContactPrimary: true }],
+          petitioners: [
+            { contactId: CONTACT_ID, contactType: CONTACT_TYPES.primary },
+          ],
           privatePractitioners: [
             {
               name: 'Test Practitioner1',
@@ -67,7 +70,7 @@ describe('setEditPrivatePractitionersAction', () => {
           petitioners: [
             {
               contactId: '6d51ca19-ae30-4647-ba84-3b98fe7f1df8',
-              isContactPrimary: true,
+              contactType: CONTACT_TYPES.primary,
             },
           ],
           privatePractitioners: [

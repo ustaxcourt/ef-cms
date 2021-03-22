@@ -1,5 +1,8 @@
 const createApplicationContext = require('../applicationContext');
 const {
+  CONTACT_TYPES,
+} = require('../../../shared/src/business/entities/EntityConstants');
+const {
   getContactPrimary,
 } = require('../../../shared/src/business/entities/cases/Case');
 const { getCaseLambda } = require('./getCaseLambda');
@@ -194,8 +197,8 @@ describe('getCaseLambda', () => {
         {
           address1: '123 Main St',
           city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
           email: 'petitioner@example.com',
-          isContactPrimary: true,
           name: 'Test Petitioner',
           phone: '1234567',
           postalCode: '12345',

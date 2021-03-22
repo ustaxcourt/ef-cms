@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   ROLES,
@@ -585,7 +586,11 @@ describe('PublicCase', () => {
         ],
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         petitioners: [
-          { ...rawContactPrimary, isContactPrimary: true, isPaper: true },
+          {
+            ...rawContactPrimary,
+            contactType: CONTACT_TYPES.primary,
+            isPaper: true,
+          },
         ],
         privatePractitioners: [
           {

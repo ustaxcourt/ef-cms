@@ -3,6 +3,7 @@ const {
   testPdfDoc,
 } = require('../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
@@ -172,8 +173,8 @@ describe('update petitioner contact information on a case', () => {
           address1: '989 Division St',
           address2: 'Lights out',
           city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
           countryType: COUNTRY_TYPES.DOMESTIC,
-          isContactPrimary: true,
           name: 'Test Primary Petitioner',
           phone: '1234567',
           postalCode: '12345',
@@ -445,10 +446,10 @@ describe('update petitioner contact information on a case', () => {
         {
           address1: '456 Center St',
           city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'test@example.com',
           isAddressSealed: true,
-          isContactPrimary: true,
           name: 'Test Petitioner',
           phone: '1234567',
           postalCode: '12345',
@@ -641,8 +642,8 @@ describe('update petitioner contact information on a case', () => {
             address1: '789 Division St',
             city: 'Somewhere',
             contactId: PRIMARY_CONTACT_ID,
+            contactType: CONTACT_TYPES.primary,
             countryType: COUNTRY_TYPES.DOMESTIC,
-            isContactPrimary: true,
             name: 'Test Petitioner',
             phone: '1234567',
             postalCode: '12345',

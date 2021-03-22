@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -54,9 +55,9 @@ describe('updateCorrespondenceDocumentInteractor', () => {
       {
         address1: '123 Main St',
         city: 'Somewhere',
+        contactType: CONTACT_TYPES.primary,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'contact@example.com',
-        isContactPrimary: true,
         name: 'Contact Primary',
         phone: '123123134',
         postalCode: '12345',

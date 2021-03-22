@@ -8,6 +8,7 @@ const {
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
+  CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -1427,7 +1428,9 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  * @returns {Object} the primary contact object on the case
  */
 const getContactPrimary = function (rawCase) {
-  return rawCase.petitioners?.find(p => p.isContactPrimary);
+  return rawCase.petitioners?.find(
+    p => p.contactType === CONTACT_TYPES.primary,
+  );
 };
 
 /**
