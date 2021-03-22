@@ -22,7 +22,6 @@ const {
   SERVICE_INDICATOR_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
-  UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
@@ -318,7 +317,7 @@ Case.prototype.assignContacts = function assignContacts({
     applicationContext,
     contactInfo: {
       //todo remove right side of || after refactor
-      otherFilers: getOtherFilers(rawCase) || rawCase.otherFilers,
+      otherFilers: getOtherFilers(rawCase),
       otherPetitioners: rawCase.otherPetitioners,
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
@@ -330,7 +329,7 @@ Case.prototype.assignContacts = function assignContacts({
   this.otherPetitioners = contacts.otherPetitioners;
 
   this.petitioners.push(contacts.primary);
-  this.petitioners.push(contacts.otherFilers);
+  this.petitioners.push(...contacts.otherFilers);
 
   this.contactSecondary = contacts.secondary;
 };
