@@ -29,8 +29,7 @@ exports.getJudgeForUserChambersInteractor = async ({
 
     const sectionUsers = await applicationContext
       .getUseCases()
-      .getUsersInSectionInteractor({
-        applicationContext,
+      .getUsersInSectionInteractor(applicationContext, {
         section: chambersSection,
       });
 
