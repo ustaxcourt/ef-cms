@@ -312,6 +312,7 @@ export const baseState = {
   selectedWorkItems: [],
   sessionMetadata: {
     docketRecordSort: [],
+    todaysOrdersSort: [],
   },
   showValidation: false,
   user: null,

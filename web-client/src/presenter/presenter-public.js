@@ -25,6 +25,7 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+import { sortTodaysOrdersSequence } from './sequences/public/sortTodaysOrdersSequence';
 import { state } from './state-public';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/public/submitPublicCaseDocketNumberSearchSequence';
@@ -73,6 +74,7 @@ export const presenter = {
     notFoundErrorSequence,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
+    sortTodaysOrdersSequence,
     submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
