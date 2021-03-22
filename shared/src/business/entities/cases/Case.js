@@ -2033,6 +2033,7 @@ module.exports = {
   Case: validEntityDecorator(Case),
   caseHasServedDocketEntries,
   getContactPrimary,
+  getOtherFilers,
   isAssociatedUser,
   isSealedCase,
   updatePetitioner,
