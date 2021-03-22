@@ -11,9 +11,9 @@ export const getUserPendingEmailAction = async ({
   applicationContext,
   get,
 }) => {
-  const { contactId } = applicationContext
+  const contactId = applicationContext
     .getUtilities()
-    .getContactPrimary(get(state.caseDetail));
+    .getContactPrimary(get(state.caseDetail))?.contactId;
 
   const userPendingEmail = await applicationContext
     .getUseCases()

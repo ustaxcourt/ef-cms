@@ -18,7 +18,7 @@ const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-const { UnauthorizedError } = require('../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
 const createDocketEntryForChange = async ({
@@ -323,10 +323,14 @@ exports.updatePetitionerInformationInteractor = async (
 
   const oldCaseContactPrimary = caseEntity.getContactPrimary();
 
-  caseEntity.updatePetitioner({
-    ...oldCaseContactPrimary,
-    ...primaryEditableFields,
-  });
+  try {
+    caseEntity.updatePetitioner({
+      ...oldCaseContactPrimary,
+      ...primaryEditableFields,
+    });
+  } catch (e) {
+    throw new NotFoundError(e.message);
+  }
 
   const servedParties = aggregatePartiesForService(caseEntity);
 

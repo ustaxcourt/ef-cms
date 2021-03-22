@@ -1420,16 +1420,31 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   );
 };
 
-// 7839 TODO - docs
+/**
+ * Retrieves the primary contact on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Object} the primary contact object on the case
+ */
 const getContactPrimary = function (rawCase) {
   return rawCase.petitioners?.find(p => p.isContactPrimary);
 };
 
-// 7839 TODO - docs
+/**
+ * Returns the primary contact on the case
+ *
+ * @returns {Object} the primary contact object on the case
+ */
 Case.prototype.getContactPrimary = function () {
   return getContactPrimary(this);
 };
 
+/**
+ * Updates the specified contact object in the case petitioner's array
+ *
+ * @param {object} arguments.rawCase the raw case object
+ * @param {object} arguments.updatedPetitioner the updated petitioner object
+ */
 const updatePetitioner = function (rawCase, updatedPetitioner) {
   const foundPetitioner = rawCase.petitioners.find(
     p => p.contactId === updatedPetitioner.contactId,
@@ -1437,12 +1452,20 @@ const updatePetitioner = function (rawCase, updatedPetitioner) {
 
   if (foundPetitioner) {
     Object.assign(foundPetitioner, updatedPetitioner);
+  } else {
+    throw new Error(
+      `Petitioner was not found on case ${rawCase.docketNumber}.`,
+    );
   }
 };
 
-// 7839 TODO - docs
+/**
+ * Updates the specified contact object in the case petitioner's array
+ *
+ * @param {object} arguments.updatedPetitioner the updated petitioner object
+ */
 Case.prototype.updatePetitioner = function (updatedPetitioner) {
-  return updatePetitioner(this, updatedPetitioner);
+  updatePetitioner(this, updatedPetitioner);
 };
 
 /**

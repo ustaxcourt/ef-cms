@@ -205,9 +205,9 @@ DocketEntry.prototype.setAsServed = function (servedParties = null) {
 
 /**
  * generates the filedBy string from parties selected for the document
-and contact info from the case detail
+and contact info from the raw docket entry
  *
- * @param {object} docketEntry the case detail
+ * @param {object} docketEntry the docket entry
  */
 DocketEntry.prototype.generateFiledBy = function (docketEntry) {
   const isNoticeOfContactChange = NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
