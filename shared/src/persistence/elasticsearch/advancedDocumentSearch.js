@@ -47,16 +47,8 @@ exports.advancedDocumentSearch = async ({
   const docketEntryQueryParams = [
     {
       bool: {
-        must_not: [
-          {
-            term: { 'isStricken.BOOL': true },
-          },
-        ],
-        should: documentEventCodes.map(eventCode => ({
-          match: {
-            'eventCode.S': eventCode,
-          },
-        })),
+        must: [{ terms: { 'eventCode.S': documentEventCodes } }],
+        must_not: [{ term: { 'isStricken.BOOL': true } }],
       },
     },
   ];
@@ -93,7 +85,7 @@ exports.advancedDocumentSearch = async ({
 
   if (docketNumber) {
     caseQueryParams.has_parent.query.bool.must = {
-      match: { 'docketNumber.S': { operator: 'and', query: docketNumber } },
+      term: { 'docketNumber.S': docketNumber },
     };
   } else if (caseTitleOrPetitioner) {
     caseQueryParams.has_parent.query.bool.must = {
@@ -143,12 +135,7 @@ exports.advancedDocumentSearch = async ({
 
   if (opinionType) {
     docketEntryQueryParams.push({
-      match: {
-        'documentType.S': {
-          operator: 'and',
-          query: opinionType,
-        },
-      },
+      term: { 'documentType.S': opinionType },
     });
   }
 
@@ -187,8 +174,7 @@ exports.advancedDocumentSearch = async ({
       query: {
         bool: {
           must: [
-            { match: { 'pk.S': 'case|' } },
-            { match: { 'sk.S': 'docket-entry|' } },
+            { term: { 'entityName.S': 'DocketEntry' } },
             {
               exists: {
                 field: 'servedAt',
