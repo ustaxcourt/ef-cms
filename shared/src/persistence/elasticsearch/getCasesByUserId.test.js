@@ -19,18 +19,17 @@ describe('getCasesByUserId', () => {
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
     ).toMatchObject({
       bool: {
-        must: [
-          { match: { 'pk.S': 'case|' } },
-          { match: { 'sk.S': 'case|' } },
+        should: [
           {
-            query_string: {
-              fields: [
-                'privatePractitioners.L.M.userId.S',
-                'irsPractitioners.L.M.userId.S',
-                'userId.S',
-              ],
-              query: `"${userId}"`,
+            term: {
+              'privatePractitioners.L.M.userId.S': `${userId}`,
             },
+          },
+          {
+            term: { 'irsPractitioners.L.M.userId.S': `${userId}` },
+          },
+          {
+            term: { 'userId.S': `${userId}` },
           },
         ],
       },
