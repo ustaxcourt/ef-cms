@@ -17,7 +17,8 @@ export const getUsersInSelectedSectionAction = async ({
   }
   const users = await applicationContext
     .getUseCases()
-    .getUsersInSectionInteractor(applicationContext, {
+    .getUsersInSectionInteractor({
+      applicationContext,
       section: props.section,
     });
 

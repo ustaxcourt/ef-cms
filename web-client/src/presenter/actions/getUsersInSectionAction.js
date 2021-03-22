@@ -23,7 +23,8 @@ export const getUsersInSectionAction = ({ section }) =>
     }
     const users = await applicationContext
       .getUseCases()
-      .getUsersInSectionInteractor(applicationContext, {
+      .getUsersInSectionInteractor({
+        applicationContext,
         section: sectionToGet,
       });
 
