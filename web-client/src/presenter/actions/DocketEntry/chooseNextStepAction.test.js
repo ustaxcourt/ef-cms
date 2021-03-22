@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { chooseNextStepAction } from './chooseNextStepAction';
 import { presenter } from '../../presenter-mock';
@@ -30,7 +31,7 @@ describe('chooseNextStepAction', () => {
           isPaper: true,
           petitioners: [
             {
-              isContactPrimary: true,
+              contactType: CONTACT_TYPES.primary,
               serviceIndicator: 'Paper',
             },
           ],
@@ -52,7 +53,7 @@ describe('chooseNextStepAction', () => {
           irsPractitioners: [],
           petitioners: [
             {
-              isContactPrimary: true,
+              contactType: CONTACT_TYPES.primary,
               serviceIndicator: 'Electronic',
             },
           ],

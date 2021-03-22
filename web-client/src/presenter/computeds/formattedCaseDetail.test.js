@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -96,10 +97,10 @@ describe('formattedCaseDetail', () => {
       address3: 'Et sunt veritatis ei',
       city: 'Et id aut est velit',
       contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
+      contactType: CONTACT_TYPES.primary,
       countryType: 'domestic',
       email: 'petitioner@example.com',
       isAddressSealed: false,
-      isContactPrimary: true,
       name: 'Mona Schultz',
       phone: '+1 (884) 358-9729',
       postalCode: '77546',
@@ -438,7 +439,7 @@ describe('formattedCaseDetail', () => {
       hasVerifiedIrsNotice: false,
       petitioners: [
         {
-          isContactPrimary: true,
+          contactType: CONTACT_TYPES.primary,
           name: 'Bob',
         },
       ],
@@ -1277,7 +1278,7 @@ describe('formattedCaseDetail', () => {
         correspondence: [],
         petitioners: [
           {
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Bob',
           },
         ],
@@ -1689,7 +1690,7 @@ describe('formattedCaseDetail', () => {
         ],
         petitioners: [
           {
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Bob',
           },
         ],
@@ -1871,7 +1872,7 @@ describe('formattedCaseDetail', () => {
         ],
         petitioners: [
           {
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Bob',
           },
         ],
@@ -2057,7 +2058,7 @@ describe('formattedCaseDetail', () => {
       baseContact = {
         hasEAccess: true,
       };
-      contactPrimary = { ...baseContact, isContactPrimary: true };
+      contactPrimary = { ...baseContact, contactType: CONTACT_TYPES.primary };
       contactSecondary = baseContact;
       otherPetitioners = [baseContact];
       otherFilers = [baseContact];
@@ -2437,7 +2438,7 @@ describe('formattedCaseDetail', () => {
         otherFilers,
         otherPetitioners,
         partyType: 'Petitioner',
-        petitioners: [{ ...baseContact, isContactPrimary: true }],
+        petitioners: [{ ...baseContact, contactType: CONTACT_TYPES.primary }],
       };
     });
 
@@ -2539,7 +2540,9 @@ describe('formattedCaseDetail', () => {
         otherFilers,
         otherPetitioners,
         partyType: 'Petitioner',
-        petitioners: [{ ...contactPrimary, isContactPrimary: true }],
+        petitioners: [
+          { ...contactPrimary, contactType: CONTACT_TYPES.primary },
+        ],
       };
     });
 
@@ -2903,10 +2906,10 @@ describe('formattedCaseDetail', () => {
             address3: 'Et sunt veritatis ei',
             city: 'Et id aut est velit',
             contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
+            contactType: CONTACT_TYPES.primary,
             countryType: 'domestic',
             email: 'petitioner@example.com',
             isAddressSealed: false,
-            isContactPrimary: true,
             name: 'Mona Schultz',
             phone: '+1 (884) 358-9729',
             postalCode: '77546',
@@ -3272,10 +3275,10 @@ describe('formattedCaseDetail', () => {
           address3: 'Et sunt veritatis ei',
           city: 'Et id aut est velit',
           contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
+          contactType: CONTACT_TYPES.primary,
           countryType: 'domestic',
           email: 'petitioner@example.com',
           isAddressSealed: false,
-          isContactPrimary: true,
           name: 'Mona Schultz',
           phone: '+1 (884) 358-9729',
           postalCode: '77546',

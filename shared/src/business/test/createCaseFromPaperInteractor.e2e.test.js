@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
@@ -46,8 +47,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
             {
               address1: '123 Abc Ln',
               city: 'something',
+              contactType: CONTACT_TYPES.primary,
               countryType: COUNTRY_TYPES.DOMESTIC,
-              isContactPrimary: true,
               name: 'Bob Jones',
               phone: '1234567890',
               postalCode: '12345',

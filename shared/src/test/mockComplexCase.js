@@ -1,3 +1,5 @@
+const { CONTACT_TYPES } = require('../business/entities/EntityConstants');
+
 exports.MOCK_COMPLEX_CASE = {
   archivedCorrespondences: [],
   archivedDocketEntries: [],
@@ -3491,10 +3493,10 @@ exports.MOCK_COMPLEX_CASE = {
       address1: '953 Thompson Square Apt. 628',
       city: 'Laurenstad',
       contactId: '0B22BB5F-D8DE-49A4-8182-5A39C5666E51',
+      contactType: CONTACT_TYPES.primary,
       country: 'U.S.A.',
       countryType: 'domestic',
       isAddressSealed: false,
-      isContactPrimary: true,
       name: 'Brian Chandler',
       postalCode: '64726',
       sealedAndUnavailable: false,

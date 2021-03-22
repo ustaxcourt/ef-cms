@@ -27,7 +27,7 @@
       "postalCode": "12345",
       "sealedAndUnavailable": false,
       "hasEAccess": false,
-      "isContactPrimary": true,
+      "contactType": "PRIMARY",
       "title": "Executor",
       "countryType": "domestic",
       "phone": "1234567",

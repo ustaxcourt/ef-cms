@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
@@ -40,7 +41,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       contactSecondary: { name: 'Timon' },
       docketEntries: [{ docketEntryId: '123' }],
       irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
-      petitioners: [{ isContactPrimary: true, name: 'Banzai' }],
+      petitioners: [{ contactType: CONTACT_TYPES.primary, name: 'Banzai' }],
       privatePractitioners: [
         { name: 'Scar', representing: [] },
         { name: 'Zazu', representing: [] },

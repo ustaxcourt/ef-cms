@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
 } = require('../../entities/EntityConstants');
@@ -92,7 +93,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         petitioners: [
           {
             contactId: PRIMARY_CONTACT_ID,
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Joe Exotic',
           },
         ],
@@ -144,7 +145,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         petitioners: [
           {
             contactId: PRIMARY_CONTACT_ID,
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Joe Exotic',
           },
         ],
@@ -194,7 +195,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketNumberWithSuffix: '123-20L',
         petitioners: [
           {
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Joe Exotic',
           },
         ],
@@ -231,7 +232,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketNumberWithSuffix: '123-20L',
         petitioners: [
           {
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Joe Exotic',
           },
         ],
@@ -269,7 +270,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketNumberWithSuffix: '123-20L',
         petitioners: [
           {
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Joe Exotic',
           },
         ],
@@ -306,7 +307,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketNumberWithSuffix: '123-20L',
         petitioners: [
           {
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Joe Exotic',
           },
         ],

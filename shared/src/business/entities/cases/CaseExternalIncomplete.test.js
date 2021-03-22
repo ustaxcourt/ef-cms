@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../EntityConstants');
@@ -58,9 +59,9 @@ describe('CaseExternalIncomplete entity', () => {
               address2: 'Culpa numquam saepe ',
               address3: 'Eaque voluptates com',
               city: 'Dignissimos voluptat',
+              contactType: CONTACT_TYPES.primary,
               countryType: COUNTRY_TYPES.DOMESTIC,
               email: 'petitioner1@example.com',
-              isContactPrimary: true,
               name: 'Priscilla Kline',
               phone: '+1 (215) 128-6587',
               postalCode: '69580',

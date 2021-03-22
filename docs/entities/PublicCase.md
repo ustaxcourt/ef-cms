@@ -108,10 +108,15 @@
       allow: 
         - null
       keys: 
-        isContactPrimary: 
-          type: "boolean"
+        contactType: 
+          type: "string"
           flags: 
             presence: "optional"
+          rules: 
+            - 
+              name: "min"
+              args: 
+                limit: 1
         name: 
           type: "string"
           flags: 
@@ -843,10 +848,15 @@
         - 
           type: "object"
           keys: 
-            isContactPrimary: 
-              type: "boolean"
+            contactType: 
+              type: "string"
               flags: 
                 presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
             name: 
               type: "string"
               flags: 
