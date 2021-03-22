@@ -69,7 +69,7 @@ module.exports = {
       type: 'text',
     },
     'numberOfPages.N': {
-      type: 'text',
+      type: 'integer',
     },
     'pending.BOOL': {
       type: 'boolean',
