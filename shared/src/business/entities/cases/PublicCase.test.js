@@ -11,6 +11,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
+const { getOtherFilers } = require('./Case');
 const { isPrivateDocument, PublicCase } = require('./PublicCase');
 const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -28,7 +29,7 @@ describe('PublicCase', () => {
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           irsPractitioners: [{ name: 'Bob' }],
           partyType: PARTY_TYPES.petitioner,
-          petitioners: [],
+          petitioners: [{ contactType: CONTACT_TYPES.primary }],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
@@ -46,7 +47,7 @@ describe('PublicCase', () => {
           docketEntries: [{ any: 'thing' }],
           docketNumber: '111-12',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          petitioners: [],
+          petitioners: [{ contactType: CONTACT_TYPES.primary }],
           receivedAt: '2020-01-05T03:30:45.007Z',
           sealedDate: '2020-01-05T03:30:45.007Z',
         },
@@ -78,7 +79,7 @@ describe('PublicCase', () => {
         isPaper: true,
         otherFilers: [],
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [],
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
         privatePractitioners: [],
         receivedAt: 'testing',
       },
@@ -101,7 +102,7 @@ describe('PublicCase', () => {
       isPaper: true,
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
-      petitioners: [],
+      petitioners: [{ contactType: CONTACT_TYPES.primary }],
       receivedAt: 'testing',
     });
   });
@@ -117,7 +118,7 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'testing',
         irsPractitioners: [],
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [],
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
         receivedAt: 'testing',
       },
       { applicationContext },
@@ -134,7 +135,7 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
-      petitioners: [],
+      petitioners: [{ contactType: CONTACT_TYPES.primary }],
       receivedAt: 'testing',
     });
   });
@@ -160,7 +161,7 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'testing',
         irsPractitioners: [],
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [],
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
         receivedAt: 'testing',
       },
       { applicationContext },
@@ -195,7 +196,7 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
-      petitioners: [],
+      petitioners: [{ contactType: CONTACT_TYPES.primary }],
       receivedAt: 'testing',
     });
   });
@@ -230,6 +231,7 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'testing',
         irsPractitioners: [],
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
         receivedAt: 'testing',
       },
       { applicationContext },
@@ -342,6 +344,7 @@ describe('PublicCase', () => {
         docketNumber: '102-20',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
         docketNumberWithSuffix: null,
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
         receivedAt: '2020-01-05T03:30:45.007Z',
       },
       { applicationContext },
@@ -360,6 +363,7 @@ describe('PublicCase', () => {
         docketNumber: '102-20',
         docketNumberSuffix: null,
         docketNumberWithSuffix: null,
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
         receivedAt: '2020-01-05T03:30:45.007Z',
       },
       { applicationContext },
@@ -451,9 +455,9 @@ describe('PublicCase', () => {
           docketNumberSuffix: null,
           docketNumberWithSuffix: null,
           irsPractitioners: [],
-          otherPetitioners: [],
+          otherpetitioners: [{ contactType: CONTACT_TYPES.primary }],
           partyType: PARTY_TYPES.petitioner,
-          petitioners: [mockOtherFiler],
+          petitioners: [{ contactType: CONTACT_TYPES.primary }, mockOtherFiler],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
@@ -481,23 +485,6 @@ describe('PublicCase', () => {
           docketNumber: '102-20',
           docketNumberSuffix: null,
           docketNumberWithSuffix: null,
-          otherFilers: [
-            {
-              address1: '42 Lamb Sauce Blvd',
-              city: 'Nashville',
-              contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
-              country: 'USA',
-              countryType: 'domestic',
-              email: 'testUser@example.com',
-              isAddressSealed: false,
-              name: 'Gordon Ramsay',
-              otherFilerType: 'Intervenor',
-              phone: '1234567890',
-              postalCode: '05198',
-              state: 'AK',
-              title: 'Intervenor',
-            },
-          ],
           otherPetitioners: [
             {
               additionalName: 'Guy Fieri',
@@ -513,12 +500,31 @@ describe('PublicCase', () => {
               title: 'Petitioner',
             },
           ],
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary },
+            {
+              address1: '42 Lamb Sauce Blvd',
+              city: 'Nashville',
+              contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
+              contactType: CONTACT_TYPES.otherFiler,
+              country: 'USA',
+              countryType: 'domestic',
+              email: 'testUser@example.com',
+              isAddressSealed: false,
+              name: 'Gordon Ramsay',
+              otherFilerType: 'Intervenor',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+              title: 'Intervenor',
+            },
+          ],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
       );
 
-      expect(entity.otherFilers).toBeUndefined();
+      expect(getOtherFilers(entity)).toEqual([]);
       expect(entity.otherPetitioners).toBeUndefined();
       expect(entity.irsPractitioners).toBeUndefined();
     });
@@ -686,6 +692,7 @@ describe('PublicCase', () => {
           },
         ],
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
         privatePractitioners: [
           {
             userId: '9805d1ab-18d0-43ec-bafb-654e83405416',

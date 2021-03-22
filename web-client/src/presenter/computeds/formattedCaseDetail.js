@@ -1,3 +1,4 @@
+import { getOtherFilers } from '../../../../shared/src/business/entities/cases/Case';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -121,10 +122,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort,
   );
 
-  result.otherFilers = (result.otherFilers || []).map(otherFiler => ({
-    ...otherFiler,
-    showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
-  }));
+  result.otherFilers = applicationContext
+    .getUtilities()
+    .getOtherFilers(result)
+    .map(otherFiler => ({
+      ...otherFiler,
+      showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
+    }));
 
   result.otherPetitioners = (result.otherPetitioners || []).map(
     otherPetitioner => ({
