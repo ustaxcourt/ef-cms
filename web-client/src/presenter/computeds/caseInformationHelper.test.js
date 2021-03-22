@@ -1,9 +1,16 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { caseInformationHelper } from './caseInformationHelper';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { caseInformationHelper as caseInformationHelperComputed } from './caseInformationHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-describe('case information helper', () => {
+describe('caseInformationHelper', () => {
+  const caseInformationHelper = withAppContextDecorator(
+    caseInformationHelperComputed,
+    applicationContext,
+  );
+
   const getBaseState = user => {
     return {
       permissions: getUserPermissions(user),
@@ -309,9 +316,12 @@ describe('case information helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            contactPrimary: {
-              email: mockEmail,
-            },
+            petitioners: [
+              {
+                email: mockEmail,
+                isContactPrimary: true,
+              },
+            ],
           },
           form: {},
         },
@@ -324,9 +334,12 @@ describe('case information helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            contactPrimary: {
-              pendingEmail: mockEmail,
-            },
+            petitioners: [
+              {
+                isContactPrimary: true,
+                pendingEmail: mockEmail,
+              },
+            ],
           },
           form: {},
         },

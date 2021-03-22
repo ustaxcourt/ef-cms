@@ -3,9 +3,9 @@ import { chooseNextStepAction } from './chooseNextStepAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('chooseNextStepAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   let isPaperStub;
   let isElectronicStub;
 
@@ -26,11 +26,14 @@ describe('chooseNextStepAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {
-            serviceIndicator: 'Paper',
-          },
           irsPractitioners: [],
           isPaper: true,
+          petitioners: [
+            {
+              isContactPrimary: true,
+              serviceIndicator: 'Paper',
+            },
+          ],
           privatePractitioners: [],
         },
       },
@@ -46,10 +49,13 @@ describe('chooseNextStepAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {
-            serviceIndicator: 'Electronic',
-          },
           irsPractitioners: [],
+          petitioners: [
+            {
+              isContactPrimary: true,
+              serviceIndicator: 'Electronic',
+            },
+          ],
           privatePractitioners: [],
         },
       },

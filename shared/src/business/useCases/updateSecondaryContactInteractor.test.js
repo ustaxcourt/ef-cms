@@ -10,6 +10,7 @@ const {
 const {
   updateSecondaryContactInteractor,
 } = require('./updateSecondaryContactInteractor');
+const { getContactPrimary } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
@@ -38,7 +39,7 @@ describe('updateSecondaryContactInteractor', () => {
     mockUser = new User({
       name: 'bob',
       role: ROLES.petitioner,
-      userId: MOCK_CASE.contactPrimary.contactId,
+      userId: getContactPrimary(MOCK_CASE).contactId,
     });
 
     applicationContext

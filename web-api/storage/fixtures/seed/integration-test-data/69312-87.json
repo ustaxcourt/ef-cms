@@ -28,7 +28,7 @@
     "receivedAt": "2021-02-16T16:29:48.990Z",
     "caseType": "Other",
     "orderDesignatingPlaceOfTrial": false,
-    "contactPrimary": {
+    "petitioners": [{
       "isAddressSealed": false,
       "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "city": "Somewhere",
@@ -36,6 +36,7 @@
       "postalCode": "12345",
       "sealedAndUnavailable": false,
       "hasEAccess": true,
+      "isContactPrimary": true,
       "title": "Executor",
       "countryType": "domestic",
       "serviceIndicator": "Electronic",
@@ -43,7 +44,7 @@
       "name": "Test Petitioner",
       "state": "TN",
       "email": "petitioner@example.com"
-    },
+    }],
     "createdAt": "2018-03-01T21:40:46.415Z",
     "noticeOfAttachments": false,
     "entityName": "Case",

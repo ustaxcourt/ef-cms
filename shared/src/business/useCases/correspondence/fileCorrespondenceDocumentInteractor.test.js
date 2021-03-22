@@ -21,16 +21,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCase = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'contact@example.com',
-      name: 'Contact Primary',
-      phone: '123123134',
-      postalCode: '12345',
-      state: 'TN',
-    },
     docketEntries: [
       {
         docketEntryId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
@@ -48,6 +38,19 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     docketNumber: '123-45',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'contact@example.com',
+        isContactPrimary: true,
+        name: 'Contact Primary',
+        phone: '123123134',
+        postalCode: '12345',
+        state: 'TN',
+      },
+    ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };

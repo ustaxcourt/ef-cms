@@ -238,7 +238,7 @@ exports.serveCaseToIrsInteractor = async (
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
-        address: caseEntityToUpdate.contactPrimary,
+        address: caseEntityToUpdate.getContactPrimary(),
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
@@ -259,7 +259,7 @@ exports.serveCaseToIrsInteractor = async (
     const contactInformationDiff = applicationContext
       .getUtilities()
       .getAddressPhoneDiff({
-        newData: caseEntityToUpdate.contactPrimary,
+        newData: caseEntityToUpdate.getContactPrimary(),
         oldData: caseEntityToUpdate.contactSecondary,
       });
 

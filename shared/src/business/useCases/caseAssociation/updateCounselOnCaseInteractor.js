@@ -50,11 +50,12 @@ exports.updateCounselOnCaseInteractor = async (
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const contactPrimary = caseEntity.getContactPrimary();
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
     const representing = [];
     if (editableFields.representingPrimary) {
-      representing.push(caseEntity.contactPrimary.contactId);
+      representing.push(contactPrimary.contactId);
     }
     if (editableFields.representingSecondary) {
       representing.push(caseEntity.contactSecondary.contactId);
@@ -66,8 +67,7 @@ exports.updateCounselOnCaseInteractor = async (
       ...editableFields,
     });
     if (userData.representingPrimary) {
-      caseEntity.contactPrimary.serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_NONE;
+      contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
     }
     if (caseEntity.contactSecondary && userData.representingSecondary) {
       caseEntity.contactSecondary.serviceIndicator =

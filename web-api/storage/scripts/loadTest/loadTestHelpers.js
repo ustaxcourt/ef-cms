@@ -104,27 +104,29 @@ const createCase = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .createCaseInteractor({
-      applicationContext,
+    .createCaseInteractor(applicationContext, {
       petitionFileId,
       petitionMetadata: {
         caseCaption: petitionerName,
         caseType: CASE_TYPES_MAP.cdp,
-        contactPrimary: {
-          address1: faker.address.streetAddress(),
-          address2: faker.address.secondaryAddress(),
-          address3: faker.address.streetSuffix(),
-          city: faker.address.city(),
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: faker.internet.email(),
-          name: petitionerName,
-          phone: faker.phone.phoneNumber(),
-          postalCode: faker.address.zipCode(),
-          state: faker.address.stateAbbr(),
-        },
         filingType: faker.random.arrayElement(FILING_TYPES[ROLES.petitioner]),
         hasIrsNotice: false,
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            address1: faker.address.streetAddress(),
+            address2: faker.address.secondaryAddress(),
+            address3: faker.address.streetSuffix(),
+            city: faker.address.city(),
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: faker.internet.email(),
+            isContactPrimary: true,
+            name: petitionerName,
+            phone: faker.phone.phoneNumber(),
+            postalCode: faker.address.zipCode(),
+            state: faker.address.stateAbbr(),
+          },
+        ],
         preferredTrialCity: faker.random.arrayElement(TRIAL_CITY_STRINGS),
         procedureType: faker.random.arrayElement(PROCEDURE_TYPES),
       },

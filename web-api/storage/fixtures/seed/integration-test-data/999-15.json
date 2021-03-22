@@ -13,22 +13,25 @@
     "caseType": "Other",
     "trialLocation": "Houston, Texas",
     "orderDesignatingPlaceOfTrial": false,
-    "contactPrimary": {
-      "isAddressSealed": false,
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-      "city": "Somewhere",
-      "address1": "123 Main St",
-      "postalCode": "12345",
-      "sealedAndUnavailable": false,
-      "hasEAccess": true,
-      "title": "Executor",
-      "countryType": "domestic",
-      "serviceIndicator": "Electronic",
-      "phone": "1234567",
-      "name": "Test Petitioner",
-      "state": "TN",
-      "email": "petitioner@example.com"
-    },
+    "petitioners": [
+      {
+        "isAddressSealed": false,
+        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "city": "Somewhere",
+        "address1": "123 Main St",
+        "postalCode": "12345",
+        "sealedAndUnavailable": false,
+        "hasEAccess": true,
+        "title": "Executor",
+        "countryType": "domestic",
+        "serviceIndicator": "Electronic",
+        "phone": "1234567",
+        "name": "Test Petitioner",
+        "state": "TN",
+        "email": "petitioner@example.com",
+        "isContactPrimary": true
+      }
+    ],
     "createdAt": "2018-03-01T21:40:46.415Z",
     "noticeOfAttachments": false,
     "trialTime": "10:00",
@@ -121,9 +124,7 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"

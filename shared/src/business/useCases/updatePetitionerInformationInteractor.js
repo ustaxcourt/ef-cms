@@ -13,12 +13,12 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { Case } = require('../entities/cases/Case');
+const { Case, getContactPrimary } = require('../entities/cases/Case');
 const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-const { UnauthorizedError } = require('../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
 const createDocketEntryForChange = async ({
@@ -295,7 +295,7 @@ exports.updatePetitionerInformationInteractor = async (
     .getUtilities()
     .getDocumentTypeForAddressChange({
       newData: primaryEditableFields,
-      oldData: oldCase.contactPrimary,
+      oldData: getContactPrimary(oldCase),
     });
 
   const secondaryChange =
@@ -312,10 +312,6 @@ exports.updatePetitionerInformationInteractor = async (
   let caseEntity = new Case(
     {
       ...oldCase,
-      contactPrimary: {
-        ...oldCase.contactPrimary,
-        ...primaryEditableFields,
-      },
       contactSecondary: {
         ...oldCase.contactSecondary,
         ...secondaryEditableFields,
@@ -325,14 +321,26 @@ exports.updatePetitionerInformationInteractor = async (
     { applicationContext },
   );
 
+  const oldCaseContactPrimary = caseEntity.getContactPrimary();
+
+  try {
+    caseEntity.updatePetitioner({
+      ...oldCaseContactPrimary,
+      ...primaryEditableFields,
+    });
+  } catch (e) {
+    throw new NotFoundError(e.message);
+  }
+
   const servedParties = aggregatePartiesForService(caseEntity);
 
   let primaryChangeDocs;
   let secondaryChangeDocs;
   let paperServicePdfUrl;
+  const newContactPrimary = caseEntity.getContactPrimary();
 
   if (
-    (primaryChange && !caseEntity.contactPrimary.isAddressSealed) ||
+    (primaryChange && !newContactPrimary.isAddressSealed) ||
     (secondaryChange && !caseEntity.contactSecondary.isAddressSealed)
   ) {
     const partyWithPaperService = caseEntity.hasPartyWithPaperService();
@@ -348,7 +356,7 @@ exports.updatePetitionerInformationInteractor = async (
         caseEntity,
         change: primaryChange,
         editableFields: primaryEditableFields,
-        oldCaseContact: oldCase.contactPrimary,
+        oldCaseContact: oldCaseContactPrimary,
         partyWithPaperService,
         privatePractitionersRepresentingContact,
         servedParties,
@@ -388,7 +396,7 @@ exports.updatePetitionerInformationInteractor = async (
 
   if (
     contactPrimary.email &&
-    contactPrimary.email !== oldCase.contactPrimary.email
+    contactPrimary.email !== oldCaseContactPrimary.email
   ) {
     const isEmailAvailable = await applicationContext
       .getPersistenceGateway()

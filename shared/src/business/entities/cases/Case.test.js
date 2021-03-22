@@ -22,6 +22,7 @@ const {
 const {
   Case,
   caseHasServedDocketEntries,
+  getContactPrimary,
   isAssociatedUser,
   isSealedCase,
 } = require('./Case');
@@ -46,6 +47,7 @@ describe('Case entity', () => {
 
   it('defaults the orders to false', () => {
     const myCase = new Case(MOCK_CASE, { applicationContext });
+
     expect(myCase).toMatchObject({
       isSealed: false,
       noticeOfAttachments: false,
@@ -70,6 +72,7 @@ describe('Case entity', () => {
       },
       { applicationContext },
     );
+
     expect(myCase.correspondence).toMatchObject([
       { filingDate: '2019-01-05T01:02:03.004Z' },
       { filingDate: '2020-01-05T01:02:03.004Z' },
@@ -78,6 +81,7 @@ describe('Case entity', () => {
 
   describe('archivedDocketEntries', () => {
     let myCase;
+
     beforeEach(() => {
       myCase = new Case(
         {
@@ -111,6 +115,7 @@ describe('Case entity', () => {
         },
         { applicationContext },
       );
+
       expect(myCase.archivedDocketEntries.length).toEqual(
         MOCK_DOCUMENTS.length,
       );
@@ -132,7 +137,6 @@ describe('Case entity', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       };
-
       const mockhearing2 = {
         createdAt: '2024-01-01T00:00:00.000Z',
         maxCases: 100,
@@ -142,7 +146,6 @@ describe('Case entity', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       };
-
       const mockhearing3 = {
         createdAt: '2024-02-01T00:00:00.000Z',
         maxCases: 100,
@@ -180,6 +183,7 @@ describe('Case entity', () => {
 
   describe('adding and removing practitioners', () => {
     let myCase;
+
     beforeEach(() => {
       myCase = new Case(
         {
@@ -194,10 +198,12 @@ describe('Case entity', () => {
     describe('who are from IRS', () => {
       it('updates a matching IRS practitioner found on the case', () => {
         expect(myCase.irsPractitioners.length).toEqual(1);
+
         myCase.updateIrsPractitioner({
           name: 'Christopher Running',
           userId: '123',
         });
+
         expect(myCase.irsPractitioners.length).toEqual(1);
         expect(myCase.irsPractitioners[0]).toMatchObject({
           name: 'Christopher Running',
@@ -208,6 +214,7 @@ describe('Case entity', () => {
           name: 'Slow Jog',
           userId: '000-111-222',
         });
+
         expect(myCase.irsPractitioners.length).toEqual(1);
         expect(myCase.irsPractitioners[0]).toMatchObject({
           name: 'Christopher Walken',
@@ -218,10 +225,12 @@ describe('Case entity', () => {
     describe('who are private', () => {
       it('updates a matching private practitioner found on the case', () => {
         expect(myCase.privatePractitioners.length).toEqual(1);
+
         myCase.updatePrivatePractitioner({
           name: 'Stout Sunny',
           userId: '567',
         });
+
         expect(myCase.privatePractitioners.length).toEqual(1);
         expect(myCase.privatePractitioners[0]).toMatchObject({
           name: 'Stout Sunny',
@@ -232,6 +241,7 @@ describe('Case entity', () => {
           name: 'Slow Jog',
           userId: '000-111-222',
         });
+
         expect(myCase.privatePractitioners.length).toEqual(1);
         expect(myCase.privatePractitioners[0]).toMatchObject({
           name: 'Slim Shady',
@@ -257,6 +267,7 @@ describe('Case entity', () => {
         applicationContext,
       },
     );
+
     expect(myCase).toMatchObject({
       noticeOfAttachments: true,
       orderDesignatingPlaceOfTrial: true,
@@ -280,7 +291,9 @@ describe('Case entity', () => {
 
     it('calls own function to update values after decorated toRawObject', () => {
       const myCase = new Case({}, { applicationContext });
+
       const result = myCase.toRawObject();
+
       expect(Case.prototype.doesHavePendingItems).toHaveBeenCalled();
       expect(result.hasPendingItems).toBeFalsy();
     });
@@ -288,6 +301,7 @@ describe('Case entity', () => {
     it('does not call own function to update values if flag is set to false after decorated toRawObject', () => {
       const myCase = new Case({}, { applicationContext });
       const result = myCase.toRawObject(false);
+
       expect(Case.prototype.doesHavePendingItems).not.toHaveBeenCalled();
       expect(result.hasPendingItems).toBeFalsy();
     });
@@ -328,6 +342,7 @@ describe('Case entity', () => {
           filtered: true,
         },
       );
+
       expect(Object.keys(myCase)).not.toContain('associatedJudge');
     });
 
@@ -343,6 +358,7 @@ describe('Case entity', () => {
           filtered: true,
         },
       );
+
       expect(Object.keys(myCase)).toContain('associatedJudge');
     });
 
@@ -358,6 +374,7 @@ describe('Case entity', () => {
           filtered: false,
         },
       );
+
       expect(Object.keys(myCase)).toContain('associatedJudge');
     });
 
@@ -373,6 +390,7 @@ describe('Case entity', () => {
           filtered: false,
         },
       );
+
       expect(Object.keys(myCase)).toContain('associatedJudge');
     });
 
@@ -388,6 +406,7 @@ describe('Case entity', () => {
           filtered: false,
         },
       );
+
       const stinDocketEntry = myCase.docketEntries.find(
         d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
       );
@@ -409,6 +428,7 @@ describe('Case entity', () => {
       const stinDocketEntry = myCase.docketEntries.find(
         d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
       );
+
       expect(stinDocketEntry).toBeDefined();
     });
 
@@ -427,6 +447,7 @@ describe('Case entity', () => {
       const stinDocketEntry = myCase.docketEntries.find(
         d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
       );
+
       expect(stinDocketEntry).toBeDefined();
     });
 
@@ -442,6 +463,7 @@ describe('Case entity', () => {
           filtered: true,
         },
       );
+
       const stinDocketEntry = myCase.docketEntries.find(
         d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
       );
@@ -483,6 +505,7 @@ describe('Case entity', () => {
           filtered: true,
         },
       );
+
       const stinDocketEntry = myCase.docketEntries.find(
         d => d.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType,
       );
@@ -680,6 +703,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.entityName).toEqual('Case');
     });
@@ -698,6 +722,7 @@ describe('Case entity', () => {
           filtered: true,
         },
       );
+
       expect(myCase.isValid()).toBeTruthy();
     });
 
@@ -705,6 +730,7 @@ describe('Case entity', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -715,6 +741,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.docketNumber).toBe('101-20');
     });
@@ -730,6 +757,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
       expect(myCase.getFormattedValidationErrors()).toMatchObject({
         trialSessionId: '"trialSessionId" is required',
@@ -740,12 +768,13 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {},
+          petitioners: [{}],
         },
         {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -764,6 +793,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -776,6 +806,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -786,6 +817,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -798,6 +830,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -824,6 +857,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -844,6 +878,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -857,6 +892,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -870,6 +906,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -884,6 +921,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -912,6 +950,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -927,6 +966,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -940,6 +980,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -955,6 +996,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -970,6 +1012,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -983,6 +1026,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
     });
 
@@ -997,6 +1041,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -1010,6 +1055,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.isValid()).toBeFalsy();
       expect(myCase.getFormattedValidationErrors()).toMatchObject({
         closedDate: expect.anything(),
@@ -1027,6 +1073,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -1040,6 +1087,7 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -1054,6 +1102,7 @@ describe('Case entity', () => {
             applicationContext,
           },
         );
+
         expect(myCase.getFormattedValidationErrors()).toMatchObject({
           petitionPaymentDate: expect.anything(),
           petitionPaymentMethod: expect.anything(),
@@ -1070,6 +1119,7 @@ describe('Case entity', () => {
             applicationContext,
           },
         );
+
         expect(myCase.getFormattedValidationErrors()).toMatchObject({
           petitionPaymentWaivedDate: expect.anything(),
         });
@@ -1115,6 +1165,7 @@ describe('Case entity', () => {
   describe('validate', () => {
     it('should do nothing if valid', () => {
       let error;
+
       try {
         new Case(MOCK_CASE, {
           applicationContext,
@@ -1122,6 +1173,7 @@ describe('Case entity', () => {
       } catch (err) {
         error = err;
       }
+
       expect(error).not.toBeDefined();
     });
 
@@ -1144,8 +1196,8 @@ describe('Case entity', () => {
       const testCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {},
           partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [],
         },
         {
           applicationContext,
@@ -1153,13 +1205,53 @@ describe('Case entity', () => {
       );
 
       const errors = testCase.getFormattedValidationErrors();
+
       expect(errors).toMatchObject({
-        contactPrimary: {
-          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
-        },
         contactSecondary: {
           name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
         },
+        petitioners: [
+          {
+            address1: 'Enter mailing address',
+            city: 'Enter city',
+            countryType: 'Enter country type',
+            index: 0,
+            name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+            phone: 'Enter phone number',
+            postalCode: 'Enter ZIP code',
+            state: 'Enter state',
+          },
+        ],
+      });
+    });
+
+    it('should throw an error on a case that is missing a primary contact', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.petitioner,
+          petitioners: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors = testCase.getFormattedValidationErrors();
+
+      expect(errors).toMatchObject({
+        petitioners: [
+          {
+            address1: 'Enter mailing address',
+            city: 'Enter city',
+            countryType: 'Enter country type',
+            index: 0,
+            name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+            phone: 'Enter phone number',
+            postalCode: 'Enter ZIP code',
+            state: 'Enter state',
+          },
+        ],
       });
     });
   });
@@ -1180,8 +1272,33 @@ describe('Case entity', () => {
   });
 
   describe('getCaseCaption', () => {
+    it('gets the primary contact from the petitioners array', () => {
+      const caseCaption = Case.getCaseCaption({
+        partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            isContactPrimary: true,
+            name: 'Bob Smith',
+          },
+        ],
+      });
+      expect(caseCaption).toEqual('Bob Smith, Petitioner');
+    });
+
+    it('gets the primary contact from contactPrimary property if petitioners array does not exist', () => {
+      const caseCaption = Case.getCaseCaption({
+        contactPrimary: {
+          isContactPrimary: true,
+          name: 'Bob Smith',
+        },
+        partyType: PARTY_TYPES.petitioner,
+      });
+      expect(caseCaption).toEqual('Bob Smith, Petitioner');
+    });
+
     it('party type Petitioner', () => {
       const caseCaption = Case.getCaseCaption(MOCK_CASE);
+
       expect(caseCaption).toEqual('Test Petitioner, Petitioner');
     });
 
@@ -1216,8 +1333,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.estate,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Estate of Test Petitioner, Deceased, Test Petitioner 2, Executor, Petitioner(s)',
       );
@@ -1228,6 +1347,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.estateWithoutExecutor,
       });
+
       expect(caseCaption).toEqual(
         'Estate of Test Petitioner, Deceased, Petitioner',
       );
@@ -1238,8 +1358,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.trust,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Trustee, Petitioner(s)',
       );
@@ -1258,8 +1380,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Tax Matters Partner, Petitioner',
       );
@@ -1270,8 +1394,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, A Partner Other Than the Tax Matters Partner, Petitioner',
       );
@@ -1282,8 +1408,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.partnershipBBA,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Partnership Representative, Petitioner(s)',
       );
@@ -1294,8 +1422,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.conservator,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Conservator, Petitioner',
       );
@@ -1306,8 +1436,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.guardian,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Guardian, Petitioner',
       );
@@ -1318,8 +1450,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.custodian,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Test Petitioner 2, Custodian, Petitioner',
       );
@@ -1330,8 +1464,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.nextFriendForMinor,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Minor, Test Petitioner 2, Next Friend, Petitioner',
       );
@@ -1342,8 +1478,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Incompetent, Test Petitioner 2, Next Friend, Petitioner',
       );
@@ -1354,6 +1492,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.donor,
       });
+
       expect(caseCaption).toEqual('Test Petitioner, Donor, Petitioner');
     });
 
@@ -1362,6 +1501,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.transferee,
       });
+
       expect(caseCaption).toEqual('Test Petitioner, Transferee, Petitioner');
     });
 
@@ -1370,8 +1510,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: PARTY_TYPES.survivingSpouse,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
+      getContactPrimary(mockCase).secondaryName = 'Test Petitioner 2';
+
       const caseCaption = Case.getCaseCaption(mockCase);
+
       expect(caseCaption).toEqual(
         'Test Petitioner, Deceased, Test Petitioner 2, Surviving Spouse, Petitioner',
       );
@@ -3373,6 +3515,7 @@ describe('Case entity', () => {
       );
 
       const caseContacts = testCase.getCaseContacts();
+
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
@@ -3878,10 +4021,6 @@ describe('Case entity', () => {
       caseEntity = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: CONTACT_PRIMARY_ID,
-          },
           contactSecondary: {
             ...MOCK_CASE.contactPrimary,
             contactId: CONTACT_SECONDARY_ID,
@@ -3890,6 +4029,12 @@ describe('Case entity', () => {
             { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
           ],
           partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactId: CONTACT_PRIMARY_ID,
+            },
+          ],
           privatePractitioners: [
             { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
           ],
@@ -4358,6 +4503,7 @@ describe('Case entity', () => {
         { ...MOCK_CASE, contactSecondary: undefined },
         { applicationContext },
       );
+
       expect(myCase).toMatchObject({
         contactSecondary: undefined,
       });
@@ -4366,10 +4512,12 @@ describe('Case entity', () => {
     describe('judgeUserId', () => {
       it('sets the judgeUserId property when a value is passed in', () => {
         const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+
         const myCase = new Case(
           { ...MOCK_CASE, judgeUserId: mockJudgeUserId },
           { applicationContext },
         );
+
         expect(myCase).toMatchObject({
           judgeUserId: mockJudgeUserId,
         });
@@ -4378,6 +4526,7 @@ describe('Case entity', () => {
 
       it('does not fail validation without a judgeUserId', () => {
         const myCase = new Case(MOCK_CASE, { applicationContext });
+
         expect(myCase.judgeUserId).toBeUndefined();
         expect(myCase.getFormattedValidationErrors()).toEqual(null);
       });
@@ -4388,7 +4537,7 @@ describe('Case entity', () => {
     const mockTrialSessionId = '9e29b116-58a0-40f5-afe6-e3a0ba4f226a';
 
     it('fails validation when the case status is calendared and blocked is true', () => {
-      let blockedCalendaredCase = {
+      const blockedCalendaredCase = {
         ...MOCK_CASE,
         blocked: true,
         blockedDate: '2019-03-01T21:42:29.073Z',
@@ -4397,26 +4546,30 @@ describe('Case entity', () => {
         trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
+
       const myCase = new Case(blockedCalendaredCase, { applicationContext });
+
       expect(myCase.getFormattedValidationErrors()).toEqual({
         blocked: '"blocked" contains an invalid value',
       });
     });
 
     it('passes validation when the case status is calendared and blocked is false', () => {
-      let calendaredCase = {
+      const calendaredCase = {
         ...MOCK_CASE,
         blocked: false,
         status: CASE_STATUS_TYPES.calendared,
         trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
+
       const myCase = new Case(calendaredCase, { applicationContext });
+
       expect(myCase.getFormattedValidationErrors()).toBe(null);
     });
 
     it('passes validation when the case status is not calendared and blocked is true', () => {
-      let blockedReadyForTrialCase = {
+      const blockedReadyForTrialCase = {
         ...MOCK_CASE,
         blocked: true,
         blockedDate: '2019-03-01T21:42:29.073Z',
@@ -4425,9 +4578,11 @@ describe('Case entity', () => {
         trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: mockTrialSessionId,
       };
+
       const myCase = new Case(blockedReadyForTrialCase, {
         applicationContext,
       });
+
       expect(myCase.getFormattedValidationErrors()).toBe(null);
     });
   });
@@ -4437,10 +4592,12 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            },
+          ],
         },
         { applicationContext },
       );

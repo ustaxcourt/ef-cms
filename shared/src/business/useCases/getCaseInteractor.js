@@ -11,6 +11,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { getContactPrimary } = require('../entities/cases/Case');
 const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
@@ -38,7 +39,7 @@ const getSealedCase = async ({
   let isAuthorizedToViewSealedCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-    caseRecord.contactPrimary.contactId,
+    getContactPrimary(caseRecord).contactId,
   );
 
   // check secondary contact if existent
@@ -108,7 +109,7 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
-    caseRecord.contactPrimary.contactId,
+    getContactPrimary(caseRecord).contactId,
   );
 
   // check secondary contact if existent

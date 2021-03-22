@@ -37,10 +37,10 @@ describe('addCourtIssuedDocketEntryHelper', () => {
 
   const state = {
     caseDetail: {
-      contactPrimary: { name: 'Banzai' },
       contactSecondary: { name: 'Timon' },
       docketEntries: [{ docketEntryId: '123' }],
       irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
+      petitioners: [{ isContactPrimary: true, name: 'Banzai' }],
       privatePractitioners: [
         { name: 'Scar', representing: [] },
         { name: 'Zazu', representing: [] },

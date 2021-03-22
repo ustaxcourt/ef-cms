@@ -17,8 +17,8 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { getContactPrimary, isSealedCase } = require('./Case');
 const { IrsPractitioner } = require('../IrsPractitioner');
-const { isSealedCase } = require('./Case');
 const { map } = require('lodash');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { PublicContact } = require('./PublicContact');
@@ -45,6 +45,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
+  this.petitioners = rawCase.petitioners;
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
@@ -57,7 +58,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       contactInfo: {
         otherFilers: rawCase.otherFilers,
         otherPetitioners: rawCase.otherPetitioners,
-        primary: rawCase.contactPrimary,
+        primary: getContactPrimary(rawCase),
         secondary: rawCase.contactSecondary,
       },
       isPaper: rawCase.isPaper,
@@ -66,7 +67,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
     this.otherPetitioners = contacts.otherPetitioners;
     this.otherFilers = contacts.otherFilers;
-    this.contactPrimary = contacts.primary;
+    this.petitioners = [contacts.primary];
     this.contactSecondary = contacts.secondary;
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
@@ -76,9 +77,10 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       practitioner => new PrivatePractitioner(practitioner),
     );
   } else {
-    this.contactPrimary = rawCase.contactPrimary
-      ? new PublicContact(rawCase.contactPrimary)
-      : undefined;
+    if (getContactPrimary(rawCase)) {
+      this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
+    }
+
     this.contactSecondary = rawCase.contactSecondary
       ? new PublicContact(rawCase.contactSecondary)
       : undefined;
@@ -95,7 +97,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-  contactPrimary: PublicContact.VALIDATION_RULES.required(),
   contactSecondary: PublicContact.VALIDATION_RULES.optional().allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketEntries: joi
@@ -118,12 +119,12 @@ const publicCaseSchema = {
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
+  petitioners: joi.array().items(PublicContact.VALIDATION_RULES).required(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
 };
 
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
   docketEntries: joi.array().max(0),
@@ -134,6 +135,7 @@ const sealedCaseSchemaRestricted = {
   hasIrsPractitioner: joi.boolean(),
   isSealed: joi.boolean(),
   partyType: joi.any().forbidden(),
+  petitioners: joi.any().forbidden(),
   receivedAt: joi.any().forbidden(),
 };
 

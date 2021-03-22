@@ -34,7 +34,7 @@ const aggregateCommonQueryParams = ({
     const simpleQuery = {
       default_operator: 'and',
       fields: [
-        'contactPrimary.M.name.S^4',
+        'petitioners.L.M.name.S^4',
         'contactSecondary.M.name.S^2',
         'caseCaption.S^0.2',
       ],
@@ -65,7 +65,7 @@ const aggregateCommonQueryParams = ({
       simple_query_string: {
         default_operator: 'or', // any subset of all terms
         fields: [
-          'contactPrimary.M.name.S^5',
+          'petitioners.L.M.name.S^5',
           'contactSecondary.M.name.S^1',
           'caseCaption.S',
         ],
@@ -80,7 +80,7 @@ const aggregateCommonQueryParams = ({
         should: [
           {
             match: {
-              'contactPrimary.M.countryType.S': countryType,
+              'petitioners.L.M.countryType.S': countryType,
             },
           },
           {
@@ -98,7 +98,7 @@ const aggregateCommonQueryParams = ({
         should: [
           {
             match: {
-              'contactPrimary.M.state.S': petitionerState,
+              'petitioners.L.M.state.S': petitionerState,
             },
           },
           {

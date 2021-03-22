@@ -3,11 +3,13 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { calculateISODate } = require('../../utilities/DateHandler');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
@@ -16,6 +18,8 @@ jest.mock('../addCoversheetInteractor', () => ({
 }));
 
 describe('generateChangeOfAddress', () => {
+  let mockCase;
+
   const { COUNTRY_TYPES } = applicationContext.getConstants();
 
   const mockIrsPractitioner = {
@@ -73,21 +77,25 @@ describe('generateChangeOfAddress', () => {
   };
 
   beforeEach(() => {
+    mockCase = mockCaseWithPrivatePractitioner;
+
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
       userId: 'docketclerk',
     });
+
     applicationContext
       .getPersistenceGateway()
       .getCasesByUserId.mockReturnValue([
         { docketNumber: mockCaseWithPrivatePractitioner.docketNumber },
       ]);
+
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCaseWithPrivatePractitioner);
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
-  it('attempts to run a change of address when address1 changes for a private practitioner', async () => {
+  it('should run a change of address when address1 changes for a private practitioner', async () => {
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
@@ -105,15 +113,13 @@ describe('generateChangeOfAddress', () => {
     ]);
   });
 
-  it('attempts to run a change of address when address1 changes for an irs practitioner', async () => {
+  it('should run a change of address when address1 changes for an irs practitioner', async () => {
+    mockCase = mockCaseWithIrsPractitioner;
     applicationContext
       .getPersistenceGateway()
       .getCasesByUserId.mockReturnValue([
         { docketNumber: mockCaseWithIrsPractitioner.docketNumber },
       ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioner);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -211,7 +217,6 @@ describe('generateChangeOfAddress', () => {
     const noticeOfChangeOfAddressDocument = cases[0].docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
-
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
@@ -254,22 +259,20 @@ describe('generateChangeOfAddress', () => {
   });
 
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by the practitioner", async () => {
-    const mockPaperServiceCase = {
+    mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
         ...MOCK_CASE.contactSecondary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -286,7 +289,6 @@ describe('generateChangeOfAddress', () => {
     const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
       entry => entry.documentTitle.includes('Notice of Change'),
     );
-
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
@@ -301,22 +303,21 @@ describe('generateChangeOfAddress', () => {
   });
 
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by a primary contact on the case", async () => {
-    const mockPaperServiceCase = {
+    mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      },
       contactSecondary: {
-        ...MOCK_CASE.contactSecondary,
+        ...getContactPrimary(MOCK_CASE),
+        name: 'Test Secondary',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -330,7 +331,6 @@ describe('generateChangeOfAddress', () => {
     const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
       entry => entry.documentTitle.includes('Notice of Change'),
     );
-
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
@@ -345,22 +345,22 @@ describe('generateChangeOfAddress', () => {
   });
 
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by a secondary contact on the case", async () => {
-    const mockPaperServiceCase = {
+    mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
-        ...MOCK_CASE.contactSecondary,
+        ...getContactPrimary(MOCK_CASE),
+        name: 'Test Secondary',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -374,7 +374,6 @@ describe('generateChangeOfAddress', () => {
     const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
       entry => entry.documentTitle.includes('Notice of Change'),
     );
-
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
@@ -389,22 +388,20 @@ describe('generateChangeOfAddress', () => {
   });
 
   it("should NOT create a work item for an associated practitioner's the notice of change of address when there is no paper service for the case", async () => {
-    const mockElectronicServiceCase = {
+    mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
         ...MOCK_CASE.contactSecondary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockElectronicServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -418,7 +415,6 @@ describe('generateChangeOfAddress', () => {
     const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
       entry => entry.documentTitle.includes('Notice of Change'),
     );
-
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
@@ -433,22 +429,20 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should not create a docket entry, work item, or serve anything if the bypassDocketEntry flag is true', async () => {
-    const mockPaperServiceCase = {
+    mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
         ...MOCK_CASE.contactSecondary,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -470,7 +464,6 @@ describe('generateChangeOfAddress', () => {
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
-    // We still want to update our case!
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
@@ -499,34 +492,33 @@ describe('generateChangeOfAddress', () => {
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
-    // We still want to update our case!
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
   });
 
   it('should create a docket entry, work item, and serve it if the case is closed less than six months ago, and it should still update the case', async () => {
-    const mockPaperServiceCase = {
+    mockCase = {
       ...mockCaseWithPrivatePractitioner,
       closedDate: calculateISODate({
         howMuch: -1,
         units: 'months',
       }),
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       contactSecondary: {
-        ...MOCK_CASE.contactSecondary,
+        ...getContactPrimary(MOCK_CASE),
+        name: 'Test Secondary',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       status: CASE_STATUS_TYPES.closed,
     };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -552,14 +544,14 @@ describe('generateChangeOfAddress', () => {
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
-    // We still want to update our case!
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
   });
 
   it('should update the practitioner serviceIndicator and email if the original practitioner did not have an email and a new one was added', async () => {
-    const mockPaperServiceCase = {
+    const UPDATED_EMAIL = 'abc@example.com';
+    mockCase = {
       ...mockCaseWithPrivatePractitioner,
       privatePractitioners: [
         {
@@ -569,12 +561,6 @@ describe('generateChangeOfAddress', () => {
         },
       ],
     };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockPaperServiceCase);
-
-    const UPDATED_EMAIL = 'abc@example.com';
 
     await generateChangeOfAddress({
       applicationContext,

@@ -16,6 +16,7 @@ describe('aggregatePartiesForService', () => {
     const contactPrimary = {
       contactId: PRIMARY_CONTACT_ID,
       email: 'contactprimary@example.com',
+      isContactPrimary: true,
       name: 'Contact Primary',
     };
 
@@ -96,9 +97,9 @@ describe('aggregatePartiesForService', () => {
     ];
 
     mockCase = {
-      contactPrimary,
       contactSecondary,
       irsPractitioners,
+      petitioners: [contactPrimary],
       privatePractitioners,
     };
   });

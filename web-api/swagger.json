@@ -4259,10 +4259,14 @@
     },
     "/users/pending-email": {
       "put": {
-        "tags": ["user"],
+        "tags": [
+          "user"
+        ],
         "summary": "updates a user with a pending email",
         "description": "updates a user with a pending email.\n",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4278,8 +4282,12 @@
         ]
       },
       "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4303,10 +4311,14 @@
     },
     "/async/users/verify-email": {
       "put": {
-        "tags": ["user"],
+        "tags": [
+          "user"
+        ],
         "summary": "verifies a user's pending email with a token",
         "description": "verifies a user's pending email with a token.\n",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4322,8 +4334,12 @@
         ]
       },
       "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7673,7 +7689,21 @@
         }
       }
     },
-    "/public-api/todays-orders": {
+    "/public-api/todays-orders/{page}/{sortOrder}": {
+      "parameters": [
+        {
+          "name": "page",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "sortOrder",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": [
           "case-documents"

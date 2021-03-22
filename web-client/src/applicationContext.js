@@ -2,6 +2,7 @@ import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
   caseHasServedDocketEntries,
+  getContactPrimary,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -636,6 +637,7 @@ const applicationContext = {
       formattedTrialSessionDetails,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
+      getContactPrimary,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
