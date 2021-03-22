@@ -43,7 +43,7 @@ describe('getUsersInSelectedSectionAction', () => {
 
     expect(
       applicationContext.getUseCases().getUsersInSectionInteractor.mock
-        .calls[0][1],
+        .calls[0][0],
     ).toMatchObject({
       section: SECTION,
     });
