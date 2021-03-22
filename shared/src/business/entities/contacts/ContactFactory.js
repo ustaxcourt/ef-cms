@@ -96,7 +96,7 @@ const commonValidationRequirements = {
     'Unique contact ID only used by the system.',
   ),
   contactType: JoiValidationConstants.STRING.valid(
-    Object.keys(CONTACT_TYPES),
+    ...Object.values(CONTACT_TYPES),
   ).required(),
   email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
