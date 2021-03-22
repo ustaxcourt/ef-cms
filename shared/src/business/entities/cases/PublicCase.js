@@ -9,6 +9,11 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const {
+  getContactPrimary,
+  getContactSecondary,
+  isSealedCase,
+} = require('./Case');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -17,7 +22,6 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { getContactPrimary, isSealedCase } = require('./Case');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { map } = require('lodash');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
@@ -59,7 +63,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
         otherFilers: rawCase.otherFilers,
         otherPetitioners: rawCase.otherPetitioners,
         primary: getContactPrimary(rawCase),
-        secondary: rawCase.contactSecondary,
+        secondary: getContactSecondary(rawCase),
       },
       isPaper: rawCase.isPaper,
       partyType: rawCase.partyType,
@@ -67,8 +71,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
     this.otherPetitioners = contacts.otherPetitioners;
     this.otherFilers = contacts.otherFilers;
-    this.petitioners = [contacts.primary];
-    this.contactSecondary = contacts.secondary;
+    this.petitioners = [contacts.primary, contacts.secondary];
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),
@@ -80,10 +83,10 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     if (getContactPrimary(rawCase)) {
       this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
     }
-
-    this.contactSecondary = rawCase.contactSecondary
-      ? new PublicContact(rawCase.contactSecondary)
-      : undefined;
+    if (getContactSecondary(rawCase)) {
+      this.petitioners = this.petitioners || [];
+      this.petitioners.push(new PublicContact(getContactSecondary(rawCase)));
+    }
   }
 
   // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition

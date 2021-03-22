@@ -111,12 +111,16 @@
         contactType: 
           type: "string"
           flags: 
+            only: true
             presence: "optional"
           rules: 
             - 
               name: "min"
               args: 
                 limit: 1
+          allow: 
+            - "PRIMARY"
+            - "SECONDARY"
         name: 
           type: "string"
           flags: 
@@ -851,12 +855,16 @@
             contactType: 
               type: "string"
               flags: 
+                only: true
                 presence: "optional"
               rules: 
                 - 
                   name: "min"
                   args: 
                     limit: 1
+              allow: 
+                - "PRIMARY"
+                - "SECONDARY"
             name: 
               type: "string"
               flags: 

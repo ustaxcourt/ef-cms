@@ -320,7 +320,7 @@ Case.prototype.assignContacts = function assignContacts({
       otherFilers: rawCase.otherFilers,
       otherPetitioners: rawCase.otherPetitioners,
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-      secondary: rawCase.contactSecondary,
+      secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
     isPaper: rawCase.isPaper,
     partyType: rawCase.partyType,
@@ -329,8 +329,7 @@ Case.prototype.assignContacts = function assignContacts({
   this.otherFilers = contacts.otherFilers;
   this.otherPetitioners = contacts.otherPetitioners;
 
-  this.petitioners.push(contacts.primary);
-  this.contactSecondary = contacts.secondary;
+  this.petitioners.push(contacts.primary, contacts.secondary);
 };
 
 Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
@@ -1443,6 +1442,27 @@ Case.prototype.getContactPrimary = function () {
 };
 
 /**
+ * Retrieves the secondary contact on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Object} the secondary contact object on the case
+ */
+const getContactSecondary = function (rawCase) {
+  return rawCase.petitioners?.find(
+    p => p.contactType === CONTACT_TYPES.secondary,
+  );
+};
+
+/**
+ * Returns the secondary contact on the case
+ *
+ * @returns {Object} the secondary contact object on the case
+ */
+Case.prototype.getContactSecondary = function () {
+  return getContactSecondary(this);
+};
+
+/**
  * Updates the specified contact object in the case petitioner's array
  *
  * @param {object} arguments.rawCase the raw case object
@@ -2009,6 +2029,7 @@ module.exports = {
   Case: validEntityDecorator(Case),
   caseHasServedDocketEntries,
   getContactPrimary,
+  getContactSecondary,
   isAssociatedUser,
   isSealedCase,
   updatePetitioner,
