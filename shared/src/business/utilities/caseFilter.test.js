@@ -4,6 +4,7 @@ const {
   caseSearchFilter,
 } = require('./caseFilter');
 const {
+  CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../entities/EntityConstants');
@@ -46,7 +47,7 @@ describe('caseFilter', () => {
       });
       const caseDetail = {};
       caseDetail.petitioners = [
-        { ...createContactInfo(), isContactPrimary: true },
+        { ...createContactInfo(), contactType: CONTACT_TYPES.primary },
       ];
       caseDetail.contactSecondary = createContactInfo();
       caseDetail.otherFilers = [createContactInfo(), createContactInfo()];
@@ -77,9 +78,9 @@ describe('caseFilter', () => {
       expect(Object.keys(getContactPrimary(result)).sort()).toMatchObject([
         'additionalName',
         'contactId',
+        'contactType',
         'inCareOf',
         'isAddressSealed',
-        'isContactPrimary',
         'name',
         'otherFilerType',
         'sealedAndUnavailable',
@@ -122,8 +123,8 @@ describe('caseFilter', () => {
           {
             address1: '1 Eagle Way',
             city: 'Hotel California',
+            contactType: CONTACT_TYPES.primary,
             isAddressSealed: true,
-            isContactPrimary: true,
             name: 'Joe Walsh',
             state: 'CA',
           },

@@ -1,4 +1,8 @@
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '../entities/EntityConstants';
 import { getContactPrimary } from '../entities/cases/Case';
 import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
@@ -31,8 +35,8 @@ describe('setServiceIndicatorsForCases', () => {
       petitioners: [
         {
           contactId: PRIMARY_CONTACT_ID,
+          contactType: CONTACT_TYPES.primary,
           email: 'petitioner@example.com',
-          isContactPrimary: true,
           name: 'Test Petitioner',
         },
       ],
@@ -67,8 +71,8 @@ describe('setServiceIndicatorsForCases', () => {
       ...baseCaseDetail,
       petitioners: [
         {
+          contactType: CONTACT_TYPES.primary,
           email: 'petitioner@example.com',
-          isContactPrimary: true,
           name: 'Test Petitioner',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
         },

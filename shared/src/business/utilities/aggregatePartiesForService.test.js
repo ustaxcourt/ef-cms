@@ -1,5 +1,8 @@
+const {
+  CONTACT_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../entities/EntityConstants');
 const { aggregatePartiesForService } = require('./aggregatePartiesForService');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
 describe('aggregatePartiesForService', () => {
   let mockCase;
@@ -15,8 +18,8 @@ describe('aggregatePartiesForService', () => {
   beforeEach(() => {
     const contactPrimary = {
       contactId: PRIMARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.primary,
       email: 'contactprimary@example.com',
-      isContactPrimary: true,
       name: 'Contact Primary',
     };
 

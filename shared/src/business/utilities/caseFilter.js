@@ -19,6 +19,7 @@ const CASE_ATTRIBUTE_WHITELIST = [
 const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'additionalName',
   'contactId',
+  'contactType',
   'inCareOf',
   'isAddressSealed',
   'name',
@@ -26,7 +27,6 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'secondaryName',
   'serviceIndicator',
   'title',
-  'isContactPrimary',
 ];
 
 const caseSealedFormatter = caseRaw => {

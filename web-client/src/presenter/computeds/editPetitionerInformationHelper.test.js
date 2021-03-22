@@ -1,4 +1,7 @@
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  PARTY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { editPetitionerInformationHelper as editPetitionerInformationHelperComputed } from './editPetitionerInformationHelper';
 import { runCompute } from 'cerebral/test';
@@ -61,8 +64,8 @@ describe('editPetitionerInformationHelper', () => {
         caseDetail: {
           petitioners: [
             {
+              contactType: CONTACT_TYPES.primary,
               email: 'testpetitioner@example.com',
-              isContactPrimary: true,
             },
           ],
         },

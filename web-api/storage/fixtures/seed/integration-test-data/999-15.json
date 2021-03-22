@@ -29,7 +29,7 @@
         "name": "Test Petitioner",
         "state": "TN",
         "email": "petitioner@example.com",
-        "isContactPrimary": true
+        "contactType": "PRIMARY",
       }
     ],
     "createdAt": "2018-03-01T21:40:46.415Z",

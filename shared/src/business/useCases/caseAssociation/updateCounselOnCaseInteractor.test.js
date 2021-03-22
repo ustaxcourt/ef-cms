@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -106,9 +107,9 @@ describe('updateCounselOnCaseInteractor', () => {
           {
             address1: '123 Main St',
             city: 'Somewhere',
+            contactType: CONTACT_TYPES.primary,
             countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'fieri@example.com',
-            isContactPrimary: true,
             name: 'Guy Fieri',
             phone: '1234567890',
             postalCode: '12345',

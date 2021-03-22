@@ -5,6 +5,7 @@ const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -1277,7 +1278,7 @@ describe('Case entity', () => {
         partyType: PARTY_TYPES.petitioner,
         petitioners: [
           {
-            isContactPrimary: true,
+            contactType: CONTACT_TYPES.primary,
             name: 'Bob Smith',
           },
         ],
@@ -1288,7 +1289,7 @@ describe('Case entity', () => {
     it('gets the primary contact from contactPrimary property if petitioners array does not exist', () => {
       const caseCaption = Case.getCaseCaption({
         contactPrimary: {
-          isContactPrimary: true,
+          contactType: CONTACT_TYPES.primary,
           name: 'Bob Smith',
         },
         partyType: PARTY_TYPES.petitioner,

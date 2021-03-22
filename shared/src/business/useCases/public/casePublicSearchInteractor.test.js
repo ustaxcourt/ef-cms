@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   MAX_SEARCH_RESULTS,
   PARTY_TYPES,
@@ -63,8 +64,8 @@ describe('casePublicSearchInteractor', () => {
         partyType: PARTY_TYPES.petitioner,
         petitioners: [
           {
+            contactType: CONTACT_TYPES.primary,
             entityName: 'PublicContact',
-            isContactPrimary: true,
             name: getContactPrimary(MOCK_CASE).name,
             state: getContactPrimary(MOCK_CASE).state,
           },

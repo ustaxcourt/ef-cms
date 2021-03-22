@@ -19,7 +19,7 @@
       "phone": "1234567",
       "address1": "123 Main St",
       "postalCode": "12345",
-      "isContactPrimary": true,
+      "contactType": "PRIMARY",
       "name": "Test Petitioner",
       "sealedAndUnavailable": false,
       "state": "TN",

@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -25,7 +26,7 @@ describe('setCaseOnFormAction', () => {
 
   it('should set state.form.contactPrimary from the props.caseDetail.petitioners array', async () => {
     const mockContactPrimary = {
-      isContactPrimary: true,
+      contactType: CONTACT_TYPES.primary,
       name: 'Pattie the Primary',
     };
 
