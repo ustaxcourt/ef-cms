@@ -430,16 +430,19 @@ ContactFactory.createContacts = ({
     otherPetitioners,
     primary: constructors.primary
       ? new constructors.primary(
-          { ...contactInfo.primary, contactType: CONTACT_TYPES.primary } || {},
+          { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
           {
             applicationContext,
           },
         )
       : {},
     secondary: constructors.secondary
-      ? new constructors.secondary(contactInfo.secondary || {}, {
-          applicationContext,
-        })
+      ? new constructors.secondary(
+          { ...contactInfo.secondary, contactType: CONTACT_TYPES.secondary },
+          {
+            applicationContext,
+          },
+        )
       : undefined,
   };
 };

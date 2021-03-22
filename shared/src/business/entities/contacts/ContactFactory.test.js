@@ -927,11 +927,6 @@ describe('ContactFactory', () => {
         const caseWithOtherPetitioners = new Case(
           {
             ...MOCK_CASE,
-            contactSecondary: {
-              ...getContactPrimary(MOCK_CASE),
-              inCareOf: 'Peter Parker',
-              secondaryName: 'Trustee Name',
-            },
             otherPetitioners: [
               {
                 additionalName: 'First Other Petitioner',
@@ -964,6 +959,10 @@ describe('ContactFactory', () => {
                 ...getContactPrimary(MOCK_CASE),
                 inCareOf: 'Peter Parker',
                 secondaryName: 'Trustee Name',
+              },
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactType: CONTACT_TYPES.secondary,
               },
             ],
           },
