@@ -21,9 +21,11 @@ function PublicContact() {
 PublicContact.prototype.init = function init(rawContact) {
   this.name = rawContact.name;
   this.state = rawContact.state;
+  this.isContactPrimary = rawContact.isContactPrimary;
 };
 
 PublicContact.VALIDATION_RULES = joi.object().keys({
+  isContactPrimary: joi.boolean().optional(),
   name: JoiValidationConstants.STRING.max(500).optional(),
   state: JoiValidationConstants.STRING.optional(),
 });

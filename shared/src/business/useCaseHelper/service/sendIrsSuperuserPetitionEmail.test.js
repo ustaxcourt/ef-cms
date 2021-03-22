@@ -32,7 +32,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     const caseEntity = new Case(
       {
         caseCaption: 'A Caption',
-        contactPrimary: {},
         contactSecondary: {},
         docketEntries: [
           {
@@ -45,6 +44,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
+        petitioners: [],
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [],
       },
@@ -72,10 +72,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       {
         caseCaption: 'A Caption',
         caseType: CASE_TYPES_MAP.cdp,
-        contactPrimary: {
-          contactId: PRIMARY_CONTACT_ID,
-          name: 'Joe Exotic',
-        },
         contactSecondary: {
           contactId: SECONDARY_CONTACT_ID,
           name: 'Carol Baskin',
@@ -92,6 +88,14 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketNumber: '123-20',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         docketNumberWithSuffix: '123-20S',
+        partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            contactId: PRIMARY_CONTACT_ID,
+            isContactPrimary: true,
+            name: 'Joe Exotic',
+          },
+        ],
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
@@ -121,10 +125,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     const caseEntity = new Case(
       {
         caseCaption: 'A Caption',
-        contactPrimary: {
-          contactId: PRIMARY_CONTACT_ID,
-          name: 'Joe Exotic',
-        },
         contactSecondary: {
           contactId: SECONDARY_CONTACT_ID,
           name: 'Carol Baskin',
@@ -141,6 +141,13 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
         partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: [
+          {
+            contactId: PRIMARY_CONTACT_ID,
+            isContactPrimary: true,
+            name: 'Joe Exotic',
+          },
+        ],
         preferredTrialCity: 'Somecity, ST',
         privatePractitioners: [
           {
@@ -176,9 +183,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     const caseEntity = new Case(
       {
         caseCaption: 'A Caption',
-        contactPrimary: {
-          name: 'Joe Exotic',
-        },
         docketEntries: [
           {
             docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
@@ -188,6 +192,12 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
+        petitioners: [
+          {
+            isContactPrimary: true,
+            name: 'Joe Exotic',
+          },
+        ],
         privatePractitioners: [],
       },
       { applicationContext },
@@ -210,9 +220,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     const caseEntity = new Case(
       {
         caseCaption: 'A Caption',
-        contactPrimary: {
-          name: 'Joe Exotic',
-        },
         docketEntries: [
           {
             docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
@@ -222,6 +229,12 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
+        petitioners: [
+          {
+            isContactPrimary: true,
+            name: 'Joe Exotic',
+          },
+        ],
         preferredTrialCity: 'Fake Trial Location, ST',
         privatePractitioners: [],
       },
@@ -245,9 +258,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     const caseEntity = new Case(
       {
         caseCaption: 'A Caption',
-        contactPrimary: {
-          name: 'Joe Exotic',
-        },
         docketEntries: [
           {
             docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
@@ -257,6 +267,12 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
+        petitioners: [
+          {
+            isContactPrimary: true,
+            name: 'Joe Exotic',
+          },
+        ],
         preferredTrialCity: '',
         privatePractitioners: [],
       },
@@ -280,9 +296,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     const caseEntity = new Case(
       {
         caseCaption: 'A Caption',
-        contactPrimary: {
-          name: 'Joe Exotic',
-        },
         docketEntries: [
           {
             docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
@@ -291,6 +304,12 @@ describe('sendIrsSuperuserPetitionEmail', () => {
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
+        petitioners: [
+          {
+            isContactPrimary: true,
+            name: 'Joe Exotic',
+          },
+        ],
         preferredTrialCity: '',
         privatePractitioners: [],
       },

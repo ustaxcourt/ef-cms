@@ -7,6 +7,7 @@ const {
   PARTY_TYPES,
 } = require('../../entities/EntityConstants');
 const { casePublicSearchInteractor } = require('./casePublicSearchInteractor');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('casePublicSearchInteractor', () => {
@@ -16,7 +17,7 @@ describe('casePublicSearchInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
-      .casePublicSearchExactMatch.mockReturnValue([]);
+      .casePublicSearch.mockReturnValue([]);
   });
 
   it('returns empty array if no search params are passed in', async () => {
@@ -28,10 +29,9 @@ describe('casePublicSearchInteractor', () => {
   it('strips out all non public data', async () => {
     applicationContext
       .getPersistenceGateway()
-      .casePublicSearchExactMatch.mockReturnValue([
+      .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
-          contactPrimary: MOCK_CASE.contactPrimary,
           docketNumber: '123-19',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           hasIrsPractitioner: false,
@@ -39,6 +39,7 @@ describe('casePublicSearchInteractor', () => {
           internalFieldB: 'should be filtered out',
           internalFieldC: 'should be filtered out',
           partyType: PARTY_TYPES.petitioner,
+          petitioners: [getContactPrimary(MOCK_CASE)],
           receivedAt: '2019-03-01T21:40:46.415Z',
         },
       ]);
@@ -50,11 +51,6 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        contactPrimary: {
-          entityName: 'PublicContact',
-          name: MOCK_CASE.contactPrimary.name,
-          state: MOCK_CASE.contactPrimary.state,
-        },
         contactSecondary: undefined,
         createdAt: undefined,
         docketEntries: [],
@@ -65,6 +61,14 @@ describe('casePublicSearchInteractor', () => {
         hasIrsPractitioner: false,
         isSealed: false,
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            entityName: 'PublicContact',
+            isContactPrimary: true,
+            name: getContactPrimary(MOCK_CASE).name,
+            state: getContactPrimary(MOCK_CASE).state,
+          },
+        ],
         receivedAt: '2019-03-01T21:40:46.415Z',
       },
     ]);
@@ -73,7 +77,6 @@ describe('casePublicSearchInteractor', () => {
   it('returns no more than MAX_SEARCH_RESULTS', async () => {
     const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
       caseCaption: 'Test Case Caption One',
-      contactPrimary: MOCK_CASE.contactPrimary,
       docketNumber: '123-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       hasIrsPractitioner: false,
@@ -81,11 +84,12 @@ describe('casePublicSearchInteractor', () => {
       internalFieldB: 'should be filtered out',
       internalFieldC: 'should be filtered out',
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [getContactPrimary(MOCK_CASE)],
       receivedAt: '2019-03-01T21:40:46.415Z',
     });
     applicationContext
       .getPersistenceGateway()
-      .casePublicSearchExactMatch.mockResolvedValue(maxPlusOneResults);
+      .casePublicSearch.mockResolvedValue(maxPlusOneResults);
 
     const results = await casePublicSearchInteractor(applicationContext, {});
 
@@ -98,7 +102,7 @@ describe('casePublicSearchInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({ sealedDate: 'some date' });
     applicationContext
       .getPersistenceGateway()
-      .casePublicSearchExactMatch.mockReturnValue([
+      .casePublicSearch.mockReturnValue([
         {
           caseCaption: 'Test Case Caption One',
           contactPrimary: MOCK_CASE.contactPrimary,

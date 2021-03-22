@@ -76,7 +76,9 @@ joiValidationDecorator(
 PrivatePractitioner.prototype.getRepresentingPrimary = function getRepresentingPrimary(
   caseEntity,
 ) {
-  return this.representing.find(r => r === caseEntity.contactPrimary.contactId);
+  return this.representing.find(
+    r => r === caseEntity.getContactPrimary().contactId,
+  );
 };
 
 PrivatePractitioner.prototype.getRepresentingSecondary = function getRepresentingSecondary(

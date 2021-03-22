@@ -18,6 +18,7 @@ const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry } = require('../DocketEntry');
+const { getContactPrimary } = require('./Case');
 const { Statistic } = require('../Statistic');
 
 /**
@@ -73,6 +74,7 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
   this.useSameAsPrimary = rawCase.useSameAsPrimary;
+  this.petitioners = rawCase.petitioners || [];
 
   this.statistics = Array.isArray(rawCase.statistics)
     ? rawCase.statistics.map(
@@ -96,13 +98,13 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
-      primary: rawCase.contactPrimary,
+      primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
     isPaper: true,
     partyType: rawCase.partyType,
   });
-  this.contactPrimary = contacts.primary;
+  this.petitioners = [contacts.primary];
   this.contactSecondary = contacts.secondary;
 };
 
@@ -149,7 +151,6 @@ const paperRequirements = joi
     archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
-    contactPrimary: joi.object().required(),
     contactSecondary: joi.object().optional().allow(null),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
@@ -215,6 +216,7 @@ const paperRequirements = joi
     petitionPaymentMethod: Case.VALIDATION_RULES.petitionPaymentMethod,
     petitionPaymentStatus: Case.VALIDATION_RULES.petitionPaymentStatus,
     petitionPaymentWaivedDate: Case.VALIDATION_RULES.petitionPaymentWaivedDate,
+    petitioners: Case.VALIDATION_RULES.petitioners,
     preferredTrialCity: joi
       .alternatives()
       .conditional('requestForPlaceOfTrialFile', {

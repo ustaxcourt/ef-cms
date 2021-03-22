@@ -111,7 +111,7 @@ const {
   CaseDeadline,
 } = require('../../shared/src/business/entities/CaseDeadline');
 const {
-  casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  casePublicSearch: casePublicSearchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
@@ -1247,7 +1247,7 @@ const gatewayMethods = {
   // methods below are not known to create "entity" records
   advancedDocumentSearch,
   caseAdvancedSearch,
-  casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  casePublicSearch: casePublicSearchPersistence,
   createNewPetitionerUser,
   createNewPractitionerUser,
   deleteCaseByDocketNumber,

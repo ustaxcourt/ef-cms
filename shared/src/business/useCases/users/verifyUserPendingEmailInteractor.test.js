@@ -5,6 +5,7 @@ const {
   updatePetitionerCases,
   verifyUserPendingEmailInteractor,
 } = require('./verifyUserPendingEmailInteractor');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { validUser } = require('../../../test/mockUsers');
@@ -447,19 +448,23 @@ describe('verifyUserPendingEmailInteractor', () => {
       const casesMock = [
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: mockPetitionerUser.userId,
-          },
           docketNumber: '101-21',
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactId: mockPetitionerUser.userId,
+            },
+          ],
         },
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: mockPetitionerUser.userId,
-          },
           docketNumber: '102-21',
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactId: mockPetitionerUser.userId,
+            },
+          ],
         },
       ];
 
@@ -506,11 +511,13 @@ describe('verifyUserPendingEmailInteractor', () => {
         },
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: mockPetitionerUser.userId,
-          },
           docketNumber: '102-21',
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactId: mockPetitionerUser.userId,
+            },
+          ],
         },
       ];
 
@@ -541,12 +548,14 @@ describe('verifyUserPendingEmailInteractor', () => {
       userCases = [
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: mockPetitionerUser.userId,
-          },
           docketNumber: 'not a docket number',
           invalidCase: 'yep',
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactId: mockPetitionerUser.userId,
+            },
+          ],
         },
       ];
 
@@ -575,7 +584,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         {
           ...MOCK_CASE,
           contactSecondary: {
-            ...MOCK_CASE.contactPrimary,
+            ...getContactPrimary(MOCK_CASE),
             contactId: mockPetitionerUser.userId,
             inCareOf: 'Barney',
           },

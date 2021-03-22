@@ -11,6 +11,7 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('associatePrivatePractitionerToCase', () => {
@@ -27,17 +28,6 @@ describe('associatePrivatePractitionerToCase', () => {
     caseRecord = {
       caseCaption: 'Case Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner',
-        phone: '1234567',
-        postalCode: '12345',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        state: 'TN',
-      },
       contactSecondary: {
         address1: '123 Main St',
         city: 'Somewhere',
@@ -63,6 +53,20 @@ describe('associatePrivatePractitionerToCase', () => {
       docketNumber: '123-19',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          isContactPrimary: true,
+          name: 'Test Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          state: 'TN',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -131,18 +135,19 @@ describe('associatePrivatePractitionerToCase', () => {
       user: practitionerUser,
     });
 
+    const updatedCase = applicationContext.getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
-    ).toMatchObject({
-      contactPrimary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
-      contactSecondary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
+    expect(updatedCase.contactSecondary).toMatchObject({
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+    });
+    expect(getContactPrimary(updatedCase)).toMatchObject({
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     });
   });
 
@@ -158,20 +163,20 @@ describe('associatePrivatePractitionerToCase', () => {
       representingSecondary: true,
       user: practitionerUser,
     });
+
+    const updatedCase = applicationContext.getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
-    ).toMatchObject({
-      contactPrimary: {
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
-      contactSecondary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
+    expect(updatedCase.contactSecondary).toMatchObject({
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+    });
+    expect(getContactPrimary(updatedCase)).toMatchObject({
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   });
 });

@@ -41,7 +41,7 @@ exports.sealCaseContactAddressInteractor = async (
   });
 
   const contactToSeal = [
-    caseEntity.contactPrimary,
+    caseEntity.getContactPrimary(),
     caseEntity.contactSecondary,
     ...(caseEntity.otherFilers || []),
     ...(caseEntity.otherPetitioners || []),

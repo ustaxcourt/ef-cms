@@ -133,9 +133,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
     }),
   );
 
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(result);
+
   result.contactPrimary = {
-    ...result.contactPrimary,
-    showEAccessFlag: !isExternalUser && result.contactPrimary.hasEAccess,
+    ...contactPrimary,
+    showEAccessFlag: !isExternalUser && contactPrimary.hasEAccess,
   };
 
   if (result.contactSecondary) {

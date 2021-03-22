@@ -5,6 +5,7 @@ const {
 const {
   MAX_SEARCH_CLIENT_RESULTS,
   ORDER_JUDGE_FIELD,
+  TODAYS_ORDERS_SORTS,
 } = require('../../business/entities/EntityConstants');
 const { advancedDocumentSearch } = require('./advancedDocumentSearch');
 const { search } = require('./searchClient');
@@ -17,7 +18,7 @@ describe('advancedDocumentSearch', () => {
   const SOURCE = {
     includes: [
       'caseCaption',
-      'contactPrimary',
+      'petitioners',
       'contactSecondary',
       'docketEntryId',
       'docketNumber',
@@ -124,7 +125,7 @@ describe('advancedDocumentSearch', () => {
           default_operator: 'and',
           fields: [
             'caseCaption.S',
-            'contactPrimary.M.name.S',
+            'petitioners.L.M.name.S',
             'contactSecondary.M.name.S',
           ],
           query: caseTitleOrPetitioner,
@@ -470,21 +471,21 @@ describe('advancedDocumentSearch', () => {
     );
   });
 
-  it('should include sorting option when overrideSort is true', async () => {
+  it('should include sorting option when sortOrder is provided', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
       endDate: '2020-02-21T04:59:59.999Z',
-      overrideSort: true,
+      sortOrder: TODAYS_ORDERS_SORTS.FILING_DATE_ASC,
       startDate: '2020-02-20T05:00:00.000Z',
     });
 
     expect(search.mock.calls[0][0].searchParameters.body.sort).toEqual([
-      { 'filingDate.S': { order: 'desc' } },
+      { 'filingDate.S': 'asc' },
     ]);
   });
 
-  it('should NOT include sorting option when overrideSort is not passed in (default is false)', async () => {
+  it('should use default sorting option (filing date, descending) when sortOrder is not passed in', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
@@ -492,7 +493,9 @@ describe('advancedDocumentSearch', () => {
       startDate: '2020-02-20T05:00:00.000Z',
     });
 
-    expect(search.mock.calls[0][0].searchParameters.body.sort).toBeUndefined();
+    expect(search.mock.calls[0][0].searchParameters.body.sort).toEqual([
+      { 'filingDate.S': 'desc' },
+    ]);
   });
 
   it('should return the results and totalCount of results1', async () => {

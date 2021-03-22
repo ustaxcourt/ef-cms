@@ -20,7 +20,7 @@ const {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
+const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
@@ -231,7 +231,7 @@ describe('serveCaseToIrsInteractor', () => {
     mockCase = {
       ...MOCK_CASE,
       contactSecondary: {
-        ...MOCK_CASE.contactPrimary,
+        ...getContactPrimary(MOCK_CASE),
         contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
         name: 'Test Petitioner Secondary',
       },
@@ -635,10 +635,10 @@ describe('addDocketEntryForPaymentStatus', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
-        contactPrimary: undefined,
         docketEntries: [],
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: 'Today',
+        petitioners: undefined,
       },
       { applicationContext },
     );

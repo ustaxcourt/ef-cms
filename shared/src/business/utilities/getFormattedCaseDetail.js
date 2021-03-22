@@ -13,7 +13,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
+const { Case, getContactPrimary } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
 const { isServed } = require('../entities/DocketEntry');
 const { ROLES } = require('../entities/EntityConstants');
@@ -401,11 +401,15 @@ const formatCase = (applicationContext, caseDetail) => {
     if (counsel.representing) {
       counsel.representingFormatted = [];
 
-      if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
+      const contactPrimary = applicationContext
+        .getUtilities()
+        .getContactPrimary(caseDetail);
+
+      if (counsel.representing.includes(contactPrimary.contactId)) {
         counsel.representingFormatted.push({
-          name: caseDetail.contactPrimary.name,
-          secondaryName: caseDetail.contactPrimary.secondaryName,
-          title: caseDetail.contactPrimary.title,
+          name: contactPrimary.name,
+          secondaryName: contactPrimary.secondaryName,
+          title: contactPrimary.title,
         });
       }
 
@@ -585,6 +589,9 @@ const getFormattedCaseDetail = ({
   );
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
+
+  result.contactPrimary = getContactPrimary(caseDetail);
+
   return result;
 };
 

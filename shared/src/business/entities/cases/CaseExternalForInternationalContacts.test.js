@@ -18,22 +18,25 @@ describe('CaseExternal', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            countryType: COUNTRY_TYPES.INTERNATIONAL,
-            email: 'someone@example.com',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: {},
           petitionFileSize: 1,
+          petitioners: [
+            {
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              countryType: COUNTRY_TYPES.INTERNATIONAL,
+              email: 'someone@example.com',
+              isContactPrimary: true,
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+          ],
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
           signature: true,
@@ -43,31 +46,34 @@ describe('CaseExternal', () => {
         { applicationContext },
       );
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        contactPrimary: { country: contactErrorMessages.country },
+        petitioners: [{ country: contactErrorMessages.country, index: 0 }],
       });
     });
 
-    it('can validate primary contact', () => {
+    it('can validate the primary contact in the petitioners array', () => {
       const caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            country: 'USA',
-            countryType: COUNTRY_TYPES.INTERNATIONAL,
-            email: 'someone@example.com',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: '2009-10-13',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: {},
           petitionFileSize: 1,
+          petitioners: [
+            {
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              country: 'USA',
+              countryType: COUNTRY_TYPES.INTERNATIONAL,
+              email: 'someone@example.com',
+              isContactPrimary: true,
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+          ],
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
           signature: true,

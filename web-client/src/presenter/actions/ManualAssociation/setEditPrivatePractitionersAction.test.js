@@ -38,7 +38,7 @@ describe('setEditPrivatePractitionersAction', () => {
     const result = await runAction(setEditPrivatePractitionersAction, {
       state: {
         caseDetail: {
-          contactPrimary: { contactId: CONTACT_ID },
+          petitioners: [{ contactId: CONTACT_ID, isContactPrimary: true }],
           privatePractitioners: [
             {
               name: 'Test Practitioner1',
@@ -63,8 +63,13 @@ describe('setEditPrivatePractitionersAction', () => {
     const result = await runAction(setEditPrivatePractitionersAction, {
       state: {
         caseDetail: {
-          contactPrimary: { contactId: '6d51ca19-ae30-4647-ba84-3b98fe7f1df8' },
           contactSecondary: { contactId: SECONDARY_CONTACT_ID },
+          petitioners: [
+            {
+              contactId: '6d51ca19-ae30-4647-ba84-3b98fe7f1df8',
+              isContactPrimary: true,
+            },
+          ],
           privatePractitioners: [
             {
               name: 'Test Practitioner1',

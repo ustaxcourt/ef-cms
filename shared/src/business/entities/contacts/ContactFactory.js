@@ -425,9 +425,12 @@ ContactFactory.createContacts = ({
     otherFilers,
     otherPetitioners,
     primary: constructors.primary
-      ? new constructors.primary(contactInfo.primary || {}, {
-          applicationContext,
-        })
+      ? new constructors.primary(
+          { ...contactInfo.primary, isContactPrimary: true } || {},
+          {
+            applicationContext,
+          },
+        )
       : {},
     secondary: constructors.secondary
       ? new constructors.secondary(contactInfo.secondary || {}, {
@@ -464,6 +467,7 @@ ContactFactory.createContactFactory = ({
       if (!applicationContext) {
         throw new TypeError('applicationContext must be defined');
       }
+
       this.contactId = rawContact.contactId || applicationContext.getUniqueId();
       this.address1 = rawContact.address1;
       this.address2 = rawContact.address2 || undefined;
@@ -474,6 +478,7 @@ ContactFactory.createContactFactory = ({
       this.email = rawContact.email;
       this.inCareOf = rawContact.inCareOf;
       this.isAddressSealed = rawContact.isAddressSealed || false;
+      this.isContactPrimary = rawContact.isContactPrimary || false;
       this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
       this.name = rawContact.name;
       this.phone = rawContact.phone;
