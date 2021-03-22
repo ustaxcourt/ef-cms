@@ -104,8 +104,7 @@ const createCase = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .createCaseInteractor({
-      applicationContext,
+    .createCaseInteractor(applicationContext, {
       petitionFileId,
       petitionMetadata: {
         caseCaption: petitionerName,
