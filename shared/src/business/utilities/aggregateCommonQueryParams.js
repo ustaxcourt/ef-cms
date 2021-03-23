@@ -84,7 +84,7 @@ const aggregateCommonQueryParams = ({
             },
           },
           {
-            match: {
+            term: {
               'contactSecondary.M.countryType.S': countryType,
             },
           },
@@ -102,7 +102,7 @@ const aggregateCommonQueryParams = ({
             },
           },
           {
-            match: {
+            term: {
               'contactSecondary.M.state.S': petitionerState,
             },
           },

@@ -41,8 +41,7 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
       query: {
         bool: {
           must: [
-            { match: { 'pk.S': 'case|' } },
-            { match: { 'sk.S': 'docket-entry|' } },
+            { term: { 'entityName.S': 'DocketEntry' } },
             { term: { 'pending.BOOL': true } },
             hasParentParam,
           ],
