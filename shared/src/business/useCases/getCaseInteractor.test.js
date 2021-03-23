@@ -8,6 +8,11 @@ const {
   isAuthorizedForContact,
 } = require('./getCaseInteractor');
 const {
+  getContactPrimary,
+  getOtherFilers,
+  getOtherPetitioners,
+} = require('../entities/cases/Case');
+const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
@@ -15,7 +20,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getContactPrimary, getOtherFilers } = require('../entities/cases/Case');
 const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
 
@@ -188,7 +192,7 @@ describe('getCaseInteractor', () => {
       getOtherFilers(mockCaseWithSealed).forEach(
         filer => (filer.isAddressSealed = true),
       );
-      mockCaseWithSealed.otherPetitioners.forEach(
+      getOtherPetitioners(mockCaseWithSealed).forEach(
         filer => (filer.isAddressSealed = true),
       );
       applicationContext
@@ -216,7 +220,7 @@ describe('getCaseInteractor', () => {
         expect(filer.city).toBeDefined();
         expect(filer.sealedAndUnavailable).toBe(false);
       });
-      result.otherPetitioners.forEach(filer => {
+      getOtherPetitioners(result).forEach(filer => {
         expect(filer.city).toBeDefined();
         expect(filer.sealedAndUnavailable).toBe(false);
       });

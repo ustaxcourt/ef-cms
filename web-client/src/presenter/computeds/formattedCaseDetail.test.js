@@ -2106,7 +2106,10 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
-      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
+      expect(
+        applicationContext.getUtilities().getOtherPetitioners(result)[0]
+          .showEAccessFlag,
+      ).toEqual(false);
     });
 
     it('sets the showEAccessFlag to true for internal users when contact has legacy access', () => {
@@ -2122,7 +2125,10 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(true);
       expect(result.contactSecondary.showEAccessFlag).toEqual(true);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(true);
-      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(true);
+      expect(
+        applicationContext.getUtilities().getOtherPetitioners(result)[0]
+          .showEAccessFlag,
+      ).toEqual(true);
     });
 
     it('sets the showEAccessFlag to false for external users when contact has legacy access', () => {
@@ -2138,7 +2144,10 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
-      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
+      expect(
+        applicationContext.getUtilities().getOtherPetitioners(result)[0]
+          .showEAccessFlag,
+      ).toEqual(false);
     });
   });
 
