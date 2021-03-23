@@ -50,8 +50,8 @@ describe('caseFilter', () => {
         { ...createContactInfo(), contactType: CONTACT_TYPES.primary },
         { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
         { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
-        { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioners },
-        { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioners },
+        { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioner },
+        { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioner },
       ];
       caseDetail.contactSecondary = createContactInfo();
 
