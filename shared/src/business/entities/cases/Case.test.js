@@ -601,7 +601,7 @@ describe('Case entity', () => {
       expect(myCase.getOtherFilers()).toMatchObject(mockOtherFilers);
     });
 
-    it.skip('fails validation with more than one unique filer type', () => {
+    it('fails validation with more than one unique filer type', () => {
       const mockOtherFilers = [
         {
           address1: '42 Lamb Sauce Blvd',
@@ -632,7 +632,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          otherFilers: mockOtherFilers,
+          petitioners: [...MOCK_CASE.petitioners, ...mockOtherFilers],
         },
         {
           applicationContext,
@@ -641,7 +641,7 @@ describe('Case entity', () => {
 
       const errors = myCase.getFormattedValidationErrors();
       expect(errors).toMatchObject({
-        'otherFilers[1]': '"otherFilers[1]" contains a duplicate value',
+        'petitioners[2]': '"petitioners[2]" contains a duplicate value',
       });
     });
 
