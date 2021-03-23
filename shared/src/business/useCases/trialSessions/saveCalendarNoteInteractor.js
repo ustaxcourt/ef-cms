@@ -64,7 +64,7 @@ exports.saveCalendarNoteInteractor = async (
     );
 
     if (hearing) {
-      applicationContext.getPersistenceGateway().updateCaseHearing({
+      await applicationContext.getPersistenceGateway().updateCaseHearing({
         applicationContext,
         docketNumber,
         hearingToUpdate: rawTrialSessionEntity,

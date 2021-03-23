@@ -91,8 +91,8 @@ exports.generatePrintablePendingReportInteractor = async (
     };
 
     s3Client.upload(params, function (err) {
-      //todo: verify if this should also be thrown
       if (err) {
+        applicationContext.logger.error('error uploading to s3', err);
         reject(err);
       }
       resolve();
