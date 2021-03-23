@@ -33,7 +33,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     const caseEntity = new Case(
       {
         caseCaption: 'A Caption',
-        contactSecondary: {},
         docketEntries: [
           {
             docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
@@ -73,10 +72,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
       {
         caseCaption: 'A Caption',
         caseType: CASE_TYPES_MAP.cdp,
-        contactSecondary: {
-          contactId: SECONDARY_CONTACT_ID,
-          name: 'Carol Baskin',
-        },
         docketEntries: [
           {
             docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
@@ -95,6 +90,11 @@ describe('sendIrsSuperuserPetitionEmail', () => {
             contactId: PRIMARY_CONTACT_ID,
             contactType: CONTACT_TYPES.primary,
             name: 'Joe Exotic',
+          },
+          {
+            contactId: SECONDARY_CONTACT_ID,
+            contactType: CONTACT_TYPES.secondary,
+            name: 'Carol Baskin',
           },
         ],
         preferredTrialCity: 'Somecity, ST',
@@ -126,10 +126,6 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     const caseEntity = new Case(
       {
         caseCaption: 'A Caption',
-        contactSecondary: {
-          contactId: SECONDARY_CONTACT_ID,
-          name: 'Carol Baskin',
-        },
         docketEntries: [
           {
             docketEntryId: '2ac7bb95-2136-47dd-842f-242220ed427b',
@@ -147,6 +143,11 @@ describe('sendIrsSuperuserPetitionEmail', () => {
             contactId: PRIMARY_CONTACT_ID,
             contactType: CONTACT_TYPES.primary,
             name: 'Joe Exotic',
+          },
+          {
+            contactId: SECONDARY_CONTACT_ID,
+            contactType: CONTACT_TYPES.secondary,
+            name: 'Carol Baskin',
           },
         ],
         preferredTrialCity: 'Somecity, ST',

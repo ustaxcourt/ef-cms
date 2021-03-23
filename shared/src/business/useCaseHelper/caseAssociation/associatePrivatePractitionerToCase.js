@@ -53,13 +53,14 @@ exports.associatePrivatePractitionerToCase = async ({
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
     const contactPrimary = caseEntity.getContactPrimary();
+    const contactSecondary = caseEntity.getContactSecondary();
 
     const representing = [];
     if (representingPrimary) {
       representing.push(contactPrimary.contactId);
     }
     if (representingSecondary) {
-      representing.push(caseEntity.contactSecondary.contactId);
+      representing.push(contactSecondary.contactId);
     }
 
     caseEntity.attachPrivatePractitioner(
@@ -73,9 +74,8 @@ exports.associatePrivatePractitionerToCase = async ({
     if (representingPrimary) {
       contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
     }
-    if (caseEntity.contactSecondary && representingSecondary) {
-      caseEntity.contactSecondary.serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_NONE;
+    if (contactSecondary && representingSecondary) {
+      contactSecondary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
     }
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

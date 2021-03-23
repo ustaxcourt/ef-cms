@@ -12,7 +12,10 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const { getContactPrimary } = require('../../entities/cases/Case');
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../entities/cases/Case');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('associatePrivatePractitionerToCase', () => {
@@ -29,16 +32,6 @@ describe('associatePrivatePractitionerToCase', () => {
     caseRecord = {
       caseCaption: 'Case Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactSecondary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Test Petitioner Secondary',
-        phone: '1234567',
-        postalCode: '12345',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        state: 'TN',
-      },
       docketEntries: [
         {
           createdAt: '2018-11-21T20:49:28.192Z',
@@ -65,6 +58,17 @@ describe('associatePrivatePractitionerToCase', () => {
           phone: '1234567',
           postalCode: '12345',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          state: 'TN',
+        },
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Test Petitioner Secondary',
+          phone: '1234567',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           state: 'TN',
         },
       ],
@@ -144,7 +148,7 @@ describe('associatePrivatePractitionerToCase', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
-    expect(updatedCase.contactSecondary).toMatchObject({
+    expect(getContactSecondary(updatedCase)).toMatchObject({
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     });
     expect(getContactPrimary(updatedCase)).toMatchObject({
@@ -173,7 +177,7 @@ describe('associatePrivatePractitionerToCase', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
-    expect(updatedCase.contactSecondary).toMatchObject({
+    expect(getContactSecondary(updatedCase)).toMatchObject({
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     });
     expect(getContactPrimary(updatedCase)).toMatchObject({

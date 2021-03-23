@@ -25,8 +25,10 @@ const addNewInitialFilingToCase = ({
       dt => dt.documentType === documentType,
     );
 
+    const contactSecondary = caseEntity.getContactSecondary();
+
     let partySecondary = false;
-    if (caseEntity.contactSecondary && caseEntity.contactSecondary.name) {
+    if (contactSecondary && contactSecondary.name) {
       partySecondary = true;
     }
 
