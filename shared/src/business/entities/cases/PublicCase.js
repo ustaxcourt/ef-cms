@@ -53,7 +53,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   const currentUser = applicationContext.getCurrentUser();
 
   if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
-    console.log('hihihihihih not here');
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {

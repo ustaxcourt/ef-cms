@@ -606,6 +606,7 @@ describe('Case entity', () => {
         {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'gordon@example.com',
@@ -618,6 +619,7 @@ describe('Case entity', () => {
         {
           address1: '1337 12th Ave',
           city: 'Flavortown',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'mayor@example.com',
@@ -645,11 +647,12 @@ describe('Case entity', () => {
       });
     });
 
-    it.skip('fails validation with an invalid otherFilerType', () => {
+    it('fails validation with an invalid otherFilerType', () => {
       const mockOtherFilers = [
         {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'gordon@example.com',
@@ -663,6 +666,7 @@ describe('Case entity', () => {
         {
           address1: '1337 12th Ave',
           city: 'Flavortown',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'mayor@example.com',
@@ -678,7 +682,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          otherFilers: mockOtherFilers,
+          petitioners: [...MOCK_CASE.petitioners, ...mockOtherFilers],
         },
         {
           applicationContext,
@@ -686,9 +690,9 @@ describe('Case entity', () => {
       );
 
       const errors = myCase.getFormattedValidationErrors();
-      expect(errors.otherFilers).toMatchObject([
+      expect(errors.petitioners).toMatchObject([
         {
-          index: 0,
+          index: 1,
           otherFilerType: 'Select a filer type',
         },
       ]);
