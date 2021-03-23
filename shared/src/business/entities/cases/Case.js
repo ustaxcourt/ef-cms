@@ -328,10 +328,7 @@ Case.prototype.assignContacts = function assignContacts({
 
   this.otherFilers = contacts.otherFilers;
   this.otherPetitioners = contacts.otherPetitioners;
-
-  if (contacts.primary) {
-    this.petitioners.push(contacts.primary);
-  }
+  this.petitioners.push(contacts.primary);
   if (contacts.secondary) {
     this.petitioners.push(contacts.secondary);
   }
@@ -768,6 +765,8 @@ joiValidationDecorator(
 Case.getCaseCaption = function (rawCase) {
   let caseCaption;
   const primaryContact = getContactPrimary(rawCase) || rawCase.contactPrimary;
+  const secondaryContact =
+    getContactSecondary(rawCase) || rawCase.contactSecondary;
 
   switch (rawCase.partyType) {
     case PARTY_TYPES.corporation:
@@ -775,10 +774,10 @@ Case.getCaseCaption = function (rawCase) {
       caseCaption = `${primaryContact.name}, Petitioner`;
       break;
     case PARTY_TYPES.petitionerSpouse:
-      caseCaption = `${primaryContact.name} & ${rawCase.contactSecondary.name}, Petitioners`;
+      caseCaption = `${primaryContact.name} & ${secondaryContact.name}, Petitioners`;
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
-      caseCaption = `${primaryContact.name} & ${rawCase.contactSecondary.name}, Deceased, ${primaryContact.name}, Surviving Spouse, Petitioners`;
+      caseCaption = `${primaryContact.name} & ${secondaryContact.name}, Deceased, ${primaryContact.name}, Surviving Spouse, Petitioners`;
       break;
     case PARTY_TYPES.estate:
       caseCaption = `Estate of ${primaryContact.name}, Deceased, ${primaryContact.secondaryName}, ${primaryContact.title}, Petitioner(s)`;
@@ -1728,7 +1727,10 @@ Case.prototype.getCaseContacts = function (shape) {
         caseContacts[contact] = this.getContactPrimary();
         return;
       }
-
+      if (contact === 'contactSecondary') {
+        caseContacts[contact] = this.getContactSecondary();
+        return;
+      }
       caseContacts[contact] = this[contact];
     }
   });
@@ -1994,11 +1996,12 @@ Case.prototype.deleteStatistic = function (statisticId) {
 };
 
 Case.prototype.hasPartyWithPaperService = function () {
+  const CONTACT_SECONDARY = this.getContactSecondary();
   return (
     this.getContactPrimary().serviceIndicator ===
       SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (this.contactSecondary &&
-      this.contactSecondary.serviceIndicator ===
+    (CONTACT_SECONDARY &&
+      CONTACT_SECONDARY.serviceIndicator ===
         SERVICE_INDICATOR_TYPES.SI_PAPER) ||
     (this.privatePractitioners &&
       this.privatePractitioners.find(
