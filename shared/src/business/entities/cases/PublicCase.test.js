@@ -102,7 +102,9 @@ describe('PublicCase', () => {
       isPaper: true,
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
-      petitioners: [{ contactType: CONTACT_TYPES.primary }],
+      petitioners: [
+        { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
+      ],
       receivedAt: 'testing',
     });
   });
@@ -135,7 +137,9 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
-      petitioners: [{ contactType: CONTACT_TYPES.primary }],
+      petitioners: [
+        { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
+      ],
       receivedAt: 'testing',
     });
   });
@@ -196,7 +200,9 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
-      petitioners: [{ contactType: CONTACT_TYPES.primary }],
+      petitioners: [
+        { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
+      ],
       receivedAt: 'testing',
     });
   });

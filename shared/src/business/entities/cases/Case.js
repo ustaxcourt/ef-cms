@@ -22,6 +22,7 @@ const {
   SERVICE_INDICATOR_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
+  UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
@@ -638,24 +639,15 @@ Case.VALIDATION_RULES = {
       then: JoiValidationConstants.ISO_DATE.max('now').required(),
     },
   ).description('When the case fee was waived.'),
+  // Individual items are validated by the ContactFactory.
   petitioners: joi
     .array()
-    .items(ContactFactory.getValidationRules('primary'))
+    .unique(
+      (a, b) =>
+        a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
+        b.otherFilerType === UNIQUE_OTHER_FILER_TYPE,
+    )
     .required(),
-  //when an item in this array has contactType otherfilers,
-  // then follow uniqueness rules
-
-  // otherFilers: joi
-  //   .array()
-  //   .items(ContactFactory.getValidationRules('otherFilers'))
-  //   .unique(
-  //     (a, b) =>
-  //       a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
-  //       b.otherFilerType === UNIQUE_OTHER_FILER_TYPE,
-  //   )
-  //   .description('List of OtherFilerContact Entities for the case.')
-  //   .optional(),
-
   preferredTrialCity: joi
     .alternatives()
     .try(
