@@ -332,9 +332,13 @@ exports.serveCaseToIrsInteractor = async (
 
     s3Client.upload(params, function (err) {
       if (err) {
-        applicationContext.logger.error('error uploading to s3', err);
+        applicationContext.logger.error(
+          'An error occurred while attempting to upload to S3',
+          err,
+        );
         reject(err);
       }
+
       resolve();
     });
   });
