@@ -34,6 +34,7 @@ export const SelectScannerSourceModal = connect(
             defaultValue={modal.scanner}
             id="scanner-select"
             onChange={e => {
+              console.log('eeee', e.target.value, e.target.selectedIndex);
               updateModalValueSequence({
                 key: 'scanner',
                 value: e.target.value,
