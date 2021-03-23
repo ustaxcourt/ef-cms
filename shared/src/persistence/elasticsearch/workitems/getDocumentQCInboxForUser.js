@@ -7,13 +7,8 @@ exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
         bool: {
           must: [
             {
-              match: {
+              term: {
                 'pk.S': `user|${userId}`,
-              },
-            },
-            {
-              match: {
-                'sk.S': 'work-item|',
               },
             },
           ],
