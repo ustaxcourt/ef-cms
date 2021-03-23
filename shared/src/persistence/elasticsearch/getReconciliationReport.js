@@ -37,8 +37,6 @@ exports.getReconciliationReport = async ({
             },
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'docket-entry|' } },
       ],
     },
   };
