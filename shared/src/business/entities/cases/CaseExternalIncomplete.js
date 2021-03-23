@@ -3,7 +3,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { Case, getContactPrimary } = require('./Case');
+const { Case, getContactPrimary, getContactSecondary } = require('./Case');
 const { CaseExternal } = require('./CaseExternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
@@ -36,26 +36,20 @@ CaseExternalIncomplete.prototype.initContacts = function (
     applicationContext,
     contactInfo: {
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-      secondary: rawCase.contactSecondary,
+      secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
     partyType: rawCase.partyType,
   });
   this.petitioners = [];
   this.petitioners.push(contacts.primary);
-  this.contactSecondary = contacts.secondary;
-
-  Object.defineProperty(this, 'contactPrimary', {
-    get() {
-      return contacts.primary;
-    },
-  });
+  if (contacts.secondary) {
+    this.petitioners.push(contacts.secondary);
+  }
 };
 
 CaseExternalIncomplete.prototype.initSelf = function (rawCase) {
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
-  this.contactPrimary = rawCase.contactPrimary;
-  this.contactSecondary = rawCase.contactSecondary;
   this.countryType = rawCase.countryType;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
@@ -72,14 +66,12 @@ joiValidationDecorator(
   joi.object().keys({
     businessType: CaseExternal.commonRequirements.businessType,
     caseType: CaseExternal.commonRequirements.caseType,
-    contactSecondary: joi.object().optional(),
     countryType: CaseExternal.commonRequirements.countryType,
     filingType: CaseExternal.commonRequirements.filingType,
     hasIrsNotice: CaseExternal.commonRequirements.hasIrsNotice,
     partyType: CaseExternal.commonRequirements.partyType,
     petitioners: joi
       .array()
-      .items(ContactFactory.getValidationRules('primary'))
       .description('List of Contact Entities for the case.')
       .optional(),
     preferredTrialCity: CaseExternal.commonRequirements.preferredTrialCity,

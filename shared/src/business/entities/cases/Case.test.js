@@ -3511,8 +3511,8 @@ describe('Case entity', () => {
       const testCase = new Case(
         {
           ...MOCK_CASE,
-          //contactPrimary,
-          //contactSecondary,
+          contactPrimary,
+          contactSecondary,
           irsPractitioners,
           otherFilers,
           otherPetitioners,
@@ -3527,8 +3527,8 @@ describe('Case entity', () => {
       const caseContacts = testCase.getCaseContacts();
 
       expect(caseContacts).toMatchObject({
-        //contactPrimary,
-        //contactSecondary,
+        contactPrimary,
+        contactSecondary,
         irsPractitioners,
         otherFilers,
         otherPetitioners,
