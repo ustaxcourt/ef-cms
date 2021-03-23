@@ -8,13 +8,17 @@ const migrateItems = async items => {
   const itemsAfter = [];
   for (const item of items) {
     if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
+      item.petitioners = [...item.petitioners, ...(item.otherFilers || [])];
+
       const updatedCase = new Case(item, { applicationContext })
         .validate()
         .toRawObject();
+
       delete item.contactPrimary;
+      delete item.otherFilers;
 
       applicationContext.logger.info(
-        'Creating case entity to add contactPrimary to case.petitioners',
+        'Creating case entity to add contactPrimary and otherFilers to case.petitioners',
         { pk: item.pk, sk: item.sk },
       );
 
