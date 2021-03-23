@@ -22,7 +22,7 @@ describe('getUsersInSectionAction', () => {
 
     expect(
       applicationContext.getUseCases().getUsersInSectionInteractor.mock
-        .calls[0][0].section,
+        .calls[0][1].section,
     ).toBe(mockSection);
   });
 
@@ -43,7 +43,7 @@ describe('getUsersInSectionAction', () => {
 
     expect(
       applicationContext.getUseCases().getUsersInSectionInteractor.mock
-        .calls[0][0].section,
+        .calls[0][1].section,
     ).toBe(mockSection);
   });
 
