@@ -255,12 +255,13 @@ exports.serveCaseToIrsInteractor = async (
       },
     });
 
-  if (caseEntityToUpdate.contactSecondary) {
+  const contactSecondary = caseEntityToUpdate.getContactSecondary();
+  if (contactSecondary) {
     const contactInformationDiff = applicationContext
       .getUtilities()
       .getAddressPhoneDiff({
         newData: caseEntityToUpdate.getContactPrimary(),
-        oldData: caseEntityToUpdate.contactSecondary,
+        oldData: contactSecondary,
       });
 
     const addressFields = [

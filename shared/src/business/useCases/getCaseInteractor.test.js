@@ -8,6 +8,11 @@ const {
   isAuthorizedForContact,
 } = require('./getCaseInteractor');
 const {
+  getContactPrimary,
+  getContactSecondary,
+  getOtherFilers,
+} = require('../entities/cases/Case');
+const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
@@ -15,7 +20,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getContactPrimary, getOtherFilers } = require('../entities/cases/Case');
 const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
 
@@ -184,7 +188,7 @@ describe('getCaseInteractor', () => {
       const mockCaseWithSealed = cloneDeep(MOCK_CASE_WITH_SECONDARY_OTHERS);
       // seal ALL addresses present on this mock case
       getContactPrimary(mockCaseWithSealed).isAddressSealed = true;
-      mockCaseWithSealed.contactSecondary.isAddressSealed = true;
+      getContactSecondary(mockCaseWithSealed).isAddressSealed = true;
       getOtherFilers(mockCaseWithSealed).forEach(
         filer => (filer.isAddressSealed = true),
       );
@@ -207,11 +211,12 @@ describe('getCaseInteractor', () => {
       });
 
       const contactPrimary = getContactPrimary(result);
+      const contactSecondary = getContactSecondary(result);
 
       expect(contactPrimary.city).toBeDefined();
       expect(contactPrimary.sealedAndUnavailable).toBe(false);
-      expect(result.contactSecondary.city).toBeDefined();
-      expect(result.contactSecondary.sealedAndUnavailable).toBe(false);
+      expect(contactSecondary.city).toBeDefined();
+      expect(contactSecondary.sealedAndUnavailable).toBe(false);
       getOtherFilers(result).forEach(filer => {
         expect(filer.city).toBeDefined();
         expect(filer.sealedAndUnavailable).toBe(false);
@@ -234,7 +239,7 @@ describe('getCaseInteractor', () => {
       });
 
       expect(getContactPrimary(result).city).toBeUndefined();
-      expect(result.contactSecondary.city).toBeUndefined();
+      expect(getContactSecondary(result).city).toBeUndefined();
     });
   });
 

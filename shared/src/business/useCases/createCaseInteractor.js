@@ -91,14 +91,16 @@ exports.createCaseInteractor = async (
         userId: user.userId,
       });
 
-    practitionerUser.representing = [petitionEntity.contactPrimary.contactId];
+    practitionerUser.representing = [
+      petitionEntity.getContactPrimary().contactId,
+    ];
 
     if (
       petitionMetadata.contactSecondary &&
       petitionMetadata.contactSecondary.name
     ) {
       practitionerUser.representing.push(
-        petitionEntity.contactSecondary.contactId,
+        petitionEntity.getContactSecondary().contactId,
       );
     }
 
