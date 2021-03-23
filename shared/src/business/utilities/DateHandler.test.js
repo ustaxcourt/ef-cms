@@ -22,10 +22,23 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('prepareDateFromString', () => {
-    it("Creates a new moment object for 'now' when given no inputs'", () => {
+  describe.only('prepareDateFromString', () => {
+    it("Creates a new moment object for 'now' when given no inputs", () => {
       const myMoment = DateHandler.prepareDateFromString();
       expect(myMoment).toBeDefined();
+    });
+
+    it('Creates a new moment object for a given YYYY-MM-DD', () => {
+      const myMoment = DateHandler.prepareDateFromString('2021-03-21');
+      const isoString = myMoment.toISOString();
+      expect(isoString).toEqual('2021-03-21T04:00:00.000Z');
+    });
+
+    it('Creates a new moment object for a given strict ISO timestamp with unchanged timezone', () => {
+      const strictIsoStamp = '2021-03-21T01:00:00.000Z';
+      const myMoment = DateHandler.prepareDateFromString(strictIsoStamp);
+      const isoString = myMoment.toISOString();
+      expect(isoString).toEqual(strictIsoStamp);
     });
   });
 
