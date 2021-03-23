@@ -884,7 +884,7 @@ workflows:
       - e2e-cypress-public
     triggers:
       - schedule:
-          cron: '0 15 0/2 * * *'
+          cron: '15 0/2 * * *'
           filters:
             branches:
               only:
