@@ -17,7 +17,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { getContactPrimary, isSealedCase } = require('./Case');
+const { getContactPrimary, getOtherFilers, isSealedCase } = require('./Case');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { map } = require('lodash');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
@@ -45,7 +45,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
-  this.petitioners = rawCase.petitioners;
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
@@ -56,7 +55,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {
-        otherFilers: rawCase.otherFilers,
+        otherFilers: getOtherFilers(rawCase),
         otherPetitioners: rawCase.otherPetitioners,
         primary: getContactPrimary(rawCase),
         secondary: rawCase.contactSecondary,
@@ -66,8 +65,8 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     });
 
     this.otherPetitioners = contacts.otherPetitioners;
-    this.otherFilers = contacts.otherFilers;
     this.petitioners = [contacts.primary];
+    this.petitioners.push(...contacts.otherFilers);
     this.contactSecondary = contacts.secondary;
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
@@ -76,10 +75,8 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     this.privatePractitioners = (rawCase.privatePractitioners || []).map(
       practitioner => new PrivatePractitioner(practitioner),
     );
-  } else {
-    if (getContactPrimary(rawCase)) {
-      this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
-    }
+  } else if (!this.isSealed) {
+    this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
 
     this.contactSecondary = rawCase.contactSecondary
       ? new PublicContact(rawCase.contactSecondary)
