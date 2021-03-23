@@ -8,7 +8,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../entities/EntityConstants');
-const { getContactPrimary } = require('../entities/cases/Case');
+const { getContactPrimary, getOtherFilers } = require('../entities/cases/Case');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -48,19 +48,16 @@ describe('caseFilter', () => {
       const caseDetail = {};
       caseDetail.petitioners = [
         { ...createContactInfo(), contactType: CONTACT_TYPES.primary },
+        { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
+        { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
       ];
       caseDetail.contactSecondary = createContactInfo();
-      caseDetail.otherFilers = [createContactInfo(), createContactInfo()];
       caseDetail.otherPetitioners = [createContactInfo(), createContactInfo()];
 
       const result = caseContactAddressSealedFormatter(caseDetail, {
         role: ROLES.petitioner,
       });
-      [
-        result.contactSecondary,
-        ...result.otherFilers,
-        ...result.otherPetitioners,
-      ].forEach(party => {
+      [result.contactSecondary, ...result.otherPetitioners].forEach(party => {
         expect(Object.keys(party).sort()).toMatchObject([
           'additionalName',
           'contactId',
@@ -75,19 +72,21 @@ describe('caseFilter', () => {
         ]);
       });
 
-      expect(Object.keys(getContactPrimary(result)).sort()).toMatchObject([
-        'additionalName',
-        'contactId',
-        'contactType',
-        'inCareOf',
-        'isAddressSealed',
-        'name',
-        'otherFilerType',
-        'sealedAndUnavailable',
-        'secondaryName',
-        'serviceIndicator',
-        'title',
-      ]);
+      [getContactPrimary(result), ...getOtherFilers(result)].forEach(party => {
+        expect(Object.keys(party).sort()).toMatchObject([
+          'additionalName',
+          'contactId',
+          'contactType',
+          'inCareOf',
+          'isAddressSealed',
+          'name',
+          'otherFilerType',
+          'sealedAndUnavailable',
+          'secondaryName',
+          'serviceIndicator',
+          'title',
+        ]);
+      });
     });
   });
 

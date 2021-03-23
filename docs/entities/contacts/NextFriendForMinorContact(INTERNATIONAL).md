@@ -109,6 +109,7 @@
       allow: 
         - "PRIMARY"
         - "SECONDARY"
+        - "OTHER_FILER"
     inCareOf: 
       type: "string"
       flags: 

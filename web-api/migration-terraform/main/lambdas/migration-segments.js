@@ -3,7 +3,7 @@ const createApplicationContext = require('../../../src/applicationContext');
 
 const {
   migrateItems: migration0024,
-} = require('./migrations/0024-add-contact-primary-to-petitioners-array');
+} = require('./migrations/0024-add-contacts-to-petitioners-array');
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');

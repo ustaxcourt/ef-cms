@@ -21,13 +21,8 @@ describe('getDocumentQCInboxForUser', () => {
             bool: {
               must: [
                 {
-                  match: {
+                  term: {
                     'pk.S': 'user|123',
-                  },
-                },
-                {
-                  match: {
-                    'sk.S': 'work-item|',
                   },
                 },
               ],

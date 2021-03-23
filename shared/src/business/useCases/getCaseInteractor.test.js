@@ -1,8 +1,4 @@
 const {
-  ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-
-const {
   CASE_TYPES_MAP,
   PARTY_TYPES,
   ROLES,
@@ -15,8 +11,11 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
+const {
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getContactPrimary } = require('../entities/cases/Case');
+const { getContactPrimary, getOtherFilers } = require('../entities/cases/Case');
 const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
 
@@ -186,7 +185,7 @@ describe('getCaseInteractor', () => {
       // seal ALL addresses present on this mock case
       getContactPrimary(mockCaseWithSealed).isAddressSealed = true;
       mockCaseWithSealed.contactSecondary.isAddressSealed = true;
-      mockCaseWithSealed.otherFilers.forEach(
+      getOtherFilers(mockCaseWithSealed).forEach(
         filer => (filer.isAddressSealed = true),
       );
       mockCaseWithSealed.otherPetitioners.forEach(
@@ -213,7 +212,7 @@ describe('getCaseInteractor', () => {
       expect(contactPrimary.sealedAndUnavailable).toBe(false);
       expect(result.contactSecondary.city).toBeDefined();
       expect(result.contactSecondary.sealedAndUnavailable).toBe(false);
-      result.otherFilers.forEach(filer => {
+      getOtherFilers(result).forEach(filer => {
         expect(filer.city).toBeDefined();
         expect(filer.sealedAndUnavailable).toBe(false);
       });
@@ -288,7 +287,6 @@ describe('getCaseInteractor', () => {
 
       expect(result).toEqual({
         caseCaption: undefined,
-        contactPrimary: undefined,
         contactSecondary: undefined,
         docketEntries: [],
         docketNumber: '101-18',

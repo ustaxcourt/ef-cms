@@ -2061,7 +2061,7 @@ describe('formattedCaseDetail', () => {
       contactPrimary = { ...baseContact, contactType: CONTACT_TYPES.primary };
       contactSecondary = baseContact;
       otherPetitioners = [baseContact];
-      otherFilers = [baseContact];
+      otherFilers = [{ ...baseContact, contactType: CONTACT_TYPES.otherFiler }];
 
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
@@ -2083,16 +2083,16 @@ describe('formattedCaseDetail', () => {
             numberOfPages: 24,
           },
         ],
-        otherFilers,
         otherPetitioners,
         partyType: 'Petitioner',
-        petitioners: [contactPrimary],
+        petitioners: [contactPrimary, ...otherFilers],
       };
     });
 
     it('sets the showEAccessFlag to false for internal users when a contact does not have legacy access', () => {
       baseContact.hasEAccess = false;
       contactPrimary.hasEAccess = false;
+      otherFilers[0].hasEAccess = false;
 
       const result = runCompute(formattedCaseDetail, {
         state: {

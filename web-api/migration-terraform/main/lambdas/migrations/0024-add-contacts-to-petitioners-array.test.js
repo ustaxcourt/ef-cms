@@ -4,9 +4,7 @@ const {
 const {
   getContactPrimary,
 } = require('../../../../../shared/src/business/entities/cases/Case');
-const {
-  migrateItems,
-} = require('./0024-add-contact-primary-to-petitioners-array');
+const { migrateItems } = require('./0024-add-contacts-to-petitioners-array');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
@@ -70,5 +68,21 @@ describe('migrateItems', () => {
         }),
       ]),
     );
+  });
+
+  it('should properly populate the petitioners array on a case when otherFilers is undefined', async () => {
+    const items = [
+      {
+        pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        ...MOCK_CASE,
+        otherFilers: undefined,
+        petitioners: [getContactPrimary(MOCK_CASE)],
+        sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+      },
+    ];
+
+    const results = await migrateItems(items);
+
+    expect(results[0].petitioners.length).toBe(1);
   });
 });

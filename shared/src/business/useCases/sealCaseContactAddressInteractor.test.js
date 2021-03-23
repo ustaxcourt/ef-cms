@@ -6,7 +6,7 @@ const {
   sealCaseContactAddressInteractor,
 } = require('./sealCaseContactAddressInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getContactPrimary } = require('../entities/cases/Case');
+const { getContactPrimary, getOtherFilers } = require('../entities/cases/Case');
 const { ROLES } = require('../entities/EntityConstants');
 
 describe('sealCaseContactAddressInteractor', () => {
@@ -118,6 +118,6 @@ describe('sealCaseContactAddressInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    expect(result.otherFilers[1].isAddressSealed).toBe(true);
+    expect(getOtherFilers(result)[1].isAddressSealed).toBe(true);
   });
 });
