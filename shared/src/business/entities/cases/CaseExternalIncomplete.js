@@ -80,6 +80,24 @@ joiValidationDecorator(
   CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES,
 );
 
+/**
+ * Returns the primary contact on the case
+ *
+ * @returns {Object} the primary contact object on the case
+ */
+CaseExternalIncomplete.prototype.getContactPrimary = function () {
+  return getContactPrimary(this);
+};
+
+/**
+ * Retrieves the secondary contact on the case
+ *
+ * @returns {Object} the secondary contact object on the case
+ */
+CaseExternalIncomplete.prototype.getContactSecondary = function () {
+  return getContactSecondary(this);
+};
+
 module.exports = {
   CaseExternalIncomplete: validEntityDecorator(CaseExternalIncomplete),
 };

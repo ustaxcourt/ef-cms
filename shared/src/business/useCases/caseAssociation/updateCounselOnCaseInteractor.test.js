@@ -10,9 +10,12 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../entities/cases/Case');
+const {
   updateCounselOnCaseInteractor,
 } = require('./updateCounselOnCaseInteractor');
-const { getContactPrimary } = require('../../entities/cases/Case');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
@@ -87,17 +90,6 @@ describe('updateCounselOnCaseInteractor', () => {
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
         caseCaption: 'Caption',
         caseType: CASE_TYPES_MAP.deficiency,
-        contactSecondary: {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'fieri@example.com',
-          name: 'Guy Fieri',
-          phone: '1234567890',
-          postalCode: '12345',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          state: 'CA',
-        },
         docketEntries: MOCK_CASE.docketEntries,
         docketNumber,
         filingType: 'Myself',
@@ -108,6 +100,18 @@ describe('updateCounselOnCaseInteractor', () => {
             address1: '123 Main St',
             city: 'Somewhere',
             contactType: CONTACT_TYPES.primary,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'fieri@example.com',
+            name: 'Guy Fieri',
+            phone: '1234567890',
+            postalCode: '12345',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            state: 'CA',
+          },
+          {
+            address1: '123 Main St',
+            city: 'Somewhere',
+            contactType: CONTACT_TYPES.secondary,
             countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'fieri@example.com',
             name: 'Guy Fieri',
@@ -214,7 +218,7 @@ describe('updateCounselOnCaseInteractor', () => {
     expect(getContactPrimary(results).serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
-    expect(results.contactSecondary.serviceIndicator).toBe(
+    expect(getContactSecondary(results).serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });

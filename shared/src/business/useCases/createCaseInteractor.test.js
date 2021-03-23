@@ -6,9 +6,12 @@ const {
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../entities/cases/Case');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('./createCaseInteractor');
-const { getContactPrimary } = require('../entities/cases/Case');
 const { PrivatePractitioner } = require('../entities/PrivatePractitioner');
 const { User } = require('../entities/User');
 
@@ -256,7 +259,7 @@ describe('createCaseInteractor', () => {
     expect(result).toBeDefined();
     expect(result.privatePractitioners[0].representing).toEqual([
       getContactPrimary(result).contactId,
-      result.contactSecondary.contactId,
+      getContactSecondary(result).contactId,
     ]);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,

@@ -212,6 +212,7 @@ describe('serveCaseToIrsInteractor', () => {
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
+
     expect(
       applicationContext.getUtilities().getAddressPhoneDiff,
     ).toHaveBeenCalled();
