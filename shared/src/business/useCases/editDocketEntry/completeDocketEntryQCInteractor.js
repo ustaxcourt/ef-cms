@@ -10,10 +10,6 @@ const {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
-  dateStringsCompared,
-  prepareDateFromString,
-} = require('../../utilities/DateHandler');
-const {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../../entities/EntityConstants');
@@ -29,6 +25,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
+const { dateStringsCompared } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
@@ -101,14 +98,6 @@ exports.completeDocketEntryQCInteractor = async ({
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
   });
-
-  // ensure normalization of strict timestamp format prior to comparisons
-  currentDocketEntry.receivedAt = prepareDateFromString(
-    currentDocketEntry.receivedAt,
-  );
-  entryMetadata.receivedAt = prepareDateFromString(entryMetadata.receivedAt);
-
-  console.log('Received at??', entryMetadata.receivedAt);
 
   const editableFields = {
     addToCoversheet: entryMetadata.addToCoversheet,

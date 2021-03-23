@@ -22,7 +22,7 @@ describe('DateHandler', () => {
     });
   });
 
-  describe.only('prepareDateFromString', () => {
+  describe('prepareDateFromString', () => {
     it("Creates a new moment object for 'now' when given no inputs", () => {
       const myMoment = DateHandler.prepareDateFromString();
       expect(myMoment).toBeDefined();
