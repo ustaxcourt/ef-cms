@@ -8,9 +8,12 @@ const migrateItems = async items => {
   const itemsAfter = [];
   for (const item of items) {
     if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
-      item.petitioners = [...item.petitioners, ...(item.otherFilers || [])];
+      item.petitioners = [
+        ...(item.petitioners || []),
+        ...(item.otherFilers || []),
+      ];
 
-      const updatedCase = new Case(item, { applicationContext })
+      const updatedCaseRaw = new Case(item, { applicationContext })
         .validate()
         .toRawObject();
 
@@ -22,7 +25,7 @@ const migrateItems = async items => {
         { pk: item.pk, sk: item.sk },
       );
 
-      itemsAfter.push({ ...item, ...updatedCase });
+      itemsAfter.push({ ...item, ...updatedCaseRaw });
     } else {
       itemsAfter.push(item);
     }
