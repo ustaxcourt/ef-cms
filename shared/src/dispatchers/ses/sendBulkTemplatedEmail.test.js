@@ -62,8 +62,8 @@ describe('sendBulkTemplatedEmail', () => {
         },
       });
 
-    try {
-      await sendBulkTemplatedEmail({
+    await expect(
+      sendBulkTemplatedEmail({
         applicationContext,
         destinations: [
           {
@@ -76,13 +76,11 @@ describe('sendBulkTemplatedEmail', () => {
           },
         ],
         templateName: 'case_served',
-      });
-    } catch (err) {
-      // eslint-disable-next-line jest/no-try-expect
-      expect(applicationContext.logger.error.mock.calls.length).toEqual(1);
-      // eslint-disable-next-line jest/no-try-expect
-      expect(applicationContext.logger.info).toHaveBeenCalledTimes(1);
-    }
+      }),
+    ).rejects.toEqual('Something bad happened!');
+
+    expect(applicationContext.logger.error.mock.calls.length).toEqual(1);
+    expect(applicationContext.logger.info).toHaveBeenCalledTimes(1);
   });
 
   it('should retry a failed mailing', async () => {
@@ -233,7 +231,7 @@ describe('sendBulkTemplatedEmail', () => {
         ],
         templateName: 'case_served',
       }),
-    ).rejects.toEqual(
+    ).rejects.toThrow(
       'Could not complete service to test.email@example.com,test.email2@example.com,test.email3@example.com',
     );
     expect(
