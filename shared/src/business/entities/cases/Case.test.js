@@ -563,9 +563,10 @@ describe('Case entity', () => {
         {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'gordon@thelambsauce.com',
+          email: 'gordon@example.com',
           name: 'Gordon Ramsay',
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
@@ -575,9 +576,10 @@ describe('Case entity', () => {
         {
           address1: '1337 12th Ave',
           city: 'Flavortown',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'mayor@flavortown.com',
+          email: 'mayor@example.com',
           name: 'Guy Fieri',
           otherFilerType: OTHER_FILER_TYPES[1],
           phone: '1234567890',
@@ -589,14 +591,14 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          otherFilers: mockOtherFilers,
+          petitioners: [getContactPrimary(MOCK_CASE), ...mockOtherFilers],
         },
         {
           applicationContext,
         },
       );
 
-      expect(myCase.toRawObject().otherFilers).toMatchObject(mockOtherFilers);
+      expect(myCase.getOtherFilers()).toMatchObject(mockOtherFilers);
     });
 
     it('fails validation with more than one unique filer type', () => {
@@ -604,9 +606,10 @@ describe('Case entity', () => {
         {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'gordon@thelambsauce.com',
+          email: 'gordon@example.com',
           name: 'Gordon Ramsay',
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
@@ -616,9 +619,10 @@ describe('Case entity', () => {
         {
           address1: '1337 12th Ave',
           city: 'Flavortown',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'mayor@flavortown.com',
+          email: 'mayor@example.com',
           name: 'Guy Fieri',
           otherFilerType: UNIQUE_OTHER_FILER_TYPE, // fails because there cannot be more than 1 filer with this type
           phone: '1234567890',
@@ -630,7 +634,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          otherFilers: mockOtherFilers,
+          petitioners: [...MOCK_CASE.petitioners, ...mockOtherFilers],
         },
         {
           applicationContext,
@@ -639,7 +643,7 @@ describe('Case entity', () => {
 
       const errors = myCase.getFormattedValidationErrors();
       expect(errors).toMatchObject({
-        'otherFilers[1]': '"otherFilers[1]" contains a duplicate value',
+        'petitioners[2]': '"petitioners[2]" contains a duplicate value',
       });
     });
 
@@ -648,9 +652,10 @@ describe('Case entity', () => {
         {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'gordon@thelambsauce.com',
+          email: 'gordon@example.com',
           name: 'Gordon Ramsay',
           otherFilerType: null,
           phone: '1234567890',
@@ -661,9 +666,10 @@ describe('Case entity', () => {
         {
           address1: '1337 12th Ave',
           city: 'Flavortown',
+          contactType: CONTACT_TYPES.otherFiler,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'mayor@flavortown.com',
+          email: 'mayor@example.com',
           name: 'Guy Fieri',
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
@@ -676,7 +682,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          otherFilers: mockOtherFilers,
+          petitioners: [...MOCK_CASE.petitioners, ...mockOtherFilers],
         },
         {
           applicationContext,
@@ -684,9 +690,9 @@ describe('Case entity', () => {
       );
 
       const errors = myCase.getFormattedValidationErrors();
-      expect(errors.otherFilers).toMatchObject([
+      expect(errors.petitioners).toMatchObject([
         {
-          index: 0,
+          index: 1,
           otherFilerType: 'Select a filer type',
         },
       ]);
@@ -3472,29 +3478,6 @@ describe('Case entity', () => {
       },
     ];
 
-    const otherFilers = [
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Secondary',
-        otherFilerType: UNIQUE_OTHER_FILER_TYPE,
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Secondary',
-        otherFilerType: OTHER_FILER_TYPES[1],
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
-    ];
-
     const privatePractitioners = [
       {
         name: 'Private Practitioner One',
@@ -3514,7 +3497,6 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
-          otherFilers,
           otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
@@ -3530,7 +3512,6 @@ describe('Case entity', () => {
         contactPrimary,
         contactSecondary,
         irsPractitioners,
-        otherFilers,
         otherPetitioners,
         privatePractitioners,
       });
@@ -3541,7 +3522,6 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           irsPractitioners,
-          otherFilers,
           otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           petitioners: [contactPrimary, contactSecondary],
@@ -3555,13 +3535,11 @@ describe('Case entity', () => {
       const caseContacts = testCase.getCaseContacts({
         contactPrimary: true,
         contactSecondary: true,
-        otherFilers: true,
         otherPetitioners: true,
       });
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
-        otherFilers,
         otherPetitioners,
       });
     });

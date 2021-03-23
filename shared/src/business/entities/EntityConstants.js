@@ -731,6 +731,7 @@ const OTHER_TYPES = {
 const CONTACT_TYPES = {
   primary: 'PRIMARY',
   secondary: 'SECONDARY',
+  otherFiler: 'OTHER_FILER',
 };
 
 const COMMON_CITIES = [

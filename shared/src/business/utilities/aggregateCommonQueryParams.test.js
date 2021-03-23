@@ -107,7 +107,7 @@ describe('aggregateCommonQueryParams', () => {
                 },
               },
               {
-                match: {
+                term: {
                   'contactSecondary.M.countryType.S': COUNTRY_TYPES.DOMESTIC,
                 },
               },
@@ -140,7 +140,7 @@ describe('aggregateCommonQueryParams', () => {
                 },
               },
               {
-                match: {
+                term: {
                   'contactSecondary.M.state.S': US_STATES.AR,
                 },
               },

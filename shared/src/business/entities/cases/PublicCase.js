@@ -11,6 +11,7 @@ const {
 const {
   getContactPrimary,
   getContactSecondary,
+  getOtherFilers,
   isSealedCase,
 } = require('./Case');
 const {
@@ -49,7 +50,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
-  this.petitioners = rawCase.petitioners;
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
@@ -60,7 +60,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {
-        otherFilers: rawCase.otherFilers,
+        otherFilers: getOtherFilers(rawCase),
         otherPetitioners: rawCase.otherPetitioners,
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
         secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
@@ -70,11 +70,11 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     });
 
     this.otherPetitioners = contacts.otherPetitioners;
-    this.otherFilers = contacts.otherFilers;
     this.petitioners = [contacts.primary];
     if (contacts.secondary) {
       this.petitioners.push(contacts.secondary);
     }
+    this.petitioners.push(...contacts.otherFilers);
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),
@@ -82,12 +82,9 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     this.privatePractitioners = (rawCase.privatePractitioners || []).map(
       practitioner => new PrivatePractitioner(practitioner),
     );
-  } else {
-    if (getContactPrimary(rawCase)) {
-      this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
-    }
+  } else if (!this.isSealed) {
+    this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
     if (getContactSecondary(rawCase)) {
-      this.petitioners = this.petitioners || [];
       this.petitioners.push(new PublicContact(getContactSecondary(rawCase)));
     }
   }

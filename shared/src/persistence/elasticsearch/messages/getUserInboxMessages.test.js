@@ -31,7 +31,7 @@ describe('getUserInboxMessages', () => {
     ).toEqual(
       expect.arrayContaining([
         {
-          match: {
+          term: {
             'isCompleted.BOOL': false,
           },
         },

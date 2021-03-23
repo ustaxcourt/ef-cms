@@ -121,7 +121,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort,
   );
 
-  result.otherFilers = (result.otherFilers || []).map(otherFiler => ({
+  result.otherFilers = (
+    applicationContext.getUtilities().getOtherFilers(result) || []
+  ).map(otherFiler => ({
     ...otherFiler,
     showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
   }));

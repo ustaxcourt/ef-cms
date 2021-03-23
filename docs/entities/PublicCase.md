@@ -819,6 +819,7 @@
               allow: 
                 - "PRIMARY"
                 - "SECONDARY"
+                - "OTHER_FILER"
             name: 
               type: "string"
               flags: 
