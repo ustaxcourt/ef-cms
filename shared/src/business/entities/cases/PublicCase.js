@@ -62,8 +62,8 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       contactInfo: {
         otherFilers: rawCase.otherFilers,
         otherPetitioners: rawCase.otherPetitioners,
-        primary: getContactPrimary(rawCase),
-        secondary: getContactSecondary(rawCase),
+        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
+        secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
       },
       isPaper: rawCase.isPaper,
       partyType: rawCase.partyType,
@@ -71,7 +71,10 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
     this.otherPetitioners = contacts.otherPetitioners;
     this.otherFilers = contacts.otherFilers;
-    this.petitioners = [contacts.primary, contacts.secondary];
+    this.petitioners = [contacts.primary];
+    if (contacts.secondary) {
+      this.petitioners.push(contacts.secondary);
+    }
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),
@@ -100,7 +103,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-  contactSecondary: PublicContact.VALIDATION_RULES.optional().allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketEntries: joi
     .array()
@@ -128,7 +130,6 @@ const publicCaseSchema = {
 
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
   docketEntries: joi.array().max(0),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),

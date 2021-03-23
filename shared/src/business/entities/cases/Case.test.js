@@ -1219,6 +1219,16 @@ describe('Case entity', () => {
             postalCode: 'Enter ZIP code',
             state: 'Enter state',
           },
+          {
+            address1: 'Enter mailing address',
+            city: 'Enter city',
+            countryType: 'Enter country type',
+            index: 1,
+            name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+            phone: 'Enter phone number',
+            postalCode: 'Enter ZIP code',
+            state: 'Enter state',
+          },
         ],
       });
     });
@@ -3420,6 +3430,7 @@ describe('Case entity', () => {
     const contactPrimary = {
       address1: '123 Main St',
       city: 'Somewhere',
+      contactType: CONTACT_TYPES.primary,
       countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
       postalCode: '12345',
@@ -3430,6 +3441,7 @@ describe('Case entity', () => {
     const contactSecondary = {
       address1: '123 Main St',
       city: 'Somewhere',
+      contactType: CONTACT_TYPES.secondary,
       countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Contact Secondary',
       postalCode: '12345',
@@ -3499,8 +3511,8 @@ describe('Case entity', () => {
       const testCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary,
-          contactSecondary,
+          //contactPrimary,
+          //contactSecondary,
           irsPractitioners,
           otherFilers,
           otherPetitioners,
@@ -3515,8 +3527,8 @@ describe('Case entity', () => {
       const caseContacts = testCase.getCaseContacts();
 
       expect(caseContacts).toMatchObject({
-        contactPrimary,
-        contactSecondary,
+        //contactPrimary,
+        //contactSecondary,
         irsPractitioners,
         otherFilers,
         otherPetitioners,
@@ -3528,12 +3540,11 @@ describe('Case entity', () => {
       const testCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary,
-          contactSecondary,
           irsPractitioners,
           otherFilers,
           otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [contactPrimary, contactSecondary],
           privatePractitioners,
         },
         {
@@ -4497,14 +4508,9 @@ describe('Case entity', () => {
 
   describe('secondary contact', () => {
     it('does not create a secondary contact when one is not needed by the party type', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, contactSecondary: undefined },
-        { applicationContext },
-      );
+      const myCase = new Case({ ...MOCK_CASE }, { applicationContext });
 
-      expect(myCase).toMatchObject({
-        contactSecondary: undefined,
-      });
+      expect(myCase.getContactSecondary()).toBeUndefined();
     });
 
     describe('judgeUserId', () => {
@@ -4609,15 +4615,18 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          },
-          contactSecondary: {
-            ...MOCK_CASE.contactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
           partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactType: CONTACT_TYPES.secondary,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            },
+          ],
         },
         { applicationContext },
       );
