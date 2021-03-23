@@ -317,7 +317,7 @@ Case.prototype.assignContacts = function assignContacts({
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
-      otherFilers: rawCase.otherFilers,
+      otherFilers: getOtherFilers(rawCase),
       otherPetitioners: rawCase.otherPetitioners,
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
@@ -326,10 +326,11 @@ Case.prototype.assignContacts = function assignContacts({
     partyType: rawCase.partyType,
   });
 
-  this.otherFilers = contacts.otherFilers;
   this.otherPetitioners = contacts.otherPetitioners;
 
   this.petitioners.push(contacts.primary);
+  this.petitioners.push(...contacts.otherFilers);
+
   this.contactSecondary = contacts.secondary;
 };
 
@@ -602,16 +603,6 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .description('Reminder for clerks to review the Order to Show Cause.'),
-  otherFilers: joi
-    .array()
-    .items(ContactFactory.getValidationRules('otherFilers'))
-    .unique(
-      (a, b) =>
-        a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
-        b.otherFilerType === UNIQUE_OTHER_FILER_TYPE,
-    )
-    .description('List of OtherFilerContact Entities for the case.')
-    .optional(),
   otherPetitioners: joi
     .array()
     .items(ContactFactory.getValidationRules('otherPetitioners'))
@@ -648,9 +639,14 @@ Case.VALIDATION_RULES = {
       then: JoiValidationConstants.ISO_DATE.max('now').required(),
     },
   ).description('When the case fee was waived.'),
+  // Individual items are validated by the ContactFactory.
   petitioners: joi
     .array()
-    .items(ContactFactory.getValidationRules('primary'))
+    .unique(
+      (a, b) =>
+        a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
+        b.otherFilerType === UNIQUE_OTHER_FILER_TYPE,
+    )
     .required(),
   preferredTrialCity: joi
     .alternatives()
@@ -1443,6 +1439,27 @@ Case.prototype.getContactPrimary = function () {
 };
 
 /**
+ * Retrieves the other filers on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Array} the other filers on the case
+ */
+const getOtherFilers = function (rawCase) {
+  return rawCase.petitioners?.filter(
+    p => p.contactType === CONTACT_TYPES.otherFiler,
+  );
+};
+
+/**
+ * Returns the other filers on the case
+ *
+ * @returns {Array} the other filers on the case
+ */
+Case.prototype.getOtherFilers = function () {
+  return getOtherFilers(this);
+};
+
+/**
  * Updates the specified contact object in the case petitioner's array
  *
  * @param {object} arguments.rawCase the raw case object
@@ -1700,14 +1717,12 @@ Case.prototype.getCaseContacts = function (shape) {
     'privatePractitioners',
     'irsPractitioners',
     'otherPetitioners',
-    'otherFilers',
   ].forEach(contact => {
     if (!shape || (shape && shape[contact] === true)) {
       if (contact === 'contactPrimary') {
         caseContacts[contact] = this.getContactPrimary();
         return;
       }
-
       caseContacts[contact] = this[contact];
     }
   });
@@ -2009,6 +2024,7 @@ module.exports = {
   Case: validEntityDecorator(Case),
   caseHasServedDocketEntries,
   getContactPrimary,
+  getOtherFilers,
   isAssociatedUser,
   isSealedCase,
   updatePetitioner,

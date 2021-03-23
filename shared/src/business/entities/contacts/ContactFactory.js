@@ -421,7 +421,10 @@ ContactFactory.createContacts = ({
         countryType: otherFiler.countryType,
         isPaper,
       });
-      return new otherFilerConstructor(otherFiler, { applicationContext });
+      return new otherFilerConstructor(
+        { ...otherFiler, contactType: CONTACT_TYPES.otherFiler },
+        { applicationContext },
+      );
     });
   }
 
