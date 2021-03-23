@@ -872,6 +872,23 @@ build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
 
 workflows:
   version: 2
+  hourly-testing:
+    jobs:
+      - build-shared
+      - build-api
+      - build-client-unit
+      - build-client-integration
+      - e2e-pa11y
+      - e2e-pa11y-public
+      - e2e-cypress
+      - e2e-cypress-public
+    triggers:
+      - schedule:
+          cron: '0 15 0/2 ? * * *'
+          filters:
+            branches:
+              only:
+                - migration
   hourly:
     jobs:
       - build-shared
