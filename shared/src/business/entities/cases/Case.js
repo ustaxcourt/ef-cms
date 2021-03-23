@@ -329,7 +329,12 @@ Case.prototype.assignContacts = function assignContacts({
   this.otherFilers = contacts.otherFilers;
   this.otherPetitioners = contacts.otherPetitioners;
 
-  this.petitioners.push(contacts.primary, contacts.secondary);
+  if (contacts.primary) {
+    this.petitioners.push(contacts.primary);
+  }
+  if (contacts.secondary) {
+    this.petitioners.push(contacts.secondary);
+  }
 };
 
 Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
@@ -465,9 +470,6 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactSecondary: ContactFactory.getValidationRules('secondary')
-    .optional()
-    .allow(null),
   correspondence: joi
     .array()
     .items(Correspondence.VALIDATION_RULES)
@@ -1400,8 +1402,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isPrimaryContact =
     getContactPrimary(caseRaw)?.contactId === user.userId;
   const isSecondaryContact =
-    caseRaw.contactSecondary &&
-    caseRaw.contactSecondary.contactId === user.userId;
+    getContactSecondary(caseRaw)?.contactId === user.userId;
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 

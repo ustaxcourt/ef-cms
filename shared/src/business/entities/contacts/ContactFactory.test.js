@@ -941,7 +941,7 @@ describe('ContactFactory', () => {
                 state: 'AK',
               },
               {
-                additionalName: 'First Other Petitioner',
+                additionalName: 'Second Other Petitioner',
                 address1: '876 12th Ave',
                 city: 'Nashville',
                 country: 'USA',
@@ -957,12 +957,12 @@ describe('ContactFactory', () => {
             petitioners: [
               {
                 ...getContactPrimary(MOCK_CASE),
-                inCareOf: 'Peter Parker',
                 secondaryName: 'Trustee Name',
               },
               {
                 ...getContactPrimary(MOCK_CASE),
                 contactType: CONTACT_TYPES.secondary,
+                inCareOf: 'Peter Parker',
               },
             ],
           },
