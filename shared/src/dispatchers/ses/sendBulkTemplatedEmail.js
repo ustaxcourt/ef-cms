@@ -85,7 +85,7 @@ exports.sendWithRetry = async ({
     const failures = needToRetry
       .map(dest => dest.Destination.ToAddresses[0])
       .join(',');
-    throw new Error(`Could not complete service to ${failures}`);
+    throw `Could not complete service to ${failures}`;
   }
 
   // exponential back-off
