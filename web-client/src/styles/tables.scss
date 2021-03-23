@@ -645,6 +645,31 @@ table.case-list tbody tr:nth-child(even) td {
 }
 
 .trial-list {
+  .trial-session-edit-btn {
+    position: relative;
+  }
+
+  .edit-case-trial-menu {
+    position: absolute;
+    z-index: 100;
+    max-width: 30%;
+    padding-top: 4px;
+    margin-left: -80px;
+    background-color: color($theme-color-primary);
+
+    button {
+      min-width: 200px;
+      padding: 12px;
+      color: $color-white;
+      text-align: left;
+      text-decoration: none;
+      &:hover {
+        color: $color-white;
+        text-decoration: underline;
+      }
+    }
+  }
+
   tbody tr:first-child td {
     padding-top: 9px;
     padding-bottom: 0;

@@ -43,11 +43,7 @@ exports.prioritizeCaseInteractor = async ({
 
   caseEntity.setAsHighPriority(reason);
 
-  if (
-    caseEntity.preferredTrialCity &&
-    !caseEntity.blocked &&
-    !caseEntity.automaticBlocked
-  ) {
+  if (caseEntity.preferredTrialCity && !caseEntity.blocked) {
     await applicationContext
       .getPersistenceGateway()
       .updateCaseTrialSortMappingRecords({

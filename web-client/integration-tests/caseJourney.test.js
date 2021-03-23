@@ -34,6 +34,10 @@ describe('Case journey', () => {
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   petitionerCancelsCreateCase(test);
   petitionerChoosesProcedureType(test);

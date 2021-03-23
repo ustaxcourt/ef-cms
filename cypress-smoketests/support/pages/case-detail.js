@@ -12,6 +12,11 @@ exports.goToCaseDetail = docketNumber => {
 };
 
 exports.goToCaseOverview = docketNumber => {
+  // first visit / because if this step fails and has to be rerun, cerebral will
+  // not see it as a new page visit when routing to the same route again and the page
+  // will not reload
+  cy.goToRoute('/');
+  cy.get('.work-queue').should('exist');
   cy.goToRoute(`/case-detail/${docketNumber}`);
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
   cy.get('#tab-case-information').click();
@@ -131,6 +136,7 @@ exports.manuallyAddCaseToCalendaredTrialSession = trialSessionId => {
 };
 
 exports.removeCaseFromTrialSession = () => {
+  cy.get('#edit-case-trial-information-btn').should('exist').click();
   cy.get('#remove-from-trial-session-btn').should('exist').click();
   cy.get('#disposition').type(faker.company.catchPhrase());
   cy.get('#modal-root .modal-button-confirm').click();

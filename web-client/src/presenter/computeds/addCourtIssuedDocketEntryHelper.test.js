@@ -22,7 +22,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     ],
     EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
     SYSTEM_GENERATED_DOCUMENT_TYPES,
-    UNSERVABLE_EVENT_CODES: UNSERVABLE_EVENT_CODES,
+    UNSERVABLE_EVENT_CODES,
     USER_ROLES: {
       petitionsClerk: USER_ROLES.petitionsClerk,
     },

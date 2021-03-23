@@ -19,6 +19,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   afterAll(() => {
     test.closeSocket();
   });
+
   const trialLocation = `Despacito, Texas, ${Date.now()}`;
   const overrides = {
     maxCases: 2,
@@ -31,7 +32,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   describe(`Create trial session with Hybrid session type for '${trialLocation}' with max case count = 2`, () => {
     loginAs(test, 'docketclerk@example.com');
     docketClerkCreatesATrialSession(test, overrides);
-    docketClerkViewsTrialSessionList(test, overrides);
+    docketClerkViewsTrialSessionList(test);
     docketClerkViewsNewTrialSession(test);
   });
 

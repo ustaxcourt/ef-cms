@@ -58,6 +58,7 @@ const decompressAndParse = async data => {
 };
 
 const convertLogEventToElasticSearchInsert = (payload, logEvent) => {
+  // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const timestamp = new Date(1 * logEvent.timestamp);
 
   // index name format: cwl-YYYY.MM.DD
@@ -212,6 +213,7 @@ function buildRequest(endpoint, body) {
   );
   let region = endpointParts[2];
   let service = endpointParts[3];
+  // eslint-disable-next-line @miovision/disallow-date/no-new-date
   let datetime = new Date().toISOString().replace(/[:-]|\.\d{3}/g, '');
   let date = datetime.substr(0, 8);
   let kDate = hmac('AWS4' + process.env.AWS_SECRET_ACCESS_KEY, date);

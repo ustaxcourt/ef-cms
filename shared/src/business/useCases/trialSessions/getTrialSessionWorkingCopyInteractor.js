@@ -68,7 +68,7 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
 
     if (canCreateWorkingCopy) {
       trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
-        trialSessionId: trialSessionId,
+        trialSessionId,
         userId: chambersUserId,
       });
       validRawTrialSessionWorkingCopyEntity = trialSessionWorkingCopyEntity

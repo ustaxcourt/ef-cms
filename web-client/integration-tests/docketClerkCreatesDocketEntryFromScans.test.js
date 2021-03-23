@@ -40,6 +40,10 @@ describe('Create Docket Entry From Scans', () => {
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);

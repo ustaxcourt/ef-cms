@@ -70,6 +70,10 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   color: color($theme-color-primary);
 }
 
+.fa-icon-red {
+  color: color($theme-color-secondary-dark);
+}
+
 .fa-icon-blue-vivid {
   color: color($theme-color-primary-vivid);
 }
@@ -139,4 +143,22 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   height: 20px;
   background: url('data:image/svg+xml;utf8,<svg aria-labelledby="svg-inline--fa-title-DIDdjAjqj8je" data-prefix="fa" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="unread messages" color="gold" aria-hidden="false"><title id="svg-inline--fa-title-DIDdjAjqj8je">unread messages</title><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/></svg>')
     20px 20px;
+}
+
+.icon-tab-notification {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  padding-top: 4px;
+  background: url('data:image/svg+xml;utf8,<svg aria-labelledby="svg-inline--fa-title-DIDdjAjqj8je" data-prefix="fa" color="%23b50909" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="unread messages" aria-hidden="false"><title id="svg-inline--fa-title-DIDdjAjqj8je">unread messages</title><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/></svg>');
+
+  .icon-tab-notification-exclamation {
+    position: relative;
+    bottom: 10px;
+    font-size: 14px;
+  }
+}
+
+.active .icon-tab-notification .icon-tab-notification-exclamation {
+  color: white;
 }

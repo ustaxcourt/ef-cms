@@ -53,7 +53,7 @@ export const formatDocumentSearchResultRecord = (
   { applicationContext },
 ) => {
   const {
-    OPINION_EVENT_CODES,
+    OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     ORDER_EVENT_CODES,
   } = applicationContext.getConstants();
 
@@ -68,7 +68,7 @@ export const formatDocumentSearchResultRecord = (
     result.documentTitle = result.documentType;
   }
 
-  if (OPINION_EVENT_CODES.includes(result.eventCode)) {
+  if (OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(result.eventCode)) {
     result.formattedJudgeName = result.judge
       ? applicationContext.getUtilities().getJudgeLastName(result.judge)
       : '';
