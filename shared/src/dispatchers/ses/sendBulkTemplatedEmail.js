@@ -46,7 +46,6 @@ exports.sendBulkTemplatedEmail = async ({
 
     await exports.sendWithRetry({ applicationContext, params });
   } catch (err) {
-    console.log('err!@!!', err);
     applicationContext.logger.error(`Error sending email: ${err}`, err);
     throw err;
   }
@@ -86,7 +85,7 @@ exports.sendWithRetry = async ({
     const failures = needToRetry
       .map(dest => dest.Destination.ToAddresses[0])
       .join(',');
-    throw `Could not complete service to ${failures}`;
+    throw new Error(`Could not complete service to ${failures}`);
   }
 
   // exponential back-off

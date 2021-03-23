@@ -54,11 +54,13 @@ describe('sendBulkTemplatedEmail', () => {
   });
 
   it('should log when an error occurs sending the bulk email', async () => {
-    applicationContext.getEmailClient().sendBulkTemplatedEmail.mockReturnValue({
-      promise: () => {
-        return Promise.reject('Something bad happened!');
-      },
-    });
+    applicationContext
+      .getEmailClient()
+      .sendBulkTemplatedEmail.mockReturnValueOnce({
+        promise: () => {
+          return Promise.reject('Something bad happened!');
+        },
+      });
 
     try {
       await sendBulkTemplatedEmail({
@@ -76,7 +78,6 @@ describe('sendBulkTemplatedEmail', () => {
         templateName: 'case_served',
       });
     } catch (err) {
-      // fixme
       // eslint-disable-next-line jest/no-try-expect
       expect(applicationContext.logger.error.mock.calls.length).toEqual(1);
       // eslint-disable-next-line jest/no-try-expect
@@ -201,36 +202,40 @@ describe('sendBulkTemplatedEmail', () => {
         }),
     });
 
-    await sendBulkTemplatedEmail({
-      applicationContext,
-      destinations: [
-        {
-          email: 'test.email@example.com',
-          templateData: {
-            name: 'Guy Fieri',
-            welcomeMessage: 'Welcome to Flavortown',
-            whoAmI: 'The Sauce Boss',
+    await expect(
+      sendBulkTemplatedEmail({
+        applicationContext,
+        destinations: [
+          {
+            email: 'test.email@example.com',
+            templateData: {
+              name: 'Guy Fieri',
+              welcomeMessage: 'Welcome to Flavortown',
+              whoAmI: 'The Sauce Boss',
+            },
           },
-        },
-        {
-          email: 'test.email2@example.com',
-          templateData: {
-            name: 'Guy Fieri',
-            welcomeMessage: 'Welcome to Flavortown',
-            whoAmI: 'The Sauce Boss',
+          {
+            email: 'test.email2@example.com',
+            templateData: {
+              name: 'Guy Fieri',
+              welcomeMessage: 'Welcome to Flavortown',
+              whoAmI: 'The Sauce Boss',
+            },
           },
-        },
-        {
-          email: 'test.email3@example.com',
-          templateData: {
-            name: 'Guy Fieri',
-            welcomeMessage: 'Welcome to Flavortown',
-            whoAmI: 'The Sauce Boss',
+          {
+            email: 'test.email3@example.com',
+            templateData: {
+              name: 'Guy Fieri',
+              welcomeMessage: 'Welcome to Flavortown',
+              whoAmI: 'The Sauce Boss',
+            },
           },
-        },
-      ],
-      templateName: 'case_served',
-    });
+        ],
+        templateName: 'case_served',
+      }),
+    ).rejects.toEqual(
+      'Could not complete service to test.email@example.com,test.email2@example.com,test.email3@example.com',
+    );
     expect(
       applicationContext.getEmailClient().sendBulkTemplatedEmail,
     ).toHaveBeenCalledTimes(MAX_SES_RETRIES + 1);
