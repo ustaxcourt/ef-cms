@@ -128,13 +128,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
     showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
   }));
 
-  result.otherPetitioners = applicationContext
-    .getUtilities()
-    .getOtherPetitioners(caseDetail)
-    .map(otherPetitioner => ({
-      ...otherPetitioner,
-      showEAccessFlag: !isExternalUser && otherPetitioner.hasEAccess,
-    }));
+  result.otherPetitioners = (
+    applicationContext.getUtilities().getOtherPetitioners(result) || []
+  ).map(otherPetitioner => ({
+    ...otherPetitioner,
+    showEAccessFlag: !isExternalUser && otherPetitioner.hasEAccess,
+  }));
 
   const contactPrimary = applicationContext
     .getUtilities()
