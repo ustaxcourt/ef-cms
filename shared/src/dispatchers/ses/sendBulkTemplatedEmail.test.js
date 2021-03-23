@@ -231,7 +231,7 @@ describe('sendBulkTemplatedEmail', () => {
         ],
         templateName: 'case_served',
       }),
-    ).rejects.toThrow(
+    ).rejects.toEqual(
       'Could not complete service to test.email@example.com,test.email2@example.com,test.email3@example.com',
     );
     expect(
