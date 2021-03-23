@@ -1,6 +1,5 @@
 const {
   CONTACT_TYPES,
-  COUNTRY_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 const {
   getContactPrimary,
@@ -77,22 +76,7 @@ describe('migrateItems', () => {
         pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
         ...MOCK_CASE,
         otherFilers: undefined,
-        petitioners: [
-          getContactPrimary(MOCK_CASE),
-          {
-            address1: '123 Main St',
-            city: 'Somewhere',
-            contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            contactType: CONTACT_TYPES.otherFiler,
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'petitioner@example.com',
-            name: 'Test Petitioner',
-            phone: '1234567',
-            postalCode: '12345',
-            state: 'TN',
-            title: 'Executor',
-          },
-        ],
+        petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
       },
     ];
