@@ -447,6 +447,20 @@ describe('PublicCase', () => {
         state: 'AK',
         title: UNIQUE_OTHER_FILER_TYPE,
       };
+      const mockOtherPetitioner = {
+        address1: '42 Lamb Sauce Blvd',
+        city: 'Nashville',
+        contactType: CONTACT_TYPES.otherPetitioner,
+        country: 'USA',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'gordon@example.com',
+        name: 'Gordon Ramsay',
+        otherFilerType: null,
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+        title: UNIQUE_OTHER_FILER_TYPE,
+      };
 
       const entity = new PublicCase(
         {
@@ -459,18 +473,23 @@ describe('PublicCase', () => {
           docketNumberSuffix: null,
           docketNumberWithSuffix: null,
           irsPractitioners: [],
-          otherpetitioners: [{ contactType: CONTACT_TYPES.primary }],
           partyType: PARTY_TYPES.petitioner,
-          petitioners: [{ contactType: CONTACT_TYPES.primary }, mockOtherFiler],
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary },
+            mockOtherFiler,
+            mockOtherPetitioner,
+          ],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
       );
 
       expect(entity.petitioners).toEqual(
-        expect.arrayContaining([expect.objectContaining(mockOtherFiler)]),
+        expect.arrayContaining([
+          expect.objectContaining(mockOtherFiler),
+          expect.objectContaining(mockOtherPetitioner),
+        ]),
       );
-      expect(entity.otherPetitioners).toBeTruthy();
       expect(entity.irsPractitioners).toBeTruthy();
     });
 
