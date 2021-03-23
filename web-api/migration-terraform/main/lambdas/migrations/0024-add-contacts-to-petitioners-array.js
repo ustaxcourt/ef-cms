@@ -11,6 +11,7 @@ const migrateItems = async items => {
       item.petitioners = [
         ...(item.petitioners || []),
         ...(item.otherFilers || []),
+        ...(item.otherPetitioners || []),
       ];
 
       const updatedCaseRaw = new Case(item, { applicationContext })
@@ -19,6 +20,7 @@ const migrateItems = async items => {
 
       delete item.contactPrimary;
       delete item.otherFilers;
+      delete item.otherPetitioners;
 
       applicationContext.logger.info(
         'Creating case entity to add contactPrimary and otherFilers to case.petitioners',

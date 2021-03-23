@@ -237,12 +237,12 @@ describe('caseInformationHelper', () => {
         state: {
           ...baseState,
           caseDetail: {
-            otherPetitioners: [
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
+            petitioners: [
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
             ],
           },
           showingAdditionalPetitioners: false,
@@ -258,12 +258,12 @@ describe('caseInformationHelper', () => {
         state: {
           ...baseState,
           caseDetail: {
-            otherPetitioners: [
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
+            petitioners: [
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
             ],
           },
           showingAdditionalPetitioners: true,
