@@ -316,7 +316,6 @@ Case.prototype.assignContacts = function assignContacts({
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
-      //todo remove right side of || after refactor
       otherFilers: getOtherFilers(rawCase),
       otherPetitioners: rawCase.otherPetitioners,
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
