@@ -10,31 +10,31 @@ module.exports = {
       type: 'date',
     },
     'docketNumber.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketNumberWithSuffix.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'entityName.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'gsi1pk.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'indexedTimestamp.N': {
       type: 'text',
     },
     'leadDocketNumber.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'pk.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'sk.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'status.S': {
-      type: 'text',
+      type: 'keyword',
     },
   },
 };
