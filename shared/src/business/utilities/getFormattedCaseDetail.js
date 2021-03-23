@@ -434,15 +434,18 @@ const formatCase = (applicationContext, caseDetail) => {
         }
       });
 
-      caseDetail.otherFilers.forEach(otherFiler => {
-        if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingFormatted.push({
-            name: otherFiler.name,
-            secondaryName: otherFiler.secondaryName,
-            title: otherFiler.title,
-          });
-        }
-      });
+      applicationContext
+        .getUtilities()
+        .getOtherFilers(caseDetail)
+        .forEach(otherFiler => {
+          if (counsel.representing.includes(otherFiler.contactId)) {
+            counsel.representingFormatted.push({
+              name: otherFiler.name,
+              secondaryName: otherFiler.secondaryName,
+              title: otherFiler.title,
+            });
+          }
+        });
     }
     return counsel;
   };
