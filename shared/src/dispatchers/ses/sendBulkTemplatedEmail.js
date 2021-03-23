@@ -46,6 +46,7 @@ exports.sendBulkTemplatedEmail = async ({
 
     await exports.sendWithRetry({ applicationContext, params });
   } catch (err) {
+    console.log('err!@!!', err);
     applicationContext.logger.error(`Error sending email: ${err}`, err);
     throw err;
   }

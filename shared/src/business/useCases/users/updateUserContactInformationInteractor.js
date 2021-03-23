@@ -138,6 +138,6 @@ exports.updateUserContactInformationInteractor = async (
       },
       userId: authenticatedUser.userId,
     });
-    throw new Error('error updating user contact information');
+    throw error;
   }
 };

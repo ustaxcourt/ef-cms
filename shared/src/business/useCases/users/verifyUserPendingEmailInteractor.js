@@ -234,6 +234,6 @@ exports.verifyUserPendingEmailInteractor = async (
     }
   } catch (error) {
     applicationContext.logger.error(error);
-    throw new Error("error updating user's cases");
+    throw error;
   }
 };
