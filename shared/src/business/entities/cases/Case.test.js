@@ -1208,9 +1208,6 @@ describe('Case entity', () => {
       const errors = testCase.getFormattedValidationErrors();
 
       expect(errors).toMatchObject({
-        contactSecondary: {
-          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
-        },
         petitioners: [
           {
             address1: 'Enter mailing address',
