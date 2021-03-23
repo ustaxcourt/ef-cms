@@ -287,7 +287,6 @@ describe('getCaseInteractor', () => {
 
       expect(result).toEqual({
         caseCaption: undefined,
-        contactPrimary: undefined,
         contactSecondary: undefined,
         docketEntries: [],
         docketNumber: '101-18',

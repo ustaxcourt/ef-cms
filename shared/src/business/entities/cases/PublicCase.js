@@ -45,7 +45,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
-  this.petitioners = rawCase.petitioners;
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
@@ -76,7 +75,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     this.privatePractitioners = (rawCase.privatePractitioners || []).map(
       practitioner => new PrivatePractitioner(practitioner),
     );
-  } else {
+  } else if (!this.isSealed) {
     this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
 
     this.contactSecondary = rawCase.contactSecondary

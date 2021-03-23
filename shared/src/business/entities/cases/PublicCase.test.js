@@ -59,10 +59,10 @@ describe('PublicCase', () => {
         // docketNumberSuffix is permitted
         // isSealed is permitted
         caseCaption: expect.anything(),
-        contactSecondary: expect.anything(),
-        petitioners: expect.anything(),
         receivedAt: expect.anything(),
       });
+      expect(entity.contactSecondary).toBeUndefined();
+      expect(entity.petitioners).toBeUndefined();
     });
   });
 
@@ -389,19 +389,16 @@ describe('PublicCase', () => {
       {
         docketNumber: '17000-15',
         docketNumberSuffix: 'W',
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
         sealedDate: 'some date',
       },
       { applicationContext },
     );
-    expect(entity.isSealed).toBe(true);
 
-    let error;
-    try {
+    expect(entity.isSealed).toBe(true);
+    expect(() => {
       entity.validate();
-    } catch (err) {
-      error = err;
-    }
-    expect(error).not.toBeDefined();
+    }).not.toThrow();
   });
 
   it('should consider a public case to be sealed and not valid if there exists a sealed docket entry on the docket record', () => {
@@ -409,6 +406,7 @@ describe('PublicCase', () => {
       {
         docketEntries: [{ isOnDocketRecord: true, isSealed: true }],
         docketNumber: '17000-15',
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
       },
       { applicationContext },
     );

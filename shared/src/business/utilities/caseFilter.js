@@ -62,7 +62,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   const caseContactsToBeSealed = [
     getContactPrimary(formattedCase),
     formattedCase.contactSecondary,
-    ...getOtherFilers(formattedCase),
+    ...(getOtherFilers(formattedCase) || []),
     ...(formattedCase.otherPetitioners || []),
   ].filter(caseContact => caseContact && caseContact.isAddressSealed);
   caseContactsToBeSealed.forEach(caseContact => {
