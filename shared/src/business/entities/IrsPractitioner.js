@@ -26,15 +26,16 @@ function IrsPractitioner() {
   this.entityName = entityName;
 }
 
-IrsPractitioner.prototype.init = function init(rawUser) {
-  userDecorator(this, rawUser);
+IrsPractitioner.prototype.init = function init(
+  rawUser,
+  { filtered = false } = {},
+) {
+  userDecorator(this, rawUser, filtered);
   this.barNumber = rawUser.barNumber;
   this.serviceIndicator =
     rawUser.serviceIndicator ||
     Practitioner.getDefaultServiceIndicator(rawUser);
 };
-
-IrsPractitioner.validationName = 'IrsPractitioner';
 
 IrsPractitioner.VALIDATION_RULES = joi.object().keys({
   barNumber: JoiValidationConstants.STRING.max(100)

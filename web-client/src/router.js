@@ -732,6 +732,14 @@ const router = {
     );
 
     registerRoute(
+      '/change-login-and-service-email',
+      ifHasAccess(() => {
+        setPageTitle('Change Login & Service Email Address');
+        return app.getSequence('gotoChangeLoginAndServiceEmailSequence')();
+      }),
+    );
+
+    registerRoute(
       '/users/create-practitioner',
       ifHasAccess(() => {
         setPageTitle('EF-CMS User Management - Create Practitioner User');
@@ -759,6 +767,22 @@ const router = {
         });
       }),
     );
+
+    registerRoute(
+      '/my-account',
+      ifHasAccess(() => {
+        setPageTitle('My Account');
+        return app.getSequence('gotoMyAccountSequence')();
+      }),
+    );
+
+    registerRoute('/verify-email..', () => {
+      setPageTitle('Verify Email');
+      const { token } = route.query();
+      return app.getSequence('gotoVerifyEmailSequence')({
+        token,
+      });
+    });
 
     registerRoute(
       '/document-qc/my',
@@ -1086,7 +1110,7 @@ const router = {
         const { judgeFilter } = route.query();
         setPageTitle('Pending report');
         return app.getSequence('gotoPrintablePendingReportSequence')({
-          judgeFilter,
+          judgeFilter: decodeURIComponent(judgeFilter),
         });
       }),
     );

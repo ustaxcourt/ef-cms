@@ -10,7 +10,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const {
   MAX_SEARCH_RESULTS,
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } = require('../../business/entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -53,7 +53,7 @@ exports.opinionAdvancedSearchInteractor = async ({
   const results = (
     await applicationContext.getPersistenceGateway().advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: OPINION_EVENT_CODES,
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       judgeType: 'judge',
       ...rawSearch,
     })

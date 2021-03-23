@@ -17,6 +17,31 @@ let caseExternal;
 
 describe('ContactFactory', () => {
   describe('for Corporation Contacts', () => {
+    it('should throw an error if app context is not passed in', () => {
+      expect(
+        () =>
+          new CaseExternal(
+            {
+              archivedDocketEntries: [],
+              caseType: CASE_TYPES_MAP.other,
+              filingType: 'Myself',
+              hasIrsNotice: true,
+              irsNoticeDate: '2009-10-13T08:06:07.539Z',
+              mailingDate: 'testing',
+              partyType: PARTY_TYPES.corporation,
+              petitionFile: {},
+              petitionFileSize: 1,
+              preferredTrialCity: 'Memphis, Tennessee',
+              procedureType: 'Small',
+              signature: true,
+              stinFile: {},
+              stinFileSize: 1,
+            },
+            {},
+          ),
+      ).toThrow();
+    });
+
     it('should not validate without contact', () => {
       caseExternal = new CaseExternal(
         {

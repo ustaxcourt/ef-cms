@@ -10,10 +10,12 @@ export const CreatePractitionerUser = connect(
   {
     navigateBackSequence: sequences.navigateBackSequence,
     submitAddPractitionerSequence: sequences.submitAddPractitionerSequence,
+    validateAddPractitionerSequence: sequences.validateAddPractitionerSequence,
   },
   function CreatePractitionerUser({
     navigateBackSequence,
     submitAddPractitionerSequence,
+    validateAddPractitionerSequence,
   }) {
     return (
       <>
@@ -27,7 +29,9 @@ export const CreatePractitionerUser = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <PractitionerForm />
+          <PractitionerForm
+            validateSequence={validateAddPractitionerSequence}
+          />
 
           <div className="grid-row margin-bottom-6">
             <div className="grid-col-12">

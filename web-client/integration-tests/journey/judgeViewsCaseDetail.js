@@ -11,6 +11,6 @@ export const judgeViewsCaseDetail = test => {
 
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
-    expect(caseDetail.userId).toBeDefined();
+    expect(caseDetail.contactPrimary.contactId).toBeDefined();
   });
 };

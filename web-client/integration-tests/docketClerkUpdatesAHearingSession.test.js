@@ -12,6 +12,10 @@ describe('Docket Clerk updates a hearing session', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   test.createdTrialSessions = [];
 
   loginAs(test, 'petitioner@example.com');
@@ -27,10 +31,7 @@ describe('Docket Clerk updates a hearing session', () => {
     sessionType: 'Motion/Hearing',
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test, {
-    sessionType: 'Motion/Hearing',
-    trialLocation,
-  });
+  docketClerkViewsTrialSessionList(test);
 
   docketClerkAddsCaseToHearing(test, 'Low blast radius', 0);
 

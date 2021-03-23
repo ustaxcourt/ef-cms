@@ -61,4 +61,6 @@ module.exports = [
   'http://localhost:5678/health',
   'http://localhost:5678/contact',
   'http://localhost:5678/privacy',
+  'http://localhost:5678/email-verification-success',
+  'http://localhost:5678/email-verification-instructions',
 ];

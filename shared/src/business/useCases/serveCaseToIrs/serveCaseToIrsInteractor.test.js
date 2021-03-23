@@ -1,15 +1,20 @@
 const {
+  addCoversheetInteractor,
+} = require('../../../business/useCases/addCoversheetInteractor');
+const {
   addDocketEntryForPaymentStatus,
   serveCaseToIrsInteractor,
 } = require('./serveCaseToIrsInteractor');
 const {
   applicationContext,
+  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -56,12 +61,19 @@ describe('serveCaseToIrsInteractor', () => {
 
   let mockCase;
 
-  beforeAll(() => {
-    mockCase = MOCK_CASE;
-    mockCase.docketEntries[0].workItem = MOCK_WORK_ITEM;
+  beforeEach(() => {
+    mockCase = { ...MOCK_CASE };
+    mockCase.docketEntries[0].workItem = { ...MOCK_WORK_ITEM };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
 
     applicationContext.getStorageClient.mockReturnValue({
+      getObject: () => {
+        return {
+          promise: async () => ({
+            Body: testPdfDoc,
+          }),
+        };
+      },
       upload: (params, cb) => {
         return cb(true);
       },
@@ -69,6 +81,14 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: 'www.example.com' });
+
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockImplementation(addCoversheetInteractor);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
@@ -98,9 +118,6 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -117,43 +134,6 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
-  it('should count number of pages for the documents in the case to be served', async () => {
-    mockCase = {
-      ...MOCK_CASE,
-      isPaper: true,
-      mailingDate: 'some day',
-    };
-
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-    expect(mockCase.docketEntries[0].numberOfPages).toBeUndefined();
-
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockResolvedValue(2);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(mockCase);
-
-    await serveCaseToIrsInteractor({
-      applicationContext,
-      docketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
-        .caseToUpdate.docketEntries[0],
-    ).toMatchObject({ numberOfPages: 2 });
-  });
-
   it('should replace coversheet on the served petition if the case is not paper', async () => {
     applicationContext.getCurrentUser.mockReturnValue(
       new User({
@@ -162,9 +142,7 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    mockCase = { ...MOCK_CASE };
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -189,9 +167,7 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    mockCase = { ...MOCK_CASE };
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -236,9 +212,6 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -279,9 +252,6 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -307,9 +277,6 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -334,9 +301,6 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await serveCaseToIrsInteractor({
       applicationContext,
@@ -359,9 +323,6 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await serveCaseToIrsInteractor({
       applicationContext,
@@ -421,9 +382,6 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await serveCaseToIrsInteractor({
       applicationContext,
@@ -497,9 +455,6 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
     await serveCaseToIrsInteractor({
       applicationContext,
       docketNumber: MOCK_CASE.docketNumber,
@@ -514,8 +469,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toEqual('1ccd40c6-a949-43ce-936e-7c92d36aaa40');
   });
 
-  it('should make 2 calls to updateCase, once before adding a coversheet and number of pages, and once after', async () => {
-    const mockNumberOfPages = 10;
+  it('should have processingStatus pending when calling updateCase the first time and processingStatus complete when calling updateCase the second time', async () => {
     mockCase = {
       ...MOCK_CASE,
       docketEntries: [
@@ -554,13 +508,6 @@ describe('serveCaseToIrsInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockReturnValue(mockNumberOfPages);
 
     await serveCaseToIrsInteractor({
       applicationContext,
@@ -573,13 +520,96 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       updateCaseCall[0][0].caseToUpdate.docketEntries.find(
         p => p.eventCode === 'A',
-      ).numberOfPages,
-    ).toBeUndefined();
+      ).processingStatus,
+    ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING);
     expect(
       updateCaseCall[1][0].caseToUpdate.docketEntries.find(
         p => p.eventCode === 'A',
-      ).numberOfPages,
-    ).toBe(mockNumberOfPages);
+      ).processingStatus,
+    ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
+  });
+
+  it('should set isOnDocketRecord true for all intially filed documents except for the petition and stin file', async () => {
+    const mockCaseWithoutServedDocketEntries = {
+      ...MOCK_CASE,
+      docketEntries: [
+        MOCK_CASE.docketEntries[0],
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'ea10afeb-f189-4657-a862-c607a091beaa',
+          docketNumber: '101-18',
+          documentTitle:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          isFileAttached: true,
+          processingStatus: 'pending',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+    const mockCaseWithServedDocketEntries = {
+      ...mockCaseWithoutServedDocketEntries,
+      docketEntries: [
+        MOCK_CASE.docketEntries[0],
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'ea10afeb-f189-4657-a862-c607a091beaa',
+          docketNumber: '101-18',
+          documentTitle:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
+          documentType:
+            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          index: 2,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          processingStatus: 'pending',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(
+        mockCaseWithoutServedDocketEntries,
+      )
+      .mockReturnValueOnce(mockCaseWithServedDocketEntries)
+      .mockReturnValueOnce(mockCaseWithServedDocketEntries);
+
+    await serveCaseToIrsInteractor({
+      applicationContext,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
+        .caseToUpdate.docketEntries,
+    ).toMatchObject([
+      {
+        documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
+        index: 1,
+        isOnDocketRecord: true,
+      },
+      {
+        documentTitle:
+          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
+        index: 2,
+        isOnDocketRecord: true,
+      },
+    ]);
   });
 });
 
@@ -636,66 +666,5 @@ describe('addDocketEntryForPaymentStatus', () => {
 
     expect(addedDocketRecord).toBeDefined();
     expect(addedDocketRecord.filingDate).toEqual('Today');
-  });
-
-  it('should set isOnDocketRecord true for all intially filed documents except for the petition and stin file', async () => {
-    const mockCase = {
-      ...MOCK_CASE,
-      docketEntries: [
-        MOCK_CASE.docketEntries[0],
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          docketNumber: '101-18',
-          documentTitle:
-            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
-          documentType:
-            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-          isFileAttached: true,
-          processingStatus: 'pending',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-      isPaper: true,
-      mailingDate: 'some day',
-    };
-
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockResolvedValue(2);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(mockCase);
-
-    await serveCaseToIrsInteractor({
-      applicationContext,
-      docketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
-        .caseToUpdate.docketEntries,
-    ).toMatchObject([
-      {
-        documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
-        index: 1,
-        isOnDocketRecord: true,
-      },
-      {
-        documentTitle:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentTitle,
-        index: 2,
-        isOnDocketRecord: true,
-      },
-    ]);
   });
 });

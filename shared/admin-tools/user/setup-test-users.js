@@ -29,7 +29,7 @@ const createManyAccounts = async ([num, role, section]) => {
     const user = {
       ...baseUser,
       email,
-      name: `${role} ${i}`,
+      name: `Test ${role}${i}`,
       role,
       section,
     };
@@ -111,7 +111,7 @@ const setupPractitioners = async () => {
         employer,
         firmName: 'Some Firm',
         firstName: `${role} ${i + 1}`,
-        name: `${role} ${i + 1}`,
+        name: `Test ${role}${i + 1}`,
         originalBarState: 'WA',
         password: DEFAULT_ACCOUNT_PASS,
         practitionerType: 'Attorney',

@@ -15,7 +15,7 @@ export const todaysOpinionsHelper = (get, applicationContext) => {
       .formatDateString(opinion.filingDate, 'MMDDYY'),
     formattedJudgeName: applicationContext
       .getUtilities()
-      .getJudgeLastName(opinion.judge),
+      .getJudgeLastName(opinion.judge || opinion.signedJudgeName),
   }));
 
   return { formattedCurrentDate, formattedOpinions };

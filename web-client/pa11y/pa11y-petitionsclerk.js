@@ -277,6 +277,22 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
+      'wait for #edit-case-trial-information-btn to be visible',
+      'click element #edit-case-trial-information-btn',
+      'wait for #add-edit-calendar-note to be visible',
+      'click element #add-edit-calendar-note',
+      'wait for .add-edit-calendar-note-modal to be visible',
+    ],
+    notes: 'checks the add edit calendar note modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/108-19&info=add-edit-calendar-note-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #edit-case-trial-information-btn to be visible',
+      'click element #edit-case-trial-information-btn',
       'wait for #remove-from-trial-session-btn to be visible',
       'click element #remove-from-trial-session-btn',
       'wait for #remove-from-trial-session-modal to be visible',
