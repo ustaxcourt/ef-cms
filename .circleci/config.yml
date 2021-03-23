@@ -872,7 +872,7 @@ build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
 
 workflows:
   version: 2
-  hourly-testing:
+  scheduled-testing:
     jobs:
       - build-shared
       - build-api
@@ -884,7 +884,7 @@ workflows:
       - e2e-cypress-public
     triggers:
       - schedule:
-          cron: '0 15 0/2 ? * * *'
+          cron: '0 15 0/2 * * *'
           filters:
             branches:
               only:
