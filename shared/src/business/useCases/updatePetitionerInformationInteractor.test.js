@@ -119,7 +119,7 @@ describe('update petitioner contact information on a case', () => {
     ).toHaveBeenCalled();
   });
 
-  it.only('throws an error if contactSecondary is required for the party type and is not valid', async () => {
+  it('throws an error if contactSecondary is required for the party type and is not valid', async () => {
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
         contactPrimary: getContactPrimary(mockCase),
@@ -129,7 +129,7 @@ describe('update petitioner contact information on a case', () => {
         docketNumber: MOCK_CASE.docketNumber,
         partyType: PARTY_TYPES.petitionerSpouse,
       }),
-    ).rejects.toThrow();
+    ).rejects.toThrow('Case entity was invalid');
 
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
