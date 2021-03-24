@@ -1,7 +1,9 @@
 import { addCourtIssuedDocketEntryHelper } from '../src/presenter/computeds/addCourtIssuedDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { caseDetailSubnavHelper } from '../src/presenter/computeds/caseDetailSubnavHelper';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
@@ -98,5 +100,36 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
     expect(test.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
+
+    await test.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: test.docketNumber,
+      docketRecordIndex: 3,
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'pending',
+      value: true,
+    });
+
+    await test.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const formattedCase = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
+    );
+
+    expect(formattedCase.showBlockedTag).toBeTruthy();
+
+    const caseDetailSubnav = runCompute(
+      withAppContextDecorator(caseDetailSubnavHelper),
+      {
+        state: test.getState(),
+      },
+    );
+    expect(caseDetailSubnav.showTrackedItemsNotification).toBeTruthy();
   });
 });
