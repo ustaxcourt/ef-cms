@@ -139,6 +139,7 @@ describe('Case entity', () => {
         contactType: CONTACT_TYPES.secondary,
         name: undefined,
       });
+
       expect(myCase.isValid()).toBeFalsy();
     });
   });
@@ -680,6 +681,7 @@ describe('Case entity', () => {
           phone: '1234567890',
           postalCode: '05198',
           state: 'AK',
+          title: UNIQUE_OTHER_FILER_TYPE,
         },
         {
           address1: '1337 12th Ave',
@@ -689,10 +691,12 @@ describe('Case entity', () => {
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'mayor@example.com',
           name: 'Guy Fieri',
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE, // fails because there cannot be more than 1 filer with this type
+          // fails because there cannot be more than 1 filer with this type
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
           state: 'AK',
+          title: OTHER_FILER_TYPES[2],
         },
       ];
 
@@ -707,6 +711,7 @@ describe('Case entity', () => {
       );
 
       const errors = myCase.getFormattedValidationErrors();
+
       expect(errors).toMatchObject({
         'petitioners[2]': '"petitioners[2]" contains a duplicate value',
       });
@@ -765,7 +770,7 @@ describe('Case entity', () => {
   });
 
   describe('isValid', () => {
-    it.only('Creates a valid case', () => {
+    it('Creates a valid case', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
