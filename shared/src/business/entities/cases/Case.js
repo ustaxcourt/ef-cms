@@ -636,21 +636,10 @@ Case.VALIDATION_RULES = {
   // items is a function that accepts contactType and returns ContactFactory.getValidationRules(CONTACT_TyPE)
   petitioners: joi
     .array()
-    .items(
-      item => {
-        console.log('itemValidation', item);
-        console.log(
-          'ContactFactory.getValidationRules(item.contactType)',
-          ContactFactory.getValidationRules(item.contactType),
-        );
-        joi
-          .object()
-          .concat(ContactFactory.getValidationRules(item.contactType));
-      },
-      // joi.object().when('contactType', {
-      //   is: CONTACT_TYPES.primary,
-      //   then: ContactFactory.getValidationObject('primary'),
-      // }),
+    .items(item =>
+      !item.validate
+        ? joi.object().keys(ContactFactory.getValidationRules(item.contactType))
+        : ContactFactory.getValidationRules(item.contactType),
     )
     .unique(
       (a, b) =>
