@@ -27,6 +27,8 @@ const { addCoverToPdf } = require('./addCoversheetInteractor');
 describe('update petitioner contact information on a case', () => {
   let mockUser;
   let mockCase;
+  const PRIMARY_CONTACT_ID = '661beb76-f9f3-40db-af3e-60ab5c9287f6';
+  const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
 
   const userData = {
     name: 'administrator',
@@ -75,9 +77,6 @@ describe('update petitioner contact information on a case', () => {
     userId: '898bbe4b-84ee-40a1-ad05-a1e2e8484c72',
   };
 
-  const PRIMARY_CONTACT_ID = '661beb76-f9f3-40db-af3e-60ab5c9287f6';
-  const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
-
   beforeAll(() => {
     addCoverToPdf.mockResolvedValue({
       pdfData: testPdfDoc,
@@ -102,12 +101,12 @@ describe('update petitioner contact information on a case', () => {
 
   beforeEach(() => {
     mockUser = userData;
-    mockCase = MOCK_CASE;
+    mockCase = { ...MOCK_CASE, petitioners: mockPetitioners };
   });
 
   it('updates case even if no change of address or phone is detected', async () => {
     await updatePetitionerInformationInteractor(applicationContext, {
-      contactPrimary: mockCaseContactPrimary,
+      contactPrimary: getContactPrimary(mockCase),
       docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitioner,
     });
@@ -123,8 +122,10 @@ describe('update petitioner contact information on a case', () => {
   it('throws an error if contactSecondary is required for the party type and is not valid', async () => {
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
-        contactPrimary: mockCaseContactPrimary,
-        contactSecondary: { countryType: COUNTRY_TYPES.DOMESTIC },
+        contactPrimary: getContactPrimary(mockCase),
+        contactSecondary: {
+          countryType: COUNTRY_TYPES.DOMESTIC,
+        },
         docketNumber: MOCK_CASE.docketNumber,
         partyType: PARTY_TYPES.petitionerSpouse,
       }),
