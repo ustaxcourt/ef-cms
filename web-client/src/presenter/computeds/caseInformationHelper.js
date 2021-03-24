@@ -18,7 +18,10 @@ export const caseInformationHelper = (get, applicationContext) => {
   const toggleAdditionalPetitionersDisplay = showingAdditionalPetitioners
     ? 'Hide'
     : 'View';
-  const otherPetitioners = [...(caseDetail.otherPetitioners || [])];
+
+  const otherPetitioners =
+    applicationContext.getUtilities().getOtherPetitioners(caseDetail) || [];
+
   const showOtherPetitioners = !!otherPetitioners.length;
   const formattedOtherPetitioners = showingAdditionalPetitioners
     ? otherPetitioners

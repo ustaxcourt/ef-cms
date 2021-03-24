@@ -9,6 +9,12 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const {
+  getContactPrimary,
+  getOtherFilers,
+  getOtherPetitioners,
+  isSealedCase,
+} = require('./Case');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -17,7 +23,6 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { getContactPrimary, getOtherFilers, isSealedCase } = require('./Case');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { map } = require('lodash');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
@@ -56,7 +61,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       applicationContext,
       contactInfo: {
         otherFilers: getOtherFilers(rawCase),
-        otherPetitioners: rawCase.otherPetitioners,
+        otherPetitioners: getOtherPetitioners(rawCase),
         primary: getContactPrimary(rawCase),
         secondary: rawCase.contactSecondary,
       },
@@ -64,9 +69,9 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       partyType: rawCase.partyType,
     });
 
-    this.otherPetitioners = contacts.otherPetitioners;
     this.petitioners = [contacts.primary];
     this.petitioners.push(...contacts.otherFilers);
+    this.petitioners.push(...contacts.otherPetitioners);
     this.contactSecondary = contacts.secondary;
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(

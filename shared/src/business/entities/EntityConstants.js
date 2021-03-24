@@ -732,6 +732,7 @@ const CONTACT_TYPES = {
   primary: 'PRIMARY',
   secondary: 'SECONDARY',
   otherFiler: 'OTHER_FILER',
+  otherPetitioner: 'OTHER_PETITIONER',
 };
 
 const COMMON_CITIES = [

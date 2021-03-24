@@ -44,7 +44,7 @@ exports.sealCaseContactAddressInteractor = async (
     caseEntity.getContactPrimary(),
     caseEntity.contactSecondary,
     ...(caseEntity.getOtherFilers() || []),
-    ...(caseEntity.otherPetitioners || []),
+    ...(caseEntity.getOtherPetitioners() || []),
   ].find(contact => contact && contact.contactId == contactId);
 
   if (!contactToSeal) {

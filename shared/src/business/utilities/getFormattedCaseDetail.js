@@ -4,6 +4,11 @@ const {
   createISODateString,
 } = require('./DateHandler');
 const {
+  Case,
+  getContactPrimary,
+  getOtherPetitioners,
+} = require('../entities/cases/Case');
+const {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
@@ -13,7 +18,6 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
-const { Case, getContactPrimary } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
 const { isServed } = require('../entities/DocketEntry');
 const { ROLES } = require('../entities/EntityConstants');
@@ -424,7 +428,9 @@ const formatCase = (applicationContext, caseDetail) => {
         });
       }
 
-      caseDetail.otherPetitioners.forEach(otherPetitioner => {
+      const otherPetitioners = getOtherPetitioners(caseDetail);
+
+      otherPetitioners.forEach(otherPetitioner => {
         if (counsel.representing.includes(otherPetitioner.contactId)) {
           counsel.representingFormatted.push({
             name: otherPetitioner.name,

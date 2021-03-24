@@ -50,14 +50,15 @@ describe('caseFilter', () => {
         { ...createContactInfo(), contactType: CONTACT_TYPES.primary },
         { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
         { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
+        { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioner },
+        { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioner },
       ];
       caseDetail.contactSecondary = createContactInfo();
-      caseDetail.otherPetitioners = [createContactInfo(), createContactInfo()];
 
       const result = caseContactAddressSealedFormatter(caseDetail, {
         role: ROLES.petitioner,
       });
-      [result.contactSecondary, ...result.otherPetitioners].forEach(party => {
+      [result.contactSecondary].forEach(party => {
         expect(Object.keys(party).sort()).toMatchObject([
           'additionalName',
           'contactId',
@@ -72,7 +73,11 @@ describe('caseFilter', () => {
         ]);
       });
 
-      [getContactPrimary(result), ...getOtherFilers(result)].forEach(party => {
+      [
+        getContactPrimary(result),
+        ...getOtherFilers(result),
+        ...getOtherFilers(result),
+      ].forEach(party => {
         expect(Object.keys(party).sort()).toMatchObject([
           'additionalName',
           'contactId',
