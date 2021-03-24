@@ -637,10 +637,14 @@ Case.VALIDATION_RULES = {
   petitioners: joi
     .array()
     .items(
-      joi.object().when('contactType', {
-        is: CONTACT_TYPES.primary,
-        then: ContactFactory.getValidationObject('primary'),
-      }),
+      item => {
+        console.log(item);
+        return ContactFactory.getValidationRules(item.contactType);
+      },
+      // joi.object().when('contactType', {
+      //   is: CONTACT_TYPES.primary,
+      //   then: ContactFactory.getValidationObject('primary'),
+      // }),
     )
     .unique(
       (a, b) =>

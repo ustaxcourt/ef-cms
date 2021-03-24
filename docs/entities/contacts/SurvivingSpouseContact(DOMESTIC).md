@@ -94,10 +94,10 @@
           args: 
             limit: 1
       allow: 
-        - "PRIMARY"
-        - "SECONDARY"
-        - "OTHER_FILER"
-        - "OTHER_PETITIONER"
+        - "primary"
+        - "secondary"
+        - "otherFilers"
+        - "otherPetitioners"
     inCareOf: 
       type: "string"
       flags: 
