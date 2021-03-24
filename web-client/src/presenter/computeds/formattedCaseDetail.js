@@ -256,7 +256,15 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && applicationContext.getUtilities().isServed(d),
+    docketEntry =>
+      (docketEntry.pending &&
+        applicationContext.getUtilities().isServed(docketEntry)) ||
+      (docketEntry.pending &&
+        applicationContext
+          .getConstants()
+          .UNSERVABLE_EVENT_CODES.find(
+            unservableCode => unservableCode === docketEntry.eventCode,
+          )),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(

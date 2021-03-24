@@ -45,6 +45,9 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
             { term: { 'pending.BOOL': true } },
             hasParentParam,
           ],
+          // should: [
+          //   { match: }
+          // ]
         },
       },
       size,
@@ -64,6 +67,8 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
     };
   }
 
+  // could be pending, not served, and an unservable document
+  // OR pending and served
   const matchingOnServedAtOrLegacyServed = {
     bool: {
       minimum_should_match: 1,
