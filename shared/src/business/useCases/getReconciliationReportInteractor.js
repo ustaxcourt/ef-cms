@@ -93,6 +93,7 @@ const assignCaseCaptionFromPersistence = async (
   const casesDetails = await applicationContext
     .getPersistenceGateway()
     .getCasesByDocketNumbers({ applicationContext, docketNumbers });
+  // todo: could there be docket entries for cases that are not in persistence?? accessing "caseCaption" of undefined
   docketEntries.forEach(docketEntry => {
     docketEntry.caseCaption = casesDetails.find(
       detail => detail.docketNumber === docketEntry.docketNumber,
