@@ -817,10 +817,10 @@
                   args: 
                     limit: 1
               allow: 
-                - "PRIMARY"
-                - "SECONDARY"
-                - "OTHER_FILER"
-                - "OTHER_PETITIONER"
+                - "primary"
+                - "secondary"
+                - "otherFilers"
+                - "otherPetitioners"
             name: 
               type: "string"
               flags: 
