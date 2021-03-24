@@ -12,6 +12,7 @@ const {
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
+  getOtherPetitioners,
   isSealedCase,
 } = require('./Case');
 const {
@@ -61,7 +62,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       applicationContext,
       contactInfo: {
         otherFilers: getOtherFilers(rawCase),
-        otherPetitioners: rawCase.otherPetitioners,
+        otherPetitioners: getOtherPetitioners(rawCase),
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
         secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
       },
@@ -69,12 +70,12 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       partyType: rawCase.partyType,
     });
 
-    this.otherPetitioners = contacts.otherPetitioners;
     this.petitioners = [contacts.primary];
     if (contacts.secondary) {
       this.petitioners.push(contacts.secondary);
     }
     this.petitioners.push(...contacts.otherFilers);
+    this.petitioners.push(...contacts.otherPetitioners);
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),

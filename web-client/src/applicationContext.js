@@ -4,6 +4,7 @@ import {
   caseHasServedDocketEntries,
   getContactPrimary,
   getOtherFilers,
+  getOtherPetitioners,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -646,6 +647,7 @@ const applicationContext = {
       getJudgeLastName,
       getMonthDayYearObj,
       getOtherFilers,
+      getOtherPetitioners,
       getServedPartiesCode,
       getTrialSessionStatus,
       getWorkQueueFilters,

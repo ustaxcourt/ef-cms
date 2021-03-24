@@ -408,9 +408,12 @@ ContactFactory.createContacts = ({
         countryType: otherPetitioner.countryType,
         isPaper,
       });
-      return new otherPetitionerConstructor(otherPetitioner, {
-        applicationContext,
-      });
+      return new otherPetitionerConstructor(
+        { ...otherPetitioner, contactType: CONTACT_TYPES.otherPetitioner },
+        {
+          applicationContext,
+        },
+      );
     });
   }
 

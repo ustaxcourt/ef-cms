@@ -11,6 +11,7 @@ const {
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
+  getOtherPetitioners,
 } = require('../entities/cases/Case');
 const {
   MOCK_CASE,
@@ -192,7 +193,7 @@ describe('getCaseInteractor', () => {
       getOtherFilers(mockCaseWithSealed).forEach(
         filer => (filer.isAddressSealed = true),
       );
-      mockCaseWithSealed.otherPetitioners.forEach(
+      getOtherPetitioners(mockCaseWithSealed).forEach(
         filer => (filer.isAddressSealed = true),
       );
       applicationContext
@@ -221,7 +222,7 @@ describe('getCaseInteractor', () => {
         expect(filer.city).toBeDefined();
         expect(filer.sealedAndUnavailable).toBe(false);
       });
-      result.otherPetitioners.forEach(filer => {
+      getOtherPetitioners(result).forEach(filer => {
         expect(filer.city).toBeDefined();
         expect(filer.sealedAndUnavailable).toBe(false);
       });
