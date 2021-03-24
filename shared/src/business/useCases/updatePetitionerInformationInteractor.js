@@ -315,34 +315,19 @@ exports.updatePetitionerInformationInteractor = async (
         })
       : undefined;
 
-  let caseEntity = new Case(
-    {
-      ...oldCase,
-      partyType,
-    },
-    { applicationContext },
-  );
-
   const secondaryContact = {
     contactId: oldCaseContactSecondary?.contactId,
     contactType: oldCaseContactSecondary?.contactType,
     ...secondaryEditableFields,
   };
 
+  const oldCaseContactPrimary = caseEntity.getContactPrimary();
+
   try {
     caseEntity.updatePetitioner(secondaryContact);
   } catch (e) {
-    caseEntity = new Case(
-      {
-        ...oldCase,
-        contactSecondary: secondaryContact,
-        partyType,
-      },
-      { applicationContext },
-    );
+    console.log(e);
   }
-
-  const oldCaseContactPrimary = caseEntity.getContactPrimary();
 
   try {
     caseEntity.updatePetitioner({
@@ -352,6 +337,14 @@ exports.updatePetitionerInformationInteractor = async (
   } catch (e) {
     throw new NotFoundError(e.message);
   }
+
+  let caseEntity = new Case(
+    {
+      ...oldCase,
+      partyType,
+    },
+    { applicationContext },
+  );
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
