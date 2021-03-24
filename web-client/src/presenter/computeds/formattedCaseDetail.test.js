@@ -2060,7 +2060,9 @@ describe('formattedCaseDetail', () => {
       };
       contactPrimary = { ...baseContact, contactType: CONTACT_TYPES.primary };
       contactSecondary = baseContact;
-      otherPetitioners = [baseContact];
+      otherPetitioners = [
+        { ...baseContact, contactType: CONTACT_TYPES.otherPetitioner },
+      ];
       otherFilers = [{ ...baseContact, contactType: CONTACT_TYPES.otherFiler }];
 
       caseDetail = {
@@ -2083,9 +2085,8 @@ describe('formattedCaseDetail', () => {
             numberOfPages: 24,
           },
         ],
-        otherPetitioners,
         partyType: 'Petitioner',
-        petitioners: [contactPrimary, ...otherFilers],
+        petitioners: [contactPrimary, ...otherFilers, ...otherPetitioners],
       };
     });
 
@@ -2093,6 +2094,7 @@ describe('formattedCaseDetail', () => {
       baseContact.hasEAccess = false;
       contactPrimary.hasEAccess = false;
       otherFilers[0].hasEAccess = false;
+      otherPetitioners[0].hasEAccess = false;
 
       const result = runCompute(formattedCaseDetail, {
         state: {

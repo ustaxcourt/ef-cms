@@ -11,7 +11,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
-const { getOtherFilers } = require('./Case');
+const { getOtherFilers, getOtherPetitioners } = require('./Case');
 const { isPrivateDocument, PublicCase } = require('./PublicCase');
 const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -447,6 +447,20 @@ describe('PublicCase', () => {
         state: 'AK',
         title: UNIQUE_OTHER_FILER_TYPE,
       };
+      const mockOtherPetitioner = {
+        address1: '42 Lamb Sauce Blvd',
+        city: 'Nashville',
+        contactType: CONTACT_TYPES.otherPetitioner,
+        country: 'USA',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'gordon@example.com',
+        name: 'Gordon Ramsay',
+        otherFilerType: null,
+        phone: '1234567890',
+        postalCode: '05198',
+        state: 'AK',
+        title: UNIQUE_OTHER_FILER_TYPE,
+      };
 
       const entity = new PublicCase(
         {
@@ -459,18 +473,23 @@ describe('PublicCase', () => {
           docketNumberSuffix: null,
           docketNumberWithSuffix: null,
           irsPractitioners: [],
-          otherpetitioners: [{ contactType: CONTACT_TYPES.primary }],
           partyType: PARTY_TYPES.petitioner,
-          petitioners: [{ contactType: CONTACT_TYPES.primary }, mockOtherFiler],
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary },
+            mockOtherFiler,
+            mockOtherPetitioner,
+          ],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
       );
 
       expect(entity.petitioners).toEqual(
-        expect.arrayContaining([expect.objectContaining(mockOtherFiler)]),
+        expect.arrayContaining([
+          expect.objectContaining(mockOtherFiler),
+          expect.objectContaining(mockOtherPetitioner),
+        ]),
       );
-      expect(entity.otherPetitioners).toBeTruthy();
       expect(entity.irsPractitioners).toBeTruthy();
     });
 
@@ -489,21 +508,6 @@ describe('PublicCase', () => {
           docketNumber: '102-20',
           docketNumberSuffix: null,
           docketNumberWithSuffix: null,
-          otherPetitioners: [
-            {
-              additionalName: 'Guy Fieri',
-              address1: '453 Electric Ave',
-              city: 'Philadelphia',
-              countryType: 'domestic',
-              email: 'mayorofflavortown@example.com',
-              name: 'Guy Fieri',
-              phone: '1234567890',
-              postalCode: '99999',
-              serviceIndicator: 'None',
-              state: 'PA',
-              title: 'Petitioner',
-            },
-          ],
           petitioners: [
             { contactType: CONTACT_TYPES.primary },
             {
@@ -522,6 +526,20 @@ describe('PublicCase', () => {
               state: 'AK',
               title: 'Intervenor',
             },
+            {
+              additionalName: 'Guy Fieri',
+              address1: '453 Electric Ave',
+              city: 'Philadelphia',
+              contactType: CONTACT_TYPES.otherPetitioner,
+              countryType: 'domestic',
+              email: 'mayorofflavortown@example.com',
+              name: 'Guy Fieri',
+              phone: '1234567890',
+              postalCode: '99999',
+              serviceIndicator: 'None',
+              state: 'PA',
+              title: 'Petitioner',
+            },
           ],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
@@ -529,7 +547,7 @@ describe('PublicCase', () => {
       );
 
       expect(getOtherFilers(entity)).toEqual([]);
-      expect(entity.otherPetitioners).toBeUndefined();
+      expect(getOtherPetitioners(entity)).toEqual([]);
       expect(entity.irsPractitioners).toBeUndefined();
     });
 
@@ -690,13 +708,14 @@ describe('PublicCase', () => {
             contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
-        otherPetitioners: [
+        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        petitioners: [
+          { contactType: CONTACT_TYPES.primary },
           {
             contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
+            contactType: CONTACT_TYPES.otherPetitioner,
           },
         ],
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: [{ contactType: CONTACT_TYPES.primary }],
         privatePractitioners: [
           {
             userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
