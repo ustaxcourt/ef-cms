@@ -1,4 +1,5 @@
 const { EligibleCase } = require('./EligibleCase');
+const { getOtherPetitioners } = require('./Case');
 const { MOCK_CASE_WITH_SECONDARY_OTHERS } = require('../../../test/mockCase');
 const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
 
@@ -8,7 +9,7 @@ describe('EligibleCase', () => {
 
     expect(eligibleCase.getFormattedValidationErrors()).toBe(null);
     expect(eligibleCase.docketEntries).toBeUndefined();
-    expect(eligibleCase.otherPetitioners).toBeUndefined();
+    expect(getOtherPetitioners(eligibleCase)).toBeUndefined();
     expect(eligibleCase.irsPractitioners.length).toEqual(0);
   });
 

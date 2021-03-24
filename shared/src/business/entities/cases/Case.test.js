@@ -521,6 +521,7 @@ describe('Case entity', () => {
           additionalName: 'First Other Petitioner',
           address1: '876 12th Ave',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.otherPetitioner,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
@@ -533,6 +534,7 @@ describe('Case entity', () => {
           additionalName: 'First Other Petitioner',
           address1: '876 12th Ave',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.otherPetitioner,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'someone@example.com',
@@ -546,14 +548,14 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          otherPetitioners: mockOtherPetitioners,
+          petitioners: [...MOCK_CASE.petitioners, ...mockOtherPetitioners],
         },
         {
           applicationContext,
         },
       );
 
-      expect(myCase.otherPetitioners).toMatchObject(mockOtherPetitioners);
+      expect(myCase.getOtherPetitioners()).toMatchObject(mockOtherPetitioners);
     });
   });
 
@@ -841,16 +843,17 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeFalsy();
     });
 
-    it('Creates an invalid case with invalid otherPetitioners', () => {
+    it('Creates an invalid case with invalid other petitioner', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          otherPetitioners: [
+          petitioners: [
             {
               address1: '982 Oak Boulevard',
               address2: 'Maxime dolorum quae ',
               address3: 'Ut numquam ducimus ',
               city: 'Placeat sed dolorum',
+              contactType: CONTACT_TYPES.otherPetitioner,
               countryType: COUNTRY_TYPES.DOMESTIC,
               phone: '+1 (785) 771-2329',
               postalCode: '17860',
@@ -3455,29 +3458,6 @@ describe('Case entity', () => {
       title: 'Executor',
     };
 
-    const otherPetitioners = [
-      {
-        additionalName: 'Other Petitioner 1',
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Secondary',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
-      {
-        additionalName: 'Other Petitioner 1',
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Secondary',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
-    ];
-
     const privatePractitioners = [
       {
         name: 'Private Practitioner One',
@@ -3497,7 +3477,6 @@ describe('Case entity', () => {
           contactPrimary,
           contactSecondary,
           irsPractitioners,
-          otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           privatePractitioners,
         },
@@ -3512,7 +3491,6 @@ describe('Case entity', () => {
         contactPrimary,
         contactSecondary,
         irsPractitioners,
-        otherPetitioners,
         privatePractitioners,
       });
     });
@@ -3522,7 +3500,6 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           irsPractitioners,
-          otherPetitioners,
           partyType: PARTY_TYPES.petitionerSpouse,
           petitioners: [contactPrimary, contactSecondary],
           privatePractitioners,
@@ -3535,12 +3512,10 @@ describe('Case entity', () => {
       const caseContacts = testCase.getCaseContacts({
         contactPrimary: true,
         contactSecondary: true,
-        otherPetitioners: true,
       });
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
-        otherPetitioners,
       });
     });
   });

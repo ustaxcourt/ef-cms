@@ -21,6 +21,7 @@ const {
   caseHasServedDocketEntries,
   getContactPrimary,
   getOtherFilers,
+  getOtherPetitioners,
 } = require('../entities/cases/Case');
 const {
   compareCasesByDocketNumber,
@@ -290,6 +291,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearObj),
     getOtherFilers: jest.fn().mockImplementation(getOtherFilers),
+    getOtherPetitioners: jest.fn().mockImplementation(getOtherPetitioners),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,

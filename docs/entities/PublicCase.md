@@ -820,6 +820,7 @@
                 - "PRIMARY"
                 - "SECONDARY"
                 - "OTHER_FILER"
+                - "OTHER_PETITIONER"
             name: 
               type: "string"
               flags: 

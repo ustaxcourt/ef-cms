@@ -318,7 +318,7 @@ Case.prototype.assignContacts = function assignContacts({
     applicationContext,
     contactInfo: {
       otherFilers: getOtherFilers(rawCase),
-      otherPetitioners: rawCase.otherPetitioners,
+      otherPetitioners: getOtherPetitioners(rawCase),
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
       secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
@@ -326,11 +326,11 @@ Case.prototype.assignContacts = function assignContacts({
     partyType: rawCase.partyType,
   });
 
-  this.otherPetitioners = contacts.otherPetitioners;
   this.petitioners.push(contacts.primary);
   if (contacts.secondary) {
     this.petitioners.push(contacts.secondary);
   }
+  this.petitioners.push(...contacts.otherPetitioners);
   this.petitioners.push(...contacts.otherFilers);
 };
 
@@ -600,11 +600,6 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .description('Reminder for clerks to review the Order to Show Cause.'),
-  otherPetitioners: joi
-    .array()
-    .items(ContactFactory.getValidationRules('otherPetitioners'))
-    .description('List of OtherPetitionerContact Entities for the case.')
-    .optional(),
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
@@ -1479,6 +1474,27 @@ Case.prototype.getOtherFilers = function () {
 };
 
 /**
+ * Retrieves the other petitioners on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Array} the other petitioners on the case
+ */
+const getOtherPetitioners = function (rawCase) {
+  return rawCase.petitioners?.filter(
+    p => p.contactType === CONTACT_TYPES.otherPetitioner,
+  );
+};
+
+/**
+ * Returns the other petitioners on the case
+ *
+ * @returns {Array} the other petitioners on the case
+ */
+Case.prototype.getOtherPetitioners = function () {
+  return getOtherPetitioners(this);
+};
+
+/**
  * Updates the specified contact object in the case petitioner's array
  *
  * @param {object} arguments.rawCase the raw case object
@@ -1735,7 +1751,6 @@ Case.prototype.getCaseContacts = function (shape) {
     'contactSecondary',
     'privatePractitioners',
     'irsPractitioners',
-    'otherPetitioners',
   ].forEach(contact => {
     if (!shape || (shape && shape[contact] === true)) {
       if (contact === 'contactPrimary') {
@@ -2050,6 +2065,7 @@ module.exports = {
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
+  getOtherPetitioners,
   isAssociatedUser,
   isSealedCase,
   updatePetitioner,

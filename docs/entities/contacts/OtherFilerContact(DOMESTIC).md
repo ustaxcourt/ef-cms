@@ -97,6 +97,7 @@
         - "PRIMARY"
         - "SECONDARY"
         - "OTHER_FILER"
+        - "OTHER_PETITIONER"
     inCareOf: 
       type: "string"
       flags: 
