@@ -647,6 +647,7 @@ const applicationContext = {
       getWorkQueueFilters,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
+      isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isServed,
       isStringISOFormatted,

@@ -22,6 +22,7 @@ const {
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
   UNIQUE_OTHER_FILER_TYPE,
+  UNSERVABLE_EVENT_CODES,
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
@@ -242,8 +243,8 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
-  this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending && isServed(docketEntry),
+  this.hasPendingItems = this.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
@@ -829,8 +830,8 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  return this.docketEntries.some(
-    docketEntry => docketEntry.pending && isServed(docketEntry),
+  return this.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 };
 
@@ -1402,7 +1403,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     doc => doc.documentType === 'Petition',
   );
 
-  const isPetitionServed = petitionDocketEntry && isServed(petitionDocketEntry);
+  const isPetitionServed = DocketEntry.isPending(petitionDocketEntry);
 
   return (
     isIrsPractitioner ||
