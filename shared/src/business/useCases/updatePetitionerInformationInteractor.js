@@ -323,15 +323,21 @@ exports.updatePetitionerInformationInteractor = async (
     { applicationContext },
   );
 
-  if (secondaryChange) {
-    try {
-      caseEntity.updatePetitioner({
-        ...oldCaseContactSecondary,
-        ...secondaryEditableFields,
-      });
-    } catch (e) {
-      throw new NotFoundError(e.message);
-    }
+  const secondaryContact = {
+    ...oldCaseContactSecondary,
+    ...secondaryEditableFields,
+  };
+  try {
+    caseEntity.updatePetitioner(secondaryContact);
+  } catch (e) {
+    caseEntity = new Case(
+      {
+        ...oldCase,
+        contactSecondary: secondaryContact,
+        partyType,
+      },
+      { applicationContext },
+    );
   }
 
   const oldCaseContactPrimary = caseEntity.getContactPrimary();
