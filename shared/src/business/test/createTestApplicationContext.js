@@ -66,7 +66,6 @@ const {
   formatCase,
   formatCaseDeadlines,
   formatDocketEntry,
-  getServedPartiesCode,
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
@@ -159,7 +158,7 @@ const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
-const { isServed } = require('../entities/DocketEntry');
+const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
