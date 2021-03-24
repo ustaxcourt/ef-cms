@@ -49,24 +49,24 @@ exports.fetchPendingItems = async ({
             { term: { 'entityName.S': 'DocketEntry' } },
             { term: { 'pending.BOOL': true } },
             hasParentParam,
-          ],
-          should: [
             {
               bool: {
-                minimum_should_match: 1,
                 should: [
                   {
-                    exists: {
-                      field: 'servedAt',
+                    bool: {
+                      minimum_should_match: 1,
+                      should: [
+                        {
+                          exists: {
+                            field: 'servedAt',
+                          },
+                        },
+                        { term: { 'isLegacyServed.BOOL': true } },
+                      ],
                     },
                   },
-                  { term: { 'isLegacyServed.BOOL': true } },
+                  { terms: { 'eventCode.S': unservableEventCodes } },
                 ],
-              },
-            },
-            {
-              bool: {
-                must: [{ terms: { 'eventCode.S': unservableEventCodes } }],
               },
             },
           ],

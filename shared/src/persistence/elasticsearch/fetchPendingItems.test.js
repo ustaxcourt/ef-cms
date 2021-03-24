@@ -17,7 +17,7 @@ describe('fetchPendingItems', () => {
     expect(search).toHaveBeenCalledTimes(1);
     const searchQuery =
       search.mock.calls[0][0].searchParameters.body.query.bool.must;
-    expect(searchQuery.length).toBe(3);
+    expect(searchQuery.length).toBe(4);
   });
 
   it('returns results from a query with a judge', async () => {
@@ -47,7 +47,8 @@ describe('fetchPendingItems', () => {
     });
 
     const searchQuery =
-      search.mock.calls[0][0].searchParameters.body.query.bool.should;
+      search.mock.calls[0][0].searchParameters.body.query.bool.must[3].bool
+        .should;
 
     expect(searchQuery[0]).toMatchObject({
       bool: {
@@ -68,9 +69,7 @@ describe('fetchPendingItems', () => {
     });
 
     expect(searchQuery[1]).toMatchObject({
-      bool: {
-        must: [{ terms: { 'eventCode.S': expect.anything() } }],
-      },
+      terms: { 'eventCode.S': expect.anything() },
     });
   });
 
