@@ -119,7 +119,7 @@ describe('update petitioner contact information on a case', () => {
     ).toHaveBeenCalled();
   });
 
-  it('throws an error if contactSecondary is required for the party type and is not valid', async () => {
+  it.only('throws an error if contactSecondary is required for the party type and is not valid', async () => {
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
         contactPrimary: getContactPrimary(mockCase),
