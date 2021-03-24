@@ -83,6 +83,37 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/ServerError'
+  /reconciliation-report/{date}:
+    get:
+      summary: fetches a list of docket entries served on a date
+      operationId: 
+      tags:
+        - irs
+      description: |
+        By passing in a date, you can retrieve a list of docket entries served on that date
+      parameters:
+        - in: path
+          name: date
+          description: A specific date, Eastern time with format YYYY-MM-DD; or 'today'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+​
 components:
   securitySchemes:
     bearerAuth:
@@ -256,3 +287,47 @@ components:
       properties:
         message:
           type: string
+    Report:
+      type: object
+      properties:
+        docketEntries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServedDocument'
+        reportTitle:
+          type: string
+          example: Reconciliation Report
+        totalDocketEntries:
+          type: number
+          example: 0
+        reconcilationDate:
+          type: string
+          format: date
+          example: '2020-03-19'
+    ServedDocument:
+      type: object
+      properties:
+        docketNumber:
+          type: string
+          example: '123-20'
+        description:
+          type: string
+          example: 'Request for Place of Trial at Lubbock, Texas'
+        docketEntryId:
+          type: string
+          example: 'e6ab9240-ed8b-4bde-95a8-eb3bccbd6200'
+        eventCode:
+          type: string
+          example: 'RQT'
+        filedBy:
+          type: string
+          example: 'Petr. John Doe'
+        filingDate:
+          type: string
+          example: '2021-01-26T17:25:38.186Z'
+        caseCaption:
+          type: string
+          example: 'John Doe, Petitioner'
+        servedAt:
+          type: string
+          example: '2021-01-05T21:14:09.031Z'
