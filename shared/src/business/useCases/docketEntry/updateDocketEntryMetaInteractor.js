@@ -9,6 +9,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -99,7 +100,8 @@ exports.updateDocketEntryMetaInteractor = async ({
     previousDocument: docketEntryMeta.previousDocument,
     scenario: docketEntryMeta.scenario,
     secondaryDocument: docketEntryMeta.secondaryDocument,
-    servedAt: docketEntryMeta.servedAt,
+    servedAt:
+      docketEntryMeta.servedAt && createISODateString(docketEntryMeta.servedAt),
     servedPartiesCode: docketEntryMeta.servedPartiesCode,
     serviceDate: docketEntryMeta.serviceDate,
     trialLocation: docketEntryMeta.trialLocation,
