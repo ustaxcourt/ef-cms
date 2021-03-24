@@ -33,6 +33,7 @@ const {
 } = require('../../../test/mockCase');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
+const { describe } = require('mocha');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -78,6 +79,26 @@ describe('Case entity', () => {
       { filingDate: '2019-01-05T01:02:03.004Z' },
       { filingDate: '2020-01-05T01:02:03.004Z' },
     ]);
+  });
+
+  describe('updatePetitioners', () => {
+    it.only('should throw an error when the petitioner to update is not found on the case', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.correspondence).toMatchObject([
+        { filingDate: '2019-01-05T01:02:03.004Z' },
+        { filingDate: '2020-01-05T01:02:03.004Z' },
+      ]);
+    });
+
+    it('', () => {});
+    it('', () => {});
+    it('', () => {});
   });
 
   describe('archivedDocketEntries', () => {

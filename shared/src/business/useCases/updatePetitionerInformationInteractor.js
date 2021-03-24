@@ -324,9 +324,11 @@ exports.updatePetitionerInformationInteractor = async (
   );
 
   const secondaryContact = {
-    ...oldCaseContactSecondary,
+    contactId: oldCaseContactSecondary?.contactId,
+    contactType: oldCaseContactSecondary?.contactType,
     ...secondaryEditableFields,
   };
+
   try {
     caseEntity.updatePetitioner(secondaryContact);
   } catch (e) {
@@ -339,6 +341,8 @@ exports.updatePetitionerInformationInteractor = async (
       { applicationContext },
     );
   }
+
+  console.log('-----right place', caseEntity.petitioners);
 
   const oldCaseContactPrimary = caseEntity.getContactPrimary();
 
