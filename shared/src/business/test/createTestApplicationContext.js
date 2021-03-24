@@ -208,6 +208,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
   };
 
+  const mockGetReduceImageBlobValue = {
+    default: jest.fn().mockReturnValue({
+      toBlob: jest.fn(),
+    }),
+  };
+
   const mockGetUtilities = appContextProxy({
     aggregatePartiesForService: jest
       .fn()
@@ -544,6 +550,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       },
     })),
     getQueueService: mockGetQueueService,
+    getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),

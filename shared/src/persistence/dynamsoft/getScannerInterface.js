@@ -1,8 +1,6 @@
 let DWObject = null;
 let dynamsoftLoader = null;
 
-import * as reduce from 'image-blob-reduce';
-
 exports.getScannerInterface = () => {
   const completeScanSession = async () => {
     DWObject.RemoveAllImages();
@@ -149,7 +147,10 @@ exports.getScannerInterface = () => {
 
             const scaledDownBlobs = await Promise.all(
               blobs.map(blob =>
-                reduce.default().toBlob(blob, { max: COVER_SHEET_WIDTH_IN_PX }),
+                applicationContext
+                  .getReduceImageBlob()
+                  .default()
+                  .toBlob(blob, { max: COVER_SHEET_WIDTH_IN_PX }),
               ),
             );
 
