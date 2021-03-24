@@ -1504,7 +1504,7 @@ const updatePetitioner = function (rawCase, updatedPetitioner) {
   let foundPetitioner = rawCase.petitioners.find(
     p => p.contactId === updatedPetitioner.contactId,
   );
-
+  console.log('foundPetitioner', foundPetitioner);
   if (foundPetitioner) {
     foundPetitioner = updatedPetitioner;
   } else {

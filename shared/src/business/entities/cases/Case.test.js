@@ -33,7 +33,6 @@ const {
 } = require('../../../test/mockCase');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { describe } = require('mocha');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -82,23 +81,32 @@ describe('Case entity', () => {
   });
 
   describe('updatePetitioners', () => {
-    it.only('should throw an error when the petitioner to update is not found on the case', () => {
+    it('should throw an error when the petitioner to update is not found on the case', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
         },
         { applicationContext },
       );
-
-      expect(myCase.correspondence).toMatchObject([
-        { filingDate: '2019-01-05T01:02:03.004Z' },
-        { filingDate: '2020-01-05T01:02:03.004Z' },
-      ]);
+      expect(() => myCase.updatePetitioner({ contactId: 'badId' })).toThrow(
+        'Petitioner was not found',
+      );
     });
-
-    it('', () => {});
-    it('', () => {});
-    it('', () => {});
+    it('should update the petitioner when found on case', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+      myCase.updatePetitioner({
+        contactId: myCase.petitioners[0].contactId,
+        name: 'Jimmy Jazz',
+      });
+      expect(myCase.petitioners[0]).toMatchObject({
+        name: 'Jimmy Jazz',
+      });
+    });
   });
 
   describe('archivedDocketEntries', () => {
