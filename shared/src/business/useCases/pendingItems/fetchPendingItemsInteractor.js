@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * fetchPendingItemsInteractor
@@ -27,7 +28,10 @@ exports.fetchPendingItemsInteractor = async (
     throw new Error('judge is required');
   }
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .fetchPendingItems({ applicationContext, judge, page });
+  return await applicationContext.getPersistenceGateway().fetchPendingItems({
+    applicationContext,
+    judge,
+    page,
+    unservableEventCodes: UNSERVABLE_EVENT_CODES,
+  });
 };
