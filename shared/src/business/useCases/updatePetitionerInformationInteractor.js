@@ -342,8 +342,6 @@ exports.updatePetitionerInformationInteractor = async (
     );
   }
 
-  console.log('-----right place', caseEntity.petitioners);
-
   const oldCaseContactPrimary = caseEntity.getContactPrimary();
 
   try {

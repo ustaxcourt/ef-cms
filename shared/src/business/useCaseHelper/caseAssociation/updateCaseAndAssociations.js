@@ -253,6 +253,8 @@ exports.updateCaseAndAssociations = async ({
       docketNumber: caseToUpdate.docketNumber,
     });
 
+  console.log('caseEntity.petitioners', caseEntity.petitioners);
+  console.log('caseEntity.partyType', caseEntity.partyType);
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 
   const validRawOldCaseEntity = new Case(oldCaseEntity, { applicationContext })
