@@ -94,7 +94,7 @@ describe('Case entity', () => {
       );
     });
 
-    it.only('should update the petitioner when found on case', () => {
+    it('should update the petitioner when found on case', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -104,14 +104,14 @@ describe('Case entity', () => {
 
       myCase.updatePetitioner({
         contactId: myCase.petitioners[0].contactId,
+        contactType: CONTACT_TYPES.primary,
         name: 'Jimmy Jazz',
       });
 
       expect(myCase.petitioners[0]).toMatchObject({
         name: 'Jimmy Jazz',
       });
-
-      // expect(myCase.isValid()).toBeFalsy();
+      expect(myCase.isValid()).toBeFalsy();
     });
   });
 
