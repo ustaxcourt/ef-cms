@@ -1403,7 +1403,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     doc => doc.documentType === 'Petition',
   );
 
-  const isPetitionServed = DocketEntry.isPending(petitionDocketEntry);
+  const isPetitionServed = petitionDocketEntry && isServed(petitionDocketEntry);
 
   return (
     isIrsPractitioner ||
