@@ -1501,12 +1501,14 @@ Case.prototype.getOtherPetitioners = function () {
  * @param {object} arguments.updatedPetitioner the updated petitioner object
  */
 const updatePetitioner = function (rawCase, updatedPetitioner) {
-  let foundPetitioner = rawCase.petitioners.find(
+  this.assignContacts({ applicationContext, filtered, rawCase });
+
+  const petitionerIndex = rawCase.petitioners.findIndex(
     p => p.contactId === updatedPetitioner.contactId,
   );
-  console.log('foundPetitioner', foundPetitioner);
-  if (foundPetitioner) {
-    foundPetitioner = updatedPetitioner;
+
+  if (petitionerIndex !== -1) {
+    rawCase.petitioners[petitionerIndex] = updatedPetitioner;
   } else {
     throw new Error(
       `Petitioner was not found on case ${rawCase.docketNumber}.`,
@@ -1520,7 +1522,6 @@ const updatePetitioner = function (rawCase, updatedPetitioner) {
  * @param {object} arguments.updatedPetitioner the updated petitioner object
  */
 Case.prototype.updatePetitioner = function (updatedPetitioner) {
-  console.log('WRONG ', this.petitioners);
   updatePetitioner(this, updatedPetitioner);
 };
 

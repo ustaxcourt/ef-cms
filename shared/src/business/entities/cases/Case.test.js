@@ -80,7 +80,7 @@ describe('Case entity', () => {
     ]);
   });
 
-  describe('updatePetitioners', () => {
+  describe('updatePetitioner', () => {
     it('should throw an error when the petitioner to update is not found on the case', () => {
       const myCase = new Case(
         {
@@ -88,10 +88,12 @@ describe('Case entity', () => {
         },
         { applicationContext },
       );
+
       expect(() => myCase.updatePetitioner({ contactId: 'badId' })).toThrow(
         'Petitioner was not found',
       );
     });
+
     it('should update the petitioner when found on case', () => {
       const myCase = new Case(
         {
@@ -99,13 +101,17 @@ describe('Case entity', () => {
         },
         { applicationContext },
       );
+
       myCase.updatePetitioner({
         contactId: myCase.petitioners[0].contactId,
         name: 'Jimmy Jazz',
       });
+
       expect(myCase.petitioners[0]).toMatchObject({
         name: 'Jimmy Jazz',
       });
+
+      expect(myCase.isValid()).toBeFalsy();
     });
   });
 
@@ -4511,6 +4517,35 @@ describe('Case entity', () => {
           },
         ],
       });
+    });
+
+    it('should require a valid secondary contact when partyType is petitionerSpouse', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [
+            ...MOCK_CASE.petitioners,
+            {
+              address2: undefined,
+              address3: undefined,
+              contactId: '56387318-0092-49a3-8cc1-921b0432bd16',
+              contactType: CONTACT_TYPES.secondary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitioners: [
+          {
+            index: 1,
+          },
+        ],
+      });
+      expect(myCase.isValid()).toBeFalsy();
     });
   });
 
