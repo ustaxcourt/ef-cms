@@ -22,7 +22,6 @@ const {
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
   UNIQUE_OTHER_FILER_TYPE,
-  UNSERVABLE_EVENT_CODES,
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
