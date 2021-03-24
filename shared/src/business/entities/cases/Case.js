@@ -636,11 +636,7 @@ Case.VALIDATION_RULES = {
   // items is a function that accepts contactType and returns ContactFactory.getValidationRules(CONTACT_TyPE)
   petitioners: joi
     .array()
-    .items(item =>
-      !item.validate
-        ? joi.object().keys(ContactFactory.getValidationRules(item.contactType))
-        : ContactFactory.getValidationRules(item.contactType),
-    )
+    .items(ContactFactory.getValidationObject({}))
     .unique(
       (a, b) =>
         a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
