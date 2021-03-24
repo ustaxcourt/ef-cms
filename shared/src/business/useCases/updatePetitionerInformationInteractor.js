@@ -334,7 +334,7 @@ exports.updatePetitionerInformationInteractor = async (
   } catch (e) {
     console.log(e);
   }
-  console.log(caseEntity.petitioners);
+  console.log('this is the right one', caseEntity.petitioners);
   const oldCaseContactPrimary = caseEntity.getContactPrimary();
   try {
     caseEntity.updatePetitioner({

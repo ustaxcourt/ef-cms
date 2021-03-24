@@ -49,6 +49,7 @@ ContactFactory.getValidationRules = contactType => {
   let results = joi;
 
   for (const partyType in PARTY_TYPES) {
+    console.log('partyType', partyType);
     const contactConstructor = ContactFactory.getContactConstructors({
       partyType: PARTY_TYPES[partyType],
     })[contactType];
