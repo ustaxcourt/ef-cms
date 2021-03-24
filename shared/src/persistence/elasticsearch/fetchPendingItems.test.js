@@ -17,7 +17,7 @@ describe('fetchPendingItems', () => {
     expect(search).toHaveBeenCalledTimes(1);
     const searchQuery =
       search.mock.calls[0][0].searchParameters.body.query.bool.must;
-    expect(searchQuery.length).toBe(4);
+    expect(searchQuery.length).toBe(3);
   });
 
   it('returns results from a query with a judge', async () => {
@@ -43,12 +43,13 @@ describe('fetchPendingItems', () => {
     await fetchPendingItems({
       applicationContext,
       judge: 'Dredd',
+      unservableEventCodes: [],
     });
 
     const searchQuery =
-      search.mock.calls[0][0].searchParameters.body.query.bool.must;
+      search.mock.calls[0][0].searchParameters.body.query.bool.should;
 
-    expect(searchQuery[3]).toMatchObject({
+    expect(searchQuery[0]).toMatchObject({
       bool: {
         minimum_should_match: 1,
         should: [
@@ -63,6 +64,12 @@ describe('fetchPendingItems', () => {
             },
           },
         ],
+      },
+    });
+
+    expect(searchQuery[1]).toMatchObject({
+      bool: {
+        must: [{ terms: { 'eventCode.S': expect.anything() } }],
       },
     });
   });
