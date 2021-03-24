@@ -12,7 +12,6 @@ const {
 const {
   ReconciliationReportEntry,
 } = require('../entities/ReconciliationReportEntry');
-const { map } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
 
 const isValidDate = dateString => {
@@ -89,11 +88,15 @@ const assignCaseCaptionFromPersistence = async (
   applicationContext,
   docketEntries,
 ) => {
-  const docketNumbers = map(docketEntries, 'docketNumber');
+  const docketNumbers = docketEntries.map(e => {
+    const docketNumber = e.docketNumber || e.pk.substr(e.pk.indexOf('|') + 1);
+    e.docketNumber = docketNumber;
+    return e.docketNumber;
+  });
   const casesDetails = await applicationContext
     .getPersistenceGateway()
     .getCasesByDocketNumbers({ applicationContext, docketNumbers });
-  // todo: could there be docket entries for cases that are not in persistence?? accessing "caseCaption" of undefined
+
   docketEntries.forEach(docketEntry => {
     docketEntry.caseCaption = casesDetails.find(
       detail => detail.docketNumber === docketEntry.docketNumber,

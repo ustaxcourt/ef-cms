@@ -20,6 +20,8 @@ describe('getReconciliationReportInteractor', () => {
         {
           caseCaption: mockCaseCaption,
           docketNumber: '135-20',
+          pk: 'case|135-20',
+          sk: 'case|135-20',
         },
       ]);
     applicationContext.getCurrentUser.mockReturnValue({
@@ -133,5 +135,34 @@ describe('getReconciliationReportInteractor', () => {
       reconciliationDateEnd: '2021-01-02T04:59:59.999Z',
       reconciliationDateStart: '2021-01-01T05:00:00.000Z',
     });
+  });
+
+  it('should call the getCasesByDocketNumbers method with a docket number extracted from pk if the record has no defined value for the docketNumber attribute', async () => {
+    const docketEntries = [
+      {
+        docketEntryId: '3d27e02e-6954-4595-8b3f-0e91bbc1b51e',
+        docketNumber: undefined,
+        documentTitle: 'Petition',
+        eventCode: 'P',
+        filedBy: 'Petr. Kaitlin Chaney',
+        filingDate: '2021-01-05T21:14:09.031Z',
+        pk: 'case|135-20',
+        servedAt: '2021-01-05T21:14:09.031Z',
+      },
+    ];
+
+    applicationContext
+      .getPersistenceGateway()
+      .getReconciliationReport.mockReturnValue(docketEntries);
+
+    const reconciliationDate = '2021-01-01';
+    await getReconciliationReportInteractor(applicationContext, {
+      reconciliationDate,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCasesByDocketNumbers.mock
+        .calls[0][0].docketNumbers,
+    ).toEqual(['135-20']);
   });
 });
