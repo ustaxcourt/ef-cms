@@ -115,14 +115,17 @@ describe('Case entity', () => {
     });
 
     it('should fail to validate an invalid secondaryContact', () => {
+      const SECONDARY_CONTACT_ID = 'd7d90c05-f6cd-442c-a168-202db587f16f';
+
       const myCase = new Case(
         {
           ...MOCK_CASE,
+          partyType: PARTY_TYPES.petitionerSpouse,
           petitioners: [
             ...MOCK_CASE.petitioners,
             {
               ...MOCK_CASE.petitioners[0],
-              contactId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+              contactId: SECONDARY_CONTACT_ID,
               contactType: CONTACT_TYPES.secondary,
               name: 'Jimmy Jazz',
             },
@@ -132,7 +135,7 @@ describe('Case entity', () => {
       );
 
       myCase.updatePetitioner({
-        contactId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        contactId: SECONDARY_CONTACT_ID,
         contactType: CONTACT_TYPES.secondary,
         name: undefined,
       });
@@ -762,11 +765,10 @@ describe('Case entity', () => {
   });
 
   describe('isValid', () => {
-    it('Creates a valid case', () => {
+    it.only('Creates a valid case', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          otherPetitioners: undefined,
         },
         {
           applicationContext,

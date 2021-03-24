@@ -639,7 +639,13 @@ Case.VALIDATION_RULES = {
     .items(
       item => {
         console.log('itemValidation', item);
-        joi.object().keys(ContactFactory.getValidationRules(item.contactType));
+        console.log(
+          'ContactFactory.getValidationRules(item.contactType)',
+          ContactFactory.getValidationRules(item.contactType),
+        );
+        joi
+          .object()
+          .concat(ContactFactory.getValidationRules(item.contactType));
       },
       // joi.object().when('contactType', {
       //   is: CONTACT_TYPES.primary,
