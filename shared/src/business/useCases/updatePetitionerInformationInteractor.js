@@ -2,6 +2,11 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  Case,
+  getContactPrimary,
+  getContactSecondary,
+} = require('../entities/cases/Case');
+const {
   copyToNewPdf,
   getAddressPages,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
@@ -13,7 +18,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { Case, getContactPrimary } = require('../entities/cases/Case');
 const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -298,28 +302,35 @@ exports.updatePetitionerInformationInteractor = async (
       oldData: getContactPrimary(oldCase),
     });
 
+  const oldCaseContactSecondary = getContactSecondary(oldCase);
+
   const secondaryChange =
     secondaryEditableFields &&
     secondaryEditableFields.name &&
-    oldCase.contactSecondary &&
-    oldCase.contactSecondary.name
+    oldCaseContactSecondary &&
+    oldCaseContactSecondary.name
       ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
           newData: secondaryEditableFields,
-          oldData: oldCase.contactSecondary,
+          oldData: oldCaseContactSecondary,
         })
       : undefined;
 
   let caseEntity = new Case(
     {
       ...oldCase,
-      contactSecondary: {
-        ...oldCase.contactSecondary,
-        ...secondaryEditableFields,
-      },
       partyType,
     },
     { applicationContext },
   );
+
+  try {
+    caseEntity.updatePetitioner({
+      ...oldCaseContactSecondary,
+      ...secondaryEditableFields,
+    });
+  } catch (e) {
+    throw new NotFoundError(e.message);
+  }
 
   const oldCaseContactPrimary = caseEntity.getContactPrimary();
 
@@ -338,10 +349,11 @@ exports.updatePetitionerInformationInteractor = async (
   let secondaryChangeDocs;
   let paperServicePdfUrl;
   const newContactPrimary = caseEntity.getContactPrimary();
+  const newContactSecondary = caseEntity.getContactSecondary();
 
   if (
     (primaryChange && !newContactPrimary.isAddressSealed) ||
-    (secondaryChange && !caseEntity.contactSecondary.isAddressSealed)
+    (secondaryChange && !newContactSecondary.isAddressSealed)
   ) {
     const partyWithPaperService = caseEntity.hasPartyWithPaperService();
 
@@ -375,7 +387,7 @@ exports.updatePetitionerInformationInteractor = async (
         caseEntity,
         change: secondaryChange,
         editableFields: secondaryEditableFields,
-        oldCaseContact: oldCase.contactSecondary,
+        oldCaseContact: oldCaseContactSecondary,
         partyWithPaperService,
         privatePractitionersRepresentingContact,
         servedParties,

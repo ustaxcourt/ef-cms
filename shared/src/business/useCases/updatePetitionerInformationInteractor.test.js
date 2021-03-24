@@ -8,13 +8,16 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../entities/cases/Case');
+const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
 const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
-const { getContactPrimary } = require('../entities/cases/Case');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 const { UserCase } = require('../entities/UserCase');
@@ -32,6 +35,35 @@ describe('update petitioner contact information on a case', () => {
   };
 
   const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
+
+  const mockPetitioners = [
+    {
+      address1: '989 Division St',
+      address2: 'Lights out',
+      city: 'Somewhere',
+      contactId: PRIMARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.primary,
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      name: 'Test Primary Petitioner',
+      phone: '1234567',
+      postalCode: '12345',
+      state: 'TN',
+      title: 'Executor',
+    },
+    {
+      address1: '789 Division St',
+      address2: 'Apt B',
+      city: 'Somewhere',
+      contactId: SECONDARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.secondary,
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      name: 'Test Secondary Petitioner',
+      phone: '1234568',
+      postalCode: '12345',
+      state: 'TN',
+      title: 'Executor',
+    },
+  ];
 
   const basePractitioner = {
     barNumber: 'PT1234',
@@ -156,32 +188,8 @@ describe('update petitioner contact information on a case', () => {
   it('ensures updates to fields with null values are persisted', async () => {
     mockCase = {
       ...MOCK_CASE,
-      contactSecondary: {
-        address1: '789 Division St',
-        address2: 'Apt B',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Test Secondary Petitioner',
-        phone: '1234568',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
       partyType: PARTY_TYPES.petitionerSpouse,
-      petitioners: [
-        {
-          address1: '989 Division St',
-          address2: 'Lights out',
-          city: 'Somewhere',
-          contactType: CONTACT_TYPES.primary,
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          name: 'Test Primary Petitioner',
-          phone: '1234567',
-          postalCode: '12345',
-          state: 'TN',
-          title: 'Executor',
-        },
-      ],
+      petitioners: mockPetitioners,
       privatePractitioners: [],
     };
 
@@ -212,33 +220,32 @@ describe('update petitioner contact information on a case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
 
-    expect(
-      getContactPrimary(
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-          .caseToUpdate,
-      ).address2,
-    ).toBeUndefined();
+    const {
+      caseToUpdate,
+    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    expect(getContactPrimary(caseToUpdate).address2).toBeUndefined();
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.contactSecondary.address2,
-    ).toBeUndefined();
+    expect(getContactSecondary(caseToUpdate).address2).toBeUndefined();
   });
 
   it('sets filedBy to undefined on notice of change docket entry', async () => {
     mockCase = {
       ...MOCK_CASE,
-      contactSecondary: {
-        address1: '789 Division St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Test Secondary Petitioner',
-        phone: '1234567',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
       partyType: PARTY_TYPES.petitionerSpouse,
+
+      petitioners: [
+        mockPetitioners[0],
+        {
+          address1: '789 Division St',
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Test Secondary Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          state: 'TN',
+          title: 'Executor',
+        },
+      ],
       privatePractitioners: [],
     };
 
