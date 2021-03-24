@@ -638,8 +638,8 @@ Case.VALIDATION_RULES = {
     .array()
     .items(
       item => {
-        console.log(item);
-        return ContactFactory.getValidationRules(item.contactType);
+        console.log('itemValidation', item);
+        joi.object().keys(ContactFactory.getValidationRules(item.contactType));
       },
       // joi.object().when('contactType', {
       //   is: CONTACT_TYPES.primary,
@@ -1518,7 +1518,7 @@ const updatePetitioner = function (rawCase, updatedPetitioner) {
   );
 
   if (petitionerIndex !== -1) {
-    Object.assign(rawCase.petitioners[petitionerIndex], updatedPetitioner);
+    rawCase.petitioners[petitionerIndex] = updatedPetitioner;
   } else {
     throw new Error(
       `Petitioner was not found on case ${rawCase.docketNumber}.`,

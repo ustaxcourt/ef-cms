@@ -113,6 +113,31 @@ describe('Case entity', () => {
       });
       expect(myCase.isValid()).toBeFalsy();
     });
+
+    it('should fail to validate an invalid secondaryContact', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitioners: [
+            ...MOCK_CASE.petitioners,
+            {
+              ...MOCK_CASE.petitioners[0],
+              contactId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+              contactType: CONTACT_TYPES.secondary,
+              name: 'Jimmy Jazz',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      myCase.updatePetitioner({
+        contactId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        contactType: CONTACT_TYPES.secondary,
+        name: undefined,
+      });
+      expect(myCase.isValid()).toBeFalsy();
+    });
   });
 
   describe('archivedDocketEntries', () => {
