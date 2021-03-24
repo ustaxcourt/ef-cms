@@ -1796,6 +1796,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         getWorkQueueFilters,
+        isPending: DocketEntry.isPending,
         prepareDateFromString,
         scrapePdfContents,
         setServiceIndicatorsForCase,
