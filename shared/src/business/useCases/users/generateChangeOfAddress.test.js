@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -261,13 +262,14 @@ describe('generateChangeOfAddress', () => {
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by the practitioner", async () => {
     mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactSecondary: {
-        ...MOCK_CASE.contactSecondary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       petitioners: [
         {
           ...getContactPrimary(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        {
+          ...MOCK_CASE.contactSecondary,
+          contactType: CONTACT_TYPES.secondary,
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
       ],
@@ -305,15 +307,16 @@ describe('generateChangeOfAddress', () => {
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by a primary contact on the case", async () => {
     mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactSecondary: {
-        ...getContactPrimary(MOCK_CASE),
-        name: 'Test Secondary',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       petitioners: [
         {
           ...getContactPrimary(MOCK_CASE),
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        {
+          ...getContactPrimary(MOCK_CASE),
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Secondary',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
       ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -347,16 +350,17 @@ describe('generateChangeOfAddress', () => {
   it("should create a work item for an associated practitioner's notice of change of address when paper service is requested by a secondary contact on the case", async () => {
     mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactSecondary: {
-        ...getContactPrimary(MOCK_CASE),
-        name: 'Test Secondary',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      },
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: [
         {
           ...getContactPrimary(MOCK_CASE),
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        {
+          ...getContactPrimary(MOCK_CASE),
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Secondary',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -390,13 +394,14 @@ describe('generateChangeOfAddress', () => {
   it("should NOT create a work item for an associated practitioner's the notice of change of address when there is no paper service for the case", async () => {
     mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactSecondary: {
-        ...MOCK_CASE.contactSecondary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
       petitioners: [
         {
           ...getContactPrimary(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        {
+          ...MOCK_CASE.contactSecondary,
+          contactType: CONTACT_TYPES.secondary,
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
       ],
@@ -431,14 +436,15 @@ describe('generateChangeOfAddress', () => {
   it('should not create a docket entry, work item, or serve anything if the bypassDocketEntry flag is true', async () => {
     mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      contactSecondary: {
-        ...MOCK_CASE.contactSecondary,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      },
       petitioners: [
         {
           ...getContactPrimary(MOCK_CASE),
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        {
+          ...MOCK_CASE.contactSecondary,
+          contactType: CONTACT_TYPES.secondary,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -504,16 +510,17 @@ describe('generateChangeOfAddress', () => {
         howMuch: -1,
         units: 'months',
       }),
-      contactSecondary: {
-        ...getContactPrimary(MOCK_CASE),
-        name: 'Test Secondary',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      },
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: [
         {
           ...getContactPrimary(MOCK_CASE),
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        {
+          ...getContactPrimary(MOCK_CASE),
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Secondary',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
