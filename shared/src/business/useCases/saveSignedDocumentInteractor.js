@@ -93,6 +93,7 @@ exports.saveSignedDocumentInteractor = async (
       {
         createdAt: applicationContext.getUtilities().createISODateString(),
         docketEntryId: signedDocketEntryId,
+        docketNumber: caseRecord.docketNumber,
         documentTitle:
           SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         documentType:
