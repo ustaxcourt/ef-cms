@@ -105,11 +105,11 @@ describe('Case entity', () => {
       myCase.updatePetitioner({
         contactId: myCase.petitioners[0].contactId,
         contactType: CONTACT_TYPES.primary,
-        name: 'Jimmy Jazz',
+        name: undefined,
       });
 
       expect(myCase.petitioners[0]).toMatchObject({
-        name: 'Jimmy Jazz',
+        name: undefined,
       });
       expect(myCase.isValid()).toBeFalsy();
     });
