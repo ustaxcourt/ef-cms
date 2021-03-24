@@ -11,6 +11,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
@@ -184,20 +185,24 @@ describe('serveCaseToIrsInteractor', () => {
   it('should generate a second notice of receipt of petition when contactSecondary.address is different from contactPrimary.address', async () => {
     mockCase = {
       ...MOCK_CASE,
-      contactSecondary: {
-        address1: '123 Side St',
-        city: 'Somewhere Else',
-        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner Secondary',
-        phone: '1234547',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
       isPaper: false,
       partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        ...MOCK_CASE.petitioners,
+        {
+          address1: '123 Side St',
+          city: 'Somewhere Else',
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner Secondary',
+          phone: '1234547',
+          postalCode: '12345',
+          state: 'TN',
+          title: 'Executor',
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 

@@ -287,7 +287,7 @@ exports.serveCaseToIrsInteractor = async (
         .noticeOfReceiptOfPetition({
           applicationContext,
           data: {
-            address: caseEntityToUpdate.contactSecondary,
+            address: contactSecondary,
             caseCaptionExtension,
             caseTitle,
             docketNumberWithSuffix,
