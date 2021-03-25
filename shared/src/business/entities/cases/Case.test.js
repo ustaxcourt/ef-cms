@@ -108,10 +108,17 @@ describe('Case entity', () => {
         name: undefined,
       });
 
-      expect(myCase.petitioners[0]).toMatchObject({
+      const updatedCaseRaw = myCase.validate().toRawObject();
+
+      // send back through the constructor so contacts are recreated as entities
+      const updatedCaseEntity = new Case(updatedCaseRaw, {
+        applicationContext,
+      });
+
+      expect(updatedCaseEntity.petitioners[0]).toMatchObject({
         name: undefined,
       });
-      expect(myCase.isValid()).toBeFalsy();
+      expect(updatedCaseEntity.isValid()).toBeFalsy();
     });
 
     it('should fail to validate an invalid secondaryContact', () => {
@@ -140,7 +147,14 @@ describe('Case entity', () => {
         name: undefined,
       });
 
-      expect(myCase.isValid()).toBeFalsy();
+      const updatedCaseRaw = myCase.validate().toRawObject();
+
+      // send back through the constructor so contacts are recreated as entities
+      const updatedCaseEntity = new Case(updatedCaseRaw, {
+        applicationContext,
+      });
+
+      expect(updatedCaseEntity.isValid()).toBeFalsy();
     });
   });
 

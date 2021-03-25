@@ -636,7 +636,6 @@ Case.VALIDATION_RULES = {
   // items is a function that accepts contactType and returns ContactFactory.getValidationRules(CONTACT_TyPE)
   petitioners: joi
     .array()
-    .items(ContactFactory.getValidationObject({}))
     .unique(
       (a, b) =>
         a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
@@ -2029,13 +2028,12 @@ Case.prototype.deleteStatistic = function (statisticId) {
 };
 
 Case.prototype.hasPartyWithPaperService = function () {
-  const CONTACT_SECONDARY = this.getContactSecondary();
+  const contactSecondary = this.getContactSecondary();
   return (
     this.getContactPrimary().serviceIndicator ===
       SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (CONTACT_SECONDARY &&
-      CONTACT_SECONDARY.serviceIndicator ===
-        SERVICE_INDICATOR_TYPES.SI_PAPER) ||
+    (contactSecondary &&
+      contactSecondary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER) ||
     (this.privatePractitioners &&
       this.privatePractitioners.find(
         pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
