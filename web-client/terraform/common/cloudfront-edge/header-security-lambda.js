@@ -47,7 +47,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
     `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
     `script-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${statuspageUrl} resource://pdf.js`,
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging}`,
-    `img-src ${applicationUrl} ${subdomainsUrl} data:`,
+    `img-src ${applicationUrl} ${subdomainsUrl} blob: data:`,
     `font-src ${applicationUrl} ${subdomainsUrl}`,
     `frame-src ${s3Url} ${subdomainsUrl} ${statuspageUrl} blob: data:`,
     "frame-ancestors 'none'",
