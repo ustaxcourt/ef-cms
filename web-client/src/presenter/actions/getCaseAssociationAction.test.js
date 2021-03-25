@@ -194,13 +194,14 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          contactSecondary: {
-            contactId: '234',
-          },
           petitioners: [
             {
               contactId: '123',
               contactType: CONTACT_TYPES.primary,
+            },
+            {
+              contactId: '234',
+              contactType: CONTACT_TYPES.secondary,
             },
           ],
         },

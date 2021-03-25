@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
+import { contactSecondaryFromState } from '../helpers';
 import { fileDocumentHelper as fileDocumentHelperComputed } from '../../src/presenter/computeds/fileDocumentHelper';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -9,9 +9,6 @@ const caseDetailHeaderHelper = withAppContextDecorator(
   caseDetailHeaderHelperComputed,
 );
 const fileDocumentHelper = withAppContextDecorator(fileDocumentHelperComputed);
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
 
 export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
@@ -37,13 +34,7 @@ export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
 
     expect(fileDocHelper.showSecondaryParty).toBeTruthy();
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetailFormatted.contactSecondary.name).toEqual(
-      'Jimothy Schultz',
-    );
+    expect(contactSecondaryFromState(test).name).toEqual('Jimothy Schultz');
 
     const documentToSelect = {
       category: 'Answer (filed by respondent only)',
