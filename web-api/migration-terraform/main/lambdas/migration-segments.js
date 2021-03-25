@@ -1,5 +1,11 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
+const {
+  migrateItems: migration0024,
+} = require('./migrations/0024-docket-entry-docket-number-served-parties-code');
+const {
+  migrateItems: migration0025,
+} = require('./migrations/0025-docket-entry-received-at-strict-timestamp');
 
 const {
   migrateItems: validationMigration,
@@ -25,7 +31,13 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  // applicationContext.logger.info('about to run validation migration');
+  applicationContext.logger.info('about to run migration 0024');
+  items = await migration0024(items, documentClient);
+
+  applicationContext.logger.info('about to run migration 0025');
+  items = await migration0025(items, documentClient);
+
+  applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
 
   return items;
