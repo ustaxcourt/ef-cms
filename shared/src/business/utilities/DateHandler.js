@@ -64,6 +64,12 @@ const createISODateString = (dateString, inputFormat) => {
   return result && result.toISOString();
 };
 
+const createISODateAtStartOfDayEST = dateString => {
+  const startOfDay = moment.tz(dateString, undefined, USTC_TZ);
+  startOfDay.startOf('day'); // adjustment is according to USTC_TZ
+  return startOfDay.toISOString(); // will reflect UTC offset.
+};
+
 const createEndOfDayISO = ({ day, month, year }) => {
   const composedDate = `${year}-${month}-${day}T23:59:59.999`;
   const composedFormat = 'YYYY-M-DTHH:mm:ss.SSS';
@@ -300,6 +306,7 @@ module.exports = {
   checkDate,
   computeDate,
   createEndOfDayISO,
+  createISODateAtStartOfDayEST,
   createISODateString,
   createISODateStringFromObject,
   createStartOfDayISO,

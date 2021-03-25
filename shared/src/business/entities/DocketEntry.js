@@ -8,13 +8,16 @@ const {
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
 } = require('./EntityConstants');
 const {
+  createISODateAtStartOfDayEST,
+  createISODateString,
+} = require('../utilities/DateHandler');
+const {
   DOCKET_ENTRY_VALIDATION_RULES,
 } = require('./EntityValidationConstants');
 const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { createISODateString } = require('../utilities/DateHandler');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 
@@ -122,7 +125,7 @@ DocketEntry.prototype.init = function init(
   this.partyPrimary = rawDocketEntry.partyPrimary;
   this.partySecondary = rawDocketEntry.partySecondary;
   this.processingStatus = rawDocketEntry.processingStatus || 'pending';
-  this.receivedAt = rawDocketEntry.receivedAt || createISODateString();
+  this.receivedAt = createISODateAtStartOfDayEST(rawDocketEntry.receivedAt);
   this.relationship = rawDocketEntry.relationship;
   this.scenario = rawDocketEntry.scenario;
   if (rawDocketEntry.scenario === 'Nonstandard H') {
