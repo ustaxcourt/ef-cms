@@ -38,10 +38,12 @@ describe('addCourtIssuedDocketEntryHelper', () => {
 
   const state = {
     caseDetail: {
-      contactSecondary: { name: 'Timon' },
       docketEntries: [{ docketEntryId: '123' }],
       irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
-      petitioners: [{ contactType: CONTACT_TYPES.primary, name: 'Banzai' }],
+      petitioners: [
+        { contactType: CONTACT_TYPES.primary, name: 'Banzai' },
+        { contactType: CONTACT_TYPES.secondary, name: 'Timon' },
+      ],
       privatePractitioners: [
         { name: 'Scar', representing: [] },
         { name: 'Zazu', representing: [] },
@@ -99,10 +101,13 @@ describe('addCourtIssuedDocketEntryHelper', () => {
   });
 
   it('should provide a list of service parties with a primary contact but no secondary contact', () => {
-    const noSecondary = cloneDeep(state);
-    delete noSecondary.caseDetail.contactSecondary;
+    const caseDetailWithoutSecondary = {
+      ...state.caseDetail,
+      petitioners: [state.caseDetail.petitioners[0]],
+    };
+
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
-      state: noSecondary,
+      state: { caseDetailWithoutSecondary },
     });
     expect(result.serviceParties).toMatchObject([
       { displayName: 'Banzai, Petitioner', name: 'Banzai' },
