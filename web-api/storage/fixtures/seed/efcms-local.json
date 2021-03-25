@@ -44,7 +44,7 @@
       "name": "Astra Santiago",
       "state": "NY",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "entityName": "Case",
     "caseCaption": "Astra Santiago, Petitioner",
@@ -420,7 +420,6 @@
   {
     "associatedJudge": "Colvin",
     "procedureType": "Small",
-    "contactSecondary": {},
     "isPaper": false,
     "petitionPaymentStatus": "Not Paid",
     "orderForFilingFee": false,
@@ -439,7 +438,7 @@
       "state": "PA",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"    },
+      "contactType": "primary"    },
         {
           "serviceIndicator": "None",
           "secondaryName": "Rumplestiltskin Ray",
@@ -453,7 +452,7 @@
           "additionalName": "Rachael Ray",
           "countryType": "domestic",
           "email": "mayor@flavortown.gov",
-          "contactType": "OTHER_PETITIONER"
+          "contactType": "otherPetitioners"
         },
         {
           "serviceIndicator": "None",
@@ -467,7 +466,7 @@
           "additionalName": "Guy Fieri",
           "countryType": "domestic",
           "email": "mayor@flavortown.gov",
-          "contactType": "OTHER_PETITIONER"
+          "contactType": "otherPetitioners"
         },
         {
           "serviceIndicator": "None",
@@ -481,7 +480,7 @@
           "additionalName": "Bobby Flay",
           "countryType": "domestic",
           "email": "mayor@flavortown.gov",
-          "contactType": "OTHER_PETITIONER"
+          "contactType": "otherPetitioners"
         },
         {
           "serviceIndicator": "None",
@@ -495,7 +494,7 @@
           "additionalName": "Kid Rock",
           "countryType": "domestic",
           "email": "mayor@flavortown.gov",
-          "contactType": "OTHER_PETITIONER"
+          "contactType": "otherPetitioners"
         },
         {
           "serviceIndicator": "None",
@@ -509,7 +508,7 @@
           "additionalName": "Bill Burr",
           "countryType": "domestic",
           "email": "mayor@flavortown.gov",
-          "contactType": "OTHER_PETITIONER"
+          "contactType": "otherPetitioners"
         },
         {
           "serviceIndicator": "None",
@@ -523,7 +522,7 @@
           "additionalName": "Bill Burr",
           "countryType": "domestic",
           "email": "mayor@flavortown.gov",
-          "contactType": "OTHER_PETITIONER"
+          "contactType": "otherPetitioners"
         },
         {
           "serviceIndicator": "None",
@@ -537,7 +536,7 @@
           "additionalName": "Bill Burr",
           "countryType": "domestic",
           "email": "mayor@flavortown.gov",
-          "contactType": "OTHER_PETITIONER"
+          "contactType": "otherPetitioners"
         }
     ],
     "createdAt": "2020-01-02T16:05:45.978Z",
@@ -820,7 +819,6 @@
     "isSealed": false,
     "procedureType": "Small",
     "isPaper": false,
-    "contactSecondary": {},
     "qcCompleteForTrial": {},
     "petitionPaymentStatus": "Not Paid",
     "orderForFilingFee": true,
@@ -840,7 +838,7 @@
       "state": "AL",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -1090,7 +1088,6 @@
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": true,
-    "contactSecondary": {},
     "automaticBlocked": false,
     "qcCompleteForTrial": {},
     "petitionPaymentStatus": "Not Paid",
@@ -1109,7 +1106,7 @@
       "name": "Hanan Al Hroub",
       "countryType": "international",
       "phone": "1234567890",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "highPriority": false,
     "noticeOfAttachments": false,
@@ -1577,7 +1574,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -1734,7 +1731,6 @@
     "associatedJudge": "Colvin",
     "isSealed": false,
     "procedureType": "Regular",
-    "contactSecondary": {},
     "isPaper": false,
     "qcCompleteForTrial": {},
     "orderForFilingFee": false,
@@ -1757,7 +1753,7 @@
       "state": "DC",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2020-01-23T21:44:54.034Z",
     "noticeOfAttachments": false,
@@ -2450,7 +2446,6 @@
   {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
-    "contactSecondary": {},
     "isPaper": false,
     "gsi1pk": "case|111-19",
     "orderForFilingFee": false,
@@ -2468,7 +2463,7 @@
       "state": "CA",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2019-12-11T16:02:31.173Z",
     "noticeOfAttachments": false,
@@ -3169,7 +3164,6 @@
   {
     "associatedJudge": "Colvin",
     "procedureType": "Regular",
-    "contactSecondary": {},
     "isPaper": false,
     "irsNoticeDate": null,
     "orderForFilingFee": false,
@@ -3190,7 +3184,7 @@
       "state": "MD",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     },
     {
       "isAddressSealed": false,
@@ -3206,7 +3200,7 @@
       "state": "AK",
       "email": "testUser@example.com",
       "otherFilerType": "Intervenor",
-      "contactType": "OTHER_FILER"
+      "contactType": "otherFilers"
     },
     {
       "isAddressSealed": false,
@@ -3222,7 +3216,7 @@
       "state": "AK",
       "email": "testUser@example.com",
       "otherFilerType": "Partner Other Than Tax Matters Partner",
-      "contactType": "OTHER_FILER"
+      "contactType": "otherFilers"
     },
       {
         "isAddressSealed": false,
@@ -3241,7 +3235,7 @@
         "state": "MD",
         "additionalName": "Coralie Carpenter",
         "email": "petitioner@example.com",
-        "contactType": "OTHER_PETITIONER"
+        "contactType": "otherPetitioners"
       },
       {
         "isAddressSealed": false,
@@ -3260,7 +3254,7 @@
         "state": "MD",
         "additionalName": "Riya Carpenter",
         "email": "petitioner@example.com",
-        "contactType": "OTHER_PETITIONER"
+        "contactType": "otherPetitioners"
       },
       {
         "isAddressSealed": false,
@@ -3279,7 +3273,7 @@
         "state": "MD",
         "additionalName": "Chinju Carpenter",
         "email": "petitioner@example.com",
-        "contactType": "OTHER_PETITIONER"
+        "contactType": "otherPetitioners"
       }
     ],
     "createdAt": "2019-08-16T19:21:46.146Z",
@@ -4193,7 +4187,7 @@
         "state": "HI",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "contactType": "PRIMARY"
+        "contactType": "primary"
       },
       {
         "role": "petitioner",
@@ -5158,7 +5152,6 @@
   {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
-    "contactSecondary": {},
     "irsNoticeDate": "1997-07-13",
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Waived",
@@ -5177,7 +5170,7 @@
       "state": "AL",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2019-03-27T21:53:00.297Z",
     "noticeOfAttachments": false,
@@ -5541,7 +5534,7 @@
         "state": "AL",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "contactType": "PRIMARY"
+        "contactType": "primary"
       },
       {
         "role": "petitioner",
@@ -6024,7 +6017,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2020-10-16T15:19:38.084Z",
     "noticeOfAttachments": false,
@@ -6212,7 +6205,6 @@
   {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
-    "contactSecondary": {},
     "isPaper": false,
     "gsi1pk": "case|111-19",
     "orderForFilingFee": false,
@@ -6230,7 +6222,7 @@
       "state": "AR",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2019-12-11T15:25:09.284Z",
     "noticeOfAttachments": false,
@@ -6377,7 +6369,7 @@
       "state": "MA",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2019-03-01T22:53:50.097Z",
     "noticeOfAttachments": false,
@@ -6664,7 +6656,6 @@
   {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
-    "contactSecondary": {},
     "isPaper": false,
     "irsNoticeDate": null,
     "orderForFilingFee": false,
@@ -6684,7 +6675,7 @@
       "state": "NM",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     },
     {
       "isAddressSealed": false,
@@ -6700,7 +6691,7 @@
       "state": "AK",
       "email": "testUser@example.com",
       "otherFilerType": "Intervenor",
-      "contactType": "OTHER_FILER"
+      "contactType": "otherFilers"
     },
     {
       "isAddressSealed": false,
@@ -6716,7 +6707,7 @@
       "state": "AK",
       "email": "testUser@example.com",
       "otherFilerType": "Partner Other Than Tax Matters Partner",
-      "contactType": "OTHER_FILER"
+      "contactType": "otherFilers"
     }],
     "createdAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
@@ -7755,7 +7746,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2020-11-30T21:58:13.406Z",
     "noticeOfAttachments": false,
@@ -7998,7 +7989,7 @@
         "state": "AL",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "contactType": "PRIMARY"
+        "contactType": "primary"
       },
       {
         "role": "petitioner",
@@ -8164,7 +8155,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2020-11-18T19:32:11.463Z",
     "noticeOfAttachments": false,
@@ -8445,7 +8436,7 @@
       "name": "Idola Flowers",
       "state": "VA",
       "countryType": "domestic",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -8678,7 +8669,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -9211,7 +9202,6 @@
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": false,
-    "contactSecondary": {},
     "qcCompleteForTrial": {},
     "petitionPaymentStatus": "Not Paid",
     "orderForFilingFee": true,
@@ -9230,7 +9220,7 @@
       "state": "TN",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -9401,7 +9391,7 @@
       "state": "CO",
       "countryType": "domestic",
       "phone": "1234567890",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -10196,7 +10186,6 @@
     "procedureType": "Small",
     "sealedDate": "2020-01-21T16:48:28.364Z",
     "isPaper": false,
-    "contactSecondary": {},
     "qcCompleteForTrial": {},
     "petitionPaymentStatus": "Not Paid",
     "orderForFilingFee": false,
@@ -10215,7 +10204,7 @@
       "state": "TN",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -10436,7 +10425,7 @@
       "phone": "+1 (677) 974-4448",
       "name": "Valentine Holman",
       "state": "CO",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2020-11-30T22:57:58.402Z",
     "noticeOfAttachments": false,
@@ -10970,7 +10959,7 @@
         "state": "AL",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "contactType": "PRIMARY"
+        "contactType": "primary"
       },
       {
         "role": "petitioner",
@@ -11269,7 +11258,6 @@
     "associatedJudge": "Chief Judge",
     "caseNote": "This is a procedural note!",
     "procedureType": "Regular",
-    "contactSecondary": {},
     "isPaper": false,
     "gsi1pk": "case|111-19",
     "orderForFilingFee": false,
@@ -11287,7 +11275,7 @@
       "state": "CA",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2019-12-11T15:25:55.006Z",
     "noticeOfAttachments": false,
@@ -11584,19 +11572,6 @@
   {
     "associatedJudge": "Chief Judge",
     "procedureType": "Small",
-    "contactSecondary": {
-      "isAddressSealed": true,
-      "country": "Cruz Barnes",
-      "address3": "Illum ut architecto",
-      "address2": "Laboris voluptate mi",
-      "city": "Velit minima do quia",
-      "phone": "+1 (352) 612-3284",
-      "address1": "49 First Drive",
-      "postalCode": "64929",
-      "name": "Cairo Harris",
-      "state": "CO",
-      "countryType": "international"
-    },
     "irsNoticeDate": "1983-03-02T00:00:00.000Z",
     "partyType": "Petitioner & spouse",
     "receivedAt": "2019-03-01T21:42:29.073Z",
@@ -11621,7 +11596,7 @@
         "state": "DE",
         "countryType": "domestic",
         "email": "petitioner@example.com",
-        "contactType": "PRIMARY"
+        "contactType": "primary"
       },
       {
         "role": "petitioner",
@@ -11631,6 +11606,20 @@
         "iat": 1551476326,
         "email": "petitioner@example.com",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
+      },
+      {
+        "isAddressSealed": true,
+        "country": "Cruz Barnes",
+        "address3": "Illum ut architecto",
+        "address2": "Laboris voluptate mi",
+        "city": "Velit minima do quia",
+        "phone": "+1 (352) 612-3284",
+        "address1": "49 First Drive",
+        "postalCode": "64929",
+        "name": "Cairo Harris",
+        "state": "CO",
+        "countryType": "international",
+        "contactType": "secondary"
       }
     ],
     "docketNumberSuffix": "P",
@@ -11784,7 +11773,7 @@
       "name": "Brett Osborne",
       "state": "AK",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2020-10-13T20:23:17.556Z",
     "noticeOfAttachments": false,
@@ -11991,7 +11980,6 @@
   {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
-    "contactSecondary": {},
     "isPaper": false,
     "orderForFilingFee": false,
     "partyType": "Petitioner",
@@ -12009,7 +11997,7 @@
       "state": "MS",
       "countryType": "domestic",
       "email": "petitioner@example.com",
-      "contactType": "PRIMARY"
+      "contactType": "primary"
     }],
     "createdAt": "2019-07-12T17:09:41.026Z",
     "noticeOfAttachments": false,
