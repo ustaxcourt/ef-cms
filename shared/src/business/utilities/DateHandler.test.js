@@ -179,6 +179,30 @@ describe('DateHandler', () => {
       expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
     });
   });
+  describe('createISODateAtStartOfDayEST', () => {
+    it('creates a timestamp at start of day EST when provided YYYY-MM-DD', () => {
+      const myDate = DateHandler.createISODateAtStartOfDayEST('2020-03-15');
+      expect(myDate).toEqual('2020-03-15T04:00:00.000Z');
+    });
+
+    it('creates a timestamp at start of day EST when given no arguments', () => {
+      const myDate = DateHandler.createISODateAtStartOfDayEST();
+      expect(DateHandler.isStringISOFormatted(myDate)).toBeTruthy();
+    });
+
+    it('creates a timestamp at start of day EST when provided full ISO that is not already at the start of the day', () => {
+      const myDate = DateHandler.createISODateAtStartOfDayEST(
+        '2020-03-15T17:42:36.916Z',
+      );
+      expect(myDate).toEqual('2020-03-15T04:00:00.000Z');
+    });
+
+    it('returns the correct timestamp value if a start of day EST timestamp is input', () => {
+      const inputAndOutput = '2020-03-15T04:00:00.000Z';
+      const myDate = DateHandler.createISODateAtStartOfDayEST(inputAndOutput);
+      expect(myDate).toEqual(inputAndOutput);
+    });
+  });
 
   describe('createISODateString', () => {
     it('creates a date anew', () => {
@@ -221,6 +245,11 @@ describe('DateHandler', () => {
       const input = '2019-10-30T12:39:54.007Z';
       const result = DateHandler.deconstructDate(input);
       expect(result).toMatchObject({ day: '30', month: '10', year: '2019' });
+    });
+    it('returns month, day, and year when provided a valid ISO timestamp in the early morning UTC', () => {
+      const input = '2019-10-30T02:39:54.007Z';
+      const result = DateHandler.deconstructDate(input);
+      expect(result).toMatchObject({ day: '29', month: '10', year: '2019' });
     });
     it('returns undefined if given a value not representative of an ISO timestamp', () => {
       const input = '';
