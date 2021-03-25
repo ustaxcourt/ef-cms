@@ -22,6 +22,8 @@ export const petitionerEditsCaseSecondaryContactAddress = test => {
 
     await test.runSequence('submitEditSecondaryContactSequence');
 
+    expect(test.getState('validationErrors')).toEqual({});
+
     const contactSecondary = contactSecondaryFromState(test);
 
     expect(contactSecondary.address1).toEqual('100 Main St.');
