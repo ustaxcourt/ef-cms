@@ -46,6 +46,7 @@ exports.getReconciliationReport = async ({
     searchParameters: {
       body: {
         _source: [
+          'pk',
           'docketNumber',
           'documentTitle',
           'docketEntryId',
