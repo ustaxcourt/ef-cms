@@ -74,6 +74,9 @@ describe('setEditPrivatePractitionersAction', () => {
     const SECONDARY_CONTACT_ID = '998009a9-e5f0-4feb-8246-f88e35749b59';
 
     const result = await runAction(setEditPrivatePractitionersAction, {
+      modules: {
+        presenter,
+      },
       state: {
         caseDetail: {
           petitioners: [
