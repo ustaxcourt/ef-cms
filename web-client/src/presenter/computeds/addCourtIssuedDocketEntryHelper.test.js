@@ -107,8 +107,9 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     };
 
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
-      state: { caseDetailWithoutSecondary },
+      state: { ...state, caseDetail: caseDetailWithoutSecondary },
     });
+
     expect(result.serviceParties).toMatchObject([
       { displayName: 'Banzai, Petitioner', name: 'Banzai' },
       { displayName: 'Scar, Petitioner Counsel', name: 'Scar' },
