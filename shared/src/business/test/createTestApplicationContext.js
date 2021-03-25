@@ -20,6 +20,7 @@ const {
   Case,
   caseHasServedDocketEntries,
   getContactPrimary,
+  getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
 } = require('../entities/cases/Case');
@@ -273,6 +274,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(Case.getAttachmentDocumentById),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
+    getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),

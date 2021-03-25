@@ -31,15 +31,17 @@ describe('setupPetitionerInformationFormAction', () => {
       contactType: CONTACT_TYPES.primary,
       name: 'Test Primary',
     };
-    const mockContactSecondary = { name: 'Test Secondary' };
+    const mockContactSecondary = {
+      contactType: CONTACT_TYPES.secondary,
+      name: 'Test Secondary',
+    };
     const mockPartyType = PARTY_TYPES.nextFriendForMinor;
 
     applicationContext
       .getUtilities()
       .setServiceIndicatorsForCase.mockReturnValue({
-        contactSecondary: mockContactSecondary,
         partyType: mockPartyType,
-        petitioners: [mockContactPrimary],
+        petitioners: [mockContactPrimary, mockContactSecondary],
       });
 
     const { state } = await runAction(setupPetitionerInformationFormAction, {

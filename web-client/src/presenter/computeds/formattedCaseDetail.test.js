@@ -2059,7 +2059,10 @@ describe('formattedCaseDetail', () => {
         hasEAccess: true,
       };
       contactPrimary = { ...baseContact, contactType: CONTACT_TYPES.primary };
-      contactSecondary = baseContact;
+      contactSecondary = {
+        ...baseContact,
+        contactType: CONTACT_TYPES.secondary,
+      };
       otherPetitioners = [
         { ...baseContact, contactType: CONTACT_TYPES.otherPetitioner },
       ];
@@ -2067,7 +2070,6 @@ describe('formattedCaseDetail', () => {
 
       caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
-        contactSecondary,
         correspondence: [],
         docketEntries: [
           {
@@ -2086,13 +2088,19 @@ describe('formattedCaseDetail', () => {
           },
         ],
         partyType: 'Petitioner',
-        petitioners: [contactPrimary, ...otherFilers, ...otherPetitioners],
+        petitioners: [
+          contactPrimary,
+          contactSecondary,
+          ...otherFilers,
+          ...otherPetitioners,
+        ],
       };
     });
 
     it('sets the showEAccessFlag to false for internal users when a contact does not have legacy access', () => {
       baseContact.hasEAccess = false;
       contactPrimary.hasEAccess = false;
+      contactSecondary.hasEAccess = false;
       otherFilers[0].hasEAccess = false;
       otherPetitioners[0].hasEAccess = false;
 
