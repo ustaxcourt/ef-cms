@@ -8,7 +8,6 @@ import React from 'react';
 export const EditPrivatePractitionersModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    caseDetail: state.caseDetail,
     caseDetailContactHelper: state.caseDetailContactHelper,
     confirmSequence: sequences.submitEditPrivatePractitionersModalSequence,
     modal: state.modal,
@@ -19,7 +18,6 @@ export const EditPrivatePractitionersModal = connect(
   },
   function EditPrivatePractitionersModal({
     cancelSequence,
-    caseDetail,
     caseDetailContactHelper,
     confirmSequence,
     modal,
