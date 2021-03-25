@@ -2,11 +2,6 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
-  Case,
-  getContactPrimary,
-  getContactSecondary,
-} = require('../entities/cases/Case');
-const {
   copyToNewPdf,
   getAddressPages,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
@@ -18,6 +13,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
+const { Case, getContactPrimary } = require('../entities/cases/Case');
 const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -302,8 +298,25 @@ exports.updatePetitionerInformationInteractor = async (
       oldData: getContactPrimary(oldCase),
     });
 
-  const oldCaseContactSecondary = getContactSecondary(oldCase);
+  const caseToUpdateContacts = new Case(
+    {
+      ...oldCase,
+      partyType,
+    },
+    { applicationContext },
+  );
 
+  const oldCaseContactPrimary = caseToUpdateContacts.getContactPrimary();
+  try {
+    caseToUpdateContacts.updatePetitioner({
+      ...oldCaseContactPrimary,
+      ...primaryEditableFields,
+    });
+  } catch (e) {
+    throw new NotFoundError(e.message);
+  }
+
+  const oldCaseContactSecondary = caseToUpdateContacts.getContactSecondary();
   const secondaryChange =
     secondaryEditableFields &&
     secondaryEditableFields.name &&
@@ -315,35 +328,33 @@ exports.updatePetitionerInformationInteractor = async (
         })
       : undefined;
 
-  const secondaryContact = {
-    contactId: oldCaseContactSecondary?.contactId,
-    contactType: oldCaseContactSecondary?.contactType,
-    ...secondaryEditableFields,
-  };
-
-  let caseEntity = new Case(
-    {
-      ...oldCase,
-      partyType,
-    },
-    { applicationContext },
-  );
-
   try {
-    caseEntity.updatePetitioner(secondaryContact);
-  } catch (e) {
-    console.log(e);
-  }
-  console.log('this is the right one', caseEntity.petitioners);
-  const oldCaseContactPrimary = caseEntity.getContactPrimary();
-  try {
-    caseEntity.updatePetitioner({
-      ...oldCaseContactPrimary,
-      ...primaryEditableFields,
+    caseToUpdateContacts.updatePetitioner({
+      additionalName: oldCaseContactSecondary?.additionalName,
+      contactId: oldCaseContactSecondary?.contactId,
+      contactType: oldCaseContactSecondary?.contactType,
+      email: oldCaseContactSecondary?.email,
+      hasEAccess: oldCaseContactSecondary?.hasEAccess,
+      isAddressSealed: oldCaseContactSecondary?.isAddressSealed,
+      sealedAndUnavailable: oldCaseContactSecondary?.sealedAndUnavailable,
+      secondaryName: oldCaseContactSecondary?.secondaryName,
+      title: oldCaseContactSecondary?.title,
+      ...secondaryEditableFields,
     });
   } catch (e) {
-    throw new NotFoundError(e.message);
+    applicationContext.logger.info(
+      'no contact secondary was found on the case',
+    );
+    //TODO handle ADDING contactSecondary when none was previously on the case?
   }
+
+  //send back through the constructor so the contacts are created with the contact constructor
+  let caseEntity = new Case(
+    {
+      ...caseToUpdateContacts.toRawObject(),
+    },
+    { applicationContext },
+  ).validate();
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
