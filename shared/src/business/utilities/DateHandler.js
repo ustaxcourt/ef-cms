@@ -112,16 +112,15 @@ const formatNow = formatStr => {
  * @returns {number} difference between date a and date b
  */
 const dateStringsCompared = (a, b) => {
-  const simpleDatePattern = /^(\d{4}-\d{2}-\d{2})/;
   const simpleDateLength = 10; // e.g. YYYY-MM-DD
 
   if (a.length == simpleDateLength || b.length == simpleDateLength) {
-    // at least one date has a simple format, compare only year, month, and day
-    const [aSimple, bSimple] = [
-      a.match(simpleDatePattern)[0],
-      b.match(simpleDatePattern)[0],
-    ];
-    if (aSimple.localeCompare(bSimple) == 0) {
+    // at least one date has a simple format, compare only year, month, and day according to EST
+    const dayDifference = calculateDifferenceInDays(
+      createISODateString(a),
+      createISODateString(b),
+    );
+    if (Math.abs(dayDifference) === 0) {
       return 0;
     }
   }
