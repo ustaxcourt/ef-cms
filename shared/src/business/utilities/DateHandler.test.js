@@ -287,6 +287,16 @@ describe('DateHandler', () => {
       result = DateHandler.dateStringsCompared(date2, date1);
       expect(result).toEqual(86400000); // 1 day in milliseconds
     });
+
+    it('should return a non-zero if two calendar-dates appear to be the same but are different according to EST', () => {
+      let result;
+      const date1 = '2001-01-02'; // i.e. Jan 2, midnight EST
+      const date2 = '2001-01-02T02:40:55.007Z'; // Jan 1, 9:40m EST
+
+      result = DateHandler.dateStringsCompared(date1, date2);
+      expect(result).not.toEqual(0);
+    });
+
     it('should return zero if two calendar-dates are the same, even if formatted differently', () => {
       let result;
       const date1 = '2001-01-01';
