@@ -1,5 +1,6 @@
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
@@ -162,16 +163,17 @@ describe('getCaseInteractor', () => {
       .getPersistenceGateway()
       .getFullCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CASE,
-        contactSecondary: {
-          ...mockCaseContactPrimary,
-          contactId: '754a3191-884f-42f0-ad2c-e6c706685299',
-        },
         docketNumber: '101-00',
         partyType: PARTY_TYPES.petitionerSpouse,
         petitioners: [
           {
             ...mockCaseContactPrimary,
             contactId: '0898d5c3-2948-4924-b28b-d5c1451c80de',
+          },
+          {
+            ...mockCaseContactPrimary,
+            contactId: '754a3191-884f-42f0-ad2c-e6c706685299',
+            contactType: CONTACT_TYPES.secondary,
           },
         ],
         userId: '320fce0e-b050-4e04-8720-db25da3ca598',
