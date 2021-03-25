@@ -8,7 +8,11 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../entities/EntityConstants');
-const { getContactPrimary, getOtherFilers } = require('../entities/cases/Case');
+const {
+  getContactPrimary,
+  getContactSecondary,
+  getOtherFilers,
+} = require('../entities/cases/Case');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -52,29 +56,16 @@ describe('caseFilter', () => {
         { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
         { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioner },
         { ...createContactInfo(), contactType: CONTACT_TYPES.otherPetitioner },
+        { ...createContactInfo(), contactType: CONTACT_TYPES.secondary },
       ];
-      caseDetail.contactSecondary = createContactInfo();
 
       const result = caseContactAddressSealedFormatter(caseDetail, {
         role: ROLES.petitioner,
       });
-      [result.contactSecondary].forEach(party => {
-        expect(Object.keys(party).sort()).toMatchObject([
-          'additionalName',
-          'contactId',
-          'inCareOf',
-          'isAddressSealed',
-          'name',
-          'otherFilerType',
-          'sealedAndUnavailable',
-          'secondaryName',
-          'serviceIndicator',
-          'title',
-        ]);
-      });
 
       [
         getContactPrimary(result),
+        getContactSecondary(result),
         ...getOtherFilers(result),
         ...getOtherFilers(result),
       ].forEach(party => {

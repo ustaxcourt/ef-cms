@@ -1,4 +1,8 @@
-import { contactPrimaryFromState, refreshElasticsearchIndex } from '../helpers';
+import {
+  contactPrimaryFromState,
+  contactSecondaryFromState,
+  refreshElasticsearchIndex,
+} from '../helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -90,13 +94,15 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
         value: true,
       });
 
+      const contactSecondary = contactSecondaryFromState(test);
+
       await test.runSequence('associatePrivatePractitionerWithCaseSequence');
       expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(
         2,
       );
       expect(
         test.getState('caseDetail.privatePractitioners.1.representing'),
-      ).toEqual([test.getState('caseDetail.contactSecondary.contactId')]);
+      ).toEqual([contactSecondary.contactId]);
       expect(test.getState('caseDetail.privatePractitioners.1.name')).toEqual(
         practitionerMatch.name,
       );

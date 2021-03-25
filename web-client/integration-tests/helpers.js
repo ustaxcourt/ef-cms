@@ -92,6 +92,11 @@ export const contactPrimaryFromState = test =>
     .getUtilities()
     .getContactPrimary(test.getState('caseDetail'));
 
+export const contactSecondaryFromState = test =>
+  applicationContext
+    .getUtilities()
+    .getContactSecondary(test.getState('caseDetail'));
+
 export const getCaseMessagesForCase = async test => {
   await test.runSequence('gotoCaseDetailSequence', {
     docketNumber: test.docketNumber,

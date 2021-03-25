@@ -417,14 +417,18 @@ const formatCase = (applicationContext, caseDetail) => {
         });
       }
 
+      const contactSecondary = applicationContext
+        .getUtilities()
+        .getContactSecondary(caseDetail);
+
       if (
-        caseDetail.contactSecondary &&
-        counsel.representing.includes(caseDetail.contactSecondary.contactId)
+        contactSecondary &&
+        counsel.representing.includes(contactSecondary.contactId)
       ) {
         counsel.representingFormatted.push({
-          name: caseDetail.contactSecondary.name,
-          secondaryName: caseDetail.contactSecondary.secondaryName,
-          title: caseDetail.contactSecondary.title,
+          name: contactSecondary.name,
+          secondaryName: contactSecondary.secondaryName,
+          title: contactSecondary.title,
         });
       }
 

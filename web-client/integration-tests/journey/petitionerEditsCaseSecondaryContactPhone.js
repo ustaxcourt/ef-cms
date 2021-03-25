@@ -1,3 +1,4 @@
+import { contactSecondaryFromState } from '../helpers';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -11,9 +12,9 @@ export const petitionerEditsCaseSecondaryContactPhone = test => {
 
     await test.runSequence('submitEditSecondaryContactSequence');
 
-    expect(test.getState('caseDetail.contactSecondary.phone')).toEqual(
-      '9999999999',
-    );
+    const contactSecondary = contactSecondaryFromState(test);
+
+    expect(contactSecondary.phone).toEqual('9999999999');
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),

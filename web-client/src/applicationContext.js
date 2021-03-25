@@ -3,6 +3,7 @@ import {
   Case,
   caseHasServedDocketEntries,
   getContactPrimary,
+  getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
 } from '../../shared/src/business/entities/cases/Case';
@@ -640,6 +641,7 @@ const applicationContext = {
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
       getContactPrimary,
+      getContactSecondary,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
