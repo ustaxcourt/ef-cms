@@ -91,8 +91,8 @@ export const EditPrivatePractitionersModal = connect(
                       </label>
                     </div>
 
-                    {caseDetail.contactSecondary &&
-                      caseDetail.contactSecondary.name && (
+                    {caseDetailContactHelper.contactSecondary &&
+                      caseDetailContactHelper.contactSecondary.name && (
                         <div className="usa-checkbox">
                           <input
                             aria-describedby={`practitioner-representing-legend-${idx}`}
@@ -115,7 +115,7 @@ export const EditPrivatePractitionersModal = connect(
                             className="usa-checkbox__label inline-block"
                             htmlFor={`representing-secondary-${idx}`}
                           >
-                            {caseDetail.contactSecondary.name}
+                            {caseDetailContactHelper.contactSecondary.name}
                           </label>
                         </div>
                       )}
