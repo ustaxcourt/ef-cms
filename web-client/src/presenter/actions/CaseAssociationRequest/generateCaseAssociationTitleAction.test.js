@@ -26,9 +26,11 @@ describe('generateCaseAssociationTitleAction', () => {
       props: { isAssociated: false },
       state: {
         caseDetail: {
-          petitioners: [{ contactType: CONTACT_TYPES.primary, name: 'Daphne' }],
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, name: 'Daphne' },
+            { contactType: CONTACT_TYPES.secondary, name: 'Hastings' },
+          ],
         },
-        contactSecondary: { name: 'Hastings' },
         form: {},
       },
     });
@@ -50,9 +52,11 @@ describe('generateCaseAssociationTitleAction', () => {
       props: { isAssociated: false },
       state: {
         caseDetail: {
-          petitioners: [{ contactType: CONTACT_TYPES.primary, name: 'Daphne' }],
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, name: 'Daphne' },
+            { contactType: CONTACT_TYPES.secondary, name: 'Hastings' },
+          ],
         },
-        contactSecondary: { name: 'Hastings' },
         form: { supportingDocumentMetadata: { name: 'Hello' } },
       },
     });
