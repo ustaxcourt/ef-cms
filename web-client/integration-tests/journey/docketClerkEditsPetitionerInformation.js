@@ -10,7 +10,7 @@ export const docketClerkEditsPetitionerInformation = test => {
     });
 
     await test.runSequence('updatePetitionerInformationFormSequence');
-
+    expect(test.getState('validationErrors')).toEqual('');
     expect(
       test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
     ).toEqual('petitioner');

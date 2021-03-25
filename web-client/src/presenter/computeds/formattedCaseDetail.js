@@ -143,11 +143,14 @@ export const formattedCaseDetail = (get, applicationContext) => {
     ...contactPrimary,
     showEAccessFlag: !isExternalUser && contactPrimary.hasEAccess,
   };
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(result);
 
-  if (result.contactSecondary) {
+  if (contactSecondary) {
     result.contactSecondary = {
-      ...result.contactSecondary,
-      showEAccessFlag: !isExternalUser && result.contactSecondary.hasEAccess,
+      ...contactSecondary,
+      showEAccessFlag: !isExternalUser && contactSecondary.hasEAccess,
     };
   }
 
