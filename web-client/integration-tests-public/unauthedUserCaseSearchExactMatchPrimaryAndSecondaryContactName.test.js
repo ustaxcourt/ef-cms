@@ -1,4 +1,7 @@
-import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
+import {
+  ADVANCED_SEARCH_TABS,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   loginAs,
@@ -16,7 +19,7 @@ const { COUNTRY_TYPES } = applicationContext.getConstants();
 
 testClient.draftOrders = [];
 
-const firstName = faker.name.lastName();
+const firstName = faker.name.firstName();
 
 const baseContact = {
   address1: '734 Cowley Parkway',
@@ -44,7 +47,7 @@ const searchTerm = `${firstName}`;
 /**
  * add a case with the contactSecondary.name provided
  */
-describe(`Petitioner creates case for ${name}`, () => {
+describe('Petitioner creates cases', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -55,7 +58,38 @@ describe(`Petitioner creates case for ${name}`, () => {
 
   loginAs(testClient, 'petitioner@example.com');
 
-  it('Create first case', async () => {
+  // todo - loop!
+  it('Create case with contactSecondary name matching search term', async () => {
+    const caseDetail = await uploadPetition(testClient, {
+      contactSecondary: { ...baseContact },
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+    testClient.docketNumber = caseDetail.docketNumber;
+    createdDocketNumbers.push(caseDetail.docketNumber);
+  });
+
+  loginAs(testClient, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(testClient);
+
+  it('Create case with contactSecondary name matching search term', async () => {
+    const caseDetail = await uploadPetition(testClient, {
+      contactSecondary: { ...baseContact },
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+    testClient.docketNumber = caseDetail.docketNumber;
+    createdDocketNumbers.push(caseDetail.docketNumber);
+  });
+
+  loginAs(testClient, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(testClient);
+
+  it('Create case with contactPrimary name matching search term', async () => {
     const caseDetail = await uploadPetition(testClient, {
       contactPrimary: { ...baseContact },
     });
@@ -69,9 +103,25 @@ describe(`Petitioner creates case for ${name}`, () => {
   loginAs(testClient, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(testClient);
 
-  it('Create second case', async () => {
+  it('Create case with contactSecondary name matching search term', async () => {
     const caseDetail = await uploadPetition(testClient, {
       contactSecondary: { ...baseContact },
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+    testClient.docketNumber = caseDetail.docketNumber;
+    createdDocketNumbers.push(caseDetail.docketNumber);
+  });
+
+  loginAs(testClient, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(testClient);
+
+  it('Create case with contactSecondary name matching search term', async () => {
+    const caseDetail = await uploadPetition(testClient, {
+      contactSecondary: { ...baseContact },
+      partyType: PARTY_TYPES.petitionerSpouse,
     });
 
     expect(caseDetail.docketNumber).toBeDefined();
@@ -87,9 +137,8 @@ describe(`Petitioner creates case for ${name}`, () => {
 describe('Petitioner searches for exact name match', () => {
   unauthedUserNavigatesToPublicSite(test);
 
-  it('returns search results we expect in the correct order', async () => {
+  it('should return case with contactPrimary name match as the first result and case with contactSecondary name match as the second result', async () => {
     const queryParams = {
-      countryType: COUNTRY_TYPES.DOMESTIC,
       currentPage: 1,
       petitionerName: searchTerm,
     };
@@ -101,14 +150,8 @@ describe('Petitioner searches for exact name match', () => {
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 
-    expect(searchResults.length).toBe(3);
+    expect(searchResults.length).toBe(5);
     expect(searchResults[0]).toMatchObject({
-      docketNumber: createdDocketNumbers[0],
-    });
-    expect(searchResults[1]).toMatchObject({
-      docketNumber: createdDocketNumbers[1],
-    });
-    expect(searchResults[2]).toMatchObject({
       docketNumber: createdDocketNumbers[2],
     });
   });
