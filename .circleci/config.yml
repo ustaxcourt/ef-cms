@@ -39,18 +39,18 @@ jobs:
       - run:
           name: Normalize Coverage for SonarQube
           command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json
-      - run:
-          name: Web API - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${API_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="web-api" \
-            -Dproject.settings="web-api/sonar-project.properties" \
-            -Dsonar.login="${API_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+      # - run:
+      #     name: Web API - SonarQube
+      #     command: |
+      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
+      #       /home/app/sonar_home/bin/sonar-scanner \
+      #       -Dsonar.projectKey="${API_SONAR_KEY}" \
+      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+      #       -Dsonar.organization="${SONAR_ORG}" \
+      #       -Dsonar.projectBaseDir="web-api" \
+      #       -Dproject.settings="web-api/sonar-project.properties" \
+      #       -Dsonar.login="${API_SONAR_TOKEN}" \
+      #       -Dsonar.host.url="https://sonarcloud.io"
 
   build-shared:
     docker:
@@ -84,18 +84,18 @@ jobs:
       - run:
           name: Normalize Coverage for SonarQube
           command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json
-      - run:
-          name: Shared - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="shared" \
-            -Dproject.settings="shared/sonar-project.properties" \
-            -Dsonar.login="${SHARED_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+      # - run:
+      #     name: Shared - SonarQube
+      #     command: |
+      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
+      #       /home/app/sonar_home/bin/sonar-scanner \
+      #       -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
+      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+      #       -Dsonar.organization="${SONAR_ORG}" \
+      #       -Dsonar.projectBaseDir="shared" \
+      #       -Dproject.settings="shared/sonar-project.properties" \
+      #       -Dsonar.login="${SHARED_SONAR_TOKEN}" \
+      #       -Dsonar.host.url="https://sonarcloud.io"
 
   build-client-unit:
     docker:
@@ -226,18 +226,19 @@ jobs:
           command: |
             npx istanbul check-coverage --include=combined-coverage/coverage-final.json \
             --statements 95 --functions 95 --branches 95 --lines 95
-      - run:
-          name: Web Client - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${UI_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="web-client" \
-            -Dproject.settings="web-client/sonar-project.properties" \
-            -Dsonar.login="${UI_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+      # - run:
+      #     name: Web Client - SonarQube
+      #     command: |
+      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
+      #       /home/app/sonar_home/bin/sonar-scanner \
+      #       -Dsonar.projectKey="${UI_SONAR_KEY}" \
+      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+      #       -Dsonar.organization="${SONAR_ORG}" \
+      #       -Dsonar.projectBaseDir="web-client" \
+      #       -Dproject.settings="web-client/sonar-project.properties" \
+      #       -Dsonar.login="${UI_SONAR_TOKEN}" \
+      #       -Dsonar.host.url="https://sonarcloud.io" \
+      #       -Dsonar.verbose=true
 
   e2e-pa11y:
     docker:
@@ -720,6 +721,9 @@ jobs:
              --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
+      - run:
+          name: 'Deploy - Pending Color Switch'
+          command: npm run pending-color-switch
 
   migrate:
     machine:

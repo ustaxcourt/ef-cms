@@ -19,6 +19,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   let showDateLast = false;
   let showDocketNumbers = false;
   let showFreeText = false;
+  let showOptionalFreeText = false;
   let showJudge = false;
   let showTrialLocation = false;
 
@@ -42,6 +43,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
         showDateFirst = true;
         break;
       case 'Type F':
+        showOptionalFreeText = true;
         showJudge = true;
         showTrialLocation = true;
         break;
@@ -62,7 +64,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   } else if (selectedEventCode === 'NOT') {
     freeTextLabel = 'What is this notice for?';
   } else {
-    freeTextLabel = 'Enter description';
+    freeTextLabel = 'Description';
   }
 
   let dateLabel = 'Date';
@@ -78,6 +80,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
     showDocketNumbers,
     showFreeText,
     showJudge,
+    showOptionalFreeText,
     showTrialLocation,
   };
 };

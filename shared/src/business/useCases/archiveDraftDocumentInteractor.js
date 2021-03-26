@@ -8,17 +8,16 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * archiveDraftDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case on which a document will be archived
  * @param {string} providers.docketEntryId the id of the docket entry which will be archived
  * @returns {object} the updated case note returned from persistence
  */
-exports.archiveDraftDocumentInteractor = async ({
+exports.archiveDraftDocumentInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-}) => {
+  { docketEntryId, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.ARCHIVE_DOCUMENT)) {

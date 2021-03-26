@@ -66,8 +66,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         attachments: false,
         certificateOfService: false,
@@ -344,8 +343,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         attachments: false,
         certificateOfService: false,

@@ -1,4 +1,5 @@
 const {
+  DOCUMENT_SEARCH_SORT,
   MAX_SEARCH_CLIENT_RESULTS,
   ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
@@ -20,7 +21,7 @@ exports.advancedDocumentSearch = async ({
   omitSealed,
   opinionType,
   overrideResultSize,
-  overrideSort = false,
+  sortOrder: sortField,
   startDate,
 }) => {
   const sourceFields = [
@@ -162,9 +163,27 @@ exports.advancedDocumentSearch = async ({
   }
 
   let sort;
+  let sortOrder = 'desc';
 
-  if (overrideSort) {
-    sort = [{ 'filingDate.S': { order: 'desc' } }];
+  if (
+    [
+      DOCUMENT_SEARCH_SORT.FILING_DATE_ASC,
+      DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC,
+    ].includes(sortField)
+  ) {
+    sortOrder = 'asc';
+  }
+
+  switch (sortField) {
+    case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC: // fall through
+    case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_DESC:
+      sort = [{ 'numberOfPages.N': sortOrder }];
+      break;
+    case DOCUMENT_SEARCH_SORT.FILING_DATE_ASC: // fall through
+    case DOCUMENT_SEARCH_SORT.FILING_DATE_DESC: // fall through
+    default:
+      sort = [{ 'filingDate.S': sortOrder }];
+      break;
   }
 
   const documentQuery = {

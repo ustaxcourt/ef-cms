@@ -3,7 +3,6 @@ const createApplicationContext = require('../../../src/applicationContext');
 const {
   migrateItems: migration0025,
 } = require('./migrations/0025-docket-entry-received-at-strict-timestamp');
-
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');

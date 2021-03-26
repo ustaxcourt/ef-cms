@@ -6,6 +6,9 @@ const {
 const { ROLES } = require('../business/entities/EntityConstants');
 
 describe('Authorization client service', () => {
+  it('returns false for undefined user', () => {
+    expect(isAuthorized(undefined, 'unknown action', 'someUser')).toBeFalsy();
+  });
   it('returns true for any user whose userId matches the 3rd owner argument, in this case "someUser" === "someUser"', () => {
     expect(
       isAuthorized(

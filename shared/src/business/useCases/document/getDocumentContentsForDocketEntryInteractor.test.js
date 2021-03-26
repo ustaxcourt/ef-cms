@@ -31,8 +31,7 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
     });
 
     await expect(
-      getDocumentContentsForDocketEntryInteractor({
-        applicationContext,
+      getDocumentContentsForDocketEntryInteractor(applicationContext, {
         documentContentsId: mockDocumentContentsId,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -44,8 +43,7 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
       role: ROLES.judge,
     });
 
-    await getDocumentContentsForDocketEntryInteractor({
-      applicationContext,
+    await getDocumentContentsForDocketEntryInteractor(applicationContext, {
       documentContentsId: mockDocumentContentsId,
     });
 
@@ -55,8 +53,7 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
   });
 
   it('should call applicationContext.getPersistenceGateway().getDocument with documentCntentsId as the key', async () => {
-    await getDocumentContentsForDocketEntryInteractor({
-      applicationContext,
+    await getDocumentContentsForDocketEntryInteractor(applicationContext, {
       documentContentsId: mockDocumentContentsId,
     });
 
@@ -66,10 +63,12 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
   });
 
   it('should return the documentContents as parsed JSON data', async () => {
-    const result = await getDocumentContentsForDocketEntryInteractor({
+    const result = await getDocumentContentsForDocketEntryInteractor(
       applicationContext,
-      documentContentsId: mockDocumentContentsId,
-    });
+      {
+        documentContentsId: mockDocumentContentsId,
+      },
+    );
 
     expect(result).toEqual({
       documentContents: 'the contents!',
@@ -87,8 +86,7 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
       );
 
     await expect(
-      getDocumentContentsForDocketEntryInteractor({
-        applicationContext,
+      getDocumentContentsForDocketEntryInteractor(applicationContext, {
         documentContentsId: mockDocumentContentsId,
       }),
     ).rejects.toThrow(

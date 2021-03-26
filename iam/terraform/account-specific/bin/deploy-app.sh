@@ -27,8 +27,8 @@ fi
 
 tf_version=$(terraform --version)
 
-if [[ ${tf_version} != *"0.13.6"* ]]; then
-  echo "Please set your terraform version to 0.13.6 before deploying."
+if [[ ${tf_version} != *"0.14.8"* ]]; then
+  echo "Please set your terraform version to 0.14.8 before deploying."
   exit 1
 fi
 
@@ -63,6 +63,8 @@ export TF_VAR_cognito_suffix="${COGNITO_SUFFIX}"
 if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
 fi
+
+echo $TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform apply
