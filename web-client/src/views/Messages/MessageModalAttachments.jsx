@@ -6,18 +6,21 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const getDocumentOption = doc => {
+  const documentTitle = doc.title.substr(0, 100);
+
   return (
     <option key={doc.docketEntryId} value={`${doc.docketEntryId}`}>
-      {doc.createdAtFormatted} - {doc.title}
+      {doc.createdAtFormatted} - {documentTitle}
     </option>
   );
 };
 
 const getCorrespondenceOption = doc => {
   const title = doc.documentTitle || doc.documentType;
+  const documentTitle = title.substr(0, 100);
   return (
     <option key={doc.correspondenceId} value={`${doc.correspondenceId}`}>
-      {title}
+      {documentTitle}
     </option>
   );
 };
@@ -91,6 +94,12 @@ export const MessageModalAttachments = connect(
               {messageModalHelper.hasDocuments && (
                 <optgroup label="Docket record">
                   {messageModalHelper.documents.map(getDocumentOption)}
+                  {getDocumentOption({
+                    createdAtFormatted: '01-08-2021',
+                    docketEntryId: 'lol-123',
+                    title:
+                      'Order that resps. Motion to File Document Under Seal filed January 8, 2021, is granted. Resps. Certificate of Authenticity of Domestic Business Records Pursuant to Federal Rule of Evidence 902(11), filed January 8, 2021, is sealed.',
+                  })}
                 </optgroup>
               )}
 
