@@ -90,17 +90,16 @@ const getUserRoles = user => {
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document
  * @param {string} providers.key the key of the document
  * @returns {Array<string>} the filing type options based on user role
  */
-exports.getDownloadPolicyUrlInteractor = async ({
+exports.getDownloadPolicyUrlInteractor = async (
   applicationContext,
-  docketNumber,
-  key,
-}) => {
+  { docketNumber, key },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {

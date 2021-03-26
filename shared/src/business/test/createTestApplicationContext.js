@@ -24,6 +24,9 @@ const {
   compareStrings,
 } = require('../utilities/sortFunctions');
 const {
+  createCaseAndAssociations,
+} = require('../useCaseHelper/caseAssociation/createCaseAndAssociations');
+const {
   createDocketNumber,
 } = require('../../persistence/dynamo/cases/docketNumberGenerator');
 const {
@@ -63,7 +66,6 @@ const {
   formatCase,
   formatCaseDeadlines,
   formatDocketEntry,
-  getServedPartiesCode,
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
@@ -156,7 +158,7 @@ const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getItem } = require('../../persistence/localStorage/getItem');
-const { isServed } = require('../entities/DocketEntry');
+const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
@@ -318,6 +320,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
+    createCaseAndAssociations: jest
+      .fn()
+      .mockImplementation(createCaseAndAssociations),
     updateCaseAndAssociations: jest
       .fn()
       .mockImplementation(updateCaseAndAssociations),
@@ -413,6 +418,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFullCaseByDocketNumber),
     getItem: jest.fn().mockImplementation(getItem),
+    getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),

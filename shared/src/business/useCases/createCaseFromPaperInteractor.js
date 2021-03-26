@@ -278,7 +278,7 @@ exports.createCaseFromPaperInteractor = async (
   }
 
   await Promise.all([
-    applicationContext.getPersistenceGateway().createCase({
+    applicationContext.getUseCaseHelpers().createCaseAndAssociations({
       applicationContext,
       caseToCreate: caseToAdd.validate().toRawObject(),
     }),

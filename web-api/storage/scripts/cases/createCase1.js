@@ -32,38 +32,40 @@ module.exports.createCase1 = async () => {
         key: stinFileId,
       });
 
-      caseDetail = await applicationContext.getUseCases().createCaseInteractor({
-        applicationContext,
-        petitionFileId,
-        petitionMetadata: {
-          caseType: CASE_TYPES_MAP.whistleblower,
-          contactPrimary: {
-            address1: '68 Fabien Freeway',
-            address2: 'Suscipit animi solu',
-            address3: 'Architecto assumenda',
-            city: 'Aspernatur nostrum s',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'petitioner@example.com',
-            name: 'Brett Osborne',
-            phone: '+1 (537) 235-6147',
-            postalCode: '89499',
-            state: 'AK',
+      caseDetail = await applicationContext
+        .getUseCases()
+        .createCaseInteractor(applicationContext, {
+          petitionFileId,
+          petitionMetadata: {
+            caseType: CASE_TYPES_MAP.whistleblower,
+            contactPrimary: {
+              address1: '68 Fabien Freeway',
+              address2: 'Suscipit animi solu',
+              address3: 'Architecto assumenda',
+              city: 'Aspernatur nostrum s',
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'petitioner@example.com',
+              name: 'Brett Osborne',
+              phone: '+1 (537) 235-6147',
+              postalCode: '89499',
+              state: 'AK',
+            },
+            filingType: 'Myself',
+            hasIrsNotice: false,
+            partyType: PARTY_TYPES.petitioner,
+            preferredTrialCity: 'Birmingham, Alabama',
+            procedureType: 'Regular',
           },
-          filingType: 'Myself',
-          hasIrsNotice: false,
-          partyType: PARTY_TYPES.petitioner,
-          preferredTrialCity: 'Birmingham, Alabama',
-          procedureType: 'Regular',
-        },
-        stinFileId,
-      });
+          stinFileId,
+        });
 
       const addCoversheet = docketEntry => {
-        return applicationContext.getUseCases().addCoversheetInteractor({
-          applicationContext,
-          docketEntryId: docketEntry.docketEntryId,
-          docketNumber: caseDetail.docketNumber,
-        });
+        return applicationContext
+          .getUseCases()
+          .addCoversheetInteractor(applicationContext, {
+            docketEntryId: docketEntry.docketEntryId,
+            docketNumber: caseDetail.docketNumber,
+          });
       };
 
       const coversheets = [];
