@@ -18,7 +18,6 @@ describe('caseAdvancedSearch', () => {
     expect(search.mock.calls[0][0].searchParameters.body['_source']).toEqual([
       'caseCaption',
       'petitioners',
-      'contactSecondary',
       'docketNumber',
       'docketNumberSuffix',
       'docketNumberWithSuffix',
