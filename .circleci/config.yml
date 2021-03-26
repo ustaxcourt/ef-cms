@@ -237,7 +237,8 @@ jobs:
       #       -Dsonar.projectBaseDir="web-client" \
       #       -Dproject.settings="web-client/sonar-project.properties" \
       #       -Dsonar.login="${UI_SONAR_TOKEN}" \
-      #       -Dsonar.host.url="https://sonarcloud.io"
+      #       -Dsonar.host.url="https://sonarcloud.io" \
+      #       -Dsonar.verbose=true
 
   e2e-pa11y:
     docker:
@@ -720,6 +721,9 @@ jobs:
              --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
+      - run:
+          name: 'Deploy - Pending Color Switch'
+          command: npm run pending-color-switch
 
   migrate:
     machine:

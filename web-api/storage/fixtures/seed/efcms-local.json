@@ -12052,7 +12052,8 @@
     "signedByUserId": "7b69a8b5-bcc4-4449-8994-08fda8d342e7",
     "pk": "case|106-19",
     "servedAt": "2020-09-25T19:27:17.149Z",
-    "docketNumber": "106-19"
+    "docketNumber": "106-19",
+    "servedPartiesCode": "B"
   },
   {
     "isStricken": false,

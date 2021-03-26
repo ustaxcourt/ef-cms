@@ -10,8 +10,7 @@ describe('archiveDraftDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      archiveDraftDocumentInteractor({
-        applicationContext,
+      archiveDraftDocumentInteractor(applicationContext, {
         docketEntryId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-20',
       }),
@@ -26,8 +25,7 @@ describe('archiveDraftDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    await archiveDraftDocumentInteractor({
-      applicationContext,
+    await archiveDraftDocumentInteractor(applicationContext, {
       docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-20',
     });
@@ -84,8 +82,7 @@ describe('archiveDraftDocumentInteractor', () => {
         ],
       });
 
-    await archiveDraftDocumentInteractor({
-      applicationContext,
+    await archiveDraftDocumentInteractor(applicationContext, {
       docketEntryId: '99981f4d-1e47-423a-8caf-6d2fdc3d3999',
       docketNumber: '101-20',
     });

@@ -103,25 +103,26 @@ describe('fileExternalDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      fileExternalDocumentInteractor({
-        applicationContext,
+      fileExternalDocumentInteractor(applicationContext, {
         documentMetadata: {},
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
-    const updatedCase = await fileExternalDocumentInteractor({
+    const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: mockDocketEntryId,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
       },
-    });
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -138,43 +139,45 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
-    const updatedCase = await fileExternalDocumentInteractor({
+    const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Motion for Leave to File',
-        documentType: 'Motion for Leave to File',
-        eventCode: 'M115',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        scenario: 'Nonstandard H',
-        secondaryDocument: {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentTitle: 'Motion for Judgment on the Pleadings',
-          documentType: 'Motion for Judgment on the Pleadings',
-          eventCode: 'M121',
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Motion for Leave to File',
+          documentType: 'Motion for Leave to File',
+          eventCode: 'M115',
           filedBy: 'Test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          scenario: 'Nonstandard H',
+          secondaryDocument: {
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentTitle: 'Motion for Judgment on the Pleadings',
+            documentType: 'Motion for Judgment on the Pleadings',
+            eventCode: 'M121',
+            filedBy: 'Test Petitioner',
+          },
+          secondarySupportingDocuments: [
+            {
+              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+              documentTitle: 'Motion for in Camera Review',
+              documentType: 'Motion for in Camera Review',
+              eventCode: 'M135',
+              filedBy: 'Test Petitioner',
+            },
+          ],
+          supportingDocuments: [
+            {
+              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
+              documentTitle: 'Civil Penalty Approval Form',
+              documentType: 'Civil Penalty Approval Form',
+              eventCode: 'CIVP',
+              filedBy: 'Test Petitioner',
+            },
+          ],
         },
-        secondarySupportingDocuments: [
-          {
-            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-            documentTitle: 'Motion for in Camera Review',
-            documentType: 'Motion for in Camera Review',
-            eventCode: 'M135',
-            filedBy: 'Test Petitioner',
-          },
-        ],
-        supportingDocuments: [
-          {
-            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
-            documentTitle: 'Civil Penalty Approval Form',
-            documentType: 'Civil Penalty Approval Form',
-            eventCode: 'CIVP',
-            filedBy: 'Test Petitioner',
-          },
-        ],
       },
-    });
+    );
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(updatedCase.docketEntries).toMatchObject([
       {}, // first 4 docs were already on the case
@@ -207,18 +210,20 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
-    const updatedCase = await fileExternalDocumentInteractor({
+    const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
-      docketEntryIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Simultaneous Memoranda of Law',
-        documentType: 'Simultaneous Memoranda of Law',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      {
+        docketEntryIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Simultaneous Memoranda of Law',
+          documentType: 'Simultaneous Memoranda of Law',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
       },
-    });
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -240,8 +245,7 @@ describe('fileExternalDocumentInteractor', () => {
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
     caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bc';
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
@@ -267,8 +271,7 @@ describe('fileExternalDocumentInteractor', () => {
   it('should create a not-high-priority work item if the case status is not calendared', async () => {
     caseRecord.status = CASE_STATUS_TYPES.new;
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
@@ -292,8 +295,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should automatically block the case if the document filed is a tracked document', async () => {
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         category: 'Application',
         docketNumber: caseRecord.docketNumber,
@@ -328,8 +330,7 @@ describe('fileExternalDocumentInteractor', () => {
         },
       ]);
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       docketEntryIds: [],
       documentMetadata: {
         category: 'Application',

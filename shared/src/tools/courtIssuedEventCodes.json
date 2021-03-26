@@ -377,14 +377,14 @@
   {
     "eventCode": "FTRL",
     "documentType": "Further Trial before",
-    "documentTitle": "Further Trial before [Judge] at [Place]",
+    "documentTitle": "Further Trial before [Judge] at [Place]. [Anything]",
     "scenario": "Type F",
     "isUnservable": true
   },
   {
     "eventCode": "HEAR",
     "documentType": "Hearing before",
-    "documentTitle": "Hearing before [Judge] at [Place]",
+    "documentTitle": "Hearing before [Judge] at [Place]. [Anything]",
     "scenario": "Type F",
     "isUnservable": true
   },
@@ -399,14 +399,14 @@
   {
     "eventCode": "PTRL",
     "documentType": "Partial Trial before",
-    "documentTitle": "Partial Trial before [Judge] at [Place]",
+    "documentTitle": "Partial Trial before [Judge] at [Place]. [Anything]",
     "scenario": "Type F",
     "isUnservable": true
   },
   {
     "eventCode": "TRL",
     "documentType": "Trial before",
-    "documentTitle": "Trial before [Judge] at [Place]",
+    "documentTitle": "Trial before [Judge] at [Place]. [Anything]",
     "scenario": "Type F",
     "isUnservable": true
   },
