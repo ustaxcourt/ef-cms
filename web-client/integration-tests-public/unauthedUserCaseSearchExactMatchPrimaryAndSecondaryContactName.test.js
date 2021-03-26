@@ -47,7 +47,7 @@ const searchTerm = `${firstName}`;
 /**
  * add a case with the contactSecondary.name provided
  */
-describe('Petitioner creates cases', () => {
+describe(`Petitioner creates cases with name ${firstName}`, () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -152,7 +152,7 @@ describe('Petitioner searches for exact name match', () => {
 
     expect(searchResults.length).toBe(5);
     expect(searchResults[0]).toMatchObject({
-      docketNumber: createdDocketNumbers[2],
+      docketNumber: createdDocketNumbers[2], // case with contactPrimary name match should be first
     });
   });
 });
