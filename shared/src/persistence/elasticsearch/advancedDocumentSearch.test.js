@@ -19,7 +19,6 @@ describe('advancedDocumentSearch', () => {
     includes: [
       'caseCaption',
       'petitioners',
-      'contactSecondary',
       'docketEntryId',
       'docketNumber',
       'docketNumberWithSuffix',

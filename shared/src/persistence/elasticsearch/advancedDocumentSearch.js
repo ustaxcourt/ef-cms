@@ -27,7 +27,6 @@ exports.advancedDocumentSearch = async ({
   const sourceFields = [
     'caseCaption',
     'petitioners',
-    'contactSecondary',
     'docketEntryId',
     'docketNumber',
     'docketNumberWithSuffix',
