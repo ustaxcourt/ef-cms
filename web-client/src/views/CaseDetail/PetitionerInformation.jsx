@@ -46,37 +46,15 @@ const PetitionerInformation = connect(
         <div className="tablet:grid-col-12">
           <div className="card height-full">
             <div className="content-wrapper">
-              <h3 id="primary-label">
-                Petitioner Contact Info
-                {caseDetailHelper.showEditContacts &&
-                  !formattedCaseDetail.contactPrimary.isAddressSealed && (
-                    <Button
-                      link
-                      aria-label="Edit petitioner contact information"
-                      className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
-                      href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
-                      icon="edit"
-                    >
-                      Edit
-                    </Button>
-                  )}
-                {caseDetailHelper.showEditPetitionerInformation && (
-                  <Button
-                    link
-                    className="margin-left-2"
-                    href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-information`}
-                    icon="edit"
-                  >
-                    Edit
-                  </Button>
-                )}
-              </h3>
+              <h3 id="primary-label">Petitioner Contact Info</h3>
               <div className="grid-row">
                 {formattedCaseDetail.contactPrimary && (
                   <div className="grid-col-3">
                     <address aria-labelledby="primary-label">
                       <AddressDisplay
                         contact={formattedCaseDetail.contactPrimary}
+                        editLinkExternal={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
+                        editLinkInternal={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-information`}
                         showEmail={false}
                         showSealAddressLink={
                           caseInformationHelper.showSealAddressLink
@@ -135,6 +113,8 @@ const PetitionerInformation = connect(
                       <address aria-labelledby="secondary-label">
                         <AddressDisplay
                           contact={formattedCaseDetail.contactSecondary}
+                          editLinkExternal={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/secondary/edit`}
+                          editLinkInternal={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-information`}
                           showEmail={true}
                           showSealAddressLink={
                             caseInformationHelper.showSealAddressLink
