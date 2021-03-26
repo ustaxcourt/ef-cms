@@ -1,3 +1,4 @@
+import * as reduce from 'image-blob-reduce';
 import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
@@ -5,6 +6,7 @@ import {
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
+  getServedPartiesCode,
   isServed,
 } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
@@ -116,7 +118,6 @@ import {
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
-  getServedPartiesCode,
   sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
@@ -586,6 +587,7 @@ const applicationContext = {
     };
   },
   getPublicSiteUrl,
+  getReduceImageBlob: () => reduce,
   getScanner: async () => {
     if (process.env.NO_SCANNER) {
       const scanner = await import(

@@ -277,4 +277,194 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalledTimes(4);
     });
   });
+
+  describe('IRS practitioners', () => {
+    const practitionerId = applicationContext.getUniqueId();
+    const mockCaseWithIrsPractitioners = new Case(
+      {
+        ...MOCK_CASE,
+        irsPractitioners: [
+          {
+            barNumber: 'BT007',
+            name: 'Bobby Tables',
+            role: 'irsPractitioner',
+            userId: practitionerId,
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    beforeAll(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioners);
+    });
+
+    it('does not call updateIrsPractitionerOnCase or removeIrsPractitionerOnCase if all IRS practitioners are unchanged', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: mockCaseWithIrsPractitioners,
+      });
+      expect(
+        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('calls updateIrsPractitionerOnCase on changed entries in irsPractitioners', async () => {
+      const updatedPractitioner = {
+        barNumber: 'BT007',
+        name: 'Robert Jables', // changed name
+        role: 'irsPractitioner',
+        userId: practitionerId,
+      };
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...mockCaseWithIrsPractitioners,
+          irsPractitioners: [updatedPractitioner],
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase
+          .mock.calls[0][0],
+      ).toMatchObject({
+        docketNumber: validMockCase.docketNumber,
+        practitioner: updatedPractitioner,
+        userId: practitionerId,
+      });
+    });
+
+    it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...mockCaseWithIrsPractitioners,
+          irsPractitioners: [],
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase
+          .mock.calls[0][0],
+      ).toMatchObject({
+        docketNumber: validMockCase.docketNumber,
+        userId: practitionerId,
+      });
+    });
+  });
+
+  describe('Private practitioners', () => {
+    const practitionerId = applicationContext.getUniqueId();
+    const mockCaseWithIrsPractitioners = new Case(
+      {
+        ...MOCK_CASE,
+        privatePractitioners: [
+          {
+            barNumber: 'BT007',
+            name: 'Billie Jean',
+            role: 'privatePractitioner',
+            userId: practitionerId,
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    beforeAll(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioners);
+    });
+
+    it('does not call updatePrivatePractitionerOnCase or removePrivatePractitionerOnCase if all private practitioners are unchanged', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: mockCaseWithIrsPractitioners,
+      });
+      expect(
+        applicationContext.getPersistenceGateway()
+          .updatePrivatePractitionerOnCase,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway()
+          .removePrivatePractitionerOnCase,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('calls updatePrivatePractitionerOnCase on changed entries in privatePractitioners', async () => {
+      const updatedPractitioner = {
+        barNumber: 'BT007',
+        name: 'William Denim', // changed name
+        role: 'privatePractitioner',
+        userId: practitionerId,
+      };
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...mockCaseWithIrsPractitioners,
+          privatePractitioners: [updatedPractitioner],
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway()
+          .removePrivatePractitionerOnCase,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway()
+          .updatePrivatePractitionerOnCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway()
+          .updatePrivatePractitionerOnCase.mock.calls[0][0],
+      ).toMatchObject({
+        docketNumber: validMockCase.docketNumber,
+        practitioner: updatedPractitioner,
+        userId: practitionerId,
+      });
+    });
+
+    it('removes an privatePractitioner from a case with existing privatePractitioners', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...mockCaseWithIrsPractitioners,
+          privatePractitioners: [],
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway()
+          .updatePrivatePractitionerOnCase,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway()
+          .removePrivatePractitionerOnCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway()
+          .removePrivatePractitionerOnCase.mock.calls[0][0],
+      ).toMatchObject({
+        docketNumber: validMockCase.docketNumber,
+        userId: practitionerId,
+      });
+    });
+  });
 });

@@ -1550,6 +1550,10 @@ button.change-scanner-button {
   width: 600px;
   max-height: 41px;
   margin: 0.5rem 0;
+
+  &.edit-docket--visible-overflow {
+    overflow: visible;
+  }
 }
 
 #service-parties {

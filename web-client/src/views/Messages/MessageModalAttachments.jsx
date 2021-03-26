@@ -6,18 +6,21 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const getDocumentOption = doc => {
+  const documentTitle = doc.title.substr(0, 100);
+
   return (
     <option key={doc.docketEntryId} value={`${doc.docketEntryId}`}>
-      {doc.createdAtFormatted} - {doc.title}
+      {doc.createdAtFormatted} - {documentTitle}
     </option>
   );
 };
 
 const getCorrespondenceOption = doc => {
   const title = doc.documentTitle || doc.documentType;
+  const documentTitle = title.substr(0, 100);
   return (
     <option key={doc.correspondenceId} value={`${doc.correspondenceId}`}>
-      {title}
+      {documentTitle}
     </option>
   );
 };

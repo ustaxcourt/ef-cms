@@ -37,17 +37,16 @@ const shouldGenerateCoversheetForDocketEntry = ({
 exports.shouldGenerateCoversheetForDocketEntry = shouldGenerateCoversheetForDocketEntry;
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number of the case to be updated
  * @param {object} providers.docketEntryMeta the docket entry metadata
  * @returns {object} the updated case after the documents are added
  */
-exports.updateDocketEntryMetaInteractor = async ({
+exports.updateDocketEntryMetaInteractor = async (
   applicationContext,
-  docketEntryMeta,
-  docketNumber,
-}) => {
+  { docketEntryMeta, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
@@ -177,8 +176,7 @@ exports.updateDocketEntryMetaInteractor = async ({
 
     const updatedDocketEntry = await applicationContext
       .getUseCases()
-      .addCoversheetInteractor({
-        applicationContext,
+      .addCoversheetInteractor(applicationContext, {
         docketEntryId: originalDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         filingDateUpdated,

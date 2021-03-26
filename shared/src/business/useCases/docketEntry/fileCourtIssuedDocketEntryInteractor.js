@@ -12,15 +12,15 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-exports.fileCourtIssuedDocketEntryInteractor = async ({
+exports.fileCourtIssuedDocketEntryInteractor = async (
   applicationContext,
-  documentMeta,
-}) => {
+  { documentMeta },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =

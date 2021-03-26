@@ -5,11 +5,16 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {object} providers.sortOrder the requested order of search results
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getTodaysOrdersInteractor = ({ applicationContext, page }) => {
+exports.getTodaysOrdersInteractor = ({
+  applicationContext,
+  page,
+  todaysOrdersSort,
+}) => {
   return get({
     applicationContext,
-    endpoint: `/public-api/todays-orders/${page}`,
+    endpoint: `/public-api/todays-orders/${page}/${todaysOrdersSort}`,
   });
 };
