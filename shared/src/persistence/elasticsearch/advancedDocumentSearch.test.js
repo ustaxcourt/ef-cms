@@ -106,11 +106,7 @@ describe('advancedDocumentSearch', () => {
       query.bool.must = {
         simple_query_string: {
           default_operator: 'and',
-          fields: [
-            'caseCaption.S',
-            'petitioners.L.M.name.S',
-            'contactSecondary.M.name.S',
-          ],
+          fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
           query: caseTitleOrPetitioner,
         },
       };

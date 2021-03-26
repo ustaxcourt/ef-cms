@@ -35,15 +35,6 @@ const createdDocketNumbers = [];
 
 const searchTerm = `${firstName}`;
 
-// case 1 has contact primay name that matches case 2 contactsecodary name
-//search for name, case 1 should shw up before case 2
-
-//create a case with contact primary name 'X'
-//create a case with contact secondary with name 'X'
-//do a case search by petitioner name with value 'X'
-//expect case 1 is first on the list
-//expect case 2 iss second on list
-
 /**
  * add a case with the contactSecondary.name provided
  */
@@ -58,70 +49,29 @@ describe(`Petitioner creates cases with name ${firstName}`, () => {
 
   loginAs(testClient, 'petitioner@example.com');
 
-  // todo - loop!
-  it('Create case with contactSecondary name matching search term', async () => {
-    const caseDetail = await uploadPetition(testClient, {
-      contactSecondary: { ...baseContact },
-      partyType: PARTY_TYPES.petitionerSpouse,
+  let i = 0;
+  while (i < 4) {
+    it('Create case with contactSecondary name matching search term', async () => {
+      const caseDetail = await uploadPetition(testClient, {
+        contactSecondary: { ...baseContact },
+        partyType: PARTY_TYPES.petitionerSpouse,
+      });
+
+      expect(caseDetail.docketNumber).toBeDefined();
+      test.docketNumber = caseDetail.docketNumber;
+      testClient.docketNumber = caseDetail.docketNumber;
+      createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
-    expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    testClient.docketNumber = caseDetail.docketNumber;
-    createdDocketNumbers.push(caseDetail.docketNumber);
-  });
+    loginAs(testClient, 'petitionsclerk@example.com');
+    petitionsClerkServesElectronicCaseToIrs(testClient);
 
-  loginAs(testClient, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(testClient);
-
-  it('Create case with contactSecondary name matching search term', async () => {
-    const caseDetail = await uploadPetition(testClient, {
-      contactSecondary: { ...baseContact },
-      partyType: PARTY_TYPES.petitionerSpouse,
-    });
-
-    expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    testClient.docketNumber = caseDetail.docketNumber;
-    createdDocketNumbers.push(caseDetail.docketNumber);
-  });
-
-  loginAs(testClient, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(testClient);
+    i++;
+  }
 
   it('Create case with contactPrimary name matching search term', async () => {
     const caseDetail = await uploadPetition(testClient, {
       contactPrimary: { ...baseContact },
-    });
-
-    expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    testClient.docketNumber = caseDetail.docketNumber;
-    createdDocketNumbers.push(caseDetail.docketNumber);
-  });
-
-  loginAs(testClient, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(testClient);
-
-  it('Create case with contactSecondary name matching search term', async () => {
-    const caseDetail = await uploadPetition(testClient, {
-      contactSecondary: { ...baseContact },
-      partyType: PARTY_TYPES.petitionerSpouse,
-    });
-
-    expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    testClient.docketNumber = caseDetail.docketNumber;
-    createdDocketNumbers.push(caseDetail.docketNumber);
-  });
-
-  loginAs(testClient, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(testClient);
-
-  it('Create case with contactSecondary name matching search term', async () => {
-    const caseDetail = await uploadPetition(testClient, {
-      contactSecondary: { ...baseContact },
-      partyType: PARTY_TYPES.petitionerSpouse,
     });
 
     expect(caseDetail.docketNumber).toBeDefined();
@@ -152,7 +102,7 @@ describe('Petitioner searches for exact name match', () => {
 
     expect(searchResults.length).toBe(5);
     expect(searchResults[0]).toMatchObject({
-      docketNumber: createdDocketNumbers[2], // case with contactPrimary name match should be first
+      docketNumber: createdDocketNumbers[4], // case with contactPrimary name match should be first
     });
   });
 });
