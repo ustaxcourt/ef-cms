@@ -19,23 +19,7 @@ const {
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { isServed } = require('../entities/DocketEntry');
-const { ROLES } = require('../entities/EntityConstants');
-
-const getServedPartiesCode = servedParties => {
-  let servedPartiesCode = '';
-  if (servedParties && servedParties.length > 0) {
-    if (
-      servedParties.length === 1 &&
-      servedParties[0].role === ROLES.irsSuperuser
-    ) {
-      servedPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
-    } else {
-      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
-    }
-  }
-  return servedPartiesCode;
-};
+const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = doc => {
@@ -616,6 +600,5 @@ module.exports = {
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
-  getServedPartiesCode,
   sortDocketEntries,
 };

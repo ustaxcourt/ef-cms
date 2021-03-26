@@ -11,7 +11,7 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../../../../shared/src/test/mockCase');
-const { migrateItems } = require('./0024-add-contacts-to-petitioners-array');
+const { migrateItems } = require('./0025-add-contacts-to-petitioners-array');
 
 describe('migrateItems', () => {
   it('should return and not modify records that are NOT cases', async () => {
