@@ -642,23 +642,25 @@ describe('completeDocketEntryQCInteractor', () => {
       },
     ];
 
-    const { caseDetail } = await completeDocketEntryQCInteractor({
+    const { caseDetail } = await completeDocketEntryQCInteractor(
       applicationContext,
-      entryMetadata: {
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'My Edited Document',
-        documentType: 'Notice of Change of Address',
-        eventCode: 'NCA',
-        freeText: 'Some text about this document',
-        hasOtherFilingParty: true,
-        isPaper: true,
-        otherFilingParty: 'Bert Brooks',
-        partyPrimary: true,
-        pending: true,
-        receivedAt: '2021-01-01', // date only
+      {
+        entryMetadata: {
+          docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'My Edited Document',
+          documentType: 'Notice of Change of Address',
+          eventCode: 'NCA',
+          freeText: 'Some text about this document',
+          hasOtherFilingParty: true,
+          isPaper: true,
+          otherFilingParty: 'Bert Brooks',
+          partyPrimary: true,
+          pending: true,
+          receivedAt: '2021-01-01', // date only
+        },
       },
-    });
+    );
 
     expect(caseDetail.docketEntries[0].receivedAt).toEqual(
       '2021-01-01T05:00:00.000Z',
