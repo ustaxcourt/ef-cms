@@ -382,6 +382,31 @@ describe('update petitioner contact information on a case', () => {
     expect(updatedContactSecondary.inCareOf).toBe(mockInCareOf);
   });
 
+  it('should add a contactSecondary when one was not initially on the case', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      partyType: PARTY_TYPES.petitioner,
+      petitioners: [MOCK_CASE.petitioners[0]],
+    };
+
+    await updatePetitionerInformationInteractor(applicationContext, {
+      contactPrimary: getContactPrimary(MOCK_CASE),
+      contactSecondary: getContactSecondary(MOCK_CASE_WITH_SECONDARY_OTHERS),
+      docketNumber: MOCK_CASE.docketNumber,
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+    });
+
+    const updatedPetitioners = applicationContext.getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.petitioners;
+
+    const updatedContactSecondary = updatedPetitioners.find(
+      p => p.contactType === CONTACT_TYPES.secondary,
+    );
+    expect(updatedContactSecondary).toMatchObject({
+      address1: getContactSecondary(MOCK_CASE_WITH_SECONDARY_OTHERS).address1,
+    });
+  });
+
   it('throws an error when attempting to update contactPrimary.countryType to an invalid value', async () => {
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {

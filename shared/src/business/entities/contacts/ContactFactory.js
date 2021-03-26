@@ -97,7 +97,7 @@ const commonValidationRequirements = {
   ),
   contactType: JoiValidationConstants.STRING.valid(
     ...Object.values(CONTACT_TYPES),
-  ).optional(),
+  ).required(),
   email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
     then: joi.required(),

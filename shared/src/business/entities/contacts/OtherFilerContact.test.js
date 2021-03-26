@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
@@ -17,6 +18,7 @@ describe('OtherFilerContact', () => {
       {
         address1: '123 Deming Way',
         city: 'Los Angeles',
+        contactType: CONTACT_TYPES.primary,
         country: 'USA',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner@example.com',
@@ -42,6 +44,7 @@ describe('OtherFilerContact', () => {
       {
         address1: '123 Deming Way',
         city: 'Los Angeles',
+        contactType: CONTACT_TYPES.primary,
         country: 'USA',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner@example.com',
