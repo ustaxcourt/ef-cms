@@ -86,7 +86,7 @@ paths:
   /reconciliation-report/{date}:
     get:
       summary: fetches a list of docket entries served on a date
-      operationId: 
+      operationId: fetchReconciliationReport
       tags:
         - irs
       description: |
@@ -100,7 +100,7 @@ paths:
             type: string
       responses:
         '200':
-          description: 
+          description: reconciliation report of served docket entries
           content:
             application/json:
               schema:
@@ -113,7 +113,7 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/ServerError'
-​
+
 components:
   securitySchemes:
     bearerAuth:
