@@ -44,6 +44,7 @@ describe('update petitioner contact information on a case', () => {
       contactId: PRIMARY_CONTACT_ID,
       contactType: CONTACT_TYPES.primary,
       countryType: COUNTRY_TYPES.DOMESTIC,
+      email: 'test@example.com',
       name: 'Test Primary Petitioner',
       phone: '1234567',
       postalCode: '12345',
@@ -145,16 +146,8 @@ describe('update petitioner contact information on a case', () => {
 
     await updatePetitionerInformationInteractor(applicationContext, {
       contactPrimary: {
-        address1: '456 Center St', // the address changes ONLY
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'test@example.com',
-        isAddressSealed: false,
-        name: 'Test Petitioner',
-        phone: '1234567',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
+        ...getContactPrimary(MOCK_CASE),
+        address1: 'changed address',
       },
       docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitioner,
@@ -342,7 +335,7 @@ describe('update petitioner contact information on a case', () => {
     await updatePetitionerInformationInteractor(applicationContext, {
       contactPrimary: {
         ...mockPetitioners[0],
-        email: 'test@example.com',
+        email: 'test2@example.com',
       },
       docketNumber: MOCK_CASE.docketNumber,
       partyType: PARTY_TYPES.petitioner,
@@ -353,7 +346,7 @@ describe('update petitioner contact information on a case', () => {
         applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
           .caseToUpdate,
       ).email,
-    ).not.toBe('test@example.com');
+    ).not.toBe('test2@example.com');
   });
 
   it('should update contactSecondary.inCareOf when the party type is petitioner and deceased spouse and it is passed in', async () => {
