@@ -5,6 +5,8 @@ const {
   EXTERNAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
+  ROLES,
+  SERVED_PARTIES_CODES,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
 } = require('./EntityConstants');
 const {
@@ -200,6 +202,7 @@ DocketEntry.prototype.setAsServed = function (servedParties = null) {
 
   if (servedParties) {
     this.servedParties = servedParties;
+    this.servedPartiesCode = getServedPartiesCode(servedParties);
   }
 };
 
@@ -370,4 +373,28 @@ const isServed = function (rawDocketEntry) {
   return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
 };
 
-module.exports = { DocketEntry: validEntityDecorator(DocketEntry), isServed };
+/**
+ * Determines the servedPartiesCode based on the given servedParties
+ *
+ * @returns {String} served parties code
+ */
+const getServedPartiesCode = servedParties => {
+  let servedPartiesCode = '';
+  if (servedParties && servedParties.length > 0) {
+    if (
+      servedParties.length === 1 &&
+      servedParties[0].role === ROLES.irsSuperuser
+    ) {
+      servedPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
+    } else {
+      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
+    }
+  }
+  return servedPartiesCode;
+};
+
+module.exports = {
+  DocketEntry: validEntityDecorator(DocketEntry),
+  getServedPartiesCode,
+  isServed,
+};
