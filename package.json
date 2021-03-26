@@ -142,7 +142,7 @@
       "npm run build:entity:docs",
       "git add **/*md"
     ],
-    "swagger.json": [
+    "swagger.json,v1.yaml,v2.yaml": [
       "swagger-cli validate"
     ]
   },
