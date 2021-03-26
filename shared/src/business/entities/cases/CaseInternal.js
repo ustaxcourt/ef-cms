@@ -18,7 +18,7 @@ const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry } = require('../DocketEntry');
-const { getContactPrimary } = require('./Case');
+const { getContactPrimary, getContactSecondary } = require('./Case');
 const { Statistic } = require('../Statistic');
 
 /**
@@ -99,13 +99,15 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
     applicationContext,
     contactInfo: {
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-      secondary: rawCase.contactSecondary,
+      secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
     isPaper: true,
     partyType: rawCase.partyType,
   });
   this.petitioners = [contacts.primary];
-  this.contactSecondary = contacts.secondary;
+  if (contacts.secondary) {
+    this.petitioners.push(contacts.secondary);
+  }
 };
 
 CaseInternal.VALIDATION_ERROR_MESSAGES = {
@@ -151,7 +153,6 @@ const paperRequirements = joi
     archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
-    contactSecondary: joi.object().optional().allow(null),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],

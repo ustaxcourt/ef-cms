@@ -1,4 +1,9 @@
 const {
+  getContactPrimary,
+  getContactSecondary,
+  getOtherFilers,
+} = require('../entities/cases/Case');
+const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
@@ -6,7 +11,6 @@ const {
   sealCaseContactAddressInteractor,
 } = require('./sealCaseContactAddressInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getContactPrimary, getOtherFilers } = require('../entities/cases/Case');
 const { ROLES } = require('../entities/EntityConstants');
 
 describe('sealCaseContactAddressInteractor', () => {
@@ -93,11 +97,11 @@ describe('sealCaseContactAddressInteractor', () => {
       contactId: '2226050f-a423-47bb-943b-a5661fe08a6b', // contactSecondary
       docketNumber: MOCK_CASE.docketNumber,
     });
+
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-
-    expect(result.contactSecondary.isAddressSealed).toBe(true);
+    expect(getContactSecondary(result).isAddressSealed).toBe(true);
   });
 
   it('should call updateCase with `isSealedAddress` on otherFilers[1] and return the updated case', async () => {

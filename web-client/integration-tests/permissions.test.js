@@ -1,6 +1,7 @@
 import { CONTACT_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
+  contactSecondaryFromState,
   fakeFile,
   loginAs,
   setupTest,
@@ -32,6 +33,7 @@ const associatedFieldsVisible = () => {
 
 const associatedFieldsBlocked = () => {
   const contactPrimary = contactPrimaryFromState(test);
+  const contactSecondary = contactSecondaryFromState(test);
 
   expect(contactPrimary).toEqual({
     contactType: CONTACT_TYPES.primary,
@@ -40,7 +42,7 @@ const associatedFieldsBlocked = () => {
     state: expect.anything(),
   });
   expect(contactPrimary.address1).toBeUndefined();
-  expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
+  expect(contactSecondary).toBeUndefined();
   expect(contactPrimary.contactId).toBeUndefined();
 };
 

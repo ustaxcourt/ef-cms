@@ -84,9 +84,10 @@ PrivatePractitioner.prototype.getRepresentingPrimary = function getRepresentingP
 PrivatePractitioner.prototype.getRepresentingSecondary = function getRepresentingSecondary(
   caseEntity,
 ) {
+  const contactSecondary = caseEntity.getContactSecondary();
   return (
-    caseEntity.contactSecondary &&
-    this.representing.find(r => r === caseEntity.contactSecondary.contactId)
+    contactSecondary &&
+    this.representing.find(r => r === contactSecondary.contactId)
   );
 };
 

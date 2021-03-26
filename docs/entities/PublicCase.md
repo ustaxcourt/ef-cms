@@ -24,10 +24,6 @@
             type: "any"
             flags: 
               presence: "forbidden"
-          contactSecondary: 
-            type: "any"
-            flags: 
-              presence: "forbidden"
           createdAt: 
             type: "any"
             flags: 
@@ -101,44 +97,6 @@
           name: "max"
           args: 
             limit: 4700
-    contactSecondary: 
-      type: "object"
-      flags: 
-        presence: "optional"
-      allow: 
-        - null
-      keys: 
-        contactType: 
-          type: "string"
-          flags: 
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
-        name: 
-          type: "string"
-          flags: 
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
-            - 
-              name: "max"
-              args: 
-                limit: 500
-        state: 
-          type: "string"
-          flags: 
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
     createdAt: 
       type: "date"
       flags: 
@@ -851,12 +809,18 @@
             contactType: 
               type: "string"
               flags: 
+                only: true
                 presence: "optional"
               rules: 
                 - 
                   name: "min"
                   args: 
                     limit: 1
+              allow: 
+                - "primary"
+                - "secondary"
+                - "otherFilers"
+                - "otherPetitioners"
             name: 
               type: "string"
               flags: 

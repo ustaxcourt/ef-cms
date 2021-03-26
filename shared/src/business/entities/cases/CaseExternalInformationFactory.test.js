@@ -462,9 +462,6 @@ describe('CaseExternalInformationFactory entity', () => {
       expect(
         caseExternal.getFormattedValidationErrors().petitioners,
       ).toBeDefined();
-      expect(
-        caseExternal.getFormattedValidationErrors().contactSecondary,
-      ).toBeDefined();
     });
 
     describe('ownership disclosure file size', () => {
@@ -572,15 +569,6 @@ describe('CaseExternalInformationFactory entity', () => {
       );
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         caseType: caseExternalErrorMessages.caseType,
-        contactSecondary: {
-          address1: contactErrorMessages.address1,
-          city: contactErrorMessages.city,
-          countryType: contactErrorMessages.countryType,
-          name: contactErrorMessages.name,
-          phone: contactErrorMessages.phone,
-          postalCode: contactErrorMessages.postalCode[1],
-          state: contactErrorMessages.state,
-        },
         petitionFileSize: caseExternalErrorMessages.petitionFileSize[1],
         petitioners: [
           {
@@ -588,6 +576,16 @@ describe('CaseExternalInformationFactory entity', () => {
             city: contactErrorMessages.city,
             countryType: contactErrorMessages.countryType,
             index: 0,
+            name: contactErrorMessages.name,
+            phone: contactErrorMessages.phone,
+            postalCode: contactErrorMessages.postalCode[1],
+            state: contactErrorMessages.state,
+          },
+          {
+            address1: contactErrorMessages.address1,
+            city: contactErrorMessages.city,
+            countryType: contactErrorMessages.countryType,
+            index: 1,
             name: contactErrorMessages.name,
             phone: contactErrorMessages.phone,
             postalCode: contactErrorMessages.postalCode[1],

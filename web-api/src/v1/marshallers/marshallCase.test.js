@@ -12,7 +12,6 @@ describe('marshallCase', () => {
     expect(Object.keys(marshallCase(MOCK_CASE)).sort()).toEqual([
       'caseCaption',
       'caseType',
-      'contactSecondary',
       'docketEntries',
       'docketNumber',
       'docketNumberSuffix',
@@ -35,13 +34,13 @@ describe('marshallCase', () => {
     contactSecondary.contactType = CONTACT_TYPES.secondary;
 
     const mock = Object.assign({}, MOCK_CASE, {
-      contactSecondary,
       docketEntries: [],
       docketNumber: '123-19L',
       docketNumberSuffix: 'L',
       irsPractitioners: [],
       leadDocketNumber: '122-19L',
       noticeOfTrialDate: '2019-12-08T00:00:00.000Z',
+      petitioners: [MOCK_CASE.petitioners[0], contactSecondary],
       privatePractitioners: [],
       sortableDocketNumber: 201900123,
       trialLocation: 'Woodstock, Connecticut',
@@ -61,7 +60,6 @@ describe('marshallCase', () => {
     expect(mock.trialLocation).toBeDefined();
 
     expect(mock.petitioners).toBeDefined();
-    expect(mock.contactSecondary).toBeDefined();
     expect(mock.docketEntries).toBeDefined();
     expect(mock.irsPractitioners).toBeDefined();
     expect(mock.privatePractitioners).toBeDefined();
@@ -83,7 +81,7 @@ describe('marshallCase', () => {
 
     // Exact format asserted in other tests.
     expect(marshalled.petitioners).toBeDefined();
-    expect(marshalled.contactSecondary).toBeDefined();
+    expect(marshalled.petitioners.length).toEqual(2);
     expect(marshalled.docketEntries).toBeDefined();
     expect(marshalled.practitioners).toBeDefined();
     expect(marshalled.respondents).toBeDefined();

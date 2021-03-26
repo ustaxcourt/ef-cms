@@ -1,4 +1,7 @@
-const { getContactPrimary } = require('../entities/cases/Case');
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../entities/cases/Case');
 const { isEmpty } = require('lodash');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
@@ -9,8 +12,9 @@ const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
  * @returns {object} service indicators for petitioner, privatePractitioners, and irsPractitioners
  */
 const setServiceIndicatorsForCase = caseDetail => {
-  const { contactSecondary, isPaper, privatePractitioners } = caseDetail;
+  const { isPaper, privatePractitioners } = caseDetail;
   const contactPrimary = getContactPrimary(caseDetail);
+  const contactSecondary = getContactSecondary(caseDetail);
 
   let hasPrimaryPractitioner = false;
   let hasSecondaryPractitioner = false;

@@ -3,11 +3,13 @@ import {
   Case,
   caseHasServedDocketEntries,
   getContactPrimary,
+  getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
+  getServedPartiesCode,
   isServed,
 } from '../../shared/src/business/entities/DocketEntry';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
@@ -119,7 +121,6 @@ import {
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
-  getServedPartiesCode,
   sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardMessageInteractor } from '../../shared/src/proxies/messages/forwardMessageProxy';
@@ -640,6 +641,7 @@ const applicationContext = {
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
       getContactPrimary,
+      getContactSecondary,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,

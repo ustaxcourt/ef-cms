@@ -3554,12 +3554,6 @@
         - "Passport"
         - "Whistleblower"
         - "Worker Classification"
-    contactSecondary: 
-      type: "object"
-      flags: 
-        presence: "optional"
-      allow: 
-        - null
     filingType: 
       type: "string"
       flags: 

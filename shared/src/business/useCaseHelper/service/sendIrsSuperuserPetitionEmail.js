@@ -1,7 +1,11 @@
 const {
+  Case,
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../entities/cases/Case');
+const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { Case, getContactPrimary } = require('../../entities/cases/Case');
 
 exports.sendIrsSuperuserPetitionEmail = async ({
   applicationContext,
@@ -19,7 +23,6 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     .setServiceIndicatorsForCase(caseEntity);
   const {
     caseCaption,
-    contactSecondary,
     docketNumber,
     docketNumberWithSuffix,
     mailingDate,
@@ -28,6 +31,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
   } = caseDetail;
 
   const contactPrimary = getContactPrimary(caseDetail);
+  const contactSecondary = getContactSecondary(caseDetail);
 
   const { documentType, eventCode, filingDate, servedAt } = docketEntryEntity;
 

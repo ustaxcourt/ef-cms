@@ -250,8 +250,8 @@ const generateAndServeDocketEntry = async ({
   const paperServiceRequested =
     caseEntity.getContactPrimary().serviceIndicator ===
       SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (caseEntity.contactSecondary &&
-      caseEntity.contactSecondary.serviceIndicator ===
+    (caseEntity.getContactSecondary() &&
+      caseEntity.getContactSecondary().serviceIndicator ===
         SERVICE_INDICATOR_TYPES.SI_PAPER) ||
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
 

@@ -1,4 +1,4 @@
-import { contactPrimaryFromState } from '../helpers';
+import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 
 export const practitionerViewsCaseDetailOfOwnedCase = test => {
   return it('Practitioner views case detail of owned case', async () => {
@@ -11,11 +11,9 @@ export const practitionerViewsCaseDetailOfOwnedCase = test => {
       'Test Private Practitioner',
     );
     const contactPrimary = contactPrimaryFromState(test);
+    const contactSecondary = contactSecondaryFromState(test);
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing'),
-    ).toEqual([
-      contactPrimary.contactId,
-      test.getState('caseDetail.contactSecondary.contactId'),
-    ]);
+    ).toEqual([contactPrimary.contactId, contactSecondary.contactId]);
   });
 };

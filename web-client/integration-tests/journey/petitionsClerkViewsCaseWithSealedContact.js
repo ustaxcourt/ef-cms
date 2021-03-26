@@ -1,4 +1,7 @@
-const { contactPrimaryFromState } = require('../helpers');
+const {
+  contactPrimaryFromState,
+  contactSecondaryFromState,
+} = require('../helpers');
 
 export const petitionsClerkViewsCaseWithSealedContact = (
   test,
@@ -14,7 +17,7 @@ export const petitionsClerkViewsCaseWithSealedContact = (
     if (contactType === 'contactPrimary') {
       sealedContact = contactPrimaryFromState(test);
     } else if (contactType === 'contactSecondary') {
-      sealedContact = test.getState(`caseDetail.${contactType}`);
+      sealedContact = contactSecondaryFromState(test);
     } else {
       sealedContact = test
         .getState(`caseDetail.${contactType}`)

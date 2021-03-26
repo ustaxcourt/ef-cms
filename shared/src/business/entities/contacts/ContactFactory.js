@@ -97,7 +97,7 @@ const commonValidationRequirements = {
   ),
   contactType: JoiValidationConstants.STRING.valid(
     ...Object.values(CONTACT_TYPES),
-  ).optional(),
+  ).required(),
   email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
     then: joi.required(),
@@ -436,16 +436,19 @@ ContactFactory.createContacts = ({
     otherPetitioners,
     primary: constructors.primary
       ? new constructors.primary(
-          { ...contactInfo.primary, contactType: CONTACT_TYPES.primary } || {},
+          { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
           {
             applicationContext,
           },
         )
       : {},
     secondary: constructors.secondary
-      ? new constructors.secondary(contactInfo.secondary || {}, {
-          applicationContext,
-        })
+      ? new constructors.secondary(
+          { ...contactInfo.secondary, contactType: CONTACT_TYPES.secondary },
+          {
+            applicationContext,
+          },
+        )
       : undefined,
   };
 };

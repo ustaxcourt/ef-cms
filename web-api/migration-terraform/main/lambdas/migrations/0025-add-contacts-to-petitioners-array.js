@@ -19,6 +19,7 @@ const migrateItems = async items => {
         .toRawObject();
 
       delete item.contactPrimary;
+      delete item.contactSecondary;
       delete item.otherFilers;
       delete item.otherPetitioners;
 

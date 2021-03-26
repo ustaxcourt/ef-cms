@@ -729,10 +729,10 @@ const OTHER_TYPES = {
 };
 
 const CONTACT_TYPES = {
-  primary: 'PRIMARY',
-  secondary: 'SECONDARY',
-  otherFiler: 'OTHER_FILER',
-  otherPetitioner: 'OTHER_PETITIONER',
+  primary: 'primary',
+  secondary: 'secondary',
+  otherFiler: 'otherFilers',
+  otherPetitioner: 'otherPetitioners',
 };
 
 const COMMON_CITIES = [

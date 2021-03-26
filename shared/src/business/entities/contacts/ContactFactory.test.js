@@ -927,11 +927,6 @@ describe('ContactFactory', () => {
         const caseWithOtherPetitioners = new Case(
           {
             ...MOCK_CASE,
-            contactSecondary: {
-              ...getContactPrimary(MOCK_CASE),
-              inCareOf: 'Peter Parker',
-              secondaryName: 'Trustee Name',
-            },
             otherPetitioners: [
               {
                 additionalName: 'First Other Petitioner',
@@ -946,7 +941,7 @@ describe('ContactFactory', () => {
                 state: 'AK',
               },
               {
-                additionalName: 'First Other Petitioner',
+                additionalName: 'Second Other Petitioner',
                 address1: '876 12th Ave',
                 city: 'Nashville',
                 country: 'USA',
@@ -962,8 +957,12 @@ describe('ContactFactory', () => {
             petitioners: [
               {
                 ...getContactPrimary(MOCK_CASE),
-                inCareOf: 'Peter Parker',
                 secondaryName: 'Trustee Name',
+              },
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactType: CONTACT_TYPES.secondary,
+                inCareOf: 'Peter Parker',
               },
             ],
           },
@@ -1055,6 +1054,7 @@ describe('ContactFactory', () => {
         {
           address1: '876 12th Ave',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.primary,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           hasEAccess: true,
@@ -1077,6 +1077,7 @@ describe('ContactFactory', () => {
         {
           address1: '876 12th Ave',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.primary,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           hasEAccess: false,

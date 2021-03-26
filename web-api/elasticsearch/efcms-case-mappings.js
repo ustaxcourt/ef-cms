@@ -27,18 +27,6 @@ module.exports = {
     'closedDate.S': {
       type: 'date',
     },
-    'contactSecondary.M.contactId.S': {
-      type: 'keyword',
-    },
-    'contactSecondary.M.countryType.S': {
-      type: 'keyword',
-    },
-    'contactSecondary.M.name.S': {
-      type: 'text',
-    },
-    'contactSecondary.M.state.S': {
-      type: 'keyword',
-    },
     'docketEntries.L.M.createdAt.S': {
       type: 'date',
     },
@@ -105,6 +93,9 @@ module.exports = {
     'isSealed.BOOL': { type: 'boolean' },
     'petitioners.L.M.contactId.S': {
       type: 'text',
+    },
+    'petitioners.L.M.contactType.S': {
+      type: 'keyword',
     },
     'petitioners.L.M.countryType.S': {
       type: 'text',
