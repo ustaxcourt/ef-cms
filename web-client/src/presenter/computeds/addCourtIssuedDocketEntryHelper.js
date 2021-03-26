@@ -30,8 +30,12 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     applicationContext.getUtilities().getContactPrimary(caseDetail),
   ];
 
-  if (!isEmpty(caseDetail.contactSecondary)) {
-    petitioners.push(caseDetail.contactSecondary);
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(caseDetail);
+
+  if (!isEmpty(contactSecondary)) {
+    petitioners.push(contactSecondary);
   }
 
   const serviceParties = [

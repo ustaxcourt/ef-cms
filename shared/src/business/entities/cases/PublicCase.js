@@ -10,6 +10,7 @@ const {
 } = require('../EntityConstants');
 const {
   getContactPrimary,
+  getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
   isSealedCase,
@@ -62,17 +63,19 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       contactInfo: {
         otherFilers: getOtherFilers(rawCase),
         otherPetitioners: getOtherPetitioners(rawCase),
-        primary: getContactPrimary(rawCase),
-        secondary: rawCase.contactSecondary,
+        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
+        secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
       },
       isPaper: rawCase.isPaper,
       partyType: rawCase.partyType,
     });
 
     this.petitioners = [contacts.primary];
+    if (contacts.secondary) {
+      this.petitioners.push(contacts.secondary);
+    }
     this.petitioners.push(...contacts.otherFilers);
     this.petitioners.push(...contacts.otherPetitioners);
-    this.contactSecondary = contacts.secondary;
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),
@@ -82,10 +85,9 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     );
   } else if (!this.isSealed) {
     this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
-
-    this.contactSecondary = rawCase.contactSecondary
-      ? new PublicContact(rawCase.contactSecondary)
-      : undefined;
+    if (getContactSecondary(rawCase)) {
+      this.petitioners.push(new PublicContact(getContactSecondary(rawCase)));
+    }
   }
 
   // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
@@ -99,7 +101,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-  contactSecondary: PublicContact.VALIDATION_RULES.optional().allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketEntries: joi
     .array()
@@ -127,7 +128,6 @@ const publicCaseSchema = {
 
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
   docketEntries: joi.array().max(0),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),

@@ -1,3 +1,7 @@
+import {
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperComputed } from './confirmInitiateServiceModalHelper';
 import { runCompute } from 'cerebral/test';
@@ -9,33 +13,35 @@ describe('confirmInitiateServiceModalHelper', () => {
     applicationContext,
   );
 
-  const { COUNTRY_TYPES } = applicationContext.getConstants();
-
   it('returns the expected contacts needed if someone needs paper', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
         caseDetail: {
-          contactPrimary: {
-            address1: '609 East Cowley Parkway',
-            address2: 'Ullamco quibusdam ea',
-            address3: 'Consectetur quos do',
-            city: 'asdf',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'petitioner@example.com',
-            name: 'Callie Bullock',
-            postalCode: '33333',
-            state: 'AK',
-          },
-          contactSecondary: {
-            address1: 'asdf',
-            city: 'asadf',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Chelsea Hogan',
-            postalCode: '33333',
-            state: 'AL',
-          },
           irsPractitioners: [],
           isPaper: false,
+          petitioners: [
+            {
+              address1: '609 East Cowley Parkway',
+              address2: 'Ullamco quibusdam ea',
+              address3: 'Consectetur quos do',
+              city: 'asdf',
+              contactType: CONTACT_TYPES.primary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'petitioner@example.com',
+              name: 'Callie Bullock',
+              postalCode: '33333',
+              state: 'AK',
+            },
+            {
+              address1: 'asdf',
+              city: 'asadf',
+              contactType: CONTACT_TYPES.secondary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              name: 'Chelsea Hogan',
+              postalCode: '33333',
+              state: 'AL',
+            },
+          ],
           privatePractitioners: [],
         },
         form: {},

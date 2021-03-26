@@ -19,23 +19,7 @@ const {
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { isServed } = require('../entities/DocketEntry');
-const { ROLES } = require('../entities/EntityConstants');
-
-const getServedPartiesCode = servedParties => {
-  let servedPartiesCode = '';
-  if (servedParties && servedParties.length > 0) {
-    if (
-      servedParties.length === 1 &&
-      servedParties[0].role === ROLES.irsSuperuser
-    ) {
-      servedPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
-    } else {
-      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
-    }
-  }
-  return servedPartiesCode;
-};
+const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = doc => {
@@ -417,14 +401,18 @@ const formatCase = (applicationContext, caseDetail) => {
         });
       }
 
+      const contactSecondary = applicationContext
+        .getUtilities()
+        .getContactSecondary(caseDetail);
+
       if (
-        caseDetail.contactSecondary &&
-        counsel.representing.includes(caseDetail.contactSecondary.contactId)
+        contactSecondary &&
+        counsel.representing.includes(contactSecondary.contactId)
       ) {
         counsel.representingFormatted.push({
-          name: caseDetail.contactSecondary.name,
-          secondaryName: caseDetail.contactSecondary.secondaryName,
-          title: caseDetail.contactSecondary.title,
+          name: contactSecondary.name,
+          secondaryName: contactSecondary.secondaryName,
+          title: contactSecondary.title,
         });
       }
 
@@ -612,6 +600,5 @@ module.exports = {
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
-  getServedPartiesCode,
   sortDocketEntries,
 };

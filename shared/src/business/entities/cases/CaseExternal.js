@@ -17,7 +17,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { Case, getContactPrimary } = require('./Case');
+const { Case, getContactPrimary, getContactSecondary } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
@@ -43,18 +43,19 @@ CaseExternal.prototype.initContacts = function (
     applicationContext,
     contactInfo: {
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-      secondary: rawCase.contactSecondary,
+      secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
     partyType: rawCase.partyType,
   });
   this.petitioners = [contacts.primary];
-  this.contactSecondary = contacts.secondary;
+  if (contacts.secondary) {
+    this.petitioners.push(contacts.secondary);
+  }
 };
 
 CaseExternal.prototype.initSelf = function (rawCase) {
   this.businessType = rawCase.businessType;
   this.caseType = rawCase.caseType;
-  this.contactSecondary = rawCase.contactSecondary;
   this.countryType = rawCase.countryType;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
@@ -82,8 +83,6 @@ CaseExternal.commonRequirements = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactPrimary: joi.object().optional(), // validated with the ContactFactory
-  contactSecondary: joi.object().optional(), // validated with the ContactFactory
   countryType: JoiValidationConstants.STRING.optional(),
   filingType: JoiValidationConstants.STRING.valid(
     ...FILING_TYPES[ROLES.petitioner],

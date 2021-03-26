@@ -298,39 +298,66 @@ exports.updatePetitionerInformationInteractor = async (
       oldData: getContactPrimary(oldCase),
     });
 
-  const secondaryChange =
-    secondaryEditableFields &&
-    secondaryEditableFields.name &&
-    oldCase.contactSecondary &&
-    oldCase.contactSecondary.name
-      ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
-          newData: secondaryEditableFields,
-          oldData: oldCase.contactSecondary,
-        })
-      : undefined;
-
-  let caseEntity = new Case(
+  const caseToUpdateContacts = new Case(
     {
       ...oldCase,
-      contactSecondary: {
-        ...oldCase.contactSecondary,
-        ...secondaryEditableFields,
-      },
       partyType,
     },
     { applicationContext },
   );
 
-  const oldCaseContactPrimary = caseEntity.getContactPrimary();
-
+  const oldCaseContactPrimary = caseToUpdateContacts.getContactPrimary();
   try {
-    caseEntity.updatePetitioner({
+    caseToUpdateContacts.updatePetitioner({
       ...oldCaseContactPrimary,
       ...primaryEditableFields,
     });
   } catch (e) {
+    applicationContext.logger.info('no contact primary was found on the case');
     throw new NotFoundError(e.message);
   }
+
+  const oldCaseContactSecondary = caseToUpdateContacts.getContactSecondary();
+  const secondaryChange =
+    secondaryEditableFields &&
+    secondaryEditableFields.name &&
+    oldCaseContactSecondary &&
+    oldCaseContactSecondary.name
+      ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
+          newData: secondaryEditableFields,
+          oldData: oldCaseContactSecondary,
+        })
+      : undefined;
+
+  if (contactSecondary) {
+    try {
+      caseToUpdateContacts.updatePetitioner({
+        additionalName: oldCaseContactSecondary?.additionalName,
+        contactId: oldCaseContactSecondary?.contactId,
+        contactType: oldCaseContactSecondary?.contactType,
+        email: oldCaseContactSecondary?.email,
+        hasEAccess: oldCaseContactSecondary?.hasEAccess,
+        isAddressSealed: oldCaseContactSecondary?.isAddressSealed,
+        sealedAndUnavailable: oldCaseContactSecondary?.sealedAndUnavailable,
+        secondaryName: oldCaseContactSecondary?.secondaryName,
+        title: oldCaseContactSecondary?.title,
+        ...secondaryEditableFields,
+      });
+    } catch (e) {
+      applicationContext.logger.info(
+        'no contact secondary was found on the case',
+      );
+      throw new NotFoundError(e.message);
+    }
+  }
+
+  //send back through the constructor so the contacts are created with the contact constructor
+  let caseEntity = new Case(
+    {
+      ...caseToUpdateContacts.toRawObject(),
+    },
+    { applicationContext },
+  ).validate();
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -338,10 +365,11 @@ exports.updatePetitionerInformationInteractor = async (
   let secondaryChangeDocs;
   let paperServicePdfUrl;
   const newContactPrimary = caseEntity.getContactPrimary();
+  const newContactSecondary = caseEntity.getContactSecondary();
 
   if (
     (primaryChange && !newContactPrimary.isAddressSealed) ||
-    (secondaryChange && !caseEntity.contactSecondary.isAddressSealed)
+    (secondaryChange && !newContactSecondary.isAddressSealed)
   ) {
     const partyWithPaperService = caseEntity.hasPartyWithPaperService();
 
@@ -375,7 +403,7 @@ exports.updatePetitionerInformationInteractor = async (
         caseEntity,
         change: secondaryChange,
         editableFields: secondaryEditableFields,
-        oldCaseContact: oldCase.contactSecondary,
+        oldCaseContact: oldCaseContactSecondary,
         partyWithPaperService,
         privatePractitionersRepresentingContact,
         servedParties,

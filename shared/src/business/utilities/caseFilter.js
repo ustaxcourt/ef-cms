@@ -1,5 +1,6 @@
 const {
   getContactPrimary,
+  getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
   isAssociatedUser,
@@ -62,7 +63,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   };
   const caseContactsToBeSealed = [
     getContactPrimary(formattedCase),
-    formattedCase.contactSecondary,
+    getContactSecondary(formattedCase),
     ...(getOtherFilers(formattedCase) || []),
     ...(getOtherPetitioners(formattedCase) || []),
   ].filter(caseContact => caseContact && caseContact.isAddressSealed);

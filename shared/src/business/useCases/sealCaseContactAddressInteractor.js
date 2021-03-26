@@ -42,7 +42,7 @@ exports.sealCaseContactAddressInteractor = async (
 
   const contactToSeal = [
     caseEntity.getContactPrimary(),
-    caseEntity.contactSecondary,
+    caseEntity.getContactSecondary(),
     ...(caseEntity.getOtherFilers() || []),
     ...(caseEntity.getOtherPetitioners() || []),
   ].find(contact => contact && contact.contactId == contactId);

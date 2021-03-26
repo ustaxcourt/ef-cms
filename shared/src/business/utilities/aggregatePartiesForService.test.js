@@ -27,6 +27,7 @@ describe('aggregatePartiesForService', () => {
       address1: 'Test Address',
       city: 'Testville',
       contactId: SECONDARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.secondary,
       name: 'Contact Secondary',
       state: 'CA',
     };
@@ -100,9 +101,8 @@ describe('aggregatePartiesForService', () => {
     ];
 
     mockCase = {
-      contactSecondary,
       irsPractitioners,
-      petitioners: [contactPrimary],
+      petitioners: [contactPrimary, contactSecondary],
       privatePractitioners,
     };
   });

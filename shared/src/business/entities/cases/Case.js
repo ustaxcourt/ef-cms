@@ -320,17 +320,18 @@ Case.prototype.assignContacts = function assignContacts({
       otherFilers: getOtherFilers(rawCase),
       otherPetitioners: getOtherPetitioners(rawCase),
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-      secondary: rawCase.contactSecondary,
+      secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
     isPaper: rawCase.isPaper,
     partyType: rawCase.partyType,
   });
 
   this.petitioners.push(contacts.primary);
+  if (contacts.secondary) {
+    this.petitioners.push(contacts.secondary);
+  }
   this.petitioners.push(...contacts.otherPetitioners);
   this.petitioners.push(...contacts.otherFilers);
-
-  this.contactSecondary = contacts.secondary;
 };
 
 Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
@@ -466,9 +467,6 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactSecondary: ContactFactory.getValidationRules('secondary')
-    .optional()
-    .allow(null),
   correspondence: joi
     .array()
     .items(Correspondence.VALIDATION_RULES)
@@ -757,6 +755,8 @@ joiValidationDecorator(
 Case.getCaseCaption = function (rawCase) {
   let caseCaption;
   const primaryContact = getContactPrimary(rawCase) || rawCase.contactPrimary;
+  const secondaryContact =
+    getContactSecondary(rawCase) || rawCase.contactSecondary;
 
   switch (rawCase.partyType) {
     case PARTY_TYPES.corporation:
@@ -764,10 +764,10 @@ Case.getCaseCaption = function (rawCase) {
       caseCaption = `${primaryContact.name}, Petitioner`;
       break;
     case PARTY_TYPES.petitionerSpouse:
-      caseCaption = `${primaryContact.name} & ${rawCase.contactSecondary.name}, Petitioners`;
+      caseCaption = `${primaryContact.name} & ${secondaryContact.name}, Petitioners`;
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
-      caseCaption = `${primaryContact.name} & ${rawCase.contactSecondary.name}, Deceased, ${primaryContact.name}, Surviving Spouse, Petitioners`;
+      caseCaption = `${primaryContact.name} & ${secondaryContact.name}, Deceased, ${primaryContact.name}, Surviving Spouse, Petitioners`;
       break;
     case PARTY_TYPES.estate:
       caseCaption = `Estate of ${primaryContact.name}, Deceased, ${primaryContact.secondaryName}, ${primaryContact.title}, Petitioner(s)`;
@@ -953,6 +953,8 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} docketEntryEntity the docket entry to add to the case
  */
 Case.prototype.addDocketEntry = function (docketEntryEntity) {
+  docketEntryEntity.docketNumber = this.docketNumber;
+
   if (docketEntryEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
@@ -1391,8 +1393,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isPrimaryContact =
     getContactPrimary(caseRaw)?.contactId === user.userId;
   const isSecondaryContact =
-    caseRaw.contactSecondary &&
-    caseRaw.contactSecondary.contactId === user.userId;
+    getContactSecondary(caseRaw)?.contactId === user.userId;
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
@@ -1433,6 +1434,18 @@ Case.prototype.getContactPrimary = function () {
 };
 
 /**
+ * Retrieves the secondary contact on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Object} the secondary contact object on the case
+ */
+const getContactSecondary = function (rawCase) {
+  return rawCase.petitioners?.find(
+    p => p.contactType === CONTACT_TYPES.secondary,
+  );
+};
+
+/**
  * Retrieves the other filers on the case
  *
  * @param {object} arguments.rawCase the raw case
@@ -1442,6 +1455,15 @@ const getOtherFilers = function (rawCase) {
   return rawCase.petitioners?.filter(
     p => p.contactType === CONTACT_TYPES.otherFiler,
   );
+};
+
+/**
+ * Returns the secondary contact on the case
+ *
+ * @returns {Object} the secondary contact object on the case
+ */
+Case.prototype.getContactSecondary = function () {
+  return getContactSecondary(this);
 };
 
 /**
@@ -1481,12 +1503,12 @@ Case.prototype.getOtherPetitioners = function () {
  * @param {object} arguments.updatedPetitioner the updated petitioner object
  */
 const updatePetitioner = function (rawCase, updatedPetitioner) {
-  const foundPetitioner = rawCase.petitioners.find(
+  const petitionerIndex = rawCase.petitioners.findIndex(
     p => p.contactId === updatedPetitioner.contactId,
   );
 
-  if (foundPetitioner) {
-    Object.assign(foundPetitioner, updatedPetitioner);
+  if (petitionerIndex !== -1) {
+    rawCase.petitioners[petitionerIndex] = updatedPetitioner;
   } else {
     throw new Error(
       `Petitioner was not found on case ${rawCase.docketNumber}.`,
@@ -1716,32 +1738,6 @@ Case.prototype.setCaseStatus = function (caseStatus) {
 Case.prototype.setCaseCaption = function (caseCaption) {
   this.caseCaption = caseCaption;
   return this;
-};
-
-/**
- * get case contacts
- *
- * @param {object} shape specific contact params to be returned
- * @returns {object} object containing case contacts
- */
-Case.prototype.getCaseContacts = function (shape) {
-  const caseContacts = {};
-  [
-    'contactPrimary',
-    'contactSecondary',
-    'privatePractitioners',
-    'irsPractitioners',
-  ].forEach(contact => {
-    if (!shape || (shape && shape[contact] === true)) {
-      if (contact === 'contactPrimary') {
-        caseContacts[contact] = this.getContactPrimary();
-        return;
-      }
-      caseContacts[contact] = this[contact];
-    }
-  });
-
-  return caseContacts;
 };
 
 /**
@@ -2002,12 +1998,12 @@ Case.prototype.deleteStatistic = function (statisticId) {
 };
 
 Case.prototype.hasPartyWithPaperService = function () {
+  const contactSecondary = this.getContactSecondary();
   return (
     this.getContactPrimary().serviceIndicator ===
       SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (this.contactSecondary &&
-      this.contactSecondary.serviceIndicator ===
-        SERVICE_INDICATOR_TYPES.SI_PAPER) ||
+    (contactSecondary &&
+      contactSecondary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER) ||
     (this.privatePractitioners &&
       this.privatePractitioners.find(
         pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -2038,6 +2034,7 @@ module.exports = {
   Case: validEntityDecorator(Case),
   caseHasServedDocketEntries,
   getContactPrimary,
+  getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
   isAssociatedUser,

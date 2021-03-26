@@ -13,9 +13,6 @@ exports.marshallCase = caseObject => {
   return {
     caseCaption: caseObject.caseCaption,
     caseType: caseObject.caseType,
-    contactSecondary: caseObject.contactSecondary
-      ? marshallContact(caseObject.contactSecondary)
-      : undefined,
     docketEntries: (caseObject.docketEntries || []).map(marshallDocketEntry),
     docketNumber: caseObject.docketNumber,
     docketNumberSuffix: caseObject.docketNumberSuffix,

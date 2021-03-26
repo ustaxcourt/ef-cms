@@ -33,11 +33,7 @@ const aggregateCommonQueryParams = ({
     const simplePetitionerQuery = removeAdvancedSyntaxSymbols(petitionerName);
     const simpleQuery = {
       default_operator: 'and',
-      fields: [
-        'petitioners.L.M.name.S^4',
-        'contactSecondary.M.name.S^2',
-        'caseCaption.S^0.2',
-      ],
+      fields: ['petitioners.L.M.name.S^4', 'caseCaption.S^0.2'],
       flags: 'AND|PHRASE|PREFIX',
     };
 
@@ -64,11 +60,7 @@ const aggregateCommonQueryParams = ({
     nonExactMatchesQuery.push({
       simple_query_string: {
         default_operator: 'or', // any subset of all terms
-        fields: [
-          'petitioners.L.M.name.S^5',
-          'contactSecondary.M.name.S^1',
-          'caseCaption.S',
-        ],
+        fields: ['petitioners.L.M.name.S^5', 'caseCaption.S'],
         query: simplePetitionerQuery,
       },
     });
@@ -83,11 +75,6 @@ const aggregateCommonQueryParams = ({
               'petitioners.L.M.countryType.S': countryType,
             },
           },
-          {
-            term: {
-              'contactSecondary.M.countryType.S': countryType,
-            },
-          },
         ],
       },
     });
@@ -99,11 +86,6 @@ const aggregateCommonQueryParams = ({
           {
             match: {
               'petitioners.L.M.state.S': petitionerState,
-            },
-          },
-          {
-            term: {
-              'contactSecondary.M.state.S': petitionerState,
             },
           },
         ],

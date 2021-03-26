@@ -80,6 +80,84 @@ describe('Case entity', () => {
     ]);
   });
 
+  describe('updatePetitioner', () => {
+    it('should throw an error when the petitioner to update is not found on the case', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+
+      expect(() => myCase.updatePetitioner({ contactId: 'badId' })).toThrow(
+        'Petitioner was not found',
+      );
+    });
+
+    it('should update the petitioner when found on case', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+
+      myCase.updatePetitioner({
+        contactId: myCase.petitioners[0].contactId,
+        contactType: CONTACT_TYPES.primary,
+        name: undefined,
+      });
+
+      const updatedCaseRaw = myCase.validate().toRawObject();
+
+      // send back through the constructor so contacts are recreated as entities
+      const updatedCaseEntity = new Case(updatedCaseRaw, {
+        applicationContext,
+      });
+
+      expect(updatedCaseEntity.petitioners[0]).toMatchObject({
+        name: undefined,
+      });
+      expect(updatedCaseEntity.isValid()).toBeFalsy();
+    });
+
+    it('should fail to validate an invalid secondaryContact', () => {
+      const SECONDARY_CONTACT_ID = 'd7d90c05-f6cd-442c-a168-202db587f16f';
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [
+            ...MOCK_CASE.petitioners,
+            {
+              ...MOCK_CASE.petitioners[0],
+              contactId: SECONDARY_CONTACT_ID,
+              contactType: CONTACT_TYPES.secondary,
+              name: 'Jimmy Jazz',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      myCase.updatePetitioner({
+        contactId: SECONDARY_CONTACT_ID,
+        contactType: CONTACT_TYPES.secondary,
+        name: undefined,
+      });
+
+      const updatedCaseRaw = myCase.validate().toRawObject();
+
+      // send back through the constructor so contacts are recreated as entities
+      const updatedCaseEntity = new Case(updatedCaseRaw, {
+        applicationContext,
+      });
+
+      expect(updatedCaseEntity.isValid()).toBeFalsy();
+    });
+  });
+
   describe('archivedDocketEntries', () => {
     let myCase;
 
@@ -617,6 +695,7 @@ describe('Case entity', () => {
           phone: '1234567890',
           postalCode: '05198',
           state: 'AK',
+          title: UNIQUE_OTHER_FILER_TYPE,
         },
         {
           address1: '1337 12th Ave',
@@ -626,10 +705,12 @@ describe('Case entity', () => {
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'mayor@example.com',
           name: 'Guy Fieri',
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE, // fails because there cannot be more than 1 filer with this type
+          // fails because there cannot be more than 1 filer with this type
+          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
           state: 'AK',
+          title: OTHER_FILER_TYPES[2],
         },
       ];
 
@@ -644,6 +725,7 @@ describe('Case entity', () => {
       );
 
       const errors = myCase.getFormattedValidationErrors();
+
       expect(errors).toMatchObject({
         'petitioners[2]': '"petitioners[2]" contains a duplicate value',
       });
@@ -706,7 +788,6 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          otherPetitioners: undefined,
         },
         {
           applicationContext,
@@ -1217,15 +1298,22 @@ describe('Case entity', () => {
       const errors = testCase.getFormattedValidationErrors();
 
       expect(errors).toMatchObject({
-        contactSecondary: {
-          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
-        },
         petitioners: [
           {
             address1: 'Enter mailing address',
             city: 'Enter city',
             countryType: 'Enter country type',
             index: 0,
+            name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+            phone: 'Enter phone number',
+            postalCode: 'Enter ZIP code',
+            state: 'Enter state',
+          },
+          {
+            address1: 'Enter mailing address',
+            city: 'Enter city',
+            countryType: 'Enter country type',
+            index: 1,
             name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
             phone: 'Enter phone number',
             postalCode: 'Enter ZIP code',
@@ -1728,10 +1816,10 @@ describe('Case entity', () => {
     });
   });
 
-  describe('addDocument', () => {
+  describe('addDocketEntry', () => {
     it('attaches the docket entry to the case', () => {
       const caseToVerify = new Case(
-        {},
+        { docketNumber: '123-45' },
         {
           applicationContext,
         },
@@ -1744,6 +1832,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketEntries.length).toEqual(1);
       expect(caseToVerify.docketEntries[0]).toMatchObject({
         docketEntryId: '123',
+        docketNumber: '123-45',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       });
@@ -3428,90 +3517,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getCaseContacts', () => {
-    const contactPrimary = {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Test Petitioner',
-      postalCode: '12345',
-      state: 'TN',
-      title: 'Executor',
-    };
-
-    const contactSecondary = {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Contact Secondary',
-      postalCode: '12345',
-      state: 'TN',
-      title: 'Executor',
-    };
-
-    const privatePractitioners = [
-      {
-        name: 'Private Practitioner One',
-      },
-    ];
-
-    const irsPractitioners = [
-      {
-        name: 'IRS Practitioner One',
-      },
-    ];
-
-    it('should return an object containing all contact types', () => {
-      const testCase = new Case(
-        {
-          ...MOCK_CASE,
-          contactPrimary,
-          contactSecondary,
-          irsPractitioners,
-          partyType: PARTY_TYPES.petitionerSpouse,
-          privatePractitioners,
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const caseContacts = testCase.getCaseContacts();
-
-      expect(caseContacts).toMatchObject({
-        contactPrimary,
-        contactSecondary,
-        irsPractitioners,
-        privatePractitioners,
-      });
-    });
-
-    it('should return an object contacts matching the `shape` if provided', () => {
-      const testCase = new Case(
-        {
-          ...MOCK_CASE,
-          contactPrimary,
-          contactSecondary,
-          irsPractitioners,
-          partyType: PARTY_TYPES.petitionerSpouse,
-          privatePractitioners,
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const caseContacts = testCase.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      });
-      expect(caseContacts).toMatchObject({
-        contactPrimary,
-        contactSecondary,
-      });
-    });
-  });
-
   describe('Case Consolidation Eligibility', () => {
     describe('canConsolidate', () => {
       let caseEntity;
@@ -4453,37 +4458,79 @@ describe('Case entity', () => {
 
   describe('secondary contact', () => {
     it('does not create a secondary contact when one is not needed by the party type', () => {
+      const myCase = new Case({ ...MOCK_CASE }, { applicationContext });
+
+      expect(myCase.getContactSecondary()).toBeUndefined();
+    });
+
+    it('should require a secondary contact when partyType is petitionerSpouse', () => {
       const myCase = new Case(
-        { ...MOCK_CASE, contactSecondary: undefined },
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.petitionerSpouse,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitioners: [
+          {
+            index: 1,
+          },
+        ],
+      });
+    });
+
+    it('should require a valid secondary contact when partyType is petitionerSpouse', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [
+            ...MOCK_CASE.petitioners,
+            {
+              address2: undefined,
+              address3: undefined,
+              contactId: '56387318-0092-49a3-8cc1-921b0432bd16',
+              contactType: CONTACT_TYPES.secondary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.getFormattedValidationErrors()).toMatchObject({
+        petitioners: [
+          {
+            index: 1,
+          },
+        ],
+      });
+      expect(myCase.isValid()).toBeFalsy();
+    });
+  });
+
+  describe('judgeUserId', () => {
+    it('sets the judgeUserId property when a value is passed in', () => {
+      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+
+      const myCase = new Case(
+        { ...MOCK_CASE, judgeUserId: mockJudgeUserId },
         { applicationContext },
       );
 
       expect(myCase).toMatchObject({
-        contactSecondary: undefined,
+        judgeUserId: mockJudgeUserId,
       });
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
-    describe('judgeUserId', () => {
-      it('sets the judgeUserId property when a value is passed in', () => {
-        const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
+    it('does not fail validation without a judgeUserId', () => {
+      const myCase = new Case(MOCK_CASE, { applicationContext });
 
-        const myCase = new Case(
-          { ...MOCK_CASE, judgeUserId: mockJudgeUserId },
-          { applicationContext },
-        );
-
-        expect(myCase).toMatchObject({
-          judgeUserId: mockJudgeUserId,
-        });
-        expect(myCase.getFormattedValidationErrors()).toEqual(null);
-      });
-
-      it('does not fail validation without a judgeUserId', () => {
-        const myCase = new Case(MOCK_CASE, { applicationContext });
-
-        expect(myCase.judgeUserId).toBeUndefined();
-        expect(myCase.getFormattedValidationErrors()).toEqual(null);
-      });
+      expect(myCase.judgeUserId).toBeUndefined();
+      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
   });
 
@@ -4565,15 +4612,18 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          },
-          contactSecondary: {
-            ...MOCK_CASE.contactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
           partyType: PARTY_TYPES.petitionerSpouse,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactType: CONTACT_TYPES.secondary,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            },
+          ],
         },
         { applicationContext },
       );

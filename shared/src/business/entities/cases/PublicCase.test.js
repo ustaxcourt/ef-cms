@@ -11,10 +11,15 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
-const { getOtherFilers, getOtherPetitioners } = require('./Case');
+const {
+  getContactSecondary,
+  getOtherFilers,
+  getOtherPetitioners,
+} = require('./Case');
 const { isPrivateDocument, PublicCase } = require('./PublicCase');
 const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { omit } = require('lodash');
 
 describe('PublicCase', () => {
   describe('validation', () => {
@@ -22,7 +27,6 @@ describe('PublicCase', () => {
       const entity = new PublicCase(
         {
           caseCaption: 'testing',
-          contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
           docketEntries: [{}],
           docketNumber: '101-20',
@@ -42,7 +46,6 @@ describe('PublicCase', () => {
       const entity = new PublicCase(
         {
           caseCaption: 'testing',
-          contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
           docketEntries: [{ any: 'thing' }],
           docketNumber: '111-12',
@@ -61,7 +64,7 @@ describe('PublicCase', () => {
         caseCaption: expect.anything(),
         receivedAt: expect.anything(),
       });
-      expect(entity.contactSecondary).toBeUndefined();
+      expect(getContactSecondary(entity)).toBeUndefined();
       expect(entity.petitioners).toBeUndefined();
     });
   });
@@ -70,7 +73,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        contactSecondary: {},
         createdAt: 'testing',
         docketEntries: [],
         docketNumber: 'testing',
@@ -79,7 +81,10 @@ describe('PublicCase', () => {
         isPaper: true,
         otherFilers: [],
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [{ contactType: CONTACT_TYPES.primary }],
+        petitioners: [
+          { contactType: CONTACT_TYPES.primary },
+          { contactType: CONTACT_TYPES.secondary },
+        ],
         privatePractitioners: [],
         receivedAt: 'testing',
       },
@@ -88,11 +93,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      contactSecondary: {
-        entityName: 'PublicContact',
-        name: undefined,
-        state: undefined,
-      },
       docketEntries: [],
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
@@ -104,6 +104,12 @@ describe('PublicCase', () => {
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
+        {
+          contactType: CONTACT_TYPES.secondary,
+          entityName: 'PublicContact',
+          name: undefined,
+          state: undefined,
+        },
       ],
       receivedAt: 'testing',
     });
@@ -128,7 +134,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      contactSecondary: undefined,
       docketEntries: [],
       docketNumber: 'testing',
       docketNumberSuffix: 'testing',
@@ -148,7 +153,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         caseCaption: 'testing',
-        contactSecondary: undefined,
         createdAt: 'testing',
         docketEntries: [
           {
@@ -173,7 +177,6 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       caseCaption: 'testing',
-      contactSecondary: undefined,
       docketEntries: [
         {
           additionalInfo: undefined,
@@ -666,7 +669,7 @@ describe('PublicCase', () => {
       const entity = new PublicCase(rawCase, { applicationContext });
 
       expect(entity.toRawObject()).toMatchObject({
-        ...rawCase,
+        ...omit(rawCase, 'contactSecondary'),
         caseCaption: 'testing',
         docketEntries: [],
         docketNumber: 'testing',
@@ -681,6 +684,9 @@ describe('PublicCase', () => {
           }),
           expect.objectContaining({
             contactType: CONTACT_TYPES.otherFiler,
+          }),
+          expect.objectContaining({
+            contactType: CONTACT_TYPES.secondary,
           }),
         ]),
         receivedAt: 'testing',

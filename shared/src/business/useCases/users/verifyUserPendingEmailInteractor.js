@@ -1,8 +1,12 @@
 const {
+  Case,
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../entities/cases/Case');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { Practitioner } = require('../../entities/Practitioner');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -44,7 +48,7 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
 
       const petitionerObject = [
         getContactPrimary(caseRaw),
-        caseRaw.contactSecondary,
+        getContactSecondary(caseRaw),
       ].find(petitioner => petitioner && petitioner.contactId === user.userId);
       if (!petitionerObject) {
         applicationContext.logger.error(

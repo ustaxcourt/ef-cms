@@ -91,14 +91,16 @@ exports.createCaseInteractor = async (
         userId: user.userId,
       });
 
-    practitionerUser.representing = [petitionEntity.contactPrimary.contactId];
+    practitionerUser.representing = [
+      petitionEntity.getContactPrimary().contactId,
+    ];
 
     if (
       petitionMetadata.contactSecondary &&
       petitionMetadata.contactSecondary.name
     ) {
       practitionerUser.representing.push(
-        petitionEntity.contactSecondary.contactId,
+        petitionEntity.getContactSecondary().contactId,
       );
     }
 
@@ -135,6 +137,8 @@ exports.createCaseInteractor = async (
 
   const petitionDocketEntryEntity = new DocketEntry(
     {
+      contactPrimary: caseToAdd.getContactPrimary(),
+      contactSecondary: caseToAdd.getContactSecondary(),
       docketEntryId: petitionFileId,
       documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -146,10 +150,6 @@ exports.createCaseInteractor = async (
       partySecondary,
       privatePractitioners,
       userId: user.userId,
-      ...caseToAdd.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     },
     { applicationContext },
   );
@@ -181,6 +181,8 @@ exports.createCaseInteractor = async (
 
   const stinDocketEntryEntity = new DocketEntry(
     {
+      contactPrimary: caseToAdd.getContactPrimary(),
+      contactSecondary: caseToAdd.getContactSecondary(),
       docketEntryId: stinFileId,
       documentTitle: INITIAL_DOCUMENT_TYPES.stin.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -192,10 +194,6 @@ exports.createCaseInteractor = async (
       partySecondary,
       privatePractitioners,
       userId: user.userId,
-      ...caseToAdd.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     },
     { applicationContext },
   );
@@ -205,6 +203,8 @@ exports.createCaseInteractor = async (
   if (ownershipDisclosureFileId) {
     const odsDocketEntryEntity = new DocketEntry(
       {
+        contactPrimary: caseToAdd.getContactPrimary(),
+        contactSecondary: caseToAdd.getContactSecondary(),
         docketEntryId: ownershipDisclosureFileId,
         documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
@@ -216,10 +216,6 @@ exports.createCaseInteractor = async (
         partySecondary,
         privatePractitioners,
         userId: user.userId,
-        ...caseToAdd.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
       },
       { applicationContext },
     );

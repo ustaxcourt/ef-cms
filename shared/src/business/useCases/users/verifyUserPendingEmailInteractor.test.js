@@ -2,12 +2,19 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../entities/cases/Case');
+const {
   updatePetitionerCases,
   verifyUserPendingEmailInteractor,
 } = require('./verifyUserPendingEmailInteractor');
-const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { validUser } = require('../../../test/mockUsers');
 
 describe('verifyUserPendingEmailInteractor', () => {
@@ -583,13 +590,17 @@ describe('verifyUserPendingEmailInteractor', () => {
       userCases = [
         {
           ...MOCK_CASE,
-          contactSecondary: {
-            ...getContactPrimary(MOCK_CASE),
-            contactId: mockPetitionerUser.userId,
-            inCareOf: 'Barney',
-          },
           docketNumber: '102-21',
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          petitioners: [
+            ...MOCK_CASE.petitioners,
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactId: mockPetitionerUser.userId,
+              contactType: CONTACT_TYPES.secondary,
+              inCareOf: 'Barney',
+            },
+          ],
         },
       ];
 
@@ -606,15 +617,11 @@ describe('verifyUserPendingEmailInteractor', () => {
         user: mockPetitionerUser,
       });
 
-      expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-          .calls[0][0].caseToUpdate,
-      ).toMatchObject({
-        contactSecondary: {
-          email: UPDATED_EMAIL,
-        },
-        docketNumber: '102-21',
-      });
+      const {
+        caseToUpdate,
+      } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+      expect(getContactSecondary(caseToUpdate).email).toBe(UPDATED_EMAIL);
+      expect(caseToUpdate.docketNumber).toBe('102-21');
     });
   });
 });

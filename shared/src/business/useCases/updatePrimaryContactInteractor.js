@@ -51,7 +51,7 @@ exports.updatePrimaryContactInteractor = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseEntity = new Case(
+  let caseEntity = new Case(
     {
       ...caseToUpdate,
     },
@@ -70,6 +70,9 @@ exports.updatePrimaryContactInteractor = async (
   } catch (e) {
     throw new NotFoundError(e);
   }
+
+  const rawUpdatedCase = caseEntity.validate().toRawObject();
+  caseEntity = new Case(rawUpdatedCase, { applicationContext });
 
   const contactPrimary = caseEntity.getContactPrimary();
 
@@ -113,6 +116,7 @@ exports.updatePrimaryContactInteractor = async (
       {
         addToCoversheet: true,
         additionalInfo: `for ${contactPrimary.name}`,
+        contactPrimary: caseEntity.getContactPrimary(),
         docketEntryId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
         documentTitle: documentType.title,
@@ -124,9 +128,6 @@ exports.updatePrimaryContactInteractor = async (
         partyPrimary: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
-        ...caseEntity.getCaseContacts({
-          contactPrimary: true,
-        }),
       },
       { applicationContext },
     );
