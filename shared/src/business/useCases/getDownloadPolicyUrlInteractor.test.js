@@ -53,8 +53,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -71,8 +70,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -105,8 +103,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: '4028c310-d65d-497a-8a5d-1d0c4ccb4813',
       }),
@@ -122,8 +119,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
@@ -140,8 +136,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: `case-${mockCase.docketNumber}-confirmation.pdf`,
       }),
@@ -158,8 +153,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .verifyCaseForUser.mockReturnValue(true);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: '26258791-7a20-4a53-8e25-cc509b502cf3',
       }),
@@ -188,8 +182,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: '8205c4bc-879f-4648-a3ba-9280384c4c00',
       }),
@@ -211,8 +204,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .verifyCaseForUser.mockReturnValue(true);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: '26258791-7a20-4a53-8e25-cc509b502cf3',
       }),
@@ -243,8 +235,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         ],
       });
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
@@ -276,8 +267,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       });
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -309,8 +299,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       });
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -342,8 +331,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       });
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -376,8 +364,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       });
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -412,8 +399,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       });
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -447,8 +433,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       });
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -480,8 +465,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         ],
       });
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
@@ -514,8 +498,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         ],
       });
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
@@ -532,8 +515,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: 'case-101-18-confirmation.pdf',
     });
@@ -551,8 +533,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .verifyCaseForUser.mockReturnValue(true);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber, //docket number is 101-18
         key: 'case-101-20-confirmation.pdf',
       }),
@@ -568,8 +549,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
@@ -592,8 +572,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -619,8 +598,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
     });
@@ -646,8 +624,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
       }),
@@ -673,8 +650,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -692,8 +668,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
@@ -718,8 +693,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -736,8 +710,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -754,8 +727,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
@@ -775,8 +747,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3858',
       }),
@@ -798,8 +769,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: mockCorrespondenceId,
     });
@@ -834,8 +804,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: mockDocketEntryId,
     });
@@ -872,8 +841,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
-    const url = await getDownloadPolicyUrlInteractor({
-      applicationContext,
+    const url = await getDownloadPolicyUrlInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       key: mockDocketEntryId,
     });
@@ -914,8 +882,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: mockDocketEntryId,
       }),
@@ -957,8 +924,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await expect(
-      getDownloadPolicyUrlInteractor({
-        applicationContext,
+      getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: mockDocketEntryId,
       }),

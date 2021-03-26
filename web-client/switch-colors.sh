@@ -52,3 +52,5 @@ if [[ "${CURRENT_STATE}" == "\"Disabled\"" && "${DEPLOYING_STATE}" == "\"Disable
   echo "ERROR"
   exit 1;
 fi
+
+aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"pending-color-switch"},"sk":{"S":"pending-color-switch"},"current":{"S":"false"}}'
