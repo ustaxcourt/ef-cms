@@ -1739,36 +1739,6 @@ Case.prototype.setCaseCaption = function (caseCaption) {
 };
 
 /**
- * get case contacts
- *
- * @param {object} shape specific contact params to be returned
- * @returns {object} object containing case contacts
- */
-Case.prototype.getCaseContacts = function (shape) {
-  const caseContacts = {};
-  [
-    'contactPrimary',
-    'contactSecondary',
-    'privatePractitioners',
-    'irsPractitioners',
-  ].forEach(contact => {
-    if (!shape || (shape && shape[contact] === true)) {
-      if (contact === 'contactPrimary') {
-        caseContacts[contact] = this.getContactPrimary();
-        return;
-      }
-      if (contact === 'contactSecondary') {
-        caseContacts[contact] = this.getContactSecondary();
-        return;
-      }
-      caseContacts[contact] = this[contact];
-    }
-  });
-
-  return caseContacts;
-};
-
-/**
  * get consolidation status between current case entity and another case entity
  *
  * @param {object} caseEntity the pending case entity to check

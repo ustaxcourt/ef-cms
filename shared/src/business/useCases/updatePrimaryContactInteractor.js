@@ -116,6 +116,7 @@ exports.updatePrimaryContactInteractor = async (
       {
         addToCoversheet: true,
         additionalInfo: `for ${contactPrimary.name}`,
+        contactPrimary: caseEntity.getContactPrimary(),
         docketEntryId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
         documentTitle: documentType.title,
@@ -127,9 +128,6 @@ exports.updatePrimaryContactInteractor = async (
         partyPrimary: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
-        ...caseEntity.getCaseContacts({
-          contactPrimary: true,
-        }),
       },
       { applicationContext },
     );

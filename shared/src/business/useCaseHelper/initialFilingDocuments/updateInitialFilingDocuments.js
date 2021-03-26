@@ -34,6 +34,8 @@ const addNewInitialFilingToCase = ({
 
     documentMeta = {
       ...currentCaseDocument,
+      contactPrimary: caseEntity.getContactPrimary(),
+      contactSecondary: caseEntity.getContactSecondary(),
       createdAt: caseEntity.receivedAt,
       eventCode,
       filingDate: caseEntity.receivedAt,
@@ -45,10 +47,6 @@ const addNewInitialFilingToCase = ({
       partySecondary,
       receivedAt: caseEntity.receivedAt,
       userId: authorizedUser.userId,
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     };
   }
 

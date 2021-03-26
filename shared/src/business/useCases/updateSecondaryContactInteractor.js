@@ -116,6 +116,7 @@ exports.updateSecondaryContactInteractor = async (
       {
         addToCoversheet: true,
         additionalInfo: `for ${contactSecondary.name}`,
+        contactSecondary: caseEntity.getContactSecondary(),
         docketEntryId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
         documentTitle: changeOfAddressDocumentTypeToGenerate.title,
@@ -127,9 +128,6 @@ exports.updateSecondaryContactInteractor = async (
         partySecondary: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
-        ...caseEntity.getCaseContacts({
-          contactSecondary: true,
-        }),
       },
       { applicationContext },
     );
