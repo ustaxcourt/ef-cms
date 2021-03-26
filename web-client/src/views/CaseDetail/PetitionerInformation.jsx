@@ -43,10 +43,10 @@ const PetitionerInformation = connect(
   }) {
     const mainPartyInformation = () => (
       <div className="grid-row grid-gap-6">
-        <div className="tablet:grid-col-6">
+        <div className="tablet:grid-col-12">
           <div className="card height-full">
             <div className="content-wrapper">
-              <h3 className="underlined" id="primary-label">
+              <h3 id="primary-label">
                 Petitioner Contact Info
                 {caseDetailHelper.showEditContacts &&
                   !formattedCaseDetail.contactPrimary.isAddressSealed && (
@@ -71,9 +71,9 @@ const PetitionerInformation = connect(
                   </Button>
                 )}
               </h3>
-              {formattedCaseDetail.contactPrimary && (
-                <div className="grid-row">
-                  <div className="grid-col-6">
+              <div className="grid-row">
+                {formattedCaseDetail.contactPrimary && (
+                  <div className="grid-col-3">
                     <address aria-labelledby="primary-label">
                       <AddressDisplay
                         contact={formattedCaseDetail.contactPrimary}
@@ -92,8 +92,7 @@ const PetitionerInformation = connect(
                           </p>
                         </div>
                       )}
-                  </div>
-                  <div className="grid-col-6">
+
                     {formattedCaseDetail.contactPrimary.serviceIndicator && (
                       <>
                         <div className="semi-bold margin-bottom-0">
@@ -127,35 +126,10 @@ const PetitionerInformation = connect(
                       </>
                     )}
                   </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {formattedCaseDetail.contactSecondary &&
-          formattedCaseDetail.contactSecondary.name && (
-            <div className="tablet:grid-col-6">
-              <div className="card height-full">
-                <div className="content-wrapper">
-                  <h3 className="underlined" id="secondary-label">
-                    Spouse Contact Info
-                    {caseDetailHelper.showEditContacts &&
-                      !formattedCaseDetail.contactSecondary.isAddressSealed && (
-                        <Button
-                          link
-                          aria-label="Edit spouse contact information"
-                          className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
-                          href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/secondary/edit`}
-                          icon="edit"
-                        >
-                          Edit
-                        </Button>
-                      )}
-                  </h3>
-
-                  <div className="grid-row">
-                    <div className="grid-col-6">
+                )}
+                {formattedCaseDetail.contactSecondary &&
+                  formattedCaseDetail.contactSecondary.name && (
+                    <div className="tablet:grid-col-3">
                       <address aria-labelledby="secondary-label">
                         <AddressDisplay
                           contact={formattedCaseDetail.contactSecondary}
@@ -175,8 +149,6 @@ const PetitionerInformation = connect(
                             </p>
                           </div>
                         )}
-                    </div>
-                    <div className="grid-col-6">
                       {formattedCaseDetail.contactSecondary
                         .serviceIndicator && (
                         <>
@@ -190,11 +162,11 @@ const PetitionerInformation = connect(
                         </>
                       )}
                     </div>
-                  </div>
-                </div>
+                  )}
               </div>
             </div>
-          )}
+          </div>
+        </div>
       </div>
     );
 
