@@ -53,7 +53,7 @@ exports.updateSecondaryContactInteractor = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const oldContactSecondary = cloneDeep(caseEntity.getContactSecondary());
 
@@ -67,6 +67,9 @@ exports.updateSecondaryContactInteractor = async (
   } catch (e) {
     throw new NotFoundError(e);
   }
+
+  const rawUpdatedCase = caseEntity.validate().toRawObject();
+  caseEntity = new Case(rawUpdatedCase, { applicationContext });
 
   const contactSecondary = caseEntity.getContactSecondary();
 

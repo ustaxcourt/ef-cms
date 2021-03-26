@@ -313,6 +313,7 @@ exports.updatePetitionerInformationInteractor = async (
       ...primaryEditableFields,
     });
   } catch (e) {
+    applicationContext.logger.info('no contact primary was found on the case');
     throw new NotFoundError(e.message);
   }
 
@@ -328,24 +329,26 @@ exports.updatePetitionerInformationInteractor = async (
         })
       : undefined;
 
-  try {
-    caseToUpdateContacts.updatePetitioner({
-      additionalName: oldCaseContactSecondary?.additionalName,
-      contactId: oldCaseContactSecondary?.contactId,
-      contactType: oldCaseContactSecondary?.contactType,
-      email: oldCaseContactSecondary?.email,
-      hasEAccess: oldCaseContactSecondary?.hasEAccess,
-      isAddressSealed: oldCaseContactSecondary?.isAddressSealed,
-      sealedAndUnavailable: oldCaseContactSecondary?.sealedAndUnavailable,
-      secondaryName: oldCaseContactSecondary?.secondaryName,
-      title: oldCaseContactSecondary?.title,
-      ...secondaryEditableFields,
-    });
-  } catch (e) {
-    applicationContext.logger.info(
-      'no contact secondary was found on the case',
-    );
-    //TODO handle ADDING contactSecondary when none was previously on the case?
+  if (contactSecondary) {
+    try {
+      caseToUpdateContacts.updatePetitioner({
+        additionalName: oldCaseContactSecondary?.additionalName,
+        contactId: oldCaseContactSecondary?.contactId,
+        contactType: oldCaseContactSecondary?.contactType,
+        email: oldCaseContactSecondary?.email,
+        hasEAccess: oldCaseContactSecondary?.hasEAccess,
+        isAddressSealed: oldCaseContactSecondary?.isAddressSealed,
+        sealedAndUnavailable: oldCaseContactSecondary?.sealedAndUnavailable,
+        secondaryName: oldCaseContactSecondary?.secondaryName,
+        title: oldCaseContactSecondary?.title,
+        ...secondaryEditableFields,
+      });
+    } catch (e) {
+      applicationContext.logger.info(
+        'no contact secondary was found on the case',
+      );
+      throw new NotFoundError(e.message);
+    }
   }
 
   //send back through the constructor so the contacts are created with the contact constructor
