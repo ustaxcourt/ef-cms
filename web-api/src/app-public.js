@@ -60,7 +60,10 @@ app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 
 app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
-app.get('/public-api/todays-orders/:page', lambdaWrapper(todaysOrdersLambda));
+app.get(
+  '/public-api/todays-orders/:page/:todaysOrdersSort',
+  lambdaWrapper(todaysOrdersLambda),
+);
 
 app.get(
   '/public-api/docket-number-search/:docketNumber',
