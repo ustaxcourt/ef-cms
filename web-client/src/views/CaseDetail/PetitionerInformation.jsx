@@ -95,7 +95,7 @@ const PetitionerInformation = connect(
 
                     {caseInformationHelper.showEmail && (
                       <>
-                        <div className="semi-bold margin-bottom-0 margin-top-6">
+                        <div className="semi-bold margin-bottom-0 margin-top-3">
                           Current email address
                         </div>
                         {formattedCaseDetail.contactPrimary.email}
@@ -111,7 +111,7 @@ const PetitionerInformation = connect(
                     )}
                     {screenMetadata.userPendingEmail && (
                       <>
-                        <div className="semi-bold  margin-top-6">
+                        <div className="semi-bold margin-top-3">
                           Pending email address
                         </div>
                         {screenMetadata.userPendingEmail}
@@ -120,7 +120,7 @@ const PetitionerInformation = connect(
 
                     {formattedCaseDetail.contactPrimary.serviceIndicator && (
                       <>
-                        <div className="semi-bold margin-top-6">
+                        <div className="semi-bold margin-top-3">
                           Service preference
                         </div>
                         {formattedCaseDetail.contactPrimary.serviceIndicator}
@@ -154,7 +154,7 @@ const PetitionerInformation = connect(
                       {formattedCaseDetail.contactSecondary
                         .serviceIndicator && (
                         <>
-                          <div className="semi-bold margin-bottom-0">
+                          <div className="semi-bold margin-bottom-0 margin-top-3">
                             Service preference
                           </div>
                           {
