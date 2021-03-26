@@ -632,8 +632,6 @@ Case.VALIDATION_RULES = {
     },
   ).description('When the case fee was waived.'),
   // Individual items are validated by the ContactFactory.
-
-  // items is a function that accepts contactType and returns ContactFactory.getValidationRules(CONTACT_TyPE)
   petitioners: joi
     .array()
     .unique(

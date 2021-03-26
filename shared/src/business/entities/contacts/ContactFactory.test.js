@@ -1054,6 +1054,7 @@ describe('ContactFactory', () => {
         {
           address1: '876 12th Ave',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.primary,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           hasEAccess: true,
@@ -1076,6 +1077,7 @@ describe('ContactFactory', () => {
         {
           address1: '876 12th Ave',
           city: 'Nashville',
+          contactType: CONTACT_TYPES.primary,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           hasEAccess: false,
