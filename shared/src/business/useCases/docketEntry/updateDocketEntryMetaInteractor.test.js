@@ -326,7 +326,8 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should NOT generate a new coversheet for the document if the servedAt field metadata formatted as YYYY-MM-DD is equivalent to the strict ISO formatted date on the entity', async () => {
-    await updateDocketEntryMetaInteractor(applicationContext, {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
       docketEntryMeta: {
         ...docketEntries[0],
         servedAt: '2019-01-01',
