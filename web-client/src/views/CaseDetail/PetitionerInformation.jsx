@@ -93,14 +93,6 @@ const PetitionerInformation = connect(
                         </div>
                       )}
 
-                    {formattedCaseDetail.contactPrimary.serviceIndicator && (
-                      <>
-                        <div className="semi-bold margin-bottom-0">
-                          Service preference
-                        </div>
-                        {formattedCaseDetail.contactPrimary.serviceIndicator}
-                      </>
-                    )}
                     {caseInformationHelper.showEmail && (
                       <>
                         <div className="semi-bold margin-bottom-0 margin-top-6">
@@ -119,14 +111,24 @@ const PetitionerInformation = connect(
                     )}
                     {screenMetadata.userPendingEmail && (
                       <>
-                        <div className="semi-bold margin-bottom-0 margin-top-6">
+                        <div className="semi-bold  margin-top-6">
                           Pending email address
                         </div>
                         {screenMetadata.userPendingEmail}
                       </>
                     )}
+
+                    {formattedCaseDetail.contactPrimary.serviceIndicator && (
+                      <>
+                        <div className="semi-bold margin-top-6">
+                          Service preference
+                        </div>
+                        {formattedCaseDetail.contactPrimary.serviceIndicator}
+                      </>
+                    )}
                   </div>
                 )}
+
                 {formattedCaseDetail.contactSecondary &&
                   formattedCaseDetail.contactSecondary.name && (
                     <div className="tablet:grid-col-3">
