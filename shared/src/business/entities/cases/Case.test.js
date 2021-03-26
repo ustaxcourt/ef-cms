@@ -1816,10 +1816,10 @@ describe('Case entity', () => {
     });
   });
 
-  describe('addDocument', () => {
+  describe('addDocketEntry', () => {
     it('attaches the docket entry to the case', () => {
       const caseToVerify = new Case(
-        {},
+        { docketNumber: '123-45' },
         {
           applicationContext,
         },
@@ -1832,6 +1832,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketEntries.length).toEqual(1);
       expect(caseToVerify.docketEntries[0]).toMatchObject({
         docketEntryId: '123',
+        docketNumber: '123-45',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       });
