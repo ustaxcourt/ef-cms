@@ -20,7 +20,6 @@ const migrateItems = async items => {
 
       applicationContext.logger.info('Updating receivedAt for docketEntry', {
         pk: item.pk,
-        processingStatus: item.processingStatus,
         sk: item.sk,
       });
 
