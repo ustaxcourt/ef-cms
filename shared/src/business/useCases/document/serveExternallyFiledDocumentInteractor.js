@@ -12,17 +12,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * serveExternallyFiledDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document to serve
  * @param {string} providers.docketEntryId the id of the docket entry to serve
  * @returns {object} the paper service pdf url
  */
-exports.serveExternallyFiledDocumentInteractor = async ({
+exports.serveExternallyFiledDocumentInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-}) => {
+  { docketEntryId, docketNumber },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {

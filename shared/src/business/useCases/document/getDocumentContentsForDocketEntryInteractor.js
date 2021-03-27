@@ -7,15 +7,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getDocumentContentsForDocketEntryInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentContentsId document contents id
  * @returns {string} url for the generated document on the storage client
  */
-exports.getDocumentContentsForDocketEntryInteractor = async ({
+exports.getDocumentContentsForDocketEntryInteractor = async (
   applicationContext,
-  documentContentsId,
-}) => {
+  { documentContentsId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_ORDER)) {

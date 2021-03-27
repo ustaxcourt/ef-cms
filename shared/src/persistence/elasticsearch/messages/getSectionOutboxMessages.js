@@ -10,9 +10,7 @@ exports.getSectionOutboxMessages = async ({ applicationContext, section }) => {
         bool: {
           must: [
             {
-              match: {
-                'fromSection.S': { operator: 'and', query: section },
-              },
+              term: { 'fromSection.S': section },
             },
             {
               range: {

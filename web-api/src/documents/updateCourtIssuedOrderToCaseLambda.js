@@ -10,9 +10,8 @@ exports.updateCourtIssuedOrderToCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateCourtIssuedOrderInteractor({
+      .updateCourtIssuedOrderInteractor(applicationContext, {
         ...JSON.parse(event.body),
-        applicationContext,
         docketEntryIdToEdit: event.pathParameters.docketEntryId,
       });
   });
