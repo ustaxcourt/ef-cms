@@ -100,7 +100,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     });
   });
 
-  it('returns showJudge = true and showTrialLocation = true when state.form.eventCode is FTRL (scenario = Type F)', () => {
+  it('returns showJudge = true, showTrialLocation = true, and showOptionalFreeText = true when state.form.eventCode is FTRL (scenario = Type F)', () => {
     let testState = { ...state, form: { eventCode: 'FTRL' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
@@ -112,6 +112,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       showDocketNumbers: false,
       showFreeText: false,
       showJudge: true,
+      showOptionalFreeText: true,
       showTrialLocation: true,
     });
   });
@@ -179,7 +180,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       state: testState,
     });
     expect(result).toMatchObject({
-      freeTextLabel: 'Enter description',
+      freeTextLabel: 'Description',
     });
   });
 });

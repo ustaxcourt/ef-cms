@@ -92,8 +92,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      fileCourtIssuedOrderInteractor({
-        applicationContext,
+      fileCourtIssuedOrderInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentType: 'Order to Show Cause',
@@ -105,8 +104,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add order document to case', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
@@ -128,8 +126,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add order document to case and set freeText and draftOrderState.freeText to the document title if it is a generic order (eventCode O)', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
@@ -160,8 +157,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should delete draftOrderState properties if they exists on the documentMetadata, after saving the document', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentContents: {},
@@ -195,8 +191,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add a generic notice document to case, set freeText to the document title, and set the document to signed', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Notice to be nice',
@@ -223,8 +218,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should store documentMetadata.documentContents in S3 and delete from data sent to persistence', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentContents: 'I am some document contents',
@@ -257,8 +251,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should parse and scrape pdf contents', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'TC Opinion',
@@ -297,8 +290,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         },
       ]);
 
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
@@ -349,8 +341,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         },
       ]);
 
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
@@ -386,8 +377,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       });
 
     await expect(
-      fileCourtIssuedOrderInteractor({
-        applicationContext,
+      fileCourtIssuedOrderInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'TC Opinion',

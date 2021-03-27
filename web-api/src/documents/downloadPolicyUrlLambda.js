@@ -10,8 +10,5 @@ exports.downloadPolicyUrlLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getDownloadPolicyUrlInteractor({
-        applicationContext,
-        ...event.pathParameters,
-      });
+      .getDownloadPolicyUrlInteractor(applicationContext, event.pathParameters);
   });

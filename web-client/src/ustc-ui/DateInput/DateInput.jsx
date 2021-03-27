@@ -9,7 +9,6 @@ export const DateInput = props => {
     label,
     onBlur = () => {},
     onChange = () => {},
-    value,
     hideLegend,
     optional,
     values = null,
@@ -29,7 +28,6 @@ export const DateInput = props => {
       name={id}
       names={names}
       optional={optional}
-      value={value}
       values={values}
       onBlur={onBlur}
       onChange={onChange}

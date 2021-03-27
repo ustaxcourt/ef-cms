@@ -1,7 +1,7 @@
 const {
   addCoversheetInteractor,
   generateCoverSheetData,
-} = require('./addCoversheetInteractor.js');
+} = require('./addCoversheetInteractor');
 const {
   applicationContext,
   testPdfDoc,
@@ -81,12 +81,11 @@ describe('addCoversheetInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     const params = {
-      applicationContext,
       docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet,
@@ -102,13 +101,12 @@ describe('addCoversheetInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     const params = {
-      applicationContext,
       docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
       replaceCoversheet: true,
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet,
@@ -124,12 +122,11 @@ describe('addCoversheetInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     const params = {
-      applicationContext,
       docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -144,12 +141,11 @@ describe('addCoversheetInteractor', () => {
       });
 
     const params = {
-      applicationContext,
       docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -162,12 +158,11 @@ describe('addCoversheetInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(optionalTestingCaseData);
 
     const params = {
-      applicationContext,
       docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
       docketNumber: '101-19',
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -182,12 +177,14 @@ describe('addCoversheetInteractor', () => {
       });
 
     const params = {
-      applicationContext,
       docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
     };
 
-    const updatedDocketEntryEntity = await addCoversheetInteractor(params);
+    const updatedDocketEntryEntity = await addCoversheetInteractor(
+      applicationContext,
+      params,
+    );
 
     expect(updatedDocketEntryEntity).toMatchObject({
       numberOfPages: 2,
