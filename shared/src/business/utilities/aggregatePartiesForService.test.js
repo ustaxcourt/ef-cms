@@ -1,5 +1,8 @@
+const {
+  CONTACT_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../entities/EntityConstants');
 const { aggregatePartiesForService } = require('./aggregatePartiesForService');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
 describe('aggregatePartiesForService', () => {
   let mockCase;
@@ -15,6 +18,7 @@ describe('aggregatePartiesForService', () => {
   beforeEach(() => {
     const contactPrimary = {
       contactId: PRIMARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.primary,
       email: 'contactprimary@example.com',
       name: 'Contact Primary',
     };
@@ -23,6 +27,7 @@ describe('aggregatePartiesForService', () => {
       address1: 'Test Address',
       city: 'Testville',
       contactId: SECONDARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.secondary,
       name: 'Contact Secondary',
       state: 'CA',
     };
@@ -96,9 +101,8 @@ describe('aggregatePartiesForService', () => {
     ];
 
     mockCase = {
-      contactPrimary,
-      contactSecondary,
       irsPractitioners,
+      petitioners: [contactPrimary, contactSecondary],
       privatePractitioners,
     };
   });

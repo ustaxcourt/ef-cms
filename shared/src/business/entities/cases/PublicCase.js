@@ -9,6 +9,13 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const {
+  getContactPrimary,
+  getContactSecondary,
+  getOtherFilers,
+  getOtherPetitioners,
+  isSealedCase,
+} = require('./Case');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -18,7 +25,6 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { IrsPractitioner } = require('../IrsPractitioner');
-const { isSealedCase } = require('./Case');
 const { map } = require('lodash');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { PublicContact } = require('./PublicContact');
@@ -55,19 +61,21 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {
-        otherFilers: rawCase.otherFilers,
-        otherPetitioners: rawCase.otherPetitioners,
-        primary: rawCase.contactPrimary,
-        secondary: rawCase.contactSecondary,
+        otherFilers: getOtherFilers(rawCase),
+        otherPetitioners: getOtherPetitioners(rawCase),
+        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
+        secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
       },
       isPaper: rawCase.isPaper,
       partyType: rawCase.partyType,
     });
 
-    this.otherPetitioners = contacts.otherPetitioners;
-    this.otherFilers = contacts.otherFilers;
-    this.contactPrimary = contacts.primary;
-    this.contactSecondary = contacts.secondary;
+    this.petitioners = [contacts.primary];
+    if (contacts.secondary) {
+      this.petitioners.push(contacts.secondary);
+    }
+    this.petitioners.push(...contacts.otherFilers);
+    this.petitioners.push(...contacts.otherPetitioners);
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),
@@ -75,13 +83,11 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     this.privatePractitioners = (rawCase.privatePractitioners || []).map(
       practitioner => new PrivatePractitioner(practitioner),
     );
-  } else {
-    this.contactPrimary = rawCase.contactPrimary
-      ? new PublicContact(rawCase.contactPrimary)
-      : undefined;
-    this.contactSecondary = rawCase.contactSecondary
-      ? new PublicContact(rawCase.contactSecondary)
-      : undefined;
+  } else if (!this.isSealed) {
+    this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
+    if (getContactSecondary(rawCase)) {
+      this.petitioners.push(new PublicContact(getContactSecondary(rawCase)));
+    }
   }
 
   // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
@@ -95,8 +101,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-  contactPrimary: PublicContact.VALIDATION_RULES.required(),
-  contactSecondary: PublicContact.VALIDATION_RULES.optional().allow(null),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketEntries: joi
     .array()
@@ -118,13 +122,12 @@ const publicCaseSchema = {
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
+  petitioners: joi.array().items(PublicContact.VALIDATION_RULES).required(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
 };
 
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  contactPrimary: joi.any().forbidden(),
-  contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
   docketEntries: joi.array().max(0),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
@@ -134,6 +137,7 @@ const sealedCaseSchemaRestricted = {
   hasIrsPractitioner: joi.boolean(),
   isSealed: joi.boolean(),
   partyType: joi.any().forbidden(),
+  petitioners: joi.any().forbidden(),
   receivedAt: joi.any().forbidden(),
 };
 
