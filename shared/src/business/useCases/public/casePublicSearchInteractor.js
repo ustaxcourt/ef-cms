@@ -16,7 +16,7 @@ exports.casePublicSearchInteractor = async (
 ) => {
   const foundCases = await applicationContext
     .getPersistenceGateway()
-    .casePublicSearchExactMatch({
+    .casePublicSearch({
       applicationContext,
       countryType,
       petitionerName,

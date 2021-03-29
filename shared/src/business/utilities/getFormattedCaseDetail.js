@@ -4,6 +4,11 @@ const {
   createISODateString,
 } = require('./DateHandler');
 const {
+  Case,
+  getContactPrimary,
+  getOtherPetitioners,
+} = require('../entities/cases/Case');
+const {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
@@ -13,7 +18,6 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 
@@ -385,26 +389,36 @@ const formatCase = (applicationContext, caseDetail) => {
     if (counsel.representing) {
       counsel.representingFormatted = [];
 
-      if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
+      const contactPrimary = applicationContext
+        .getUtilities()
+        .getContactPrimary(caseDetail);
+
+      if (counsel.representing.includes(contactPrimary.contactId)) {
         counsel.representingFormatted.push({
-          name: caseDetail.contactPrimary.name,
-          secondaryName: caseDetail.contactPrimary.secondaryName,
-          title: caseDetail.contactPrimary.title,
+          name: contactPrimary.name,
+          secondaryName: contactPrimary.secondaryName,
+          title: contactPrimary.title,
         });
       }
+
+      const contactSecondary = applicationContext
+        .getUtilities()
+        .getContactSecondary(caseDetail);
 
       if (
-        caseDetail.contactSecondary &&
-        counsel.representing.includes(caseDetail.contactSecondary.contactId)
+        contactSecondary &&
+        counsel.representing.includes(contactSecondary.contactId)
       ) {
         counsel.representingFormatted.push({
-          name: caseDetail.contactSecondary.name,
-          secondaryName: caseDetail.contactSecondary.secondaryName,
-          title: caseDetail.contactSecondary.title,
+          name: contactSecondary.name,
+          secondaryName: contactSecondary.secondaryName,
+          title: contactSecondary.title,
         });
       }
 
-      caseDetail.otherPetitioners.forEach(otherPetitioner => {
+      const otherPetitioners = getOtherPetitioners(caseDetail);
+
+      otherPetitioners.forEach(otherPetitioner => {
         if (counsel.representing.includes(otherPetitioner.contactId)) {
           counsel.representingFormatted.push({
             name: otherPetitioner.name,
@@ -414,15 +428,18 @@ const formatCase = (applicationContext, caseDetail) => {
         }
       });
 
-      caseDetail.otherFilers.forEach(otherFiler => {
-        if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingFormatted.push({
-            name: otherFiler.name,
-            secondaryName: otherFiler.secondaryName,
-            title: otherFiler.title,
-          });
-        }
-      });
+      applicationContext
+        .getUtilities()
+        .getOtherFilers(caseDetail)
+        .forEach(otherFiler => {
+          if (counsel.representing.includes(otherFiler.contactId)) {
+            counsel.representingFormatted.push({
+              name: otherFiler.name,
+              secondaryName: otherFiler.secondaryName,
+              title: otherFiler.title,
+            });
+          }
+        });
     }
     return counsel;
   };
@@ -569,6 +586,9 @@ const getFormattedCaseDetail = ({
   );
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
+
+  result.contactPrimary = getContactPrimary(caseDetail);
+
   return result;
 };
 

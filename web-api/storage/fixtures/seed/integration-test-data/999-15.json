@@ -5,7 +5,6 @@
     "procedureType": "Regular",
     "qcCompleteForTrial": {},
     "irsNoticeDate": "2018-03-01T00:00:00.000Z",
-    "otherPetitioners": [],
     "orderForFilingFee": false,
     "petitionPaymentStatus": "Not Paid",
     "partyType": "Petitioner",
@@ -13,22 +12,25 @@
     "caseType": "Other",
     "trialLocation": "Houston, Texas",
     "orderDesignatingPlaceOfTrial": false,
-    "contactPrimary": {
-      "isAddressSealed": false,
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-      "city": "Somewhere",
-      "address1": "123 Main St",
-      "postalCode": "12345",
-      "sealedAndUnavailable": false,
-      "hasEAccess": true,
-      "title": "Executor",
-      "countryType": "domestic",
-      "serviceIndicator": "Electronic",
-      "phone": "1234567",
-      "name": "Test Petitioner",
-      "state": "TN",
-      "email": "petitioner@example.com"
-    },
+    "petitioners": [
+      {
+        "isAddressSealed": false,
+        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "city": "Somewhere",
+        "address1": "123 Main St",
+        "postalCode": "12345",
+        "sealedAndUnavailable": false,
+        "hasEAccess": true,
+        "title": "Executor",
+        "countryType": "domestic",
+        "serviceIndicator": "Electronic",
+        "phone": "1234567",
+        "name": "Test Petitioner",
+        "state": "TN",
+        "email": "petitioner@example.com",
+        "contactType": "primary"
+      }
+    ],
     "createdAt": "2018-03-01T21:40:46.415Z",
     "noticeOfAttachments": false,
     "trialTime": "10:00",
@@ -42,7 +44,6 @@
     "initialDocketNumberSuffix": "_",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "docketNumberSuffix": null,
-    "otherFilers": [],
     "sortableDocketNumber": 15000999,
     "trialDate": "2020-11-27T05:00:00.000Z",
     "noticeOfTrialDate": "2021-02-16T16:16:19.660Z",
@@ -121,9 +122,7 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"

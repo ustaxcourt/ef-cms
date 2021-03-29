@@ -11,6 +11,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
@@ -20,7 +21,7 @@ const {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
+const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
@@ -184,20 +185,24 @@ describe('serveCaseToIrsInteractor', () => {
   it('should generate a second notice of receipt of petition when contactSecondary.address is different from contactPrimary.address', async () => {
     mockCase = {
       ...MOCK_CASE,
-      contactSecondary: {
-        address1: '123 Side St',
-        city: 'Somewhere Else',
-        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner Secondary',
-        phone: '1234547',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
       isPaper: false,
       partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        ...MOCK_CASE.petitioners,
+        {
+          address1: '123 Side St',
+          city: 'Somewhere Else',
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner Secondary',
+          phone: '1234547',
+          postalCode: '12345',
+          state: 'TN',
+          title: 'Executor',
+        },
+      ],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
@@ -212,6 +217,7 @@ describe('serveCaseToIrsInteractor', () => {
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
+
     expect(
       applicationContext.getUtilities().getAddressPhoneDiff,
     ).toHaveBeenCalled();
@@ -231,7 +237,7 @@ describe('serveCaseToIrsInteractor', () => {
     mockCase = {
       ...MOCK_CASE,
       contactSecondary: {
-        ...MOCK_CASE.contactPrimary,
+        ...getContactPrimary(MOCK_CASE),
         contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
         name: 'Test Petitioner Secondary',
       },
@@ -635,10 +641,10 @@ describe('addDocketEntryForPaymentStatus', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
-        contactPrimary: undefined,
         docketEntries: [],
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: 'Today',
+        petitioners: undefined,
       },
       { applicationContext },
     );

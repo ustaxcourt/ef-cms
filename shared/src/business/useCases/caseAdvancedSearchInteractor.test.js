@@ -40,9 +40,11 @@ describe('caseAdvancedSearchInteractor', () => {
       .caseAdvancedSearch.mockResolvedValue([
         {
           docketNumber: '101-20',
+          petitioners: [],
         },
         {
           docketNumber: '201-20',
+          petitioners: [],
         },
       ]);
 
@@ -51,8 +53,8 @@ describe('caseAdvancedSearchInteractor', () => {
     });
 
     expect(results).toEqual([
-      { docketNumber: '101-20' },
-      { docketNumber: '201-20' },
+      { docketNumber: '101-20', petitioners: [] },
+      { docketNumber: '201-20', petitioners: [] },
     ]);
   });
 
@@ -66,8 +68,8 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
-          contactPrimary: {},
           docketNumber: '101-20',
+          petitioners: [],
           sealedDate: 'yup',
           userId: '28e908f6-edf0-4289-9372-5b8fe8d2265c',
         },
@@ -90,9 +92,9 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
-          contactPrimary: {},
           docketNumber: '101-20',
           isSealed: true,
+          petitioners: [],
           userId: '28e908f6-edf0-4289-9372-5b8fe8d2265c',
         },
       ]);
@@ -111,8 +113,8 @@ describe('caseAdvancedSearchInteractor', () => {
     });
 
     const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
-      contactPrimary: {},
       docketNumber: '101-20',
+      petitioners: [],
       userId: '28e908f6-edf0-4289-9372-5b8fe8d2265c',
     });
 
@@ -137,13 +139,13 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
-          contactPrimary: {},
           docketNumber: '101-20',
           irsPractitioners: [
             {
               userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
             },
           ],
+          petitioners: [],
           sealedDate: 'yup',
         },
       ]);
@@ -154,13 +156,13 @@ describe('caseAdvancedSearchInteractor', () => {
 
     expect(results).toEqual([
       {
-        contactPrimary: {},
         docketNumber: '101-20',
         irsPractitioners: [
           {
             userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
           },
         ],
+        petitioners: [],
         sealedDate: 'yup',
       },
     ]);
@@ -175,8 +177,8 @@ describe('caseAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .caseAdvancedSearch.mockResolvedValue([
         {
-          contactPrimary: {},
           docketNumber: '101-20',
+          petitioners: [],
           sealedDate: 'yup',
         },
       ]);
@@ -187,8 +189,8 @@ describe('caseAdvancedSearchInteractor', () => {
 
     expect(results).toEqual([
       {
-        contactPrimary: {},
         docketNumber: '101-20',
+        petitioners: [],
         sealedDate: 'yup',
       },
     ]);
