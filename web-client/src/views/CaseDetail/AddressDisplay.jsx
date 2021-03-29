@@ -79,7 +79,6 @@ export const AddressDisplay = connect(
             contactName =>
               contactName && (
                 <span key={contactName}>
-                  <br />
                   c/o {contactName}
                   {contact.title && <span>, {contact.title}</span>}
                 </span>
