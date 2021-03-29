@@ -1,3 +1,4 @@
+import * as reduce from 'image-blob-reduce';
 import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
@@ -590,6 +591,7 @@ const applicationContext = {
     };
   },
   getPublicSiteUrl,
+  getReduceImageBlob: () => reduce,
   getScanner: async () => {
     if (process.env.NO_SCANNER) {
       const scanner = await import(
