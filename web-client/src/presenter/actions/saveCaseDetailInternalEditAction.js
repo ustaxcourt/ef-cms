@@ -83,9 +83,6 @@ export const saveCaseDetailInternalEditAction = async ({
     }
   }
 
-  console.log('in action, contactPrim', caseToUpdate.contactPrimary);
-  console.log('in action, petitioners', caseToUpdate.petitioners);
-
   const caseDetail = await applicationContext
     .getUseCases()
     .saveCaseDetailInternalEditInteractor({
