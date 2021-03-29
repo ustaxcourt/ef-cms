@@ -52,7 +52,7 @@ describe('validateStartCaseWizardAction', () => {
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 
-  it('should call the error path, providing an error display order, when errors are found', async () => {
+  it('should call the error path, providing an error display order and errorDisplayMap, when errors are found', async () => {
     applicationContext
       .getUseCases()
       .validateStartCaseWizardInteractor.mockReturnValue({
@@ -83,5 +83,8 @@ describe('validateStartCaseWizardAction', () => {
       'procedureType',
       'preferredTrialLocation',
     ]);
+    expect(errorStub.mock.calls[0][0].errorDisplayMap).toEqual({
+      petitioners: 'Contact',
+    });
   });
 });
