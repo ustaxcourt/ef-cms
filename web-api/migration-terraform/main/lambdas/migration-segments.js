@@ -8,6 +8,10 @@ const {
 } = require('./migrations/0025-add-contacts-to-petitioners-array');
 
 const {
+  migrateItems: migration0024,
+} = require('./migrations/0024-docket-entry-docket-number-served-parties-code');
+
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
