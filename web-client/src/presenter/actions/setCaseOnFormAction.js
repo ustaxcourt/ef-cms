@@ -20,4 +20,8 @@ export const setCaseOnFormAction = async ({
     .getUtilities()
     .getContactPrimary(caseDetail);
   store.set(state.form.contactPrimary, contactPrimary);
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(caseDetail);
+  store.set(state.form.contactSecondary, contactSecondary);
 };
