@@ -10,6 +10,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setContactsOnFormAction } from '../actions/setContactsOnFormAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -32,6 +33,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       setValidationAlertErrorsAction,
     ],
     success: [
+      setCurrentPageAction('Interstitial'),
       clearModalAction,
       unsetDocumentSelectedForPreviewAction,
       stopShowValidationAction,
