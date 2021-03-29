@@ -6,7 +6,7 @@ const {
   UnauthorizedError,
   UnprocessableEntityError,
 } = require('../../errors/errors');
-const { Case } = require('../entities/cases/Case');
+const { Case, updatePetitioner } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { isEmpty } = require('lodash');
 const { WorkItem } = require('../entities/WorkItem');
@@ -81,16 +81,14 @@ exports.saveCaseDetailInternalEditInteractor = async (
     ...editableFields,
   };
 
-  const caseEntity = new Case(caseWithFormEdits, {
-    applicationContext,
-  });
-
   if (!isEmpty(caseWithFormEdits.contactPrimary)) {
-    caseWithFormEdits.contactPrimary = ContactFactory.createContacts({
-      applicationContext,
-      contactInfo: { primary: caseWithFormEdits.contactPrimary },
-      partyType: caseWithFormEdits.partyType,
-    }).primary.toRawObject();
+    updatePetitioner(caseWithFormEdits, caseWithFormEdits.contactPrimary);
+    // caseWithFormEdits.contactPrimary = ContactFactory.createContacts({
+    //   applicationContext,
+    //   contactInfo: { primary: caseWithFormEdits.contactPrimary },
+    //   partyType: caseWithFormEdits.partyType,
+    // }).primary.toRawObject();
+    // console.log('in interesting code', caseWithFormEdits.contactPrimary);
   }
 
   if (!isEmpty(caseWithFormEdits.contactSecondary)) {
@@ -100,6 +98,13 @@ exports.saveCaseDetailInternalEditInteractor = async (
       partyType: caseWithFormEdits.partyType,
     }).secondary.toRawObject();
   }
+
+  const caseEntity = new Case(caseWithFormEdits, {
+    applicationContext,
+  });
+
+  console.log('in action, contactPrim', caseEntity.contactPrimary);
+  console.log('in action, petitioners', caseEntity.petitioners);
 
   if (caseEntity.isPaper) {
     await applicationContext.getUseCaseHelpers().updateInitialFilingDocuments({
