@@ -77,6 +77,7 @@ exports.saveCaseDetailInternalEditInteractor = async (
   const caseWithFormEdits = {
     ...caseRecord,
     ...editableFields,
+    petitioners: [],
   };
 
   const caseEntityWithFormEdits = new Case(caseWithFormEdits, {
