@@ -98,4 +98,32 @@ describe('validatePetitionFromPaperAction', () => {
       ],
     });
   });
+
+  it('should call the error path, providing an error display order and errorDisplayMap, when errors are found', async () => {
+    applicationContext
+      .getUseCases()
+      .validatePetitionFromPaperInteractor.mockReturnValue({
+        petitioners: [
+          {
+            inCareOf: 'Enter name for in care of',
+          },
+        ],
+      });
+
+    await runAction(validatePetitionFromPaperAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          statistics: [],
+        },
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errorDisplayMap).toEqual({
+      petitioners: 'Contact',
+      statistics: 'Statistics',
+    });
+  });
 });
