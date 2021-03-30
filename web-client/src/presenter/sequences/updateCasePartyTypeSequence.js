@@ -1,4 +1,4 @@
-import { resetContactsAction } from '../actions/StartCaseInternal/resetContactsAction';
+import { resetContactsAction } from '../actions/resetContactsAction';
 import { setPartyTypeAction } from '../actions/setPartyTypeAction';
 
 /**
