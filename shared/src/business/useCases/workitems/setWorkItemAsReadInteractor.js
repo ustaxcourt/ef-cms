@@ -22,7 +22,7 @@ exports.setWorkItemAsReadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return applicationContext
+  return await applicationContext
     .getPersistenceGateway()
     .setWorkItemAsRead({ applicationContext, userId: user.userId, workItemId });
 };
