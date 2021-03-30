@@ -234,5 +234,6 @@ exports.verifyUserPendingEmailInteractor = async (
     }
   } catch (error) {
     applicationContext.logger.error(error);
+    throw error;
   }
 };
