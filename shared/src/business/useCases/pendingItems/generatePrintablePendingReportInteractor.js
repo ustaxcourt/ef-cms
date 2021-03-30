@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * generatePrintablePendingReportInteractor
@@ -31,9 +32,11 @@ exports.generatePrintablePendingReportInteractor = async (
       .fetchPendingItemsByDocketNumber({ applicationContext, docketNumber });
   } else {
     pendingDocuments = (
-      await applicationContext
-        .getPersistenceGateway()
-        .fetchPendingItems({ applicationContext, judge })
+      await applicationContext.getPersistenceGateway().fetchPendingItems({
+        applicationContext,
+        judge,
+        unservableEventCodes: UNSERVABLE_EVENT_CODES,
+      })
     ).foundDocuments;
   }
 

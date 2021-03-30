@@ -8,6 +8,7 @@ const {
   ROLES,
   SERVED_PARTIES_CODES,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
+  UNSERVABLE_EVENT_CODES,
 } = require('./EntityConstants');
 const {
   DOCKET_ENTRY_VALIDATION_RULES,
@@ -186,6 +187,23 @@ joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES);
  */
 DocketEntry.prototype.setWorkItem = function (workItem) {
   this.workItem = workItem;
+};
+
+/**
+ * The pending boolean on the DocketEntry just represents if the user checked the
+ * add to pending report checkbox.  This is a computed that uses that along with
+ * eventCodes and servedAt to determine if the docket entry is pending.
+ *
+ * @returns {boolean} is the docket entry is pending or not
+ */
+DocketEntry.isPending = function (docketEntry) {
+  return (
+    docketEntry.pending &&
+    (isServed(docketEntry) ||
+      UNSERVABLE_EVENT_CODES.find(
+        unservedCode => unservedCode === docketEntry.eventCode,
+      ))
+  );
 };
 
 /**
