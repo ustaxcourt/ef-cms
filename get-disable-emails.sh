@@ -20,6 +20,8 @@ elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "${DISABLE_EMAILS_EXP2}"
 elif [[ $BRANCH == 'experimental3' ]] ; then
   echo "${DISABLE_EMAILS_EXP3}"
+elif [[ $BRANCH == 'experimental4' ]] ; then
+  echo "${DISABLE_EMAILS_EXP4}"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "${DISABLE_EMAILS_IRS}"
 elif [[ $BRANCH == 'staging' ]] ; then
