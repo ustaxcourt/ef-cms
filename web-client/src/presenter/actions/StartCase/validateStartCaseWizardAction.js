@@ -46,15 +46,21 @@ export const validateStartCaseWizardAction = ({
       'preferredTrialLocation',
     ];
 
-    const errorDisplayMap = {
-      petitioners: 'Contact',
-    };
+    if (errors.petitioners) {
+      errors.petitioners.forEach(e => {
+        if (e.index === 0) {
+          errors.contactPrimary = e;
+        } else {
+          errors.contactSecondary = e;
+        }
+      });
+      delete errors.petitioners;
+    }
 
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errorDisplayMap,
       errorDisplayOrder,
       errors,
     });

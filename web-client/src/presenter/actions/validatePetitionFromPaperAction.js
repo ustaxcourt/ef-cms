@@ -75,13 +75,23 @@ export const validatePetitionFromPaperAction = ({
     return path.success();
   } else {
     const errorDisplayMap = {
-      petitioners: 'Contact',
       statistics: 'Statistics',
     };
 
     const statisticsErrors = aggregateStatisticsErrors({ errors, get });
     if (statisticsErrors) {
       errors.statistics = statisticsErrors;
+    }
+
+    if (errors.petitioners) {
+      errors.petitioners.forEach(e => {
+        if (e.index === 0) {
+          errors.contactPrimary = e;
+        } else {
+          errors.contactSecondary = e;
+        }
+      });
+      delete errors.petitioners;
     }
 
     return path.error({
