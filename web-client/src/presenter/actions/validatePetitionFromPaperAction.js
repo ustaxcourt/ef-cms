@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 export const aggregateStatisticsErrors = ({ errors, get }) => {
@@ -86,9 +87,9 @@ export const validatePetitionFromPaperAction = ({
     if (errors.petitioners) {
       errors.petitioners.forEach(e => {
         if (e.index === 0) {
-          errors.contactPrimary = e;
+          errors.contactPrimary = omit(e, 'index');
         } else {
-          errors.contactSecondary = e;
+          errors.contactSecondary = omit(e, 'index');
         }
       });
       delete errors.petitioners;
