@@ -49,9 +49,9 @@ export const validateStartCaseWizardAction = ({
     if (errors.petitioners) {
       errors.petitioners.forEach(e => {
         if (e.index === 0) {
-          errors.contactPrimary = e;
+          errors.contactPrimary = omit(e, 'index');
         } else {
-          errors.contactSecondary = e;
+          errors.contactSecondary = omit(e, 'index');
         }
       });
       delete errors.petitioners;

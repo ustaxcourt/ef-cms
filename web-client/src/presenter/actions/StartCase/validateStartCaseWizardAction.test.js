@@ -81,7 +81,7 @@ describe('validateStartCaseWizardAction', () => {
     });
 
     expect(errorStub.mock.calls[0][0].errors).toEqual({
-      contactPrimary: { inCareOf: mockInCareOfError, index: 0 },
+      contactPrimary: { inCareOf: mockInCareOfError },
     });
   });
 
@@ -113,7 +113,7 @@ describe('validateStartCaseWizardAction', () => {
     });
 
     expect(errorStub.mock.calls[0][0].errors).toEqual({
-      contactSecondary: { inCareOf: mockInCareOfError, index: 1 },
+      contactSecondary: { inCareOf: mockInCareOfError },
     });
   });
 
