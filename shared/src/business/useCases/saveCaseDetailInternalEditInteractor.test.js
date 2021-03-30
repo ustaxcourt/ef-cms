@@ -17,16 +17,6 @@ describe('updateCase', () => {
   const MOCK_CASE = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.other,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
     createdAt: applicationContext.getUtilities().createISODateString(),
     docketEntries: [
       {
