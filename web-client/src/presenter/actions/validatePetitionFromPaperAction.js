@@ -75,6 +75,7 @@ export const validatePetitionFromPaperAction = ({
     return path.success();
   } else {
     const errorDisplayMap = {
+      petitioners: 'Contact',
       statistics: 'Statistics',
     };
 

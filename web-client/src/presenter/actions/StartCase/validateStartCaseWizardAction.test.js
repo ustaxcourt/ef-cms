@@ -56,9 +56,11 @@ describe('validateStartCaseWizardAction', () => {
     applicationContext
       .getUseCases()
       .validateStartCaseWizardInteractor.mockReturnValue({
-        contactSecondary: {
-          inCareOf: 'Enter name for in care of',
-        },
+        petitioners: [
+          {
+            inCareOf: 'Enter name for in care of',
+          },
+        ],
       });
 
     await runAction(validateStartCaseWizardAction, {
