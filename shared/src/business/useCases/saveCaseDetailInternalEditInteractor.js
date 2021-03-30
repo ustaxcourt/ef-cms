@@ -80,15 +80,21 @@ exports.saveCaseDetailInternalEditInteractor = async (
     ...editableFields,
   };
 
+  const caseEntityWithFormEdits = new Case(caseWithFormEdits, {
+    applicationContext,
+  });
+
   if (!isEmpty(caseWithFormEdits.contactPrimary)) {
-    updatePetitioner(caseWithFormEdits, caseWithFormEdits.contactPrimary);
+    caseEntityWithFormEdits.updatePetitioner(caseWithFormEdits.contactPrimary);
   }
 
   if (!isEmpty(caseWithFormEdits.contactSecondary)) {
-    updatePetitioner(caseWithFormEdits, caseWithFormEdits.contactSecondary);
+    caseEntityWithFormEdits.updatePetitioner(
+      caseWithFormEdits.contactSecondary,
+    );
   }
 
-  const caseEntity = new Case(caseWithFormEdits, {
+  const caseEntity = new Case(caseEntityWithFormEdits, {
     applicationContext,
   });
 
