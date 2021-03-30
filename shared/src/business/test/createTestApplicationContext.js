@@ -453,7 +453,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const nodeSassMockReturnValue = {
-    render: (data, cb) => cb(data, { css: '' }),
+    render: (data, cb) => cb(null, { css: '' }),
   };
 
   const mockGetEmailClient = {
