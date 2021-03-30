@@ -6,7 +6,8 @@ const {
   UnauthorizedError,
   UnprocessableEntityError,
 } = require('../../errors/errors');
-const { Case, updatePetitioner } = require('../entities/cases/Case');
+const { Case } = require('../entities/cases/Case');
+const { CONTACT_TYPES } = require('../entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -47,8 +48,6 @@ exports.saveCaseDetailInternalEditInteractor = async (
   const editableFields = {
     caseCaption: caseToUpdate.caseCaption,
     caseType: caseToUpdate.caseType,
-    contactPrimary: caseToUpdate.contactPrimary,
-    contactSecondary: caseToUpdate.contactSecondary,
     docketNumber: caseToUpdate.docketNumber,
     docketNumberSuffix: caseToUpdate.docketNumberSuffix,
     filingType: caseToUpdate.filingType,
@@ -84,14 +83,24 @@ exports.saveCaseDetailInternalEditInteractor = async (
     applicationContext,
   });
 
-  if (!isEmpty(caseWithFormEdits.contactPrimary)) {
-    caseEntityWithFormEdits.updatePetitioner(caseWithFormEdits.contactPrimary);
+  if (!isEmpty(caseToUpdate.contactPrimary)) {
+    const primaryContactId = caseEntityWithFormEdits.getContactPrimary()
+      .contactId;
+    caseEntityWithFormEdits.updatePetitioner({
+      ...caseToUpdate.contactPrimary,
+      contactId: primaryContactId,
+      contactType: CONTACT_TYPES.primary,
+    });
   }
 
-  if (!isEmpty(caseWithFormEdits.contactSecondary)) {
-    caseEntityWithFormEdits.updatePetitioner(
-      caseWithFormEdits.contactSecondary,
-    );
+  if (!isEmpty(caseToUpdate.contactSecondary)) {
+    const secondaryContactId = caseEntityWithFormEdits.getContactSecondary()
+      ?.contactId;
+    caseEntityWithFormEdits.updatePetitioner({
+      ...caseToUpdate.contactSecondary,
+      contactId: secondaryContactId,
+      contactType: CONTACT_TYPES.secondary,
+    });
   }
 
   const caseEntity = new Case(caseEntityWithFormEdits, {
