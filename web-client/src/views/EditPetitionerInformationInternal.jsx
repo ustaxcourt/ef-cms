@@ -50,7 +50,7 @@ export const EditPetitionerInformationInternal = connect(
 
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
-              <FormGroup errorText={validationErrors.contactPrimary?.name}>
+              <FormGroup errorText={validationErrors.contact?.name}>
                 <label className="usa-label" htmlFor="name">
                   <span>Name</span>
                 </label>
@@ -58,7 +58,7 @@ export const EditPetitionerInformationInternal = connect(
                   autoCapitalize="none"
                   className="usa-input"
                   id="name"
-                  name="contactPrimary.name"
+                  name="contact.name"
                   type="text"
                   value={form.contact.name || ''}
                   onBlur={() => {
@@ -74,9 +74,7 @@ export const EditPetitionerInformationInternal = connect(
               </FormGroup>
             </div>
 
-            <FormGroup
-              errorText={validationErrors.contactPrimary?.additionalName}
-            >
+            <FormGroup errorText={validationErrors.contact?.additionalName}>
               <label className="usa-label" htmlFor="additionalName">
                 <span>
                   Additional name <span className="usa-hint">(optional)</span>
@@ -90,7 +88,7 @@ export const EditPetitionerInformationInternal = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id="additionalName"
-                name="contactPrimary.additionalName"
+                name="contact.additionalName"
                 type="text"
                 value={form.contact.additionalName || ''}
                 onBlur={() => {
@@ -109,7 +107,7 @@ export const EditPetitionerInformationInternal = connect(
               bind={bind}
               clearTypeOnCountryChange={true}
               type={type}
-              onChange="contactPrimaryCountryTypeChangeSequence"
+              onChange="contactCountryTypeChangeSequence"
             />
             {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
               <Address
@@ -129,8 +127,8 @@ export const EditPetitionerInformationInternal = connect(
             <FormGroup
               errorText={
                 validationErrors &&
-                validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.phone
+                validationErrors.contact &&
+                validationErrors.contact.phone
               }
             >
               <label className="usa-label" htmlFor="phone">
@@ -143,7 +141,7 @@ export const EditPetitionerInformationInternal = connect(
                 autoCapitalize="none"
                 className="usa-input max-width-200"
                 id="phone"
-                name="contactPrimary.phone"
+                name="contact.phone"
                 type="tel"
                 value={form.contact.phone || ''}
                 onBlur={() => {
@@ -167,7 +165,7 @@ export const EditPetitionerInformationInternal = connect(
                 bind="form.contact"
                 hideElectronic={true}
                 // validateSequence={validateSequence}
-                validationErrors="validationErrors.contactPrimary"
+                validationErrors="validationErrors.contact"
               />
             </div>
             <h4>Add Login & Service Email</h4>
