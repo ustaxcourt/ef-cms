@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { resetContactsAction } from '../actions/StartCaseInternal/resetContactsAction';
+import { resetContactsAction } from '../actions/resetContactsAction';
 import { setPartyTypeAction } from '../actions/setPartyTypeAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 

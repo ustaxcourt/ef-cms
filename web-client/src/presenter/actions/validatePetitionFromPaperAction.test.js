@@ -98,4 +98,75 @@ describe('validatePetitionFromPaperAction', () => {
       ],
     });
   });
+
+  it('should call the error path, providing an error display order and errorDisplayMap, when errors are found', async () => {
+    applicationContext
+      .getUseCases()
+      .validatePetitionFromPaperInteractor.mockReturnValue({
+        petitioners: [
+          {
+            inCareOf: 'Enter name for in care of',
+          },
+        ],
+      });
+
+    await runAction(validatePetitionFromPaperAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          statistics: [],
+        },
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errorDisplayMap).toEqual({
+      statistics: 'Statistics',
+    });
+  });
+
+  it('should call the error path with contactPrimary errors from petitioners array', async () => {
+    const mockInCareOfError = 'Enter name for in care of';
+    applicationContext
+      .getUseCases()
+      .validatePetitionFromPaperInteractor.mockReturnValue({
+        petitioners: [{ inCareOf: mockInCareOfError, index: 0 }],
+      });
+
+    await runAction(validatePetitionFromPaperAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {},
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errors).toEqual({
+      contactPrimary: { inCareOf: mockInCareOfError },
+    });
+  });
+
+  it('should call the error path with contactSecondary errors from petitioners array', async () => {
+    const mockInCareOfError = 'Enter name for in care of';
+    applicationContext
+      .getUseCases()
+      .validatePetitionFromPaperInteractor.mockReturnValue({
+        petitioners: [{ inCareOf: mockInCareOfError, index: 1 }],
+      });
+
+    await runAction(validatePetitionFromPaperAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {},
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errors).toEqual({
+      contactSecondary: { inCareOf: mockInCareOfError },
+    });
+  });
 });
