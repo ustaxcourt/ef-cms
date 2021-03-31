@@ -2027,6 +2027,7 @@ const isSealedCase = rawCase => {
 };
 
 const caseHasServedDocketEntries = rawCase => {
+  console.log('docketEntries---[', rawCase.docketEntries);
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
 };
 

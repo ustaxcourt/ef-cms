@@ -158,6 +158,7 @@ export const StartCaseStep4 = connect(
           <Button
             id="submit-case"
             onClick={() => {
+              console.log('im gonna fail');
               completeStartCaseWizardStepSequence({
                 nextStep: 5,
               });
