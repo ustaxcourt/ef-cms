@@ -1,10 +1,10 @@
 import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
+import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { Hint } from '../ustc-ui/Hint/Hint';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -40,24 +40,14 @@ export const EditPetitionerInformationInternal = connect(
 
     return (
       <>
-        <div className="big-blue-header">
-          <div className="grid-container">
-            <h1>Edit Contact Information ---?!!!</h1>
-          </div>
-        </div>
+        <CaseDetailHeader />
 
         <section className="usa-section grid-container">
           <ErrorNotification />
 
-          <p>
-            This form will automatically create and submit a change of contact
-            information notification for this case. Please ensure your
-            information is accurate before submitting.
-          </p>
+          <h2>Edit Petitioner Information</h2>
 
-          <Hint wider>
-            To change the case caption, please file a Motion to Change Caption
-          </Hint>
+          <h3>Contact Information</h3>
 
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">

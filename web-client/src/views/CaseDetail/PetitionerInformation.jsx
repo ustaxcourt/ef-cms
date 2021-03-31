@@ -56,7 +56,7 @@ const PetitionerInformation = connect(
                       <AddressDisplay
                         contact={formattedCaseDetail.contactPrimary}
                         editLinkExternal={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
-                        editLinkInternal={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
+                        editLinkInternal={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-information/${formattedCaseDetail.contactPrimary.contactId}`}
                         showEmail={false}
                         showSealAddressLink={
                           caseInformationHelper.showSealAddressLink
