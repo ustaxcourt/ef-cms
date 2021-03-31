@@ -178,4 +178,70 @@ describe('validateCaseDetail', () => {
       stinFileSize: 1,
     });
   });
+
+  it('should call the error path with contactSecondary errors from petitioners array', async () => {
+    const mockInCareOfError = 'Enter name for in care of';
+    applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor.mockReturnValue({
+        petitioners: [{ inCareOf: mockInCareOfError, index: 1 }],
+      });
+
+    await runAction(validateCaseDetailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        formWithComputedDates: {
+          docketEntries: [
+            { documentType: 'Petition' },
+            { documentType: 'Statement of Taxpayer Identification' },
+            { documentType: 'Application for Waiver of Filing Fee' },
+          ],
+          docketNumber: '123-45',
+          irsNoticeDate: '2009-10-13',
+        },
+      },
+      state: {
+        form: {},
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errors).toEqual({
+      contactSecondary: { inCareOf: mockInCareOfError },
+    });
+  });
+
+  it('should call the error path with contactPrimary errors from petitioners array', async () => {
+    const mockInCareOfError = 'Enter name for in care of';
+    applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor.mockReturnValue({
+        petitioners: [{ inCareOf: mockInCareOfError, index: 0 }],
+      });
+
+    await runAction(validateCaseDetailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        formWithComputedDates: {
+          docketEntries: [
+            { documentType: 'Petition' },
+            { documentType: 'Statement of Taxpayer Identification' },
+            { documentType: 'Application for Waiver of Filing Fee' },
+          ],
+          docketNumber: '123-45',
+          irsNoticeDate: '2009-10-13',
+        },
+      },
+      state: {
+        form: {},
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errors).toEqual({
+      contactPrimary: { inCareOf: mockInCareOfError },
+    });
+  });
 });
