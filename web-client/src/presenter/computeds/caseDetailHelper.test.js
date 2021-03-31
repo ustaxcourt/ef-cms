@@ -685,7 +685,7 @@ describe('case detail computed', () => {
       expect(result.showEditPetitionerInformation).toEqual(true);
     });
 
-    it('should not allow the user to edit the petitioner information if have the EDIT_PETITIONER_INFO permission but case status is new', () => {
+    it('should not allow the user to edit the petitioner information if they have the EDIT_PETITIONER_INFO permission but case status is new', () => {
       const user = {
         role: ROLES.docketClerk,
         userId: '789',
