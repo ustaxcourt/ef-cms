@@ -171,12 +171,12 @@ export const EditPetitionerInformationInternal = connect(
               />
             </div>
             {form.contact.email && (
-              <>
+              <div className="margin-bottom-6">
                 <label className="usa-label" htmlFor="current-email-display">
                   Current email address
                 </label>
                 <span id="current-email-display">{form.contact.email}</span>
-              </>
+              </div>
             )}
 
             {editPetitionerInformationHelper.userPendingEmail && (
