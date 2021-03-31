@@ -1,7 +1,4 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -661,72 +658,6 @@ describe('case detail computed', () => {
       },
     });
     expect(result.hasPrivatePractitioners).toEqual(true);
-  });
-
-  describe('showEditPetitionerInformation', () => {
-    it('should allow the user to edit the petitioner information if have the EDIT_PETITIONER_INFO permission', () => {
-      const user = {
-        role: ROLES.docketClerk,
-        userId: '789',
-      };
-
-      const result = runCompute(caseDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketEntries: [],
-            privatePractitioners: [{ userId: '789' }],
-          },
-          currentPage: 'CaseDetailInternal',
-          permissions: { EDIT_PETITIONER_INFO: true },
-        },
-      });
-
-      expect(result.showEditPetitionerInformation).toEqual(true);
-    });
-
-    it('should not allow the user to edit the petitioner information if have the EDIT_PETITIONER_INFO permission but case status is new', () => {
-      const user = {
-        role: ROLES.docketClerk,
-        userId: '789',
-      };
-
-      const result = runCompute(caseDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketEntries: [],
-            privatePractitioners: [{ userId: '789' }],
-            status: CASE_STATUS_TYPES.new,
-          },
-          currentPage: 'CaseDetailInternal',
-          permissions: { EDIT_PETITIONER_INFO: true },
-        },
-      });
-
-      expect(result.showEditPetitionerInformation).toBeFalsy();
-    });
-
-    it('should not allow the user to edit the petitioner information if they have the incorrect permission', () => {
-      const user = {
-        role: ROLES.petitionsClerk,
-        userId: '789',
-      };
-
-      const result = runCompute(caseDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketEntries: [],
-            privatePractitioners: [{ userId: '789' }],
-          },
-          currentPage: 'CaseDetailInternal',
-          permissions: { EDIT_PETITIONER_INFO: false },
-        },
-      });
-
-      expect(result.showEditPetitionerInformation).toEqual(false);
-    });
   });
 
   describe('showAddRemoveFromHearingButtons', () => {
