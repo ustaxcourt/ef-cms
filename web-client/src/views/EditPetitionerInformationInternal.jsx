@@ -1,6 +1,7 @@
 import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
+import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
@@ -51,22 +52,17 @@ export const EditPetitionerInformationInternal = connect(
 
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
-              <p className="usa-label margin-bottom-0">Contact name</p>
-              <p className="margin-top-0">{form.contactPrimary.name}</p>
-            </div>
-
-            {contactEditHelper.contactPrimary?.showInCareOf && (
-              <FormGroup errorText={validationErrors.contactPrimary?.inCareOf}>
+              <FormGroup errorText={validationErrors.contactPrimary?.name}>
                 <label className="usa-label" htmlFor="inCareOf">
-                  <span>In care of</span>
+                  <span>Name</span>
                 </label>
                 <input
                   autoCapitalize="none"
                   className="usa-input"
-                  id="inCareOf"
-                  name="contactPrimary.inCareOf"
+                  id="name"
+                  name="contactPrimary.name"
                   type="text"
-                  value={form.contactPrimary.inCareOf || ''}
+                  value={form.contactPrimary.name || ''}
                   onBlur={() => {
                     validatePrimaryContactSequence();
                   }}
@@ -78,7 +74,38 @@ export const EditPetitionerInformationInternal = connect(
                   }}
                 />
               </FormGroup>
-            )}
+            </div>
+
+            <FormGroup
+              errorText={validationErrors.contactPrimary?.additionalName}
+            >
+              <label className="usa-label" htmlFor="inCareOf">
+                <span>
+                  Additional Name <span className="usa-hint">(optional)</span>
+                </span>
+                <p className="usa-hint">
+                  A representative of the taxpayer or petitioner (In Care Of,
+                  Guardian, Executor, Trustee, Surviving Spouse, etc.)
+                </p>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="additionalName"
+                name="contactPrimary.additionalName"
+                type="text"
+                value={form.contactPrimary.additionalName || ''}
+                onBlur={() => {
+                  validatePrimaryContactSequence();
+                }}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
 
             <Country
               bind={bind}
@@ -133,6 +160,9 @@ export const EditPetitionerInformationInternal = connect(
               />
             </FormGroup>
           </div>
+
+          <ChangeLoginAndServiceEmail />
+
           <Button
             onClick={() => {
               submitEditPrimaryContactSequence();
