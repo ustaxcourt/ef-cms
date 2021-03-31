@@ -87,7 +87,7 @@ describe('address display', () => {
   });
 
   describe('showEditPetitionerInformation', () => {
-    it('should allow the user to edit the petitioner information if have the EDIT_PETITIONER_INFO permission', () => {
+    it('should be true when the user has the EDIT_PETITIONER_INFO permission', () => {
       const user = {
         role: ROLES.docketClerk,
         userId: '789',

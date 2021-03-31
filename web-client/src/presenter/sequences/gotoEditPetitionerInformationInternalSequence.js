@@ -1,3 +1,5 @@
+import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getUserPendingEmailAction } from '../actions/getUserPendingEmailAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -7,6 +9,8 @@ import { setupPetitionerInformationFormAction } from '../actions/setupPetitioner
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditPetitionerInformationInternalSequence = [
+  clearAlertsAction,
+  clearErrorAlertsAction,
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   getCaseAction,
