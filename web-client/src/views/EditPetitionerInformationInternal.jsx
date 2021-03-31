@@ -51,7 +51,7 @@ export const EditPetitionerInformationInternal = connect(
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <FormGroup errorText={validationErrors.contactPrimary?.name}>
-                <label className="usa-label" htmlFor="inCareOf">
+                <label className="usa-label" htmlFor="name">
                   <span>Name</span>
                 </label>
                 <input
@@ -77,7 +77,7 @@ export const EditPetitionerInformationInternal = connect(
             <FormGroup
               errorText={validationErrors.contactPrimary?.additionalName}
             >
-              <label className="usa-label" htmlFor="inCareOf">
+              <label className="usa-label" htmlFor="additionalName">
                 <span>
                   Additional name <span className="usa-hint">(optional)</span>
                 </span>
