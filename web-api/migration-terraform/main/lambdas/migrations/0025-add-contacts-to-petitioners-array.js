@@ -15,7 +15,7 @@ const migrateItems = async items => {
         filer => (filer.contactType = CONTACT_TYPES.otherFiler),
       );
       item.otherPetitioners?.forEach(
-        filer => (filer.contactType = CONTACT_TYPES.otherFiler),
+        filer => (filer.contactType = CONTACT_TYPES.otherPetitioner),
       );
 
       item.petitioners = [
