@@ -1,12 +1,12 @@
 import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
-import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './StartCase/InternationalAddress';
+import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -14,7 +14,6 @@ import React from 'react';
 export const EditPetitionerInformationInternal = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
-    contactEditHelper: state.contactEditHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -25,7 +24,6 @@ export const EditPetitionerInformationInternal = connect(
     validationErrors: state.validationErrors,
   },
   function EditPetitionerInformationInternal({
-    contactEditHelper,
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
@@ -161,7 +159,57 @@ export const EditPetitionerInformationInternal = connect(
             </FormGroup>
           </div>
 
-          <ChangeLoginAndServiceEmail />
+          <div className="blue-container margin-bottom-5">
+            <div className="margin-bottom-6">
+              <ServiceIndicatorRadios
+                bind="form.contactPrimary"
+                hideElectronic={true}
+                // validateSequence={validateSequence}
+                validationErrors="validationErrors.contactPrimary"
+              />
+            </div>
+            <h4>Add Login & Service Email</h4>
+            <FormGroup errorText={validationErrors.email}>
+              <label className="usa-label" htmlFor="email">
+                New email address
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="email"
+                name="email"
+                type="text"
+                value={form.email || ''}
+                // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                onChange={e =>
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  })
+                }
+              />
+            </FormGroup>
+            <FormGroup errorText={validationErrors.confirmEmail}>
+              <label className="usa-label" htmlFor="confirm-email">
+                Re-enter new email address
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="confirm-email"
+                name="confirmEmail"
+                type="text"
+                value={form.confirmEmail || ''}
+                // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                onChange={e =>
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  })
+                }
+              />
+            </FormGroup>
+          </div>
 
           <Button
             onClick={() => {
