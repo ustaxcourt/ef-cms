@@ -14,6 +14,7 @@ import React from 'react';
 export const EditPetitionerInformationInternal = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
+    editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -25,6 +26,7 @@ export const EditPetitionerInformationInternal = connect(
   },
   function EditPetitionerInformationInternal({
     COUNTRY_TYPES,
+    editPetitionerInformationHelper,
     form,
     formCancelToggleCancelSequence,
     showModal,
@@ -163,52 +165,77 @@ export const EditPetitionerInformationInternal = connect(
             <div className="margin-bottom-6">
               <ServiceIndicatorRadios
                 bind="form.contact"
-                hideElectronic={true}
+                hideElectronic={!form.contact.email}
                 // validateSequence={validateSequence}
                 validationErrors="validationErrors.contact"
               />
             </div>
-            <h4>Add Login & Service Email</h4>
-            <FormGroup errorText={validationErrors.email}>
-              <label className="usa-label" htmlFor="email">
-                New email address
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="email"
-                name="email"
-                type="text"
-                value={form.email || ''}
-                // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
-                onChange={e =>
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  })
-                }
-              />
-            </FormGroup>
-            <FormGroup errorText={validationErrors.confirmEmail}>
-              <label className="usa-label" htmlFor="confirm-email">
-                Re-enter new email address
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="confirm-email"
-                name="confirmEmail"
-                type="text"
-                value={form.confirmEmail || ''}
-                // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
-                onChange={e =>
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  })
-                }
-              />
-            </FormGroup>
+            {form.contact.email && (
+              <>
+                <label className="usa-label" htmlFor="current-email-display">
+                  Current email address
+                </label>
+                <span id="current-email-display">{form.contact.email}</span>
+              </>
+            )}
+
+            {editPetitionerInformationHelper.userPendingEmail && (
+              <>
+                <label className="usa-label" htmlFor="pending-email-display">
+                  Pending email address
+                </label>
+                <span id="pending-email-display">
+                  {editPetitionerInformationHelper.userPendingEmail}
+                </span>
+              </>
+            )}
+
+            {editPetitionerInformationHelper.showEditEmail &&
+              !form.contact.email && (
+                <>
+                  <h4>Add Login & Service Email</h4>
+                  <FormGroup errorText={validationErrors.email}>
+                    <label className="usa-label" htmlFor="email">
+                      New email address
+                    </label>
+                    <input
+                      autoCapitalize="none"
+                      className="usa-input"
+                      id="email"
+                      name="email"
+                      type="text"
+                      value={form.email || ''}
+                      // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                      onChange={e =>
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        })
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup errorText={validationErrors.confirmEmail}>
+                    <label className="usa-label" htmlFor="confirm-email">
+                      Re-enter new email address
+                    </label>
+                    <input
+                      autoCapitalize="none"
+                      className="usa-input"
+                      id="confirm-email"
+                      name="confirmEmail"
+                      type="text"
+                      value={form.confirmEmail || ''}
+                      // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                      onChange={e =>
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        })
+                      }
+                    />
+                  </FormGroup>
+                </>
+              )}
           </div>
 
           <Button
