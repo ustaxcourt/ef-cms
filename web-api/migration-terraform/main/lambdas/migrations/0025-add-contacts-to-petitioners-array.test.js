@@ -181,7 +181,11 @@ describe('migrateItems', () => {
 
   it("should populate the petitioners array with otherPetitioners and otherFilers when they don't exist in the petitioners array and do not have a contactType", async () => {
     const mockOtherFilerWithoutContactType = omit(
-      getOtherFilers(MOCK_CASE_WITH_SECONDARY_OTHERS),
+      getOtherFilers(MOCK_CASE_WITH_SECONDARY_OTHERS)[0],
+      'contactType',
+    );
+    const mockOtherPetitionerWithoutContactType = omit(
+      getOtherPetitioners(MOCK_CASE_WITH_SECONDARY_OTHERS)[0],
       'contactType',
     );
     const items = [
@@ -189,22 +193,7 @@ describe('migrateItems', () => {
         pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
         ...MOCK_CASE,
         otherFilers: [mockOtherFilerWithoutContactType],
-        otherPetitioners: [
-          {
-            address1: '123 Main St',
-            city: 'Somewhere',
-            contactId: '3336050f-a423-47bb-943b-a5661fe08a6b',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'petitioner@example.com',
-            inCareOf: 'Myself',
-            name: 'Test Petitioner3',
-            otherFilerType: 'Tax Matters Partner',
-            phone: '1234567',
-            postalCode: '12345',
-            state: 'TN',
-            title: 'Tax Matters Partner',
-          },
-        ],
+        otherPetitioners: [mockOtherPetitionerWithoutContactType],
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
       },
@@ -212,22 +201,22 @@ describe('migrateItems', () => {
 
     const results = await migrateItems(items);
 
+    expect(results[0].petitioners.length).toBe(3);
     expect(results[0].petitioners).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          ...getOtherPetitioners(MOCK_CASE_WITH_SECONDARY_OTHERS)[0],
-          contactType: CONTACT_TYPES.otherPetitioner,
+          ...mockOtherFilerWithoutContactType,
+          contactType: CONTACT_TYPES.otherFiler,
         }),
         expect.objectContaining({
-          ...getOtherFilers(MOCK_CASE_WITH_SECONDARY_OTHERS)[0],
-          contactType: CONTACT_TYPES.otherFiler,
+          ...mockOtherPetitionerWithoutContactType,
+          contactType: CONTACT_TYPES.otherPetitioner,
         }),
       ]),
     );
-    expect(results[0].petitioners.length).toBe(3);
   });
 
-  it('should not throw an error when attempting to set contactType for otherFilers when otherFiles is undefined', async () => {
+  it('should not throw an error when attempting to set contactType for otherFilers when otherFilers is undefined', async () => {
     const items = [
       {
         pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
@@ -249,6 +238,36 @@ describe('migrateItems', () => {
             title: 'Tax Matters Partner',
           },
         ],
+        petitioners: [getContactPrimary(MOCK_CASE)],
+        sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+      },
+    ];
+
+    await expect(() => migrateItems(items)).not.toThrow();
+  });
+
+  it('should not throw an error when attempting to set contactType for otherPetitioners it is undefined', async () => {
+    const items = [
+      {
+        pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        ...MOCK_CASE,
+        otherFilers: [
+          {
+            address1: '123 Main St',
+            city: 'Somewhere',
+            contactId: '3336050f-a423-47bb-943b-a5661fe08a6b',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'petitioner@example.com',
+            inCareOf: 'Myself',
+            name: 'Test other Filer',
+            otherFilerType: 'Tax Matters Partner',
+            phone: '1234567',
+            postalCode: '12345',
+            state: 'TN',
+            title: 'Tax Matters Partner',
+          },
+        ],
+        otherPetitioners: undefined,
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
       },
