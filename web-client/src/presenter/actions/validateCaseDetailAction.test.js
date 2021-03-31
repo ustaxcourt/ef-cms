@@ -178,4 +178,27 @@ describe('validateCaseDetail', () => {
       stinFileSize: 1,
     });
   });
+
+  // 7839 add tests and refactor new logic
+  it('should call the error path with contactSecondary errors from petitioners array', async () => {
+    const mockInCareOfError = 'Enter name for in care of';
+    applicationContext
+      .getUseCases()
+      .validatePetitionFromPaperInteractor.mockReturnValue({
+        petitioners: [{ inCareOf: mockInCareOfError, index: 1 }],
+      });
+
+    await runAction(validatePetitionFromPaperAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {},
+      },
+    });
+
+    expect(errorStub.mock.calls[0][0].errors).toEqual({
+      contactSecondary: { inCareOf: mockInCareOfError },
+    });
+  });
 });

@@ -1,4 +1,5 @@
 import { aggregateStatisticsErrors } from './validatePetitionFromPaperAction';
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -53,6 +54,17 @@ export const validateCaseDetailAction = ({
       applicationContext,
       caseDetail: formWithComputedDates,
     });
+  }
+
+  if (errors && errors.petitioners) {
+    errors.petitioners.forEach(e => {
+      if (e.index === 0) {
+        errors.contactPrimary = omit(e, 'index');
+      } else {
+        errors.contactSecondary = omit(e, 'index');
+      }
+    });
+    delete errors.petitioners;
   }
 
   store.set(state.validationErrors, errors || {});
