@@ -7,8 +7,12 @@ import classNames from 'classnames';
 
 export const AddressDisplay = connect(
   {
+    addressDisplayHelper: state.addressDisplayHelper,
     constants: state.constants,
     contact: props.contact,
+    editLinkExternal: props.editLinkExternal || undefined,
+    editLinkInternal: props.editLinkInternal || undefined,
+    formattedCaseDetail: state.formattedCaseDetail,
     nameOverride: props.nameOverride || {},
     noMargin: props.noMargin || false,
     openSealAddressModalSequence: sequences.openSealAddressModalSequence,
@@ -16,8 +20,12 @@ export const AddressDisplay = connect(
     showSealAddressLink: props.showSealAddressLink || false,
   },
   function AddressDisplay({
+    addressDisplayHelper,
     constants,
     contact,
+    editLinkExternal,
+    editLinkInternal,
+    formattedCaseDetail,
     nameOverride,
     noMargin,
     openSealAddressModalSequence,
@@ -40,6 +48,30 @@ export const AddressDisplay = connect(
             </span>
           )}
           {nameOverride || contact.name}{' '}
+          {editLinkExternal &&
+            addressDisplayHelper.showEditContacts &&
+            !formattedCaseDetail.contactPrimary.isAddressSealed && (
+              <Button
+                link
+                aria-label="Edit petitioner contact information"
+                className="margin-left-2"
+                href={editLinkExternal}
+                icon="edit"
+              >
+                Edit
+              </Button>
+            )}
+          {editLinkInternal &&
+            addressDisplayHelper.showEditPetitionerInformation && (
+              <Button
+                link
+                className="margin-left-2"
+                href={editLinkInternal}
+                icon="edit"
+              >
+                Edit
+              </Button>
+            )}
           {contact.barNumber && `(${contact.barNumber})`}
           <br />
           {contact.firmName}
@@ -48,7 +80,6 @@ export const AddressDisplay = connect(
             contactName =>
               contactName && (
                 <span key={contactName}>
-                  <br />
                   c/o {contactName}
                   {contact.title && <span>, {contact.title}</span>}
                 </span>
