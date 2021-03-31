@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 export const AddressDisplay = connect(
   {
-    caseDetailHelper: state.caseDetailHelper,
+    addressDisplayHelper: state.addressDisplayHelper,
     constants: state.constants,
     contact: props.contact,
     editLinkExternal: props.editLinkExternal || undefined,
@@ -20,7 +20,7 @@ export const AddressDisplay = connect(
     showSealAddressLink: props.showSealAddressLink || false,
   },
   function AddressDisplay({
-    caseDetailHelper,
+    addressDisplayHelper,
     constants,
     contact,
     editLinkExternal,
@@ -49,7 +49,7 @@ export const AddressDisplay = connect(
           )}
           {nameOverride || contact.name}{' '}
           {editLinkExternal &&
-            caseDetailHelper.showEditContacts &&
+            addressDisplayHelper.showEditContacts &&
             !formattedCaseDetail.contactPrimary.isAddressSealed && (
               <Button
                 link
@@ -61,16 +61,17 @@ export const AddressDisplay = connect(
                 Edit
               </Button>
             )}
-          {editLinkInternal && caseDetailHelper.showEditPetitionerInformation && (
-            <Button
-              link
-              className="margin-left-2"
-              href={editLinkInternal}
-              icon="edit"
-            >
-              Edit
-            </Button>
-          )}
+          {editLinkInternal &&
+            addressDisplayHelper.showEditPetitionerInformation && (
+              <Button
+                link
+                className="margin-left-2"
+                href={editLinkInternal}
+                icon="edit"
+              >
+                Edit
+              </Button>
+            )}
           {contact.barNumber && `(${contact.barNumber})`}
           <br />
           {contact.firmName}
