@@ -79,7 +79,7 @@ export const EditPetitionerInformationInternal = connect(
             >
               <label className="usa-label" htmlFor="inCareOf">
                 <span>
-                  Additional Name <span className="usa-hint">(optional)</span>
+                  Additional name <span className="usa-hint">(optional)</span>
                 </span>
                 <p className="usa-hint">
                   A representative of the taxpayer or petitioner (In Care Of,
@@ -158,6 +158,8 @@ export const EditPetitionerInformationInternal = connect(
               />
             </FormGroup>
           </div>
+
+          <h3>Login & Service Information</h3>
 
           <div className="blue-container margin-bottom-5">
             <div className="margin-bottom-6">
