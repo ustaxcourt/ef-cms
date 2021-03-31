@@ -21,5 +21,6 @@ exports.updateUserEmail = async ({ applicationContext, user }) => {
     applicationContext.logger.error(
       `Error updating user with original email ${user.email}`,
     );
+    throw err;
   }
 };

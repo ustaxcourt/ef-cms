@@ -38,6 +38,10 @@ exports.loadPDFForSigningInteractor = async ({
     }
     return await pdfjsLib.getDocument(formattedArrayBuffer).promise;
   } catch (err) {
-    throw new Error('error loading PDF');
+    applicationContext.logger.error(
+      `error loading PDF for signing with docketEntryId ${docketEntryId}`,
+      err,
+    );
+    throw new Error('error loading PDF for signing');
   }
 };

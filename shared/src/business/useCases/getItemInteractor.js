@@ -1,5 +1,5 @@
 exports.getItemInteractor = async ({ applicationContext, key }) => {
-  return applicationContext.getPersistenceGateway().getItem({
+  return await applicationContext.getPersistenceGateway().getItem({
     applicationContext,
     key,
   });
