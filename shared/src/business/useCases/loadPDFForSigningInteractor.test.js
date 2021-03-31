@@ -58,6 +58,6 @@ describe('loadPDFForSigningInteractor', () => {
       loadPDFForSigningInteractor({
         applicationContext,
       }),
-    ).rejects.toThrow(new Error('error loading PDF'));
+    ).rejects.toThrow(new Error('error loading PDF for signing'));
   });
 });
