@@ -27,5 +27,5 @@ export const setupPetitionerInformationFormAction = ({
     p => p.contactId === contactId,
   );
 
-  store.set(state.form, cloneDeep(contactToSet));
+  store.set(state.form, cloneDeep({ contact: contactToSet }));
 };
