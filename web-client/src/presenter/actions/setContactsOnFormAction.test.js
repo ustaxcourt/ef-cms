@@ -60,4 +60,20 @@ describe('setContactsOnFormAction', () => {
 
     expect(state.form.contactSecondary).toBeUndefined();
   });
+
+  it('should unset state.form.petitioners', async () => {
+    const { state } = await runAction(setContactsOnFormAction, {
+      modules: { presenter },
+      props: {
+        caseDetail: {},
+      },
+      state: {
+        form: {
+          petitioners: [mockContactPrimary],
+        },
+      },
+    });
+
+    expect(state.form.petitioners).toBeUndefined();
+  });
 });

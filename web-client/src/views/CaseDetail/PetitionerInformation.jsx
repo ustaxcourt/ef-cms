@@ -13,6 +13,7 @@ import classNames from 'classnames';
 
 const PetitionerInformation = connect(
   {
+    addressDisplayHelper: state.addressDisplayHelper,
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
     form: state.form,
@@ -29,6 +30,7 @@ const PetitionerInformation = connect(
     validationErrors: state.validationErrors,
   },
   function PetitionerInformation({
+    addressDisplayHelper,
     caseDetailHelper,
     caseInformationHelper,
     form,
@@ -61,7 +63,7 @@ const PetitionerInformation = connect(
                         }
                       />
                     </address>
-                    {caseDetailHelper.showEditContacts &&
+                    {addressDisplayHelper.showEditContacts &&
                       formattedCaseDetail.contactPrimary.isAddressSealed && (
                         <div>
                           <p className="text-italic">
@@ -121,7 +123,7 @@ const PetitionerInformation = connect(
                           }
                         />
                       </address>
-                      {caseDetailHelper.showEditContacts &&
+                      {addressDisplayHelper.showEditContacts &&
                         formattedCaseDetail.contactSecondary
                           .isAddressSealed && (
                           <div className="max-width-50">

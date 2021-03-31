@@ -2,12 +2,22 @@ const createApplicationContext = require('../../../../src/applicationContext');
 const {
   Case,
 } = require('../../../../../shared/src/business/entities/cases/Case');
+const {
+  CONTACT_TYPES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
 const applicationContext = createApplicationContext({});
 
 const migrateItems = async items => {
   const itemsAfter = [];
   for (const item of items) {
     if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
+      item.otherFilers?.forEach(
+        filer => (filer.contactType = CONTACT_TYPES.otherFiler),
+      );
+      item.otherPetitioners?.forEach(
+        filer => (filer.contactType = CONTACT_TYPES.otherPetitioner),
+      );
+
       item.petitioners = [
         ...(item.petitioners || []),
         ...(item.otherFilers || []),

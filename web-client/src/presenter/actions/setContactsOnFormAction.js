@@ -24,4 +24,5 @@ export const setContactsOnFormAction = async ({
     .getUtilities()
     .getContactSecondary(caseDetail);
   store.set(state.form.contactSecondary, contactSecondary);
+  store.unset(state.form.petitioners);
 };

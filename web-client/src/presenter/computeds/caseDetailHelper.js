@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const { USER_ROLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const documentDetailTab =
@@ -13,7 +13,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     .getUtilities()
     .isExternalUser(user.role);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  let showEditPetitionerInformation = false;
   const permissions = get(state.permissions);
   const showJudgesNotes = permissions.JUDGES_NOTES;
 
@@ -48,19 +47,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     }
   }
 
-  let showEditContacts = false;
-
-  if (user.role === USER_ROLES.petitioner) {
-    showEditContacts = true;
-  } else if (user.role === USER_ROLES.privatePractitioner) {
-    showEditContacts = userAssociatedWithCase;
-  } else if (
-    permissions.EDIT_PETITIONER_INFO &&
-    caseDetail.status !== STATUS_TYPES.new
-  ) {
-    showEditPetitionerInformation = true;
-  }
-
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
   const caseHasServedDocketEntries = applicationContext
@@ -86,9 +72,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
     showDocketRecordInProgressState: !isExternalUser,
-    showEditContacts,
     showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
-    showEditPetitionerInformation,
     showEditSecondaryContactModal:
       get(state.modal.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
