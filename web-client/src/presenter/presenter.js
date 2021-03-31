@@ -126,6 +126,7 @@ import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequ
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
 import { gotoEditOtherStatisticsSequence } from './sequences/gotoEditOtherStatisticsSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
+import { gotoEditPetitionerInformationInternalSequence } from './sequences/gotoEditPetitionerInformationInternalSequence';
 import { gotoEditPetitionerInformationSequence } from './sequences/gotoEditPetitionerInformationSequence';
 import { gotoEditPractitionerUserSequence } from './sequences/gotoEditPractitionerUserSequence';
 import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSequence';
@@ -598,6 +599,7 @@ export const presenter = {
     gotoEditOrderSequence,
     gotoEditOtherStatisticsSequence,
     gotoEditPetitionDetailsSequence,
+    gotoEditPetitionerInformationInternalSequence,
     gotoEditPetitionerInformationSequence,
     gotoEditPractitionerUserSequence,
     gotoEditTrialSessionSequence,
