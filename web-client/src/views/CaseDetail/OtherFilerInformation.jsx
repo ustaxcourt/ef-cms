@@ -52,13 +52,14 @@ export const OtherFilerInformation = connect(
                                   }
                                 />
                               </address>
-                              {/* todo: this will be updated later */}
-                              <div className="margin-top-4">
-                                <p className="semi-bold margin-bottom-0">
-                                  Service preference
-                                </p>
-                                Paper
-                              </div>
+                              {otherFiler.serviceIndicator && (
+                                <div className="margin-top-4">
+                                  <p className="semi-bold margin-bottom-0">
+                                    Service preference
+                                  </p>
+                                  {otherFiler.serviceIndicator}
+                                </div>
+                              )}
                             </div>
                           );
                         })}
