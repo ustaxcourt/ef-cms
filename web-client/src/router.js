@@ -215,7 +215,7 @@ const router = {
     registerRoute(
       '/case-detail/*/edit-petitioner-information/*',
       ifHasAccess((docketNumber, contactId) => {
-        setPageTitle(`Docket ${docketNumber}`);
+        setPageTitle('Edit Petitioner Information');
         return app.getSequence('gotoEditPetitionerInformationInternalSequence')(
           {
             contactId,
