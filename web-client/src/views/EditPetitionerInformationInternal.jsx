@@ -33,7 +33,6 @@ export const EditPetitionerInformationInternal = connect(
     validatePrimaryContactSequence,
     validationErrors,
   }) {
-    const type = 'contactPrimary';
     const bind = 'form';
     const onBlur = 'validatePrimaryContactSequence';
 
@@ -50,7 +49,7 @@ export const EditPetitionerInformationInternal = connect(
 
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
-              <FormGroup errorText={validationErrors.contactPrimary?.name}>
+              <FormGroup errorText={validationErrors.name}>
                 <label className="usa-label" htmlFor="inCareOf">
                   <span>Name</span>
                 </label>
@@ -58,9 +57,9 @@ export const EditPetitionerInformationInternal = connect(
                   autoCapitalize="none"
                   className="usa-input"
                   id="name"
-                  name="contactPrimary.name"
+                  name="name"
                   type="text"
-                  value={form.contactPrimary.name || ''}
+                  value={form.name || ''}
                   onBlur={() => {
                     validatePrimaryContactSequence();
                   }}
@@ -74,9 +73,7 @@ export const EditPetitionerInformationInternal = connect(
               </FormGroup>
             </div>
 
-            <FormGroup
-              errorText={validationErrors.contactPrimary?.additionalName}
-            >
+            <FormGroup errorText={validationErrors.additionalName}>
               <label className="usa-label" htmlFor="inCareOf">
                 <span>
                   Additional name <span className="usa-hint">(optional)</span>
@@ -90,9 +87,9 @@ export const EditPetitionerInformationInternal = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id="additionalName"
-                name="contactPrimary.additionalName"
+                name="additionalName"
                 type="text"
-                value={form.contactPrimary.additionalName || ''}
+                value={form.additionalName || ''}
                 onBlur={() => {
                   validatePrimaryContactSequence();
                 }}
@@ -108,31 +105,25 @@ export const EditPetitionerInformationInternal = connect(
             <Country
               bind={bind}
               clearTypeOnCountryChange={true}
-              type={type}
+              // type={type}
               onChange="contactPrimaryCountryTypeChangeSequence"
             />
-            {form.contactPrimary.countryType === COUNTRY_TYPES.DOMESTIC ? (
+            {form.countryType === COUNTRY_TYPES.DOMESTIC ? (
               <Address
                 bind={bind}
-                type={type}
+                // type={type}
                 onBlur={onBlur}
                 onChange="updateFormValueSequence"
               />
             ) : (
               <InternationalAddress
                 bind={bind}
-                type={type}
+                // type={type}
                 onBlur={onBlur}
                 onChange="updateFormValueSequence"
               />
             )}
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.phone
-              }
-            >
+            <FormGroup errorText={validationErrors && validationErrors.phone}>
               <label className="usa-label" htmlFor="phone">
                 Phone number
               </label>
@@ -143,9 +134,9 @@ export const EditPetitionerInformationInternal = connect(
                 autoCapitalize="none"
                 className="usa-input max-width-200"
                 id="phone"
-                name="contactPrimary.phone"
+                name="phone"
                 type="tel"
-                value={form.contactPrimary.phone || ''}
+                value={form.phone || ''}
                 onBlur={() => {
                   validatePrimaryContactSequence();
                 }}
@@ -164,10 +155,10 @@ export const EditPetitionerInformationInternal = connect(
           <div className="blue-container margin-bottom-5">
             <div className="margin-bottom-6">
               <ServiceIndicatorRadios
-                bind="form.contactPrimary"
+                bind="form"
                 hideElectronic={true}
                 // validateSequence={validateSequence}
-                validationErrors="validationErrors.contactPrimary"
+                validationErrors="validationErrors"
               />
             </div>
             <h4>Add Login & Service Email</h4>
