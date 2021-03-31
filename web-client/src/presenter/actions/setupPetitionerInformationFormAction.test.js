@@ -1,7 +1,4 @@
-import {
-  CONTACT_TYPES,
-  SERVICE_INDICATOR_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -18,9 +15,7 @@ describe('setupPetitionerInformationFormAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
-          petitioners: [],
-        },
+        caseDetail: {},
       },
     });
 
@@ -29,41 +24,34 @@ describe('setupPetitionerInformationFormAction', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should set contact on state.form from the result of setServiceIndicatorsForCase', async () => {
-    const mockContactId = '12345A';
+  it('should set contactPrimary, contactSecondary, and partyType on state.form from the result of setServiceIndicatorsForCase', async () => {
+    const { PARTY_TYPES } = applicationContext.getConstants();
     const mockContactPrimary = {
-      contactId: mockContactId,
       contactType: CONTACT_TYPES.primary,
       name: 'Test Primary',
     };
+    const mockContactSecondary = {
+      contactType: CONTACT_TYPES.secondary,
+      name: 'Test Secondary',
+    };
+    const mockPartyType = PARTY_TYPES.nextFriendForMinor;
 
     applicationContext
       .getUtilities()
       .setServiceIndicatorsForCase.mockReturnValue({
-        petitioners: [
-          {
-            ...mockContactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          },
-        ],
+        partyType: mockPartyType,
+        petitioners: [mockContactPrimary, mockContactSecondary],
       });
 
     const { state } = await runAction(setupPetitionerInformationFormAction, {
       modules: {
         presenter,
       },
-      props: {
-        contactId: mockContactId,
-      },
       state: {},
     });
 
-    expect(state.form.contact).toEqual({
-      ...mockContactPrimary,
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    });
-    expect(state.form.contact.serviceIndicator).toEqual(
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    );
+    expect(state.form.contactPrimary).toEqual(mockContactPrimary);
+    expect(state.form.contactSecondary).toEqual(mockContactSecondary);
+    expect(state.form.partyType).toEqual(mockPartyType);
   });
 });
