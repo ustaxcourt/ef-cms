@@ -36,8 +36,21 @@ export const aggregateStatisticsErrors = ({ errors, get }) => {
 
     errors.statistics = newErrorStatistics;
   }
+  return errors;
+};
 
-  return newErrorStatistics;
+export const aggregatePetitionerErrors = ({ errors }) => {
+  if (errors?.petitioners) {
+    errors.petitioners.forEach(e => {
+      if (e.index === 0) {
+        errors.contactPrimary = omit(e, 'index');
+      } else {
+        errors.contactSecondary = omit(e, 'index');
+      }
+    });
+    delete errors.petitioners;
+  }
+  return errors;
 };
 
 /**
@@ -60,7 +73,7 @@ export const validatePetitionFromPaperAction = ({
 
   const form = get(state.form);
 
-  const errors = applicationContext
+  let errors = applicationContext
     .getUseCases()
     .validatePetitionFromPaperInteractor({
       applicationContext,
@@ -79,21 +92,9 @@ export const validatePetitionFromPaperAction = ({
       statistics: 'Statistics',
     };
 
-    const statisticsErrors = aggregateStatisticsErrors({ errors, get });
-    if (statisticsErrors) {
-      errors.statistics = statisticsErrors;
-    }
+    errors = aggregateStatisticsErrors({ errors, get });
 
-    if (errors.petitioners) {
-      errors.petitioners.forEach(e => {
-        if (e.index === 0) {
-          errors.contactPrimary = omit(e, 'index');
-        } else {
-          errors.contactSecondary = omit(e, 'index');
-        }
-      });
-      delete errors.petitioners;
-    }
+    errors = aggregatePetitionerErrors({ errors });
 
     return path.error({
       alertError: {

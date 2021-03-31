@@ -1,3 +1,4 @@
+import { aggregatePetitionerErrors } from '../validatePetitionFromPaperAction';
 import { omit } from 'lodash';
 import { state } from 'cerebral';
 
@@ -22,7 +23,7 @@ export const validateStartCaseWizardAction = ({
     'trialCities',
   );
 
-  const errors = applicationContext
+  let errors = applicationContext
     .getUseCases()
     .validateStartCaseWizardInteractor({
       applicationContext,
@@ -46,16 +47,7 @@ export const validateStartCaseWizardAction = ({
       'preferredTrialLocation',
     ];
 
-    if (errors.petitioners) {
-      errors.petitioners.forEach(e => {
-        if (e.index === 0) {
-          errors.contactPrimary = omit(e, 'index');
-        } else {
-          errors.contactSecondary = omit(e, 'index');
-        }
-      });
-      delete errors.petitioners;
-    }
+    errors = aggregatePetitionerErrors({ errors });
 
     return path.error({
       alertError: {

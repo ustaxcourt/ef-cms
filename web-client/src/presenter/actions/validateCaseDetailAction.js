@@ -1,5 +1,7 @@
-import { aggregateStatisticsErrors } from './validatePetitionFromPaperAction';
-import { omit } from 'lodash';
+import {
+  aggregatePetitionerErrors,
+  aggregateStatisticsErrors,
+} from './validatePetitionFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -56,16 +58,7 @@ export const validateCaseDetailAction = ({
     });
   }
 
-  if (errors && errors.petitioners) {
-    errors.petitioners.forEach(e => {
-      if (e.index === 0) {
-        errors.contactPrimary = omit(e, 'index');
-      } else {
-        errors.contactSecondary = omit(e, 'index');
-      }
-    });
-    delete errors.petitioners;
-  }
+  errors = aggregatePetitionerErrors({ errors });
 
   store.set(state.validationErrors, errors || {});
 
@@ -78,10 +71,7 @@ export const validateCaseDetailAction = ({
       statistics: 'Statistics',
     };
 
-    const statisticsErrors = aggregateStatisticsErrors({ errors, get });
-    if (statisticsErrors) {
-      errors.statistics = statisticsErrors;
-    }
+    errors = aggregateStatisticsErrors({ errors, get });
 
     return path.error({ errorDisplayMap, errors });
   }
