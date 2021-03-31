@@ -9,12 +9,14 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object containing the props.caseDetail
  * @param {object} providers.store the cerebral store used for setting the state.caseDetail
  */
-export const setupPetitionerInformationFormAction = ({
+export const setupPetitionerContactInformationFormAction = ({
   applicationContext,
   get,
+  props,
   store,
 }) => {
   const caseDetail = get(state.caseDetail);
+  const { contactId } = props;
 
   const formattedCaseDetail = applicationContext
     .getUtilities()
@@ -22,20 +24,9 @@ export const setupPetitionerInformationFormAction = ({
       ...caseDetail,
     });
 
-  const contactPrimary = applicationContext
-    .getUtilities()
-    .getContactPrimary(formattedCaseDetail);
-
-  const contactSecondary = applicationContext
-    .getUtilities()
-    .getContactSecondary(formattedCaseDetail);
-
-  store.set(
-    state.form,
-    cloneDeep({
-      contactPrimary,
-      contactSecondary,
-      partyType: formattedCaseDetail.partyType,
-    }),
+  const contactToSet = formattedCaseDetail.petitioners.find(
+    p => p.contactId === contactId,
   );
+
+  store.set(state.form, cloneDeep({ contact: contactToSet }));
 };
