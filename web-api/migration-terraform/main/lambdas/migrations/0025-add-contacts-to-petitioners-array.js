@@ -20,9 +20,7 @@ const migrateItems = async items => {
 
       item.petitioners = [
         ...(item.petitioners || []),
-        // we need to set contactType
         ...(item.otherFilers || []),
-        // we need to set contactType
         ...(item.otherPetitioners || []),
       ];
 
