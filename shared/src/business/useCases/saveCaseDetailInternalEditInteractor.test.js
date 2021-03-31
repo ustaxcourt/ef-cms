@@ -1,6 +1,7 @@
 const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
@@ -11,22 +12,15 @@ const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getContactPrimary } = require('../entities/cases/Case');
 const { omit } = require('lodash');
 
 describe('updateCase', () => {
+  const mockContactPrimaryId = '9565ed58-2a74-4dec-a34a-c87dde49f3c0';
+
   const MOCK_CASE = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.other,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
     createdAt: applicationContext.getUtilities().createISODateString(),
     docketEntries: [
       {
@@ -67,7 +61,20 @@ describe('updateCase', () => {
     docketNumber: '56789-18',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
-    petitioners: [{ name: 'Test Petitioner' }],
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: mockContactPrimaryId,
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'fieri@example.com',
+        name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
+    ],
     preferredTrialCity: 'Washington, District of Columbia',
     procedureType: 'Regular',
     status: CASE_STATUS_TYPES.new,
@@ -168,6 +175,7 @@ describe('updateCase', () => {
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
+        contactPrimary: getContactPrimary(MOCK_CASE),
       },
       docketNumber: caseToUpdate.docketNumber,
     });
@@ -195,6 +203,7 @@ describe('updateCase', () => {
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
+        contactPrimary: getContactPrimary(MOCK_CASE),
       },
       docketNumber: caseToUpdate.docketNumber,
     });
@@ -269,6 +278,7 @@ describe('updateCase', () => {
     await saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate: {
         ...MOCK_CASE,
+        contactPrimary: getContactPrimary(MOCK_CASE),
         docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
         isPaper: true,
         mailingDate: 'yesterday',
@@ -297,6 +307,7 @@ describe('updateCase', () => {
       {
         caseToUpdate: {
           ...caseToUpdate,
+          contactPrimary: getContactPrimary(MOCK_CASE),
         },
         docketNumber: caseToUpdate.docketNumber,
       },
