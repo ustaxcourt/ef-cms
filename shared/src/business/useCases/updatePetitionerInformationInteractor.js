@@ -316,7 +316,8 @@ exports.updatePetitionerInformationInteractor = async (
 
   try {
     caseToUpdateContacts.updatePetitioner({
-      ...oldCaseContact,
+      contactId: oldCaseContact.contactId,
+      contactType: oldCaseContact.contactType,
       ...editableFields,
     });
   } catch (e) {

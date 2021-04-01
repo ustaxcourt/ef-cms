@@ -117,11 +117,18 @@ describe('update petitioner contact information on a case', () => {
     ).toHaveBeenCalled();
   });
 
-  it('throws an error if contactSecondary is required for the party type and is not valid', async () => {
+  it('throws an error if the contact to update is not valid', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: mockPetitioners,
+    };
+
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
+          contactId: SECONDARY_CONTACT_ID,
           countryType: COUNTRY_TYPES.DOMESTIC,
         },
       }),
@@ -417,7 +424,7 @@ describe('update petitioner contact information on a case', () => {
     ).not.toHaveBeenCalled();
   });
 
-  describe.skip('createWorkItemForChange', () => {
+  describe('createWorkItemForChange', () => {
     it('should create a work item for the NCA when the primary contact is unrepresented', async () => {
       mockUser.role = ROLES.docketClerk;
       mockCase = {
@@ -435,12 +442,11 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
             ...mockPetitioners[0],
             address1: 'A Changed Street',
           },
-          docketNumber: MOCK_CASE.docketNumber,
-          partyType: PARTY_TYPES.petitioner,
         },
       );
 
@@ -474,13 +480,11 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: mockPetitioners[0],
-          contactSecondary: {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
             ...mockPetitioners[1],
             address1: 'A Changed Street',
           },
-          docketNumber: MOCK_CASE.docketNumber,
-          partyType: PARTY_TYPES.petitionerSpouse,
         },
       );
 
@@ -511,12 +515,11 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
             ...mockPetitioners[0],
             address1: 'A Changed Street',
           },
-          docketNumber: MOCK_CASE.docketNumber,
-          partyType: PARTY_TYPES.petitioner,
         },
       );
 
@@ -547,13 +550,11 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: mockPetitioners[0],
-          contactSecondary: {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
             ...mockPetitioners[1],
             address1: 'A Changed Street',
           },
-          docketNumber: MOCK_CASE.docketNumber,
-          partyType: PARTY_TYPES.petitionerSpouse,
         },
       );
 
@@ -584,13 +585,12 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
             ...mockPetitioners[0],
             address1: 'A Changed Street',
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
-          docketNumber: MOCK_CASE.docketNumber,
-          partyType: PARTY_TYPES.petitioner,
         },
       );
 
@@ -621,14 +621,12 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: mockPetitioners[0],
-          contactSecondary: {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
             ...mockPetitioners[1],
             address1: 'A Changed Street',
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
-          docketNumber: MOCK_CASE.docketNumber,
-          partyType: PARTY_TYPES.petitionerSpouse,
         },
       );
 
@@ -663,13 +661,11 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: mockPetitioners[0],
-          contactSecondary: {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
             ...mockPetitioners[1],
             address1: 'A Changed Street',
           },
-          docketNumber: MOCK_CASE.docketNumber,
-          partyType: PARTY_TYPES.petitionerSpouse,
         },
       );
 
@@ -713,13 +709,11 @@ describe('update petitioner contact information on a case', () => {
       const result = await updatePetitionerInformationInteractor(
         applicationContext,
         {
-          contactPrimary: mockPetitioners[0],
-          contactSecondary: {
+          docketNumber: MOCK_CASE.docketNumber,
+          updatedPetitionerData: {
             ...mockPetitioners[1],
             address1: 'A Changed Street',
           },
-          docketNumber: MOCK_CASE.docketNumber,
-          partyType: PARTY_TYPES.petitionerSpouse,
         },
       );
 
@@ -741,12 +735,11 @@ describe('update petitioner contact information on a case', () => {
   describe('update contactPrimary email', () => {
     it('should call the update addExistingUserToCase use case helper if the contactPrimary is adding an email address', async () => {
       await updatePetitionerInformationInteractor(applicationContext, {
-        contactPrimary: {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
           ...mockPetitioners[0],
           email: 'changed-email@example.com',
         },
-        docketNumber: MOCK_CASE.docketNumber,
-        partyType: PARTY_TYPES.petitioner,
       });
 
       expect(
@@ -760,9 +753,8 @@ describe('update petitioner contact information on a case', () => {
 
     it('should not call the update addExistingUserToCase use case helper if the contactPrimary is unchanged', async () => {
       await updatePetitionerInformationInteractor(applicationContext, {
-        contactPrimary: mockPetitioners[0],
         docketNumber: MOCK_CASE.docketNumber,
-        partyType: PARTY_TYPES.petitioner,
+        updatedPetitionerData: mockPetitioners[0],
       });
 
       expect(
@@ -786,12 +778,11 @@ describe('update petitioner contact information on a case', () => {
         );
 
       await updatePetitionerInformationInteractor(applicationContext, {
-        contactPrimary: {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
           ...mockPetitioners[0],
           email: 'changed-email@example.com',
         },
-        docketNumber: MOCK_CASE.docketNumber,
-        partyType: PARTY_TYPES.petitioner,
       });
 
       expect(
@@ -819,12 +810,11 @@ describe('update petitioner contact information on a case', () => {
         );
 
       await updatePetitionerInformationInteractor(applicationContext, {
-        contactPrimary: {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
           ...mockPetitioners[0],
           email: 'changed-email@example.com',
         },
-        docketNumber: MOCK_CASE.docketNumber,
-        partyType: PARTY_TYPES.petitioner,
       });
 
       expect(
