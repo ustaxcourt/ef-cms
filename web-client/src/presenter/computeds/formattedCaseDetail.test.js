@@ -1,5 +1,6 @@
 import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
@@ -2116,6 +2117,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
 
@@ -2132,6 +2136,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(true);
       expect(result.contactSecondary.showEAccessFlag).toEqual(true);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(true);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(true);
     });
 
@@ -2148,6 +2155,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
   });
