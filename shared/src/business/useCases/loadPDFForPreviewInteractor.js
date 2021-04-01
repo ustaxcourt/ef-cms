@@ -19,6 +19,10 @@ exports.loadPDFForPreviewInteractor = async ({
       key: docketEntryId,
     });
   } catch (err) {
-    throw new Error('error loading PDF');
+    applicationContext.logger.error(
+      `error loading PDF for preview with docketEntryId ${docketEntryId}`,
+      err,
+    );
+    throw new Error('error loading PDF for preview');
   }
 };

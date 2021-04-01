@@ -143,7 +143,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       partyIrsPractitioner: true,
       partyPrimary: true,
       partySecondary: true,
-      receivedAt: '2012-01-01',
+      receivedAt: '2012-01-01T05:00:00.000Z',
     });
   });
 };

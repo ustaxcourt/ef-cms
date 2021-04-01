@@ -138,5 +138,6 @@ exports.updateUserContactInformationInteractor = async (
       },
       userId: authenticatedUser.userId,
     });
+    throw error;
   }
 };

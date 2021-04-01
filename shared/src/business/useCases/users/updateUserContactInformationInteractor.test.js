@@ -115,10 +115,12 @@ describe('updateUserContactInformationInteractor', () => {
         throw new Error('something wicked');
       });
 
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      userId: mockUser.userId,
-    });
+    await expect(
+      updateUserContactInformationInteractor(applicationContext, {
+        contactInfo,
+        userId: mockUser.userId,
+      }),
+    ).rejects.toThrow('something wicked');
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -251,10 +253,12 @@ describe('updateUserContactInformationInteractor', () => {
       entityName: 'notapractitioner',
     };
 
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+    await expect(
+      updateUserContactInformationInteractor(applicationContext, {
+        contactInfo,
+        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      }),
+    ).rejects.toThrow();
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
