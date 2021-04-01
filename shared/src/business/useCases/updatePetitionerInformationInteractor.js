@@ -382,7 +382,6 @@ exports.updatePetitionerInformationInteractor = async (
         email: updatedPetitionerData.email,
       });
     if (isEmailAvailable) {
-      // TODO - rename this usecasehelper to be more truthful
       caseEntity = await applicationContext
         .getUseCaseHelpers()
         .createUserForContact({
@@ -398,6 +397,7 @@ exports.updatePetitionerInformationInteractor = async (
         .addExistingUserToCase({
           applicationContext,
           caseEntity,
+          contactId: updatedPetitionerData.contactId,
           email: updatedPetitionerData.email,
           name: updatedCaseContact.name,
         });
