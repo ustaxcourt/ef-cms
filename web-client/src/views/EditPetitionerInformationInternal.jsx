@@ -14,6 +14,7 @@ import React from 'react';
 export const EditPetitionerInformationInternal = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
+    editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -25,6 +26,7 @@ export const EditPetitionerInformationInternal = connect(
   },
   function EditPetitionerInformationInternal({
     COUNTRY_TYPES,
+    editPetitionerInformationHelper,
     form,
     formCancelToggleCancelSequence,
     showModal,
@@ -33,7 +35,7 @@ export const EditPetitionerInformationInternal = connect(
     validatePrimaryContactSequence,
     validationErrors,
   }) {
-    const type = 'contactPrimary';
+    const type = 'contact';
     const bind = 'form';
     const onBlur = 'validatePrimaryContactSequence';
 
@@ -50,7 +52,7 @@ export const EditPetitionerInformationInternal = connect(
 
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
-              <FormGroup errorText={validationErrors.contactPrimary?.name}>
+              <FormGroup errorText={validationErrors.contact?.name}>
                 <label className="usa-label" htmlFor="name">
                   <span>Name</span>
                 </label>
@@ -58,9 +60,9 @@ export const EditPetitionerInformationInternal = connect(
                   autoCapitalize="none"
                   className="usa-input"
                   id="name"
-                  name="contactPrimary.name"
+                  name="contact.name"
                   type="text"
-                  value={form.contactPrimary.name || ''}
+                  value={form.contact.name || ''}
                   onBlur={() => {
                     validatePrimaryContactSequence();
                   }}
@@ -74,9 +76,7 @@ export const EditPetitionerInformationInternal = connect(
               </FormGroup>
             </div>
 
-            <FormGroup
-              errorText={validationErrors.contactPrimary?.additionalName}
-            >
+            <FormGroup errorText={validationErrors.contact?.additionalName}>
               <label className="usa-label" htmlFor="additionalName">
                 <span>
                   Additional name <span className="usa-hint">(optional)</span>
@@ -90,9 +90,9 @@ export const EditPetitionerInformationInternal = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id="additionalName"
-                name="contactPrimary.additionalName"
+                name="contact.additionalName"
                 type="text"
-                value={form.contactPrimary.additionalName || ''}
+                value={form.contact.additionalName || ''}
                 onBlur={() => {
                   validatePrimaryContactSequence();
                 }}
@@ -109,9 +109,9 @@ export const EditPetitionerInformationInternal = connect(
               bind={bind}
               clearTypeOnCountryChange={true}
               type={type}
-              onChange="contactPrimaryCountryTypeChangeSequence"
+              onChange="contactCountryTypeChangeSequence"
             />
-            {form.contactPrimary.countryType === COUNTRY_TYPES.DOMESTIC ? (
+            {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
               <Address
                 bind={bind}
                 type={type}
@@ -129,8 +129,8 @@ export const EditPetitionerInformationInternal = connect(
             <FormGroup
               errorText={
                 validationErrors &&
-                validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.phone
+                validationErrors.contact &&
+                validationErrors.contact.phone
               }
             >
               <label className="usa-label" htmlFor="phone">
@@ -143,9 +143,9 @@ export const EditPetitionerInformationInternal = connect(
                 autoCapitalize="none"
                 className="usa-input max-width-200"
                 id="phone"
-                name="contactPrimary.phone"
+                name="contact.phone"
                 type="tel"
-                value={form.contactPrimary.phone || ''}
+                value={form.contact.phone || ''}
                 onBlur={() => {
                   validatePrimaryContactSequence();
                 }}
@@ -164,53 +164,78 @@ export const EditPetitionerInformationInternal = connect(
           <div className="blue-container margin-bottom-5">
             <div className="margin-bottom-6">
               <ServiceIndicatorRadios
-                bind="form.contactPrimary"
-                hideElectronic={true}
+                bind="form.contact"
+                hideElectronic={!form.contact.email}
                 // validateSequence={validateSequence}
-                validationErrors="validationErrors.contactPrimary"
+                validationErrors="validationErrors.contact"
               />
             </div>
-            <h4>Add Login & Service Email</h4>
-            <FormGroup errorText={validationErrors.email}>
-              <label className="usa-label" htmlFor="email">
-                New email address
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="email"
-                name="email"
-                type="text"
-                value={form.email || ''}
-                // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
-                onChange={e =>
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  })
-                }
-              />
-            </FormGroup>
-            <FormGroup errorText={validationErrors.confirmEmail}>
-              <label className="usa-label" htmlFor="confirm-email">
-                Re-enter new email address
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="confirm-email"
-                name="confirmEmail"
-                type="text"
-                value={form.confirmEmail || ''}
-                // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
-                onChange={e =>
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  })
-                }
-              />
-            </FormGroup>
+            {form.contact.email && (
+              <div className="margin-bottom-6">
+                <label className="usa-label" htmlFor="current-email-display">
+                  Current email address
+                </label>
+                <span id="current-email-display">{form.contact.email}</span>
+              </div>
+            )}
+
+            {editPetitionerInformationHelper.userPendingEmail && (
+              <>
+                <label className="usa-label" htmlFor="pending-email-display">
+                  Pending email address
+                </label>
+                <span id="pending-email-display">
+                  {editPetitionerInformationHelper.userPendingEmail}
+                </span>
+              </>
+            )}
+
+            {editPetitionerInformationHelper.showEditEmail &&
+              !form.contact.email && (
+                <>
+                  <h4>Add Login & Service Email</h4>
+                  <FormGroup errorText={validationErrors.email}>
+                    <label className="usa-label" htmlFor="email">
+                      New email address
+                    </label>
+                    <input
+                      autoCapitalize="none"
+                      className="usa-input"
+                      id="email"
+                      name="email"
+                      type="text"
+                      value={form.email || ''}
+                      // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                      onChange={e =>
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        })
+                      }
+                    />
+                  </FormGroup>
+                  <FormGroup errorText={validationErrors.confirmEmail}>
+                    <label className="usa-label" htmlFor="confirm-email">
+                      Re-enter new email address
+                    </label>
+                    <input
+                      autoCapitalize="none"
+                      className="usa-input"
+                      id="confirm-email"
+                      name="confirmEmail"
+                      type="text"
+                      value={form.confirmEmail || ''}
+                      // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                      onChange={e =>
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        })
+                      }
+                    />
+                  </FormGroup>
+                </>
+              )}
           </div>
 
           <Button
