@@ -64,10 +64,12 @@ describe('updateUserEmail', () => {
         throw new Error('bad!');
       });
 
-    await updateUserEmail({
-      applicationContext,
-      user: mockUser,
-    });
+    await expect(
+      updateUserEmail({
+        applicationContext,
+        user: mockUser,
+      }),
+    ).rejects.toThrow('bad!');
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       `Error updating user with original email ${mockEmail}`,

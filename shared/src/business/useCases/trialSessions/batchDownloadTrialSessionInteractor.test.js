@@ -111,9 +111,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       trialSessionId: '123',
     });
 
-    expect(applicationContext.logger.error).toHaveBeenCalledWith(
-      expect.anything(),
-    );
+    expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
