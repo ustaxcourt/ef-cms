@@ -20,6 +20,8 @@ elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'experimental3' ]] ; then
   echo "t2.small.elasticsearch"
+elif [[ $BRANCH == 'experimental4' ]] ; then
+  echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "t2.small.elasticsearch"
 elif [[ $BRANCH == 'staging' ]] ; then
