@@ -24,6 +24,7 @@ describe('createUserForContact', () => {
       createUserForContact({
         applicationContext,
         caseEntity: new Case(MOCK_CASE, { applicationContext }),
+        contactId: USER_ID,
         email: 'testing@example.com',
         name: 'Bob Ross',
       }),
@@ -57,6 +58,7 @@ describe('createUserForContact', () => {
     await createUserForContact({
       applicationContext,
       caseEntity,
+      contactId: USER_ID,
       email: UPDATED_EMAIL,
       name: 'Bob Ross',
     });
@@ -99,6 +101,7 @@ describe('createUserForContact', () => {
     const updatedCase = await createUserForContact({
       applicationContext,
       caseEntity,
+      contactId: USER_ID,
       email: UPDATED_EMAIL,
       name: 'Bob Ross',
     });
@@ -132,6 +135,7 @@ describe('createUserForContact', () => {
     await createUserForContact({
       applicationContext,
       caseEntity,
+      contactId: USER_ID,
       email: UPDATED_EMAIL,
       name: 'Bob Ross',
     });

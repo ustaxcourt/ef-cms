@@ -12,6 +12,7 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {object} options the options object
  * @param {object} options.applicationContext the applicationContext
  * @param {object} options.caseEntity the case entity to modify and return
+ * @param {string} options.contactId the contactId of the user to add to the case
  * @param {string} options.email the email address for the user we are attaching to the case
  * @param {string} options.name the name of the user to update the case with
  * @returns {Case} the updated case entity
@@ -19,6 +20,7 @@ const { UserCase } = require('../../entities/UserCase');
 exports.addExistingUserToCase = async ({
   applicationContext,
   caseEntity,
+  contactId,
   email,
   name,
 }) => {
@@ -46,14 +48,14 @@ exports.addExistingUserToCase = async ({
       userId: userIdFromCognito,
     });
 
-  const contactPrimary = caseEntity.getContactPrimary();
-  if (contactPrimary.name === name) {
-    contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-    contactPrimary.email = email;
-    contactPrimary.contactId = userToAdd.userId;
-    contactPrimary.hasEAccess = true;
+  const contact = caseEntity.petitioners.find(p => p.contactId === contactId);
+  if (contact.name === name) {
+    contact.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    contact.email = email;
+    contact.contactId = userToAdd.userId;
+    contact.hasEAccess = true;
   } else {
-    throw new Error(`no contact primary found with that user name of ${name}`);
+    throw new Error(`no contact found with that user name of ${name}`);
   }
 
   const rawCase = caseEntity.toRawObject();
