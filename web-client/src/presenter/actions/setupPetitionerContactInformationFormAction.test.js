@@ -13,20 +13,21 @@ describe('setupPetitionerContactInformationFormAction', () => {
   });
 
   it('should call applicationContext.getUtilities().setServiceIndicatorsForCase with state.caseDetail', async () => {
+    const mockCaseDetail = {
+      petitioners: [{ name: 'A Test Petitioner' }],
+    };
     await runAction(setupPetitionerContactInformationFormAction, {
       modules: {
         presenter,
       },
       state: {
-        caseDetail: {
-          petitioners: [],
-        },
+        caseDetail: mockCaseDetail,
       },
     });
 
     expect(
       applicationContext.getUtilities().setServiceIndicatorsForCase,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith(mockCaseDetail);
   });
 
   it('should set contact on state.form from the result of setServiceIndicatorsForCase', async () => {
@@ -65,8 +66,5 @@ describe('setupPetitionerContactInformationFormAction', () => {
       ...mockContactPrimary,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
-    expect(state.form.contact.serviceIndicator).toEqual(
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    );
   });
 });
