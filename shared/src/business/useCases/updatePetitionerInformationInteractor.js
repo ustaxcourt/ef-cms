@@ -375,25 +375,6 @@ exports.updatePetitionerInformationInteractor = async (
       });
     }
 
-    // if (secondaryChange) {
-    //   const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
-    //     privatePractitioner =>
-    //       privatePractitioner.getRepresentingSecondary(caseEntity),
-    //   );
-
-    //   secondaryChangeDocs = await createDocketEntryAndWorkItem({
-    //     applicationContext,
-    //     caseEntity,
-    //     change: secondaryChange,
-    //     editableFields: secondaryEditableFields,
-    //     oldCaseContact: oldCaseContactSecondary,
-    //     partyWithPaperService,
-    //     privatePractitionersRepresentingContact,
-    //     servedParties,
-    //     user,
-    //   });
-    // }
-
     if (servedParties.paper.length > 0) {
       paperServicePdfUrl = await generatePaperServicePdf({
         applicationContext,
