@@ -365,6 +365,7 @@ describe('update petitioner contact information on a case', () => {
         {
           address1: '456 Center St',
           city: 'Somewhere',
+          contactId: PRIMARY_CONTACT_ID,
           contactType: CONTACT_TYPES.primary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'test@example.com',
@@ -383,6 +384,7 @@ describe('update petitioner contact information on a case', () => {
       updatedPetitionerData: {
         address1: '456 Center St TEST',
         city: 'Somewhere',
+        contactId: PRIMARY_CONTACT_ID,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'test@example.com',
         isAddressSealed: true,
@@ -761,7 +763,7 @@ describe('update petitioner contact information on a case', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('should not call createUserForContactPrimary when the new email address is not available', async () => {
+    it('should not call createUserForContact when the new email address is not available', async () => {
       applicationContext
         .getPersistenceGateway()
         .isEmailAvailable.mockImplementation(() => false);
@@ -772,9 +774,7 @@ describe('update petitioner contact information on a case', () => {
 
       applicationContext
         .getUseCaseHelpers()
-        .createUserForContactPrimary.mockImplementation(
-          () => new UserCase(mockCase),
-        );
+        .createUserForContact.mockImplementation(() => new UserCase(mockCase));
 
       await updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
@@ -785,7 +785,7 @@ describe('update petitioner contact information on a case', () => {
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().createUserForContactPrimary,
+        applicationContext.getUseCaseHelpers().createUserForContact,
       ).not.toHaveBeenCalled();
 
       expect(
@@ -793,7 +793,7 @@ describe('update petitioner contact information on a case', () => {
       ).toHaveBeenCalled();
     });
 
-    it('should call createUserForContactPrimary when the new email address is available', async () => {
+    it('should call createUserForContact when the new email address is available', async () => {
       applicationContext
         .getPersistenceGateway()
         .isEmailAvailable.mockImplementation(() => true);
@@ -804,9 +804,7 @@ describe('update petitioner contact information on a case', () => {
 
       applicationContext
         .getUseCaseHelpers()
-        .createUserForContactPrimary.mockImplementation(
-          () => new UserCase(mockCase),
-        );
+        .createUserForContact.mockImplementation(() => new UserCase(mockCase));
 
       await updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
@@ -817,7 +815,7 @@ describe('update petitioner contact information on a case', () => {
       });
 
       expect(
-        applicationContext.getUseCaseHelpers().createUserForContactPrimary,
+        applicationContext.getUseCaseHelpers().createUserForContact,
       ).toHaveBeenCalled();
 
       expect(
