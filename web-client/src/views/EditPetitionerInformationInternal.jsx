@@ -18,10 +18,9 @@ export const EditPetitionerInformationInternal = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
-    submitEditPrimaryContactSequence:
-      sequences.submitEditPrimaryContactSequence,
+    submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validatePrimaryContactSequence: sequences.validatePrimaryContactSequence,
+    validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
   },
   function EditPetitionerInformationInternal({
@@ -30,14 +29,14 @@ export const EditPetitionerInformationInternal = connect(
     form,
     formCancelToggleCancelSequence,
     showModal,
-    submitEditPrimaryContactSequence,
+    submitEditPetitionerSequence,
     updateFormValueSequence,
-    validatePrimaryContactSequence,
+    validatePetitionerSequence,
     validationErrors,
   }) {
     const type = 'contact';
     const bind = 'form';
-    const onBlur = 'validatePrimaryContactSequence';
+    const onBlur = 'validatePetitionerSequence';
 
     return (
       <>
@@ -64,7 +63,7 @@ export const EditPetitionerInformationInternal = connect(
                   type="text"
                   value={form.contact.name || ''}
                   onBlur={() => {
-                    validatePrimaryContactSequence();
+                    validatePetitionerSequence();
                   }}
                   onChange={e => {
                     updateFormValueSequence({
@@ -94,7 +93,7 @@ export const EditPetitionerInformationInternal = connect(
                 type="text"
                 value={form.contact.additionalName || ''}
                 onBlur={() => {
-                  validatePrimaryContactSequence();
+                  validatePetitionerSequence();
                 }}
                 onChange={e => {
                   updateFormValueSequence({
@@ -147,7 +146,7 @@ export const EditPetitionerInformationInternal = connect(
                 type="tel"
                 value={form.contact.phone || ''}
                 onBlur={() => {
-                  validatePrimaryContactSequence();
+                  validatePetitionerSequence();
                 }}
                 onChange={e => {
                   updateFormValueSequence({
@@ -240,7 +239,7 @@ export const EditPetitionerInformationInternal = connect(
 
           <Button
             onClick={() => {
-              submitEditPrimaryContactSequence();
+              submitEditPetitionerSequence();
             }}
           >
             Save
