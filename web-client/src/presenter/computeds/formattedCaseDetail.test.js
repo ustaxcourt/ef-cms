@@ -1,6 +1,8 @@
-import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
