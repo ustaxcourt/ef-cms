@@ -13,7 +13,9 @@ export const updatePetitionerInformationAction = async ({
   get,
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const { contactPrimary, contactSecondary, partyType } = get(state.form);
+  const { contact } = get(state.form);
+
+  console.log('Contact: ', contact);
 
   const {
     paperServiceParties,
@@ -23,10 +25,8 @@ export const updatePetitionerInformationAction = async ({
     .getUseCases()
     .updatePetitionerInformationInteractor({
       applicationContext,
-      contactPrimary,
-      contactSecondary,
       docketNumber,
-      partyType,
+      updatePetitionerData: contact,
     });
 
   return {
