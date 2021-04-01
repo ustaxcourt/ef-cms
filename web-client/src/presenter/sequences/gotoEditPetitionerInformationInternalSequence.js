@@ -5,7 +5,7 @@ import { getUserPendingEmailAction } from '../actions/getUserPendingEmailAction'
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setUserPendingEmailAction } from '../actions/setUserPendingEmailAction';
-import { setupPetitionerInformationFormAction } from '../actions/setupPetitionerInformationFormAction';
+import { setupPetitionerContactInformationFormAction } from '../actions/setupPetitionerContactInformationFormAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditPetitionerInformationInternalSequence = [
@@ -15,7 +15,7 @@ export const gotoEditPetitionerInformationInternalSequence = [
   stopShowValidationAction,
   getCaseAction,
   setCaseAction,
-  setupPetitionerInformationFormAction,
+  setupPetitionerContactInformationFormAction,
   getUserPendingEmailAction,
   setUserPendingEmailAction,
   setCurrentPageAction('EditPetitionerInformationInternal'),
