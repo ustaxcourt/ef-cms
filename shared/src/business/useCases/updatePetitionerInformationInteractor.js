@@ -227,11 +227,12 @@ const createDocketEntryAndWorkItem = async ({
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update
+ * @param {string} providers.updatedPetitionerData the updatedPetitionerData to update
  * @returns {object} the updated case data
  */
 exports.updatePetitionerInformationInteractor = async (
   applicationContext,
-  { contactId, docketNumber, updatedPetitionerData },
+  { docketNumber, updatedPetitionerData },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -244,12 +245,12 @@ exports.updatePetitionerInformationInteractor = async (
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const oldCaseContact = oldCase.petitioners.find(
-    p => p.contactId === contactId,
+    p => p.contactId === updatedPetitionerData.contactId,
   );
 
   if (!oldCaseContact) {
     throw new NotFoundError(
-      `Case contact with id ${contactId} was not found on the case`,
+      `Case contact with id ${updatedPetitionerData.contactId} was not found on the case`,
     );
   }
 
@@ -320,7 +321,7 @@ exports.updatePetitionerInformationInteractor = async (
     });
   } catch (e) {
     applicationContext.logger.info(
-      `Case contact with id ${contactId} was not found on the case`,
+      `Case contact with id ${updatedPetitionerData.contactId} was not found on the case`,
     );
     throw new NotFoundError(e.message);
   }
@@ -339,7 +340,7 @@ exports.updatePetitionerInformationInteractor = async (
   let paperServicePdfUrl;
 
   const updatedCaseContact = caseEntity.petitioners.find(
-    p => p.contactId === contactId,
+    p => p.contactId === updatedPetitionerData.contactId,
   );
 
   if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {
