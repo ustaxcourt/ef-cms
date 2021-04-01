@@ -15,8 +15,6 @@ export const updatePetitionerInformationAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const { contact } = get(state.form);
 
-  console.log('Contact: ', contact);
-
   const {
     paperServiceParties,
     paperServicePdfUrl,
@@ -26,7 +24,7 @@ export const updatePetitionerInformationAction = async ({
     .updatePetitionerInformationInteractor({
       applicationContext,
       docketNumber,
-      updatePetitionerData: contact,
+      updatedPetitionerData: contact,
     });
 
   return {
