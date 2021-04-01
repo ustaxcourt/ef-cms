@@ -29,6 +29,22 @@
         "state": "TN",
         "email": "petitioner@example.com",
         "contactType": "primary"
+      },
+      {
+        "isAddressSealed": false,
+        "country": "USA",
+        "contactType": "otherFilers",
+        "city": "Nashville",
+        "contactId": "89d7d182-46da-4b96-b29b-260d15249c25",
+        "address1": "42 Lamb Sauce Blvd",
+        "postalCode": "05198",
+        "title": "Intervenor",
+        "countryType": "domestic",
+        "phone": "1234567890",
+        "name": "Gordon Ramsay",
+        "state": "AK",
+        "email": "testUser@example.com",
+        "otherFilerType": "Intervenor"
       }
     ],
     "createdAt": "2018-03-01T21:40:46.415Z",

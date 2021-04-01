@@ -320,7 +320,7 @@ exports.serveCaseToIrsInteractor = async (
 
   const caseConfirmationPdfName = caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
 
-  await new Promise(resolve => {
+  await new Promise((resolve, reject) => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
     const s3Client = applicationContext.getStorageClient();
 
@@ -331,7 +331,17 @@ exports.serveCaseToIrsInteractor = async (
       Key: caseConfirmationPdfName,
     };
 
-    s3Client.upload(params, resolve);
+    s3Client.upload(params, function (err) {
+      if (err) {
+        applicationContext.logger.error(
+          'An error occurred while attempting to upload to S3',
+          err,
+        );
+        reject(err);
+      }
+
+      resolve();
+    });
   });
 
   let urlToReturn;

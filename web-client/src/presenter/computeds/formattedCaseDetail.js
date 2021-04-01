@@ -1,3 +1,4 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -125,6 +126,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
     applicationContext.getUtilities().getOtherFilers(result) || []
   ).map(otherFiler => ({
     ...otherFiler,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
   }));
 
@@ -265,7 +267,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && applicationContext.getUtilities().isServed(d),
+    docketEntry => applicationContext.getUtilities().isPending(docketEntry),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
