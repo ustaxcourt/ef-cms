@@ -20,6 +20,8 @@ elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "10"
 elif [[ $BRANCH == 'experimental3' ]] ; then
   echo "10"
+elif [[ $BRANCH == 'experimental4' ]] ; then
+  echo "10"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "10"
 elif [[ $BRANCH == 'staging' ]] ; then
