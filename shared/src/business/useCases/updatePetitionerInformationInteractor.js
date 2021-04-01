@@ -2,18 +2,19 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  CONTACT_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+} = require('../entities/EntityConstants');
+const {
   copyToNewPdf,
   getAddressPages,
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
-const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../entities/EntityConstants');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { Case, getContactPrimary } = require('../entities/cases/Case');
+const { Case } = require('../entities/cases/Case');
 const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -246,6 +247,12 @@ exports.updatePetitionerInformationInteractor = async (
     p => p.contactId === contactId,
   );
 
+  if (!oldCaseContact) {
+    throw new NotFoundError(
+      `Case contact with id ${contactId} was not found on the case`,
+    );
+  }
+
   const editableFields = pick(
     defaults(updatedPetitionerData, {
       address2: undefined,
@@ -328,23 +335,33 @@ exports.updatePetitionerInformationInteractor = async (
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  let primaryChangeDocs;
-  let secondaryChangeDocs;
+  let petitionerChangeDocs;
   let paperServicePdfUrl;
-  const udpatedCaseContact = caseEntity.petitioners.find(
+
+  const updatedCaseContact = caseEntity.petitioners.find(
     p => p.contactId === contactId,
   );
 
-  if (petitionerInfoChange && !udpatedCaseContact.isAddressSealed) {
+  if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {
     const partyWithPaperService = caseEntity.hasPartyWithPaperService();
 
     if (petitionerInfoChange) {
-      const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
-        privatePractitioner =>
-          privatePractitioner.getRepresentingPrimary(caseEntity),
-      );
+      let privatePractitionersRepresentingContact;
+      if (updatedCaseContact.contactType === CONTACT_TYPES.primary) {
+        privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
+          privatePractitioner =>
+            privatePractitioner.getRepresentingPrimary(caseEntity),
+        );
+      } else if (updatedCaseContact.contactType === CONTACT_TYPES.secondary) {
+        privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
+          privatePractitioner =>
+            privatePractitioner.getRepresentingSecondary(caseEntity),
+        );
+      } else {
+        console.log('handle dis situation');
+      }
 
-      primaryChangeDocs = await createDocketEntryAndWorkItem({
+      petitionerChangeDocs = await createDocketEntryAndWorkItem({
         applicationContext,
         caseEntity,
         change: petitionerInfoChange,
@@ -357,55 +374,55 @@ exports.updatePetitionerInformationInteractor = async (
       });
     }
 
-    if (secondaryChange) {
-      const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
-        privatePractitioner =>
-          privatePractitioner.getRepresentingSecondary(caseEntity),
-      );
+    // if (secondaryChange) {
+    //   const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
+    //     privatePractitioner =>
+    //       privatePractitioner.getRepresentingSecondary(caseEntity),
+    //   );
 
-      secondaryChangeDocs = await createDocketEntryAndWorkItem({
-        applicationContext,
-        caseEntity,
-        change: secondaryChange,
-        editableFields: secondaryEditableFields,
-        oldCaseContact: oldCaseContactSecondary,
-        partyWithPaperService,
-        privatePractitionersRepresentingContact,
-        servedParties,
-        user,
-      });
-    }
+    //   secondaryChangeDocs = await createDocketEntryAndWorkItem({
+    //     applicationContext,
+    //     caseEntity,
+    //     change: secondaryChange,
+    //     editableFields: secondaryEditableFields,
+    //     oldCaseContact: oldCaseContactSecondary,
+    //     partyWithPaperService,
+    //     privatePractitionersRepresentingContact,
+    //     servedParties,
+    //     user,
+    //   });
+    // }
 
     if (servedParties.paper.length > 0) {
       paperServicePdfUrl = await generatePaperServicePdf({
         applicationContext,
         caseEntity,
-        primaryChangeDocs,
-        secondaryChangeDocs,
+        primaryChangeDocs: petitionerChangeDocs,
         servedParties,
       });
     }
   }
 
   if (
-    contactPrimary.email &&
-    contactPrimary.email !== oldCaseContactPrimary.email
+    updatedCaseContact.email &&
+    updatedCaseContact.email !== oldCaseContact.email
   ) {
     const isEmailAvailable = await applicationContext
       .getPersistenceGateway()
       .isEmailAvailable({
         applicationContext,
-        email: contactPrimary.email,
+        email: updatedCaseContact.email,
       });
 
     if (isEmailAvailable) {
+      // TODO - rename this usecasehelper to be more truthful
       caseEntity = await applicationContext
         .getUseCaseHelpers()
         .createUserForContactPrimary({
           applicationContext,
           caseEntity,
-          email: contactPrimary.email,
-          name: contactPrimary.name,
+          email: updatedCaseContact.email,
+          name: updatedCaseContact.name,
         });
     } else {
       caseEntity = await applicationContext
@@ -413,8 +430,8 @@ exports.updatePetitionerInformationInteractor = async (
         .addExistingUserToCase({
           applicationContext,
           caseEntity,
-          email: contactPrimary.email,
-          name: contactPrimary.name,
+          email: updatedCaseContact.email,
+          name: updatedCaseContact.name,
         });
     }
   }
