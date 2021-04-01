@@ -476,8 +476,11 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should not create a docket entry, work item, or serve anything if the case is closed more than six months ago, but it should still update the case', async () => {
-    mockCaseWithPrivatePractitioner.status = CASE_STATUS_TYPES.closed;
-    mockCaseWithPrivatePractitioner.closedDate = '1999-11-11T22:22:22.021Z';
+    mockCase = {
+      ...mockCase,
+      closedDate: '1999-11-11T22:22:22.021Z',
+      status: CASE_STATUS_TYPES.closed,
+    };
 
     const cases = await generateChangeOfAddress({
       applicationContext,
@@ -560,6 +563,7 @@ describe('generateChangeOfAddress', () => {
     const UPDATED_EMAIL = 'abc@example.com';
     mockCase = {
       ...mockCaseWithPrivatePractitioner,
+      closedDate: '1999-11-11T22:22:22.021Z',
       privatePractitioners: [
         {
           ...mockCaseWithPrivatePractitioner.privatePractitioners[0],
@@ -567,6 +571,7 @@ describe('generateChangeOfAddress', () => {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ],
+      status: CASE_STATUS_TYPES.closed,
     };
 
     await generateChangeOfAddress({
