@@ -1,6 +1,8 @@
 const {
   getContactPrimary,
   getContactSecondary,
+  getOtherFilers,
+  getOtherPetitioners,
 } = require('../entities/cases/Case');
 const {
   setServiceIndicatorsForCase,
@@ -25,8 +27,8 @@ const aggregatePartiesForService = caseEntity => {
   ];
 
   const otherParties = [
-    ...(formattedCase.otherFilers || []),
-    ...(formattedCase.otherPetitioners || []),
+    ...getOtherFilers(formattedCase),
+    ...getOtherPetitioners(formattedCase),
   ];
 
   const aggregated = {
