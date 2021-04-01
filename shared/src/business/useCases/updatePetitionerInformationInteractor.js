@@ -279,27 +279,6 @@ exports.updatePetitionerInformationInteractor = async (
     ],
   );
 
-  // let secondaryEditableFields;
-  // if (contactSecondary) {
-  //   secondaryEditableFields = pick(
-  //     defaults(contactSecondary, { address2: undefined, address3: undefined }),
-  //     [
-  //       'address1',
-  //       'address2',
-  //       'address3',
-  //       'city',
-  //       'country',
-  //       'countryType',
-  //       'inCareOf',
-  //       'name',
-  //       'phone',
-  //       'postalCode',
-  //       'serviceIndicator',
-  //       'state',
-  //     ],
-  //   );
-  // }
-
   const petitionerInfoChange = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
@@ -316,8 +295,14 @@ exports.updatePetitionerInformationInteractor = async (
 
   try {
     caseToUpdateContacts.updatePetitioner({
+      additionalName: oldCaseContact.additionalName,
       contactId: oldCaseContact.contactId,
       contactType: oldCaseContact.contactType,
+      email: oldCaseContact.email,
+      hasEAccess: oldCaseContact.hasEAccess,
+      isAddressSealed: oldCaseContact.isAddressSealed,
+      otherFilerType: oldCaseContact.otherFilerType,
+      sealedAndUnavailable: oldCaseContact.sealedAndUnavailable,
       ...editableFields,
     });
   } catch (e) {
@@ -387,16 +372,15 @@ exports.updatePetitionerInformationInteractor = async (
   }
 
   if (
-    updatedCaseContact.email &&
-    updatedCaseContact.email !== oldCaseContact.email
+    updatedPetitionerData.email &&
+    updatedPetitionerData.email !== oldCaseContact.email
   ) {
     const isEmailAvailable = await applicationContext
       .getPersistenceGateway()
       .isEmailAvailable({
         applicationContext,
-        email: updatedCaseContact.email,
+        email: updatedPetitionerData.email,
       });
-
     if (isEmailAvailable) {
       // TODO - rename this usecasehelper to be more truthful
       caseEntity = await applicationContext
@@ -404,7 +388,7 @@ exports.updatePetitionerInformationInteractor = async (
         .createUserForContactPrimary({
           applicationContext,
           caseEntity,
-          email: updatedCaseContact.email,
+          email: updatedPetitionerData.email,
           name: updatedCaseContact.name,
         });
     } else {
@@ -413,7 +397,7 @@ exports.updatePetitionerInformationInteractor = async (
         .addExistingUserToCase({
           applicationContext,
           caseEntity,
-          email: updatedCaseContact.email,
+          email: updatedPetitionerData.email,
           name: updatedCaseContact.name,
         });
     }

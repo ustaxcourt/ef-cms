@@ -153,6 +153,7 @@ describe('update petitioner contact information on a case', () => {
       updatedPetitionerData: {
         ...getContactPrimary(MOCK_CASE),
         address1: 'changed address',
+        contactId: mockPetitioners[0].contactId,
       },
     });
 
@@ -192,8 +193,8 @@ describe('update petitioner contact information on a case', () => {
       docketNumber: MOCK_CASE.docketNumber,
       updatedPetitionerData: {
         address1: '989 Division St',
-        // removed address2
         city: 'Somewhere',
+        contactId: mockPetitioners[0].contactId,
         countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Test Primary Petitioner',
         phone: '1234568',
@@ -207,8 +208,6 @@ describe('update petitioner contact information on a case', () => {
       caseToUpdate,
     } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
     expect(getContactPrimary(caseToUpdate).address2).toBeUndefined();
-
-    expect(getContactSecondary(caseToUpdate).address2).toBeUndefined();
   });
 
   it('sets filedBy to undefined on notice of change docket entry', async () => {
@@ -316,7 +315,7 @@ describe('update petitioner contact information on a case', () => {
     await updatePetitionerInformationInteractor(applicationContext, {
       docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
       updatedPetitionerData: {
-        ...getContactSecondary(MOCK_CASE_WITH_SECONDARY_OTHERS),
+        ...getContactSecondary(mockCase),
         inCareOf: mockInCareOf,
       },
     });
