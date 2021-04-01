@@ -2212,7 +2212,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
             relationship: 
               type: "string"

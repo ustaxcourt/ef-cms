@@ -1,5 +1,5 @@
 exports.removeItemInteractor = async ({ applicationContext, key }) => {
-  return applicationContext.getPersistenceGateway().removeItem({
+  return await applicationContext.getPersistenceGateway().removeItem({
     applicationContext,
     key,
   });
