@@ -154,6 +154,7 @@ const {
 const { Case, caseHasServedDocketEntries } = require('../entities/cases/Case');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
@@ -207,6 +208,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     setSourceByName: jest.fn().mockReturnValue(null),
     startScanSession: jest.fn().mockReturnValue({
       scannedBuffer: [],
+    }),
+  };
+
+  const mockGetReduceImageBlobValue = {
+    default: jest.fn().mockReturnValue({
+      toBlob: jest.fn(),
     }),
   };
 
@@ -286,6 +293,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
+    isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
     isStringISOFormatted: jest
       .fn()
@@ -445,7 +453,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const nodeSassMockReturnValue = {
-    render: (data, cb) => cb(data, { css: '' }),
+    render: (data, cb) => cb(null, { css: '' }),
   };
 
   const mockGetEmailClient = {
@@ -550,6 +558,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       },
     })),
     getQueueService: mockGetQueueService,
+    getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),
