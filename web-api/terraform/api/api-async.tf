@@ -8,6 +8,8 @@ resource "aws_lambda_function" "api_async_lambda" {
   source_code_hash = var.api_object_hash
   timeout          = "900"
   memory_size      = "5000"
+  
+  minimum_compression_size = "1"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn

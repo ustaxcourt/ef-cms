@@ -8,6 +8,8 @@ resource "aws_lambda_function" "api_public_lambda" {
   source_code_hash = var.public_object_hash
   timeout          = "10"
   memory_size      = "3008"
+  
+  minimum_compression_size = "1"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
