@@ -344,8 +344,6 @@ exports.updatePetitionerInformationInteractor = async (
           privatePractitioner =>
             privatePractitioner.getRepresentingSecondary(caseEntity),
         );
-      } else {
-        console.log('handle dis situation');
       }
 
       petitionerChangeDocs = await createDocketEntryAndWorkItem({
