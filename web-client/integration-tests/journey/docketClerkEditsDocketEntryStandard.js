@@ -96,7 +96,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       eventCode: 'EA',
       filedBy: 'Petr. Mona Schultz, Brianna Noble',
       partyPrimary: true,
-      receivedAt: '2018-01-01',
+      receivedAt: '2018-01-01T05:00:00.000Z',
     });
   });
 };

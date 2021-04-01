@@ -29,7 +29,7 @@ exports.getOpenConsolidatedCasesInteractor = async applicationContext => {
     casesAssociatedWithUserOrLeadCaseMap,
     leadDocketNumbersAssociatedWithUser,
     userAssociatedDocketNumbersMap,
-  } = await applicationContext
+  } = applicationContext
     .getUseCaseHelpers()
     .processUserAssociatedCases(openUserCases);
 
