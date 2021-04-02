@@ -53,13 +53,13 @@ describe('checkEmailAvailabilityAction', () => {
     ).toMatchObject({ email: mockEmail });
   });
 
-  it('should call checkEmailAvailabilityInteractor with state.form.contactPrimary.email', async () => {
+  it('should call checkEmailAvailabilityInteractor with state.form.contact.email', async () => {
     await runAction(checkEmailAvailabilityAction, {
       modules: {
         presenter,
       },
       state: {
-        form: { contactPrimary: { email: mockEmail } },
+        form: { contact: { email: mockEmail } },
       },
     });
 
