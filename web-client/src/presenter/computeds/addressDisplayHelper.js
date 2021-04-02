@@ -10,17 +10,24 @@ export const addressDisplayHelper = (get, applicationContext) => {
   const contactPrimary = applicationContext
     .getUtilities()
     .getContactPrimary(caseDetail);
+
   let showEditPrimaryContact =
     contactPrimary.contactId === user.userId && !contactPrimary.isAddressSealed;
+
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(caseDetail);
+
+  let showEditSecondaryContact =
+    contactSecondary?.contactId === user.userId &&
+    !contactSecondary?.isAddressSealed;
 
   let showEditPetitionerInformation = false;
   const permissions = get(state.permissions);
 
   let showEditContacts = false;
 
-  if (user.role === USER_ROLES.petitioner) {
-    showEditContacts = true;
-  } else if (user.role === USER_ROLES.privatePractitioner) {
+  if (user.role === USER_ROLES.privatePractitioner) {
     showEditContacts = userAssociatedWithCase;
   } else if (
     permissions.EDIT_PETITIONER_INFO &&
@@ -30,7 +37,9 @@ export const addressDisplayHelper = (get, applicationContext) => {
   }
 
   return {
+    showEditContacts,
     showEditPetitionerInformation,
     showEditPrimaryContact,
+    showEditSecondaryContact,
   };
 };
