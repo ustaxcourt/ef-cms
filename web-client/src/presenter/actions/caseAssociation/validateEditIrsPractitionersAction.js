@@ -15,15 +15,13 @@ export const validateEditIrsPractitionersAction = ({
   get,
   path,
 }) => {
-  let SERVICE_INDICATOR_TYPES;
-
-  ({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+  const {
+    SERVICE_INDICATOR_ERROR,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
 
   const { irsPractitioners } = get(state.modal);
   const { irsPractitioners: oldRespondents } = get(state.caseDetail);
-
-  const serviceIndicatorError =
-    'You cannot change from paper to electronic service. Select a valid service preference.';
 
   const errors = [];
   irsPractitioners.forEach(respondent => {
@@ -38,7 +36,7 @@ export const validateEditIrsPractitionersAction = ({
       ].includes(oldRespondent.serviceIndicator) &&
       respondent.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
     ) {
-      error.serviceIndicator = serviceIndicatorError;
+      error.serviceIndicator = SERVICE_INDICATOR_ERROR;
     }
 
     errors.push(error);
