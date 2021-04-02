@@ -6,6 +6,8 @@ import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './StartCase/InternationalAddress';
+import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
+import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -164,17 +166,19 @@ export const EditPetitionerInformationInternal = connect(
             <div className="margin-bottom-6">
               <ServiceIndicatorRadios
                 bind="form.contact"
-                hideElectronic={!form.contact.email}
+                hideElectronic={!form.contact.currentEmail}
                 // validateSequence={validateSequence}
                 validationErrors="validationErrors.contact"
               />
             </div>
-            {form.contact.email && (
+            {form.contact.currentEmail && (
               <div className="margin-bottom-6">
                 <label className="usa-label" htmlFor="current-email-display">
                   Current email address
                 </label>
-                <span id="current-email-display">{form.contact.email}</span>
+                <span id="current-email-display">
+                  {form.contact.currentEmail}
+                </span>
               </div>
             )}
 
@@ -190,7 +194,7 @@ export const EditPetitionerInformationInternal = connect(
             )}
 
             {editPetitionerInformationHelper.showEditEmail &&
-              !form.contact.email && (
+              !form.contact.currentEmail && (
                 <>
                   <h4>Add Login & Service Email</h4>
                   <FormGroup errorText={validationErrors.email}>
@@ -201,9 +205,9 @@ export const EditPetitionerInformationInternal = connect(
                       autoCapitalize="none"
                       className="usa-input"
                       id="email"
-                      name="email"
+                      name="contact.email"
                       type="text"
-                      value={form.email || ''}
+                      value={form.contact.email || ''}
                       // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
                       onChange={e =>
                         updateFormValueSequence({
@@ -221,9 +225,9 @@ export const EditPetitionerInformationInternal = connect(
                       autoCapitalize="none"
                       className="usa-input"
                       id="confirm-email"
-                      name="confirmEmail"
+                      name="contact.confirmEmail"
                       type="text"
-                      value={form.confirmEmail || ''}
+                      value={form.contact.confirmEmail || ''}
                       // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
                       onChange={e =>
                         updateFormValueSequence({
@@ -258,6 +262,10 @@ export const EditPetitionerInformationInternal = connect(
 
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+        )}
+        {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
+        {showModal === 'NoMatchingEmailFoundModal' && (
+          <NoMatchingEmailFoundModal />
         )}
       </>
     );
