@@ -11,7 +11,7 @@ export const addressDisplayHelper = (get, applicationContext) => {
     .getUtilities()
     .getContactPrimary(caseDetail);
   let showEditPrimaryContact =
-    contactPrimary === user.userId && !contactPrimary.isAddressSealed;
+    contactPrimary.contactId === user.userId && !contactPrimary.isAddressSealed;
 
   let showEditPetitionerInformation = false;
   const permissions = get(state.permissions);

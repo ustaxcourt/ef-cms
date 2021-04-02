@@ -5,7 +5,6 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { addressDisplayHelper as addressDisplayHelperComputed } from './addressDisplayHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { describe } from 'mocha';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -90,9 +89,9 @@ describe('address display', () => {
 
   describe('showEditPrimaryContact', () => {
     it.only('should be true if the current user is primary and the address is not sealed', () => {
-      const mockUserId = '789';
+      const mockUserId = 'f50f9f1e-473e-41b5-8c3d-89ddf56649ef';
       const user = {
-        role: ROLES.docketClerk,
+        role: ROLES.petitioner,
         userId: mockUserId,
       };
 
@@ -105,16 +104,44 @@ describe('address display', () => {
               {
                 contactId: mockUserId,
                 contactType: CONTACT_TYPES.primary,
+                isAddressSealed: false,
               },
             ],
-            privatePractitioners: [{ userId: '789' }],
           },
           currentPage: 'CaseDetailInternal',
-          permissions: { EDIT_PETITIONER_INFO: true },
+          permissions: {},
         },
       });
 
       expect(result.showEditPrimaryContact).toEqual(true);
+    });
+
+    it.only('should be false if the current user is primary and the address is sealed', () => {
+      const mockUserId = 'f50f9f1e-473e-41b5-8c3d-89ddf56649ef';
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockUserId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: true,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.showEditPrimaryContact).toEqual(false);
     });
   });
 
