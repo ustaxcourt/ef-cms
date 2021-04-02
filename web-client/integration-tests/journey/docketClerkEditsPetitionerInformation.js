@@ -1,15 +1,20 @@
+import { contactPrimaryFromState } from '../helpers';
+
 export const docketClerkEditsPetitionerInformation = test => {
   return it('docket clerk edits petitioner information', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.name',
+      key: 'contact.name',
       value: 'Bob',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(
       test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
