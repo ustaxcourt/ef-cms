@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { checkEmailAvailabilityAction } from './checkEmailAvailabilityAction';
+import { checkEmailAvailabilityForPetitionerAction } from './checkEmailAvailabilityForPetitionerAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('checkEmailAvailabilityAction', () => {
+describe('checkEmailAvailabilityForPetitionerAction', () => {
   const mockEmail = 'someone@example.com';
 
   let pathEmailAvailableStub;
@@ -22,12 +22,12 @@ describe('checkEmailAvailabilityAction', () => {
   });
 
   it('should call checkEmailAvailabilityInteractor with state.form.updatedEmail', async () => {
-    await runAction(checkEmailAvailabilityAction, {
+    await runAction(checkEmailAvailabilityForPetitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: { updatedEmail: mockEmail },
+        form: { contact: { updatedEmail: mockEmail } },
       },
     });
 
@@ -38,12 +38,28 @@ describe('checkEmailAvailabilityAction', () => {
   });
 
   it('should call checkEmailAvailabilityInteractor with state.form.email when state.form.updatedEmail is undefined', async () => {
-    await runAction(checkEmailAvailabilityAction, {
+    await runAction(checkEmailAvailabilityForPetitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: { email: mockEmail },
+        form: { contact: { email: mockEmail } },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({ email: mockEmail });
+  });
+
+  it('should call checkEmailAvailabilityInteractor with state.form.contact.email', async () => {
+    await runAction(checkEmailAvailabilityForPetitionerAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { contact: { email: mockEmail } },
       },
     });
 
@@ -58,12 +74,12 @@ describe('checkEmailAvailabilityAction', () => {
       .getUseCases()
       .checkEmailAvailabilityInteractor.mockReturnValue(true);
 
-    await runAction(checkEmailAvailabilityAction, {
+    await runAction(checkEmailAvailabilityForPetitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: { email: mockEmail },
+        form: { contact: { email: mockEmail } },
       },
     });
 
@@ -75,12 +91,12 @@ describe('checkEmailAvailabilityAction', () => {
       .getUseCases()
       .checkEmailAvailabilityInteractor.mockReturnValue(false);
 
-    await runAction(checkEmailAvailabilityAction, {
+    await runAction(checkEmailAvailabilityForPetitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: { email: mockEmail },
+        form: { contact: { email: mockEmail } },
       },
     });
 
