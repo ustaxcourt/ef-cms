@@ -52,21 +52,24 @@ describe('Petitioner Service Indicator Journey', () => {
 
   loginAs(test, 'admissionsclerk@example.com');
   it('Admissions Clerk updates petitioner email address', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
+      key: 'contact.email',
       value: 'petitioner@example.com',
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.confirmEmail',
+      key: 'contact.confirmEmail',
       value: 'petitioner@example.com',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('modal.showModal')).toEqual('MatchingEmailFoundModal');
@@ -177,7 +180,7 @@ describe('Petitioner Service Indicator Journey', () => {
   // explicitly set petitioner to Paper
   loginAs(test, 'docketclerk@example.com');
   it('Updates petitioner service indicator to paper', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
       docketNumber: test.docketNumber,
     });
 

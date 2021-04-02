@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -22,7 +22,7 @@ export const submitEditPetitionerSequence = [
       setSaveAlertsForNavigationAction,
       setCaseDetailPageTabFrozenAction,
       setCurrentPageAction('Interstitial'),
-      navigateToCaseDetailAction,
+      navigateToCaseDetailCaseInformationActionFactory('petitioner'),
     ]),
   },
 ];

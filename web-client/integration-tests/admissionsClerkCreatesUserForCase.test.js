@@ -1,13 +1,11 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
 import faker from 'faker';
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
 
 const test = setupTest();
 
@@ -27,35 +25,34 @@ describe('admissions clerk creates user for case', () => {
 
   loginAs(test, 'admissionsclerk@example.com');
   it('admissions clerk verifies petitioner on case has no email', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
 
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
+    expect(contactPrimary.email).toBeUndefined();
 
-    expect(formattedCase.contactPrimary.email).toBeUndefined();
-
-    await test.runSequence('gotoEditPetitionerInformationSequence');
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence');
     expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
 
-    expect(test.getState('form.contactPrimary,email')).toBeUndefined();
-    expect(test.getState('form.contactPrimary.serviceIndicator')).toBe('Paper');
+    expect(test.getState('form.contact.email')).toBeUndefined();
+    expect(test.getState('form.contact.serviceIndicator')).toBe('Paper');
   });
 
   it('admissions clerk adds an existing email address for petitioner on case', async () => {
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
+      key: 'contact.email',
       value: 'petitioner@example.com',
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.confirmEmail',
+      key: 'contact.confirmEmail',
       value: 'petitioner@example.com',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('modal.showModal')).toBe('MatchingEmailFoundModal');
 
@@ -66,16 +63,16 @@ describe('admissions clerk creates user for case', () => {
 
   it('admissions clerk adds a new email address for petitioner on case', async () => {
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
+      key: 'contact.email',
       value: validEmail,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.confirmEmail',
+      key: 'contact.confirmEmail',
       value: validEmail,
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

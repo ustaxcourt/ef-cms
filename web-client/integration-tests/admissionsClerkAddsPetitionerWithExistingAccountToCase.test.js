@@ -30,6 +30,8 @@ describe('admissions clerk adds petitioner with existing cognito account to case
   it('admissions clerk adds petitioner email with existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
+    let contactPrimary = contactPrimaryFromState(test);
+
     await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
       contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
@@ -40,16 +42,16 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     expect(test.getState('form.confirmEmail')).toBeUndefined();
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
+      key: 'contact.email',
       value: EMAIL_TO_ADD,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.confirmEmail',
+      key: 'contact.confirmEmail',
       value: EMAIL_TO_ADD,
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
@@ -63,7 +65,7 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     expect(test.getState('modal.showModal')).toBeUndefined();
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    contactPrimary = contactPrimaryFromState(test);
 
     expect(contactPrimary.email).toEqual(EMAIL_TO_ADD);
     expect(contactPrimary.serviceIndicator).toEqual(
