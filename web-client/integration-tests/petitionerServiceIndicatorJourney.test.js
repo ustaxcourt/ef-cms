@@ -78,7 +78,9 @@ describe('Petitioner Service Indicator Journey', () => {
 
     expect(test.getState('modal.showModal')).toEqual('MatchingEmailFoundModal');
 
-    await test.runSequence('submitEditPetitionerSequence');
+    await test.runSequence(
+      'submitUpdatePetitionerInformationFromModalSequence',
+    );
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
