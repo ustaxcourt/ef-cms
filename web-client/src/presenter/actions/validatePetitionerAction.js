@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -47,7 +48,7 @@ export const validatePetitionerAction = ({
 
   store.set(state.validationErrors.contact, errors || {});
 
-  if (!errors) {
+  if (isEmpty(errors)) {
     return path.success();
   } else {
     return path.error({ errors });
