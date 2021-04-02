@@ -82,20 +82,6 @@ export const validatePetitionerInformationFormAction = ({
     };
   }
 
-  if (
-    oldContactSecondary &&
-    [
-      SERVICE_INDICATOR_TYPES.SI_PAPER,
-      SERVICE_INDICATOR_TYPES.SI_NONE,
-    ].includes(oldContactSecondary.serviceIndicator) &&
-    contactSecondary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
-  ) {
-    errors.contactSecondary = {
-      ...errors.contactSecondary,
-      ...SERVICE_INDICATOR_ERROR,
-    };
-  }
-
   if (isEmpty(errors.contactPrimary) && isEmpty(errors.contactSecondary)) {
     return path.success();
   } else {
