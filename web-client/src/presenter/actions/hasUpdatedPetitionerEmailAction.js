@@ -9,18 +9,15 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path function
  * @returns {object} continue path for the sequence
  */
-export const hasUpdatedPetitionerEmailAction = async ({
-  applicationContext,
-  get,
-  path,
-}) => {
+export const hasUpdatedPetitionerEmailAction = async ({ get, path }) => {
   const caseDetail = get(state.caseDetail);
-  const contactPrimary = applicationContext
-    .getUtilities()
-    .getContactPrimary(caseDetail);
-  const { contactPrimary: formContactPrimary } = get(state.form);
+  const { contact: formContact } = get(state.form);
 
-  if (contactPrimary.email !== formContactPrimary.email) {
+  const caseContact = caseDetail.petitioners.find(
+    p => p.contactId === formContact.contactId,
+  );
+
+  if (caseContact.email !== formContact.email) {
     return path.yes();
   }
 

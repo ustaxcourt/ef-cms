@@ -52,6 +52,10 @@ describe('Petitioner Service Indicator Journey', () => {
 
   loginAs(test, 'admissionsclerk@example.com');
   it('Admissions Clerk updates petitioner email address', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     const contactPrimary = contactPrimaryFromState(test);
 
     await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
