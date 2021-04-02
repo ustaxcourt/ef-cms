@@ -188,6 +188,34 @@ describe('address display', () => {
 
       expect(result.showEditPrimaryContact).toEqual(false);
     });
+
+    it('should be true if current user is a private practitioner, address is not sealed, and current user is associated to case', () => {
+      const user = {
+        role: ROLES.privatePractitioner,
+        userId: mockSecondPetitionerId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: false,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+          screenMetadata: { isAssociated: true },
+        },
+      });
+
+      expect(result.showEditPrimaryContact).toEqual(true);
+    });
   });
 
   describe('showEditSecondaryContact', () => {

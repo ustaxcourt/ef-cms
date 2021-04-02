@@ -29,6 +29,7 @@ export const addressDisplayHelper = (get, applicationContext) => {
 
   if (user.role === USER_ROLES.privatePractitioner) {
     showEditContacts = userAssociatedWithCase;
+    showEditPrimaryContact = userAssociatedWithCase;
   } else if (
     permissions.EDIT_PETITIONER_INFO &&
     caseStatus !== STATUS_TYPES.new
