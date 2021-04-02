@@ -238,6 +238,7 @@ export const EditPetitionerInformationInternal = connect(
           </div>
 
           <Button
+            id="submit-edit-petitioner-information"
             onClick={() => {
               submitEditPetitionerSequence();
             }}
