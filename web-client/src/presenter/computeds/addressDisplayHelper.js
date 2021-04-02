@@ -13,6 +13,8 @@ export const addressDisplayHelper = (get, applicationContext) => {
 
   let showEditPrimaryContact =
     contactPrimary.contactId === user.userId && !contactPrimary.isAddressSealed;
+  const showSealedPrimaryContact =
+    contactPrimary.contactId === user.userId && contactPrimary.isAddressSealed;
 
   const contactSecondary = applicationContext
     .getUtilities()
@@ -21,6 +23,9 @@ export const addressDisplayHelper = (get, applicationContext) => {
   let showEditSecondaryContact =
     contactSecondary?.contactId === user.userId &&
     !contactSecondary?.isAddressSealed;
+  const showSealedSecondaryContact =
+    contactSecondary?.contactId === user.userId &&
+    contactSecondary?.isAddressSealed;
 
   let showEditPetitionerInformation = false;
   const permissions = get(state.permissions);
@@ -42,9 +47,11 @@ export const addressDisplayHelper = (get, applicationContext) => {
   return {
     primary: {
       showEditContact: showEditPrimaryContact,
+      showSealedContact: showSealedPrimaryContact,
     },
     secondary: {
       showEditContact: showEditSecondaryContact,
+      showSealedContact: showSealedSecondaryContact,
     },
     showEditContacts,
     showEditPetitionerInformation,

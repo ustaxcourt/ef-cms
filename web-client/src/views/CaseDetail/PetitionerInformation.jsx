@@ -48,7 +48,9 @@ const PetitionerInformation = connect(
         <div className="tablet:grid-col-12">
           <div className="card height-full">
             <div className="content-wrapper">
-              <h3 id="primary-label">Petitioner Contact Info</h3>
+              <h3 id="primary-label">
+                Petitioner Contact Info hdhdhdhdhdhdhdh
+              </h3>
               <div className="grid-row">
                 {formattedCaseDetail.contactPrimary && (
                   <div className="grid-col-3">
@@ -63,15 +65,14 @@ const PetitionerInformation = connect(
                         }
                       />
                     </address>
-                    {addressDisplayHelper.showEditContacts &&
-                      formattedCaseDetail.contactPrimary.isAddressSealed && (
-                        <div>
-                          <p className="text-italic">
-                            Call the Tax Court at (202) 521-0700 if you need to
-                            update your contact information
-                          </p>
-                        </div>
-                      )}
+                    {addressDisplayHelper.primary.showSealedContact && (
+                      <div>
+                        <p className="text-italic">
+                          Call the Tax Court at (202) 521-0700 if you need to
+                          update your contact information
+                        </p>
+                      </div>
+                    )}
 
                     {caseInformationHelper.showEmail && (
                       <>
@@ -123,16 +124,14 @@ const PetitionerInformation = connect(
                           }
                         />
                       </address>
-                      {addressDisplayHelper.showEditContacts &&
-                        formattedCaseDetail.contactSecondary
-                          .isAddressSealed && (
-                          <div className="max-width-50">
-                            <p className="text-italic">
-                              Call the Tax Court at (202) 521-0700 if you need
-                              to update your contact information
-                            </p>
-                          </div>
-                        )}
+                      {addressDisplayHelper.secondary.showSealedContact && (
+                        <div className="max-width-50">
+                          <p className="text-italic">
+                            Call the Tax Court at (202) 521-0700 if you need to
+                            update your contact information
+                          </p>
+                        </div>
+                      )}
                       {formattedCaseDetail.contactSecondary
                         .serviceIndicator && (
                         <>
