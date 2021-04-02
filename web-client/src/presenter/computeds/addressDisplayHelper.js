@@ -40,9 +40,13 @@ export const addressDisplayHelper = (get, applicationContext) => {
   }
 
   return {
+    primary: {
+      showEditContact: showEditPrimaryContact,
+    },
+    secondary: {
+      showEditContact: showEditSecondaryContact,
+    },
     showEditContacts,
     showEditPetitionerInformation,
-    showEditPrimaryContact,
-    showEditSecondaryContact,
   };
 };

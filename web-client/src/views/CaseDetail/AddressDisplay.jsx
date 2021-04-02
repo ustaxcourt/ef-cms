@@ -48,7 +48,7 @@ export const AddressDisplay = connect(
           )}
           {nameOverride || contact.name}{' '}
           {editLinkExternal &&
-            addressDisplayHelper.showEditPrimaryContact(
+            addressDisplayHelper[contact.contactType].showEditContact && (
               <Button
                 link
                 aria-label="Edit petitioner contact information"
@@ -57,7 +57,7 @@ export const AddressDisplay = connect(
                 icon="edit"
               >
                 Edit
-              </Button>,
+              </Button>
             )}
           {editLinkInternal &&
             addressDisplayHelper.showEditPetitionerInformation && (
