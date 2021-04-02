@@ -167,7 +167,7 @@ export const EditPetitionerInformationInternal = connect(
               <ServiceIndicatorRadios
                 bind="form.contact"
                 hideElectronic={!form.contact.currentEmail}
-                // validateSequence={validateSequence}
+                validateSequence={validatePetitionerSequence}
                 validationErrors="validationErrors.contact"
               />
             </div>
@@ -208,7 +208,7 @@ export const EditPetitionerInformationInternal = connect(
                       name="contact.email"
                       type="text"
                       value={form.contact.email || ''}
-                      // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                      onBlur={() => validatePetitionerSequence()}
                       onChange={e =>
                         updateFormValueSequence({
                           key: e.target.name,
@@ -228,7 +228,7 @@ export const EditPetitionerInformationInternal = connect(
                       name="contact.confirmEmail"
                       type="text"
                       value={form.contact.confirmEmail || ''}
-                      // onBlur={() => validateChangeLoginAndServiceEmailSequence()}
+                      onBlur={() => validatePetitionerSequence()}
                       onChange={e =>
                         updateFormValueSequence({
                           key: e.target.name,

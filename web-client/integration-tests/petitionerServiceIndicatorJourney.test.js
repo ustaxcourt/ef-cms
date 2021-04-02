@@ -196,7 +196,6 @@ describe('Petitioner Service Indicator Journey', () => {
       value: 'Paper',
     });
 
-    //todo change
     await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({});

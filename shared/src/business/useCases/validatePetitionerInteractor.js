@@ -20,11 +20,9 @@ exports.validatePetitionerInteractor = ({
     p => p.contactId === contactInfo.contactId,
   );
 
-  const errors = ContactFactory.createContacts({
+  return ContactFactory.createContacts({
     applicationContext,
     contactInfo: { [petitioner.contactType]: contactInfo },
     partyType,
   })[petitioner.contactType].getFormattedValidationErrors();
-
-  return errors;
 };
