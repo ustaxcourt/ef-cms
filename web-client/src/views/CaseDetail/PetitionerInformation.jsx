@@ -48,9 +48,7 @@ const PetitionerInformation = connect(
         <div className="tablet:grid-col-12">
           <div className="card height-full">
             <div className="content-wrapper">
-              <h3 id="primary-label">
-                Petitioner Contact Info hdhdhdhdhdhdhdh
-              </h3>
+              <h3 id="primary-label">Petitioner Contact Info</h3>
               <div className="grid-row">
                 {formattedCaseDetail.contactPrimary && (
                   <div className="grid-col-3">
