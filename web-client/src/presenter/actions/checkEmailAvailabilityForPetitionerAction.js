@@ -9,12 +9,12 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path function
  * @returns {object} continue path for the sequence
  */
-export const checkEmailAvailabilityAction = async ({
+export const checkEmailAvailabilityForPetitionerAction = async ({
   applicationContext,
   get,
   path,
 }) => {
-  const { email, updatedEmail } = get(state.form);
+  const { email, updatedEmail } = get(state.form.contact);
 
   const isEmailAvailable = await applicationContext
     .getUseCases()

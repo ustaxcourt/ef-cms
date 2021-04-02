@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -16,19 +17,38 @@ export const validatePetitionerAction = ({
   path,
   store,
 }) => {
+  const {
+    SERVICE_INDICATOR_ERROR,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
   const { contact } = get(state.form);
   const { partyType, petitioners } = get(state.caseDetail);
 
-  const errors = applicationContext.getUseCases().validatePetitionerInteractor({
-    applicationContext,
-    contactInfo: contact,
-    partyType,
-    petitioners,
-  });
+  let errors =
+    applicationContext.getUseCases().validatePetitionerInteractor({
+      applicationContext,
+      contactInfo: contact,
+      partyType,
+      petitioners,
+    }) || {};
+
+  const caseContact = petitioners.find(p => p.contactId === contact.contactId);
+  if (
+    [
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    ].includes(caseContact.serviceIndicator) &&
+    contact.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
+  ) {
+    errors = {
+      ...errors,
+      ...SERVICE_INDICATOR_ERROR,
+    };
+  }
 
   store.set(state.validationErrors.contact, errors || {});
 
-  if (!errors) {
+  if (isEmpty(errors)) {
     return path.success();
   } else {
     return path.error({ errors });
