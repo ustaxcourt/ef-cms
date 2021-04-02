@@ -1,9 +1,11 @@
 import {
   CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { addressDisplayHelper as addressDisplayHelperComputed } from './addressDisplayHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { describe } from 'mocha';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -83,6 +85,36 @@ describe('address display', () => {
       });
 
       expect(result.showEditContacts).toEqual(false);
+    });
+  });
+
+  describe('showEditPrimaryContact', () => {
+    it.only('should be true if the current user is primary and the address is not sealed', () => {
+      const mockUserId = '789';
+      const user = {
+        role: ROLES.docketClerk,
+        userId: mockUserId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+              },
+            ],
+            privatePractitioners: [{ userId: '789' }],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: { EDIT_PETITIONER_INFO: true },
+        },
+      });
+
+      expect(result.showEditPrimaryContact).toEqual(true);
     });
   });
 

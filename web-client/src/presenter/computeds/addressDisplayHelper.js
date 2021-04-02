@@ -1,10 +1,18 @@
 import { state } from 'cerebral';
 
 export const addressDisplayHelper = (get, applicationContext) => {
+  const caseDetail = get(state.caseDetail);
+  const caseStatus = caseDetail.status;
   const user = applicationContext.getCurrentUser();
   const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
-  const caseStatus = get(state.caseDetail.status);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
+
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(caseDetail);
+  let showEditPrimaryContact =
+    contactPrimary === user.userId && !contactPrimary.isAddressSealed;
+
   let showEditPetitionerInformation = false;
   const permissions = get(state.permissions);
 
@@ -22,7 +30,7 @@ export const addressDisplayHelper = (get, applicationContext) => {
   }
 
   return {
-    showEditContacts,
     showEditPetitionerInformation,
+    showEditPrimaryContact,
   };
 };
