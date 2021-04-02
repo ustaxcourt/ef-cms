@@ -6,7 +6,8 @@ export const docketClerkEditsServiceIndicatorForPetitioner = (
   expectedServiceIndicator = null,
 ) => {
   return it('docket clerk edits service indicator for a petitioner', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
 

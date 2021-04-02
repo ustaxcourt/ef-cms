@@ -5,7 +5,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import { getContactPrimary } from '../../shared/src/business/entities/cases/Case';
 
 const test = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -64,14 +63,13 @@ describe('docket clerk edits the petitioner information', () => {
 
     expect(test.getState('form.contact.address1')).toBeUndefined();
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      contactPrimary: {
+      contact: {
         address1: 'Enter mailing address',
         phone: 'Enter phone number',
       },
-      contactSecondary: null,
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -79,16 +77,16 @@ describe('docket clerk edits the petitioner information', () => {
       value: '1234567890',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      contactPrimary: {
+      contact: {
         address1: 'Enter mailing address',
       },
-      contactSecondary: null,
     });
 
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: caseDetail.docketNumber,
     });
 
@@ -117,7 +115,7 @@ describe('docket clerk edits the petitioner information', () => {
   });
 
   it('verify that the paper service modal is displayed after submitting the address, the address was updated, and a Notice of Change of Address was generated and served', async () => {
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 

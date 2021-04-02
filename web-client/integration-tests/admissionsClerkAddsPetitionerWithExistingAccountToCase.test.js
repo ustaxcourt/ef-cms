@@ -30,7 +30,8 @@ describe('admissions clerk adds petitioner with existing cognito account to case
   it('admissions clerk adds petitioner email with existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
 
