@@ -20,14 +20,10 @@ export const navigateToCaseDetailCaseInformationActionFactory = caseInformationT
       ? props.caseDetail.docketNumber
       : get(state.caseDetail.docketNumber));
 
-  console.log('dockt number', docketNumber);
-
   if (docketNumber) {
-    console.log('111111111');
     let url = `/case-detail/${docketNumber}/case-information`;
 
     if (caseInformationTab) {
-      console.log('22222222');
       url += `?caseInformationTab=${caseInformationTab}`;
     }
     await router.route(url);
