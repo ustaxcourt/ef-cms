@@ -198,7 +198,7 @@ Message.prototype.markAsCompleted = function ({ message, user }) {
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedBySection = user.section;
-  this.completedMessage = message;
+  this.completedMessage = message || null;
 
   return this;
 };
