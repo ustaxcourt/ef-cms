@@ -40,9 +40,6 @@ export const validatePetitionerAction = ({
     ].includes(caseContact.serviceIndicator) &&
     contact.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
   ) {
-    if (!errors) {
-      errors = {};
-    }
     errors = {
       ...errors,
       ...SERVICE_INDICATOR_ERROR,

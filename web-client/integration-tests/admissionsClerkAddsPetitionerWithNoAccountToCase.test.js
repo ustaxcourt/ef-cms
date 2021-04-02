@@ -82,7 +82,9 @@ describe('admissions clerk adds petitioner without existing cognito account to c
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
+    expect(test.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
     expect(test.getState('form.email')).toBeUndefined();
     expect(test.getState('form.confirmEmail')).toBeUndefined();
 
@@ -101,7 +103,9 @@ describe('admissions clerk adds petitioner without existing cognito account to c
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('modal.showModal')).toBe('NoMatchingEmailFoundModal');
-    expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
+    expect(test.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
 
     await test.runSequence(
       'submitUpdatePetitionerInformationFromModalSequence',
