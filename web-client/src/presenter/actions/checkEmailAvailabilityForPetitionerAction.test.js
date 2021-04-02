@@ -27,7 +27,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
         presenter,
       },
       state: {
-        form: { updatedEmail: mockEmail },
+        form: { contact: { updatedEmail: mockEmail } },
       },
     });
 
@@ -43,7 +43,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
         presenter,
       },
       state: {
-        form: { email: mockEmail },
+        form: { contact: { email: mockEmail } },
       },
     });
 
@@ -79,7 +79,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
         presenter,
       },
       state: {
-        form: { email: mockEmail },
+        form: { contact: { email: mockEmail } },
       },
     });
 
@@ -96,7 +96,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
         presenter,
       },
       state: {
-        form: { email: mockEmail },
+        form: { contact: { email: mockEmail } },
       },
     });
 
