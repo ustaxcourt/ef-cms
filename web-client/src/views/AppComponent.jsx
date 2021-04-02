@@ -32,7 +32,6 @@ import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
-import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
 import { EditPetitionerInformationInternal } from './EditPetitionerInformationInternal';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
@@ -120,7 +119,6 @@ const pages = {
   EditDocketEntryMeta,
   EditOtherStatistics,
   EditPetitionDetails,
-  EditPetitionerInformation,
   EditPetitionerInformationInternal,
   EditPractitionerUser,
   EditTrialSession,

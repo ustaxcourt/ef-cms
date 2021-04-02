@@ -75,30 +75,37 @@ describe('admissions clerk adds petitioner without existing cognito account to c
   it('admissions clerk adds petitioner email without existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    let contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
+    expect(test.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
     expect(test.getState('form.email')).toBeUndefined();
     expect(test.getState('form.confirmEmail')).toBeUndefined();
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
+      key: 'contact.email',
       value: EMAIL_TO_ADD,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.confirmEmail',
+      key: 'contact.confirmEmail',
       value: EMAIL_TO_ADD,
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('modal.showModal')).toBe('NoMatchingEmailFoundModal');
-    expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
+    expect(test.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
 
     await test.runSequence(
       'submitUpdatePetitionerInformationFromModalSequence',
@@ -107,7 +114,7 @@ describe('admissions clerk adds petitioner without existing cognito account to c
     expect(test.getState('modal.showModal')).toBeUndefined();
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    contactPrimary = contactPrimaryFromState(test);
 
     expect(contactPrimary.email).toBeUndefined();
     expect(contactPrimary.serviceIndicator).toEqual(

@@ -35,6 +35,7 @@ describe('setupPetitionerContactInformationFormAction', () => {
     const mockContactPrimary = {
       contactId: mockContactId,
       contactType: CONTACT_TYPES.primary,
+      email: 'test@example.com',
       name: 'Test Primary',
     };
 
@@ -64,6 +65,7 @@ describe('setupPetitionerContactInformationFormAction', () => {
 
     expect(state.form.contact).toEqual({
       ...mockContactPrimary,
+      currentEmail: mockContactPrimary.email,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   });

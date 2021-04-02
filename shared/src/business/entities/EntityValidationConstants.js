@@ -26,6 +26,11 @@ const {
 
 // TODO: when 6217 is done, enable the commented validators
 
+const SERVICE_INDICATOR_ERROR = {
+  serviceIndicator:
+    'You cannot change from paper to electronic service. Select a valid service preference.',
+};
+
 const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   action: JoiValidationConstants.STRING.max(100)
     .optional()
@@ -431,5 +436,6 @@ module.exports = {
   DOCKET_ENTRY_VALIDATION_RULES: joi
     .object()
     .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS),
+  SERVICE_INDICATOR_ERROR,
   WORK_ITEM_VALIDATION_RULES: joi.object().keys(WORK_ITEM_VALIDATION_RULE_KEYS),
 };

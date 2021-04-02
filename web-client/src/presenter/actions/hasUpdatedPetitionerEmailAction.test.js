@@ -18,7 +18,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     };
   });
 
-  it('returns the yes path when caseDetail.contactPrimary.email is different than form.contactPrimary.email', async () => {
+  it('returns the yes path when caseDetail.petitioners.email is different than form.contact.email', async () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
@@ -27,14 +27,14 @@ describe('hasUpdatedPetitionerEmailAction', () => {
             { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
           ],
         },
-        form: { contactPrimary: { email: UPDATED_EMAIL } },
+        form: { contact: { email: UPDATED_EMAIL } },
       },
     });
 
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the no path when caseDetail.contactPrimary.email is the same as form.contactPrimary.email', async () => {
+  it('returns the no path when caseDetail.petitioners.email is the same as form.contact.email', async () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
@@ -44,7 +44,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
           ],
         },
         form: {
-          contactPrimary: { email: INITIAL_EMAIL },
+          contact: { email: INITIAL_EMAIL },
         },
       },
     });
