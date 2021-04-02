@@ -34,8 +34,9 @@ describe('admissions clerk creates user for case', () => {
 
     expect(contactPrimary.email).toBeUndefined();
 
-    await test.runSequence('gotoEditPetitionerInformationInternalSequence');
-    expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
+    expect(test.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
 
     expect(test.getState('form.contact.email')).toBeUndefined();
     expect(test.getState('form.contact.serviceIndicator')).toBe('Paper');
@@ -58,7 +59,9 @@ describe('admissions clerk creates user for case', () => {
 
     await test.runSequence('dismissModalSequence');
 
-    expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
+    expect(test.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
   });
 
   it('admissions clerk adds a new email address for petitioner on case', async () => {

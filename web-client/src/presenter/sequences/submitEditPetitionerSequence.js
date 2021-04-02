@@ -1,12 +1,14 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { hasUpdatedPetitionerEmailAction } from '../actions/hasUpdatedPetitionerEmailAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
+import { openGainElectronicAccessToCaseModalSequence } from './openGainElectronicAccessToCaseModalSequence';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { updatePetitionerInformationAction } from '../actions/updatePetitionerInformationAction';
+import { submitUpdatePetitionerInformationSequence } from './submitUpdatePetitionerInformationSequence';
 import { validatePetitionerAction } from '../actions/validatePetitionerAction';
 
 export const submitEditPetitionerSequence = [
@@ -16,7 +18,14 @@ export const submitEditPetitionerSequence = [
   {
     error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
-      updatePetitionerInformationAction,
+      hasUpdatedPetitionerEmailAction,
+      {
+        no: [
+          submitUpdatePetitionerInformationSequence,
+          navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+        ],
+        yes: [openGainElectronicAccessToCaseModalSequence],
+      },
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
       setCurrentPageAction('Interstitial'),

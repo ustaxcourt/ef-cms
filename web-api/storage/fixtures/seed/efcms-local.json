@@ -1099,6 +1099,7 @@
     "createdAt": "2020-04-14T19:59:46.086Z",
     "petitioners": [{
       "country": "Palestine",
+      "contactId": "f7272c25-99e1-4448-960e-e2a6b86e7d17",
       "serviceIndicator": "Paper",
       "city": "Haifa",
       "address1": "123 Teachers Way",
