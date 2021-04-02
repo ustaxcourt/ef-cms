@@ -5,6 +5,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { getContactPrimary } from '../../shared/src/business/entities/cases/Case';
 
 const test = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -42,25 +43,26 @@ describe('docket clerk edits the petitioner information', () => {
   loginAs(test, 'docketclerk@example.com');
 
   it('login as the docketclerk and edit the case contact information', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: caseDetail.docketNumber,
     });
-
-    const contactPrimary = contactPrimaryFromState(test);
 
     expect(contactPrimary.address1).toEqual('734 Cowley Parkway');
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.address1',
+      key: 'contact.address1',
       value: '',
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.phone',
+      key: 'contact.phone',
       value: '',
     });
 
-    expect(test.getState('form.contactPrimary.address1')).toBeUndefined();
+    expect(test.getState('form.contact.address1')).toBeUndefined();
 
     await test.runSequence('updatePetitionerInformationFormSequence');
 
@@ -73,7 +75,7 @@ describe('docket clerk edits the petitioner information', () => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.phone',
+      key: 'contact.phone',
       value: '1234567890',
     });
 
@@ -90,26 +92,26 @@ describe('docket clerk edits the petitioner information', () => {
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(test.getState('form.contactPrimary.address2')).toEqual(
+    expect(test.getState('form.contact.address2')).toEqual(
       'Cum aut velit volupt',
     );
 
-    expect(test.getState('form.contactPrimary.address3')).toEqual(
+    expect(test.getState('form.contact.address3')).toEqual(
       'Et sunt veritatis ei',
     );
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.address1',
+      key: 'contact.address1',
       value: '123 Some Street',
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.address2',
+      key: 'contact.address2',
       value: '',
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.address3',
+      key: 'contact.address3',
       value: '',
     });
   });
