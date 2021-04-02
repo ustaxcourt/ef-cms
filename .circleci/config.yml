@@ -27,13 +27,6 @@ jobs:
             npm ci
             npm rebuild
       - run:
-          name: Lint
-          command: npm run lint
-      - run:
-          name: Shellcheck
-          command: |
-            ./run-shellcheck.sh
-      - run:
           name: Web API - Test
           command: npm run test:api:ci
       - run:
