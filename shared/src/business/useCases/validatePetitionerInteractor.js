@@ -26,7 +26,5 @@ exports.validatePetitionerInteractor = ({
     partyType,
   })[petitioner.contactType].getFormattedValidationErrors();
 
-  console.log(errors);
-
   return errors;
 };
