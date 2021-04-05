@@ -289,5 +289,63 @@ describe('migrateItems', () => {
         },
       ]);
     });
+
+    it('should update startDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockTrialSession, startDate: '2025-03-01' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockTrialSession,
+          startDate: '2025-03-01T05:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update removedFromTrialDate to be an ISO formatted date', async () => {
+      const items = [
+        { ...mockTrialSession, removedFromTrialDate: '2025-03-01' },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockTrialSession,
+          removedFromTrialDate: '2025-03-01T05:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should throw an error when the item is invalid', async () => {
+      const items = [{ ...mockTrialSession, maxCases: undefined }]; // maxCases is required
+
+      await expect(migrateItems(items)).rejects.toThrow();
+    });
+
+    it('should not update createdAt, noticeIssuedDate, startDate, or removedFromTrialDate when they are already a dateTime stamp', async () => {
+      const items = [
+        {
+          ...mockTrialSession,
+          createdAt: '2025-03-01T00:00:00.000Z',
+          noticeIssuedDate: '2025-03-01T00:00:00.000Z',
+          removedFromTrialDate: '2025-03-01T00:00:00.000Z',
+          startDate: '2025-03-01T00:00:00.000Z',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockTrialSession,
+          createdAt: '2025-03-01T00:00:00.000Z',
+          noticeIssuedDate: '2025-03-01T00:00:00.000Z',
+          removedFromTrialDate: '2025-03-01T00:00:00.000Z',
+          startDate: '2025-03-01T00:00:00.000Z',
+        },
+      ]);
+    });
   });
 });

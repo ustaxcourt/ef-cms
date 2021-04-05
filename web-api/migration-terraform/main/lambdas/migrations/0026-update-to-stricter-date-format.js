@@ -26,7 +26,7 @@ const applicationContext = createApplicationContext({});
 const migrateItems = async items => {
   const itemsAfter = [];
   for (const item of items) {
-    // look for pks of: EntityValidationConstants, Statistic, Case, TrialSession
+    // look for pks of: EntityValidationConstants, Case
     if (item.pk.startsWith('case-deadline|')) {
       if (
         item.deadlineDate &&
@@ -96,6 +96,18 @@ const migrateItems = async items => {
           item.noticeIssuedDate,
         );
       }
+      if (item.startDate && !isValidDateString(item.startDate, FORMATS.ISO)) {
+        item.startDate = createISODateAtStartOfDayEST(item.startDate);
+      }
+      if (
+        item.removedFromTrialDate &&
+        !isValidDateString(item.removedFromTrialDate, FORMATS.ISO)
+      ) {
+        item.removedFromTrialDate = createISODateAtStartOfDayEST(
+          item.removedFromTrialDate,
+        );
+      }
+
       new TrialSession(item, { applicationContext }).validate();
 
       itemsAfter.push(item);
