@@ -2,18 +2,14 @@
 
 ENVIRONMENT=$1
 
-if [ -z "$ENVIRONMENT" ]; then
-  echo "Please specify the environment"
-  exit 1
-fi
+[ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
+[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
-if [ -z "$EFCMS_DOMAIN" ]; then
-  echo "Please export the EFCMS_DOMAIN variable in your shell"
-  exit 1
-fi
+tf_version=$(terraform --version)
 
-if [ -z "$ZONE_NAME" ]; then
-  echo "Please export the ZONE_NAME variable in your shell"
+if [[ ${tf_version} != *"0.14.8"* ]]; then
+  echo "Please set your terraform version to 0.14.8 before deploying."
   exit 1
 fi
 
@@ -22,6 +18,16 @@ BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="permissions-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
+
+if [[ ${ENVIRONMENT} == "prod" ]]; then
+  if [[ ${EFCMS_DOMAIN} != *"dawson"* ]]; then
+    echo "ENVIRONMENT and EFCMS_DOMAIN do not match. Please check your environment variables and run again."
+    exit 1
+  fi
+elif [[ ${EFCMS_DOMAIN} != "${ENVIRONMENT}"* ]]; then
+  echo "ENVIRONMENT and EFCMS_DOMAIN do not match. Please check your environment variables and run again."
+  exit 1
+fi
 
 rm -rf .terraform
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
@@ -40,5 +46,8 @@ fi
 # exit on any failure
 set -eo pipefail
 
+export TF_VAR_environment=$ENVIRONMENT
+export TF_VAR_dns_domain=$EFCMS_DOMAIN
+
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform apply -auto-approve -var "environment=${ENVIRONMENT}"
+terraform apply -auto-approve

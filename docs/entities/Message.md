@@ -169,7 +169,9 @@
         - "chambers"
         - "clerkofcourt"
         - "docket"
+        - "floater"
         - "petitions"
+        - "reportersOffice"
         - "trialClerks"
         - "ashfordsChambers"
         - "buchsChambers"
@@ -308,7 +310,9 @@
         - "chambers"
         - "clerkofcourt"
         - "docket"
+        - "floater"
         - "petitions"
+        - "reportersOffice"
         - "trialClerks"
         - "ashfordsChambers"
         - "buchsChambers"
@@ -427,7 +431,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 700
     messageId: 
       type: "string"
       flags: 
@@ -507,7 +511,9 @@
         - "chambers"
         - "clerkofcourt"
         - "docket"
+        - "floater"
         - "petitions"
+        - "reportersOffice"
         - "trialClerks"
         - "ashfordsChambers"
         - "buchsChambers"

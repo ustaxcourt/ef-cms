@@ -8,9 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.completeMessageLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().completeMessageInteractor({
-      applicationContext,
-      parentMessageId: event.pathParameters.parentMessageId,
-      ...JSON.parse(event.body),
-    });
+    return await applicationContext
+      .getUseCases()
+      .completeMessageInteractor(applicationContext, {
+        parentMessageId: event.pathParameters.parentMessageId,
+        ...JSON.parse(event.body),
+      });
   });

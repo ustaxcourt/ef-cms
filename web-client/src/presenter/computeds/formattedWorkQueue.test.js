@@ -43,7 +43,6 @@ describe('formatted work queue computed', () => {
   const WORK_ITEM_ID_2 = '00557601-2dab-44bc-a5cf-7d1a115bd08d';
   const WORK_ITEM_ID_3 = 'a066204a-6c86-499e-9d98-b45a8f7bf86f';
   const WORK_ITEM_ID_4 = '4bd51fb7-fc46-4d4d-a506-08d48afcf46d';
-  const JUDGE_USER_ID_1 = '89c956aa-65c6-4632-a6c8-7f0c6162d615';
 
   const FORMATTED_WORK_ITEM = {
     assigneeId: 'abc',
@@ -78,10 +77,6 @@ describe('formatted work queue computed', () => {
         permissions: getUserPermissions(user),
       };
     };
-
-    applicationContext
-      .getUtilities()
-      .filterQcItemsByAssociatedJudge.mockReturnValue(() => true);
 
     formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
       ...applicationContext,
@@ -256,104 +251,6 @@ describe('formatted work queue computed', () => {
       ...FORMATTED_WORK_ITEM,
       section: DOCKET_SECTION,
     });
-  });
-
-  it('filters items based on associatedJudge for a given judge or chambers user', () => {
-    const judgeUser = {
-      name: 'Test Judge',
-      role: USER_ROLES.judge,
-      userId: JUDGE_USER_ID_1,
-    };
-
-    applicationContext
-      .getUtilities()
-      .filterQcItemsByAssociatedJudge.mockReturnValue(
-        item => item.associatedJudge && item.associatedJudge === judgeUser.name,
-      );
-
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(judgeUser),
-        judgeUser,
-        workQueue: [
-          {
-            ...qcWorkItem,
-            workItemId: WORK_ITEM_ID_1,
-          },
-          {
-            ...qcWorkItem,
-            associatedJudge: judgeUser.name,
-            workItemId: WORK_ITEM_ID_2,
-          },
-          {
-            ...qcWorkItem,
-            associatedJudge: 'Test Judge 2',
-            workItemId: WORK_ITEM_ID_3,
-          },
-          {
-            ...qcWorkItem,
-            associatedJudge: CHIEF_JUDGE,
-            workItemId: WORK_ITEM_ID_4,
-          },
-        ],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'section',
-        },
-      },
-    });
-
-    expect(result.length).toEqual(1);
-    expect(result[0].workItemId).toEqual(WORK_ITEM_ID_2);
-  });
-
-  it('filters items based on associatedJudge for an adc user', () => {
-    const adcUser = {
-      name: 'Test ADC',
-      role: USER_ROLES.adc,
-      userId: 'd4d25c47-bb50-4575-9c31-d00bb682a215',
-    };
-
-    applicationContext
-      .getUtilities()
-      .filterQcItemsByAssociatedJudge.mockReturnValue(
-        item => !item.associatedJudge || item.associatedJudge === CHIEF_JUDGE,
-      );
-
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        ...getBaseState(adcUser),
-        workQueue: [
-          {
-            ...qcWorkItem,
-            workItemId: WORK_ITEM_ID_1,
-          },
-          {
-            ...qcWorkItem,
-            associatedJudge: 'Test Judge',
-            workItemId: WORK_ITEM_ID_2,
-          },
-          {
-            ...qcWorkItem,
-            associatedJudge: 'Test Judge 2',
-            workItemId: WORK_ITEM_ID_3,
-          },
-          {
-            ...qcWorkItem,
-            associatedJudge: CHIEF_JUDGE,
-            workItemId: WORK_ITEM_ID_4,
-          },
-        ],
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'section',
-        },
-      },
-    });
-
-    expect(result.length).toEqual(2);
-    expect(result[0].workItemId).toEqual(WORK_ITEM_ID_1);
-    expect(result[1].workItemId).toEqual(WORK_ITEM_ID_4);
   });
 
   it('filters items based on in progress cases for a petitionsclerk', () => {
@@ -1159,7 +1056,7 @@ describe('formatted work queue computed', () => {
     });
 
     it('should return docketEntry.createdAt for receivedAt when docketEntry.receivedAt is today', () => {
-      const now = new Date().toISOString();
+      const now = applicationContext.getUtilities().createISODateString();
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         docketEntry: {
@@ -1193,22 +1090,34 @@ describe('formatted work queue computed', () => {
       expect(result.received).toEqual('12/27/18');
     });
 
-    it('should return isCourtIssuedDocument as true when the documentType is a court issued document type', () => {
+    it('should return isCourtIssuedDocument as false when the eventCode is NOT court issued document type', () => {
       const workItem = {
         ...FORMATTED_WORK_ITEM,
         docketEntry: {
           ...FORMATTED_WORK_ITEM.docketEntry,
           documentType: 'Petition',
+          eventCode: 'P',
         },
       };
 
-      let result = formatWorkItem({ applicationContext, workItem });
-      expect(result.isCourtIssuedDocument).toEqual(false);
+      const result = formatWorkItem({ applicationContext, workItem });
 
-      workItem.docketEntry.documentType = 'Transcript';
+      expect(result.isCourtIssuedDocument).toBeFalsy();
+    });
 
-      result = formatWorkItem({ applicationContext, workItem });
-      expect(result.isCourtIssuedDocument).toEqual(true);
+    it('should return isCourtIssuedDocument as true when the eventCode is a court issued document type', () => {
+      const workItem = {
+        ...FORMATTED_WORK_ITEM,
+        docketEntry: {
+          ...FORMATTED_WORK_ITEM.docketEntry,
+          documentType: 'Miscellaneous',
+          eventCode: 'O',
+        },
+      };
+
+      const result = formatWorkItem({ applicationContext, workItem });
+
+      expect(result.isCourtIssuedDocument).toBeTruthy();
     });
 
     it('should return isOrder as true when the documentType is a court issued document type', () => {

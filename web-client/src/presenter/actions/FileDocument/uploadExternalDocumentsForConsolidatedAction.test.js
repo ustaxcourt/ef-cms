@@ -19,23 +19,26 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
   });
 
   it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor for the pending document', async () => {
-    uploadExternalDocumentsInteractor.mockReturnValue([
-      {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            docketNumber: MOCK_CASE.docketNumber,
-            documentTitle: 'Answer',
-            documentType: 'Answer',
-            eventCode: 'A',
-            processingStatus: 'pending',
-            userId: 'petitioner',
-          },
-        ],
-      },
-    ]);
+    uploadExternalDocumentsInteractor.mockReturnValue({
+      caseDetail: [
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketNumber: MOCK_CASE.docketNumber,
+              documentTitle: 'Answer',
+              documentType: 'Answer',
+              eventCode: 'A',
+              processingStatus: 'pending',
+              userId: 'petitioner',
+            },
+          ],
+        },
+      ],
+      docketEntryIdsAdded: ['f6b81f4d-1e47-423a-8caf-6d2fdc3d3859'],
+    });
 
     await runAction(uploadExternalDocumentsForConsolidatedAction, {
       modules: {

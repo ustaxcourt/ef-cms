@@ -1,24 +1,48 @@
 const {
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
+
+const {
   CASE_TYPES_MAP,
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
 const {
+  getCaseInteractor,
+  isAuthorizedForContact,
+} = require('./getCaseInteractor');
+const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getCaseInteractor } = require('./getCaseInteractor');
 const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
 
 describe('getCaseInteractor', () => {
   const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
   const docketClerkId = '44c4d382-1136-492f-b1f4-45e893c34771';
-  const petitionerId = '273f5d19-3707-41c0-bccc-449c52dfe54e';
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
   const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
   const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
+
+  it('should format the given docket number, removing leading zeroes and suffix', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+    await getCaseInteractor(applicationContext, {
+      docketNumber: '000123-19S',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber.mock
+        .calls[0][0],
+    ).toEqual({
+      applicationContext,
+      docketNumber: '123-19',
+    });
+  });
 
   it('should throw an error when a case with the provided docketNumber is not found', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
@@ -28,7 +52,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
+      .getFullCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           archivedCorrespondences: [],
           archivedDocketEntries: [],
@@ -41,13 +65,12 @@ describe('getCaseInteractor', () => {
       );
 
     await expect(
-      getCaseInteractor({
-        applicationContext,
+      getCaseInteractor(applicationContext, {
         docketNumber: '123-19',
       }),
     ).rejects.toThrow('Case 123-19 was not found.');
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
+      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber.mock
         .calls.length,
     ).toBe(1);
   });
@@ -60,71 +83,39 @@ describe('getCaseInteractor', () => {
     const mockInvalidCase = { ...MOCK_CASE, caseCaption: undefined };
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockInvalidCase);
+      .getFullCaseByDocketNumber.mockReturnValue(mockInvalidCase);
 
     await expect(
-      getCaseInteractor({
-        applicationContext,
+      getCaseInteractor(applicationContext, {
         docketNumber: '00101-08',
       }),
     ).rejects.toThrow('The Case entity was invalid');
   });
 
-  it('successfully retrieves a case with docketEntries that have documentContents', async () => {
-    const mockCaseWithDocumentContents = {
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          docketNumber: '101-18',
-          documentContentsId: '0098d177-78ef-4210-88aa-4bbb45c4f048',
-          documentTitle: 'Petition',
-          documentType: 'Petition',
-          draftOrderState: {},
-          eventCode: 'P',
-          filedBy: 'Test Petitioner',
-          processingStatus: 'pending',
-          userId: petitionerId,
-        },
-      ],
-    };
+  it('should return the case when the currentUser is an unassociated IRS practitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: petitionsclerkId,
+      name: 'IRS Practitionerr',
+      role: ROLES.irsPractitioner,
+      userId: irsPractitionerId,
     });
+
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCaseWithDocumentContents);
-    applicationContext.getPersistenceGateway().getDocument.mockReturnValue(
-      Buffer.from(
-        JSON.stringify({
-          documentContents: 'the contents!',
-          richText: '<b>the contents!</b>',
-        }),
-      ),
-    );
+      .getFullCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          contactId: 'dc56e26e-f9fd-4165-8997-97676cc0523e',
+        },
+        docketNumber: '101-00',
+        userId: '320fce0e-b050-4e04-8720-db25da3ca598',
+      });
 
-    const caseRecord = await getCaseInteractor({
-      applicationContext,
-      docketNumber: '123-19',
+    const result = await getCaseInteractor(applicationContext, {
+      docketNumber: '00101-00',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      key: '0098d177-78ef-4210-88aa-4bbb45c4f048',
-      protocol: 'S3',
-      useTempBucket: false,
-    });
-    expect(caseRecord.docketEntries[0]).toMatchObject({
-      documentContents: 'the contents!',
-      draftOrderState: {
-        documentContents: 'the contents!',
-        richText: '<b>the contents!</b>',
-      },
-    });
+    expect(result.docketNumber).toEqual('101-00');
   });
 
   it('should return the case when the currentUser is the contactPrimary on the case', async () => {
@@ -133,7 +124,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
+      .getFullCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           ...MOCK_CASE,
           contactPrimary: {
@@ -145,8 +136,7 @@ describe('getCaseInteractor', () => {
         }),
       );
 
-    const result = await getCaseInteractor({
-      applicationContext,
+    const result = await getCaseInteractor(applicationContext, {
       docketNumber: '00101-00',
     });
 
@@ -159,25 +149,22 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          contactPrimary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: '0898d5c3-2948-4924-b28b-d5c1451c80de',
-          },
-          contactSecondary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: '754a3191-884f-42f0-ad2c-e6c706685299',
-          },
-          docketNumber: '101-00',
-          partyType: PARTY_TYPES.petitionerSpouse,
-          userId: '320fce0e-b050-4e04-8720-db25da3ca598',
-        }),
-      );
+      .getFullCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          contactId: '0898d5c3-2948-4924-b28b-d5c1451c80de',
+        },
+        contactSecondary: {
+          ...MOCK_CASE.contactPrimary,
+          contactId: '754a3191-884f-42f0-ad2c-e6c706685299',
+        },
+        docketNumber: '101-00',
+        partyType: PARTY_TYPES.petitionerSpouse,
+        userId: '320fce0e-b050-4e04-8720-db25da3ca598',
+      });
 
-    const result = await getCaseInteractor({
-      applicationContext,
+    const result = await getCaseInteractor(applicationContext, {
       docketNumber: '00101-00',
     });
 
@@ -198,17 +185,16 @@ describe('getCaseInteractor', () => {
       );
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
+        .getFullCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
     });
 
-    it(`allows unfiltered view of sealed contact addresses when role is ${ROLES.docket_clerk}`, async () => {
+    it(`allows unfiltered view of sealed contact addresses when role is ${ROLES.docketClerk}`, async () => {
       applicationContext.getCurrentUser.mockReturnValue({
         name: 'Security Officer Worf',
         role: ROLES.docketClerk,
         userId: docketClerkId,
       });
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
       expect(result.contactPrimary.city).toBeDefined();
@@ -232,8 +218,7 @@ describe('getCaseInteractor', () => {
         userId: applicationContext.getUniqueId(),
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -244,15 +229,17 @@ describe('getCaseInteractor', () => {
 
   describe('sealed cases', () => {
     beforeAll(() => {
+      const sealedDocketEntries = cloneDeep(docketEntries);
+      sealedDocketEntries[0].isSealed = true;
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(
+        .getFullCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
             ...MOCK_CASE,
             caseCaption: 'a case caption',
             caseType: CASE_TYPES_MAP.other,
-            createdAt: new Date().toISOString(),
-            docketEntries,
+            createdAt: applicationContext.getUtilities().createISODateString(),
+            docketEntries: sealedDocketEntries,
             docketNumber: '101-18',
             irsPractitioners: [
               {
@@ -272,7 +259,6 @@ describe('getCaseInteractor', () => {
               },
             ],
             procedureType: 'Regular',
-            sealedDate: new Date().toISOString(),
           }),
         );
     });
@@ -284,8 +270,7 @@ describe('getCaseInteractor', () => {
         userId: practitioner2Id,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -297,6 +282,7 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
+        entityName: 'PublicCase',
         hasIrsPractitioner: false,
         isSealed: true,
         partyType: undefined,
@@ -311,8 +297,7 @@ describe('getCaseInteractor', () => {
         userId: docketClerkId,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -327,8 +312,7 @@ describe('getCaseInteractor', () => {
         userId: practitionerId,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -341,7 +325,7 @@ describe('getCaseInteractor', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(
+        .getFullCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
             ...MOCK_CASE,
             privatePractitioners: [
@@ -363,8 +347,7 @@ describe('getCaseInteractor', () => {
         userId: docketClerkId,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -379,8 +362,7 @@ describe('getCaseInteractor', () => {
         userId: practitionerId,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
@@ -395,13 +377,63 @@ describe('getCaseInteractor', () => {
         userId: practitioner2Id,
       });
 
-      const result = await getCaseInteractor({
-        applicationContext,
+      const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
       expect(result.contactPrimary.address1).toBeDefined();
       expect(result.contactPrimary.phone).toBeDefined();
+    });
+  });
+
+  describe('isAuthorizedForContact', () => {
+    let currentUser;
+    let contact;
+
+    beforeEach(() => {
+      currentUser = {
+        userId: '123',
+      };
+      contact = {
+        contactId: currentUser.userId,
+      };
+    });
+
+    it('returns false if the default value is false and the user is not authorized', () => {
+      const result = isAuthorizedForContact({
+        contact: {
+          contactId: 'not_the_current_user',
+        },
+        currentUser,
+        defaultValue: false,
+        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+      });
+
+      expect(result).toEqual(false);
+    });
+
+    it('returns true if the default value is true and the user is not authorized', () => {
+      const result = isAuthorizedForContact({
+        contact: {
+          contactId: 'not_the_current_user',
+        },
+        currentUser,
+        defaultValue: true,
+        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+      });
+
+      expect(result).toEqual(true);
+    });
+
+    it('returns true if the default value is false and the user is authorized', () => {
+      const result = isAuthorizedForContact({
+        contact,
+        currentUser,
+        defaultValue: false,
+        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+      });
+
+      expect(result).toEqual(true);
     });
   });
 });

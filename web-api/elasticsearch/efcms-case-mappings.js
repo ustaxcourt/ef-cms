@@ -24,11 +24,14 @@ module.exports = {
     'caseCaption.S': {
       type: 'text',
     },
+    'closedDate.S': {
+      type: 'date',
+    },
     'contactPrimary.M.contactId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'contactPrimary.M.countryType.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'contactPrimary.M.name.S': {
       type: 'text',
@@ -37,34 +40,34 @@ module.exports = {
       type: 'text',
     },
     'contactPrimary.M.state.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'contactSecondary.M.contactId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'contactSecondary.M.countryType.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'contactSecondary.M.name.S': {
       type: 'text',
     },
     'contactSecondary.M.state.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketEntries.L.M.createdAt.S': {
       type: 'date',
     },
     'docketEntries.L.M.docketEntryId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketEntries.L.M.documentType.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketEntries.L.M.entityName.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketEntries.L.M.eventCode.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketEntries.L.M.filedBy.S': {
       type: 'text',
@@ -91,19 +94,19 @@ module.exports = {
       type: 'date',
     },
     'docketEntries.L.M.userId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketNumber.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketNumberSuffix.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketNumberWithSuffix.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'entityName.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'hasPendingItems.BOOL': {
       type: 'boolean',
@@ -112,16 +115,17 @@ module.exports = {
       type: 'text',
     },
     'irsPractitioners.L.M.userId.S': {
-      type: 'text',
+      type: 'keyword',
     },
+    'isSealed.BOOL': { type: 'boolean' },
     'pk.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'preferredTrialCity.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'privatePractitioners.L.M.userId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'receivedAt.S': {
       type: 'date',
@@ -130,7 +134,7 @@ module.exports = {
       type: 'date',
     },
     'sk.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'sortableDocketNumber.N': {
       fields: {
@@ -138,13 +142,13 @@ module.exports = {
           type: 'keyword',
         },
       },
-      type: 'text',
+      type: 'integer',
     },
     'status.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'userId.S': {
-      type: 'text',
+      type: 'keyword',
     },
   },
 };

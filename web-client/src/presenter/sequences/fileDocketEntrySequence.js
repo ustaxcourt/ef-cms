@@ -4,12 +4,10 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
-import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
-import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
-import { getIsPendingItemAction } from '../actions/DocketEntry/getIsPendingItemAction';
 import { getIsSavingForLaterAction } from '../actions/DocketEntry/getIsSavingForLaterAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
@@ -20,6 +18,7 @@ import { saveDocketEntryAction } from '../actions/DocketEntry/saveDocketEntryAct
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -61,16 +60,10 @@ const afterEntrySaved = [
   setDocketEntryIdAction,
   getIsSavingForLaterAction,
   {
-    no: [
-      getIsPendingItemAction,
-      {
-        no: [completeDocketEntryQCAction],
-        yes: [],
-      },
-      caseDetailOrPrintPaperService,
-    ],
-    yes: [caseDetailOrPrintPaperService],
+    no: [completeDocketEntryQCAction],
+    yes: [],
   },
+  caseDetailOrPrintPaperService,
 ];
 
 export const fileDocketEntrySequence = [
@@ -80,10 +73,13 @@ export const fileDocketEntrySequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      computeFormDateAction,
+      getComputedFormDateFactoryAction('serviceDate'),
+      setComputeFormDateFactoryAction('serviceDate'),
       computeCertificateOfServiceFormDateAction,
-      computeDateReceivedAction,
+      getComputedFormDateFactoryAction('dateReceived'),
+      setComputeFormDateFactoryAction('dateReceived'),
       setDocumentIsRequiredAction,
+      generateTitleForPaperFilingAction,
       validateDocketEntryAction,
       {
         error: [
@@ -93,7 +89,6 @@ export const fileDocketEntrySequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
-          generateTitleAction,
           stopShowValidationAction,
           clearAlertsAction,
           isFileAttachedAction,
@@ -110,7 +105,6 @@ export const fileDocketEntrySequence = [
                 error: [openFileUploadErrorModal],
                 success: showProgressSequenceDecorator([
                   saveDocketEntryAction,
-                  closeFileUploadStatusModalAction,
                   afterEntrySaved,
                 ]),
               },

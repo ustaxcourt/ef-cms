@@ -1,9 +1,21 @@
+const { getOnly } = require('./helpers');
+
 const chambers = require('./pa11y-chambers');
 const docketclerk = require('./pa11y-docketclerk');
+const floater = require('./pa11y-floater');
+const general = require('./pa11y-general');
 const judge = require('./pa11y-judge');
+const reportersOffice = require('./pa11y-reportersOffice');
 const { defaults, jsCheckDecorator } = require('./pa11y-ci.base-config.js');
 
-const userUrls = [...docketclerk, ...judge, ...chambers];
+const userUrls = [
+  ...chambers,
+  ...floater,
+  ...general,
+  ...reportersOffice,
+  ...docketclerk,
+  ...judge,
+];
 
 const initialUrls = [
   'http://localhost:1234/',
@@ -25,5 +37,5 @@ const urls = [...initialUrls, ...userUrls].map(jsCheckDecorator);
 
 module.exports = {
   defaults,
-  urls,
+  urls: getOnly(urls),
 };

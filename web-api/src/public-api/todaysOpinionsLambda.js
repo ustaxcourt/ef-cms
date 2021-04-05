@@ -12,12 +12,7 @@ exports.todaysOpinionsLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .getTodaysOpinionsInteractor({
-          applicationContext,
-        });
+        .getTodaysOpinionsInteractor(applicationContext);
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );

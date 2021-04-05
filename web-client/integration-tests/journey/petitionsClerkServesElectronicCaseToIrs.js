@@ -1,5 +1,5 @@
 export const petitionsClerkServesElectronicCaseToIrs = test => {
-  return it('Petitions clerk serves an electronically-filed case to IRS', async () => {
+  return it(`Petitions clerk serves an electronically-filed case (${test.docketNumber}) to IRS`, async () => {
     await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
     });

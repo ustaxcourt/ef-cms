@@ -5,12 +5,22 @@ const {
 const { getCaseCaptionMeta } = require('./getCaseCaptionMeta');
 
 describe('getCaseCaptionMeta', () => {
+  it('returns an empty string for caseCaptionWithPostfix if the case caption on case detail is undefined or empty, such as when the info is not available on a sealed case', () => {
+    expect(getCaseCaptionMeta({}).caseCaptionWithPostfix).toEqual('');
+    expect(getCaseCaptionMeta({}).caseCaptionWithPostfix.trim()).not.toEqual(
+      CASE_CAPTION_POSTFIX,
+    );
+    expect(
+      getCaseCaptionMeta({ caseCaption: '' }).caseCaptionWithPostfix,
+    ).toEqual('');
+  });
+
   it('returns an object with the case caption, case caption postfix, and the combined case caption with postfix', () => {
     const caseDetail = {
       caseCaption: 'Eve Brewer, Petitioner',
     };
     expect(getCaseCaptionMeta(caseDetail)).toMatchObject({
-      CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
+      CASE_CAPTION_POSTFIX,
       caseCaption: 'Eve Brewer, Petitioner',
       caseCaptionWithPostfix: `Eve Brewer, Petitioner ${CASE_CAPTION_POSTFIX}`,
     });

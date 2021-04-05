@@ -4,6 +4,8 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('openCaseDocumentDownloadUrlAction', () => {
+  const openInNewTab = jest.fn();
+
   beforeAll(() => {
     window.open = jest.fn().mockReturnValue({
       location: { href: '' },
@@ -12,6 +14,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     window.location = { href: '' };
 
     presenter.providers.applicationContext = applicationContext;
+    presenter.providers.router = { openInNewTab };
 
     applicationContext
       .getUseCases()
@@ -20,7 +23,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       });
   });
 
-  it('sets iframeSrc with the url', async () => {
+  it('should set iframeSrc with the url when props.isForIFrame is true', async () => {
     const result = await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
@@ -43,33 +46,13 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
   });
 
-  it('calls window.open with a blank tab for non-mobile', async () => {
+  it('should set window.location.href when props.useSameTab is true and props.isForIFrame is false', async () => {
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
         docketEntryId: 'docket-entry-id-123',
         docketNumber: '123-20',
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().getDocumentDownloadUrlInteractor,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketNumber: '123-20',
-        key: 'docket-entry-id-123',
-      }),
-    );
-    expect(window.open).toHaveBeenCalledWith('http://example.com', '_blank');
-  });
-
-  it('calls window.open (opens new tab on mobile) and sets window.location.href for mobile', async () => {
-    await runAction(openCaseDocumentDownloadUrlAction, {
-      modules: { presenter },
-      props: {
-        docketEntryId: 'docket-entry-id-123',
-        docketNumber: '123-20',
-        isMobile: true,
+        useSameTab: true,
       },
     });
 
@@ -82,5 +65,26 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       }),
     );
     expect(window.location.href).toEqual('http://example.com');
+  });
+
+  it('should open in a new tab when props.useSameTab and props.isForIFrame is false', async () => {
+    await runAction(openCaseDocumentDownloadUrlAction, {
+      modules: { presenter },
+      props: {
+        docketEntryId: 'docket-entry-id-123',
+        docketNumber: '123-20',
+        useSameTab: false,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getDocumentDownloadUrlInteractor,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        docketNumber: '123-20',
+        key: 'docket-entry-id-123',
+      }),
+    );
+    expect(openInNewTab).toHaveBeenCalledWith('http://example.com');
   });
 });

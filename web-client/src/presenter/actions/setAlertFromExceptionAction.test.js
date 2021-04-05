@@ -1,13 +1,20 @@
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { setAlertFromExceptionAction } from './setAlertFromExceptionAction';
 
 describe('setAlertFromExceptionAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('sets alertError when valid message provided', async () => {
     const error = {
       message: 'my message',
       title: 'my title',
     };
     const { state } = await runAction(setAlertFromExceptionAction, {
+      modules: { presenter },
       props: { error },
     });
     expect(state.alertError).toEqual(error);
@@ -17,6 +24,7 @@ describe('setAlertFromExceptionAction', () => {
       title: 'my title',
     };
     const { state } = await runAction(setAlertFromExceptionAction, {
+      modules: { presenter },
       props: { error },
     });
     expect(state.alertError).toEqual(error);
@@ -26,6 +34,7 @@ describe('setAlertFromExceptionAction', () => {
       message: 'my message',
     };
     const { state } = await runAction(setAlertFromExceptionAction, {
+      modules: { presenter },
       props: { error },
     });
     expect(state.alertError).toEqual(error);
@@ -35,12 +44,14 @@ describe('setAlertFromExceptionAction', () => {
       foo: 'bar',
     };
     const { state } = await runAction(setAlertFromExceptionAction, {
+      modules: { presenter },
       props: { error },
     });
     expect(state.alertError).not.toEqual(error);
   });
   it('does not set alertError when error object is null', async () => {
     const { state } = await runAction(setAlertFromExceptionAction, {
+      modules: { presenter },
       props: {},
     });
     expect(state.alertError).toEqual({});

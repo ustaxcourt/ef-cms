@@ -10,6 +10,7 @@
     "startTime": "21:00",
     "term": "Fall",
     "pk": "trial-session|c5bee7c0-bd98-4504-890b-b00eb398e547",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
@@ -381,6 +382,10 @@
   },
   {
     "role": "privatePractitioner",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
     "barNumber": "PT1234",
     "entityName": "PrivatePractitioner",
@@ -396,10 +401,7 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "section": "privatePractitioner",
     "pk": "case|105-20",
-    "representingPrimary": true,
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"
   },
   {
@@ -525,13 +527,13 @@
     "contactPrimary": {
       "city": "Philadelphia",
       "phone": "1234567890",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "453 Electric Ave",
       "postalCode": "99999",
       "name": "Bill Burr",
       "state": "PA",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2020-01-02T16:05:45.978Z",
     "noticeOfAttachments": false,
@@ -685,6 +687,7 @@
     "startTime": "10:00",
     "term": "Fall",
     "pk": "trial-session|c7220f03-e46e-4d5e-8e1d-a640e64df552",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
@@ -747,7 +750,7 @@
     "admissionsStatus": "Active",
     "lastName": "Rivas",
     "role": "privatePractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "privatePractitioner",
     "practitionerType": "Attorney",
     "userId": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
@@ -784,6 +787,7 @@
     "startTime": "15:00",
     "term": "Fall",
     "pk": "trial-session|b4bee7c0-bd98-4504-890b-b00eb398e547",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Buch",
       "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
@@ -825,13 +829,13 @@
       "address3": "Cell Block B",
       "city": "The Rock",
       "phone": "1234567890",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "123 Alcatraz Ave",
       "postalCode": "37172",
       "name": "Sean Connery",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -1098,7 +1102,8 @@
       "address1": "123 Teachers Way",
       "postalCode": "123456",
       "name": "Hanan Al Hroub",
-      "countryType": "international"
+      "countryType": "international",
+      "phone": "1234567890"
     },
     "highPriority": false,
     "noticeOfAttachments": false,
@@ -1114,7 +1119,7 @@
     "sortableDocketNumber": 20000104,
     "mailingDate": "04/12/2020",
     "noticeOfTrialDate": "2020-04-14T19:59:46.087Z",
-    "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "San Francisco, California",
@@ -1317,12 +1322,13 @@
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Denver, Colorado",
     "createdAt": "2020-10-02T05:00:00.000Z",
-    "sk": "trial-session-9c943468-bc2e-4631-84e3-b084cf5b1faa",
+    "sk": "trial-session|9c943468-bc2e-4631-84e3-b084cf5b1faa",
     "sessionType": "Special",
     "termYear": "2020",
+    "proceedingType": "In Person",
     "startTime": "21:00",
     "term": "Fall",
-    "pk": "trial-session-9c943468-bc2e-4631-84e3-b084cf5b1faa",
+    "pk": "trial-session|9c943468-bc2e-4631-84e3-b084cf5b1faa",
     "judge": {
       "name": "Cohen",
       "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
@@ -1385,20 +1391,75 @@
     "pk": "case-by-docket-number|102-20"
   },
   {
-    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "section|petitioner"
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|624ab651-c8df-4b8c-a332-fb11b9df7a9c",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "624ab651-c8df-4b8c-a332-fb11b9df7a9c",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-11-30T21:58:13.409Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|624ab651-c8df-4b8c-a332-fb11b9df7a9c",
+    "docketNumberWithSuffix": "128-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-11-30T21:58:13.406Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-11-30T21:58:13.408Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "createdAt": "2020-11-30T21:58:13.408Z",
+      "processingStatus": "pending",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "942624dd-9ef5-4a70-823e-2a0fb227b98d",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "work-item|624ab651-c8df-4b8c-a332-fb11b9df7a9c",
+    "docketNumber": "128-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-11-30T21:58:13.409Z"
   },
   {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "pk": "inactivePractitioner|Test Inactive Practitioner"
   },
   {
-    "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
-    "pk": "section|inactivePractitioner"
-  },
-  {
     "sk": "user|9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
     "pk": "section|admissions"
+  },
+  {
+    "role": "reportersOffice",
+    "entityName": "User",
+    "sk": "user|27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f",
+    "name": "Test Reporter's Office",
+    "section": "reportersOffice",
+    "pk": "user|27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f",
+    "userId": "27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f",
+    "email": "reportersOffice@example.com"
+  },
+  {
+    "sk": "b2a1d128-784f-4dfb-a2a4-deb138b85542",
+    "template": "{\"docketNumber\":\"129-20\",\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">November 30, 2020</div></div></div><br/><br/><p>A new Petition has been served:</p><div id=\\\"case-information\\\"><div>Case Information:</div><div>Docket Number: <!-- -->129-20</div><div>Case Title: <!-- -->Valentine Holman</div><div>Requested Place of Trial: <!-- -->Tampa, Florida</div></div><br/><div id=\\\"document-information\\\"><div>Document Information:</div><div>Document Name: <!-- -->Petition</div><div>Docket Entry No.: <!-- -->1</div><div>Filed Date: <!-- -->01/20/20</div><div>25-Sep-1995</div><div>Served: <!-- -->11/30/20 5:58 pm ET</div></div><br/><div id=\\\"petitioner-information\\\"><div>Petitioner Information:</div><div>Valentine Holman</div><div><div>71 East Green Nobel Lane</div><div>Sed eligendi exercit</div><div>Soluta voluptas eius</div><div><span>Consequatur cum ven<!-- -->, </span><span>CO<!-- --> </span><span>93000</span></div><div>+1 (677) 974-4448</div></div><div>Service: <!-- -->Paper</div></div><p>To view this document,<!-- --> <a href=\\\"https://app.exp2.ustc-case-mgmt.flexion.us\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->129-20</div><div>docketEntryNo: <!-- -->1</div><div>docketEntryId: <!-- -->ec78b8ab-046e-41c0-ac35-797a3691e103</div><div>eventCode: <!-- -->P</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
+    "pk": "email-irsSuperuser@example.com"
+  },
+  {
+    "sk": "fcf2f9c6-13e3-4664-82a2-fbc4b9ab3af0",
+    "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">November 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->129-20</div><div>Case Title: <!-- -->Valentine Holman</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->Request for Place of Trial at Tampa, Florida</div><div>Docket Entry No.: <!-- -->2</div><div>Filed by: <!-- -->Petr. Valentine Holman</div><div>Served: <!-- -->11/30/20 5:58 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.exp2.ustc-case-mgmt.flexion.us\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->129-20</div><div>docketEntryNo: <!-- -->2</div><div>docketEntryId: <!-- -->a462063f-4c97-4621-b7a8-a6a87567104d</div><div>eventCode: <!-- -->RQT</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
+    "pk": "email-irsSuperuser@example.com"
   },
   {
     "sk": "docketNumberCounter-2019",
@@ -1416,90 +1477,47 @@
     "pk": "inactivePractitioner|IP1111"
   },
   {
-    "sk": "case-46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case-491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case-5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case-6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|101-19",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|102-19",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|102-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|103-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|104-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|105-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|106-19",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|107-19",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|117-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|120-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|121-20",
-    "docketNumber": "121-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|122-20",
-    "docketNumber": "122-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|123-20",
-    "docketNumber": "123-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|124-20",
-    "docketNumber": "124-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|125-20",
-    "docketNumber": "125-20",
-    "pk": "catalog"
-  },
-  {
-    "sk": "case|126-20",
-    "docketNumber": "126-20",
-    "pk": "catalog"
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-11-18T19:32:11.465Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
+    "docketNumberWithSuffix": "127-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-11-18T19:32:11.463Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-11-18T19:32:11.464Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "createdAt": "2020-11-18T19:32:11.464Z",
+      "processingStatus": "pending",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "69180101-2399-4414-8da4-2b0eb9f734da",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "work-item|b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
+    "docketNumber": "127-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-11-18T19:32:11.465Z"
   },
   {
     "sk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
@@ -1512,6 +1530,19 @@
   {
     "sk": "user|dabbad04-18d0-43ec-bafb-654e83405416",
     "pk": "section|cohensChambers"
+  },
+  {
+    "role": "petitioner",
+    "address2": "Hanover, MI 49241",
+    "phone": "517-563-1536",
+    "address1": "3202 Elk Avenue",
+    "entityName": "User",
+    "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405417",
+    "name": "Test Petitioner 2",
+    "section": "petitioner",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405417",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
+    "email": "petitioner2@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -1714,13 +1745,13 @@
       "address2": "Ut culpa cum sint ",
       "city": "Omnis dignissimos at",
       "phone": "+1 (338) 996-7072",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "66 East Clarendon Parkway",
       "postalCode": "92017",
       "name": "Reuben Blair",
       "state": "DC",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2020-01-23T21:44:54.034Z",
     "noticeOfAttachments": false,
@@ -2324,6 +2355,57 @@
     "updatedAt": "2020-04-29T15:52:15.628Z"
   },
   {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - Not at Issue",
+    "caseIsInProgress": true,
+    "gsi1pk": "work-item|aebe6b3d-71d8-4788-8991-6de482737bcc",
+    "section": "petitions",
+    "workItemId": "aebe6b3d-71d8-4788-8991-6de482737bcc",
+    "sentBy": "Test Petitionsclerk",
+    "createdAt": "2020-11-30T22:57:58.406Z",
+    "highPriority": false,
+    "assigneeName": "Test Petitionsclerk",
+    "entityName": "WorkItem",
+    "sk": "2020-11-30T22:58:08.206Z",
+    "docketNumberWithSuffix": "129-20",
+    "updatedAt": "2020-11-30T22:57:58.406Z",
+    "completedAt": "2020-11-30T22:58:08.206Z",
+    "completedMessage": "Served to IRS",
+    "caseTitle": "Valentine Holman",
+    "isInitializeCase": true,
+    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "petitions",
+    "docketEntry": {
+      "isPaper": true,
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-01-20T05:00:00.000Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "mailingDate": "25-Sep-1995",
+      "isFileAttached": true,
+      "receivedAt": "2020-01-20T05:00:00.000Z",
+      "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "createdAt": "2020-01-20T05:00:00.000Z",
+      "processingStatus": "pending",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Valentine Holman",
+      "docketEntryId": "ec78b8ab-046e-41c0-ac35-797a3691e103",
+      "partySecondary": false,
+      "servedAt": "2020-11-30T22:58:08.081Z",
+      "documentTitle": "Petition"
+    },
+    "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "129-20",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Petitionsclerk"
+  },
+  {
     "sk": "case|113-19",
     "pk": "case-by-docket-number|113-19"
   },
@@ -2338,10 +2420,15 @@
     "startTime": "10:00",
     "term": "Winter",
     "pk": "trial-session|159c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "swingSession": false,
     "startDate": "2020-01-26T05:00:00.000Z",
     "isCalendared": true,
@@ -2368,13 +2455,13 @@
     "contactPrimary": {
       "city": "Los Angeles",
       "phone": "3235556429",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "111 Fast Ln",
       "postalCode": "12355",
       "name": "Letti Toretto",
       "state": "CA",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-12-11T16:02:31.173Z",
     "noticeOfAttachments": false,
@@ -2524,6 +2611,7 @@
     "startTime": "21:00",
     "term": "Fall",
     "pk": "trial-session|6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Carluzzo",
       "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
@@ -2886,7 +2974,7 @@
           "isDraft": false,
           "receivedAt": "2020-09-30T20:25:22.035Z",
           "isOnDocketRecord": true,
-          "signedJudgeName": "Fieri",
+          "signedJudgeName": "Guy S. B. Fieri",
           "createdAt": "2020-09-30T20:25:25.087Z",
           "numberOfPages": 1,
           "scenario": "Type A",
@@ -2918,7 +3006,7 @@
       },
       "receivedAt": "2020-09-30T20:25:22.035Z",
       "isOnDocketRecord": true,
-      "signedJudgeName": "Fieri",
+      "signedJudgeName": "Guy S. B. Fieri",
       "createdAt": "2020-09-30T20:25:25.087Z",
       "numberOfPages": 1,
       "scenario": "Type A",
@@ -3175,7 +3263,39 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|108-19",
     "docketNumber": "108-19",
-    "status": "Calendared"
+    "status": "Calendared",
+    "otherFilers": [
+      {
+        "isAddressSealed": false,
+        "country": "USA",
+        "city": "Nashville",
+        "contactId": "89d7d182-46da-4b96-b29b-260d15249c25",
+        "address1": "42 Lamb Sauce Blvd",
+        "postalCode": "05198",
+        "title": "Intervenor",
+        "countryType": "domestic",
+        "phone": "1234567890",
+        "name": "Gordon Ramsay",
+        "state": "AK",
+        "email": "testUser@example.com",
+        "otherFilerType": "Intervenor"
+      },
+      {
+        "isAddressSealed": false,
+        "country": "USA",
+        "city": "Flavortown",
+        "contactId": "277ca24a-7be3-49e9-80d3-529a19a1a841",
+        "address1": "1337 12th Ave",
+        "postalCode": "05198",
+        "title": "Partner Other Than Tax Matters Partner",
+        "countryType": "domestic",
+        "phone": "1234567890",
+        "name": "Guy Fieri",
+        "state": "AK",
+        "email": "testUser@example.com",
+        "otherFilerType": "Partner Other Than Tax Matters Partner"
+      }
+    ]
   },
   {
     "isStricken": false,
@@ -3849,6 +3969,7 @@
     "startTime": "21:00",
     "term": "Fall",
     "pk": "trial-session|0d943468-bc2e-4631-84e3-b084cf5b1fbb",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Cohen",
       "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
@@ -3943,7 +4064,7 @@
     "admissionsStatus": "Active",
     "lastName": "Lane",
     "role": "irsPractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "address2": "Hanover, MI 49241",
     "address1": "3202 Elk Avenue",
     "section": "irsPractitioner",
@@ -4006,22 +4127,22 @@
   },
   {
     "sk": "0402cea0-727e-4155-8357-5df4fe30196c",
-    "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 21207</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->Summary Opinion Chief Judge Fieri</div><div>Docket Entry No.: <!-- -->4</div><div>Filed by: <!-- -->N/A</div><div>Served: <!-- -->09/30/20 4:26 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: <!-- -->4</div><div>docketEntryId: <!-- -->659d001a-4d91-41f4-acd8-8417a1d2be49</div><div>eventCode: <!-- -->SOP</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
+    "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->Summary Opinion Chief Judge Fieri</div><div>Docket Entry No.: <!-- -->4</div><div>Filed by: <!-- -->N/A</div><div>Served: <!-- -->09/30/20 4:26 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: <!-- -->4</div><div>docketEntryId: <!-- -->659d001a-4d91-41f4-acd8-8417a1d2be49</div><div>eventCode: <!-- -->SOP</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
     "pk": "email-undefined"
   },
   {
     "sk": "2fbeeb71-d628-45c5-b84d-f45db398ce37",
-    "template": "{\"docketNumber\":\"124-20\",\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 21207</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>A new Petition has been served:</p><div id=\\\"case-information\\\"><div>Case Information:</div><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div><div>Requested Place of Trial: <!-- -->Indianapolis, Indiana</div></div><br/><div id=\\\"document-information\\\"><div>Document Information:</div><div>Document Name: <!-- -->Petition</div><div>Docket Entry No.: <!-- -->1</div><div>Filed Date: <!-- -->09/02/20</div><div>03/03/2020</div><div>Served: <!-- -->09/30/20 4:24 pm ET</div></div><br/><div id=\\\"petitioner-information\\\"><div>Petitioner Information:</div><div>Stacy Russold</div><div><div>543 Ten Ballon Drive</div><div><span>Berthoud<!-- -->, </span><span>CO<!-- --> </span><span>80513</span></div></div><div>Service: <!-- -->Paper</div></div><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: <!-- -->1</div><div>docketEntryId: <!-- -->b0899914-f433-467a-a12c-6ffb5a36ccd2</div><div>eventCode: <!-- -->P</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
+    "template": "{\"docketNumber\":\"124-20\",\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>A new Petition has been served:</p><div id=\\\"case-information\\\"><div>Case Information:</div><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div><div>Requested Place of Trial: <!-- -->Indianapolis, Indiana</div></div><br/><div id=\\\"document-information\\\"><div>Document Information:</div><div>Document Name: <!-- -->Petition</div><div>Docket Entry No.: <!-- -->1</div><div>Filed Date: <!-- -->09/02/20</div><div>03/03/2020</div><div>Served: <!-- -->09/30/20 4:24 pm ET</div></div><br/><div id=\\\"petitioner-information\\\"><div>Petitioner Information:</div><div>Stacy Russold</div><div><div>543 Ten Ballon Drive</div><div><span>Berthoud<!-- -->, </span><span>CO<!-- --> </span><span>80513</span></div></div><div>Service: <!-- -->Paper</div></div><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: <!-- -->1</div><div>docketEntryId: <!-- -->b0899914-f433-467a-a12c-6ffb5a36ccd2</div><div>eventCode: <!-- -->P</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
     "pk": "email-undefined"
   },
   {
     "sk": "34939073-fbd4-4b44-b679-916d9fd1e40c",
-    "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 21207</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->Request for Place of Trial at Indianapolis, Indiana</div><div>Docket Entry No.: </div><div>Filed by: <!-- -->Petr. Stacy Russold</div><div>Served: <!-- -->09/30/20 4:24 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: </div><div>docketEntryId: <!-- -->57682810-ca3f-47e9-80c8-5d3b3b67a914</div><div>eventCode: <!-- -->RQT</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
+    "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->Request for Place of Trial at Indianapolis, Indiana</div><div>Docket Entry No.: </div><div>Filed by: <!-- -->Petr. Stacy Russold</div><div>Served: <!-- -->09/30/20 4:24 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: </div><div>docketEntryId: <!-- -->57682810-ca3f-47e9-80c8-5d3b3b67a914</div><div>eventCode: <!-- -->RQT</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
     "pk": "email-undefined"
   },
   {
     "sk": "45473e99-6498-4485-84cf-1c806c104a80",
-    "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 21207</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->This is a legacy judge&#x27;s order</div><div>Docket Entry No.: <!-- -->3</div><div>Filed by: <!-- -->N/A</div><div>Served: <!-- -->09/30/20 4:25 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: <!-- -->3</div><div>docketEntryId: <!-- -->67a204c3-7111-48f3-8ddd-3c2e60f4d1af</div><div>eventCode: <!-- -->O</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
+    "template": "{\"emailContent\":\"<div style=\\\"text-align:center\\\"><h1 style=\\\"font-size:20px;margin-bottom:0\\\">United States Tax Court</h1><div style=\\\"font-size:16px\\\"><div>Washington, DC 20217</div><div style=\\\"margin-top:15px\\\">September 30, 2020</div></div></div><br/><br/><p>Dear <!-- -->IRS<!-- -->,</p><p>A document has been served on your Tax Court case:</p><div id=\\\"case-information\\\"><div>Docket Number: <!-- -->124-20</div><div>Case Title: <!-- -->Stacy Russold, Natalya Chaouche, Tax Matters Partner</div></div><br/><div id=\\\"document-information\\\"><div>Document Type: <!-- -->This is a legacy judge&#x27;s order</div><div>Docket Entry No.: <!-- -->3</div><div>Filed by: <!-- -->N/A</div><div>Served: <!-- -->09/30/20 4:25 pm ET</div></div><br/><p>To view this document,<!-- --> <a href=\\\"https://app.undefined\\\">please log in to the U.S. Tax Court.</a></p><p>Certain documents may require your action.</p><div id=\\\"computer-readable\\\"><div>---- COMPUTER-READABLE DATA ----</div><div>docketNumber: <!-- -->124-20</div><div>docketEntryNo: <!-- -->3</div><div>docketEntryId: <!-- -->67a204c3-7111-48f3-8ddd-3c2e60f4d1af</div><div>eventCode: <!-- -->O</div></div><p><em>Please do not reply to this message. This e-mail is an automated notification from an account which is unable to receive replies.</em></p>\"}",
     "pk": "email-undefined"
   },
   {
@@ -4133,7 +4254,6 @@
     "signedJudgeName": "Maurice B. Foley",
     "archived": true,
     "createdAt": "2020-08-18T18:07:09.796Z",
-    "documentContentsId": "356e1887-a937-4d5f-ad71-88aded1aed81",
     "entityName": "DocketEntry",
     "filedBy": "Test Docketclerk",
     "docketEntryId": "8ed9bad9-db58-43c8-b03f-c2e3ad92995f",
@@ -4297,7 +4417,7 @@
     "admissionsStatus": "Inactive",
     "lastName": "Practitioner",
     "role": "inactivePractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "inactivePractitioner",
     "practitionerType": "Attorney",
     "userId": "c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
@@ -4486,6 +4606,49 @@
     "pk": "section|petitions",
     "docketNumber": "102-19",
     "updatedAt": "2019-03-01T21:42:29.073Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|624ab651-c8df-4b8c-a332-fb11b9df7a9c",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "624ab651-c8df-4b8c-a332-fb11b9df7a9c",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-11-30T21:58:13.409Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|624ab651-c8df-4b8c-a332-fb11b9df7a9c",
+    "docketNumberWithSuffix": "128-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-11-30T21:58:13.406Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-11-30T21:58:13.408Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "createdAt": "2020-11-30T21:58:13.408Z",
+      "processingStatus": "pending",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "942624dd-9ef5-4a70-823e-2a0fb227b98d",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "section|petitions",
+    "docketNumber": "128-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-11-30T21:58:13.409Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -4714,6 +4877,49 @@
   {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
+    "gsi1pk": "work-item|b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2020-11-18T19:32:11.465Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
+    "docketNumberWithSuffix": "127-20W",
+    "docketEntry": {
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-11-18T19:32:11.463Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "isFileAttached": true,
+      "receivedAt": "2020-11-18T19:32:11.464Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "createdAt": "2020-11-18T19:32:11.464Z",
+      "processingStatus": "pending",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "69180101-2399-4414-8da4-2b0eb9f734da",
+      "partySecondary": false,
+      "documentTitle": "Petition",
+      "privatePractitioners": []
+    },
+    "pk": "section|petitions",
+    "docketNumber": "127-20",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2020-11-18T19:32:11.465Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
     "gsi1pk": "work-item|b99d6fab-d009-4f22-8bdf-e42157cecfe9",
     "caseIsInProgress": true,
     "caseTitle": "Idola Flowers, Donor",
@@ -4840,7 +5046,7 @@
     "admissionsStatus": "Active",
     "lastName": "Gilbert",
     "role": "privatePractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "privatePractitioner",
     "practitionerType": "Non-Attorney",
     "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
@@ -4894,10 +5100,15 @@
     "startTime": "10:00",
     "term": "Fall",
     "pk": "trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "swingSession": true,
     "startDate": "2020-11-27T05:00:00.000Z",
     "isCalendared": true,
@@ -4908,7 +5119,7 @@
     "admissionsStatus": "Active",
     "lastName": "West",
     "role": "irsPractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "irsPractitioner",
     "practitionerType": "Attorney",
     "userId": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
@@ -4948,6 +5159,7 @@
       "address2": "Est asperiores ullam",
       "city": "Consequatur duis ut",
       "phone": "+1 (669) 779-5845",
+      "contactId": "28cae029-bae2-4eef-ac54-878fbbab65e3",
       "address1": "472 North Green Cowley Boulevard",
       "postalCode": "49767",
       "name": "Caryn Wall",
@@ -5077,9 +5289,35 @@
     "documentTitle": "Statement of Taxpayer Identification"
   },
   {
+    "caseOrder": [],
+    "gsi1pk": "trial-session-catalog",
+    "trialLocation": "Lubbock, Texas",
+    "createdAt": "2020-10-25T05:00:00.000Z",
+    "sk": "trial-session|a1b04943-8ea8-422b-8990-dec3ca644c83",
+    "sessionType": "Hybrid",
+    "termYear": "2020",
+    "startTime": "15:00",
+    "term": "Fall",
+    "pk": "trial-session|a1b04943-8ea8-422b-8990-dec3ca644c83",
+    "proceedingType": "In Person",
+    "judge": {
+      "name": "Buch",
+      "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
+    },
+    "startDate": "2030-11-25T05:00:00.000Z",
+    "maxCases": 125,
+    "trialSessionId": "a1b04943-8ea8-422b-8990-dec3ca644c83",
+    "isCalendared": false
+  },
+  {
     "role": "privatePractitioner",
+    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
     "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
     "contact": {
       "address3": "Under the stairs",
       "address2": "Apartment 4",
@@ -5092,10 +5330,7 @@
     },
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "privatePractitioner",
-    "representingPrimary": true,
     "pk": "case|105-19",
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"
   },
   {
@@ -5109,6 +5344,11 @@
     "startTime": "10:00",
     "term": "Winter",
     "pk": "trial-session|539c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "proceedingType": "In Person",
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "judge": {
       "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
@@ -5177,26 +5417,6 @@
     "pk": "irsPractitioner|RT6789"
   },
   {
-    "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
-    "pk": "section|irsPractitioner"
-  },
-  {
-    "sk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "section|irsPractitioner"
-  },
-  {
-    "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
-    "pk": "section|irsPractitioner"
-  },
-  {
-    "sk": "user|5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
-    "pk": "section|irsPractitioner"
-  },
-  {
-    "sk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
-    "pk": "section|irsPractitioner"
-  },
-  {
     "sk": "case|101-20",
     "pk": "case-by-docket-number|101-20"
   },
@@ -5211,6 +5431,7 @@
     "startTime": "21:00",
     "term": "Fall",
     "pk": "trial-session|5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Colvin",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
@@ -5688,12 +5909,67 @@
     "completedBy": "Test Petitionsclerk1"
   },
   {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - Not at Issue",
+    "caseIsInProgress": true,
+    "gsi1pk": "work-item|aebe6b3d-71d8-4788-8991-6de482737bcc",
+    "section": "petitions",
+    "workItemId": "aebe6b3d-71d8-4788-8991-6de482737bcc",
+    "sentBy": "Test Petitionsclerk",
+    "createdAt": "2020-11-30T22:57:58.406Z",
+    "highPriority": false,
+    "assigneeName": "Test Petitionsclerk",
+    "entityName": "WorkItem",
+    "sk": "2020-11-30T22:58:08.206Z",
+    "docketNumberWithSuffix": "129-20",
+    "updatedAt": "2020-11-30T22:57:58.406Z",
+    "completedAt": "2020-11-30T22:58:08.206Z",
+    "completedMessage": "Served to IRS",
+    "caseTitle": "Valentine Holman",
+    "isInitializeCase": true,
+    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "petitions",
+    "docketEntry": {
+      "isPaper": true,
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-01-20T05:00:00.000Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "mailingDate": "25-Sep-1995",
+      "isFileAttached": true,
+      "receivedAt": "2020-01-20T05:00:00.000Z",
+      "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "createdAt": "2020-01-20T05:00:00.000Z",
+      "processingStatus": "pending",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Valentine Holman",
+      "docketEntryId": "ec78b8ab-046e-41c0-ac35-797a3691e103",
+      "partySecondary": false,
+      "servedAt": "2020-11-30T22:58:08.081Z",
+      "documentTitle": "Petition"
+    },
+    "pk": "section-outbox|petitions",
+    "docketNumber": "129-20",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Petitionsclerk"
+  },
+  {
     "sk": "case|120-20",
     "pk": "case-by-docket-number|120-20"
   },
   {
     "sk": "user|659789b4-acc5-40b7-9318-3354e7eb8604",
     "pk": "section|foleysChambers"
+  },
+  {
+    "sk": "user|0a03718f-595e-4e2e-bde0-e0b3c3c5ae16",
+    "pk": "section|general"
   },
   {
     "sk": "case|102-19",
@@ -5890,6 +6166,10 @@
     "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defee"
   },
   {
+    "sk": "user|27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f",
+    "pk": "section|reportersOffice"
+  },
+  {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
     "caseIsInProgress": false,
@@ -5932,13 +6212,13 @@
     "contactPrimary": {
       "city": "Flavortown",
       "phone": "1234567890",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "123 Leet Street",
       "postalCode": "72364",
       "name": "Guy Fieri",
       "state": "AR",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-12-11T15:25:09.284Z",
     "noticeOfAttachments": false,
@@ -6384,13 +6664,13 @@
       "address2": "Et et aliquip non si",
       "city": "Rerum culpa consequ",
       "phone": "+1 (849) 773-8302",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "343 Second Street",
       "postalCode": "82461",
       "name": "Tatum Craig",
       "state": "NM",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
@@ -6619,8 +6899,13 @@
   },
   {
     "role": "privatePractitioner",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "serviceIndicator": "Electronic",
     "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
     "contact": {
       "address3": "Under the stairs",
       "address2": "Apartment 4",
@@ -6633,10 +6918,7 @@
     },
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "privatePractitioner",
-    "representingPrimary": true,
     "pk": "case|107-19",
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"
   },
   {
@@ -6773,10 +7055,15 @@
     "startTime": "10:00",
     "term": "Winter",
     "pk": "trial-session|459c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "swingSession": false,
     "startDate": "2020-01-06T05:00:00.000Z",
     "isCalendared": true,
@@ -6795,6 +7082,7 @@
     "startTime": "15:00",
     "term": "Fall",
     "pk": "trial-session|208a959f-9526-4db5-b262-e58c476a4604",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Carluzzo",
       "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
@@ -6902,7 +7190,7 @@
     "admissionsStatus": "Active",
     "lastName": "Morrison",
     "role": "irsPractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "irsPractitioner",
     "practitionerType": "Attorney",
     "userId": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
@@ -7088,6 +7376,18 @@
     "status": "New"
   },
   {
+    "createdAt": "2020-04-14T19:59:46.086Z",
+    "closedDate": "2020-04-14T03:01:50.746Z",
+    "entityName": "UserCase",
+    "gsi1pk": "user-case|104-20",
+    "caseCaption": "Hanan Al Hroub, Petitioner",
+    "sk": "case|104-20",
+    "docketNumberWithSuffix": "104-20R",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "104-20",
+    "status": "Closed"
+  },
+  {
     "createdAt": "2020-04-29T15:50:41.686Z",
     "entityName": "UserCase",
     "gsi1pk": "user-case|105-20",
@@ -7231,6 +7531,28 @@
     "docketNumberWithSuffix": "126-20W",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "126-20",
+    "status": "New"
+  },
+  {
+    "createdAt": "2020-11-18T19:32:11.463Z",
+    "entityName": "UserCase",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "gsi1pk": "user-case|127-20",
+    "sk": "case|127-20",
+    "docketNumberWithSuffix": "127-20W",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "127-20",
+    "status": "New"
+  },
+  {
+    "createdAt": "2020-11-30T21:58:13.406Z",
+    "entityName": "UserCase",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "gsi1pk": "user-case|128-20",
+    "sk": "case|128-20",
+    "docketNumberWithSuffix": "128-20W",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "128-20",
     "status": "New"
   },
   {
@@ -7383,6 +7705,7 @@
     "startTime": "09:00",
     "term": "Fall",
     "pk": "trial-session|259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Cohen",
       "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
@@ -7392,6 +7715,179 @@
     "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
     "isCalendared": false,
     "status": "Closed"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "isPaper": false,
+    "qcCompleteForTrial": {},
+    "otherPetitioners": [],
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not Paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2020-11-30T21:58:13.407Z",
+    "caseType": "Whistleblower",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "isAddressSealed": false,
+      "address3": "Architecto assumenda",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "sealedAndUnavailable": false,
+      "countryType": "domestic",
+      "phone": "+1 (537) 235-6147",
+      "name": "Brett Osborne",
+      "state": "AK",
+      "email": "petitioner@example.com"
+    },
+    "createdAt": "2020-11-30T21:58:13.406Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "sk": "case|128-20",
+    "orderForOds": false,
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "128-20W",
+    "orderForRatification": false,
+    "archivedCorrespondences": [],
+    "initialDocketNumberSuffix": "W",
+    "docketNumberSuffix": "W",
+    "otherFilers": [],
+    "correspondence": [],
+    "sortableDocketNumber": 20000128,
+    "archivedDocketEntries": [],
+    "noticeOfTrialDate": "2020-11-30T21:58:13.407Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "hasPendingItems": false,
+    "initialCaption": "Brett Osborne, Petitioner",
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|128-20",
+    "docketNumber": "128-20",
+    "status": "New",
+    "statistics": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2020-11-30T21:58:13.406Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 0,
+    "isFileAttached": true,
+    "receivedAt": "2020-11-30T21:58:13.410Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": false,
+    "eventCode": "STIN",
+    "createdAt": "2020-11-30T21:58:13.410Z",
+    "processingStatus": "complete",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "13178e81-a4bb-4183-b57a-d68fc75fdfaf",
+    "sk": "docket-entry|13178e81-a4bb-4183-b57a-d68fc75fdfaf",
+    "partySecondary": false,
+    "pk": "case|128-20",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2020-11-30T21:58:13.406Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2020-11-30T21:58:13.410Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "createdAt": "2020-11-30T21:58:13.410Z",
+    "processingStatus": "complete",
+    "entityName": "DocketEntry",
+    "docketEntryId": "2bc8db97-08f9-40f4-8eec-1388efb3aab0",
+    "sk": "docket-entry|2bc8db97-08f9-40f4-8eec-1388efb3aab0",
+    "pk": "case|128-20",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2020-11-30T21:58:13.406Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "caseStatus": "New",
+      "caseTitle": "Brett Osborne",
+      "section": "petitions",
+      "workItemId": "624ab651-c8df-4b8c-a332-fb11b9df7a9c",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Petitioner",
+      "createdAt": "2020-11-30T21:58:13.409Z",
+      "highPriority": false,
+      "assigneeName": null,
+      "entityName": "WorkItem",
+      "docketNumberWithSuffix": "128-20W",
+      "docketEntry": {
+        "isStricken": false,
+        "documentType": "Petition",
+        "filingDate": "2020-11-30T21:58:13.406Z",
+        "isMinuteEntry": false,
+        "partyPrimary": true,
+        "pending": false,
+        "isDraft": false,
+        "isFileAttached": true,
+        "receivedAt": "2020-11-30T21:58:13.408Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "isOnDocketRecord": true,
+        "eventCode": "P",
+        "createdAt": "2020-11-30T21:58:13.408Z",
+        "processingStatus": "pending",
+        "entityName": "DocketEntry",
+        "filedBy": "Petr. Brett Osborne",
+        "docketEntryId": "942624dd-9ef5-4a70-823e-2a0fb227b98d",
+        "partySecondary": false,
+        "documentTitle": "Petition",
+        "privatePractitioners": []
+      },
+      "docketNumber": "128-20",
+      "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "updatedAt": "2020-11-30T21:58:13.409Z"
+    },
+    "receivedAt": "2020-11-30T21:58:13.408Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2020-11-30T21:58:13.408Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "942624dd-9ef5-4a70-823e-2a0fb227b98d",
+    "sk": "docket-entry|942624dd-9ef5-4a70-823e-2a0fb227b98d",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "partySecondary": false,
+    "pk": "case|128-20"
+  },
+  {
+    "sk": "work-item|624ab651-c8df-4b8c-a332-fb11b9df7a9c",
+    "pk": "case|128-20"
   },
   {
     "sk": "user|8c0902ab-d156-4cca-b80d-43f595aa5ab0",
@@ -7628,6 +8124,179 @@
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|110-19",
     "documentTitle": "Statement of Taxpayer Identification"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "isPaper": false,
+    "qcCompleteForTrial": {},
+    "otherPetitioners": [],
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not Paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2020-11-18T19:32:11.463Z",
+    "caseType": "Whistleblower",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "isAddressSealed": false,
+      "address3": "Architecto assumenda",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "sealedAndUnavailable": false,
+      "countryType": "domestic",
+      "phone": "+1 (537) 235-6147",
+      "name": "Brett Osborne",
+      "state": "AK",
+      "email": "petitioner@example.com"
+    },
+    "createdAt": "2020-11-18T19:32:11.463Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "sk": "case|127-20",
+    "orderForOds": false,
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "127-20W",
+    "orderForRatification": false,
+    "archivedCorrespondences": [],
+    "initialDocketNumberSuffix": "W",
+    "docketNumberSuffix": "W",
+    "otherFilers": [],
+    "correspondence": [],
+    "sortableDocketNumber": 20000127,
+    "archivedDocketEntries": [],
+    "noticeOfTrialDate": "2020-11-18T19:32:11.463Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "hasPendingItems": false,
+    "initialCaption": "Brett Osborne, Petitioner",
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|127-20",
+    "docketNumber": "127-20",
+    "status": "New",
+    "statistics": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2020-11-18T19:32:11.463Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2020-11-18T19:32:11.466Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "createdAt": "2020-11-18T19:32:11.466Z",
+    "processingStatus": "complete",
+    "entityName": "DocketEntry",
+    "docketEntryId": "45dee1f6-666e-4183-9e02-c824850b859b",
+    "sk": "docket-entry|45dee1f6-666e-4183-9e02-c824850b859b",
+    "pk": "case|127-20",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2020-11-18T19:32:11.463Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "caseStatus": "New",
+      "caseTitle": "Brett Osborne",
+      "section": "petitions",
+      "workItemId": "b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Petitioner",
+      "createdAt": "2020-11-18T19:32:11.465Z",
+      "highPriority": false,
+      "assigneeName": null,
+      "entityName": "WorkItem",
+      "docketNumberWithSuffix": "127-20W",
+      "docketEntry": {
+        "isStricken": false,
+        "documentType": "Petition",
+        "filingDate": "2020-11-18T19:32:11.463Z",
+        "isMinuteEntry": false,
+        "partyPrimary": true,
+        "pending": false,
+        "isDraft": false,
+        "isFileAttached": true,
+        "receivedAt": "2020-11-18T19:32:11.464Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "isOnDocketRecord": true,
+        "eventCode": "P",
+        "createdAt": "2020-11-18T19:32:11.464Z",
+        "processingStatus": "pending",
+        "entityName": "DocketEntry",
+        "filedBy": "Petr. Brett Osborne",
+        "docketEntryId": "69180101-2399-4414-8da4-2b0eb9f734da",
+        "partySecondary": false,
+        "documentTitle": "Petition",
+        "privatePractitioners": []
+      },
+      "docketNumber": "127-20",
+      "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "updatedAt": "2020-11-18T19:32:11.465Z"
+    },
+    "receivedAt": "2020-11-18T19:32:11.464Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2020-11-18T19:32:11.464Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "69180101-2399-4414-8da4-2b0eb9f734da",
+    "sk": "docket-entry|69180101-2399-4414-8da4-2b0eb9f734da",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "partySecondary": false,
+    "pk": "case|127-20"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2020-11-18T19:32:11.463Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 0,
+    "isFileAttached": true,
+    "receivedAt": "2020-11-18T19:32:11.466Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": false,
+    "eventCode": "STIN",
+    "createdAt": "2020-11-18T19:32:11.466Z",
+    "processingStatus": "complete",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "d1760696-630b-4472-9e74-3aa8f18975fa",
+    "sk": "docket-entry|d1760696-630b-4472-9e74-3aa8f18975fa",
+    "partySecondary": false,
+    "pk": "case|127-20",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": []
+  },
+  {
+    "sk": "work-item|b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
+    "pk": "case|127-20"
   },
   {
     "sk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -7987,9 +8656,9 @@
     "contactPrimary": {
       "isAddressSealed": false,
       "address3": "Architecto assumenda",
-      "contactId": "c5e430ed-a1c9-4f28-9f59-0a75db3a13de",
       "address2": "Suscipit animi solu",
       "city": "Aspernatur nostrum s",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "68 Fabien Freeway",
       "postalCode": "89499",
       "sealedAndUnavailable": false,
@@ -7997,8 +8666,7 @@
       "phone": "+1 (537) 235-6147",
       "name": "Brett Osborne",
       "state": "AK",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -8148,7 +8816,7 @@
     "admissionsStatus": "Active",
     "lastName": "Practitioner1",
     "role": "irsPractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "irsPractitioner",
     "practitionerType": "Attorney",
     "userId": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
@@ -8210,9 +8878,8 @@
   {
     "admissionsStatus": "Active",
     "lastName": "Practitioner",
-    "alternateEmail": "privatePractitioner@example.com",
     "role": "privatePractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "privatePractitioner",
     "practitionerType": "Attorney",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -8298,6 +8965,7 @@
     "startTime": "09:00",
     "term": "Fall",
     "pk": "trial-session|259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Buch",
       "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
@@ -8353,8 +9021,13 @@
   },
   {
     "sk": "docketNumberCounter-2020",
-    "id": 26,
+    "id": 29,
     "pk": "docketNumberCounter-2020"
+  },
+  {
+    "sk": "docketNumberCounter-2021",
+    "id": 200,
+    "pk": "docketNumberCounter-2021"
   },
   {
     "judgeTitle": "Judge",
@@ -8373,6 +9046,16 @@
     "pk": "trial-session-working-copy|5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5"
+  },
+  {
+    "role": "general",
+    "entityName": "User",
+    "sk": "user|0a03718f-595e-4e2e-bde0-e0b3c3c5ae16",
+    "name": "Test General",
+    "section": "general",
+    "pk": "user|0a03718f-595e-4e2e-bde0-e0b3c3c5ae16",
+    "userId": "0a03718f-595e-4e2e-bde0-e0b3c3c5ae16",
+    "email": "general@example.com"
   },
   {
     "sk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -8455,8 +9138,62 @@
     "updatedAt": "2019-08-08T14:33:24.183Z"
   },
   {
+    "sk": "user|5dffc4d8-423d-4de9-bca0-585c7b6627f7",
+    "pk": "section|floater"
+  },
+  {
     "sk": "user|9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "pk": "section|floater"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "caseIsInProgress": true,
+    "section": "petitions",
+    "workItemId": "aebe6b3d-71d8-4788-8991-6de482737bcc",
+    "sentBy": "Test Petitionsclerk",
+    "createdAt": "2020-11-30T22:57:58.406Z",
+    "highPriority": false,
+    "assigneeName": "Test Petitionsclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|aebe6b3d-71d8-4788-8991-6de482737bcc",
+    "docketNumberWithSuffix": "129-20",
+    "updatedAt": "2020-11-30T22:57:58.406Z",
+    "completedAt": "2020-11-30T22:58:08.206Z",
+    "completedMessage": "Served to IRS",
+    "caseTitle": "Valentine Holman",
+    "isInitializeCase": true,
+    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "petitions",
+    "docketEntry": {
+      "isPaper": true,
+      "isStricken": false,
+      "documentType": "Petition",
+      "filingDate": "2020-01-20T05:00:00.000Z",
+      "isMinuteEntry": false,
+      "partyPrimary": true,
+      "pending": false,
+      "isDraft": false,
+      "mailingDate": "25-Sep-1995",
+      "isFileAttached": true,
+      "receivedAt": "2020-01-20T05:00:00.000Z",
+      "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+      "isOnDocketRecord": true,
+      "eventCode": "P",
+      "createdAt": "2020-01-20T05:00:00.000Z",
+      "processingStatus": "pending",
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Valentine Holman",
+      "docketEntryId": "ec78b8ab-046e-41c0-ac35-797a3691e103",
+      "partySecondary": false,
+      "servedAt": "2020-11-30T22:58:08.081Z",
+      "documentTitle": "Petition"
+    },
+    "pk": "work-item|aebe6b3d-71d8-4788-8991-6de482737bcc",
+    "docketNumber": "129-20",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Petitionsclerk"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8476,13 +9213,13 @@
     "contactPrimary": {
       "city": "Springfield",
       "phone": "1234567890",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "123 Doh Rd",
       "postalCode": "37172",
       "name": "Bart Simpson",
       "state": "TN",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -8652,7 +9389,8 @@
       "name": "Stacy Russold",
       "sealedAndUnavailable": false,
       "state": "CO",
-      "countryType": "domestic"
+      "countryType": "domestic",
+      "phone": "1234567890"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -9391,6 +10129,7 @@
     "startTime": "15:00",
     "term": "Fall",
     "pk": "trial-session|f3b04943-8ea8-422b-8990-dec3ca644c83",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Buch",
       "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
@@ -9411,10 +10150,15 @@
     "startTime": "10:00",
     "term": "Winter",
     "pk": "trial-session|359c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Ashford",
       "userId": "dabbad01-18d0-43ec-bafb-654e83405416"
     },
+    "address1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "postalCode": "94535",
     "swingSession": false,
     "startDate": "2020-01-16T05:00:00.000Z",
     "isCalendared": true,
@@ -9454,13 +10198,13 @@
     "contactPrimary": {
       "city": "Nashville",
       "phone": "+1 (477) 640-5087",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "67 Oak Parkway",
       "postalCode": "36042",
       "name": "Eve Brewer",
       "state": "TN",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "noticeOfAttachments": false,
     "entityName": "Case",
@@ -9616,8 +10360,13 @@
   },
   {
     "role": "privatePractitioner",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "serviceIndicator": "Electronic",
     "barNumber": "PT5432",
+    "entityName": "PrivatePractitioner",
     "contact": {
       "address3": "Under the stairs",
       "address2": "Apartment 4",
@@ -9630,10 +10379,7 @@
     },
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "section": "privatePractitioner",
-    "representingPrimary": true,
     "pk": "case|102-20",
-    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "email": "privatePractitioner1@example.com"
   },
   {
@@ -9651,6 +10397,225 @@
     "description": "Filing fee due",
     "pk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "docketNumber": "107-19"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "isSealed": false,
+    "procedureType": "Regular",
+    "isPaper": true,
+    "qcCompleteForTrial": {},
+    "irsNoticeDate": null,
+    "otherPetitioners": [],
+    "orderForFilingFee": false,
+    "petitionPaymentStatus": "Not Paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2020-01-20T05:00:00.000Z",
+    "caseType": "Innocent Spouse",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "isAddressSealed": false,
+      "address3": "Soluta voluptas eius",
+      "contactId": "05b98fff-e4ca-4114-b8ec-7218effc982e",
+      "address2": "Sed eligendi exercit",
+      "city": "Consequatur cum ven",
+      "address1": "71 East Green Nobel Lane",
+      "postalCode": "93000",
+      "sealedAndUnavailable": false,
+      "countryType": "domestic",
+      "serviceIndicator": "Paper",
+      "phone": "+1 (677) 974-4448",
+      "name": "Valentine Holman",
+      "state": "CO"
+    },
+    "createdAt": "2020-11-30T22:57:58.402Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Valentine Holman, Petitioner",
+    "sk": "case|129-20",
+    "orderForOds": false,
+    "docketNumberWithSuffix": "129-20",
+    "orderForRatification": false,
+    "archivedCorrespondences": [],
+    "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
+    "otherFilers": [],
+    "correspondence": [],
+    "sortableDocketNumber": 20000129,
+    "archivedDocketEntries": [],
+    "mailingDate": "25-Sep-1995",
+    "noticeOfTrialDate": "2020-11-30T22:57:58.404Z",
+    "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": true,
+    "preferredTrialCity": "Tampa, Florida",
+    "initialCaption": "Valentine Holman, Petitioner",
+    "hasPendingItems": false,
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|129-20",
+    "docketNumber": "129-20",
+    "status": "General Docket - Not at Issue",
+    "statistics": [],
+    "hasVerifiedIrsNotice": false
+  },
+  {
+    "isStricken": false,
+    "documentType": "Order",
+    "filingDate": "2020-11-30T22:58:53.700Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": true,
+    "receivedAt": "2020-11-30T22:58:53.701Z",
+    "isOnDocketRecord": false,
+    "signedJudgeName": "Maurice B. Foley",
+    "createdAt": "2020-11-30T22:59:37.523Z",
+    "documentContentsId": "08e59604-fedd-4855-8340-844425fce8dc",
+    "entityName": "DocketEntry",
+    "filedBy": "Test Petitionsclerk",
+    "docketEntryId": "0dff390d-8851-4993-8edf-bcd46bb8b563",
+    "sk": "docket-entry|0dff390d-8851-4993-8edf-bcd46bb8b563",
+    "documentIdBeforeSignature": "c1fe9ab1-9fc9-4c1b-b7a9-581ce14f0696",
+    "documentTitle": "Order",
+    "relationship": "primaryDocument",
+    "draftOrderState": {
+      "eventCode": "O",
+      "documentTitle": "Order",
+      "documentType": "Order",
+      "docketNumber": "129-20",
+      "freeText": "Order"
+    },
+    "isFileAttached": true,
+    "isSealed": true,
+    "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "O",
+    "processingStatus": "complete",
+    "signedJudgeUserId": null,
+    "freeText": "Order",
+    "signedAt": "2020-11-30T22:59:37.524Z",
+    "pk": "case|129-20",
+    "signedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "129-20"
+  },
+  {
+    "servedParties": [
+      {
+        "name": "IRS",
+        "role": "irsSuperuser"
+      }
+    ],
+    "isPaper": true,
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2020-01-20T05:00:00.000Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2020-01-20T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2020-01-20T05:00:00.000Z",
+    "numberOfPages": 10,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Valentine Holman",
+    "docketEntryId": "a462063f-4c97-4621-b7a8-a6a87567104d",
+    "sk": "docket-entry|a462063f-4c97-4621-b7a8-a6a87567104d",
+    "documentTitle": "Request for Place of Trial at Tampa, Florida",
+    "draftOrderState": null,
+    "index": 2,
+    "mailingDate": "25-Sep-1995",
+    "isFileAttached": true,
+    "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "RQT",
+    "processingStatus": "pending",
+    "partySecondary": false,
+    "pk": "case|129-20",
+    "servedAt": "2020-11-30T22:58:08.130Z"
+  },
+  {
+    "servedParties": [
+      {
+        "name": "IRS",
+        "role": "irsSuperuser"
+      }
+    ],
+    "isPaper": true,
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2020-01-20T05:00:00.000Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "completedAt": "2020-11-30T22:58:08.206Z",
+      "caseStatus": "New",
+      "completedMessage": "Served to IRS",
+      "caseIsInProgress": true,
+      "caseTitle": "Valentine Holman",
+      "section": "petitions",
+      "workItemId": "aebe6b3d-71d8-4788-8991-6de482737bcc",
+      "isInitializeCase": true,
+      "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+      "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+      "sentBy": "Test Petitionsclerk",
+      "sentBySection": "petitions",
+      "createdAt": "2020-11-30T22:57:58.406Z",
+      "highPriority": false,
+      "assigneeName": "Test Petitionsclerk",
+      "entityName": "WorkItem",
+      "docketNumberWithSuffix": "129-20",
+      "docketEntry": {
+        "isPaper": true,
+        "isStricken": false,
+        "documentType": "Petition",
+        "filingDate": "2020-01-20T05:00:00.000Z",
+        "isMinuteEntry": false,
+        "partyPrimary": true,
+        "pending": false,
+        "isDraft": false,
+        "mailingDate": "25-Sep-1995",
+        "isFileAttached": true,
+        "receivedAt": "2020-01-20T05:00:00.000Z",
+        "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "isOnDocketRecord": true,
+        "eventCode": "P",
+        "createdAt": "2020-01-20T05:00:00.000Z",
+        "processingStatus": "pending",
+        "entityName": "DocketEntry",
+        "filedBy": "Petr. Valentine Holman",
+        "docketEntryId": "ec78b8ab-046e-41c0-ac35-797a3691e103",
+        "partySecondary": false,
+        "servedAt": "2020-11-30T22:58:08.081Z",
+        "documentTitle": "Petition"
+      },
+      "docketNumber": "129-20",
+      "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+      "completedBy": "Test Petitionsclerk",
+      "updatedAt": "2020-11-30T22:57:58.406Z"
+    },
+    "receivedAt": "2020-01-20T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2020-01-20T05:00:00.000Z",
+    "numberOfPages": 14,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Valentine Holman",
+    "docketEntryId": "ec78b8ab-046e-41c0-ac35-797a3691e103",
+    "sk": "docket-entry|ec78b8ab-046e-41c0-ac35-797a3691e103",
+    "documentTitle": "Petition",
+    "draftOrderState": null,
+    "index": 1,
+    "mailingDate": "25-Sep-1995",
+    "isFileAttached": true,
+    "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "pending",
+    "partySecondary": false,
+    "pk": "case|129-20",
+    "servedAt": "2020-11-30T22:58:08.081Z"
+  },
+  {
+    "sk": "work-item|aebe6b3d-71d8-4788-8991-6de482737bcc",
+    "pk": "case|129-20"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -9705,6 +10670,7 @@
     "startTime": "15:00",
     "term": "Fall",
     "pk": "trial-session|a3bee7c0-bd98-4504-890b-b00eb398e547",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Carluzzo",
       "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
@@ -9939,6 +10905,7 @@
     "startTime": "09:00",
     "term": "Fall",
     "pk": "trial-session|149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Cohen",
       "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
@@ -9976,13 +10943,13 @@
       "address2": "Suscipit animi solu",
       "city": "Aspernatur nostrum s",
       "phone": "+1 (537) 235-6147",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "68 Fabien Freeway",
       "postalCode": "89499",
       "name": "Brett Osborne",
       "state": "AL",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "preferredTrialCity": "Birmingham, Alabama",
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -10151,6 +11118,7 @@
     "startTime": "21:00",
     "term": "Fall",
     "pk": "trial-session|7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
+    "proceedingType": "In Person",
     "judge": {
       "name": "Carluzzo",
       "userId": "dabbad03-18d0-43ec-bafb-654e83405416"
@@ -10164,26 +11132,6 @@
   {
     "sk": "user|dadbad42-18d0-43ec-bafb-654e83405416",
     "pk": "section|legacyJudgesChambers"
-  },
-  {
-    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
-    "pk": "section|privatePractitioner"
-  },
-  {
-    "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "section|privatePractitioner"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -10239,7 +11187,7 @@
     "admissionsStatus": "Active",
     "lastName": "Practitioner",
     "role": "privatePractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "privatePractitioner",
     "practitionerType": "Attorney",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -10321,13 +11269,13 @@
     "contactPrimary": {
       "city": "Los Angeles",
       "phone": "3235556429",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "111 Fast Ln",
       "postalCode": "12355",
       "name": "Brian Earl Spilner",
       "state": "CA",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-12-11T15:25:55.006Z",
     "noticeOfAttachments": false,
@@ -10555,7 +11503,7 @@
     "admissionsStatus": "Active",
     "lastName": "Practitioner",
     "role": "irsPractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "irsPractitioner",
     "practitionerType": "Attorney",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
@@ -10815,6 +11763,7 @@
       "address3": "Architecto assumenda",
       "address2": "Suscipit animi solu",
       "city": "Aspernatur nostrum s",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "68 Fabien Freeway",
       "postalCode": "89499",
       "sealedAndUnavailable": false,
@@ -10822,8 +11771,7 @@
       "phone": "+1 (537) 235-6147",
       "name": "Brett Osborne",
       "state": "AK",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2020-10-13T20:23:17.556Z",
     "noticeOfAttachments": false,
@@ -10971,6 +11919,16 @@
     "pk": "case|125-20"
   },
   {
+    "role": "floater",
+    "entityName": "User",
+    "sk": "user|5dffc4d8-423d-4de9-bca0-585c7b6627f7",
+    "name": "Test Floater1",
+    "section": "floater",
+    "pk": "user|5dffc4d8-423d-4de9-bca0-585c7b6627f7",
+    "userId": "5dffc4d8-423d-4de9-bca0-585c7b6627f7",
+    "email": "floater1@example.com"
+  },
+  {
     "role": "admissionsclerk",
     "entityName": "User",
     "sk": "user|9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
@@ -10984,7 +11942,7 @@
     "admissionsStatus": "Active",
     "lastName": "Stark",
     "role": "privatePractitioner",
-    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsDate": "2019-03-01",
     "section": "privatePractitioner",
     "practitionerType": "Attorney",
     "userId": "9f25dc2c-764a-435c-86dd-323e53634537",
@@ -11032,13 +11990,13 @@
       "address2": "Nostrud sint lorem u",
       "city": "Dolore est qui pers",
       "phone": "+1 (493) 953-3442",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "address1": "28 North Nobel Road",
       "postalCode": "91301",
       "name": "Denise Gould",
       "state": "MS",
       "countryType": "domestic",
-      "email": "petitioner@example.com",
-      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      "email": "petitioner@example.com"
     },
     "createdAt": "2019-07-12T17:09:41.026Z",
     "noticeOfAttachments": false,
@@ -11094,7 +12052,8 @@
     "signedByUserId": "7b69a8b5-bcc4-4449-8994-08fda8d342e7",
     "pk": "case|106-19",
     "servedAt": "2020-09-25T19:27:17.149Z",
-    "docketNumber": "106-19"
+    "docketNumber": "106-19",
+    "servedPartiesCode": "B"
   },
   {
     "isStricken": false,
@@ -11327,6 +12286,6 @@
     "section": "floater",
     "pk": "user|9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
-    "email": "testFloater@example.com"
+    "email": "floater@example.com"
   }
 ]

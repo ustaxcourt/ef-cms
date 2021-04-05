@@ -6,7 +6,11 @@ const {
   STATUS_TYPES,
 } = applicationContext.getConstants();
 
-export const petitionsClerkBlocksCase = (test, trialLocation) => {
+export const petitionsClerkBlocksCase = (
+  test,
+  trialLocation,
+  overrides = {},
+) => {
   return it('Petitions clerk blocks the case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -45,12 +49,16 @@ export const petitionsClerkBlocksCase = (test, trialLocation) => {
       expect.arrayContaining([
         expect.objectContaining({
           blocked: true,
+          blockedDate: expect.anything(),
           blockedReason: 'just because',
           caseCaption:
+            overrides.caseCaption ||
             'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
           docketNumber: test.docketNumber,
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          status: STATUS_TYPES.generalDocketReadyForTrial,
+          docketNumberSuffix:
+            overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.SMALL,
+          status:
+            overrides.caseStatus || STATUS_TYPES.generalDocketReadyForTrial,
         }),
       ]),
     );

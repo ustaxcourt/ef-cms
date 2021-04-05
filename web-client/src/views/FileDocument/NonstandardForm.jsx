@@ -117,16 +117,17 @@ export const NonstandardForm = connect(
               }}
             >
               <option value="">- Select -</option>
-              {helper[level].previouslyFiledDocuments.map(
-                (previousDocument, idx) => {
-                  return (
-                    <option key={idx} value={previousDocument.docketEntryId}>
-                      {previousDocument.documentTitle ||
-                        previousDocument.documentType}
-                    </option>
-                  );
-                },
-              )}
+              {helper[level].previouslyFiledDocuments.map(previousDocument => {
+                return (
+                  <option
+                    key={previousDocument.docketEntryId}
+                    value={previousDocument.docketEntryId}
+                  >
+                    {previousDocument.documentTitle ||
+                      previousDocument.documentType}
+                  </option>
+                );
+              })}
             </select>
           </FormGroup>
         )}
@@ -137,14 +138,14 @@ export const NonstandardForm = connect(
             id="date-of-service"
             label="Service date"
             names={{
-              day: `${namespace}day`,
-              month: `${namespace}month`,
-              year: `${namespace}year`,
+              day: `${namespace}serviceDateDay`,
+              month: `${namespace}serviceDateMonth`,
+              year: `${namespace}serviceDateYear`,
             }}
             values={{
-              day: get(form, `${namespace}day`, ''),
-              month: get(form, `${namespace}month`, ''),
-              year: get(form, `${namespace}year`, ''),
+              day: get(form, `${namespace}serviceDateDay`, ''),
+              month: get(form, `${namespace}serviceDateMonth`, ''),
+              year: get(form, `${namespace}serviceDateYear`, ''),
             }}
             onBlur={validateSequence}
             onChange={updateSequence}

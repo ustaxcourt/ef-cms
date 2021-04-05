@@ -25,18 +25,20 @@ export const petitionsClerkEditsDraftOrder = (
       docketNumber: draftOrder.docketNumber,
     });
 
-    expect(draftOrder.draftOrderState.richText).toEqual(currentRichText);
+    expect(test.getState('form.richText')).toEqual(currentRichText);
 
     test.setState('form.richText', setRichText);
     await test.runSequence('submitCourtIssuedOrderSequence');
 
-    const formattedAfterEdit = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+    await test.runSequence('gotoEditOrderSequence', {
+      docketEntryIdToEdit: draftOrder.docketEntryId,
+      docketNumber: draftOrder.docketNumber,
     });
 
-    const editedDraftOrder = formattedAfterEdit.draftDocuments[0];
+    expect(test.getState('form.richText')).toEqual(setRichText);
 
-    expect(editedDraftOrder.draftOrderState.richText).toEqual(setRichText);
+    await test.runSequence('submitCourtIssuedOrderSequence');
+
     expect(test.getState('currentPage')).toEqual('SignOrder');
   });
 };

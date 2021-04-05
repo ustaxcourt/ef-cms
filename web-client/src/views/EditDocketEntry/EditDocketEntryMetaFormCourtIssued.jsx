@@ -58,33 +58,38 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
           >
             Document type
           </label>
-          <SelectSearch
-            aria-labelledby="document-type-label"
-            id="document-type"
-            name="eventCode"
-            options={addCourtIssuedDocketEntryHelper.documentTypes}
-            value={reactSelectValue({
-              documentTypes: addCourtIssuedDocketEntryHelper.documentTypes,
-              selectedEventCode: form.eventCode,
-            })}
-            onChange={(inputValue, { action, name }) => {
-              courtIssuedDocketEntryOnChange({
-                action,
-                inputValue,
-                name,
-                updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
-                validateSequence: validateCourtIssuedDocketEntrySequence,
-              });
-              return true;
-            }}
-            onInputChange={(inputText, { action }) => {
-              onInputChange({
-                action,
-                inputText,
-                updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
-              });
-            }}
-          />
+          {addCourtIssuedDocketEntryHelper.showDocumentTypeDropdown && (
+            <SelectSearch
+              aria-labelledby="document-type-label"
+              id="document-type"
+              name="eventCode"
+              options={addCourtIssuedDocketEntryHelper.documentTypes}
+              value={reactSelectValue({
+                documentTypes: addCourtIssuedDocketEntryHelper.documentTypes,
+                selectedEventCode: form.eventCode,
+              })}
+              onChange={(inputValue, { action, name }) => {
+                courtIssuedDocketEntryOnChange({
+                  action,
+                  inputValue,
+                  name,
+                  updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
+                  validateSequence: validateCourtIssuedDocketEntrySequence,
+                });
+                return true;
+              }}
+              onInputChange={(inputText, { action }) => {
+                onInputChange({
+                  action,
+                  inputText,
+                  updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
+                });
+              }}
+            />
+          )}
+          {!addCourtIssuedDocketEntryHelper.showDocumentTypeDropdown && (
+            <span>{form.documentType}</span>
+          )}
         </FormGroup>
 
         {form.eventCode && <CourtIssuedNonstandardForm />}
@@ -116,6 +121,33 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             </div>
           </fieldset>
         </FormGroup>
+        <hr />
+        <div className="usa-form-group">
+          <fieldset className="usa-fieldset">
+            <legend className="usa-legend">Track document?</legend>
+            <div className="usa-checkbox">
+              <input
+                checked={form.pending || false}
+                className="usa-checkbox__input"
+                id="pending"
+                name="pending"
+                type="checkbox"
+                onChange={e => {
+                  updateCourtIssuedDocketEntryFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                }}
+              />
+              <label
+                className="usa-checkbox__label inline-block"
+                htmlFor="pending"
+              >
+                Add to pending report
+              </label>
+            </div>
+          </fieldset>
+        </div>
       </div>
     );
   },

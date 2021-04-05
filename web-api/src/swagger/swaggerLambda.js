@@ -23,7 +23,7 @@ exports.swaggerLambda = async () => {
   </html>`;
 
   return {
-    body: body,
+    body,
     headers: {
       ...headers,
       'Content-Type': 'text/html',

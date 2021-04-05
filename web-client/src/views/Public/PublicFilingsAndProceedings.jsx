@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -28,14 +27,10 @@ export const PublicFilingsAndProceedings = connect(
                 docketEntryId: entry.docketEntryId,
                 docketNumber: caseDetail.docketNumber,
                 isPublic: true,
+                useSameTab: true,
               });
             }}
           >
-            {entry.isPaper && (
-              <span className="filing-type-icon-mobile">
-                <FontAwesomeIcon icon={['fas', 'file-alt']} />
-              </span>
-            )}
             {entry.descriptionDisplay}
           </Button>
         )}
@@ -43,17 +38,16 @@ export const PublicFilingsAndProceedings = connect(
         <span
           className={classNames(entry.isStricken && 'stricken-docket-record')}
         >
-          {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
-        </span>
+          <span>
+            {entry.showDocumentDescriptionWithoutLink &&
+              entry.descriptionDisplay}
+          </span>
 
-        <span
-          className={classNames(entry.isStricken && 'stricken-docket-record')}
-        >
-          {entry.signatory}
-        </span>
+          <span>{entry.signatory}</span>
 
-        <span className="filings-and-proceedings">
-          {entry.filingsAndProceedingsWithAdditionalInfo}
+          <span className="filings-and-proceedings">
+            {entry.filingsAndProceedingsWithAdditionalInfo}
+          </span>
         </span>
 
         {entry.isStricken && <span> (STRICKEN)</span>}

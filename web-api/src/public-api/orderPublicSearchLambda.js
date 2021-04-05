@@ -12,13 +12,9 @@ exports.orderPublicSearchLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .orderPublicSearchInteractor({
-          applicationContext,
+        .orderPublicSearchInteractor(applicationContext, {
           ...event.queryStringParameters,
         });
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );

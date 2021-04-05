@@ -1,6 +1,3 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { updateSearchTermAction } from '../actions/updateSearchTermAction';
 
-export const updateSearchTermSequence = [
-  set(state.header.searchTerm, props.searchTerm),
-];
+export const updateSearchTermSequence = [updateSearchTermAction];

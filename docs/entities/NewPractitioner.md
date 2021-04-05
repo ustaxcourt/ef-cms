@@ -55,7 +55,7 @@
           then: 
             type: "any"
             flags: 
-              presence: "optional"
+              presence: "required"
           otherwise: 
             type: "any"
             flags: 
@@ -90,7 +90,7 @@
           then: 
             type: "any"
             flags: 
-              presence: "optional"
+              presence: "required"
           otherwise: 
             type: "any"
             flags: 
@@ -380,6 +380,43 @@
       flags: 
         presence: "optional"
         description: "Whether the contact information for the user is being updated."
+    pendingEmail: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "email"
+          args: 
+            options: 
+              tlds: false
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      allow: 
+        - null
+    pendingEmailVerificationToken: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "guid"
+          args: 
+            options: 
+              version: 
+                - "uuidv4"
+      allow: 
+        - null
     section: 
       type: "string"
       flags: 
@@ -396,7 +433,9 @@
         - "chambers"
         - "clerkofcourt"
         - "docket"
+        - "floater"
         - "petitions"
+        - "reportersOffice"
         - "trialClerks"
         - "ashfordsChambers"
         - "buchsChambers"
@@ -434,7 +473,7 @@
         - "admin"
         - "admissionsclerk"
         - "docketclerk"
-        - "floater"
+        - "general"
         - "inactivePractitioner"
         - "irsPractitioner"
         - "irsSuperuser"
@@ -484,7 +523,6 @@
       type: "date"
       flags: 
         format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
           - "YYYY-MM-DD"
         presence: "required"
         description: "The date the practitioner was admitted to the Tax Court bar."
@@ -496,33 +534,21 @@
     admissionsStatus: 
       type: "string"
       flags: 
+        only: true
         presence: "required"
+        description: "The Tax Court bar admission status for the practitioner."
       rules: 
         - 
           name: "min"
           args: 
             limit: 1
-    alternateEmail: 
-      type: "string"
-      flags: 
-        presence: "optional"
-        description: "An alternate email address for the practitioner."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "email"
-          args: 
-            options: 
-              tlds: false
-        - 
-          name: "max"
-          args: 
-            limit: 100
       allow: 
-        - null
+        - "Active"
+        - "Suspended"
+        - "Disbarred"
+        - "Resigned"
+        - "Deceased"
+        - "Inactive"
     barNumber: 
       type: "string"
       flags: 
@@ -549,7 +575,7 @@
         - 
           name: "max"
           args: 
-            limit: 2020
+            limit: 2021
     employer: 
       type: "string"
       flags: 
@@ -585,20 +611,30 @@
       type: "string"
       flags: 
         presence: "required"
+        description: "The first name of the practitioner."
       rules: 
         - 
           name: "min"
           args: 
             limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
     lastName: 
       type: "string"
       flags: 
         presence: "required"
+        description: "The last name of the practitioner."
       rules: 
         - 
           name: "min"
           args: 
             limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
     middleName: 
       type: "string"
       flags: 
@@ -629,6 +665,23 @@
           name: "max"
           args: 
             limit: 100
+    practitionerNotes: 
+      type: "string"
+      flags: 
+        presence: "optional"
+        description: "The optional notes of the practitioner."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 500
+      allow: 
+        - null
+        - ""
     practitionerType: 
       type: "string"
       flags: 
@@ -643,6 +696,20 @@
       allow: 
         - "Attorney"
         - "Non-Attorney"
+    serviceIndicator: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "Electronic"
+        - "None"
+        - "Paper"
     suffix: 
       type: "string"
       flags: 
@@ -659,5 +726,99 @@
             limit: 100
       allow: 
         - ""
+    updatedEmail: 
+      type: "alternatives"
+      matches: 
+        - 
+          ref: 
+            path: 
+              - "confirmEmail"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "string"
+            flags: 
+              presence: "required"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
+                name: "email"
+                args: 
+                  options: 
+                    tlds: false
+              - 
+                name: "max"
+                args: 
+                  limit: 100
+          otherwise: 
+            type: "string"
+            flags: 
+              presence: "optional"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
+                name: "email"
+                args: 
+                  options: 
+                    tlds: false
+              - 
+                name: "max"
+                args: 
+                  limit: 100
+            allow: 
+              - null
+    confirmEmail: 
+      type: "string"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "email"
+          args: 
+            options: 
+              tlds: false
+        - 
+          name: "max"
+          args: 
+            limit: 100
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "updatedEmail"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                ref: 
+                  path: 
+                    - "updatedEmail"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
 
  ```

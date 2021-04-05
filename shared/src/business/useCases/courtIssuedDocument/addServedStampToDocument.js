@@ -1,4 +1,63 @@
-const { getPageDimensions } = require('../generateSignedDocumentInteractor');
+const getPageDimensionsWithTrim = page => {
+  const size = page.getTrimBox();
+  return { pageHeight: size.height, pageWidth: size.width, startingY: size.y };
+};
+
+const computeCoordinates = ({
+  boxHeight,
+  boxWidth,
+  pageHeight,
+  pageRotation,
+  pageWidth,
+  posY,
+}) => {
+  let rotationRads = (pageRotation * Math.PI) / 180;
+  let coordsFromBottomLeft = {};
+  if (pageRotation === 90 || pageRotation === 270) {
+    coordsFromBottomLeft.x = pageHeight / 2 - boxWidth / 2;
+  } else {
+    coordsFromBottomLeft.x = pageWidth / 2 - boxWidth / 2;
+  }
+
+  if (pageRotation === 90 || pageRotation === 270) {
+    coordsFromBottomLeft.y = posY + boxHeight;
+  } else {
+    coordsFromBottomLeft.y = posY + boxHeight;
+  }
+
+  let rectangleX, rectangleY;
+
+  if (pageRotation === 90) {
+    rectangleX =
+      coordsFromBottomLeft.x * Math.cos(rotationRads) -
+      coordsFromBottomLeft.y * Math.sin(rotationRads) +
+      pageWidth;
+    rectangleY =
+      coordsFromBottomLeft.x * Math.sin(rotationRads) +
+      coordsFromBottomLeft.y * Math.cos(rotationRads);
+  } else if (pageRotation === 180) {
+    rectangleX =
+      coordsFromBottomLeft.x * Math.cos(rotationRads) -
+      coordsFromBottomLeft.y * Math.sin(rotationRads) +
+      pageWidth;
+    rectangleY =
+      coordsFromBottomLeft.x * Math.sin(rotationRads) +
+      coordsFromBottomLeft.y * Math.cos(rotationRads) +
+      pageHeight;
+  } else if (pageRotation === 270) {
+    rectangleX =
+      coordsFromBottomLeft.x * Math.cos(rotationRads) -
+      coordsFromBottomLeft.y * Math.sin(rotationRads);
+    rectangleY =
+      coordsFromBottomLeft.x * Math.sin(rotationRads) +
+      coordsFromBottomLeft.y * Math.cos(rotationRads) +
+      pageHeight;
+  } else {
+    rectangleX = coordsFromBottomLeft.x;
+    rectangleY = coordsFromBottomLeft.y;
+  }
+  return { rectangleX, rectangleY };
+};
 
 /**
  * addServedStampToDocument
@@ -20,6 +79,7 @@ exports.addServedStampToDocument = async ({
   }
 
   const {
+    degrees,
     PDFDocument,
     rgb,
     StandardFonts,
@@ -30,7 +90,7 @@ exports.addServedStampToDocument = async ({
   const pages = pdfDoc.getPages();
   const page = pages[0];
 
-  const [originalPageWidth] = getPageDimensions(page);
+  const { pageHeight, pageWidth, startingY } = getPageDimensionsWithTrim(page);
 
   const helveticaBoldFont = pdfDoc.embedStandardFont(
     StandardFonts.HelveticaBold,
@@ -45,21 +105,38 @@ exports.addServedStampToDocument = async ({
   const textHeight = helveticaBoldFont.sizeAtHeight(textSize);
   const boxWidth = serviceStampWidth + padding * 2;
   const boxHeight = textHeight + padding * 2;
-  const posX = originalPageWidth / 2 - boxWidth / 2;
-  const posY = boxHeight;
+  const posY = startingY + padding * 2;
+
+  const rotationAngle = page.getRotation().angle;
+  const shouldRotateStamp = rotationAngle !== 0;
+  const rotateSignatureDegrees = degrees(rotationAngle);
+
+  const { rectangleX, rectangleY } = computeCoordinates({
+    boxHeight,
+    boxWidth,
+    pageHeight,
+    pageRotation: rotationAngle,
+    pageWidth,
+    posY,
+    scale,
+  });
+
+  const rotate = shouldRotateStamp ? rotateSignatureDegrees : degrees(0);
 
   page.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
+    rotate,
     width: boxWidth,
-    x: posX,
-    y: posY,
+    x: rectangleX,
+    y: rectangleY + padding,
   });
   page.drawText(serviceStampText, {
     font: helveticaBoldFont,
+    rotate,
     size: textSize,
-    x: posX + padding,
-    y: posY + padding,
+    x: rectangleX + padding,
+    y: rectangleY + padding * 2,
   });
 
   const pdfBytes = await pdfDoc.save({
@@ -68,3 +145,5 @@ exports.addServedStampToDocument = async ({
 
   return pdfBytes;
 };
+
+exports.computeCoordinates = computeCoordinates;

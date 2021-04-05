@@ -3,22 +3,20 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { caseSearchFilter } = require('../utilities/caseFilter');
+const { MAX_SEARCH_RESULTS } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * caseAdvancedSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.caseAdvancedSearchInteractor = async ({
+exports.caseAdvancedSearchInteractor = async (
   applicationContext,
-  countryType,
-  petitionerName,
-  petitionerState,
-  yearFiledMax,
-  yearFiledMin,
-}) => {
+  { countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
@@ -38,7 +36,10 @@ exports.caseAdvancedSearchInteractor = async ({
       },
     });
 
-  const filteredCases = caseSearchFilter(foundCases, authorizedUser);
+  const filteredCases = caseSearchFilter(foundCases, authorizedUser).slice(
+    0,
+    MAX_SEARCH_RESULTS,
+  );
 
   return filteredCases;
 };

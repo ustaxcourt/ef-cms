@@ -1,10 +1,13 @@
-const joi = require('joi');
 const {
   calculateISODate,
   createISODateString,
   formatDateString,
   FORMATS,
 } = require('../../utilities/DateHandler');
+const {
+  courtIssuedDocumentDecorator,
+  CourtIssuedDocumentDefault,
+} = require('./CourtIssuedDocumentDefault');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
@@ -28,10 +31,8 @@ const yesterdayFormatted = formatDateString(
  */
 function CourtIssuedDocumentTypeE() {}
 CourtIssuedDocumentTypeE.prototype.init = function init(rawProps) {
-  this.attachments = rawProps.attachments;
+  courtIssuedDocumentDecorator(this, rawProps);
   this.date = rawProps.date;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
 };
 
 CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function () {
@@ -42,10 +43,8 @@ CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function () {
 };
 
 CourtIssuedDocumentTypeE.schema = {
-  attachments: joi.boolean().required(),
+  ...CourtIssuedDocumentDefault.schema,
   date: JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
 };
 
 joiValidationDecorator(

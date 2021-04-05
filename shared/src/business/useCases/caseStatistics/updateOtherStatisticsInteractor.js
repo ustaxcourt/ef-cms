@@ -8,19 +8,17 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * updateOtherStatisticsInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update statistics
  * @param {number} providers.damages damages statistic to add to the case
  * @param {number} providers.litigationCosts litigation costs statistic to add to the case
  * @returns {object} the updated case
  */
-exports.updateOtherStatisticsInteractor = async ({
+exports.updateOtherStatisticsInteractor = async (
   applicationContext,
-  damages,
-  docketNumber,
-  litigationCosts,
-}) => {
+  { damages, docketNumber, litigationCosts },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_EDIT_STATISTICS)) {
@@ -37,10 +35,10 @@ exports.updateOtherStatisticsInteractor = async ({
   );
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase.validate().toRawObject(),
+      caseToUpdate: newCase,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

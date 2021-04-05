@@ -40,6 +40,10 @@ describe('Create Docket Entry From Scans', () => {
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
@@ -48,6 +52,7 @@ describe('Create Docket Entry From Scans', () => {
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
   docketClerkSavesDocketEntry(test);
+
   docketClerkViewsQCInProgress(test, true);
   docketClerkViewsSectionQCInProgress(test, true);
   docketClerkViewsEditDocketRecord(test);
@@ -67,6 +72,7 @@ describe('Create Docket Entry From Scans', () => {
 
   docketClerkAddsDocketEntryFile(test, fakeFile);
   docketClerkSavesAndServesDocketEntry(test);
+
   docketClerkViewsQCInProgress(test, false);
   docketClerkViewsSectionQCInProgress(test, false);
 });

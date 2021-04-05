@@ -28,7 +28,10 @@ export const AddressDisplay = connect(
       <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
         <p className="no-margin position-relative">
           {contact.isAddressSealed && (
-            <span className="sealed-address sealed-contact-icon">
+            <span
+              aria-label="sealed address"
+              className="sealed-address sealed-contact-icon"
+            >
               <FontAwesomeIcon
                 className="margin-right-05"
                 icon={['fas', 'lock']}
@@ -39,40 +42,33 @@ export const AddressDisplay = connect(
           {nameOverride || contact.name}{' '}
           {contact.barNumber && `(${contact.barNumber})`}
           <br />
-          {contact.firmName && contact.firmName}
+          {contact.firmName}
           <br />
-          {contact.secondaryName && (
-            <span>
-              <br />
-              c/o {contact.secondaryName}
-              {contact.title && <span>, {contact.title}</span>}
-            </span>
-          )}
-          {contact.inCareOf && (
-            <span>
-              <br />
-              c/o {contact.inCareOf}
-              {contact.title && <span>, {contact.title}</span>}
-            </span>
+          {[contact.secondaryName, contact.inCareOf].map(
+            contactName =>
+              contactName && (
+                <span key={contactName}>
+                  <br />
+                  c/o {contactName}
+                  {contact.title && <span>, {contact.title}</span>}
+                </span>
+              ),
           )}
         </p>
         {!contact.sealedAndUnavailable && (
           <p
             className={classNames(
               'no-margin',
-              showSealAddressLink &&
-                contact.isAddressSealed &&
-                'sealed-address',
+              contact.isAddressSealed && 'sealed-address',
             )}
           >
-            {contact.address1 && (
-              <span className="address-line">{contact.address1}</span>
-            )}
-            {contact.address2 && (
-              <span className="address-line">{contact.address2}</span>
-            )}
-            {contact.address3 && (
-              <span className="address-line">{contact.address3}</span>
+            {[contact.address1, contact.address2, contact.address3].map(
+              addr =>
+                addr && (
+                  <span className="address-line" key={addr}>
+                    {addr}
+                  </span>
+                ),
             )}
             <span className="address-line">
               {contact.city && `${contact.city}, `}
@@ -96,6 +92,7 @@ export const AddressDisplay = connect(
                 {contact.email}
                 {contact.showEAccessFlag && (
                   <FontAwesomeIcon
+                    aria-label="has e-access"
                     className="margin-left-05 fa-icon-blue"
                     icon="flag"
                     size="1x"

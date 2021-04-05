@@ -9,8 +9,6 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
 - [SonarCloud](https://sonarcloud.io/) — static code analysis.
   - Create a [organization](https://sonarcloud.io/create-organization). Make note of the name chosen for CircleCI configuration later.
   - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Make note of each project’s key and token for CircleCI configuration later.
-- [Honeybadger](https://www.honeybadger.io/plans/) — exception monitoring.
-  - Make note of the key for CircleCI configuration later.
 
 ## 2. Configure your local developer machine.
 
@@ -76,9 +74,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `DYNAMSOFT_PRODUCT_KEYS_TEST` | Dynamsoft Web TWAIN product key used for TEST |
   | `DYNAMSOFT_PRODUCT_KEYS_PROD` | Dynamsoft Web TWAIN product key used for PROD |
   | `DYNAMSOFT_S3_ZIP_PATH` | Dynamsoft Web TWAIN full S3 path ZIP configured above, e.g. `s3://bucketname/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz` |
-  | `CIRCLE_HONEYBADGER_API_KEY_STG` | Honeybadger key used for STG |
-  | `CIRCLE_HONEYBADGER_API_KEY_TEST` | Honeybadger key used for TEST |
-  | `CIRCLE_HONEYBADGER_API_KEY_PROD` | Honeybadger key used for PROD |
   | `EFCMS_DOMAIN` | Domain name chosen above |
   | `COGNITO_SUFFIX` | Suffix of your choice for the Cognito URL |
   | `USTC_ADMIN_PASS` | Password of your choice used by the Cognito admin user |
@@ -88,6 +83,10 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `IRS_SUPERUSER_EMAIL_PROD` | Email address used to serve all new petitions to the IRS for PROD |
   | `DEFAULT_ACCOUNT_PASS` | Default password for all test accounts and some password resets |
   | `STATUSPAGE_DNS_RECORD` | DNS record for Statuspage of CNAME `status.${EFCMS_DOMAIN}` (optional) |
+  | `SESSION_MODAL_TIMEOUT` | Time in ms to wait before logging the user out after the idle timeout modal displays (optional, default: `300000` / 5 mins) |
+  | `SESSION_TIMEOUT` | Time in ms to wait displaying the idle timeout modal (optional, default: `3300000` / 55 mins) |
+  | `CLIENT_STAGE` | The `process.env.STAGE` for the React application |
+  | `BOUNCED_EMAIL_RECIPIENT` | An email to which email bounced should be sent (defaults to noreply@`EFCMS_DOMAIN`) |
 
 - Run a build in CircleCI.
   - The build may fail the first time, as provisioning new security certificates can take some time (and cause a timeout). See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to common problems.
@@ -102,16 +101,14 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 4. Edit `get-es-instance-count.sh`, adding a new `elif` statement for your `$BRANCH` which returns the appropriate number of ElasticSearch instances.
 5. Edit `get-keys.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the `$ENVIRONMENT`-specific Dynamsoft licensing keys; licensing requires that each environment use their own unique keys.
 6. Edit `get-env.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the environment name.
-8. Create the `config/$ENVIRONMENT.yml` (e.g. `config/stg.yml`)
-9. Create the `web-api/config/$ENVIRONMENT.yml` (e.g. `web-api/config/stg.yml`)
-10. Add mention of your environment, if appropriate, to `SETUP.md`
+7. Add mention of your environment, if appropriate, to `SETUP.md`
     - to create Lambda roles & policies:
       - e.g. `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh $ENVIRONMENT`
     - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
-11. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
-13. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
-14. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
-15. Update CircleCI to have all the new environment variables needed:
-     - DYNAMSOFT_PRODUCT_KEYS_`$ENVIRONMENT`
+8. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
+10. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
+11. Update CircleCI to have all the new environment variables needed.
+
+Then, follow the instructions found in the [Blue-Green Migration documentation](../BLUE_GREEN_MIGRATION.md) for a first-time deployment.
 
 A deploy of a new environment is likely to require _two_ attempts to work, due to Terraform limitations. See [the troubleshooting guide](TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.

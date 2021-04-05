@@ -1,10 +1,16 @@
 const AWS = require('aws-sdk');
+const createApplicationContext = require('../../../src/applicationContext');
 const {
-  migrateItems: migration0003,
-} = require('./migrations/0003-case-deadline-required-fields');
+  migrateItems: migration0025,
+} = require('./migrations/0025-docket-entry-received-at-strict-timestamp');
+const {
+  migrateItems: validationMigration,
+} = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
+
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
+const applicationContext = createApplicationContext({});
 const dynamodb = new AWS.DynamoDB({
   maxRetries: 10,
   region: 'us-east-1',
@@ -19,39 +25,43 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
+// eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  items = await migration0003(items, documentClient);
+  applicationContext.logger.info('about to run migration 0025');
+  items = await migration0025(items, documentClient);
+
+  applicationContext.logger.info('about to run validation migration');
+  items = await validationMigration(items, documentClient);
+
   return items;
 };
 
 const reprocessItems = async ({ documentClient, items }) => {
-  const moreUnprocessedItems = [];
-
-  items = await migrateRecords({ documentClient, items });
-
-  for (let item of items) {
-    const results = await documentClient
-      .batchWrite({
-        RequestItems: item,
-      })
-      .promise();
-
-    if (!isEmpty(results.UnprocessedItems)) {
-      moreUnprocessedItems.push(results.UnprocessedItems);
-    }
-  }
-
-  if (moreUnprocessedItems.length) {
-    await reprocessItems(moreUnprocessedItems);
+  // items already been migrated. they simply could not be processed in the batchWrite. Try again recursively
+  const results = await documentClient
+    .batchWrite({
+      RequestItems: items,
+    })
+    .promise();
+  if (!isEmpty(results.UnprocessedItems)) {
+    await reprocessItems({
+      documentClient,
+      items: results.UnprocessedItems,
+    });
   }
 };
 
 const processItems = async ({ documentClient, items }) => {
+  try {
+    items = await migrateRecords({ documentClient, items });
+  } catch (err) {
+    applicationContext.logger.error('Error migrating records', err);
+    throw err;
+  }
+
   // your migration code goes here
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
   for (let c of chunks) {
-    c = await migrateRecords({ documentClient, items: c });
-
     const results = await documentClient
       .batchWrite({
         RequestItems: {
@@ -69,7 +79,7 @@ const processItems = async ({ documentClient, items }) => {
     if (!isEmpty(results.UnprocessedItems)) {
       await reprocessItems({
         documentClient,
-        items: [results.UnprocessedItems],
+        items: results.UnprocessedItems,
       });
     }
   }
@@ -92,7 +102,9 @@ const scanTableSegment = async (segment, totalSegments) => {
       })
       .promise()
       .then(async results => {
-        console.log('got some results', results.Items.length);
+        applicationContext.logger.info(
+          `${segment}/${totalSegments} got ${results.Items.length} results`,
+        );
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         await processItems({
@@ -108,9 +120,12 @@ exports.handler = async event => {
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);
 
-  console.log(`about to process ${segment} of ${totalSegments}`);
+  applicationContext.logger.info(
+    `about to process ${segment} of ${totalSegments}`,
+  );
 
   await scanTableSegment(segment, totalSegments);
+  applicationContext.logger.info(`finishing ${segment} of ${totalSegments}`);
   await sqs
     .deleteMessage({
       QueueUrl: process.env.SEGMENTS_QUEUE_URL,

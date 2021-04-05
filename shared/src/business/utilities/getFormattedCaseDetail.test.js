@@ -27,17 +27,18 @@ const { MOCK_USERS } = require('../../test/mockUsers');
 applicationContext.getCurrentUser = () =>
   MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
 
+const getDateISO = () =>
+  applicationContext.getUtilities().createISODateString();
+
 const mockCaseDetailBase = {
   correspondence: [],
-  createdAt: new Date(),
+  createdAt: getDateISO(),
   docketEntries: [],
   docketNumber: '123-45',
   docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '123-45S',
-  receivedAt: new Date(),
+  receivedAt: getDateISO(),
 };
-
-const getDateISO = () => new Date().toISOString();
 
 describe('formatCase', () => {
   let mockCaseDetail;
@@ -46,6 +47,54 @@ describe('formatCase', () => {
     mockCaseDetail = {
       ...mockCaseDetailBase,
     };
+  });
+
+  it('should set showPrintConfirmationLink to true for served cases without legacy docket entries', () => {
+    const docketEntries = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+        documentType: 'Petition',
+        eventCode: 'P',
+        index: 1,
+        isLegacy: false,
+        isLegacySealed: false,
+        isOnDocketRecord: true,
+        servedAt: getDateISO(),
+        workItem: {
+          completedAt: getDateISO(),
+        },
+      },
+    ];
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries,
+    });
+    expect(result.showPrintConfirmationLink).toBeTruthy();
+  });
+
+  it('should set showPrintConfirmationLink to false for served cases with legacy docket entries', () => {
+    const docketEntries = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+        documentType: 'Petition',
+        eventCode: 'P',
+        index: 1,
+        isLegacy: true,
+        isLegacySealed: false,
+        isOnDocketRecord: true,
+        servedAt: getDateISO(),
+        workItem: {
+          completedAt: getDateISO(),
+        },
+      },
+    ];
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries,
+    });
+    expect(result.showPrintConfirmationLink).toBeFalsy();
   });
 
   it('should return an empty object if caseDetail is empty', () => {
@@ -160,6 +209,40 @@ describe('formatCase', () => {
     expect(result.formattedDocketEntries[1].isUnservable).toBeTruthy();
   });
 
+  it('should compute isNotServedDocument', () => {
+    let result;
+    result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries: [
+        {
+          isLegacyServed: undefined,
+          isMinuteEntry: undefined,
+          servedAt: undefined,
+        },
+        {
+          isLegacyServed: true,
+          isMinuteEntry: undefined,
+          servedAt: undefined,
+        },
+        {
+          isLegacyServed: undefined,
+          isMinuteEntry: true,
+          servedAt: undefined,
+        },
+        {
+          isLegacyServed: undefined,
+          isMinuteEntry: undefined,
+          servedAt: createISODateString(),
+        },
+      ],
+    });
+
+    expect(result.formattedDocketEntries[0].isNotServedDocument).toBe(true);
+    expect(result.formattedDocketEntries[1].isNotServedDocument).toBe(false);
+    expect(result.formattedDocketEntries[2].isNotServedDocument).toBe(false);
+    expect(result.formattedDocketEntries[3].isNotServedDocument).toBe(false);
+  });
+
   it('should format the filing date of all correspondence documents', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
@@ -176,7 +259,7 @@ describe('formatCase', () => {
   });
 
   it('should format docket entries from documents', () => {
-    const documents = [
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: '123',
@@ -187,8 +270,7 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
 
     expect(result.formattedDocketEntries[0]).toHaveProperty(
@@ -198,7 +280,7 @@ describe('formatCase', () => {
   });
 
   it('should format docket entries and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
-    const documents = [
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
@@ -211,8 +293,7 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
 
     expect(result).toHaveProperty('formattedDocketEntries');
@@ -220,7 +301,7 @@ describe('formatCase', () => {
   });
 
   it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
-    const documents = [
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
@@ -236,8 +317,7 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
     });
 
     expect(result).toHaveProperty('formattedDocketEntries');
@@ -245,7 +325,7 @@ describe('formatCase', () => {
   });
 
   it('should return docket entries with pending and served documents for pendingItemsDocketEntries', () => {
-    const documents = [
+    const docketEntries = [
       {
         createdAt: getDateISO(),
         docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
@@ -277,8 +357,33 @@ describe('formatCase', () => {
 
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      docketEntries: documents,
-      documents,
+      docketEntries,
+    });
+
+    expect(result.pendingItemsDocketEntries).toMatchObject([
+      {
+        index: '1',
+      },
+    ]);
+  });
+
+  it('should return docket entries with pending and isLegacyServed for pendingItemsDocketEntries', () => {
+    const docketEntries = [
+      {
+        createdAt: getDateISO(),
+        docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+        documentType: 'Administrative Record',
+        filingDate: getDateISO(),
+        index: '1',
+        isLegacyServed: true,
+        isOnDocketRecord: true,
+        pending: true,
+      },
+    ];
+
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketEntries,
     });
 
     expect(result.pendingItemsDocketEntries).toMatchObject([
@@ -437,27 +542,6 @@ describe('formatCase', () => {
   });
 
   describe('should indicate blocked status', () => {
-    it('should format blockedDate and automaticBlockedDate when blocked and automaticBlocked are true', () => {
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        automaticBlocked: true,
-        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
-        automaticBlockedReason: 'for reasons',
-        blocked: true,
-        blockedDate: getDateISO(),
-        blockedReason: 'for reasons',
-      });
-
-      expect(result).toMatchObject({
-        automaticBlockedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString('2020-01-06T11:12:13.007Z', 'MMDDYY'),
-        blockedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(getDateISO(), 'MMDDYY'),
-        showBlockedFromTrial: true,
-      });
-    });
     it('should format blockedDate and when blocked is true', () => {
       const result = formatCase(applicationContext, {
         ...mockCaseDetail,
@@ -472,30 +556,6 @@ describe('formatCase', () => {
           .formatDateString(getDateISO(), 'MMDDYY'),
         showBlockedFromTrial: true,
       });
-    });
-
-    it('should show automatic blocked and high priority indicator if the case is automaticBlocked and highPriority', () => {
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        automaticBlocked: true,
-        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
-        automaticBlockedReason: 'for reasons',
-        highPriority: true,
-      });
-
-      expect(result.showAutomaticBlockedAndHighPriority).toBeTruthy();
-    });
-
-    it('should not show automatic blocked and high priority indicator if the case is automaticBlocked but not highPriority', () => {
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        automaticBlocked: true,
-        automaticBlockedDate: '2020-01-06T11:12:13.007Z',
-        automaticBlockedReason: 'for reasons',
-        highPriority: false,
-      });
-
-      expect(result.showAutomaticBlockedAndHighPriority).toBeFalsy();
     });
   });
 
@@ -539,6 +599,49 @@ describe('formatCase', () => {
     expect(result).not.toHaveProperty('showNotScheduled');
   });
 
+  it('should format hearing details if the case has associated hearings', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      hearings: [
+        {
+          judge: {
+            name: 'Judge Dredd',
+          },
+          startDate: '2011-11-11',
+          startTime: '10:00',
+          trialLocation: 'Megacity One',
+        },
+      ],
+      status: CASE_STATUS_TYPES.calendared,
+      trialDate: '2011-11-11',
+      trialLocation: 'Boise, Idaho',
+      trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+    });
+
+    expect(result).toMatchObject({
+      formattedAssociatedJudge: 'Not assigned',
+      formattedTrialCity: 'Boise, Idaho',
+      formattedTrialDate: '11/11/11',
+      hearings: [
+        {
+          formattedAssociatedJudge: 'Judge Dredd',
+          formattedTrialCity: 'Megacity One',
+          formattedTrialDate: '11/11/11 10:00 am',
+          judge: {
+            name: 'Judge Dredd',
+          },
+          startDate: '2011-11-11',
+          startTime: '10:00',
+          trialLocation: 'Megacity One',
+        },
+      ],
+      showTrialCalendared: true,
+    });
+    expect(result).not.toHaveProperty('showBlockedFromTrial');
+    expect(result).not.toHaveProperty('showNotScheduled');
+    expect(result).not.toHaveProperty('showScheduled');
+  });
+
   it('should format trial details with incomplete trial information', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
@@ -564,15 +667,33 @@ describe('formatCase', () => {
     });
   });
 
-  it('should show not scheduled section if case status is closed', () => {
+  it('should return showNotScheduled as true when the case has not been added to a trial session', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       status: CASE_STATUS_TYPES.closed,
     });
 
-    expect(result).toMatchObject({
-      showNotScheduled: true,
+    expect(result.showNotScheduled).toBeTruthy();
+  });
+
+  it('should return showNotScheduled as false when the case status is closed and has been added to a trial session', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: CASE_STATUS_TYPES.closed,
+      trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
     });
+
+    expect(result.showNotScheduled).toBeFalsy();
+  });
+
+  it('should return showScheduled as true when case status is closed and has been added to a trial session', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: CASE_STATUS_TYPES.closed,
+      trialSessionId: '4f8bd637-fc3b-4073-85b4-388f22731854',
+    });
+
+    expect(result.showScheduled).toBeTruthy();
   });
 
   it('should set defaults for formattedTrialDate and formattedAssociatedJudge and show the prioritized section if case is high priority', () => {
@@ -625,6 +746,82 @@ describe('formatCase', () => {
 
     expect(result).toMatchObject(mockCaseDetail);
     expect(result).not.toHaveProperty('consolidatedCases');
+  });
+
+  describe('qcNeeded', () => {
+    it('should be true for a docket entry that is not in-progress and has an incomplete work item', () => {
+      const docketEntries = [
+        {
+          createdAt: getDateISO(),
+          docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isFileAttached: true,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+          workItem: {
+            completedAt: undefined,
+            isRead: false,
+          },
+        },
+      ];
+
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries,
+      });
+      expect(result.formattedDocketEntries[0].qcNeeded).toBeTruthy();
+    });
+
+    it('should be false for a docket entry that is in-progress and has an incomplete work item', () => {
+      const docketEntries = [
+        {
+          createdAt: getDateISO(),
+          docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isFileAttached: false,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+          workItem: {
+            completedAt: undefined,
+            isRead: false,
+          },
+        },
+      ];
+
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries,
+      });
+      expect(result.formattedDocketEntries[0].qcNeeded).toBeFalsy();
+    });
+
+    it('should be false for a docket entry that is not in-progress and does not have an incomplete work item', () => {
+      const docketEntries = [
+        {
+          createdAt: getDateISO(),
+          docketEntryId: '3036bdba-98e5-4072-8367-9e8ee43f915d',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isFileAttached: true,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: getDateISO(),
+        },
+      ];
+
+      const result = formatCase(applicationContext, {
+        ...mockCaseDetail,
+        docketEntries,
+      });
+      expect(result.formattedDocketEntries[0].qcNeeded).toBeFalsy();
+    });
   });
 });
 
@@ -713,24 +910,39 @@ describe('formatDocketEntry', () => {
     expect(result.isStipDecision).toEqual(false);
   });
 
-  it('should set the servedPartiesCode to `B` if servedAt date exists and servedParties is an array', () => {
+  it('should set the servedPartiesCode to `B` if servedParties is an array', () => {
     const results = formatDocketEntry(applicationContext, {
-      servedAt: '2019-03-27T21:53:00.297Z',
       servedParties: ['someone', 'someone else'],
+      servedPartiesCode: 'BANANAS',
     });
     expect(results).toMatchObject({
       servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
     });
   });
 
-  it('should set the servedPartiesCode to `R` if servedAt date exists and servedParties is an array of length 1 with role irsSuperuser', () => {
+  it('should set the servedPartiesCode to `P` if servedPartiesCode was already set to `P` on docket entry', () => {
     const results = formatDocketEntry(applicationContext, {
-      servedAt: '2019-03-27T21:53:00.297Z',
+      servedParties: ['someone', 'someone else'],
+      servedPartiesCode: 'P',
+    });
+    expect(results).toMatchObject({
+      servedPartiesCode: SERVED_PARTIES_CODES.PETITIONER,
+    });
+  });
+
+  it('should set the servedPartiesCode to `R` if servedParties is an array of length 1 with role irsSuperuser', () => {
+    const results = formatDocketEntry(applicationContext, {
       servedParties: [{ role: ROLES.irsSuperuser }],
     });
     expect(results).toMatchObject({
       servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
     });
+  });
+
+  it('should set isCourtIssuedDocument to false when document.eventCode is not present in the list of court issued documents', () => {
+    const results = formatDocketEntry(applicationContext, { eventCode: 'PMT' });
+
+    expect(results.isCourtIssuedDocument).toBeFalsy();
   });
 
   describe('isInProgress', () => {
@@ -930,6 +1142,13 @@ describe('getFormattedCaseDetail', () => {
 });
 
 describe('documentMeetsAgeRequirements', () => {
+  const oldTranscriptDate = '2010-01-01T01:02:03.007Z';
+  const aShortTimeAgo = calculateISODate({
+    dateString: createISODateString(),
+    howMuch: -12,
+    units: 'hours',
+  });
+
   it('indicates success if document is not a transcript', () => {
     const nonTranscriptEventCode = 'BANANA'; // this is not a transcript event code - to think otherwise would just be bananas.
     const result = documentMeetsAgeRequirements({
@@ -937,22 +1156,40 @@ describe('documentMeetsAgeRequirements', () => {
     });
     expect(result).toBeTruthy();
   });
+
   it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
     const result = documentMeetsAgeRequirements({
+      date: oldTranscriptDate,
       eventCode: TRANSCRIPT_EVENT_CODE,
-      secondaryDate: '2010-01-01T01:02:03.007Z', // 10yr old transcript
     });
     expect(result).toBeTruthy();
   });
-  it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
-    const aShortTimeAgo = calculateISODate({
-      dateString: createISODateString(),
-      howMuch: -12,
-      units: 'hours',
-    });
+
+  it(`indicates success if document is a legacy transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
     const result = documentMeetsAgeRequirements({
+      date: undefined,
       eventCode: TRANSCRIPT_EVENT_CODE,
-      secondaryDate: aShortTimeAgo,
+      filingDate: oldTranscriptDate,
+      isLegacy: true,
+    });
+    expect(result).toBeTruthy();
+  });
+
+  it(`indicates failure if document is a legacy transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
+    const result = documentMeetsAgeRequirements({
+      date: undefined,
+      eventCode: TRANSCRIPT_EVENT_CODE,
+      filingDate: aShortTimeAgo,
+      isLegacy: true,
+    });
+
+    expect(result).toBeFalsy();
+  });
+
+  it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
+    const result = documentMeetsAgeRequirements({
+      date: aShortTimeAgo,
+      eventCode: TRANSCRIPT_EVENT_CODE,
     });
     expect(result).toBeFalsy();
   });

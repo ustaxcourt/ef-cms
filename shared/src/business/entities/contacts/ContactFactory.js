@@ -48,28 +48,28 @@ ContactFactory.getValidationRules = contactType => {
   let results = joi;
 
   for (const partyType in PARTY_TYPES) {
-    const constructor = ContactFactory.getContactConstructors({
+    const contactConstructor = ContactFactory.getContactConstructors({
       partyType: PARTY_TYPES[partyType],
     })[contactType];
 
-    if (constructor) {
+    if (contactConstructor) {
       results = results.when('partyType', {
         is: PARTY_TYPES[partyType],
         then: joi
           .alternatives(
-            constructor({
+            contactConstructor({
               countryType: COUNTRY_TYPES.DOMESTIC,
               isPaper: true,
             }).VALIDATION_RULES,
-            constructor({
+            contactConstructor({
               countryType: COUNTRY_TYPES.INTERNATIONAL,
               isPaper: true,
             }).VALIDATION_RULES,
-            constructor({
+            contactConstructor({
               countryType: COUNTRY_TYPES.DOMESTIC,
               isPaper: false,
             }).VALIDATION_RULES,
-            constructor({
+            contactConstructor({
               countryType: COUNTRY_TYPES.INTERNATIONAL,
               isPaper: false,
             }).VALIDATION_RULES,
@@ -400,32 +400,24 @@ ContactFactory.createContacts = ({
   let otherPetitioners = [];
   if (Array.isArray(contactInfo.otherPetitioners)) {
     otherPetitioners = contactInfo.otherPetitioners.map(otherPetitioner => {
-      const otherPetitionerConstructor = constructorMap.otherPetitioners
-        ? constructorMap.otherPetitioners({
-            countryType: otherPetitioner.countryType,
-            isPaper,
-          })
-        : undefined;
-      return otherPetitionerConstructor
-        ? new otherPetitionerConstructor(otherPetitioner, {
-            applicationContext,
-          })
-        : {};
+      const otherPetitionerConstructor = constructorMap.otherPetitioners({
+        countryType: otherPetitioner.countryType,
+        isPaper,
+      });
+      return new otherPetitionerConstructor(otherPetitioner, {
+        applicationContext,
+      });
     });
   }
 
   let otherFilers = [];
   if (Array.isArray(contactInfo.otherFilers)) {
     otherFilers = contactInfo.otherFilers.map(otherFiler => {
-      const otherFilerConstructor = constructorMap.otherFilers
-        ? constructorMap.otherFilers({
-            countryType: otherFiler.countryType,
-            isPaper,
-          })
-        : undefined;
-      return otherFilerConstructor
-        ? new otherFilerConstructor(otherFiler, { applicationContext })
-        : {};
+      const otherFilerConstructor = constructorMap.otherFilers({
+        countryType: otherFiler.countryType,
+        isPaper,
+      });
+      return new otherFilerConstructor(otherFiler, { applicationContext });
     });
   }
 

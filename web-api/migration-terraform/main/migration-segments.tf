@@ -12,16 +12,17 @@ resource "aws_lambda_function" "migration_segments_lambda" {
   handler          = "migration-segments.handler"
   source_code_hash = data.archive_file.migration_segments_zip.output_base64sha256
 
-  runtime     = "nodejs12.x"
-  timeout     = "60"
+  runtime     = "nodejs14.x"
+  timeout     = "900"
   memory_size = "768"
 
   environment {
     variables = {
-      SOURCE_TABLE       = var.source_table
-      ENVIRONMENT        = var.environment
-      SEGMENTS_QUEUE_URL = aws_sqs_queue.migration_segments_queue.id
       DESTINATION_TABLE  = var.destination_table
+      ENVIRONMENT        = var.environment
+      NODE_ENV           = "production"
+      SEGMENTS_QUEUE_URL = aws_sqs_queue.migration_segments_queue.id
+      SOURCE_TABLE       = var.source_table
     }
   }
 }

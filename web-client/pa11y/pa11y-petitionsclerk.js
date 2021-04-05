@@ -248,7 +248,7 @@ module.exports = [
     actions: [
       'wait for #tab-correspondence to be visible',
       'click element #tab-correspondence',
-      'wait for .document-viewer to be visible',
+      'wait for .document-viewer--documents to be visible',
     ],
     notes: 'checks a11y of correspondence tab',
     url:
@@ -264,7 +264,7 @@ module.exports = [
     actions: [
       'wait for #tab-correspondence to be visible',
       'click element #tab-correspondence',
-      'wait for .document-viewer to be visible',
+      'wait for .document-viewer--documents to be visible',
       'click element .edit-correspondence-button',
       'wait for element #edit-correspondence-header to be visible',
     ],
@@ -277,6 +277,22 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
+      'wait for #edit-case-trial-information-btn to be visible',
+      'click element #edit-case-trial-information-btn',
+      'wait for #add-edit-calendar-note to be visible',
+      'click element #add-edit-calendar-note',
+      'wait for .add-edit-calendar-note-modal to be visible',
+    ],
+    notes: 'checks the add edit calendar note modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/108-19&info=add-edit-calendar-note-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #edit-case-trial-information-btn to be visible',
+      'click element #edit-case-trial-information-btn',
       'wait for #remove-from-trial-session-btn to be visible',
       'click element #remove-from-trial-session-btn',
       'wait for #remove-from-trial-session-modal to be visible',
@@ -450,8 +466,21 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-sessions&info=list-trial-sessions',
   },
   {
-    actions: ['wait for #start-date-date to be visible'],
-    notes: 'checks a11y of trial sessions add form',
+    actions: [
+      'wait for #start-date-date to be visible',
+      'wait for #meeting-id to be visible',
+    ],
+    notes: 'checks a11y of remote trial session add form',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
+  },
+  {
+    actions: [
+      'wait for #start-date-date to be visible',
+      'click element #inPerson-proceeding-label',
+      'wait for #address1 to be visible',
+    ],
+    notes: 'checks a11y of in-person trial sessions add form',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
   },

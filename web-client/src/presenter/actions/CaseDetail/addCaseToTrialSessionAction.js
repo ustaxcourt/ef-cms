@@ -13,7 +13,7 @@ export const addCaseToTrialSessionAction = async ({
   get,
 }) => {
   const { docketNumber } = get(state.caseDetail);
-  const { trialSessionId } = get(state.modal);
+  const { calendarNotes, trialSessionId } = get(state.modal);
   const trialSessions = get(state.trialSessions);
 
   const selectedTrialSession =
@@ -27,6 +27,7 @@ export const addCaseToTrialSessionAction = async ({
     .getUseCases()
     .addCaseToTrialSessionInteractor({
       applicationContext,
+      calendarNotes,
       docketNumber,
       trialSessionId,
     });
@@ -43,6 +44,7 @@ export const addCaseToTrialSessionAction = async ({
   }
   return {
     alertSuccess,
+    calendarNotes,
     caseDetail,
     docketNumber,
     trialSessionId,

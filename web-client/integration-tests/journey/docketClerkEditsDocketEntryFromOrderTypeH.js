@@ -39,6 +39,18 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
       value: TRANSCRIPT_EVENT_CODE,
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: '2021',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
       value: 'Transcript',
     });
@@ -57,7 +69,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
 
     expect(test.getState('validationErrors')).toEqual({
       date: VALIDATION_ERROR_MESSAGES.date[2],
-      freeText: VALIDATION_ERROR_MESSAGES.freeText,
+      freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {

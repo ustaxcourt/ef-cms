@@ -7,6 +7,8 @@ exports.createTrialSession = testData => {
     const month = faker.random.number({ max: 12, min: 1 });
     const day = faker.random.number({ max: 28, min: 1 });
     const year =
+      // disabled because we're generating a random year for testing.
+      // eslint-disable-next-line @miovision/disallow-date/no-new-date
       new Date().getUTCFullYear() + faker.random.number({ max: 5, min: 1 });
     return `${month}/${day}/${year}`;
   };
@@ -27,6 +29,7 @@ exports.createTrialSession = testData => {
   cy.get('#max-cases').type(faker.random.number({ max: 100, min: 10 }));
 
   // location information
+  cy.get('#inPerson-proceeding-label').click();
   cy.get('#trial-location').select(testData.preferredTrialCity);
   cy.get('#courthouse-name').type(faker.commerce.productName());
   cy.get('#address1').type(faker.address.streetAddress());
@@ -61,6 +64,7 @@ exports.setTrialSessionAsCalendared = trialSessionId => {
   cy.get('#set-calendar-button').should('exist').click();
   cy.get('#modal-root .modal-button-confirm').click();
   cy.get('#set-calendar-button').should('not.exist');
+  cy.get('.progress-indicator').should('not.exist');
 };
 
 exports.markCaseAsQcCompleteForTrial = docketNumber => {

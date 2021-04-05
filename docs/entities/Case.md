@@ -620,6 +620,7 @@
                 - "Simultaneous Sur-Reply Memorandum Brief"
                 - "Standing Pretrial Notice"
                 - "Standing Pretrial Order"
+                - "Standing Pretrial Order for Small Case"
                 - "Statement"
                 - "Statement of Redacted Information"
                 - "Statement of Taxpayer Identification"
@@ -1435,7 +1436,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 1000
             freeText2: 
               type: "string"
               flags: 
@@ -1448,7 +1449,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 1000
             hasOtherFilingParty: 
               type: "boolean"
               flags: 
@@ -1666,6 +1667,9 @@
               type: "number"
               flags: 
                 presence: "optional"
+              rules: 
+                - 
+                  name: "integer"
               allow: 
                 - null
             objections: 
@@ -1744,6 +1748,7 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Determines if the docket entry should be displayed in the Pending Report."
             previousDocument: 
               type: "object"
               flags: 
@@ -2105,6 +2110,7 @@
                     - "Simultaneous Sur-Reply Memorandum Brief"
                     - "Standing Pretrial Notice"
                     - "Standing Pretrial Order"
+                    - "Standing Pretrial Order for Small Case"
                     - "Statement"
                     - "Statement of Redacted Information"
                     - "Statement of Taxpayer Identification"
@@ -2161,7 +2167,7 @@
               type: "string"
               flags: 
                 only: true
-                presence: "optional"
+                presence: "required"
               rules: 
                 - 
                   name: "min"
@@ -2199,7 +2205,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
             relationship: 
               type: "string"
@@ -2237,6 +2242,8 @@
                 - "Nonstandard F"
                 - "Nonstandard G"
                 - "Nonstandard H"
+                - "Nonstandard I"
+                - "Nonstandard J"
                 - "Type A"
                 - "Type B"
                 - "Type C"
@@ -2245,14 +2252,6 @@
                 - "Type F"
                 - "Type G"
                 - "Type H"
-            secondaryDate: 
-              type: "date"
-              flags: 
-                format: 
-                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
-                description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
             secondaryDocument: 
               type: "object"
               flags: 
@@ -2620,6 +2619,7 @@
                     - "Simultaneous Sur-Reply Memorandum Brief"
                     - "Standing Pretrial Notice"
                     - "Standing Pretrial Order"
+                    - "Standing Pretrial Order for Small Case"
                     - "Statement"
                     - "Statement of Redacted Information"
                     - "Statement of Taxpayer Identification"
@@ -3113,6 +3113,7 @@
                         - "clerkofcourt"
                         - "docketclerk"
                         - "floater"
+                        - "general"
                         - "inactivePractitioner"
                         - "irsPractitioner"
                         - "irsSuperuser"
@@ -3121,6 +3122,7 @@
                         - "petitioner"
                         - "petitionsclerk"
                         - "privatePractitioner"
+                        - "reportersOffice"
                         - "trialclerk"
             servedPartiesCode: 
               type: "string"
@@ -3204,6 +3206,7 @@
                             - "O"
                             - "OAJ"
                             - "SPOS"
+                            - "SPTO"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -3241,7 +3244,6 @@
                             - "OAD"
                             - "ODJ"
                             - "SDEC"
-                            - "NOT"
                             - "NTD"
                         then: 
                           type: "any"
@@ -3306,6 +3308,7 @@
                             - "O"
                             - "OAJ"
                             - "SPOS"
+                            - "SPTO"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -3577,90 +3580,6 @@
           ref: 
             path: 
               - "automaticBlocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    blocked: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-        description: "Temporarily blocked from trial."
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-    blockedDate: 
-      type: "date"
-      flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "blocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    blockedReason: 
-      type: "string"
-      flags: 
-        description: "Open text field for describing reason for blocking this case from trial."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 250
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "blocked"
           is: 
             type: "any"
             flags: 
@@ -4368,6 +4287,7 @@
                 - "Simultaneous Sur-Reply Memorandum Brief"
                 - "Standing Pretrial Notice"
                 - "Standing Pretrial Order"
+                - "Standing Pretrial Order for Small Case"
                 - "Statement"
                 - "Statement of Redacted Information"
                 - "Statement of Taxpayer Identification"
@@ -5183,7 +5103,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 1000
             freeText2: 
               type: "string"
               flags: 
@@ -5196,7 +5116,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 1000
             hasOtherFilingParty: 
               type: "boolean"
               flags: 
@@ -5414,6 +5334,9 @@
               type: "number"
               flags: 
                 presence: "optional"
+              rules: 
+                - 
+                  name: "integer"
               allow: 
                 - null
             objections: 
@@ -5492,6 +5415,7 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Determines if the docket entry should be displayed in the Pending Report."
             previousDocument: 
               type: "object"
               flags: 
@@ -5853,6 +5777,7 @@
                     - "Simultaneous Sur-Reply Memorandum Brief"
                     - "Standing Pretrial Notice"
                     - "Standing Pretrial Order"
+                    - "Standing Pretrial Order for Small Case"
                     - "Statement"
                     - "Statement of Redacted Information"
                     - "Statement of Taxpayer Identification"
@@ -5909,7 +5834,7 @@
               type: "string"
               flags: 
                 only: true
-                presence: "optional"
+                presence: "required"
               rules: 
                 - 
                   name: "min"
@@ -5947,7 +5872,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
             relationship: 
               type: "string"
@@ -5985,6 +5909,8 @@
                 - "Nonstandard F"
                 - "Nonstandard G"
                 - "Nonstandard H"
+                - "Nonstandard I"
+                - "Nonstandard J"
                 - "Type A"
                 - "Type B"
                 - "Type C"
@@ -5993,14 +5919,6 @@
                 - "Type F"
                 - "Type G"
                 - "Type H"
-            secondaryDate: 
-              type: "date"
-              flags: 
-                format: 
-                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
-                description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
             secondaryDocument: 
               type: "object"
               flags: 
@@ -6368,6 +6286,7 @@
                     - "Simultaneous Sur-Reply Memorandum Brief"
                     - "Standing Pretrial Notice"
                     - "Standing Pretrial Order"
+                    - "Standing Pretrial Order for Small Case"
                     - "Statement"
                     - "Statement of Redacted Information"
                     - "Statement of Taxpayer Identification"
@@ -6861,6 +6780,7 @@
                         - "clerkofcourt"
                         - "docketclerk"
                         - "floater"
+                        - "general"
                         - "inactivePractitioner"
                         - "irsPractitioner"
                         - "irsSuperuser"
@@ -6869,6 +6789,7 @@
                         - "petitioner"
                         - "petitionsclerk"
                         - "privatePractitioner"
+                        - "reportersOffice"
                         - "trialclerk"
             servedPartiesCode: 
               type: "string"
@@ -6952,6 +6873,7 @@
                             - "O"
                             - "OAJ"
                             - "SPOS"
+                            - "SPTO"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -6989,7 +6911,6 @@
                             - "OAD"
                             - "ODJ"
                             - "SDEC"
-                            - "NOT"
                             - "NTD"
                         then: 
                           type: "any"
@@ -7054,6 +6975,7 @@
                             - "O"
                             - "OAJ"
                             - "SPOS"
+                            - "SPTO"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -71291,14 +71213,6 @@
                         options: 
                           version: 
                             - "uuidv4"
-            representingPrimary: 
-              type: "boolean"
-              flags: 
-                presence: "optional"
-            representingSecondary: 
-              type: "boolean"
-              flags: 
-                presence: "optional"
             role: 
               type: "string"
               flags: 
@@ -71602,7 +71516,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 2020
+                    limit: 2021
               whens: 
                 - 
                   ref: 
@@ -71655,6 +71569,112 @@
         - 
           tags: 
             - "Restricted"
+    blocked: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Temporarily blocked from trial."
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "status"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - "Calendared"
+          then: 
+            type: "any"
+            invalid: 
+              - true
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+    blockedDate: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+          - "YYYY-MM-DD"
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "blocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    blockedReason: 
+      type: "string"
+      flags: 
+        description: "Open text field for describing reason for blocking this case from trial."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 250
+      metas: 
+        - 
+          tags: 
+            - "Restricted"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "blocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
     closedDate: 
       type: "date"
       flags: 
@@ -71686,15 +71706,36 @@
             allow: 
               - null
     trialDate: 
-      type: "date"
+      type: "alternatives"
       flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-        presence: "optional"
         description: "When this case goes to trial."
-      allow: 
-        - null
+      matches: 
+        - 
+          ref: 
+            path: 
+              - "trialSessionId"
+          is: 
+            type: "any"
+            flags: 
+              presence: "required"
+            invalid: 
+              - null
+          then: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
+              presence: "required"
+          otherwise: 
+            type: "date"
+            flags: 
+              format: 
+                - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+                - "YYYY-MM-DD"
+              presence: "optional"
+            allow: 
+              - null
     trialLocation: 
       type: "alternatives"
       flags: 
@@ -71800,20 +71841,9 @@
                 args: 
                   regex: "/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/"
     trialSessionId: 
-      type: "string"
+      type: "any"
       flags: 
         description: "The unique ID of the trial session associated with this case."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
       whens: 
         - 
           ref: 
@@ -71829,13 +71859,63 @@
                 override: true
               - "Calendared"
           then: 
-            type: "any"
+            type: "string"
             flags: 
               presence: "required"
+            rules: 
+              - 
+                name: "min"
+                args: 
+                  limit: 1
+              - 
+                name: "guid"
+                args: 
+                  options: 
+                    version: 
+                      - "uuidv4"
           otherwise: 
             type: "any"
-            flags: 
-              presence: "optional"
+            whens: 
+              - 
+                ref: 
+                  path: 
+                    - "trialDate"
+                is: 
+                  type: "any"
+                  flags: 
+                    presence: "required"
+                  invalid: 
+                    - null
+                then: 
+                  type: "string"
+                  flags: 
+                    presence: "required"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
+                      name: "guid"
+                      args: 
+                        options: 
+                          version: 
+                            - "uuidv4"
+                otherwise: 
+                  type: "string"
+                  flags: 
+                    presence: "optional"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
+                      name: "guid"
+                      args: 
+                        options: 
+                          version: 
+                            - "uuidv4"
     trialTime: 
       type: "string"
       flags: 
@@ -71855,25 +71935,5 @@
       flags: 
         presence: "optional"
         description: "Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process)."
-    userId: 
-      type: "string"
-      flags: 
-        presence: "required"
-        description: "The unique ID of the User who added the case to the system."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
 
  ```

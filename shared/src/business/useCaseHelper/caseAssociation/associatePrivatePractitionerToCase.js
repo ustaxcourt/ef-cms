@@ -52,11 +52,18 @@ exports.associatePrivatePractitionerToCase = async ({
 
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+    const representing = [];
+    if (representingPrimary) {
+      representing.push(caseEntity.contactPrimary.contactId);
+    }
+    if (representingSecondary) {
+      representing.push(caseEntity.contactSecondary.contactId);
+    }
+
     caseEntity.attachPrivatePractitioner(
       new PrivatePractitioner({
         ...user,
-        representingPrimary,
-        representingSecondary,
+        representing,
         serviceIndicator,
       }),
     );
@@ -70,9 +77,9 @@ exports.associatePrivatePractitionerToCase = async ({
         SERVICE_INDICATOR_TYPES.SI_NONE;
     }
 
-    await applicationContext.getPersistenceGateway().updateCase({
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
     return caseEntity.toRawObject();

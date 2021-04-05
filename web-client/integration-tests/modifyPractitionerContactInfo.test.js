@@ -1,4 +1,9 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 import { practitionerViewsCaseDetailNoticeOfChangeOfAddress } from './journey/practitionerViewsCaseDetailNoticeOfChangeOfAddress';
 
@@ -9,23 +14,32 @@ describe('Modify Practitioner Contact Information', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   let caseDetail;
   test.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
-    loginAs(test, 'privatePractitioner@example.com');
-    it(`login as a practitioner and create case #${i}`, async () => {
+    loginAs(test, 'privatePractitioner2@example.com');
+    it('login as a practitioner and create 3 cases', async () => {
       caseDetail = await uploadPetition(
         test,
         {},
-        'privatePractitioner@example.com',
+        'privatePractitioner2@example.com',
       );
       expect(caseDetail.docketNumber).toBeDefined();
       test.createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }
 
+  it('waits for elasticsearch', async () => {
+    await refreshElasticsearchIndex();
+  });
+
   practitionerUpdatesAddress(test);
+
   for (let i = 0; i < 3; i++) {
     practitionerViewsCaseDetailNoticeOfChangeOfAddress(test, i);
   }

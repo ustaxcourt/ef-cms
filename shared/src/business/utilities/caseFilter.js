@@ -3,10 +3,12 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { cloneDeep, pick } = require('lodash');
-const { isAssociatedUser } = require('../entities/cases/Case');
+const { isAssociatedUser, isSealedCase } = require('../entities/cases/Case');
 const CASE_ATTRIBUTE_WHITELIST = [
   'docketNumber',
   'docketNumberSuffix',
+  'isPaper',
+  'isSealed',
   'sealedDate',
 ];
 
@@ -18,6 +20,7 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'name',
   'otherFilerType',
   'secondaryName',
+  'serviceIndicator',
   'title',
 ];
 
@@ -58,7 +61,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   ].filter(caseContact => caseContact && caseContact.isAddressSealed);
   caseContactsToBeSealed.forEach(caseContact => {
     const sealedContactAddress = formatSealedAddress(caseContact);
-    Object.keys(caseContact).map(key => delete caseContact[key]);
+    Object.keys(caseContact).forEach(key => delete caseContact[key]);
     Object.assign(caseContact, sealedContactAddress);
   });
   return formattedCase;
@@ -66,13 +69,9 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
 
 const caseSearchFilter = (cases, currentUser) => {
   const caseSearchFilterConditionals = caseRaw =>
-    !caseRaw.sealedDate ||
+    !isSealedCase(caseRaw) ||
     isAssociatedUser({ caseRaw, user: currentUser }) ||
-    isAuthorized(
-      currentUser,
-      ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      caseRaw.userId,
-    );
+    isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE);
   return cases
     .filter(caseSearchFilterConditionals)
     .map(filteredCase =>

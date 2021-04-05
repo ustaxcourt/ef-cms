@@ -1,9 +1,11 @@
 const {
   aggregateCommonQueryParams,
 } = require('../../business/utilities/aggregateCommonQueryParams');
+const {
+  MAX_SEARCH_CLIENT_RESULTS,
+} = require('../../business/entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { search } = require('./searchClient');
-
 /**
  * caseAdvancedSearchInteractor
  *
@@ -25,6 +27,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
     'docketNumberSuffix',
     'docketNumberWithSuffix',
     'irsPractitioners',
+    'isSealed',
     'privatePractitioners',
     'receivedAt',
     'sealedDate',
@@ -42,7 +45,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
             must: [...exactMatchesQuery, ...commonQuery],
           },
         },
-        size: 5000,
+        size: MAX_SEARCH_CLIENT_RESULTS,
       },
       index: 'efcms-case',
     },
@@ -59,6 +62,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
               must: [...nonExactMatchesQuery, ...commonQuery],
             },
           },
+          size: MAX_SEARCH_CLIENT_RESULTS,
         },
         index: 'efcms-case',
       },

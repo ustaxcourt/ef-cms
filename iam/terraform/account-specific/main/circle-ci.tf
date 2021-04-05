@@ -5,8 +5,8 @@ resource "aws_iam_user" "circle_ci" {
 }
 
 resource "aws_iam_user_policy_attachment" "circle_ci_policy_attachment" {
-  user       = "${aws_iam_user.circle_ci.name}"
-  policy_arn = "${aws_iam_policy.circle_ci_policy.arn}"
+  user       = aws_iam_user.circle_ci.name
+  policy_arn = aws_iam_policy.circle_ci_policy.arn
 }
 
 resource "aws_iam_policy" "circle_ci_policy" {
@@ -26,7 +26,12 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "route53:ListHostedZones",
         "route53:ChangeResourceRecordSets",
         "route53:ListTagsForResource",
-        "route53:ListHostedZonesByName"
+        "route53:ListHostedZonesByName",
+        "route53:CreateHealthCheck",
+        "route53:DeleteHealthCheck",
+        "route53:GetHealthCheck",
+        "route53:ListHealthChecks",
+        "route53:UpdateHealthCheck"
       ],
       "Resource": "*"
     },
@@ -52,7 +57,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "sqs:CreateQueue",
         "sqs:SetQueueAttributes",
         "sqs:SendMessageBatch",
-        "sqs:SendMessage"
+        "sqs:SendMessage",
+        "sqs:DeleteQueue"
       ],
       "Resource": "*"
     },
@@ -64,14 +70,12 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cognito-idp:UpdateUserPool",
         "cognito-idp:CreateUserPool",
         "cognito-idp:AdminRespondToAuthChallenge",
-        "cognito-idp:AdminConfirmSignUp",
         "cognito-idp:DescribeUserPool",
         "cognito-idp:CreateUserPoolDomain",
         "cognito-idp:UpdateUserPool",
         "cognito-idp:DescribeUserPoolClient",
         "cognito-idp:AdminInitiateAuth",
         "cognito-idp:AdminDisableUser",
-        "cognito-idp:SignUp",
         "cognito-idp:ListUserPools",
         "cognito-idp:ListUserPoolClients",
         "cognito-idp:CreateUserPoolClient",
@@ -79,7 +83,9 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cognito-idp:SetUICustomization",
         "cognito-idp:DeleteUserPoolDomain",
         "cognito-idp:GetUserPoolMfaConfig",
-        "cognito-idp:SetUserPoolMfaConfig"
+        "cognito-idp:SetUserPoolMfaConfig",
+        "cognito-idp:AdminCreateUser",
+        "cognito-idp:AdminSetUserPassword"
       ],
       "Resource": "*"
     },
@@ -92,7 +98,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "apigateway:PATCH",
         "apigateway:GET",
         "apigateway:PUT",
-        "apigateway:POST"
+        "apigateway:POST",
+        "apigateway:SetWebACL"
       ],
       "Resource": "*"
     },
@@ -225,6 +232,16 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-work-items-*-lambdaRole",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*"
+      ]
+    },
+    {
+      "Sid": "WAFv2",
+      "Effect": "Allow",
+      "Action": [
+        "wafv2:*"
+      ],
+      "Resource": [
+        "*"
       ]
     }
   ]

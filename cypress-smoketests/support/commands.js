@@ -1,5 +1,6 @@
-/* eslint-disable jsdoc/require-returns */
-/* eslint-disable promise/no-nesting */
+/* eslint-disable */
+import { b64toBlob } from '../../cypress/support/helpers';
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -40,11 +41,7 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(testFile);
         el.files = dataTransfer.files;
-        if (subject.is(':visible')) {
-          return cy.wrap(subject).trigger('change', { force: true });
-        } else {
-          return cy.wrap(subject);
-        }
+        return cy.wrap(subject).trigger('change', { force: true });
       });
     });
   });
@@ -57,26 +54,3 @@ Cypress.Commands.add('goToRoute', (...args) => {
     w.__cy_route(...args);
   });
 });
-
-/**
- * @param b64Data
- * @param contentType
- * @param sliceSize
- */
-function b64toBlob(b64Data, contentType, sliceSize) {
-  contentType = contentType || '';
-  sliceSize = sliceSize || 512;
-  const byteCharacters = atob(b64Data);
-  const byteArrays = [];
-  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    const slice = byteCharacters.slice(offset, offset + sliceSize);
-    const byteNumbers = new Array(slice.length);
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
-    }
-    byteArrays.push(new Uint8Array(byteNumbers));
-  }
-  const blob = new Blob(byteArrays, { type: contentType });
-  blob.lastModifiedDate = new Date();
-  return blob;
-}

@@ -7,7 +7,11 @@ const documentViewerHelper = withAppContextDecorator(
   documentViewerHelperComputed,
   applicationContext,
 );
+
 describe('documentViewerHelper', () => {
+  const DOCKET_NUMBER = '101-20';
+  const DOCKET_ENTRY_ID = 'b8947b11-19b3-4c96-b7a1-fa6a5654e2d5';
+
   beforeAll(() => {
     applicationContext.getCurrentUser = jest.fn().mockReturnValue({
       role: 'docketclerk',
@@ -295,6 +299,60 @@ describe('documentViewerHelper', () => {
 
       expect(result.showNotServed).toEqual(false);
     });
+
+    it('should be false when the document is a legacy served document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                isLegacyServed: true,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showNotServed).toEqual(false);
+    });
+
+    it('should be true when the document is not a legacy served document and has no servedAt date', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                isLegacyServed: false,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showNotServed).toEqual(true);
+    });
   });
 
   describe('showServeCourtIssuedDocumentButton', () => {
@@ -334,7 +392,7 @@ describe('documentViewerHelper', () => {
               {
                 docketEntryId,
                 documentTitle: 'Some Stuff',
-                documentType: 'Petition',
+                documentType: 'Miscellaneous',
                 eventCode: 'P',
                 isOnDocketRecord: true,
               },
@@ -404,6 +462,60 @@ describe('documentViewerHelper', () => {
       });
 
       expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
+    });
+
+    it('should be false when the document is a legacy served document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                isLegacyServed: true,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(false);
+    });
+
+    it('should be true when the document is not a legacy served document and has no servedAt date', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Some Stuff',
+                documentType: 'Order',
+                eventCode: 'O',
+                isLegacyServed: false,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toEqual(true);
     });
   });
 
@@ -513,6 +625,60 @@ describe('documentViewerHelper', () => {
       });
 
       expect(result.showServePaperFiledDocumentButton).toEqual(false);
+    });
+
+    it('should be false when the document is a legacy served document', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Entry of Appearance',
+                documentType: 'Entry of Appearance',
+                eventCode: 'EA',
+                isLegacyServed: true,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toEqual(false);
+    });
+
+    it('should be true when the document is not a legacy served document and has no servedAt date', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                docketEntryId,
+                documentTitle: 'Entry of Appearance',
+                documentType: 'Entry of Appearance',
+                eventCode: 'EA',
+                isLegacyServed: false,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {
+            SERVE_DOCUMENT: true,
+          },
+          viewerDocumentToDisplay: {
+            docketEntryId,
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toEqual(true);
     });
   });
 
@@ -627,7 +793,7 @@ describe('documentViewerHelper', () => {
       expect(result.showSignStipulatedDecisionButton).toEqual(true);
     });
 
-    it('should be undefined if the eventCode is PSDE and the PSDE is not served', () => {
+    it('should be true if the eventCode is PSDE, the PSDE is legacy served, and the SDEC eventCode is not in the documents', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           caseDetail: {
@@ -638,6 +804,7 @@ describe('documentViewerHelper', () => {
                 documentType: 'Proposed Stipulated Decision',
                 entityName: 'Document',
                 eventCode: 'PSDE',
+                isLegacyServed: true,
                 isOnDocketRecord: true,
               },
             ],
@@ -649,7 +816,33 @@ describe('documentViewerHelper', () => {
         },
       });
 
-      expect(result.showSignStipulatedDecisionButton).toBeUndefined();
+      expect(result.showSignStipulatedDecisionButton).toEqual(true);
+    });
+
+    it('should be undefined if the eventCode is PSDE and the PSDE is not served', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isLegacyServed: false,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          permissions: {},
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showSignStipulatedDecisionButton).toBeFalsy();
     });
 
     it('should be true if the document code is PSDE, the PSDE is served, and an archived SDEC eventCode is in the documents', () => {
@@ -743,6 +936,116 @@ describe('documentViewerHelper', () => {
     });
   });
 
+  describe('showCompleteQcButton', () => {
+    it('should be true if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isOnDocketRecord: true,
+                servedAt: '2019-08-25T05:00:00.000Z',
+                workItem: {},
+              },
+            ],
+          },
+          permissions: { EDIT_DOCKET_ENTRY: true },
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showCompleteQcButton).toBeTruthy();
+    });
+
+    it('should be false if the user does not have EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isOnDocketRecord: true,
+                servedAt: '2019-08-25T05:00:00.000Z',
+                workItem: {},
+              },
+            ],
+          },
+          permissions: {},
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showCompleteQcButton).toBeFalsy();
+    });
+
+    it('should be false if the user has EDIT_DOCKET_ENTRY permissions and the docket entry does not have an incomplete work item', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isOnDocketRecord: true,
+                servedAt: '2019-08-25T05:00:00.000Z',
+              },
+            ],
+          },
+          permissions: { EDIT_DOCKET_ENTRY: true },
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showCompleteQcButton).toBeFalsy();
+    });
+
+    it('should be false if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item but is in progress', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          caseDetail: {
+            correspondence: [],
+            docketEntries: [
+              {
+                docketEntryId: '123',
+                documentType: 'Proposed Stipulated Decision',
+                entityName: 'Document',
+                eventCode: 'PSDE',
+                isFileAttached: false,
+                isOnDocketRecord: true,
+                servedAt: '2019-08-25T05:00:00.000Z',
+                workItem: {},
+              },
+            ],
+          },
+          permissions: { EDIT_DOCKET_ENTRY: true },
+          viewerDocumentToDisplay: {
+            docketEntryId: '123',
+          },
+        },
+      });
+
+      expect(result.showCompleteQcButton).toBeFalsy();
+    });
+  });
+
   it('should show stricken information if the associated document has been stricken', () => {
     const result = runCompute(documentViewerHelper, {
       state: {
@@ -796,5 +1099,113 @@ describe('documentViewerHelper', () => {
     });
 
     expect(result.showStricken).toEqual(true);
+  });
+
+  it('should return documentViewerLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        permissions: {},
+        viewerDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.documentViewerLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/document-view?docketEntryId=${DOCKET_ENTRY_ID}`,
+    );
+  });
+
+  it('should return completeQcLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        permissions: {},
+        viewerDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.completeQcLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/documents/${DOCKET_ENTRY_ID}/edit`,
+    );
+  });
+
+  it('should return reviewAndServePetitionLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        permissions: {},
+        viewerDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.reviewAndServePetitionLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/petition-qc/document-view/${DOCKET_ENTRY_ID}`,
+    );
+  });
+
+  it('should return signStipulatedDecisionLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: DOCKET_ENTRY_ID,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+              index: 1,
+              isOnDocketRecord: true,
+            },
+          ],
+          docketNumber: DOCKET_NUMBER,
+        },
+        permissions: {},
+        viewerDocumentToDisplay: {
+          docketEntryId: DOCKET_ENTRY_ID,
+        },
+      },
+    });
+
+    expect(result.signStipulatedDecisionLink).toEqual(
+      `/case-detail/${DOCKET_NUMBER}/edit-order/${DOCKET_ENTRY_ID}/sign`,
+    );
   });
 });

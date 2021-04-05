@@ -10,13 +10,11 @@ exports.getPublicCaseLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      return await applicationContext.getUseCases().getPublicCaseInteractor({
-        applicationContext,
-        docketNumber: event.pathParameters.docketNumber,
-      });
+      return await applicationContext
+        .getUseCases()
+        .getPublicCaseInteractor(applicationContext, {
+          docketNumber: event.pathParameters.docketNumber,
+        });
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );

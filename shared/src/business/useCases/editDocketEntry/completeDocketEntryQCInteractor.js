@@ -7,43 +7,64 @@ const {
 const {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_RELATIONSHIPS,
-  NOTICE_OF_DOCKET_CHANGE,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../../entities/EntityConstants');
 const {
-  formatDocketEntry,
-  getFilingsAndProceedings,
-} = require('../../utilities/getFormattedCaseDetail');
-const {
   generateNoticeOfDocketChangePdf,
 } = require('../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf');
+const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../utilities/getDocumentTitleWithAdditionalInfo');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
+const { dateStringsCompared } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getDocumentTitle } = require('../../utilities/getDocumentTitle');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
+
+const getNeedsNewCoversheet = ({ currentDocketEntry, updatedDocketEntry }) => {
+  const receivedAtUpdated =
+    dateStringsCompared(
+      currentDocketEntry.receivedAt,
+      updatedDocketEntry.receivedAt,
+    ) !== 0;
+  const certificateOfServiceUpdated =
+    currentDocketEntry.certificateOfService !==
+    updatedDocketEntry.certificateOfService;
+  const documentTitleUpdated =
+    getDocumentTitleWithAdditionalInfo({ docketEntry: currentDocketEntry }) !==
+    getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocketEntry });
+
+  return (
+    receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
+  );
+};
+
+exports.getNeedsNewCoversheet = getNeedsNewCoversheet;
 
 /**
  * completeDocketEntryQCInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.entryMetadata the entry metadata
  * @returns {object} the updated case after the documents are added
  */
-exports.completeDocketEntryQCInteractor = async ({
+exports.completeDocketEntryQCInteractor = async (
   applicationContext,
-  entryMetadata,
-}) => {
+  { entryMetadata },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const { PDFDocument } = await applicationContext.getPdfLib();
@@ -124,31 +145,20 @@ exports.completeDocketEntryQCInteractor = async ({
   ).validate();
   updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = updatedDocketEntry.documentTitle;
-  if (updatedDocketEntry.additionalInfo) {
-    updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo}`;
-  }
-  updatedDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocketEntry(applicationContext, updatedDocketEntry),
-  )}`;
-  if (updatedDocketEntry.additionalInfo2) {
-    updatedDocumentTitle += ` ${updatedDocketEntry.additionalInfo2}`;
-  }
+  let updatedDocumentTitle = getDocumentTitle({
+    applicationContext,
+    docketEntry: updatedDocketEntry,
+  });
 
-  let currentDocumentTitle = currentDocketEntry.documentTitle;
-  if (currentDocketEntry.additionalInfo) {
-    currentDocumentTitle += ` ${currentDocketEntry.additionalInfo}`;
-  }
-  currentDocumentTitle += ` ${getFilingsAndProceedings(
-    formatDocketEntry(applicationContext, currentDocketEntry),
-  )}`;
-  if (currentDocketEntry.additionalInfo2) {
-    currentDocumentTitle += ` ${currentDocketEntry.additionalInfo2}`;
-  }
+  let currentDocumentTitle = getDocumentTitle({
+    applicationContext,
+    docketEntry: currentDocketEntry,
+  });
 
-  const needsNewCoversheet =
-    updatedDocketEntry.additionalInfo !== currentDocketEntry.additionalInfo ||
-    updatedDocumentTitle !== currentDocumentTitle;
+  const needsNewCoversheet = getNeedsNewCoversheet({
+    currentDocketEntry,
+    updatedDocketEntry,
+  });
 
   const needsNoticeOfDocketChange =
     updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||
@@ -293,10 +303,10 @@ exports.completeDocketEntryQCInteractor = async ({
 
     let noticeUpdatedDocketEntry = new DocketEntry(
       {
-        ...NOTICE_OF_DOCKET_CHANGE,
+        ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
         docketEntryId: noticeDocketEntryId,
         documentTitle: replaceBracketed(
-          NOTICE_OF_DOCKET_CHANGE.documentTitle,
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
           docketChangeInfo.docketEntryIndex,
         ),
         isFileAttached: true,
@@ -343,63 +353,32 @@ exports.completeDocketEntryQCInteractor = async ({
       key: noticeUpdatedDocketEntry.docketEntryId,
     });
 
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
-      caseEntity,
-      docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
-      servedParties,
-    });
-
-    if (servedParties.paper.length > 0) {
-      const noticeDoc = await PDFDocument.load(newPdfData);
-      let newPdfDoc = await PDFDocument.create();
-
-      await applicationContext
-        .getUseCaseHelpers()
-        .appendPaperServiceAddressPageToPdf({
-          applicationContext,
-          caseEntity,
-          newPdfDoc,
-          noticeDoc,
-          servedParties,
-        });
-
-      const paperServicePdfData = await newPdfDoc.save();
-      const paperServicePdfId = applicationContext.getUniqueId();
-
-      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    const paperServiceResult = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
         applicationContext,
-        document: paperServicePdfData,
-        key: paperServicePdfId,
-        useTempBucket: true,
+        caseEntity,
+        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
       });
 
-      const {
-        url,
-      } = await applicationContext
-        .getPersistenceGateway()
-        .getDownloadPolicyUrl({
-          applicationContext,
-          key: paperServicePdfId,
-          useTempBucket: true,
-        });
-
-      paperServicePdfUrl = url;
+    if (servedParties.paper.length > 0) {
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
       paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
     }
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   if (needsNewCoversheet) {
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseEntity.docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+      });
   }
 
   return {

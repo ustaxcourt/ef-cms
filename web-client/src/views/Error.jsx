@@ -4,11 +4,11 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const Error = connect(
+export const ErrorView = connect(
   {
     alertHelper: state.alertHelper,
   },
-  function Error({ alertHelper }) {
+  function ErrorView({ alertHelper }) {
     return (
       <>
         <BigHeader text="Error 404" />

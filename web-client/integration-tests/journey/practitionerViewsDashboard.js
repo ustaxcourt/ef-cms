@@ -1,5 +1,8 @@
+import { refreshElasticsearchIndex } from '../helpers';
+
 export const practitionerViewsDashboard = test => {
   return it('Practitioner views dashboard', async () => {
+    await refreshElasticsearchIndex();
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardPractitioner');
     expect(test.getState('openCases').length).toBeGreaterThan(0);

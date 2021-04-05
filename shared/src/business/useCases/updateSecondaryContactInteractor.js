@@ -16,17 +16,16 @@ const { WorkItem } = require('../entities/WorkItem');
 /**
  * updateSecondaryContactInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update the secondary contact
  * @param {object} providers.contactInfo the contact info to update on the case
  * @returns {object} the updated case
  */
-exports.updateSecondaryContactInteractor = async ({
+exports.updateSecondaryContactInteractor = async (
   applicationContext,
-  contactInfo,
-  docketNumber,
-}) => {
+  { contactInfo, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   const editableFields = {
@@ -61,9 +60,9 @@ exports.updateSecondaryContactInteractor = async ({
     { applicationContext },
   );
 
-  const userIsAssociated = applicationContext
-    .getUseCases()
-    .userIsAssociated({ applicationContext, caseDetail: caseToUpdate, user });
+  const userIsAssociated = caseEntity.isAssociatedUser({
+    user,
+  });
 
   if (!userIsAssociated) {
     throw new UnauthorizedError('Unauthorized for update case contact');
@@ -76,7 +75,10 @@ exports.updateSecondaryContactInteractor = async ({
       oldData: caseToUpdate.contactSecondary,
     });
 
-  if (changeOfAddressDocumentTypeToGenerate) {
+  if (
+    !caseEntity.contactSecondary.isAddressSealed &&
+    changeOfAddressDocumentTypeToGenerate
+  ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
     const changeOfAddressPdf = await applicationContext
@@ -131,28 +133,48 @@ exports.updateSecondaryContactInteractor = async ({
       servedParties,
     });
 
-    const workItem = new WorkItem(
-      {
-        assigneeId: null,
-        assigneeName: null,
-        associatedJudge: caseEntity.associatedJudge,
-        caseIsInProgress: caseEntity.inProgress,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
-        docketEntry: {
-          ...changeOfAddressDocketEntry.toRawObject(),
-          createdAt: changeOfAddressDocketEntry.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        section: DOCKET_SECTION,
-        sentBy: user.name,
-        sentByUserId: user.userId,
-      },
-      { applicationContext },
-    );
+    let privatePractitionersRepresentingSecondaryContact = false;
+    for (const privatePractitioner of caseEntity.privatePractitioners) {
+      const practitionerRepresentingSecondary = privatePractitioner.getRepresentingSecondary(
+        caseEntity,
+      );
+      if (practitionerRepresentingSecondary) {
+        privatePractitionersRepresentingSecondaryContact = true;
+        break;
+      }
+    }
 
-    changeOfAddressDocketEntry.setWorkItem(workItem);
+    if (!privatePractitionersRepresentingSecondaryContact) {
+      const workItem = new WorkItem(
+        {
+          assigneeId: null,
+          assigneeName: null,
+          associatedJudge: caseEntity.associatedJudge,
+          caseIsInProgress: caseEntity.inProgress,
+          caseStatus: caseEntity.status,
+          caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+          docketEntry: {
+            ...changeOfAddressDocketEntry.toRawObject(),
+            createdAt: changeOfAddressDocketEntry.createdAt,
+          },
+          docketNumber: caseEntity.docketNumber,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+          section: DOCKET_SECTION,
+          sentBy: user.name,
+          sentByUserId: user.userId,
+        },
+        { applicationContext },
+      );
+
+      changeOfAddressDocketEntry.setWorkItem(workItem);
+
+      await applicationContext
+        .getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox({
+          applicationContext,
+          workItem: workItem.validate().toRawObject(),
+        });
+    }
 
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
@@ -175,14 +197,7 @@ exports.updateSecondaryContactInteractor = async ({
       document: changeOfAddressPdfWithCover,
       key: newDocketEntryId,
     });
-
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    });
   }
-
-  const validatedCaseEntity = caseEntity.validate().toRawObject();
 
   const contactDiff = applicationContext.getUtilities().getAddressPhoneDiff({
     newData: editableFields,
@@ -193,11 +208,11 @@ exports.updateSecondaryContactInteractor = async ({
     !isEmpty(contactDiff) || changeOfAddressDocumentTypeToGenerate;
 
   if (shouldUpdateCase) {
-    await applicationContext.getPersistenceGateway().updateCase({
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: validatedCaseEntity,
+      caseToUpdate: caseEntity,
     });
   }
 
-  return validatedCaseEntity;
+  return caseEntity.toRawObject();
 };

@@ -21,7 +21,6 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const docketNumber = get(state.caseDetail.docketNumber);
 
     isAssociated = some(caseDetailPractitioners, { userId: user.userId });
-
     if (!isAssociated) {
       pendingAssociation = await applicationContext
         .getUseCases()
@@ -33,16 +32,26 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     }
   } else if (user.role === USER_ROLES.irsPractitioner) {
     const caseDetailRespondents = get(state.caseDetail.irsPractitioners);
+
     isAssociated = some(caseDetailRespondents, { userId: user.userId });
   } else if (user.role === USER_ROLES.petitioner) {
-    const caseUserId = get(state.caseDetail.userId);
-    isAssociated = caseUserId === user.userId;
-  } else if (user.role === USER_ROLES.irsSuperuser) {
-    const documents = get(state.caseDetail.docketEntries);
+    const caseContactPrimaryId = get(state.caseDetail.contactPrimary.contactId);
+    const caseContactSecondaryId = get(
+      state.caseDetail.contactSecondary.contactId,
+    );
 
-    const isPetitionServed = !!documents.find(
+    isAssociated =
+      caseContactPrimaryId === user.userId ||
+      (!!caseContactSecondaryId && caseContactSecondaryId === user.userId);
+  } else if (user.role === USER_ROLES.irsSuperuser) {
+    const docketEntries = get(state.caseDetail.docketEntries);
+    const petitionDocketEntry = docketEntries.find(
       doc => doc.documentType === 'Petition',
-    ).servedAt;
+    );
+    const isPetitionServed = applicationContext
+      .getUtilities()
+      .isServed(petitionDocketEntry);
+
     isAssociated = isPetitionServed;
   }
 

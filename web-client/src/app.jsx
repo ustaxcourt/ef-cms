@@ -1,4 +1,5 @@
 import { AppComponent } from './views/AppComponent';
+import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import {
@@ -62,12 +63,14 @@ import { faLaptop } from '@fortawesome/free-solid-svg-icons/faLaptop';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons/faLongArrowAltUp';
 import { faMailBulk } from '@fortawesome/free-solid-svg-icons/faMailBulk';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons/faMinusCircle';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons/faPaperPlane';
 import { faPaperclip } from '@fortawesome/free-solid-svg-icons/faPaperclip';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
+import { faPhone } from '@fortawesome/free-solid-svg-icons/faPhone';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
@@ -107,7 +110,6 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
-    applicationContext.initHoneybadger();
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
@@ -200,12 +202,14 @@ const app = {
       faLink,
       faListUl,
       faLock,
+      faLongArrowAltUp,
       faMailBulk,
       faMinus,
       faMinusCircle,
       faPaperclip,
       faPaperPlane,
       faPencilAlt,
+      faPhone,
       faPlus,
       faPlusCircle,
       faPrint,
@@ -253,15 +257,22 @@ const app = {
     const cerebralApp = App(presenter, debugTools);
 
     router.initialize(cerebralApp, route);
-    initializeSocketProvider(cerebralApp);
+    initializeSocketProvider(cerebralApp, applicationContext);
 
     ReactDOM.render(
       <Container app={cerebralApp}>
-        <IdleActivityMonitor />
+        {!process.env.CI && (
+          <>
+            <IdleActivityMonitor />
+            <AppInstanceManager />
+          </>
+        )}
+
         <AppComponent />
+
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      document.querySelector('#app'),
+      window.document.querySelector('#app'),
     );
   },
 };

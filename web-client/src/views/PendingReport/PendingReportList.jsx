@@ -1,41 +1,59 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PendingReportList = connect(
   {
     formattedPendingItems: state.formattedPendingItems,
+    loadMorePendingItemsSequence: sequences.loadMorePendingItemsSequence,
+    pendingReportListHelper: state.pendingReportListHelper,
+    setPendingReportSelectedJudgeSequence:
+      sequences.setPendingReportSelectedJudgeSequence,
   },
-  function PendingReportList({ formattedPendingItems }) {
+  function PendingReportList({
+    formattedPendingItems,
+    loadMorePendingItemsSequence,
+    pendingReportListHelper,
+    setPendingReportSelectedJudgeSequence,
+  }) {
     return (
-      <React.Fragment>
+      <>
         <div className="grid-row margin-bottom-2">
-          <div className="tablet:grid-col-7">
+          <div className="tablet:grid-col-8">
             <div className="grid-row grid-gap">
-              <div className="grid-col-3 tablet:grid-col-2 padding-top-05">
-                <h3 id="filterHeading">Filter by</h3>
-              </div>
-              <div className="grid-col-3">
-                <BindedSelect
-                  aria-describedby="case-deadlines-tab filterHeading"
-                  aria-label="judge"
-                  bind="screenMetadata.pendingItemsFilters.judge"
-                  className="select-left"
-                  id="judgeFilter"
-                  name="judge"
-                >
-                  <option value="">-Judge-</option>
-                  {formattedPendingItems.judges.map((judge, idx) => (
-                    <option key={idx} value={judge}>
-                      {judge}
-                    </option>
-                  ))}
-                </BindedSelect>
-              </div>
+              <h3 id="filterHeading">Show items for</h3>
+              <BindedSelect
+                aria-describedby="case-deadlines-tab filterHeading"
+                aria-label="judge"
+                bind="screenMetadata.pendingItemsFilters.judge"
+                className="select-left"
+                id="judgeFilter"
+                name="judge"
+                onChange={judge =>
+                  setPendingReportSelectedJudgeSequence({
+                    judge,
+                  })
+                }
+              >
+                <option value="">-Judge-</option>
+                {formattedPendingItems.judges.map(judge => (
+                  <option key={`pending-judge-${judge}`} value={judge}>
+                    {judge}
+                  </option>
+                ))}
+              </BindedSelect>
             </div>
           </div>
+          {pendingReportListHelper.hasPendingItemsResults && (
+            <div className="grid-col-4 text-right margin-top-1">
+              <span className="text-semibold">
+                Count: {pendingReportListHelper.searchResultsCount}
+              </span>
+            </div>
+          )}
         </div>
 
         <table
@@ -54,8 +72,8 @@ export const PendingReportList = connect(
               <th>Judge</th>
             </tr>
           </thead>
-          {formattedPendingItems.items.map((item, idx) => (
-            <tbody key={idx}>
+          {formattedPendingItems.items.map(item => (
+            <tbody key={`pending-item-${item.docketEntryId}`}>
               <tr className="pending-item-row">
                 <td>
                   <CaseLink formattedCase={item} />
@@ -63,11 +81,7 @@ export const PendingReportList = connect(
                 <td>{item.formattedFiledDate}</td>
                 <td>{item.caseTitle}</td>
                 <td>
-                  <a
-                    href={`/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`}
-                  >
-                    {item.formattedName}
-                  </a>
+                  <a href={item.documentLink}>{item.formattedName}</a>
                 </td>
                 <td>{item.status}</td>
                 <td>{item.associatedJudgeFormatted}</td>
@@ -75,10 +89,31 @@ export const PendingReportList = connect(
             </tbody>
           ))}
         </table>
-        {formattedPendingItems.items.length === 0 && (
+
+        {pendingReportListHelper.showLoading && (
+          <p>Loading pending reports...</p>
+        )}
+
+        {pendingReportListHelper.showNoPendingItems && (
           <p>There is nothing pending.</p>
         )}
-      </React.Fragment>
+
+        {pendingReportListHelper.showSelectJudgeText && (
+          <p>Select a judge to view their pending items.</p>
+        )}
+
+        {pendingReportListHelper.showLoadMore && (
+          <Button
+            secondary
+            className="margin-bottom-20"
+            onClick={() => {
+              loadMorePendingItemsSequence();
+            }}
+          >
+            Load More
+          </Button>
+        )}
+      </>
     );
   },
 );

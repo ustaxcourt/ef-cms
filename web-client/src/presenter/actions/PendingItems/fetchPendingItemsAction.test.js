@@ -8,7 +8,10 @@ presenter.providers.applicationContext = applicationContextForClient;
 describe('fetchPendingItemsAction', () => {
   applicationContextForClient
     .getUseCases()
-    .fetchPendingItemsInteractor.mockResolvedValue(['some content']);
+    .fetchPendingItemsInteractor.mockResolvedValue({
+      foundDocuments: ['some content'],
+      total: 10,
+    });
 
   it('updates pendingItems', async () => {
     const result = await runAction(fetchPendingItemsAction, {
@@ -24,5 +27,6 @@ describe('fetchPendingItemsAction', () => {
       applicationContextForClient.getUseCases().fetchPendingItemsInteractor,
     ).toBeCalled();
     expect(result.output.pendingItems).toEqual(['some content']);
+    expect(result.output.total).toEqual(10);
   });
 });

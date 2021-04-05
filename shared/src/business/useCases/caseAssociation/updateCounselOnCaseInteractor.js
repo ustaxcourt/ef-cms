@@ -12,19 +12,17 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * updateCounselOnCaseInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case the user is attached to
  * @param {object} providers.userData the data being updated on the user
  * @param {string} providers.userId the id of the user to be updated on the case
  * @returns {Promise} the promise of the update case call
  */
-exports.updateCounselOnCaseInteractor = async ({
+exports.updateCounselOnCaseInteractor = async (
   applicationContext,
-  docketNumber,
-  userData,
-  userId,
-}) => {
+  { docketNumber, userData, userId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   const editableFields = {
@@ -54,7 +52,16 @@ exports.updateCounselOnCaseInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
+    const representing = [];
+    if (editableFields.representingPrimary) {
+      representing.push(caseEntity.contactPrimary.contactId);
+    }
+    if (editableFields.representingSecondary) {
+      representing.push(caseEntity.contactSecondary.contactId);
+    }
+
     caseEntity.updatePrivatePractitioner({
+      representing,
       userId,
       ...editableFields,
     });
@@ -76,10 +83,10 @@ exports.updateCounselOnCaseInteractor = async ({
   }
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

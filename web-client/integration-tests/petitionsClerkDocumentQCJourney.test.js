@@ -1,4 +1,9 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerkBulkAssignsCases } from './journey/petitionsClerkBulkAssignsCases';
 import { petitionsClerkGetsMyDocumentQCInboxCount } from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
 import { petitionsClerkGetsSectionDocumentQCInboxCount } from './journey/petitionsClerkGetsSectionDocumentQCInboxCount';
@@ -11,6 +16,10 @@ const test = setupTest();
 describe('Petitions Clerk Document QC Journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   const createdCases = [];
@@ -31,6 +40,10 @@ describe('Petitions Clerk Document QC Journey', () => {
       createdCases.push(caseDetail);
     });
   }
+
+  it('refresh elasticsearch index', async () => {
+    await refreshElasticsearchIndex();
+  });
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsSectionDocumentQC(test);

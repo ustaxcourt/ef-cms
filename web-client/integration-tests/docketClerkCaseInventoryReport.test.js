@@ -1,6 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from '../src/presenter/computeds/caseInventoryReportHelper';
-1;
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
@@ -26,6 +25,7 @@ describe('case inventory report journey', () => {
 
   const initialCaseInventoryCounts = {};
   const createdDocketNumbers = [];
+  // eslint-disable-next-line @miovision/disallow-date/no-static-date
   const trialLocation = `Indianapolis, Indiana, ${Date.now()}`;
 
   loginAs(test, 'docketclerk@example.com');
@@ -106,7 +106,7 @@ describe('case inventory report journey', () => {
     },
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test, { trialLocation });
+  docketClerkViewsTrialSessionList(test);
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkSetsATrialSessionsSchedule(test);
 

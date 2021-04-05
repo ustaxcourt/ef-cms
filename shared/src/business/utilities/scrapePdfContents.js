@@ -28,7 +28,7 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
 
       for (let item of pageTextContent.items) {
         if (lastY === item.transform[5] || !lastY) {
-          pageText += item.str;
+          pageText += ' ' + item.str;
         } else {
           pageText += '\n' + item.str;
         }
@@ -36,14 +36,16 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
       }
 
       if (!isEmpty(pageText)) {
-        scrapedText = `${scrapedText}\n\n${pageText}`;
+        scrapedText += '\n\n' + pageText;
       }
     }
 
     return scrapedText;
   } catch (e) {
     const pdfjsVersion = pdfjsLib && pdfjsLib.version;
-    throw new Error(`Error scraping PDF with PDF.JS v${pdfjsVersion}`);
+    throw new Error(
+      `Error scraping PDF with PDF.JS v${pdfjsVersion} ${e.message}`,
+    );
   }
 };
 

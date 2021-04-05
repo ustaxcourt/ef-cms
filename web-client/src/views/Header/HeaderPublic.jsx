@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import close from '../../../../node_modules/uswds/dist/img/close.svg';
+import closeImg from '../../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../../images/ustc_seal.svg';
 
 const BetaBar = toggleBetaBarSequence => {
@@ -23,7 +23,7 @@ const BetaBar = toggleBetaBarSequence => {
               <img
                 alt="close"
                 className="ustc-icon-square--small"
-                src={close}
+                src={closeImg}
               />
             </button>
           </div>
@@ -36,7 +36,7 @@ const BetaBar = toggleBetaBarSequence => {
 export const HeaderPublic = connect(
   {
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
-    showBetaBar: state.header.showBetaBar,
+    showBetaBar: state.templateHelper.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
   function HeaderPublic({
@@ -59,9 +59,7 @@ export const HeaderPublic = connect(
                     <img alt="USTC Seal" src={seal} />
                   </a>
                 </div>
-                <h1 className="header-welcome-public">
-                  Welcome to the U.S. Tax Court’s Case Management System
-                </h1>
+                <h1 className="header-welcome-public">Welcome to DAWSON</h1>
                 <div className="login-container">
                   <Button
                     className="usa-button--unstyled"

@@ -11,9 +11,6 @@ const {
 const {
   fileExternalDocumentInteractor,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
-const {
-  getDocumentQCInboxForSectionInteractor,
-} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -23,21 +20,26 @@ const { User } = require('../entities/User');
 describe('fileExternalDocumentInteractor integration test', () => {
   const CREATED_DATE = '2019-03-01T22:54:06.000Z';
   const CREATED_YEAR = '2019';
+  const PETITIONER_USER_ID = '9bf6b51f-8584-4040-afe7-933985728fcf';
+
+  const petitionerUser = {
+    name: 'Test Petitioner',
+    role: ROLES.petitioner,
+    userId: PETITIONER_USER_ID,
+  };
 
   beforeEach(() => {
     window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
     window.Date.prototype.getFullYear = jest.fn().mockReturnValue(CREATED_YEAR);
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Test Petitioner',
-      role: ROLES.petitioner,
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(petitionerUser);
   });
 
   it('should attach the expected documents to the case', async () => {
-    const { docketNumber } = await createCaseInteractor({
-      applicationContext,
+    const { docketNumber } = await createCaseInteractor(applicationContext, {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseCaption: 'Caption',
@@ -64,8 +66,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         attachments: false,
         certificateOfService: false,
@@ -116,8 +117,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       },
     });
 
-    const caseAfterDocument = await getCaseInteractor({
-      applicationContext,
+    const caseAfterDocument = await getCaseInteractor(applicationContext, {
       docketNumber,
     });
 
@@ -136,13 +136,12 @@ describe('fileExternalDocumentInteractor integration test', () => {
         postalCode: '89614',
         state: 'AL',
       },
-      contactSecondary: {},
       docketEntries: [
         {
           docketEntryId: '92eac064-9ca5-4c56-80a0-c5852c752277',
           documentType: 'Petition',
           filedBy: 'Petr. Test Petitioner',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: PETITIONER_USER_ID,
           workItem: {
             assigneeId: null,
             assigneeName: null,
@@ -151,7 +150,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
               docketEntryId: '92eac064-9ca5-4c56-80a0-c5852c752277',
               documentType: 'Petition',
               filedBy: 'Petr. Test Petitioner',
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
             docketNumber,
             docketNumberWithSuffix: '101-19S',
@@ -165,13 +163,13 @@ describe('fileExternalDocumentInteractor integration test', () => {
           docketEntryId: expect.anything(),
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: PETITIONER_USER_ID,
         },
         {
           docketEntryId: '72de0fac-f63c-464f-ac71-0f54fd248484',
           documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
           filedBy: 'Petr. Test Petitioner',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: PETITIONER_USER_ID,
         },
         {
           attachments: false,
@@ -187,25 +185,16 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           scenario: 'Nonstandard H',
           supportingDocument: 'Brief in Support',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: PETITIONER_USER_ID,
           workItem: {
             assigneeId: null,
             assigneeName: null,
             caseStatus: CASE_STATUS_TYPES.new,
             docketEntry: {
-              attachments: false,
-              certificateOfService: false,
-              certificateOfServiceDate: '2020-06-12T08:09:45.129Z',
               docketEntryId: '12de0fac-f63c-464f-ac71-0f54fd248484',
-              docketNumber,
               documentTitle:
                 'Motion for Leave to File Brief in Support of Petition',
               documentType: 'Motion for Leave to File',
-              hasSupportingDocuments: true,
-              partyPrimary: true,
-              scenario: 'Nonstandard H',
-              supportingDocument: 'Brief in Support',
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
             docketNumber,
             docketNumberWithSuffix: '101-19S',
@@ -224,7 +213,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             documentType: 'Amended',
           },
           scenario: 'Nonstandard A',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: PETITIONER_USER_ID,
           workItem: {
             assigneeId: null,
             assigneeName: null,
@@ -233,13 +222,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
               docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Amended Answer',
               documentType: 'Brief in Support',
-              partyPrimary: true,
-              previousDocument: {
-                documentTitle: 'Amended Answer',
-                documentType: 'Amended',
-              },
-              scenario: 'Nonstandard A',
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
             docketNumber,
             docketNumberWithSuffix: '101-19S',
@@ -257,7 +239,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           previousDocument: { documentType: 'Petition' },
           scenario: 'Nonstandard A',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: PETITIONER_USER_ID,
           workItem: {
             assigneeId: null,
             assigneeName: null,
@@ -266,11 +248,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
               docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Petition',
               documentType: 'Brief in Support',
-              lodged: true,
-              partyPrimary: true,
-              previousDocument: { documentType: 'Petition' },
-              scenario: 'Nonstandard A',
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
             docketNumber,
             docketNumberWithSuffix: '101-19S',
@@ -291,7 +268,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             documentType: 'Amended',
           },
           scenario: 'Nonstandard A',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: PETITIONER_USER_ID,
           workItem: {
             assigneeId: null,
             assigneeName: null,
@@ -300,14 +277,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
               docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Amended Answer',
               documentType: 'Brief in Support',
-              lodged: true,
-              partyPrimary: true,
-              previousDocument: {
-                documentTitle: 'Amended Answer',
-                documentType: 'Amended',
-              },
-              scenario: 'Nonstandard A',
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
             docketNumber,
             docketNumberWithSuffix: '101-19S',
@@ -335,7 +304,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
       privatePractitioners: [],
       procedureType: 'Small',
       status: CASE_STATUS_TYPES.new,
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     applicationContext.getCurrentUser.mockReturnValue(
@@ -345,108 +313,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     );
-
-    const workItems = await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
-      section: DOCKET_SECTION,
-    });
-
-    expect(workItems.length).toEqual(4);
-
-    expect(workItems).toMatchObject([
-      {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          attachments: false,
-          certificateOfService: false,
-          docketEntryId: '12de0fac-f63c-464f-ac71-0f54fd248484',
-          docketNumber,
-          documentTitle:
-            'Motion for Leave to File Brief in Support of Petition',
-          documentType: 'Motion for Leave to File',
-          hasSupportingDocuments: true,
-          partyPrimary: true,
-          scenario: 'Nonstandard H',
-          supportingDocument: 'Brief in Support',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        section: DOCKET_SECTION,
-        sentBy: 'Test Petitioner',
-      },
-      {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Amended Answer',
-          documentType: 'Brief in Support',
-          partyPrimary: true,
-          previousDocument: {
-            documentTitle: 'Amended Answer',
-            documentType: 'Amended',
-          },
-          scenario: 'Nonstandard A',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        section: DOCKET_SECTION,
-        sentBy: 'Test Petitioner',
-        updatedAt: '2019-03-01T22:54:06.000Z',
-      },
-      {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Petition',
-          documentType: 'Brief in Support',
-          lodged: true,
-          partyPrimary: true,
-          previousDocument: { documentType: 'Petition' },
-          scenario: 'Nonstandard A',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        section: DOCKET_SECTION,
-        sentBy: 'Test Petitioner',
-        updatedAt: '2019-03-01T22:54:06.000Z',
-      },
-      {
-        assigneeId: null,
-        assigneeName: null,
-        caseStatus: CASE_STATUS_TYPES.new,
-        docketEntry: {
-          docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Amended Answer',
-          documentType: 'Brief in Support',
-          lodged: true,
-          partyPrimary: true,
-          previousDocument: {
-            documentTitle: 'Amended Answer',
-            documentType: 'Amended',
-          },
-          scenario: 'Nonstandard A',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber,
-        docketNumberWithSuffix: '101-19S',
-        section: DOCKET_SECTION,
-        sentBy: 'Test Petitioner',
-      },
-    ]);
   });
 
   it('should set partyPrimary to representingPrimary when partyPrimary is not provided', async () => {
-    const { docketNumber } = await createCaseInteractor({
-      applicationContext,
+    const { docketNumber } = await createCaseInteractor(applicationContext, {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseCaption: 'Caption',
@@ -473,8 +343,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         attachments: false,
         certificateOfService: false,
@@ -525,8 +394,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       },
     });
 
-    const caseAfterDocument = await getCaseInteractor({
-      applicationContext,
+    const caseAfterDocument = await getCaseInteractor(applicationContext, {
       docketNumber,
     });
     const filedDocument = caseAfterDocument.docketEntries.find(

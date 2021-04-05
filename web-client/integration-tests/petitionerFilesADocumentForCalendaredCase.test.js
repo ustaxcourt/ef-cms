@@ -3,7 +3,14 @@ import { docketClerkRemovesCaseFromTrial } from './journey/docketClerkRemovesCas
 import { docketClerkViewsSectionInboxHighPriority } from './journey/docketClerkViewsSectionInboxHighPriority';
 import { docketClerkViewsSectionInboxNotHighPriority } from './journey/docketClerkViewsSectionInboxNotHighPriority';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
+import {
+  fakeFile,
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+  wait,
+} from './helpers';
 import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
@@ -25,8 +32,10 @@ describe('petitioner files document', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
+  const trialLocation = `Jacksonville, Florida, ${Date.now()}`;
+
   loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test);
+  docketClerkCreatesATrialSession(test, { trialLocation });
   docketClerkViewsTrialSessionList(test);
 
   loginAs(test, 'petitionsclerk@example.com');
@@ -51,5 +60,10 @@ describe('petitioner files document', () => {
   loginAs(test, 'docketclerk@example.com');
   docketClerkViewsSectionInboxHighPriority(test);
   docketClerkRemovesCaseFromTrial(test);
+
+  it('refresh elasticsearch index', async () => {
+    await refreshElasticsearchIndex();
+  });
+
   docketClerkViewsSectionInboxNotHighPriority(test);
 });

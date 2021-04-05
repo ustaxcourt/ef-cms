@@ -1,24 +1,38 @@
+const { filterForPublic } = require('./publicHelpers');
+const { MAX_SEARCH_RESULTS } = require('../../entities/EntityConstants');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
 /**
  * casePublicSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.casePublicSearchInteractor = async providers => {
-  const { applicationContext } = providers;
 
+exports.casePublicSearchInteractor = async (
+  applicationContext,
+  { countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin },
+) => {
   const foundCases = await applicationContext
     .getPersistenceGateway()
-    .casePublicSearch(providers);
+    .casePublicSearchExactMatch({
+      applicationContext,
+      countryType,
+      petitionerName,
+      petitionerState,
+      yearFiledMax,
+      yearFiledMin,
+    });
 
-  const filteredCases = foundCases.filter(item => {
-    return !item.sealedDate && item.docketNumber && item.caseCaption;
+  const unsealedFoundCases = (
+    await filterForPublic({
+      applicationContext,
+      unfiltered: foundCases,
+    })
+  ).slice(0, MAX_SEARCH_RESULTS);
+
+  return PublicCase.validateRawCollection(unsealedFoundCases, {
+    applicationContext,
   });
-
-  const makeSafe = item =>
-    new PublicCase(item, { applicationContext }).validate().toRawObject();
-
-  return filteredCases.map(makeSafe);
 };

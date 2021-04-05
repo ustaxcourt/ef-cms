@@ -58,8 +58,14 @@ Inactive
 * new attorney is created in the DB with automated bar number generated
 * user is navigated to the Practitioner Detail screen with success message displayed
 
+## Practitioner without email address
+* Although email is required to add a practitioner to the database, some practitioners were migrated into the system without an email address
+* Practitioners without email automatically default to paper service
+
 
 ## Editing Practitioner information
+### Adding email address for a practitioner without email
+* When adding an email to a practitioner who previously had no email on record, the practitioner service indicator updates to electronic for all existing cases assciated with that practitioner
 
 ### Admissions clerk edits practitioner contact info in DB
 If Address is changed in DB:
@@ -69,20 +75,3 @@ If Address is changed in DB:
 If primary Phone number is changed in DB:
 * a Notice of Telephone Number is generated and displays on docket record for all cases associated with the practitioner
 * Updated phone number displays on "Practitioner Dashboard" , "Edit Contact Information" form, and on the Case Detail > Petitioner Counsel section of all cases the practitioner is associated with
-
-### Practitioner edits their own contact info from dashboard
-If Address is changed by practitioner user on Edit Contact Information screen:
-* a Notice of Address Change is generated and displays on docket record for all cases associated with the practitioner
-* Updated address displays in Practitioner DB
-
-If primary Phone number is changed by practitioner user on Edit Contact Information screen:
-* a Notice of Telephone Number is generated and displays on docket record for all cases associated with the practitioner
-* Updated phone number displays on Practitioner DB
-
-If Address and primary Telephone number are changed by practitioner user on Edit Contact Information screen
-* a Notice of Address and Telephone Number Change is generated and displays on docket record for all cases associated with the practitioner
-* Updated address and phone number displays on Practitioner Database
-
-If Address and primary Telephone number are changed in DB:
-* a Notice of Address and Telephone Number Change is generated and displays on docket record for all cases associated with the practitioner
-* Updated address and phone number displays on "Practitioner Dashboard" , "Edit Contact Information" form, and on the Case Detail > Petitioner Counsel section of all cases the practitioner is associated with

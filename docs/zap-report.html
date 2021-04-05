@@ -64,6 +64,12 @@ th{
 .alerts th{
   color: #FFF;
 }
+.left-header{
+  display: inline-block;
+}
+.time-stamp{
+  float: right;
+}
 </style>
     </head>
     <body>
@@ -74,7 +80,8 @@ ZAP Scanning Report
         </h1>
         <p>
 </p>
-        <h3>Summary of Alerts</h3>
+        <h3 class="left-header">Summary of Alerts</h3>
+        <h3 class="time-stamp">Generated on Thu, 18 Mar 2021 22:21:05</h3>
         <table width="45%" class="summary">
             <tr bgcolor="#666666">
                 <th width="45%" height="24">Risk 
@@ -104,7 +111,7 @@ ZAP Scanning Report
                 <td>Application Error Disclosure</td><td align="center">Low</td><td align="center">1</td>
             </tr>
             <tr bgcolor="#e8e8e8">
-                <td>A Server Error response code was returned by the server</td><td align="center">Low</td><td align="center">11</td>
+                <td>A Server Error response code was returned by the server</td><td align="center">Low</td><td align="center">13</td>
             </tr>
             <tr bgcolor="#e8e8e8">
                 <td>Strict-Transport-Security Header Not Set</td><td align="center">Low</td><td align="center">1</td>
@@ -118,6 +125,7 @@ ZAP Scanning Report
         <div class="spacer"></div>
         <table width="100%" class="results">
               
+  
   
   
             <tr height="24" class="risk-low">
@@ -180,6 +188,7 @@ ZAP Scanning Report
               
   
   
+  
             <tr height="24" class="risk-low">
                 <a name="low"></a><th width="20%">Low (High)</th><th width="80%">A Server Error response code was returned by the server</th>
             </tr>
@@ -197,77 +206,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/3254891664157807800</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api/</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api/2189360018116308524</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
                 <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api/trace.axd</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-            </tr>
-              
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
-            </tr>
-              
-  
-  
-            <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api/swagger.json</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -295,7 +234,21 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/elmah.axd</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api/.env</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api/</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -323,7 +276,35 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/.htaccess</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/.env</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api/2030483057228979655</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -351,7 +332,63 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%">Instances</td><td width="80%">11</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/api/swagger.json</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/1755378100762721122</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/elmah.axd</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/.htaccess</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+            </tr>
+              
+            <tr bgcolor="#e8e8e8">
+                <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 500</td>
+            </tr>
+              
+  
+  
+            <tr bgcolor="#e8e8e8">
+                <td width="20%">Instances</td><td width="80%">13</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -378,6 +415,7 @@ ZAP Scanning Report
         <div class="spacer"></div>
         <table width="100%" class="results">
               
+  
   
   
             <tr height="24" class="risk-low">
@@ -415,7 +453,7 @@ ZAP Scanning Report
             </tr>
               
             <tr bgcolor="#e8e8e8">
-                <td width="20%">Reference</td><td width="80%"><p>https://www.owasp.org/index.php/HTTP_Strict_Transport_Security</p><p>https://www.owasp.org/index.php/List_of_useful_HTTP_headers</p><p>http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security</p><p>http://caniuse.com/stricttransportsecurity</p><p>http://tools.ietf.org/html/rfc6797</p></td>
+                <td width="20%">Reference</td><td width="80%"><p>https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Strict_Transport_Security_Cheat_Sheet.html</p><p>https://owasp.org/www-community/Security_Headers</p><p>http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security</p><p>http://caniuse.com/stricttransportsecurity</p><p>http://tools.ietf.org/html/rfc6797</p></td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -436,6 +474,7 @@ ZAP Scanning Report
               
   
   
+  
             <tr height="24" class="risk-info">
                 <th width="20%"><a name="info"></a>Informational (High)</th><th width="80%">A Client Error response code was returned by the server</th>
             </tr>
@@ -453,7 +492,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">
@@ -467,7 +506,7 @@ ZAP Scanning Report
   
   
             <tr bgcolor="#e8e8e8">
-                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us</td>
+                <td width="20%" class="indent1">URL</td><td width="80%">https://api-blue.dev.ustc-case-mgmt.flexion.us/</td>
             </tr>
               
             <tr bgcolor="#e8e8e8">

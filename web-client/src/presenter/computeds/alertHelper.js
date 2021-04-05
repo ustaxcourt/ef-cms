@@ -8,6 +8,7 @@ export const alertHelper = (get, applicationContext) => {
   return {
     messagesDeduped: uniq(alertError.messages),
     preventAutoScroll: false,
+    responseCode: alertError.responseCode,
     showErrorAlert:
       !!alertError.title || !!alertError.message || !!alertError.messages,
     showLogIn: userIsIdentified,

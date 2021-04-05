@@ -55,10 +55,14 @@ Message.prototype.init = function init(rawMessage, { applicationContext }) {
   this.toUserId = rawMessage.toUserId;
 };
 
-Message.validationName = 'Message';
-
 Message.VALIDATION_ERROR_MESSAGES = {
-  message: 'Enter a message',
+  message: [
+    { contains: 'is required', message: 'Enter a message' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 700 characters. Enter 700 or fewer characters.',
+    },
+  ],
   subject: 'Enter a subject line',
   toSection: 'Select a section',
   toUserId: 'Select a recipient',
@@ -145,7 +149,7 @@ Message.VALIDATION_RULES = {
     .boolean()
     .required()
     .description('Whether the message has been replied to or forwarded.'),
-  message: JoiValidationConstants.STRING.max(500)
+  message: JoiValidationConstants.STRING.max(700)
     .required()
     .description('The message text.'),
   messageId: JoiValidationConstants.UUID.required().description(
@@ -190,6 +194,7 @@ joiValidationDecorator(
 Message.prototype.markAsCompleted = function ({ message, user }) {
   this.isCompleted = true;
   this.completedAt = createISODateString();
+  this.isRepliedTo = true;
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedBySection = user.section;

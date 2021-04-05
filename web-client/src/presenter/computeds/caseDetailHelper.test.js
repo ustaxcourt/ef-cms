@@ -525,7 +525,7 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should not show petition processing alert if user is an external user and the petition is served', () => {
+  it('should not show petition processing alert if user is an external user and the case contains a served docket entry', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
@@ -545,7 +545,25 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should show petition processing alert if user is an external user and the petition is not served', () => {
+  it('should not show petition processing alert if user is an external user and the case contains an isLegacyServed docket entry', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
+        },
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showPetitionProcessingAlert).toEqual(false);
+  });
+
+  it('should show petition processing alert if user is an external user and the case does not contain any served docket entries', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
@@ -683,6 +701,50 @@ describe('case detail computed', () => {
       });
 
       expect(result.showEditPetitionerInformation).toEqual(false);
+    });
+  });
+
+  describe('showAddRemoveFromHearingButtons', () => {
+    it('should set showAddRemoveFromHearingButtons to false when the current user does not have SET_FOR_HEARING permission', () => {
+      const user = {
+        role: ROLES.petitionsClerk, // does not have SET_FOR_HEARING permission
+        userId: '123',
+      };
+
+      const result = runCompute(caseDetailHelper, {
+        state: {
+          ...getBaseState(user), // sets the permissions in state based on the user role
+          caseDetail: { docketEntries: [], privatePractitioners: [] },
+          currentPage: 'CaseDetail',
+          form: {},
+          screenMetadata: {
+            isAssociated: false,
+          },
+        },
+      });
+
+      expect(result.showAddRemoveFromHearingButtons).toEqual(false);
+    });
+
+    it('should set showAddRemoveFromHearingButtons to true when the current user is a has SET_FOR_HEARING permission', () => {
+      const user = {
+        role: ROLES.docketClerk, // has SET_FOR_HEARING permission
+        userId: '123',
+      };
+
+      const result = runCompute(caseDetailHelper, {
+        state: {
+          ...getBaseState(user), // sets the permissions in state based on the user role
+          caseDetail: { docketEntries: [], privatePractitioners: [] },
+          currentPage: 'CaseDetail',
+          form: {},
+          screenMetadata: {
+            isAssociated: false,
+          },
+        },
+      });
+
+      expect(result.showAddRemoveFromHearingButtons).toEqual(true);
     });
   });
 });

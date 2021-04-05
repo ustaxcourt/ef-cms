@@ -8,7 +8,7 @@ export const EmailHeader = ({ date }) => {
           United States Tax Court
         </h1>
         <div style={{ fontSize: '16px' }}>
-          <div>Washington, DC 21207</div>
+          <div>Washington, DC 20217</div>
           {date && <div style={{ marginTop: '15px' }}>{date}</div>}
         </div>
       </div>

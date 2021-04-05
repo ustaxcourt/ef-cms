@@ -26,6 +26,7 @@ export const OpenCases = connect(
               <th>Case Title</th>
               <th>Petitioner Counsel</th>
               <th>Respondent Counsel</th>
+              <th>Calendar Notes</th>
             </tr>
           </thead>
           {openCases.map(item => (
@@ -55,6 +56,9 @@ export const OpenCases = connect(
                   {item.irsPractitioners.map(respondent => (
                     <div key={respondent.userId}>{respondent.name}</div>
                   ))}
+                </td>
+                <td>
+                  <div>{item.calendarNotes}</div>
                 </td>
               </tr>
             </tbody>

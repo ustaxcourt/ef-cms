@@ -20,10 +20,15 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  Case,
+  caseHasServedDocketEntries,
+  isAssociatedUser,
+  isSealedCase,
+} = require('./Case');
+const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
-const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { IrsPractitioner } = require('../IrsPractitioner');
@@ -71,24 +76,6 @@ describe('Case entity', () => {
     ]);
   });
 
-  describe('init', () => {
-    it('should set contactPrimary.contactId to currentUser.userId when the logged in user is the same as the user on the case and they are a petitioner', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
-      ); //petitioner user
-
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.contactPrimary.contactId).toBe(myCase.userId);
-    });
-  });
-
   describe('archivedDocketEntries', () => {
     let myCase;
     beforeEach(() => {
@@ -109,7 +96,6 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           archivedDocketEntries: [...MOCK_DOCUMENTS],
-          userId: applicationContext.getCurrentUser().userId,
         },
         { applicationContext, filtered: true },
       );
@@ -132,6 +118,63 @@ describe('Case entity', () => {
 
     it('should set archivedDocketEntries to an empty list when a value is not provided and the user is an internal user', () => {
       expect(myCase.archivedDocketEntries).toEqual([]);
+    });
+  });
+
+  describe('hearings', () => {
+    it('sets associated hearings on the case hearings array, and make sure they are sorted by created date', () => {
+      const mockhearing1 = {
+        createdAt: '2024-03-01T00:00:00.000Z',
+        maxCases: 100,
+        sessionType: 'Regular',
+        startDate: '2025-03-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialLocation: 'Birmingham, Alabama',
+      };
+
+      const mockhearing2 = {
+        createdAt: '2024-01-01T00:00:00.000Z',
+        maxCases: 100,
+        sessionType: 'Regular',
+        startDate: '2025-01-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialLocation: 'Birmingham, Alabama',
+      };
+
+      const mockhearing3 = {
+        createdAt: '2024-02-01T00:00:00.000Z',
+        maxCases: 100,
+        sessionType: 'Regular',
+        startDate: '2025-02-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialLocation: 'Birmingham, Alabama',
+      };
+
+      const newCase = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [mockhearing1, mockhearing2, mockhearing3],
+        },
+        { applicationContext },
+      );
+
+      expect(newCase.hearings[0].createdAt).toEqual(mockhearing2.createdAt);
+      expect(newCase.hearings[1].createdAt).toEqual(mockhearing3.createdAt);
+      expect(newCase.hearings[2].createdAt).toEqual(mockhearing1.createdAt);
+    });
+
+    it('sets the case hearings property to an empty object if none are provided', () => {
+      const newCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+
+      expect(newCase.hearings).toEqual([]);
     });
   });
 
@@ -197,25 +240,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('conditionally sets userId on entity', () => {
-    it('sets userId to current user if authenticated userId matches the userId in the case', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, userId: applicationContext.getCurrentUser().userId },
-        { applicationContext },
-      );
-      expect(myCase.userId).toEqual(applicationContext.getCurrentUser().userId);
-    });
-    it('does NOT set userId to if current user does not match rawCase', () => {
-      const myCase = new Case(
-        { ...MOCK_CASE, userId: '9999' },
-        { applicationContext },
-      );
-      expect(myCase.userId).not.toEqual(
-        applicationContext.getCurrentUser().userId,
-      );
-    });
-  });
-
   it('sets the expected order booleans', () => {
     const myCase = new Case(
       {
@@ -271,12 +295,23 @@ describe('Case entity', () => {
 
   describe('formattedDocketNumber', () => {
     it('formats docket numbers with leading zeroes', () => {
-      const docketNumber = '00000456-19';
-      expect(Case.formatDocketNumber(docketNumber)).toEqual('456-19');
+      expect(Case.formatDocketNumber('00000456-19')).toEqual('456-19');
     });
+
     it('does not alter properly-formatted docket numbers', () => {
-      const docketNumber = '123456-19';
-      expect(Case.formatDocketNumber(docketNumber)).toEqual(docketNumber);
+      expect(Case.formatDocketNumber('123456-19')).toEqual('123456-19'); // unchanged
+    });
+
+    it('strips letters from docket numbers', () => {
+      expect(Case.formatDocketNumber('456-19L')).toEqual('456-19');
+    });
+
+    it('strips both leading zeroes and letters from docket numbers', () => {
+      expect(Case.formatDocketNumber('00000456-19L')).toEqual('456-19');
+    });
+
+    it('does not error when a non docket number is given', () => {
+      expect(Case.formatDocketNumber('FRED')).toEqual('FRED');
     });
   });
 
@@ -647,6 +682,23 @@ describe('Case entity', () => {
       );
       expect(myCase.getFormattedValidationErrors()).toEqual(null);
       expect(myCase.entityName).toEqual('Case');
+    });
+
+    it('creates a valid case without a petition docket entry and does not throw an error', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.petitionsClerk,
+      });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          docketEntries: [MOCK_CASE.docketEntries[1]],
+        },
+        {
+          applicationContext,
+          filtered: true,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
     });
 
     it('Creates a valid case from an already existing case json', () => {
@@ -1524,10 +1576,10 @@ describe('Case entity', () => {
     });
   });
 
-  describe('addDocument', () => {
+  describe('addDocketEntry', () => {
     it('attaches the docket entry to the case', () => {
       const caseToVerify = new Case(
-        {},
+        { docketNumber: '123-45' },
         {
           applicationContext,
         },
@@ -1540,6 +1592,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketEntries.length).toEqual(1);
       expect(caseToVerify.docketEntries[0]).toMatchObject({
         docketEntryId: '123',
+        docketNumber: '123-45',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       });
@@ -2113,6 +2166,102 @@ describe('Case entity', () => {
     });
   });
 
+  describe('updateTrialSessionInformation', () => {
+    it('should not change the status of the case', () => {
+      const myCase = new Case(
+        { ...MOCK_CASE, status: CASE_STATUS_TYPES.closed },
+        {
+          applicationContext,
+        },
+      );
+      myCase.updateTrialSessionInformation({
+        isCalendared: false,
+        judge: {
+          name: 'Judge Judy',
+        },
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+      expect(myCase.status).toBe(CASE_STATUS_TYPES.closed);
+    });
+
+    it('should set only judge and trialSessionId if the trial session is calendared', () => {
+      const myCase = new Case(MOCK_CASE, {
+        applicationContext,
+      });
+      myCase.updateTrialSessionInformation({
+        isCalendared: false,
+        judge: {
+          name: 'Judge Judy',
+        },
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+      expect(myCase.trialSessionId).toBeTruthy();
+    });
+
+    it('should set all trial session fields if the trial session is calendared', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      myCase.updateTrialSessionInformation(trialSession);
+
+      expect(myCase.trialDate).toBeTruthy();
+      expect(myCase.associatedJudge).toBeTruthy();
+      expect(myCase.trialLocation).toBeTruthy();
+      expect(myCase.trialSessionId).toBeTruthy();
+      expect(myCase.trialTime).toBeTruthy();
+    });
+
+    it('should set all trial session fields but not set the associated judge if the trial session is not calendared', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: false,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      myCase.setAsCalendared(trialSession);
+
+      expect(myCase.status).toEqual(CASE_STATUS_TYPES.new);
+      expect(myCase.trialDate).toBeTruthy();
+      expect(myCase.associatedJudge).toEqual(CHIEF_JUDGE);
+      expect(myCase.trialLocation).toBeTruthy();
+      expect(myCase.trialSessionId).toBeTruthy();
+      expect(myCase.trialTime).toBeTruthy();
+    });
+  });
+
   describe('closeCase', () => {
     it('should update the status of the case to closed and add a closedDate', () => {
       const myCase = new Case(
@@ -2412,15 +2561,8 @@ describe('Case entity', () => {
     });
   });
 
-  describe('stripLeadingZeros', () => {
-    it('should remove leading zeros', () => {
-      const result = Case.stripLeadingZeros('000101-19');
-      expect(result).toEqual('101-19');
-    });
-  });
-
   describe('updateDocketEntry', () => {
-    it('should update the document', () => {
+    it('should replace the docket entry with the exact object provided', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -2433,8 +2575,11 @@ describe('Case entity', () => {
       expect(
         myCase.docketEntries.find(
           d => d.docketEntryId === MOCK_DOCUMENTS[0].docketEntryId,
-        ).processingStatus,
-      ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
+        ),
+      ).toEqual({
+        docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      });
     });
 
     it('should not change any docketEntries if no match is found', () => {
@@ -2476,6 +2621,31 @@ describe('Case entity', () => {
         ).documentTitle,
       ).toEqual('updated title');
     });
+
+    it('should not throw an exception when the specified correspondence document is not found', () => {
+      const mockCorrespondence = new Correspondence({
+        correspondenceId: '123-abc',
+        documentTitle: 'My Correspondence',
+        filedBy: 'Docket clerk',
+      });
+      const myCase = new Case(
+        { ...MOCK_CASE, correspondence: [mockCorrespondence] },
+        {
+          applicationContext,
+        },
+      );
+
+      myCase.updateCorrespondence({
+        correspondenceId: 'BAD-ID',
+        documentTitle: 'updated title',
+      });
+
+      expect(
+        myCase.correspondence.find(
+          d => d.correspondenceId === mockCorrespondence.correspondenceId,
+        ).documentTitle,
+      ).toEqual('My Correspondence');
+    });
   });
 
   describe('updatePrivatePractitioner', () => {
@@ -2484,7 +2654,7 @@ describe('Case entity', () => {
         {
           privatePractitioners: [
             new PrivatePractitioner({
-              representingPrimary: true,
+              representing: ['182e1a2c-0252-4d76-8590-593324efaee3'],
               userId: 'privatePractitioner',
             }),
           ],
@@ -2495,17 +2665,15 @@ describe('Case entity', () => {
       );
 
       expect(caseToVerify.privatePractitioners).not.toBeNull();
-      expect(
-        caseToVerify.privatePractitioners[0].representingPrimary,
-      ).toBeTruthy();
+      expect(caseToVerify.privatePractitioners[0].representing).toEqual([
+        '182e1a2c-0252-4d76-8590-593324efaee3',
+      ]);
 
       caseToVerify.updatePrivatePractitioner({
-        representingPrimary: false,
+        representing: [],
         userId: 'privatePractitioner',
       });
-      expect(
-        caseToVerify.privatePractitioners[0].representingPrimary,
-      ).toBeFalsy();
+      expect(caseToVerify.privatePractitioners[0].representing).toEqual([]);
     });
   });
 
@@ -2815,6 +2983,80 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialSessionId).toBeFalsy();
       expect(caseToUpdate.trialTime).toBeFalsy();
     });
+
+    it('sets the case status to the given case status when provided', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrial(CASE_STATUS_TYPES.cav);
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
+      expect(caseToUpdate.associatedJudge).toEqual('Chief Judge');
+    });
+
+    it('sets the case status along with the associated judge when provided', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrial(CASE_STATUS_TYPES.cav, 'Judge Dredd');
+
+      expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.cav);
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Dredd');
+    });
   });
 
   describe('removeFromTrialWithAssociatedJudge', () => {
@@ -2943,6 +3185,28 @@ describe('Case entity', () => {
             pending: true,
             servedAt: '2019-08-25T05:00:00.000Z',
             servedParties: [{ name: 'Bob' }],
+          },
+        ],
+      };
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(true);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
+    });
+
+    it('should show the case as having pending items if isLegacyServed is true', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            isLegacyServed: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
           },
         ],
       };
@@ -3464,6 +3728,53 @@ describe('Case entity', () => {
     });
   });
 
+  describe('trialDate and trialSessionId validation', () => {
+    it('should fail validation when trialSessionId is defined and trialDate is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        trialSessionId: '0762e545-8cbc-4a18-ab7a-27d205c83f60',
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toEqual({
+        trialDate: '"trialDate" is required',
+      });
+    });
+
+    it('should fail validation when case status is calendared, trialDate is defined and trialSessionId is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:40:46.415Z',
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toEqual({
+        trialSessionId: '"trialSessionId" is required',
+      });
+    });
+
+    it('should pass validation when case status is not calendared, trialDate is undefined and trialSessionId is undefined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.new,
+        trialDate: undefined,
+        trialSessionId: undefined,
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+
+    it('should pass validation when case status is calendared, trialDate is defined and trialSessionId is defined', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:40:46.415Z',
+        trialSessionId: '0762e545-8cbc-4a18-ab7a-27d205c83f60',
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+  });
+
   describe('setNoticeOfTrialDate', () => {
     it('should set noticeOfTrialDate on the given case', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
@@ -3473,7 +3784,9 @@ describe('Case entity', () => {
     });
 
     it('should set noticeOfTrialDate when passed through Case constructor', () => {
-      const isoDateString = new Date().toISOString();
+      const isoDateString = applicationContext
+        .getUtilities()
+        .createISODateString();
 
       const caseEntity = new Case(
         {
@@ -3552,7 +3865,6 @@ describe('Case entity', () => {
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
-      userId: '"userId" is required',
     });
   });
 
@@ -3674,6 +3986,27 @@ describe('Case entity', () => {
       const isAssociated = isAssociatedUser({
         caseRaw: caseEntity.toRawObject(),
         user: { userId: CONTACT_SECONDARY_ID },
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('should return true when the petition docket entry has been served in the legacy system and the current user is an irs superuser', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: {
+          ...caseEntity.toRawObject(),
+          docketEntries: [
+            {
+              documentTitle: 'Petition',
+              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+              eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
+              isLegacyServed: true,
+              servedAt: undefined,
+              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+        },
+        user: { role: ROLES.irsSuperuser },
       });
 
       expect(isAssociated).toBeTruthy();
@@ -4049,6 +4382,320 @@ describe('Case entity', () => {
         expect(myCase.judgeUserId).toBeUndefined();
         expect(myCase.getFormattedValidationErrors()).toEqual(null);
       });
+    });
+  });
+
+  describe('blocked status validation for calendared cases', () => {
+    const mockTrialSessionId = '9e29b116-58a0-40f5-afe6-e3a0ba4f226a';
+
+    it('fails validation when the case status is calendared and blocked is true', () => {
+      let blockedCalendaredCase = {
+        ...MOCK_CASE,
+        blocked: true,
+        blockedDate: '2019-03-01T21:42:29.073Z',
+        blockedReason: 'A reason',
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(blockedCalendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toEqual({
+        blocked: '"blocked" contains an invalid value',
+      });
+    });
+
+    it('passes validation when the case status is calendared and blocked is false', () => {
+      let calendaredCase = {
+        ...MOCK_CASE,
+        blocked: false,
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: '2019-03-01T21:42:29.073Z',
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(calendaredCase, { applicationContext });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+
+    it('passes validation when the case status is not calendared and blocked is true', () => {
+      let blockedReadyForTrialCase = {
+        ...MOCK_CASE,
+        blocked: true,
+        blockedDate: '2019-03-01T21:42:29.073Z',
+        blockedReason: 'A reason',
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        trialDate: '2019-03-01T21:42:29.073Z',
+        trialSessionId: mockTrialSessionId,
+      };
+      const myCase = new Case(blockedReadyForTrialCase, {
+        applicationContext,
+      });
+      expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+  });
+
+  describe('hasPartyWithPaperService', () => {
+    it('should return true if contactPrimary service indicator is paper', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {
+            ...MOCK_CASE.contactPrimary,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        },
+        { applicationContext },
+      );
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeTruthy();
+    });
+
+    it('should return true if contactSecondary service indicator is paper', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {
+            ...MOCK_CASE.contactPrimary,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+          contactSecondary: {
+            ...MOCK_CASE.contactPrimary,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+          partyType: PARTY_TYPES.petitionerSpouse,
+        },
+        { applicationContext },
+      );
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeTruthy();
+    });
+
+    it('should return true if any privatePractitioner has paper service indicator', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          privatePractitioners: [
+            {
+              name: 'Bob Barker',
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+              userId: '919b8ead-d8ec-487d-a0c0-4e136a566f74',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeTruthy();
+    });
+
+    it('should return true if any irsPractitioner has paper service indicator', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [
+            {
+              name: 'Bob Barker',
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+              userId: '919b8ead-d8ec-487d-a0c0-4e136a566f74',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeTruthy();
+    });
+
+    it('should return false if no contacts or practitioners have paper service indicator', () => {
+      const myCase = new Case(MOCK_CASE, { applicationContext });
+
+      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+
+      expect(hasPartyWithPaperService).toBeFalsy();
+    });
+  });
+
+  describe('getSortableDocketNumber', () => {
+    it('should sort in the correct order', () => {
+      const numbers = [
+        Case.getSortableDocketNumber('19844-12'),
+        Case.getSortableDocketNumber('5520-08'),
+        Case.getSortableDocketNumber('1773-11'),
+        Case.getSortableDocketNumber('5242-10'),
+        Case.getSortableDocketNumber('1144-05'),
+      ].sort((a, b) => a - b);
+      expect(numbers).toEqual([5001144, 8005520, 10005242, 11001773, 12019844]);
+    });
+  });
+
+  describe('isSealedCase', () => {
+    it('returns false for objects without any truthy sealed attributes', () => {
+      const result = isSealedCase({
+        docketEntries: [],
+        isSealed: false,
+        name: 'Johnny Appleseed',
+        sealedDate: false,
+      });
+      expect(result).toBe(false);
+    });
+
+    it('returns true if the object has truthy values for isSealed or isSealedDate', () => {
+      expect(isSealedCase({ isSealed: true })).toBe(true);
+      expect(
+        isSealedCase({
+          sealedDate: applicationContext.getUtilities().createISODateString(),
+        }),
+      ).toBe(true);
+    });
+
+    it('returns true if the object has a docket entry with truthy values for isSealed or isLegacySealed', () => {
+      expect(
+        isSealedCase({
+          docketEntries: [{ isSealed: true }],
+          isSealed: false,
+          name: 'Johnny Appleseed',
+          sealedDate: false,
+        }),
+      ).toBe(true);
+      expect(
+        isSealedCase({
+          docketEntries: [{ isLegacySealed: true }],
+          isSealed: false,
+          name: 'Johnny Appleseed',
+          sealedDate: false,
+        }),
+      ).toBe(true);
+    });
+  });
+
+  describe('caseHasServedDocketEntries', () => {
+    it('should return true if the case has any docket entry with isLegacyServed set to true', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [{ isLegacyServed: true }],
+        }),
+      ).toBeTruthy();
+    });
+
+    it('should return true if the case has any docket entry with servedAt defined', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [{ servedAt: '2019-08-25T05:00:00.000Z' }],
+        }),
+      ).toBeTruthy();
+    });
+
+    it('should return false if the case does not have any docket entries with isLegacyServed set to true or servedAt', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [{ isLegacyServed: false }],
+        }),
+      ).toBeFalsy();
+    });
+
+    it('should return false if the case does not have any docket entries', () => {
+      expect(
+        caseHasServedDocketEntries({
+          docketEntries: [],
+        }),
+      ).toBeFalsy();
+    });
+  });
+
+  describe('removeFromHearing', () => {
+    it('removes the hearing from the case', () => {
+      const trialSessionHearing = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [trialSessionHearing],
+        },
+        {
+          applicationContext,
+        },
+      );
+      caseToUpdate.removeFromHearing(trialSessionHearing.trialSessionId);
+
+      expect(caseToUpdate.hearings).toEqual([]);
+    });
+  });
+
+  describe('isHearing', () => {
+    it('checks if the given trialSessionId is a hearing (true)', () => {
+      const trialSessionHearing = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+          hearings: [trialSessionHearing],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(
+        caseToUpdate.isHearing(trialSessionHearing.trialSessionId),
+      ).toEqual(true);
+    });
+
+    it('checks if the given trialSessionId is a hearing (false)', () => {
+      const trialSessionHearing = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, Alabama',
+        },
+        { applicationContext },
+      );
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      caseToUpdate.setAsCalendared(trialSessionHearing);
+
+      expect(
+        caseToUpdate.isHearing(trialSessionHearing.trialSessionId),
+      ).toEqual(false);
     });
   });
 });

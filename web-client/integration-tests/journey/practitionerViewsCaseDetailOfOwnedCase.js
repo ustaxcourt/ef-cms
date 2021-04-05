@@ -9,10 +9,10 @@ export const practitionerViewsCaseDetailOfOwnedCase = test => {
       'Test Private Practitioner',
     );
     expect(
-      test.getState('caseDetail.privatePractitioners.0.representingPrimary'),
-    ).toEqual(true);
-    expect(
-      test.getState('caseDetail.privatePractitioners.0.representingSecondary'),
-    ).toEqual(true);
+      test.getState('caseDetail.privatePractitioners.0.representing'),
+    ).toEqual([
+      test.getState('caseDetail.contactPrimary.contactId'),
+      test.getState('caseDetail.contactSecondary.contactId'),
+    ]);
   });
 };

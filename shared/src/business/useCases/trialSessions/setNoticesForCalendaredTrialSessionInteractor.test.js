@@ -3,33 +3,42 @@ const {
   fakeData,
 } = require('../../test/createTestApplicationContext');
 const {
-  NOTICE_OF_TRIAL,
-  STANDING_PRETRIAL_NOTICE,
-  STANDING_PRETRIAL_ORDER,
-} = require('../../entities/EntityConstants');
-const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
+const {
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
   return caseRecord.docketEntries.find(
-    document => document.documentType === NOTICE_OF_TRIAL.documentType,
+    doc =>
+      doc.documentType ===
+      SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
   );
 };
 
 const findStandingPretrialDocument = caseRecord => {
   return caseRecord.docketEntries.find(
-    document =>
-      document.documentType === STANDING_PRETRIAL_NOTICE.documentType ||
-      document.documentType === STANDING_PRETRIAL_ORDER.documentType,
+    doc =>
+      doc.documentType ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+          .documentType ||
+      doc.documentType ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.documentType,
   );
 };
 
 const MOCK_TRIAL = {
+  judge: {
+    name: 'Judge Mary Kate and Ashley',
+    userId: '410e4ade-6ad5-4fc4-8741-3f8352c72a0c',
+  },
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Regular',
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
@@ -42,6 +51,11 @@ let calendaredCases;
 let trialSession;
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  });
   beforeEach(() => {
     const case0 = {
       // should get electronic service
@@ -124,7 +138,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .generateNoticeOfTrialIssuedInteractor.mockReturnValue(fakeData);
     applicationContext
       .getUseCases()
-      .generateStandingPretrialNoticeInteractor.mockReturnValue(fakeData);
+      .generateStandingPretrialOrderForSmallCaseInteractor.mockReturnValue(
+        fakeData,
+      );
     applicationContext
       .getUseCases()
       .generateStandingPretrialOrderInteractor.mockReturnValue(fakeData);
@@ -140,8 +156,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     let error;
 
     try {
-      await setNoticesForCalendaredTrialSessionInteractor({
-        applicationContext,
+      await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
     } catch (e) {
@@ -156,10 +171,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([]); // returning no cases
 
-    const result = await setNoticesForCalendaredTrialSessionInteractor({
+    const result = await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+      {
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    );
 
     expect(
       applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
@@ -171,8 +188,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should generate a Notice of Trial for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -188,8 +204,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should include the signedAt field on the Notice of Trial document', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -198,8 +213,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should set the noticeOfTrialDate field on each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -213,14 +227,15 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
 
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketEntries.find(
-        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
+        entry =>
+          entry.documentType ===
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
       );
     };
 
@@ -229,22 +244,25 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
 
     expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toMatchObject({
+      date: '2025-12-01T00:00:00.000Z',
       index: expect.anything(),
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages: 999,
+      trialLocation: 'Birmingham, Alabama',
     });
     expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toMatchObject({
+      date: '2025-12-01T00:00:00.000Z',
       index: expect.anything(),
       isFileAttached: true,
       isOnDocketRecord: true,
       numberOfPages: 999,
+      trialLocation: 'Birmingham, Alabama',
     });
   });
 
   it('Should set the status of the Notice of Trial as served for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -260,8 +278,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should set the servedAt field for the Notice of Trial for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -277,8 +294,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should set the servedParties field for the Notice of Trial for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -298,8 +314,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should dispatch a service email for parties receiving electronic service', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -309,8 +324,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should set the noticeIssuedDate on the trial session and then call updateTrialSession', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -324,8 +338,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     const oldDate = '2019-12-01T00:00:00.000Z';
     trialSession.noticeIssuedDate = oldDate;
 
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       docketNumber: '102-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -337,8 +350,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should only generate a Notice of Trial for a single case if a docketNumber is set', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       docketNumber: '103-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -355,8 +367,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should only set the notice for a single case if a docketNumber is set', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       docketNumber: '102-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -366,15 +377,16 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should only create a docket entry for a single case if a docketNumber is set', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       docketNumber: '103-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketEntries.find(
-        entry => entry.documentType === NOTICE_OF_TRIAL.documentType,
+        entry =>
+          entry.documentType ===
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
       );
     };
 
@@ -383,8 +395,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should set the status of the Notice of Trial as served for a single case if a docketNumber is set', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       docketNumber: '103-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -400,9 +411,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeDefined();
   });
 
-  it('Should generate a Standing Pretrial Order for REGULAR cases', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+  it('Should generate a signed Standing Pretrial Order for REGULAR cases', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       docketNumber: '102-20', // MOCK_CASE with procedureType: 'Regular'
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -410,23 +420,33 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
     ).toHaveBeenCalled();
+    expect(findStandingPretrialDocument(calendaredCases[0])).toMatchObject({
+      attachments: false,
+      eventCode:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
+      signedByUserId: MOCK_TRIAL.judge.userId,
+      signedJudgeName: MOCK_TRIAL.judge.name,
+    });
   });
 
-  it('Should generate a Standing Pretrial Notice for SMALL cases', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+  it('Should generate a Standing Pretrial Order for Small Case for SMALL cases', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       docketNumber: '103-20', // MOCK_CASE with procedureType: 'Small'
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     expect(
-      applicationContext.getUseCases().generateStandingPretrialNoticeInteractor,
+      applicationContext.getUseCases()
+        .generateStandingPretrialOrderForSmallCaseInteractor,
     ).toHaveBeenCalled();
+    expect(findStandingPretrialDocument(calendaredCases[1]).eventCode).toBe(
+      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+        .eventCode,
+    );
   });
 
   it('Should set the status of the Standing Pretrial Document as served for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -446,8 +466,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should set the servedAt field for the Standing Pretrial Document for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -467,8 +486,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should set the servedParties field for the Standing Pretrial Document for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 

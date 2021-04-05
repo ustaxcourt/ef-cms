@@ -9,20 +9,19 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * completes a message thread
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.message the message text
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {object} the message
  */
-exports.completeMessageInteractor = async ({
+exports.completeMessageInteractor = async (
   applicationContext,
-  message,
-  parentMessageId,
-}) => {
+  { message, parentMessageId },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MESSAGES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

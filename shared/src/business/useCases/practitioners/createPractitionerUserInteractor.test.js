@@ -8,7 +8,7 @@ const { ROLES, US_STATES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const mockUser = {
-  admissionsDate: '2019-03-01T21:40:46.415Z',
+  admissionsDate: '2019-03-01',
   admissionsStatus: 'Active',
   barNumber: 'AT5678',
   birthYear: 2019,
@@ -40,8 +40,7 @@ describe('create practitioner user', () => {
   });
 
   it('creates the practitioner user', async () => {
-    const user = await createPractitionerUserInteractor({
-      applicationContext,
+    const user = await createPractitionerUserInteractor(applicationContext, {
       user: mockUser,
     });
     expect(user).not.toBeUndefined();
@@ -54,8 +53,7 @@ describe('create practitioner user', () => {
     };
 
     await expect(
-      createPractitionerUserInteractor({
-        applicationContext,
+      createPractitionerUserInteractor(applicationContext, {
         user: mockUser,
       }),
     ).rejects.toThrow(UnauthorizedError);

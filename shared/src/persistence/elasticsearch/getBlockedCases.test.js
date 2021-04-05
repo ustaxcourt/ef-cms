@@ -8,6 +8,7 @@ const { search } = require('./searchClient');
 describe('getBlockedCases', () => {
   it('returns results when searching with a trialLocation', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
+
     const results = await getBlockedCases({
       applicationContext,
       trialLocation: 'Memphis, TN',
@@ -18,7 +19,7 @@ describe('getBlockedCases', () => {
     const searchQuery =
       search.mock.calls[0][0].searchParameters.body.query.bool.must;
     expect(searchQuery[0]).toMatchObject({
-      match: { 'preferredTrialCity.S': 'Memphis, TN' },
+      term: { 'preferredTrialCity.S': 'Memphis, TN' },
     });
   });
 });

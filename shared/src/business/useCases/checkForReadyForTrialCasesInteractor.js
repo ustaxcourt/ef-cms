@@ -3,35 +3,32 @@ const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
+ * @param {object} applicationContext the application context
  */
-exports.checkForReadyForTrialCasesInteractor = async ({
-  applicationContext,
-}) => {
-  applicationContext.logger.info('Time', createISODateString());
+exports.checkForReadyForTrialCasesInteractor = async applicationContext => {
+  applicationContext.logger.debug('Time', createISODateString());
 
   const caseCatalog = await applicationContext
     .getPersistenceGateway()
-    .getAllCatalogCases({
-      applicationContext,
-    });
+    .getReadyForTrialCases({ applicationContext });
 
   const updateForTrial = async entity => {
     // assuming we want these done serially; if first fails, promise is rejected and error thrown
     const caseEntity = entity.validate();
-    await applicationContext.getPersistenceGateway().updateCase({
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-        docketNumber: caseEntity.docketNumber,
-      });
+    if (caseEntity.isReadyForTrial()) {
+      await applicationContext
+        .getPersistenceGateway()
+        .createCaseTrialSortMappingRecords({
+          applicationContext,
+          caseSortTags: caseEntity.generateTrialSortTags(),
+          docketNumber: caseEntity.docketNumber,
+        });
+    }
   };
 
   const updatedCases = [];
@@ -59,7 +56,8 @@ exports.checkForReadyForTrialCasesInteractor = async ({
       }
     }
   }
+
   await Promise.all(updatedCases);
 
-  applicationContext.logger.info('Time', createISODateString());
+  applicationContext.logger.debug('Time', createISODateString());
 };

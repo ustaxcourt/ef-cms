@@ -1,11 +1,21 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PublicDocketRecordHeader = connect(
-  { docketNumber: state.caseDetail.docketNumber },
-  function PublicDocketRecordHeader({ docketNumber }) {
+  {
+    docketNumber: state.caseDetail.docketNumber,
+    gotoPublicPrintableDocketRecordSequence:
+      sequences.gotoPublicPrintableDocketRecordSequence,
+    showModal: state.modal.showModal,
+  },
+  function PublicDocketRecordHeader({
+    docketNumber,
+    gotoPublicPrintableDocketRecordSequence,
+    showModal,
+  }) {
     return (
       <React.Fragment>
         <div className="title">
@@ -13,8 +23,12 @@ export const PublicDocketRecordHeader = connect(
           <Button
             link
             className="hide-on-mobile float-right margin-right-0 margin-top-1"
-            href={`/case-detail/${docketNumber}/printable-docket-record`}
             icon="print"
+            onClick={() => {
+              gotoPublicPrintableDocketRecordSequence({
+                docketNumber,
+              });
+            }}
           >
             Printable Docket Record
           </Button>
@@ -26,14 +40,21 @@ export const PublicDocketRecordHeader = connect(
                 link
                 aria-hidden="true"
                 className="show-on-mobile margin-top-1 text-left"
-                href={`/case-detail/${docketNumber}/printable-docket-record`}
                 icon="print"
+                onClick={() => {
+                  gotoPublicPrintableDocketRecordSequence({
+                    docketNumber,
+                  });
+                }}
               >
                 Printable Docket Record
               </Button>
             </div>
           </div>
         </div>
+        {showModal === 'OpenPrintableDocketRecordModal' && (
+          <OpenPrintableDocketRecordModal />
+        )}
       </React.Fragment>
     );
   },

@@ -1,10 +1,14 @@
+import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
 import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
-
 const test = setupTest();
 
 describe('Docket Clerk edits a paper filing journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -151,4 +155,6 @@ describe('Docket Clerk edits a paper filing journey', () => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
   });
+
+  docketClerkAddsMiscellaneousPaperFiling(test, fakeFile);
 });

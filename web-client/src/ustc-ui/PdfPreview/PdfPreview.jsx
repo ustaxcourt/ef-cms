@@ -7,7 +7,11 @@ const PdfPreviewComponent = connect(
     clearPdfPreviewUrlSequence: sequences.clearPdfPreviewUrlSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  function PdfPreviewComponent({ clearPdfPreviewUrlSequence, pdfPreviewUrl }) {
+  function PdfPreviewComponent({
+    clearPdfPreviewUrlSequence,
+    pdfPreviewUrl,
+    scroll = true,
+  }) {
     // always renders. use life-cycle hooks here.
 
     const onRemove = () => {
@@ -17,9 +21,14 @@ const PdfPreviewComponent = connect(
     useEffect(() => {
       return onRemove;
     }, []);
-
+    const setScroll = scroll ? 'yes' : 'no';
     return (
-      <iframe id="pdf-preview-iframe" src={pdfPreviewUrl} title="PDF Preview" />
+      <iframe
+        id="pdf-preview-iframe"
+        scrolling={setScroll}
+        src={pdfPreviewUrl}
+        title="PDF Preview"
+      />
     );
   },
 );
@@ -29,12 +38,12 @@ export const PdfPreview = connect(
     noDocumentText: props.noDocumentText,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  function PdfPreview({ noDocumentText, pdfPreviewUrl }) {
+  function PdfPreview({ noDocumentText, pdfPreviewUrl, scroll = true }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
-      return noDocumentText ? noDocumentText : '';
+      return noDocumentText || '';
     }
 
-    return <PdfPreviewComponent />;
+    return <PdfPreviewComponent scroll={scroll} />;
   },
 );

@@ -68,7 +68,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        startDate: new Date('2019-09-26T12:00:00.000Z'),
+        startDate: '2019-09-26T12:00:00.000Z',
         trialLocation: 'Birmingham',
       });
 
@@ -78,8 +78,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('skips DocketEntry that are not in docketrecord or have documents in S3', async () => {
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
@@ -108,15 +107,11 @@ describe('batchDownloadTrialSessionInteractor', () => {
       userId: 'abc-123',
     };
 
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
-    expect(applicationContext.logger.info).toHaveBeenCalledWith(
-      'Error',
-      expect.anything(),
-    );
+    expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
@@ -130,8 +125,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('calls persistence functions to fetch trial sessions and associated cases and then zips their associated documents', async () => {
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
@@ -157,8 +151,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         },
       ]);
 
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 

@@ -5,19 +5,21 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
+ * @param {object} providers.router the router object
  * @param {object} providers.store the cerebral store object used for clearing alertError, alertSuccess
  */
 export const openCaseDocumentDownloadUrlAction = async ({
   applicationContext,
   props,
+  router,
   store,
 }) => {
   const {
     docketEntryId,
     docketNumber,
-    isForIFrame,
-    isMobile,
+    isForIFrame = false,
     isPublic,
+    useSameTab,
   } = props;
 
   const {
@@ -31,11 +33,9 @@ export const openCaseDocumentDownloadUrlAction = async ({
 
   if (isForIFrame) {
     store.set(state.iframeSrc, url);
+  } else if (useSameTab) {
+    window.location.href = url;
   } else {
-    if (isMobile) {
-      window.location.href = url;
-    } else {
-      window.open(url, '_blank');
-    }
+    router.openInNewTab(url);
   }
 };

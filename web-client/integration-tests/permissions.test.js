@@ -24,12 +24,13 @@ const associatedFieldsVisible = () => {
 
 const associatedFieldsBlocked = () => {
   expect(test.getState('caseDetail.contactPrimary')).toEqual({
+    entityName: 'PublicContact',
     name: expect.anything(),
     state: expect.anything(),
   });
   expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
   expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
-  expect(test.getState('caseDetail.userId')).toBeUndefined();
+  expect(test.getState('caseDetail.contactPrimary.contactId')).toBeUndefined();
 };
 
 const internalFieldsVisible = () => {
@@ -119,6 +120,13 @@ const stinBlocked = () => {
   ).toBe(false);
 };
 
+const printableDocketRecordVisible = async () => {
+  await test.runSequence('gotoPrintableDocketRecordSequence', {
+    docketNumber: test.docketNumber,
+  });
+  expect(test.getState('pdfPreviewUrl')).toBeDefined();
+};
+
 describe('Case permissions test', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
@@ -129,6 +137,10 @@ describe('Case permissions test', () => {
         setItem: () => null,
       },
     };
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -144,6 +156,7 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsBlocked();
     stinBlocked();
+    await printableDocketRecordVisible();
   });
 
   loginAs(test, 'irsSuperuser@example.com');
@@ -157,6 +170,7 @@ describe('Case permissions test', () => {
     associatedFieldsBlocked();
     internalFieldsBlocked();
     stinBlocked();
+    await printableDocketRecordVisible();
   });
 
   loginAs(test, 'privatePractitioner@example.com');
@@ -170,6 +184,7 @@ describe('Case permissions test', () => {
     associatedFieldsBlocked();
     internalFieldsBlocked();
     stinBlocked();
+    await printableDocketRecordVisible();
   });
 
   loginAs(test, 'irsPractitioner@example.com');
@@ -180,9 +195,10 @@ describe('Case permissions test', () => {
     });
 
     publicFieldsVisible();
-    associatedFieldsBlocked();
+    associatedFieldsVisible();
     internalFieldsBlocked();
     stinBlocked();
+    await printableDocketRecordVisible();
   });
 
   loginAs(test, 'petitioner2@example.com');
@@ -196,6 +212,7 @@ describe('Case permissions test', () => {
     associatedFieldsBlocked();
     internalFieldsBlocked();
     stinBlocked();
+    await printableDocketRecordVisible();
   });
 
   loginAs(test, 'docketclerk@example.com');
@@ -209,6 +226,7 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsVisible();
     stinBlocked();
+    await printableDocketRecordVisible();
   });
 
   loginAs(test, 'petitionsclerk@example.com');
@@ -222,6 +240,7 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsVisible();
     stinVisible();
+    await printableDocketRecordVisible();
   });
 
   petitionsClerkSubmitsCaseToIrs(test);
@@ -236,6 +255,7 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsVisible();
     stinBlocked();
+    await printableDocketRecordVisible();
   });
 
   loginAs(test, 'docketclerk@example.com');
@@ -249,6 +269,7 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsVisible();
     stinBlocked();
+    await printableDocketRecordVisible();
   });
 
   loginAs(test, 'irsSuperuser@example.com');
@@ -262,5 +283,6 @@ describe('Case permissions test', () => {
     associatedFieldsVisible();
     internalFieldsBlocked();
     stinVisible();
+    await printableDocketRecordVisible();
   });
 });

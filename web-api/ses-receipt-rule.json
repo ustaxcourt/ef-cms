@@ -1,0 +1,11 @@
+{
+  "Name": "confirm-email-rule",
+  "Enabled": true,
+  "Actions": [
+    {
+      "S3Action": {
+        "BucketName": "BUCKETNAME"
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import { formatSearchResultRecord } from './AdvancedSearch/advancedSearchHelper';
 import { state } from 'cerebral';
+import qs from 'qs';
 
 export const formatPendingItem = (item, { applicationContext }) => {
   const result = formatSearchResultRecord(item, { applicationContext });
@@ -11,13 +12,16 @@ export const formatPendingItem = (item, { applicationContext }) => {
     .formatJudgeName(result.associatedJudge);
 
   result.formattedName = result.documentTitle || result.documentType;
+
+  result.documentLink = `/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`;
+
   return result;
 };
 
 export const formattedPendingItems = (get, applicationContext) => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
-  let items = get(state.pendingItems).map(item =>
+  let items = (get(state.pendingReports.pendingItems) || []).map(item =>
     formatPendingItem(item, { applicationContext }),
   );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
@@ -32,20 +36,12 @@ export const formattedPendingItems = (get, applicationContext) => {
       .compareISODateStrings(a.receivedAt, b.receivedAt),
   );
 
-  if (judgeFilter) {
-    items = items.filter(i => i.associatedJudgeFormatted === judgeFilter);
-  }
-
-  let printUrl = '/reports/pending-report/printable';
-
-  if (judgeFilter) {
-    printUrl += `?judgeFilter=${encodeURIComponent(judgeFilter)}`;
-  }
+  const queryString = qs.stringify({ judgeFilter });
 
   const result = {
     items,
     judges,
-    printUrl,
+    printUrl: `/reports/pending-report/printable?${queryString}`,
   };
 
   return result;

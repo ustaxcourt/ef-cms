@@ -1,3 +1,11 @@
+const {
+  DOCUMENT_SEARCH_SORT,
+  MAX_SEARCH_CLIENT_RESULTS,
+  ORDER_JUDGE_FIELD,
+} = require('../../business/entities/EntityConstants');
+const {
+  removeAdvancedSyntaxSymbols,
+} = require('../../business/utilities/aggregateCommonQueryParams');
 const { search } = require('./searchClient');
 
 exports.advancedDocumentSearch = async ({
@@ -6,10 +14,14 @@ exports.advancedDocumentSearch = async ({
   docketNumber,
   documentEventCodes,
   endDate,
+  from = 0,
   judge,
   judgeType,
   keyword,
+  omitSealed,
   opinionType,
+  overrideResultSize,
+  sortOrder: sortField,
   startDate,
 }) => {
   const sourceFields = [
@@ -18,43 +30,47 @@ exports.advancedDocumentSearch = async ({
     'contactSecondary',
     'docketEntryId',
     'docketNumber',
-    'docketNumberSuffix',
     'docketNumberWithSuffix',
-    'documentContents',
     'documentTitle',
     'documentType',
     'eventCode',
     'filingDate',
     'irsPractitioners',
     'isSealed',
+    'isStricken',
+    'judge',
     'numberOfPages',
     'privatePractitioners',
     'sealedDate',
-    judgeType,
+    'signedJudgeName',
   ];
 
-  const queryParams = [
+  const docketEntryQueryParams = [
     {
       bool: {
-        should: documentEventCodes.map(eventCode => ({
-          match: {
-            'eventCode.S': eventCode,
-          },
-        })),
+        must: [{ terms: { 'eventCode.S': documentEventCodes } }],
+        must_not: [{ term: { 'isStricken.BOOL': true } }],
       },
     },
   ];
+  const caseMustNot = [];
 
   if (keyword) {
-    queryParams.push({
+    docketEntryQueryParams.push({
       simple_query_string: {
+        default_operator: 'and',
         fields: ['documentContents.S', 'documentTitle.S'],
-        query: keyword,
+        query: removeAdvancedSyntaxSymbols(keyword),
       },
     });
   }
 
-  const parentQueryParams = {
+  if (omitSealed) {
+    caseMustNot.push({
+      term: { 'isSealed.BOOL': true },
+    });
+  }
+  const caseQueryParams = {
     has_parent: {
       inner_hits: {
         _source: {
@@ -63,61 +79,69 @@ exports.advancedDocumentSearch = async ({
         name: 'case-mappings',
       },
       parent_type: 'case',
-      query: { match_all: {} },
+      query: { bool: { must_not: caseMustNot } },
+      score: true,
     },
   };
 
   if (docketNumber) {
-    parentQueryParams.has_parent.query = {
-      match: {
-        'docketNumber.S': { operator: 'and', query: docketNumber },
-      },
+    caseQueryParams.has_parent.query.bool.must = {
+      term: { 'docketNumber.S': docketNumber },
     };
   } else if (caseTitleOrPetitioner) {
-    parentQueryParams.has_parent.query = {
+    caseQueryParams.has_parent.query.bool.must = {
       simple_query_string: {
+        default_operator: 'and',
+
         fields: [
           'caseCaption.S',
           'contactPrimary.M.name.S',
           'contactSecondary.M.name.S',
         ],
-        query: caseTitleOrPetitioner,
+        query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
       },
     };
   }
 
-  queryParams.push(parentQueryParams);
+  docketEntryQueryParams.push(caseQueryParams);
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     const judgeField = `${judgeType}.S`;
-    queryParams.push({
-      bool: {
-        should: {
-          match: {
-            [judgeField]: {
-              operator: 'and',
-              query: judgeName,
+    if (judgeType === 'judge') {
+      docketEntryQueryParams.push({
+        bool: {
+          should: {
+            match: {
+              [judgeField]: judgeName,
             },
           },
         },
-      },
-    });
+      });
+    } else if (judgeType === ORDER_JUDGE_FIELD) {
+      docketEntryQueryParams.push({
+        bool: {
+          should: {
+            match: {
+              [judgeField]: {
+                operator: 'and',
+                query: judgeName,
+              },
+            },
+          },
+        },
+      });
+    }
   }
 
   if (opinionType) {
-    queryParams.push({
-      match: {
-        'documentType.S': {
-          operator: 'and',
-          query: opinionType,
-        },
-      },
+    docketEntryQueryParams.push({
+      term: { 'documentType.S': opinionType },
     });
   }
 
   if (startDate) {
-    queryParams.push({
+    docketEntryQueryParams.push({
       range: {
         'filingDate.S': {
           format: 'strict_date_time', // ISO-8601 time stamp
@@ -128,7 +152,7 @@ exports.advancedDocumentSearch = async ({
   }
 
   if (endDate && startDate) {
-    queryParams.push({
+    docketEntryQueryParams.push({
       range: {
         'filingDate.S': {
           format: 'strict_date_time', // ISO-8601 time stamp
@@ -138,31 +162,57 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
+  let sort;
+  let sortOrder = 'desc';
+
+  if (
+    [
+      DOCUMENT_SEARCH_SORT.FILING_DATE_ASC,
+      DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC,
+    ].includes(sortField)
+  ) {
+    sortOrder = 'asc';
+  }
+
+  switch (sortField) {
+    case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC: // fall through
+    case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_DESC:
+      sort = [{ 'numberOfPages.N': sortOrder }];
+      break;
+    case DOCUMENT_SEARCH_SORT.FILING_DATE_ASC: // fall through
+    case DOCUMENT_SEARCH_SORT.FILING_DATE_DESC: // fall through
+    default:
+      sort = [{ 'filingDate.S': sortOrder }];
+      break;
+  }
+
   const documentQuery = {
     body: {
       _source: sourceFields,
+      from,
       query: {
         bool: {
           must: [
-            { match: { 'pk.S': 'case|' } },
-            { match: { 'sk.S': 'docket-entry|' } },
+            { term: { 'entityName.S': 'DocketEntry' } },
             {
               exists: {
                 field: 'servedAt',
               },
             },
-            ...queryParams,
+            ...docketEntryQueryParams,
           ],
         },
       },
-      size: 5000,
+      size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
+      sort,
     },
     index: 'efcms-docket-entry',
   };
 
-  const { results } = await search({
+  const { results, total } = await search({
     applicationContext,
     searchParameters: documentQuery,
   });
-  return results;
+
+  return { results, totalCount: total };
 };

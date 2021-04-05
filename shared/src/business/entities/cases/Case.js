@@ -18,6 +18,7 @@ const {
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
   UNIQUE_OTHER_FILER_TYPE,
@@ -48,11 +49,12 @@ const {
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { DocketEntry } = require('../DocketEntry');
+const { DocketEntry, isServed } = require('../DocketEntry');
 const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 Case.VALIDATION_ERROR_MESSAGES = {
@@ -129,8 +131,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
   ],
 };
 
-Case.validationName = 'Case';
-
 /**
  * Case Entity
  * Represents a Case that has already been accepted into the system.
@@ -155,12 +155,10 @@ Case.prototype.init = function init(
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
     this.assignFieldsForInternalUsers({ applicationContext, rawCase });
-    this.assignFieldsForInternalUsersAndOwners({ applicationContext, rawCase });
-  } else if (applicationContext.getCurrentUser().userId === rawCase.userId) {
-    this.assignFieldsForInternalUsersAndOwners({ applicationContext, rawCase });
   }
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
+  this.assignHearings({ applicationContext, rawCase });
   this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
@@ -200,12 +198,6 @@ Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUs
   this.assignArchivedDocketEntries({ applicationContext, rawCase });
   this.assignStatistics({ applicationContext, rawCase });
   this.assignCorrespondences({ applicationContext, rawCase });
-};
-
-Case.prototype.assignFieldsForInternalUsersAndOwners = function assignFieldsForAllUsers({
-  rawCase,
-}) {
-  this.userId = rawCase.userId;
 };
 
 Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
@@ -250,8 +242,8 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
-  this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending && docketEntry.servedAt,
+  this.hasPendingItems = this.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
@@ -273,17 +265,13 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
       )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
-    this.isSealed =
-      !!rawCase.sealedDate ||
-      this.docketEntries.some(
-        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-      );
+    this.isSealed = isSealedCase(rawCase);
 
     if (
       filtered &&
       applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
       (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
-        getPetitionDocketEntryFromDocketEntries(this.docketEntries).servedAt)
+        this.getIrsSendDate())
     ) {
       this.docketEntries = this.docketEntries.filter(
         d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -291,6 +279,19 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
     }
   } else {
     this.docketEntries = [];
+  }
+};
+
+Case.prototype.assignHearings = function assignHearings({
+  applicationContext,
+  rawCase,
+}) {
+  if (Array.isArray(rawCase.hearings)) {
+    this.hearings = rawCase.hearings
+      .map(hearing => new TrialSession(hearing, { applicationContext }))
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+  } else {
+    this.hearings = [];
   }
 };
 
@@ -311,13 +312,6 @@ Case.prototype.assignContacts = function assignContacts({
   applicationContext,
   rawCase,
 }) {
-  if (
-    applicationContext.getCurrentUser().role === ROLES.petitioner &&
-    applicationContext.getCurrentUser().userId === rawCase.userId
-  ) {
-    rawCase.contactPrimary.contactId = rawCase.userId;
-  }
-
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
@@ -437,6 +431,11 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .meta({ tags: ['Restricted'] })
+    .when('status', {
+      is: CASE_STATUS_TYPES.calendared,
+      otherwise: joi.optional(),
+      then: joi.invalid(true),
+    })
     .description('Temporarily blocked from trial.'),
   blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
     is: true,
@@ -706,8 +705,13 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
-  trialDate: JoiValidationConstants.ISO_DATE.optional()
-    .allow(null)
+  trialDate: joi
+    .alternatives()
+    .conditional('trialSessionId', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.ISO_DATE.optional().allow(null),
+      then: JoiValidationConstants.ISO_DATE.required(),
+    })
     .description('When this case goes to trial.'),
   trialLocation: joi
     .alternatives()
@@ -719,13 +723,19 @@ Case.VALIDATION_RULES = {
     .description(
       'Where this case goes to trial. This may be different that the preferred trial location.',
     ),
-  trialSessionId: JoiValidationConstants.UUID.when('status', {
-    is: CASE_STATUS_TYPES.calendared,
-    otherwise: joi.optional(),
-    then: joi.required(),
-  }).description(
-    'The unique ID of the trial session associated with this case.',
-  ),
+  trialSessionId: joi
+    .when('status', {
+      is: CASE_STATUS_TYPES.calendared,
+      otherwise: joi.when('trialDate', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.UUID.optional(),
+        then: JoiValidationConstants.UUID.required(),
+      }),
+      then: JoiValidationConstants.UUID.required(),
+    })
+    .description(
+      'The unique ID of the trial session associated with this case.',
+    ),
   trialTime: JoiValidationConstants.STRING.pattern(PATTERNS['H:MM'])
     .optional()
     .description('Time of day when this case goes to trial.'),
@@ -735,9 +745,6 @@ Case.VALIDATION_RULES = {
     .description(
       'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
     ),
-  userId: JoiValidationConstants.UUID.required()
-    .meta({ tags: ['Restricted'] })
-    .description('The unique ID of the User who added the case to the system.'),
 };
 
 joiValidationDecorator(
@@ -822,8 +829,8 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  return this.docketEntries.some(
-    docketEntry => docketEntry.pending && docketEntry.servedAt,
+  return this.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 };
 
@@ -949,6 +956,8 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} docketEntryEntity the docket entry to add to the case
  */
 Case.prototype.addDocketEntry = function (docketEntryEntity) {
+  docketEntryEntity.docketNumber = this.docketNumber;
+
   if (docketEntryEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
@@ -1163,15 +1172,11 @@ Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
   return this;
 };
 
-const getPetitionDocketEntryFromDocketEntries = function (docketEntries) {
-  return docketEntries.find(
+Case.prototype.getPetitionDocketEntry = function () {
+  return this.docketEntries.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-};
-
-Case.prototype.getPetitionDocketEntry = function () {
-  return getPetitionDocketEntryFromDocketEntries(this.docketEntries);
 };
 
 Case.prototype.getIrsSendDate = function () {
@@ -1200,38 +1205,27 @@ Case.prototype.generateNextDocketRecordIndex = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
-  const foundDocketEntry = this.docketEntries.find(
+  const foundDocketEntryIndex = this.docketEntries.findIndex(
     docketEntry =>
       docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
   );
 
-  if (foundDocketEntry) {
-    Object.assign(foundDocketEntry, updatedDocketEntry);
+  if (foundDocketEntryIndex !== -1) {
+    this.docketEntries[foundDocketEntryIndex] = updatedDocketEntry;
 
-    if (foundDocketEntry.isOnDocketRecord) {
+    if (updatedDocketEntry.isOnDocketRecord) {
       const updateIndex = shouldGenerateDocketRecordIndex({
         caseDetail: this,
-        docketEntry: foundDocketEntry,
+        docketEntry: updatedDocketEntry,
       });
 
       if (updateIndex) {
-        foundDocketEntry.index = this.generateNextDocketRecordIndex();
+        updatedDocketEntry.index = this.generateNextDocketRecordIndex();
       }
     }
   }
 
   return this;
-};
-
-/**
- * stripLeadingZeros
- *
- * @param {string} docketNumber the docket number
- * @returns {string} the updated docket number
- */
-Case.stripLeadingZeros = docketNumber => {
-  const [number, year] = docketNumber.split('-');
-  return `${parseInt(number)}-${year}`;
 };
 
 /**
@@ -1355,6 +1349,20 @@ Case.prototype.generateTrialSortTags = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.setAsCalendared = function (trialSessionEntity) {
+  this.updateTrialSessionInformation(trialSessionEntity);
+  if (trialSessionEntity.isCalendared === true) {
+    this.status = CASE_STATUS_TYPES.calendared;
+  }
+  return this;
+};
+
+/**
+ * update trial session information
+ *
+ * @param {object} trialSessionEntity - the trial session that is associated with the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.updateTrialSessionInformation = function (trialSessionEntity) {
   if (
     trialSessionEntity.isCalendared &&
     trialSessionEntity.judge &&
@@ -1366,9 +1374,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
   this.trialDate = trialSessionEntity.startDate;
   this.trialTime = trialSessionEntity.startTime;
   this.trialLocation = trialSessionEntity.trialLocation;
-  if (trialSessionEntity.isCalendared === true) {
-    this.status = CASE_STATUS_TYPES.calendared;
-  }
+
   return this;
 };
 
@@ -1377,7 +1383,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
  *
  * @param {object} arguments arguments
  * @param {object} arguments.caseRaw raw case details
- * @param {string} arguments.userId id of the user account
+ * @param {string} arguments.user the user account
  * @returns {boolean} if the case is associated
  */
 const isAssociatedUser = function ({ caseRaw, user }) {
@@ -1398,8 +1404,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     doc => doc.documentType === 'Petition',
   );
 
-  const isPetitionServed =
-    petitionDocketEntry && !!petitionDocketEntry.servedAt;
+  const isPetitionServed = petitionDocketEntry && isServed(petitionDocketEntry);
 
   return (
     isIrsPractitioner ||
@@ -1408,6 +1413,16 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Determines if provided user is associated with the case
+ *
+ * @param {object} arguments.user the user account
+ * @returns {boolean} true if the user provided is associated with the case, false otherwise
+ */
+Case.prototype.isAssociatedUser = function ({ user }) {
+  return isAssociatedUser({ caseRaw: this, user });
 };
 
 /**
@@ -1425,7 +1440,12 @@ Case.prototype.isCalendared = function () {
  * @returns {boolean} if the case is calendared
  */
 Case.prototype.isReadyForTrial = function () {
-  return this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial;
+  return (
+    this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
+    this.preferredTrialCity &&
+    !this.blocked &&
+    !this.automaticBlocked
+  );
 };
 
 /**
@@ -1508,16 +1528,45 @@ Case.prototype.unsetAsHighPriority = function () {
 /**
  * remove case from trial, setting case status to generalDocketReadyForTrial
  *
+ * @param {string} caseStatus optional case status to set the case to
+ * @param {string} associatedJudge optional associatedJudge to set on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function () {
-  this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
-  this.associatedJudge = CHIEF_JUDGE;
+Case.prototype.removeFromTrial = function (caseStatus, associatedJudge) {
+  this.setAssociatedJudge(associatedJudge || CHIEF_JUDGE);
+  this.setCaseStatus(
+    caseStatus || CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  );
   this.trialDate = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
   this.trialTime = undefined;
   return this;
+};
+
+/**
+ * check to see if trialSessionId is a hearing
+ *
+ * @param {string} trialSessionId trial session id to check
+ * @returns {boolean} whether or not the trial session id associated is a hearing or not
+ */
+Case.prototype.isHearing = function (trialSessionId) {
+  return this.hearings.some(
+    trialSession => trialSession.trialSessionId === trialSessionId,
+  );
+};
+
+/**
+ * removes a hearing from the case.hearings array
+ *
+ * @param {string} trialSessionId trial session id associated with hearing to remove
+ */
+Case.prototype.removeFromHearing = function (trialSessionId) {
+  const removeIndex = this.hearings
+    .map(trialSession => trialSession.trialSessionId)
+    .indexOf(trialSessionId);
+
+  this.hearings.splice(removeIndex, 1);
 };
 
 /**
@@ -1699,7 +1748,7 @@ Case.prototype.removeConsolidation = function () {
  * @returns {Case} the lead Case entity
  */
 Case.sortByDocketNumber = function (cases) {
-  const casesOrdered = cases.sort((a, b) => {
+  return cases.sort((a, b) => {
     const aSplit = a.docketNumber.split('-');
     const bSplit = b.docketNumber.split('-');
 
@@ -1711,8 +1760,6 @@ Case.sortByDocketNumber = function (cases) {
       return aSplit[0].localeCompare(bSplit[0]);
     }
   });
-
-  return casesOrdered;
 };
 
 /**
@@ -1728,15 +1775,14 @@ Case.findLeadCaseForCases = function (cases) {
 };
 
 /**
- * re-formats docket number with any leading zeroes removed
+ * re-formats docket number with any leading zeroes and suffix removed
  *
  * @param {string} docketNumber the docket number to re-format
  * @returns {string} the formatted docket Number
  */
 Case.formatDocketNumber = function formatDocketNumber(docketNumber) {
-  const leadingZeroes = /^0+/;
-  const formattedDocketNumber = docketNumber.replace(leadingZeroes, '');
-  return formattedDocketNumber;
+  const regex = /^0*(\d+-\d{2}).*/;
+  return docketNumber.replace(regex, '$1');
 };
 
 /**
@@ -1865,8 +1911,41 @@ Case.prototype.deleteStatistic = function (statisticId) {
   return this;
 };
 
+Case.prototype.hasPartyWithPaperService = function () {
+  return (
+    this.contactPrimary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER ||
+    (this.contactSecondary &&
+      this.contactSecondary.serviceIndicator ===
+        SERVICE_INDICATOR_TYPES.SI_PAPER) ||
+    (this.privatePractitioners &&
+      this.privatePractitioners.find(
+        pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+      )) ||
+    (this.irsPractitioners &&
+      this.irsPractitioners.find(
+        ip => ip.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+      ))
+  );
+};
+
+const isSealedCase = rawCase => {
+  const isSealed =
+    rawCase.isSealed ||
+    !!rawCase.sealedDate ||
+    (Array.isArray(rawCase.docketEntries) &&
+      rawCase.docketEntries.some(
+        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+      ));
+  return isSealed;
+};
+
+const caseHasServedDocketEntries = rawCase => {
+  return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
-  getPetitionDocketEntryFromDocketEntries,
+  caseHasServedDocketEntries,
   isAssociatedUser,
+  isSealedCase,
 };

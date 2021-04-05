@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
 import { connect } from '@cerebral/react';
@@ -28,7 +27,6 @@ export const PublicDocketRecord = connect(
               </th>
               <th>Date</th>
               <th className="center-column">Event</th>
-              <th aria-hidden="true" className="icon-column" />
               <th>Filings and Proceedings</th>
               <th>Pages</th>
               <th>Filed By</th>
@@ -57,14 +55,6 @@ export const PublicDocketRecord = connect(
                     </td>
                     <td className="center-column hide-on-mobile">
                       {entry.eventCode}
-                    </td>
-                    <td
-                      aria-hidden="true"
-                      className="filing-type-icon hide-on-mobile"
-                    >
-                      {entry.isPaper && (
-                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                      )}
                     </td>
                     <td>
                       <PublicFilingsAndProceedings entry={entry} />

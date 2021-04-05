@@ -1,6 +1,5 @@
 const {
   entityName: irsPractitionerEntityName,
-  IrsPractitioner,
 } = require('../../entities/IrsPractitioner');
 const {
   entityName: practitionerEntityName,
@@ -8,7 +7,6 @@ const {
 } = require('../../entities/Practitioner');
 const {
   entityName: privatePractitionerEntityName,
-  PrivatePractitioner,
 } = require('../../entities/PrivatePractitioner');
 const {
   isAuthorized,
@@ -21,17 +19,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * updateUserContactInformationInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  * @returns {Promise} an object is successful
  */
-const updateUserContactInformationInteractor = async ({
+const updateUserContactInformationInteractor = async (
   applicationContext,
-  contactInfo,
-  userId,
-}) => {
+  { contactInfo, userId },
+) => {
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
@@ -55,19 +52,11 @@ const updateUserContactInformationInteractor = async ({
   }
 
   let userEntity;
-  if (user.entityName === privatePractitionerEntityName) {
-    userEntity = new PrivatePractitioner({
-      ...user,
-      contact: { ...contactInfo },
-      isUpdatingInformation: true,
-    });
-  } else if (user.entityName === irsPractitionerEntityName) {
-    userEntity = new IrsPractitioner({
-      ...user,
-      contact: { ...contactInfo },
-      isUpdatingInformation: true,
-    });
-  } else if (user.entityName === practitionerEntityName) {
+  if (
+    user.entityName === privatePractitionerEntityName ||
+    user.entityName === irsPractitionerEntityName ||
+    user.entityName === practitionerEntityName
+  ) {
     userEntity = new Practitioner({
       ...user,
       contact: { ...contactInfo },
@@ -115,17 +104,16 @@ const updateUserContactInformationInteractor = async ({
 /**
  * updateUserContactInformationInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  * @returns {Promise} an object is successful
  */
-exports.updateUserContactInformationInteractor = async ({
+exports.updateUserContactInformationInteractor = async (
   applicationContext,
-  contactInfo,
-  userId,
-}) => {
+  { contactInfo, userId },
+) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
   if (
@@ -136,13 +124,12 @@ exports.updateUserContactInformationInteractor = async ({
   }
 
   try {
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId,
     });
   } catch (error) {
-    applicationContext.logger.info('Error', error);
+    applicationContext.logger.error(error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
@@ -151,6 +138,6 @@ exports.updateUserContactInformationInteractor = async ({
       },
       userId: authenticatedUser.userId,
     });
-    await applicationContext.notifyHoneybadger(error);
+    throw error;
   }
 };

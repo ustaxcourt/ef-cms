@@ -1,11 +1,19 @@
 const {
-  COURT_ISSUED_DOCUMENT_TYPES,
+  COURT_ISSUED_EVENT_CODES,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
-  TRACKED_DOCUMENT_TYPES,
+  ROLES,
+  SERVED_PARTIES_CODES,
+  TRACKED_DOCUMENT_TYPES_EVENT_CODES,
+  UNSERVABLE_EVENT_CODES,
 } = require('./EntityConstants');
+const {
+  createISODateAtStartOfDayEST,
+  createISODateString,
+} = require('../utilities/DateHandler');
 const {
   DOCKET_ENTRY_VALIDATION_RULES,
 } = require('./EntityValidationConstants');
@@ -13,11 +21,9 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { createISODateString } = require('../utilities/DateHandler');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 
-DocketEntry.validationName = 'DocketEntry';
 /**
  * constructor
  *
@@ -27,6 +33,40 @@ DocketEntry.validationName = 'DocketEntry';
 function DocketEntry() {
   this.entityName = 'DocketEntry';
 }
+
+DocketEntry.prototype.initUnfilteredForInternalUsers = function initForUnfilteredForInternalUsers(
+  rawDocketEntry,
+  { applicationContext },
+) {
+  this.editState = rawDocketEntry.editState;
+  this.draftOrderState = rawDocketEntry.draftOrderState;
+  this.isDraft = rawDocketEntry.isDraft || false;
+  this.judge = rawDocketEntry.judge;
+  this.judgeUserId = rawDocketEntry.judgeUserId;
+  this.pending =
+    rawDocketEntry.pending === undefined
+      ? DocketEntry.isPendingOnCreation(rawDocketEntry)
+      : rawDocketEntry.pending;
+  if (rawDocketEntry.previousDocument) {
+    this.previousDocument = {
+      docketEntryId: rawDocketEntry.previousDocument.docketEntryId,
+      documentTitle: rawDocketEntry.previousDocument.documentTitle,
+      documentType: rawDocketEntry.previousDocument.documentType,
+    };
+  }
+  this.qcAt = rawDocketEntry.qcAt;
+  this.qcByUserId = rawDocketEntry.qcByUserId;
+  this.signedAt = rawDocketEntry.signedAt;
+  this.signedByUserId = rawDocketEntry.signedByUserId;
+  this.signedJudgeName = rawDocketEntry.signedJudgeName;
+  this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
+  this.strickenBy = rawDocketEntry.strickenBy;
+  this.strickenByUserId = rawDocketEntry.strickenByUserId;
+  this.userId = rawDocketEntry.userId;
+  this.workItem = rawDocketEntry.workItem
+    ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
+    : undefined;
+};
 
 DocketEntry.prototype.init = function init(
   rawDocketEntry,
@@ -39,40 +79,13 @@ DocketEntry.prototype.init = function init(
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
-    this.editState = rawDocketEntry.editState;
-    this.draftOrderState = rawDocketEntry.draftOrderState;
-    this.isDraft = rawDocketEntry.isDraft || false;
-    this.judge = rawDocketEntry.judge;
-    this.judgeUserId = rawDocketEntry.judgeUserId;
-    this.pending =
-      rawDocketEntry.pending === undefined
-        ? DocketEntry.isPendingOnCreation(rawDocketEntry)
-        : rawDocketEntry.pending;
-    if (rawDocketEntry.previousDocument) {
-      this.previousDocument = {
-        docketEntryId: rawDocketEntry.previousDocument.docketEntryId,
-        documentTitle: rawDocketEntry.previousDocument.documentTitle,
-        documentType: rawDocketEntry.previousDocument.documentType,
-      };
-    }
-    this.qcAt = rawDocketEntry.qcAt;
-    this.qcByUserId = rawDocketEntry.qcByUserId;
-    this.signedAt = rawDocketEntry.signedAt;
-    this.signedByUserId = rawDocketEntry.signedByUserId;
-    this.signedJudgeName = rawDocketEntry.signedJudgeName;
-    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
-    this.strickenBy = rawDocketEntry.strickenBy;
-    this.strickenByUserId = rawDocketEntry.strickenByUserId;
-    this.userId = rawDocketEntry.userId;
-    this.workItem = rawDocketEntry.workItem
-      ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
-      : undefined;
+    this.initUnfilteredForInternalUsers(rawDocketEntry, { applicationContext });
   }
 
   this.action = rawDocketEntry.action;
   this.additionalInfo = rawDocketEntry.additionalInfo;
   this.additionalInfo2 = rawDocketEntry.additionalInfo2;
-  this.addToCoversheet = rawDocketEntry.addToCoversheet;
+  this.addToCoversheet = rawDocketEntry.addToCoversheet || false;
   this.archived = rawDocketEntry.archived;
   this.attachments = rawDocketEntry.attachments;
   this.certificateOfService = rawDocketEntry.certificateOfService;
@@ -115,11 +128,12 @@ DocketEntry.prototype.init = function init(
   this.partyPrimary = rawDocketEntry.partyPrimary;
   this.partySecondary = rawDocketEntry.partySecondary;
   this.processingStatus = rawDocketEntry.processingStatus || 'pending';
-  this.receivedAt = rawDocketEntry.receivedAt || createISODateString();
+  this.receivedAt = createISODateAtStartOfDayEST(rawDocketEntry.receivedAt);
   this.relationship = rawDocketEntry.relationship;
   this.scenario = rawDocketEntry.scenario;
-  this.secondaryDate = rawDocketEntry.secondaryDate;
-  this.secondaryDocument = rawDocketEntry.secondaryDocument;
+  if (rawDocketEntry.scenario === 'Nonstandard H') {
+    this.secondaryDocument = rawDocketEntry.secondaryDocument;
+  }
   this.servedAt = rawDocketEntry.servedAt;
   this.servedPartiesCode = rawDocketEntry.servedPartiesCode;
   this.serviceDate = rawDocketEntry.serviceDate;
@@ -165,15 +179,7 @@ DocketEntry.prototype.init = function init(
 };
 
 DocketEntry.isPendingOnCreation = rawDocketEntry => {
-  const isPending = Object.values(TRACKED_DOCUMENT_TYPES).some(trackedType => {
-    return (
-      (rawDocketEntry.category &&
-        trackedType.category === rawDocketEntry.category) ||
-      (rawDocketEntry.eventCode &&
-        trackedType.eventCode === rawDocketEntry.eventCode)
-    );
-  });
-  return isPending;
+  return TRACKED_DOCUMENT_TYPES_EVENT_CODES.includes(rawDocketEntry.eventCode);
 };
 
 joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES);
@@ -184,6 +190,23 @@ joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES);
  */
 DocketEntry.prototype.setWorkItem = function (workItem) {
   this.workItem = workItem;
+};
+
+/**
+ * The pending boolean on the DocketEntry just represents if the user checked the
+ * add to pending report checkbox.  This is a computed that uses that along with
+ * eventCodes and servedAt to determine if the docket entry is pending.
+ *
+ * @returns {boolean} is the docket entry is pending or not
+ */
+DocketEntry.isPending = function (docketEntry) {
+  return (
+    docketEntry.pending &&
+    (isServed(docketEntry) ||
+      UNSERVABLE_EVENT_CODES.find(
+        unservedCode => unservedCode === docketEntry.eventCode,
+      ))
+  );
 };
 
 /**
@@ -200,6 +223,7 @@ DocketEntry.prototype.setAsServed = function (servedParties = null) {
 
   if (servedParties) {
     this.servedParties = servedParties;
+    this.servedPartiesCode = getServedPartiesCode(servedParties);
   }
 };
 
@@ -210,7 +234,14 @@ and contact info from the case detail
  * @param {object} caseDetail the case detail
  */
 DocketEntry.prototype.generateFiledBy = function (caseDetail) {
-  if (!this.filedBy) {
+  const isNoticeOfContactChange = NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
+    this.eventCode,
+  );
+
+  const shouldGenerateFiledBy =
+    !this.filedBy && !(isNoticeOfContactChange && this.isAutoGenerated);
+
+  if (shouldGenerateFiledBy) {
     let partiesArray = [];
     this.partyIrsPractitioner && partiesArray.push('Resp.');
 
@@ -295,10 +326,12 @@ DocketEntry.prototype.isAutoServed = function () {
   const isExternalDocumentType = EXTERNAL_DOCUMENT_TYPES.includes(
     this.documentType,
   );
+
   const isPractitionerAssociationDocumentType = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(
     this.documentType,
   );
-  //if fully concatenated document title includes the word Simultaneous, do not auto-serve
+
+  // if fully concatenated document title includes the word Simultaneous, do not auto-serve
   const isSimultaneous = (this.documentTitle || this.documentType).includes(
     'Simultaneous',
   );
@@ -309,8 +342,15 @@ DocketEntry.prototype.isAutoServed = function () {
   );
 };
 
+/**
+ * Determines if the docket entry is a court issued document
+ *
+ * @returns {Boolean} true if the docket entry is a court issued document, false otherwise
+ */
 DocketEntry.prototype.isCourtIssued = function () {
-  return COURT_ISSUED_DOCUMENT_TYPES.includes(this.documentType);
+  return COURT_ISSUED_EVENT_CODES.map(({ eventCode }) => eventCode).includes(
+    this.eventCode,
+  );
 };
 
 /**
@@ -329,10 +369,13 @@ DocketEntry.prototype.setNumberOfPages = function (numberOfPages) {
  * @param {string} obj.name user name
  * @param {string} obj.userId user id
  */
-DocketEntry.prototype.strikeEntry = function ({ name, userId }) {
+DocketEntry.prototype.strikeEntry = function ({
+  name: strickenByName,
+  userId,
+}) {
   if (this.isOnDocketRecord) {
     this.isStricken = true;
-    this.strickenBy = name;
+    this.strickenBy = strickenByName;
     this.strickenByUserId = userId;
     this.strickenAt = createISODateString();
   } else {
@@ -342,4 +385,37 @@ DocketEntry.prototype.strikeEntry = function ({ name, userId }) {
   }
 };
 
-exports.DocketEntry = validEntityDecorator(DocketEntry);
+/**
+ * Determines if the docket entry has been served
+ *
+ * @returns {Boolean} true if the docket entry has been served, false otherwise
+ */
+const isServed = function (rawDocketEntry) {
+  return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
+};
+
+/**
+ * Determines the servedPartiesCode based on the given servedParties
+ *
+ * @returns {String} served parties code
+ */
+const getServedPartiesCode = servedParties => {
+  let servedPartiesCode = '';
+  if (servedParties && servedParties.length > 0) {
+    if (
+      servedParties.length === 1 &&
+      servedParties[0].role === ROLES.irsSuperuser
+    ) {
+      servedPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
+    } else {
+      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
+    }
+  }
+  return servedPartiesCode;
+};
+
+module.exports = {
+  DocketEntry: validEntityDecorator(DocketEntry),
+  getServedPartiesCode,
+  isServed,
+};

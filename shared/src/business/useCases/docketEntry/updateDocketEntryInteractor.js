@@ -15,18 +15,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
  * @returns {object} the updated case after the documents are added
  */
-exports.updateDocketEntryInteractor = async ({
+exports.updateDocketEntryInteractor = async (
   applicationContext,
-  documentMetadata,
-  isSavingForLater,
-  primaryDocumentFileId,
-}) => {
+  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
@@ -245,10 +243,12 @@ exports.updateDocketEntryInteractor = async ({
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
 
-  return caseEntity.toRawObject();
+  return new Case(result, { applicationContext }).validate().toRawObject();
 };

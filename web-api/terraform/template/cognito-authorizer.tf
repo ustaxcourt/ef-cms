@@ -11,12 +11,15 @@ resource "aws_lambda_function" "cognito_authorizer_lambda" {
   handler          = "cognito-authorizer.handler"
   source_code_hash = data.archive_file.zip_authorizer.output_base64sha256
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
 
   environment {
     variables = {
       USER_POOL_ID_MAIN = aws_cognito_user_pool.pool.id
       USER_POOL_ID_IRS  = aws_cognito_user_pool.irs_pool.id
+      NODE_ENV          = "production"
+      LOG_LEVEL         = "info"
+      STAGE             = var.environment
     }
   }
 }
@@ -28,7 +31,7 @@ resource "aws_lambda_function" "cognito_authorizer_lambda_west" {
   handler          = "cognito-authorizer.handler"
   source_code_hash = data.archive_file.zip_authorizer.output_base64sha256
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
 
   environment {
     variables = {

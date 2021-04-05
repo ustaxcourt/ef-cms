@@ -28,7 +28,7 @@
         - 
           name: "max"
           args: 
-            limit: 500
+            limit: 700
     subject: 
       type: "string"
       flags: 
@@ -60,7 +60,9 @@
         - "chambers"
         - "clerkofcourt"
         - "docket"
+        - "floater"
         - "petitions"
+        - "reportersOffice"
         - "trialClerks"
         - "ashfordsChambers"
         - "buchsChambers"

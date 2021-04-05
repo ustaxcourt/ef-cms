@@ -115,8 +115,8 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description('Date that this Document was filed.'),
-  freeText: JoiValidationConstants.STRING.max(500).optional(),
-  freeText2: JoiValidationConstants.STRING.max(500).optional(),
+  freeText: JoiValidationConstants.STRING.max(1000).optional(),
+  freeText2: JoiValidationConstants.STRING.max(1000).optional(),
   hasOtherFilingParty: joi
     .boolean()
     .optional()
@@ -202,7 +202,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       'A lodged document is awaiting action by the judge to enact or refuse.',
     ),
   mailingDate: JoiValidationConstants.STRING.max(100).optional(),
-  numberOfPages: joi.number().optional().allow(null),
+  numberOfPages: joi.number().integer().optional().allow(null),
   objections: JoiValidationConstants.STRING.valid(
     ...OBJECTIONS_OPTIONS,
   ).optional(),
@@ -225,7 +225,12 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .boolean()
     .optional()
     .description('Use the secondary contact to compose the filedBy text.'),
-  pending: joi.boolean().optional(),
+  pending: joi
+    .boolean()
+    .optional()
+    .description(
+      'Determines if the docket entry should be displayed in the Pending Report.',
+    ),
   previousDocument: joi
     .object()
     .keys({
@@ -247,17 +252,14 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description('Practitioner names to be used to compose the filedBy text.'),
   processingStatus: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
-  ).optional(),
+  ).required(),
   qcAt: JoiValidationConstants.ISO_DATE.optional(),
   qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
-  receivedAt: JoiValidationConstants.ISO_DATE.optional(),
+  receivedAt: JoiValidationConstants.ISO_DATE_STRICT.optional(),
   relationship: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_RELATIONSHIPS),
   ).optional(),
   scenario: JoiValidationConstants.STRING.valid(...SCENARIOS).optional(),
-  secondaryDate: JoiValidationConstants.ISO_DATE.optional().description(
-    'A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents.',
-  ),
   secondaryDocument: joi // TODO: limit keys
     .object()
     .keys({
@@ -425,6 +427,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
 //   .optional();
 
 module.exports = {
+  DOCKET_ENTRY_VALIDATION_RULE_KEYS,
   DOCKET_ENTRY_VALIDATION_RULES: joi
     .object()
     .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS),

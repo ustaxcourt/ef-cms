@@ -49,10 +49,10 @@ const SectionWorkQueueInProgressRow = React.memo(
           <td className="message-queue-row message-queue-case-title">
             {item.caseTitle}
           </td>
-          <td className="message-queue-row message-queue-document">
+          <td className="message-queue-row max-width-25">
             <div className="message-document-title">
               <a className="case-link" href={item.editLink}>
-                {item.docketEntry.documentTitle ||
+                {item.docketEntry.descriptionDisplay ||
                   item.docketEntry.documentType}
               </a>
             </div>
@@ -103,11 +103,11 @@ export const SectionWorkQueueInProgress = connect(
               className="usa-select"
               id="options"
               name="options"
-              onChange={event => {
+              onChange={evt => {
                 selectAssigneeSequence({
-                  assigneeId: event.target.value,
+                  assigneeId: evt.target.value,
                   assigneeName:
-                    event.target.options[event.target.selectedIndex].text,
+                    evt.target.options[evt.target.selectedIndex].text,
                 });
                 assignSelectedWorkItemsSequence();
               }}

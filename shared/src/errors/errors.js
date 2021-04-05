@@ -57,7 +57,9 @@ module.exports.UnauthorizedError = class UnauthorizedError extends Error {
  *
  * @type {module.UnprocessableEntity}
  */
-module.exports.UnprocessableEntityError = class UnprocessableEntityError extends Error {
+module.exports.UnprocessableEntityError = class UnprocessableEntityError extends (
+  Error
+) {
   /**
    * constructor
    *
@@ -75,7 +77,9 @@ module.exports.UnprocessableEntityError = class UnprocessableEntityError extends
  *
  * @type {module.UnsanitizedEntity}
  */
-module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends Error {
+module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends (
+  Error
+) {
   /**
    * constructor
    *
@@ -100,10 +104,15 @@ module.exports.InvalidEntityError = class InvalidEntityError extends Error {
    * @param {string} message the error message
    */
   constructor(
-    validationName,
-    entityIds,
+    entityName,
     message = 'entity is invalid or invalid for operation',
+    validationObject = {},
   ) {
-    super(`The ${validationName} entity was invalid. ${message}. ${entityIds}`);
+    super(`The ${entityName} entity was invalid. ${message}`);
+    Object.defineProperties(this, {
+      details: {
+        value: validationObject,
+      },
+    });
   }
 };

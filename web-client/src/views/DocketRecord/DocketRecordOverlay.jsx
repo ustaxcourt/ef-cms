@@ -6,7 +6,7 @@ import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
-const modalRoot = document.getElementById('modal-root');
+const modalRoot = window.document.getElementById('modal-root');
 
 export const DocketRecordOverlay = connect(
   {
@@ -29,7 +29,7 @@ export const DocketRecordOverlay = connect(
 
     const getEl = () => {
       if (!elRef.current) {
-        elRef.current = document.createElement('div');
+        elRef.current = window.document.createElement('div');
       }
       return elRef.current;
     };
@@ -37,13 +37,13 @@ export const DocketRecordOverlay = connect(
     useEffect(() => {
       const toggleNoScroll = scrollingOn => {
         if (scrollingOn) {
-          document.body.classList.add('no-scroll');
-          document.addEventListener('touchmove', touchmoveTriggered, {
+          window.document.body.classList.add('no-scroll');
+          window.document.addEventListener('touchmove', touchmoveTriggered, {
             passive: false,
           });
         } else {
-          document.body.classList.remove('no-scroll');
-          document.removeEventListener('touchmove', touchmoveTriggered, {
+          window.document.body.classList.remove('no-scroll');
+          window.document.removeEventListener('touchmove', touchmoveTriggered, {
             passive: false,
           });
         }
@@ -64,12 +64,12 @@ export const DocketRecordOverlay = connect(
       };
 
       modalRoot.appendChild(getEl());
-      document.addEventListener('keydown', keydownTriggered, false);
+      window.document.addEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(true);
 
       return () => {
         modalRoot.removeChild(getEl());
-        document.removeEventListener('keydown', keydownTriggered, false);
+        window.document.removeEventListener('keydown', keydownTriggered, false);
         toggleNoScroll(false);
       };
     }, []);
@@ -111,13 +111,22 @@ export const DocketRecordOverlay = connect(
                   openCaseDocumentDownloadUrlSequence({
                     docketEntryId: entry.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
-                    isMobile: true,
+                    useSameTab: true,
                   });
                 }}
               >
                 <FontAwesomeIcon icon={['fas', 'file-pdf']} />
                 View PDF
               </Button>
+              {entry.isLegacySealed && (
+                <p className="sealed-address">
+                  <FontAwesomeIcon
+                    className="margin-right-1"
+                    icon={['fas', 'lock']}
+                  />
+                  Document is sealed
+                </p>
+              )}
               <p className="semi-bold label margin-top-3">Date</p>
               <p className="margin-top-0">{entry.createdAtFormatted}</p>
               <p className="semi-bold label margin-top-3">Pages</p>

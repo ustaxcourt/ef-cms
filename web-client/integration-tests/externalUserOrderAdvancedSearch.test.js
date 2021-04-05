@@ -4,12 +4,7 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import {
-  loginAs,
-  refreshElasticsearchIndex,
-  setupTest,
-  uploadPetition,
-} from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
@@ -22,6 +17,10 @@ test.draftOrders = [];
 describe('external users perform an advanced search for orders', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -46,9 +45,6 @@ describe('external users perform an advanced search for orders', () => {
   docketClerkSignsOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
   docketClerkServesDocument(test, 0);
-  it('refresh elasticsearch index', async () => {
-    await refreshElasticsearchIndex();
-  });
 
   loginAs(test, 'privatePractitioner@example.com');
   associatedUserSearchesForServedOrder(test, {
@@ -76,15 +72,16 @@ describe('external users perform an advanced search for orders', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkSealsCase(test);
-  it('refresh elasticsearch index', async () => {
-    await refreshElasticsearchIndex();
-  });
 
   loginAs(test, 'privatePractitioner@example.com');
-  associatedUserSearchesForServedOrder(test, {
-    draftOrderIndex: 0,
-    keyword: 'Jiminy Cricket',
-  });
+  associatedUserSearchesForServedOrder(
+    test,
+    {
+      draftOrderIndex: 0,
+      keyword: 'Jiminy Cricket',
+    },
+    true,
+  );
 
   loginAs(test, 'privatePractitioner1@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(test, {
@@ -93,10 +90,14 @@ describe('external users perform an advanced search for orders', () => {
   });
 
   loginAs(test, 'irsPractitioner@example.com');
-  associatedUserSearchesForServedOrder(test, {
-    draftOrderIndex: 0,
-    keyword: 'Jiminy Cricket',
-  });
+  associatedUserSearchesForServedOrder(
+    test,
+    {
+      draftOrderIndex: 0,
+      keyword: 'Jiminy Cricket',
+    },
+    true,
+  );
 
   loginAs(test, 'irsPractitioner2@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(test, {

@@ -20,6 +20,41 @@ h2 {
   text-align: center;
 }
 
+.bu {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.check-list {
+  list-style-type: none;
+
+  li {
+    position: relative;
+    margin-bottom: 10px;
+
+    label {
+      display: block;
+    }
+
+    input {
+      position: absolute;
+      top: 4px;
+      left: -20px;
+      margin-right: 10px;
+    }
+  }
+}
+
+.dashed-box {
+  padding: 10px;
+  border: 1px solid #999;
+  text-align: center;
+}
+
+.padding-top-1 {
+  padding-top: 12px;
+}
+
 p.heading-address {
   width: 100%;
   font-size: 12px;
@@ -225,6 +260,12 @@ th {
   padding: 10px;
 }
 
+.internal-card-content {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+}
+
 // TODO: Refactor these in favor of "cards"
 .info-box {
   border: 1px solid #ccc;
@@ -267,6 +308,15 @@ th {
   font-family: 'nimbus_roman', serif;
   font-size: 14px;
   line-height: 13px;
+}
+
+.stricken-docket-record {
+  text-decoration: line-through;
+
+  &.usa-button,
+  &.view-pdf-link {
+    text-decoration: underline line-through;
+  }
 }
 
 .us-tax-court-seal {
@@ -314,6 +364,48 @@ th {
 
 .text-center {
   text-align: center;
+}
+
+.standing-pretrial-order-small-case {
+  line-height: 22px;
+
+  p {
+    line-height: 22px;
+  }
+
+  ol {
+    li {
+      padding-bottom: 20px;
+    }
+  }
+}
+
+.mr-1 {
+  margin-right: 10px;
+}
+
+.pl-1 {
+  padding-left: 7px;
+}
+
+.mb-8 {
+  margin-bottom: 80px;
+}
+
+.mr-2 {
+  margin-right: 20px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-grow-2 {
+  flex-grow: 2;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
 }
 
 .text-right {

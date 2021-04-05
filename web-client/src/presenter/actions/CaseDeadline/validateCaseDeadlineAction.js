@@ -1,4 +1,4 @@
-import { getCaseDeadlineFromForm } from './getCaseDeadlineFromForm';
+import { getCaseDeadlineFromFormAction } from './getCaseDeadlineFromFormAction';
 
 /**
  * validates the petition.
@@ -16,7 +16,7 @@ export const validateCaseDeadlineAction = ({
   path,
   props,
 }) => {
-  const caseDeadline = getCaseDeadlineFromForm({
+  const caseDeadline = getCaseDeadlineFromFormAction({
     applicationContext,
     get,
     props,

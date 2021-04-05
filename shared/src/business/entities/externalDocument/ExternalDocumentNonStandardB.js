@@ -1,4 +1,8 @@
 const {
+  baseExternalDocumentValidation,
+  externalDocumentDecorator,
+} = require('./ExternalDocumentBase');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -18,9 +22,7 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
 function ExternalDocumentNonStandardB() {}
 
 ExternalDocumentNonStandardB.prototype.init = function init(rawProps) {
-  this.category = rawProps.category;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
+  externalDocumentDecorator(this, rawProps);
   this.freeText = rawProps.freeText;
 };
 
@@ -33,10 +35,8 @@ ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES = {
 };
 
 ExternalDocumentNonStandardB.schema = {
-  category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
-  freeText: JoiValidationConstants.STRING.required(),
+  ...baseExternalDocumentValidation,
+  freeText: JoiValidationConstants.STRING.max(1000).required(),
 };
 
 joiValidationDecorator(

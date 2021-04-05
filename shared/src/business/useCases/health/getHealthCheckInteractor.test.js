@@ -2,42 +2,43 @@ const { getHealthCheckInteractor } = require('./getHealthCheckInteractor');
 
 describe('getHealthCheckInteractor', () => {
   it('should return the expected true statues for all services', async () => {
-    const status = await getHealthCheckInteractor({
-      applicationContext: {
-        environment: {
-          stage: 'dev',
-        },
-        getHttpClient: () => {
-          return {
-            CancelToken: {
-              source: () => ({
-                cancel: () => null,
-              }),
-            },
-            get: () => Promise.resolve(true),
-          };
-        },
-        getPersistenceGateway() {
-          return {
-            getClientId: () => 'a',
-            getDeployTableStatus: () => 'ACTIVE',
-            getFirstSingleCaseRecord: () => true,
-            getSesStatus: () => true,
-            getTableStatus: () => 'ACTIVE',
-          };
-        },
-        getStorageClient: () => {
-          return {
-            listObjectsV2: () => ({
-              promise: () => Promise.resolve(true),
+    const statusResult = await getHealthCheckInteractor({
+      environment: {
+        stage: 'dev',
+      },
+      getHttpClient: () => {
+        return {
+          CancelToken: {
+            source: () => ({
+              cancel: () => null,
             }),
-          };
-        },
+          },
+          get: () => Promise.resolve(true),
+        };
+      },
+      getPersistenceGateway() {
+        return {
+          getClientId: () => 'a',
+          getDeployTableStatus: () => 'ACTIVE',
+          getFirstSingleCaseRecord: () => true,
+          getSesStatus: () => true,
+          getTableStatus: () => 'ACTIVE',
+        };
+      },
+      getScannerResourceUri: () => '',
+      getStorageClient: () => {
+        return {
+          listObjectsV2: () => ({
+            promise: () => Promise.resolve(true),
+          }),
+        };
+      },
+      logger: {
+        error: () => {},
       },
     });
 
-    expect(status).toEqual({
-      clamAV: false,
+    expect(statusResult).toEqual({
       cognito: true,
       dynamo: {
         efcms: true,
@@ -61,50 +62,52 @@ describe('getHealthCheckInteractor', () => {
 
   it('should return false for all services when services are down', async () => {
     const status = await getHealthCheckInteractor({
-      applicationContext: {
-        environment: {
-          stage: 'dev',
-        },
-        getHttpClient: () => {
-          return {
-            CancelToken: {
-              source: () => ({
-                cancel: () => null,
-              }),
-            },
-            get: () => Promise.reject(true),
-          };
-        },
-        getPersistenceGateway() {
-          return {
-            getClientId: () => {
-              throw new Error();
-            },
-            getDeployTableStatus: () => {
-              throw new Error();
-            },
-            getFirstSingleCaseRecord: () => {
-              throw new Error();
-            },
-            getSesStatus: () => {
-              throw new Error();
-            },
-            getTableStatus: () => {
-              throw new Error();
-            },
-          };
-        },
-        getStorageClient: () => {
-          return {
-            listObjectsV2: () => ({
-              promise: () => Promise.reject(true),
+      environment: {
+        stage: 'dev',
+      },
+      getHttpClient: () => {
+        return {
+          CancelToken: {
+            source: () => ({
+              cancel: () => null,
             }),
-          };
-        },
+          },
+          get: () => Promise.reject(true),
+        };
+      },
+      getPersistenceGateway() {
+        return {
+          getClientId: () => {
+            throw new Error();
+          },
+          getDeployTableStatus: () => {
+            throw new Error();
+          },
+          getFirstSingleCaseRecord: () => {
+            throw new Error();
+          },
+          getSesStatus: () => {
+            throw new Error();
+          },
+          getTableStatus: () => {
+            throw new Error();
+          },
+        };
+      },
+      getScannerResourceUri: () => '',
+      getStorageClient: () => {
+        return {
+          listObjectsV2: () => ({
+            promise: () => Promise.reject(true),
+          }),
+        };
+      },
+      logger: {
+        error: () => {},
       },
     });
+
     expect(status).toEqual({
-      clamAV: false,
       cognito: false,
       dynamo: {
         efcms: false,
@@ -139,34 +142,36 @@ describe('getHealthCheckInteractor', () => {
       const listObjectsMock = jest.fn().mockReturnValue(Promise.resolve(true));
 
       await getHealthCheckInteractor({
-        applicationContext: {
-          environment: {
-            stage: 'dev',
-          },
-          getHttpClient: () => {
-            return {
-              CancelToken: {
-                source: () => ({
-                  cancel: () => null,
-                }),
-              },
-              get: () => Promise.resolve(true),
-            };
-          },
-          getPersistenceGateway() {
-            return {
-              getClientId: () => 'a',
-              getDeployTableStatus: () => 'ACTIVE',
-              getFirstSingleCaseRecord: () => true,
-              getSesStatus: () => true,
-              getTableStatus: () => 'ACTIVE',
-            };
-          },
-          getStorageClient: () => {
-            return {
-              listObjectsV2: listObjectsMock,
-            };
-          },
+        environment: {
+          stage: 'dev',
+        },
+        getHttpClient: () => {
+          return {
+            CancelToken: {
+              source: () => ({
+                cancel: () => null,
+              }),
+            },
+            get: () => Promise.resolve(true),
+          };
+        },
+        getPersistenceGateway() {
+          return {
+            getClientId: () => 'a',
+            getDeployTableStatus: () => 'ACTIVE',
+            getFirstSingleCaseRecord: () => true,
+            getSesStatus: () => true,
+            getTableStatus: () => 'ACTIVE',
+          };
+        },
+        getStorageClient: () => {
+          return {
+            listObjectsV2: listObjectsMock,
+          };
+        },
+
+        logger: {
+          error: () => {},
         },
       });
 

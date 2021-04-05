@@ -1,9 +1,6 @@
-
-
 resource "aws_s3_bucket" "api_lambdas_bucket_west" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-west-1.lambdas"
   acl    = "private"
-  region = "us-west-1"
 
   provider = aws.us-west-1
   tags = {
@@ -19,7 +16,7 @@ resource "null_resource" "api_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -31,7 +28,7 @@ resource "null_resource" "websockets_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -43,7 +40,7 @@ resource "null_resource" "api_public_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -55,7 +52,7 @@ resource "null_resource" "puppeteer_layer_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -66,7 +63,21 @@ resource "null_resource" "cron_west_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
+  }
+}
+
+resource "aws_acm_certificate" "api_gateway_cert_west" {
+  domain_name       = "*.${var.dns_domain}"
+  validation_method = "DNS"
+  provider          = aws.us-west-1
+
+  tags = {
+    Name          = "wildcard.${var.dns_domain}"
+    ProductDomain = "EFCMS API"
+    Environment   = var.environment
+    Description   = "Certificate for wildcard.${var.dns_domain}"
+    ManagedBy     = "terraform"
   }
 }
 
@@ -128,24 +139,86 @@ data "aws_s3_bucket_object" "puppeteer_green_west_object" {
 
 data "aws_elasticsearch_domain" "green_west_elasticsearch_domain" {
   depends_on = [
-    aws_elasticsearch_domain.efcms-search,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
+    module.elasticsearch_alpha,
+    module.elasticsearch_beta,
   ]
   domain_name = var.green_elasticsearch_domain
 }
 
 data "aws_elasticsearch_domain" "blue_west_elasticsearch_domain" {
   depends_on = [
-    aws_elasticsearch_domain.efcms-search,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
+    module.elasticsearch_alpha,
+    module.elasticsearch_beta,
   ]
   domain_name = var.blue_elasticsearch_domain
+}
+
+resource "aws_api_gateway_domain_name" "public_api_custom_main_west" {
+  depends_on               = [aws_acm_certificate.api_gateway_cert_west]
+  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_west.arn
+  domain_name              = "public-api.${var.dns_domain}"
+  security_policy          = "TLS_1_2"
+  provider                 = aws.us-west-1
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+resource "aws_api_gateway_domain_name" "api_custom_main_west" {
+  depends_on               = [aws_acm_certificate.api_gateway_cert_west]
+  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_west.arn
+  domain_name              = "api.${var.dns_domain}"
+  security_policy          = "TLS_1_2"
+  provider                 = aws.us-west-1
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+
+resource "aws_route53_record" "api_route53_main_west_regional_record" {
+  name           = aws_api_gateway_domain_name.api_custom_main_west.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "api_main_us_west_1"
+  provider       = aws.us-west-1
+
+  alias {
+    name                   = aws_api_gateway_domain_name.api_custom_main_west.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.api_custom_main_west.regional_zone_id
+    evaluate_target_health = false
+  }
+
+  latency_routing_policy {
+    region = "us-west-1"
+  }
+}
+
+
+resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
+  name           = aws_api_gateway_domain_name.public_api_custom_main_west.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "public_api_main_us_west_1"
+  provider       = aws.us-west-1
+
+  alias {
+    name                   = aws_api_gateway_domain_name.public_api_custom_main_west.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.public_api_custom_main_west.regional_zone_id
+    evaluate_target_health = false
+  }
+
+  latency_routing_policy {
+    region = "us-west-1"
+  }
+}
+
+module "api-west-waf" {
+  environment = var.environment
+  providers = {
+    aws = aws.us-west-1
+  }
+  source = "./waf/"
 }
 
 module "api-west-green" {
@@ -184,6 +257,7 @@ module "api-west-green" {
   create_cron            = 0
   create_streams         = 0
   stream_arn             = ""
+  web_acl_arn            = module.api-west-waf.web_acl_arn
 }
 
 module "api-west-blue" {
@@ -222,4 +296,5 @@ module "api-west-blue" {
   create_cron            = 0
   create_streams         = 0
   stream_arn             = ""
+  web_acl_arn            = module.api-west-waf.web_acl_arn
 }

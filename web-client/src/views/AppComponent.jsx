@@ -14,6 +14,8 @@ import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
 import { CaseInventoryReport } from './CaseInventoryReport/CaseInventoryReport';
 import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryReportModal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
+import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
+import { Contact } from './Contact';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
@@ -34,7 +36,7 @@ import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformatio
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
-import { Error } from './Error';
+import { ErrorView } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
@@ -46,6 +48,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
+import { MyAccount } from './MyAccount';
 import { OtherFilerInformation } from './CaseDetail/OtherFilerInformation';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
@@ -57,6 +60,7 @@ import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
+import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SecondaryContactEdit } from './SecondaryContactEdit';
@@ -76,6 +80,7 @@ import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCou
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { UserContactEditProgress } from './UserContactEditProgress';
+import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -96,6 +101,8 @@ const pages = {
   CaseDetailInternal,
   CaseInventoryReport,
   CaseSearchNoMatches,
+  ChangeLoginAndServiceEmail,
+  Contact,
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,
@@ -116,7 +123,7 @@ const pages = {
   EditPractitionerUser,
   EditTrialSession,
   EditUploadCourtIssuedDocument,
-  Error,
+  ErrorView,
   FileDocumentWizard,
   FilePetitionSuccess,
   IdleLogout,
@@ -125,6 +132,7 @@ const pages = {
   LogIn,
   MessageDetail,
   Messages,
+  MyAccount,
   OtherFilerInformation,
   PendingReport,
   PetitionQc,
@@ -136,6 +144,7 @@ const pages = {
   PrintableCaseInventoryReport,
   PrintableDocketRecord,
   PrintableTrialCalendar,
+  Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
   SecondaryContactEdit,
@@ -175,7 +184,7 @@ export const AppComponent = connect(
   }) {
     const focusMain = e => {
       e && e.preventDefault();
-      const header = document.querySelector('#main-content h1');
+      const header = window.document.querySelector('#main-content h1');
       if (header) header.focus();
       return;
     };
@@ -202,8 +211,10 @@ export const AppComponent = connect(
           {zipInProgress && <BatchDownloadProgress />}
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
-        <Footer />
         <Loading />
+
+        <Footer />
+
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
         )}
@@ -213,6 +224,7 @@ export const AppComponent = connect(
         {showModal === 'FileCompressionErrorModal' && (
           <FileCompressionErrorModal />
         )}
+        {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
       </>
     );
   },

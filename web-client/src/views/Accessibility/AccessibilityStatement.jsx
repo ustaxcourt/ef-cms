@@ -91,10 +91,7 @@ export const AccessibilityStatement = () => (
         </li>
         <li>
           E-mail:{' '}
-          <a
-            className="email u-email"
-            href="mailto:webmaster@ustaxcourt.govwebmaster@ustaxcourt.gov"
-          >
+          <a className="email u-email" href="mailto:webmaster@ustaxcourt.gov">
             webmaster@ustaxcourt.gov
           </a>
         </li>

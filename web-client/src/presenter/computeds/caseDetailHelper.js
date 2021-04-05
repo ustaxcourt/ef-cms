@@ -31,7 +31,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       userHasAccessToCase = true;
       showFileDocumentButton = true;
 
-      if (caseDeadlines && caseDeadlines.length > 0) {
+      if (caseDeadlines.length > 0) {
         showCaseDeadlinesExternal = true;
       }
     } else {
@@ -41,7 +41,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     userHasAccessToCase = true;
     showQcWorkItemsUntouchedState = true;
 
-    if (caseDeadlines && caseDeadlines.length > 0) {
+    if (caseDeadlines.length > 0) {
       showCaseDeadlinesInternal = true;
     } else {
       showCaseDeadlinesInternalEmpty = true;
@@ -60,11 +60,9 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
-  const petitionDocketEntry = applicationContext
+  const caseHasServedDocketEntries = applicationContext
     .getUtilities()
-    .getPetitionDocketEntryFromDocketEntries(caseDetail.docketEntries);
-  const petitionIsServed =
-    petitionDocketEntry && !!petitionDocketEntry.servedAt;
+    .caseHasServedDocketEntries(caseDetail);
 
   const hasPrivatePractitioners =
     !!caseDetail.privatePractitioners &&
@@ -79,6 +77,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     hasIrsPractitioners,
     hasPrivatePractitioners,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
+    showAddRemoveFromHearingButtons: permissions.SET_FOR_HEARING,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
@@ -95,7 +94,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       user.role !== USER_ROLES.irsPractitioner &&
       user.role !== USER_ROLES.irsSuperuser,
     showJudgesNotes,
-    showPetitionProcessingAlert: isExternalUser && !petitionIsServed,
+    showPetitionProcessingAlert: isExternalUser && !caseHasServedDocketEntries,
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,

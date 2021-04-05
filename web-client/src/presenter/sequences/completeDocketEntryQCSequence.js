@@ -1,14 +1,15 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
-import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
+import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
+import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -21,10 +22,20 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 
 export const completeDocketEntryQCSequence = [
   startShowValidationAction,
-  computeFormDateAction,
-  computeSecondaryFormDateAction,
+  getComputedFormDateFactoryAction(null),
+  formHasSecondaryDocumentAction,
+  {
+    no: [],
+    yes: [
+      getComputedFormDateFactoryAction('secondaryDocument.serviceDate'),
+      setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
+    ],
+  },
   computeCertificateOfServiceFormDateAction,
-  computeDateReceivedAction,
+  getComputedFormDateFactoryAction('dateReceived'),
+  setComputeFormDateFactoryAction('dateReceived'),
+  getComputedFormDateFactoryAction('serviceDate'),
+  setComputeFormDateFactoryAction('serviceDate'),
   validateDocketEntryAction,
   {
     error: [
@@ -35,6 +46,7 @@ export const completeDocketEntryQCSequence = [
     success: [
       stopShowValidationAction,
       setCurrentPageAction('Interstitial'),
+      refreshExternalDocumentTitleFromEventCodeAction,
       generateTitleAction,
       completeDocketEntryQCAction,
       setPdfPreviewUrlAction,

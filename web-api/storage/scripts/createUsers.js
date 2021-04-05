@@ -1,11 +1,14 @@
 const createApplicationContext = require('../../src/applicationContext');
 const users = require('../fixtures/seed/users.json');
 const {
+  createPetitionerUserRecords,
+} = require('../../../shared/src/persistence/dynamo/users/createPetitionerUserRecords');
+const {
   createUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createUser.js');
+} = require('../../../shared/src/persistence/dynamo/users/createUser');
 const {
   createUserRecords: createPractitionerUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createPractitionerUser.js');
+} = require('../../../shared/src/persistence/dynamo/users/createPractitionerUser');
 const {
   ROLES,
 } = require('../../../shared/src/business/entities/EntityConstants');
@@ -50,6 +53,20 @@ module.exports.createUsers = async () => {
           usersByEmail[userCreated.email] = userCreated;
         });
       }
+
+      if (userRecord.role === ROLES.petitioner) {
+        return createPetitionerUserRecords({
+          applicationContext,
+          user: omit(userRecord, EXCLUDE_PROPS),
+          userId,
+        }).then(userCreated => {
+          if (usersByEmail[userCreated.email]) {
+            throw new Error('User already exists');
+          }
+          usersByEmail[userCreated.email] = userCreated;
+        });
+      }
+
       return createUserRecords({
         applicationContext,
         user: omit(userRecord, EXCLUDE_PROPS),

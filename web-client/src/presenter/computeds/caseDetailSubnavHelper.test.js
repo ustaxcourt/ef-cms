@@ -25,14 +25,27 @@ const getBaseState = user => {
 };
 
 describe('caseDetailSubnavHelper', () => {
+  const petitionsClerkUser = {
+    role: ROLES.petitionsClerk,
+    userId: '123',
+  };
+  const petitionerUser = {
+    role: ROLES.petitioner,
+    userId: '123',
+  };
+  const privatePractitionerUser = {
+    role: ROLES.privatePractitioner,
+    userId: '123',
+  };
+  const irsPractitionerUser = {
+    role: ROLES.irsPractitioner,
+    userId: '123',
+  };
+
   it('should show internal-only tabs if user is internal', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '123',
-    };
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionsClerkUser),
       },
     });
     expect(result.showCaseInformationTab).toBeTruthy();
@@ -44,13 +57,9 @@ describe('caseDetailSubnavHelper', () => {
   });
 
   it('should not show internal-only tabs if user is external', () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionerUser),
       },
     });
     expect(result.showTrackedItemsTab).toBeFalsy();
@@ -61,13 +70,9 @@ describe('caseDetailSubnavHelper', () => {
   });
 
   it('should show case information tab if user is external and associated with the case', () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionerUser),
         screenMetadata: {
           isAssociated: true,
         },
@@ -77,13 +82,9 @@ describe('caseDetailSubnavHelper', () => {
   });
 
   it('should not show case information tab if user is external and not associated with the case', () => {
-    const user = {
-      role: ROLES.irsPractitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(privatePractitionerUser),
         screenMetadata: {
           isAssociated: false,
         },
@@ -92,14 +93,22 @@ describe('caseDetailSubnavHelper', () => {
     expect(result.showCaseInformationTab).toBeFalsy();
   });
 
-  it('should show primaryTab as selected if it is not caseInformation', () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '123',
-    };
+  it('should show case information tab if user is an irsPractitioner and not associated with the case', () => {
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(irsPractitionerUser),
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+    expect(result.showCaseInformationTab).toBeTruthy();
+  });
+
+  it('should show primaryTab as selected if it is not caseInformation', () => {
+    const result = runCompute(caseDetailSubnavHelper, {
+      state: {
+        ...getBaseState(petitionerUser),
         currentViewMetadata: {
           caseDetail: {
             caseInformationTab: 'overview',
@@ -112,13 +121,9 @@ describe('caseDetailSubnavHelper', () => {
   });
 
   it("should show caseInformationTab's value as selected if primaryTab is caseInformation", () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionerUser),
         currentViewMetadata: {
           caseDetail: {
             caseInformationTab: 'petitioner',
@@ -128,5 +133,59 @@ describe('caseDetailSubnavHelper', () => {
       },
     });
     expect(result.selectedCaseInformationTab).toBe('petitioner');
+  });
+
+  describe('showTrackedItemsNotification', () => {
+    it('should be true when caseDetail.hasPendingItems is true', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            hasPendingItems: true,
+          },
+        },
+      });
+
+      expect(result.showTrackedItemsNotification).toBeTruthy();
+    });
+
+    it('should be true when caseDeadlines is an array with length greater than 0', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDeadlines: [{ yes: true }],
+        },
+      });
+
+      expect(result.showTrackedItemsNotification).toBeTruthy();
+    });
+
+    it('should be false when caseDetail.hasPendingItems is false and caseDeadlines is undefined', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDeadlines: undefined,
+          caseDetail: {
+            hasPendingItems: false,
+          },
+        },
+      });
+
+      expect(result.showTrackedItemsNotification).toBeFalsy();
+    });
+
+    it('should be false when caseDetail.hasPendingItems is false and caseDeadlines is an empty array', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDeadlines: [],
+          caseDetail: {
+            hasPendingItems: false,
+          },
+        },
+      });
+
+      expect(result.showTrackedItemsNotification).toBeFalsy();
+    });
   });
 });

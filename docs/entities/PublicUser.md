@@ -34,6 +34,7 @@
         - "clerkofcourt"
         - "docketclerk"
         - "floater"
+        - "general"
         - "inactivePractitioner"
         - "irsPractitioner"
         - "irsSuperuser"
@@ -42,6 +43,7 @@
         - "petitioner"
         - "petitionsclerk"
         - "privatePractitioner"
+        - "reportersOffice"
         - "trialclerk"
     judgeFullName: 
       type: "string"
@@ -71,7 +73,7 @@
           then: 
             type: "any"
             flags: 
-              presence: "optional"
+              presence: "required"
           otherwise: 
             type: "any"
             flags: 
@@ -106,7 +108,7 @@
           then: 
             type: "any"
             flags: 
-              presence: "optional"
+              presence: "required"
           otherwise: 
             type: "any"
             flags: 

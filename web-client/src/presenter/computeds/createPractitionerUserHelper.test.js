@@ -52,4 +52,50 @@ describe('createPractitionerUserHelper', () => {
     expect(result.canEditEmail).toBeTruthy();
     expect(result.canEditAdmissionStatus).toBeFalsy();
   });
+
+  it('returns formattedOriginalEmail defaulted to Not provided if one is not present', () => {
+    const result = runCompute(createPractitionerUserHelper, {
+      state: {
+        form: {
+          originalEmail: null,
+        },
+      },
+    });
+    expect(result.formattedOriginalEmail).toEqual('Not provided');
+  });
+
+  it('returns formattedOriginalEmail as the originalEmail if one is present on the form', () => {
+    const result = runCompute(createPractitionerUserHelper, {
+      state: {
+        form: {
+          originalEmail: 'abc@example.com',
+        },
+      },
+    });
+    expect(result.formattedOriginalEmail).toEqual('abc@example.com');
+  });
+
+  it('returns isAddingPractitioner false and isEditingPractitioner true when barNumber is set on the form', () => {
+    const result = runCompute(createPractitionerUserHelper, {
+      state: {
+        form: {
+          barNumber: 'PT1234',
+        },
+      },
+    });
+
+    expect(result.isAddingPractitioner).toBeFalsy();
+    expect(result.isEditingPractitioner).toBeTruthy();
+  });
+
+  it('returns isAddingPractitioner true and isEditingPractitioner false when barNumber is NOT set on the form', () => {
+    const result = runCompute(createPractitionerUserHelper, {
+      state: {
+        form: {},
+      },
+    });
+
+    expect(result.isAddingPractitioner).toBeTruthy();
+    expect(result.isEditingPractitioner).toBeFalsy();
+  });
 });

@@ -1,7 +1,9 @@
 const {
   aggregateCommonQueryParams,
 } = require('../../business/utilities/aggregateCommonQueryParams');
-const { isEmpty } = require('lodash');
+const {
+  MAX_SEARCH_CLIENT_RESULTS,
+} = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
 /**
@@ -10,7 +12,7 @@ const { search } = require('./searchClient');
  * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.casePublicSearch = async ({
+exports.casePublicSearchExactMatch = async ({
   applicationContext,
   countryType,
   petitionerName,
@@ -18,11 +20,7 @@ exports.casePublicSearch = async ({
   yearFiledMax,
   yearFiledMin,
 }) => {
-  const {
-    commonQuery,
-    exactMatchesQuery,
-    nonExactMatchesQuery,
-  } = aggregateCommonQueryParams({
+  const { commonQuery, exactMatchesQuery } = aggregateCommonQueryParams({
     applicationContext,
     countryType,
     petitionerName,
@@ -31,7 +29,7 @@ exports.casePublicSearch = async ({
     yearFiledMin,
   });
 
-  const source = [
+  const sourceFields = [
     'caseCaption',
     'contactPrimary',
     'contactSecondary',
@@ -45,39 +43,29 @@ exports.casePublicSearch = async ({
   ];
 
   let results;
+  const query = {
+    bool: {
+      must: [...exactMatchesQuery, ...commonQuery],
+      must_not: {
+        exists: {
+          field: 'sealedDate',
+        },
+      },
+    },
+  };
 
   ({ results } = await search({
     applicationContext,
     searchParameters: {
       body: {
-        _source: source,
-        query: {
-          bool: {
-            must: [...exactMatchesQuery, ...commonQuery],
-          },
-        },
-        size: 5000,
+        _source: sourceFields,
+        min_score: 0.1,
+        query,
+        size: MAX_SEARCH_CLIENT_RESULTS,
       },
       index: 'efcms-case',
     },
   }));
-
-  if (isEmpty(results)) {
-    ({ results } = await search({
-      applicationContext,
-      searchParameters: {
-        body: {
-          _source: source,
-          query: {
-            bool: {
-              must: [...nonExactMatchesQuery, ...commonQuery],
-            },
-          },
-        },
-        index: 'efcms-case',
-      },
-    }));
-  }
 
   return results;
 };

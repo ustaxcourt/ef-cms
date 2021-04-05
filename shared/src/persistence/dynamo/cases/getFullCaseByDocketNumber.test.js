@@ -34,6 +34,7 @@ describe('getCaseByDocketNumber', () => {
       correspondence: [],
       docketEntries: [],
       docketNumber: '123-20',
+      hearings: [],
       irsPractitioners: [],
       pk: 'case|123-20',
       privatePractitioners: [],
@@ -53,6 +54,11 @@ describe('getCaseByDocketNumber', () => {
               pk: 'case|123-20',
               sk: 'case|23',
               status: CASE_STATUS_TYPES.new,
+            },
+            {
+              pk: 'case|123-20',
+              sk: 'hearing|123',
+              trialSessionId: '123',
             },
             {
               pk: 'case|123-20',
@@ -139,6 +145,13 @@ describe('getCaseByDocketNumber', () => {
         },
       ],
       docketNumber: '123-20',
+      hearings: [
+        {
+          pk: 'case|123-20',
+          sk: 'hearing|123',
+          trialSessionId: '123',
+        },
+      ],
       irsPractitioners: [
         { pk: 'case|123-20', sk: 'irsPractitioner|123', userId: 'abc-123' },
       ],
@@ -156,7 +169,7 @@ describe('getCaseByDocketNumber', () => {
     });
   });
 
-  it('should return default object if nothing is returned from the client query request', async () => {
+  it('should return default object if an empty array is returned from the client query request', async () => {
     applicationContext.getDocumentClient().query.mockReturnValue({
       promise: async () => Promise.resolve({ Items: [] }),
     });
@@ -171,6 +184,7 @@ describe('getCaseByDocketNumber', () => {
       archivedDocketEntries: [],
       correspondence: [],
       docketEntries: [],
+      hearings: [],
       irsPractitioners: [],
       privatePractitioners: [],
     });

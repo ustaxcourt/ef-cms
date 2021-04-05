@@ -110,60 +110,29 @@ export const PractitionerContactForm = connect(
           </div>
         </div>
 
-        <div className="grid-row">
-          <div className="grid-col-6">
-            {createPractitionerUserHelper.canEditEmail ? (
-              <FormGroup errorText={validationErrors.email}>
-                <label className="usa-label" htmlFor="email">
-                  Email address
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input"
-                  id="email"
-                  name="email"
-                  value={form.email || ''}
-                  onBlur={() => {
-                    onBlurValidationSequence();
-                  }}
-                  onChange={e => {
-                    onChangeUpdateSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </FormGroup>
-            ) : (
-              <>
-                <span className="usa-label">Email address</span>
-                <p>{form.email}</p>
-              </>
-            )}
-          </div>
-
-          <div className="grid-col-6">
-            <FormGroup>
-              <label className="usa-label" htmlFor="alternateEmail">
-                Alternative email address{' '}
-                <span className="usa-hint">(optional)</span>
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="alternateEmail"
-                name="alternateEmail"
-                value={form.alternateEmail || ''}
-                onChange={e => {
-                  onChangeUpdateSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </FormGroup>
-          </div>
-        </div>
+        {createPractitionerUserHelper.isAddingPractitioner && (
+          <FormGroup errorText={validationErrors.email}>
+            <label className="usa-label" htmlFor="email">
+              Email address
+            </label>
+            <input
+              autoCapitalize="none"
+              className="usa-input"
+              id="email"
+              name="email"
+              value={form.email || ''}
+              onBlur={() => {
+                onBlurValidationSequence();
+              }}
+              onChange={e => {
+                onChangeUpdateSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
+        )}
       </>
     );
   },

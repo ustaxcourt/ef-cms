@@ -18,20 +18,18 @@ const { createISODateString } = require('../utilities/DateHandler');
 function Batch() {}
 
 Batch.prototype.init = function init({ applicationContext, rawBatch }) {
+  this.entityName = 'Batch';
   this.batchId = rawBatch.batchId || applicationContext.getUniqueId();
   this.batchIndex = rawBatch.batchIndex || 0;
   this.createdAt = rawBatch.createdAt || createISODateString();
   this.pages = rawBatch.pages || [];
 };
 
-Batch.validationName = 'Batch';
-
 /**
  * adds a page to current Batch
  *
  * @param {object} page the page to add
  * @returns {Batch} the batch entity after the page is added
-
  */
 Batch.prototype.addPage = function (page) {
   this.pages.push(page);

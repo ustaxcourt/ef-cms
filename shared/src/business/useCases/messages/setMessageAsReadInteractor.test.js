@@ -12,8 +12,7 @@ describe('setMessageAsReadInteractor', () => {
     });
 
     await expect(
-      setMessageAsReadInteractor({
-        applicationContext,
+      setMessageAsReadInteractor(applicationContext, {
         docketNumber: '123-45',
         messageId: '123',
       }),
@@ -29,8 +28,7 @@ describe('setMessageAsReadInteractor', () => {
       userId: 'petitionsClerk',
     });
 
-    await setMessageAsReadInteractor({
-      applicationContext,
+    await setMessageAsReadInteractor(applicationContext, {
       docketNumber: '123-45',
       messageId: '123',
     });

@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 
 export const documentViewerHelper = (get, applicationContext) => {
   const {
-    COURT_ISSUED_DOCUMENT_TYPES,
+    COURT_ISSUED_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
     STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
@@ -45,9 +45,10 @@ export const documentViewerHelper = (get, applicationContext) => {
     draftDocuments: formattedCaseDetail.draftDocuments,
   });
 
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    formattedDocumentToDisplay.documentType,
-  );
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(formattedDocumentToDisplay.eventCode);
+
   const showServeCourtIssuedDocumentButton =
     showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
 
@@ -65,7 +66,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showSignStipulatedDecisionButton =
     formattedDocumentToDisplay.eventCode ===
       PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    formattedDocumentToDisplay.servedAt &&
+    applicationContext.getUtilities().isServed(formattedDocumentToDisplay) &&
     !formattedCaseDetail.docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
@@ -82,10 +83,17 @@ export const documentViewerHelper = (get, applicationContext) => {
     showStricken = entry.isStricken;
   }
 
+  const showCompleteQcButton =
+    permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
+
   return {
+    completeQcLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/edit`,
     description: formattedDocumentToDisplay.descriptionDisplay,
+    documentViewerLink: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
     filedLabel,
+    reviewAndServePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.docketEntryId}`,
     servedLabel,
+    showCompleteQcButton,
     showNotServed,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
     showServeCourtIssuedDocumentButton,
@@ -93,5 +101,6 @@ export const documentViewerHelper = (get, applicationContext) => {
     showServePetitionButton,
     showSignStipulatedDecisionButton,
     showStricken,
+    signStipulatedDecisionLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.docketEntryId}/sign`,
   };
 };

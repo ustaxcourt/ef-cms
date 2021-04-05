@@ -10,9 +10,10 @@ const createWebSocketClient = token => {
 
 export const socketProvider = ({ socketRouter }) => {
   let app;
+  let applicationContext;
   let socket;
 
-  const stop = () => {
+  const stopSocket = () => {
     if (socket) {
       socket.close();
       socket = null;
@@ -23,24 +24,42 @@ export const socketProvider = ({ socketRouter }) => {
     const token = app.getState('token');
 
     if (socket && socket.close) {
-      stop();
+      stopSocket();
     }
 
     return new Promise((resolve, reject) => {
-      socket = createWebSocketClient(token);
-      socket.onmessage = socketRouter(app);
-      socket.onopen = resolve;
-      socket.onerror = reject;
+      try {
+        socket = createWebSocketClient(token);
+        socket.onmessage = socketRouter(app);
+        socket.onerror = reject;
+
+        socket.onopen = () => {
+          // the socket needs to be open for a short period or it could miss the first message
+          setTimeout(() => {
+            resolve();
+          }, 300);
+        };
+      } catch (e) {
+        if (applicationContext) {
+          applicationContext.logger.error(
+            'Failed to establish WebSocket connection',
+            e,
+          );
+        }
+        console.error(e);
+        reject();
+      }
     });
   };
 
-  const initialize = _app => {
+  const initialize = (_app, _applicationContext) => {
     app = _app;
+    applicationContext = _applicationContext;
   };
 
   return {
     initialize,
     start,
-    stop,
+    stop: stopSocket,
   };
 };

@@ -30,10 +30,6 @@ variable "es_instance_type" {
   type = string
 }
 
-variable "honeybadger_key" {
-  type = string
-}
-
 variable "irs_superuser_email" {
   type = string
 }
@@ -63,5 +59,27 @@ variable "destination_table" {
 }
 
 variable "disable_emails" {
-  type = bool
+  type    = bool
+  default = false
+}
+
+variable "es_volume_size" {
+  type = number
+}
+
+variable "log_level" {
+  type    = string
+  default = "info"
+}
+
+variable "alert_sns_topic_arn" {
+  type = string
+}
+
+variable "bounced_email_recipient" {
+  type = string
+}
+
+variable "scanner_resource_uri" {
+  type = string
 }

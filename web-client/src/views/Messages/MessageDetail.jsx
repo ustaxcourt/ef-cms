@@ -196,10 +196,10 @@ export const MessageDetail = connect(
           )}
 
           {formattedMessageDetail.showOlderMessages &&
-            formattedMessageDetail.olderMessages.map((message, idx) => (
+            formattedMessageDetail.olderMessages.map(message => (
               <div
                 className="border border-base-lightest padding-top-2 padding-bottom-2 padding-left-3 padding-right-3"
-                key={idx}
+                key={`older-messages-${message.messageId}`}
               >
                 <SingleMessage indent={true} message={message} />
               </div>
@@ -208,14 +208,14 @@ export const MessageDetail = connect(
           <h2 className="margin-top-5">Attachments</h2>
 
           <div className="grid-row grid-gap-5">
-            <div className="grid-col-4">
-              <div className="border border-base-lighter document-viewer--documents">
+            <div className="grid-col-4 document-viewer--documents-list-container">
+              <div className="border border-base-lighter document-viewer--documents document-viewer--documents-list">
                 {!formattedMessageDetail.attachments.length && (
                   <div className="padding-2">There are no attachments</div>
                 )}
 
                 {formattedMessageDetail.attachments.length > 0 &&
-                  formattedMessageDetail.attachments.map((attachment, idx) => {
+                  formattedMessageDetail.attachments.map(attachment => {
                     return (
                       <Button
                         className={classNames(
@@ -227,7 +227,7 @@ export const MessageDetail = connect(
                           viewerDocumentToDisplay.documentId ===
                           attachment.documentId
                         }
-                        key={idx}
+                        key={`attachment-button-${attachment.documentId}`}
                         onClick={() => {
                           setMessageDetailViewerDocumentToDisplaySequence({
                             viewerDocumentToDisplay: attachment,

@@ -3,16 +3,15 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
-import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
+import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
+import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateAddToTrialSessionAction } from '../actions/CaseDetail/validateAddToTrialSessionAction';
 
@@ -31,20 +30,15 @@ export const addCaseToTrialSessionSequence = [
   {
     error: [setValidationErrorsAction],
     success: [
-      // this is intentionally NOT using showProgressSequenceDecorator
-      // because we want the spinner to show until the websocket response is received
-      setWaitingForResponseAction,
-      clearModalAction,
-      addCaseToTrialSessionAction,
-      getTrialSessionDetailsAction,
-      isTrialSessionCalendaredAction,
-      {
-        no: [unsetWaitingForResponseAction, showSuccessAlert],
-        yes: [
-          startWebSocketConnectionAction,
-          setNoticesForCalendaredTrialSessionAction,
-        ],
-      },
+      showProgressSequenceDecorator([
+        setWaitingForResponseAction,
+        clearModalAction,
+        addCaseToTrialSessionAction,
+        getTrialSessionsAction,
+        setTrialSessionsAction,
+        unsetWaitingForResponseAction,
+        showSuccessAlert,
+      ]),
     ],
   },
 ];

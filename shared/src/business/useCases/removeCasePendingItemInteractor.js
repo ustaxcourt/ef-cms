@@ -8,17 +8,16 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * removeCasePendingItemInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.docketEntryId the id of the docket entry no longer pending
  * @returns {object} the updated case data
  */
-exports.removeCasePendingItemInteractor = async ({
+exports.removeCasePendingItemInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-}) => {
+  { docketEntryId, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
@@ -44,12 +43,10 @@ exports.removeCasePendingItemInteractor = async ({
       caseEntity: updatedCaseEntity,
     });
 
-  const updatedCase = updatedCaseEntity.validate().toRawObject();
-
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: updatedCase,
+    caseToUpdate: updatedCaseEntity,
   });
 
-  return updatedCase;
+  return updatedCaseEntity.toRawObject();
 };

@@ -12,15 +12,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * batchDownloadTrialSessionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
-const batchDownloadTrialSessionInteractor = async ({
+const batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)) {
@@ -73,8 +73,8 @@ const batchDownloadTrialSessionInteractor = async ({
       d => d.isOnDocketRecord && d.isFileAttached,
     );
 
-    const documentMap = docketEntriesOnDocketRecord.reduce((acc, document) => {
-      acc[document.docketEntryId] = document;
+    const documentMap = docketEntriesOnDocketRecord.reduce((acc, doc) => {
+      acc[doc.docketEntryId] = doc;
       return acc;
     }, {});
 
@@ -125,25 +125,22 @@ const batchDownloadTrialSessionInteractor = async ({
   const generateDocumentAndDocketRecordForCase = async sessionCase => {
     const result = await applicationContext
       .getUseCases()
-      .generateDocketRecordPdfInteractor({
-        applicationContext,
+      .generateDocketRecordPdfInteractor(applicationContext, {
         docketNumber: sessionCase.docketNumber,
         includePartyDetail: true,
       });
 
-    const document = await applicationContext
-      .getPersistenceGateway()
-      .getDocument({
-        applicationContext,
-        docketNumber: sessionCase.docketNumber,
-        key: result.fileId,
-        protocol: 'S3',
-        useTempBucket: true,
-      });
+    const doc = await applicationContext.getPersistenceGateway().getDocument({
+      applicationContext,
+      docketNumber: sessionCase.docketNumber,
+      key: result.fileId,
+      protocol: 'S3',
+      useTempBucket: true,
+    });
 
     await onDocketRecordCreation({ docketNumber: sessionCase.docketNumber });
 
-    extraFiles.push(document);
+    extraFiles.push(doc);
 
     extraFileNames.push(`${sessionCase.caseFolder}/0_Docket Record.pdf`);
   };
@@ -224,24 +221,26 @@ const batchDownloadTrialSessionInteractor = async ({
 /**
  * batchDownloadTrialSessionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
-exports.batchDownloadTrialSessionInteractor = async ({
+exports.batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   try {
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId,
     });
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
 
-    applicationContext.logger.info('Error', error);
+    applicationContext.logger.error(
+      `Error when batch downloading trial session with id ${trialSessionId}`,
+      error,
+    );
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
@@ -250,6 +249,5 @@ exports.batchDownloadTrialSessionInteractor = async ({
       },
       userId,
     });
-    await applicationContext.notifyHoneybadger(error);
   }
 };

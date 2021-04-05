@@ -8,12 +8,11 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object
  * @returns {Promise} promise which resolves if it successfully loads the pdf
  */
-export const loadPdfAction = ({ applicationContext, path, props, store }) => {
-  const { ctx, file } = props;
+export const loadPdfAction = ({ applicationContext, props, router, store }) => {
+  const { file } = props;
   const isBase64Encoded = typeof file === 'string' && file.startsWith('data');
 
   store.set(state.modal.pdfPreviewModal, {});
-  store.set(state.modal.pdfPreviewModal.ctx, ctx);
 
   return new Promise((resolve, reject) => {
     const reader = applicationContext.getFileReaderInstance();
@@ -28,23 +27,21 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
       }
 
       try {
-        const pdfJs = await applicationContext.getPdfJs();
-        const pdfDoc = await pdfJs.getDocument({ data: binaryFile }).promise;
-
-        store.set(state.modal.pdfPreviewModal.pdfDoc, pdfDoc);
-        store.set(state.modal.pdfPreviewModal.totalPages, pdfDoc.numPages);
-        store.set(state.modal.pdfPreviewModal.currentPage, 1);
+        const pdfDataUri = router.createObjectURL(
+          new Blob([binaryFile], { type: 'application/pdf' }),
+        );
+        store.set(state.pdfPreviewUrl, pdfDataUri);
         store.unset(state.modal.pdfPreviewModal.error);
-        resolve(path.success());
+        resolve();
       } catch (err) {
         store.set(state.modal.pdfPreviewModal.error, err);
-        reject(path.error());
+        reject(err);
       }
     };
 
     reader.onerror = function (err) {
       store.set(state.modal.pdfPreviewModal.error, err);
-      reject(path.error());
+      reject(err);
     };
 
     if (isBase64Encoded) {

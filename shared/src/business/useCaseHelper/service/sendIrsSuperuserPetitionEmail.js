@@ -29,7 +29,10 @@ exports.sendIrsSuperuserPetitionEmail = async ({
 
   privatePractitioners.forEach(practitioner => {
     const representingFormatted = [];
-    const { representingPrimary, representingSecondary } = practitioner;
+    const representingPrimary = practitioner.getRepresentingPrimary(caseEntity);
+    const representingSecondary = practitioner.getRepresentingSecondary(
+      caseEntity,
+    );
 
     if (representingPrimary) {
       representingFormatted.push(contactPrimary.name);
@@ -58,8 +61,8 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     data: {
       caseDetail: {
         caseTitle: Case.getCaseTitle(caseCaption),
-        docketNumber: docketNumber,
-        docketNumberWithSuffix: docketNumberWithSuffix,
+        docketNumber,
+        docketNumberWithSuffix,
         trialLocation: preferredTrialCity || 'No requested place of trial',
       },
       contactPrimary,
@@ -97,5 +100,12 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     },
     destinations: [destination],
     templateName: process.env.EMAIL_SERVED_PETITION_TEMPLATE,
+  });
+
+  applicationContext.logger.info('served a document to the irs', {
+    destination,
+    docketEntryId,
+    docketNumber,
+    eventCode,
   });
 };

@@ -1,4 +1,6 @@
+import { AddEditCalendarNoteModal } from './AddEditCalendarNoteModal';
 import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
+import { AddEditHearingNoteModal } from './AddEditHearingNoteModal';
 import { AddToTrialModal } from './AddToTrialModal';
 import { BlockFromTrialModal } from './BlockFromTrialModal';
 import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
@@ -20,6 +22,8 @@ import classNames from 'classnames';
 
 export const CaseDetailHeaderMenu = connect(
   {
+    addCaseToTrialSessionSequence: sequences.addCaseToTrialSessionSequence,
+    addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     caseDetail: state.caseDetail,
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     isCaseDetailMenuOpen: state.menuHelper.isCaseDetailMenuOpen,
@@ -36,8 +40,12 @@ export const CaseDetailHeaderMenu = connect(
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
     showModal: state.modal.showModal,
     toggleMenuSequence: sequences.toggleMenuSequence,
+    validateAddToTrialSessionSequence:
+      sequences.validateAddToTrialSessionSequence,
   },
   function CaseDetailHeaderMenu({
+    addCaseToTrialSessionSequence,
+    addToTrialSessionModalHelper,
     caseDetail,
     caseDetailHeaderHelper,
     isCaseDetailMenuOpen,
@@ -50,6 +58,7 @@ export const CaseDetailHeaderMenu = connect(
     resetCaseMenuSequence,
     showModal,
     toggleMenuSequence,
+    validateAddToTrialSessionSequence,
   }) {
     const menuRef = useRef(null);
     const keydown = event => {
@@ -72,15 +81,172 @@ export const CaseDetailHeaderMenu = connect(
     };
 
     useEffect(() => {
-      document.addEventListener('mousedown', reset, false);
-      document.addEventListener('keydown', keydown, false);
+      window.document.addEventListener('mousedown', reset, false);
+      window.document.addEventListener('keydown', keydown, false);
       return () => {
         resetCaseMenuSequence();
-        document.removeEventListener('mousedown', reset, false);
-        document.removeEventListener('keydown', keydown, false);
+        window.document.removeEventListener('mousedown', reset, false);
+        window.document.removeEventListener('keydown', keydown, false);
       };
     }, []);
 
+    const caseMenu = () => (
+      <ul className="usa-nav__submenu position-right-0">
+        <li
+          className="usa-nav__submenu-item row-button"
+          id="menu-button-new-tab"
+          onClick={() => {
+            resetCaseMenuSequence();
+            openCaseInNewTabSequence();
+          }}
+        >
+          <Icon
+            aria-label="new tab"
+            className="margin-right-1"
+            icon="arrow-right"
+            size="1x"
+          />
+          New Tab
+          <hr></hr>
+        </li>
+
+        {caseDetailHeaderHelper.showCreateMessageButton && (
+          <li
+            className="usa-nav__submenu-item row-button"
+            id="menu-button-add-new-message"
+            onClick={() => {
+              resetCaseMenuSequence();
+              openCreateMessageModalSequence();
+            }}
+          >
+            <Icon
+              aria-label="create message"
+              className="margin-right-1"
+              icon="envelope"
+              size="1x"
+            />
+            Message
+            <hr></hr>
+          </li>
+        )}
+        <li
+          className="usa-nav__submenu-item row-button"
+          id="menu-button-add-deadline"
+          onClick={() => {
+            resetCaseMenuSequence();
+            openCreateCaseDeadlineModalSequence();
+          }}
+        >
+          <Icon
+            aria-label="create deadline"
+            className="margin-right-1"
+            icon="calendar-alt"
+            size="1x"
+          />
+          Deadline
+          <hr></hr>
+        </li>
+
+        {caseDetailHeaderHelper.showCreateOrderButton && (
+          <li
+            className="usa-nav__submenu-item row-button"
+            id="menu-button-create-order"
+            onClick={() => {
+              resetCaseMenuSequence();
+              openCreateOrderChooseTypeModalSequence();
+            }}
+          >
+            <Icon
+              aria-label="create order or notice"
+              className="margin-right-1"
+              icon="clipboard-list"
+              size="1x"
+            />
+            Order or Notice
+            <hr></hr>
+          </li>
+        )}
+        {caseDetailHeaderHelper.showAddDocketEntryButton && (
+          <li
+            className="usa-nav__submenu-item row-button"
+            id="menu-button-add-docket-entry"
+            onClick={() => {
+              navigateToPathSequence({
+                path: `/case-detail/${caseDetail.docketNumber}/add-paper-filing`,
+              });
+            }}
+          >
+            <Icon
+              aria-label="create paper filing"
+              className="margin-right-1"
+              icon="plus-circle"
+              size="1x"
+            />
+            Paper Filing
+            <hr></hr>
+          </li>
+        )}
+
+        {caseDetailHeaderHelper.showUploadCourtIssuedDocumentButton && (
+          <li
+            className="usa-nav__submenu-item row-button"
+            id="menu-button-upload-pdf"
+            onClick={() => {
+              navigateToPathSequence({
+                path: `/case-detail/${caseDetail.docketNumber}/upload-court-issued`,
+              });
+            }}
+          >
+            <Icon
+              aria-label="create pdf upload"
+              className="margin-right-1 fa-icon-blue"
+              icon="file-pdf"
+              size="1x"
+            />
+            PDF Upload
+            <hr></hr>
+          </li>
+        )}
+
+        {caseDetailHeaderHelper.showAddCorrespondenceButton && (
+          <li
+            className="usa-nav__submenu-item row-button"
+            id="menu-button-upload-pdf"
+            onClick={() => {
+              navigateToPathSequence({
+                path: `/case-detail/${caseDetail.docketNumber}/upload-correspondence`,
+              });
+            }}
+          >
+            <Icon
+              aria-label="create correspondence"
+              className="margin-right-1 fa-icon-blue"
+              icon="mail-bulk"
+              size="1x"
+            />
+            Correspondence
+            <hr></hr>
+          </li>
+        )}
+
+        <li
+          className="usa-nav__submenu-item row-button"
+          id="menu-add-case-note-button"
+          onClick={() => {
+            resetCaseMenuSequence();
+            openAddEditCaseNoteModalSequence();
+          }}
+        >
+          <Icon
+            aria-label="create case note"
+            className="margin-right-1"
+            icon="sticky-note"
+            size="1x"
+          />
+          Case Note
+        </li>
+      </ul>
+    );
     return (
       <div className="tablet:grid-col-1" ref={menuRef}>
         <ul className="usa-nav__primary usa-accordion case-detail-menu flex-column flex-align-end">
@@ -98,169 +264,13 @@ export const CaseDetailHeaderMenu = connect(
                 toggleMenuSequence({ caseDetailMenu: 'CaseDetailMenu' });
               }}
             >
-              Create
+              Create{' '}
               <FontAwesomeIcon
-                className="margin-left-05"
                 icon={isCaseDetailMenuOpen ? 'caret-up' : 'caret-down'}
-                size="1x"
               />
             </button>
 
-            {isCaseDetailMenuOpen && (
-              <ul className="usa-nav__submenu position-right-0">
-                <li
-                  className="usa-nav__submenu-item row-button"
-                  id="menu-button-new-tab"
-                  onClick={() => {
-                    resetCaseMenuSequence();
-                    openCaseInNewTabSequence();
-                  }}
-                >
-                  <Icon
-                    aria-label="create message"
-                    className="margin-right-1"
-                    icon="arrow-right"
-                    size="1x"
-                  />
-                  New Tab
-                  <hr></hr>
-                </li>
-
-                <li
-                  className="usa-nav__submenu-item row-button"
-                  id="menu-button-add-new-message"
-                  onClick={() => {
-                    resetCaseMenuSequence();
-                    openCreateMessageModalSequence();
-                  }}
-                >
-                  <Icon
-                    aria-label="create message"
-                    className="margin-right-1"
-                    icon="envelope"
-                    size="1x"
-                  />
-                  Message
-                  <hr></hr>
-                </li>
-                <li
-                  className="usa-nav__submenu-item row-button"
-                  id="menu-button-add-deadline"
-                  onClick={() => {
-                    resetCaseMenuSequence();
-                    openCreateCaseDeadlineModalSequence();
-                  }}
-                >
-                  <Icon
-                    aria-label="create deadline"
-                    className="margin-right-1"
-                    icon="calendar-alt"
-                    size="1x"
-                  />
-                  Deadline
-                  <hr></hr>
-                </li>
-
-                {caseDetailHeaderHelper.showCreateOrderButton && (
-                  <li
-                    className="usa-nav__submenu-item row-button"
-                    id="menu-button-create-order"
-                    onClick={() => {
-                      resetCaseMenuSequence();
-                      openCreateOrderChooseTypeModalSequence();
-                    }}
-                  >
-                    <Icon
-                      aria-label="create order or notice"
-                      className="margin-right-1"
-                      icon="clipboard-list"
-                      size="1x"
-                    />
-                    Order or Notice
-                    <hr></hr>
-                  </li>
-                )}
-                {caseDetailHeaderHelper.showAddDocketEntryButton && (
-                  <li
-                    className="usa-nav__submenu-item row-button"
-                    id="menu-button-add-docket-entry"
-                    onClick={() => {
-                      navigateToPathSequence({
-                        path: `/case-detail/${caseDetail.docketNumber}/add-paper-filing`,
-                      });
-                    }}
-                  >
-                    <Icon
-                      aria-label="create paper filing"
-                      className="margin-right-1"
-                      icon="plus-circle"
-                      size="1x"
-                    />
-                    Paper Filing
-                    <hr></hr>
-                  </li>
-                )}
-
-                {caseDetailHeaderHelper.showUploadCourtIssuedDocumentButton && (
-                  <li
-                    className="usa-nav__submenu-item row-button"
-                    id="menu-button-upload-pdf"
-                    onClick={() => {
-                      navigateToPathSequence({
-                        path: `/case-detail/${caseDetail.docketNumber}/upload-court-issued`,
-                      });
-                    }}
-                  >
-                    <Icon
-                      aria-label="create pdf upload"
-                      className="margin-right-1 fa-icon-blue"
-                      icon="file-pdf"
-                      size="1x"
-                    />
-                    PDF Upload
-                    <hr></hr>
-                  </li>
-                )}
-
-                {caseDetailHeaderHelper.showAddCorrespondenceButton && (
-                  <li
-                    className="usa-nav__submenu-item row-button"
-                    id="menu-button-upload-pdf"
-                    onClick={() => {
-                      navigateToPathSequence({
-                        path: `/case-detail/${caseDetail.docketNumber}/upload-correspondence`,
-                      });
-                    }}
-                  >
-                    <Icon
-                      aria-label="create pdf upload"
-                      className="margin-right-1 fa-icon-blue"
-                      icon="mail-bulk"
-                      size="1x"
-                    />
-                    Correspondence
-                    <hr></hr>
-                  </li>
-                )}
-
-                <li
-                  className="usa-nav__submenu-item row-button"
-                  id="menu-add-case-note-button"
-                  onClick={() => {
-                    resetCaseMenuSequence();
-                    openAddEditCaseNoteModalSequence();
-                  }}
-                >
-                  <Icon
-                    aria-label="create order or notice"
-                    className="margin-right-1"
-                    icon="sticky-note"
-                    size="1x"
-                  />
-                  Case Note
-                </li>
-              </ul>
-            )}
+            {isCaseDetailMenuOpen && caseMenu()}
           </li>
         </ul>
         {showModal === 'CreateCaseDeadlineModalDialog' && (
@@ -275,7 +285,18 @@ export const CaseDetailHeaderMenu = connect(
         {showModal === 'AddEditCaseNoteModal' && (
           <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteSequence" />
         )}
-        {showModal === 'AddToTrialModal' && <AddToTrialModal />}
+        {showModal === 'AddEditCalendarNoteModal' && (
+          <AddEditCalendarNoteModal />
+        )}
+        {showModal === 'AddEditHearingNoteModal' && <AddEditHearingNoteModal />}
+        {showModal === 'AddToTrialModal' && (
+          <AddToTrialModal
+            confirmSequence={addCaseToTrialSessionSequence}
+            modalHelper={addToTrialSessionModalHelper}
+            modalTitle="Add to Trial Session"
+            validateSequence={validateAddToTrialSessionSequence}
+          />
+        )}
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
         {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
         {showModal === 'PrioritizeCaseModal' && <PrioritizeCaseModal />}

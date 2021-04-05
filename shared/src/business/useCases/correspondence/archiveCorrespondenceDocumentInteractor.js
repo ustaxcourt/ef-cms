@@ -5,11 +5,19 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.archiveCorrespondenceDocumentInteractor = async ({
+/**
+ * archiveCorrespondenceDocumentInteractor
+ *
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.correspondenceId case correspondence id
+ * @param {string} providers.docketNumber the docket number of the case
+ * @returns {void}
+ */
+exports.archiveCorrespondenceDocumentInteractor = async (
   applicationContext,
-  correspondenceId,
-  docketNumber,
-}) => {
+  { correspondenceId, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
@@ -40,8 +48,8 @@ exports.archiveCorrespondenceDocumentInteractor = async ({
     docketNumber,
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 };

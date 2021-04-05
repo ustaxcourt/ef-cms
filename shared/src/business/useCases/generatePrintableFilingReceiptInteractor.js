@@ -3,35 +3,34 @@ const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
 const getDocumentInfo = ({ applicationContext, documentData }) => {
-  const document = new DocketEntry(documentData, {
+  const doc = new DocketEntry(documentData, {
     applicationContext,
   });
 
   return {
-    attachments: document.attachments,
-    certificateOfService: document.certificateOfService,
-    certificateOfServiceDate: document.certificateOfServiceDate,
-    documentTitle: document.documentTitle,
-    filedBy: document.filedBy,
-    objections: document.objections,
-    receivedAt: document.receivedAt,
+    attachments: doc.attachments,
+    certificateOfService: doc.certificateOfService,
+    certificateOfServiceDate: doc.certificateOfServiceDate,
+    documentTitle: doc.documentTitle,
+    filedBy: doc.filedBy,
+    objections: doc.objections,
+    receivedAt: doc.receivedAt,
   };
 };
 
 /**
  * generatePrintableFilingReceiptInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case the documents were filed in
  * @param {object} providers.documentsFiled object containing the docketNumber and documents for the filing receipt to be generated
  * @returns {string} url for the generated document on the storage client
  */
-exports.generatePrintableFilingReceiptInteractor = async ({
+exports.generatePrintableFilingReceiptInteractor = async (
   applicationContext,
-  docketNumber,
-  documentsFiled,
-}) => {
+  { docketNumber, documentsFiled },
+) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({

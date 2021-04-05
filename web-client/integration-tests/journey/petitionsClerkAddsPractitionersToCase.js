@@ -1,4 +1,5 @@
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -8,6 +9,10 @@ const formattedCaseDetail = withAppContextDecorator(
 
 export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
   return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     const practitionerBarNumber = test.barNumber || 'PT1234';
 
     expect(test.getState('caseDetail.privatePractitioners')).toEqual([]);
@@ -41,12 +46,16 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       value: true,
     });
 
+    expect(
+      test.getState('validationErrors.practitionerSearchError'),
+    ).toBeUndefined();
+
     await test.runSequence('associatePrivatePractitionerWithCaseSequence');
 
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
     expect(
-      test.getState('caseDetail.privatePractitioners.0.representingPrimary'),
-    ).toEqual(true);
+      test.getState('caseDetail.privatePractitioners.0.representing'),
+    ).toEqual([test.getState('caseDetail.contactPrimary.contactId')]);
     expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
       practitionerMatch.name,
     );
@@ -84,10 +93,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
         2,
       );
       expect(
-        test.getState(
-          'caseDetail.privatePractitioners.1.representingSecondary',
-        ),
-      ).toEqual(true);
+        test.getState('caseDetail.privatePractitioners.1.representing'),
+      ).toEqual([test.getState('caseDetail.contactSecondary.contactId')]);
       expect(test.getState('caseDetail.privatePractitioners.1.name')).toEqual(
         practitionerMatch.name,
       );
@@ -100,6 +107,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       expect(formatted.privatePractitioners[1].formattedName).toEqual(
         `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
       );
+
+      await refreshElasticsearchIndex();
     }
   });
 };

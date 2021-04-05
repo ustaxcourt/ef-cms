@@ -30,12 +30,10 @@ describe('createTrialSessionInteractor', () => {
     applicationContext.getCurrentUser.mockImplementation(() => user);
 
     applicationContext
-      .getPersistenceGateway()
-      .createTrialSession.mockImplementation(trial => trial.trialSession);
-
-    applicationContext
-      .getPersistenceGateway()
-      .createTrialSessionWorkingCopy.mockReturnValue(null);
+      .getUseCaseHelpers()
+      .createTrialSessionAndWorkingCopy.mockImplementation(
+        trial => trial.trialSessionToAdd,
+      );
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -45,8 +43,7 @@ describe('createTrialSessionInteractor', () => {
     });
 
     await expect(
-      createTrialSessionInteractor({
-        applicationContext,
+      createTrialSessionInteractor(applicationContext, {
         trialSession: MOCK_TRIAL,
       }),
     ).rejects.toThrow();
@@ -54,16 +51,15 @@ describe('createTrialSessionInteractor', () => {
 
   it('throws an exception when it fails to create a trial session', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .createTrialSession.mockImplementation(() => {
+      .getUseCaseHelpers()
+      .createTrialSessionAndWorkingCopy.mockImplementation(() => {
         throw new Error('Error!');
       });
 
     let error;
 
     try {
-      await createTrialSessionInteractor({
-        applicationContext,
+      await createTrialSessionInteractor(applicationContext, {
         trialSession: MOCK_TRIAL,
       });
     } catch (e) {
@@ -74,83 +70,17 @@ describe('createTrialSessionInteractor', () => {
   });
 
   it('creates a trial session successfully', async () => {
-    await createTrialSessionInteractor({
-      applicationContext,
+    await createTrialSessionInteractor(applicationContext, {
       trialSession: MOCK_TRIAL,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().createTrialSession,
+      applicationContext.getUseCaseHelpers().createTrialSessionAndWorkingCopy,
     ).toHaveBeenCalled();
-  });
-
-  it('creates a trial session and working copy successfully if a judge is set on the trial session', async () => {
-    await createTrialSessionInteractor({
-      applicationContext,
-      trialSession: {
-        ...MOCK_TRIAL,
-        judge: {
-          name: 'Judge Valhalla',
-          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().createTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
-  });
-
-  it('creates a trial session and working copy successfully if a trial clerk is set on the trial session', async () => {
-    await createTrialSessionInteractor({
-      applicationContext,
-      trialSession: {
-        ...MOCK_TRIAL,
-        trialClerk: {
-          name: 'Clerk Bifrost',
-          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().createTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
-  });
-
-  it('creates a working copy for both a trial clerk and judge if both are set on the trial session', async () => {
-    await createTrialSessionInteractor({
-      applicationContext,
-      trialSession: {
-        ...MOCK_TRIAL,
-        judge: {
-          name: 'Judge Magni',
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-        trialClerk: {
-          name: 'Clerk Modi',
-          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().createTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-    ).toHaveBeenCalledTimes(2);
   });
 
   it('sets the trial session as calendared if it is a Motion/Hearing session type', async () => {
-    const result = await createTrialSessionInteractor({
-      applicationContext,
+    const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...MOCK_TRIAL,
         sessionType: 'Motion/Hearing',
@@ -161,8 +91,7 @@ describe('createTrialSessionInteractor', () => {
   });
 
   it('sets the trial session as calendared if it is a Special session type', async () => {
-    const result = await createTrialSessionInteractor({
-      applicationContext,
+    const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...MOCK_TRIAL,
         sessionType: 'Special',
@@ -173,8 +102,7 @@ describe('createTrialSessionInteractor', () => {
   });
 
   it('does not set the trial session as calendared if it is a Regular session type', async () => {
-    const result = await createTrialSessionInteractor({
-      applicationContext,
+    const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: MOCK_TRIAL,
     });
 

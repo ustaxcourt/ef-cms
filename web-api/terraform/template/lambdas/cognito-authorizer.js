@@ -1,88 +1,140 @@
 const axios = require('axios');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
+const {
+  createLogger,
+} = require('../../../../shared/src/utilities/createLogger');
+const { transports } = require('winston');
+
+const transport = new transports.Console({
+  handleExceptions: true,
+  handleRejections: true,
+});
 
 const issMain = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_MAIN}`;
 const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_POOL_ID_IRS}`;
 
-const generatePolicy = (principalId, effect, resource) => {
-  const authResponse = {};
-  authResponse.principalId = principalId;
-  if (effect && resource) {
-    const policyDocument = {};
-    policyDocument.Version = '2012-10-17';
-    policyDocument.Statement = [];
-    const statementOne = {};
-    statementOne.Action = 'execute-api:Invoke';
-    statementOne.Effect = effect;
-    statementOne.Resource = resource;
-    policyDocument.Statement[0] = statementOne;
-    authResponse.policyDocument = policyDocument;
-  }
-  return authResponse;
-};
-
-const verify = (methodArn, token, keys, kid, iss, cb) => {
-  const k = keys.keys.find(k => k.kid === kid);
-
-  if (!k) {
-    throw new Error(
-      `The key used to sign the authorization token '${kid}' was not found in user pool keys '${iss}/.well-known/jwks.json'.`,
-    );
-  }
-
-  const pem = jwkToPem(k);
-
-  jwk.verify(token, pem, { issuer: [issMain, issIrs] }, (err, decoded) => {
-    if (err) {
-      console.log('Unauthorized user:', err.message);
-      cb('Unauthorized');
-    } else {
-      cb(
-        null,
-        generatePolicy(
-          decoded.sub,
-          'Allow',
-          methodArn.split('/').slice(0, 2).join('/') + '/*',
-        ),
-      );
-    }
+const getLogger = context => {
+  return createLogger({
+    defaultMeta: {
+      environment: {
+        stage: process.env.STAGE,
+      },
+      requestId: {
+        authorizer: context.awsRequestId,
+      },
+    },
+    transports: [transport],
   });
 };
 
-let keyCache = {};
-
-exports.handler = (event, context, cb) => {
-  console.log('Auth function invoked');
-
-  let requestToken = null;
+const getToken = event => {
   if (event.queryStringParameters && event.queryStringParameters.token) {
-    requestToken = event.queryStringParameters.token;
+    return event.queryStringParameters.token;
   } else if (event.authorizationToken) {
-    requestToken = event.authorizationToken.substring(7);
+    return event.authorizationToken.substring(7);
+  }
+};
+
+const decodeToken = requestToken => {
+  const { header, payload } = jwk.decode(requestToken, { complete: true });
+  return { iss: payload.iss, kid: header.kid };
+};
+
+let keyCache = {};
+const getKeysForIssuer = async iss => {
+  if (keyCache[iss]) {
+    return keyCache[iss];
   }
 
-  if (requestToken) {
-    const { header, payload } = jwk.decode(requestToken, { complete: true });
-    const { iss } = payload;
-    const { kid } = header;
-    if (keyCache[iss]) {
-      verify(event.methodArn, requestToken, keyCache[iss], kid, iss, cb);
-    } else {
-      axios
-        .get(`${iss}/.well-known/jwks.json`)
-        .then(response => {
-          keyCache[iss] = response.data;
-          verify(event.methodArn, requestToken, keyCache[iss], kid, iss, cb);
-        })
-        .catch(error => {
-          console.log('Request error:', error);
-          // eslint-disable-next-line promise/no-callback-in-promise
-          cb('Unauthorized');
-        });
-    }
-  } else {
-    console.log('No authorizationToken found in the header.');
-    cb('Unauthorized');
+  const response = await axios.get(`${iss}/.well-known/jwks.json`);
+
+  return (keyCache[iss] = response.data.keys);
+};
+
+const verify = async (key, token) => {
+  return new Promise((resolve, reject) => {
+    const pem = jwkToPem(key);
+    const options = { issuer: [issMain, issIrs] };
+
+    jwk.verify(token, pem, options, (err, payload) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(payload);
+      }
+    });
+  });
+};
+
+exports.handler = async (event, context) => {
+  const logger = getLogger(context);
+  const token = getToken(event);
+
+  if (!token) {
+    logger.info('No authorizationToken found in the header');
+
+    throw new Error('Unauthorized'); // Magic string to return 401
   }
+
+  const { iss, kid } = decodeToken(token);
+
+  let keys;
+  try {
+    keys = await getKeysForIssuer(iss);
+  } catch (error) {
+    logger.warning(
+      'Could not fetch keys for token issuer, considering request unauthorized',
+      error,
+    );
+
+    throw new Error('Unauthorized'); // Magic string to return 401
+  }
+
+  const key = keys.find(k => k.kid === kid);
+
+  if (!key) {
+    logger.warning(
+      'The key used to sign the authorization token was not found in the user pool’s keys, considering request unauthorized',
+      {
+        issuer: iss,
+        keys,
+        requestedKeyId: kid,
+      },
+    );
+
+    throw new Error('Unauthorized'); // Magic string to return 401
+  }
+
+  let payload;
+  try {
+    payload = await verify(key, token);
+  } catch (error) {
+    logger.warning(
+      'The token is not valid, considering request unauthorized',
+      error,
+    );
+
+    throw new Error('Unauthorized'); // Magic string to return 401
+  }
+
+  const policy = {
+    policyDocument: {
+      Statement: [
+        {
+          Action: 'execute-api:Invoke',
+          Effect: 'Allow',
+          Resource: event.methodArn.split('/').slice(0, 2).join('/') + '/*',
+        },
+      ],
+      Version: '2012-10-17',
+    },
+    principalId: payload['custom:userId'] || payload.sub,
+  };
+
+  logger.info('Request authorized', {
+    metadata: { policy },
+  });
+
+  return policy;
 };

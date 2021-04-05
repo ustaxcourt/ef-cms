@@ -1,3 +1,5 @@
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
@@ -9,11 +11,13 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const getDateISO = () => new Date().toISOString();
+const getDateISO = () =>
+  applicationContext.getUtilities().createISODateString();
 
 describe('formattedCaseDetail', () => {
   let globalUser;
   const {
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
     DOCUMENT_RELATIONSHIPS,
     JUDGES_CHAMBERS,
     OBJECTIONS_OPTIONS_MAP,
@@ -284,8 +288,10 @@ describe('formattedCaseDetail', () => {
       correspondence: [],
       docketEntries: complexDocketEntries,
       hasVerifiedIrsNotice: false,
+      otherFilers: [],
+      otherPetitioners: [],
       petitioners: [{ name: 'bob' }],
-      privatePractitioners: [{ name: 'Test Practitioner' }],
+      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -370,6 +376,41 @@ describe('formattedCaseDetail', () => {
         showDocumentViewerLink: true,
         showEditDocketRecordEntry: false,
         showLinkToDocument: false,
+      },
+    ]);
+  });
+
+  it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
+    const DOCKET_NUMBER = '101-20';
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      contactSecondary: {
+        name: 'Bill',
+      },
+      correspondence: [],
+      docketEntries: simpleDocketEntries,
+      docketNumber: DOCKET_NUMBER,
+      hasVerifiedIrsNotice: false,
+      otherFilers: [],
+      otherPetitioners: [],
+      petitioners: [{ name: 'bob' }],
+      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
+    };
+
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        validationErrors: {},
+      },
+    });
+
+    expect(result.formattedDocketEntries).toMatchObject([
+      {
+        editDocketEntryMetaLink: `/case-detail/${DOCKET_NUMBER}/docket-entry/${simpleDocketEntries[0].index}/edit-meta`,
       },
     ]);
   });
@@ -498,8 +539,10 @@ describe('formattedCaseDetail', () => {
           lodged: false,
         },
       ],
+      otherFilers: [],
+      otherPetitioners: [],
       petitioners: [{ name: 'bob' }],
-      privatePractitioners: [{ name: 'Test Practitioner' }],
+      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
 
     const result = runCompute(formattedCaseDetail, {
@@ -758,7 +801,11 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        privatePractitioners: [{ barNumber: '9999', name: 'Jackie Chan' }],
+        otherFilers: [],
+        otherPetitioners: [],
+        privatePractitioners: [
+          { barNumber: '9999', name: 'Jackie Chan', representing: [] },
+        ],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -777,7 +824,9 @@ describe('formattedCaseDetail', () => {
         contactPrimary: {},
         correspondence: [],
         docketEntries: [],
-        privatePractitioners: [{ name: 'Jackie Chan' }],
+        otherFilers: [],
+        otherPetitioners: [],
+        privatePractitioners: [{ name: 'Jackie Chan', representing: [] }],
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -895,7 +944,7 @@ describe('formattedCaseDetail', () => {
       };
       const caseDeadlines = [
         {
-          deadlineDate: new Date(),
+          deadlineDate: applicationContext.getUtilities().createISODateString(),
         },
       ];
 
@@ -939,6 +988,7 @@ describe('formattedCaseDetail', () => {
           description: 'Petition',
           docketEntryId: 'Petition',
           documentType: 'Petition',
+          eventCode: 'P',
           filedBy: 'Jessica Frase Marine',
           filingDate: '2019-02-28T21:14:39.488Z',
           index: 1,
@@ -952,6 +1002,7 @@ describe('formattedCaseDetail', () => {
           docketEntryId: 'd-1-2-3',
           documentTitle: 'Order to do something',
           documentType: 'Order',
+          eventCode: 'O',
           isDraft: true,
           isOnDocketRecord: false,
         },
@@ -961,6 +1012,7 @@ describe('formattedCaseDetail', () => {
           docketEntryId: 'd-2-3-4',
           documentTitle: 'Stipulated Decision',
           documentType: 'Stipulated Decision',
+          eventCode: 'SDEC',
           isDraft: true,
           isOnDocketRecord: false,
         },
@@ -983,6 +1035,7 @@ describe('formattedCaseDetail', () => {
           validationErrors: {},
         },
       });
+
       expect(result.formattedDraftDocuments).toMatchObject([
         {
           createdAtFormatted: '02/28/19',
@@ -1089,6 +1142,116 @@ describe('formattedCaseDetail', () => {
 
       expect(result.consolidatedCases).toBeDefined();
       expect(result.consolidatedCases).toEqual([]);
+    });
+  });
+
+  describe('getCalendarDetailsForTrialSession', () => {
+    it('adds the calendarNotes from the trialSession caseOrder if a trialSessionId is set on the case', () => {
+      const caseDetail = {
+        associatedJudge: 'Judge Judy',
+        contactPrimary: {},
+        correspondence: [],
+        docketEntries: [],
+        docketNumber: '123-45',
+        status: STATUS_TYPES.calendared,
+        trialDate: '2018-12-11T05:00:00Z',
+        trialLocation: 'England is my City',
+        trialSessionId: '123',
+      };
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          trialSessions: [
+            {
+              caseOrder: [
+                {
+                  calendarNotes: 'Test notes',
+                  docketNumber: '123-45',
+                },
+              ],
+              trialSessionId: '123',
+            },
+          ],
+          validationErrors: {},
+        },
+      });
+
+      expect(result.trialSessionNotes).toEqual('Test notes');
+    });
+
+    it('adds calendarNotes and addedToSessionAt fields from trialSessions to case hearings', () => {
+      const caseDetail = {
+        associatedJudge: 'Judge Judy',
+        contactPrimary: {},
+        correspondence: [],
+        docketEntries: [],
+        docketNumber: '123-45',
+        hearings: [
+          {
+            trialSessionId: '234',
+          },
+          {
+            trialSessionId: '345',
+          },
+        ],
+        status: STATUS_TYPES.calendared,
+        trialDate: '2018-12-11T05:00:00Z',
+        trialLocation: 'England is my City',
+        trialSessionId: '123',
+      };
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          trialSessions: [
+            {
+              caseOrder: [
+                {
+                  docketNumber: '123-45',
+                },
+              ],
+              trialSessionId: '123',
+            },
+            {
+              caseOrder: [
+                {
+                  addedToSessionAt: '2019-01-01T17:29:13.122Z',
+                  calendarNotes: 'Hearing notes one.',
+                  docketNumber: '123-45',
+                },
+              ],
+              trialSessionId: '234',
+            },
+            {
+              caseOrder: [
+                {
+                  addedToSessionAt: '2019-01-02T17:29:13.122Z',
+                  calendarNotes: 'Hearing notes two.',
+                  docketNumber: '123-45',
+                },
+              ],
+              trialSessionId: '345',
+            },
+          ],
+          validationErrors: {},
+        },
+      });
+
+      expect(result.hearings).toMatchObject([
+        {
+          addedToSessionAt: '2019-01-01T17:29:13.122Z',
+          calendarNotes: 'Hearing notes one.',
+          trialSessionId: '234',
+        },
+        {
+          addedToSessionAt: '2019-01-02T17:29:13.122Z',
+          calendarNotes: 'Hearing notes two.',
+          trialSessionId: '345',
+        },
+      ]);
     });
   });
 
@@ -1545,6 +1708,67 @@ describe('formattedCaseDetail', () => {
     });
   });
 
+  it('should not show the link to an unassociated external user for a pending paper filed document', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...simpleDocketEntries[0],
+              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+            },
+          ],
+        },
+        permissions: {
+          CREATE_ORDER_DOCKET_ENTRY: false,
+          DOCKET_ENTRY: false,
+          UPDATE_CASE: false,
+        },
+        validationErrors: {},
+      },
+    });
+
+    expect(
+      result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+    ).toEqual(false);
+    expect(result.formattedDocketEntries[0].showDocumentProcessing).toEqual(
+      true,
+    );
+  });
+
+  it('should not show the link to an unassociated external user for a complete paper filed document', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...simpleDocketEntries[0],
+              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+            },
+          ],
+        },
+        permissions: {
+          CREATE_ORDER_DOCKET_ENTRY: false,
+          DOCKET_ENTRY: false,
+          UPDATE_CASE: false,
+        },
+        screenMetadata: {
+          isAssociated: false,
+        },
+        validationErrors: {},
+      },
+    });
+
+    expect(
+      result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+    ).toEqual(true);
+    expect(result.formattedDocketEntries[0].showDocumentProcessing).toEqual(
+      false,
+    );
+  });
+
   describe('stricken docket record', () => {
     let caseDetail;
 
@@ -1571,6 +1795,7 @@ describe('formattedCaseDetail', () => {
             isOnDocketRecord: true,
             isStricken: true,
             numberOfPages: 24,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
           {
             description: 'Filing Fee Paid',
@@ -1657,6 +1882,120 @@ describe('formattedCaseDetail', () => {
       );
     });
 
+    it('should not show the link to an associated external user when the document has isLegacySealed true', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...caseDetail.docketEntries[0],
+                isLegacySealed: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+                isStricken: false,
+                servedAt: '2020-01-23T21:44:54.034Z',
+              },
+            ],
+          },
+          permissions: {
+            CREATE_ORDER_DOCKET_ENTRY: false,
+            DOCKET_ENTRY: false,
+            UPDATE_CASE: false,
+          },
+          screenMetadata: {
+            isAssociated: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].isLegacySealed).toBeTruthy();
+      expect(
+        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+      ).toEqual(true);
+      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
+        false,
+      );
+      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
+        false,
+      );
+    });
+
+    it('should show the link to an associated external user when the document has isLegacyServed true and servedAt undefined', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...caseDetail.docketEntries[0],
+                isLegacyServed: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+                isStricken: false,
+              },
+            ],
+          },
+          permissions: {
+            CREATE_ORDER_DOCKET_ENTRY: false,
+            DOCKET_ENTRY: false,
+            UPDATE_CASE: false,
+          },
+          screenMetadata: {
+            isAssociated: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].isLegacyServed).toBeTruthy();
+      expect(
+        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+      ).toEqual(false);
+      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(true);
+      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
+        false,
+      );
+    });
+
+    it('should NOT show the link to an associated external user when the document has isLegacyServed undefined and servedAt undefined', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...caseDetail.docketEntries[0],
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+                isStricken: false,
+              },
+            ],
+          },
+          permissions: {
+            CREATE_ORDER_DOCKET_ENTRY: false,
+            DOCKET_ENTRY: false,
+            UPDATE_CASE: false,
+          },
+          screenMetadata: {
+            isAssociated: true,
+          },
+          validationErrors: {},
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+      ).toEqual(true);
+      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
+        false,
+      );
+      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
+        false,
+      );
+    });
+
     it('should show the link to an internal user for a document with a stricken docket record', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -1724,6 +2063,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -1742,6 +2082,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
 
@@ -1758,6 +2101,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(true);
       expect(result.contactSecondary.showEAccessFlag).toEqual(true);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(true);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(true);
     });
 
@@ -1774,6 +2120,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
   });
@@ -1998,6 +2347,30 @@ describe('formattedCaseDetail', () => {
         },
         output: true,
       },
+      {
+        // User is external, with no access to case, document link is not publicly visible
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isHiddenToPublic: true,
+          isUnservable: true,
+          userHasAccessToCase: false,
+        },
+        output: false,
+      },
+      {
+        // User is external, with access to case, document link is visible
+        inputs: {
+          hasDocument: true,
+          isCourtIssuedDocument: true,
+          isExternalUser: true,
+          isHiddenToPublic: true,
+          isUnservable: true,
+          userHasAccessToCase: true,
+        },
+        output: true,
+      },
     ];
 
     tests.forEach(({ inputs, output }) => {
@@ -2051,6 +2424,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2152,6 +2526,7 @@ describe('formattedCaseDetail', () => {
         docketEntries: [mockDocketEntry],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2481,6 +2856,37 @@ describe('formattedCaseDetail', () => {
             scenario: 'Standard',
             userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
           },
+          {
+            attachments: false,
+            certificateOfService: false,
+            certificateOfServiceDate: null,
+            createdAt: '2020-09-18T17:38:32.417Z',
+            docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
+            docketNumber: '169-20',
+            documentTitle: 'Hearing',
+            documentType: 'Hearing before',
+            draftOrderState: null,
+            entityName: 'DocketEntry',
+            eventCode: 'HEAR',
+            filedBy: 'Resp.',
+            filingDate: '2020-09-18T17:38:32.418Z',
+            hasSupportingDocuments: false,
+            index: 5,
+            isDraft: false,
+            isFileAttached: true,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            isStricken: false,
+            numberOfPages: 2,
+            partyIrsPractitioner: true,
+            pending: true,
+            privatePractitioners: [],
+            processingStatus: 'complete',
+            receivedAt: '2020-09-18T17:38:32.418Z',
+            relationship: 'primaryDocument',
+            scenario: 'Standard',
+            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+          },
         ],
         docketNumber: '169-20',
         docketNumberSuffix: 'L',
@@ -2557,16 +2963,87 @@ describe('formattedCaseDetail', () => {
         {
           isOnDocketRecord: true,
         },
+        {
+          isOnDocketRecord: true,
+        },
       ]);
 
       expect(result.formattedPendingDocketEntriesOnDocketRecord.length).toEqual(
-        1,
+        2,
       );
       expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
         {
+          eventCode: 'PSDE',
           isOnDocketRecord: true,
           pending: true,
         },
+        {
+          eventCode: 'HEAR',
+          isOnDocketRecord: true,
+          pending: true,
+        },
+      ]);
+    });
+
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending', async () => {
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[2],
+            docketEntryId: '999999',
+            isLegacyServed: true,
+            isOnDocketRecord: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
+        { docketEntryId: '999999' },
+      ]);
+    });
+
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', async () => {
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[2],
+            docketEntryId: '999999',
+            isLegacyServed: false,
+            isOnDocketRecord: true,
+            pending: true,
+            servedAt: '2019-08-25T05:00:00.000Z',
+            servedParties: [
+              {
+                name: 'Bernard Lowe',
+              },
+              {
+                name: 'IRS',
+                role: 'irsSuperuser',
+              },
+            ],
+          },
+        ],
+      };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
+        { docketEntryId: '999999' },
       ]);
     });
   });
@@ -2989,6 +3466,430 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(result.userIsAssignedToSession).toBeFalsy();
+    });
+
+    describe('hearings - userIsAssignedToSession', () => {
+      it("should be true when the hearing's trial session judge is the currently logged in user", () => {
+        const mockTrialSessionId = applicationContext.getUniqueId();
+
+        const result = runCompute(formattedCaseDetail, {
+          state: {
+            caseDetail: {
+              ...caseDetail,
+              hearings: [
+                {
+                  judge: {
+                    userId: judgeUser.userId,
+                  },
+                  trialSessionId: '123',
+                },
+                {
+                  judge: {
+                    userId: 'some_other_id',
+                  },
+                  trialSessionId: '234',
+                },
+              ],
+              trialSessionId: mockTrialSessionId,
+            },
+            ...getBaseState(judgeUser),
+            trialSessions: [
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialSessionId: mockTrialSessionId,
+              },
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialSessionId: '123',
+              },
+              {
+                judge: {
+                  userId: 'some_other_id',
+                },
+                trialSessionId: '234',
+              },
+            ],
+          },
+        });
+
+        expect(result.hearings).toMatchObject([
+          {
+            judge: {
+              userId: judgeUser.userId,
+            },
+            trialSessionId: '123',
+            userIsAssignedToSession: true,
+          },
+          {
+            judge: {
+              userId: 'some_other_id',
+            },
+            trialSessionId: '234',
+            userIsAssignedToSession: false,
+          },
+        ]);
+      });
+
+      it('should be true when the current user is a chambers user for the judge assigned to a hearing the case is scheduled for', () => {
+        const mockTrialSessionId = applicationContext.getUniqueId();
+
+        const result = runCompute(formattedCaseDetail, {
+          state: {
+            caseDetail: {
+              ...caseDetail,
+              hearings: [
+                {
+                  judge: {
+                    userId: judgeUser.userId,
+                  },
+                  trialSessionId: '123',
+                },
+                {
+                  judge: {
+                    userId: 'some_other_id',
+                  },
+                  trialSessionId: '234',
+                },
+              ],
+            },
+            judgeUser: {
+              section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+              userId: judgeUser.userId,
+            },
+            ...getBaseState(chambersUser),
+            trialSessions: [
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialSessionId: mockTrialSessionId,
+              },
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialSessionId: '123',
+              },
+              {
+                judge: {
+                  userId: 'some_other_id',
+                },
+                trialSessionId: '234',
+              },
+            ],
+          },
+        });
+
+        expect(result.hearings).toMatchObject([
+          {
+            judge: {
+              userId: judgeUser.userId,
+            },
+            trialSessionId: '123',
+            userIsAssignedToSession: true,
+          },
+          {
+            judge: {
+              userId: 'some_other_id',
+            },
+            trialSessionId: '234',
+            userIsAssignedToSession: false,
+          },
+        ]);
+      });
+
+      it('should be true when the current user is the trial clerk assigned to a hearing the case is scheduled for', () => {
+        const mockTrialSessionId = applicationContext.getUniqueId();
+
+        const result = runCompute(formattedCaseDetail, {
+          state: {
+            caseDetail: {
+              ...caseDetail,
+              hearings: [
+                {
+                  judge: {
+                    userId: judgeUser.userId,
+                  },
+                  trialClerk: {
+                    userId: 'some_other_id',
+                  },
+                  trialSessionId: '123',
+                },
+                {
+                  judge: {
+                    userId: 'some_other_id',
+                  },
+                  trialClerk: {
+                    userId: trialClerkUser.userId,
+                  },
+                  trialSessionId: '234',
+                },
+              ],
+            },
+            ...getBaseState(trialClerkUser),
+            trialSessions: [
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialClerk: {
+                  userId: trialClerkUser.userId,
+                },
+                trialSessionId: mockTrialSessionId,
+              },
+              {
+                judge: {
+                  userId: judgeUser.userId,
+                },
+                trialClerk: {
+                  userId: 'some_other_id',
+                },
+                trialSessionId: '123',
+              },
+              {
+                judge: {
+                  userId: 'some_other_id',
+                },
+                trialClerk: {
+                  userId: trialClerkUser.userId,
+                },
+                trialSessionId: '234',
+              },
+            ],
+          },
+        });
+
+        expect(result.hearings).toMatchObject([
+          {
+            judge: {
+              userId: judgeUser.userId,
+            },
+            trialClerk: {
+              userId: 'some_other_id',
+            },
+            trialSessionId: '123',
+            userIsAssignedToSession: false,
+          },
+          {
+            judge: {
+              userId: 'some_other_id',
+            },
+            trialClerk: {
+              userId: trialClerkUser.userId,
+            },
+            trialSessionId: '234',
+            userIsAssignedToSession: true,
+          },
+        ]);
+      });
+    });
+  });
+
+  describe('qcNeeded', () => {
+    const mockDocketEntry = {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-18',
+      documentTitle: 'Petition',
+      documentType: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.documentType,
+      eventCode: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.eventCode,
+      filedBy: 'Test Petitioner',
+      filingDate: '2018-03-01T00:01:00.000Z',
+      index: 1,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T00:01:00.000Z',
+      servedAt: '2020-04-29T15:51:29.168Z',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      workItem: {
+        completedAt: undefined,
+        isRead: false,
+      },
+    };
+
+    it('should set qcNeeded to true when work item is not read', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [mockDocketEntry],
+            docketNumber: '123-45',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        qcNeeded: true,
+      });
+    });
+
+    it('should set qcNeeded to false when qcWorkItemsUntouched is true and work item is read', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                workItem: {
+                  completedAt: '2020-04-29T15:51:29.168Z',
+                  isRead: true,
+                },
+              },
+            ],
+            docketNumber: '123-45',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        qcNeeded: false,
+      });
+    });
+  });
+
+  it('should sort hearings by the addedToSessionAt field', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail: {
+          ...MOCK_CASE,
+          docketNumber: '123-45',
+          hearings: [
+            {
+              trialSessionId: '234',
+            },
+            {
+              trialSessionId: '123',
+            },
+            {
+              trialSessionId: '345',
+            },
+          ],
+        },
+        ...getBaseState(docketClerkUser),
+        trialSessionId: '987',
+        trialSessions: [
+          {
+            caseOrder: [
+              {
+                addedToSessionAt: '2019-04-19T17:29:13.120Z',
+                calendarNotes: 'SECOND',
+                docketNumber: '123-45',
+              },
+            ],
+            trialSessionId: '234',
+          },
+          {
+            caseOrder: [
+              {
+                addedToSessionAt: '2018-04-19T17:29:13.120Z',
+                calendarNotes: 'FIRST',
+                docketNumber: '123-45',
+              },
+            ],
+            trialSessionId: '123',
+          },
+          {
+            caseOrder: [
+              {
+                addedToSessionAt: '2020-04-19T17:29:13.120Z',
+                calendarNotes: 'THIRD',
+                docketNumber: '123-45',
+              },
+            ],
+            trialSessionId: '345',
+          },
+          {
+            caseOrder: [
+              {
+                addedToSessionAt: '2018-05-19T17:29:13.120Z',
+                calendarNotes: 'CASE TRIAL SESSION',
+                docketNumber: '123-45',
+              },
+            ],
+            trialSessionId: '987',
+          },
+        ],
+      },
+    });
+
+    expect(result.hearings[0]).toMatchObject({
+      addedToSessionAt: '2018-04-19T17:29:13.120Z',
+      calendarNotes: 'FIRST',
+      trialSessionId: '123',
+    });
+
+    expect(result.hearings[1]).toMatchObject({
+      addedToSessionAt: '2019-04-19T17:29:13.120Z',
+      calendarNotes: 'SECOND',
+      trialSessionId: '234',
+    });
+
+    expect(result.hearings[2]).toMatchObject({
+      addedToSessionAt: '2020-04-19T17:29:13.120Z',
+      calendarNotes: 'THIRD',
+      trialSessionId: '345',
+    });
+  });
+
+  describe('showBlockedTag', () => {
+    it('should be true when blocked is true', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            blocked: true,
+            blockedDate: '2019-04-19T17:29:13.120Z',
+            blockedReason: 'because',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be true when blocked is false, automaticBlocked is true, and case status is NOT calendared', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: STATUS_TYPES.new,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be false when blocked is false, automaticBlocked is true, and case status is calendared', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: STATUS_TYPES.calendared,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeFalsy();
     });
   });
 });

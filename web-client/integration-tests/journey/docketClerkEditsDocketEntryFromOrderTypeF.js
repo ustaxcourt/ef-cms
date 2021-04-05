@@ -36,12 +36,28 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
       value: 'FTRL',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'freeText',
+      value: 'some freeText',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: '2021',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
       value: 'Further Trial before',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
-      value: 'Further Trial before [Judge] at [Place]',
+      value: 'Further Trial before [Judge] at [Place]. [Anything]',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'scenario',
@@ -81,9 +97,11 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      documentTitle: 'Further Trial before Judge Ashford at Boise, Idaho',
+      documentTitle:
+        'Further Trial before Judge Ashford at Boise, Idaho. some freeText',
       documentType: 'Further Trial before',
       eventCode: 'FTRL',
+      freeText: 'some freeText',
       judge: 'Judge Ashford',
       trialLocation: 'Boise, Idaho',
     });
@@ -94,11 +112,13 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
     });
 
     expect(test.getState('form')).toMatchObject({
-      documentTitle: 'Further Trial before Judge Ashford at Boise, Idaho',
+      documentTitle:
+        'Further Trial before Judge Ashford at Boise, Idaho. some freeText',
       documentType: 'Further Trial before',
       eventCode: 'FTRL',
+      freeText: 'some freeText',
       generatedDocumentTitle:
-        'Further Trial before Judge Ashford at Boise, Idaho',
+        'Further Trial before Judge Ashford at Boise, Idaho. some freeText',
       judge: 'Judge Ashford',
       trialLocation: 'Boise, Idaho',
     });

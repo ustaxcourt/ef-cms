@@ -8,16 +8,26 @@ import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRem
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerk1CreatesNoticeFromMessageDetail } from './journey/petitionsClerk1CreatesNoticeFromMessageDetail';
 import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
 import { petitionsClerk1VerifiesCaseStatusOnMessage } from './journey/petitionsClerk1VerifiesCaseStatusOnMessage';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
 import { petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments } from './journey/petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments';
+import { petitionsClerkCreatesNewMessageOnCaseWithNoAttachments } from './journey/petitionsClerkCreatesNewMessageOnCaseWithNoAttachments';
 import { petitionsClerkCreatesOrderFromMessage } from './journey/petitionsClerkCreatesOrderFromMessage';
 import { petitionsClerkForwardsMessageToDocketClerk } from './journey/petitionsClerkForwardsMessageToDocketClerk';
+import { petitionsClerkForwardsMessageWithAttachment } from './journey/petitionsClerkForwardsMessageWithAttachment';
+import { petitionsClerkVerifiesCompletedMessageNotInInbox } from './journey/petitionsClerkVerifiesCompletedMessageNotInInbox';
+import { petitionsClerkVerifiesCompletedMessageNotInSection } from './journey/petitionsClerkVerifiesCompletedMessageNotInSection';
 import { petitionsClerkViewsInProgressMessagesOnCaseDetail } from './journey/petitionsClerkViewsInProgressMessagesOnCaseDetail';
+import { petitionsClerkViewsRepliesAndCompletesMessageInInbox } from './journey/petitionsClerkViewsRepliesAndCompletesMessageInInbox';
 import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
@@ -27,6 +37,10 @@ const { STATUS_TYPES } = applicationContext.getConstants();
 describe('messages journey', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -77,4 +91,23 @@ describe('messages journey', () => {
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
   petitionsClerk1CreatesNoticeFromMessageDetail(test);
+
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithNoAttachments(test);
+
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerkForwardsMessageWithAttachment(test);
+
+  loginAs(test, 'petitionsclerk@example.com');
+  createNewMessageOnCase(test);
+
+  loginAs(test, 'petitionsclerk1@example.com');
+  petitionsClerkViewsRepliesAndCompletesMessageInInbox(test);
+
+  loginAs(test, 'petitionsclerk@example.com');
+  it('wait for ES index', async () => {
+    await refreshElasticsearchIndex();
+  });
+  petitionsClerkVerifiesCompletedMessageNotInInbox(test);
+  petitionsClerkVerifiesCompletedMessageNotInSection(test);
 });

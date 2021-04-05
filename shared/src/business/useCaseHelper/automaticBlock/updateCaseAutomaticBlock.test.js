@@ -77,7 +77,39 @@ describe('updateCaseAutomaticBlock', () => {
       ]);
 
     const caseEntity = new Case(
-      { ...MOCK_CASE_WITHOUT_PENDING, trialDate: '2021-03-01T21:40:46.415Z' },
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        highPriority: false,
+        trialDate: '2021-03-01T21:40:46.415Z',
+      },
+      {
+        applicationContext,
+      },
+    );
+    const updatedCase = await updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
+
+    expect(updatedCase.automaticBlocked).toBeFalsy();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .deleteCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords when the case is marked as high priority', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([
+        { deadline: 'something' },
+      ]);
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        highPriority: true,
+        trialDate: undefined,
+      },
       {
         applicationContext,
       },
@@ -146,5 +178,32 @@ describe('updateCaseAutomaticBlock', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
+  });
+
+  it('does not call createCaseTrialSortMappingRecords if the case has no trial city', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        preferredTrialCity: null,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    await updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
   });
 });

@@ -1,3 +1,4 @@
+jest.mock('./combineTwoPdfs');
 const fs = require('fs');
 const path = require('path');
 const {
@@ -12,11 +13,15 @@ const {
   order,
   pendingReport,
   receiptOfFiling,
-  standingPretrialNotice,
   standingPretrialOrder,
+  standingPretrialOrderForSmallCase,
   trialCalendar,
   trialSessionPlanningReport,
 } = require('./documentGenerators');
+const {
+  applicationContext,
+  testPdfDoc,
+} = require('../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
@@ -28,8 +33,9 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../useCases/generatePdfFromHtmlInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+const { combineTwoPdfs } = require('./combineTwoPdfs');
 const { getChromiumBrowser } = require('./getChromiumBrowser');
+const { sass } = require('sass');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -53,8 +59,7 @@ describe('documentGenerators', () => {
       );
 
       applicationContext.getNodeSass.mockImplementation(() => {
-        // eslint-disable-next-line security/detect-non-literal-require
-        return require('node-' + 'sass');
+        return sass;
       });
 
       applicationContext.getPug.mockImplementation(() => {
@@ -68,6 +73,8 @@ describe('documentGenerators', () => {
           generatePdfFromHtmlInteractor,
         );
     }
+
+    combineTwoPdfs.mockReturnValue(testPdfDoc);
   });
 
   describe('addressLabelCoverSheet', () => {
@@ -425,16 +432,15 @@ describe('documentGenerators', () => {
     });
   });
 
-  describe('standingPretrialNotice', () => {
-    it('generates a Standing Pre-trial Notice document', async () => {
-      const pdf = await standingPretrialNotice({
+  describe('standingPretrialOrderForSmallCase', () => {
+    it('generates a Standing Pre-trial Order for Small Case document', async () => {
+      const pdf = await standingPretrialOrderForSmallCase({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle:
             'Test Petitioner, Another Petitioner, and Yet Another Petitioner',
           docketNumberWithSuffix: '123-45S',
-          footerDate: '02/02/20',
           trialInfo: {
             address1: '123 Some St.',
             address2: '3rd Floor',
@@ -475,7 +481,6 @@ describe('documentGenerators', () => {
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Test Petitioner',
           docketNumberWithSuffix: '123-45S',
-          footerDate: '02/02/20',
           trialInfo: {
             city: 'Some City',
             fullStartDate: 'Friday May 8, 2020',

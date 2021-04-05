@@ -14,17 +14,16 @@ const { WorkItem } = require('../entities/WorkItem');
 /**
  * saveCaseDetailInternalEditInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.caseToUpdate the updated case data
  * @returns {object} the updated case data
  */
-exports.saveCaseDetailInternalEditInteractor = async ({
+exports.saveCaseDetailInternalEditInteractor = async (
   applicationContext,
-  caseToUpdate,
-  docketNumber,
-}) => {
+  { caseToUpdate, docketNumber },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
@@ -129,17 +128,19 @@ exports.saveCaseDetailInternalEditInteractor = async ({
       { applicationContext },
     );
 
-    await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
-      applicationContext,
-      workItem: workItemEntity.validate().toRawObject(),
-    });
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemAndAddToUserAndSectionInbox({
+        applicationContext,
+        workItem: workItemEntity.validate().toRawObject(),
+      });
   }
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
   return new Case(updatedCase, { applicationContext }).toRawObject();

@@ -10,8 +10,7 @@ exports.getOutboxMessagesForSectionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getOutboxMessagesForSectionInteractor({
-        applicationContext,
+      .getOutboxMessagesForSectionInteractor(applicationContext, {
         section: event.pathParameters.section,
       });
   });

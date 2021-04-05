@@ -15,15 +15,17 @@ module.exports = {
     '!src/index.prod.js',
     '!src/index-public.dev.js',
     '!src/index-public.prod.js',
+    '!src/presenter/state.js',
   ],
   coverageDirectory: './coverage',
   globals: {
-    File: function () {},
+    Blob() {},
+    File() {},
     FileReader: () => {},
     atob: x => x,
   },
   testEnvironment: 'node',
-  testTimeout: 30000,
+  testTimeout: 60000,
   // this is to ignore imported html files
   transform: {
     '^.+\\.html?$': './htmlLoader.js',

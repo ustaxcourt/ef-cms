@@ -15,12 +15,14 @@ describe('caseFilter', () => {
       docketNumber: '102-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       foo: 'bar',
+      isPaper: true,
       sealedDate: '2020-01-02T03:04:05.007Z',
     });
 
     expect(result).toEqual({
       docketNumber: '102-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      isPaper: true,
       sealedDate: '2020-01-02T03:04:05.007Z',
     });
   });
@@ -37,6 +39,7 @@ describe('caseFilter', () => {
         name: 'Joe Dirt',
         otherFilerType: 'Nail File',
         secondaryName: 'Cheeseburgers',
+        serviceIndicator: 'Electronic',
         title: 'Emperor',
         transmission: 'manual',
       });
@@ -64,6 +67,7 @@ describe('caseFilter', () => {
           'otherFilerType',
           'sealedAndUnavailable',
           'secondaryName',
+          'serviceIndicator',
           'title',
         ]);
       });
@@ -108,6 +112,17 @@ describe('caseFilter', () => {
         privatePractitioners: [{ userId: 'authPractitioner' }],
         sealedDate: '2020-01-02T03:04:05.007Z',
       },
+      {
+        contactPrimary: {},
+        docketEntries: [
+          {
+            documentType: 'Petition',
+            isLegacySealed: true,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
+        ],
+        docketNumber: '120-20',
+      },
     ];
 
     it('should remove sealed cases from a set of advanced search results', () => {
@@ -129,7 +144,7 @@ describe('caseFilter', () => {
         userId: 'petitionsClerk',
       });
 
-      expect(result.length).toEqual(3);
+      expect(result.length).toEqual(4);
       expect(result[2].contactPrimary).toMatchObject({
         isAddressSealed: true,
         name: 'Joe Walsh',
@@ -143,7 +158,7 @@ describe('caseFilter', () => {
         userId: 'petitionsClerk',
       });
 
-      expect(result.length).toEqual(3);
+      expect(result.length).toEqual(4);
     });
 
     it('should keep sealed cases in search results if user is an IRS superuser with permission to see sealed cases', () => {
@@ -152,7 +167,7 @@ describe('caseFilter', () => {
         userId: 'irsSuperuser',
       });
 
-      expect(result.length).toEqual(3);
+      expect(result.length).toEqual(4);
     });
 
     it('should keep sealed cases in search results if user is associated as practitioner or respondent', () => {

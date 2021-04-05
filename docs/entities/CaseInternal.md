@@ -627,6 +627,7 @@
                 - "Simultaneous Sur-Reply Memorandum Brief"
                 - "Standing Pretrial Notice"
                 - "Standing Pretrial Order"
+                - "Standing Pretrial Order for Small Case"
                 - "Statement"
                 - "Statement of Redacted Information"
                 - "Statement of Taxpayer Identification"
@@ -1442,7 +1443,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 1000
             freeText2: 
               type: "string"
               flags: 
@@ -1455,7 +1456,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 500
+                    limit: 1000
             hasOtherFilingParty: 
               type: "boolean"
               flags: 
@@ -1673,6 +1674,9 @@
               type: "number"
               flags: 
                 presence: "optional"
+              rules: 
+                - 
+                  name: "integer"
               allow: 
                 - null
             objections: 
@@ -1751,6 +1755,7 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Determines if the docket entry should be displayed in the Pending Report."
             previousDocument: 
               type: "object"
               flags: 
@@ -2112,6 +2117,7 @@
                     - "Simultaneous Sur-Reply Memorandum Brief"
                     - "Standing Pretrial Notice"
                     - "Standing Pretrial Order"
+                    - "Standing Pretrial Order for Small Case"
                     - "Statement"
                     - "Statement of Redacted Information"
                     - "Statement of Taxpayer Identification"
@@ -2168,7 +2174,7 @@
               type: "string"
               flags: 
                 only: true
-                presence: "optional"
+                presence: "required"
               rules: 
                 - 
                   name: "min"
@@ -2206,7 +2212,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
             relationship: 
               type: "string"
@@ -2244,6 +2249,8 @@
                 - "Nonstandard F"
                 - "Nonstandard G"
                 - "Nonstandard H"
+                - "Nonstandard I"
+                - "Nonstandard J"
                 - "Type A"
                 - "Type B"
                 - "Type C"
@@ -2252,14 +2259,6 @@
                 - "Type F"
                 - "Type G"
                 - "Type H"
-            secondaryDate: 
-              type: "date"
-              flags: 
-                format: 
-                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
-                description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
             secondaryDocument: 
               type: "object"
               flags: 
@@ -2627,6 +2626,7 @@
                     - "Simultaneous Sur-Reply Memorandum Brief"
                     - "Standing Pretrial Notice"
                     - "Standing Pretrial Order"
+                    - "Standing Pretrial Order for Small Case"
                     - "Statement"
                     - "Statement of Redacted Information"
                     - "Statement of Taxpayer Identification"
@@ -3120,6 +3120,7 @@
                         - "clerkofcourt"
                         - "docketclerk"
                         - "floater"
+                        - "general"
                         - "inactivePractitioner"
                         - "irsPractitioner"
                         - "irsSuperuser"
@@ -3128,6 +3129,7 @@
                         - "petitioner"
                         - "petitionsclerk"
                         - "privatePractitioner"
+                        - "reportersOffice"
                         - "trialclerk"
             servedPartiesCode: 
               type: "string"
@@ -3211,6 +3213,7 @@
                             - "O"
                             - "OAJ"
                             - "SPOS"
+                            - "SPTO"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -3248,7 +3251,6 @@
                             - "OAD"
                             - "ODJ"
                             - "SDEC"
-                            - "NOT"
                             - "NTD"
                         then: 
                           type: "any"
@@ -3313,6 +3315,7 @@
                             - "O"
                             - "OAJ"
                             - "SPOS"
+                            - "SPTO"
                             - "OAL"
                             - "OAP"
                             - "OAPF"
@@ -4295,7 +4298,7 @@
                 - 
                   name: "max"
                   args: 
-                    limit: 2020
+                    limit: 2021
               whens: 
                 - 
                   ref: 

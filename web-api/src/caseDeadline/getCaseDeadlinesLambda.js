@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getCaseDeadlinesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().getCaseDeadlinesInteractor({
-      applicationContext,
-      ...event.queryStringParameters,
-    });
+    return await applicationContext
+      .getUseCases()
+      .getCaseDeadlinesInteractor(applicationContext, {
+        ...event.queryStringParameters,
+      });
   });

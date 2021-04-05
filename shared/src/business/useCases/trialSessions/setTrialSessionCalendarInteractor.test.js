@@ -2,22 +2,40 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  PARTY_TYPES,
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   setTrialSessionCalendarInteractor,
 } = require('./setTrialSessionCalendarInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('setTrialSessionCalendarInteractor', () => {
   let user;
   const MOCK_TRIAL = {
+    chambersPhoneNumber: '1111111',
+    joinPhoneNumber: '0987654321',
+    judge: {
+      name: 'Sarah Jane',
+      userId: '822366b7-e47c-413e-811f-d29113d09b06',
+    },
     maxCases: 100,
+    meetingId: '1234567890',
+    password: 'abcdefg',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '2025-12-01T00:00:00.000Z',
     term: 'Fall',
     termYear: '2025',
     trialLocation: 'Birmingham, Alabama',
   };
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  });
 
   beforeEach(() => {
     user = new User({
@@ -46,8 +64,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getEligibleCasesForTrialSession.mockReturnValue([MOCK_CASE]);
 
     await expect(
-      setTrialSessionCalendarInteractor({
-        applicationContext,
+      setTrialSessionCalendarInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -80,8 +97,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getPersistenceGateway()
       .setPriorityOnAllWorkItems.mockReturnValue({});
 
-    await setTrialSessionCalendarInteractor({
-      applicationContext,
+    await setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -115,8 +131,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor({
-      applicationContext,
+    await setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -154,8 +169,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    await setTrialSessionCalendarInteractor({
-      applicationContext,
+    await setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -179,6 +193,48 @@ describe('setTrialSessionCalendarInteractor', () => {
     ).toMatchObject({
       highPriority: true,
       trialDate: '2025-12-01T00:00:00.000Z',
+    });
+  });
+
+  it('should call getEligibleCasesForTrialSession with correct limit when no cases have been manually added and QCed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([]);
+
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
+        .mock.calls[0][0],
+    ).toMatchObject({
+      limit: 150, // max cases + buffer
+    });
+  });
+
+  it('should call getEligibleCasesForTrialSession with correct limit when 1 case has been manually added and QCed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          docketNumber: '102-19',
+          qcCompleteForTrial: {
+            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+          },
+        },
+      ]);
+
+    await setTrialSessionCalendarInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
+        .mock.calls[0][0],
+    ).toMatchObject({
+      limit: 149, // max cases + buffer - manually added case
     });
   });
 });

@@ -1,12 +1,14 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
+import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const DocumentSearchResults = connect(
   {
+    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
@@ -14,6 +16,7 @@ export const DocumentSearchResults = connect(
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
+    MAX_SEARCH_RESULTS,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
   }) {
@@ -21,9 +24,17 @@ export const DocumentSearchResults = connect(
       <div aria-live="polite">
         {advancedDocumentSearchHelper.showSearchResults && (
           <>
-            <h1 className="margin-top-4">
-              ({advancedDocumentSearchHelper.searchResultsCount}) Results
-            </h1>
+            <h1 className="margin-top-4">Search Results</h1>
+            {advancedDocumentSearchHelper.showManyResultsMessage && (
+              <WarningNotificationComponent
+                alertWarning={{
+                  message: 'Narrow your search by adding search terms.',
+                  title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
+                }}
+                dismissable={false}
+                scrollToTop={false}
+              />
+            )}
 
             <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
@@ -41,7 +52,7 @@ export const DocumentSearchResults = connect(
               <tbody>
                 {advancedDocumentSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
-                    <tr className="search-result" key={idx}>
+                    <tr className="search-result" key={result.docketEntryId}>
                       <td aria-hidden="true" className="small-column">
                         {idx + 1}
                       </td>
@@ -68,6 +79,7 @@ export const DocumentSearchResults = connect(
                               docketEntryId: result.docketEntryId,
                               docketNumber: result.docketNumber,
                               isPublic: advancedDocumentSearchHelper.isPublic,
+                              useSameTab: advancedDocumentSearchHelper.isPublic,
                             });
                           }}
                         >

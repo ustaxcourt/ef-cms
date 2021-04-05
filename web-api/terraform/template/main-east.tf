@@ -1,7 +1,6 @@
 resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   bucket = "${var.dns_domain}.efcms.${var.environment}.us-east-1.lambdas"
   acl    = "private"
-  region = "us-east-1"
 
   tags = {
     environment = var.environment
@@ -11,7 +10,15 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
 data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/api.js"
+  source_dir = "${path.module}/../template/lambdas/dist/"
+  excludes    = [ "${path.module}/../template/lambdas/dist/api-public.js",
+                  "${path.module}/../template/lambdas/dist/websockets.js",
+                  "${path.module}/../template/lambdas/dist/cron.js",
+                  "${path.module}/../template/lambdas/dist/legacy-documents-migration.js",
+                  "${path.module}/../template/lambdas/dist/streams.js",
+                  "${path.module}/../template/lambdas/dist/cognito-triggers.js",
+                  "${path.module}/../template/lambdas/dist/cognito-authorizer.js",
+                  "${path.module}/../template/lambdas/dist/report.html", ]
 }
 
 resource "null_resource" "api_east_object" {
@@ -21,7 +28,7 @@ resource "null_resource" "api_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -38,7 +45,7 @@ resource "null_resource" "websockets_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -55,7 +62,7 @@ resource "null_resource" "api_public_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -67,7 +74,7 @@ resource "null_resource" "puppeteer_layer_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -84,7 +91,7 @@ resource "null_resource" "cron_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
 
@@ -101,7 +108,20 @@ resource "null_resource" "streams_east_object" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
+  }
+}
+
+resource "aws_acm_certificate" "api_gateway_cert_east" {
+  domain_name       = "*.${var.dns_domain}"
+  validation_method = "DNS"
+
+  tags = {
+    Name          = "wildcard.${var.dns_domain}"
+    ProductDomain = "EFCMS API"
+    Environment   = var.environment
+    Description   = "Certificate for wildcard.${var.dns_domain}"
+    ManagedBy     = "terraform"
   }
 }
 
@@ -179,46 +199,96 @@ data "aws_s3_bucket_object" "streams_green_east_object" {
 
 data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
   depends_on = [
-    aws_elasticsearch_domain.efcms-search,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
+    module.elasticsearch_alpha,
+    module.elasticsearch_beta,
   ]
   domain_name = var.green_elasticsearch_domain
 }
 
 data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
   depends_on = [
-    aws_elasticsearch_domain.efcms-search,
-    module.elasticsearch_1,
-    module.elasticsearch_2,
-    module.elasticsearch_3,
-    module.elasticsearch_4
+    module.elasticsearch_alpha,
+    module.elasticsearch_beta,
   ]
   domain_name = var.blue_elasticsearch_domain
 }
 
 data "aws_dynamodb_table" "green_dynamo_table" {
   depends_on = [
-    aws_dynamodb_table.efcms-east,
-    module.dynamo_table_1,
-    module.dynamo_table_2,
-    module.dynamo_table_3,
-    module.dynamo_table_4
+    module.dynamo_table_alpha,
+    module.dynamo_table_beta,
   ]
   name = var.green_table_name
 }
 
 data "aws_dynamodb_table" "blue_dynamo_table" {
   depends_on = [
-    aws_dynamodb_table.efcms-east,
-    module.dynamo_table_1,
-    module.dynamo_table_2,
-    module.dynamo_table_3,
-    module.dynamo_table_4
+    module.dynamo_table_alpha,
+    module.dynamo_table_beta,
   ]
   name = var.blue_table_name
+}
+
+resource "aws_api_gateway_domain_name" "public_api_custom_main_east" {
+  depends_on               = [aws_acm_certificate.api_gateway_cert_east]
+  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_east.arn
+  domain_name              = "public-api.${var.dns_domain}"
+  security_policy          = "TLS_1_2"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+resource "aws_api_gateway_domain_name" "api_custom_main_east" {
+  depends_on               = [aws_acm_certificate.api_gateway_cert_east]
+  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_east.arn
+  domain_name              = "api.${var.dns_domain}"
+  security_policy          = "TLS_1_2"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+resource "aws_route53_record" "api_route53_main_east_regional_record" {
+  name           = aws_api_gateway_domain_name.api_custom_main_east.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "api_main_us_east_1"
+
+  alias {
+    name                   = aws_api_gateway_domain_name.api_custom_main_east.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.api_custom_main_east.regional_zone_id
+    evaluate_target_health = false
+  }
+
+  latency_routing_policy {
+    region = "us-east-1"
+  }
+}
+
+resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
+  name           = aws_api_gateway_domain_name.public_api_custom_main_east.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "public_api_main_us_east_1"
+
+  alias {
+    name                   = aws_api_gateway_domain_name.public_api_custom_main_east.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.public_api_custom_main_east.regional_zone_id
+    evaluate_target_health = false
+  }
+
+  latency_routing_policy {
+    region = "us-east-1"
+  }
+}
+
+module "api-east-waf" {
+  environment = var.environment
+  providers = {
+    aws = aws.us-east-1
+  }
+  source = "./waf/"
 }
 
 module "api-east-green" {
@@ -257,6 +327,7 @@ module "api-east-green" {
   create_cron            = 1
   create_streams         = 1
   stream_arn             = data.aws_dynamodb_table.green_dynamo_table.stream_arn
+  web_acl_arn            = module.api-east-waf.web_acl_arn
 }
 
 module "api-east-blue" {
@@ -295,4 +366,5 @@ module "api-east-blue" {
   create_cron            = 1
   create_streams         = 1
   stream_arn             = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
+  web_acl_arn            = module.api-east-waf.web_acl_arn
 }

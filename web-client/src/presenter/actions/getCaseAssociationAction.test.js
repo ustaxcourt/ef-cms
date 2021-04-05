@@ -7,11 +7,9 @@ import { runAction } from 'cerebral/test';
 describe('getCaseAssociation', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
-
     applicationContext
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.privatePractitioner,
       userId: '123',
@@ -44,7 +42,6 @@ describe('getCaseAssociation', () => {
       role: ROLES.privatePractitioner,
       userId: '1234',
     });
-
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -70,7 +67,6 @@ describe('getCaseAssociation', () => {
       role: ROLES.privatePractitioner,
       userId: '1234',
     });
-
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -96,7 +92,6 @@ describe('getCaseAssociation', () => {
       role: ROLES.irsPractitioner,
       userId: '789',
     });
-
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -122,7 +117,6 @@ describe('getCaseAssociation', () => {
       role: ROLES.irsPractitioner,
       userId: '789',
     });
-
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -140,7 +134,7 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return that petitioner is associated', async () => {
+  it('should return that petitioner is associated when the contactPrimaryId is equal to currentUser.userId', async () => {
     applicationContext
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
@@ -155,7 +149,39 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          userId: '123',
+          contactPrimary: {
+            contactId: '123',
+          },
+        },
+      },
+    });
+    expect(results.output).toEqual({
+      isAssociated: true,
+      pendingAssociation: false,
+    });
+  });
+
+  it('should return that petitioner is associated when the contactSecondaryId is equal to currentUser.userId', async () => {
+    applicationContext
+      .getUseCases()
+      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+      userId: '234',
+    });
+    const results = await runAction(getCaseAssociationAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        caseDetail: {
+          contactPrimary: {
+            contactId: '123',
+          },
+          contactSecondary: {
+            contactId: '234',
+          },
         },
       },
     });
@@ -173,7 +199,6 @@ describe('getCaseAssociation', () => {
       role: ROLES.petitioner,
       userId: '789',
     });
-
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -181,7 +206,16 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
+          contactPrimary: {
+            contactId: '456',
+          },
           userId: '123',
+        },
+        contactPrimary: {
+          userId: '123',
+        },
+        contactSecondary: {
+          userId: '234',
         },
       },
     });
@@ -199,7 +233,6 @@ describe('getCaseAssociation', () => {
       role: ROLES.petitionsClerk,
       userId: '123',
     });
-
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -234,6 +267,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
@@ -245,7 +279,6 @@ describe('getCaseAssociation', () => {
       role: ROLES.irsSuperuser,
       userId: '123',
     });
-
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,

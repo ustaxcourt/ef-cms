@@ -1,3 +1,4 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -14,11 +15,11 @@ export const formattedClosedCases = (get, applicationContext) => {
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
-const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
+const getUserIsAssignedToSession = ({ currentUser, get, trialSessionId }) => {
   const sessions = get(state.trialSessions);
   let session;
   if (sessions) {
-    session = sessions.find(s => s.trialSessionId === result.trialSessionId);
+    session = sessions.find(s => s.trialSessionId === trialSessionId);
   }
 
   const judge = get(state.judgeUser);
@@ -26,13 +27,15 @@ const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
   const isJudgeUserAssigned = session?.judge?.userId === currentUser.userId;
   const isChambersUserAssigned =
     judge &&
-    session?.judge?.userId === judge?.userId &&
-    judge?.section === currentUser.section;
+    session?.judge?.userId === judge.userId &&
+    judge.section === currentUser.section;
   const isTrialClerkUserAssigned =
     session?.trialClerk?.userId === currentUser.userId;
 
-  return (
-    isJudgeUserAssigned || isTrialClerkUserAssigned || isChambersUserAssigned
+  return !!(
+    isJudgeUserAssigned ||
+    isTrialClerkUserAssigned ||
+    isChambersUserAssigned
   );
 };
 
@@ -40,7 +43,9 @@ export const getShowDocumentViewerLink = ({
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
+  isHiddenToPublic,
   isInitialDocument,
+  isLegacySealed,
   isServed,
   isStipDecision,
   isStricken,
@@ -49,11 +54,12 @@ export const getShowDocumentViewerLink = ({
   userHasNoAccessToDocument,
 }) => {
   if (!hasDocument) return false;
+  if (!userHasAccessToCase && isHiddenToPublic) return false;
 
   if (isExternalUser) {
     if (isStricken) return false;
+    if (isLegacySealed) return false;
     if (userHasNoAccessToDocument) return false;
-
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
       if (!isServed) return false;
@@ -76,7 +82,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
+    STATUS_TYPES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -116,6 +124,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.otherFilers = (result.otherFilers || []).map(otherFiler => ({
     ...otherFiler,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
   }));
 
@@ -143,7 +152,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
       entry && systemGeneratedEventCodes.includes(entry.eventCode);
     const hasCourtIssuedDocument = entry && entry.isCourtIssuedDocument;
     const hasServedCourtIssuedDocument =
-      hasCourtIssuedDocument && !!entry.servedAt;
+      hasCourtIssuedDocument &&
+      applicationContext.getUtilities().isServed(entry);
     const hasUnservableCourtIssuedDocument =
       entry && UNSERVABLE_EVENT_CODES.includes(entry.eventCode);
 
@@ -171,17 +181,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
     let showDocumentLinks = false;
 
     if (isExternalUser) {
-      formattedResult.isInProgress = false;
       formattedResult.hideIcons = true;
-      formattedResult.qcWorkItemsUntouched = false;
     } else {
-      formattedResult.isInProgress = entry.isInProgress;
-
-      formattedResult.qcWorkItemsUntouched =
-        !formattedResult.isInProgress &&
-        entry.qcWorkItemsUntouched &&
-        !entry.isCourtIssuedDocument;
-
       formattedResult.showLoadingIcon =
         !permissions.UPDATE_CASE &&
         entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
@@ -193,20 +194,16 @@ export const formattedCaseDetail = (get, applicationContext) => {
       entry.isPaper;
 
     if (entry.documentTitle) {
-      formattedResult.descriptionDisplay = entry.documentTitle;
-      if (entry.additionalInfo && entry.addToCoversheet) {
-        formattedResult.descriptionDisplay += ` ${entry.additionalInfo}`;
-      }
+      formattedResult.descriptionDisplay = applicationContext
+        .getUtilities()
+        .getDocumentTitleWithAdditionalInfo({ docketEntry: entry });
     }
 
     formattedResult.showDocumentProcessing =
       !permissions.UPDATE_CASE &&
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-    formattedResult.showNotServed =
-      !formattedResult.isUnservable &&
-      entry.isNotServedDocument &&
-      !entry.isMinuteEntry;
+    formattedResult.showNotServed = entry.isNotServedDocument;
     formattedResult.showServed = entry.isStatusServed;
 
     const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
@@ -217,8 +214,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
       hasDocument: entry.isFileAttached,
       isCourtIssuedDocument: entry.isCourtIssuedDocument,
       isExternalUser,
+      isHiddenToPublic: !EVENT_CODES_VISIBLE_TO_PUBLIC.includes(
+        entry.eventCode,
+      ),
       isInitialDocument,
-      isServed: !!entry.servedAt,
+      isLegacySealed: entry.isLegacySealed,
+      isServed: applicationContext.getUtilities().isServed(entry),
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
@@ -244,7 +245,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
       userPermissions: permissions,
     });
 
-    formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
+    formattedResult.showDocumentDescriptionWithoutLink =
+      !showDocumentLinks && !formattedResult.showDocumentProcessing;
+
+    formattedResult.editDocketEntryMetaLink = `/case-detail/${docketNumber}/docket-entry/${formattedResult.index}/edit-meta`;
 
     return formattedResult;
   });
@@ -254,7 +258,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && d.servedAt,
+    docketEntry => applicationContext.getUtilities().isPending(docketEntry),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
@@ -269,13 +273,79 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.consolidatedCases = result.consolidatedCases || [];
 
+  const allTrialSessions = get(state.trialSessions);
+
+  const getCalendarDetailsForTrialSession = ({
+    caseDocketNumber,
+    trialSessionId,
+    trialSessions,
+  }) => {
+    let note;
+    let addedAt;
+
+    if (!trialSessions || !trialSessions.length) {
+      return { addedAt, note };
+    }
+
+    const foundTrialSession = trialSessions.find(
+      session => session.trialSessionId === trialSessionId,
+    );
+
+    if (foundTrialSession && foundTrialSession.caseOrder) {
+      const trialSessionCase = foundTrialSession.caseOrder.find(
+        sessionCase => sessionCase.docketNumber === caseDocketNumber,
+      );
+
+      note = trialSessionCase && trialSessionCase.calendarNotes;
+      addedAt = trialSessionCase && trialSessionCase.addedToSessionAt;
+    }
+
+    return { addedAt, note };
+  };
+
+  const { note: trialSessionNotes } = getCalendarDetailsForTrialSession({
+    caseDocketNumber: caseDetail.docketNumber,
+    trialSessionId: caseDetail.trialSessionId,
+    trialSessions: allTrialSessions,
+  });
+
+  result.trialSessionNotes = trialSessionNotes;
+
+  if (result.hearings && result.hearings.length) {
+    result.hearings.forEach(hearing => {
+      const { addedAt, note } = getCalendarDetailsForTrialSession({
+        caseDocketNumber: caseDetail.docketNumber,
+        trialSessionId: hearing.trialSessionId,
+        trialSessions: allTrialSessions,
+      });
+
+      hearing.calendarNotes = note;
+      hearing.addedToSessionAt = addedAt;
+
+      hearing.userIsAssignedToSession = getUserIsAssignedToSession({
+        currentUser: user,
+        get,
+        trialSessionId: hearing.trialSessionId,
+      });
+    });
+
+    result.hearings.sort((a, b) => {
+      return applicationContext
+        .getUtilities()
+        .compareISODateStrings(a.addedToSessionAt, b.addedToSessionAt);
+    });
+  }
+
   result.userIsAssignedToSession = getUserIsAssignedToSession({
     currentUser: user,
     get,
-    result,
+    trialSessionId: caseDetail.trialSessionId,
   });
 
-  result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;
+  result.showBlockedTag =
+    caseDetail.blocked ||
+    (caseDetail.automaticBlocked &&
+      caseDetail.status !== STATUS_TYPES.calendared);
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;

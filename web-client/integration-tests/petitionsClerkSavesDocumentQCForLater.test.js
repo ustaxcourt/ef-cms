@@ -1,5 +1,10 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitionsClerkReviewsPetitionAndSavesForLater';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
@@ -11,6 +16,10 @@ describe('Petitions Clerk Saves Document QC for Later', () => {
 
   beforeEach(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -32,7 +41,17 @@ describe('Petitions Clerk Saves Document QC for Later', () => {
   });
 
   loginAs(test, 'petitionsclerk@example.com');
+
+  it('refresh elasticsearch index', async () => {
+    await refreshElasticsearchIndex();
+  });
+
   petitionsClerkReviewsPetitionAndSavesForLater(test);
+
+  it('refresh elasticsearch index', async () => {
+    await refreshElasticsearchIndex();
+  });
+
   petitionsClerkViewsSectionInProgress(test);
   petitionsClerkServesPetitionFromDocumentView(test);
 });

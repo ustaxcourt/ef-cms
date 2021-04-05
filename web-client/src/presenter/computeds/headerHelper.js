@@ -7,19 +7,25 @@ export const headerHelper = (get, applicationContext) => {
   const currentPage = get(state.currentPage) || '';
   const { USER_ROLES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
-  const notifications = get(state.notifications);
-  const { unreadMessageCount } = notifications;
+  const unreadMessageCount = get(state.notifications.unreadMessageCount);
+  const isInternalUser = applicationContext
+    .getUtilities()
+    .isInternalUser(userRole);
+  const isExternalUser = applicationContext
+    .getUtilities()
+    .isExternalUser(userRole);
 
   const isOtherUser = role => {
     const externalRoles = [USER_ROLES.petitionsClerk, USER_ROLES.docketClerk];
     return !externalRoles.includes(role);
   };
 
-  const isTrialSessions = currentPage.includes('TrialSession');
+  const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
+  const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
   const isDashboard = currentPage.startsWith('Dashboard');
+  const isTrialSessions = currentPage.includes('TrialSession');
   const isWorkQueue = currentPage.startsWith('WorkQueue');
-  const isMessages = currentPage.startsWith('Messages');
-
+  const pageIsMessages = currentPage.startsWith('Messages');
   const pageIsHome =
     isDashboard ||
     ([
@@ -27,44 +33,42 @@ export const headerHelper = (get, applicationContext) => {
       USER_ROLES.petitionsClerk,
       USER_ROLES.adc,
     ].includes(userRole) &&
-      isMessages);
-  const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
-  const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
+      pageIsMessages);
 
   return {
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
-    pageIsDashboard:
-      isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
+    pageIsDashboard: isDashboard && isExternalUser,
     pageIsDocumentQC: isWorkQueue,
     pageIsHome,
-    pageIsMessages: isMessages,
-    pageIsMyCases:
-      isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
+    pageIsMessages,
+    pageIsMyCases: isDashboard && isExternalUser,
     pageIsReports: isCaseDeadlines || isBlockedCasesReport,
-    pageIsTrialSessions:
-      isTrialSessions &&
-      applicationContext.getUtilities().isInternalUser(userRole),
+    pageIsTrialSessions: isTrialSessions && isInternalUser,
     showAccountMenu: isLoggedIn,
-    showDocumentQC: applicationContext.getUtilities().isInternalUser(userRole),
+    showDocumentQC: isInternalUser,
     showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
-    showMessages: applicationContext.getUtilities().isInternalUser(userRole),
+    showMessages: isInternalUser && userRole !== USER_ROLES.general,
+    showMyAccount: [
+      USER_ROLES.privatePractitioner,
+      USER_ROLES.irsPractitioner,
+      USER_ROLES.petitioner,
+    ].includes(userRole),
     showMyCases:
-      applicationContext.getUtilities().isExternalUser(userRole) &&
-      user &&
-      userRole &&
-      userRole !== USER_ROLES.irsSuperuser,
-    showReports: applicationContext.getUtilities().isInternalUser(userRole),
+      isExternalUser && userRole && userRole !== USER_ROLES.irsSuperuser,
+    showReports: isInternalUser,
     showSearchInHeader:
-      user &&
       userRole &&
-      userRole !== USER_ROLES.petitioner &&
-      userRole !== USER_ROLES.privatePractitioner &&
-      userRole !== USER_ROLES.irsPractitioner &&
-      userRole !== USER_ROLES.irsSuperuser,
-    showSearchNavItem: user && userRole && userRole === USER_ROLES.irsSuperuser,
+      ![
+        USER_ROLES.petitioner,
+        USER_ROLES.privatePractitioner,
+        USER_ROLES.irsPractitioner,
+        USER_ROLES.irsSuperuser,
+      ].includes(userRole),
+    showSearchNavItem: userRole && userRole === USER_ROLES.irsSuperuser,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
+    showVerifyEmailWarningNotification: !!user?.pendingEmail,
     unreadMessageCount,
     userName: user && user.name,
   };

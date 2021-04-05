@@ -1,6 +1,6 @@
 const joi = require('joi');
 const { InvalidEntityError } = require('../errors/errors');
-const { isEmpty, pick } = require('lodash');
+const { isEmpty } = require('lodash');
 
 const setIsValidated = obj => {
   Object.defineProperty(obj, 'isValidated', {
@@ -163,7 +163,7 @@ exports.joiValidationDecorator = function (
 
     if (error) {
       throw new InvalidEntityError(
-        entityConstructor.validationName,
+        this.entityName,
         JSON.stringify(
           error.details.map(detail => {
             return detail.message.replace(/"/g, "'");
@@ -177,12 +177,6 @@ exports.joiValidationDecorator = function (
 
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
-      const helpfulKeys = Object.keys(this).filter(key => key.endsWith('Id'));
-      helpfulKeys.push(
-        'docketNumber',
-        ...Object.keys(this.getFormattedValidationErrors()),
-      );
-
       const stringifyTransform = obj => {
         if (!obj) return obj;
         const transformed = {};
@@ -195,17 +189,11 @@ exports.joiValidationDecorator = function (
         });
         return transformed;
       };
-
+      const validationErrors = this.getValidationErrors();
       throw new InvalidEntityError(
-        entityConstructor.validationName,
-        JSON.stringify(
-          stringifyTransform(pick(this, helpfulKeys)),
-          (key, value) =>
-            this.hasOwnProperty(key) && typeof value === 'undefined'
-              ? '<undefined>'
-              : value,
-        ),
-        JSON.stringify(stringifyTransform(this.getValidationErrors())),
+        this.entityName,
+        JSON.stringify(stringifyTransform(validationErrors)),
+        validationErrors,
       );
     }
     setIsValidated(this);

@@ -18,15 +18,15 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {object} the updated case after the documents have been added
  */
-exports.fileExternalDocumentInteractor = async ({
+exports.fileExternalDocumentInteractor = async (
   applicationContext,
-  documentMetadata,
-}) => {
+  { documentMetadata },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
@@ -185,16 +185,18 @@ exports.fileExternalDocumentInteractor = async ({
       caseEntity,
     });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   for (let workItem of workItems) {
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    });
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemAndAddToSectionInbox({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
   }
 
   return caseEntity.toRawObject();

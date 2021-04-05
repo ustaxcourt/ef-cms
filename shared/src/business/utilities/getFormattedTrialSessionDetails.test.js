@@ -5,6 +5,8 @@ import {
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import {
+  compareTrialSessionEligibleCases,
+  formatCase,
   formattedTrialSessionDetails,
   getTrialSessionStatus,
 } from './getFormattedTrialSessionDetails';
@@ -158,6 +160,143 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
+  it('formatCase identifies Small Lien/Levy, Lien/Levy, and Passport as high priority', () => {
+    expect(
+      formatCase({ applicationContext, caseItem: { docketNumberSuffix: 'W' } })
+        .isDocketSuffixHighPriority,
+    ).toBe(false);
+    expect(
+      formatCase({
+        applicationContext,
+        caseItem: {
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
+        },
+      }).isDocketSuffixHighPriority,
+    ).toBe(true);
+    expect(
+      formatCase({
+        applicationContext,
+        caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY },
+      }).isDocketSuffixHighPriority,
+    ).toBe(true);
+    expect(
+      formatCase({
+        applicationContext,
+        caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT },
+      }).isDocketSuffixHighPriority,
+    ).toBe(true);
+  });
+  describe('comparing eligible cases', () => {
+    it('prioritizes L and P', () => {
+      const result = compareTrialSessionEligibleCases(
+        {
+          docketNumber: '101-19',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '101-19',
+          isDocketSuffixHighPriority: false,
+        },
+        {
+          docketNumber: '101-19',
+          docketNumberSuffix: 'P',
+          docketNumberWithSuffix: '101-19P',
+          isDocketSuffixHighPriority: true,
+        },
+      );
+      expect(result).toBe(1);
+    });
+
+    it('compares eligible trial session cases sorting lien/levy and passport first', () => {
+      const formattedEligibleCases = [
+        {
+          docketNumber: '101-19',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '101-19',
+        },
+        {
+          docketNumber: '101-19',
+          docketNumberSuffix: 'P',
+          docketNumberWithSuffix: '101-19P',
+          isDocketSuffixHighPriority: true,
+        },
+      ];
+      const result = formattedEligibleCases.sort(
+        compareTrialSessionEligibleCases,
+      );
+      expect(result).toMatchObject([
+        {
+          docketNumber: '101-19',
+          docketNumberSuffix: 'P',
+          docketNumberWithSuffix: '101-19P',
+          isDocketSuffixHighPriority: true,
+        },
+        {
+          docketNumber: '101-19',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '101-19',
+        },
+      ]);
+    });
+
+    it('compares eligible trial session cases sorting manually added cases first', () => {
+      const formattedEligibleCases = [
+        {
+          // should be last
+          docketNumber: '105-19',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '105-19',
+        },
+        {
+          // should be 3rd
+          docketNumber: '101-19',
+          docketNumberSuffix: 'L',
+          docketNumberWithSuffix: '101-19L',
+        },
+        {
+          // should be 1st
+          docketNumber: '103-19',
+          docketNumberSuffix: 'P',
+          docketNumberWithSuffix: '103-19P',
+          isManuallyAdded: true,
+        },
+        {
+          // should be 2nd
+          docketNumber: '104-19',
+          docketNumberSuffix: '',
+          docketNumberWithSuffix: '104-19',
+          highPriority: true,
+        },
+      ];
+      const result = formattedEligibleCases.sort(
+        compareTrialSessionEligibleCases,
+      );
+      expect(result[0]).toMatchObject({
+        docketNumber: '103-19',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '103-19P',
+        isManuallyAdded: true,
+      });
+      expect(result[1]).toMatchObject({
+        // should be 2nd
+        docketNumber: '104-19',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '104-19',
+        highPriority: true,
+      });
+      expect(result[2]).toMatchObject({
+        // should be 3rd
+        docketNumber: '101-19',
+        docketNumberSuffix: 'L',
+        docketNumberWithSuffix: '101-19L',
+      });
+      expect(result[3]).toMatchObject({
+        // should be last
+        docketNumber: '105-19',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '105-19',
+      });
+    });
+  });
+
   it('formats docket numbers with suffixes and case caption names without postfix on eligible cases', () => {
     let result = formattedTrialSessionDetails({
       applicationContext,
@@ -175,26 +314,54 @@ describe('formattedTrialSessionDetails', () => {
             caseCaption: undefined,
             docketNumber: '103-19',
           },
+          {
+            ...MOCK_CASE,
+            caseCaption: 'Marky Mark and The Funky Bunch, Petitioners',
+            docketNumber: '799-19',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+            docketNumberWithSuffix: '799-19L', // high priority
+          },
+          {
+            ...MOCK_CASE,
+            caseCaption: 'Bob Dylan and the Traveling Wilburys, Petitioners',
+            docketNumber: '122-20',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+            docketNumberWithSuffix: '122-20P', // high priority
+          },
         ],
       },
     });
-    expect(result.formattedEligibleCases.length).toEqual(3);
-    expect(result.formattedEligibleCases[0].docketNumberWithSuffix).toEqual(
-      '101-18',
-    );
-    expect(result.formattedEligibleCases[0].caseTitle).toEqual(
-      'Test Petitioner',
-    );
-    expect(result.formattedEligibleCases[1].docketNumberWithSuffix).toEqual(
-      '101-18W',
-    );
-    expect(result.formattedEligibleCases[1].caseTitle).toEqual(
-      'Daenerys Stormborn & Someone Else',
-    );
-    expect(result.formattedEligibleCases[2].docketNumberWithSuffix).toEqual(
-      '103-19',
-    );
-    expect(result.formattedEligibleCases[2].caseTitle).toEqual('');
+    expect(result.formattedEligibleCases.length).toEqual(5);
+
+    expect(result.formattedEligibleCases[0]).toMatchObject({
+      caseCaption: 'Marky Mark and The Funky Bunch, Petitioners',
+      docketNumber: '799-19',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+      docketNumberWithSuffix: '799-19L',
+      isDocketSuffixHighPriority: true,
+    });
+
+    expect(result.formattedEligibleCases[1]).toMatchObject({
+      caseCaption: 'Bob Dylan and the Traveling Wilburys, Petitioners',
+      docketNumber: '122-20',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+      docketNumberWithSuffix: '122-20P',
+      isDocketSuffixHighPriority: true,
+    });
+
+    expect(result.formattedEligibleCases[2]).toMatchObject({
+      caseTitle: 'Test Petitioner',
+      docketNumberWithSuffix: '101-18',
+    });
+    expect(result.formattedEligibleCases[3]).toMatchObject({
+      caseTitle: 'Daenerys Stormborn & Someone Else',
+      docketNumberWithSuffix: '101-18W',
+    });
+
+    expect(result.formattedEligibleCases[4]).toMatchObject({
+      caseTitle: '',
+      docketNumberWithSuffix: '103-19',
+    });
   });
 
   it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {

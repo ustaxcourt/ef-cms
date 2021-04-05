@@ -29,10 +29,10 @@ import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormData from 'form-data';
+import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import queryString from 'query-string';
+import qs from 'qs';
 import riotRoute from 'riot-route';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
@@ -110,6 +110,15 @@ export const getEmailsForAddress = address => {
     applicationContext,
   });
 };
+export const getUserRecordById = userId => {
+  return client.get({
+    Key: {
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
+    },
+    applicationContext,
+  });
+};
 
 export const deleteEmails = emails => {
   return Promise.all(
@@ -169,6 +178,7 @@ export const createCourtIssuedDocketEntry = async ({
   docketEntryId,
   docketNumber,
   eventCode,
+  filingDate,
   test,
   trialLocation,
 }) => {
@@ -193,6 +203,21 @@ export const createCourtIssuedDocketEntry = async ({
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: trialLocation,
+    });
+  }
+
+  if (filingDate) {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: filingDate.month,
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: filingDate.day,
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: filingDate.year,
     });
   }
 
@@ -234,11 +259,11 @@ export const getNotifications = test => {
 export const assignWorkItems = async (test, to, workItems) => {
   const users = {
     adc: {
-      name: 'Test ADC',
+      name: 'test ADC',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     },
     docketclerk: {
-      name: 'Test Docketclerk',
+      name: 'test Docketclerk',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     },
   };
@@ -269,7 +294,30 @@ export const uploadExternalDecisionDocument = async test => {
     primaryDocumentFileSize: 115022,
     scenario: 'Standard',
     searchError: false,
-    serviceDate: null,
+    supportingDocument: null,
+    supportingDocumentFile: null,
+    supportingDocumentFreeText: null,
+    supportingDocumentMetadata: null,
+  });
+  await test.runSequence('submitExternalDocumentSequence');
+};
+
+export const uploadExternalRatificationDocument = async test => {
+  test.setState('form', {
+    attachments: false,
+    category: 'Miscellaneous',
+    certificateOfService: false,
+    certificateOfServiceDate: null,
+    documentTitle: 'Ratification of do the test',
+    documentType: 'Ratification',
+    eventCode: 'RATF',
+    freeText: 'do the test',
+    hasSupportingDocuments: false,
+    partyPrimary: true,
+    primaryDocumentFile: fakeFile,
+    primaryDocumentFileSize: 115022,
+    scenario: 'Nonstandard B',
+    searchError: false,
     supportingDocument: null,
     supportingDocumentFile: null,
     supportingDocumentFreeText: null,
@@ -316,7 +364,7 @@ export const uploadPetition = async (
 
   const petitionMetadata = {
     caseType: overrides.caseType || CASE_TYPES_MAP.cdp,
-    contactPrimary: {
+    contactPrimary: overrides.contactPrimary || {
       address1: '734 Cowley Parkway',
       address2: 'Cum aut velit volupt',
       address3: 'Et sunt veritatis ei',
@@ -364,7 +412,6 @@ export const uploadPetition = async (
 };
 
 export const loginAs = (test, user) => {
-  // eslint-disable-next-line jest/expect-expect
   return it(`login as ${user}`, async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
@@ -374,12 +421,16 @@ export const loginAs = (test, user) => {
     await test.runSequence('submitLoginSequence', {
       path: '/',
     });
+
+    await wait(500);
+
+    expect(test.getState('user.email')).toBeDefined();
   });
 };
 
 export const setupTest = ({ useCases = {} } = {}) => {
   let test;
-  global.FormData = FormData;
+  global.FormData = FormDataHelper;
   global.Blob = () => {
     return fakeFile;
   };
@@ -406,21 +457,23 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
   presenter.providers.applicationContext = applicationContext;
 
-  presenter.providers.applicationContext = applicationContext;
-  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+  const {
+    initialize: initializeSocketProvider,
+    start,
+    stop: stopSocket,
+  } = socketProvider({
     socketRouter,
   });
-  presenter.providers.socket = { start, stop };
+  presenter.providers.socket = { start, stop: stopSocket };
 
   test = CerebralTest(presenter);
-  test.getSequence = name => async obj => await test.runSequence(name, obj);
-  test.closeSocket = stop;
+  test.getSequence = seqName => async obj =>
+    await test.runSequence(seqName, obj);
+  test.closeSocket = stopSocket;
   test.applicationContext = applicationContext;
 
-  const { window } = dom;
-
   global.window = {
-    ...window,
+    ...dom.window,
     DOMParser: () => {
       return {
         parseFromString: () => {
@@ -447,7 +500,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
       removeItem: () => null,
       setItem: () => null,
     },
-    location: {},
+    location: { replace: jest.fn() },
     open: url => {
       test.setState('openedUrl', url);
     },
@@ -496,11 +549,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
   };
 
   test = CerebralTest(presenter);
-  test.getSequence = name => async obj => {
-    const result = await test.runSequence(name, obj);
-    return result;
-  };
-  test.closeSocket = stop;
+  test.getSequence = seqName => async obj =>
+    await test.runSequence(seqName, obj);
+  test.closeSocket = stopSocket;
 
   test.setState('constants', applicationContext.getConstants());
 
@@ -517,10 +568,10 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
 const mockQuery = routeToGoTo => {
   const paramsString = routeToGoTo.split('?')[1];
-  return queryString.parse(paramsString);
+  return qs.parse(paramsString);
 };
 
-export const gotoRoute = (routes, routeToGoTo) => {
+export const gotoRoute = async (routes, routeToGoTo) => {
   for (let route of routes) {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(
@@ -552,12 +603,12 @@ export const wait = time => {
   });
 };
 
-export const refreshElasticsearchIndex = async () => {
+export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
   await axios.post('http://localhost:9200/_refresh');
   await axios.post('http://localhost:9200/_flush');
-  return await wait(2000);
+  return await wait(time);
 };
 
 export const base64ToUInt8Array = b64 => {
@@ -589,12 +640,25 @@ export const getPetitionDocumentForCase = caseDetail => {
   // In our tests, we had numerous instances of `case.docketEntries[0]`, which would
   // return the petition document most of the time, but occasionally fail,
   // producing unintended results.
-  return caseDetail.docketEntries.find(
-    document => document.documentType === 'Petition',
-  );
+  return caseDetail.docketEntries.find(doc => doc.documentType === 'Petition');
 };
 
 export const getPetitionWorkItemForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
   return petitionDocument.workItem;
+};
+
+export const getTextByCount = count => {
+  const baseText =
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate efficitur ante, at placerat.';
+  const baseCount = baseText.length;
+
+  let resultText = baseText;
+  if (count > baseCount) {
+    for (let i = 1; i < Math.ceil(count / baseCount); i++) {
+      resultText += baseText;
+    }
+  }
+
+  return resultText.slice(0, count);
 };

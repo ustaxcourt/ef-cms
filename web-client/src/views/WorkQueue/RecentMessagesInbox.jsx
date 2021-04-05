@@ -31,11 +31,11 @@ export const RecentMessagesInbox = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {recentMessagesHelper.recentMessages.map((item, idx) => {
+          {recentMessagesHelper.recentMessages.map(item => {
             const unreadClass = item.isRead ? '' : 'text-bold';
 
             return (
-              <tbody key={idx}>
+              <tbody key={item.messageId}>
                 <tr>
                   <td className="message-queue-row small">
                     {item.docketNumberWithSuffix}
@@ -44,7 +44,7 @@ export const RecentMessagesInbox = connect(
                   <td className="message-unread-column">
                     {!item.isRead && (
                       <Icon
-                        aria-label="create message"
+                        aria-label="unread message"
                         className="fa-icon-blue"
                         icon="envelope"
                         size="1x"
@@ -56,7 +56,7 @@ export const RecentMessagesInbox = connect(
                       <Button
                         link
                         className={classNames('padding-0', unreadClass)}
-                        href={`/messages/${item.docketNumber}/message-detail/${item.parentMessageId}`}
+                        href={item.messageDetailLink}
                       >
                         {item.subject}
                       </Button>

@@ -36,6 +36,7 @@ const addNewInitialFilingToCase = ({
       eventCode,
       filingDate: caseEntity.receivedAt,
       isFileAttached: true,
+      isOnDocketRecord: true,
       isPaper: true,
       mailingDate: caseEntity.mailingDate,
       partyPrimary: true,
@@ -51,7 +52,7 @@ const addNewInitialFilingToCase = ({
 
   const documentToAdd = new DocketEntry(documentMeta, { applicationContext });
 
-  caseEntity.docketEntries.push(documentToAdd);
+  caseEntity.addDocketEntry(documentToAdd);
 };
 
 const deleteInitialFilingFromCase = async ({
@@ -75,6 +76,16 @@ const deleteInitialFilingFromCase = async ({
   });
 };
 
+/**
+ * updateInitialFilingDocuments
+ *
+ * @param {object} providers providers object
+ * @param {object} providers.applicationContext application context object
+ * @param {object} providers.authorizedUser authorized user object
+ * @param {object} providers.caseEntity case entity
+ * @param {object} providers.caseToUpdate case to update
+ * @returns {void}
+ */
 exports.updateInitialFilingDocuments = async ({
   applicationContext,
   authorizedUser,

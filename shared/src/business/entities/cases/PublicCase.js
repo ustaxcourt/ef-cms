@@ -1,9 +1,10 @@
 const joi = require('joi');
 const {
-  COURT_ISSUED_DOCUMENT_TYPES,
+  COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   PARTY_TYPES,
+  ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
@@ -15,7 +16,11 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
+const { ContactFactory } = require('../contacts/ContactFactory');
+const { IrsPractitioner } = require('../IrsPractitioner');
+const { isSealedCase } = require('./Case');
 const { map } = require('lodash');
+const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { PublicContact } = require('./PublicContact');
 const { PublicDocketEntry } = require('./PublicDocketEntry');
 
@@ -28,6 +33,7 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
  */
 function PublicCase() {}
 PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
+  this.entityName = 'PublicCase';
   this.caseCaption = rawCase.caseCaption;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -36,16 +42,47 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
   this.hasIrsPractitioner =
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
-  this.isSealed = !!rawCase.sealedDate; // if true only return docket number with suffix
+  this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
+  this._score = rawCase['_score'];
 
-  this.contactPrimary = rawCase.contactPrimary
-    ? new PublicContact(rawCase.contactPrimary)
-    : undefined;
-  this.contactSecondary = rawCase.contactSecondary
-    ? new PublicContact(rawCase.contactSecondary)
-    : undefined;
+  this.isSealed = isSealedCase(rawCase);
+
+  const currentUser = applicationContext.getCurrentUser();
+
+  if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
+    const contacts = ContactFactory.createContacts({
+      applicationContext,
+      contactInfo: {
+        otherFilers: rawCase.otherFilers,
+        otherPetitioners: rawCase.otherPetitioners,
+        primary: rawCase.contactPrimary,
+        secondary: rawCase.contactSecondary,
+      },
+      isPaper: rawCase.isPaper,
+      partyType: rawCase.partyType,
+    });
+
+    this.otherPetitioners = contacts.otherPetitioners;
+    this.otherFilers = contacts.otherFilers;
+    this.contactPrimary = contacts.primary;
+    this.contactSecondary = contacts.secondary;
+
+    this.irsPractitioners = (rawCase.irsPractitioners || []).map(
+      irsPractitioner => new IrsPractitioner(irsPractitioner),
+    );
+    this.privatePractitioners = (rawCase.privatePractitioners || []).map(
+      practitioner => new PrivatePractitioner(practitioner),
+    );
+  } else {
+    this.contactPrimary = rawCase.contactPrimary
+      ? new PublicContact(rawCase.contactPrimary)
+      : undefined;
+    this.contactSecondary = rawCase.contactSecondary
+      ? new PublicContact(rawCase.contactSecondary)
+      : undefined;
+  }
 
   // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
   this.docketEntries = (rawCase.docketEntries || [])
@@ -53,10 +90,8 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     .map(
       docketEntry => new PublicDocketEntry(docketEntry, { applicationContext }),
     )
-    .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+    .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
 };
-
-PublicCase.validationName = 'PublicCase';
 
 const publicCaseSchema = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
@@ -78,6 +113,7 @@ const publicCaseSchema = {
     'Auto-generated from docket number and the suffix.',
   ),
   hasIrsPractitioner: joi.boolean().required(),
+  isPaper: joi.boolean().optional(),
   isSealed: joi.boolean(),
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
@@ -109,19 +145,24 @@ joiValidationDecorator(
   {},
 );
 
-const isPrivateDocument = function (document) {
+const isPrivateDocument = function (documentEntity) {
   const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
-  const isStipDecision = document.eventCode === STIPULATED_DECISION_EVENT_CODE;
-  const isTranscript = document.eventCode === TRANSCRIPT_EVENT_CODE;
-  const isOrder = orderDocumentTypes.includes(document.documentType);
-  const isDocumentOnDocketRecord = document.isOnDocketRecord;
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    document.documentType,
-  );
+  const isStipDecision =
+    documentEntity.eventCode === STIPULATED_DECISION_EVENT_CODE;
+  const isTranscript = documentEntity.eventCode === TRANSCRIPT_EVENT_CODE;
+  const isOrder = orderDocumentTypes.includes(documentEntity.documentType);
+  const isDocumentOnDocketRecord = documentEntity.isOnDocketRecord;
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(documentEntity.eventCode);
+  const documentIsStricken = !!documentEntity.isStricken;
 
   const isPublicDocumentType =
-    (isOrder || isCourtIssuedDocument) && !isTranscript && !isStipDecision;
+    (isOrder || isCourtIssuedDocument) &&
+    !isTranscript &&
+    !isStipDecision &&
+    !documentIsStricken;
 
   return (
     (isPublicDocumentType && !isDocumentOnDocketRecord) || !isPublicDocumentType

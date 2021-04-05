@@ -6,6 +6,7 @@ export const publicAlertHelper = get => {
 
   return {
     messagesDeduped: uniq(alertError.messages),
+    responseCode: alertError.responseCode,
     showErrorAlert:
       !!alertError.title || !!alertError.message || !!alertError.messages,
     showMultipleMessages: !!alertError.messages,
