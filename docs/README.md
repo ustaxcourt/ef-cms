@@ -52,3 +52,4 @@ During routine operations of EF-CMS:
 
 - [Accessing log data in Kibana](operations/logging.md)
 - [Receiving system health alerts](operations/system-health-alerts.md)
+- [Blocking IP addresses](operations/ip-blocking.md)
