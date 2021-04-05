@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
   Case,
@@ -16,6 +17,9 @@ const {
 const {
   Message,
 } = require('../../../../../shared/src/business/entities/Message');
+const {
+  TrialSession,
+} = require('../../../../../shared/src/business/entities/trialSessions/TrialSession');
 
 const applicationContext = createApplicationContext({});
 
@@ -84,6 +88,17 @@ const migrateItems = async items => {
       if (item.createdAt && !isValidDateString(item.createdAt, FORMATS.ISO)) {
         item.createdAt = createISODateAtStartOfDayEST(item.createdAt);
       }
+      if (
+        item.noticeIssuedDate &&
+        !isValidDateString(item.noticeIssuedDate, FORMATS.ISO)
+      ) {
+        item.noticeIssuedDate = createISODateAtStartOfDayEST(
+          item.noticeIssuedDate,
+        );
+      }
+      new TrialSession(item, { applicationContext }).validate();
+
+      itemsAfter.push(item);
     } else {
       itemsAfter.push(item);
     }
