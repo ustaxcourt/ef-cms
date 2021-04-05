@@ -77,6 +77,13 @@ const migrateItems = async items => {
       new Case(item, { applicationContext }).validate();
 
       itemsAfter.push(item);
+    } else if (
+      item.pk.startsWith('trial-session|') &&
+      item.sk.startsWith('trial-session|')
+    ) {
+      if (item.createdAt && !isValidDateString(item.createdAt, FORMATS.ISO)) {
+        item.createdAt = createISODateAtStartOfDayEST(item.createdAt);
+      }
     } else {
       itemsAfter.push(item);
     }

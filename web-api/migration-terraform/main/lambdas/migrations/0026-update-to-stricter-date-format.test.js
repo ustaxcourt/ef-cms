@@ -220,28 +220,30 @@ describe('migrateItems', () => {
     });
 
     it('should throw an error when the item is invalid', async () => {
-      mockCase.status = undefined; // status is required
+      mockCase.docketNumber = undefined; // status is required
 
       const items = [mockCase];
 
       await expect(migrateItems(items)).rejects.toThrow();
     });
 
-    it('should not update createdAt or completedAt when it is already a dateTime stamp', async () => {
-      const mockCreatedAt = '2019-08-01T04:00:34.000Z';
-      const mockCompletedAt = '2019-08-01T04:00:34.000Z';
-      mockMessage.createdAt = mockCreatedAt;
-      mockMessage.completedAt = mockCreatedAt;
+    it('should not update lastDateOfPeriod when it is already a dateTime stamp', async () => {
+      const mockLastDateOfPeriod = '2019-08-01T04:00:34.000Z';
+      mockCase.statistics[0].lastDateOfPeriod = mockLastDateOfPeriod;
 
-      const items = [mockMessage];
+      const items = [mockCase];
 
       const results = await migrateItems(items);
 
       expect(results).toEqual([
         {
-          ...mockMessage,
-          completedAt: mockCompletedAt,
-          createdAt: mockCreatedAt,
+          ...mockCase,
+          statistics: [
+            {
+              ...mockCase.statistics[0],
+              lastDateOfPeriod: mockLastDateOfPeriod,
+            },
+          ],
         },
       ]);
     });
