@@ -386,12 +386,138 @@ describe('migrateItems', () => {
       ]);
     });
 
-    it('should not update createdAt, receivedAt when it is already a dateTime stamp', async () => {
+    it('should update noticeOfTrialDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, noticeOfTrialDate: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          noticeOfTrialDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update automaticBlockedDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, automaticBlockedDate: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          automaticBlockedDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update blockedDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, blockedDate: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          blockedDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update closedDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, closedDate: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          closedDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update irsNoticeDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, irsNoticeDate: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          irsNoticeDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update petitionPaymentDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, petitionPaymentDate: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          petitionPaymentDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update petitionPaymentWaivedDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, petitionPaymentWaivedDate: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          petitionPaymentWaivedDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update sealedDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, sealedDate: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          sealedDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should trialDate sealedDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, trialDate: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          trialDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should not update createdAt, receivedAt, petitionPaymentWaivedDate, trialDate, sealedDate, noticeOfTrialDate, petitionPaymentDate, automaticBlockedDate, blockedDate, closedDate, irsNoticeDate when they are already a dateTime stamp', async () => {
       const items = [
         {
           ...mockCase,
+          automaticBlockedDate: '2025-04-01T00:00:22.000Z',
+          blockedDate: '2025-04-01T00:00:22.000Z',
+          closedDate: '2025-04-01T00:00:22.000Z',
           createdAt: '2025-03-01T00:00:22.000Z',
+          irsNoticeDate: '2020-04-01T00:00:22.000Z',
+          noticeOfTrialDate: '2025-04-01T00:00:22.000Z',
+          petitionPaymentDate: '2025-04-01T00:00:22.000Z',
+          petitionPaymentWaivedDate: '2025-04-01T00:00:22.000Z',
           receivedAt: '2025-04-01T00:00:22.000Z',
+          sealedDate: '2025-04-01T00:00:22.000Z',
+          trialDate: '2025-04-01T00:00:22.000Z',
         },
       ];
 
@@ -400,8 +526,17 @@ describe('migrateItems', () => {
       expect(results).toEqual([
         {
           ...mockCase,
+          automaticBlockedDate: '2025-04-01T00:00:22.000Z',
+          blockedDate: '2025-04-01T00:00:22.000Z',
+          closedDate: '2025-04-01T00:00:22.000Z',
           createdAt: '2025-03-01T00:00:22.000Z',
+          irsNoticeDate: '2020-04-01T00:00:22.000Z',
+          noticeOfTrialDate: '2025-04-01T00:00:22.000Z',
+          petitionPaymentDate: '2025-04-01T00:00:22.000Z',
+          petitionPaymentWaivedDate: '2025-04-01T00:00:22.000Z',
           receivedAt: '2025-04-01T00:00:22.000Z',
+          sealedDate: '2025-04-01T00:00:22.000Z',
+          trialDate: '2025-04-01T00:00:22.000Z',
         },
       ]);
     });
