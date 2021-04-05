@@ -3,6 +3,9 @@ const {
   CaseDeadline,
 } = require('../../../../../shared/src/business/entities/CaseDeadline');
 const {
+  Correspondence,
+} = require('../../../../../shared/src/business/entities/Correspondence');
+const {
   createISODateAtStartOfDayEST,
   FORMATS,
   isValidDateString,
@@ -21,11 +24,20 @@ const migrateItems = async items => {
       ) {
         item.deadlineDate = createISODateAtStartOfDayEST(item.deadlineDate);
       }
+
       if (item.createdAt && !isValidDateString(item.createdAt, FORMATS.ISO)) {
         item.createdAt = createISODateAtStartOfDayEST(item.createdAt);
       }
 
       new CaseDeadline(item, { applicationContext }).validate();
+
+      itemsAfter.push(item);
+    } else if (item.sk.startsWith('correspondence|')) {
+      if (item.filingDate && !isValidDateString(item.filingDate, FORMATS.ISO)) {
+        item.filingDate = createISODateAtStartOfDayEST(item.filingDate);
+      }
+
+      new Correspondence(item, { applicationContext }).validate();
 
       itemsAfter.push(item);
     } else {
