@@ -41,11 +41,14 @@ describe('migrateItems', () => {
       await expect(migrateItems(items)).rejects.toThrow();
     });
 
-    it('should not createISODateAtStartOfDayEST if the date is valid', async () => {
+    it('should not update deadlineDate or createdAt if dates are already dateTime stamps', async () => {
+      const mockCreatedAt = '2019-07-01T04:00:12.000Z';
+      const mockDeadlineDate = '2019-08-01T04:00:34.000Z';
+
       const mockCaseDeadline = {
         associatedJudge: 'Judge Buch',
-        createdAt: '2019-07-01',
-        deadlineDate: '2019-08-01',
+        createdAt: mockCreatedAt,
+        deadlineDate: mockDeadlineDate,
         description: 'One small step',
         docketNumber: '170-34',
         pk: 'case-deadline|000-00',
@@ -59,8 +62,8 @@ describe('migrateItems', () => {
       expect(results).toEqual([
         {
           ...mockCaseDeadline,
-          createdAt: '2019-07-01T04:00:00.000Z',
-          deadlineDate: '2019-08-01T04:00:00.000Z',
+          createdAt: mockCreatedAt,
+          deadlineDate: mockDeadlineDate,
         },
       ]);
     });
