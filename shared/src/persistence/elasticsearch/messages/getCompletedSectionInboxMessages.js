@@ -13,12 +13,10 @@ exports.getCompletedSectionInboxMessages = async ({
         bool: {
           must: [
             {
-              match: {
-                'completedBySection.S': { operator: 'and', query: section },
-              },
+              term: { 'completedBySection.S': section },
             },
             {
-              match: { 'isCompleted.BOOL': true },
+              term: { 'isCompleted.BOOL': true },
             },
             {
               range: {

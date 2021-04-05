@@ -79,12 +79,12 @@ const aggregateCommonQueryParams = ({
       bool: {
         should: [
           {
-            match: {
+            term: {
               'contactPrimary.M.countryType.S': countryType,
             },
           },
           {
-            match: {
+            term: {
               'contactSecondary.M.countryType.S': countryType,
             },
           },
@@ -97,12 +97,12 @@ const aggregateCommonQueryParams = ({
       bool: {
         should: [
           {
-            match: {
+            term: {
               'contactPrimary.M.state.S': petitionerState,
             },
           },
           {
-            match: {
+            term: {
               'contactSecondary.M.state.S': petitionerState,
             },
           },

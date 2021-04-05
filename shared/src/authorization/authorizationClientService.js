@@ -224,6 +224,10 @@ exports.AUTHORIZATION_MAP = AUTHORIZATION_MAP;
  * @returns {boolean} true if user is authorized, false otherwise
  */
 exports.isAuthorized = (user, action, owner) => {
+  if (!user) {
+    return false;
+  }
+
   if (user.userId && user.userId === owner) {
     return true;
   }

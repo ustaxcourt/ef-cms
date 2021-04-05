@@ -9,6 +9,9 @@ describe('aggregatePartiesForService', () => {
   let irsPractitionerWithPaper;
   let privatePractitionerWithPaper;
 
+  let otherFilers;
+  let otherPetitioners;
+
   const PRIMARY_CONTACT_ID = 'c344c39f-6086-484b-998c-e93e9c7dcff5';
   const SECONDARY_CONTACT_ID = '09ecdf10-359c-4694-a5a8-d15d56796ce1';
 
@@ -93,6 +96,68 @@ describe('aggregatePartiesForService', () => {
         userId: 'p2',
       },
       privatePractitionerWithPaper,
+    ];
+
+    otherFilers = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '9836050f-a423-47bb-943b-a5661fe08a6b',
+        countryType: 'domestic',
+        email: 'petitioner@example.com',
+        inCareOf: 'Myself',
+        name: 'Test Petitioner3',
+        otherFilerType: 'Tax Matters Partner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Tax Matters Partner',
+      },
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '8746050f-a423-47bb-943b-a5661fe08a6b',
+        countryType: 'domestic',
+        email: 'petitioner@example.com',
+        inCareOf: 'Myself',
+        name: 'Test Petitioner4',
+        otherFilerType: 'Intervener',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Tax Matters Partner',
+      },
+    ];
+
+    otherPetitioners = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '6536050f-a423-47bb-943b-a5661fe08a6b',
+        countryType: 'domestic',
+        email: 'petitioner5@example.com',
+        inCareOf: 'Myself',
+        name: 'Test Petitioner5',
+        otherFilerType: 'Tax Matters Partner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Tax Matters Partner',
+      },
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '5446050f-a423-47bb-943b-a5661fe08a6b',
+        countryType: 'domestic',
+        email: 'petitioner6@example.com',
+        inCareOf: 'Myself',
+        name: 'Test Petitioner6',
+        otherFilerType: 'Tax Matters Partner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Tax Matters Partner',
+      },
     ];
 
     mockCase = {
@@ -268,5 +333,32 @@ describe('aggregatePartiesForService', () => {
     expect(result.paper.length).toEqual(3);
     expect(foundPrivatePractitionerWithPaper).toBeTruthy();
     expect(foundIrsPractitionerWithPaper).toBeTruthy();
+  });
+
+  it('should serve any otherFilers and otherPetitioners by paper if they exist', () => {
+    const result = aggregatePartiesForService({
+      ...mockCase,
+      otherFilers,
+      otherPetitioners,
+    });
+
+    const otherFiler1 = result.paper.find(
+      p => p.contactId === otherFilers[0].contactId,
+    );
+    const otherFiler2 = result.paper.find(
+      p => p.contactId === otherFilers[1].contactId,
+    );
+
+    const otherPetitioner1 = result.paper.find(
+      p => p.contactId === otherPetitioners[0].contactId,
+    );
+    const otherPetitioner2 = result.paper.find(
+      p => p.contactId === otherPetitioners[1].contactId,
+    );
+
+    expect(otherFiler1).toBeTruthy();
+    expect(otherFiler2).toBeTruthy();
+    expect(otherPetitioner1).toBeTruthy();
+    expect(otherPetitioner2).toBeTruthy();
   });
 });

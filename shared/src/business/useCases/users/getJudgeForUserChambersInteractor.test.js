@@ -56,9 +56,11 @@ describe('getJudgeForUserChambersInteractor', () => {
       });
     applicationContext
       .getUseCases()
-      .getUsersInSectionInteractor.mockImplementation(async ({ section }) => {
-        return allUsers.filter(user => user.section === section);
-      });
+      .getUsersInSectionInteractor.mockImplementation(
+        async (appContext, { section }) => {
+          return allUsers.filter(user => user.section === section);
+        },
+      );
   });
 
   it('Fetches the judge associated with a given chambers user', async () => {

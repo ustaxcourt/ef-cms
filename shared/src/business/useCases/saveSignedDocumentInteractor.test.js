@@ -1,6 +1,7 @@
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PETITIONS_SECTION,
+  SIGNED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
 const {
   saveSignedDocumentInteractor,
@@ -100,6 +101,12 @@ describe('saveSignedDocumentInteractor', () => {
     );
 
     expect(caseEntity.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 1);
+    const signedDocument = caseEntity.docketEntries.find(
+      e =>
+        e.documentType ===
+        SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
+    );
+    expect(signedDocument.docketNumber).toEqual(caseEntity.docketNumber);
 
     const signedDocketEntryEntity = caseEntity.docketEntries.find(
       doc =>

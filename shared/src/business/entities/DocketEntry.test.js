@@ -11,10 +11,15 @@ const {
   ORDER_TYPES,
   PETITIONS_SECTION,
   ROLES,
+  SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
 } = require('./EntityConstants');
+const {
+  DocketEntry,
+  getServedPartiesCode,
+  isServed,
+} = require('./DocketEntry');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry, isServed } = require('./DocketEntry');
 const { omit } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
@@ -150,6 +155,48 @@ describe('DocketEntry entity', () => {
       );
 
       expect(isServed(doc1)).toBeTruthy();
+    });
+  });
+
+  describe('getServedPartiesCode', () => {
+    it('returns an empty string if servedParties is undefined', () => {
+      const servedPartiesCode = getServedPartiesCode();
+      expect(servedPartiesCode).toEqual('');
+    });
+
+    it('returns an empty string if servedParties is an empty array', () => {
+      const servedPartiesCode = getServedPartiesCode([]);
+      expect(servedPartiesCode).toEqual('');
+    });
+
+    it('returns the servedParties code for respondent if the only party in the given servedParties array has the irsSuperUser role', () => {
+      const servedPartiesCode = getServedPartiesCode([
+        {
+          role: ROLES.irsSuperuser,
+        },
+      ]);
+      expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.RESPONDENT);
+    });
+
+    it('returns the servedParties code for both if the only party in the given servedParties array does not have the irsSuperUser role', () => {
+      const servedPartiesCode = getServedPartiesCode([
+        {
+          role: ROLES.petitioner,
+        },
+      ]);
+      expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
+    });
+
+    it('returns the servedParties code for both if the the given servedParties array contains multiple servedParties', () => {
+      const servedPartiesCode = getServedPartiesCode([
+        {
+          role: ROLES.irsSuperuser,
+        },
+        {
+          role: ROLES.petitioner,
+        },
+      ]);
+      expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
     });
   });
 
@@ -2010,6 +2057,44 @@ describe('DocketEntry entity', () => {
       );
       expect(docketEntry.judgeUserId).toBeUndefined();
       expect(docketEntry.isValid()).toBeTruthy();
+    });
+  });
+
+  describe('isPending', () => {
+    it('should return true if docketEntry is pending and is served', () => {
+      const isPending = DocketEntry.isPending({
+        pending: true,
+        servedAt: '9000-01-01T00:00:00.000Z',
+      });
+
+      expect(isPending).toBeTruthy();
+    });
+
+    it('should return false if docketEntry is NOT pending and is served', () => {
+      const isPending = DocketEntry.isPending({
+        pending: false,
+        servedAt: '9000-01-01T00:00:00.000Z',
+      });
+
+      expect(isPending).toBeFalsy();
+    });
+
+    it('should return true if docketEntry is pending and is a unservable document', () => {
+      const isPending = DocketEntry.isPending({
+        eventCode: 'HEAR',
+        pending: true,
+      });
+
+      expect(isPending).toBeTruthy();
+    });
+
+    it('should return false if docketEntry is pending and is NOT unservable document', () => {
+      const isPending = DocketEntry.isPending({
+        eventCode: 'MISC',
+        pending: true,
+      });
+
+      expect(isPending).toBeFalsy();
     });
   });
 });
