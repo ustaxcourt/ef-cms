@@ -1,6 +1,4 @@
-const {
-  migrateItems,
-} = require('./0025-docket-entry-received-at-strict-timestamp.js');
+const { migrateItems } = require('./0026-update-to-stricter-date-format');
 
 describe('migrateItems', () => {
   describe('caseDeadline', () => {
@@ -22,8 +20,8 @@ describe('migrateItems', () => {
       expect(results).toEqual([
         {
           ...mockCaseDeadline,
-          createdAt: '2019-04-01T00:00:00.000Z',
-          deadlineDate: '2019-03-01T00:00:00.000Z',
+          createdAt: '2019-04-01T04:00:00.000Z',
+          deadlineDate: '2019-03-01T05:00:00.000Z',
         },
       ]);
     });
