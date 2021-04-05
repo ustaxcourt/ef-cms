@@ -1,5 +1,6 @@
 import {
   CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { addressDisplayHelper as addressDisplayHelperComputed } from './addressDisplayHelper';
@@ -8,81 +9,483 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const addressDisplayHelper = withAppContextDecorator(
-  addressDisplayHelperComputed,
-  {
-    ...applicationContext,
-    getCurrentUser: () => {
-      return globalUser;
+describe('addressDisplayHelper', () => {
+  let globalUser;
+
+  const mockUserId = 'f50f9f1e-473e-41b5-8c3d-89ddf56649ef';
+  const mockSecondPetitionerId = '3852b946-3343-400e-a713-a43a22dd8d86';
+
+  const mockPetitioners = [
+    {
+      contactId: mockUserId,
+      contactType: CONTACT_TYPES.primary,
+      isAddressSealed: false,
     },
-  },
-);
+    {
+      contactId: mockSecondPetitionerId,
+      contactType: CONTACT_TYPES.secondary,
+      isAddressSealed: false,
+    },
+  ];
 
-let globalUser;
-
-const getBaseState = user => {
-  globalUser = user;
-  return {
-    permissions: getUserPermissions(user),
+  const getBaseState = user => {
+    globalUser = user;
+    return {
+      permissions: getUserPermissions(user),
+    };
   };
-};
 
-describe('address display', () => {
-  describe('showEditContacts', () => {
-    it('should be true if user is a petitioner role', () => {
+  const addressDisplayHelper = withAppContextDecorator(
+    addressDisplayHelperComputed,
+    {
+      ...applicationContext,
+      getCurrentUser: () => {
+        return globalUser;
+      },
+    },
+  );
+
+  it('should not throw an error when retrieving contact primary when state.caseDetail is empty', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: mockUserId,
+    };
+
+    expect(() =>
+      runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {},
+          form: {
+            contactPrimary: {
+              contactId: mockUserId,
+              name: 'Hi primary',
+            },
+          },
+          permissions: {},
+        },
+      }),
+    ).not.toThrow();
+  });
+
+  it('should not throw an error when retrieving contact secondary when state.caseDetail is empty', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: mockUserId,
+    };
+
+    expect(() =>
+      runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {},
+          form: {
+            contactPrimary: {
+              contactId: mockUserId,
+              name: 'Hi primary',
+            },
+            contactSecondary: {
+              contactId: mockSecondPetitionerId,
+              name: 'Hi secondary',
+            },
+          },
+          permissions: {},
+        },
+      }),
+    ).not.toThrow();
+  });
+
+  describe('primary.showEditContact', () => {
+    it('should be true if the current user is primary and the address is not sealed', () => {
       const user = {
         role: ROLES.petitioner,
-        userId: '789',
+        userId: mockUserId,
       };
 
       const result = runCompute(addressDisplayHelper, {
         state: {
           ...getBaseState(user),
-          caseDetail: {},
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: false,
+              },
+            ],
+          },
           currentPage: 'CaseDetailInternal',
-          permissions: { EDIT_PETITIONER_INFO: true },
+          permissions: {},
         },
       });
 
-      expect(result.showEditContacts).toEqual(true);
+      expect(result.primary.showEditContact).toEqual(true);
     });
 
-    it('should be true if user is a privatePractitioner role and userAssociatedWithCase is true', () => {
+    it('should be false if the current user is primary and the address is sealed', () => {
       const user = {
-        role: ROLES.privatePractitioner,
-        userId: '789',
+        role: ROLES.petitioner,
+        userId: mockUserId,
       };
 
       const result = runCompute(addressDisplayHelper, {
         state: {
           ...getBaseState(user),
-          caseDetail: {},
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: true,
+              },
+            ],
+          },
           currentPage: 'CaseDetailInternal',
-          permissions: { EDIT_PETITIONER_INFO: true },
+          permissions: {},
+        },
+      });
+
+      expect(result.primary.showEditContact).toEqual(false);
+    });
+
+    it('should be false if the current user is not the primary contact and the address is not sealed', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockSecondPetitionerId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: false,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.primary.showEditContact).toEqual(false);
+    });
+
+    it('should be true if current user is a private practitioner, address is not sealed, and current user is associated to case', () => {
+      const user = {
+        role: ROLES.privatePractitioner,
+        userId: mockSecondPetitionerId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: false,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
           screenMetadata: { isAssociated: true },
         },
       });
 
-      expect(result.showEditContacts).toEqual(true);
+      expect(result.primary.showEditContact).toEqual(true);
     });
+  });
 
-    it('should be false if user is a privatePractitioner role and userAssociatedWithCase is false', () => {
+  describe('primary.showSealedContact', () => {
+    it('should be true if the current user is primary and the address is sealed', () => {
       const user = {
-        role: ROLES.privatePractitioner,
-        userId: '789',
+        role: ROLES.petitioner,
+        userId: mockUserId,
       };
 
       const result = runCompute(addressDisplayHelper, {
         state: {
           ...getBaseState(user),
-          caseDetail: {},
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: true,
+              },
+            ],
+          },
           currentPage: 'CaseDetailInternal',
-          permissions: { EDIT_PETITIONER_INFO: true },
-          screenMetadata: { isAssociated: false },
+          permissions: {},
         },
       });
 
-      expect(result.showEditContacts).toEqual(false);
+      expect(result.primary.showSealedContact).toEqual(true);
+    });
+
+    it('should be false if the current user is primary and the address is not sealed', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockUserId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: false,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.primary.showSealedContact).toEqual(false);
+    });
+
+    it('should be false if the current user is not the primary contact and the address is sealed', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockSecondPetitionerId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: true,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.primary.showSealedContact).toEqual(false);
+    });
+
+    it('should be true if current user is a private practitioner, address is not sealed, and current user is associated to case', () => {
+      const user = {
+        role: ROLES.privatePractitioner,
+        userId: mockSecondPetitionerId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: false,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+          screenMetadata: { isAssociated: true },
+        },
+      });
+
+      expect(result.primary.showEditContact).toEqual(true);
+    });
+  });
+
+  describe('secondary.showEditContact', () => {
+    it('should be true if the current user is secondary and the address is not sealed', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockUserId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              mockPetitioners[0],
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.secondary,
+                isAddressSealed: false,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.secondary.showEditContact).toEqual(true);
+    });
+
+    it('should be false if the current user is secondary and the address is sealed', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockUserId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              mockPetitioners[0],
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.secondary,
+                isAddressSealed: true,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.secondary.showEditContact).toEqual(false);
+    });
+
+    it('should be false if the current user is not the secondary contact and the address is not sealed', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockSecondPetitionerId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              mockPetitioners[0],
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.secondary,
+                isAddressSealed: false,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.secondary.showEditContact).toEqual(false);
+    });
+  });
+
+  describe('secondary.showSealedContact', () => {
+    it('should be true if the current user is secondary and the address is sealed', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockUserId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              mockPetitioners[0],
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.secondary,
+                isAddressSealed: true,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.secondary.showSealedContact).toEqual(true);
+    });
+
+    it('should be false if the current user is secondary and the address is not sealed', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockUserId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              mockPetitioners[0],
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.secondary,
+                isAddressSealed: false,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.secondary.showSealedContact).toEqual(false);
+    });
+
+    it('should be false if the current user is not the secondary contact and the address is sealed', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockSecondPetitionerId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              mockPetitioners[0],
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.secondary,
+                isAddressSealed: true,
+              },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.secondary.showSealedContact).toEqual(false);
     });
   });
 
@@ -98,6 +501,7 @@ describe('address display', () => {
           ...getBaseState(user),
           caseDetail: {
             docketEntries: [],
+            petitioners: mockPetitioners,
             privatePractitioners: [{ userId: '789' }],
           },
           currentPage: 'CaseDetailInternal',
@@ -108,7 +512,7 @@ describe('address display', () => {
       expect(result.showEditPetitionerInformation).toEqual(true);
     });
 
-    it('should not allow the user to edit the petitioner information if they have the EDIT_PETITIONER_INFO permission but case status is new', () => {
+    it('should be false when the current user has the EDIT_PETITIONER_INFO permission but case status is new', () => {
       const user = {
         role: ROLES.docketClerk,
         userId: '789',
@@ -119,6 +523,7 @@ describe('address display', () => {
           ...getBaseState(user),
           caseDetail: {
             docketEntries: [],
+            petitioners: mockPetitioners,
             privatePractitioners: [{ userId: '789' }],
             status: CASE_STATUS_TYPES.new,
           },
@@ -130,7 +535,7 @@ describe('address display', () => {
       expect(result.showEditPetitionerInformation).toBeFalsy();
     });
 
-    it('should not allow the user to edit the petitioner information if they have the incorrect permission', () => {
+    it('should be false when the current user has incorrect permissions', () => {
       const user = {
         role: ROLES.petitionsClerk,
         userId: '789',
@@ -141,6 +546,7 @@ describe('address display', () => {
           ...getBaseState(user),
           caseDetail: {
             docketEntries: [],
+            petitioners: mockPetitioners,
             privatePractitioners: [{ userId: '789' }],
           },
           currentPage: 'CaseDetailInternal',

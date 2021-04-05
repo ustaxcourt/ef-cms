@@ -25,7 +25,6 @@ export const AddressDisplay = connect(
     contact,
     editLinkExternal,
     editLinkInternal,
-    formattedCaseDetail,
     nameOverride,
     noMargin,
     openSealAddressModalSequence,
@@ -49,8 +48,7 @@ export const AddressDisplay = connect(
           )}
           {nameOverride || contact.name}{' '}
           {editLinkExternal &&
-            addressDisplayHelper.showEditContacts &&
-            !formattedCaseDetail.contactPrimary.isAddressSealed && (
+            addressDisplayHelper[contact.contactType].showEditContact && (
               <Button
                 link
                 aria-label="Edit petitioner contact information"
