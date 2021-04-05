@@ -1,6 +1,7 @@
 const {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 const { migrateItems } = require('./0026-update-to-stricter-date-format');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
@@ -244,6 +245,47 @@ describe('migrateItems', () => {
               lastDateOfPeriod: mockLastDateOfPeriod,
             },
           ],
+        },
+      ]);
+    });
+  });
+
+  describe('trialSession', () => {
+    const mockTrialSession = {
+      createdAt: '2025-03-01',
+      maxCases: 100,
+      pk: 'trial-session|000-00',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      sessionType: 'Regular',
+      sk: 'trial-session|6d74eadc-0181-4ff5-826c-305200e8733d',
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    };
+
+    it('should update createdAt to be an ISO formatted date', async () => {
+      const items = [mockTrialSession];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockTrialSession,
+          createdAt: '2025-03-01T05:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update noticeIssuedDate to be an ISO formatted date', async () => {
+      const items = [{ ...mockTrialSession, noticeIssuedDate: '2025-03-01' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockTrialSession,
+          noticeIssuedDate: '2025-03-01T05:00:00.000Z',
         },
       ]);
     });
