@@ -45,6 +45,54 @@ describe('addressDisplayHelper', () => {
     },
   );
 
+  it('should not throw an error when retrieving contact primary when state.caseDetail is undefined', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: mockUserId,
+    };
+
+    expect(() =>
+      runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {},
+          currentPage: 'CaseDetailInternal',
+          form: {
+            contactPrimary: {
+              contactId: mockUserId,
+              name: 'Hi primary',
+            },
+          },
+          permissions: {},
+        },
+      }),
+    ).not.toThrow();
+  });
+
+  it('should not throw an error when retrieving contact secondary when state.caseDetail is undefined', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: mockUserId,
+    };
+
+    expect(() =>
+      runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {},
+          currentPage: 'CaseDetailInternal',
+          form: {
+            contactPrimary: {
+              contactId: mockUserId,
+              name: 'Hi primary',
+            },
+          },
+          permissions: {},
+        },
+      }),
+    ).not.toThrow();
+  });
+
   describe('primary.showEditContact', () => {
     it('should be true if the current user is primary and the address is not sealed', () => {
       const user = {
