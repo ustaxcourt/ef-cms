@@ -142,6 +142,11 @@ const migrateItems = async items => {
 
       itemsAfter.push(item);
     } else if (
+      item.pk.startsWith('case|') &&
+      item.sk.startsWith('docket-entry|')
+    ) {
+      // todo
+    } else if (
       item.pk.startsWith('trial-session|') &&
       item.sk.startsWith('trial-session|')
     ) {

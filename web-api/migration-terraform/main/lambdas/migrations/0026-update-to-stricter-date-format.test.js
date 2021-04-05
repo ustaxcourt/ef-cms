@@ -491,7 +491,13 @@ describe('migrateItems', () => {
     });
 
     it('should trialDate sealedDate to be an ISO formatted date', async () => {
-      const items = [{ ...mockCase, trialDate: '2020-10-20' }];
+      const items = [
+        {
+          ...mockCase,
+          trialDate: '2020-10-20',
+          trialSessionId: '3ca27710-7538-494f-835d-65a35ee1ebed',
+        },
+      ];
 
       const results = await migrateItems(items);
 
@@ -499,6 +505,7 @@ describe('migrateItems', () => {
         {
           ...mockCase,
           trialDate: '2020-10-20T04:00:00.000Z',
+          trialSessionId: '3ca27710-7538-494f-835d-65a35ee1ebed',
         },
       ]);
     });
@@ -518,6 +525,7 @@ describe('migrateItems', () => {
           receivedAt: '2025-04-01T00:00:22.000Z',
           sealedDate: '2025-04-01T00:00:22.000Z',
           trialDate: '2025-04-01T00:00:22.000Z',
+          trialSessionId: '3ca27710-7538-494f-835d-65a35ee1ebed',
         },
       ];
 
@@ -537,8 +545,25 @@ describe('migrateItems', () => {
           receivedAt: '2025-04-01T00:00:22.000Z',
           sealedDate: '2025-04-01T00:00:22.000Z',
           trialDate: '2025-04-01T00:00:22.000Z',
+          trialSessionId: '3ca27710-7538-494f-835d-65a35ee1ebed',
         },
       ]);
     });
+  });
+
+  describe('docketEntry', () => {
+    //certificateOfServiceDate
+    //createdAt
+    //date
+    //filingDate
+    //qcAt
+    //receivedAt
+    //serviceDate
+    //stricketAt
+    //completedAt
+    //trialDate
+    //updatedAt
+    //servedAt
+    it('should', () => {});
   });
 });
