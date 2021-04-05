@@ -1,9 +1,11 @@
 import { state } from 'cerebral';
 
 export const addressDisplayHelper = (get, applicationContext) => {
-  const caseDetail = get(state.caseDetail);
-  const user = applicationContext.getCurrentUser();
   const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+
+  const user = applicationContext.getCurrentUser();
+
+  const caseDetail = get(state.caseDetail);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const permissions = get(state.permissions);
 
@@ -11,30 +13,34 @@ export const addressDisplayHelper = (get, applicationContext) => {
     .getUtilities()
     .getContactPrimary(caseDetail);
 
-  let showEditPrimaryContact =
-    contactPrimary.contactId === user.userId && !contactPrimary.isAddressSealed;
-  const showSealedPrimaryContact =
-    contactPrimary.contactId === user.userId && contactPrimary.isAddressSealed;
-
   const contactSecondary = applicationContext
     .getUtilities()
     .getContactSecondary(caseDetail);
 
-  let showEditSecondaryContact =
-    contactSecondary?.contactId === user.userId &&
-    !contactSecondary?.isAddressSealed;
-  const showSealedSecondaryContact =
-    contactSecondary?.contactId === user.userId &&
-    contactSecondary?.isAddressSealed;
+  let showEditPrimaryContact;
+  let showSealedPrimaryContact;
+  let showEditSecondaryContact;
+  let showSealedSecondaryContact;
 
   let showEditPetitionerInformation = false;
-  let showEditContacts = false;
 
   if (user.role === USER_ROLES.petitioner) {
-    showEditContacts = true;
+    showEditPrimaryContact =
+      contactPrimary.contactId === user.userId &&
+      !contactPrimary.isAddressSealed;
+    showSealedPrimaryContact =
+      contactPrimary.contactId === user.userId &&
+      contactPrimary.isAddressSealed;
+
+    showEditSecondaryContact =
+      contactSecondary?.contactId === user.userId &&
+      !contactSecondary?.isAddressSealed;
+    showSealedSecondaryContact =
+      contactSecondary?.contactId === user.userId &&
+      contactSecondary?.isAddressSealed;
   } else if (user.role === USER_ROLES.privatePractitioner) {
-    showEditContacts = userAssociatedWithCase;
     showEditPrimaryContact = userAssociatedWithCase;
+    showEditSecondaryContact = userAssociatedWithCase;
   } else if (
     permissions.EDIT_PETITIONER_INFO &&
     caseDetail.status !== STATUS_TYPES.new
@@ -51,7 +57,6 @@ export const addressDisplayHelper = (get, applicationContext) => {
       showEditContact: showEditSecondaryContact,
       showSealedContact: showSealedSecondaryContact,
     },
-    showEditContacts,
     showEditPetitionerInformation,
   };
 };
