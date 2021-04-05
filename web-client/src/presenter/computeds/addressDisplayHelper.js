@@ -1,21 +1,21 @@
 import { state } from 'cerebral';
 
 export const addressDisplayHelper = (get, applicationContext) => {
+  const caseDetail = get(state.caseDetail);
+  const form = get(state.form);
+  const user = applicationContext.getCurrentUser();
   const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
 
-  const user = applicationContext.getCurrentUser();
-
-  const caseDetail = get(state.caseDetail);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const permissions = get(state.permissions);
 
-  const contactPrimary = applicationContext
-    .getUtilities()
-    .getContactPrimary(caseDetail);
+  const contactPrimary =
+    applicationContext.getUtilities().getContactPrimary(caseDetail) ||
+    form.contactPrimary;
 
-  const contactSecondary = applicationContext
-    .getUtilities()
-    .getContactSecondary(caseDetail);
+  const contactSecondary =
+    applicationContext.getUtilities().getContactSecondary(caseDetail) ||
+    form.contactSecondary;
 
   let showEditPrimaryContact;
   let showSealedPrimaryContact;
