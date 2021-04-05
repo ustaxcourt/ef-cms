@@ -398,9 +398,11 @@ describe('verifyUserPendingEmailInteractor', () => {
         new Error('updateCaseAndAssociations failure'),
       );
 
-    await verifyUserPendingEmailInteractor(applicationContext, {
-      token: TOKEN,
-    });
+    await expect(
+      verifyUserPendingEmailInteractor(applicationContext, {
+        token: TOKEN,
+      }),
+    ).rejects.toThrow('updateCaseAndAssociations failure');
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,

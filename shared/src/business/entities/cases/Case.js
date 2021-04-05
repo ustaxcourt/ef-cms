@@ -242,8 +242,8 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
-  this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending && isServed(docketEntry),
+  this.hasPendingItems = this.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
@@ -829,8 +829,8 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  return this.docketEntries.some(
-    docketEntry => docketEntry.pending && isServed(docketEntry),
+  return this.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 };
 
@@ -956,6 +956,8 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} docketEntryEntity the docket entry to add to the case
  */
 Case.prototype.addDocketEntry = function (docketEntryEntity) {
+  docketEntryEntity.docketNumber = this.docketNumber;
+
   if (docketEntryEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,

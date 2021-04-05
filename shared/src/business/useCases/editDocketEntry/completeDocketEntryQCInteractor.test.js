@@ -620,6 +620,53 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(caseDetail.automaticBlocked).toBeTruthy();
   });
 
+  it('normalizes receivedAt dates to ISO string format', async () => {
+    caseRecord.docketEntries = [
+      {
+        addToCoversheet: false,
+        additionalInfo: 'additional info',
+        additionalInfo2: 'additional info 2',
+        certificateOfService: true,
+        certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
+        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'Answer',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Petr. Guy Fieri',
+        index: 42,
+        isOnDocketRecord: true,
+        receivedAt: '2021-01-01', // date only
+        servedAt: '2019-08-25T05:00:00.000Z',
+        servedParties: [{ name: 'Bernard Lowe' }],
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+    ];
+
+    const { caseDetail } = await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'My Edited Document',
+          documentType: 'Notice of Change of Address',
+          eventCode: 'NCA',
+          freeText: 'Some text about this document',
+          hasOtherFilingParty: true,
+          isPaper: true,
+          otherFilingParty: 'Bert Brooks',
+          partyPrimary: true,
+          pending: true,
+          receivedAt: '2021-01-01', // date only
+        },
+      },
+    );
+
+    expect(caseDetail.docketEntries[0].receivedAt).toEqual(
+      '2021-01-01T05:00:00.000Z',
+    );
+  });
+
   describe('getNeedsNewCoversheet', () => {
     it('should return true when receivedAt is updated', () => {
       const needsNewCoversheet = getNeedsNewCoversheet({

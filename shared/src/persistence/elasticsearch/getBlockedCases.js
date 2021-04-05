@@ -29,9 +29,7 @@ exports.getBlockedCases = async ({ applicationContext, trialLocation }) => {
         query: {
           bool: {
             must: [
-              { match_phrase: { 'preferredTrialCity.S': trialLocation } },
-              { match: { 'pk.S': 'case|' } },
-              { match: { 'sk.S': 'case|' } },
+              { term: { 'preferredTrialCity.S': trialLocation } },
               {
                 bool: {
                   should: [

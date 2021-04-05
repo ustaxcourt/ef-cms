@@ -24,12 +24,12 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentType: 'Petition',
         eventCode: 'P',
         filedBy: 'Test Petitioner',
-        filingDate: '2019-01-01T00:01:00.000Z',
+        filingDate: '2019-01-01T05:00:00.000Z',
         freeText: 'some free text',
         index: 1,
         partyPrimary: true,
         pending: false,
-        servedAt: '2019-01-01T00:01:00.000Z',
+        servedAt: '2019-01-01T05:00:00.000Z',
         servedParties: [{ name: 'Some Party' }],
         userId: mockUserId,
       },
@@ -38,7 +38,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentTitle: 'Test Entry 1',
         documentType: 'Order',
         eventCode: 'O',
-        filingDate: '2019-01-01T00:01:00.000Z',
+        filingDate: '2019-01-01T05:00:00.000Z',
         index: 2,
         partyPrimary: true,
         servedAt: '2019-01-02T00:01:00.000Z',
@@ -53,7 +53,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentTitle: 'Test Entry 2',
         documentType: 'Request for Place of Trial',
         eventCode: 'RQT',
-        filingDate: '2019-01-01T00:01:00.000Z',
+        filingDate: '2019-01-01T05:00:00.000Z',
         index: 3,
         isMinuteEntry: true,
         partyPrimary: true,
@@ -102,7 +102,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentTitle: 'Summary Opinion',
         documentType: 'Summary Opinion',
         eventCode: 'SOP',
-        filingDate: '2011-02-22T00:01:00.000Z',
+        filingDate: '2011-02-22T05:00:00.000Z',
         index: 7,
         isMinuteEntry: false,
         judge: 'Buch',
@@ -314,6 +314,21 @@ describe('updateDocketEntryMetaInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should NOT generate a new coversheet for the document if the servedAt field metadata formatted as YYYY-MM-DD is equivalent to the strict ISO formatted date on the entity', async () => {
+    await updateDocketEntryMetaInteractor(applicationContext, {
+      applicationContext,
+      docketEntryMeta: {
+        ...docketEntries[0],
+        servedAt: '2019-01-01',
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet', async () => {
     await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
@@ -417,8 +432,8 @@ describe('updateDocketEntryMetaInteractor', () => {
     await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
-        filingDate: '2019-01-01T00:01:00.000Z', // unchanged from current filingDate
-        servedAt: '2019-01-01T00:01:00.000Z', // unchanged from current servedAt
+        filingDate: '2019-01-01T05:00:00.000Z', // unchanged from current filingDate
+        servedAt: '2019-01-01T05:00:00.000Z', // unchanged from current servedAt
       },
       docketNumber: '101-20',
     });

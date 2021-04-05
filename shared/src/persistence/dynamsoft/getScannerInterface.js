@@ -143,8 +143,19 @@ exports.getScannerInterface = () => {
 
         return Promise.all(promises)
           .then(async blobs => {
+            const COVER_SHEET_WIDTH_IN_PX = 866;
+
+            const scaledDownBlobs = await Promise.all(
+              blobs.map(blob =>
+                applicationContext
+                  .getReduceImageBlob()
+                  .default()
+                  .toBlob(blob, { max: COVER_SHEET_WIDTH_IN_PX }),
+              ),
+            );
+
             const blobBuffers = await Promise.all(
-              blobs.map(applicationContext.convertBlobToUInt8Array),
+              scaledDownBlobs.map(applicationContext.convertBlobToUInt8Array),
             );
 
             response.scannedBuffer = blobBuffers;
