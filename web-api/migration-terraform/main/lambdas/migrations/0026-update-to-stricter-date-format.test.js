@@ -348,4 +348,62 @@ describe('migrateItems', () => {
       ]);
     });
   });
+
+  describe('case', () => {
+    let mockCase;
+
+    beforeEach(() => {
+      mockCase = {
+        ...MOCK_CASE,
+        pk: 'case|101-20',
+        sk: 'case|101-20',
+      };
+    });
+
+    it('should update createdAt to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, createdAt: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          createdAt: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update receivedAt to be an ISO formatted date', async () => {
+      const items = [{ ...mockCase, receivedAt: '2020-10-20' }];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          receivedAt: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should not update createdAt, receivedAt when it is already a dateTime stamp', async () => {
+      const items = [
+        {
+          ...mockCase,
+          createdAt: '2025-03-01T00:00:22.000Z',
+          receivedAt: '2025-04-01T00:00:22.000Z',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          createdAt: '2025-03-01T00:00:22.000Z',
+          receivedAt: '2025-04-01T00:00:22.000Z',
+        },
+      ]);
+    });
+  });
 });

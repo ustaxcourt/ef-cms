@@ -78,6 +78,23 @@ const migrateItems = async items => {
         });
       }
 
+      // noticeOfTrialDate
+      // automaticBlockedDate
+      // blockedDate
+      // closedDate
+      // irsNoticeDate
+      // petitionPaymentDate
+      // petitionPaymentWaivedDate
+      // sealedDate
+      // trialDate
+
+      if (item.createdAt && !isValidDateString(item.createdAt, FORMATS.ISO)) {
+        item.createdAt = createISODateAtStartOfDayEST(item.createdAt);
+      }
+      if (item.receivedAt && !isValidDateString(item.receivedAt, FORMATS.ISO)) {
+        item.receivedAt = createISODateAtStartOfDayEST(item.receivedAt);
+      }
+
       new Case(item, { applicationContext }).validate();
 
       itemsAfter.push(item);
