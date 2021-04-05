@@ -45,7 +45,7 @@ describe('addressDisplayHelper', () => {
     },
   );
 
-  it('should not throw an error when retrieving contact primary when state.caseDetail is undefined', () => {
+  it('should not throw an error when retrieving contact primary when state.caseDetail is empty', () => {
     const user = {
       role: ROLES.petitioner,
       userId: mockUserId,
@@ -56,7 +56,6 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {},
-          currentPage: 'CaseDetailInternal',
           form: {
             contactPrimary: {
               contactId: mockUserId,
@@ -69,7 +68,7 @@ describe('addressDisplayHelper', () => {
     ).not.toThrow();
   });
 
-  it('should not throw an error when retrieving contact secondary when state.caseDetail is undefined', () => {
+  it('should not throw an error when retrieving contact secondary when state.caseDetail is empty', () => {
     const user = {
       role: ROLES.petitioner,
       userId: mockUserId,
@@ -80,11 +79,14 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {},
-          currentPage: 'CaseDetailInternal',
           form: {
             contactPrimary: {
               contactId: mockUserId,
               name: 'Hi primary',
+            },
+            contactSecondary: {
+              contactId: mockSecondPetitionerId,
+              name: 'Hi secondary',
             },
           },
           permissions: {},
