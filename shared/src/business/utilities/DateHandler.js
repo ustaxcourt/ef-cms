@@ -55,6 +55,7 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
  */
 const createISODateString = (dateString, inputFormat) => {
   let result;
+
   if (!dateString) {
     result = moment.tz(USTC_TZ);
   } else {
