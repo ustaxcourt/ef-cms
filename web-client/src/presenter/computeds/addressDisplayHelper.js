@@ -15,7 +15,7 @@ export const addressDisplayHelper = (get, applicationContext) => {
 
   const contactSecondary =
     applicationContext.getUtilities().getContactSecondary(caseDetail) ||
-    form.contactSecondary;
+    form?.contactSecondary;
 
   let showEditPrimaryContact;
   let showSealedPrimaryContact;
