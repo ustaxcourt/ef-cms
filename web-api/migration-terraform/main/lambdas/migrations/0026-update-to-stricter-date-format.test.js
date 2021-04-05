@@ -1,4 +1,9 @@
+const {
+  CASE_STATUS_TYPES,
+  PETITIONS_SECTION,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
 const { migrateItems } = require('./0026-update-to-stricter-date-format');
+const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
   describe('caseDeadline', () => {
@@ -105,6 +110,138 @@ describe('migrateItems', () => {
         {
           ...mockCorrespondence,
           filingDate: mockFilingDate,
+        },
+      ]);
+    });
+  });
+
+  describe('message', () => {
+    let mockMessage;
+
+    beforeEach(() => {
+      mockMessage = {
+        caseStatus: CASE_STATUS_TYPES.generalDocket,
+        caseTitle: 'Test Petitioner',
+        completedAt: '2020-02-02',
+        createdAt: '2019-01-01',
+        docketNumber: '123-45',
+        docketNumberWithSuffix: '123-45S',
+        from: 'gg',
+        fromSection: PETITIONS_SECTION,
+        fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        message: 'hello world',
+        pk: 'case|101-22',
+        sk: 'message|3d21c047-2821-4f72-b12d-9ee72baf68eb',
+        subject: 'hey!',
+        to: 'bob',
+        toSection: PETITIONS_SECTION,
+        toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      };
+    });
+
+    it('should update createdAt and completedAt to be an ISO formatted date', async () => {
+      const items = [mockMessage];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockMessage,
+          completedAt: '2020-02-02T05:00:00.000Z',
+          createdAt: '2019-01-01T05:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should throw an error when the item is invalid', async () => {
+      mockMessage.caseStatus = undefined; // caseStatus is required
+
+      const items = [mockMessage];
+
+      await expect(migrateItems(items)).rejects.toThrow();
+    });
+
+    it('should not update createdAt or completedAt when it is already a dateTime stamp', async () => {
+      const mockCreatedAt = '2019-08-01T04:00:34.000Z';
+      const mockCompletedAt = '2019-08-01T04:00:34.000Z';
+      mockMessage.createdAt = mockCreatedAt;
+      mockMessage.completedAt = mockCreatedAt;
+
+      const items = [mockMessage];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockMessage,
+          completedAt: mockCompletedAt,
+          createdAt: mockCreatedAt,
+        },
+      ]);
+    });
+  });
+
+  describe('statistic', () => {
+    let mockStatistic;
+    let mockCase;
+
+    beforeEach(() => {
+      mockStatistic = {
+        irsDeficiencyAmount: 1,
+        irsTotalPenalties: 1,
+        lastDateOfPeriod: '2020-03-01',
+        yearOrPeriod: 'Period',
+      };
+
+      mockCase = {
+        ...MOCK_CASE,
+        pk: 'case|101-20',
+        sk: 'case|101-20',
+        statistics: [mockStatistic],
+      };
+    });
+
+    it('should update statistic lastDateOfPeriod to be an ISO formatted date', async () => {
+      const items = [mockCase];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          statistics: [
+            {
+              ...mockStatistic,
+              lastDateOfPeriod: '2020-03-01T05:00:00.000Z',
+            },
+          ],
+        },
+      ]);
+    });
+
+    it('should throw an error when the item is invalid', async () => {
+      mockCase.status = undefined; // status is required
+
+      const items = [mockCase];
+
+      await expect(migrateItems(items)).rejects.toThrow();
+    });
+
+    it('should not update createdAt or completedAt when it is already a dateTime stamp', async () => {
+      const mockCreatedAt = '2019-08-01T04:00:34.000Z';
+      const mockCompletedAt = '2019-08-01T04:00:34.000Z';
+      mockMessage.createdAt = mockCreatedAt;
+      mockMessage.completedAt = mockCreatedAt;
+
+      const items = [mockMessage];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockMessage,
+          completedAt: mockCompletedAt,
+          createdAt: mockCreatedAt,
         },
       ]);
     });

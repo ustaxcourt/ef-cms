@@ -1,5 +1,8 @@
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
+  Case,
+} = require('../../../../../shared/src/business/entities/cases/Case');
+const {
   CaseDeadline,
 } = require('../../../../../shared/src/business/entities/CaseDeadline');
 const {
@@ -10,13 +13,16 @@ const {
   FORMATS,
   isValidDateString,
 } = require('../../../../../shared/src/business/utilities/DateHandler');
+const {
+  Message,
+} = require('../../../../../shared/src/business/entities/Message');
 
 const applicationContext = createApplicationContext({});
 
 const migrateItems = async items => {
   const itemsAfter = [];
   for (const item of items) {
-    // look for pks of: CaseDeadline, Correspondence, EntityValidationConstants, Message, Statistic, Case, TrialSession
+    // look for pks of: EntityValidationConstants, Statistic, Case, TrialSession
     if (item.pk.startsWith('case-deadline|')) {
       if (
         item.deadlineDate &&
@@ -38,6 +44,37 @@ const migrateItems = async items => {
       }
 
       new Correspondence(item, { applicationContext }).validate();
+
+      itemsAfter.push(item);
+    } else if (item.sk.startsWith('message|')) {
+      if (item.createdAt && !isValidDateString(item.createdAt, FORMATS.ISO)) {
+        item.createdAt = createISODateAtStartOfDayEST(item.createdAt);
+      }
+      if (
+        item.completedAt &&
+        !isValidDateString(item.completedAt, FORMATS.ISO)
+      ) {
+        item.completedAt = createISODateAtStartOfDayEST(item.completedAt);
+      }
+
+      new Message(item, { applicationContext }).validate();
+
+      itemsAfter.push(item);
+    } else if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
+      if (item.statistics && item.statistics.length > 0) {
+        item.statistics.forEach(statistic => {
+          if (
+            statistic.lastDateOfPeriod &&
+            !isValidDateString(statistic.lastDateOfPeriod, FORMATS.ISO)
+          ) {
+            statistic.lastDateOfPeriod = createISODateAtStartOfDayEST(
+              statistic.lastDateOfPeriod,
+            );
+          }
+        });
+      }
+
+      new Case(item, { applicationContext }).validate();
 
       itemsAfter.push(item);
     } else {
