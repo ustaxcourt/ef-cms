@@ -78,21 +78,64 @@ const migrateItems = async items => {
         });
       }
 
-      // noticeOfTrialDate
-      // automaticBlockedDate
-      // blockedDate
-      // closedDate
-      // irsNoticeDate
-      // petitionPaymentDate
-      // petitionPaymentWaivedDate
-      // sealedDate
-      // trialDate
-
       if (item.createdAt && !isValidDateString(item.createdAt, FORMATS.ISO)) {
         item.createdAt = createISODateAtStartOfDayEST(item.createdAt);
       }
       if (item.receivedAt && !isValidDateString(item.receivedAt, FORMATS.ISO)) {
         item.receivedAt = createISODateAtStartOfDayEST(item.receivedAt);
+      }
+      if (
+        item.noticeOfTrialDate &&
+        !isValidDateString(item.noticeOfTrialDate, FORMATS.ISO)
+      ) {
+        item.noticeOfTrialDate = createISODateAtStartOfDayEST(
+          item.noticeOfTrialDate,
+        );
+      }
+      if (
+        item.automaticBlockedDate &&
+        !isValidDateString(item.automaticBlockedDate, FORMATS.ISO)
+      ) {
+        item.automaticBlockedDate = createISODateAtStartOfDayEST(
+          item.automaticBlockedDate,
+        );
+      }
+      if (
+        item.blockedDate &&
+        !isValidDateString(item.blockedDate, FORMATS.ISO)
+      ) {
+        item.blockedDate = createISODateAtStartOfDayEST(item.blockedDate);
+      }
+      if (item.closedDate && !isValidDateString(item.closedDate, FORMATS.ISO)) {
+        item.closedDate = createISODateAtStartOfDayEST(item.closedDate);
+      }
+      if (
+        item.irsNoticeDate &&
+        !isValidDateString(item.irsNoticeDate, FORMATS.ISO)
+      ) {
+        item.irsNoticeDate = createISODateAtStartOfDayEST(item.irsNoticeDate);
+      }
+      if (
+        item.petitionPaymentDate &&
+        !isValidDateString(item.petitionPaymentDate, FORMATS.ISO)
+      ) {
+        item.petitionPaymentDate = createISODateAtStartOfDayEST(
+          item.petitionPaymentDate,
+        );
+      }
+      if (
+        item.petitionPaymentWaivedDate &&
+        !isValidDateString(item.petitionPaymentWaivedDate, FORMATS.ISO)
+      ) {
+        item.petitionPaymentWaivedDate = createISODateAtStartOfDayEST(
+          item.petitionPaymentWaivedDate,
+        );
+      }
+      if (item.sealedDate && !isValidDateString(item.sealedDate, FORMATS.ISO)) {
+        item.sealedDate = createISODateAtStartOfDayEST(item.sealedDate);
+      }
+      if (item.trialDate && !isValidDateString(item.trialDate, FORMATS.ISO)) {
+        item.trialDate = createISODateAtStartOfDayEST(item.trialDate);
       }
 
       new Case(item, { applicationContext }).validate();
