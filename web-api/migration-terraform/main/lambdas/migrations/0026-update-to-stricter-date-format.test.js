@@ -1,6 +1,7 @@
 const {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
+  ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 const { migrateItems } = require('./0026-update-to-stricter-date-format');
@@ -552,18 +553,213 @@ describe('migrateItems', () => {
   });
 
   describe('docketEntry', () => {
-    //certificateOfServiceDate
-    //createdAt
-    //date
-    //filingDate
-    //qcAt
-    //receivedAt
-    //serviceDate
-    //stricketAt
-    //completedAt
-    //trialDate
-    //updatedAt
-    //servedAt
-    it('should', () => {});
+    let mockDocketEntry;
+
+    beforeEach(() => {
+      mockDocketEntry = {
+        createdAt: '2020-07-17T19:28:29.675Z',
+        docketEntryId: '0f5e035c-efa8-49e4-ba69-daf8a166a98f',
+        documentType: 'Petition',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        pk: 'case|2bce00a4-107c-4caa-8381-e07d0c1aefad',
+        receivedAt: '2020-07-17T19:28:29.675Z',
+        role: ROLES.petitioner,
+        sk: 'docket-entry|eb431962-9138-40ff-b05b-99f5d3fae785',
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      };
+    });
+
+    it('should update certificateOfServiceDate to be an ISO formatted date', async () => {
+      const items = [
+        {
+          ...mockDocketEntry,
+          certificateOfServiceDate: '2020-10-20',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockDocketEntry,
+          certificateOfServiceDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update createdAt to be an ISO formatted date', async () => {
+      const items = [
+        {
+          ...mockDocketEntry,
+          createdAt: '2020-10-20',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockDocketEntry,
+          createdAt: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update date to be an ISO formatted date', async () => {
+      const items = [
+        {
+          ...mockDocketEntry,
+          date: '2020-10-20',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockDocketEntry,
+          date: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update filingDate to be an ISO formatted date', async () => {
+      const items = [
+        {
+          ...mockDocketEntry,
+          filingDate: '2020-10-20',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockDocketEntry,
+          filingDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update qcAt to be an ISO formatted date', async () => {
+      const items = [
+        {
+          ...mockDocketEntry,
+          qcAt: '2020-10-20',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockDocketEntry,
+          qcAt: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update receivedAt to be an ISO formatted date', async () => {
+      const items = [
+        {
+          ...mockDocketEntry,
+          receivedAt: '2020-10-20',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockDocketEntry,
+          receivedAt: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update serviceDate to be an ISO formatted date', async () => {
+      const items = [
+        {
+          ...mockDocketEntry,
+          serviceDate: '2020-10-20',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockDocketEntry,
+          serviceDate: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it('should update strickenAt to be an ISO formatted date', async () => {
+      const items = [
+        {
+          ...mockDocketEntry,
+          strickenAt: '2020-10-20',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockDocketEntry,
+          strickenAt: '2020-10-20T04:00:00.000Z',
+        },
+      ]);
+    });
+
+    it.skip('should update completedAt to be an ISO formatted date', () => {});
+
+    it.skip('should update trialDate to be an ISO formatted date', () => {});
+
+    it.skip('should update updatedAt to be an ISO formatted date', () => {});
+
+    it.skip('should update servedAt to be an ISO formatted date', () => {});
+
+    it.skip('should not update createdAt, receivedAt, petitionPaymentWaivedDate, trialDate, sealedDate, noticeOfTrialDate, petitionPaymentDate, automaticBlockedDate, blockedDate, closedDate, irsNoticeDate when they are already a dateTime stamp', async () => {
+      const items = [
+        {
+          ...mockCase,
+          automaticBlockedDate: '2025-04-01T00:00:22.000Z',
+          blockedDate: '2025-04-01T00:00:22.000Z',
+          closedDate: '2025-04-01T00:00:22.000Z',
+          createdAt: '2025-03-01T00:00:22.000Z',
+          irsNoticeDate: '2020-04-01T00:00:22.000Z',
+          noticeOfTrialDate: '2025-04-01T00:00:22.000Z',
+          petitionPaymentDate: '2025-04-01T00:00:22.000Z',
+          petitionPaymentWaivedDate: '2025-04-01T00:00:22.000Z',
+          receivedAt: '2025-04-01T00:00:22.000Z',
+          sealedDate: '2025-04-01T00:00:22.000Z',
+          trialDate: '2025-04-01T00:00:22.000Z',
+          trialSessionId: '3ca27710-7538-494f-835d-65a35ee1ebed',
+        },
+      ];
+
+      const results = await migrateItems(items);
+
+      expect(results).toEqual([
+        {
+          ...mockCase,
+          automaticBlockedDate: '2025-04-01T00:00:22.000Z',
+          blockedDate: '2025-04-01T00:00:22.000Z',
+          closedDate: '2025-04-01T00:00:22.000Z',
+          createdAt: '2025-03-01T00:00:22.000Z',
+          irsNoticeDate: '2020-04-01T00:00:22.000Z',
+          noticeOfTrialDate: '2025-04-01T00:00:22.000Z',
+          petitionPaymentDate: '2025-04-01T00:00:22.000Z',
+          petitionPaymentWaivedDate: '2025-04-01T00:00:22.000Z',
+          receivedAt: '2025-04-01T00:00:22.000Z',
+          sealedDate: '2025-04-01T00:00:22.000Z',
+          trialDate: '2025-04-01T00:00:22.000Z',
+          trialSessionId: '3ca27710-7538-494f-835d-65a35ee1ebed',
+        },
+      ]);
+    });
   });
 });

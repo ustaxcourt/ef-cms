@@ -146,6 +146,40 @@ const migrateItems = async items => {
       item.sk.startsWith('docket-entry|')
     ) {
       // todo
+      if (
+        item.certificateOfServiceDate &&
+        !isValidDateString(item.certificateOfServiceDate, FORMATS.ISO)
+      ) {
+        item.certificateOfServiceDate = createISODateAtStartOfDayEST(
+          item.certificateOfServiceDate,
+        );
+      }
+      if (item.createdAt && !isValidDateString(item.createdAt, FORMATS.ISO)) {
+        item.createdAt = createISODateAtStartOfDayEST(item.createdAt);
+      }
+      if (item.date && !isValidDateString(item.date, FORMATS.ISO)) {
+        item.date = createISODateAtStartOfDayEST(item.date);
+      }
+      if (item.filingDate && !isValidDateString(item.filingDate, FORMATS.ISO)) {
+        item.filingDate = createISODateAtStartOfDayEST(item.filingDate);
+      }
+      if (item.qcAt && !isValidDateString(item.qcAt, FORMATS.ISO)) {
+        item.qcAt = createISODateAtStartOfDayEST(item.qcAt);
+      }
+      if (item.receivedAt && !isValidDateString(item.receivedAt, FORMATS.ISO)) {
+        item.receivedAt = createISODateAtStartOfDayEST(item.receivedAt);
+      }
+      if (
+        item.serviceDate &&
+        !isValidDateString(item.serviceDate, FORMATS.ISO)
+      ) {
+        item.serviceDate = createISODateAtStartOfDayEST(item.serviceDate);
+      }
+      if (item.strickenAt && !isValidDateString(item.strickenAt, FORMATS.ISO)) {
+        item.strickenAt = createISODateAtStartOfDayEST(item.strickenAt);
+      }
+
+      itemsAfter.push(item);
     } else if (
       item.pk.startsWith('trial-session|') &&
       item.sk.startsWith('trial-session|')
