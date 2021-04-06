@@ -15,6 +15,9 @@ const {
   isValidDateString,
 } = require('../../../../../shared/src/business/utilities/DateHandler');
 const {
+  DocketEntry,
+} = require('../../../../../shared/src/business/entities/DocketEntry');
+const {
   Message,
 } = require('../../../../../shared/src/business/entities/Message');
 const {
@@ -145,7 +148,6 @@ const migrateItems = async items => {
       item.pk.startsWith('case|') &&
       item.sk.startsWith('docket-entry|')
     ) {
-      // todo
       if (
         item.certificateOfServiceDate &&
         !isValidDateString(item.certificateOfServiceDate, FORMATS.ISO)
@@ -178,6 +180,8 @@ const migrateItems = async items => {
       if (item.strickenAt && !isValidDateString(item.strickenAt, FORMATS.ISO)) {
         item.strickenAt = createISODateAtStartOfDayEST(item.strickenAt);
       }
+
+      new DocketEntry(item, { applicationContext }).validate();
 
       itemsAfter.push(item);
     } else if (
