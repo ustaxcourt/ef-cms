@@ -1,5 +1,6 @@
 const getPageDimensionsWithTrim = page => {
   const size = page.getTrimBox();
+  console.log('size', size);
   return { pageHeight: size.height, pageWidth: size.width, startingY: size.y };
 };
 
@@ -11,6 +12,8 @@ const computeCoordinates = ({
   pageWidth,
   posY,
 }) => {
+  console.log('posY', posY);
+  console.log('boxHeight', boxHeight);
   let rotationRads = (pageRotation * Math.PI) / 180;
   let coordsFromBottomLeft = {};
   if (pageRotation === 90 || pageRotation === 270) {
@@ -118,7 +121,6 @@ exports.addServedStampToDocument = async ({
     pageRotation: rotationAngle,
     pageWidth,
     posY,
-    scale,
   });
 
   console.log('pageHeight', pageHeight);
@@ -131,12 +133,12 @@ exports.addServedStampToDocument = async ({
   const rotate = shouldRotateStamp ? rotateSignatureDegrees : degrees(0);
 
   page.drawRectangle({
-    color: rgb(1, 1, 1),
+    color: rgb(0.5, 1, 0.2),
     height: boxHeight,
     rotate,
     width: boxWidth,
     x: rectangleX,
-    y: rectangleY + padding,
+    y: rectangleY + padding + 80,
   });
   page.drawText(serviceStampText, {
     font: helveticaBoldFont,
