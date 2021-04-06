@@ -8,6 +8,19 @@ const { migrateItems } = require('./0026-update-to-stricter-date-format');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
+  it('should not update record that is not a case deadline, correspondence, message, case, docket entry, or trial session', async () => {
+    const items = [
+      {
+        pk: 'user|ae3aff09-1e2e-43d0-a6bf-d43e2e4e0ff9',
+        sk: 'user|ae3aff09-1e2e-43d0-a6bf-d43e2e4e0ff9',
+      },
+    ];
+
+    const results = await migrateItems(items);
+
+    expect(results).toEqual(items);
+  });
+
   describe('caseDeadline', () => {
     let mockCaseDeadline;
 
@@ -72,7 +85,7 @@ describe('migrateItems', () => {
       mockCorrespondence = {
         correspondenceId: 'e9ab90a9-2150-4dd1-90b4-fee2097c23db',
         documentTitle: 'A Title',
-        filingDate: '04/20/2006',
+        filingDate: '2006-04-20',
         pk: 'case|000-00',
         sk: 'correspondence|6d74eadc-0181-4ff5-826c-305200e8733d',
         userId: 'a389ca07-f19e-45d4-8e77-5cb79c9285ae',
@@ -87,7 +100,7 @@ describe('migrateItems', () => {
       expect(results).toEqual([
         {
           ...mockCorrespondence,
-          filingDate: '2006-04-19T04:00:00.000Z',
+          filingDate: '2006-04-20T04:00:00.000Z',
         },
       ]);
     });
@@ -714,30 +727,18 @@ describe('migrateItems', () => {
       ]);
     });
 
-    it.skip('should update completedAt to be an ISO formatted date', () => {});
-
-    it.skip('should update trialDate to be an ISO formatted date', () => {});
-
-    it.skip('should update updatedAt to be an ISO formatted date', () => {});
-
-    it.skip('should update servedAt to be an ISO formatted date', () => {});
-
-    it.skip('should not update createdAt, receivedAt, petitionPaymentWaivedDate, trialDate, sealedDate, noticeOfTrialDate, petitionPaymentDate, automaticBlockedDate, blockedDate, closedDate, irsNoticeDate when they are already a dateTime stamp', async () => {
+    it('should not update certificateOfServiceDate, createdAt, date, filingDate, qcAt, receivedAt, serviceDate, or strickenAt when they are already a dateTime stamp', async () => {
       const items = [
         {
-          ...mockCase,
-          automaticBlockedDate: '2025-04-01T00:00:22.000Z',
-          blockedDate: '2025-04-01T00:00:22.000Z',
-          closedDate: '2025-04-01T00:00:22.000Z',
-          createdAt: '2025-03-01T00:00:22.000Z',
-          irsNoticeDate: '2020-04-01T00:00:22.000Z',
-          noticeOfTrialDate: '2025-04-01T00:00:22.000Z',
-          petitionPaymentDate: '2025-04-01T00:00:22.000Z',
-          petitionPaymentWaivedDate: '2025-04-01T00:00:22.000Z',
+          ...mockDocketEntry,
+          certificateOfServiceDate: '2025-04-01T00:00:22.000Z',
+          createdAt: '2025-04-01T00:00:22.000Z',
+          date: '2025-04-01T00:00:22.000Z',
+          filingDate: '2020-03-01T00:00:22.000Z',
+          qcAt: '2020-04-01T00:00:22.000Z',
           receivedAt: '2025-04-01T00:00:22.000Z',
-          sealedDate: '2025-04-01T00:00:22.000Z',
-          trialDate: '2025-04-01T00:00:22.000Z',
-          trialSessionId: '3ca27710-7538-494f-835d-65a35ee1ebed',
+          serviceDate: '2020-04-01T00:00:22.000Z',
+          strickenAt: '2020-04-01T00:00:22.000Z',
         },
       ];
 
@@ -745,19 +746,15 @@ describe('migrateItems', () => {
 
       expect(results).toEqual([
         {
-          ...mockCase,
-          automaticBlockedDate: '2025-04-01T00:00:22.000Z',
-          blockedDate: '2025-04-01T00:00:22.000Z',
-          closedDate: '2025-04-01T00:00:22.000Z',
-          createdAt: '2025-03-01T00:00:22.000Z',
-          irsNoticeDate: '2020-04-01T00:00:22.000Z',
-          noticeOfTrialDate: '2025-04-01T00:00:22.000Z',
-          petitionPaymentDate: '2025-04-01T00:00:22.000Z',
-          petitionPaymentWaivedDate: '2025-04-01T00:00:22.000Z',
+          ...mockDocketEntry,
+          certificateOfServiceDate: '2025-04-01T00:00:22.000Z',
+          createdAt: '2025-04-01T00:00:22.000Z',
+          date: '2025-04-01T00:00:22.000Z',
+          filingDate: '2020-03-01T00:00:22.000Z',
+          qcAt: '2020-04-01T00:00:22.000Z',
           receivedAt: '2025-04-01T00:00:22.000Z',
-          sealedDate: '2025-04-01T00:00:22.000Z',
-          trialDate: '2025-04-01T00:00:22.000Z',
-          trialSessionId: '3ca27710-7538-494f-835d-65a35ee1ebed',
+          serviceDate: '2020-04-01T00:00:22.000Z',
+          strickenAt: '2020-04-01T00:00:22.000Z',
         },
       ]);
     });
