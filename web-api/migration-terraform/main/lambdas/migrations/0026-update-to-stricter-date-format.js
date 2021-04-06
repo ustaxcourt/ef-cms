@@ -29,7 +29,6 @@ const applicationContext = createApplicationContext({});
 const migrateItems = async items => {
   const itemsAfter = [];
   for (const item of items) {
-    // look for pks of: EntityValidationConstants, Case
     if (item.pk.startsWith('case-deadline|')) {
       if (
         item.deadlineDate &&
