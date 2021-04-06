@@ -104,7 +104,7 @@ export const DocketRecord = connect(
                     <td>
                       <span
                         className={classNames(
-                          entry.isStricken && 'stricken-ustc-table',
+                          entry.isStricken && 'stricken-docket-record',
                           'no-wrap',
                         )}
                       >
