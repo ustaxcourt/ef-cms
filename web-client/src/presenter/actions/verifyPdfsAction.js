@@ -16,7 +16,7 @@ export const verifyPdfsAction = async ({ applicationContext, path }) => {
   } catch (e) {
     return path.error({
       alertError: {
-        title: 'ERROR',
+        title: 'Error verifying PDFs on attempted upload',
       },
     });
   }
