@@ -28,7 +28,6 @@ export const submitFilePetitionSequence = [
       stopShowValidationAction,
       openFileUploadStatusModalAction,
       setCaseTypeAction,
-      verifyPdfsAction,
       {
         error: [],
         success: [
