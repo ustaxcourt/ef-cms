@@ -38,10 +38,11 @@ const prepareDateFromString = (dateString, inputFormat) => {
     dateString = createISODateString();
   }
   const dateFromMoment = moment.tz(dateString, inputFormat, USTC_TZ);
-  console.log('moment.tz result', dateFromMoment);
-  if (dateFromMoment.toString().includes('Invalid')) {
+  // If an invalid string is passed in, we're able to check the result and log so error is
+  // not silently swallowed
+  if (dateString !== null && dateFromMoment.toString().includes('Invalid')) {
     console.error('Invalid date', {
-      message: `moment cannot recognize string '${dateString}'`,
+      message: `moment cannot recognize dateString: [${dateString}] dateFromMoment: [${dateFromMoment}]`,
     });
   }
 
@@ -300,9 +301,11 @@ const computeDate = ({ day, month, year }) => {
   if (!PATTERNS.YYYYMMDD.test(dateToParse)) {
     return dateToParse;
   }
-  const preparedDateISO = prepareDateFromString(dateToParse, FORMATS.YYYYMMDD);
-  const yyyymmdd = formatDateString(preparedDateISO, FORMATS.YYYYMMDD);
-  return yyyymmdd;
+  const preparedAndFormattedDateISO = prepareDateFromString(
+    dateToParse,
+    FORMATS.YYYYMMDD,
+  ).format(FORMATS.YYYYMMDD);
+  return preparedAndFormattedDateISO;
 };
 
 module.exports = {
