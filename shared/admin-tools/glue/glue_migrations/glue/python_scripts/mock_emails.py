@@ -2,11 +2,11 @@
 
 import sys
 from hashlib import md5
-from awsglue.transforms import Map  # type: ignore
-from awsglue.utils import getResolvedOptions  # type: ignore
-from pyspark.context import SparkContext  # type: ignore
-from awsglue.context import GlueContext  # type: ignore
-from awsglue.job import Job  # type: ignore
+from awsglue.transforms import Map
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
 
 
 ## @params: [JOB_NAME]
@@ -29,7 +29,8 @@ OUTPUT_OPTIONS = {
     "dynamodb.output.tableName": args['destination_table'],
     "dynamodb.output.retry": 35,
     "dynamodb.throughput.write.percent": 0.1,
-    "dynamodb.sts.roleArn": args['external_role_arn']
+    "dynamodb.sts.roleArn": args['external_role_arn'],
+    "dynamodb.region": "us-east-1"
 }
 
 # Per: https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-connect.html#aws-glue-programming-etl-connect-dynamodb
@@ -38,7 +39,8 @@ dynamo_splits = ((int(args['number_of_workers']) - 1) * 2 - 1) * 8
 
 INPUT_OPTIONS = {
     "dynamodb.input.tableName": args['source_table'],
-    "dynamodb.splits": str(dynamo_splits)
+    "dynamodb.splits": str(dynamo_splits),
+    "dynamodb.region": "us-east-1"
 }
 
 

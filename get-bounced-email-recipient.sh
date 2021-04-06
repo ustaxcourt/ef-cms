@@ -20,6 +20,8 @@ elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "${BOUNCED_EMAIL_RECIPIENT_EXP2}"
 elif [[ $BRANCH == 'experimental3' ]] ; then
   echo "${BOUNCED_EMAIL_RECIPIENT_EXP3}"
+elif [[ $BRANCH == 'experimental4' ]] ; then
+  echo "${BOUNCED_EMAIL_RECIPIENT_EXP4}"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "${BOUNCED_EMAIL_RECIPIENT_IRS}"
 elif [[ $BRANCH == 'test' ]] ; then
