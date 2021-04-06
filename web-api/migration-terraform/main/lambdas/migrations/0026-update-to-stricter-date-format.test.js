@@ -758,5 +758,13 @@ describe('migrateItems', () => {
         },
       ]);
     });
+
+    it('should throw an error when the item is invalid', async () => {
+      mockDocketEntry.documentType = undefined; // documentType is required
+
+      const items = [mockDocketEntry];
+
+      await expect(migrateItems(items)).rejects.toThrow();
+    });
   });
 });
