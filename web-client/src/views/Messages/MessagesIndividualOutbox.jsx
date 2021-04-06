@@ -8,7 +8,7 @@ export const MessagesIndividualOutbox = connect(
   function MessagesIndividualOutbox({ formattedMessages }) {
     return (
       <>
-        <table className="usa-table work-queue subsection">
+        <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
