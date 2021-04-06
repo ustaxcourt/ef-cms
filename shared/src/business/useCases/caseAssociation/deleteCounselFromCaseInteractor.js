@@ -52,8 +52,22 @@ exports.deleteCounselFromCaseInteractor = async (
     throw new Error('User is not a practitioner');
   }
 
-  if (!caseEntity.hasPrivatePractitioners()) {
+  if (
+    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      caseEntity.contactPrimary.contactId,
+    )
+  ) {
     caseEntity.contactPrimary.serviceIndicator = null;
+    aggregatePartiesForService(caseEntity);
+  }
+
+  if (
+    caseEntity.contactSecondary &&
+    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      caseEntity.contactSecondary.contactId,
+    )
+  ) {
+    caseEntity.contactSecondary.serviceIndicator = null;
     aggregatePartiesForService(caseEntity);
   }
 

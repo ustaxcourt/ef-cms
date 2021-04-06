@@ -1746,6 +1746,18 @@ Case.prototype.removeConsolidation = function () {
 };
 
 /**
+ * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
+ *
+ * @param {String} userId the id of the user
+ * @returns {boolean} if the userId has a privatePractitioner associated with them
+ */
+Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
+  return !!this.privatePractitioners.find(practitioner =>
+    practitioner.representing.find(id => id === userId),
+  );
+};
+
+/**
  * sorts the given array of cases by docket number
  *
  * @param {Array} cases the cases to check for lead case computation
