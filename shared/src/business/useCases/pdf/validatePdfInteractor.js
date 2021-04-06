@@ -43,5 +43,11 @@ exports.validatePdfInteractor = async (applicationContext, { key }) => {
     throw new Error('invalid pdf');
   }
 
+  try {
+    pdfDoc.getPages();
+  } catch (e) {
+    throw new Error('pdf pages cannot be read');
+  }
+
   return true;
 };
