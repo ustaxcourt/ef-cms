@@ -12,6 +12,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePetitionAction } from '../actions/validatePetitionAction';
+import { verifyPdfsAction } from '../actions/verifyPdfsAction';
 
 export const submitFilePetitionSequence = [
   clearAlertsAction,
@@ -27,13 +28,19 @@ export const submitFilePetitionSequence = [
       stopShowValidationAction,
       openFileUploadStatusModalAction,
       setCaseTypeAction,
-      createCaseAction,
+      verifyPdfsAction,
       {
-        error: [openFileUploadErrorModal],
+        error: [],
         success: [
-          setCaseAction,
-          closeFileUploadStatusModalAction,
-          navigateToFilePetitionSuccessAction,
+          createCaseAction,
+          {
+            error: [openFileUploadErrorModal],
+            success: [
+              setCaseAction,
+              closeFileUploadStatusModalAction,
+              navigateToFilePetitionSuccessAction,
+            ],
+          },
         ],
       },
     ],
