@@ -96,7 +96,7 @@
     "parcel-plugin-static-files-copy": "^2.6.0",
     "parse-full-name": "^1.2.5",
     "pdf-lib": "^1.16.0",
-    "pdfjs-dist": "^2.7.570",
+    "pdfjs-dist": "2.6.347",
     "pixelmatch": "^5.2.1",
     "pngjs": "^6.0.0",
     "postcss": "^8.2.9",
