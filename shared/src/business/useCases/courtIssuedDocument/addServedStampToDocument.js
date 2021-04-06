@@ -121,6 +121,13 @@ exports.addServedStampToDocument = async ({
     scale,
   });
 
+  console.log('pageHeight', pageHeight);
+  console.log('pageWidth', pageWidth);
+  console.log('rectangleX', rectangleX);
+  console.log('rectangleY', rectangleY);
+  console.log('startingY', startingY);
+  console.log('rotationAngle', rotationAngle);
+
   const rotate = shouldRotateStamp ? rotateSignatureDegrees : degrees(0);
 
   page.drawRectangle({
