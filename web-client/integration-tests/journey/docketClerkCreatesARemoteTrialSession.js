@@ -37,7 +37,7 @@ export const docketClerkCreatesARemoteTrialSession = (test, overrides = {}) => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
-      value: '13',
+      value: '12',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -47,7 +47,7 @@ export const docketClerkCreatesARemoteTrialSession = (test, overrides = {}) => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'year',
-      value: '2025',
+      value: '1999',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -69,13 +69,12 @@ export const docketClerkCreatesARemoteTrialSession = (test, overrides = {}) => {
 
     expect(test.getState('validationErrors')).toEqual({
       startDate: errorMessages.startDate[1],
-      term: errorMessages.term,
       trialLocation: errorMessages.trialLocation,
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'month',
-      value: '12',
+      key: 'year',
+      value: '2025',
     });
 
     await test.runSequence('validateTrialSessionSequence');

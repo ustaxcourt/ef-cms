@@ -37,7 +37,15 @@ const prepareDateFromString = (dateString, inputFormat) => {
   if (dateString === undefined) {
     dateString = createISODateString();
   }
-  return moment.tz(dateString, inputFormat, USTC_TZ);
+  const dateFromMoment = moment.tz(dateString, inputFormat, USTC_TZ);
+  console.log('moment.tz result', dateFromMoment);
+  if (dateFromMoment.toString().includes('Invalid')) {
+    console.error('Invalid date', {
+      message: `moment cannot recognize string '${dateString}'`,
+    });
+  }
+
+  return dateFromMoment;
 };
 
 const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
