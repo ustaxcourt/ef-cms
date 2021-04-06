@@ -99,7 +99,7 @@ const createISODateStringFromObject = options => {
  * @param {string} formatStr the desired formatting as specified by the moment library
  * @returns {string} a formatted date string
  */
-const formatDateString = (dateString, formatStr) => {
+const formatDateString = (dateString, formatStr = FORMATS.ISO) => {
   if (!dateString) return;
   let formatString = FORMATS[formatStr] || formatStr;
   return prepareDateFromString(dateString).format(formatString);
