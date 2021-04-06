@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+import moment from 'moment';
 
 export const docketClerkAddsTranscriptDocketEntryFromOrder = (
   test,
@@ -55,10 +56,18 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
       value: 'Anything',
     });
 
+    // suppressing moment deprecation warnings temporarily as moment returns an
+    // invalid object when called with a single day or month value
+    moment.suppressDeprecationWarnings = true;
+
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'month',
       value: date.month,
     });
+
+    // re-enabling moment warnings here
+    moment.suppressDeprecationWarnings = false;
+
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'day',
       value: date.day,
