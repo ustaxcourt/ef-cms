@@ -308,6 +308,10 @@ Case.prototype.assignArchivedDocketEntries = function assignArchivedDocketEntrie
   }
 };
 
+Case.prototype.hasPrivatePractitioners = function hasPrivatePractitioners() {
+  return this.privatePractitioners.length > 0;
+};
+
 Case.prototype.assignContacts = function assignContacts({
   applicationContext,
   rawCase,
