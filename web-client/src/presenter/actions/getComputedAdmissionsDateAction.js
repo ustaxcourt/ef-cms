@@ -26,8 +26,7 @@ const computeAdmissionsDate = ({ applicationContext, day, month, year }) => {
 /**
  * computes admissions date from form date values
  *
- * @param {string} prefix prefix for form state date field keys
- * @returns {Function} the primed action
+ * @returns {Object} the computed date
  */
 export const getComputedAdmissionsDateAction = ({
   applicationContext,
@@ -37,9 +36,7 @@ export const getComputedAdmissionsDateAction = ({
   let formMonth = get(state.form.month);
   let formDay = get(state.form.day);
 
-  let computedDate = null;
-
-  computedDate = computeAdmissionsDate({
+  const computedDate = computeAdmissionsDate({
     applicationContext,
     day: formDay,
     month: formMonth,
