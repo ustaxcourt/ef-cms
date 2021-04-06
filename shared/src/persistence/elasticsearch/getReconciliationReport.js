@@ -37,8 +37,6 @@ exports.getReconciliationReport = async ({
             },
           },
         },
-        { match: { 'pk.S': 'case|' } },
-        { match: { 'sk.S': 'docket-entry|' } },
       ],
     },
   };
@@ -48,6 +46,7 @@ exports.getReconciliationReport = async ({
     searchParameters: {
       body: {
         _source: [
+          'pk',
           'docketNumber',
           'documentTitle',
           'docketEntryId',
