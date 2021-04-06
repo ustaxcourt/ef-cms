@@ -162,18 +162,6 @@ describe('DateHandler', () => {
 
       expect(result).toEqual('2000-01-01T00:00:00.000Z');
     });
-
-    it('calculates NOW as an ISO datetime', () => {
-      DateHandler.createISODateString = jest.fn().mockReturnValue('2002-08-15');
-
-      const result = DateHandler.calculateISODate({
-        dateString: undefined,
-        howMuch: -20,
-        units: 'days',
-      });
-
-      expect(result).toEqual('2000-01-01T00:00:00.000Z');
-    });
   });
 
   describe('createStartOfDayISO', () => {

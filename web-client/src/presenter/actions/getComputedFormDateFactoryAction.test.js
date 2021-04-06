@@ -29,7 +29,7 @@ describe('getComputedFormDateFactoryAction', () => {
         },
       });
 
-      expect(result.output.computedDate).toEqual('2020-01-13');
+      expect(result.output.computedDate).toEqual('2020-01-13T05:00:00.000Z');
     });
 
     it('computes date parts from the computed state.form values if a prefix is given in the outter scope', async () => {
@@ -52,7 +52,7 @@ describe('getComputedFormDateFactoryAction', () => {
         },
       );
 
-      expect(result.output.computedDate).toEqual('2021-02-14');
+      expect(result.output.computedDate).toEqual('2021-02-14T05:00:00.000Z');
     });
 
     it('returns the date in iso string format if toIsoString is given as true in the outter scope', async () => {
