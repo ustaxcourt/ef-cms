@@ -293,9 +293,9 @@ const computeDate = ({ day, month, year }) => {
   if (!PATTERNS.YYYYMMDD.test(dateToParse)) {
     return dateToParse;
   }
-  const preparedDateISO = prepareDateFromString(dateToParse, FORMATS.YYYYMMDD);
-  const yyyymmdd = formatDateString(preparedDateISO, FORMATS.YYYYMMDD);
-  return yyyymmdd;
+  const preparedDateISO = prepareDateFromString(dateToParse, FORMATS.ISO);
+  const isoDateString = formatDateString(preparedDateISO, FORMATS.ISO);
+  return isoDateString;
 };
 
 module.exports = {
