@@ -131,4 +131,52 @@ describe('deleteCounselFromCaseInteractor', () => {
       }),
     ).rejects.toThrow('User is not a practitioner');
   });
+
+  it('should set the contactPrimary.serviceIndicator to Electronic if the case was e-filed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          serviceIndicator: 'None',
+        },
+        privatePractitioners: [mockPrivatePractitioners[0]],
+      });
+
+    const updatedCase = await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+    );
+
+    expect(updatedCase.contactPrimary.serviceIndicator).toEqual('Electronic');
+  });
+
+  it('should set the contactPrimary.serviceIndicator to Paper if the case was paper', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          serviceIndicator: 'None',
+        },
+        isPaper: true,
+        mailingDate: '04/16/2019',
+        privatePractitioners: [mockPrivatePractitioners[0]],
+      });
+
+    const updatedCase = await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+    );
+
+    expect(updatedCase.contactPrimary.serviceIndicator).toEqual('Paper');
+  });
 });

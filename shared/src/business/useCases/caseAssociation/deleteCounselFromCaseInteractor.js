@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -47,6 +50,11 @@ exports.deleteCounselFromCaseInteractor = async (
     caseEntity.removeIrsPractitioner(userToDelete);
   } else {
     throw new Error('User is not a practitioner');
+  }
+
+  if (!caseEntity.hasPrivatePractitioners()) {
+    caseEntity.contactPrimary.serviceIndicator = null;
+    aggregatePartiesForService(caseEntity);
   }
 
   await applicationContext.getPersistenceGateway().deleteUserFromCase({
