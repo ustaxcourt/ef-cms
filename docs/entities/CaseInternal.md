@@ -72,7 +72,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "Date that this Document was filed."
               rules: 
@@ -168,7 +167,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
               whens: 
                 - 
                   ref: 
@@ -198,7 +196,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "When the Document was added to the system."
             date: 
@@ -206,7 +203,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "An optional date used when generating a fully concatenated document title."
               allow: 
@@ -1423,7 +1419,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "Date that this Document was filed."
               rules: 
@@ -2188,7 +2183,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
             qcByUserId: 
               type: "string"
@@ -3033,14 +3027,12 @@
                     flags: 
                       format: 
                         - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                        - "YYYY-MM-DD"
                       presence: "required"
                   otherwise: 
                     type: "date"
                     flags: 
                       format: 
                         - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                        - "YYYY-MM-DD"
                       presence: "optional"
             servedParties: 
               type: "array"
@@ -3152,7 +3144,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "Used by certificate of service documents to construct the document title."
               rules: 
@@ -3439,7 +3430,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "Date that this Docket Record item was stricken."
               rules: 
@@ -3589,7 +3579,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
         description: "Last date that the petitioner is allowed to file before."
       rules: 
@@ -3877,7 +3866,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
       rules: 
         - 
           name: "max"
@@ -3949,7 +3937,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         description: "When the case fee was waived."
       whens: 
         - 
@@ -3970,7 +3957,6 @@
             flags: 
               format: 
                 - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
             rules: 
               - 
@@ -4029,7 +4015,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "required"
       rules: 
         - 
@@ -4253,7 +4238,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 description: "Last date of the statistics period."
               rules: 
                 - 

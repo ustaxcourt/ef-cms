@@ -90,7 +90,7 @@ const createStartOfDayISO = ({ day, month, year }) => {
 const createISODateStringFromObject = options => {
   return createISODateString(
     `${options.year}-${options.month}-${options.day}`,
-    FORMATS.YYYYMMDD,
+    FORMATS.ISO,
   );
 };
 

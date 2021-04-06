@@ -23,7 +23,6 @@ exports.JoiValidationConstants = deepFreeze({
   DOCUMENT_TITLE: STRING.max(3000),
   EMAIL: STRING.email({ tlds: false }).max(100),
   ISO_DATE: joi.date().iso().format([FORMATS.ISO]),
-  ISO_DATE_STRICT: joi.date().iso().format([FORMATS.ISO]),
   MAX_FILE_SIZE_BYTES: joi.number().integer().min(1).max(MAX_FILE_SIZE_BYTES),
   STRING,
   TWENTYFOUR_HOUR_MINUTES: STRING.regex(
