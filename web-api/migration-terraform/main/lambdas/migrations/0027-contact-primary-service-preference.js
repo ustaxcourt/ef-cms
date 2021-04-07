@@ -57,24 +57,31 @@ const migrateItems = async (items, documentClient) => {
       let itemToModify = cloneDeep(item);
 
       const currentCaseEntity = new Case(caseRecord, { applicationContext });
-      //console.log('currentCaseEntity', currentCaseEntity);
 
       let shouldUpdateServiceIndicators = false;
 
-      const shouldUpdateContactPrimary = !currentCaseEntity.isUserIdRepresentedByPrivatePractitioner(
-        item.contactPrimary.contactId,
-      );
+      // we check the service indicator again to prevent overwriting an intentional
+      // service preference since the outer conditional is evaluation BOTH contacts
+      const shouldUpdateContactPrimary =
+        contactHasServiceIndicatorNone(item.contactPrimary) &&
+        !currentCaseEntity.isUserIdRepresentedByPrivatePractitioner(
+          item.contactPrimary.contactId,
+        );
       if (shouldUpdateContactPrimary) {
         delete itemToModify.contactPrimary.serviceIndicator;
         shouldUpdateServiceIndicators = true;
       }
 
-      const shouldUpdateContactSecondary = !!(
-        item.contactSecondary &&
-        !currentCaseEntity.isUserIdRepresentedByPrivatePractitioner(
-          item.contactSecondary.contactId,
-        )
-      );
+      // we check the service indicator again to prevent overwriting an intentional
+      // service preference since the outer conditional is evaluation BOTH contacts
+      const shouldUpdateContactSecondary =
+        contactHasServiceIndicatorNone(item.contactSecondary) &&
+        !!(
+          item.contactSecondary &&
+          !currentCaseEntity.isUserIdRepresentedByPrivatePractitioner(
+            item.contactSecondary.contactId,
+          )
+        );
 
       if (shouldUpdateContactSecondary) {
         delete itemToModify.contactSecondary.serviceIndicator;
@@ -82,6 +89,7 @@ const migrateItems = async (items, documentClient) => {
       }
 
       if (shouldUpdateServiceIndicators) {
+        // we only care about mutations to the contacts service preference
         const {
           contactPrimary,
           contactSecondary,
@@ -90,11 +98,21 @@ const migrateItems = async (items, documentClient) => {
           privatePractitioners: [...caseRecord.privatePractitioners],
         });
 
-        itemToModify = {
-          ...itemToModify,
-          contactPrimary,
-          contactSecondary,
-        };
+        if (shouldUpdateContactPrimary && contactPrimary) {
+          // trying to reduce blast radius on what actually gets mutated on the item
+          itemToModify.contactPrimary = {
+            ...item.contactPrimary,
+            serviceIndicator: contactPrimary.serviceIndicator,
+          };
+        }
+
+        if (shouldUpdateContactSecondary && contactSecondary) {
+          // trying to reduce blast radius on what actually gets mutated on the item
+          itemToModify.contactSecondary = {
+            ...item.contactSecondary,
+            serviceIndicator: contactSecondary.serviceIndicator,
+          };
+        }
 
         new Case(
           { ...caseRecord, itemToModify },
