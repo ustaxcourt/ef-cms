@@ -69,7 +69,6 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
     });
 
     const today = applicationContext.getUtilities().getMonthDayYearObj();
-    console.log('today', today);
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'filingDateMonth',
