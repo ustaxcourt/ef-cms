@@ -23,7 +23,7 @@ exports.setMessageAsReadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return applicationContext
+  return await applicationContext
     .getPersistenceGateway()
     .setMessageAsRead({ applicationContext, docketNumber, messageId });
 };

@@ -161,6 +161,7 @@ const {
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
@@ -303,6 +304,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
+    isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
     isStringISOFormatted: jest
       .fn()
@@ -462,7 +464,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const nodeSassMockReturnValue = {
-    render: (data, cb) => cb(data, { css: '' }),
+    render: (data, cb) => cb(null, { css: '' }),
   };
 
   const mockGetEmailClient = {

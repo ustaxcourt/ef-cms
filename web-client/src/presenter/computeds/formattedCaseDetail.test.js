@@ -1,4 +1,7 @@
-import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -2116,6 +2119,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
 
@@ -2132,6 +2138,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(true);
       expect(result.contactSecondary.showEAccessFlag).toEqual(true);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(true);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(true);
     });
 
@@ -2148,6 +2157,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
   });
@@ -2864,6 +2876,37 @@ describe('formattedCaseDetail', () => {
             scenario: 'Standard',
             userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
           },
+          {
+            attachments: false,
+            certificateOfService: false,
+            certificateOfServiceDate: null,
+            createdAt: '2020-09-18T17:38:32.417Z',
+            docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
+            docketNumber: '169-20',
+            documentTitle: 'Hearing',
+            documentType: 'Hearing before',
+            draftOrderState: null,
+            entityName: 'DocketEntry',
+            eventCode: 'HEAR',
+            filedBy: 'Resp.',
+            filingDate: '2020-09-18T17:38:32.418Z',
+            hasSupportingDocuments: false,
+            index: 5,
+            isDraft: false,
+            isFileAttached: true,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            isStricken: false,
+            numberOfPages: 2,
+            partyIrsPractitioner: true,
+            pending: true,
+            privatePractitioners: [],
+            processingStatus: 'complete',
+            receivedAt: '2020-09-18T17:38:32.418Z',
+            relationship: 'primaryDocument',
+            scenario: 'Standard',
+            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+          },
         ],
         docketNumber: '169-20',
         docketNumberSuffix: 'L',
@@ -2959,13 +3002,22 @@ describe('formattedCaseDetail', () => {
         {
           isOnDocketRecord: true,
         },
+        {
+          isOnDocketRecord: true,
+        },
       ]);
 
       expect(result.formattedPendingDocketEntriesOnDocketRecord.length).toEqual(
-        1,
+        2,
       );
       expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
         {
+          eventCode: 'PSDE',
+          isOnDocketRecord: true,
+          pending: true,
+        },
+        {
+          eventCode: 'HEAR',
           isOnDocketRecord: true,
           pending: true,
         },

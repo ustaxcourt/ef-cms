@@ -96,7 +96,7 @@ We use this list when performing a code review to ensure that all tasks have bee
   - [ ] Fetch the pull request for the sprint (e.g., `git fetch origin pull/{PR #}/head:sprint-{Sprint #}`), and then switch to that branch (e.g. `git checkout sprint-{Sprint #}`)
   - [ ] stand up the site locally, with `./docker-run.sh`
 	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
-	- [ ] for internal Court functionality, perform the most thorough testing in Chrome, though also test in Edge and Firefox
+	- [ ] for internal Court functionality, perform the most thorough testing in Edge, though also test in Chrome and Firefox
 	- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/)
 	- [ ] test in Mobile Safari and Mobile Chrome (or an emulator like Chrome DevTools), with the caveat that not all internal Court functionality will be necessary on these platforms
 	- [ ] use an automated audit tool for code quality and practices (recommended: [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/), aka [Lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk))
