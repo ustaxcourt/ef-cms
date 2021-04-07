@@ -1,11 +1,12 @@
 const {
-  contactHasServiceIndicatorNone,
-  migrateItems,
-} = require('./0027-contact-primary-service-preference');
-const {
+  CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
+const {
+  contactHasServiceIndicatorNone,
+  migrateItems,
+} = require('./0027-contact-primary-secondary-service-preference');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('contactHasServiceIndicatorNone', () => {
@@ -445,6 +446,68 @@ describe('migrateItems', () => {
         },
         pk: 'case|109-21',
         sk: 'case|109-21',
+      },
+    ]);
+  });
+
+  it('should return and not modify case records that are closed', async () => {
+    caseQueryResults = {
+      'case|101-21': [],
+      'case|102-21': [],
+    };
+
+    const items = [
+      // CLOSED electronic case, serviceIndicator: None, no practitioners, should NOT migrate
+      {
+        ...mockCaseRecord,
+        contactPrimary: {
+          ...mockContact,
+          contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+        pk: 'case|101-21',
+        sk: 'case|101-21',
+        status: CASE_STATUS_TYPES.closed,
+      },
+      // electronic case, serviceIndicator: None, no practitioner representing primary, should migrate
+      {
+        ...mockCaseRecord,
+        contactPrimary: {
+          ...mockContact,
+          contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+        pk: 'case|102-21',
+        sk: 'case|102-21',
+      },
+    ];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(queryMock).toHaveBeenCalledTimes(1);
+    expect(results).toEqual([
+      // CLOSED case, should NOT migrate
+      {
+        ...mockCaseRecord,
+        contactPrimary: {
+          ...mockContact,
+          contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE, // no change
+        },
+        pk: 'case|101-21',
+        sk: 'case|101-21',
+        status: CASE_STATUS_TYPES.closed,
+      },
+      // serviceIndicator: None, no practitioner representingPrimary: true, should migrate
+      {
+        ...mockCaseRecord,
+        contactPrimary: {
+          ...mockContact,
+          contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC, // changed to paper
+        },
+        pk: 'case|102-21',
+        sk: 'case|102-21',
       },
     ]);
   });

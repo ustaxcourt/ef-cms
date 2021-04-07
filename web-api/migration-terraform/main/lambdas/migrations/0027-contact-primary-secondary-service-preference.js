@@ -6,6 +6,7 @@ const {
   Case,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const {
+  CASE_STATUS_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 const {
@@ -33,6 +34,8 @@ const migrateItems = async (items, documentClient) => {
     if (
       item.pk.includes('case|') &&
       item.sk.includes('case|') &&
+      item.status &&
+      item.status !== CASE_STATUS_TYPES.closed &&
       (contactHasServiceIndicatorNone(item.contactPrimary) ||
         contactHasServiceIndicatorNone(item.contactSecondary))
     ) {
@@ -40,6 +43,7 @@ const migrateItems = async (items, documentClient) => {
         .query({
           ExpressionAttributeNames: {
             '#pk': 'pk',
+            '#sk': 'sk',
           },
           ExpressionAttributeValues: {
             ':pk': item.pk,
