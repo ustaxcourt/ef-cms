@@ -3,8 +3,8 @@
  * @returns {Array} [width, height]
  */
 exports.getPageDimensions = page => {
-  const size = page.getSize();
-  return [size.width, size.height];
+  const sizeCropBox = page.getCropBox();
+  return [sizeCropBox.width, sizeCropBox.height];
 };
 
 exports.getCropBoxCoordinates = page => {
