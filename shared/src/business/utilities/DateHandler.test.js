@@ -1,5 +1,6 @@
 const DateHandler = require('./DateHandler');
 const { FORMATS, PATTERNS } = DateHandler;
+const moment = require('moment');
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
@@ -26,6 +27,7 @@ describe('DateHandler', () => {
     it("Creates a new moment object for 'now' when given no inputs", () => {
       const myMoment = DateHandler.prepareDateFromString();
       expect(myMoment).toBeDefined();
+      expect(myMoment.isValid()).toBeTruthy();
     });
 
     it('Creates a new moment object for a given YYYY-MM-DD', () => {
@@ -39,6 +41,20 @@ describe('DateHandler', () => {
       const myMoment = DateHandler.prepareDateFromString(strictIsoStamp);
       const isoString = myMoment.toISOString();
       expect(isoString).toEqual(strictIsoStamp);
+    });
+
+    it('Should log an error if an invalid, non-null string is passed in', () => {
+      const BAD_DATE = 'ABCDEFG';
+      const spy = jest.spyOn(console, 'error').mockImplementation();
+
+      moment.suppressDeprecationWarnings = true;
+      const myMoment = DateHandler.prepareDateFromString(BAD_DATE);
+      moment.suppressDeprecationWarnings = false;
+
+      expect(myMoment.isValid()).toBeFalsy();
+      expect(console.error).toHaveBeenCalledTimes(1);
+      expect(console.error).toBeCalledWith('Invalid date', BAD_DATE);
+      spy.mockRestore();
     });
   });
 

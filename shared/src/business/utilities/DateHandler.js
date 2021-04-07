@@ -40,12 +40,9 @@ const prepareDateFromString = (dateString, inputFormat) => {
   const dateFromMoment = moment.tz(dateString, inputFormat, USTC_TZ);
   // If an invalid string is passed in, we're able to check the result and log so error is
   // not silently swallowed
-  if (dateString !== null && !dateFromMoment.isValid()) {
-    console.error('Invalid date', {
-      message: `moment cannot recognize dateString: [${dateString}] dateFromMoment: [${dateFromMoment}]`,
-    });
+  if (dateString != null && !dateFromMoment.isValid()) {
+    console.error('Invalid date', dateString);
   }
-
   return dateFromMoment;
 };
 
