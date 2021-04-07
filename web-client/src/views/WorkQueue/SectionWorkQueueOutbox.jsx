@@ -13,7 +13,7 @@ export const SectionWorkQueueOutbox = connect(
       <React.Fragment>
         <table
           aria-describedby="tab-work-queue"
-          className="usa-table work-queue subsection"
+          className="usa-table ustc-table subsection"
           id="section-work-queue"
         >
           <thead>
