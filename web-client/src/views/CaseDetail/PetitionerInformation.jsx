@@ -88,12 +88,12 @@ const PetitionerInformation = connect(
                         )}
                       </>
                     )}
-                    {screenMetadata.userPendingEmail && (
+                    {screenMetadata.contactPrimaryPendingEmail && (
                       <>
                         <div className="semi-bold margin-top-3">
                           Pending email address
                         </div>
-                        {screenMetadata.userPendingEmail}
+                        {screenMetadata.contactPrimaryPendingEmail}
                       </>
                     )}
 
@@ -147,12 +147,12 @@ const PetitionerInformation = connect(
                           )}
                         </>
                       )}
-                      {screenMetadata.secondaryContactPendingEmail && (
+                      {screenMetadata.contactSecondaryPendingEmail && (
                         <>
                           <div className="semi-bold margin-top-3">
                             Pending email address
                           </div>
-                          {screenMetadata.secondaryContactPendingEmail}
+                          {screenMetadata.contactSecondaryPendingEmail}
                         </>
                       )}
                       {formattedCaseDetail.contactSecondary
