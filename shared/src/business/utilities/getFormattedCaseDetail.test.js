@@ -422,6 +422,7 @@ describe('formatCase', () => {
         {
           barNumber: 'b1234',
           name: 'Test Practitioner',
+          representing: [mockCaseDetail.petitioners[0].contactId],
         },
       ],
     });
@@ -429,6 +430,11 @@ describe('formatCase', () => {
     expect(result.privatePractitioners[0].formattedName).toEqual(
       'Test Practitioner (b1234)',
     );
+    expect(result.privatePractitioners[0].representingFormatted).toEqual({
+      name: mockCaseDetail.petitioners[0].name,
+      secondaryName: mockCaseDetail.petitioners[0].secondaryName,
+      title: mockCaseDetail.petitioners[0].title,
+    });
   });
 
   it('should format the general properties of case details', () => {
