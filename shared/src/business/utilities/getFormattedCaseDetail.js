@@ -6,6 +6,8 @@ const {
 const {
   Case,
   getContactPrimary,
+  getContactSecondary,
+  getOtherFilers,
   getOtherPetitioners,
 } = require('../entities/cases/Case');
 const {
@@ -389,9 +391,7 @@ const formatCase = (applicationContext, caseDetail) => {
     if (counsel.representing) {
       counsel.representingFormatted = [];
 
-      const contactPrimary = applicationContext
-        .getUtilities()
-        .getContactPrimary(caseDetail);
+      const contactPrimary = getContactPrimary(caseDetail);
 
       if (counsel.representing.includes(contactPrimary.contactId)) {
         counsel.representingFormatted.push({
@@ -401,9 +401,7 @@ const formatCase = (applicationContext, caseDetail) => {
         });
       }
 
-      const contactSecondary = applicationContext
-        .getUtilities()
-        .getContactSecondary(caseDetail);
+      const contactSecondary = getContactSecondary(caseDetail);
 
       if (
         contactSecondary &&
@@ -428,18 +426,15 @@ const formatCase = (applicationContext, caseDetail) => {
         }
       });
 
-      applicationContext
-        .getUtilities()
-        .getOtherFilers(caseDetail)
-        .forEach(otherFiler => {
-          if (counsel.representing.includes(otherFiler.contactId)) {
-            counsel.representingFormatted.push({
-              name: otherFiler.name,
-              secondaryName: otherFiler.secondaryName,
-              title: otherFiler.title,
-            });
-          }
-        });
+      getOtherFilers(caseDetail).forEach(otherFiler => {
+        if (counsel.representing.includes(otherFiler.contactId)) {
+          counsel.representingFormatted.push({
+            name: otherFiler.name,
+            secondaryName: otherFiler.secondaryName,
+            title: otherFiler.title,
+          });
+        }
+      });
     }
     return counsel;
   };
