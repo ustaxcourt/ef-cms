@@ -49,6 +49,7 @@ exports.generatePrintableFilingReceiptInteractor = async (
     doc => doc.docketEntryId === documentsFiled.primaryDocumentId,
   );
   primaryDocument.filedBy = primaryDocumentRecord.filedBy;
+  primaryDocument.filingDate = primaryDocumentRecord.filingDate;
 
   const filingReceiptDocumentParams = { document: primaryDocument };
 
