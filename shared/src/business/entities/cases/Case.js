@@ -1423,7 +1423,6 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  * @returns {Object} the primary contact object on the case
  */
 Case.prototype.setAdditionalNameOnPetitioners = function () {
-  // based on party type, grab the appropriate fields and append them to additionalName
   const contactPrimary = this.getContactPrimary(this);
 
   switch (this.partyType) {
