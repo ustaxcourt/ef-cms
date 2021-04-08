@@ -111,6 +111,7 @@ describe('Case entity', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            additionalName: undefined,
             secondaryName: mockSecondaryName,
             title: mockTitle,
           },
@@ -120,28 +121,55 @@ describe('Case entity', () => {
       { applicationContext },
     );
 
-    expect(myCase.petitioners[0].additionalName).toEqual(
-      `${mockSecondaryName} ${mockTitle}`,
-    );
+    expect(myCase.petitioners[0].additionalName).toBeDefined();
   });
 
-  // it('should populate additionalName for contacts as name of executor + title when case status is NOT new and partyType is estateWithExecutor', () => {
-  //   const myCase = new Case(
-  //     {
-  //       ...MOCK_CASE,
-  //       correspondence: [
-  //         { filingDate: '2020-01-05T01:02:03.004Z' },
-  //         { filingDate: '2019-01-05T01:02:03.004Z' },
-  //       ],
-  //     },
-  //     { applicationContext },
-  //   );
+  describe('setAdditionalNameOnPetitioners', () => {
+    const mockSecondaryName = 'Test Secondary Name';
+    const mockTitle = 'Test Title';
 
-  //   expect(myCase.correspondence).toMatchObject([
-  //     { filingDate: '2019-01-05T01:02:03.004Z' },
-  //     { filingDate: '2020-01-05T01:02:03.004Z' },
-  //   ]);
-  // });
+    it('should set additionalName as name when partyType is survivingSpouse', () => {
+      // secondaryName === additionalName
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.survivingSpouse,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: mockSecondaryName,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
+    });
+
+    it('should set additionalName as `name of executor, title` when partyType is estateWithExecutor', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.estate,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: mockSecondaryName,
+              title: mockTitle,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(
+        `${mockSecondaryName}, ${mockTitle}`,
+      );
+    });
+  });
 
   describe('updatePetitioner', () => {
     it('should throw an error when the petitioner to update is not found on the case', () => {

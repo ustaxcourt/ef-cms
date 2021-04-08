@@ -1424,7 +1424,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  */
 Case.prototype.setAdditionalNameOnPetitioners = function () {
   // based on party type, grab the appropriate fields and append them to additionalName
-  this.petitioners[0].additionalName = `${this.petitioners[0].secondaryName} ${this.petitioners[0].title}`;
+  this.petitioners[0].additionalName = `${this.petitioners[0].secondaryName}, ${this.petitioners[0].title}`;
 };
 
 /**
