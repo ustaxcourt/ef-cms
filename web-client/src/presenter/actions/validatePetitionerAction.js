@@ -22,7 +22,7 @@ export const validatePetitionerAction = ({
     SERVICE_INDICATOR_TYPES,
   } = applicationContext.getConstants();
   const { contact } = get(state.form);
-  const { partyType, petitioners } = get(state.caseDetail);
+  const { partyType, petitioners, status } = get(state.caseDetail);
 
   let errors =
     applicationContext.getUseCases().validatePetitionerInteractor({
@@ -30,6 +30,7 @@ export const validatePetitionerAction = ({
       contactInfo: contact,
       partyType,
       petitioners,
+      status,
     }) || {};
 
   const caseContact = petitioners.find(p => p.contactId === contact.contactId);
