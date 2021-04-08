@@ -256,9 +256,9 @@ exports.updatePetitionerInformationInteractor = async (
 
   const editableFields = pick(
     defaults(updatedPetitionerData, {
+      additionalName: undefined,
       address2: undefined,
       address3: undefined,
-      secondaryName: undefined,
       title: undefined,
     }),
     [
@@ -268,14 +268,12 @@ exports.updatePetitionerInformationInteractor = async (
       'city',
       'country',
       'countryType',
-      'inCareOf',
       'name',
       'phone',
       'postalCode',
-      'secondaryName',
+      'additionalName',
       'serviceIndicator',
       'state',
-      'title',
     ],
   );
 
