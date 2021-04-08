@@ -324,6 +324,7 @@ Case.prototype.assignContacts = function assignContacts({
     },
     isPaper: rawCase.isPaper,
     partyType: rawCase.partyType,
+    status: rawCase.status,
   });
 
   this.petitioners.push(contacts.primary);
