@@ -127,6 +127,7 @@ describe('Case entity', () => {
   describe('setAdditionalNameOnPetitioners', () => {
     const mockSecondaryName = 'Test Secondary Name';
     const mockTitle = 'Test Title';
+    const mockInCareOf = 'Test In Care Of';
 
     it('should set additionalName as name when partyType is survivingSpouse', () => {
       // secondaryName === additionalName
@@ -168,6 +169,63 @@ describe('Case entity', () => {
       expect(myCase.petitioners[0].additionalName).toBe(
         `${mockSecondaryName}, ${mockTitle}`,
       );
+    });
+
+    it('should set additionalName as `c/o in care of` when partyType is estateWithoutExecutor', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.estateWithoutExecutor,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              inCareOf: mockInCareOf,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
+    });
+
+    it('should set additionalName as `secondaryName` when partyType is guardian', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.guardian,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: mockSecondaryName,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
+    });
+
+    it.only('should set additionalName as `secondaryName` when partyType is nextFriendForIncompetentPerson', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: mockSecondaryName,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
     });
   });
 
