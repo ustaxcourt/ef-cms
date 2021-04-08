@@ -1418,7 +1418,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 };
 
 /**
- * Computes and sets additionalName for contactPrimary depending on
+ * Computes and sets additionalName for contactPrimary depending on partyType
  *
  */
 Case.prototype.setAdditionalNameOnPetitioners = function () {
