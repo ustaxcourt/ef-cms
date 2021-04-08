@@ -38,7 +38,7 @@ describe('computeCertificateOfServiceFormDateAction', () => {
     );
   });
 
-  it('should set certificateOfServiceDate to undefined-MM-DD if state.form has month and day', async () => {
+  it('should set certificateOfServiceDate to undefined if state.form has year, month, or day', async () => {
     const result = await runAction(computeCertificateOfServiceFormDateAction, {
       modules: {
         presenter,
@@ -51,9 +51,7 @@ describe('computeCertificateOfServiceFormDateAction', () => {
       },
     });
 
-    expect(result.state.form.certificateOfServiceDate).toEqual(
-      'undefined-12-05',
-    );
+    expect(result.state.form.certificateOfServiceDate).toEqual(undefined);
   });
 
   it('should set certificateOfServiceDate for secondary and supporting documents', async () => {
