@@ -7,9 +7,12 @@ export const AddressLabel = ({
   address3,
   city,
   countryName,
+  inCareOf,
   name,
   postalCode,
+  secondaryName,
   state,
+  title,
 }) => {
   return (
     <div className="address-label">
@@ -18,6 +21,18 @@ export const AddressLabel = ({
       </style>
       <div>{name}</div>
       {additionalName && <div>{additionalName}</div>}
+      {secondaryName && (
+        <div>
+          c/o {secondaryName}
+          {title && <span>, {title}</span>}
+        </div>
+      )}
+      {inCareOf && (
+        <div>
+          c/o {inCareOf}
+          {title && <span>, {title}</span>}
+        </div>
+      )}
       <div>{address1}</div>
       {address2 && <div>{address2}</div>}
       {address3 && <div>{address3}</div>}
