@@ -370,9 +370,7 @@ ContactFactory.getContactConstructors = ({
     }
   };
 
-  if (status === CASE_STATUS_TYPES.new) {
-    return partyConstructorFetch(partyType);
-  } else {
+  if (status && status !== CASE_STATUS_TYPES.new) {
     return {
       otherFilers: getOtherFilerContact,
       otherPetitioners: getOtherPetitionerContact,
@@ -380,6 +378,8 @@ ContactFactory.getContactConstructors = ({
       secondary: contactInfo?.secondary ? getPetitionerPrimaryContact : null,
     };
   }
+
+  return partyConstructorFetch(partyType);
 };
 
 /**

@@ -1,7 +1,7 @@
 # Party Type Contact Type Mappings
 ### conservator
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PetitionerConservatorContact
 
 Other filers contact: OtherFilerContact
 
@@ -9,7 +9,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### corporation
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PetitionerCorporationContact
 
 Other filers contact: OtherFilerContact
 
@@ -17,7 +17,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### custodian
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PetitionerCustodianContact
 
 Other filers contact: OtherFilerContact
 
@@ -33,7 +33,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### estate
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PetitionerEstateWithExecutorPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -41,7 +41,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### estateWithoutExecutor
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PetitionerIntermediaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -49,7 +49,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### guardian
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PetitionerGuardianContact
 
 Other filers contact: OtherFilerContact
 
@@ -57,7 +57,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### nextFriendForIncompetentPerson
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: NextFriendForIncompetentPersonContact
 
 Other filers contact: OtherFilerContact
 
@@ -65,7 +65,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### nextFriendForMinor
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: NextFriendForMinorContact
 
 Other filers contact: OtherFilerContact
 
@@ -73,7 +73,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### partnershipAsTaxMattersPartner
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PartnershipAsTaxMattersPartnerPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -81,7 +81,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### partnershipBBA
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PartnershipBBAPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -89,7 +89,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### partnershipOtherThanTaxMatters
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PartnershipOtherThanTaxMattersPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -107,6 +107,8 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
+Secondary contact: PetitionerDeceasedSpouseContact
+
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -115,13 +117,15 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
+Secondary contact: PetitionerSpouseContact
+
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
 
 ### survivingSpouse
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: SurvivingSpouseContact
 
 Other filers contact: OtherFilerContact
 
@@ -137,7 +141,7 @@ Other petitioners contact: OtherPetitionerContact
 
 ### trust
 
-Primary contact: PetitionerPrimaryContact
+Primary contact: PetitionerTrustContact
 
 Other filers contact: OtherFilerContact
 
