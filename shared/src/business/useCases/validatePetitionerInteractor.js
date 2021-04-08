@@ -15,6 +15,7 @@ exports.validatePetitionerInteractor = ({
   contactInfo,
   partyType,
   petitioners,
+  status,
 }) => {
   const petitioner = petitioners.find(
     p => p.contactId === contactInfo.contactId,
@@ -24,5 +25,6 @@ exports.validatePetitionerInteractor = ({
     applicationContext,
     contactInfo: { [petitioner.contactType]: contactInfo },
     partyType,
+    status,
   })[petitioner.contactType].getFormattedValidationErrors();
 };
