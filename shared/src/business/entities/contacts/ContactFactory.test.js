@@ -146,7 +146,7 @@ describe('ContactFactory', () => {
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it.only('passes validation when primary contact is defined and everything else is valid on an unserved case', () => {
+  it('passes validation when primary contact is defined and everything else is valid on an unserved case', () => {
     caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
@@ -184,7 +184,7 @@ describe('ContactFactory', () => {
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('passes validation when primary contact is undefined and everything else is valid on a served case', () => {
+  it.only('passes validation when in care of is undefined and everything else is valid on a served case', () => {
     caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
@@ -203,7 +203,6 @@ describe('ContactFactory', () => {
             country: 'USA',
             countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'someone@example.com',
-            inCareOf: 'USTC',
             name: 'Jimmy Dean',
             phone: '1234567890',
             postalCode: '05198',
@@ -214,7 +213,6 @@ describe('ContactFactory', () => {
         procedureType: 'Small',
         signature: true,
         status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-        status: CASE_STATUS_TYPES.new,
         stinFile: {},
         stinFileSize: 1,
       },
@@ -438,7 +436,7 @@ describe('ContactFactory', () => {
     expect(caseExternal.isValid()).toEqual(false);
   });
 
-  it('a valid petition returns true for isValid', () => {
+  it('a valid petition returns true for isValid when status is new', () => {
     caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
@@ -467,6 +465,7 @@ describe('ContactFactory', () => {
         preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         signature: true,
+        status: CASE_STATUS_TYPES.new,
         stinFile: {},
         stinFileSize: 1,
       },
