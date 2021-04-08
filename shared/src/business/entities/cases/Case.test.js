@@ -128,25 +128,37 @@ describe('Case entity', () => {
     const mockSecondaryName = 'Test Secondary Name';
     const mockTitle = 'Test Title';
     const mockInCareOf = 'Test In Care Of';
+    const partyTypesWithSecondaryName = [
+      PARTY_TYPES.conservator,
+      PARTY_TYPES.custodian,
+      PARTY_TYPES.guardian,
+      PARTY_TYPES.nextFriendForIncompetentPerson,
+      PARTY_TYPES.nextFriendForMinor,
+      PARTY_TYPES.partnershipOtherThanTaxMatters,
+      PARTY_TYPES.partnershipBBA,
+      PARTY_TYPES.survivingSpouse,
+      PARTY_TYPES.trust,
+    ];
 
-    it('should set additionalName as name when partyType is survivingSpouse', () => {
-      // secondaryName === additionalName
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          partyType: PARTY_TYPES.survivingSpouse,
-          petitioners: [
-            {
-              ...getContactPrimary(MOCK_CASE),
-              secondaryName: mockSecondaryName,
-            },
-          ],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
+    partyTypesWithSecondaryName.forEach(partyType => {
+      it(`should set additionalName as secondaryName when party type is ${partyType}`, () => {
+        const myCase = new Case(
+          {
+            ...MOCK_CASE,
+            partyType,
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                secondaryName: mockSecondaryName,
+              },
+            ],
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          { applicationContext },
+        );
 
-      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
+        expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
+      });
     });
 
     it('should set additionalName as `name of executor, title` when partyType is estateWithExecutor', () => {
@@ -190,125 +202,11 @@ describe('Case entity', () => {
       expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
     });
 
-    it('should set additionalName as `secondaryName` when partyType is guardian', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          partyType: PARTY_TYPES.guardian,
-          petitioners: [
-            {
-              ...getContactPrimary(MOCK_CASE),
-              secondaryName: mockSecondaryName,
-            },
-          ],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
-    });
-
-    it('should set additionalName as `secondaryName` when partyType is nextFriendForIncompetentPerson', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
-          petitioners: [
-            {
-              ...getContactPrimary(MOCK_CASE),
-              secondaryName: mockSecondaryName,
-            },
-          ],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
-    });
-
     it('should set additionalName as `secondaryName` when partyType is nextFriendForMinor', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
           partyType: PARTY_TYPES.nextFriendForMinor,
-          petitioners: [
-            {
-              ...getContactPrimary(MOCK_CASE),
-              secondaryName: mockSecondaryName,
-            },
-          ],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
-    });
-
-    it('should set additionalName as `secondaryName` when partyType is conservator', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          partyType: PARTY_TYPES.conservator,
-          petitioners: [
-            {
-              ...getContactPrimary(MOCK_CASE),
-              secondaryName: mockSecondaryName,
-            },
-          ],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
-    });
-
-    it('should set additionalName as `secondaryName` when partyType is partnershipOtherThanTaxMatters', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
-          petitioners: [
-            {
-              ...getContactPrimary(MOCK_CASE),
-              secondaryName: mockSecondaryName,
-            },
-          ],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
-    });
-
-    it('should set additionalName as `secondaryName` when partyType is trust', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          partyType: PARTY_TYPES.trust,
-          petitioners: [
-            {
-              ...getContactPrimary(MOCK_CASE),
-              secondaryName: mockSecondaryName,
-            },
-          ],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
-    });
-
-    it('should set additionalName as `secondaryName` when partyType is custodian', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          partyType: PARTY_TYPES.custodian,
           petitioners: [
             {
               ...getContactPrimary(MOCK_CASE),
