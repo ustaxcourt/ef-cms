@@ -72,7 +72,7 @@ const PetitionerInformation = connect(
                       </div>
                     )}
 
-                    {caseInformationHelper.showEmail && (
+                    {caseInformationHelper.showContactPrimaryEmail && (
                       <>
                         <div className="semi-bold margin-bottom-0 margin-top-3">
                           Current email address
@@ -88,12 +88,12 @@ const PetitionerInformation = connect(
                         )}
                       </>
                     )}
-                    {screenMetadata.userPendingEmail && (
+                    {screenMetadata.contactPrimaryPendingEmail && (
                       <>
                         <div className="semi-bold margin-top-3">
                           Pending email address
                         </div>
-                        {screenMetadata.userPendingEmail}
+                        {screenMetadata.contactPrimaryPendingEmail}
                       </>
                     )}
 
@@ -116,7 +116,7 @@ const PetitionerInformation = connect(
                           contact={formattedCaseDetail.contactSecondary}
                           editLinkExternal={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/secondary/edit`}
                           editLinkInternal={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-information/${formattedCaseDetail.contactSecondary.contactId}`}
-                          showEmail={true}
+                          showEmail={false}
                           showSealAddressLink={
                             caseInformationHelper.showSealAddressLink
                           }
@@ -129,6 +129,31 @@ const PetitionerInformation = connect(
                             update your contact information
                           </p>
                         </div>
+                      )}
+                      {caseInformationHelper.showContactSecondaryEmail && (
+                        <>
+                          <div className="semi-bold margin-bottom-0 margin-top-3">
+                            Current email address
+                          </div>
+                          {formattedCaseDetail.contactSecondary.email}
+                          {formattedCaseDetail.contactSecondary
+                            .showEAccessFlag && (
+                            <FontAwesomeIcon
+                              aria-label="has e-access"
+                              className="margin-left-05 fa-icon-blue"
+                              icon="flag"
+                              size="1x"
+                            />
+                          )}
+                        </>
+                      )}
+                      {screenMetadata.contactSecondaryPendingEmail && (
+                        <>
+                          <div className="semi-bold margin-top-3">
+                            Pending email address
+                          </div>
+                          {screenMetadata.contactSecondaryPendingEmail}
+                        </>
                       )}
                       {formattedCaseDetail.contactSecondary
                         .serviceIndicator && (

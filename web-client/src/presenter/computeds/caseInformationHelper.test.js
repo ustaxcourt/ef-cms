@@ -307,7 +307,7 @@ describe('caseInformationHelper', () => {
     });
   });
 
-  describe('showEmail', () => {
+  describe('showContactPrimaryEmail', () => {
     const mockEmail = 'error@example.com';
     const user = {
       role: ROLES.petitioner,
@@ -315,7 +315,7 @@ describe('caseInformationHelper', () => {
     };
 
     it('should be true when the case contact primary has an email', () => {
-      const { showEmail } = runCompute(caseInformationHelper, {
+      const { showContactPrimaryEmail } = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
           caseDetail: {
@@ -329,11 +329,11 @@ describe('caseInformationHelper', () => {
           form: {},
         },
       });
-      expect(showEmail).toBeTruthy();
+      expect(showContactPrimaryEmail).toBeTruthy();
     });
 
     it('should be false when the case contact primary does not have an email', () => {
-      const { showEmail } = runCompute(caseInformationHelper, {
+      const { showContactPrimaryEmail } = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
           caseDetail: {
@@ -347,7 +347,57 @@ describe('caseInformationHelper', () => {
           form: {},
         },
       });
-      expect(showEmail).toBeFalsy();
+      expect(showContactPrimaryEmail).toBeFalsy();
+    });
+  });
+
+  describe('showContactSecondaryEmail', () => {
+    const mockEmail = 'error@example.com';
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+
+    it('should be true when the case contact secondary has an email', () => {
+      const { showContactSecondaryEmail } = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.primary,
+              },
+              {
+                contactType: CONTACT_TYPES.secondary,
+                email: 'petitioner2@example.com',
+              },
+            ],
+          },
+          form: {},
+        },
+      });
+      expect(showContactSecondaryEmail).toBeTruthy();
+    });
+
+    it('should be false when the case contact secondary does not have an email', () => {
+      const { showContactSecondaryEmail } = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.primary,
+              },
+              {
+                contactType: CONTACT_TYPES.secondary,
+                pendingEmail: mockEmail,
+              },
+            ],
+          },
+          form: {},
+        },
+      });
+      expect(showContactSecondaryEmail).toBeFalsy();
     });
   });
 });
