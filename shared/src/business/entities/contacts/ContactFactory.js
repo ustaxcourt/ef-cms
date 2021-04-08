@@ -197,7 +197,11 @@ ContactFactory.getErrorToMessageMap = ({
  * @param {string} options.status the case status
  * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact, other petitioner contacts
  */
-ContactFactory.getContactConstructors = ({ partyType, status }) => {
+ContactFactory.getContactConstructors = ({
+  contactInfo,
+  partyType,
+  status,
+}) => {
   const {
     getNextFriendForIncompetentPersonContact,
   } = require('./NextFriendForIncompetentPersonContact');
@@ -373,7 +377,7 @@ ContactFactory.getContactConstructors = ({ partyType, status }) => {
       otherFilers: getOtherFilerContact,
       otherPetitioners: getOtherPetitionerContact,
       primary: getPetitionerPrimaryContact,
-      secondary: getPetitionerPrimaryContact,
+      secondary: contactInfo?.secondary ? getPetitionerPrimaryContact : null,
     };
   }
 };
@@ -396,6 +400,7 @@ ContactFactory.createContacts = ({
   status,
 }) => {
   const constructorMap = ContactFactory.getContactConstructors({
+    contactInfo,
     partyType,
     status,
   });
