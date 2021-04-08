@@ -104,6 +104,48 @@ describe('TabsComponent', () => {
     );
   });
 
+  it('should provide aria-controls prop for tab with corresponding tab content', () => {
+    let testRenderer;
+    act(() => {
+      testRenderer = TestRenderer.create(
+        <TabsComponent>
+          <Tab
+            id="tab-with-content"
+            tabName="withContent"
+            title="Has Tab Content"
+          >
+            <p>This is tab content.</p>
+          </Tab>
+        </TabsComponent>,
+      );
+    });
+
+    const testInstance = testRenderer.root;
+
+    expect(
+      testInstance.findByProps({ id: 'tab-with-content' }).props[
+        'aria-controls'
+      ],
+    ).toEqual('tabContent-withContent');
+  });
+
+  it('should not provide aria-controls prop for tab without corresponding content', () => {
+    let testRenderer;
+    act(() => {
+      testRenderer = TestRenderer.create(
+        <TabsComponent>
+          <Tab id="tab-no-content" tabName="noContent" title="No Tab Content" />
+        </TabsComponent>,
+      );
+    });
+
+    const testInstance = testRenderer.root;
+
+    expect(
+      testInstance.findByProps({ id: 'tab-no-content' }).props['aria-controls'],
+    ).toBeUndefined();
+  });
+
   it('should not show tab for items without title (for tab-less tabs)', () => {
     let testRenderer;
     act(() => {
