@@ -1427,17 +1427,23 @@ Case.prototype.setAdditionalNameOnPetitioners = function () {
   const contactPrimary = this.getContactPrimary(this);
 
   switch (this.partyType) {
+    case PARTY_TYPES.conservator:
+    case PARTY_TYPES.custodian:
+    case PARTY_TYPES.guardian:
+    case PARTY_TYPES.nextFriendForIncompetentPerson:
+    case PARTY_TYPES.nextFriendForMinor:
+    case PARTY_TYPES.partnershipOtherThanTaxMatters:
+    case PARTY_TYPES.partnershipBBA:
     case PARTY_TYPES.survivingSpouse:
+    case PARTY_TYPES.trust:
       contactPrimary.additionalName = contactPrimary.secondaryName;
       break;
     case PARTY_TYPES.estate:
       contactPrimary.additionalName = `${contactPrimary.secondaryName}, ${contactPrimary.title}`;
       break;
     case PARTY_TYPES.estateWithoutExecutor:
+    case PARTY_TYPES.corporation:
       contactPrimary.additionalName = `c/o ${contactPrimary.inCareOf}`;
-      break;
-    case PARTY_TYPES.guardian:
-      contactPrimary.additionalName = contactPrimary.secondaryName;
       break;
     default:
       break;
