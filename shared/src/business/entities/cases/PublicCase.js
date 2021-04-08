@@ -68,6 +68,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       },
       isPaper: rawCase.isPaper,
       partyType: rawCase.partyType,
+      status: rawCase.status,
     });
 
     this.petitioners = [contacts.primary];

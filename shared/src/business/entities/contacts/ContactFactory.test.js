@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -43,7 +44,7 @@ describe('ContactFactory', () => {
       ).toThrow();
     });
 
-    it('should not validate without contact', () => {
+    it('should not validate without contact when the case status is new', () => {
       caseExternal = new CaseExternal(
         {
           archivedDocketEntries: [],
@@ -66,7 +67,7 @@ describe('ContactFactory', () => {
       expect(caseExternal.isValid()).toEqual(false);
     });
 
-    it('can validate primary contact', () => {
+    it('can validate primary contact when the case is not served', () => {
       caseExternal = new CaseExternal(
         {
           caseType: CASE_TYPES_MAP.other,
@@ -97,6 +98,7 @@ describe('ContactFactory', () => {
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
           signature: true,
+          status: CASE_STATUS_TYPES.new,
           stinFile: {},
           stinFileSize: 1,
         },
@@ -106,7 +108,7 @@ describe('ContactFactory', () => {
     });
   });
 
-  it('can validate Petitioner contact', () => {
+  it('can validate Petitioner contact when the case is not served', () => {
     caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
@@ -135,6 +137,7 @@ describe('ContactFactory', () => {
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Small',
         signature: true,
+        status: CASE_STATUS_TYPES.new,
         stinFile: {},
         stinFileSize: 1,
       },
@@ -143,7 +146,7 @@ describe('ContactFactory', () => {
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('returns true when primary contact is defined and everything else is valid', () => {
+  it.only('passes validation when primary contact is defined and everything else is valid on an unserved case', () => {
     caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
@@ -172,6 +175,46 @@ describe('ContactFactory', () => {
         preferredTrialCity: 'Memphis, Tennessee',
         procedureType: 'Small',
         signature: true,
+        status: CASE_STATUS_TYPES.new,
+        stinFile: {},
+        stinFileSize: 1,
+      },
+      { applicationContext },
+    );
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('passes validation when primary contact is undefined and everything else is valid on a served case', () => {
+    caseExternal = new CaseExternal(
+      {
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: PARTY_TYPES.estateWithoutExecutor,
+        petitionFile: {},
+        petitionFileSize: 1,
+        petitioners: [
+          {
+            address1: '876 12th Ave',
+            city: 'Nashville',
+            contactType: CONTACT_TYPES.primary,
+            country: 'USA',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'someone@example.com',
+            inCareOf: 'USTC',
+            name: 'Jimmy Dean',
+            phone: '1234567890',
+            postalCode: '05198',
+            state: 'AK',
+          },
+        ],
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        signature: true,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        status: CASE_STATUS_TYPES.new,
         stinFile: {},
         stinFileSize: 1,
       },

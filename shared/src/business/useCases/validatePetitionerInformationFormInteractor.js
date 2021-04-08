@@ -14,11 +14,14 @@ exports.validatePetitionerInformationFormInteractor = ({
   contactPrimary,
   contactSecondary,
   partyType,
+  status,
 }) => {
+  //fixme need to pull in case
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: { primary: contactPrimary, secondary: contactSecondary },
     partyType,
+    status,
   });
 
   return {
