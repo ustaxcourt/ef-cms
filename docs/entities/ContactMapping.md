@@ -3,8 +3,6 @@
 
 Primary contact: PetitionerPrimaryContact
 
-Secondary contact: PetitionerPrimaryContact
-
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -12,8 +10,6 @@ Other petitioners contact: OtherPetitionerContact
 ### corporation
 
 Primary contact: PetitionerPrimaryContact
-
-Secondary contact: PetitionerPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -23,8 +19,6 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
-Secondary contact: PetitionerPrimaryContact
-
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -32,8 +26,6 @@ Other petitioners contact: OtherPetitionerContact
 ### donor
 
 Primary contact: PetitionerPrimaryContact
-
-Secondary contact: PetitionerPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -43,8 +35,6 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
-Secondary contact: PetitionerPrimaryContact
-
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -52,8 +42,6 @@ Other petitioners contact: OtherPetitionerContact
 ### estateWithoutExecutor
 
 Primary contact: PetitionerPrimaryContact
-
-Secondary contact: PetitionerPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -63,8 +51,6 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
-Secondary contact: PetitionerPrimaryContact
-
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -72,8 +58,6 @@ Other petitioners contact: OtherPetitionerContact
 ### nextFriendForIncompetentPerson
 
 Primary contact: PetitionerPrimaryContact
-
-Secondary contact: PetitionerPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -83,8 +67,6 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
-Secondary contact: PetitionerPrimaryContact
-
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -92,8 +74,6 @@ Other petitioners contact: OtherPetitionerContact
 ### partnershipAsTaxMattersPartner
 
 Primary contact: PetitionerPrimaryContact
-
-Secondary contact: PetitionerPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -103,8 +83,6 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
-Secondary contact: PetitionerPrimaryContact
-
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -112,8 +90,6 @@ Other petitioners contact: OtherPetitionerContact
 ### partnershipOtherThanTaxMatters
 
 Primary contact: PetitionerPrimaryContact
-
-Secondary contact: PetitionerPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -123,8 +99,6 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
-Secondary contact: PetitionerPrimaryContact
-
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -132,8 +106,6 @@ Other petitioners contact: OtherPetitionerContact
 ### petitionerDeceasedSpouse
 
 Primary contact: PetitionerPrimaryContact
-
-Secondary contact: PetitionerPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -143,8 +115,6 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
-Secondary contact: PetitionerPrimaryContact
-
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -152,8 +122,6 @@ Other petitioners contact: OtherPetitionerContact
 ### survivingSpouse
 
 Primary contact: PetitionerPrimaryContact
-
-Secondary contact: PetitionerPrimaryContact
 
 Other filers contact: OtherFilerContact
 
@@ -163,8 +131,6 @@ Other petitioners contact: OtherPetitionerContact
 
 Primary contact: PetitionerPrimaryContact
 
-Secondary contact: PetitionerPrimaryContact
-
 Other filers contact: OtherFilerContact
 
 Other petitioners contact: OtherPetitionerContact
@@ -172,8 +138,6 @@ Other petitioners contact: OtherPetitionerContact
 ### trust
 
 Primary contact: PetitionerPrimaryContact
-
-Secondary contact: PetitionerPrimaryContact
 
 Other filers contact: OtherFilerContact
 

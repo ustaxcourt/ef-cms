@@ -184,7 +184,45 @@ describe('ContactFactory', () => {
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it.only('passes validation when in care of is undefined and everything else is valid on a served case', () => {
+  it('passes validation when primary contact is defined and everything else is valid on a served case', () => {
+    caseExternal = new CaseExternal(
+      {
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: PARTY_TYPES.estateWithoutExecutor,
+        petitionFile: {},
+        petitionFileSize: 1,
+        petitioners: [
+          {
+            address1: '876 12th Ave',
+            city: 'Nashville',
+            contactType: CONTACT_TYPES.primary,
+            country: 'USA',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'someone@example.com',
+            inCareOf: 'USTC',
+            name: 'Jimmy Dean',
+            phone: '1234567890',
+            postalCode: '05198',
+            state: 'AK',
+          },
+        ],
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        signature: true,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        stinFile: {},
+        stinFileSize: 1,
+      },
+      { applicationContext },
+    );
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('passes validation when in care of is undefined and everything else is valid on a served case', () => {
     caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
@@ -436,7 +474,7 @@ describe('ContactFactory', () => {
     expect(caseExternal.isValid()).toEqual(false);
   });
 
-  it('a valid petition returns true for isValid when status is new', () => {
+  it('a valid case returns true for isValid when status is new', () => {
     caseExternal = new CaseExternal(
       {
         caseType: CASE_TYPES_MAP.other,
@@ -471,6 +509,45 @@ describe('ContactFactory', () => {
       },
       { applicationContext },
     );
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('a valid case returns true for isValid when status is not new', () => {
+    caseExternal = new CaseExternal(
+      {
+        caseType: CASE_TYPES_MAP.other,
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13T08:06:07.539Z',
+        mailingDate: 'testing',
+        partyType: PARTY_TYPES.estate,
+        petitionFile: {},
+        petitionFileSize: 1,
+        petitioners: [
+          {
+            address1: '876 12th Ave',
+            city: 'Nashville',
+            contactType: CONTACT_TYPES.primary,
+            country: 'USA',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            name: 'Jimmy Dean',
+            phone: '4444444444',
+            postalCode: '05198',
+            secondaryName: 'Jimmy Dean',
+            state: 'AK',
+            title: 'Some Title',
+          },
+        ],
+        preferredTrialCity: 'Memphis, Tennessee',
+        procedureType: 'Small',
+        signature: true,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        stinFile: {},
+        stinFileSize: 1,
+      },
+      { applicationContext },
+    );
+
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
@@ -909,6 +986,7 @@ describe('ContactFactory', () => {
           preferredTrialCity: 'Memphis, Tennessee',
           procedureType: 'Small',
           signature: true,
+          status: CASE_STATUS_TYPES.new,
           stinFile: {},
           stinFileSize: 1,
         },
@@ -1069,9 +1147,10 @@ describe('ContactFactory', () => {
   });
 
   describe('getContactConstructors', () => {
-    it('returns an empty object if no partyType is given', () => {
+    it('should return an empty object if no partyType is given and case has not been served', () => {
       const contactConstructor = ContactFactory.getContactConstructors({
         partyType: undefined,
+        status: CASE_STATUS_TYPES.new,
       });
 
       expect(contactConstructor).toEqual({});
