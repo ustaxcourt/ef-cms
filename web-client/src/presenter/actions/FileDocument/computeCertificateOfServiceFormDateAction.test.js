@@ -33,7 +33,9 @@ describe('computeCertificateOfServiceFormDateAction', () => {
       },
     });
 
-    expect(result.state.form.certificateOfServiceDate).toEqual('2012-12-05');
+    expect(result.state.form.certificateOfServiceDate).toEqual(
+      '2012-12-05T05:00:00.000Z',
+    );
   });
 
   it('should set certificateOfServiceDate to undefined-MM-DD if state.form has month and day', async () => {
@@ -87,16 +89,18 @@ describe('computeCertificateOfServiceFormDateAction', () => {
       },
     });
 
-    expect(result.state.form.certificateOfServiceDate).toEqual('2012-12-05');
+    expect(result.state.form.certificateOfServiceDate).toEqual(
+      '2012-12-05T05:00:00.000Z',
+    );
     expect(
       result.state.form.secondaryDocument.certificateOfServiceDate,
-    ).toEqual('2012-11-06');
+    ).toEqual('2012-11-06T05:00:00.000Z');
     expect(
       result.state.form.supportingDocuments[0].certificateOfServiceDate,
-    ).toEqual('2012-10-07');
+    ).toEqual('2012-10-07T04:00:00.000Z');
     expect(
       result.state.form.secondarySupportingDocuments[0]
         .certificateOfServiceDate,
-    ).toEqual('2012-09-08');
+    ).toEqual('2012-09-08T04:00:00.000Z');
   });
 });

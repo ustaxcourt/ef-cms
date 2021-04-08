@@ -56,7 +56,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "required"
         description: "Date that this Document was filed."
       rules: 
