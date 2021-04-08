@@ -12,10 +12,12 @@ exports.validateSecondaryContactInteractor = ({
   applicationContext,
   contactInfo,
   partyType,
+  status,
 }) => {
   return ContactFactory.createContacts({
     applicationContext,
     contactInfo: { secondary: contactInfo },
     partyType,
+    status,
   }).secondary.getFormattedValidationErrors();
 };
