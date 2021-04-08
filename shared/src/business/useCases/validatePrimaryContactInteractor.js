@@ -12,10 +12,12 @@ exports.validatePrimaryContactInteractor = ({
   applicationContext,
   contactInfo,
   partyType,
+  status,
 }) => {
   return ContactFactory.createContacts({
     applicationContext,
     contactInfo: { primary: contactInfo },
     partyType,
+    status,
   }).primary.getFormattedValidationErrors();
 };
