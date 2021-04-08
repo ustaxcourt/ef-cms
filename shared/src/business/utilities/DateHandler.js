@@ -291,7 +291,7 @@ const computeDate = ({ day, month, year }) => {
   const ddPadded = `${day}`.padStart(2, '0');
   const dateToParse = `${yyyyPadded}-${mmPadded}-${ddPadded}`;
   if (!PATTERNS.YYYYMMDD.test(dateToParse)) {
-    return dateToParse;
+    return undefined;
   }
   return prepareDateFromString(dateToParse, FORMATS.ISO).toISOString();
 };
