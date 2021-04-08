@@ -1732,6 +1732,10 @@ describe('Case entity', () => {
     });
   });
 
+  describe('getAdditionalName', () => {
+    it('should', () => {});
+  });
+
   describe('archiveCorrespondence', () => {
     let caseRecord;
     let correspondenceToArchive;
