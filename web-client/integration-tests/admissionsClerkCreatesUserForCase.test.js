@@ -91,6 +91,8 @@ describe('admissions clerk creates user for case', () => {
   it('admissions clerk checks pending email for petitioner on case with unverified email', async () => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(test.getState('screenMetadata.userPendingEmail')).toBe(validEmail);
+    expect(test.getState('screenMetadata.contactPrimaryPendingEmail')).toBe(
+      validEmail,
+    );
   });
 });
