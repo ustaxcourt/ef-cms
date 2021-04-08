@@ -437,13 +437,13 @@ describe('DateHandler', () => {
       expect(result).toBe('1993-03-09T05:00:00.000Z');
     });
 
-    it('should return "undefined-mm-dd" when year is not provided', () => {
+    it('should return undefined when year, month, or day is not provided', () => {
       const result = DateHandler.computeDate({
         day: '5',
         month: '11',
       });
 
-      expect(result).toBe('undefined-11-05');
+      expect(result).toBe(undefined);
     });
 
     it('should return null if not provided values for all of day, month, and year', () => {
