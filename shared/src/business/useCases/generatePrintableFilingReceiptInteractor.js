@@ -13,6 +13,7 @@ const getDocumentInfo = ({ applicationContext, documentData }) => {
     certificateOfServiceDate: doc.certificateOfServiceDate,
     documentTitle: doc.documentTitle,
     filedBy: doc.filedBy,
+    filingDate: doc.filingDate,
     objections: doc.objections,
     receivedAt: doc.receivedAt,
   };
@@ -80,7 +81,7 @@ exports.generatePrintableFilingReceiptInteractor = async (
       docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
       filedAt: applicationContext
         .getUtilities()
-        .formatDateString(primaryDocument.receivedAt, 'DATE_TIME_TZ'),
+        .formatDateString(primaryDocument.filingDate, 'DATE_TIME_TZ'),
       filedBy: primaryDocument.filedBy,
       ...filingReceiptDocumentParams,
     },
