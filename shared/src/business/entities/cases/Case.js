@@ -161,9 +161,9 @@ Case.prototype.init = function init(
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
   this.assignHearings({ applicationContext, rawCase });
-  this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
+  this.assignContacts({ applicationContext, filtered, rawCase });
 };
 
 Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
@@ -1424,7 +1424,19 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  */
 Case.prototype.setAdditionalNameOnPetitioners = function () {
   // based on party type, grab the appropriate fields and append them to additionalName
-  this.petitioners[0].additionalName = `${this.petitioners[0].secondaryName}, ${this.petitioners[0].title}`;
+  const contactPrimary = this.getContactPrimary(this);
+
+  switch (this.partyType) {
+    case PARTY_TYPES.survivingSpouse:
+      contactPrimary.additionalName = contactPrimary.secondaryName;
+      break;
+    case PARTY_TYPES.estate:
+      contactPrimary.additionalName = `${contactPrimary.secondaryName}, ${contactPrimary.title}`;
+      break;
+
+    default:
+      break;
+  }
 };
 
 /**
