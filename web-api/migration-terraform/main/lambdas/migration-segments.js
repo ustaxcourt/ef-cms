@@ -1,8 +1,8 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
-  migrateItems: migration0025,
-} = require('./migrations/0025-docket-entry-received-at-strict-timestamp');
+  migrateItems: migration0026,
+} = require('./migrations/0026-update-to-stricter-date-format');
 const {
   migrateItems: migration0026,
 } = require('./migrations/0026-hearing-remove-gsi1pk');
@@ -33,8 +33,8 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 0025');
-  items = await migration0025(items, documentClient);
+  applicationContext.logger.info('about to run migration 0026');
+  items = await migration0026(items, documentClient);
 
   applicationContext.logger.info('about to run migration 0026');
   items = await migration0026(items, documentClient);
