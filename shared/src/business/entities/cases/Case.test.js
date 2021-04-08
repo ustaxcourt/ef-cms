@@ -1823,10 +1823,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('setAdditionalNameOnPetitioners', () => {
-    it('should', () => {});
-  });
-
   describe('archiveCorrespondence', () => {
     let caseRecord;
     let correspondenceToArchive;
