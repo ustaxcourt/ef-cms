@@ -1418,9 +1418,8 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 };
 
 /**
- * Returns the primary contact on the case
+ * Computes and sets additionalName for contactPrimary depending on
  *
- * @returns {Object} the primary contact object on the case
  */
 Case.prototype.setAdditionalNameOnPetitioners = function () {
   const contactPrimary = this.getContactPrimary(this);
