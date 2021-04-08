@@ -101,21 +101,28 @@ describe('Case entity', () => {
   });
 
   it('should populate additionalName when case has been served', () => {
+    const mockSecondaryName = 'Test Secondary Name';
+    const mockTitle = 'Test Title';
+
     const myCase = new Case(
       {
         ...MOCK_CASE,
-        correspondence: [
-          { filingDate: '2020-01-05T01:02:03.004Z' },
-          { filingDate: '2019-01-05T01:02:03.004Z' },
+        partyType: PARTY_TYPES.estate,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            secondaryName: mockSecondaryName,
+            title: mockTitle,
+          },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       },
       { applicationContext },
     );
 
-    expect(myCase.correspondence).toMatchObject([
-      { filingDate: '2019-01-05T01:02:03.004Z' },
-      { filingDate: '2020-01-05T01:02:03.004Z' },
-    ]);
+    expect(myCase.petitioners[0].additionalName).toEqual(
+      `${mockSecondaryName} ${mockTitle}`,
+    );
   });
 
   // it('should populate additionalName for contacts as name of executor + title when case status is NOT new and partyType is estateWithExecutor', () => {
@@ -1788,7 +1795,7 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getAdditionalName', () => {
+  describe('setAdditionalNameOnPetitioners', () => {
     it('should', () => {});
   });
 
