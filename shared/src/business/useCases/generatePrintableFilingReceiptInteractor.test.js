@@ -61,6 +61,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     const receiptMockCall = applicationContext.getDocumentGenerators()
       .receiptOfFiling.mock.calls[0][0].data; // 'data' property of first arg (an object) of first call
     expect(receiptMockCall.filedBy).toBe(MOCK_CASE.contactPrimary.name);
+    expect(receiptMockCall.filedAt).toBe('04/08/21 3:13 pm ET');
   });
 
   it('acquires document information', async () => {
