@@ -80,6 +80,62 @@ describe('Case entity', () => {
     ]);
   });
 
+  it('should NOT populate additionalName when case has NOT been served', () => {
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        partyType: PARTY_TYPES.estate,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            secondaryName: 'Test Secondary Name',
+            title: 'Test Title',
+          },
+        ],
+        status: CASE_STATUS_TYPES.new,
+      },
+      { applicationContext },
+    );
+
+    expect(myCase.petitioners[0].additionalName).toBeUndefined();
+  });
+
+  it('should populate additionalName when case has been served', () => {
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        correspondence: [
+          { filingDate: '2020-01-05T01:02:03.004Z' },
+          { filingDate: '2019-01-05T01:02:03.004Z' },
+        ],
+      },
+      { applicationContext },
+    );
+
+    expect(myCase.correspondence).toMatchObject([
+      { filingDate: '2019-01-05T01:02:03.004Z' },
+      { filingDate: '2020-01-05T01:02:03.004Z' },
+    ]);
+  });
+
+  // it('should populate additionalName for contacts as name of executor + title when case status is NOT new and partyType is estateWithExecutor', () => {
+  //   const myCase = new Case(
+  //     {
+  //       ...MOCK_CASE,
+  //       correspondence: [
+  //         { filingDate: '2020-01-05T01:02:03.004Z' },
+  //         { filingDate: '2019-01-05T01:02:03.004Z' },
+  //       ],
+  //     },
+  //     { applicationContext },
+  //   );
+
+  //   expect(myCase.correspondence).toMatchObject([
+  //     { filingDate: '2019-01-05T01:02:03.004Z' },
+  //     { filingDate: '2020-01-05T01:02:03.004Z' },
+  //   ]);
+  // });
+
   describe('updatePetitioner', () => {
     it('should throw an error when the petitioner to update is not found on the case', () => {
       const myCase = new Case(
