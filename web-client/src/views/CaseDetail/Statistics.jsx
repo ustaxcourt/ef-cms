@@ -42,7 +42,7 @@ export const Statistics = connect(
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
               <h4>Deficiency</h4>
-              <table className="usa-table docket-record responsive-table row-border-only">
+              <table className="usa-table ustc-table responsive-table">
                 <thead>
                   <tr>
                     <th>Year/Period</th>
@@ -66,7 +66,7 @@ export const Statistics = connect(
 
             <div className="grid-col-6">
               <h4>Penalties</h4>
-              <table className="usa-table docket-record responsive-table row-border-only">
+              <table className="usa-table ustc-table responsive-table ">
                 <thead>
                   <tr>
                     <th>IRS Notice</th>
@@ -102,7 +102,7 @@ export const Statistics = connect(
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
               <h4>Other</h4>
-              <table className="usa-table docket-record responsive-table row-border-only">
+              <table className="usa-table ustc-table responsive-table">
                 <thead>
                   <tr>
                     {statisticsHelper.showLitigationCosts && (

@@ -60,7 +60,7 @@ export const Tables = () => (
     </table>
 
     <h2>Work Queue Table</h2>
-    <table className="usa-table work-queue subsection">
+    <table className="usa-table ustc-table subsection">
       <thead>
         <tr>
           <th aria-label="Docket Number">Docket No.</th>
