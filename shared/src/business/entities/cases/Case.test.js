@@ -258,6 +258,30 @@ describe('Case entity', () => {
 
       expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
     });
+
+    it('should NOT set additionalName when it has already been set', () => {
+      const mockAlreadySetAdditionalName = 'Anything at all';
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.corporation,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              additionalName: mockAlreadySetAdditionalName,
+              inCareOf: mockInCareOf,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(
+        mockAlreadySetAdditionalName,
+      );
+    });
   });
 
   describe('updatePetitioner', () => {
