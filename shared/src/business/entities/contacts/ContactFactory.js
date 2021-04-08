@@ -193,6 +193,7 @@ ContactFactory.getErrorToMessageMap = ({
  * used for getting the contact constructors depending on the party type and contact type
  *
  * @param {object} options the options object
+ * @param {object} options.contactInfo the contact info
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
  * @param {string} options.status the case status
  * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact, other petitioner contacts
