@@ -333,6 +333,10 @@ Case.prototype.assignContacts = function assignContacts({
   }
   this.petitioners.push(...contacts.otherPetitioners);
   this.petitioners.push(...contacts.otherFilers);
+
+  if (rawCase.status && rawCase.status !== CASE_STATUS_TYPES.new) {
+    this.setAdditionalNameOnPetitioners();
+  }
 };
 
 Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
@@ -1411,6 +1415,16 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Returns the primary contact on the case
+ *
+ * @returns {Object} the primary contact object on the case
+ */
+Case.prototype.setAdditionalNameOnPetitioners = function () {
+  // based on party type, grab the appropriate fields and append them to additionalName
+  this.petitioners[0].additionalName = `${this.petitioners[0].secondaryName} ${this.petitioners[0].title}`;
 };
 
 /**
