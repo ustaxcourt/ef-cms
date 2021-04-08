@@ -161,9 +161,9 @@ Case.prototype.init = function init(
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
   this.assignHearings({ applicationContext, rawCase });
-  this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
+  this.assignContacts({ applicationContext, filtered, rawCase });
 };
 
 Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
@@ -333,6 +333,10 @@ Case.prototype.assignContacts = function assignContacts({
   }
   this.petitioners.push(...contacts.otherPetitioners);
   this.petitioners.push(...contacts.otherFilers);
+
+  if (rawCase.status && rawCase.status !== CASE_STATUS_TYPES.new) {
+    this.setAdditionalNameOnPetitioners();
+  }
 };
 
 Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
@@ -1411,6 +1415,38 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Returns the primary contact on the case
+ *
+ * @returns {Object} the primary contact object on the case
+ */
+Case.prototype.setAdditionalNameOnPetitioners = function () {
+  const contactPrimary = this.getContactPrimary(this);
+
+  switch (this.partyType) {
+    case PARTY_TYPES.conservator:
+    case PARTY_TYPES.custodian:
+    case PARTY_TYPES.guardian:
+    case PARTY_TYPES.nextFriendForIncompetentPerson:
+    case PARTY_TYPES.nextFriendForMinor:
+    case PARTY_TYPES.partnershipOtherThanTaxMatters:
+    case PARTY_TYPES.partnershipBBA:
+    case PARTY_TYPES.survivingSpouse:
+    case PARTY_TYPES.trust:
+      contactPrimary.additionalName = contactPrimary.secondaryName;
+      break;
+    case PARTY_TYPES.estate:
+      contactPrimary.additionalName = `${contactPrimary.secondaryName}, ${contactPrimary.title}`;
+      break;
+    case PARTY_TYPES.estateWithoutExecutor:
+    case PARTY_TYPES.corporation:
+      contactPrimary.additionalName = `c/o ${contactPrimary.inCareOf}`;
+      break;
+    default:
+      break;
+  }
 };
 
 /**
