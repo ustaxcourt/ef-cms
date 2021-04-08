@@ -121,6 +121,7 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
                 "dynamodb:ListShards",
                 "dynamodb:ListStreams",
                 "dynamodb:PutItem",
+                "dynamodb:Query",
                 "dynamodb:Scan"
             ],
             "Resource": [
