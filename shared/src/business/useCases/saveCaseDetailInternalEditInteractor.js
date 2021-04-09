@@ -82,9 +82,6 @@ exports.saveCaseDetailInternalEditInteractor = async (
     petitioners: undefined,
   };
 
-  console.log('contactPrimary', caseToUpdate.contactPrimary);
-  console.log('contactSecondary', caseToUpdate.contactSecondary);
-
   const caseEntityWithFormEdits = new Case(caseWithFormEdits, {
     applicationContext,
   });
@@ -117,8 +114,6 @@ exports.saveCaseDetailInternalEditInteractor = async (
   const caseEntity = new Case(caseEntityWithFormEdits, {
     applicationContext,
   });
-
-  console.log(caseEntity.petitioners);
 
   if (caseEntity.isPaper) {
     await applicationContext.getUseCaseHelpers().updateInitialFilingDocuments({
