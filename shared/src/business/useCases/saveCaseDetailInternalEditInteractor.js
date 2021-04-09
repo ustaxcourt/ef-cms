@@ -80,13 +80,28 @@ exports.saveCaseDetailInternalEditInteractor = async (
     petitioners: [],
   };
 
+  console.log('caseRecord.petitioners', caseRecord.petitioners);
+
+  console.log('caseWithFormEdits', caseWithFormEdits);
+
   const caseEntityWithFormEdits = new Case(caseWithFormEdits, {
     applicationContext,
   });
 
+  console.log(
+    'caseEntityWithFormEdits.petitioners',
+    caseEntityWithFormEdits.petitioners,
+  );
+
   if (!isEmpty(caseToUpdate.contactPrimary)) {
-    const primaryContactId = caseEntityWithFormEdits.getContactPrimary()
+    const caseEntityToGetContactId = new Case(caseRecord, {
+      applicationContext,
+    });
+
+    const primaryContactId = caseEntityToGetContactId.getContactPrimary()
       .contactId;
+
+    console.log('primaryContactId', primaryContactId);
     caseEntityWithFormEdits.updatePetitioner({
       ...caseToUpdate.contactPrimary,
       contactId: primaryContactId,
