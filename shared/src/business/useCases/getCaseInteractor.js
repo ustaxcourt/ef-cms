@@ -73,11 +73,15 @@ const getCaseForExternalUser = async ({
   isAssociatedWithCase,
   isAuthorizedToGetCase,
 }) => {
+  console.log('isAuthorizedToGetCase', isAuthorizedToGetCase);
+  console.log('isAssociatedWithCase', isAssociatedWithCase);
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
+    console.log('1');
     return new Case(caseRecord, { applicationContext })
       .validate()
       .toRawObject();
   } else {
+    console.log('2');
     return new PublicCase(caseRecord, {
       applicationContext,
     })
@@ -155,6 +159,8 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
   }
 
   caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
+
+  console.log('caseDetailRaw', caseDetailRaw);
 
   return caseDetailRaw;
 };
