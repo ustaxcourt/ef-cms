@@ -543,4 +543,34 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       ).toHaveBeenCalled();
     });
   });
+
+  it('should throw an error if there is no one on the case with electronic or paper service', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...caseRecord,
+        contactPrimary: {
+          ...caseRecord.contactPrimary,
+          serviceIndicator: 'None',
+        },
+      });
+
+    await expect(
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        documentMeta: {
+          date: '2019-03-01T21:40:46.415Z',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order',
+          documentType: 'Order',
+          eventCode: 'O',
+          serviceStamp: 'Served',
+        },
+      }),
+    ).rejects.toThrow("servedPartiesCode' is not allowed to be empty");
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).not.toBeCalled();
+  });
 });
