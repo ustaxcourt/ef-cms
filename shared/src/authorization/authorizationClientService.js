@@ -225,15 +225,18 @@ exports.AUTHORIZATION_MAP = AUTHORIZATION_MAP;
  */
 exports.isAuthorized = (user, action, owner) => {
   if (!user) {
+    console.log('returning false 11111');
     return false;
   }
 
   if (user.userId && user.userId === owner) {
+    console.log('returning true');
     return true;
   }
 
   const userRole = user.role;
   if (!AUTHORIZATION_MAP[userRole]) {
+    console.log('returning false');
     return false;
   }
 
@@ -243,5 +246,6 @@ exports.isAuthorized = (user, action, owner) => {
     roleActionIndex
   ];
 
+  console.log('actionInRoleAuthorization', actionInRoleAuthorization);
   return actionInRoleAuthorization;
 };
