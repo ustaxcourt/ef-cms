@@ -107,11 +107,6 @@ exports.serveCaseToIrsInteractor = async (
       docketNumber,
     });
 
-  console.log(
-    'serveCaseToIrsInteractor caseToBatch petitioners',
-    caseToBatch.petitioners,
-  );
-
   const caseEntity = new Case(caseToBatch, { applicationContext });
 
   caseEntity.markAsSentToIRS();
@@ -209,11 +204,6 @@ exports.serveCaseToIrsInteractor = async (
       applicationContext,
       caseToUpdate: caseEntity,
     });
-
-  console.log(
-    'serveCaseToIrsInteractor updateCaseAndAssociations caseEntity petitioners',
-    caseEntity.petitioners,
-  );
 
   const caseEntityToUpdate = new Case(caseWithServedDocketEntryInformation, {
     applicationContext,
@@ -370,11 +360,6 @@ exports.serveCaseToIrsInteractor = async (
     applicationContext,
     caseToUpdate: caseEntityToUpdate,
   });
-
-  console.log(
-    'serveCaseToIrsInteractor updateCaseAndAssociations caseEntityToUpdate petitioners',
-    caseEntityToUpdate.petitioners,
-  );
 
   return urlToReturn;
 };
