@@ -121,15 +121,22 @@ describe('updateCase', () => {
   });
 
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'fee757df-666f-4ebe-94a0-7a342d438345',
+    });
+
     await expect(
       saveCaseDetailInternalEditInteractor(applicationContext, {
-        caseToUpdate: omit(mockCase, 'caseCaption'),
+        caseToUpdate: omit({ ...mockCase }, 'caseCaption'),
         docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('The Case entity was invalid');
   });
 
-  it('should update partyType AND case contacts when updating partyType', async () => {
+  it('should update case contacts when updating partyType', async () => {
+    expect(mockCase.petitioners.length).toEqual(1);
+
     const mockContactSecondary = {
       address1: '86 West Rocky Cowley Extension',
       address2: 'Aperiam aliquip volu',
@@ -168,7 +175,7 @@ describe('updateCase', () => {
       },
     );
 
-    expect(updatedCase.partyType).toEqual(PARTY_TYPES.petitionerSpouse);
+    expect(updatedCase.petitioners.length).toEqual(2);
     expect(updatedCase.petitioners).toEqual([
       expect.objectContaining(mockContactSecondary),
     ]);
