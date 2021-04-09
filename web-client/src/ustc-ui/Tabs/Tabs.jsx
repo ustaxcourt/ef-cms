@@ -87,14 +87,16 @@ export function TabsComponent({
     }
 
     return (
-      <li className={liClass}>
+      <li
+        aria-controls={tabContentId}
+        aria-selected={isActiveTab}
+        className={liClass}
+        role="tab"
+      >
         <button
-          aria-controls={tabContentId}
-          aria-selected={isActiveTab}
           className={childClassName}
           disabled={disabled}
           id={tabId}
-          role="tab"
           type="button"
           onClick={() => setTab(tabName)}
         >
