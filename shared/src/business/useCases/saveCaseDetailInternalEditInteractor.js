@@ -6,7 +6,7 @@ const {
   UnauthorizedError,
   UnprocessableEntityError,
 } = require('../../errors/errors');
-const { Case, getContactPrimary } = require('../entities/cases/Case');
+const { Case } = require('../entities/cases/Case');
 const { CONTACT_TYPES } = require('../entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { WorkItem } = require('../entities/WorkItem');
@@ -82,6 +82,9 @@ exports.saveCaseDetailInternalEditInteractor = async (
     petitioners: undefined,
   };
 
+  console.log('contactPrimary', caseToUpdate.contactPrimary);
+  console.log('contactSecondary', caseToUpdate.contactSecondary);
+
   const caseEntityWithFormEdits = new Case(caseWithFormEdits, {
     applicationContext,
   });
@@ -103,6 +106,7 @@ exports.saveCaseDetailInternalEditInteractor = async (
   if (!isEmpty(caseToUpdate.contactSecondary)) {
     const secondaryContactId = caseEntityWithFormEdits.getContactSecondary()
       ?.contactId;
+
     caseEntityWithFormEdits.updatePetitioner({
       ...caseToUpdate.contactSecondary,
       contactId: secondaryContactId,
@@ -113,6 +117,8 @@ exports.saveCaseDetailInternalEditInteractor = async (
   const caseEntity = new Case(caseEntityWithFormEdits, {
     applicationContext,
   });
+
+  console.log(caseEntity.petitioners);
 
   if (caseEntity.isPaper) {
     await applicationContext.getUseCaseHelpers().updateInitialFilingDocuments({
