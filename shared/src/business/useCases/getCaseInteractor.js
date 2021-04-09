@@ -73,17 +73,11 @@ const getCaseForExternalUser = async ({
   isAssociatedWithCase,
   isAuthorizedToGetCase,
 }) => {
-  console.log('12isAuthorizedToGetCase', isAuthorizedToGetCase);
-  console.log('12isAssociatedWithCase', isAssociatedWithCase);
-  console.log('12caseRecord', caseRecord);
-
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
-    console.log('in the if');
     return new Case(caseRecord, { applicationContext })
       .validate()
       .toRawObject();
   } else {
-    console.log('ELSA????');
     return new PublicCase(caseRecord, {
       applicationContext,
     })
@@ -107,8 +101,6 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
       applicationContext,
       docketNumber: Case.formatDocketNumber(docketNumber),
     });
-
-  console.log('1111caseRecord', caseRecord);
 
   if (!caseRecord.docketNumber && !caseRecord.entityName) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);

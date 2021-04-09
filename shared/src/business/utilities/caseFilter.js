@@ -48,7 +48,6 @@ const caseSealedFormatter = caseRaw => {
  * @returns {object} reference to modified raw case detail
  */
 const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
-  console.log('caseRAWWWW', caseRaw);
   const userCanViewSealedAddresses = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
@@ -57,7 +56,6 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
     return caseRaw;
   }
   const formattedCase = cloneDeep(caseRaw);
-  console.log('formattedCase HELLO', formattedCase);
 
   const formatSealedAddress = contactRaw => {
     const result = pick(contactRaw, CASE_CONTACT_ATTRIBUTE_WHITELIST);
