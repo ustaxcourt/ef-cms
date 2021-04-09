@@ -17,7 +17,7 @@ export const addressDisplayHelper = (get, applicationContext) => {
     applicationContext.getUtilities().getContactSecondary(caseDetail) ||
     form?.contactSecondary;
 
-  const petitionIsServed = applicationContext
+  const petitionIsServed = !!applicationContext
     .getUtilities()
     .getPetitionDocketEntry(caseDetail)?.servedAt;
 
