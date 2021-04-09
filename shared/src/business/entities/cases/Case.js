@@ -1179,7 +1179,7 @@ Case.prototype.getPetitionDocketEntry = function () {
 };
 
 const getPetitionDocketEntry = function (rawCase) {
-  return rawCase.docketEntries.find(
+  return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );

@@ -4,7 +4,7 @@ export const addressDisplayHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const user = applicationContext.getCurrentUser();
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const { USER_ROLES } = applicationContext.getConstants();
 
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const permissions = get(state.permissions);
@@ -17,11 +17,9 @@ export const addressDisplayHelper = (get, applicationContext) => {
     applicationContext.getUtilities().getContactSecondary(caseDetail) ||
     form?.contactSecondary;
 
-  //FIXME
-  const petitionIsServed = getPetitionDocketEntry;
-  // go through docket entries, find petition, look for served at
-
-  // caseDetail.status && caseDetail.status !== STATUS_TYPES.new;
+  const petitionIsServed = applicationContext
+    .getUtilities()
+    .getPetitionDocketEntry(caseDetail)?.servedAt;
 
   let showEditPrimaryContact;
   let showSealedPrimaryContact;
