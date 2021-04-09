@@ -17,6 +17,9 @@ export const addressDisplayHelper = (get, applicationContext) => {
     applicationContext.getUtilities().getContactSecondary(caseDetail) ||
     form?.contactSecondary;
 
+  const petitionIsServed =
+    caseDetail.status && caseDetail.status !== STATUS_TYPES.new;
+
   let showEditPrimaryContact;
   let showSealedPrimaryContact;
   let showEditSecondaryContact;
@@ -41,20 +44,17 @@ export const addressDisplayHelper = (get, applicationContext) => {
   } else if (user.role === USER_ROLES.privatePractitioner) {
     showEditPrimaryContact = userAssociatedWithCase;
     showEditSecondaryContact = userAssociatedWithCase;
-  } else if (
-    permissions.EDIT_PETITIONER_INFO &&
-    caseDetail.status !== STATUS_TYPES.new
-  ) {
+  } else if (permissions.EDIT_PETITIONER_INFO && petitionIsServed) {
     showEditPetitionerInformation = true;
   }
 
   return {
     primary: {
-      showEditContact: showEditPrimaryContact,
+      showEditContact: showEditPrimaryContact && petitionIsServed,
       showSealedContact: showSealedPrimaryContact,
     },
     secondary: {
-      showEditContact: showEditSecondaryContact,
+      showEditContact: showEditSecondaryContact && petitionIsServed,
       showSealedContact: showSealedSecondaryContact,
     },
     showEditPetitionerInformation,

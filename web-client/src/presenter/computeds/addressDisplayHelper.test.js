@@ -96,7 +96,7 @@ describe('addressDisplayHelper', () => {
   });
 
   describe('primary.showEditContact', () => {
-    it('should be true if the current user is primary and the address is not sealed', () => {
+    it('should be true if the current user is primary, the address is not sealed and the case has been served', () => {
       const user = {
         role: ROLES.petitioner,
         userId: mockUserId,
@@ -114,6 +114,7 @@ describe('addressDisplayHelper', () => {
                 isAddressSealed: false,
               },
             ],
+            status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
           },
           currentPage: 'CaseDetailInternal',
           permissions: {},
@@ -121,6 +122,34 @@ describe('addressDisplayHelper', () => {
       });
 
       expect(result.primary.showEditContact).toEqual(true);
+    });
+
+    it('should be false when the current user is primary, the address is not sealed and the case has not been served', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockUserId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: false,
+              },
+            ],
+            status: CASE_STATUS_TYPES.new,
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.primary.showEditContact).toEqual(false);
     });
 
     it('should be false if the current user is primary and the address is sealed', () => {
@@ -177,7 +206,7 @@ describe('addressDisplayHelper', () => {
       expect(result.primary.showEditContact).toEqual(false);
     });
 
-    it('should be true if current user is a private practitioner, address is not sealed, and current user is associated to case', () => {
+    it('should be true if current user is a private practitioner, address is not sealed, current user is associated to case and the case has been served', () => {
       const user = {
         role: ROLES.privatePractitioner,
         userId: mockSecondPetitionerId,
@@ -195,6 +224,7 @@ describe('addressDisplayHelper', () => {
                 isAddressSealed: false,
               },
             ],
+            status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
           },
           currentPage: 'CaseDetailInternal',
           permissions: {},
@@ -203,6 +233,35 @@ describe('addressDisplayHelper', () => {
       });
 
       expect(result.primary.showEditContact).toEqual(true);
+    });
+
+    it('should be false when current user is a private practitioner, address is not sealed, current user is associated to case and the case has not been served', () => {
+      const user = {
+        role: ROLES.privatePractitioner,
+        userId: mockSecondPetitionerId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.primary,
+                isAddressSealed: false,
+              },
+            ],
+            status: CASE_STATUS_TYPES.new,
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+          screenMetadata: { isAssociated: true },
+        },
+      });
+
+      expect(result.primary.showEditContact).toEqual(false);
     });
   });
 
@@ -318,7 +377,7 @@ describe('addressDisplayHelper', () => {
   });
 
   describe('secondary.showEditContact', () => {
-    it('should be true if the current user is secondary and the address is not sealed', () => {
+    it('should be true if the current user is secondary, the address is not sealed, and the case has been served', () => {
       const user = {
         role: ROLES.petitioner,
         userId: mockUserId,
@@ -337,6 +396,7 @@ describe('addressDisplayHelper', () => {
                 isAddressSealed: false,
               },
             ],
+            status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
           },
           currentPage: 'CaseDetailInternal',
           permissions: {},
@@ -344,6 +404,35 @@ describe('addressDisplayHelper', () => {
       });
 
       expect(result.secondary.showEditContact).toEqual(true);
+    });
+
+    it('should be false when the current user is secondary, the address is not sealed, and the case has not been served', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: mockUserId,
+      };
+
+      const result = runCompute(addressDisplayHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              mockPetitioners[0],
+              {
+                contactId: mockUserId,
+                contactType: CONTACT_TYPES.secondary,
+                isAddressSealed: false,
+              },
+            ],
+            status: CASE_STATUS_TYPES.new,
+          },
+          currentPage: 'CaseDetailInternal',
+          permissions: {},
+        },
+      });
+
+      expect(result.secondary.showEditContact).toEqual(false);
     });
 
     it('should be false if the current user is secondary and the address is sealed', () => {
