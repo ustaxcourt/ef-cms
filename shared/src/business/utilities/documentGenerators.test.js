@@ -421,11 +421,10 @@ describe('documentGenerators', () => {
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Notice_Trial_Issued', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+        const { PDFDocument } = await applicationContext.getPdfLib();
+        const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
+        expect(pdfDoc.getPages().length).toEqual(1);
       }
-
-      const { PDFDocument } = await applicationContext.getPdfLib();
-      const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
-      expect(pdfDoc.getPages().length).toEqual(1);
 
       expect(
         applicationContext.getUseCases().generatePdfFromHtmlInteractor,
