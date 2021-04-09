@@ -8,10 +8,13 @@ const {
   ROLES,
 } = require('../entities/EntityConstants');
 const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../entities/cases/Case');
+const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getContactPrimary } = require('../entities/cases/Case');
 const { omit } = require('lodash');
 
 describe('updateCase', () => {
@@ -132,6 +135,47 @@ describe('updateCase', () => {
         docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('The Case entity was invalid');
+  });
+
+  it('should update contactSecondary', async () => {
+    const mockAddress = '1234 Something Lane';
+    const mockCaseWithContactSecondary = {
+      ...mockCase,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        ...mockCase.petitioners,
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactId: '41535712-c502-41a5-827c-26890e72733f',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          state: 'CA',
+        },
+      ],
+    };
+
+    const result = await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...mockCaseWithContactSecondary,
+          caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
+          contactPrimary: getContactPrimary(mockCase),
+          contactSecondary: {
+            ...getContactSecondary(mockCaseWithContactSecondary),
+            address1: mockAddress,
+          },
+        },
+        docketNumber: mockCase.docketNumber,
+      },
+    );
+
+    expect(result.petitioners[1].address1).toEqual(mockAddress);
   });
 
   it("should move the initialize case work item into the current user's in-progress box if the case is not paper", async () => {
