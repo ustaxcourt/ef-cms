@@ -134,53 +134,6 @@ describe('updateCase', () => {
     ).rejects.toThrow('The Case entity was invalid');
   });
 
-  it('should update case contacts when updating partyType', async () => {
-    expect(mockCase.petitioners.length).toEqual(1);
-
-    const mockContactSecondary = {
-      address1: '86 West Rocky Cowley Extension',
-      address2: 'Aperiam aliquip volu',
-      address3: 'Eos consequuntur max',
-      city: 'Deleniti lorem sit ',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Linda Singleton',
-      phone: '+1 (153) 683-1448',
-      postalCode: '89985',
-      state: 'FL',
-    };
-
-    const updatedCase = await saveCaseDetailInternalEditInteractor(
-      applicationContext,
-      {
-        caseToUpdate: {
-          ...mockCase,
-          caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
-          caseType: CASE_TYPES_MAP.innocentSpouse,
-          contactPrimary: {
-            ...mockCase.contactPrimary,
-            address1: '193 South Hague Freeway',
-            address2: 'Sunt maiores vitae ',
-            address3: 'Culpa ex aliquip ven',
-            city: 'Aperiam minim sunt r',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'petitioner@example.com',
-            name: 'Iola Snow',
-            phone: '+1 (772) 246-3448',
-            postalCode: '26037',
-            state: 'IA',
-          },
-          contactSecondary: mockContactSecondary,
-        },
-        docketNumber: mockCase.docketNumber,
-      },
-    );
-
-    expect(updatedCase.petitioners.length).toEqual(2);
-    expect(updatedCase.petitioners).toEqual([
-      expect.objectContaining(mockContactSecondary),
-    ]);
-  });
-
   it("should move the initialize case work item into the current user's in-progress box if the case is not paper", async () => {
     const caseToUpdate = Object.assign(mockCase);
 
