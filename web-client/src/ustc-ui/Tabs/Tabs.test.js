@@ -104,6 +104,23 @@ describe('TabsComponent', () => {
     );
   });
 
+  it('should create a default tab element id if one is not provided', () => {
+    let testRenderer;
+    act(() => {
+      testRenderer = TestRenderer.create(
+        <TabsComponent>
+          <Tab tabName="myTabName" title="No Provided Id" />
+        </TabsComponent>,
+      );
+    });
+
+    const testInstance = testRenderer.root;
+
+    expect(
+      testInstance.findByProps({ id: 'tabButton-myTabName' }),
+    ).toBeDefined();
+  });
+
   it('should provide aria-controls prop for tab with corresponding tab content', () => {
     let testRenderer;
     act(() => {

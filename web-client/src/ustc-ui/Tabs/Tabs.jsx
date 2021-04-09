@@ -78,6 +78,7 @@ export function TabsComponent({
     const isActiveTab = tabName === activeKey;
     const tabContentId =
       asSwitch || !tabChildren ? undefined : `tabContent-${camelCase(tabName)}`;
+    const buttonId = tabId || `tabButton-${camelCase(tabName)}`;
 
     const liClass = classNames('ustc-ui-tabs', {
       active: isActiveTab,
@@ -93,7 +94,7 @@ export function TabsComponent({
       'aria-selected': isActiveTab,
       className: childClassName,
       disabled,
-      id: tabId,
+      id: buttonId,
       onClick: () => setTab(tabName),
       role: 'tab',
       type: 'button',
