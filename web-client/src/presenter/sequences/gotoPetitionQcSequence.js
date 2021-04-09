@@ -9,7 +9,6 @@ import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabActio
 import { setDocumentForPreviewSequence } from '../sequences/setDocumentForPreviewSequence';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentSelectedForPreviewAction } from '../actions/unsetDocumentSelectedForPreviewAction';
 
@@ -27,8 +26,5 @@ export const gotoPetitionQcSequence = [
   unsetDocumentSelectedForPreviewAction,
   setDefaultDocumentSelectedForPreviewAction,
   setDocumentForPreviewSequence,
-  ({ get }) => {
-    console.log(get(state.form));
-  },
   setCurrentPageAction('PetitionQc'),
 ];
