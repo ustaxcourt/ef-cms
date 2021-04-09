@@ -77,16 +77,25 @@ exports.saveCaseDetailInternalEditInteractor = async (
   const caseWithFormEdits = {
     ...caseRecord,
     ...editableFields,
-    petitioners: [],
+    contactPrimary: caseToUpdate.contactPrimary,
+    contactSecondary: caseToUpdate.contactSecondary,
+    petitioners: undefined,
   };
+
+  console.log('contactPrimary', caseToUpdate.contactPrimary);
+  console.log('contactSecondary', caseToUpdate.contactSecondary);
 
   const caseEntityWithFormEdits = new Case(caseWithFormEdits, {
     applicationContext,
   });
 
   if (!isEmpty(caseToUpdate.contactPrimary)) {
-    const primaryContactId = caseEntityWithFormEdits.getContactPrimary()
+    const caseEntityFromCaseRecord = new Case(caseRecord, {
+      applicationContext,
+    });
+    const primaryContactId = caseEntityFromCaseRecord.getContactPrimary()
       .contactId;
+
     caseEntityWithFormEdits.updatePetitioner({
       ...caseToUpdate.contactPrimary,
       contactId: primaryContactId,
@@ -97,6 +106,7 @@ exports.saveCaseDetailInternalEditInteractor = async (
   if (!isEmpty(caseToUpdate.contactSecondary)) {
     const secondaryContactId = caseEntityWithFormEdits.getContactSecondary()
       ?.contactId;
+
     caseEntityWithFormEdits.updatePetitioner({
       ...caseToUpdate.contactSecondary,
       contactId: secondaryContactId,
@@ -107,6 +117,8 @@ exports.saveCaseDetailInternalEditInteractor = async (
   const caseEntity = new Case(caseEntityWithFormEdits, {
     applicationContext,
   });
+
+  console.log(caseEntity.petitioners);
 
   if (caseEntity.isPaper) {
     await applicationContext.getUseCaseHelpers().updateInitialFilingDocuments({

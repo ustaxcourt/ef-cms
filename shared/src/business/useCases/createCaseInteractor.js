@@ -68,6 +68,10 @@ exports.createCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  console.log(
+    'createCaseInteractor authorizedUser.userId',
+    authorizedUser.userId,
+  );
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -227,6 +231,11 @@ exports.createCaseInteractor = async (
     applicationContext,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
+
+  console.log(
+    'createCaseInteractor caseToAdd petitioners',
+    caseToAdd.petitioners,
+  );
 
   const userCaseEntity = new UserCase(caseToAdd);
 
