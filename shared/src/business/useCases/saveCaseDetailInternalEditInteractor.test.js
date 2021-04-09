@@ -3,7 +3,6 @@ const {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   PETITIONS_SECTION,
   ROLES,
@@ -130,7 +129,19 @@ describe('updateCase', () => {
     ).rejects.toThrow('The Case entity was invalid');
   });
 
-  it('TODO FIX ME', async () => {
+  it('should update partyType AND case contacts when updating partyType', async () => {
+    const mockContactSecondary = {
+      address1: '86 West Rocky Cowley Extension',
+      address2: 'Aperiam aliquip volu',
+      address3: 'Eos consequuntur max',
+      city: 'Deleniti lorem sit ',
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      name: 'Linda Singleton',
+      phone: '+1 (153) 683-1448',
+      postalCode: '89985',
+      state: 'FL',
+    };
+
     const updatedCase = await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
@@ -151,34 +162,16 @@ describe('updateCase', () => {
             postalCode: '26037',
             state: 'IA',
           },
-          contactSecondary: {
-            address1: '86 West Rocky Cowley Extension',
-            address2: 'Aperiam aliquip volu',
-            address3: 'Eos consequuntur max',
-            city: 'Deleniti lorem sit ',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Linda Singleton',
-            phone: '+1 (153) 683-1448',
-            postalCode: '89985',
-            state: 'FL',
-          },
-          createdAt: '2019-07-24T16:30:01.940Z',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          filingType: 'Myself and my spouse',
-          hasVerifiedIrsNotice: false,
-          isPaper: false,
-          partyType: PARTY_TYPES.petitionerSpouse,
-          preferredTrialCity: 'Mobile, Alabama',
-          privatePractitioners: [],
-          procedureType: 'Small',
+          contactSecondary: mockContactSecondary,
         },
         docketNumber: mockCase.docketNumber,
       },
     );
 
-    const returnedDocument = omit(updatedCase.docketEntries[0], 'createdAt');
-    const documentToMatch = omit(mockCase.docketEntries[0], 'createdAt');
-    expect(returnedDocument).toMatchObject(documentToMatch);
+    expect(updatedCase.partyType).toEqual(PARTY_TYPES.petitionerSpouse);
+    expect(updatedCase.petitioners).toEqual([
+      expect.objectContaining(mockContactSecondary),
+    ]);
   });
 
   it("should move the initialize case work item into the current user's in-progress box if the case is not paper", async () => {
