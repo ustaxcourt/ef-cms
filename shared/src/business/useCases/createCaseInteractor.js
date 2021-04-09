@@ -72,7 +72,7 @@ exports.createCaseInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const petitionEntity = new CaseExternalIncomple te(petitionMetadata, {
+  const petitionEntity = new CaseExternalIncomplete(petitionMetadata, {
     applicationContext,
   }).validate();
 

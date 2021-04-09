@@ -1,6 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { addressDisplayHelper as addressDisplayHelperComputed } from './addressDisplayHelper';
@@ -96,7 +97,7 @@ describe('addressDisplayHelper', () => {
   });
 
   describe('primary.showEditContact', () => {
-    it('should be true if the current user is primary, the address is not sealed and the case has been served', () => {
+    it.only('should be true if the current user is primary, the address is not sealed and the case has been served', () => {
       const user = {
         role: ROLES.petitioner,
         userId: mockUserId,
@@ -106,7 +107,12 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            docketEntries: [],
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2019-08-25T05:00:00.000Z',
+              },
+            ],
             petitioners: [
               {
                 contactId: mockUserId,
@@ -114,7 +120,6 @@ describe('addressDisplayHelper', () => {
                 isAddressSealed: false,
               },
             ],
-            status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
           },
           currentPage: 'CaseDetailInternal',
           permissions: {},
