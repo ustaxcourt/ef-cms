@@ -13,7 +13,6 @@ import React from 'react';
 export const SecondaryContactEdit = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
-    contactEditHelper: state.contactEditHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -25,7 +24,6 @@ export const SecondaryContactEdit = connect(
     validationErrors: state.validationErrors,
   },
   function SecondaryContactEdit({
-    contactEditHelper,
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
@@ -66,31 +64,13 @@ export const SecondaryContactEdit = connect(
               <p className="margin-top-0">{form.contactSecondary.name}</p>
             </div>
 
-            {contactEditHelper.contactSecondary?.showInCareOf && (
-              <FormGroup
-                errorText={validationErrors.contactSecondary?.inCareOf}
-              >
-                <label className="usa-label" htmlFor="inCareOf">
-                  <span>In care of</span>
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input"
-                  id="inCareOf"
-                  name="contactSecondary.inCareOf"
-                  type="text"
-                  value={form.contactSecondary.inCareOf || ''}
-                  onBlur={() => {
-                    validateSecondaryContactSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </FormGroup>
+            {form.contactSecondary.additionalName && (
+              <div className="usa-form-group">
+                <p className="usa-label margin-bottom-0">Additional name</p>
+                <p className="margin-top-0">
+                  {form.contactSecondary.additionalName}
+                </p>
+              </div>
             )}
 
             <Country

@@ -13,7 +13,6 @@ import React from 'react';
 export const PrimaryContactEdit = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
-    contactEditHelper: state.contactEditHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
