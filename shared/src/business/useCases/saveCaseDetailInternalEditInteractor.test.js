@@ -321,4 +321,24 @@ describe('updateCase', () => {
     expect(result.orderForRatification).toBeTruthy();
     expect(result.orderToShowCause).toBeTruthy();
   });
+
+  it('should not change contact primary contactId when saving case', async () => {
+    const caseToUpdate = Object.assign(MOCK_CASE);
+
+    const result = await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...caseToUpdate,
+          contactPrimary: { ...getContactPrimary(MOCK_CASE) },
+          petitioners: undefined,
+        },
+        docketNumber: caseToUpdate.docketNumber,
+      },
+    );
+
+    expect(result.petitioners[0].contactId).toEqual(
+      MOCK_CASE.petitioners[0].contactId,
+    );
+  });
 });
