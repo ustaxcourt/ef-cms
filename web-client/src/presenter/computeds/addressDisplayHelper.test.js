@@ -97,7 +97,7 @@ describe('addressDisplayHelper', () => {
   });
 
   describe('primary.showEditContact', () => {
-    it.only('should be true if the current user is primary, the address is not sealed and the case has been served', () => {
+    it('should be true if the current user is primary, the address is not sealed and the case has been served', () => {
       const user = {
         role: ROLES.petitioner,
         userId: mockUserId,
@@ -139,7 +139,12 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            docketEntries: [],
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: undefined,
+              },
+            ],
             petitioners: [
               {
                 contactId: mockUserId,
@@ -147,7 +152,6 @@ describe('addressDisplayHelper', () => {
                 isAddressSealed: false,
               },
             ],
-            status: CASE_STATUS_TYPES.new,
           },
           currentPage: 'CaseDetailInternal',
           permissions: {},
@@ -221,7 +225,12 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            docketEntries: [],
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2019-08-25T05:00:00.000Z',
+              },
+            ],
             petitioners: [
               {
                 contactId: mockUserId,
@@ -229,7 +238,6 @@ describe('addressDisplayHelper', () => {
                 isAddressSealed: false,
               },
             ],
-            status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
           },
           currentPage: 'CaseDetailInternal',
           permissions: {},
@@ -250,7 +258,12 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            docketEntries: [],
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: undefined,
+              },
+            ],
             petitioners: [
               {
                 contactId: mockUserId,
@@ -258,7 +271,6 @@ describe('addressDisplayHelper', () => {
                 isAddressSealed: false,
               },
             ],
-            status: CASE_STATUS_TYPES.new,
           },
           currentPage: 'CaseDetailInternal',
           permissions: {},
@@ -362,7 +374,12 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            docketEntries: [],
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2019-08-25T05:00:00.000Z',
+              },
+            ],
             petitioners: [
               {
                 contactId: mockUserId,
@@ -392,7 +409,12 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            docketEntries: [],
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2019-08-25T05:00:00.000Z',
+              },
+            ],
             petitioners: [
               mockPetitioners[0],
               {
@@ -401,7 +423,6 @@ describe('addressDisplayHelper', () => {
                 isAddressSealed: false,
               },
             ],
-            status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
           },
           currentPage: 'CaseDetailInternal',
           permissions: {},
@@ -421,7 +442,12 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            docketEntries: [],
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: undefined,
+              },
+            ],
             petitioners: [
               mockPetitioners[0],
               {
@@ -430,7 +456,6 @@ describe('addressDisplayHelper', () => {
                 isAddressSealed: false,
               },
             ],
-            status: CASE_STATUS_TYPES.new,
           },
           currentPage: 'CaseDetailInternal',
           permissions: {},
@@ -584,7 +609,7 @@ describe('addressDisplayHelper', () => {
   });
 
   describe('showEditPetitionerInformation', () => {
-    it('should be true when the user has the EDIT_PETITIONER_INFO permission', () => {
+    it('should be true when the user has the EDIT_PETITIONER_INFO permission and the case has been served', () => {
       const user = {
         role: ROLES.docketClerk,
         userId: '789',
@@ -594,7 +619,12 @@ describe('addressDisplayHelper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            docketEntries: [],
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2019-08-25T05:00:00.000Z',
+              },
+            ],
             petitioners: mockPetitioners,
             privatePractitioners: [{ userId: '789' }],
           },
