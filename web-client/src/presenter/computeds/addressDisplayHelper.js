@@ -17,8 +17,11 @@ export const addressDisplayHelper = (get, applicationContext) => {
     applicationContext.getUtilities().getContactSecondary(caseDetail) ||
     form?.contactSecondary;
 
-  const petitionIsServed =
-    caseDetail.status && caseDetail.status !== STATUS_TYPES.new;
+  //FIXME
+  const petitionIsServed = getPetitionDocketEntry;
+  // go through docket entries, find petition, look for served at
+
+  // caseDetail.status && caseDetail.status !== STATUS_TYPES.new;
 
   let showEditPrimaryContact;
   let showSealedPrimaryContact;
