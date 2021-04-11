@@ -224,9 +224,34 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
+  // explicitly set petitioner to Paper
+  loginAs(test, 'docketclerk@example.com');
+  it('Updates petitioner service indicator to none', async () => {
+    await test.runSequence('gotoEditPetitionerInformationSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.serviceIndicator',
+      value: 'None',
+    });
+
+    await test.runSequence('updatePetitionerInformationFormSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
+
+    const caseDetail = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('None');
+  });
+
   // remove private practitioner
   loginAs(test, 'docketclerk@example.com');
-  it('Removes private practitioner from case and check service indicator is paper', async () => {
+  it('Removes private practitioner from case and check service indicator is switched back to paper', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
