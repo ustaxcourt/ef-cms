@@ -29,6 +29,7 @@ const renderTabFactory = ({
 }) =>
   function TabComponent(child) {
     const {
+      children: tabChildren,
       className: childClassName,
       disabled,
       icon,
@@ -41,7 +42,9 @@ const renderTabFactory = ({
     } = child.props;
 
     const isActiveTab = tabName === activeKey;
-    const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
+    const tabContentId =
+      asSwitch || !tabChildren ? undefined : `tabContent-${camelCase(tabName)}`;
+    const buttonId = tabId || `tabButton-${camelCase(tabName)}`;
 
     const liClass = classNames('ustc-ui-tabs', {
       active: isActiveTab,
@@ -53,19 +56,24 @@ const renderTabFactory = ({
     }
 
     const HeadingElement = headingLevel ? `h${headingLevel}` : 'span';
+    const tabProps = {
+      'aria-controls': tabContentId,
+      'aria-selected': isActiveTab,
+      className: liClass,
+      role: 'tab',
+    };
+
+    const buttonProps = {
+      className: childClassName,
+      disabled,
+      id: buttonId,
+      onClick: () => setTab(tabName),
+      type: 'button',
+    };
 
     return (
-      <li className={liClass}>
-        <button
-          aria-controls={tabContentId}
-          aria-selected={isActiveTab}
-          className={childClassName}
-          disabled={disabled}
-          id={tabId}
-          role="tab"
-          type="button"
-          onClick={() => setTab(tabName)}
-        >
+      <li {...tabProps}>
+        <button {...buttonProps}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
           {showIcon && (
             <FontAwesomeIcon color={iconColor || null} icon={icon} />
