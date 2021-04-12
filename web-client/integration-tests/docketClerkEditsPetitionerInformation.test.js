@@ -5,6 +5,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 const test = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -38,6 +39,10 @@ describe('docket clerk edits the petitioner information', () => {
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(test, 'petitionsclerk@example.com');
+
+  petitionsClerkServesElectronicCaseToIrs(test);
 
   loginAs(test, 'docketclerk@example.com');
 
