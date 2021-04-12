@@ -1102,6 +1102,30 @@ Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
 };
 
 /**
+ * Retrieves the petitioner with id contactId on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Object} the contact object
+ */
+
+const getPetitionerById = function (rawCase, contactId) {
+  return rawCase.petitioners.find(
+    petitioner => petitioner.contactId === contactId,
+  );
+};
+
+/**
+ * gets the petitioner with id contactId from the petitioners array
+ *
+ * @params {object} params the params object
+ * @params {string} params.contactId the id of the petitioner to retrieve
+ * @returns {object} the retrieved petitioner
+ */
+Case.prototype.getPetitionerById = function (contactId) {
+  return getPetitionerById(this, contactId);
+};
+
+/**
  * gets the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
