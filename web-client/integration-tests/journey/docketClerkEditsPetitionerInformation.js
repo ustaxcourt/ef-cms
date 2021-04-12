@@ -14,7 +14,18 @@ export const docketClerkEditsPetitionerInformation = test => {
       value: 'Bob',
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.additionalName',
+      value: 'Bob Additional Name',
+    });
+
     await test.runSequence('submitEditPetitionerSequence');
+
+    expect(contactPrimaryFromState(test).additionalName).toBe(
+      'Bob Additional Name',
+    );
+
+    expect(contactPrimaryFromState(test).name).toBe('Bob');
 
     expect(
       test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
