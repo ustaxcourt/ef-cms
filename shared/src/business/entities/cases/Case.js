@@ -1107,7 +1107,6 @@ Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
  * @param {object} arguments.rawCase the raw case
  * @returns {Object} the contact object
  */
-
 const getPetitionerById = function (rawCase, contactId) {
   return rawCase.petitioners.find(
     petitioner => petitioner.contactId === contactId,
@@ -2108,6 +2107,7 @@ module.exports = {
   getOtherFilers,
   getOtherPetitioners,
   getPetitionDocketEntry,
+  getPetitionerById,
   isAssociatedUser,
   isSealedCase,
   updatePetitioner,

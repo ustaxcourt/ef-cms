@@ -24,6 +24,7 @@ const {
   getOtherFilers,
   getOtherPetitioners,
   getPetitionDocketEntry,
+  getPetitionerById,
 } = require('../entities/cases/Case');
 const {
   compareCasesByDocketNumber,
@@ -304,6 +305,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPetitionDocketEntry: jest
       .fn()
       .mockImplementation(getPetitionDocketEntry),
+    getPetitionerById: jest.fn().mockImplementation(getPetitionerById),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
