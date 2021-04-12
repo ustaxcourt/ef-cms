@@ -9,14 +9,14 @@ export const NoticeOfTrialIssued = ({
   trialInfo,
 }) => {
   return (
-    <>
+    <div id="notice-of-trial-pdf">
       <PrimaryHeader />
       <DocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
       />
-      <h3>Notice Setting Case For Trial</h3>
+      <h3 className="notice-of-trial-title">Notice Setting Case For Trial</h3>
       <div>
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
@@ -51,12 +51,12 @@ export const NoticeOfTrialIssued = ({
         </p>
 
         <p className="text-underline">ACCESS REMOTE PROCEEDING</p>
-        <p>Your Meeting ID and Password for the remote proceeding is:</p>
+        <p>Your Meeting ID and Passcode for the remote proceeding are:</p>
         <p className="text-center">
           <b>Meeting ID:</b> {trialInfo.meetingId}
         </p>
         <p className="text-center">
-          <b>Password:</b> {trialInfo.password}
+          <b>Passcode:</b> {trialInfo.password}
         </p>
 
         <p>
@@ -65,12 +65,12 @@ export const NoticeOfTrialIssued = ({
             www.zoomgov.com
           </a>{' '}
           and click `Join a meeting` (blue box in the middle of the page). Enter
-          the Meeting ID and Password above when prompted.
+          the Meeting ID and Passcode above when prompted.
         </p>
 
         <p>
           Join by telephone: Call {trialInfo.joinPhoneNumber}. Enter the Meeting
-          ID and Password above when prompted.
+          ID and Passcode above when prompted.
         </p>
 
         <p>
@@ -87,6 +87,6 @@ export const NoticeOfTrialIssued = ({
           Clerk of the Court
         </p>
       </div>
-    </>
+    </div>
   );
 };

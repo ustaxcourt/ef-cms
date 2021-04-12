@@ -68,12 +68,6 @@ describe('JoiValidationConstants', () => {
       expect(results.error).toBeUndefined();
     });
 
-    it(`validates ISO string which uses format ${FORMATS.YYYYMMDD}`, () => {
-      const shortIsoTimestamp = '2020-05-04';
-      const results = schema.validate(shortIsoTimestamp);
-      expect(results.error).toBeUndefined();
-    });
-
     describe('identifies as invalid a list of date formats which conform to ISO-8601 but are not valid for our application', () => {
       const iso8601Invalid = [
         // '2020-05-03', // TODO: this will soon become invalid also.

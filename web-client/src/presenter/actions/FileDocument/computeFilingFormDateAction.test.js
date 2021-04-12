@@ -21,7 +21,7 @@ describe('computeFilingFormDateAction', () => {
       },
     });
 
-    expect(result.state.form.filingDate).toEqual('2019-01-06');
+    expect(result.state.form.filingDate).toEqual('2019-01-06T05:00:00.000Z');
   });
 
   it("does not set document's filingDate when some value needed is not present", async () => {
