@@ -308,6 +308,10 @@ Case.prototype.assignArchivedDocketEntries = function assignArchivedDocketEntrie
   }
 };
 
+Case.prototype.hasPrivatePractitioners = function hasPrivatePractitioners() {
+  return this.privatePractitioners.length > 0;
+};
+
 Case.prototype.assignContacts = function assignContacts({
   applicationContext,
   rawCase,
@@ -1739,6 +1743,18 @@ Case.prototype.setLeadCase = function (leadDocketNumber) {
 Case.prototype.removeConsolidation = function () {
   this.leadDocketNumber = undefined;
   return this;
+};
+
+/**
+ * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
+ *
+ * @param {String} userId the id of the user
+ * @returns {boolean} if the userId has a privatePractitioner associated with them
+ */
+Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
+  return !!this.privatePractitioners.find(practitioner =>
+    practitioner.representing.find(id => id === userId),
+  );
 };
 
 /**

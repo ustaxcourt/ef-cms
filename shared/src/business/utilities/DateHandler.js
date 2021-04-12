@@ -55,6 +55,7 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
  */
 const createISODateString = (dateString, inputFormat) => {
   let result;
+
   if (!dateString) {
     result = moment.tz(USTC_TZ);
   } else {
@@ -89,7 +90,7 @@ const createStartOfDayISO = ({ day, month, year }) => {
 const createISODateStringFromObject = options => {
   return createISODateString(
     `${options.year}-${options.month}-${options.day}`,
-    FORMATS.YYYYMMDD,
+    FORMATS.ISO,
   );
 };
 
@@ -98,7 +99,7 @@ const createISODateStringFromObject = options => {
  * @param {string} formatStr the desired formatting as specified by the moment library
  * @returns {string} a formatted date string
  */
-const formatDateString = (dateString, formatStr) => {
+const formatDateString = (dateString, formatStr = FORMATS.ISO) => {
   if (!dateString) return;
   let formatString = FORMATS[formatStr] || formatStr;
   return prepareDateFromString(dateString).format(formatString);
@@ -290,11 +291,9 @@ const computeDate = ({ day, month, year }) => {
   const ddPadded = `${day}`.padStart(2, '0');
   const dateToParse = `${yyyyPadded}-${mmPadded}-${ddPadded}`;
   if (!PATTERNS.YYYYMMDD.test(dateToParse)) {
-    return dateToParse;
+    return undefined;
   }
-  const preparedDateISO = prepareDateFromString(dateToParse, FORMATS.YYYYMMDD);
-  const yyyymmdd = formatDateString(preparedDateISO, FORMATS.YYYYMMDD);
-  return yyyymmdd;
+  return prepareDateFromString(dateToParse, FORMATS.ISO).toISOString();
 };
 
 module.exports = {
