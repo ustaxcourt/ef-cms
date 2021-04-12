@@ -1,7 +1,7 @@
 import { checkEmailAvailabilityAction } from '../actions/checkEmailAvailabilityAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { getComputedAdmissionsDateAction } from '../actions/getComputedAdmissionsDateAction';
 import { hasUpdatedEmailAction } from '../actions/hasUpdatedEmailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
@@ -36,7 +36,7 @@ const afterSuccess = [
 export const submitUpdatePractitionerUserSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  getComputedFormDateFactoryAction(null),
+  getComputedAdmissionsDateAction,
   validatePractitionerAction,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],

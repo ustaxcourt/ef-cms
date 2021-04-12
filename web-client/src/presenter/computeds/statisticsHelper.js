@@ -67,7 +67,7 @@ export const statisticsHelper = (get, applicationContext) => {
     } else {
       date = applicationContext
         .getUtilities()
-        .formatDateString(statistic.lastDateOfPeriod, 'YYYYMMDD');
+        .formatDateString(statistic.lastDateOfPeriod);
     }
     return date;
   };

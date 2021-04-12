@@ -26,7 +26,7 @@ export const CaseDeadlinesInternal = connect(
           </p>
         )}
         {caseDetailHelper.showCaseDeadlinesInternal && (
-          <table className="usa-table docket-record row-border-only subsection deadlines">
+          <table className="usa-table ustc-table subsection deadlines">
             <thead>
               <tr>
                 <th>Due Date</th>
