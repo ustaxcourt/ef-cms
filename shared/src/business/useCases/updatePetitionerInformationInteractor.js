@@ -2,6 +2,7 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../entities/EntityConstants');
@@ -243,6 +244,12 @@ exports.updatePetitionerInformationInteractor = async (
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
+
+  if (oldCase.status === CASE_STATUS_TYPES.new) {
+    throw new Error(
+      `Case with docketNumber ${oldCase.docketNumber} has not been served`,
+    );
+  }
 
   const oldCaseContact = getPetitionerById(
     oldCase,
