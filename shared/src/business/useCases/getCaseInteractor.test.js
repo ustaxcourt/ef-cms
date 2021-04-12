@@ -153,6 +153,8 @@ describe('getCaseInteractor', () => {
     });
 
     expect(result.docketNumber).toEqual('101-00');
+    expect(result.petitioners[0].address1).toBeDefined();
+    expect(result.entityName).toEqual('Case');
   });
 
   it('should return the case when the currentUser is the contactSecondary on the case', async () => {
@@ -184,6 +186,8 @@ describe('getCaseInteractor', () => {
     });
 
     expect(result.docketNumber).toEqual('101-00');
+    expect(result.petitioners[0].address1).toBeDefined();
+    expect(result.entityName).toEqual('Case');
   });
 
   describe('sealed contact information', () => {
