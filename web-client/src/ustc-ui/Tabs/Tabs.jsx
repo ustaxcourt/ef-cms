@@ -63,6 +63,7 @@ export function TabsComponent({
 
   const renderTab = child => {
     const {
+      children: tabChildren,
       className: childClassName,
       disabled,
       icon,
@@ -75,7 +76,9 @@ export function TabsComponent({
     } = child.props;
 
     const isActiveTab = tabName === activeKey;
-    const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
+    const tabContentId =
+      asSwitch || !tabChildren ? undefined : `tabContent-${camelCase(tabName)}`;
+    const buttonId = tabId || `tabButton-${camelCase(tabName)}`;
 
     const liClass = classNames('ustc-ui-tabs', {
       active: isActiveTab,
@@ -86,20 +89,25 @@ export function TabsComponent({
       return null;
     }
 
+    const tabProps = {
+      'aria-controls': tabContentId,
+      'aria-selected': isActiveTab,
+      className: liClass,
+      id: tabId,
+      role: 'tab',
+    };
+
+    const buttonProps = {
+      className: childClassName,
+      disabled,
+      id: buttonId,
+      onClick: () => setTab(tabName),
+      type: 'button',
+    };
+
     return (
-      <li
-        aria-controls={tabContentId}
-        aria-selected={isActiveTab}
-        className={liClass}
-        role="tab"
-      >
-        <button
-          className={childClassName}
-          disabled={disabled}
-          id={tabId}
-          type="button"
-          onClick={() => setTab(tabName)}
-        >
+      <li {...tabProps}>
+        <button {...buttonProps}>
           <span>{title}</span>{' '}
           {showIcon && (
             <FontAwesomeIcon color={iconColor || null} icon={icon} />
