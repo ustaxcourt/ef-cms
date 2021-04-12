@@ -1,8 +1,11 @@
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkEditsPetitionerInformation = test => {
   return it('docket clerk edits petitioner information', async () => {
     const contactPrimary = contactPrimaryFromState(test);
+
+    expect(test.getState('caseDetail.status')).not.toBe(CASE_STATUS_TYPES.new);
 
     await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
       contactId: contactPrimary.contactId,
