@@ -7,6 +7,7 @@ import {
   getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
+  getPetitionDocketEntry,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -654,6 +655,7 @@ const applicationContext = {
       getMonthDayYearObj,
       getOtherFilers,
       getOtherPetitioners,
+      getPetitionDocketEntry,
       getServedPartiesCode,
       getTrialSessionStatus,
       getWorkQueueFilters,
