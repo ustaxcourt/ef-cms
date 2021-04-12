@@ -3,6 +3,7 @@ const {
   testPdfDoc,
 } = require('../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
@@ -308,15 +309,18 @@ describe('update petitioner contact information on a case', () => {
     ).not.toBe('test2@example.com');
   });
 
-  it('should update contactSecondary.inCareOf when it is passed in', async () => {
-    mockCase = MOCK_CASE_WITH_SECONDARY_OTHERS;
-    const mockInCareOf = 'Tina Belcher';
+  it('should update secondaryContact.additionalName when it is passed in', async () => {
+    mockCase = {
+      ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    };
+    const mockAdditionalName = 'Tina Belcher';
 
     await updatePetitionerInformationInteractor(applicationContext, {
       docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
       updatedPetitionerData: {
         ...getContactSecondary(mockCase),
-        inCareOf: mockInCareOf,
+        additionalName: mockAdditionalName,
       },
     });
 
@@ -326,7 +330,7 @@ describe('update petitioner contact information on a case', () => {
     const updatedContactSecondary = updatedPetitioners.find(
       p => p.contactType === CONTACT_TYPES.secondary,
     );
-    expect(updatedContactSecondary.inCareOf).toBe(mockInCareOf);
+    expect(updatedContactSecondary.additionalName).toBe(mockAdditionalName);
   });
 
   it('throws an error when attempting to update contactPrimary.countryType to an invalid value', async () => {

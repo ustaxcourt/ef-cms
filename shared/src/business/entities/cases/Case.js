@@ -161,9 +161,9 @@ Case.prototype.init = function init(
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
   this.assignHearings({ applicationContext, rawCase });
-  this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
+  this.assignContacts({ applicationContext, filtered, rawCase });
 };
 
 Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
@@ -324,6 +324,7 @@ Case.prototype.assignContacts = function assignContacts({
     },
     isPaper: rawCase.isPaper,
     partyType: rawCase.partyType,
+    status: rawCase.status,
   });
 
   this.petitioners.push(contacts.primary);
@@ -332,6 +333,10 @@ Case.prototype.assignContacts = function assignContacts({
   }
   this.petitioners.push(...contacts.otherPetitioners);
   this.petitioners.push(...contacts.otherFilers);
+
+  if (rawCase.status && rawCase.status !== CASE_STATUS_TYPES.new) {
+    this.setAdditionalNameOnPetitioners();
+  }
 };
 
 Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
@@ -1170,7 +1175,11 @@ Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
 };
 
 Case.prototype.getPetitionDocketEntry = function () {
-  return this.docketEntries.find(
+  return getPetitionDocketEntry(this);
+};
+
+const getPetitionDocketEntry = function (rawCase) {
+  return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
@@ -1410,6 +1419,43 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Computes and sets additionalName for contactPrimary depending on partyType
+ *
+ */
+Case.prototype.setAdditionalNameOnPetitioners = function () {
+  const contactPrimary = this.getContactPrimary(this);
+
+  if (!contactPrimary.additionalName) {
+    switch (this.partyType) {
+      case PARTY_TYPES.conservator:
+      case PARTY_TYPES.custodian:
+      case PARTY_TYPES.guardian:
+      case PARTY_TYPES.nextFriendForIncompetentPerson:
+      case PARTY_TYPES.nextFriendForMinor:
+      case PARTY_TYPES.partnershipOtherThanTaxMatters:
+      case PARTY_TYPES.partnershipBBA:
+      case PARTY_TYPES.survivingSpouse:
+      case PARTY_TYPES.trust:
+        contactPrimary.additionalName = contactPrimary.secondaryName;
+        delete contactPrimary.secondaryName;
+        break;
+      case PARTY_TYPES.estate:
+        contactPrimary.additionalName = `${contactPrimary.secondaryName}, ${contactPrimary.title}`;
+        delete contactPrimary.secondaryName;
+        delete contactPrimary.title;
+        break;
+      case PARTY_TYPES.estateWithoutExecutor:
+      case PARTY_TYPES.corporation:
+        contactPrimary.additionalName = `c/o ${contactPrimary.inCareOf}`;
+        delete contactPrimary.inCareOf;
+        break;
+      default:
+        break;
+    }
+  }
 };
 
 /**
@@ -2037,6 +2083,7 @@ module.exports = {
   getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
+  getPetitionDocketEntry,
   isAssociatedUser,
   isSealedCase,
   updatePetitioner,

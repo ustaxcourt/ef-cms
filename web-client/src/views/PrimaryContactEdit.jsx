@@ -13,7 +13,6 @@ import React from 'react';
 export const PrimaryContactEdit = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
-    contactEditHelper: state.contactEditHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -24,7 +23,6 @@ export const PrimaryContactEdit = connect(
     validationErrors: state.validationErrors,
   },
   function PrimaryContactEdit({
-    contactEditHelper,
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
@@ -65,29 +63,13 @@ export const PrimaryContactEdit = connect(
               <p className="margin-top-0">{form.contactPrimary.name}</p>
             </div>
 
-            {contactEditHelper.contactPrimary?.showInCareOf && (
-              <FormGroup errorText={validationErrors.contactPrimary?.inCareOf}>
-                <label className="usa-label" htmlFor="inCareOf">
-                  <span>In care of</span>
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input"
-                  id="inCareOf"
-                  name="contactPrimary.inCareOf"
-                  type="text"
-                  value={form.contactPrimary.inCareOf || ''}
-                  onBlur={() => {
-                    validatePrimaryContactSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </FormGroup>
+            {form.contactPrimary.additionalName && (
+              <div className="usa-form-group">
+                <p className="usa-label margin-bottom-0">Additional name</p>
+                <p className="margin-top-0">
+                  {form.contactPrimary.additionalName}
+                </p>
+              </div>
             )}
 
             <Country
