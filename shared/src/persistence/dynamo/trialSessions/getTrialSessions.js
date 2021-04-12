@@ -1,7 +1,7 @@
-const { query } = require('../../dynamodbClientService');
+const { queryFull } = require('../../dynamodbClientService');
 
 exports.getTrialSessions = async ({ applicationContext }) => {
-  return await query({
+  return await queryFull({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
