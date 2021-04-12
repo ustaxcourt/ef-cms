@@ -4,6 +4,7 @@ const cors = require('cors');
 const express = require('express');
 const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
+
 const app = express();
 
 app.use(cors());
