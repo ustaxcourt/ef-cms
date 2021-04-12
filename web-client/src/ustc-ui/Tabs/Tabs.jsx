@@ -20,48 +20,14 @@ if (process.env.NODE_ENV === 'test') {
   ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
 }
 
-/**
- * Tab
- */
-export function Tab() {}
-
-/**
- * TabsComponent
- *
- * @param {*} properties the props
- * @returns {*} the rendered component
- */
-export function TabsComponent({
+const renderTabFactory = ({
+  activeKey,
   asSwitch,
-  bind,
   boxed,
-  children,
-  className,
-  defaultActiveTab,
-  id,
-  onSelect,
-  simpleSetter,
-  value,
-}) {
-  // TODO - Refactor how tab selection sets documentSelectedForScan
-  let activeKey, setTab;
-
-  defaultActiveTab =
-    defaultActiveTab || getDefaultAttribute(children, 'tabName');
-
-  if (bind) {
-    const useCerebralState = useCerebralStateFactory(
-      simpleSetter,
-      value || defaultActiveTab,
-    );
-    [activeKey, setTab] = useCerebralState(bind, defaultActiveTab);
-  } else {
-    [activeKey, setTab] = useState(defaultActiveTab);
-  }
-
-  setTab = decorateWithPostCallback(setTab, onSelect);
-
-  const renderTab = child => {
+  headingLevel,
+  setTab,
+}) =>
+  function TabComponent(child) {
     const {
       className: childClassName,
       disabled,
@@ -86,6 +52,8 @@ export function TabsComponent({
       return null;
     }
 
+    const HeadingElement = headingLevel ? `h${headingLevel}` : 'span';
+
     return (
       <li className={liClass}>
         <button
@@ -98,7 +66,7 @@ export function TabsComponent({
           type="button"
           onClick={() => setTab(tabName)}
         >
-          <span>{title}</span>{' '}
+          <HeadingElement className="button-text">{title}</HeadingElement>{' '}
           {showIcon && (
             <FontAwesomeIcon color={iconColor || null} icon={icon} />
           )}
@@ -111,6 +79,47 @@ export function TabsComponent({
       </li>
     );
   };
+/**
+ * Tab
+ */
+export function Tab() {}
+
+/**
+ * TabsComponent
+ *
+ * @param {*} properties the props
+ * @returns {*} the rendered component
+ */
+export function TabsComponent({
+  asSwitch,
+  bind,
+  boxed,
+  children,
+  className,
+  defaultActiveTab,
+  headingLevel,
+  id,
+  onSelect,
+  simpleSetter,
+  value,
+}) {
+  // TODO - Refactor how tab selection sets documentSelectedForScan
+  let activeKey, setTab;
+
+  defaultActiveTab =
+    defaultActiveTab || getDefaultAttribute(children, 'tabName');
+
+  if (bind) {
+    const useCerebralState = useCerebralStateFactory(
+      simpleSetter,
+      value || defaultActiveTab,
+    );
+    [activeKey, setTab] = useCerebralState(bind, defaultActiveTab);
+  } else {
+    [activeKey, setTab] = useState(defaultActiveTab);
+  }
+
+  setTab = decorateWithPostCallback(setTab, onSelect);
 
   const renderTabContent = child => {
     const { children: tabChildren, tabName } = child.props;
@@ -162,6 +171,14 @@ export function TabsComponent({
     baseProps = {};
   }
 
+  const TabComponent = renderTabFactory({
+    activeKey,
+    asSwitch,
+    boxed,
+    headingLevel,
+    setTab,
+  });
+
   return (
     <div {...baseProps}>
       {hasNav && (
@@ -170,7 +187,7 @@ export function TabsComponent({
             className={classNames('ustc-ui-tabs', { 'grid-row': boxed })}
             role="tablist"
           >
-            {map(children, renderTab)}
+            {map(children, TabComponent)}
           </ul>
         </nav>
       )}
