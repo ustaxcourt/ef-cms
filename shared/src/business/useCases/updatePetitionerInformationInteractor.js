@@ -324,8 +324,8 @@ exports.updatePetitionerInformationInteractor = async (
   let petitionerChangeDocs;
   let paperServicePdfUrl;
 
-  const updatedCaseContact = caseEntity.petitioners.find(
-    p => p.contactId === updatedPetitionerData.contactId,
+  const updatedCaseContact = caseEntity.getPetitionerById(
+    updatedPetitionerData.contactId,
   );
 
   if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {
