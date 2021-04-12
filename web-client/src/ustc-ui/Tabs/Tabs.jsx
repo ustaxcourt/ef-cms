@@ -93,7 +93,6 @@ export function TabsComponent({
       'aria-controls': tabContentId,
       'aria-selected': isActiveTab,
       className: liClass,
-      id: tabId,
       role: 'tab',
     };
 
