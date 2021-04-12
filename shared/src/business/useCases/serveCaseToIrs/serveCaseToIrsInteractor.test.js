@@ -295,6 +295,29 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(1);
   });
 
+  it('should have the same contact id on contactPrimary before and after serving the case', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+    };
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate.petitioners[0].contactId,
+    ).toBe(MOCK_CASE.petitioners[0].contactId);
+  });
+
   it('should generate a notice of receipt of petition document and upload it to s3', async () => {
     mockCase = {
       ...MOCK_CASE,

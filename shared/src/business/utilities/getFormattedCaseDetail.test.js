@@ -3,6 +3,7 @@ const {
 } = require('../../../../web-client/src/applicationContext');
 const {
   CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
@@ -40,7 +41,10 @@ describe('getFormattedCaseDetail', () => {
     docketNumber: '123-45',
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     docketNumberWithSuffix: '123-45S',
-    petitioners: [getContactPrimary(MOCK_CASE)],
+    petitioners: [
+      getContactPrimary(MOCK_CASE),
+      { ...getContactPrimary(MOCK_CASE), contactType: CONTACT_TYPES.secondary },
+    ],
     receivedAt: getDateISO(),
   };
 
@@ -447,6 +451,11 @@ describe('getFormattedCaseDetail', () => {
           name: mockCaseDetail.petitioners[0].name,
           secondaryName: mockCaseDetail.petitioners[0].secondaryName,
           title: mockCaseDetail.petitioners[0].title,
+        },
+        {
+          name: mockCaseDetail.petitioners[1].name,
+          secondaryName: mockCaseDetail.petitioners[1].secondaryName,
+          title: mockCaseDetail.petitioners[1].title,
         },
       ]);
     });
@@ -1056,6 +1065,15 @@ describe('getFormattedCaseDetail', () => {
   });
 
   describe('getFormattedCaseDetail', () => {
+    it('should set a contactSecondary on the formatted case when one exists in the petitioners array', () => {
+      const result = getFormattedCaseDetail({
+        applicationContext,
+        caseDetail: { ...mockCaseDetailBase },
+      });
+
+      expect(result.contactSecondary).toBeDefined();
+    });
+
     it('should call formatCase and add additional details on the given case', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
