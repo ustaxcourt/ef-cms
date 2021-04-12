@@ -110,7 +110,7 @@ export const EditPetitionerInformationInternal = connect(
               bind={bind}
               clearTypeOnCountryChange={true}
               type={type}
-              onChange="contactCountryTypeChangeSequence"
+              onChange="updateFormValueSequence"
             />
             {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
               <Address
