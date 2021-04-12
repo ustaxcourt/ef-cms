@@ -124,10 +124,9 @@ describe('update petitioner contact information on a case', () => {
 
   it('throws an error if the contact to update is not valid', async () => {
     mockCase = {
-      ...MOCK_CASE,
+      ...mockCase,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: mockPetitioners,
-      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     await expect(
@@ -148,7 +147,24 @@ describe('update petitioner contact information on a case', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should throw an error if the case status is new', () => {});
+  it('should throw an error if the case status is new', async () => {
+    mockCase = {
+      ...mockCase,
+      status: CASE_STATUS_TYPES.new,
+    };
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          contactId: SECONDARY_CONTACT_ID,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+        },
+      }),
+    ).rejects.toThrow(
+      `Case with docketNumber ${mockCase.docketNumber} has not been served`,
+    );
+  });
 
   it('updates petitioner contact when primary contact info changes and serves the notice created', async () => {
     const mockNumberOfPages = 999;
@@ -191,11 +207,10 @@ describe('update petitioner contact information on a case', () => {
 
   it('ensures updates to fields with null values are persisted', async () => {
     mockCase = {
-      ...MOCK_CASE,
+      ...mockCase,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: mockPetitioners,
       privatePractitioners: [],
-      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     await updatePetitionerInformationInteractor(applicationContext, {
@@ -221,11 +236,10 @@ describe('update petitioner contact information on a case', () => {
 
   it('sets filedBy to undefined on notice of change docket entry', async () => {
     mockCase = {
-      ...MOCK_CASE,
+      ...mockCase,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: mockPetitioners,
       privatePractitioners: [],
-      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     const result = await updatePetitionerInformationInteractor(
@@ -248,10 +262,9 @@ describe('update petitioner contact information on a case', () => {
 
   it('updates petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice if the contactSecondary was previously on the case', async () => {
     mockCase = {
-      ...MOCK_CASE,
+      ...mockCase,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: mockPetitioners,
-      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     const result = await updatePetitionerInformationInteractor(
@@ -373,7 +386,7 @@ describe('update petitioner contact information on a case', () => {
   it("should not generate a notice of change address when contactPrimary's information is sealed", async () => {
     mockUser.role = ROLES.docketClerk;
     mockCase = {
-      ...MOCK_CASE,
+      ...mockCase,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
@@ -391,7 +404,6 @@ describe('update petitioner contact information on a case', () => {
           title: 'Executor',
         },
       ],
-      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     await updatePetitionerInformationInteractor(applicationContext, {
@@ -419,13 +431,12 @@ describe('update petitioner contact information on a case', () => {
   it("should not generate a notice of change address when contactSecondary's information is sealed", async () => {
     mockUser.role = ROLES.docketClerk;
     mockCase = {
-      ...MOCK_CASE,
+      ...mockCase,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: [
         mockPetitioners[0],
         { ...mockPetitioners[1], isAddressSealed: true },
       ],
-      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     await updatePetitionerInformationInteractor(applicationContext, {
@@ -445,7 +456,7 @@ describe('update petitioner contact information on a case', () => {
     it('should create a work item for the NCA when the primary contact is unrepresented', async () => {
       mockUser.role = ROLES.docketClerk;
       mockCase = {
-        ...MOCK_CASE,
+        ...mockCase,
         partyType: PARTY_TYPES.petitioner,
         petitioners: [mockPetitioners[0]],
         privatePractitioners: [
@@ -454,7 +465,6 @@ describe('update petitioner contact information on a case', () => {
             representing: ['6c5b79e0-2429-4ebc-8e9c-483d0282d4e0'],
           },
         ],
-        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -484,7 +494,7 @@ describe('update petitioner contact information on a case', () => {
 
     it('should create a work item for the NCA when the secondary contact is unrepresented', async () => {
       mockCase = {
-        ...MOCK_CASE,
+        ...mockCase,
         partyType: PARTY_TYPES.petitionerSpouse,
         petitioners: mockPetitioners,
         privatePractitioners: [
@@ -493,7 +503,6 @@ describe('update petitioner contact information on a case', () => {
             representing: ['51c088b0-808e-4189-bb99-e76546befbfe'],
           },
         ],
-        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -523,13 +532,12 @@ describe('update petitioner contact information on a case', () => {
 
     it('should NOT create a work item for the NCA when the primary contact is represented and their service preference is NOT paper', async () => {
       mockCase = {
-        ...MOCK_CASE,
+        ...mockCase,
         partyType: PARTY_TYPES.petitioner,
         petitioners: [mockPetitioners[0]],
         privatePractitioners: [
           { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
         ],
-        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -559,13 +567,12 @@ describe('update petitioner contact information on a case', () => {
 
     it('should NOT create a work item for the NCA when the secondary contact is represented and their service preference is NOT paper', async () => {
       mockCase = {
-        ...MOCK_CASE,
+        ...mockCase,
         partyType: PARTY_TYPES.petitionerSpouse,
         petitioners: mockPetitioners,
         privatePractitioners: [
           { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
         ],
-        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -595,13 +602,12 @@ describe('update petitioner contact information on a case', () => {
 
     it('should create a work item for the NCA when the primary contact is represented and their service preference is paper', async () => {
       mockCase = {
-        ...MOCK_CASE,
+        ...mockCase,
         partyType: PARTY_TYPES.petitioner,
         petitioners: [mockPetitioners[0]],
         privatePractitioners: [
           { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
         ],
-        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -632,13 +638,12 @@ describe('update petitioner contact information on a case', () => {
 
     it('should create a work item for the NCA when the secondary contact is represented and their service preference is paper', async () => {
       mockCase = {
-        ...MOCK_CASE,
+        ...mockCase,
         partyType: PARTY_TYPES.petitionerSpouse,
         petitioners: mockPetitioners,
         privatePractitioners: [
           { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
         ],
-        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -669,7 +674,7 @@ describe('update petitioner contact information on a case', () => {
 
     it('should create a work item for the NCA when the primary contact is represented and a private practitioner on the case requests paper service', async () => {
       mockCase = {
-        ...MOCK_CASE,
+        ...mockCase,
         partyType: PARTY_TYPES.petitionerSpouse,
         petitioners: mockPetitioners,
         privatePractitioners: [
@@ -679,7 +684,6 @@ describe('update petitioner contact information on a case', () => {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
-        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -709,7 +713,7 @@ describe('update petitioner contact information on a case', () => {
 
     it('should create a work item for the NCA when the secondary contact is represented and a IRS practitioner on the case requests paper service', async () => {
       mockCase = {
-        ...MOCK_CASE,
+        ...mockCase,
         irsPractitioners: [
           {
             barNumber: 'PT1234',
@@ -728,7 +732,6 @@ describe('update petitioner contact information on a case', () => {
             representing: [SECONDARY_CONTACT_ID],
           },
         ],
-        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
