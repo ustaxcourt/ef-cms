@@ -17,7 +17,6 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { cloneDeep } = require('lodash');
-const { userDecorator } = require('../User');
 
 const ContactFactory = {};
 
@@ -501,8 +500,6 @@ ContactFactory.createContactFactory = ({
       if (!applicationContext) {
         throw new TypeError('applicationContext must be defined');
       }
-
-      userDecorator(this, rawContact);
 
       this.contactId = rawContact.contactId || applicationContext.getUniqueId();
       this.address1 = rawContact.address1;
