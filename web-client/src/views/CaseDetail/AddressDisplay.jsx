@@ -55,7 +55,7 @@ export const AddressDisplay = connect(
                 className="margin-left-2"
                 href={editLinkExternal}
                 icon="edit"
-                tabindex="0"
+                tabIndex="0"
               >
                 Edit
               </Button>
