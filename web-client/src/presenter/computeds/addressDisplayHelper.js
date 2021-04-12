@@ -4,7 +4,7 @@ export const addressDisplayHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const user = applicationContext.getCurrentUser();
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const { USER_ROLES } = applicationContext.getConstants();
 
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const permissions = get(state.permissions);
@@ -16,6 +16,10 @@ export const addressDisplayHelper = (get, applicationContext) => {
   const contactSecondary =
     applicationContext.getUtilities().getContactSecondary(caseDetail) ||
     form?.contactSecondary;
+
+  const petitionIsServed = !!applicationContext
+    .getUtilities()
+    .getPetitionDocketEntry(caseDetail)?.servedAt;
 
   let showEditPrimaryContact;
   let showSealedPrimaryContact;
@@ -41,20 +45,17 @@ export const addressDisplayHelper = (get, applicationContext) => {
   } else if (user.role === USER_ROLES.privatePractitioner) {
     showEditPrimaryContact = userAssociatedWithCase;
     showEditSecondaryContact = userAssociatedWithCase;
-  } else if (
-    permissions.EDIT_PETITIONER_INFO &&
-    caseDetail.status !== STATUS_TYPES.new
-  ) {
+  } else if (permissions.EDIT_PETITIONER_INFO && petitionIsServed) {
     showEditPetitionerInformation = true;
   }
 
   return {
     primary: {
-      showEditContact: showEditPrimaryContact,
+      showEditContact: showEditPrimaryContact && petitionIsServed,
       showSealedContact: showSealedPrimaryContact,
     },
     secondary: {
-      showEditContact: showEditSecondaryContact,
+      showEditContact: showEditSecondaryContact && petitionIsServed,
       showSealedContact: showSealedSecondaryContact,
     },
     showEditPetitionerInformation,

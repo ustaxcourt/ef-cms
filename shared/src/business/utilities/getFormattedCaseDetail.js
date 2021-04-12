@@ -583,6 +583,7 @@ const getFormattedCaseDetail = ({
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
 
   result.contactPrimary = getContactPrimary(caseDetail);
+  result.contactSecondary = getContactSecondary(caseDetail);
 
   return result;
 };
