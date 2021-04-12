@@ -25,9 +25,9 @@ export const setupPetitionerContactInformationFormAction = ({
       ...caseDetail,
     });
 
-  const contactToSet = formattedCaseDetail.petitioners.find(
-    p => p.contactId === contactId,
-  );
+  const contactToSet = applicationContext
+    .getUtilities()
+    .getPetitionerById(formattedCaseDetail, contactId);
 
   store.set(
     state.form,

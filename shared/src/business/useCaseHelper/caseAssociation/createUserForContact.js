@@ -29,7 +29,7 @@ exports.createUserForContact = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const contact = caseEntity.petitioners.find(p => p.contactId === contactId);
+  const contact = caseEntity.getPetitionerById(contactId);
 
   const userEntity = new User(
     {

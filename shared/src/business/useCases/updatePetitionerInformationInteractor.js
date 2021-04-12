@@ -2,6 +2,7 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../entities/EntityConstants');
@@ -14,7 +15,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { Case } = require('../entities/cases/Case');
+const { Case, getPetitionerById } = require('../entities/cases/Case');
 const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -244,8 +245,15 @@ exports.updatePetitionerInformationInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const oldCaseContact = oldCase.petitioners.find(
-    p => p.contactId === updatedPetitionerData.contactId,
+  if (oldCase.status === CASE_STATUS_TYPES.new) {
+    throw new Error(
+      `Case with docketNumber ${oldCase.docketNumber} has not been served`,
+    );
+  }
+
+  const oldCaseContact = getPetitionerById(
+    oldCase,
+    updatedPetitionerData.contactId,
   );
 
   if (!oldCaseContact) {
@@ -323,8 +331,8 @@ exports.updatePetitionerInformationInteractor = async (
   let petitionerChangeDocs;
   let paperServicePdfUrl;
 
-  const updatedCaseContact = caseEntity.petitioners.find(
-    p => p.contactId === updatedPetitionerData.contactId,
+  const updatedCaseContact = caseEntity.getPetitionerById(
+    updatedPetitionerData.contactId,
   );
 
   if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {

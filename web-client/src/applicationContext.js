@@ -8,6 +8,7 @@ import {
   getOtherFilers,
   getOtherPetitioners,
   getPetitionDocketEntry,
+  getPetitionerById,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -656,6 +657,7 @@ const applicationContext = {
       getOtherFilers,
       getOtherPetitioners,
       getPetitionDocketEntry,
+      getPetitionerById,
       getServedPartiesCode,
       getTrialSessionStatus,
       getWorkQueueFilters,
