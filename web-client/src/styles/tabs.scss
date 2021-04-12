@@ -32,11 +32,13 @@
         margin-right: 45px;
         background: none;
         color: color($theme-color-primary);
-        cursor: pointer;
-        font-family: $font-serif;
-        font-size: 32px;
-        font-weight: bold;
-        text-align: left;
+        .button-text {
+          cursor: pointer;
+          font-family: $font-serif;
+          font-size: 32px;
+          font-weight: bold;
+          text-align: left;
+        }
 
         &:hover {
           border-bottom: 3px solid color($theme-color-primary-darker);
