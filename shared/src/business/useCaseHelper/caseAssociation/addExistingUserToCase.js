@@ -48,7 +48,7 @@ exports.addExistingUserToCase = async ({
       userId: userIdFromCognito,
     });
 
-  const contact = caseEntity.petitioners.find(p => p.contactId === contactId);
+  const contact = caseEntity.getPetitionerById(contactId);
   if (contact.name === name) {
     contact.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     contact.email = email;

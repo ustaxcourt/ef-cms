@@ -14,7 +14,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { Case } = require('../entities/cases/Case');
+const { Case, getPetitionerById } = require('../entities/cases/Case');
 const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -244,8 +244,9 @@ exports.updatePetitionerInformationInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const oldCaseContact = oldCase.petitioners.find(
-    p => p.contactId === updatedPetitionerData.contactId,
+  const oldCaseContact = getPetitionerById(
+    oldCase,
+    updatedPetitionerData.contactId,
   );
 
   if (!oldCaseContact) {
