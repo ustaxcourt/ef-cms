@@ -98,7 +98,11 @@ describe('update petitioner contact information on a case', () => {
 
   beforeEach(() => {
     mockUser = userData;
-    mockCase = { ...MOCK_CASE, petitioners: mockPetitioners };
+    mockCase = {
+      ...MOCK_CASE,
+      petitioners: mockPetitioners,
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
@@ -123,6 +127,7 @@ describe('update petitioner contact information on a case', () => {
       ...MOCK_CASE,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: mockPetitioners,
+      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     await expect(
@@ -142,6 +147,8 @@ describe('update petitioner contact information on a case', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).not.toHaveBeenCalled();
   });
+
+  it('should throw an error if the case status is new', () => {});
 
   it('updates petitioner contact when primary contact info changes and serves the notice created', async () => {
     const mockNumberOfPages = 999;
@@ -188,6 +195,7 @@ describe('update petitioner contact information on a case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: mockPetitioners,
       privatePractitioners: [],
+      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     await updatePetitionerInformationInteractor(applicationContext, {
@@ -217,6 +225,7 @@ describe('update petitioner contact information on a case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: mockPetitioners,
       privatePractitioners: [],
+      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     const result = await updatePetitionerInformationInteractor(
@@ -242,6 +251,7 @@ describe('update petitioner contact information on a case', () => {
       ...MOCK_CASE,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: mockPetitioners,
+      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     const result = await updatePetitionerInformationInteractor(
@@ -381,6 +391,7 @@ describe('update petitioner contact information on a case', () => {
           title: 'Executor',
         },
       ],
+      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     await updatePetitionerInformationInteractor(applicationContext, {
@@ -414,6 +425,7 @@ describe('update petitioner contact information on a case', () => {
         mockPetitioners[0],
         { ...mockPetitioners[1], isAddressSealed: true },
       ],
+      status: CASE_STATUS_TYPES.generalDocket,
     };
 
     await updatePetitionerInformationInteractor(applicationContext, {
@@ -442,6 +454,7 @@ describe('update petitioner contact information on a case', () => {
             representing: ['6c5b79e0-2429-4ebc-8e9c-483d0282d4e0'],
           },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -480,6 +493,7 @@ describe('update petitioner contact information on a case', () => {
             representing: ['51c088b0-808e-4189-bb99-e76546befbfe'],
           },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -515,6 +529,7 @@ describe('update petitioner contact information on a case', () => {
         privatePractitioners: [
           { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -550,6 +565,7 @@ describe('update petitioner contact information on a case', () => {
         privatePractitioners: [
           { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -585,6 +601,7 @@ describe('update petitioner contact information on a case', () => {
         privatePractitioners: [
           { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -621,6 +638,7 @@ describe('update petitioner contact information on a case', () => {
         privatePractitioners: [
           { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -661,6 +679,7 @@ describe('update petitioner contact information on a case', () => {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
@@ -709,6 +728,7 @@ describe('update petitioner contact information on a case', () => {
             representing: [SECONDARY_CONTACT_ID],
           },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       };
 
       const result = await updatePetitionerInformationInteractor(
