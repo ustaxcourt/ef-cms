@@ -16,10 +16,19 @@ export const FileUploadStatusModal = connect(
     percentComplete,
   }) {
     return (
-      <ModalDialog ariaLiveMode="polite" className="file-upload-status-modal">
+      <ModalDialog className="file-upload-status-modal">
         <div>
-          <div className="status-message">{helper.statusMessage}</div>
-          <div aria-hidden="true" className="percent-complete">
+          <div className="status-message" id="progress-description">
+            {helper.statusMessage}
+          </div>
+          <div
+            aria-describedby="progress-description"
+            aria-valuemax="100"
+            aria-valuemin="0"
+            aria-valuenow={percentComplete}
+            className="percent-complete"
+            role="progressbar"
+          >
             {percentComplete}%
           </div>
           <div aria-hidden="true" className="progress-bar">

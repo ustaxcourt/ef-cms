@@ -12,9 +12,18 @@ export const UserContactEditProgress = connect(
         <div className="sticky-footer sticky-footer--space" />
         <div className="sticky-footer sticky-footer--container">
           <div className="usa-section grid-container padding-bottom-0 margin-top-1">
-            <div aria-live="polite" className="progress-user-contact-edit">
-              <h3>Updating contact info in all cases...</h3>
-              <span className="progress-text">
+            <div className="progress-user-contact-edit">
+              <h3 id="progress-description">
+                Updating contact info in all cases...
+              </h3>
+              <span
+                aria-describedby="progress-description"
+                aria-valuemax="100"
+                aria-valuemin="0"
+                aria-valuenow={userContactEditProgressHelper.percentComplete}
+                className="progress-text"
+                role="progressbar"
+              >
                 {userContactEditProgressHelper.percentComplete}% Complete
               </span>
               <div
