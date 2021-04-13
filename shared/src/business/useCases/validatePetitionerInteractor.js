@@ -37,6 +37,7 @@ exports.validatePetitionerInteractor = ({
       applicationContext,
     }).getFormattedValidationErrors();
   }
+
   const aggregatedErrors = {
     ...contactErrors,
     ...updateUserEmailErrors,
