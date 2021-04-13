@@ -599,37 +599,37 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should use original case caption to create case title when creating work item', async () => {
-    const UPDATED_EMAIL = 'abc@example.com';
     mockCase = {
       ...mockCaseWithPrivatePractitioner,
-      closedDate: '1999-11-11T22:22:22.021Z',
-      privatePractitioners: [
+      petitioners: [
         {
-          ...mockCaseWithPrivatePractitioner.privatePractitioners[0],
-          email: undefined,
+          ...getContactPrimary(MOCK_CASE),
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
+        {
+          ...getContactPrimary(MOCK_CASE),
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Secondary',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
       ],
-      status: CASE_STATUS_TYPES.closed,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
 
     await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
         ...mockPrivatePractitioner.contact,
+        address1: '234 Main St',
       },
-      updatedEmail: UPDATED_EMAIL,
-      user: {
-        ...mockPrivatePractitioner,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      },
+      user: mockPrivatePractitioner,
     });
 
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
     ).toMatchObject({
-      caseTitle: 'Guy Fieri',
+      caseTitle: 'Test Petitioner',
     });
   });
 });
