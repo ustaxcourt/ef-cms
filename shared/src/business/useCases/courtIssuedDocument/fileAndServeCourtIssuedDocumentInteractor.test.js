@@ -543,4 +543,27 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       ).toHaveBeenCalled();
     });
   });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      documentMeta: {
+        date: '2019-03-01T21:40:46.415Z',
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order',
+        documentType: 'Order',
+        eventCode: 'O',
+        freeText: 'Dogs',
+        generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
+        serviceStamp: 'Served',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
+        .calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: caseRecord.caseCaption,
+    });
+  });
 });

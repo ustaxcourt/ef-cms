@@ -597,4 +597,39 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
   });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    mockCase = {
+      ...mockCaseWithPrivatePractitioner,
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        {
+          ...getContactPrimary(MOCK_CASE),
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Secondary',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    };
+
+    await generateChangeOfAddress({
+      applicationContext,
+      contactInfo: {
+        ...mockPrivatePractitioner.contact,
+        address1: '234 Main St',
+      },
+      user: mockPrivatePractitioner,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: 'Test Petitioner',
+    });
+  });
 });
