@@ -1,5 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { ModalDialog } from './ModalDialog';
+import { ProgressBar } from '../ustc-ui/ProgressBar/ProgressBar';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -21,16 +22,11 @@ export const FileUploadStatusModal = connect(
           <div className="status-message" id="progress-description">
             {helper.statusMessage}
           </div>
-          <div
-            aria-describedby="progress-description"
-            aria-valuemax="100"
-            aria-valuemin="0"
-            aria-valuenow={percentComplete}
-            className="percent-complete"
-            role="progressbar"
-          >
-            {percentComplete}%
-          </div>
+          <ProgressBar
+            aria-labelledby="progress-description"
+            value={percentComplete}
+          />
+          <div className="percent-complete">{percentComplete}%</div>
           <div aria-hidden="true" className="progress-bar">
             <div
               className="progress-bar-fill"
