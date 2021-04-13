@@ -54,20 +54,20 @@ exports.deleteCounselFromCaseInteractor = async (
 
   if (
     !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      caseEntity.contactPrimary.contactId,
+      caseEntity.getContactPrimary().contactId,
     )
   ) {
-    caseEntity.contactPrimary.serviceIndicator = null;
+    caseEntity.getContactPrimary().serviceIndicator = null;
     aggregatePartiesForService(caseEntity);
   }
 
   if (
-    caseEntity.contactSecondary &&
+    caseEntity.getContactSecondary() &&
     !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      caseEntity.contactSecondary.contactId,
+      caseEntity.getContactSecondary().contactId,
     )
   ) {
-    caseEntity.contactSecondary.serviceIndicator = null;
+    caseEntity.getContactSecondary().serviceIndicator = null;
     aggregatePartiesForService(caseEntity);
   }
 
