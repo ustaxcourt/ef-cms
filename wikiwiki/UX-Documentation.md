@@ -120,7 +120,7 @@ In this study, Flexion UX Designers observed Docket Clerks performing their norm
 
 [Docket Clerk Usability Testing - Findings](https://drive.google.com/open?id=1ay3hwjE2WrUH4izPs7BHNCRUY0S7WkhNZuuOTkWCyTI)
 
-## Roundtable Cooperative Usability Testing (January 2020)
+## Cooperative Usability Testing (January 2020)
 In this study, Flexion UX Designers performed an end-to-end testing of a U.S. Tax Court case workflow in order to validate system features and handoffs between roles at the Court.
 
 A modified methodology for cooperative usability testing was used to meet our unique needs. Users performed their daily tasks and then reflected with the entire group on the experience.
