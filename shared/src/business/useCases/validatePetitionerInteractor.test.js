@@ -8,6 +8,7 @@ const {
 } = require('./validatePetitionerInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 
 describe('validatePetitionerInteractor', () => {
   it('runs validation on a contact with no invalid properties', async () => {
@@ -16,8 +17,9 @@ describe('validatePetitionerInteractor', () => {
       address2: 'Grand View Apartments',
       address3: 'Apt. #104',
       city: 'Jordan',
+      confirmEmail: 'night@example.com',
       countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'night@theroxbury.com',
+      email: 'night@example.com',
       name: 'Wilbur Rayou',
       phone: '1111111111',
       postalCode: '55352',
@@ -74,6 +76,7 @@ describe('validatePetitionerInteractor', () => {
     });
 
     expect(errors).toEqual({
+      confirmEmail: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail,
       postalCode:
         ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.postalCode[0].message,
     });
