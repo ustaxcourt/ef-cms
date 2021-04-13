@@ -766,7 +766,7 @@ describe('update petitioner contact information on a case', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
-          email: 'changed-email@example.com',
+          updatedEmail: 'changed-email@example.com',
         },
       });
 
@@ -807,7 +807,7 @@ describe('update petitioner contact information on a case', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
-          email: 'changed-email@example.com',
+          updatedEmail: 'changed-email@example.com',
         },
       });
 
@@ -837,7 +837,7 @@ describe('update petitioner contact information on a case', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
-          email: 'changed-email@example.com',
+          updatedEmail: 'changed-email@example.com',
         },
       });
 

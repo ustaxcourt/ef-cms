@@ -199,8 +199,7 @@ export const EditPetitionerInformationInternal = connect(
                   <h4>Add Login & Service Email</h4>
                   <FormGroup
                     errorText={
-                      validationErrors.contact &&
-                      validationErrors.contact.updatedEmail
+                      validationErrors.contact && validationErrors.contact.email
                     }
                   >
                     <label className="usa-label" htmlFor="updatedEmail">

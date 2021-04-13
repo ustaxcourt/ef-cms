@@ -19,11 +19,11 @@ describe('validatePetitionerInteractor', () => {
       city: 'Jordan',
       confirmEmail: 'night@example.com',
       countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'night@example.com',
       name: 'Wilbur Rayou',
       phone: '1111111111',
       postalCode: '55352',
       state: 'MN',
+      updatedEmail: 'night@example.com',
     };
 
     const partyType = PARTY_TYPES.petitioner;
@@ -84,11 +84,11 @@ describe('validatePetitionerInteractor', () => {
       address3: 'Apt. #104',
       city: 'Jordan',
       countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'night@example.com',
       name: 'Wilbur Rayou',
       phone: '1111111111',
       postalCode: 'what is love',
       state: 'MN',
+      updatedEmail: 'night@example.com',
     };
 
     const partyType = PARTY_TYPES.petitioner;
@@ -122,11 +122,11 @@ describe('validatePetitionerInteractor', () => {
       address3: 'Apt. #104',
       city: 'Jordan',
       countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'night@example.com',
       name: 'Wilbur Rayou',
       phone: '1111111111',
       postalCode: 'what is love',
       state: 'MN',
+      updatedEmail: 'night@example.com',
     };
 
     const partyType = PARTY_TYPES.petitionerSpouse;
