@@ -850,4 +850,23 @@ describe('update petitioner contact information on a case', () => {
       ).not.toHaveBeenCalled();
     });
   });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...getContactPrimary(MOCK_CASE),
+        address1: 'changed address',
+        contactId: mockPetitioners[0].contactId,
+        name: 'Test Person22222',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: 'Test Petitioner',
+    });
+  });
 });
