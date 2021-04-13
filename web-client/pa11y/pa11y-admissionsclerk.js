@@ -4,8 +4,8 @@ module.exports = [
   'http://localhost:1234/mock-login?token=admissionsclerk&path=/case-detail/124-20/edit-petitioner-information',
   {
     actions: [
-      'wait for #email to be visible',
-      'set field #email to petitioner1@example.com',
+      'wait for #updatedEmail to be visible',
+      'set field #updatedEmail to petitioner1@example.com',
       'set field #confirm-email to petitioner1@example.com',
       'click element #submit-edit-petitioner-information',
       'wait for #matching-email-modal to be visible',
@@ -16,8 +16,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #email to be visible',
-      'set field #email to available@example.com',
+      'wait for #updatedEmail to be visible',
+      'set field #updatedEmail to available@example.com',
       'set field #confirm-email to available@example.com',
       'click element #submit-edit-petitioner-information',
       'wait for #no-matching-email-modal to be visible',

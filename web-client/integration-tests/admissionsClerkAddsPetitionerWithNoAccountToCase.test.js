@@ -85,11 +85,11 @@ describe('admissions clerk adds petitioner without existing cognito account to c
     expect(test.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
-    expect(test.getState('form.email')).toBeUndefined();
+    expect(test.getState('form.updatedEmail')).toBeUndefined();
     expect(test.getState('form.confirmEmail')).toBeUndefined();
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contact.email',
+      key: 'contact.updatedEmail',
       value: EMAIL_TO_ADD,
     });
 
