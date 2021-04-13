@@ -1,4 +1,5 @@
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { isEmpty } = require('lodash');
 const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 
 /**
@@ -36,9 +37,10 @@ exports.validatePetitionerInteractor = ({
       applicationContext,
     }).getFormattedValidationErrors();
   }
-
-  return {
+  const aggregatedErrors = {
     ...contactErrors,
     ...updateUserEmailErrors,
   };
+
+  return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;
 };
