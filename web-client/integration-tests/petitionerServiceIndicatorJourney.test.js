@@ -227,9 +227,12 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
+    const caseDetail = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
+    );
 
     expect(caseDetail.contactPrimary.serviceIndicator).toEqual('None');
   });
