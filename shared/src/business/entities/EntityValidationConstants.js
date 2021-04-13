@@ -255,7 +255,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   ).required(),
   qcAt: JoiValidationConstants.ISO_DATE.optional(),
   qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
-  receivedAt: JoiValidationConstants.ISO_DATE_STRICT.optional(),
+  receivedAt: JoiValidationConstants.ISO_DATE.optional(),
   relationship: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_RELATIONSHIPS),
   ).optional(),

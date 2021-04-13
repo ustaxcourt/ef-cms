@@ -102,7 +102,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
     docketEntries: 
       type: "array"
@@ -152,7 +151,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
               whens: 
                 - 
                   ref: 
@@ -182,7 +180,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "When the Document was added to the system."
             docketEntryId: 
@@ -610,7 +607,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "Date that this Document was filed."
               rules: 
@@ -695,7 +691,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
               rules: 
                 - 
@@ -707,7 +702,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
               rules: 
                 - 
@@ -848,7 +842,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
 
  ```

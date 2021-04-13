@@ -38,7 +38,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "required"
         description: "When the Case Deadline was added to the system."
     deadlineDate: 
@@ -46,7 +45,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "required"
         description: "When the Case Deadline expires."
     description: 

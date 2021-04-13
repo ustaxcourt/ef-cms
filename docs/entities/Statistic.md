@@ -110,7 +110,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         description: "Last date of the statistics period."
       rules: 
         - 
