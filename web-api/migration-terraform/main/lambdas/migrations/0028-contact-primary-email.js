@@ -44,17 +44,12 @@ const migrateItems = async (items, documentClient) => {
       const caseRecord = aggregateCaseItems([item, ...privatePractitioners]);
       let itemToModify = cloneDeep(item);
 
-      const currentCaseEntity = new Case(caseRecord, { applicationContext });
-
-      const contactIdUser = await applicationContext
-        .getPersistenceGateway()
-        .getUserByEmail({
-          applicationContext,
-          email: currentCaseEntity.contactPrimary.email,
-        });
-
-      // if this user was found in dynamo, that means the case contactPrimary.contactId is a petitioner
-      if (!contactIdUser) {
+      if (
+        privatePractitioners.find(
+          practitioner =>
+            practitioner.email === itemToModify.contactPrimary.email,
+        )
+      ) {
         delete itemToModify.contactPrimary.email;
         delete itemToModify.contactPrimary.serviceIndicator;
 

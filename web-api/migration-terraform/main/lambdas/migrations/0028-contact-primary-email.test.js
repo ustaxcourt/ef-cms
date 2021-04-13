@@ -2,7 +2,6 @@ const {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { applicationContext } = require('./0028-contact-primary-email');
 const { migrateItems } = require('./0028-contact-primary-email');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
@@ -117,7 +116,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should remove the contactPrimary.email on a case if it is not associated with a petitioner', async () => {
+  it('should not remove the contactPrimary.email on a case if there are no practitioners', async () => {
     caseQueryResults = {
       'case|101-21': [],
     };
@@ -135,11 +134,49 @@ describe('migrateItems', () => {
       },
     ];
 
-    applicationContext.getPersistenceGateway().getUserByEmail = jest
-      .fn()
-      .mockImplementation(async () => {
-        return null;
-      });
+    const results = await migrateItems(items, documentClient);
+
+    expect(queryMock).toHaveBeenCalledTimes(1);
+    expect(results).toEqual([
+      {
+        ...mockCaseRecord,
+        contactPrimary: {
+          ...mockContact,
+          contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
+          email: 'something@example.com',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        pk: 'case|101-21',
+        sk: 'case|101-21',
+      },
+    ]);
+  });
+
+  it('should not remove the contactPrimary.email on a case if there are no associated practitioners', async () => {
+    caseQueryResults = {
+      'case|101-21': [
+        {
+          ...mockPrivatePractitioner,
+          email: 'else@example.com',
+          pk: 'case|101-21',
+          representing: [],
+          sk: 'privatePractitioner|7874eadc-0181-4ff5-826c-305200e8733d',
+        },
+      ],
+    };
+    const items = [
+      {
+        ...mockCaseRecord,
+        contactPrimary: {
+          ...mockContact,
+          contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
+          email: 'something@example.com',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        pk: 'case|101-21',
+        sk: 'case|101-21',
+      },
+    ];
 
     const results = await migrateItems(items, documentClient);
 
@@ -150,8 +187,8 @@ describe('migrateItems', () => {
         contactPrimary: {
           ...mockContact,
           contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
-          email: null,
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, // changed to paper
+          email: 'something@example.com',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
         pk: 'case|101-21',
         sk: 'case|101-21',
@@ -159,11 +196,12 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should remove the contactPrimary.email on a case if it is not associated with a petitioner (even if private practitioner is still on case)', async () => {
+  it('should remove the contactPrimary.email on a case if there is a practitioner with a matching email', async () => {
     caseQueryResults = {
       'case|101-21': [
         {
           ...mockPrivatePractitioner,
+          email: 'something@example.com',
           pk: 'case|101-21',
           representing: ['6d74eadc-0181-4ff5-826c-305200e8733d'],
           sk: 'privatePractitioner|7874eadc-0181-4ff5-826c-305200e8733d',
@@ -183,12 +221,6 @@ describe('migrateItems', () => {
         sk: 'case|101-21',
       },
     ];
-
-    applicationContext.getPersistenceGateway().getUserByEmail = jest
-      .fn()
-      .mockImplementation(async () => {
-        return null;
-      });
 
     const results = await migrateItems(items, documentClient);
 
@@ -201,55 +233,6 @@ describe('migrateItems', () => {
           contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
           email: null,
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE, // changed to none
-        },
-        pk: 'case|101-21',
-        sk: 'case|101-21',
-      },
-    ]);
-  });
-
-  it('should not modify the contactPrimary.email or service indicator if email is associated with a petitioner', async () => {
-    caseQueryResults = {
-      'case|101-21': [
-        {
-          ...mockPrivatePractitioner,
-          pk: 'case|101-21',
-          representing: ['6d74eadc-0181-4ff5-826c-305200e8733d'],
-          sk: 'privatePractitioner|7874eadc-0181-4ff5-826c-305200e8733d',
-        },
-      ],
-    };
-    const items = [
-      {
-        ...mockCaseRecord,
-        contactPrimary: {
-          ...mockContact,
-          contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
-          email: 'something@example.com',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        },
-        pk: 'case|101-21',
-        sk: 'case|101-21',
-      },
-    ];
-
-    applicationContext.getPersistenceGateway().getUserByEmail = jest
-      .fn()
-      .mockImplementation(async () => {
-        return {};
-      });
-
-    const results = await migrateItems(items, documentClient);
-
-    expect(queryMock).toHaveBeenCalledTimes(1);
-    expect(results).toEqual([
-      {
-        ...mockCaseRecord,
-        contactPrimary: {
-          ...mockContact,
-          contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
-          email: 'something@example.com', // do not change
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC, // do not change
         },
         pk: 'case|101-21',
         sk: 'case|101-21',
