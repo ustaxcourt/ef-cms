@@ -32,10 +32,11 @@ exports.validatePetitionerInteractor = ({
   })[petitioner.contactType].getFormattedValidationErrors();
 
   let updateUserEmailErrors;
-  if (contactInfo.email || contactInfo.confirmEmail) {
-    updateUserEmailErrors = new UpdateUserEmail(contactInfo, {
-      applicationContext,
-    }).getFormattedValidationErrors();
+  if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
+    updateUserEmailErrors = new UpdateUserEmail(
+      { ...contactInfo, email: contactInfo.updatedEmail },
+      { applicationContext },
+    ).getFormattedValidationErrors();
   }
 
   const aggregatedErrors = {
