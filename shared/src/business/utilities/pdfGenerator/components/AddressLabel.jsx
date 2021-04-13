@@ -20,7 +20,7 @@ export const AddressLabel = ({
         {'@media print{@page {margin-bottom: 2cm}}'}
       </style>
       <div>{name}</div>
-      {additionalName && <div>{additionalName}</div>}
+      {additionalName && <div>c/o {additionalName}</div>}
       {secondaryName && (
         <div>
           c/o {secondaryName}

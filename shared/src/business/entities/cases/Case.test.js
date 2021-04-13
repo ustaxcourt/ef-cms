@@ -184,7 +184,7 @@ describe('Case entity', () => {
       );
     });
 
-    it('should set additionalName as `c/o in care of` when partyType is estateWithoutExecutor', () => {
+    it('should set additionalName as `in care of` when partyType is estateWithoutExecutor', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -200,7 +200,7 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
+      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
     });
 
     it('should set additionalName as `secondaryName` when partyType is nextFriendForMinor', () => {
@@ -257,7 +257,7 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
+      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
     });
 
     it('should NOT set additionalName when it has already been set', () => {
