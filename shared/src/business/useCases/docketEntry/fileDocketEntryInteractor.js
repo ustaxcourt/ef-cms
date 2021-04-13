@@ -101,7 +101,8 @@ exports.fileDocketEntryInteractor = async (
       associatedJudge: caseToUpdate.associatedJudge,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
-      caseTitle: caseToUpdate.getCaseTitle(caseToUpdate.caseCaption),
+      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+
       docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
