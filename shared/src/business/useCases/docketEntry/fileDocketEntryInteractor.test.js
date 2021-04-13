@@ -266,7 +266,7 @@ describe('fileDocketEntryInteractor', () => {
   it('does not send the service email if an error occurs while updating the case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .updateCase.mockRejectedValue(new Error('bad!'));
+      .updateCase.mockRejectedValueOnce(new Error('bad!'));
 
     let error;
     try {
