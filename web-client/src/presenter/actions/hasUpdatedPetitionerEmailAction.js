@@ -5,24 +5,14 @@ import { state } from 'cerebral';
  * takes the no path otherwise
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.path the cerebral path function
  * @returns {object} continue path for the sequence
  */
-export const hasUpdatedPetitionerEmailAction = async ({
-  applicationContext,
-  get,
-  path,
-}) => {
-  const caseDetail = get(state.caseDetail);
+export const hasUpdatedPetitionerEmailAction = async ({ get, path }) => {
   const { contact: formContact } = get(state.form);
 
-  const caseContact = applicationContext
-    .getUtilities()
-    .getPetitionerById(caseDetail, formContact.contactId);
-
-  if (caseContact.email !== formContact.email) {
+  if (formContact.updatedEmail) {
     return path.yes();
   }
 

@@ -1,4 +1,6 @@
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { isEmpty } = require('lodash');
+const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 
 /**
  * validatePetitionerInteractor
@@ -22,10 +24,25 @@ exports.validatePetitionerInteractor = ({
     p => p.contactId === contactInfo.contactId,
   );
 
-  return ContactFactory.createContacts({
+  const contactErrors = ContactFactory.createContacts({
     applicationContext,
     contactInfo: { [petitioner.contactType]: contactInfo },
     partyType,
     status,
   })[petitioner.contactType].getFormattedValidationErrors();
+
+  let updateUserEmailErrors;
+  if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
+    updateUserEmailErrors = new UpdateUserEmail(
+      { ...contactInfo, email: contactInfo.updatedEmail },
+      { applicationContext },
+    ).getFormattedValidationErrors();
+  }
+
+  const aggregatedErrors = {
+    ...contactErrors,
+    ...updateUserEmailErrors,
+  };
+
+  return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;
 };
