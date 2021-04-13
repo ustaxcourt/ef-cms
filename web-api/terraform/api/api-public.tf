@@ -23,6 +23,8 @@ resource "aws_lambda_function" "api_public_lambda" {
 resource "aws_api_gateway_rest_api" "gateway_for_api_public" {
   name = "gateway_api_public_${var.environment}_${var.current_color}"
 
+  minimum_compression_size = "1"
+
   endpoint_configuration {
     types = ["REGIONAL"]
   }
