@@ -352,4 +352,27 @@ describe('updateSecondaryContactInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).not.toHaveBeenCalled();
   });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await updateSecondaryContactInteractor(applicationContext, {
+      contactInfo: {
+        address1: '453 Electric Ave',
+        city: 'Philadelphia',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'secondary@example.com',
+        name: 'New Secondary',
+        phone: '1234567890',
+        postalCode: '99999',
+        state: 'PA',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: 'Test Petitioner',
+    });
+  });
 });
