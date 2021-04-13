@@ -32,8 +32,10 @@
         margin-right: 45px;
         background: none;
         color: color($theme-color-primary);
+        cursor: pointer;
+
         .button-text {
-          cursor: pointer;
+          display: inline;
           font-family: $font-serif;
           font-size: 32px;
           font-weight: bold;
@@ -97,8 +99,11 @@
             display: inline-block;
             padding: 10px 27px 15px;
             margin-right: 0;
-            font-size: 17px;
-            text-align: center;
+
+            .button-text {
+              font-size: 17px;
+              text-align: center;
+            }
 
             &:hover,
             &:focus {
@@ -106,7 +111,7 @@
               background-color: none;
               color: color($theme-color-primary-darker);
 
-              span {
+              .button-text {
                 padding-bottom: 0;
                 border-bottom: 1px solid color($theme-color-primary-darker);
               }
@@ -123,12 +128,12 @@
               cursor: default;
 
               &:hover {
-                span {
+                .button-text {
                   border-bottom: 3px solid color($theme-color-primary);
                 }
               }
 
-              span {
+              .button-text {
                 border-bottom: 3px solid color($theme-color-primary);
               }
             }
@@ -161,8 +166,10 @@
             padding: 10px 27px 15px;
             margin-right: 0;
             color: $color-white;
-            font-size: 17px;
-            text-align: center;
+            .button-text {
+              font-size: 17px;
+              text-align: center;
+            }
 
             &:hover,
             &:focus {
@@ -170,7 +177,7 @@
               background-color: none;
               color: $color-white;
 
-              span {
+              .button-text {
                 padding-bottom: 0;
                 border-bottom: 3px solid $color-white;
               }
@@ -189,16 +196,15 @@
               &:hover {
                 color: color($theme-color-primary-darker);
 
-                span {
+                .button-text {
                   padding-bottom: 0;
                   border-bottom: 3px solid color($theme-color-primary-darker);
                 }
 
               }
 
-              span {
+              .button-text {
                 border-bottom: 3px solid color($theme-color-primary);
-
               }
             }
           }
@@ -210,14 +216,14 @@
   &.tab-button-h2 {
     > nav ul {
       margin-bottom: 20px;
-      li button {
+      li button .button-text {
         font-size: 24px;
       }
     }
   }
 
   &.tab-button-h3 {
-    nav ul li button {
+    nav ul li button .button-text {
       font-size: 17px;
     }
   }
