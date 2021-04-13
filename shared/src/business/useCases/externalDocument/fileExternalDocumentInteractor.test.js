@@ -138,6 +138,26 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
   });
 
+  it('should use original case caption to create case title when creating work item', async () => {
+    await fileExternalDocumentInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: mockDocketEntryId,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: caseRecord.caseCaption,
+    });
+  });
+
   it('should set secondary document and secondary supporting documents to lodged', async () => {
     const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
