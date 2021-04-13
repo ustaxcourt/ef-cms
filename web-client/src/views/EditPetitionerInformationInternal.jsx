@@ -197,7 +197,11 @@ export const EditPetitionerInformationInternal = connect(
               !form.contact.currentEmail && (
                 <>
                   <h4>Add Login & Service Email</h4>
-                  <FormGroup errorText={validationErrors.email}>
+                  <FormGroup
+                    errorText={
+                      validationErrors.contact && validationErrors.contact.email
+                    }
+                  >
                     <label className="usa-label" htmlFor="email">
                       New email address
                     </label>
@@ -217,7 +221,12 @@ export const EditPetitionerInformationInternal = connect(
                       }
                     />
                   </FormGroup>
-                  <FormGroup errorText={validationErrors.confirmEmail}>
+                  <FormGroup
+                    errorText={
+                      validationErrors.contact &&
+                      validationErrors.contact.confirmEmail
+                    }
+                  >
                     <label className="usa-label" htmlFor="confirm-email">
                       Re-enter new email address
                     </label>
