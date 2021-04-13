@@ -279,4 +279,50 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[0].docketEntries.length).toEqual(8);
     expect(result[1].docketEntries.length).toEqual(8);
   });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
+      docketNumbersForFiling: ['101-19', '102-19'],
+      documentMetadata: {
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: docketEntryId0,
+        secondaryDocument: {
+          docketEntryId: docketEntryId1,
+          documentTitle: 'Redacted',
+          documentType: 'Redacted',
+          eventCode: 'REDC',
+          filedBy: 'Test Petitioner',
+        },
+        secondarySupportingDocuments: [
+          {
+            docketEntryId: docketEntryId2,
+            documentTitle: 'Redacted',
+            documentType: 'Redacted',
+            eventCode: 'REDC',
+            filedBy: 'Test Petitioner',
+          },
+        ],
+        supportingDocuments: [
+          {
+            docketEntryId: docketEntryId3,
+            documentTitle: 'Redacted',
+            documentType: 'Redacted',
+            eventCode: 'REDC',
+            filedBy: 'Test Petitioner',
+          },
+        ],
+      },
+      leadDocketNumber: docketNumber0,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: 'fixme',
+    });
+  });
 });
