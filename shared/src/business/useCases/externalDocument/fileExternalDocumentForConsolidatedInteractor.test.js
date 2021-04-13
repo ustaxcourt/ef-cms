@@ -296,24 +296,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           eventCode: 'REDC',
           filedBy: 'Test Petitioner',
         },
-        secondarySupportingDocuments: [
-          {
-            docketEntryId: docketEntryId2,
-            documentTitle: 'Redacted',
-            documentType: 'Redacted',
-            eventCode: 'REDC',
-            filedBy: 'Test Petitioner',
-          },
-        ],
-        supportingDocuments: [
-          {
-            docketEntryId: docketEntryId3,
-            documentTitle: 'Redacted',
-            documentType: 'Redacted',
-            eventCode: 'REDC',
-            filedBy: 'Test Petitioner',
-          },
-        ],
       },
       leadDocketNumber: docketNumber0,
     });
@@ -322,7 +304,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       applicationContext.getPersistenceGateway()
         .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
     ).toMatchObject({
-      caseTitle: 'fixme',
+      caseTitle: 'Guy Fieri',
     });
   });
 });
