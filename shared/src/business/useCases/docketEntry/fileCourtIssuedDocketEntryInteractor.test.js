@@ -280,8 +280,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress.mock.calls[0][0].workItem,
+      applicationContext.getPersistenceGateway().createUserInboxRecord.mock
+        .calls[0][0].workItem,
     ).toMatchObject({
       caseTitle: caseRecord.caseCaption,
     });
