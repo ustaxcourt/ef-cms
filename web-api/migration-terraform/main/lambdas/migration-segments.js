@@ -1,15 +1,6 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
-  migrateItems: migration0025,
-} = require('./migrations/0026-update-to-stricter-date-format');
-const {
-  migrateItems: migration0026,
-} = require('./migrations/0026-hearing-remove-gsi1pk');
-const {
-  migrateItems: migration0027,
-} = require('./migrations/0027-contact-primary-secondary-service-preference');
-const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
@@ -33,15 +24,6 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 0025');
-  items = await migration0025(items, documentClient);
-
-  applicationContext.logger.info('about to run migration 0026');
-  items = await migration0026(items, documentClient);
-
-  applicationContext.logger.info('about to run migration 0027');
-  items = await migration0027(items, documentClient);
-
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
 
