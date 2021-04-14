@@ -48,7 +48,23 @@ const PetitionerInformation = connect(
         <div className="tablet:grid-col-12">
           <div className="card height-full">
             <div className="content-wrapper">
-              <h3 id="primary-label">Petitioner Contact Info</h3>
+              <h3 className="underlined" id="primary-label">
+                Petitioner Contact Info{' '}
+                <Button
+                  link
+                  aria-label="add cases to consolidate with this case"
+                  className="margin-top-1 padding-0 float-right"
+                  icon="plus-circle"
+                  // onClick={() => {
+                  //   openCleanModalSequence({
+                  //     showModal: 'AddConsolidatedCaseModal',
+                  //   });
+                  // }}
+                >
+                  Add Petitioner
+                </Button>
+              </h3>
+
               <div className="grid-row">
                 {formattedCaseDetail.contactPrimary && (
                   <div className="grid-col-3">
