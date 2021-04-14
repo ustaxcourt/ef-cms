@@ -229,24 +229,18 @@ describe('Petitioner Service Indicator Journey', () => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.serviceIndicator',
+      key: 'contact.serviceIndicator',
       value: 'None',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitUpdatePetitionerInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
 
-    const caseDetail = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('None');
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
   // remove private practitioner
