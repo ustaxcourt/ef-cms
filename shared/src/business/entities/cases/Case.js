@@ -47,11 +47,11 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
+const { compact, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry, isServed } = require('../DocketEntry');
-const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
@@ -1465,11 +1465,16 @@ Case.prototype.setAdditionalNameOnPetitioners = function () {
         contactPrimary.additionalName = contactPrimary.secondaryName;
         delete contactPrimary.secondaryName;
         break;
-      case PARTY_TYPES.estate:
-        contactPrimary.additionalName = `${contactPrimary.secondaryName}, ${contactPrimary.title}`;
+      case PARTY_TYPES.estate: {
+        const additionalNameFields = compact([
+          contactPrimary.secondaryName,
+          contactPrimary.title,
+        ]);
+        contactPrimary.additionalName = additionalNameFields.join(', ');
         delete contactPrimary.secondaryName;
         delete contactPrimary.title;
         break;
+      }
       case PARTY_TYPES.estateWithoutExecutor:
       case PARTY_TYPES.corporation:
         contactPrimary.additionalName = contactPrimary.inCareOf;
