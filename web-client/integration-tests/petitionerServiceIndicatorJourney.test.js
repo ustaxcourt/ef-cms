@@ -224,7 +224,10 @@ describe('Petitioner Service Indicator Journey', () => {
   // explicitly set petitioner to Paper
   loginAs(test, 'docketclerk@example.com');
   it('Updates petitioner service indicator to none', async () => {
+    let contactPrimary = contactPrimaryFromState(test);
+
     await test.runSequence('gotoEditPetitionerInformationSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
 
@@ -233,13 +236,17 @@ describe('Petitioner Service Indicator Journey', () => {
       value: 'None',
     });
 
-    await test.runSequence('submitUpdatePetitionerInformationSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    runCompute(withAppContextDecorator(formattedCaseDetail), {
+      state: test.getState(),
+    });
+
+    contactPrimary = contactPrimaryFromState(test);
     expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
