@@ -25,6 +25,7 @@ describe('DocketRecord', () => {
     };
 
     contactPrimary = {
+      additionalName: 'Additional name',
       address1: 'Address 1',
       address2: 'Address 2',
       address3: 'Address 3',
@@ -125,6 +126,7 @@ describe('DocketRecord', () => {
 
     expect(contactPrimaryEl).toContain(contactPrimary.name);
     expect(contactPrimaryEl).toContain(`c/o ${contactPrimary.secondaryName}`);
+    expect(contactPrimaryEl).toContain(contactPrimary.additionalName);
     expect(contactPrimaryEl).toContain(contactPrimary.address1);
     expect(contactPrimaryEl).toContain(contactPrimary.address2);
     expect(contactPrimaryEl).toContain(contactPrimary.address3);

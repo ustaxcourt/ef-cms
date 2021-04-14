@@ -33,14 +33,19 @@ export const caseInformationHelper = (get, applicationContext) => {
   const contactPrimary = applicationContext
     .getUtilities()
     .getContactPrimary(caseDetail);
-  const showEmail = contactPrimary?.email;
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(caseDetail);
+  const showContactPrimaryEmail = contactPrimary?.email;
+  const showContactSecondaryEmail = contactSecondary?.email;
 
   return {
     formattedOtherPetitioners,
     showAddCounsel,
+    showContactPrimaryEmail,
+    showContactSecondaryEmail,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
-    showEmail,
     showHearingsTable,
     showOtherPetitioners,
     showSealAddressLink,

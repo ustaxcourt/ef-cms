@@ -26,7 +26,6 @@ describe('setupPetitionerInformationFormAction', () => {
 
   it('should set contactPrimary, contactSecondary, and partyType on state.form from the result of setServiceIndicatorsForCase', async () => {
     const { PARTY_TYPES } = applicationContext.getConstants();
-
     const mockContactPrimary = {
       contactType: CONTACT_TYPES.primary,
       name: 'Test Primary',

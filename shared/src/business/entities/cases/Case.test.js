@@ -24,6 +24,7 @@ const {
   Case,
   caseHasServedDocketEntries,
   getContactPrimary,
+  getPetitionDocketEntry,
   isAssociatedUser,
   isSealedCase,
 } = require('./Case');
@@ -78,6 +79,250 @@ describe('Case entity', () => {
       { filingDate: '2019-01-05T01:02:03.004Z' },
       { filingDate: '2020-01-05T01:02:03.004Z' },
     ]);
+  });
+
+  it('should NOT populate additionalName when case has NOT been served', () => {
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        partyType: PARTY_TYPES.estate,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            secondaryName: 'Test Secondary Name',
+            title: 'Test Title',
+          },
+        ],
+        status: CASE_STATUS_TYPES.new,
+      },
+      { applicationContext },
+    );
+
+    expect(myCase.petitioners[0].additionalName).toBeUndefined();
+  });
+
+  it('should populate additionalName when case has been served', () => {
+    const mockSecondaryName = 'Test Secondary Name';
+    const mockTitle = 'Test Title';
+
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        partyType: PARTY_TYPES.estate,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            additionalName: undefined,
+            secondaryName: mockSecondaryName,
+            title: mockTitle,
+          },
+        ],
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      { applicationContext },
+    );
+
+    expect(myCase.petitioners[0].additionalName).toBeDefined();
+  });
+
+  describe('setAdditionalNameOnPetitioners', () => {
+    const mockSecondaryName = 'Test Secondary Name';
+    const mockTitle = 'Test Title';
+    const mockInCareOf = 'Test In Care Of';
+    const partyTypesWithSecondaryName = [
+      PARTY_TYPES.conservator,
+      PARTY_TYPES.custodian,
+      PARTY_TYPES.guardian,
+      PARTY_TYPES.nextFriendForIncompetentPerson,
+      PARTY_TYPES.nextFriendForMinor,
+      PARTY_TYPES.partnershipOtherThanTaxMatters,
+      PARTY_TYPES.partnershipBBA,
+      PARTY_TYPES.survivingSpouse,
+      PARTY_TYPES.trust,
+    ];
+
+    partyTypesWithSecondaryName.forEach(partyType => {
+      it(`should set additionalName as secondaryName when party type is ${partyType}`, () => {
+        const myCase = new Case(
+          {
+            ...MOCK_CASE,
+            partyType,
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                secondaryName: mockSecondaryName,
+              },
+            ],
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          { applicationContext },
+        );
+
+        expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
+      });
+    });
+
+    it('should set additionalName as `name of executor, title` when partyType is estateWithExecutor', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.estate,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: mockSecondaryName,
+              title: mockTitle,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(
+        `${mockSecondaryName}, ${mockTitle}`,
+      );
+    });
+
+    it('should set additionalName as `name of executor` when partyType is estateWithExecutor and title is undefined', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.estate,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: mockSecondaryName,
+              title: undefined,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
+    });
+
+    it('should set additionalName as undefined when partyType is estateWithExecutor and secondaryName and title are undefined', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.estate,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: undefined,
+              title: undefined,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toEqual('');
+    });
+
+    it('should set additionalName as `in care of` when partyType is estateWithoutExecutor', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.estateWithoutExecutor,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              inCareOf: mockInCareOf,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
+    });
+
+    it('should set additionalName as `secondaryName` when partyType is nextFriendForMinor', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.nextFriendForMinor,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: mockSecondaryName,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
+    });
+
+    it('should set additionalName as `secondaryName` when partyType is partnershipBBA', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.partnershipBBA,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: mockSecondaryName,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
+    });
+
+    it('should set additionalName as `secondaryName` when partyType is corporation', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.corporation,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              inCareOf: mockInCareOf,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
+    });
+
+    it('should NOT set additionalName when it has already been set', () => {
+      const mockAlreadySetAdditionalName = 'Anything at all';
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.corporation,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              additionalName: mockAlreadySetAdditionalName,
+              inCareOf: mockInCareOf,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(
+        mockAlreadySetAdditionalName,
+      );
+    });
   });
 
   describe('updatePetitioner', () => {
@@ -2751,6 +2996,19 @@ describe('Case entity', () => {
         INITIAL_DOCUMENT_TYPES.petition.documentType,
       );
     });
+
+    it('should get the petition docket entry from a raw case', () => {
+      const result = getPetitionDocketEntry(MOCK_CASE);
+      expect(result.documentType).toEqual(
+        INITIAL_DOCUMENT_TYPES.petition.documentType,
+      );
+    });
+
+    it('should not throw an error when raw case does not have docketEntries', () => {
+      expect(() =>
+        getPetitionDocketEntry({ ...MOCK_CASE, docketEntries: undefined }),
+      ).not.toThrow();
+    });
   });
 
   describe('getIrsSendDate', () => {
@@ -4508,6 +4766,45 @@ describe('Case entity', () => {
         ],
       });
       expect(myCase.isValid()).toBeFalsy();
+    });
+  });
+
+  describe('getPetitionerById', () => {
+    it('returns petitioner with matching contactId from petitioners array', () => {
+      const mockContactId = 'b0690ccb-a94b-453f-8d6b-45775658f559';
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitioners: [
+            { ...getContactPrimary(MOCK_CASE), contactId: mockContactId },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.getPetitionerById(mockContactId)).toBeDefined();
+    });
+
+    it('returns undefined if matching petitioner is not found', () => {
+      const mockNonExistingContactId = '6d23e903-69e2-4c87-a5a3-d127cdd44ce8';
+
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactId: 'ddd26f7e-06dc-4fab-8b12-2f83d64d8dce',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(
+        myCase.getPetitionerById(mockNonExistingContactId),
+      ).toBeUndefined();
     });
   });
 

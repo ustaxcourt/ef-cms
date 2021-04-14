@@ -1,5 +1,6 @@
 const joi = require('joi');
 const {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
@@ -192,12 +193,16 @@ ContactFactory.getErrorToMessageMap = ({
  * used for getting the contact constructors depending on the party type and contact type
  *
  * @param {object} options the options object
- * @param {string} options.countryType typically either 'domestic' or 'international'
- * @param {boolean} options.isPaper is paper case
+ * @param {object} options.contactInfo the contact info
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
+ * @param {string} options.status the case status
  * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact, other petitioner contacts
  */
-ContactFactory.getContactConstructors = ({ partyType }) => {
+ContactFactory.getContactConstructors = ({
+  contactInfo,
+  partyType,
+  status,
+}) => {
   const {
     getNextFriendForIncompetentPersonContact,
   } = require('./NextFriendForIncompetentPersonContact');
@@ -366,6 +371,15 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
     }
   };
 
+  if (status && status !== CASE_STATUS_TYPES.new) {
+    return {
+      otherFilers: getOtherFilerContact,
+      otherPetitioners: getOtherPetitionerContact,
+      primary: getPetitionerPrimaryContact,
+      secondary: contactInfo?.secondary ? getPetitionerPrimaryContact : null,
+    };
+  }
+
   return partyConstructorFetch(partyType);
 };
 
@@ -376,6 +390,7 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
  * @param {object} options.contactInfo information on party contacts (primary, secondary, other)
  * @param {boolean} options.isPaper whether service is paper
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
+ * @param {string} options.status the case status
  * @returns {object} contains the primary, secondary, and other contact instances
  */
 ContactFactory.createContacts = ({
@@ -383,8 +398,13 @@ ContactFactory.createContacts = ({
   contactInfo,
   isPaper,
   partyType,
+  status,
 }) => {
-  const constructorMap = ContactFactory.getContactConstructors({ partyType });
+  const constructorMap = ContactFactory.getContactConstructors({
+    contactInfo,
+    partyType,
+    status,
+  });
 
   const constructors = {
     primary:

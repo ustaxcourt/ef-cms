@@ -1,4 +1,5 @@
 const {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
@@ -244,6 +245,22 @@ describe('migrateItems', () => {
     ];
 
     await expect(() => migrateItems(items)).not.toThrow();
+  });
+
+  it('should set the petitioners inCareOf to additionalName', async () => {
+    const items = [
+      {
+        pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        ...MOCK_CASE,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
+        petitioners: [{ ...getContactPrimary(MOCK_CASE), inCareOf: 'Myself' }],
+        sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+    ];
+    const results = await migrateItems(items);
+
+    expect(results[0].petitioners[0].additionalName).toEqual('Myself');
   });
 
   it('should not throw an error when attempting to set contactType for otherPetitioners it is undefined', async () => {

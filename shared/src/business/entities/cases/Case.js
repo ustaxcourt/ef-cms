@@ -47,11 +47,11 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
+const { compact, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry, isServed } = require('../DocketEntry');
-const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
@@ -161,9 +161,9 @@ Case.prototype.init = function init(
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
   this.assignHearings({ applicationContext, rawCase });
-  this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
+  this.assignContacts({ applicationContext, filtered, rawCase });
 };
 
 Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
@@ -328,6 +328,7 @@ Case.prototype.assignContacts = function assignContacts({
     },
     isPaper: rawCase.isPaper,
     partyType: rawCase.partyType,
+    status: rawCase.status,
   });
 
   this.petitioners.push(contacts.primary);
@@ -336,6 +337,10 @@ Case.prototype.assignContacts = function assignContacts({
   }
   this.petitioners.push(...contacts.otherPetitioners);
   this.petitioners.push(...contacts.otherFilers);
+
+  if (rawCase.status && rawCase.status !== CASE_STATUS_TYPES.new) {
+    this.setAdditionalNameOnPetitioners();
+  }
 };
 
 Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
@@ -1101,6 +1106,29 @@ Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
 };
 
 /**
+ * Retrieves the petitioner with id contactId on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Object} the contact object
+ */
+const getPetitionerById = function (rawCase, contactId) {
+  return rawCase.petitioners.find(
+    petitioner => petitioner.contactId === contactId,
+  );
+};
+
+/**
+ * gets the petitioner with id contactId from the petitioners array
+ *
+ * @params {object} params the params object
+ * @params {string} params.contactId the id of the petitioner to retrieve
+ * @returns {object} the retrieved petitioner
+ */
+Case.prototype.getPetitionerById = function (contactId) {
+  return getPetitionerById(this, contactId);
+};
+
+/**
  * gets the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
@@ -1174,7 +1202,11 @@ Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
 };
 
 Case.prototype.getPetitionDocketEntry = function () {
-  return this.docketEntries.find(
+  return getPetitionDocketEntry(this);
+};
+
+const getPetitionDocketEntry = function (rawCase) {
+  return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
@@ -1414,6 +1446,48 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Computes and sets additionalName for contactPrimary depending on partyType
+ *
+ */
+Case.prototype.setAdditionalNameOnPetitioners = function () {
+  const contactPrimary = this.getContactPrimary(this);
+
+  if (!contactPrimary.additionalName) {
+    switch (this.partyType) {
+      case PARTY_TYPES.conservator:
+      case PARTY_TYPES.custodian:
+      case PARTY_TYPES.guardian:
+      case PARTY_TYPES.nextFriendForIncompetentPerson:
+      case PARTY_TYPES.nextFriendForMinor:
+      case PARTY_TYPES.partnershipOtherThanTaxMatters:
+      case PARTY_TYPES.partnershipBBA:
+      case PARTY_TYPES.survivingSpouse:
+      case PARTY_TYPES.trust:
+        contactPrimary.additionalName = contactPrimary.secondaryName;
+        delete contactPrimary.secondaryName;
+        break;
+      case PARTY_TYPES.estate: {
+        const additionalNameFields = compact([
+          contactPrimary.secondaryName,
+          contactPrimary.title,
+        ]);
+        contactPrimary.additionalName = additionalNameFields.join(', ');
+        delete contactPrimary.secondaryName;
+        delete contactPrimary.title;
+        break;
+      }
+      case PARTY_TYPES.estateWithoutExecutor:
+      case PARTY_TYPES.corporation:
+        contactPrimary.additionalName = contactPrimary.inCareOf;
+        delete contactPrimary.inCareOf;
+        break;
+      default:
+        break;
+    }
+  }
 };
 
 /**
@@ -2053,6 +2127,8 @@ module.exports = {
   getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
+  getPetitionDocketEntry,
+  getPetitionerById,
   isAssociatedUser,
   isSealedCase,
   updatePetitioner,
