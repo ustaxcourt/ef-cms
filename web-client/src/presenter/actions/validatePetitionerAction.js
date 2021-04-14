@@ -21,11 +21,11 @@ export const validatePetitionerAction = ({
     SERVICE_INDICATOR_ERROR,
     SERVICE_INDICATOR_TYPES,
   } = applicationContext.getConstants();
-  //fixme for some reason contact doesnt have any info but service indicator for failing test
+
   const { contact } = get(state.form);
   const caseDetail = get(state.caseDetail);
   const { partyType, petitioners, status } = caseDetail;
-  console.log('....contact', contact);
+  console.log('....get(state.form)', get(state.form));
   console.log('....contact', contact);
   console.log('....petitioners', petitioners);
 

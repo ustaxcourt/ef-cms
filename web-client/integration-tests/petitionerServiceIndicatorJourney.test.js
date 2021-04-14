@@ -227,12 +227,10 @@ describe('Petitioner Service Indicator Journey', () => {
   it('Updates petitioner service indicator to none', async () => {
     let contactPrimary = contactPrimaryFromState(test);
 
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
       contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
-
-    console.log('-------contact', contactPrimary);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.serviceIndicator',

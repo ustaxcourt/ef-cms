@@ -1,7 +1,6 @@
 module.exports = [
   'http://localhost:1234/mock-login?token=admissionsclerk&path=/users/create-practitioner',
   'http://localhost:1234/mock-login?token=admissionsclerk&path=/users/edit-practitioner/PT1234',
-  'http://localhost:1234/mock-login?token=admissionsclerk&path=/case-detail/124-20/edit-petitioner-information',
   {
     actions: [
       'wait for #updatedEmail to be visible',
