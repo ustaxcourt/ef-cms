@@ -291,7 +291,6 @@ exports.updatePetitionerInformationInteractor = async (
       newData: editableFields,
       oldData: oldCaseContact,
     });
-  console.log('-------old case ', oldCase);
   const caseToUpdateContacts = new Case(
     {
       ...oldCase,
