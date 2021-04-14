@@ -2,6 +2,7 @@ import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDeficiencyStatistics } from './CaseDetail/AddDeficiencyStatistics';
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
+import { AddPetitionerToCase } from './AddPetitionerToCase/AddPetitionerToCase';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
@@ -91,6 +92,7 @@ const pages = {
   AddDeficiencyStatistics,
   AddDocketEntry,
   AddOtherStatistics,
+  AddPetitionerToCase,
   AddTrialSession,
   AdvancedSearch,
   BeforeStartingCase,
