@@ -225,6 +225,7 @@ DocketEntry.prototype.setAsServed = function (servedParties = null) {
     this.servedParties = servedParties;
     this.servedPartiesCode = getServedPartiesCode(servedParties);
   }
+  return this;
 };
 
 /**

@@ -80,6 +80,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
       numberOfPages,
       scenario: documentMeta.scenario,
       serviceStamp: documentMeta.serviceStamp,
+      trialLocation: documentMeta.trialLocation,
       userId: user.userId,
     },
     { applicationContext },
