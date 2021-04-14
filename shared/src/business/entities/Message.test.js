@@ -181,6 +181,48 @@ describe('Message', () => {
         isRepliedTo: true,
       });
     });
+
+    it('should not error out if message is a blank string', () => {
+      const message = new Message(
+        {
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
+          caseTitle: 'Test Petitioner',
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45S',
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          isRepliedTo: false,
+          message: 'hello world',
+          subject: 'hey!',
+          to: 'bob',
+          toSection: PETITIONS_SECTION,
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+
+      message.markAsCompleted({
+        message: '',
+        user: {
+          name: 'Test Person',
+          section: PETITIONS_SECTION,
+          userId: 'f3cf18f9-f1b0-43f7-a4e0-d0e2658e1faa',
+        },
+      });
+
+      expect(message.isValid()).toBeTruthy();
+      expect(message).toMatchObject({
+        completedBy: 'Test Person',
+        completedBySection: PETITIONS_SECTION,
+        completedByUserId: 'f3cf18f9-f1b0-43f7-a4e0-d0e2658e1faa',
+        completedMessage: null,
+        createdAt: expect.anything(),
+        isCompleted: true,
+        isRepliedTo: true,
+      });
+    });
   });
 
   describe('addAttachment', () => {
