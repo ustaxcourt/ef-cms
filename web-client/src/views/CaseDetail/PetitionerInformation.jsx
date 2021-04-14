@@ -54,12 +54,8 @@ const PetitionerInformation = connect(
                   link
                   aria-label="add cases to consolidate with this case"
                   className="margin-top-1 padding-0 float-right"
+                  href={`/${formattedCaseDetail.docketNumber}/add-petitioner-to-case`}
                   icon="plus-circle"
-                  // onClick={() => {
-                  //   openCleanModalSequence({
-                  //     showModal: 'AddConsolidatedCaseModal',
-                  //   });
-                  // }}
                 >
                   Add Petitioner
                 </Button>
