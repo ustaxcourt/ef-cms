@@ -184,6 +184,46 @@ describe('Case entity', () => {
       );
     });
 
+    it('should set additionalName as `name of executor` when partyType is estateWithExecutor and title is undefined', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.estate,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: mockSecondaryName,
+              title: undefined,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(mockSecondaryName);
+    });
+
+    it('should set additionalName as undefined when partyType is estateWithExecutor and secondaryName and title are undefined', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.estate,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              secondaryName: undefined,
+              title: undefined,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toEqual('');
+    });
+
     it('should set additionalName as `in care of` when partyType is estateWithoutExecutor', () => {
       const myCase = new Case(
         {
