@@ -87,6 +87,7 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
+import { SERVICE_INDICATOR_ERROR } from '../../shared/src/business/entities/EntityValidationConstants';
 import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 const MINUTES = 60 * 1000;
@@ -171,6 +172,7 @@ export const getConstants = () => ({
   SCAN_MODES,
   SECTIONS,
   SERVED_PARTIES_CODES,
+  SERVICE_INDICATOR_ERROR,
   SERVICE_INDICATOR_TYPES,
   SERVICE_STAMP_OPTIONS,
   SESSION_DEBOUNCE: 250,

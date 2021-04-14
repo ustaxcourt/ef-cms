@@ -56,6 +56,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
     return caseRaw;
   }
   const formattedCase = cloneDeep(caseRaw);
+
   const formatSealedAddress = contactRaw => {
     const result = pick(contactRaw, CASE_CONTACT_ATTRIBUTE_WHITELIST);
     result.sealedAndUnavailable = true;

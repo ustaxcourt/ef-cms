@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
@@ -59,12 +60,16 @@ describe('addExistingUserToCase', () => {
   });
 
   it('throws an error if contact not found with name provided', async () => {
+    const mockExistingUser = {
+      contactId: '60dd21b3-5abb-447f-b036-9794962252a0',
+      contactType: CONTACT_TYPES.primary,
+    };
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.admissionsClerk,
     });
 
     const caseEntity = new Case(
-      { ...MOCK_CASE, petitioners: [] },
+      { ...MOCK_CASE, petitioners: [mockExistingUser] },
       { applicationContext },
     );
 
@@ -72,15 +77,15 @@ describe('addExistingUserToCase', () => {
       addExistingUserToCase({
         applicationContext,
         caseEntity,
+        contactId: mockExistingUser.contactId,
         email: 'testing@example.com',
         name: 'Bob Ross',
       }),
-    ).rejects.toThrow(
-      'no contact primary found with that user name of Bob Ross',
-    );
+    ).rejects.toThrow('no contact found with that user name of Bob Ross');
   });
 
   it('should call associateUserWithCase and return the updated case with contact primary email', async () => {
+    const mockContactId = '60dd21b3-5abb-447f-b036-9794962252a0';
     const UPDATED_EMAIL = 'testing@example.com';
 
     applicationContext.getCurrentUser.mockReturnValue({
@@ -93,7 +98,7 @@ describe('addExistingUserToCase', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
-            contactId: '123',
+            contactId: mockContactId,
             email: undefined,
             name: 'Bob Ross',
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -106,6 +111,7 @@ describe('addExistingUserToCase', () => {
     const updatedCase = await addExistingUserToCase({
       applicationContext,
       caseEntity,
+      contactId: mockContactId,
       email: UPDATED_EMAIL,
       name: 'Bob Ross',
     });

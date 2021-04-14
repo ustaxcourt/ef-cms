@@ -53,22 +53,6 @@ describe('checkEmailAvailabilityAction', () => {
     ).toMatchObject({ email: mockEmail });
   });
 
-  it('should call checkEmailAvailabilityInteractor with state.form.contactPrimary.email', async () => {
-    await runAction(checkEmailAvailabilityAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: { contactPrimary: { email: mockEmail } },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
-        .calls[0][0],
-    ).toMatchObject({ email: mockEmail });
-  });
-
   it('should call path.emailAvailable when checkEmailAvailabilityInteractor returns true', async () => {
     applicationContext
       .getUseCases()
