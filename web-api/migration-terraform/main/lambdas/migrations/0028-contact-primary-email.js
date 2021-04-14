@@ -50,6 +50,16 @@ const migrateItems = async (items, documentClient) => {
             practitioner.email === itemToModify.contactPrimary.email,
         )
       ) {
+        applicationContext.logger.info(
+          'deleting the email off the contactPrimary',
+          {
+            email: itemToModify.contactPrimary.email,
+            pk: itemToModify.pk,
+            serviceIndicator: itemToModify.contactPrimary.serviceIndicator,
+            sk: itemToModify.sk,
+          },
+        );
+
         delete itemToModify.contactPrimary.email;
         delete itemToModify.contactPrimary.serviceIndicator;
 
