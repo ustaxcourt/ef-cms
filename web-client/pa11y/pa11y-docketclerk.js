@@ -208,7 +208,6 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/reports/case-deadlines',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information/28cae029-bae2-4eef-ac54-878fbbab65e3',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19?openModal=PaperServiceConfirmModal',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/111-19?openModal=UnconsolidateCasesModal',

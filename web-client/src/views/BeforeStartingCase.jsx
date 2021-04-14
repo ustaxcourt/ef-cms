@@ -41,7 +41,7 @@ export const BeforeStartingCase = connect(
             role="list"
           >
             <div className="grid-row grid-gap grid-col-10">
-              <Accordion headingLevel="3">
+              <Accordion headingLevel="3" role="listitem">
                 <AccordionItem
                   displayIcon="true"
                   iconClassName="bullet-icon"
@@ -64,7 +64,7 @@ export const BeforeStartingCase = connect(
                   </p>
                 </AccordionItem>
               </Accordion>
-              <Accordion headingLevel="3">
+              <Accordion headingLevel="3" role="listitem">
                 <AccordionItem
                   displayIcon="true"
                   iconClassName="bullet-icon"
@@ -108,7 +108,7 @@ export const BeforeStartingCase = connect(
                   </p>
                 </AccordionItem>
               </Accordion>
-              <Accordion headingLevel="3">
+              <Accordion headingLevel="3" role="listitem">
                 <AccordionItem
                   displayIcon="true"
                   iconClassName="bullet-icon"
@@ -179,7 +179,7 @@ export const BeforeStartingCase = connect(
                   </p>
                 </AccordionItem>
               </Accordion>
-              <Accordion headingLevel="3">
+              <Accordion headingLevel="3" role="listitem">
                 <AccordionItem
                   displayIcon="true"
                   iconClassName="bullet-icon"
