@@ -3,9 +3,11 @@ const {
 } = require('../../../../web-client/src/applicationContext');
 const {
   CASE_STATUS_TYPES,
+  CORRECTED_TRANSCRIPT_EVENT_CODE,
   DOCKET_NUMBER_SUFFIXES,
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
+  REVISED_TRANSCRIPT_EVENT_CODE,
   ROLES,
   SERVED_PARTIES_CODES,
   STIPULATED_DECISION_EVENT_CODE,
@@ -1157,41 +1159,47 @@ describe('documentMeetsAgeRequirements', () => {
     expect(result).toBeTruthy();
   });
 
-  it(`indicates success if document is a transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
-    const result = documentMeetsAgeRequirements({
-      date: oldTranscriptDate,
-      eventCode: TRANSCRIPT_EVENT_CODE,
-    });
-    expect(result).toBeTruthy();
-  });
-
-  it(`indicates success if document is a legacy transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
-    const result = documentMeetsAgeRequirements({
-      date: undefined,
-      eventCode: TRANSCRIPT_EVENT_CODE,
-      filingDate: oldTranscriptDate,
-      isLegacy: true,
-    });
-    expect(result).toBeTruthy();
-  });
-
-  it(`indicates failure if document is a legacy transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
-    const result = documentMeetsAgeRequirements({
-      date: undefined,
-      eventCode: TRANSCRIPT_EVENT_CODE,
-      filingDate: aShortTimeAgo,
-      isLegacy: true,
+  [
+    TRANSCRIPT_EVENT_CODE,
+    CORRECTED_TRANSCRIPT_EVENT_CODE,
+    REVISED_TRANSCRIPT_EVENT_CODE,
+  ].forEach(transcript => {
+    it(`indicates success if document is a ${transcript} transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
+      const result = documentMeetsAgeRequirements({
+        date: oldTranscriptDate,
+        eventCode: transcript,
+      });
+      expect(result).toBeTruthy();
     });
 
-    expect(result).toBeFalsy();
-  });
-
-  it(`indicates failure if document is a transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
-    const result = documentMeetsAgeRequirements({
-      date: aShortTimeAgo,
-      eventCode: TRANSCRIPT_EVENT_CODE,
+    it(`indicates success if document is a legacy ${transcript} transcript aged more than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
+      const result = documentMeetsAgeRequirements({
+        date: undefined,
+        eventCode: transcript,
+        filingDate: oldTranscriptDate,
+        isLegacy: true,
+      });
+      expect(result).toBeTruthy();
     });
-    expect(result).toBeFalsy();
+
+    it(`indicates failure if document is a legacy ${transcript} transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days using filingDate`, () => {
+      const result = documentMeetsAgeRequirements({
+        date: undefined,
+        eventCode: transcript,
+        filingDate: aShortTimeAgo,
+        isLegacy: true,
+      });
+
+      expect(result).toBeFalsy();
+    });
+
+    it(`indicates failure if document is a ${transcript} transcript aged less than ${TRANSCRIPT_AGE_DAYS_MIN} days`, () => {
+      const result = documentMeetsAgeRequirements({
+        date: aShortTimeAgo,
+        eventCode: transcript,
+      });
+      expect(result).toBeFalsy();
+    });
   });
 });
 
