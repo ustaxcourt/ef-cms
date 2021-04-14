@@ -9,6 +9,7 @@ import { InternationalAddress } from './StartCase/InternationalAddress';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
+import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -19,6 +20,7 @@ export const EditPetitionerInformationInternal = connect(
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -30,6 +32,7 @@ export const EditPetitionerInformationInternal = connect(
     editPetitionerInformationHelper,
     form,
     formCancelToggleCancelSequence,
+    screenMetadata,
     showModal,
     submitEditPetitionerSequence,
     updateFormValueSequence,
@@ -161,7 +164,15 @@ export const EditPetitionerInformationInternal = connect(
           </div>
 
           <h3>Login & Service Information</h3>
-
+          {screenMetadata.userPendingEmail && (
+            <WarningNotificationComponent
+              alertWarning={{
+                title: `${screenMetadata.userPendingEmail} is not verified. When petitioner verifies email, service will update to electronic at the verified email address.`,
+              }}
+              dismissable={false}
+              scrollToTop={false}
+            />
+          )}
           <div className="blue-container margin-bottom-5">
             <div className="margin-bottom-6">
               <ServiceIndicatorRadios
