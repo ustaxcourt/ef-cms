@@ -9,6 +9,7 @@ const {
 const {
   getContactPrimary,
   getContactSecondary,
+  getPetitionerById,
 } = require('../../entities/cases/Case');
 const {
   updatePetitionerCases,
@@ -624,6 +625,45 @@ describe('verifyUserPendingEmailInteractor', () => {
       } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
       expect(getContactSecondary(caseToUpdate).email).toBe(UPDATED_EMAIL);
       expect(caseToUpdate.docketNumber).toBe('102-21');
+    });
+
+    it.only('should update the petitioner email on the case for a contact secondary', async () => {
+      userCases = [
+        {
+          ...MOCK_CASE,
+          docketNumber: '102-21',
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          petitioners: [
+            ...MOCK_CASE.petitioners,
+            {
+              ...getContactPrimary(MOCK_CASE),
+              contactId: mockPetitionerUser.userId,
+              contactType: CONTACT_TYPES.secondary,
+              inCareOf: 'Barney',
+            },
+          ],
+        },
+      ];
+
+      applicationContext
+        .getPersistenceGateway()
+        .getIndexedCasesForUser.mockReturnValue(userCases);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(userCases[0]);
+
+      await updatePetitionerCases({
+        applicationContext,
+        user: mockPetitionerUser,
+      });
+
+      const {
+        caseToUpdate,
+      } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+      expect(
+        getPetitionerById(caseToUpdate, mockPetitionerUser.userId).email,
+      ).toBe(UPDATED_EMAIL);
     });
   });
 });
