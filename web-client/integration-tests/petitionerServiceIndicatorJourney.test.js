@@ -6,6 +6,7 @@ import {
   setupTest,
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
+import { getContactPrimary } from '../../shared/src/business/entities/cases/Case';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
@@ -231,6 +232,8 @@ describe('Petitioner Service Indicator Journey', () => {
       docketNumber: test.docketNumber,
     });
 
+    console.log('-------contact', contactPrimary);
+
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.serviceIndicator',
       value: 'None',
@@ -242,11 +245,14 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
 
-    runCompute(withAppContextDecorator(formattedCaseDetail), {
-      state: test.getState(),
-    });
+    const caseDetailFormatted = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
+    );
 
-    contactPrimary = contactPrimaryFromState(test);
+    contactPrimary = getContactPrimary(caseDetailFormatted);
     expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
