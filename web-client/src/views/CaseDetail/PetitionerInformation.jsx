@@ -52,9 +52,8 @@ const PetitionerInformation = connect(
                 Petitioner Contact Info{' '}
                 <Button
                   link
-                  aria-label="add cases to consolidate with this case"
                   className="margin-top-1 padding-0 float-right"
-                  href={`/${formattedCaseDetail.docketNumber}/add-petitioner-to-case`}
+                  href={`/case-detail/${formattedCaseDetail.docketNumber}/add-petitioner-to-case`}
                   icon="plus-circle"
                 >
                   Add Petitioner
