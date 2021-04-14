@@ -6,6 +6,7 @@ import {
   setupTest,
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
+import { getContactPrimary } from '../../shared/src/business/entities/cases/Case';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
@@ -221,9 +222,41 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
+  // explicitly set petitioner to Paper
+  loginAs(test, 'docketclerk@example.com');
+  it('Updates petitioner service indicator to none', async () => {
+    let contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
+      docketNumber: test.docketNumber,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.serviceIndicator',
+      value: 'None',
+    });
+
+    await test.runSequence('submitEditPetitionerSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
+
+    const caseDetailFormatted = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
+    );
+
+    contactPrimary = getContactPrimary(caseDetailFormatted);
+    expect(contactPrimary.serviceIndicator).toEqual('None');
+  });
+
   // remove private practitioner
   loginAs(test, 'docketclerk@example.com');
-  it('Removes private practitioner from case and check service indicator is paper', async () => {
+  it('Removes private practitioner from case and check service indicator is switched back to paper', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
