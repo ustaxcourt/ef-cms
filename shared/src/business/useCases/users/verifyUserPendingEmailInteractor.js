@@ -2,40 +2,24 @@ const {
   Case,
   getContactPrimary,
   getContactSecondary,
-  updatePetitioner,
 } = require('../../entities/cases/Case');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { Practitioner } = require('../../entities/Practitioner');
-const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-/**
- * updatePetitionerCases
- * for the provided user, update their email address on all cases
- * where they are the contactPrimary or contactSecondary
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.user the user who is a primary or secondary contact on a case
- * @returns {Promise} resolves upon completion of case updates
- */
-const updatePetitionerCases = async ({ applicationContext, user }) => {
-  const petitionerCases = await applicationContext
-    .getPersistenceGateway()
-    .getIndexedCasesForUser({
-      applicationContext,
-      statuses: applicationContext.getConstants().CASE_STATUSES,
-      userId: user.userId,
-    });
-  applicationContext.logger.error(
-    'found cases for petitioner',
-    petitionerCases,
-  );
-
+const updateCasesForPetitioner = async ({
+  applicationContext,
+  petitionerCases,
+  user,
+}) => {
   const casesToUpdate = await Promise.all(
     petitionerCases.map(({ docketNumber }) =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
@@ -64,10 +48,7 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       }
       // This updates the case by reference!
       petitionerObject.email = user.email;
-      updatePetitioner(caseRaw, {
-        contactId: petitionerObject.contactId,
-        email: user.email,
-      });
+      petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
       applicationContext.logger.error('updating petitioner', petitionerObject);
       // we do this again so that it will convert '' to null
@@ -89,6 +70,34 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       }),
     ),
   );
+};
+
+exports.updateCasesForPetitioner = updateCasesForPetitioner;
+
+/**
+ * updatePetitionerCases
+ * for the provided user, update their email address on all cases
+ * where they are the contactPrimary or contactSecondary
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.user the user who is a primary or secondary contact on a case
+ * @returns {Promise} resolves upon completion of case updates
+ */
+const updatePetitionerCases = async ({ applicationContext, user }) => {
+  const petitionerCases = await applicationContext
+    .getPersistenceGateway()
+    .getIndexedCasesForUser({
+      applicationContext,
+      statuses: applicationContext.getConstants().CASE_STATUSES,
+      userId: user.userId,
+    });
+
+  return await updateCasesForPetitioner({
+    applicationContext,
+    petitionerCases,
+    user,
+  });
 };
 
 exports.updatePetitionerCases = updatePetitionerCases;
