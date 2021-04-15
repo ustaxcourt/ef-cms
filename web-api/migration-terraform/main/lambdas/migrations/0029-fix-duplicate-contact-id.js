@@ -39,6 +39,8 @@ const migrateItems = async items => {
         },
       );
 
+      itemToModify.contactSecondary.contactId = newContactId;
+
       new Case(aggregateCaseItems([itemToModify]), {
         applicationContext,
       }).validate();

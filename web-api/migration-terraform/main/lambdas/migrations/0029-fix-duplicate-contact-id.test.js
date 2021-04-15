@@ -149,7 +149,7 @@ describe('migrateItems', () => {
         ...omit(items[0].contactSecondary, 'contactId'),
       },
     });
-    expect(results[0].contactSecondary).not.toEqual(
+    expect(results[0].contactSecondary.contactId).not.toEqual(
       '6d74eadc-0181-4ff5-826c-305200e8733d',
     );
   });
