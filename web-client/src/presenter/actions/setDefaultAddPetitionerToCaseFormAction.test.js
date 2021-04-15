@@ -1,4 +1,7 @@
-import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter-mock';
@@ -22,6 +25,7 @@ describe('setDefaultAddPetitionerToCaseFormAction', () => {
       caseCaption: MOCK_CASE.caseCaption,
       contact: {
         contactType: CONTACT_TYPES.otherPetitioner,
+        countryType: COUNTRY_TYPES.DOMESTIC,
       },
     });
   });
