@@ -627,7 +627,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       expect(caseToUpdate.docketNumber).toBe('102-21');
     });
 
-    it.only('should update the petitioner email on the case for a contact secondary', async () => {
+    it('should update the petitioner email on the case for a contact secondary', async () => {
       userCases = [
         {
           ...MOCK_CASE,
