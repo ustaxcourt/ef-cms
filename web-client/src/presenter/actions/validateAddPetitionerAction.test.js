@@ -7,11 +7,7 @@ describe('validateAddPetitionerAction', () => {
   let successMock;
   let errorMock;
 
-  const {
-    COUNTRY_TYPES,
-    PARTY_TYPES,
-    STATUS_TYPES,
-  } = applicationContext.getConstants();
+  const { COUNTRY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     successMock = jest.fn();
@@ -37,10 +33,6 @@ describe('validateAddPetitionerAction', () => {
         computedDate: '2019-03-01T21:40:46.415Z',
       },
       state: {
-        caseDetail: {
-          partyType: PARTY_TYPES.petitioner,
-          status: STATUS_TYPES.new,
-        },
         form: {
           contact: {
             address1: '123 Some St.',
@@ -68,14 +60,7 @@ describe('validateAddPetitionerAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '2019-03-01T21:40:46.415Z',
-      },
       state: {
-        caseDetail: {
-          partyType: PARTY_TYPES.petitioner,
-          status: STATUS_TYPES.new,
-        },
         form: {
           contact: {
             address1: '123 Some St.',
@@ -104,14 +89,7 @@ describe('validateAddPetitionerAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '2019-03-01T21:40:46.415Z',
-      },
       state: {
-        caseDetail: {
-          partyType: PARTY_TYPES.petitioner,
-          status: STATUS_TYPES.new,
-        },
         form: {
           contact: {
             city: 'Some City',
