@@ -16,7 +16,6 @@ export const validateAddPetitionerAction = ({
   path,
 }) => {
   const { contact } = get(state.form);
-  console.log('formg', get(state.form));
   const { partyType, status } = get(state.caseDetail);
 
   const errors = applicationContext
@@ -27,8 +26,6 @@ export const validateAddPetitionerAction = ({
       partyType,
       status,
     });
-
-  console.log('errors', errors);
 
   combineContactErrors({ errors });
 
