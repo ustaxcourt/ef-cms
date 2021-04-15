@@ -4,6 +4,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultAddPetitionerToCaseFormAction } from '../actions/setDefaultAddPetitionerToCaseFormAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoAddPetitionerToCaseSequence = [
@@ -15,6 +16,7 @@ export const gotoAddPetitionerToCaseSequence = [
       clearFormAction,
       getCaseAction,
       setCaseAction,
+      setDefaultAddPetitionerToCaseFormAction,
       setCurrentPageAction('AddPetitionerToCase'),
     ],
     unauthorized: [redirectToCognitoAction],
