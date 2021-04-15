@@ -28,14 +28,9 @@ describe('validateAddPetitionerInteractor', () => {
       updatedEmail: 'night@example.com',
     };
 
-    const partyType = PARTY_TYPES.petitioner;
-    const status = CASE_STATUS_TYPES.generalDocket;
-
     const errors = validateAddPetitionerInteractor({
       applicationContext,
       contact,
-      partyType,
-      status,
     });
 
     expect(errors).toBeFalsy();
