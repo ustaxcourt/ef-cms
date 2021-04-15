@@ -36,14 +36,15 @@ export const caseInformationHelper = (get, applicationContext) => {
   const contactSecondary = applicationContext
     .getUtilities()
     .getContactSecondary(caseDetail);
-  const showContactPrimaryEmail = contactPrimary?.email;
-  const showContactSecondaryEmail = contactSecondary?.email;
+  const contactPrimaryEmailFormatted = contactPrimary?.email ?? 'Not provided';
+  const contactSecondaryEmailFormatted =
+    contactSecondary?.email ?? 'Not provided';
 
   return {
+    contactPrimaryEmailFormatted,
+    contactSecondaryEmailFormatted,
     formattedOtherPetitioners,
     showAddCounsel,
-    showContactPrimaryEmail,
-    showContactSecondaryEmail,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showHearingsTable,
