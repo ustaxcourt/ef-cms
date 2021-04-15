@@ -33,7 +33,7 @@ const updateCasesForPetitioner = async ({
     .map(caseToUpdate => {
       const caseRaw = new Case(caseToUpdate, {
         applicationContext,
-      }).toRawObject();
+      });
 
       const petitionerObject = [
         getContactPrimary(caseRaw),
