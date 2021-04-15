@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
 export const caseInformationHelper = (get, applicationContext) => {
+  const { STATUS_TYPES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
   const showEditPrivatePractitionersButton =
@@ -39,9 +40,14 @@ export const caseInformationHelper = (get, applicationContext) => {
   const showContactPrimaryEmail = contactPrimary?.email;
   const showContactSecondaryEmail = contactSecondary?.email;
 
+  const showAddPetitionerButton =
+    permissions.ADD_PETITIONER_TO_CASE &&
+    caseDetail.status !== STATUS_TYPES.new;
+
   return {
     formattedOtherPetitioners,
     showAddCounsel,
+    showAddPetitionerButton,
     showContactPrimaryEmail,
     showContactSecondaryEmail,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
