@@ -59,7 +59,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.name"
                 type="text"
                 value={form.contact.name || ''}
-                onBlur={validatePetitionerSequence}
+                onBlur={() => validatePetitionerSequence()}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -86,7 +86,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.additionalName"
                 type="text"
                 value={form.contact.additionalName || ''}
-                onBlur={validatePetitionerSequence}
+                onBlur={() => validatePetitionerSequence()}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -124,14 +124,14 @@ export const AddPetitionerToCase = connect(
               <Address
                 bind={bind}
                 type={type}
-                onBlur={validatePetitionerSequence}
+                onBlur={onBlur}
                 onChange="updateFormValueSequence"
               />
             ) : (
               <InternationalAddress
                 bind={bind}
                 type={type}
-                onBlur={validatePetitionerSequence}
+                onBlur={onBlur}
                 onChange="updateFormValueSequence"
               />
             )}
@@ -155,7 +155,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.phone"
                 type="tel"
                 value={form.contact.phone || ''}
-                onBlur={validatePetitionerSequence}
+                onBlur={() => validatePetitionerSequence()}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,

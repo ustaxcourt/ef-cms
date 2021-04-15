@@ -1,32 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * combines contact error fields into a single contact error object -
- * this modifies the original errors object rather than returning the value
- *
- * @param {object} providers the providers object
- * @param {object} providers.errors the errors
- */
-export const combineContactErrors = ({ errors }) => {
-  if (
-    errors.address1 ||
-    errors.city ||
-    errors.country ||
-    errors.postalCode ||
-    errors.state
-  ) {
-    errors.contact = {};
-    ['address1', 'city', 'country', 'postalCode', 'state'].forEach(key => {
-      if (errors[key]) {
-        errors.contact[key] = errors[key];
-        delete errors[key];
-      }
-    });
-  }
-};
-
-/**
- * validates the add practitioner user form
+ * validates the add petitioner user form
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -34,50 +9,30 @@ export const combineContactErrors = ({ errors }) => {
  * @returns {object} providers.path the next path based on if validation was successful or error
  * @param {object} providers.props the props passed in to the action
  */
-export const validateAddPractitionerAction = ({
+export const validateAddPetitionerAction = ({
   applicationContext,
   get,
   path,
-  props,
 }) => {
   const { contact } = get(state.form);
+  const { partyType, status } = get(state.caseDetail);
 
-  // todo: create interactor
   const errors = applicationContext
     .getUseCases()
     .validateAddPetitionerInteractor({
       applicationContext,
-      practitioner,
+      contact,
+      partyType,
+      status,
     });
 
   if (!errors) {
     return path.success();
   } else {
-    const errorDisplayOrder = [
-      'firstName',
-      'lastName',
-      'birthYear',
-      'practitionerType',
-      'employer',
-      'contact.country',
-      'contact.address1',
-      'contact.city',
-      'contact.state',
-      'contact.postalCode',
-      'phone',
-      'email',
-      'originalBarState',
-      'admissionsStatus',
-      'admissionsDate',
-    ];
-
-    combineContactErrors({ errors });
-
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errorDisplayOrder,
       errors,
     });
   }
