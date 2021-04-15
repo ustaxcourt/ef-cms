@@ -14,11 +14,11 @@ export const submitAddPetitionerSequence = [
   {
     error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
-      hasUpdatedPetitionerEmailAction,
-      {
-        no: [submitUpdatePetitionerInformationSequence],
-        yes: [openGainElectronicAccessToCaseModalSequence],
-      },
+      // hasUpdatedPetitionerEmailAction,
+      // {
+      //   no: [submitUpdatePetitionerInformationSequence],
+      //   yes: [openGainElectronicAccessToCaseModalSequence],
+      // },
     ]),
   },
 ];
