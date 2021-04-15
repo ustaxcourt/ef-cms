@@ -174,7 +174,6 @@ export const AddPetitionerToCase = connect(
           </div>
 
           <h2>Case Caption</h2>
-          {/* todo 5386 make casecaption required */}
           <div className="blue-container margin-bottom-5">
             <FormGroup
               errorText={validationErrors && validationErrors.caseCaption}

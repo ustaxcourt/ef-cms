@@ -20,11 +20,9 @@ exports.validatePetitionerInteractor = ({
   petitioners,
   status,
 }) => {
-  let petitioner = petitioners.find(p => p.contactId === contactInfo.contactId);
-
-  if (!petitioner) {
-    petitioner = contactInfo;
-  }
+  const petitioner = petitioners.find(
+    p => p.contactId === contactInfo.contactId,
+  );
 
   const contactErrors = ContactFactory.createContacts({
     applicationContext,
