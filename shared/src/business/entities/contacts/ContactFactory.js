@@ -406,6 +406,8 @@ ContactFactory.createContacts = ({
     status,
   });
 
+  console.log('constructorMap', constructorMap);
+
   const constructors = {
     primary:
       constructorMap.primary &&

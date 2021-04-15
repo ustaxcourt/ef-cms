@@ -27,7 +27,9 @@ export const validateAddPetitionerAction = ({
       status,
     });
 
-  combineContactErrors({ errors });
+  if (errors) {
+    combineContactErrors({ errors });
+  }
 
   if (!errors) {
     return path.success();
