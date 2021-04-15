@@ -25,6 +25,7 @@ export const validateCreateMessageAction = ({
   if (!errors) {
     return path.success();
   } else {
+    console.log('errors', errors);
     return path.error({ errors });
   }
 };
