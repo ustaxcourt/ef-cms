@@ -45,13 +45,10 @@ const updateCasesForPetitioner = async ({
         );
         return;
       }
-      // This updates the case by reference!
       petitionerObject.email = user.email;
       petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
-      // we do this again so that it will convert '' to null
       const newCase = new Case(caseRaw, { applicationContext }).validate();
-
       return newCase;
     })
     // if petitioner is not found on the case, function exits early and returns `undefined`.
