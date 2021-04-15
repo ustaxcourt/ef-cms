@@ -1,17 +1,17 @@
 import { DynamoDB } from 'aws-sdk';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
-  contactPrimaryFromState,
-  fakeFile,
+  contactSecondaryFromState,
   getUserRecordById,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
+  uploadPetition,
 } from './helpers';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
-import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -55,8 +55,12 @@ const callCognitoTriggerForPendingEmail = async userId => {
   });
 };
 
-describe('admissions clerk adds petitioner without existing cognito account to case', () => {
-  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
+describe('admissions clerk adds secondary petitioner without existing cognito account to case', () => {
+  const {
+    COUNTRY_TYPES,
+    PARTY_TYPES,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
 
   const EMAIL_TO_ADD = `new${Math.random()}@example.com`;
 
@@ -68,17 +72,35 @@ describe('admissions clerk adds petitioner without existing cognito account to c
     test.closeSocket();
   });
 
+  loginAs(test, 'petitioner@example.com');
+  it('Create test case', async () => {
+    const caseDetail = await uploadPetition(test, {
+      contactSecondary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Jimothy Schultz',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+  });
+
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkServesElectronicCaseToIrs(test);
 
   loginAs(test, 'admissionsclerk@example.com');
-  it('admissions clerk adds petitioner email without existing cognito account to case', async () => {
+  it('admissions clerk adds secondary petitioner email without existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
-    let contactPrimary = contactPrimaryFromState(test);
+    let contactSecondary = contactSecondaryFromState(test);
 
     await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
-      contactId: contactPrimary.contactId,
+      contactId: contactSecondary.contactId,
       docketNumber: test.docketNumber,
     });
 
@@ -114,14 +136,14 @@ describe('admissions clerk adds petitioner without existing cognito account to c
     expect(test.getState('modal.showModal')).toBeUndefined();
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    contactPrimary = contactPrimaryFromState(test);
+    contactSecondary = contactSecondaryFromState(test);
 
-    expect(contactPrimary.email).toBeUndefined();
-    expect(contactPrimary.serviceIndicator).toEqual(
+    expect(contactSecondary.email).toBeUndefined();
+    expect(contactSecondary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
-    test.userId = contactPrimary.contactId;
+    test.userId = contactSecondary.contactId;
 
     await refreshElasticsearchIndex();
   });
@@ -138,10 +160,10 @@ describe('admissions clerk adds petitioner without existing cognito account to c
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactSecondary = contactSecondaryFromState(test);
 
-    expect(contactPrimary.email).toEqual(EMAIL_TO_ADD);
-    expect(contactPrimary.serviceIndicator).toEqual(
+    expect(contactSecondary.email).toEqual(EMAIL_TO_ADD);
+    expect(contactSecondary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
