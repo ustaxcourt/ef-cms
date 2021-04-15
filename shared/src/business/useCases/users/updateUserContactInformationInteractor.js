@@ -17,23 +17,40 @@ const { isEqual } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * updateUserContactInformationInteractor
+ * updateUserContactInformationHelper
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
+ * @param {string} providers.firmName the firmName to update if a privatePractitioner is updating their info
  * @returns {Promise} an object is successful
  */
-const updateUserContactInformationInteractor = async (
+const updateUserContactInformationHelper = async (
   applicationContext,
-  { contactInfo, userId },
+  { contactInfo, firmName, userId },
 ) => {
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
-  if (isEqual(user.contact, contactInfo)) {
+  const isPractitioner = u => {
+    return (
+      u.entityName === privatePractitionerEntityName ||
+      u.entityName === irsPractitionerEntityName ||
+      u.entityName === practitionerEntityName
+    );
+  };
+
+  const isPractitionerUnchanged = u =>
+    isPractitioner(u) &&
+    isEqual(user.contact, contactInfo) &&
+    (firmName ? isEqual(user.firmName, firmName) : true);
+
+  const isUserUnchanged = u =>
+    !isPractitioner(u) && isEqual(user.contact, contactInfo);
+
+  if (isPractitionerUnchanged(user) || isUserUnchanged(user)) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
@@ -62,6 +79,10 @@ const updateUserContactInformationInteractor = async (
       contact: { ...contactInfo },
       isUpdatingInformation: true,
     });
+
+    if (firmName) {
+      userEntity.firmName = firmName;
+    }
   } else {
     throw new Error(`Unrecognized entityType ${user.entityName}`);
   }
@@ -79,11 +100,14 @@ const updateUserContactInformationInteractor = async (
     userId: user.userId,
   });
 
-  await generateChangeOfAddress({
-    applicationContext,
-    contactInfo,
-    user: userEntity.validate().toRawObject(),
-  });
+  // prevent the progress bar component from showing when updating ONLY the firmName
+  if (!isEqual(user.contact, contactInfo)) {
+    await generateChangeOfAddress({
+      applicationContext,
+      contactInfo,
+      user: userEntity.validate().toRawObject(),
+    });
+  }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
@@ -112,7 +136,7 @@ const updateUserContactInformationInteractor = async (
  */
 exports.updateUserContactInformationInteractor = async (
   applicationContext,
-  { contactInfo, userId },
+  { contactInfo, firmName, userId },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
@@ -124,8 +148,9 @@ exports.updateUserContactInformationInteractor = async (
   }
 
   try {
-    await updateUserContactInformationInteractor(applicationContext, {
+    await updateUserContactInformationHelper(applicationContext, {
       contactInfo,
+      firmName,
       userId,
     });
   } catch (error) {
