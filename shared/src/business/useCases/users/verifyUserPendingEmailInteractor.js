@@ -2,6 +2,7 @@ const {
   Case,
   getContactPrimary,
   getContactSecondary,
+  updatePetitioner,
 } = require('../../entities/cases/Case');
 const {
   isAuthorized,
@@ -30,6 +31,10 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       statuses: applicationContext.getConstants().CASE_STATUSES,
       userId: user.userId,
     });
+  applicationContext.logger.error(
+    'found cases for petitioner',
+    petitionerCases,
+  );
 
   const casesToUpdate = await Promise.all(
     petitionerCases.map(({ docketNumber }) =>
@@ -39,6 +44,7 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       }),
     ),
   );
+  applicationContext.logger.error('found cases to update', casesToUpdate);
 
   const validatedCasesToUpdate = casesToUpdate
     .map(caseToUpdate => {
@@ -58,9 +64,17 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       }
       // This updates the case by reference!
       petitionerObject.email = user.email;
+      updatePetitioner(caseRaw, {
+        contactId: petitionerObject.contactId,
+        email: user.email,
+      });
 
+      applicationContext.logger.error('updating petitioner', petitionerObject);
       // we do this again so that it will convert '' to null
-      return new Case(caseRaw, { applicationContext }).validate();
+      const newCase = new Case(caseRaw, { applicationContext }).validate();
+
+      applicationContext.logger.error('updated case', newCase.petitioners);
+      return newCase;
     })
     // if petitioner is not found on the case, function exits early and returns `undefined`.
     // if this happens, continue with remaining cases and do not throw exception, but discard
