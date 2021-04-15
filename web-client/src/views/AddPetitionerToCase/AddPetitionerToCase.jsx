@@ -48,7 +48,7 @@ export const AddPetitionerToCase = connect(
           <h2>Add Petitioner</h2>
 
           <div className="blue-container margin-bottom-5">
-            <FormGroup errorText={validationErrors.contact?.name}>
+            <FormGroup errorText={validationErrors.name}>
               <label className="usa-label" htmlFor="name">
                 <span>Name</span>
               </label>
@@ -69,7 +69,7 @@ export const AddPetitionerToCase = connect(
               />
             </FormGroup>
 
-            <FormGroup errorText={validationErrors.contact?.additionalName}>
+            <FormGroup errorText={validationErrors.additionalName}>
               <label className="usa-label" htmlFor="additionalName">
                 <span>
                   Additional name <span className="usa-hint">(optional)</span>
@@ -135,13 +135,7 @@ export const AddPetitionerToCase = connect(
                 onChange="updateFormValueSequence"
               />
             )}
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.phone
-              }
-            >
+            <FormGroup errorText={validationErrors && validationErrors.phone}>
               <label className="usa-label" htmlFor="phone">
                 Phone number
               </label>
@@ -180,15 +174,16 @@ export const AddPetitionerToCase = connect(
           </div>
 
           <h2>Case Caption</h2>
-
+          {/* todo 5386 make casecaption required */}
           <div className="blue-container margin-bottom-5">
-            <label className="usa-label" htmlFor="message">
+            <label className="usa-label" htmlFor="caseCaption">
               Case caption
             </label>
             <textarea
               className="usa-textarea"
-              id="message"
-              name="message"
+              id="case-caption"
+              name="caseCaption"
+              value={form.caseCaption}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,

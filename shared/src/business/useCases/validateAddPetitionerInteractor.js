@@ -7,28 +7,29 @@ const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.contactInfo the contactInfo to validate
+ * @param {object} providers.contact the contactInfo to validate
  * @param {object} providers.partyType the partyType to validate
  * @param {object} providers.status the case status to validate
  * @returns {object} errors (null if no errors)
  */
 exports.validateAddPetitionerInteractor = ({
   applicationContext,
-  contactInfo,
+  contact,
   partyType,
   status,
 }) => {
+  console.log(contact);
   const contactErrors = ContactFactory.createContacts({
     applicationContext,
-    contactInfo: { [contactInfo.contactType]: contactInfo },
+    contactInfo: { [contact.contactType]: contact },
     partyType,
     status,
-  })[contactInfo.contactType].getFormattedValidationErrors();
+  })[contact.contactType].getFormattedValidationErrors();
 
   let updateUserEmailErrors;
-  if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
+  if (contact.updatedEmail || contact.confirmEmail) {
     updateUserEmailErrors = new UpdateUserEmail(
-      { ...contactInfo, email: contactInfo.updatedEmail },
+      { ...contact, email: contact.updatedEmail },
       { applicationContext },
     ).getFormattedValidationErrors();
   }
