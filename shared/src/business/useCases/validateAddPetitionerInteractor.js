@@ -1,3 +1,4 @@
+const { CONTACT_TYPES } = require('../entities/EntityConstants');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { isEmpty } = require('lodash');
 const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
@@ -18,10 +19,17 @@ exports.validateAddPetitionerInteractor = ({
   partyType,
   status,
 }) => {
-  console.log(contact);
+  let contactInfo;
+
+  if (contact.contactType === CONTACT_TYPES.secondary) {
+    contactInfo = { [contact.contactType]: contact };
+  } else {
+    contactInfo = { [contact.contactType]: [contact] };
+  }
+
   const contactErrors = ContactFactory.createContacts({
     applicationContext,
-    contactInfo: { [contact.contactType]: contact },
+    contactInfo,
     partyType,
     status,
   })[contact.contactType].getFormattedValidationErrors();
