@@ -1,6 +1,7 @@
 const {
   getOtherPetitionerContact,
 } = require('../entities/contacts/OtherPetitionerContact');
+const { isEmpty } = require('lodash');
 
 /**
  * validateAddPetitionerInteractor
@@ -13,7 +14,19 @@ const {
 exports.validateAddPetitionerInteractor = ({ applicationContext, contact }) => {
   const OtherPetitionerContact = getOtherPetitionerContact({});
 
-  return new OtherPetitionerContact(contact, {
+  const petitionerErrors = new OtherPetitionerContact(contact, {
     applicationContext,
   }).getFormattedValidationErrors();
+
+  let caseCaptionError;
+  if (!contact.caseCaption) {
+    caseCaptionError = { caseCaption: 'Case caption is required' };
+  }
+
+  const aggregatedErrors = {
+    ...petitionerErrors,
+    ...caseCaptionError,
+  };
+
+  return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;
 };

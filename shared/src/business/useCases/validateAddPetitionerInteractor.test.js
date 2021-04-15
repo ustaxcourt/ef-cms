@@ -3,13 +3,13 @@ const {
 } = require('./validateAddPetitionerInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { CONTACT_TYPES, COUNTRY_TYPES } = require('../entities/EntityConstants');
-
 describe('validateAddPetitionerInteractor', () => {
-  it('should not return validation errors when contact is valid', async () => {
+  it('should not return validation errors when contact is valid and a case caption is present', async () => {
     const contact = {
       address1: '100 Main St.',
       address2: 'Grand View Apartments',
       address3: 'Apt. #104',
+      caseCaption: 'Caption this',
       city: 'Jordan',
       contactType: CONTACT_TYPES.otherPetitioner,
       countryType: COUNTRY_TYPES.DOMESTIC,
@@ -48,6 +48,7 @@ describe('validateAddPetitionerInteractor', () => {
 
     expect(errors).toEqual({
       address1: 'Enter mailing address',
+      caseCaption: 'Case caption is required',
     });
   });
 });
