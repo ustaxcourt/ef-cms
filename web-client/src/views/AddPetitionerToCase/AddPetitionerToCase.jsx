@@ -16,6 +16,7 @@ import React from 'react';
 export const AddPetitionerToCase = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
+    constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -25,6 +26,7 @@ export const AddPetitionerToCase = connect(
     validationErrors: state.validationErrors,
   },
   function AddPetitionerToCase({
+    constants,
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
@@ -100,6 +102,23 @@ export const AddPetitionerToCase = connect(
               />
             </FormGroup>
 
+            <FormGroup>
+              <input
+                checked={false}
+                className="usa-checkbox__input"
+                id="use-same-address-above"
+                name="useExistingAddress"
+                type="checkbox"
+              />
+              <label
+                className="usa-checkbox__label"
+                htmlFor="use-same-address-above"
+                id="use-same-address-above-label"
+              >
+                Use existing address
+              </label>
+            </FormGroup>
+
             <Country
               bind={bind}
               clearTypeOnCountryChange={true}
@@ -165,6 +184,29 @@ export const AddPetitionerToCase = connect(
                 validationErrors="validationErrors.contact"
               />
             </div>
+          </div>
+
+          <h2>Case Caption</h2>
+
+          <div className="blue-container margin-bottom-5">
+            <label className="usa-label" htmlFor="message">
+              Case caption
+            </label>
+            <textarea
+              className="usa-textarea"
+              id="message"
+              name="message"
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                validatePetitionerSequence();
+              }}
+            />
+            <span className="display-inline-block margin-top-1">
+              {constants.CASE_CAPTION_POSTFIX}
+            </span>
           </div>
 
           <Button
