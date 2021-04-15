@@ -50,14 +50,16 @@ const PetitionerInformation = connect(
             <div className="content-wrapper">
               <h3 className="underlined" id="primary-label">
                 Petitioner Contact Info{' '}
-                <Button
-                  link
-                  className="margin-top-1 padding-0 float-right"
-                  href={`/case-detail/${formattedCaseDetail.docketNumber}/add-petitioner-to-case`}
-                  icon="plus-circle"
-                >
-                  Add Petitioner
-                </Button>
+                {caseInformationHelper.showAddPetitionerButton && (
+                  <Button
+                    link
+                    className="margin-top-1 padding-0 float-right"
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}/add-petitioner-to-case`}
+                    icon="plus-circle"
+                  >
+                    Add Petitioner
+                  </Button>
+                )}
               </h3>
 
               <div className="grid-row">

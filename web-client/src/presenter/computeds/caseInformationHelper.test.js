@@ -1,4 +1,5 @@
 import {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -398,6 +399,68 @@ describe('caseInformationHelper', () => {
         },
       });
       expect(showContactSecondaryEmail).toBeFalsy();
+    });
+  });
+
+  describe('showAddPetitionerButton', () => {
+    it('should be true when case status is not new and user has ADD_PETITIONER_TO_CASE permission', () => {
+      const user = {
+        role: ROLES.docketClerk,
+        userId: '789',
+      };
+
+      const { showAddPetitionerButton } = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            petitioners: [],
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          form: {},
+        },
+      });
+
+      expect(showAddPetitionerButton).toBeTruthy();
+    });
+
+    it('should be false when case status is new and user has ADD_PETITIONER_TO_CASE permission', () => {
+      const user = {
+        role: ROLES.docketClerk,
+        userId: '789',
+      };
+
+      const { showAddPetitionerButton } = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            petitioners: [],
+            status: CASE_STATUS_TYPES.new,
+          },
+          form: {},
+        },
+      });
+
+      expect(showAddPetitionerButton).toBeFalsy();
+    });
+
+    it('should be false when case status is not new and user does not have ADD_PETITIONER_TO_CASE permission', () => {
+      const user = {
+        role: ROLES.petitionsClerk,
+        userId: '789',
+      };
+
+      const { showAddPetitionerButton } = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            petitioners: [],
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+          form: {},
+        },
+      });
+
+      expect(showAddPetitionerButton).toBeFalsy();
     });
   });
 });
