@@ -6,8 +6,6 @@ import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from '../StartCase/InternationalAddress';
-import { MatchingEmailFoundModal } from '../CaseDetail/MatchingEmailFoundModal';
-import { NoMatchingEmailFoundModal } from '../CaseDetail/NoMatchingEmailFoundModal';
 import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -61,9 +59,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.name"
                 type="text"
                 value={form.contact.name || ''}
-                onBlur={() => {
-                  validatePetitionerSequence();
-                }}
+                onBlur={onBlur}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -90,9 +86,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.additionalName"
                 type="text"
                 value={form.contact.additionalName || ''}
-                onBlur={() => {
-                  validatePetitionerSequence();
-                }}
+                onBlur={onBlur}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -160,9 +154,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.phone"
                 type="tel"
                 value={form.contact.phone || ''}
-                onBlur={() => {
-                  validatePetitionerSequence();
-                }}
+                onBlur={onBlur}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -230,10 +222,6 @@ export const AddPetitionerToCase = connect(
 
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
-        )}
-        {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
-        {showModal === 'NoMatchingEmailFoundModal' && (
-          <NoMatchingEmailFoundModal />
         )}
       </>
     );
