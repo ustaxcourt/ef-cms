@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { getContactSecondary } from '../../../../shared/src/business/entities/cases/Case';
 import { state } from 'cerebral';
 
@@ -16,12 +17,14 @@ export const setDefaultAddPetitionerToCaseFormAction = ({
 
   store.set(state.form, { contact: {} });
 
-  const caseDetail = get(state.caseDetail);
+  const caseDetail = cloneDeep(get(state.caseDetail));
   const contactSecondary = getContactSecondary(caseDetail);
 
   if (!contactSecondary) {
-    store.set(state.form.contactType, CONTACT_TYPES.secondary);
+    store.set(state.form.contact.contactType, CONTACT_TYPES.secondary);
   } else {
-    store.set(state.form.contactType, CONTACT_TYPES.otherPetitioner);
+    store.set(state.form.contact.contactType, CONTACT_TYPES.otherPetitioner);
   }
+
+  store.set(state.form.caseCaption, caseDetail.caseCaption);
 };
