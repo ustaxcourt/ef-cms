@@ -176,25 +176,29 @@ export const AddPetitionerToCase = connect(
           <h2>Case Caption</h2>
           {/* todo 5386 make casecaption required */}
           <div className="blue-container margin-bottom-5">
-            <label className="usa-label" htmlFor="caseCaption">
-              Case caption
-            </label>
-            <textarea
-              className="usa-textarea"
-              id="case-caption"
-              name="caseCaption"
-              value={form.caseCaption}
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                validatePetitionerSequence();
-              }}
-            />
-            <span className="display-inline-block margin-top-1">
-              {constants.CASE_CAPTION_POSTFIX}
-            </span>
+            <FormGroup
+              errorText={validationErrors && validationErrors.caseCaption}
+            >
+              <label className="usa-label" htmlFor="caseCaption">
+                Case caption
+              </label>
+              <textarea
+                className="usa-textarea"
+                id="case-caption"
+                name="caseCaption"
+                value={form.caseCaption}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validatePetitionerSequence();
+                }}
+              />
+              <span className="display-inline-block margin-top-1">
+                {constants.CASE_CAPTION_POSTFIX}
+              </span>
+            </FormGroup>
           </div>
 
           <Button

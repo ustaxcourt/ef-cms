@@ -1,6 +1,5 @@
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { isEmpty } = require('lodash');
-const { lineTo } = require('pdf-lib');
 const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 
 /**
@@ -26,8 +25,6 @@ exports.validatePetitionerInteractor = ({
   if (!petitioner) {
     petitioner = contactInfo;
   }
-
-  console.log('petitioner', petitioner);
 
   const contactErrors = ContactFactory.createContacts({
     applicationContext,
