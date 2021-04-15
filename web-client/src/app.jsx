@@ -1,3 +1,5 @@
+import './index.scss';
+
 import { AppComponent } from './views/AppComponent';
 import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
