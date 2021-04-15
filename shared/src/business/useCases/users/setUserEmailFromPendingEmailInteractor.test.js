@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -104,7 +105,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     });
   });
 
-  it.only('should update the user cases with the new email and electronic service for the contact secondary', async () => {
+  it('should update the user cases with the new email and electronic service for the contact secondary', async () => {
     userCases = [
       {
         ...MOCK_CASE,
@@ -122,6 +123,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
