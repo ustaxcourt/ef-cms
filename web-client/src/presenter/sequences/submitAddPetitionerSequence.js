@@ -5,12 +5,12 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { submitUpdatePetitionerInformationSequence } from './submitUpdatePetitionerInformationSequence';
-import { validateAddPractitionerAction } from '../actions/validateAddPractitionerAction';
+import { validateAddPetitionerAction } from '../actions/validateAddPetitionerAction';
 
 export const submitAddPetitionerSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  validateAddPractitionerAction,
+  validateAddPetitionerAction,
   {
     error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
