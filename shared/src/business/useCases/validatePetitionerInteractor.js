@@ -1,5 +1,6 @@
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { isEmpty } = require('lodash');
+const { lineTo } = require('pdf-lib');
 const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 
 /**
@@ -20,9 +21,13 @@ exports.validatePetitionerInteractor = ({
   petitioners,
   status,
 }) => {
-  const petitioner = petitioners.find(
-    p => p.contactId === contactInfo.contactId,
-  );
+  let petitioner = petitioners.find(p => p.contactId === contactInfo.contactId);
+
+  if (!petitioner) {
+    petitioner = contactInfo;
+  }
+
+  console.log('petitioner', petitioner);
 
   const contactErrors = ContactFactory.createContacts({
     applicationContext,

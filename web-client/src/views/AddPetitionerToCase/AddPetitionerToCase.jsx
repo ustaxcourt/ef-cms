@@ -59,7 +59,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.name"
                 type="text"
                 value={form.contact.name || ''}
-                onBlur={onBlur}
+                onBlur={validatePetitionerSequence}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -86,7 +86,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.additionalName"
                 type="text"
                 value={form.contact.additionalName || ''}
-                onBlur={onBlur}
+                onBlur={validatePetitionerSequence}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -103,6 +103,7 @@ export const AddPetitionerToCase = connect(
                 id="use-same-address-above"
                 name="useExistingAddress"
                 type="checkbox"
+                onChange={() => {}}
               />
               <label
                 className="usa-checkbox__label"
@@ -123,14 +124,14 @@ export const AddPetitionerToCase = connect(
               <Address
                 bind={bind}
                 type={type}
-                onBlur={onBlur}
+                onBlur={validatePetitionerSequence}
                 onChange="updateFormValueSequence"
               />
             ) : (
               <InternationalAddress
                 bind={bind}
                 type={type}
-                onBlur={onBlur}
+                onBlur={validatePetitionerSequence}
                 onChange="updateFormValueSequence"
               />
             )}
@@ -154,7 +155,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.phone"
                 type="tel"
                 value={form.contact.phone || ''}
-                onBlur={onBlur}
+                onBlur={validatePetitionerSequence}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
