@@ -28,7 +28,6 @@ const updateCasesForPetitioner = async ({
       }),
     ),
   );
-  applicationContext.logger.error('found cases to update', casesToUpdate);
 
   const validatedCasesToUpdate = casesToUpdate
     .map(caseToUpdate => {
@@ -50,11 +49,9 @@ const updateCasesForPetitioner = async ({
       petitionerObject.email = user.email;
       petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
-      applicationContext.logger.error('updating petitioner', petitionerObject);
       // we do this again so that it will convert '' to null
       const newCase = new Case(caseRaw, { applicationContext }).validate();
 
-      applicationContext.logger.error('updated case', newCase.petitioners);
       return newCase;
     })
     // if petitioner is not found on the case, function exits early and returns `undefined`.
@@ -246,8 +243,6 @@ exports.verifyUserPendingEmailInteractor = async (
     applicationContext,
     user: updatedRawUser,
   });
-
-  applicationContext.logger.error('user being updated', userEntity);
 
   try {
     if (userEntity.role === ROLES.petitioner) {
