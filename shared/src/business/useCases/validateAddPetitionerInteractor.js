@@ -11,10 +11,7 @@ const {
  * @returns {object} errors (null if no errors)
  */
 exports.validateAddPetitionerInteractor = ({ applicationContext, contact }) => {
-  const OtherPetitionerContact = getOtherPetitionerContact({
-    countryType: contact.countryType,
-    isPaper: false,
-  });
+  const OtherPetitionerContact = getOtherPetitionerContact({});
 
   return new OtherPetitionerContact(contact, {
     applicationContext,
