@@ -72,22 +72,19 @@ const PetitionerInformation = connect(
                       </div>
                     )}
 
-                    {caseInformationHelper.showContactPrimaryEmail && (
-                      <>
-                        <div className="semi-bold margin-bottom-0 margin-top-3">
-                          Current email address
-                        </div>
-                        {formattedCaseDetail.contactPrimary.email}
-                        {formattedCaseDetail.contactPrimary.showEAccessFlag && (
-                          <FontAwesomeIcon
-                            aria-label="has e-access"
-                            className="margin-left-05 fa-icon-blue"
-                            icon="flag"
-                            size="1x"
-                          />
-                        )}
-                      </>
+                    <div className="semi-bold margin-bottom-0 margin-top-3">
+                      Current email address
+                    </div>
+                    {caseInformationHelper.contactPrimaryEmailFormatted}
+                    {formattedCaseDetail.contactPrimary.showEAccessFlag && (
+                      <FontAwesomeIcon
+                        aria-label="has e-access"
+                        className="margin-left-05 fa-icon-blue"
+                        icon="flag"
+                        size="1x"
+                      />
                     )}
+
                     {screenMetadata.contactPrimaryPendingEmail && (
                       <>
                         <div className="semi-bold margin-top-3">
@@ -130,22 +127,17 @@ const PetitionerInformation = connect(
                           </p>
                         </div>
                       )}
-                      {caseInformationHelper.showContactSecondaryEmail && (
-                        <>
-                          <div className="semi-bold margin-bottom-0 margin-top-3">
-                            Current email address
-                          </div>
-                          {formattedCaseDetail.contactSecondary.email}
-                          {formattedCaseDetail.contactSecondary
-                            .showEAccessFlag && (
-                            <FontAwesomeIcon
-                              aria-label="has e-access"
-                              className="margin-left-05 fa-icon-blue"
-                              icon="flag"
-                              size="1x"
-                            />
-                          )}
-                        </>
+                      <div className="semi-bold margin-bottom-0 margin-top-3">
+                        Current email address
+                      </div>
+                      {caseInformationHelper.contactSecondaryEmailFormatted}
+                      {formattedCaseDetail.contactSecondary.showEAccessFlag && (
+                        <FontAwesomeIcon
+                          aria-label="has e-access"
+                          className="margin-left-05 fa-icon-blue"
+                          icon="flag"
+                          size="1x"
+                        />
                       )}
                       {screenMetadata.contactSecondaryPendingEmail && (
                         <>
