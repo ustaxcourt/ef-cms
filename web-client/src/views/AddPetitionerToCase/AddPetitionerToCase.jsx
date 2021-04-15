@@ -18,7 +18,7 @@ export const AddPetitionerToCase = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
-    submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
+    submitAddPetitionerSequence: sequences.submitAddPetitionerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
@@ -29,7 +29,7 @@ export const AddPetitionerToCase = connect(
     form,
     formCancelToggleCancelSequence,
     showModal,
-    submitEditPetitionerSequence,
+    submitAddPetitionerSequence,
     updateFormValueSequence,
     validatePetitionerSequence,
     validationErrors,
@@ -204,7 +204,7 @@ export const AddPetitionerToCase = connect(
           <Button
             id="submit-edit-petitioner-information"
             onClick={() => {
-              submitEditPetitionerSequence();
+              submitAddPetitionerSequence();
             }}
           >
             Save
