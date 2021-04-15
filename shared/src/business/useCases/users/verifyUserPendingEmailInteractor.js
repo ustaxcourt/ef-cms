@@ -238,6 +238,8 @@ exports.verifyUserPendingEmailInteractor = async (
     user: updatedRawUser,
   });
 
+  applicationContext.logger.error('user being updated', userEntity);
+
   try {
     if (userEntity.role === ROLES.petitioner) {
       await updatePetitionerCases({
