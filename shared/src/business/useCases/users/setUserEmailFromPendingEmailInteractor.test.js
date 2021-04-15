@@ -26,20 +26,13 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
   beforeEach(() => {
     mockUser = {
       ...validUser,
-      admissionsDate: '2019-03-01',
-      admissionsStatus: 'Active',
-      barNumber: 'RA3333',
       birthYear: '1950',
       email: undefined,
-      employer: 'Private',
       firstName: 'Alden',
       lastName: 'Rivas',
       name: 'Alden Rivas',
-      originalBarState: 'Florida',
       pendingEmail: UPDATED_EMAIL,
-      practitionerType: 'Attorney',
-      //fixme make petitioner
-      role: ROLES.privatePractitioner,
+      role: ROLES.petitioner,
       userId: USER_ID,
     };
 

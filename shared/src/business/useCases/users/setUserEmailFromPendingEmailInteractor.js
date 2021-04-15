@@ -21,9 +21,9 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
-  const petitionerCases = petitionerDocketNumbers.map(
-    docketNumber => docketNumber,
-  );
+  const petitionerCases = petitionerDocketNumbers.map(docketNumber => ({
+    docketNumber,
+  }));
 
   return await updateCasesForPetitioner({
     applicationContext,

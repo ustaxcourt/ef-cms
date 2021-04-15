@@ -12,6 +12,7 @@ import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -70,6 +71,7 @@ describe('admissions clerk adds petitioner without existing cognito account to c
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkSubmitsPaperCaseToIrs(test);
 
   loginAs(test, 'admissionsclerk@example.com');
   it('admissions clerk adds petitioner email without existing cognito account to case', async () => {
