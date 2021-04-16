@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('removeCaseFromTrialAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should set petitioner addresses from case on screenMetadata', async () => {
+  it('should set petitioner addresses from case on screenMetadata when from.useExistingAddress is true', async () => {
     const result = await runAction(getAndSetPetitionersAddressAction, {
       modules: {
         presenter,
@@ -24,6 +24,9 @@ describe('removeCaseFromTrialAction', () => {
             },
           ],
         },
+        form: {
+          useExistingAddress: true,
+        },
       },
     });
 
@@ -33,5 +36,44 @@ describe('removeCaseFromTrialAction', () => {
         'e8489600-9eca-11eb-a8b3-0242ac130003': '3100 Street street',
       },
     });
+  });
+
+  it('should unset petitioner addresses from case on screenMetadata when from.useExistingAddress is false', async () => {
+    const result = await runAction(getAndSetPetitionersAddressAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          petitioners: [
+            {
+              address1: '3100 Street street',
+              contactId: 'e8489600-9eca-11eb-a8b3-0242ac130003',
+            },
+            {
+              address1: '3100 Ave street',
+              contactId: '5fd05a6a-3742-4de8-935d-b600b2fca9b7',
+            },
+          ],
+        },
+        form: {
+          useExistingAddress: false,
+        },
+        screenMetadata: {
+          petitionerAddresses: [
+            {
+              address1: '3100 Street street',
+              contactId: 'e8489600-9eca-11eb-a8b3-0242ac130003',
+            },
+            {
+              address1: '3100 Ave street',
+              contactId: '5fd05a6a-3742-4de8-935d-b600b2fca9b7',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.state.screenMetadata.petitionerAddresses).toBeUndefined();
   });
 });

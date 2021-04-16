@@ -22,11 +22,12 @@ describe('setDefaultAddPetitionerToCaseFormAction', () => {
     });
 
     expect(state.form).toEqual({
-      caseCaption: MOCK_CASE.caseCaption,
       contact: {
+        caseCaption: MOCK_CASE.caseCaption,
         contactType: CONTACT_TYPES.otherPetitioner,
         countryType: COUNTRY_TYPES.DOMESTIC,
       },
+      useExistingAddress: false,
     });
   });
 });
