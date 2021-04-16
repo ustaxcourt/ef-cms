@@ -220,23 +220,25 @@ const PetitionerInformation = connect(
                     ),
                   )}
               </div>
-              <div className="grid-row">
-                <div className="grid-col-12 text-right">
-                  <Button
-                    link
-                    className="margin-top-3"
-                    icon={['far', 'address-card']}
-                    iconSize="sm"
-                    id="view-additional-petitioners-button"
-                    onClick={() => {
-                      toggleShowAdditionalPetitionersSequence();
-                    }}
-                  >
-                    {caseInformationHelper.toggleAdditionalPetitionersDisplay}{' '}
-                    Additional Petitioners
-                  </Button>
+              {formattedCaseDetail.petitioners.length > 4 && (
+                <div className="grid-row">
+                  <div className="grid-col-12 text-right">
+                    <Button
+                      link
+                      className="margin-top-3"
+                      icon={['far', 'address-card']}
+                      iconSize="sm"
+                      id="view-additional-petitioners-button"
+                      onClick={() => {
+                        toggleShowAdditionalPetitionersSequence();
+                      }}
+                    >
+                      {caseInformationHelper.toggleAdditionalPetitionersDisplay}{' '}
+                      Additional Petitioners
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
