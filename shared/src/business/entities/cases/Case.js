@@ -318,25 +318,31 @@ Case.prototype.assignContacts = function assignContacts({
   applicationContext,
   rawCase,
 }) {
-  const contacts = ContactFactory.createContacts({
-    applicationContext,
-    contactInfo: {
-      otherFilers: getOtherFilers(rawCase),
-      otherPetitioners: getOtherPetitioners(rawCase),
-      primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-      secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
-    },
-    isPaper: rawCase.isPaper,
-    partyType: rawCase.partyType,
-    status: rawCase.status,
-  });
+  if (rawCase.status && rawCase.status === CASE_STATUS_TYPES.new) {
+    const contacts = ContactFactory.createContacts({
+      applicationContext,
+      contactInfo: {
+        otherFilers: getOtherFilers(rawCase),
+        otherPetitioners: getOtherPetitioners(rawCase),
+        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
+        secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
+      },
+      isPaper: rawCase.isPaper,
+      partyType: rawCase.partyType,
+      status: rawCase.status,
+    });
 
-  this.petitioners.push(contacts.primary);
-  if (contacts.secondary) {
-    this.petitioners.push(contacts.secondary);
+    this.petitioners.push(contacts.primary);
+    if (contacts.secondary) {
+      this.petitioners.push(contacts.secondary);
+    }
+    this.petitioners.push(...contacts.otherPetitioners);
+    this.petitioners.push(...contacts.otherFilers);
+  } else {
+    this.petitioners = rawCase.petitioners.map(
+      petitioner => new Petitioner(petitioner, { applicationContext }),
+    );
   }
-  this.petitioners.push(...contacts.otherPetitioners);
-  this.petitioners.push(...contacts.otherFilers);
 
   if (rawCase.status && rawCase.status !== CASE_STATUS_TYPES.new) {
     this.setAdditionalNameOnPetitioners();

@@ -374,7 +374,7 @@ ContactFactory.getContactConstructors = ({
   if (status && status !== CASE_STATUS_TYPES.new) {
     return {
       otherFilers: getOtherFilerContact,
-      otherPetitioners: getOtherPetitionerContact,
+      petitioners: getOtherPetitionerContact,
       primary: getPetitionerPrimaryContact,
       secondary: contactInfo?.secondary ? getPetitionerPrimaryContact : null,
     };
