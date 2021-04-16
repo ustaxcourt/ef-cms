@@ -1,6 +1,7 @@
 const {
   getOtherPetitionerContact,
 } = require('../entities/contacts/OtherPetitionerContact');
+const { Case } = require('../entities/cases/Case');
 const { isEmpty } = require('lodash');
 
 /**
@@ -8,7 +9,7 @@ const { isEmpty } = require('lodash');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.contact the contactInfo to validate
+ * @param {object} providers.contact the contact to validate
  * @returns {object} errors (null if no errors)
  */
 exports.validateAddPetitionerInteractor = ({ applicationContext, contact }) => {
@@ -20,7 +21,9 @@ exports.validateAddPetitionerInteractor = ({ applicationContext, contact }) => {
 
   let caseCaptionError;
   if (!contact.caseCaption) {
-    caseCaptionError = { caseCaption: 'Case caption is required' };
+    caseCaptionError = {
+      caseCaption: Case.VALIDATION_ERROR_MESSAGES.caseCaption,
+    };
   }
 
   const aggregatedErrors = {
