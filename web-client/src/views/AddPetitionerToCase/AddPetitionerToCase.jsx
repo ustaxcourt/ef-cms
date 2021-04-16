@@ -1,4 +1,5 @@
 import { Address } from '../StartCase/Address';
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { Country } from '../StartCase/Country';
@@ -17,6 +18,7 @@ export const AddPetitionerToCase = connect(
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    petitionerAddresses: state.screenMetadata.petitionerAddresses,
     showModal: state.modal.showModal,
     submitAddPetitionerSequence: sequences.submitAddPetitionerSequence,
     toggleUseExistingAddressSequence:
@@ -30,6 +32,7 @@ export const AddPetitionerToCase = connect(
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
+    petitionerAddresses,
     showModal,
     submitAddPetitionerSequence,
     toggleUseExistingAddressSequence,
@@ -106,7 +109,9 @@ export const AddPetitionerToCase = connect(
                 id="use-same-address-above"
                 name="useExistingAddress"
                 type="checkbox"
-                onChange={() => toggleUseExistingAddressSequence()}
+                onChange={() => {
+                  toggleUseExistingAddressSequence();
+                }}
               />
               <label
                 className="usa-checkbox__label"
@@ -116,6 +121,24 @@ export const AddPetitionerToCase = connect(
                 Use existing address
               </label>
             </FormGroup>
+
+            {petitionerAddresses && (
+              <FormGroup className="margin-left-3">
+                <BindedSelect
+                  bind={`${bind}.${type}.existingAddressContactId`}
+                  className="usa-input width-mobile"
+                  id="order-opinion"
+                  name="opinionType"
+                >
+                  <option value="">- Select -</option>
+                  {Object.keys(petitionerAddresses).map(contactId => (
+                    <option key={contactId} value={contactId}>
+                      {petitionerAddresses[contactId]}
+                    </option>
+                  ))}
+                </BindedSelect>
+              </FormGroup>
+            )}
 
             <Country
               bind={bind}
