@@ -321,6 +321,7 @@ import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
 import { submitAddOtherStatisticsSequence } from './sequences/submitAddOtherStatisticsSequence';
+import { submitAddPetitionerSequence } from './sequences/submitAddPetitionerSequence';
 import { submitAddPractitionerSequence } from './sequences/submitAddPractitionerSequence';
 import { submitCaseAdvancedSearchSequence } from './sequences/submitCaseAdvancedSearchSequence';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
@@ -793,6 +794,7 @@ export const presenter = {
     submitAddConsolidatedCaseSequence,
     submitAddDeficiencyStatisticsSequence,
     submitAddOtherStatisticsSequence,
+    submitAddPetitionerSequence,
     submitAddPractitionerSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseAssociationRequestSequence,
