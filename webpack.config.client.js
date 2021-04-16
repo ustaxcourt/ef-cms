@@ -12,16 +12,11 @@ module.exports = {
         use: ['babel-loader'],
       },
       {
-        test: /\.(pdf|woff|woff2|ttf)$/,
+        test: /\.(png|svg|jpg|jpeg|gif|pdf|woff|woff2|ttf)$/i,
         use: ['file-loader'],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
-      },
-      {
         test: /\.css$/i,
-        type: 'asset/resource',
         use: ['style-loader', 'css-loader'],
       },
       {

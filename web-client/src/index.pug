@@ -1,12 +1,12 @@
 doctype html
 html(lang="en")
   head
+    base(href="/")
     meta(charset="utf-8")
     meta(revision="" + (process.env.CIRCLE_SHA1 || '').substr(0,7))
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     meta(name="robots" content="noindex")
     title U.S. Tax Court Electronic Filing and Case Management System
-    link(rel="stylesheet" href="../../node_modules/@fortawesome/fontawesome-svg-core/styles.css")
   body
     #app
     #modal-root
