@@ -104,6 +104,36 @@ describe('TabsComponent', () => {
     );
   });
 
+  it('should use a span tag for tab label if no headingLevel parameter is provided', () => {
+    let testRenderer;
+    act(() => {
+      testRenderer = TestRenderer.create(
+        <TabsComponent>
+          <Tab tabName="myTabName" title="No Heading Level" />
+        </TabsComponent>,
+      );
+    });
+
+    const testInstance = testRenderer.root;
+
+    expect(testInstance.findByType('span')).toBeDefined();
+  });
+
+  it('should render tab label within the proper heading tag if headingLevel parameter is present', () => {
+    let testRenderer;
+    act(() => {
+      testRenderer = TestRenderer.create(
+        <TabsComponent headingLevel="2">
+          <Tab tabName="myTabName" title="Heading Level Two" />
+        </TabsComponent>,
+      );
+    });
+
+    const testInstance = testRenderer.root;
+
+    expect(testInstance.findByType('h2')).toBeDefined();
+  });
+
   it('should create a default tab element id if one is not provided', () => {
     let testRenderer;
     act(() => {
@@ -140,7 +170,7 @@ describe('TabsComponent', () => {
     const testInstance = testRenderer.root;
 
     expect(
-      testInstance.findByProps({ id: 'tab-with-content' }).props[
+      testInstance.findByProps({ id: 'tab-with-content' }).parent.props[
         'aria-controls'
       ],
     ).toEqual('tabContent-withContent');
