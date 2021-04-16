@@ -45,7 +45,9 @@ exports.addPetitionerToCaseInteractor = async (
 
   caseEntity.caseCaption = caseCaption;
 
-  const OtherPetitionerContact = getOtherPetitionerContact({});
+  const OtherPetitionerContact = getOtherPetitionerContact({
+    countryType: contact.countryType,
+  });
 
   const petitionerEntity = new OtherPetitionerContact(contact, {
     applicationContext,
