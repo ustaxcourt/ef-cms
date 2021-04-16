@@ -75,6 +75,7 @@ describe('addPetitionerToCaseInteractor', () => {
   it('should add the petitioner to the case and send the updated case to persistence, and return the updated case', async () => {
     await addPetitionerToCaseInteractor(applicationContext, {
       caseCaption: MOCK_CASE.caseCaption,
+
       contact: {
         ...mockContact,
         country: 'Georgia',
