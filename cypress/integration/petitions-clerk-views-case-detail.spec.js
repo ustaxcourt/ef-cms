@@ -19,7 +19,7 @@ describe('Petitions clerk views case detail', function () {
 
       cy.get('div#petitioner-information')
         .find('.other-petitioners-information')
-        .should('have.length', 8);
+        .should('have.length', 7);
     });
   });
 
