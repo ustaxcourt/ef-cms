@@ -1,6 +1,5 @@
 const joi = require('joi');
 const {
-  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
@@ -193,16 +192,10 @@ ContactFactory.getErrorToMessageMap = ({
  * used for getting the contact constructors depending on the party type and contact type
  *
  * @param {object} options the options object
- * @param {object} options.contactInfo the contact info
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
- * @param {string} options.status the case status
  * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact, other petitioner contacts
  */
-ContactFactory.getContactConstructors = ({
-  contactInfo,
-  partyType,
-  status,
-}) => {
+ContactFactory.getContactConstructors = ({ partyType }) => {
   const {
     getNextFriendForIncompetentPersonContact,
   } = require('./NextFriendForIncompetentPersonContact');
@@ -371,15 +364,6 @@ ContactFactory.getContactConstructors = ({
     }
   };
 
-  if (status && status !== CASE_STATUS_TYPES.new) {
-    return {
-      otherFilers: getOtherFilerContact,
-      petitioners: getOtherPetitionerContact,
-      primary: getPetitionerPrimaryContact,
-      secondary: contactInfo?.secondary ? getPetitionerPrimaryContact : null,
-    };
-  }
-
   return partyConstructorFetch(partyType);
 };
 
@@ -390,7 +374,6 @@ ContactFactory.getContactConstructors = ({
  * @param {object} options.contactInfo information on party contacts (primary, secondary, other)
  * @param {boolean} options.isPaper whether service is paper
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
- * @param {string} options.status the case status
  * @returns {object} contains the primary, secondary, and other contact instances
  */
 ContactFactory.createContacts = ({
@@ -398,12 +381,9 @@ ContactFactory.createContacts = ({
   contactInfo,
   isPaper,
   partyType,
-  status,
 }) => {
   const constructorMap = ContactFactory.getContactConstructors({
-    contactInfo,
     partyType,
-    status,
   });
 
   const constructors = {

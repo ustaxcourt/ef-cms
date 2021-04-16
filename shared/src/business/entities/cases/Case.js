@@ -319,7 +319,7 @@ Case.prototype.assignContacts = function assignContacts({
   applicationContext,
   rawCase,
 }) {
-  if (rawCase.status && rawCase.status === CASE_STATUS_TYPES.new) {
+  if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {
@@ -330,7 +330,6 @@ Case.prototype.assignContacts = function assignContacts({
       },
       isPaper: rawCase.isPaper,
       partyType: rawCase.partyType,
-      status: rawCase.status,
     });
 
     this.petitioners.push(contacts.primary);
