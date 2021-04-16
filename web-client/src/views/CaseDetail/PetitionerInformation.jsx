@@ -62,7 +62,7 @@ const PetitionerInformation = connect(
                 )}
               </h3>
 
-              <div className="grid-row">
+              <div className="grid-row" id="petitioner-information">
                 {formattedCaseDetail.contactPrimary && (
                   <div className="grid-col-3">
                     <address aria-labelledby="primary-label">
