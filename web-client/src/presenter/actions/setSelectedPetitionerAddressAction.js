@@ -21,8 +21,6 @@ export const setSelectedPetitionerAddressAction = async ({
     .getUtilities()
     .getPetitionerById(caseDetail, props.contactId);
 
-  console.log('~~~', state.form.contact);
-
   store.set(state.form.contact.address1, petitioner.address1);
   store.set(state.form.contact.address2, petitioner.address2);
   store.set(state.form.contact.address3, petitioner.address3);
