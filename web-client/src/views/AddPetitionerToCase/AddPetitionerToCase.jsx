@@ -19,6 +19,8 @@ export const AddPetitionerToCase = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     petitionerAddresses: state.screenMetadata.petitionerAddresses,
+    setSelectedAddressOnFormSequence:
+      sequences.setSelectedAddressOnFormSequence,
     showModal: state.modal.showModal,
     submitAddPetitionerSequence: sequences.submitAddPetitionerSequence,
     toggleUseExistingAddressSequence:
@@ -33,6 +35,7 @@ export const AddPetitionerToCase = connect(
     form,
     formCancelToggleCancelSequence,
     petitionerAddresses,
+    setSelectedAddressOnFormSequence,
     showModal,
     submitAddPetitionerSequence,
     toggleUseExistingAddressSequence,
@@ -127,8 +130,13 @@ export const AddPetitionerToCase = connect(
                 <BindedSelect
                   bind={`${bind}.${type}.existingAddressContactId`}
                   className="usa-input width-mobile"
-                  id="order-opinion"
-                  name="opinionType"
+                  id="existing-addresses"
+                  name="existingAddresses"
+                  onChange={e => {
+                    setSelectedAddressOnFormSequence({
+                      contactId: e.target.value,
+                    });
+                  }}
                 >
                   <option value="">- Select -</option>
                   {Object.keys(petitionerAddresses).map(contactId => (
