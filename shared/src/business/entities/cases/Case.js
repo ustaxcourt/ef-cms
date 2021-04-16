@@ -1,4 +1,5 @@
 const joi = require('joi');
+const Petitioner = require('../contacts/Petitioner');
 const {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_DOCUMENT_CODES,
