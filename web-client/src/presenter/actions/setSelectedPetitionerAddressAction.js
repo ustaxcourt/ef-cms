@@ -11,10 +11,11 @@ import { state } from 'cerebral';
  */
 export const setSelectedPetitionerAddressAction = async ({
   applicationContext,
+  get,
   props,
   store,
 }) => {
-  const caseDetail = cloneDeep(state.caseDetail);
+  const caseDetail = cloneDeep(get(state.caseDetail));
 
   const petitioner = applicationContext
     .getUtilities()

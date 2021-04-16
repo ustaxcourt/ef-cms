@@ -3,5 +3,5 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 
 export const setSelectedAddressOnFormSequence = [
   setSelectedPetitionerAddressAction,
-  setShowModalFactoryAction('FormCancelModalDialog'),
+  // setShowModalFactoryAction('FormCancelModalDialog'),
 ];
