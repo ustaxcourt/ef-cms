@@ -89,19 +89,23 @@ export function TabsComponent({
       return null;
     }
 
-    const buttonProps = {
+    const tabProps = {
       'aria-controls': tabContentId,
       'aria-selected': isActiveTab,
+      className: liClass,
+      role: 'tab',
+    };
+
+    const buttonProps = {
       className: childClassName,
       disabled,
       id: buttonId,
       onClick: () => setTab(tabName),
-      role: 'tab',
       type: 'button',
     };
 
     return (
-      <li className={liClass}>
+      <li {...tabProps}>
         <button {...buttonProps}>
           <span>{title}</span>{' '}
           {showIcon && (
