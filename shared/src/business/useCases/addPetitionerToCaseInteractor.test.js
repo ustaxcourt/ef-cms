@@ -75,14 +75,21 @@ describe('addPetitionerToCaseInteractor', () => {
   it('should add the petitioner to the case and send the updated case to persistence, and return the updated case', async () => {
     await addPetitionerToCaseInteractor(applicationContext, {
       caseCaption: MOCK_CASE.caseCaption,
-      contact: mockContact,
+      contact: {
+        ...mockContact,
+        country: 'Georgia',
+        countryType: COUNTRY_TYPES.INTERNATIONAL,
+      },
       docketNumber: MOCK_CASE.docketNumber,
     });
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.petitioners[1],
-    ).toMatchObject(mockContact);
+    ).toMatchObject({
+      ...mockContact,
+      countryType: COUNTRY_TYPES.INTERNATIONAL,
+    });
   });
 
   it('should add the petitioner to the case and return the updated case', async () => {

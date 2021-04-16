@@ -253,6 +253,10 @@ exports.updateCaseAndAssociations = async ({
       docketNumber: caseToUpdate.docketNumber,
     });
 
+  console.log(
+    '~~~caseEntity.getFormattedValidationErrors()',
+    caseEntity.getFormattedValidationErrors(),
+  );
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 
   const validRawOldCaseEntity = new Case(oldCaseEntity, { applicationContext })
