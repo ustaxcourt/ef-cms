@@ -8,11 +8,11 @@ const {
 } = require('../EntityConstants');
 const {
   JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
+} = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('../../../utilities/JoiValidationDecorator');
 
 /**
  * constructor
@@ -95,13 +95,11 @@ Petitioner.VALIDATION_RULES = {
   serviceIndicator: JoiValidationConstants.STRING.valid(
     ...Object.values(SERVICE_INDICATOR_TYPES),
   ).optional(),
-  state: JoiValidationConstants.STRING.valid(
-    ...Object.keys(US_STATES),
-    ...US_STATES_OTHER,
-    STATE_NOT_AVAILABLE,
-  ).when('countryType', {
+  state: JoiValidationConstants.STRING.when('countryType', {
     is: COUNTRY_TYPES.INTERNATIONAL,
-    otherwise: joi.required(),
+    otherwise: joi
+      .valid(...Object.keys(US_STATES), ...US_STATES_OTHER, STATE_NOT_AVAILABLE)
+      .required(),
     then: joi.optional().allow(null),
   }),
   title: JoiValidationConstants.STRING.max(100).optional(),

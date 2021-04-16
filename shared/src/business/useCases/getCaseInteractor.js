@@ -53,6 +53,10 @@ const getSealedCase = async ({
     permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
   });
 
+  const blah = new Case(caseRecord, { applicationContext });
+
+  console.log('!!!!!!', blah.getFormattedValidationErrors());
+
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
     return new Case(caseRecord, { applicationContext })
       .validate()
