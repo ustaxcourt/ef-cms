@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getAndSetPetitionersAddressAction } from './getAndPetitionersAddressAction';
+import { getAndSetPetitionersAddressAction } from './getAndSetPetitionersAddressAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
@@ -20,18 +20,17 @@ describe('removeCaseFromTrialAction', () => {
             },
             {
               address1: '3100 Ave street',
-              contactId: 'ef907d38-9eca-11eb-a8b3-0242ac130003',
+              contactId: '5fd05a6a-3742-4de8-935d-b600b2fca9b7',
             },
           ],
         },
       },
     });
 
-    expect(result.output).toToEqual({
-      screenMetaData: {
-        petitionerAddresses: {
-          'e8489600-9eca-11eb-a8b3-0242ac130003': '3100 Street street',
-        },
+    expect(result.state.screenMetadata).toEqual({
+      petitionerAddresses: {
+        '5fd05a6a-3742-4de8-935d-b600b2fca9b7': '3100 Ave street',
+        'e8489600-9eca-11eb-a8b3-0242ac130003': '3100 Street street',
       },
     });
   });
