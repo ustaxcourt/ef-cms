@@ -2,7 +2,10 @@ const {
   validateAddPetitionerInteractor,
 } = require('./validateAddPetitionerInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { Case } = require('../entities/cases/Case');
 const { CONTACT_TYPES, COUNTRY_TYPES } = require('../entities/EntityConstants');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
+
 describe('validateAddPetitionerInteractor', () => {
   it('should not return validation errors when contact is valid and a case caption is present', async () => {
     const contact = {
@@ -47,8 +50,8 @@ describe('validateAddPetitionerInteractor', () => {
     });
 
     expect(errors).toEqual({
-      address1: 'Enter mailing address',
-      caseCaption: 'Case caption is required',
+      address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
+      caseCaption: Case.VALIDATION_ERROR_MESSAGES.caseCaption,
     });
   });
 });
