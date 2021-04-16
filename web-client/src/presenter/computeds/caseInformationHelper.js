@@ -24,9 +24,6 @@ export const caseInformationHelper = (get, applicationContext) => {
     applicationContext.getUtilities().getOtherPetitioners(caseDetail) || [];
 
   const showOtherPetitioners = !!otherPetitioners.length;
-  const formattedOtherPetitioners = showingAdditionalPetitioners
-    ? otherPetitioners
-    : otherPetitioners.slice(0, 4);
 
   const showSealAddressLink = permissions.SEAL_ADDRESS;
   const showHearingsTable = !!caseDetail.hearings?.length;
@@ -39,6 +36,15 @@ export const caseInformationHelper = (get, applicationContext) => {
     .getContactSecondary(caseDetail);
   const showContactPrimaryEmail = contactPrimary?.email;
   const showContactSecondaryEmail = contactSecondary?.email;
+
+  let formattedOtherPetitioners;
+  if (showingAdditionalPetitioners) {
+    formattedOtherPetitioners = otherPetitioners;
+  } else if (contactSecondary) {
+    formattedOtherPetitioners = otherPetitioners.slice(0, 2);
+  } else {
+    formattedOtherPetitioners = otherPetitioners.slice(0, 3);
+  }
 
   const showAddPetitionerButton =
     permissions.ADD_PETITIONER_TO_CASE &&
