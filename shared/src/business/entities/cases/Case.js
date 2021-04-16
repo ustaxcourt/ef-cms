@@ -1129,6 +1129,17 @@ Case.prototype.getPetitionerById = function (contactId) {
 };
 
 /**
+ * adds the petitioner to the petitioners array
+ *
+ * @params {object} petitioner the petitioner to add to the case
+ * @returns {Case} the updated case
+ */
+Case.prototype.addPetitioner = function (petitioner) {
+  this.petitioners.push(petitioner);
+  return this;
+};
+
+/**
  * gets the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
