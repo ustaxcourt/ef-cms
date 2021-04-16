@@ -338,23 +338,4 @@ describe('updateUserContactInformationInteractor', () => {
       applicationContext.getPersistenceGateway().updateUser,
     ).not.toBeCalled();
   });
-
-  it('should return early if the firmName and contact info was not changed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => ({
-        ...mockUser,
-        contact: contactInfo,
-      }));
-
-    await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo,
-      firmName: mockUser.firmName,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateUser,
-    ).not.toBeCalled();
-  });
 });
