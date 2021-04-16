@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {Function} providers.store the cerebral store function
  */
-export const getPetitionersAddressAction = ({ get, store }) => {
+export const getAndSetPetitionersAddressAction = ({ get, store }) => {
   // GO BACK AND DO A TEST
   const caseDetail = get(state.caseDetail);
 
