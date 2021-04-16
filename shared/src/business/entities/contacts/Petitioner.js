@@ -5,7 +5,7 @@ const {
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
-} = require('./EntityConstants');
+} = require('../EntityConstants');
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
