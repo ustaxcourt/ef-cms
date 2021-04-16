@@ -17,7 +17,9 @@ describe('Petitions clerk views case detail', function () {
         .scrollIntoView()
         .click();
 
-      cy.get('div#petitioner-information').should('have.length', 8);
+      cy.get('div#petitioner-information')
+        .find('.other-petitioners-information')
+        .should('have.length', 8);
     });
   });
 

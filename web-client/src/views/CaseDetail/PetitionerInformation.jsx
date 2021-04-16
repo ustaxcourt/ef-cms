@@ -187,7 +187,7 @@ const PetitionerInformation = connect(
                     (otherPetitioner, idx) => (
                       <div
                         className={classNames(
-                          'grid-col-3',
+                          'grid-col-3 other-petitioners-information',
                           idx > 1 &&
                             formattedCaseDetail.contactSecondary &&
                             'margin-top-8',
