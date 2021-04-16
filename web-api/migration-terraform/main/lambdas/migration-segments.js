@@ -4,6 +4,9 @@ const {
   migrateItems: migration0028,
 } = require('./migrations/0028-contact-primary-email');
 const {
+  migrateItems: migration0029,
+} = require('./migrations/0029-fix-duplicate-contact-id');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
@@ -29,6 +32,8 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.info('about to run migration 0028');
   items = await migration0028(items, documentClient);
+  applicationContext.logger.info('about to run migration 0029');
+  items = await migration0029(items, documentClient);
 
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
