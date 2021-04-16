@@ -1,4 +1,5 @@
 import { Address } from '../StartCase/Address';
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { Country } from '../StartCase/Country';
@@ -17,8 +18,13 @@ export const AddPetitionerToCase = connect(
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    petitionerAddresses: state.screenMetadata.petitionerAddresses,
+    setSelectedAddressOnFormSequence:
+      sequences.setSelectedAddressOnFormSequence,
     showModal: state.modal.showModal,
     submitAddPetitionerSequence: sequences.submitAddPetitionerSequence,
+    toggleUseExistingAddressSequence:
+      sequences.toggleUseExistingAddressSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
@@ -28,8 +34,11 @@ export const AddPetitionerToCase = connect(
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
+    petitionerAddresses,
+    setSelectedAddressOnFormSequence,
     showModal,
     submitAddPetitionerSequence,
+    toggleUseExistingAddressSequence,
     updateFormValueSequence,
     validatePetitionerSequence,
     validationErrors,
@@ -98,12 +107,18 @@ export const AddPetitionerToCase = connect(
 
             <FormGroup>
               <input
-                checked={false}
+                checked={form.useExistingAddress}
                 className="usa-checkbox__input"
                 id="use-same-address-above"
                 name="useExistingAddress"
                 type="checkbox"
-                onChange={() => {}}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                  toggleUseExistingAddressSequence();
+                }}
               />
               <label
                 className="usa-checkbox__label"
@@ -113,6 +128,29 @@ export const AddPetitionerToCase = connect(
                 Use existing address
               </label>
             </FormGroup>
+
+            {petitionerAddresses && (
+              <FormGroup className="margin-left-3">
+                <BindedSelect
+                  bind={`${bind}.${type}.existingAddressContactId`}
+                  className="usa-input width-mobile"
+                  id="existing-addresses"
+                  name="existingAddresses"
+                  onChange={e => {
+                    setSelectedAddressOnFormSequence({
+                      contactId: e,
+                    });
+                  }}
+                >
+                  <option value="">- Select -</option>
+                  {Object.keys(petitionerAddresses).map(contactId => (
+                    <option key={contactId} value={contactId}>
+                      {petitionerAddresses[contactId]}
+                    </option>
+                  ))}
+                </BindedSelect>
+              </FormGroup>
+            )}
 
             <Country
               bind={bind}
@@ -178,17 +216,17 @@ export const AddPetitionerToCase = connect(
             <FormGroup
               errorText={validationErrors && validationErrors.caseCaption}
             >
-              <label className="usa-label" htmlFor="caseCaption">
+              <label className="usa-label" htmlFor="case-caption">
                 Case caption
               </label>
               <textarea
                 className="usa-textarea"
                 id="case-caption"
                 name="caseCaption"
-                value={form.caseCaption}
+                value={form.contact.caseCaption || ''}
                 onChange={e => {
                   updateFormValueSequence({
-                    key: e.target.name,
+                    key: 'contact.caseCaption',
                     value: e.target.value,
                   });
                   validatePetitionerSequence();
