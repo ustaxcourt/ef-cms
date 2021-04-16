@@ -134,7 +134,7 @@ export const AddPetitionerToCase = connect(
                   name="existingAddresses"
                   onChange={e => {
                     setSelectedAddressOnFormSequence({
-                      contactId: e.target.value,
+                      contactId: e,
                     });
                   }}
                 >
