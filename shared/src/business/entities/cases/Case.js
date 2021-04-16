@@ -340,13 +340,13 @@ Case.prototype.assignContacts = function assignContacts({
     this.petitioners.push(...contacts.otherPetitioners);
     this.petitioners.push(...contacts.otherFilers);
   } else {
-    this.petitioners = rawCase.petitioners.map(
-      petitioner => new Petitioner(petitioner, { applicationContext }),
-    );
-  }
+    if (Array.isArray(rawCase.petitioners)) {
+      this.petitioners = rawCase.petitioners.map(
+        petitioner => new Petitioner(petitioner, { applicationContext }),
+      );
 
-  if (rawCase.status && rawCase.status !== CASE_STATUS_TYPES.new) {
-    this.setAdditionalNameOnPetitioners();
+      this.setAdditionalNameOnPetitioners();
+    }
   }
 };
 
@@ -1473,7 +1473,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 Case.prototype.setAdditionalNameOnPetitioners = function () {
   const contactPrimary = this.getContactPrimary(this);
 
-  if (!contactPrimary.additionalName) {
+  if (contactPrimary && !contactPrimary.additionalName) {
     switch (this.partyType) {
       case PARTY_TYPES.conservator:
       case PARTY_TYPES.custodian:
