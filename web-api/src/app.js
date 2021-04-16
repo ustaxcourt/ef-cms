@@ -171,6 +171,9 @@ const {
 } = require('./v2/getReconciliationReportLambda');
 
 const {
+  addPetitionerToCaseLambda,
+} = require('./cases/addPetitionerToCaseLambda');
+const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
 const {
@@ -632,6 +635,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.post(
     '/case-meta/:docketNumber/statistics',
     lambdaWrapper(addDeficiencyStatisticLambda),
+  );
+  app.post(
+    '/case-meta/:docketNumber/add-petitioner',
+    lambdaWrapper(addPetitionerToCaseLambda),
   );
 }
 /**
