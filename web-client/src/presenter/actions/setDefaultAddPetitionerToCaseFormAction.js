@@ -20,5 +20,6 @@ export const setDefaultAddPetitionerToCaseFormAction = ({
 
   store.set(state.form.contact.contactType, CONTACT_TYPES.otherPetitioner);
   store.set(state.form.contact.countryType, COUNTRY_TYPES.DOMESTIC);
-  store.set(state.form.caseCaption, caseDetail.caseCaption);
+  store.set(state.form.contact.caseCaption, caseDetail.caseCaption);
+  store.set(state.form.useExistingAddress, false);
 };
