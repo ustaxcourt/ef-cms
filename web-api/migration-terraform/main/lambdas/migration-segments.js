@@ -1,6 +1,9 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
+  migrateItems: migration0028,
+} = require('./migrations/0028-contact-primary-email');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
@@ -24,6 +27,9 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
+  applicationContext.logger.info('about to run migration 0028');
+  items = await migration0028(items, documentClient);
+
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
 
