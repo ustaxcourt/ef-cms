@@ -19,6 +19,8 @@ export const AddPetitionerToCase = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     submitAddPetitionerSequence: sequences.submitAddPetitionerSequence,
+    toggleUseExistingAddressSequence:
+      sequences.toggleUseExistingAddressSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
@@ -30,6 +32,7 @@ export const AddPetitionerToCase = connect(
     formCancelToggleCancelSequence,
     showModal,
     submitAddPetitionerSequence,
+    toggleUseExistingAddressSequence,
     updateFormValueSequence,
     validatePetitionerSequence,
     validationErrors,
@@ -103,7 +106,7 @@ export const AddPetitionerToCase = connect(
                 id="use-same-address-above"
                 name="useExistingAddress"
                 type="checkbox"
-                onChange={() => {}}
+                onChange={() => toggleUseExistingAddressSequence()}
               />
               <label
                 className="usa-checkbox__label"
