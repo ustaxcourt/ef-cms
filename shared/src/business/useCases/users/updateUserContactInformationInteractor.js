@@ -23,7 +23,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
- * @param {string} providers.firmName the firmName to update if a privatePractitioner is updating their info
+ * @param {string} providers.firmName firmName to update if a privatePractitioner is updating their info
  * @returns {Promise} an object is successful
  */
 const updateUserContactInformationHelper = async (
