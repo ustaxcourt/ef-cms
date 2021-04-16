@@ -1,3 +1,5 @@
-import { getPetitionersAddressAction } from '../actions/CaseDetail/getPetitionersAddressAction';
+import { getAndSetPetitionersAddressAction } from '../actions/CaseDetail/getAndSetPetitionersAddressAction';
 
-export const toggleUseExistingAddressSequence = [getPetitionersAddressAction];
+export const toggleUseExistingAddressSequence = [
+  getAndSetPetitionersAddressAction,
+];
