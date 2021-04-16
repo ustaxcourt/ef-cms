@@ -182,73 +182,60 @@ const PetitionerInformation = connect(
                       )}
                     </div>
                   )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-
-    const otherPetitionersInformation = () => (
-      <div className="subsection party-information">
-        <div className="card">
-          <div className="content-wrapper">
-            <div className="grid-row header-row">
-              <div
-                className="grid-col-6 display-flex"
-                id="other-petitioners-label"
-              >
-                <h3>Other Petitioners</h3>
-              </div>
-            </div>
-            <div className="grid-row grid-gap-6">
-              {caseInformationHelper.formattedOtherPetitioners.map(
-                (otherPetitioner, idx) => (
-                  <div
-                    className={classNames(
-                      'grid-col-3 other-petitioners-information',
-                      idx > 3 && 'margin-top-4',
-                    )}
-                    key={otherPetitioner.name}
-                  >
-                    <address aria-labelledby="secondary-label">
-                      {otherPetitioner.name && (
-                        <AddressDisplay
-                          contact={otherPetitioner}
-                          showEmail={true}
-                          showSealAddressLink={
-                            caseInformationHelper.showSealAddressLink
-                          }
-                        />
-                      )}
-                    </address>
-                    {otherPetitioner.serviceIndicator && (
-                      <div className="margin-top-4">
-                        <p className="semi-bold margin-bottom-0">
-                          Service preference
-                        </p>
-                        {otherPetitioner.serviceIndicator}
+                {formattedCaseDetail.otherPetitioners &&
+                  caseInformationHelper.formattedOtherPetitioners.map(
+                    (otherPetitioner, idx) => (
+                      <div
+                        className={classNames(
+                          'grid-col-3',
+                          idx > 1 &&
+                            formattedCaseDetail.contactSecondary &&
+                            'margin-top-8',
+                          idx > 2 &&
+                            !formattedCaseDetail.contactSecondary &&
+                            'margin-top-8',
+                        )}
+                        key={otherPetitioner.name}
+                      >
+                        <address aria-labelledby="secondary-label">
+                          {otherPetitioner.name && (
+                            <AddressDisplay
+                              contact={otherPetitioner}
+                              showEmail={true}
+                              showSealAddressLink={
+                                caseInformationHelper.showSealAddressLink
+                              }
+                            />
+                          )}
+                        </address>
+                        {otherPetitioner.serviceIndicator && (
+                          <div className="margin-top-4">
+                            <p className="semi-bold margin-bottom-0">
+                              Service preference
+                            </p>
+                            {otherPetitioner.serviceIndicator}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                ),
-              )}
-            </div>
-            <div className="grid-row">
-              <div className="grid-col-12 text-right">
-                <Button
-                  link
-                  className="margin-top-3"
-                  icon={['far', 'address-card']}
-                  iconSize="sm"
-                  id="view-additional-petitioners-button"
-                  onClick={() => {
-                    toggleShowAdditionalPetitionersSequence();
-                  }}
-                >
-                  {caseInformationHelper.toggleAdditionalPetitionersDisplay}{' '}
-                  Additional Petitioners
-                </Button>
+                    ),
+                  )}
+              </div>
+              <div className="grid-row">
+                <div className="grid-col-12 text-right">
+                  <Button
+                    link
+                    className="margin-top-3"
+                    icon={['far', 'address-card']}
+                    iconSize="sm"
+                    id="view-additional-petitioners-button"
+                    onClick={() => {
+                      toggleShowAdditionalPetitionersSequence();
+                    }}
+                  >
+                    {caseInformationHelper.toggleAdditionalPetitionersDisplay}{' '}
+                    Additional Petitioners
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -458,8 +445,6 @@ const PetitionerInformation = connect(
             </div>
           </div>
         )}
-        {caseInformationHelper.showOtherPetitioners &&
-          otherPetitionersInformation()}
         {caseDetailHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
