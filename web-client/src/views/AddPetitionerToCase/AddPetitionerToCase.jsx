@@ -107,12 +107,16 @@ export const AddPetitionerToCase = connect(
 
             <FormGroup>
               <input
-                checked={false}
+                checked={form.useExistingAddress}
                 className="usa-checkbox__input"
                 id="use-same-address-above"
                 name="useExistingAddress"
                 type="checkbox"
-                onChange={() => {
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
                   toggleUseExistingAddressSequence();
                 }}
               />
@@ -221,9 +225,8 @@ export const AddPetitionerToCase = connect(
                 name="caseCaption"
                 value={form.contact.caseCaption || ''}
                 onChange={e => {
-                  console.log('e', e);
                   updateFormValueSequence({
-                    key: e.target.name,
+                    key: 'contact.caseCaption',
                     value: e.target.value,
                   });
                   validatePetitionerSequence();
