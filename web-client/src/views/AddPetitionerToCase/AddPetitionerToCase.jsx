@@ -18,7 +18,7 @@ export const AddPetitionerToCase = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
-    submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
+    submitAddPetitionerSequence: sequences.submitAddPetitionerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
@@ -29,7 +29,7 @@ export const AddPetitionerToCase = connect(
     form,
     formCancelToggleCancelSequence,
     showModal,
-    submitEditPetitionerSequence,
+    submitAddPetitionerSequence,
     updateFormValueSequence,
     validatePetitionerSequence,
     validationErrors,
@@ -48,7 +48,7 @@ export const AddPetitionerToCase = connect(
           <h2>Add Petitioner</h2>
 
           <div className="blue-container margin-bottom-5">
-            <FormGroup errorText={validationErrors.contact?.name}>
+            <FormGroup errorText={validationErrors.name}>
               <label className="usa-label" htmlFor="name">
                 <span>Name</span>
               </label>
@@ -59,7 +59,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.name"
                 type="text"
                 value={form.contact.name || ''}
-                onBlur={onBlur}
+                onBlur={() => validatePetitionerSequence()}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -69,7 +69,7 @@ export const AddPetitionerToCase = connect(
               />
             </FormGroup>
 
-            <FormGroup errorText={validationErrors.contact?.additionalName}>
+            <FormGroup errorText={validationErrors.additionalName}>
               <label className="usa-label" htmlFor="additionalName">
                 <span>
                   Additional name <span className="usa-hint">(optional)</span>
@@ -86,7 +86,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.additionalName"
                 type="text"
                 value={form.contact.additionalName || ''}
-                onBlur={onBlur}
+                onBlur={() => validatePetitionerSequence()}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -103,6 +103,7 @@ export const AddPetitionerToCase = connect(
                 id="use-same-address-above"
                 name="useExistingAddress"
                 type="checkbox"
+                onChange={() => {}}
               />
               <label
                 className="usa-checkbox__label"
@@ -134,13 +135,7 @@ export const AddPetitionerToCase = connect(
                 onChange="updateFormValueSequence"
               />
             )}
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.phone
-              }
-            >
+            <FormGroup errorText={validationErrors && validationErrors.phone}>
               <label className="usa-label" htmlFor="phone">
                 Phone number
               </label>
@@ -154,7 +149,7 @@ export const AddPetitionerToCase = connect(
                 name="contact.phone"
                 type="tel"
                 value={form.contact.phone || ''}
-                onBlur={onBlur}
+                onBlur={() => validatePetitionerSequence()}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -179,32 +174,36 @@ export const AddPetitionerToCase = connect(
           </div>
 
           <h2>Case Caption</h2>
-
           <div className="blue-container margin-bottom-5">
-            <label className="usa-label" htmlFor="message">
-              Case caption
-            </label>
-            <textarea
-              className="usa-textarea"
-              id="message"
-              name="message"
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-                validatePetitionerSequence();
-              }}
-            />
-            <span className="display-inline-block margin-top-1">
-              {constants.CASE_CAPTION_POSTFIX}
-            </span>
+            <FormGroup
+              errorText={validationErrors && validationErrors.caseCaption}
+            >
+              <label className="usa-label" htmlFor="caseCaption">
+                Case caption
+              </label>
+              <textarea
+                className="usa-textarea"
+                id="case-caption"
+                name="caseCaption"
+                value={form.caseCaption}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validatePetitionerSequence();
+                }}
+              />
+              <span className="display-inline-block margin-top-1">
+                {constants.CASE_CAPTION_POSTFIX}
+              </span>
+            </FormGroup>
           </div>
 
           <Button
             id="submit-edit-petitioner-information"
             onClick={() => {
-              submitEditPetitionerSequence();
+              submitAddPetitionerSequence();
             }}
           >
             Save
