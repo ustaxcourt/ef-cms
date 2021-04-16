@@ -233,12 +233,13 @@ describe('caseInformationHelper', () => {
       expect(result.showOtherPetitioners).toEqual(false);
     });
 
-    it('paginates if showingAdditionalPetitioners is false', () => {
+    it('paginates and shows two otherPetitioners if showingAdditionalPetitioners is false and contactSecondary is present', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...baseState,
           caseDetail: {
             petitioners: [
+              { a: '1', contactType: CONTACT_TYPES.secondary },
               { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
               { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
               { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
@@ -250,7 +251,29 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(result.formattedOtherPetitioners.length).toEqual(4);
+      expect(result.formattedOtherPetitioners.length).toEqual(2);
+      expect(result.showOtherPetitioners).toEqual(true);
+    });
+
+    it('paginates and shows three otherPetitioners if showingAdditionalPetitioners is false and contactSecondary is not present', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...baseState,
+          caseDetail: {
+            petitioners: [
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+            ],
+          },
+          showingAdditionalPetitioners: false,
+        },
+      });
+
+      expect(result.formattedOtherPetitioners.length).toEqual(3);
       expect(result.showOtherPetitioners).toEqual(true);
     });
 
