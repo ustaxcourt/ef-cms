@@ -19,7 +19,6 @@ exports.validateAddPetitionerInteractor = ({ applicationContext, contact }) => {
     applicationContext,
   }).getFormattedValidationErrors();
 
-  console.log('~~~contact', contact);
   let caseCaptionError;
   if (!contact.caseCaption) {
     caseCaptionError = {

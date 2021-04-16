@@ -9,7 +9,6 @@ import { state } from 'cerebral';
  */
 export const getAndSetPetitionersAddressAction = ({ get, store }) => {
   const caseDetail = get(state.caseDetail);
-  const useExistingAddress = get(state.form.useExistingAddress);
 
   const petitionerAddresses = {};
 
@@ -17,9 +16,5 @@ export const getAndSetPetitionersAddressAction = ({ get, store }) => {
     petitionerAddresses[petitioner.contactId] = petitioner.address1;
   });
 
-  if (useExistingAddress) {
-    store.set(state.screenMetadata.petitionerAddresses, petitionerAddresses);
-  } else {
-    store.unset(state.screenMetadata.petitionerAddresses);
-  }
+  store.set(state.screenMetadata.petitionerAddresses, petitionerAddresses);
 };
