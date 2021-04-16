@@ -13,7 +13,9 @@ const { isEmpty } = require('lodash');
  * @returns {object} errors (null if no errors)
  */
 exports.validateAddPetitionerInteractor = ({ applicationContext, contact }) => {
-  const OtherPetitionerContact = getOtherPetitionerContact({});
+  const OtherPetitionerContact = getOtherPetitionerContact({
+    countryType: contact.countryType,
+  });
 
   const petitionerErrors = new OtherPetitionerContact(contact, {
     applicationContext,
