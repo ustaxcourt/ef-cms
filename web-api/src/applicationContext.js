@@ -27,6 +27,9 @@ const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
+  addPetitionerToCaseInteractor,
+} = require('../../shared/src/business/useCases/addPetitionerToCaseInteractor');
+const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -1614,6 +1617,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        addPetitionerToCaseInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,

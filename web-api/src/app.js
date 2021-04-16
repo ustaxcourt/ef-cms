@@ -32,6 +32,9 @@ const {
   addDeficiencyStatisticLambda,
 } = require('./cases/addDeficiencyStatisticLambda');
 const {
+  addPetitionerToCaseLambda,
+} = require('./cases/addPetitionerToCaseLambda');
+const {
   archiveCorrespondenceDocumentLambda,
 } = require('./correspondence/archiveCorrespondenceDocumentLambda');
 const {
@@ -167,10 +170,6 @@ const {
   getDocumentDownloadUrlLambda: v2GetDocumentDownloadUrlLambda,
 } = require('./v2/getDocumentDownloadUrlLambda');
 const {
-  getReconciliationReportLambda: v2GetReconciliationReportLambda,
-} = require('./v2/getReconciliationReportLambda');
-
-const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
 const {
@@ -215,6 +214,9 @@ const {
 const {
   getPrivatePractitionersBySearchKeyLambda,
 } = require('./users/getPrivatePractitionersBySearchKeyLambda');
+const {
+  getReconciliationReportLambda: v2GetReconciliationReportLambda,
+} = require('./v2/getReconciliationReportLambda');
 const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
@@ -632,6 +634,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.post(
     '/case-meta/:docketNumber/statistics',
     lambdaWrapper(addDeficiencyStatisticLambda),
+  );
+  app.post(
+    '/case-meta/:docketNumber/add-petitioner',
+    lambdaWrapper(addPetitionerToCaseLambda),
   );
 }
 /**

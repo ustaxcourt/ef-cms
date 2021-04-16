@@ -54,6 +54,7 @@ import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialS
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
+import { addPetitionerToCaseInteractor } from '../../shared/src/proxies/addPetitionerToCaseProxy';
 import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
 import { archiveCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/archiveCorrespondenceDocumentProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
@@ -311,6 +312,7 @@ const allUseCases = {
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
+  addPetitionerToCaseInteractor,
   archiveCorrespondenceDocumentInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
