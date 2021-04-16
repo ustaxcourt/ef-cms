@@ -212,15 +212,16 @@ export const AddPetitionerToCase = connect(
             <FormGroup
               errorText={validationErrors && validationErrors.caseCaption}
             >
-              <label className="usa-label" htmlFor="caseCaption">
+              <label className="usa-label" htmlFor="case-caption">
                 Case caption
               </label>
               <textarea
                 className="usa-textarea"
                 id="case-caption"
                 name="caseCaption"
-                value={form.caseCaption}
+                value={form.contact.caseCaption || ''}
                 onChange={e => {
+                  console.log('e', e);
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
