@@ -1,5 +1,9 @@
+import {
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { filingPartiesFormHelper as filingPartiesFormHelperComputed } from './filingPartiesFormHelper';
 import { runCompute } from 'cerebral/test';
@@ -19,6 +23,26 @@ const filingPartiesFormHelper = withAppContextDecorator(
 describe('filingPartiesFormHelper', () => {
   beforeEach(() => {
     state.form = {};
+  });
+
+  it('should return otherPetitioners', () => {
+    const mockOtherPetitioner = {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      contactType: CONTACT_TYPES.otherPetitioner,
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      email: 'petitioner@example.com',
+      name: 'Test Petitioner',
+      phone: '1234567',
+      postalCode: '12345',
+      state: 'TN',
+      title: 'Executor',
+    };
+
+    state.caseDetail.petitioners.push(mockOtherPetitioner);
+    const result = runCompute(filingPartiesFormHelper, { state });
+    expect(result.otherPetitioners).toEqual([mockOtherPetitioner]);
   });
 
   it('shows secondary party for petitionerSpouse or petitionerDeceasedSpouse', () => {
