@@ -730,6 +730,13 @@ const OTHER_TYPES = {
   nextFriendForMinor: PARTY_TYPES.nextFriendForMinor,
 };
 
+const CONTACT_TYPES = {
+  primary: 'primary',
+  secondary: 'secondary',
+  otherFiler: 'otherFilers',
+  otherPetitioner: 'otherPetitioners',
+};
+
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
   { city: 'Mobile', state: 'Alabama' },
@@ -1178,6 +1185,7 @@ module.exports = deepFreeze({
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,

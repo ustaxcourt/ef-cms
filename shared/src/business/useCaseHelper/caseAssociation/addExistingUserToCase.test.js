@@ -6,7 +6,7 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { addExistingUserToCase } = require('./addExistingUserToCase');
-const { Case } = require('../../entities/cases/Case');
+const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('addExistingUserToCase', () => {
@@ -64,7 +64,7 @@ describe('addExistingUserToCase', () => {
     });
 
     const caseEntity = new Case(
-      { ...MOCK_CASE, contactPrimary: {} },
+      { ...MOCK_CASE, petitioners: [] },
       { applicationContext },
     );
 
@@ -90,13 +90,15 @@ describe('addExistingUserToCase', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
-        contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
-          contactId: '123',
-          email: undefined,
-          name: 'Bob Ross',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            contactId: '123',
+            email: undefined,
+            name: 'Bob Ross',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
       },
       { applicationContext },
     );
@@ -114,13 +116,11 @@ describe('addExistingUserToCase', () => {
     ).toMatchObject({
       userId: USER_ID,
     });
-    expect(updatedCase).toMatchObject({
-      contactPrimary: {
-        contactId: USER_ID, // contactId was updated to new userId
-        email: UPDATED_EMAIL,
-        hasEAccess: true,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
+    expect(getContactPrimary(updatedCase)).toMatchObject({
+      contactId: USER_ID, // contactId was updated to new userId
+      email: UPDATED_EMAIL,
+      hasEAccess: true,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   });
 });
