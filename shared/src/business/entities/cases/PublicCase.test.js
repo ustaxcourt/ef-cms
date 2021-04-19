@@ -678,17 +678,7 @@ describe('PublicCase', () => {
         hasIrsPractitioner: true,
         isSealed: false,
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: expect.arrayContaining([
-          expect.objectContaining({
-            ...rawContactPrimary,
-          }),
-          expect.objectContaining({
-            contactType: CONTACT_TYPES.otherFiler,
-          }),
-          expect.objectContaining({
-            contactType: CONTACT_TYPES.secondary,
-          }),
-        ]),
+        petitioners: rawCase.petitioners,
         receivedAt: 'testing',
       });
     });
