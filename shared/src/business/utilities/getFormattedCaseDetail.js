@@ -12,9 +12,11 @@ const {
 } = require('../entities/cases/Case');
 const {
   CASE_STATUS_TYPES,
+  CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
+  REVISED_TRANSCRIPT_EVENT_CODE,
   SERVED_PARTIES_CODES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
@@ -25,7 +27,11 @@ const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = doc => {
-  const transcriptCodes = [TRANSCRIPT_EVENT_CODE];
+  const transcriptCodes = [
+    TRANSCRIPT_EVENT_CODE,
+    CORRECTED_TRANSCRIPT_EVENT_CODE,
+    REVISED_TRANSCRIPT_EVENT_CODE,
+  ];
   const isTranscript = transcriptCodes.includes(doc.eventCode);
   if (!isTranscript) return true;
 
