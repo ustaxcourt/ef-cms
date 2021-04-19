@@ -19,7 +19,11 @@ export const FileUploadStatusModal = connect(
     return (
       <ModalDialog className="file-upload-status-modal">
         <div>
-          <div className="status-message" id="progress-description">
+          <div
+            className="status-message"
+            id="progress-description"
+            role="status"
+          >
             {helper.statusMessage}
           </div>
           <ProgressBar
