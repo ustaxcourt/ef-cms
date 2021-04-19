@@ -11,8 +11,6 @@ const {
 const {
   getContactPrimary,
   getContactSecondary,
-  getOtherFilers,
-  getOtherPetitioners,
   isSealedCase,
 } = require('./Case');
 const {
@@ -23,7 +21,6 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
-const { ContactFactory } = require('../contacts/ContactFactory');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { map } = require('lodash');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
@@ -58,25 +55,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   const currentUser = applicationContext.getCurrentUser();
 
   if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
-    const contacts = ContactFactory.createContacts({
-      applicationContext,
-      contactInfo: {
-        otherFilers: getOtherFilers(rawCase),
-        otherPetitioners: getOtherPetitioners(rawCase),
-        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-        secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
-      },
-      isPaper: rawCase.isPaper,
-      partyType: rawCase.partyType,
-      status: rawCase.status,
-    });
-
-    this.petitioners = [contacts.primary];
-    if (contacts.secondary) {
-      this.petitioners.push(contacts.secondary);
-    }
-    this.petitioners.push(...contacts.otherFilers);
-    this.petitioners.push(...contacts.otherPetitioners);
+    this.petitioners = rawCase.petitioners;
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),
