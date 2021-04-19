@@ -7,11 +7,9 @@ const {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
-  PAYMENT_STATUS,
 } = require('../EntityConstants');
 const { Case, getContactPrimary } = require('../cases/Case');
 const { CaseExternal } = require('../cases/CaseExternal');
-const { CaseInternal } = require('../cases/CaseInternal');
 const { ContactFactory } = require('./ContactFactory');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
@@ -993,51 +991,6 @@ describe('ContactFactory', () => {
         { applicationContext },
       );
     }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
-  });
-
-  it('does not require phone number for internal cases', () => {
-    const caseInternal = new CaseInternal(
-      {
-        archivedDocketEntries: [],
-        caseCaption: 'Sisqo',
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.transferee,
-        petitionFile: {},
-        petitionFileSize: 1,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            name: 'Jimmy Dean',
-            postalCode: '05198',
-            state: 'AK',
-          },
-        ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        receivedAt: '2009-10-13T08:06:07.539Z',
-        requestForPlaceOfTrialFile: new File(
-          [],
-          'requestForPlaceOfTrialFile.pdf',
-        ),
-        requestForPlaceOfTrialFileSize: 1,
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-
-    expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   describe('Cases with otherPetitioners', () => {

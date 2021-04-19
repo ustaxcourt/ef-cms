@@ -9,6 +9,7 @@ const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { Case } = require('../../entities/cases/Case');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
 jest.mock(
   '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
@@ -38,6 +39,7 @@ describe('sendServedPartiesEmails', () => {
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
+        petitioners: MOCK_CASE.petitioners,
         status: CASE_STATUS_TYPES.generalDocket,
       },
       { applicationContext },

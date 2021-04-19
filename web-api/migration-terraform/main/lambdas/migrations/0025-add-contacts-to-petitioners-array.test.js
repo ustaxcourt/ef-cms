@@ -116,6 +116,44 @@ describe('migrateItems', () => {
     );
   });
 
+  it('should populate petitioners array with contactPrimary and contactSecondary when case status is not new', async () => {
+    const items = [
+      {
+        pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...getContactPrimary(MOCK_CASE),
+          contactType: undefined,
+        },
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          contactType: undefined,
+        },
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: undefined,
+        sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+    ];
+
+    const results = await migrateItems(items);
+
+    expect(results[0].contactPrimary).toBeUndefined();
+    expect(results[0].contactSecondary).toBeUndefined();
+    expect(results[0].petitioners).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ...getContactPrimary(MOCK_CASE),
+          contactType: CONTACT_TYPES.primary,
+        }),
+        expect.objectContaining({
+          ...getContactPrimary(MOCK_CASE),
+          contactType: CONTACT_TYPES.secondary,
+        }),
+      ]),
+    );
+  });
+
   it('should properly populate the petitioners array on a case when otherFilers is undefined', async () => {
     const items = [
       {
