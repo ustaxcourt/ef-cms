@@ -70,13 +70,13 @@ const migrateItems = async (items, documentClient) => {
 
         itemToModify.contactPrimary = {
           ...item.contactPrimary,
-          email: null,
+          email: undefined,
           serviceIndicator: contactPrimary.serviceIndicator,
         };
       }
 
       new Case(
-        { ...caseRecord, itemToModify },
+        { ...caseRecord, ...itemToModify },
         {
           applicationContext,
         },
