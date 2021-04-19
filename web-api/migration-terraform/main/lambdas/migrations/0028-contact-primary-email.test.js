@@ -232,7 +232,7 @@ describe('migrateItems', () => {
           ...mockContact,
           contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
           email: undefined,
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE, // changed to none
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE, // changed to none since they have no email
         },
         pk: 'case|101-21',
         sk: 'case|101-21',
