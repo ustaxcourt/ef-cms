@@ -16,14 +16,14 @@ describe('migrateItems', () => {
   beforeEach(() => {
     mockCaseRecord = {
       ...MOCK_CASE,
-      archivedCorrespondences: [{}],
-      archivedDocketEntries: [{}],
-      correspondence: [{}],
-      docketEntries: [{}],
-      hearings: [{}],
-      irsPractitioners: [{}],
+      archivedCorrespondences: [],
+      archivedDocketEntries: [],
+      correspondence: [],
+      docketEntries: [],
+      hearings: [],
+      irsPractitioners: [],
       pk: 'case|105-20',
-      privatePractitioners: [{}],
+      privatePractitioners: [],
       sk: 'case|105-20',
     };
 
@@ -231,8 +231,8 @@ describe('migrateItems', () => {
         contactPrimary: {
           ...mockContact,
           contactId: '6d74eadc-0181-4ff5-826c-305200e8733d',
-          email: null,
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE, // changed to none
+          email: undefined,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE, // changed to none since they have no email
         },
         pk: 'case|101-21',
         sk: 'case|101-21',
