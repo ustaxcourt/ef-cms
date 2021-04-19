@@ -18,7 +18,11 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from '../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import {
+  Case,
+  getContactPrimary,
+  getContactSecondary,
+} from '../../shared/src/business/entities/cases/Case';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -136,6 +140,8 @@ const applicationContextPublic = {
       createISODateString,
       formatDateString,
       formatDocketEntry,
+      getContactPrimary,
+      getContactSecondary,
       getJudgeLastName,
       sortDocketEntries,
     };

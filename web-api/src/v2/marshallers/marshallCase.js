@@ -13,18 +13,13 @@ exports.marshallCase = caseObject => {
   return {
     caseCaption: caseObject.caseCaption,
     caseType: caseObject.caseType,
-    contactPrimary: caseObject.contactPrimary
-      ? marshallContact(caseObject.contactPrimary)
-      : undefined,
-    contactSecondary: caseObject.contactSecondary
-      ? marshallContact(caseObject.contactSecondary)
-      : undefined,
     docketEntries: (caseObject.docketEntries || []).map(marshallDocketEntry),
     docketNumber: caseObject.docketNumber,
     docketNumberSuffix: caseObject.docketNumberSuffix,
     filingType: caseObject.filingType,
     leadDocketNumber: caseObject.leadDocketNumber,
     partyType: caseObject.partyType,
+    petitioners: (caseObject.petitioners || []).map(marshallContact),
     practitioners: (caseObject.privatePractitioners || []).map(
       marshallPractitioner,
     ),

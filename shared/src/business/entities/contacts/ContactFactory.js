@@ -1,5 +1,6 @@
 const joi = require('joi');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
@@ -94,6 +95,9 @@ const commonValidationRequirements = {
   contactId: JoiValidationConstants.UUID.required().description(
     'Unique contact ID only used by the system.',
   ),
+  contactType: JoiValidationConstants.STRING.valid(
+    ...Object.values(CONTACT_TYPES),
+  ).required(),
   email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
     then: joi.required(),
@@ -404,9 +408,12 @@ ContactFactory.createContacts = ({
         countryType: otherPetitioner.countryType,
         isPaper,
       });
-      return new otherPetitionerConstructor(otherPetitioner, {
-        applicationContext,
-      });
+      return new otherPetitionerConstructor(
+        { ...otherPetitioner, contactType: CONTACT_TYPES.otherPetitioner },
+        {
+          applicationContext,
+        },
+      );
     });
   }
 
@@ -417,7 +424,10 @@ ContactFactory.createContacts = ({
         countryType: otherFiler.countryType,
         isPaper,
       });
-      return new otherFilerConstructor(otherFiler, { applicationContext });
+      return new otherFilerConstructor(
+        { ...otherFiler, contactType: CONTACT_TYPES.otherFiler },
+        { applicationContext },
+      );
     });
   }
 
@@ -425,14 +435,20 @@ ContactFactory.createContacts = ({
     otherFilers,
     otherPetitioners,
     primary: constructors.primary
-      ? new constructors.primary(contactInfo.primary || {}, {
-          applicationContext,
-        })
+      ? new constructors.primary(
+          { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
+          {
+            applicationContext,
+          },
+        )
       : {},
     secondary: constructors.secondary
-      ? new constructors.secondary(contactInfo.secondary || {}, {
-          applicationContext,
-        })
+      ? new constructors.secondary(
+          { ...contactInfo.secondary, contactType: CONTACT_TYPES.secondary },
+          {
+            applicationContext,
+          },
+        )
       : undefined,
   };
 };
@@ -464,11 +480,13 @@ ContactFactory.createContactFactory = ({
       if (!applicationContext) {
         throw new TypeError('applicationContext must be defined');
       }
+
       this.contactId = rawContact.contactId || applicationContext.getUniqueId();
       this.address1 = rawContact.address1;
       this.address2 = rawContact.address2 || undefined;
       this.address3 = rawContact.address3 || undefined;
       this.city = rawContact.city;
+      this.contactType = rawContact.contactType;
       this.country = rawContact.country;
       this.countryType = rawContact.countryType;
       this.email = rawContact.email;

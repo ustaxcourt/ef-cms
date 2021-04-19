@@ -17,8 +17,7 @@ describe('caseAdvancedSearch', () => {
     expect(search).toHaveBeenCalledTimes(1);
     expect(search.mock.calls[0][0].searchParameters.body['_source']).toEqual([
       'caseCaption',
-      'contactPrimary',
-      'contactSecondary',
+      'petitioners',
       'docketNumber',
       'docketNumberSuffix',
       'docketNumberWithSuffix',

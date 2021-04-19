@@ -20,7 +20,10 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     });
 
   const parties = {
-    petitioner: [formattedCase.contactPrimary, formattedCase.contactSecondary],
+    petitioner: [
+      applicationContext.getUtilities().getContactPrimary(formattedCase),
+      applicationContext.getUtilities().getContactSecondary(formattedCase),
+    ],
     privatePractitioners: formattedCase.privatePractitioners,
     respondent: formattedCase.irsPractitioners,
   };
