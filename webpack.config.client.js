@@ -1,3 +1,4 @@
+const CopyPlugin = require('copy-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
@@ -17,11 +18,11 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.s[ac]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
         test: /\.pug$/i,
@@ -45,6 +46,13 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'node_modules/pdfjs-dist/es5/build', to: 'dist' },
+        { from: 'node_modules/react-quill/dist', to: 'dist' },
+        { from: 'node_modules/pdf-lib/dist', to: 'dist' },
+      ],
     }),
   ],
   resolve: {
