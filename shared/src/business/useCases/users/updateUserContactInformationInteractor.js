@@ -45,7 +45,7 @@ const updateUserContactInformationHelper = async (
   const isPractitionerUnchanged = u =>
     isPractitioner(u) &&
     isEqual(user.contact, contactInfo) &&
-    (firmName ? isEqual(user.firmName, firmName) : true);
+    isEqual(user.firmName, firmName);
 
   const isUserUnchanged = u =>
     !isPractitioner(u) && isEqual(user.contact, contactInfo);
@@ -80,9 +80,7 @@ const updateUserContactInformationHelper = async (
       isUpdatingInformation: true,
     });
 
-    if (firmName) {
-      userEntity.firmName = firmName;
-    }
+    userEntity.firmName = firmName;
   } else {
     throw new Error(`Unrecognized entityType ${user.entityName}`);
   }
@@ -101,13 +99,12 @@ const updateUserContactInformationHelper = async (
   });
 
   // prevent the progress bar component from showing when updating ONLY the firmName
-  if (!isEqual(user.contact, contactInfo)) {
-    await generateChangeOfAddress({
-      applicationContext,
-      contactInfo,
-      user: userEntity.validate().toRawObject(),
-    });
-  }
+  await generateChangeOfAddress({
+    applicationContext,
+    contactInfo,
+    firmName,
+    user: userEntity.validate().toRawObject(),
+  });
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
