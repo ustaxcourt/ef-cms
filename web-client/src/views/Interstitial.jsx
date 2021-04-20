@@ -56,7 +56,7 @@ export const Interstitial = connect(
           <>
             <div
               aria-label="please wait"
-              aria-live="assertive"
+              aria-live="polite"
               className="progress-indicator"
             >
               <FontAwesomeIcon

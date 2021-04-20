@@ -13,7 +13,8 @@ export const Loading = connect(
       !loadingHelper.pageIsInterstitial &&
       waitingForResponse && (
         <div
-          aria-live="assertive"
+          aria-label="please wait"
+          aria-live="polite"
           className="loading-overlay progress-indicator"
         >
           <FontAwesomeIcon className="fa-spin spinner" icon="sync" size="6x" />
