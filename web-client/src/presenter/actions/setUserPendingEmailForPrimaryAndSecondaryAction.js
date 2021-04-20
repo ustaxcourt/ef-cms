@@ -12,11 +12,11 @@ export const setUserPendingEmailForPrimaryAndSecondaryAction = async ({
 }) => {
   const { contactPrimaryPendingEmail, contactSecondaryPendingEmail } = props;
   store.set(
-    state.screenMetadata.contactPrimaryPendingEmail,
+    state.screenMetadata.pendingEmails.primary,
     contactPrimaryPendingEmail,
   );
   store.set(
-    state.screenMetadata.contactSecondaryPendingEmail,
+    state.screenMetadata.pendingEmails.secondary,
     contactSecondaryPendingEmail,
   );
 };

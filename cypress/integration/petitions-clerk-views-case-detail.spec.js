@@ -18,8 +18,8 @@ describe('Petitions clerk views case detail', function () {
         .click();
 
       cy.get('div#petitioner-information')
-        .find('.other-petitioners-information')
-        .should('have.length', 7);
+        .find('.petitioner-information-card')
+        .should('have.length', 8);
     });
   });
 

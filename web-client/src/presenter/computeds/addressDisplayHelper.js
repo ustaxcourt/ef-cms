@@ -50,6 +50,11 @@ export const addressDisplayHelper = (get, applicationContext) => {
   }
 
   return {
+    // temporarily returning false until otherPetitioners can be edited externally
+    otherPetitioners: {
+      showEditContact: false,
+      showSealedContact: false,
+    },
     primary: {
       showEditContact: showEditPrimaryContact && petitionIsServed,
       showSealedContact: showSealedPrimaryContact,
