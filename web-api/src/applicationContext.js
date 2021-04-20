@@ -150,6 +150,9 @@ const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
+  createCaseAndAssociations,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/createCaseAndAssociations');
+const {
   createCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline');
 const {
@@ -584,6 +587,12 @@ const {
   getReadyForTrialCases,
 } = require('../../shared/src/persistence/elasticsearch/getReadyForTrialCases');
 const {
+  getReconciliationReport,
+} = require('../../shared/src/persistence/elasticsearch/getReconciliationReport');
+const {
+  getReconciliationReportInteractor,
+} = require('../../shared/src/business/useCases/getReconciliationReportInteractor');
+const {
   getSectionInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages');
 const {
@@ -752,6 +761,9 @@ const {
   putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
 const {
+  removeCaseFromHearing,
+} = require('../../shared/src/persistence/dynamo/trialSessions/removeCaseFromHearing');
+const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
 const {
@@ -760,6 +772,10 @@ const {
 const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
+const {
+  removeIrsPractitionerOnCase,
+  removePrivatePractitionerOnCase,
+} = require('../../shared/src/persistence/dynamo/cases/removePractitionerOnCase');
 const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/removePdfFromDocketEntryInteractor');
@@ -952,6 +968,10 @@ const {
 const {
   updateInitialFilingDocuments,
 } = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
+const {
+  updateIrsPractitionerOnCase,
+  updatePrivatePractitionerOnCase,
+} = require('../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
 const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
@@ -1197,6 +1217,7 @@ const gatewayMethods = {
     persistUser,
     putWorkItemInOutbox,
     putWorkItemInUsersOutbox,
+    removeCaseFromHearing,
     saveDocumentFromLambda,
     saveUserConnection,
     saveWorkItemAndAddToSectionInbox,
@@ -1211,8 +1232,10 @@ const gatewayMethods = {
     updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
+    updateIrsPractitionerOnCase,
     updateMessage,
     updatePractitionerUser,
+    updatePrivatePractitionerOnCase,
     updateTrialSession,
     updateTrialSessionWorkingCopy,
     updateUser,
@@ -1274,6 +1297,7 @@ const gatewayMethods = {
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
+  getReconciliationReport,
   getSectionInboxMessages,
   getSectionOutboxMessages,
   getTableStatus,
@@ -1294,6 +1318,8 @@ const gatewayMethods = {
   getWorkItemById,
   isEmailAvailable,
   isFileExists,
+  removeIrsPractitionerOnCase,
+  removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
   verifyCaseForUser,
   verifyPendingCaseForUser,
@@ -1433,25 +1459,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
               }),
             };
           },
-          sendBulkTemplatedEmail: params => {
+          sendBulkTemplatedEmail: () => {
             return {
-              promise: () =>
-                Promise.all(
-                  params.Destinations.map(Destination => {
-                    const address = Destination.Destination.ToAddresses[0];
-                    const template = Destination.ReplacementTemplateData;
-                    return getDocumentClient()
-                      .put({
-                        Item: {
-                          pk: `email-${address}`,
-                          sk: getUniqueId(),
-                          template,
-                        },
-                        TableName: process.env.DYNAMODB_TABLE_NAME,
-                      })
-                      .promise();
-                  }),
-                ),
+              promise: async () => {
+                return { Status: [] };
+              },
             };
           },
         };
@@ -1487,8 +1499,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
       sendNotificationToUser,
     }),
     getPdfJs: async () => {
-      const pdfjsLib = require('pdfjs-dist');
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+      const pdfjsLib = require('pdfjs-dist/es5/build/pdf');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
 
       return pdfjsLib;
     },
@@ -1573,6 +1585,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
+        createCaseAndAssociations,
         createTrialSessionAndWorkingCopy,
         createUserForContactPrimary,
         fetchPendingItems,
@@ -1685,6 +1698,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getPrivatePractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,
+        getReconciliationReportInteractor,
         getTodaysOpinionsInteractor,
         getTodaysOrdersInteractor,
         getTrialSessionDetailsInteractor,
@@ -1782,6 +1796,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         getWorkQueueFilters,
+        isPending: DocketEntry.isPending,
         prepareDateFromString,
         scrapePdfContents,
         setServiceIndicatorsForCase,

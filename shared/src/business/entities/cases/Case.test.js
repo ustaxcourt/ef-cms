@@ -295,12 +295,23 @@ describe('Case entity', () => {
 
   describe('formattedDocketNumber', () => {
     it('formats docket numbers with leading zeroes', () => {
-      const docketNumber = '00000456-19';
-      expect(Case.formatDocketNumber(docketNumber)).toEqual('456-19');
+      expect(Case.formatDocketNumber('00000456-19')).toEqual('456-19');
     });
+
     it('does not alter properly-formatted docket numbers', () => {
-      const docketNumber = '123456-19';
-      expect(Case.formatDocketNumber(docketNumber)).toEqual(docketNumber);
+      expect(Case.formatDocketNumber('123456-19')).toEqual('123456-19'); // unchanged
+    });
+
+    it('strips letters from docket numbers', () => {
+      expect(Case.formatDocketNumber('456-19L')).toEqual('456-19');
+    });
+
+    it('strips both leading zeroes and letters from docket numbers', () => {
+      expect(Case.formatDocketNumber('00000456-19L')).toEqual('456-19');
+    });
+
+    it('does not error when a non docket number is given', () => {
+      expect(Case.formatDocketNumber('FRED')).toEqual('FRED');
     });
   });
 
@@ -1565,10 +1576,10 @@ describe('Case entity', () => {
     });
   });
 
-  describe('addDocument', () => {
+  describe('addDocketEntry', () => {
     it('attaches the docket entry to the case', () => {
       const caseToVerify = new Case(
-        {},
+        { docketNumber: '123-45' },
         {
           applicationContext,
         },
@@ -1581,6 +1592,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketEntries.length).toEqual(1);
       expect(caseToVerify.docketEntries[0]).toMatchObject({
         docketEntryId: '123',
+        docketNumber: '123-45',
         documentType: 'Answer',
         userId: 'irsPractitioner',
       });
@@ -2546,13 +2558,6 @@ describe('Case entity', () => {
       );
       const result = myCase.getIrsSendDate();
       expect(result).toBeUndefined();
-    });
-  });
-
-  describe('stripLeadingZeros', () => {
-    it('should remove leading zeros', () => {
-      const result = Case.stripLeadingZeros('000101-19');
-      expect(result).toEqual('101-19');
     });
   });
 
@@ -4690,6 +4695,93 @@ describe('Case entity', () => {
 
       expect(
         caseToUpdate.isHearing(trialSessionHearing.trialSessionId),
+      ).toEqual(false);
+    });
+  });
+
+  describe('hasPrivatePractitioners', () => {
+    it('returns true when there are privatePractitioners on the case', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          privatePractitioners: [
+            {
+              barNumber: 'OK0063',
+              contact: {
+                address1: '5943 Joseph Summit',
+                address2: 'Suite 334',
+                address3: null,
+                city: 'Millermouth',
+                country: 'U.S.A.',
+                countryType: 'domestic',
+                phone: '348-858-8312',
+                postalCode: '99517',
+                state: 'AK',
+              },
+              email: 'thomastorres@example.com',
+              entityName: 'PrivatePractitioner',
+              name: 'Brandon Choi',
+              role: 'privatePractitioner',
+              serviceIndicator: 'Electronic',
+              userId: '3bcd5fb7-434e-4354-aa08-1d10846c1867',
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.hasPrivatePractitioners()).toEqual(true);
+    });
+
+    it('returns false when there are NO privatePractitioners on the case', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          privatePractitioners: [],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.hasPrivatePractitioners()).toEqual(false);
+    });
+  });
+
+  describe('isUserIdRepresentedByPrivatePractitioner', () => {
+    let caseEntity;
+
+    beforeAll(() => {
+      caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          privatePractitioners: [
+            {
+              barNumber: 'PP123',
+              representing: ['123'],
+            },
+            {
+              barNumber: 'PP234',
+              representing: ['234', '456'],
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+    });
+    it('returns true if there is a privatePractitioner representing the given userId', () => {
+      expect(
+        caseEntity.isUserIdRepresentedByPrivatePractitioner('456'),
+      ).toEqual(true);
+    });
+
+    it('returns false if there is NO privatePractitioner representing the given userId', () => {
+      expect(
+        caseEntity.isUserIdRepresentedByPrivatePractitioner('678'),
       ).toEqual(false);
     });
   });

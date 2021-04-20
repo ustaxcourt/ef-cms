@@ -22,7 +22,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "required"
         description: "When the paper or electronic case was added to the system. This value cannot be edited."
     docketNumber: 
@@ -108,7 +107,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
       whens: 
         - 
           ref: 

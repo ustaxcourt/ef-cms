@@ -19,18 +19,20 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * orderAdvancedSearchInteractor
  *
- * @param {object} providers the providers object containing applicationContext, keyword, caseTitleOrPetitioner, docketNumber, judge, startDate, endDate
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {string} providers.caseTitleOrPetitioner case title or petitioner to search for
+ * @param {string} providers.docketNumber docket number
+ * @param {string} providers.endDate ending date for date range
+ * @param {string} providers.judge judge name to filter by
+ * @param {string} providers.keyword keyword to search for
+ * @param {string} providers.startDate start date for date range
  * @returns {object} the orders data
  */
-exports.orderAdvancedSearchInteractor = async ({
+exports.orderAdvancedSearchInteractor = async (
   applicationContext,
-  caseTitleOrPetitioner,
-  docketNumber,
-  endDate,
-  judge,
-  keyword,
-  startDate,
-}) => {
+  { caseTitleOrPetitioner, docketNumber, endDate, judge, keyword, startDate },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {

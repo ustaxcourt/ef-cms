@@ -1,30 +1,29 @@
+import { chooseStartCaseWizardStepAction } from '../actions/chooseStartCaseWizardStepAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getConstants } from '../../getConstants';
 import { prepareFormAction } from '../actions/StartCase/prepareFormAction';
-import { props, state } from 'cerebral';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultStartCaseInternalFormAction } from '../actions/StartCaseInternal/setDefaultStartCaseInternalFormAction';
+import { setDocumentSelectedForScanAction } from '../actions/setDocumentSelectedForScanAction';
+import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
-import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOrderForDesignatingPlaceOfTrialAction';
+
 const { USER_ROLES } = getConstants();
 
 const gotoStartCaseInternal = [
   setStartInternalCaseDefaultTabAction,
   setDefaultStartCaseInternalFormAction,
-  updateOrderForDesignatingPlaceOfTrialAction,
-  set(state.currentViewMetadata.documentUploadMode, 'scan'),
-  set(state.currentViewMetadata.documentSelectedForScan, 'petitionFile'),
+  setDocumentUploadModeAction('scan'),
+  setDocumentSelectedForScanAction('petitionFile'),
   setCurrentPageAction('StartCaseInternal'),
 ];
 
 const gotoStartCaseExternal = [
-  set(state.wizardStep, props.wizardStep),
-  set(state.form.wizardStep, props.step),
+  chooseStartCaseWizardStepAction,
   setCurrentPageAction('StartCaseWizard'),
 ];
 

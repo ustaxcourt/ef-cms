@@ -20,9 +20,7 @@ describe('casePublicSearchInteractor', () => {
   });
 
   it('returns empty array if no search params are passed in', async () => {
-    const results = await casePublicSearchInteractor({
-      applicationContext,
-    });
+    const results = await casePublicSearchInteractor(applicationContext, {});
 
     expect(results).toEqual([]);
   });
@@ -45,8 +43,7 @@ describe('casePublicSearchInteractor', () => {
         },
       ]);
 
-    const results = await casePublicSearchInteractor({
-      applicationContext,
+    const results = await casePublicSearchInteractor(applicationContext, {
       petitionerName: 'test person',
     });
 
@@ -90,9 +87,7 @@ describe('casePublicSearchInteractor', () => {
       .getPersistenceGateway()
       .casePublicSearchExactMatch.mockResolvedValue(maxPlusOneResults);
 
-    const results = await casePublicSearchInteractor({
-      applicationContext,
-    });
+    const results = await casePublicSearchInteractor(applicationContext, {});
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
@@ -115,8 +110,7 @@ describe('casePublicSearchInteractor', () => {
         },
       ]);
 
-    const results = await casePublicSearchInteractor({
-      applicationContext,
+    const results = await casePublicSearchInteractor(applicationContext, {
       petitionerName: 'test person',
     });
 

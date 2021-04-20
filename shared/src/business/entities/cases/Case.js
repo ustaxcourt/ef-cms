@@ -242,8 +242,8 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
     this.initialCaption = rawCase.initialCaption || this.caseCaption;
   }
 
-  this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending && isServed(docketEntry),
+  this.hasPendingItems = this.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 
   this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
@@ -306,6 +306,10 @@ Case.prototype.assignArchivedDocketEntries = function assignArchivedDocketEntrie
   } else {
     this.archivedDocketEntries = [];
   }
+};
+
+Case.prototype.hasPrivatePractitioners = function hasPrivatePractitioners() {
+  return this.privatePractitioners.length > 0;
 };
 
 Case.prototype.assignContacts = function assignContacts({
@@ -829,8 +833,8 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  return this.docketEntries.some(
-    docketEntry => docketEntry.pending && isServed(docketEntry),
+  return this.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 };
 
@@ -956,6 +960,8 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} docketEntryEntity the docket entry to add to the case
  */
 Case.prototype.addDocketEntry = function (docketEntryEntity) {
+  docketEntryEntity.docketNumber = this.docketNumber;
+
   if (docketEntryEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
@@ -1224,17 +1230,6 @@ Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
   }
 
   return this;
-};
-
-/**
- * stripLeadingZeros
- *
- * @param {string} docketNumber the docket number
- * @returns {string} the updated docket number
- */
-Case.stripLeadingZeros = docketNumber => {
-  const [number, year] = docketNumber.split('-');
-  return `${parseInt(number)}-${year}`;
 };
 
 /**
@@ -1751,6 +1746,18 @@ Case.prototype.removeConsolidation = function () {
 };
 
 /**
+ * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
+ *
+ * @param {String} userId the id of the user
+ * @returns {boolean} if the userId has a privatePractitioner associated with them
+ */
+Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
+  return !!this.privatePractitioners.find(practitioner =>
+    practitioner.representing.find(id => id === userId),
+  );
+};
+
+/**
  * sorts the given array of cases by docket number
  *
  * @param {Array} cases the cases to check for lead case computation
@@ -1784,15 +1791,14 @@ Case.findLeadCaseForCases = function (cases) {
 };
 
 /**
- * re-formats docket number with any leading zeroes removed
+ * re-formats docket number with any leading zeroes and suffix removed
  *
  * @param {string} docketNumber the docket number to re-format
  * @returns {string} the formatted docket Number
  */
 Case.formatDocketNumber = function formatDocketNumber(docketNumber) {
-  const leadingZeroes = /^0+/;
-  const formattedDocketNumber = docketNumber.replace(leadingZeroes, '');
-  return formattedDocketNumber;
+  const regex = /^0*(\d+-\d{2}).*/;
+  return docketNumber.replace(regex, '$1');
 };
 
 /**

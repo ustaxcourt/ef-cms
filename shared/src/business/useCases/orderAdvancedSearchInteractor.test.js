@@ -49,9 +49,7 @@ describe('orderAdvancedSearchInteractor', () => {
     });
 
     await expect(
-      orderAdvancedSearchInteractor({
-        applicationContext,
-      }),
+      orderAdvancedSearchInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -60,8 +58,7 @@ describe('orderAdvancedSearchInteractor', () => {
       role: ROLES.privatePractitioner,
     });
 
-    await orderAdvancedSearchInteractor({
-      applicationContext,
+    await orderAdvancedSearchInteractor(applicationContext, {
       keyword: 'candy',
       startDate: '2001-01-01',
     });
@@ -73,8 +70,7 @@ describe('orderAdvancedSearchInteractor', () => {
   });
 
   it('returns results with an authorized user role (petitionsclerk)', async () => {
-    const result = await orderAdvancedSearchInteractor({
-      applicationContext,
+    const result = await orderAdvancedSearchInteractor(applicationContext, {
       keyword: 'candy',
       startDate: '2001-01-01',
     });
@@ -116,8 +112,7 @@ describe('orderAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
-    const results = await orderAdvancedSearchInteractor({
-      applicationContext,
+    const results = await orderAdvancedSearchInteractor(applicationContext, {
       keyword: 'keyword',
       petitionerName: 'test person',
     });
@@ -128,8 +123,7 @@ describe('orderAdvancedSearchInteractor', () => {
   it('searches for documents that are of type orders', async () => {
     const keyword = 'keyword';
 
-    await orderAdvancedSearchInteractor({
-      applicationContext,
+    await orderAdvancedSearchInteractor(applicationContext, {
       keyword,
       startDate: '2001-01-01',
     });

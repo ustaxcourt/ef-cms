@@ -9,19 +9,17 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * setForHearingInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.calendarNotes notes for why the trial session/hearing was added
  * @param {string} providers.trialSessionId the id of the trial session
  * @param {string} providers.docketNumber the docket number of the case
- * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
+ * @returns {Promise} the promise of the setForHearingInteractor call
  */
-exports.setForHearingInteractor = async ({
+exports.setForHearingInteractor = async (
   applicationContext,
-  calendarNotes,
-  docketNumber,
-  trialSessionId,
-}) => {
+  { calendarNotes, docketNumber, trialSessionId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SET_FOR_HEARING)) {

@@ -6,15 +6,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * checkEmailAvailabilityInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.email the email to check
  * @returns {boolean} true if the email is available; false otherwise
  */
-exports.checkEmailAvailabilityInteractor = async ({
+exports.checkEmailAvailabilityInteractor = async (
   applicationContext,
-  email,
-}) => {
+  { email },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EMAIL_MANAGEMENT)) {

@@ -7,13 +7,12 @@ import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJud
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
+import { setIsEditingDocketEntryAction } from '../actions/setIsEditingDocketEntryAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditCourtIssuedDocketEntry = [
@@ -30,7 +29,7 @@ export const gotoEditCourtIssuedDocketEntry = [
   getComputedFormDateFactoryAction(null, true),
   generateCourtIssuedDocumentTitleAction,
   setDocketEntryIdAction,
-  set(state.isEditingDocketEntry, true),
+  setIsEditingDocketEntryAction(true),
   setCurrentPageAction('CourtIssuedDocketEntry'),
 ];
 

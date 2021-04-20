@@ -37,25 +37,19 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     });
 
     await expect(
-      createCourtIssuedOrderPdfFromHtmlInteractor({
-        applicationContext,
-      }),
+      createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('fetches the case by id', async () => {
-    await createCourtIssuedOrderPdfFromHtmlInteractor({
-      applicationContext,
-    });
+    await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {});
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
   });
 
   it('calls the pdf document generator function', async () => {
-    await createCourtIssuedOrderPdfFromHtmlInteractor({
-      applicationContext,
-    });
+    await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {});
     expect(
       applicationContext.getDocumentGenerators().order,
     ).toHaveBeenCalledWith(
@@ -68,9 +62,10 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   });
 
   it('returns the pdf url from the temp documents bucket', async () => {
-    const result = await createCourtIssuedOrderPdfFromHtmlInteractor({
+    const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-    });
+      {},
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,

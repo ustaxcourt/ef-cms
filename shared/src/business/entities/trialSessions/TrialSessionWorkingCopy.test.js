@@ -78,5 +78,20 @@ describe('TrialSessionWorkingCopy entity', () => {
       }
       expect(error).toBeDefined();
     });
+    it('should allow empty string for caseMetadata trialStatus field', () => {
+      let error;
+      try {
+        const workingCopy = new TrialSessionWorkingCopy({
+          ...VALID_TRIAL_SESSION_WORKING_COPY,
+          caseMetadata: {
+            '111-11': { trialStatus: '' },
+          },
+        });
+        workingCopy.validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).not.toBeDefined();
+    });
   });
 });

@@ -20,6 +20,8 @@ elif [[ $BRANCH == 'experimental2' ]] ; then
   echo "${IRS_SUPERUSER_EMAIL_EXP2}"
 elif [[ $BRANCH == 'experimental3' ]] ; then
   echo "${IRS_SUPERUSER_EMAIL_EXP3}"
+elif [[ $BRANCH == 'experimental4' ]] ; then
+  echo "${IRS_SUPERUSER_EMAIL_EXP4}"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "${IRS_SUPERUSER_EMAIL_IRS}"
 elif [[ $BRANCH == 'test' ]] ; then

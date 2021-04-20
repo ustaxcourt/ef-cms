@@ -40,15 +40,12 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
-      archiveCorrespondenceDocumentInteractor({
-        applicationContext,
-      }),
+      archiveCorrespondenceDocumentInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should delete the specified correspondence document from s3', async () => {
-    await archiveCorrespondenceDocumentInteractor({
-      applicationContext,
+    await archiveCorrespondenceDocumentInteractor(applicationContext, {
       correspondenceId: mockCorrespondenceId,
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -62,8 +59,7 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
   });
 
   it('should update the specified correspondence document on the case to be marked as archived', async () => {
-    await archiveCorrespondenceDocumentInteractor({
-      applicationContext,
+    await archiveCorrespondenceDocumentInteractor(applicationContext, {
       correspondenceId: mockCorrespondenceId,
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -78,8 +74,7 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
   });
 
   it('should update the case to reflect the archived correspondence', async () => {
-    await archiveCorrespondenceDocumentInteractor({
-      applicationContext,
+    await archiveCorrespondenceDocumentInteractor(applicationContext, {
       correspondenceId: mockCorrespondenceId,
       docketNumber: MOCK_CASE.docketNumber,
     });

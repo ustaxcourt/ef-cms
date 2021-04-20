@@ -10,8 +10,8 @@ exports.removePdfFromDocketEntryLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .removePdfFromDocketEntryInteractor({
+      .removePdfFromDocketEntryInteractor(
         applicationContext,
-        ...event.pathParameters,
-      });
+        event.pathParameters,
+      );
   });

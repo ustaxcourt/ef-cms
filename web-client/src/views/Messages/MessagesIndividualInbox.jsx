@@ -10,7 +10,7 @@ export const MessagesIndividualInbox = connect(
   function MessagesIndividualInbox({ formattedMessages }) {
     return (
       <>
-        <table className="usa-table work-queue subsection">
+        <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
@@ -43,7 +43,7 @@ export const MessagesIndividualInbox = connect(
                   <td className="message-unread-column">
                     {!message.isRead && (
                       <Icon
-                        aria-label="create message"
+                        aria-label="unread message"
                         className="fa-icon-blue"
                         icon="envelope"
                         size="1x"

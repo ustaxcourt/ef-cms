@@ -12,8 +12,7 @@ exports.runTrialSessionPlanningReportLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .runTrialSessionPlanningReportInteractor({
-          applicationContext,
+        .runTrialSessionPlanningReportInteractor(applicationContext, {
           ...JSON.parse(event.body),
         });
     },

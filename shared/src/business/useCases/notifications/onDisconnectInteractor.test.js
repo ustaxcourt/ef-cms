@@ -5,8 +5,7 @@ const { onDisconnectInteractor } = require('./onDisconnectInteractor');
 
 describe('deleteUserConnection', () => {
   it('attempts to delete the user connection', async () => {
-    await onDisconnectInteractor({
-      applicationContext,
+    await onDisconnectInteractor(applicationContext, {
       connectionId: 'abc',
     });
 

@@ -1,5 +1,90 @@
 # Release Notes
 
+## PR 65 Release Notes
+
+### Internal Only
+
+**Bug Fix** The Service Date field now clears when updating a docket entry to Certificate of Service or Amended Certificate of Service.
+
+**Bug Fix** On the Judge’s Working Copy, you can now reset the trial status to unselected without an error.
+
+**New Feature** Docket clerks can now enter optional additional text as part of the docket entry for all Minute Sheets.
+
+### External / Public
+
+**New Feature** A summary of all documents served on Respondent is now available to the IRS.
+
+**New Feature** Today’s Orders can now be sorted by time served and page count.
+
+## PR 64 Release Notes
+
+### Internal Only
+
+**Bug Fix** Waived date form error on Petition QC is removed when error is corrected.
+
+**Bug Fix** Practitioners can no longer see unassociated sealed cases when searching by petitioner name.
+
+**Bug Fix** Users can access a case detail screen directly by the URL with or without the docket number suffix.
+
+**Bug Fix** If a closed case is added to a trial session, the session information now displays accurately on the case.
+
+**Bug Fix** To prevent service stamps and signatures from overlapping, signatures can no longer be placed where stamps are applied.  
+
+**Bug Fix** Updates to trial session proceeding type are now accurately saved.
+
+**Bug Fix** Docket clerk can now update docket entries for migrated event code “O” documents.
+
+**Bug Fix** A Notice of Docket Change is now generated when Attachment(s) and / or Certificate of Service information is added, removed, or updated during QC.  
+
+**Bug Fix** Users are no longer logged out when accessing Los Angeles, Hybrid trial sessions. Data limits were being reached when retrieving eligible cases. We have removed redundant data to remain below the limit.  
+
+**Bug Fix** Users are no longer logged out when accessing the Section Document QC Processed tab. Data limits were being reached when attempting to view these documents. We are now retrieving less data per document.
+
+**Bug Fix** Petitioners with eAccess in old system now display the eAccess flag.
+
+**Bug Fix** Signatures are now consistently saved and visible on Proposed Stipulated Decisions.  
+
+**Bug Fix** A new cover sheet is consistently applied when updating docket entry document type after QC.
+
+**Bug Fix** Transcripts with trial/hearing date more than 90 days ago are visible to parties. Transcripts migrated from old system are visible 90 days after their filing date.
+
+**Bug Fix** Docket entry preview now displays accurate date and description when editing Certificate of Service or Amended Certificate of Service.
+
+
+### External / Public
+**Bug Fix** Petitioner service preference displays accurately for parties when address is sealed.
+
+**Bug Fix** Transcripts with trial/hearing date more than 90 days ago are visible to parties. Transcripts migrated from old system are visible to parties 90 days after their filing date.
+
+
+## PR 63 Release Notes
+
+### Internal Only
+
+**Improvement** Admissions clerks can add notes for practitioners that are visible to all Court users when viewing practitioner information.
+
+**Improvement** Docket clerks can now directly access the QC screen for e-filed documents from the Docket Record Document View.
+
+**Improvement** Docket clerks can add Calendar Notes after a case has been set for trial, and edit Calendar Notes for both trials and hearing anytime while the case is still on the trial session.
+
+**Improvement** Docket clerks can manually add cases with due dates and pending documents to a trial session and mark them as high priority.
+
+**Improvement** Admissions clerks can give petitioners electronic access to a case by adding a new or existing email to the petitioner on a case-by-case level.
+
+**Bug Fix** Document title now displays correctly in dropdown menus throughout the application.
+
+**Bug Fix** Document QC boxes for Processed / Served documents now include pagination to display documents from the last seven days.
+
+**Bug Fix** Users can now preview PDF documents that are larger than 2MB.
+
+**Bug Fix** Large cases (over 1 MB) were not displaying some case information due to the case size. Users are now able to view all case information, regardless of case size.
+
+### External / Public
+
+**Improvement** Petitioners can provide a new or existing email address to the Court to gain electronic access to their case.
+
+**Improvement** The Printable Docket Record now includes counsel information for both parties.
+
 ## PR 62 Release Notes
 
 ### Internal Only
@@ -27,7 +112,7 @@
 **Improvement**: Admissions clerks can edit the profile for a practitioner without an email address.
 * Clerks can make changes to practitioner information for practitioners with or without an email address on record.
 
-**Bug Fix**: Docket clerks will not be prompted to print paper service after completing QC and sending a message.
+**Bug Fix**: Docket clerks will now be prompted to print paper service after completing QC and sending a message.
 * When completing QC and sending a message for a document to be served via paper service, clerks are now prompted immediately to print and mail the necessary documents.
 
 **Bug Fix**: Document titles will now display correctly across the application

@@ -51,8 +51,7 @@ describe('createCaseDeadlineInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
     user = {};
     await expect(
-      createCaseDeadlineInteractor({
-        applicationContext,
+      createCaseDeadlineInteractor(applicationContext, {
         caseDeadline: mockCaseDeadline,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -61,10 +60,10 @@ describe('createCaseDeadlineInteractor', () => {
   it('creates a case deadline, marks the case as automatically blocked, and calls deleteCaseTrialSortMappingRecords when there are no pending items', async () => {
     mockCase = MOCK_CASE_WITHOUT_PENDING;
 
-    const caseDeadline = await createCaseDeadlineInteractor({
+    const caseDeadline = await createCaseDeadlineInteractor(
       applicationContext,
-      caseDeadline: mockCaseDeadline,
-    });
+      { caseDeadline: mockCaseDeadline },
+    );
 
     expect(caseDeadline).toBeDefined();
     expect(caseDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
@@ -87,10 +86,10 @@ describe('createCaseDeadlineInteractor', () => {
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
 
-    const caseDeadline = await createCaseDeadlineInteractor({
+    const caseDeadline = await createCaseDeadlineInteractor(
       applicationContext,
-      caseDeadline: mockCaseDeadline,
-    });
+      { caseDeadline: mockCaseDeadline },
+    );
 
     expect(caseDeadline).toBeDefined();
     expect(caseDeadline.associatedJudge).toEqual('Judge Buch');

@@ -8,12 +8,12 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * sealCaseInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {Promise<object>} the updated case data
  */
-exports.sealCaseInteractor = async ({ applicationContext, docketNumber }) => {
+exports.sealCaseInteractor = async (applicationContext, { docketNumber }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SEAL_CASE)) {

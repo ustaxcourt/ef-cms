@@ -8,15 +8,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getIrsPractitionersBySearchKeyInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} params the params object
- * @param {object} params.applicationContext the application context
  * @param {string} params.searchKey the search string entered by the user
  * @returns {*} the result
  */
-exports.getIrsPractitionersBySearchKeyInteractor = async ({
+exports.getIrsPractitionersBySearchKeyInteractor = async (
   applicationContext,
-  searchKey,
-}) => {
+  { searchKey },
+) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
   if (
