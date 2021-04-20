@@ -19,7 +19,7 @@ describe('getBlockedCases', () => {
     const searchQuery =
       search.mock.calls[0][0].searchParameters.body.query.bool.must;
     expect(searchQuery[0]).toMatchObject({
-      match_phrase: { 'preferredTrialCity.S': 'Memphis, TN' },
+      term: { 'preferredTrialCity.S': 'Memphis, TN' },
     });
   });
 });

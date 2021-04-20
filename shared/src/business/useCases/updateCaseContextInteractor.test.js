@@ -27,8 +27,7 @@ describe('updateCaseContextInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateCaseContextInteractor({
-        applicationContext,
+      updateCaseContextInteractor(applicationContext, {
         caseStatus: CASE_STATUS_TYPES.cav,
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -44,8 +43,7 @@ describe('updateCaseContextInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
 
-    const result = await updateCaseContextInteractor({
-      applicationContext,
+    const result = await updateCaseContextInteractor(applicationContext, {
       caseStatus: CASE_STATUS_TYPES.cav,
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -53,8 +51,7 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
-    const result = await updateCaseContextInteractor({
-      applicationContext,
+    const result = await updateCaseContextInteractor(applicationContext, {
       associatedJudge: 'Judge Rachael',
       caseStatus: CASE_STATUS_TYPES.cav,
       docketNumber: MOCK_CASE.docketNumber,
@@ -66,8 +63,7 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is General Docket - Not At Issue', async () => {
-    const result = await updateCaseContextInteractor({
-      applicationContext,
+    const result = await updateCaseContextInteractor(applicationContext, {
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -85,8 +81,7 @@ describe('updateCaseContextInteractor', () => {
         status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       });
 
-    const result = await updateCaseContextInteractor({
-      applicationContext,
+    const result = await updateCaseContextInteractor(applicationContext, {
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -99,8 +94,7 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should call updateCase and createCaseTrialSortMappingRecords if the case status is being updated to Ready for Trial', async () => {
-    const result = await updateCaseContextInteractor({
-      applicationContext,
+    const result = await updateCaseContextInteractor(applicationContext, {
       caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -125,8 +119,7 @@ describe('updateCaseContextInteractor', () => {
         status: CASE_STATUS_TYPES.submitted,
       });
 
-    const result = await updateCaseContextInteractor({
-      applicationContext,
+    const result = await updateCaseContextInteractor(applicationContext, {
       associatedJudge: 'Judge Carluzzo',
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -135,8 +128,7 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should only update the associated judge without changing the status if the associated judge and the same case status are passed in', async () => {
-    const result = await updateCaseContextInteractor({
-      applicationContext,
+    const result = await updateCaseContextInteractor(applicationContext, {
       associatedJudge: 'Judge Carluzzo',
       caseStatus: CASE_STATUS_TYPES.submitted,
       docketNumber: MOCK_CASE.docketNumber,
@@ -147,8 +139,7 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should call updateCase with the updated case caption and return the updated case', async () => {
-    const result = await updateCaseContextInteractor({
-      applicationContext,
+    const result = await updateCaseContextInteractor(applicationContext, {
       caseCaption: 'The new case caption',
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -166,8 +157,7 @@ describe('updateCaseContextInteractor', () => {
         }),
       );
 
-    await updateCaseContextInteractor({
-      applicationContext,
+    await updateCaseContextInteractor(applicationContext, {
       caseCaption: 'The new case caption',
       docketNumber: MOCK_CASE.docketNumber,
     });

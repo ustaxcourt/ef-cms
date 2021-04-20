@@ -13,8 +13,9 @@ exports.blockCaseFromTrialLambda = event =>
       ...JSON.parse(event.body),
     };
 
-    return await applicationContext.getUseCases().blockCaseFromTrialInteractor({
-      applicationContext,
-      ...lambdaArguments,
-    });
+    return await applicationContext
+      .getUseCases()
+      .blockCaseFromTrialInteractor(applicationContext, {
+        ...lambdaArguments,
+      });
   });

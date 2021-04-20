@@ -1,26 +1,11 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
-  migrateItems: migration0017,
-} = require('./migrations/0017-remove-draft-order-state');
+  migrateItems: migration0028,
+} = require('./migrations/0028-contact-primary-email');
 const {
-  migrateItems: migration0018,
-} = require('./migrations/0018-remove-nested-draft-order-state');
-const {
-  migrateItems: migration0019,
-} = require('./migrations/0019-remove-values-from-cases');
-const {
-  migrateItems: migration0020,
-} = require('./migrations/0020-add-entity-name-for-correspondences');
-const {
-  migrateItems: migration0021,
-} = require('./migrations/0021-practitioner-search-upper-case');
-const {
-  migrateItems: migration0022,
-} = require('./migrations/0022-practitioner-admissions-date');
-const {
-  migrateItems: migration0023,
-} = require('./migrations/0023-set-served-docket-entries-as-completed');
+  migrateItems: migration0029,
+} = require('./migrations/0029-fix-duplicate-contact-id');
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
@@ -45,20 +30,10 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 0017');
-  items = await migration0017(items, documentClient);
-  applicationContext.logger.info('about to run migration 0018');
-  items = await migration0018(items, documentClient);
-  applicationContext.logger.info('about to run migration 0019');
-  items = await migration0019(items, documentClient);
-  applicationContext.logger.info('about to run migration 0020');
-  items = await migration0020(items, documentClient);
-  applicationContext.logger.info('about to run migration 0021');
-  items = await migration0021(items, documentClient);
-  applicationContext.logger.info('about to run migration 0022');
-  items = await migration0022(items, documentClient);
-  applicationContext.logger.info('about to run migration 0023');
-  items = await migration0023(items, documentClient);
+  applicationContext.logger.info('about to run migration 0028');
+  items = await migration0028(items, documentClient);
+  applicationContext.logger.info('about to run migration 0029');
+  items = await migration0029(items, documentClient);
 
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
@@ -68,8 +43,6 @@ const migrateRecords = async ({ documentClient, items }) => {
 
 const reprocessItems = async ({ documentClient, items }) => {
   // items already been migrated. they simply could not be processed in the batchWrite. Try again recursively
-  const numUnprocessed = items[process.env.DESTINATION_TABLE].length;
-  applicationContext.logger.info(`reprocessing ${numUnprocessed} items`);
   const results = await documentClient
     .batchWrite({
       RequestItems: items,

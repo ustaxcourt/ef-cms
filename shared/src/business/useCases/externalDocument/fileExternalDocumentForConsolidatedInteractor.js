@@ -15,13 +15,19 @@ const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
-exports.fileExternalDocumentForConsolidatedInteractor = async ({
+/**
+ *
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {array} providers.docketNumbersForFiling an array of docket numbers representing consolidated cases
+ * @param {object} providers.documentMetadata the metadata for all the documents
+ * @param {string} providers.leadDocketNumber the lead docket number in the consolidated cases
+ * @returns {Promise<*>} an array of the updated consolidated cases
+ */
+exports.fileExternalDocumentForConsolidatedInteractor = async (
   applicationContext,
-  docketNumbersForFiling,
-  documentMetadata,
-  leadDocketNumber,
-  //filingPartyNames? filingPartyMap?,
-}) => {
+  { docketNumbersForFiling, documentMetadata, leadDocketNumber },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_IN_CONSOLIDATED)) {

@@ -5,9 +5,11 @@ const {
 } = require('./DateHandler');
 const {
   CASE_STATUS_TYPES,
+  CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
+  REVISED_TRANSCRIPT_EVENT_CODE,
   SERVED_PARTIES_CODES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
@@ -15,35 +17,26 @@ const {
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { isServed } = require('../entities/DocketEntry');
-const { ROLES } = require('../entities/EntityConstants');
-
-const getServedPartiesCode = servedParties => {
-  let servedPartiesCode = '';
-  if (servedParties && servedParties.length > 0) {
-    if (
-      servedParties.length === 1 &&
-      servedParties[0].role === ROLES.irsSuperuser
-    ) {
-      servedPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
-    } else {
-      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
-    }
-  }
-  return servedPartiesCode;
-};
+const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = doc => {
-  const transcriptCodes = [TRANSCRIPT_EVENT_CODE];
+  const transcriptCodes = [
+    TRANSCRIPT_EVENT_CODE,
+    CORRECTED_TRANSCRIPT_EVENT_CODE,
+    REVISED_TRANSCRIPT_EVENT_CODE,
+  ];
   const isTranscript = transcriptCodes.includes(doc.eventCode);
   if (!isTranscript) return true;
+
+  const dateStringToCheck = doc.isLegacy ? doc.filingDate : doc.date;
   const availableOnDate = calculateISODate({
-    dateString: doc.secondaryDate,
+    dateString: dateStringToCheck,
     howMuch: TRANSCRIPT_AGE_DAYS_MIN,
     units: 'days',
   });
   const rightNow = createISODateString();
+
   const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
   return meetsTranscriptAgeRequirements;
 };
@@ -75,7 +68,7 @@ const computeIsInProgress = ({ formattedEntry }) => {
       !formattedEntry.isMinuteEntry &&
       !formattedEntry.isUnservable) ||
     (formattedEntry.isFileAttached === true &&
-      !formattedEntry.servedAt &&
+      !isServed(formattedEntry) &&
       !formattedEntry.isUnservable)
   );
 };
@@ -291,10 +284,7 @@ const formatTrialSessionScheduling = ({
 }) => {
   formattedCase.formattedPreferredTrialCity =
     formattedCase.preferredTrialCity || 'No location selected';
-  if (
-    formattedCase.trialSessionId &&
-    formattedCase.status !== CASE_STATUS_TYPES.closed
-  ) {
+  if (formattedCase.trialSessionId) {
     if (formattedCase.status === CASE_STATUS_TYPES.calendared) {
       formattedCase.showTrialCalendared = true;
     } else {
@@ -378,7 +368,7 @@ const formatCase = (applicationContext, caseDetail) => {
     result.formattedDocketEntries.sort(byIndexSortFunction);
 
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-      entry => entry.pending && (entry.servedAt || entry.isLegacyServed),
+      entry => applicationContext.getUtilities().isPending(entry),
     );
   }
 
@@ -596,6 +586,5 @@ module.exports = {
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
-  getServedPartiesCode,
   sortDocketEntries,
 };

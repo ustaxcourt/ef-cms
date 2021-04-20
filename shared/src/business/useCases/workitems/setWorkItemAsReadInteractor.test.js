@@ -21,8 +21,7 @@ describe('setWorkItemAsReadInteractor', () => {
 
     let error;
     try {
-      await setWorkItemAsReadInteractor({
-        applicationContext,
+      await setWorkItemAsReadInteractor(applicationContext, {
         messageId: 'abc',
       });
     } catch (err) {
@@ -41,8 +40,7 @@ describe('setWorkItemAsReadInteractor', () => {
       .getPersistenceGateway()
       .setWorkItemAsRead.mockResolvedValue([]);
 
-    const res = await setWorkItemAsReadInteractor({
-      applicationContext,
+    const res = await setWorkItemAsReadInteractor(applicationContext, {
       messageId: 'abc',
     });
     expect(res).toEqual([]);

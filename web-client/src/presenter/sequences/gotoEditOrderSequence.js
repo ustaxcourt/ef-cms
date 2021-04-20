@@ -11,13 +11,12 @@ import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unset } from 'cerebral/factories';
+import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
 const gotoEditOrder = [
   setRedirectUrlAction,
-  unset(state.documentToEdit),
+  unsetDocumentToEditAction,
   clearModalAction,
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,

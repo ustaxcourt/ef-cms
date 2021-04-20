@@ -634,11 +634,6 @@ select[disabled] {
   }
 }
 .before-starting-case {
-  [role='listitem'] {
-    position: relative;
-    margin-top: 30px;
-    margin-bottom: 30px;
-  }
 
   .caseItem__icon {
     top: 0;
@@ -1117,10 +1112,26 @@ hr.lighter {
   background-color: color($theme-color-base);
   #signature {
     position: absolute;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #eee;
     background-color: rgba(255, 255, 255, 0.8);
     font-weight: $font-bold;
+    text-align: center;
+  }
+  #signature-warning {
+    display: block;
+    width: 612px;
+    padding: 20px;
+    margin: auto;
+    margin-top: -60px;
+    background-color: transparent;
+    color: transparent;
+    &:hover {
+      background-color: $color-error;
+      color: black;
+    }
+    font-weight: $font-bold;
+    overflow-y: overlay;
     text-align: center;
   }
   #sign-pdf-canvas {
@@ -1534,6 +1545,10 @@ button.change-scanner-button {
   width: 600px;
   max-height: 41px;
   margin: 0.5rem 0;
+
+  &.edit-docket--visible-overflow {
+    overflow: visible;
+  }
 }
 
 #service-parties {
@@ -1654,7 +1669,7 @@ button.change-scanner-button {
       max-width: 1440px;
     }
 
-    h3.usa-footer__logo-heading {
+    .usa-footer__logo-heading {
       font-family: $font-serif;
       font-size: 18px;
       font-weight: 700;
@@ -1689,7 +1704,7 @@ button.change-scanner-button {
 
   @media only screen and (max-width: $large-screen - 1) {
     .usa-footer__secondary-section {
-      h3.usa-footer__logo-heading {
+      .usa-footer__logo-heading {
         font-size: 16px;
       }
     }
@@ -1707,7 +1722,7 @@ button.change-scanner-button {
         margin-bottom: 10px;
       }
 
-      h3.usa-footer__logo-heading {
+      .usa-footer__logo-heading {
         font-size: 18px;
       }
     }

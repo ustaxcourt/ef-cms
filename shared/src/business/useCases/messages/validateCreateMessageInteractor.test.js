@@ -8,8 +8,7 @@ const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 
 describe('validateCreateMessageInteractor', () => {
   it('returns null when no errors exist in the Message', () => {
-    const errors = validateCreateMessageInteractor({
-      applicationContext,
+    const errors = validateCreateMessageInteractor(applicationContext, {
       message: {
         message: 'yup',
         subject: 'hi',
@@ -22,8 +21,7 @@ describe('validateCreateMessageInteractor', () => {
   });
 
   it('returns an error when a subject is missing', () => {
-    const errors = validateCreateMessageInteractor({
-      applicationContext,
+    const errors = validateCreateMessageInteractor(applicationContext, {
       message: {
         message: 'yup',
         toSection: PETITIONS_SECTION,

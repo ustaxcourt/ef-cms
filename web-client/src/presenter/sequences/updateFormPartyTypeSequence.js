@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { props, state } from 'cerebral';
-import { resetContactsAction } from '../actions/StartCaseInternal/resetContactsAction';
-import { set } from 'cerebral/factories';
+import { resetContactsAction } from '../actions/resetContactsAction';
+import { setPartyTypeAction } from '../actions/setPartyTypeAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 /**
@@ -10,7 +9,7 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
  * to clear the contacts
  */
 export const updateFormPartyTypeSequence = [
-  set(state.form.partyType, props.value),
+  setPartyTypeAction,
   clearAlertsAction,
   stopShowValidationAction,
   resetContactsAction,

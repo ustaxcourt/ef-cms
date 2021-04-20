@@ -4,6 +4,7 @@ const cors = require('cors');
 const express = require('express');
 const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
+
 const app = express();
 
 app.use(cors());
@@ -165,6 +166,10 @@ const {
 const {
   getDocumentDownloadUrlLambda: v2GetDocumentDownloadUrlLambda,
 } = require('./v2/getDocumentDownloadUrlLambda');
+const {
+  getReconciliationReportLambda: v2GetReconciliationReportLambda,
+} = require('./v2/getReconciliationReportLambda');
+
 const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
@@ -979,6 +984,10 @@ app.get('/v2/cases/:docketNumber', lambdaWrapper(v2GetCaseLambda));
 app.get(
   '/v2/cases/:docketNumber/entries/:key/document-download-url',
   lambdaWrapper(v2GetDocumentDownloadUrlLambda),
+);
+app.get(
+  '/v2/reconciliation-report/:reconciliationDate',
+  lambdaWrapper(v2GetReconciliationReportLambda),
 );
 
 /**

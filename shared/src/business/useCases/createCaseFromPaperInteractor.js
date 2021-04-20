@@ -49,8 +49,8 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.ownershipDisclosureFileId the id of the ownership disclosure file
  * @param {string} providers.petitionFileId the id of the petition file
  * @param {string} providers.petitionMetadata the petition metadata
@@ -58,15 +58,17 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
  * @param {string} providers.stinFileId the id of the stin file
  * @returns {object} the created case
  */
-exports.createCaseFromPaperInteractor = async ({
+exports.createCaseFromPaperInteractor = async (
   applicationContext,
-  applicationForWaiverOfFilingFeeFileId,
-  ownershipDisclosureFileId,
-  petitionFileId,
-  petitionMetadata,
-  requestForPlaceOfTrialFileId,
-  stinFileId,
-}) => {
+  {
+    applicationForWaiverOfFilingFeeFileId,
+    ownershipDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
+    requestForPlaceOfTrialFileId,
+    stinFileId,
+  },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
@@ -276,7 +278,7 @@ exports.createCaseFromPaperInteractor = async ({
   }
 
   await Promise.all([
-    applicationContext.getPersistenceGateway().createCase({
+    applicationContext.getUseCaseHelpers().createCaseAndAssociations({
       applicationContext,
       caseToCreate: caseToAdd.validate().toRawObject(),
     }),

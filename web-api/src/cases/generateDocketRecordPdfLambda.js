@@ -14,8 +14,7 @@ exports.generateDocketRecordPdfLambda = event =>
 
       return await applicationContext
         .getUseCases()
-        .generateDocketRecordPdfInteractor({
-          applicationContext,
+        .generateDocketRecordPdfInteractor(applicationContext, {
           docketNumber,
           docketRecordSort,
           includePartyDetail: true,

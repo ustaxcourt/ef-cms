@@ -19,17 +19,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * updateUserContactInformationInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  * @returns {Promise} an object is successful
  */
-const updateUserContactInformationInteractor = async ({
+const updateUserContactInformationInteractor = async (
   applicationContext,
-  contactInfo,
-  userId,
-}) => {
+  { contactInfo, userId },
+) => {
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
@@ -105,17 +104,16 @@ const updateUserContactInformationInteractor = async ({
 /**
  * updateUserContactInformationInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  * @returns {Promise} an object is successful
  */
-exports.updateUserContactInformationInteractor = async ({
+exports.updateUserContactInformationInteractor = async (
   applicationContext,
-  contactInfo,
-  userId,
-}) => {
+  { contactInfo, userId },
+) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
   if (
@@ -126,8 +124,7 @@ exports.updateUserContactInformationInteractor = async ({
   }
 
   try {
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId,
     });
@@ -141,5 +138,6 @@ exports.updateUserContactInformationInteractor = async ({
       },
       userId: authenticatedUser.userId,
     });
+    throw error;
   }
 };

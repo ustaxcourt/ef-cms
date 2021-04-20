@@ -1,4 +1,4 @@
-const { chunk } = require('lodash');
+const { chunk, isEmpty } = require('lodash');
 
 /**
  * PUT for dynamodb aws-sdk client
@@ -278,56 +278,41 @@ exports.batchGet = async ({ applicationContext, keys }) => {
  * @param {object} providers.items the items to write
  * @returns {Promise} the promise of the persistence call
  */
-exports.batchWrite = ({ applicationContext, items }) => {
-  if (!items || items.length === 0) {
-    return Promise.resolve();
-  }
-  return applicationContext
-    .getDocumentClient()
-    .batchWrite({
-      RequestItems: {
-        [getTableName({ applicationContext })]: items.map(item => ({
-          PutRequest: {
-            ConditionExpression:
-              'attribute_not_exists(#pk) and attribute_not_exists(#sk)',
-            ExpressionAttributeNames: {
-              '#pk': item.pk,
-              '#sk': item.sk,
-            },
-            Item: filterEmptyStrings(item),
-          },
-        })),
-      },
-    })
-    .promise();
-};
-
-/**
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.items the items to write
- * @returns {Promise} the promise of the persistence call
- */
 exports.batchDelete = ({ applicationContext, items }) => {
   if (!items || items.length === 0) {
     return Promise.resolve();
   }
-  return applicationContext
-    .getDocumentClient()
-    .batchWrite({
-      RequestItems: {
-        [getTableName({ applicationContext })]: items.map(item => ({
-          DeleteRequest: {
-            Key: {
-              pk: item.pk,
-              sk: item.sk,
+
+  const batchDeleteItems = itemsToDelete => {
+    return applicationContext
+      .getDocumentClient()
+      .batchWrite({
+        RequestItems: {
+          [getTableName({ applicationContext })]: itemsToDelete.map(item => ({
+            DeleteRequest: {
+              Key: {
+                pk: item.pk,
+                sk: item.sk,
+              },
             },
-          },
-        })),
-      },
-    })
-    .promise();
+          })),
+        },
+      })
+      .promise();
+  };
+
+  const results = batchDeleteItems(items);
+
+  if (!isEmpty(results.UnprocessedItems)) {
+    const retryResults = batchDeleteItems(results.UnprocessedItems);
+
+    if (!isEmpty(retryResults.UnprocessedItems)) {
+      applicationContext.logger.error(
+        'Unable to batch delete',
+        retryResults.UnprocessedItems,
+      );
+    }
+  }
 };
 
 exports.delete = ({ applicationContext, key }) => {

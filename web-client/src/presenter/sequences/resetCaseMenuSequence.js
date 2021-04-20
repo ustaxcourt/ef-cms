@@ -1,4 +1,3 @@
-import { state } from 'cerebral';
-import { unset } from 'cerebral/factories';
+import { clearCaseDetailMenuAction } from '../actions/clearCaseDetailMenuAction';
 
-export const resetCaseMenuSequence = [unset(state.navigation.caseDetailMenu)];
+export const resetCaseMenuSequence = [clearCaseDetailMenuAction];

@@ -2,15 +2,21 @@ const {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
 } = require('../../entities/EntityConstants');
 const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../utilities/getDocumentTitleWithAdditionalInfo');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const shouldGenerateCoversheetForDocketEntry = ({
+  certificateOfServiceUpdated,
+  documentTitleUpdated,
   entryRequiresCoverSheet,
   filingDateUpdated,
   originalDocketEntry,
@@ -18,7 +24,11 @@ const shouldGenerateCoversheetForDocketEntry = ({
   shouldAddNewCoverSheet,
 }) => {
   return (
-    (servedAtUpdated || filingDateUpdated || shouldAddNewCoverSheet) &&
+    (servedAtUpdated ||
+      filingDateUpdated ||
+      certificateOfServiceUpdated ||
+      shouldAddNewCoverSheet ||
+      documentTitleUpdated) &&
     (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
     !originalDocketEntry.isMinuteEntry
   );
@@ -27,17 +37,16 @@ const shouldGenerateCoversheetForDocketEntry = ({
 exports.shouldGenerateCoversheetForDocketEntry = shouldGenerateCoversheetForDocketEntry;
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number of the case to be updated
  * @param {object} providers.docketEntryMeta the docket entry metadata
  * @returns {object} the updated case after the documents are added
  */
-exports.updateDocketEntryMetaInteractor = async ({
+exports.updateDocketEntryMetaInteractor = async (
   applicationContext,
-  docketEntryMeta,
-  docketNumber,
-}) => {
+  { docketEntryMeta, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
@@ -90,7 +99,8 @@ exports.updateDocketEntryMetaInteractor = async ({
     previousDocument: docketEntryMeta.previousDocument,
     scenario: docketEntryMeta.scenario,
     secondaryDocument: docketEntryMeta.secondaryDocument,
-    servedAt: docketEntryMeta.servedAt,
+    servedAt:
+      docketEntryMeta.servedAt && createISODateString(docketEntryMeta.servedAt),
     servedPartiesCode: docketEntryMeta.servedPartiesCode,
     serviceDate: docketEntryMeta.serviceDate,
     trialLocation: docketEntryMeta.trialLocation,
@@ -119,7 +129,17 @@ exports.updateDocketEntryMetaInteractor = async ({
   const shouldAddNewCoverSheet =
     originalEntryDoesNotRequireCoversheet && entryRequiresCoverSheet;
 
+  const documentTitleUpdated =
+    getDocumentTitleWithAdditionalInfo({ docketEntry: originalDocketEntry }) !==
+    getDocumentTitleWithAdditionalInfo({ docketEntry: docketEntryMeta });
+
+  const certificateOfServiceUpdated =
+    originalDocketEntry.certificateOfService !==
+    docketEntryMeta.certificateOfService;
+
   const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry({
+    certificateOfServiceUpdated,
+    documentTitleUpdated,
     entryRequiresCoverSheet,
     filingDateUpdated,
     originalDocketEntry,
@@ -154,13 +174,15 @@ exports.updateDocketEntryMetaInteractor = async ({
       document: docketEntryEntity.validate(),
     });
 
-    // servedAt or filingDate has changed, generate a new coversheet
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId: originalDocketEntry.docketEntryId,
-      docketNumber: caseEntity.docketNumber,
-      filingDateUpdated,
-    });
+    const updatedDocketEntry = await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId: originalDocketEntry.docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        filingDateUpdated,
+      });
+
+    caseEntity.updateDocketEntry(updatedDocketEntry);
   }
 
   const result = await applicationContext

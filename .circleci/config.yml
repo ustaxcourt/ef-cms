@@ -27,30 +27,23 @@ jobs:
             npm ci
             npm rebuild
       - run:
-          name: Lint
-          command: npm run lint
-      - run:
-          name: Shellcheck
-          command: |
-            ./run-shellcheck.sh
-      - run:
           name: Web API - Test
           command: npm run test:api:ci
       - run:
           name: Normalize Coverage for SonarQube
           command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json
-      - run:
-          name: Web API - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${API_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="web-api" \
-            -Dproject.settings="web-api/sonar-project.properties" \
-            -Dsonar.login="${API_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+      # - run:
+      #     name: Web API - SonarQube
+      #     command: |
+      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
+      #       /home/app/sonar_home/bin/sonar-scanner \
+      #       -Dsonar.projectKey="${API_SONAR_KEY}" \
+      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+      #       -Dsonar.organization="${SONAR_ORG}" \
+      #       -Dsonar.projectBaseDir="web-api" \
+      #       -Dproject.settings="web-api/sonar-project.properties" \
+      #       -Dsonar.login="${API_SONAR_TOKEN}" \
+      #       -Dsonar.host.url="https://sonarcloud.io"
 
   build-shared:
     docker:
@@ -84,18 +77,18 @@ jobs:
       - run:
           name: Normalize Coverage for SonarQube
           command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json
-      - run:
-          name: Shared - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="shared" \
-            -Dproject.settings="shared/sonar-project.properties" \
-            -Dsonar.login="${SHARED_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+      # - run:
+      #     name: Shared - SonarQube
+      #     command: |
+      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
+      #       /home/app/sonar_home/bin/sonar-scanner \
+      #       -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
+      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+      #       -Dsonar.organization="${SONAR_ORG}" \
+      #       -Dsonar.projectBaseDir="shared" \
+      #       -Dproject.settings="shared/sonar-project.properties" \
+      #       -Dsonar.login="${SHARED_SONAR_TOKEN}" \
+      #       -Dsonar.host.url="https://sonarcloud.io"
 
   build-client-unit:
     docker:
@@ -226,18 +219,19 @@ jobs:
           command: |
             npx istanbul check-coverage --include=combined-coverage/coverage-final.json \
             --statements 95 --functions 95 --branches 95 --lines 95
-      - run:
-          name: Web Client - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /home/app/sonar_home/bin/sonar-scanner \
-            -Dsonar.projectKey="${UI_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="web-client" \
-            -Dproject.settings="web-client/sonar-project.properties" \
-            -Dsonar.login="${UI_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
+      # - run:
+      #     name: Web Client - SonarQube
+      #     command: |
+      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
+      #       /home/app/sonar_home/bin/sonar-scanner \
+      #       -Dsonar.projectKey="${UI_SONAR_KEY}" \
+      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+      #       -Dsonar.organization="${SONAR_ORG}" \
+      #       -Dsonar.projectBaseDir="web-client" \
+      #       -Dproject.settings="web-client/sonar-project.properties" \
+      #       -Dsonar.login="${UI_SONAR_TOKEN}" \
+      #       -Dsonar.host.url="https://sonarcloud.io" \
+      #       -Dsonar.verbose=true
 
   e2e-pa11y:
     docker:
@@ -422,6 +416,8 @@ jobs:
             npm run cypress:smoketests:local
             sleep 5
             npm run cypress
+      - store_artifacts:
+          path: /root/project/cypress-smoketests/videos/
       - store_artifacts:
           path: /root/project/cypress/videos/
       - store_artifacts:
@@ -620,7 +616,7 @@ jobs:
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -634,7 +630,7 @@ jobs:
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-west-1'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -673,6 +669,9 @@ jobs:
              --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
+      - run:
+          name: 'Deploy - Pending Color Switch'
+          command: npm run pending-color-switch
 
   migrate:
     machine:
@@ -906,6 +905,7 @@ workflows:
                 - experimental1
                 - experimental2
                 - experimental3
+                - experimental4
                 - dawson
       - migrate:
           requires:
@@ -919,6 +919,7 @@ workflows:
                 - experimental1
                 - experimental2
                 - experimental3
+                - experimental4
       - smoketests:
           requires:
             - migrate
@@ -930,6 +931,7 @@ workflows:
                 - experimental1
                 - experimental2
                 - experimental3
+                - experimental4
       - switch-colors:
           requires:
             - smoketests
@@ -942,6 +944,7 @@ workflows:
                 - experimental1
                 - experimental2
                 - experimental3
+                - experimental4
                 - dawson
   build-and-deploy-without-smoketests:
     jobs:

@@ -14,7 +14,7 @@ export const RecentMessagesInbox = connect(
       <React.Fragment>
         <table
           aria-describedby="recent-messages-tab"
-          className="usa-table work-queue subsection messages"
+          className="usa-table ustc-table subsection messages"
           id="my-recent-messages"
         >
           <thead>
@@ -44,7 +44,7 @@ export const RecentMessagesInbox = connect(
                   <td className="message-unread-column">
                     {!item.isRead && (
                       <Icon
-                        aria-label="create message"
+                        aria-label="unread message"
                         className="fa-icon-blue"
                         icon="envelope"
                         size="1x"

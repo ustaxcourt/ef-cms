@@ -6,10 +6,13 @@ const {
 const { validatePdfInteractor } = require('./validatePdfInteractor');
 
 describe('validatePdfInteractor', () => {
+  const getPagesMock = jest.fn();
+
   beforeEach(() => {
     applicationContext.getPdfLib = jest.fn().mockResolvedValue({
       PDFDocument: {
         load: jest.fn().mockResolvedValue({
+          getPages: getPagesMock,
           isEncrypted: false,
         }),
       },
@@ -23,14 +26,13 @@ describe('validatePdfInteractor', () => {
   });
 
   it('validates a clean PDF', async () => {
-    const result = await validatePdfInteractor({
-      applicationContext,
+    const result = await validatePdfInteractor(applicationContext, {
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });
     expect(result).toBeTruthy();
   });
 
-  it('validates an encrypted PDF', async () => {
+  it('throws an error when pdf is encrypted', async () => {
     applicationContext.getPdfLib = jest.fn().mockResolvedValue({
       PDFDocument: {
         load: jest.fn().mockResolvedValue({
@@ -39,34 +41,36 @@ describe('validatePdfInteractor', () => {
       },
     });
 
-    let error;
-    try {
-      await validatePdfInteractor({
-        applicationContext,
+    await expect(
+      validatePdfInteractor(applicationContext, {
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toEqual('invalid pdf');
+      }),
+    ).rejects.toThrow('invalid pdf');
   });
 
-  it('validates an invalid PDF', async () => {
+  it('throws an error when pdf is actually a png', async () => {
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testInvalidPdfDoc,
       }),
     });
 
-    let error;
-    try {
-      await validatePdfInteractor({
-        applicationContext,
+    await expect(
+      validatePdfInteractor(applicationContext, {
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toEqual('invalid pdf');
+      }),
+    ).rejects.toThrow('invalid pdf');
+  });
+
+  it('throws an error when pdf pages cannot be read', async () => {
+    getPagesMock.mockImplementation(() => {
+      throw new Error('cannot read pages');
+    });
+
+    await expect(
+      validatePdfInteractor(applicationContext, {
+        key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).rejects.toThrow('pdf pages cannot be read');
   });
 });

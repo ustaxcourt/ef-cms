@@ -10,8 +10,8 @@ exports.generatePrintableFilingReceiptLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .generatePrintableFilingReceiptInteractor({
+      .generatePrintableFilingReceiptInteractor(
         applicationContext,
-        ...JSON.parse(event.body),
-      });
+        JSON.parse(event.body),
+      );
   });

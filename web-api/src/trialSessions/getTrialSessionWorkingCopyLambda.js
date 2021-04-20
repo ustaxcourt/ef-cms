@@ -12,8 +12,7 @@ exports.getTrialSessionWorkingCopyLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getTrialSessionWorkingCopyInteractor({
-        applicationContext,
+      .getTrialSessionWorkingCopyInteractor(applicationContext, {
         trialSessionId,
       });
   });

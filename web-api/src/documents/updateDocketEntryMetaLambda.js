@@ -10,8 +10,7 @@ exports.updateDocketEntryMetaLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateDocketEntryMetaInteractor({
-        applicationContext,
+      .updateDocketEntryMetaInteractor(applicationContext, {
         ...JSON.parse(event.body),
         ...event.pathParameters,
       });

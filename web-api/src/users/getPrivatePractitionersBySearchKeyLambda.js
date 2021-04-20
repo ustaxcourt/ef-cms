@@ -12,8 +12,7 @@ exports.getPrivatePractitionersBySearchKeyLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getPrivatePractitionersBySearchKeyInteractor({
-        applicationContext,
+      .getPrivatePractitionersBySearchKeyInteractor(applicationContext, {
         searchKey,
       });
   });

@@ -23,8 +23,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('should call the Receipt of Filing document generator', async () => {
-    await generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         primaryDocumentId: mockPrimaryDocketEntryId,
@@ -43,8 +42,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('should populate filedBy on the receipt of filing', async () => {
-    await generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
@@ -62,12 +60,17 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const receiptMockCall = applicationContext.getDocumentGenerators()
       .receiptOfFiling.mock.calls[0][0].data; // 'data' property of first arg (an object) of first call
+
+    const expectedFilingDateForamtted = applicationContext
+      .getUtilities()
+      .formatDateString(MOCK_CASE.docketEntries[0].filingDate, 'DATE_TIME_TZ');
+
     expect(receiptMockCall.filedBy).toBe(MOCK_CASE.contactPrimary.name);
+    expect(receiptMockCall.filedAt).toBe(expectedFilingDateForamtted);
   });
 
   it('acquires document information', async () => {
-    await generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,

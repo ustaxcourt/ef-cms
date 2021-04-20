@@ -19,6 +19,7 @@ import { docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry } from './journey/
 import { docketClerkVerifiesEditCourtIssuedNonstandardFields } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFields';
 import { docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge } from './journey/docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { irsSuperuserGetsReconciliationReport } from './journey/irsSuperuserGetsReconciliationReport';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionerFilesApplicationToTakeDeposition } from './journey/petitionerFilesApplicationToTakeDeposition';
 
@@ -90,4 +91,6 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   loginAs(test, 'docketclerk@example.com');
   docketClerkNavigatesToEditDocketEntryMeta(test, 6);
   docketClerkEditsDocketEntryMetaWithNewFreeText(test, 6);
+
+  irsSuperuserGetsReconciliationReport(test);
 });

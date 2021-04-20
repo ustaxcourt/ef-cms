@@ -13,6 +13,7 @@ const getDocumentInfo = ({ applicationContext, documentData }) => {
     certificateOfServiceDate: doc.certificateOfServiceDate,
     documentTitle: doc.documentTitle,
     filedBy: doc.filedBy,
+    filingDate: doc.filingDate,
     objections: doc.objections,
     receivedAt: doc.receivedAt,
   };
@@ -21,17 +22,16 @@ const getDocumentInfo = ({ applicationContext, documentData }) => {
 /**
  * generatePrintableFilingReceiptInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case the documents were filed in
  * @param {object} providers.documentsFiled object containing the docketNumber and documents for the filing receipt to be generated
  * @returns {string} url for the generated document on the storage client
  */
-exports.generatePrintableFilingReceiptInteractor = async ({
+exports.generatePrintableFilingReceiptInteractor = async (
   applicationContext,
-  docketNumber,
-  documentsFiled,
-}) => {
+  { docketNumber, documentsFiled },
+) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -49,6 +49,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     doc => doc.docketEntryId === documentsFiled.primaryDocumentId,
   );
   primaryDocument.filedBy = primaryDocumentRecord.filedBy;
+  primaryDocument.filingDate = primaryDocumentRecord.filingDate;
 
   const filingReceiptDocumentParams = { document: primaryDocument };
 
@@ -81,7 +82,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
       docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
       filedAt: applicationContext
         .getUtilities()
-        .formatDateString(primaryDocument.receivedAt, 'DATE_TIME_TZ'),
+        .formatDateString(primaryDocument.filingDate, 'DATE_TIME_TZ'),
       filedBy: primaryDocument.filedBy,
       ...filingReceiptDocumentParams,
     },

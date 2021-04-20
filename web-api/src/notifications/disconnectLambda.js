@@ -12,8 +12,7 @@ exports.disconnectLambda = event =>
     async ({ applicationContext }) => {
       const results = await applicationContext
         .getUseCases()
-        .onDisconnectInteractor({
-          applicationContext,
+        .onDisconnectInteractor(applicationContext, {
           connectionId: event.requestContext.connectionId,
         });
 

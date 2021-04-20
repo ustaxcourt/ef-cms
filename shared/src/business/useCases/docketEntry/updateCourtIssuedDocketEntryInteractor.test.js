@@ -123,8 +123,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateCourtIssuedDocketEntryInteractor({
-        applicationContext,
+      updateCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
@@ -143,8 +142,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     });
 
     await expect(
-      updateCourtIssuedDocketEntryInteractor({
-        applicationContext,
+      updateCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
@@ -165,8 +163,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await updateCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await updateCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
@@ -189,39 +186,6 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should set secondaryDate on the created document if the eventCode is TRAN', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    await updateCourtIssuedDocketEntryInteractor({
-      applicationContext,
-      documentMeta: {
-        date: '2019-03-01T21:40:46.415Z',
-        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'Transcript',
-        eventCode: TRANSCRIPT_EVENT_CODE,
-        freeText: 'Dogs',
-        generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
-      },
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[4],
-    ).toMatchObject({
-      secondaryDate: '2019-03-01T21:40:46.415Z',
-    });
-  });
-
   it('should not update non-editable fields on the document', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -229,8 +193,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await updateCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await updateCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,

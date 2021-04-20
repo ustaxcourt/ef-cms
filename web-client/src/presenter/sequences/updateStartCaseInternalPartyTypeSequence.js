@@ -1,4 +1,4 @@
-import { resetContactsAction } from '../actions/StartCaseInternal/resetContactsAction';
+import { resetContactsAction } from '../actions/resetContactsAction';
 import { setFormValueAction } from '../actions/setFormValueAction';
 import { updateOrderForOdsAction } from '../actions/StartCaseInternal/updateOrderForOdsAction';
 

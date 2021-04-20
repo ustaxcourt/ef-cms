@@ -12,15 +12,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * batchDownloadTrialSessionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
-const batchDownloadTrialSessionInteractor = async ({
+const batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)) {
@@ -56,7 +56,11 @@ const batchDownloadTrialSessionInteractor = async ({
     .replace(/,/g, '');
 
   sessionCases = sessionCases
-    .filter(caseToFilter => caseToFilter.status !== CASE_STATUS_TYPES.closed)
+    .filter(
+      caseToFilter =>
+        caseToFilter.status !== CASE_STATUS_TYPES.closed &&
+        !caseToFilter.removedFromTrial,
+    )
     .map(caseToBatch => {
       const caseTitle = Case.getCaseTitle(caseToBatch.caseCaption);
       const caseFolder = `${caseToBatch.docketNumber}, ${caseTitle}`;
@@ -68,7 +72,7 @@ const batchDownloadTrialSessionInteractor = async ({
       };
     });
 
-  sessionCases.forEach(caseToBatch => {
+  for (const caseToBatch of sessionCases) {
     const docketEntriesOnDocketRecord = caseToBatch.docketEntries.filter(
       d => d.isOnDocketRecord && d.isFileAttached,
     );
@@ -78,12 +82,26 @@ const batchDownloadTrialSessionInteractor = async ({
       return acc;
     }, {});
 
-    docketEntriesOnDocketRecord.forEach(aDocketRecord => {
+    for (const aDocketRecord of docketEntriesOnDocketRecord) {
       let myDoc;
       if (
         aDocketRecord.docketEntryId &&
         (myDoc = documentMap[aDocketRecord.docketEntryId])
       ) {
+        // check that all file exists before continuing
+        const isFileExists = await applicationContext
+          .getPersistenceGateway()
+          .isFileExists({
+            applicationContext,
+            key: aDocketRecord.docketEntryId,
+          });
+
+        if (!isFileExists) {
+          throw new Error(
+            `Batch Download Error: File ${aDocketRecord.docketEntryId} for case ${caseToBatch.docketNumber} does not exist!`,
+          );
+        }
+
         const docDate = formatDateString(
           aDocketRecord.filingDate,
           'YYYY-MM-DD',
@@ -96,8 +114,8 @@ const batchDownloadTrialSessionInteractor = async ({
         s3Ids.push(myDoc.docketEntryId);
         fileNames.push(pdfTitle);
       }
-    });
-  });
+    }
+  }
 
   let numberOfDocketRecordsGenerated = 0;
   const numberOfDocketRecordsToGenerate = sessionCases.length;
@@ -125,8 +143,7 @@ const batchDownloadTrialSessionInteractor = async ({
   const generateDocumentAndDocketRecordForCase = async sessionCase => {
     const result = await applicationContext
       .getUseCases()
-      .generateDocketRecordPdfInteractor({
-        applicationContext,
+      .generateDocketRecordPdfInteractor(applicationContext, {
         docketNumber: sessionCase.docketNumber,
         includePartyDetail: true,
       });
@@ -163,6 +180,17 @@ const batchDownloadTrialSessionInteractor = async ({
     });
   };
 
+  const onError = error => {
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_error',
+        error,
+      },
+      userId: user.userId,
+    });
+  };
+
   const onProgress = progressData => {
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
@@ -194,6 +222,7 @@ const batchDownloadTrialSessionInteractor = async ({
     extraFiles,
     fileNames,
     onEntry,
+    onError,
     onProgress,
     onUploadStart,
     s3Ids,
@@ -222,24 +251,26 @@ const batchDownloadTrialSessionInteractor = async ({
 /**
  * batchDownloadTrialSessionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
-exports.batchDownloadTrialSessionInteractor = async ({
+exports.batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   try {
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId,
     });
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
 
-    applicationContext.logger.error(error);
+    applicationContext.logger.error(
+      `Error when batch downloading trial session with id ${trialSessionId}`,
+      error,
+    );
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {

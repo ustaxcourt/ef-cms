@@ -47,8 +47,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
 
   it('should throw an error when not authorized', async () => {
     await expect(
-      associatePrivatePractitionerWithCaseInteractor({
-        applicationContext,
+      associatePrivatePractitionerWithCaseInteractor(applicationContext, {
         docketNumber: caseRecord.docketNumber,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
@@ -78,8 +77,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    await associatePrivatePractitionerWithCaseInteractor({
-      applicationContext,
+    await associatePrivatePractitionerWithCaseInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
       representingPrimary: true,
       representingSecondary: false,
