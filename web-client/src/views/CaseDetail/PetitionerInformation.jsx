@@ -63,157 +63,99 @@ const PetitionerInformation = connect(
               </h3>
 
               <div className="grid-row" id="petitioner-information">
-                {formattedCaseDetail.contactPrimary && (
-                  <div className="grid-col-3">
-                    <address aria-labelledby="primary-label">
-                      <AddressDisplay
-                        contact={formattedCaseDetail.contactPrimary}
-                        editLinkExternal={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
-                        editLinkInternal={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-information/${formattedCaseDetail.contactPrimary.contactId}`}
-                        showEmail={false}
-                        showSealAddressLink={
-                          caseInformationHelper.showSealAddressLink
-                        }
-                      />
-                    </address>
-                    {addressDisplayHelper.primary.showSealedContact && (
-                      <div>
-                        <p className="text-italic">
-                          Call the Tax Court at (202) 521-0700 if you need to
-                          update your contact information
-                        </p>
-                      </div>
-                    )}
-
-                    {caseInformationHelper.showContactPrimaryEmail && (
-                      <>
-                        <div className="semi-bold margin-bottom-0 margin-top-3">
-                          Current email address
-                        </div>
-                        {formattedCaseDetail.contactPrimary.email}
-                        {formattedCaseDetail.contactPrimary.showEAccessFlag && (
-                          <FontAwesomeIcon
-                            aria-label="has e-access"
-                            className="margin-left-05 fa-icon-blue"
-                            icon="flag"
-                            size="1x"
-                          />
-                        )}
-                      </>
-                    )}
-                    {screenMetadata.contactPrimaryPendingEmail && (
-                      <>
-                        <div className="semi-bold margin-top-3">
-                          Pending email address
-                        </div>
-                        {screenMetadata.contactPrimaryPendingEmail}
-                      </>
-                    )}
-
-                    {formattedCaseDetail.contactPrimary.serviceIndicator && (
-                      <>
-                        <div className="semi-bold margin-top-3">
-                          Service preference
-                        </div>
-                        {formattedCaseDetail.contactPrimary.serviceIndicator}
-                      </>
-                    )}
-                  </div>
-                )}
-
-                {formattedCaseDetail.contactSecondary &&
-                  formattedCaseDetail.contactSecondary.name && (
-                    <div className="tablet:grid-col-3">
-                      <address aria-labelledby="secondary-label">
-                        <AddressDisplay
-                          contact={formattedCaseDetail.contactSecondary}
-                          editLinkExternal={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/secondary/edit`}
-                          editLinkInternal={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-information/${formattedCaseDetail.contactSecondary.contactId}`}
-                          showEmail={false}
-                          showSealAddressLink={
-                            caseInformationHelper.showSealAddressLink
-                          }
-                        />
-                      </address>
-                      {addressDisplayHelper.secondary.showSealedContact && (
-                        <div className="max-width-50">
-                          <p className="text-italic">
-                            Call the Tax Court at (202) 521-0700 if you need to
-                            update your contact information
-                          </p>
-                        </div>
-                      )}
-                      {caseInformationHelper.showContactSecondaryEmail && (
-                        <>
-                          <div className="semi-bold margin-bottom-0 margin-top-3">
-                            Current email address
-                          </div>
-                          {formattedCaseDetail.contactSecondary.email}
-                          {formattedCaseDetail.contactSecondary
-                            .showEAccessFlag && (
-                            <FontAwesomeIcon
-                              aria-label="has e-access"
-                              className="margin-left-05 fa-icon-blue"
-                              icon="flag"
-                              size="1x"
-                            />
-                          )}
-                        </>
-                      )}
-                      {screenMetadata.contactSecondaryPendingEmail && (
-                        <>
-                          <div className="semi-bold margin-top-3">
-                            Pending email address
-                          </div>
-                          {screenMetadata.contactSecondaryPendingEmail}
-                        </>
-                      )}
-                      {formattedCaseDetail.contactSecondary
-                        .serviceIndicator && (
-                        <>
-                          <div className="semi-bold margin-bottom-0 margin-top-3">
-                            Service preference
-                          </div>
-                          {
-                            formattedCaseDetail.contactSecondary
-                              .serviceIndicator
-                          }
-                        </>
-                      )}
-                    </div>
-                  )}
-                {formattedCaseDetail.otherPetitioners &&
-                  caseInformationHelper.formattedOtherPetitioners.map(
-                    (otherPetitioner, idx) => (
+                {caseInformationHelper.formattedPetitioners &&
+                  caseInformationHelper.formattedPetitioners.map(
+                    (petitioner, idx) => (
                       <div
                         className={classNames(
-                          'grid-col-3 other-petitioners-information',
-                          idx > 1 &&
-                            formattedCaseDetail.contactSecondary &&
-                            'margin-top-8',
-                          idx > 2 &&
-                            !formattedCaseDetail.contactSecondary &&
-                            'margin-top-8',
+                          'grid-col-3 petitioner-information-card',
+                          idx > 3 && 'margin-top-8',
                         )}
-                        key={otherPetitioner.name}
+                        key={petitioner.name}
                       >
-                        <address aria-labelledby="secondary-label">
-                          {otherPetitioner.name && (
+                        <address aria-labelledby="primary-label">
+                          {petitioner.name && (
                             <AddressDisplay
-                              contact={otherPetitioner}
-                              showEmail={true}
+                              contact={petitioner}
+                              editLinkExternal={
+                                petitioner.contactType !== 'otherPetitioners'
+                                  ? `/case-detail/${formattedCaseDetail.docketNumber}/contacts/${petitioner.contactType}/edit`
+                                  : undefined
+                              }
+                              editLinkInternal={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
+                              showEmail={false}
                               showSealAddressLink={
                                 caseInformationHelper.showSealAddressLink
                               }
                             />
                           )}
                         </address>
-                        {otherPetitioner.serviceIndicator && (
+                        {addressDisplayHelper[petitioner.contactType]
+                          .showSealedContact && (
+                          <div className="max-width-50">
+                            <p className="text-italic">
+                              Call the Tax Court at (202) 521-0700 if you need
+                              to update your contact information
+                            </p>
+                          </div>
+                        )}
+                        {petitioner.contactType == 'primary' &&
+                          petitioner.email && (
+                            <>
+                              <div className="semi-bold margin-bottom-0 margin-top-3">
+                                Current email address
+                              </div>
+                              {formattedCaseDetail.contactPrimary.email}
+                              {formattedCaseDetail.contactPrimary
+                                .showEAccessFlag && (
+                                <FontAwesomeIcon
+                                  aria-label="has e-access"
+                                  className="margin-left-05 fa-icon-blue"
+                                  icon="flag"
+                                  size="1x"
+                                />
+                              )}
+                            </>
+                          )}
+                        {petitioner.contactType == 'secondary' &&
+                          caseInformationHelper.showContactSecondaryEmail && (
+                            <>
+                              <div className="semi-bold margin-bottom-0 margin-top-3">
+                                Current email address
+                              </div>
+                              {formattedCaseDetail.contactSecondary.email}
+                              {formattedCaseDetail.contactSecondary
+                                .showEAccessFlag && (
+                                <FontAwesomeIcon
+                                  aria-label="has e-access"
+                                  className="margin-left-05 fa-icon-blue"
+                                  icon="flag"
+                                  size="1x"
+                                />
+                              )}
+                            </>
+                          )}
+                        {screenMetadata.pendingEmails &&
+                          screenMetadata.pendingEmails[
+                            petitioner.contactType
+                          ] && (
+                            <>
+                              <div className="semi-bold margin-top-3">
+                                Pending email address
+                              </div>
+                              {
+                                screenMetadata.pendingEmails[
+                                  petitioner.contactType
+                                ]
+                              }
+                            </>
+                          )}
+                        {petitioner.serviceIndicator && (
                           <div className="margin-top-4">
                             <p className="semi-bold margin-bottom-0">
                               Service preference
                             </p>
-                            {otherPetitioner.serviceIndicator}
+                            {petitioner.serviceIndicator}
                           </div>
                         )}
                       </div>
