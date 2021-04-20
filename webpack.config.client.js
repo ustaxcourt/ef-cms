@@ -44,6 +44,23 @@ module.exports = {
     new webpack.ProvidePlugin({
       process: 'process/browser',
     }),
+    new webpack.EnvironmentPlugin([
+      'API_URL',
+      'CI',
+      'CIRCLE_SHA1',
+      'COGNITO',
+      'COGNITO_CLIENT_ID',
+      'COGNITO_REDIRECT_URI',
+      'COGNITO_TOKEN_URL',
+      'NO_SCANNER',
+      'NODE_ENV',
+      'SESSION_MODAL_TIMEOUT',
+      'SESSION_TIMEOUT',
+      'SKIP_VIRUS_SCAN',
+      'STAGE',
+      'USTC_DEBUG',
+      'USTC_ENV',
+    ]),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }),
