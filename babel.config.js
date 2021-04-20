@@ -1,17 +1,11 @@
 module.exports = {
-  plugins: [
-    '@babel/plugin-syntax-dynamic-import',
-    'babel-plugin-cerebral',
-    'transform-html-import-require-to-string',
-  ],
+  plugins: ['babel-plugin-cerebral', 'transform-html-import-require-to-string'],
   presets: [
     [
-      '@babel/env',
+      '@babel/preset-env',
       {
         targets: {
-          chrome: '78',
-          firefox: '70',
-          safari: '13',
+          esmodules: true,
         },
       },
     ],
