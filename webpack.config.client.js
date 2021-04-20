@@ -49,9 +49,9 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'node_modules/pdfjs-dist/es5/build', to: 'dist' },
-        { from: 'node_modules/react-quill/dist', to: 'dist' },
-        { from: 'node_modules/pdf-lib/dist', to: 'dist' },
+        { from: 'node_modules/pdfjs-dist/es5/build', to: '.' },
+        { from: 'node_modules/react-quill/dist', to: '.' },
+        { from: 'node_modules/pdf-lib/dist', to: '.' },
       ],
     }),
   ],
