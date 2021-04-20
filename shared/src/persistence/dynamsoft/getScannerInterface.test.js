@@ -224,6 +224,9 @@ describe('getScannerInterface', () => {
       scanMode: SCAN_MODES.FLATBED,
     });
     expect(DWObject.IfDuplexEnabled).toEqual(false);
+    expect(
+      applicationContext.getReduceImageBlob().default().toBlob,
+    ).toHaveBeenCalled();
   });
 
   it('can enable flatbed scanning by calling startScanSession with scanMode set to `FLATBED`', async () => {
@@ -241,6 +244,9 @@ describe('getScannerInterface', () => {
       scanMode: SCAN_MODES.FEEDER,
     });
     expect(DWObject.IfFeederEnabled).toEqual(true);
+    expect(
+      applicationContext.getReduceImageBlob().default().toBlob,
+    ).toHaveBeenCalled();
   });
 
   it('should scan from feeder when calling startScanSession with scanMode set to `DUPLEX`', async () => {
@@ -253,6 +259,9 @@ describe('getScannerInterface', () => {
     });
     expect(DWObject.IfDuplexEnabled).toEqual(true);
     expect(DWObject.IfFeederEnabled).toEqual(true);
+    expect(
+      applicationContext.getReduceImageBlob().default().toBlob,
+    ).toHaveBeenCalled();
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {
@@ -261,7 +270,7 @@ describe('getScannerInterface', () => {
     global.window.document = {
       addEventListener: () => null,
       createElement: () => ({
-        cloneNode: function () {
+        cloneNode() {
           return {
             ...this,
           };

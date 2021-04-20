@@ -79,8 +79,7 @@ describe('addConsolidatedCaseInteractor', () => {
     });
 
     await expect(
-      addConsolidatedCaseInteractor({
-        applicationContext,
+      addConsolidatedCaseInteractor(applicationContext, {
         docketNumber: '519-19',
         docketNumberToConsolidateWith: '319-19',
       }),
@@ -88,8 +87,7 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should try to get the case by its docketNumber', async () => {
-    await addConsolidatedCaseInteractor({
-      applicationContext,
+    await addConsolidatedCaseInteractor(applicationContext, {
       docketNumber: '519-19',
       docketNumberToConsolidateWith: '319-19',
     });
@@ -101,8 +99,7 @@ describe('addConsolidatedCaseInteractor', () => {
 
   it('Should return a Not Found error if the case to update can not be found', async () => {
     await expect(
-      addConsolidatedCaseInteractor({
-        applicationContext,
+      addConsolidatedCaseInteractor(applicationContext, {
         docketNumber: '111-11',
         docketNumberToConsolidateWith: '319-19',
       }),
@@ -111,8 +108,7 @@ describe('addConsolidatedCaseInteractor', () => {
 
   it('Should return a Not Found error if the case to consolidate with cannot be found', async () => {
     await expect(
-      addConsolidatedCaseInteractor({
-        applicationContext,
+      addConsolidatedCaseInteractor(applicationContext, {
         docketNumber: '519-19',
         docketNumberToConsolidateWith: '111-11',
       }),
@@ -120,8 +116,7 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should update the case to consolidate with if it does not already have the leadDocketNumber', async () => {
-    await addConsolidatedCaseInteractor({
-      applicationContext,
+    await addConsolidatedCaseInteractor(applicationContext, {
       docketNumber: '519-19',
       docketNumberToConsolidateWith: '320-19',
     });
@@ -132,8 +127,7 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should NOT update the case to consolidate with if it already has the leadDocketNumber and is the lead case', async () => {
-    await addConsolidatedCaseInteractor({
-      applicationContext,
+    await addConsolidatedCaseInteractor(applicationContext, {
       docketNumber: '519-19',
       docketNumberToConsolidateWith: '319-19',
     });
@@ -144,8 +138,7 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should update both cases with the leadDocketNumber if neither have one', async () => {
-    await addConsolidatedCaseInteractor({
-      applicationContext,
+    await addConsolidatedCaseInteractor(applicationContext, {
       docketNumber: '519-19',
       docketNumberToConsolidateWith: '319-19',
     });
@@ -160,8 +153,7 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should update all leadDocketNumber fields if the new case has the lower docket number', async () => {
-    await addConsolidatedCaseInteractor({
-      applicationContext,
+    await addConsolidatedCaseInteractor(applicationContext, {
       docketNumber: '219-19',
       docketNumberToConsolidateWith: '319-19',
     });
@@ -176,8 +168,7 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('Should combine all cases when both the case and case to consolidate with are in separate consolidated sets', async () => {
-    await addConsolidatedCaseInteractor({
-      applicationContext,
+    await addConsolidatedCaseInteractor(applicationContext, {
       docketNumber: '119-19',
       docketNumberToConsolidateWith: '419-19',
     });

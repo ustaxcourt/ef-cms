@@ -173,19 +173,25 @@ exports.addCoverToPdf = async ({
 /**
  * addCoversheetInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.docketEntryId the docket entry id
+ * @param {string} providers.docketNumber the docket number of the case
+ * @param {boolean} providers.filingDateUpdated flag that represents if the filing date was updated
+ * @param {boolean} providers.replaceCoversheet flag that represents if the coversheet should be replaced
+ * @param {boolean} providers.useInitialData flag that represents to use initial data
+ * @returns {Promise<*>} updated docket entry entity
  */
-exports.addCoversheetInteractor = async ({
+exports.addCoversheetInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-  filingDateUpdated = false,
-  replaceCoversheet = false,
-  useInitialData = false,
-}) => {
+  {
+    docketEntryId,
+    docketNumber,
+    filingDateUpdated = false,
+    replaceCoversheet = false,
+    useInitialData = false,
+  },
+) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -227,11 +233,13 @@ exports.addCoversheetInteractor = async ({
   docketEntryEntity.setAsProcessingStatusAsCompleted();
   docketEntryEntity.setNumberOfPages(numberOfPages);
 
+  const updatedDocketEntryEntity = docketEntryEntity.validate();
+
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
     docketEntryId,
     docketNumber: caseEntity.docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
+    document: updatedDocketEntryEntity.toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -239,4 +247,6 @@ exports.addCoversheetInteractor = async ({
     document: newPdfData,
     key: docketEntryId,
   });
+
+  return updatedDocketEntryEntity;
 };

@@ -8,7 +8,6 @@ const {
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
-  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   serveExternallyFiledDocumentInteractor,
@@ -107,15 +106,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      serveExternallyFiledDocumentInteractor({
-        applicationContext,
-      }),
+      serveExternallyFiledDocumentInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should update the document with a servedAt date', async () => {
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
     });
@@ -133,8 +129,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should add a coversheet to the document', async () => {
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
     });
@@ -142,56 +137,31 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
   });
 
-  it('should send electronic-service parties emails', async () => {
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toBeCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
-        .calls[0][0],
-    ).toMatchObject({
-      servedParties: {
-        all: [
-          {
-            email: 'fieri@example.com',
-            name: 'Guy Fieri',
-          },
-        ],
-        electronic: [
-          {
-            email: 'fieri@example.com',
-            name: 'Guy Fieri',
-          },
-        ],
-        paper: [],
-      },
-    });
-  });
-
-  it('should generate and return a paper-service PDF if there are paper service parties on the case', async () => {
-    caseRecord.contactPrimary.serviceIndicator =
-      SERVICE_INDICATOR_TYPES.SI_PAPER;
-
+  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: 'localhost:123',
+      });
 
-    const result = await serveExternallyFiledDocumentInteractor({
+    const result = await serveExternallyFiledDocumentInteractor(
       applicationContext,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumber: DOCKET_NUMBER,
-    });
+      {
+        docketEntryId: DOCKET_ENTRY_ID,
+        docketNumber: DOCKET_NUMBER,
+      },
+    );
 
     expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toBeCalled();
-    expect(result.paperServicePdfUrl).toEqual('www.example.com');
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
+        .mock.calls[0][0],
+    ).toMatchObject({
+      docketEntryId: DOCKET_ENTRY_ID,
+    });
+    expect(result).toEqual({ pdfUrl: 'localhost:123' });
   });
 
   it('if the workItem exists, it should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {
@@ -227,8 +197,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       },
     ];
 
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
       docketNumber: DOCKET_NUMBER,
     });
@@ -297,8 +266,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       },
     ];
 
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
       docketNumber: DOCKET_NUMBER,
     });

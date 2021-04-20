@@ -10,8 +10,7 @@ exports.unblockCaseFromTrialLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .unblockCaseFromTrialInteractor({
-        applicationContext,
+      .unblockCaseFromTrialInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });

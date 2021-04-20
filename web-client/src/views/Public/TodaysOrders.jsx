@@ -11,11 +11,13 @@ export const TodaysOrders = connect(
     loadMoreTodaysOrdersSequence: sequences.loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
+    sortTodaysOrdersSequence: sequences.sortTodaysOrdersSequence,
     todaysOrdersHelper: state.todaysOrdersHelper,
   },
   function TodaysOrders({
     loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence,
+    sortTodaysOrdersSequence,
     todaysOrdersHelper,
   }) {
     return (
@@ -45,6 +47,26 @@ export const TodaysOrders = connect(
           {todaysOrdersHelper.hasResults && (
             <>
               <NonMobile>
+                <div className="tablet:grid-col-2">
+                  <select
+                    aria-label="Today’s Orders Sort"
+                    className="usa-select margin-top-0 margin-bottom-2 sort"
+                    name="todaysOrdersSort"
+                    value={todaysOrdersHelper.todaysOrdersSort}
+                    onChange={e => {
+                      sortTodaysOrdersSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  >
+                    {todaysOrdersHelper.sortOptions.map(({ label, value }) => (
+                      <option key={value} value={value}>
+                        Sort by {label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <table
                   aria-label="todays orders"
                   className="usa-table gray-header todays-orders responsive-table row-border-only"
@@ -62,7 +84,7 @@ export const TodaysOrders = connect(
                   </thead>
                   <tbody>
                     {todaysOrdersHelper.formattedOrders.map((order, idx) => (
-                      <tr key={`todays-orders-${idx}`}>
+                      <tr key={`todays-orders-${order.docketEntryId}`}>
                         <td className="center-column">{idx + 1}</td>
                         <td aria-hidden="true"></td>
                         <td>
@@ -109,8 +131,8 @@ export const TodaysOrders = connect(
                     </tr>
                   </thead>
                   <tbody>
-                    {todaysOrdersHelper.formattedOrders.map((order, idx) => (
-                      <tr key={`todays-orders-mobile-${idx}`}>
+                    {todaysOrdersHelper.formattedOrders.map(order => (
+                      <tr key={`todays-orders-mobile-${order.docketEntryId}`}>
                         <td className="padding-5 margin-top-2">
                           <CaseLink formattedCase={order} />
                         </td>

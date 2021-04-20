@@ -99,7 +99,7 @@ table.search-results .ustc-button--unstyled {
   text-align: left;
 }
 
-table.docket-record .ustc-button--unstyled {
+table.ustc-table .ustc-button--unstyled {
   text-align: left;
 }
 
@@ -205,4 +205,8 @@ table.docket-record .ustc-button--unstyled {
       color: $color-primary-alt;
     }
   }
+}
+
+#tab-tracked-items.tracked-items-padding-right {
+  padding-right: 10px;
 }

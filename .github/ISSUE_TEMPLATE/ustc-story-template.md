@@ -26,16 +26,16 @@ assignees: ''
 
 ## Tasks
 
-## Definition of Done (Updated 10-26-20)
-
+## Definition of Done (Updated 2-23-21)
 **Product Owner**
- - [ ]  Acceptance criteria have been met and validated on the Flexion Prod env
+ - [ ]  Acceptance criteria have been met and validated on the Flexion mig env
 
 **UX**
  - [ ] Business test scenarios to meet all acceptance criteria have been written
  - [ ] Usability has been validated
  - [ ] Wiki has been updated (if applicable) 
  - [ ] Story has been tested on a mobile device (for external users only)
+ - [ ] Add scenario to testing document, if applicable (https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA/edit?usp=sharing)
 
 **Engineering**
  - [ ] Automated test scripts have been written
@@ -53,4 +53,15 @@ assignees: ''
  - [ ] Rebuild entity documentation
  - [ ] Acceptance criteria for the story has been met
  - [ ] Deployed to the dev environment
- - [ ] Deployed to the prod environment
+ - [ ] Deployed to the Court's migration environment
+
+ **Review Steps**
+ 1. Finish all other DOD
+ 2. Deploy to the dev environment
+ 3. Engineers add `Needs UX Review` label
+ 4. UX Review on dev environment (if feedback, implement and go back to step 2)
+ 5. UX add `Needs Migration Deploy` label
+ 6. Deploy to the Court's migration environment
+ 7. Engineers go through test scenarios on Court's migration environment
+ 8. Engineers add `Needs PO Review` label and move to Review/QA column
+ 9. PO review (if feedback, implement and go back to step 2)

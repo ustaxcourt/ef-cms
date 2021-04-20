@@ -11,6 +11,8 @@ import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoPublicCaseDetailSequence } from './sequences/public/gotoPublicCaseDetailSequence';
+import { gotoPublicEmailVerificationInstructionsSequence } from './sequences/gotoPublicEmailVerificationInstructionsSequence';
+import { gotoPublicEmailVerificationSuccessSequence } from './sequences/gotoPublicEmailVerificationSuccessSequence';
 import { gotoPublicPrintableDocketRecordSequence } from './sequences/public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/public/gotoTodaysOpinionsSequence';
@@ -23,6 +25,7 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+import { sortTodaysOrdersSequence } from './sequences/public/sortTodaysOrdersSequence';
 import { state } from './state-public';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/public/submitPublicCaseDocketNumberSearchSequence';
@@ -58,6 +61,8 @@ export const presenter = {
     gotoHealthCheckSequence,
     gotoPrivacySequence,
     gotoPublicCaseDetailSequence,
+    gotoPublicEmailVerificationInstructionsSequence,
+    gotoPublicEmailVerificationSuccessSequence,
     gotoPublicPrintableDocketRecordSequence,
     gotoPublicSearchSequence,
     gotoTodaysOpinionsSequence,
@@ -69,7 +74,8 @@ export const presenter = {
     notFoundErrorSequence,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
-    submitPublicCaseAdvancedSearchSequence: submitPublicCaseAdvancedSearchSequence,
+    sortTodaysOrdersSequence,
+    submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,

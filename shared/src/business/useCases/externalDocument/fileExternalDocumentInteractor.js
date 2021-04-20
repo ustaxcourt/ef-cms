@@ -18,15 +18,15 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {object} the updated case after the documents have been added
  */
-exports.fileExternalDocumentInteractor = async ({
+exports.fileExternalDocumentInteractor = async (
   applicationContext,
-  documentMetadata,
-}) => {
+  { documentMetadata },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 

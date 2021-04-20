@@ -19,8 +19,7 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    const result = await prioritizeCaseInteractor({
-      applicationContext,
+    const result = await prioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
@@ -53,8 +52,7 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    await prioritizeCaseInteractor({
-      applicationContext,
+    await prioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
@@ -69,8 +67,7 @@ describe('prioritizeCaseInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      prioritizeCaseInteractor({
-        applicationContext,
+      prioritizeCaseInteractor(applicationContext, {
         docketNumber: '123-20',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -91,8 +88,7 @@ describe('prioritizeCaseInteractor', () => {
       );
 
     await expect(
-      prioritizeCaseInteractor({
-        applicationContext,
+      prioritizeCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         reason: 'just because',
       }),
@@ -112,8 +108,7 @@ describe('prioritizeCaseInteractor', () => {
       );
 
     await expect(
-      prioritizeCaseInteractor({
-        applicationContext,
+      prioritizeCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         reason: 'just because',
       }),
@@ -130,8 +125,7 @@ describe('prioritizeCaseInteractor', () => {
         }),
       );
 
-    await prioritizeCaseInteractor({
-      applicationContext,
+    await prioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
@@ -139,5 +133,33 @@ describe('prioritizeCaseInteractor', () => {
       applicationContext.getPersistenceGateway()
         .updateCaseTrialSortMappingRecords,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should update trial sort mapping records when automaticBlocked and high priority', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-11-30T09:10:11.000Z',
+          automaticBlockedReason: 'Pending Item',
+          status: CASE_STATUS_TYPES.rule155,
+        }),
+      );
+
+    await prioritizeCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      reason: 'just because',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
   });
 });

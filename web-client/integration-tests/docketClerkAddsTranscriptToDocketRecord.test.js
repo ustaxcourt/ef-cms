@@ -2,11 +2,8 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { fakeFile, loginAs, setupTest } from './helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -21,13 +18,20 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
   const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
 
   beforeAll(() => {
+    console.error = () => {};
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
+  it('Create test case', async () => {
+    const caseDetail = await uploadPetition(test);
+    expect(caseDetail.docketNumber).toBeDefined();
+    test.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(test, {
@@ -70,9 +74,28 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     // first transcript should be available to the user
     expect(transcriptDocuments[0].showLinkToDocument).toEqual(true);
     expect(transcriptDocuments[0].isUnservable).toEqual(true);
+
+    await test.runSequence('openCaseDocumentDownloadUrlSequence', {
+      docketEntryId: transcriptDocuments[0].docketEntryId,
+      docketNumber: test.docketNumber,
+      isPublic: false,
+      useSameTab: true,
+    });
+    expect(window.location.href).toContain(
+      transcriptDocuments[0].docketEntryId,
+    );
+
     // second transcript should NOT be available to the user
     expect(transcriptDocuments[1].showLinkToDocument).toEqual(false);
     expect(transcriptDocuments[1].isUnservable).toEqual(true);
+
+    await expect(
+      test.runSequence('openCaseDocumentDownloadUrlSequence', {
+        docketEntryId: transcriptDocuments[1].docketEntryId,
+        docketNumber: test.docketNumber,
+        isPublic: false,
+      }),
+    ).rejects.toThrow('Unauthorized to view document at this time.');
 
     const transDocketRecord = formattedCase.docketEntries.find(
       record => record.eventCode === TRANSCRIPT_EVENT_CODE,

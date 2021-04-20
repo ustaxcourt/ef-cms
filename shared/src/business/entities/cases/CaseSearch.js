@@ -12,7 +12,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-CaseSearch.validationName = 'CaseSearch';
 
 /**
  * Case Search entity
@@ -20,7 +19,10 @@ CaseSearch.validationName = 'CaseSearch';
  * @param {object} rawProps the raw case search data
  * @constructor
  */
-function CaseSearch() {}
+function CaseSearch() {
+  this.entityName = 'CaseSearch';
+}
+
 CaseSearch.prototype.init = function init(rawProps) {
   this.petitionerName = rawProps.petitionerName;
   this.yearFiledMin = rawProps.yearFiledMin || CASE_SEARCH_MIN_YEAR;

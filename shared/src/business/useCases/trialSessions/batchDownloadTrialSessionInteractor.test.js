@@ -10,9 +10,10 @@ const { ROLES } = require('../../entities/EntityConstants');
 
 describe('batchDownloadTrialSessionInteractor', () => {
   let user;
+  let mockCase;
 
   beforeEach(() => {
-    const mockCase = {
+    mockCase = {
       ...MOCK_CASE,
     };
 
@@ -68,18 +69,21 @@ describe('batchDownloadTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
-        startDate: new Date('2019-09-26T12:00:00.000Z'),
+        startDate: '2019-09-26T12:00:00.000Z',
         trialLocation: 'Birmingham',
       });
 
     applicationContext
       .getUseCases()
       .generateDocketRecordPdfInteractor.mockResolvedValue({});
+
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(true);
   });
 
   it('skips DocketEntry that are not in docketrecord or have documents in S3', async () => {
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
@@ -91,6 +95,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       extraFiles: expect.anything(),
       fileNames: expect.anything(),
       onEntry: expect.anything(),
+      onError: expect.anything(),
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [
@@ -102,20 +107,45 @@ describe('batchDownloadTrialSessionInteractor', () => {
     });
   });
 
+  it('checks that the files to be zipped exist in persistence', async () => {
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: '123',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).toHaveBeenCalledTimes(2);
+  });
+
+  it('throws an error if a file to be zipped does not exist in persistence', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(false);
+
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: '123',
+    });
+
+    const errorCall = applicationContext.getNotificationGateway()
+      .sendNotificationToUser.mock.calls[0];
+
+    expect(errorCall).toBeTruthy();
+    expect(errorCall[0].message.error.message).toEqual(
+      `Batch Download Error: File ${mockCase.docketEntries[0].docketEntryId} for case ${mockCase.docketNumber} does not exist!`,
+    );
+  });
+
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
     user = {
       role: ROLES.petitioner,
       userId: 'abc-123',
     };
 
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
-    expect(applicationContext.logger.error).toHaveBeenCalledWith(
-      expect.anything(),
-    );
+    expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
@@ -129,8 +159,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('calls persistence functions to fetch trial sessions and associated cases and then zips their associated documents', async () => {
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
@@ -156,8 +185,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         },
       ]);
 
-    await batchDownloadTrialSessionInteractor({
-      applicationContext,
+    await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
     });
 
@@ -176,6 +204,45 @@ describe('batchDownloadTrialSessionInteractor', () => {
       extraFiles: [],
       fileNames: [],
       onEntry: expect.anything(),
+      onError: expect.anything(),
+      onProgress: expect.anything(),
+      onUploadStart: expect.anything(),
+      s3Ids: [],
+      uploadToTempBucket: true,
+      zipName: 'September_26_2019-Birmingham.zip',
+    });
+  });
+
+  it('should filter removed cases from batch', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          removedFromTrial: true,
+        },
+      ]);
+
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: '123',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .getCalendaredCasesForTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().zipDocuments,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      extraFileNames: [],
+      extraFiles: [],
+      fileNames: [],
+      onEntry: expect.anything(),
+      onError: expect.anything(),
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [],

@@ -5,6 +5,7 @@ const {
   INITIAL_DOCUMENT_TYPES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
+  UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const {
   isAuthorized,
@@ -44,7 +45,7 @@ const handleIrsSuperUser = ({
   key,
   petitionDocketEntry,
 }) => {
-  if (petitionDocketEntry && !petitionDocketEntry.servedAt) {
+  if (petitionDocketEntry && !isServed(petitionDocketEntry)) {
     throw new UnauthorizedError(
       'Unauthorized to view case documents until the petition has been served.',
     );
@@ -61,7 +62,11 @@ const handleIrsSuperUser = ({
 };
 
 const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
-  if (!isServed(docketEntryEntity)) {
+  const isUnservable = UNSERVABLE_EVENT_CODES.includes(
+    docketEntryEntity.eventCode,
+  );
+
+  if (!isServed(docketEntryEntity) && !isUnservable) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   } else if (
     docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
@@ -85,17 +90,16 @@ const getUserRoles = user => {
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document
  * @param {string} providers.key the key of the document
  * @returns {Array<string>} the filing type options based on user role
  */
-exports.getDownloadPolicyUrlInteractor = async ({
+exports.getDownloadPolicyUrlInteractor = async (
   applicationContext,
-  docketNumber,
-  key,
-}) => {
+  { docketNumber, key },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {

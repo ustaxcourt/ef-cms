@@ -60,9 +60,7 @@ describe('completeMessageInteractor', () => {
     });
 
     await expect(
-      completeMessageInteractor({
-        applicationContext,
-      }),
+      completeMessageInteractor(applicationContext, {}),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -86,8 +84,7 @@ describe('completeMessageInteractor', () => {
 
     const PARENT_MESSAGE_ID = 'b8ff88da-89fe-46a6-bc37-dc2100c7b2bd';
 
-    await completeMessageInteractor({
-      applicationContext,
+    await completeMessageInteractor(applicationContext, {
       message: 'the completed message',
       parentMessageId: PARENT_MESSAGE_ID,
     });

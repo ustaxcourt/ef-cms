@@ -33,7 +33,6 @@ exports.MOCK_CASE = {
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.new,
-  userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
 exports.MOCK_CASE_WITHOUT_PENDING = {
@@ -59,7 +58,6 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.new,
-  userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
 exports.MOCK_CASE_WITHOUT_NOTICE = {
@@ -178,7 +176,6 @@ exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: CASE_STATUS_TYPES.new,
-  userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
 exports.MOCK_CASE_WITH_TRIAL_SESSION = {
@@ -213,5 +210,66 @@ exports.MOCK_CASE_WITH_TRIAL_SESSION = {
   trialLocation: 'Washington, District of Columbia',
   trialSessionId: '7805d1ab-18d0-43ec-bafb-654e83405410',
   trialTime: '10:00',
-  userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+};
+
+exports.MOCK_ELIGIBLE_CASE = {
+  caseCaption: 'Guy Fieri & Gordon Ramsay, Petitioner',
+  caseType: CASE_TYPES_MAP.other,
+  docketNumber: '321-21',
+  docketNumberSuffix: 'W',
+  highPriority: true,
+  irsPractitioners: [],
+  privatePractitioners: [],
+};
+
+exports.MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
+  caseCaption: 'Guy Fieri & Gordon Ramsay, Petitioner',
+  caseType: CASE_TYPES_MAP.other,
+  docketNumber: '321-21',
+  docketNumberSuffix: 'W',
+  highPriority: true,
+  irsPractitioners: [
+    {
+      barNumber: 'VS0062',
+      contact: {
+        address1: '016 Miller Loop Apt. 494',
+        address2: 'Apt. 835',
+        address3: null,
+        city: 'Cristianville',
+        country: 'U.S.A.',
+        countryType: 'domestic',
+        phone: '001-016-669-6532x5946',
+        postalCode: '68117',
+        state: 'NE',
+      },
+      email: 'adam22@example.com',
+      entityName: 'IrsPractitioner',
+      name: 'Isaac Benson',
+      role: 'irsPractitioner',
+      serviceIndicator: 'Electronic',
+      userId: '020374b7-b274-462b-8a16-65783147efa9',
+    },
+  ],
+  privatePractitioners: [
+    {
+      barNumber: 'OK0063',
+      contact: {
+        address1: '5943 Joseph Summit',
+        address2: 'Suite 334',
+        address3: null,
+        city: 'Millermouth',
+        country: 'U.S.A.',
+        countryType: 'domestic',
+        phone: '348-858-8312',
+        postalCode: '99517',
+        state: 'AK',
+      },
+      email: 'thomastorres@example.com',
+      entityName: 'PrivatePractitioner',
+      name: 'Brandon Choi',
+      role: 'privatePractitioner',
+      serviceIndicator: 'Electronic',
+      userId: '3bcd5fb7-434e-4354-aa08-1d10846c1867',
+    },
+  ],
 };

@@ -6,18 +6,21 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const getDocumentOption = doc => {
+  const documentTitle = doc.title.substr(0, 100);
+
   return (
     <option key={doc.docketEntryId} value={`${doc.docketEntryId}`}>
-      {doc.createdAtFormatted} - {doc.title}
+      {doc.createdAtFormatted} - {documentTitle}
     </option>
   );
 };
 
 const getCorrespondenceOption = doc => {
   const title = doc.documentTitle || doc.documentType;
+  const documentTitle = title.substr(0, 100);
   return (
     <option key={doc.correspondenceId} value={`${doc.correspondenceId}`}>
-      {title}
+      {documentTitle}
     </option>
   );
 };
@@ -51,9 +54,9 @@ export const MessageModalAttachments = connect(
               />
               <span className="margin-left-1 semi-bold">Attachment(s)</span>
             </div>
-            {form.attachments.map((doc, idx) => {
+            {form.attachments.map(doc => {
               return (
-                <div className="margin-top-1" key={`${idx}-${doc.documentId}`}>
+                <div className="margin-top-1" key={doc.documentId}>
                   {doc.documentTitle}
                 </div>
               );

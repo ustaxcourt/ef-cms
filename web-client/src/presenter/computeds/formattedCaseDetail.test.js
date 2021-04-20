@@ -1,4 +1,5 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
@@ -10,7 +11,8 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const getDateISO = () => new Date().toISOString();
+const getDateISO = () =>
+  applicationContext.getUtilities().createISODateString();
 
 describe('formattedCaseDetail', () => {
   let globalUser;
@@ -374,6 +376,41 @@ describe('formattedCaseDetail', () => {
         showDocumentViewerLink: true,
         showEditDocketRecordEntry: false,
         showLinkToDocument: false,
+      },
+    ]);
+  });
+
+  it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
+    const DOCKET_NUMBER = '101-20';
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      contactSecondary: {
+        name: 'Bill',
+      },
+      correspondence: [],
+      docketEntries: simpleDocketEntries,
+      docketNumber: DOCKET_NUMBER,
+      hasVerifiedIrsNotice: false,
+      otherFilers: [],
+      otherPetitioners: [],
+      petitioners: [{ name: 'bob' }],
+      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
+    };
+
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        validationErrors: {},
+      },
+    });
+
+    expect(result.formattedDocketEntries).toMatchObject([
+      {
+        editDocketEntryMetaLink: `/case-detail/${DOCKET_NUMBER}/docket-entry/${simpleDocketEntries[0].index}/edit-meta`,
       },
     ]);
   });
@@ -907,7 +944,7 @@ describe('formattedCaseDetail', () => {
       };
       const caseDeadlines = [
         {
-          deadlineDate: new Date(),
+          deadlineDate: applicationContext.getUtilities().createISODateString(),
         },
       ];
 
@@ -2026,6 +2063,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2044,6 +2082,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
 
@@ -2060,6 +2101,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(true);
       expect(result.contactSecondary.showEAccessFlag).toEqual(true);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(true);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(true);
     });
 
@@ -2076,6 +2120,9 @@ describe('formattedCaseDetail', () => {
       expect(result.contactPrimary.showEAccessFlag).toEqual(false);
       expect(result.contactSecondary.showEAccessFlag).toEqual(false);
       expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
+      expect(result.otherFilers[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
       expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
   });
@@ -2377,6 +2424,7 @@ describe('formattedCaseDetail', () => {
         ],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2478,6 +2526,7 @@ describe('formattedCaseDetail', () => {
         docketEntries: [mockDocketEntry],
         otherFilers,
         otherPetitioners,
+        partyType: 'Petitioner',
       };
     });
 
@@ -2807,6 +2856,37 @@ describe('formattedCaseDetail', () => {
             scenario: 'Standard',
             userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
           },
+          {
+            attachments: false,
+            certificateOfService: false,
+            certificateOfServiceDate: null,
+            createdAt: '2020-09-18T17:38:32.417Z',
+            docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
+            docketNumber: '169-20',
+            documentTitle: 'Hearing',
+            documentType: 'Hearing before',
+            draftOrderState: null,
+            entityName: 'DocketEntry',
+            eventCode: 'HEAR',
+            filedBy: 'Resp.',
+            filingDate: '2020-09-18T17:38:32.418Z',
+            hasSupportingDocuments: false,
+            index: 5,
+            isDraft: false,
+            isFileAttached: true,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            isStricken: false,
+            numberOfPages: 2,
+            partyIrsPractitioner: true,
+            pending: true,
+            privatePractitioners: [],
+            processingStatus: 'complete',
+            receivedAt: '2020-09-18T17:38:32.418Z',
+            relationship: 'primaryDocument',
+            scenario: 'Standard',
+            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+          },
         ],
         docketNumber: '169-20',
         docketNumberSuffix: 'L',
@@ -2883,13 +2963,22 @@ describe('formattedCaseDetail', () => {
         {
           isOnDocketRecord: true,
         },
+        {
+          isOnDocketRecord: true,
+        },
       ]);
 
       expect(result.formattedPendingDocketEntriesOnDocketRecord.length).toEqual(
-        1,
+        2,
       );
       expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
         {
+          eventCode: 'PSDE',
+          isOnDocketRecord: true,
+          pending: true,
+        },
+        {
+          eventCode: 'HEAR',
           isOnDocketRecord: true,
           pending: true,
         },
@@ -3600,6 +3689,74 @@ describe('formattedCaseDetail', () => {
     });
   });
 
+  describe('qcNeeded', () => {
+    const mockDocketEntry = {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-18',
+      documentTitle: 'Petition',
+      documentType: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.documentType,
+      eventCode: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.eventCode,
+      filedBy: 'Test Petitioner',
+      filingDate: '2018-03-01T00:01:00.000Z',
+      index: 1,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T00:01:00.000Z',
+      servedAt: '2020-04-29T15:51:29.168Z',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      workItem: {
+        completedAt: undefined,
+        isRead: false,
+      },
+    };
+
+    it('should set qcNeeded to true when work item is not read', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [mockDocketEntry],
+            docketNumber: '123-45',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        qcNeeded: true,
+      });
+    });
+
+    it('should set qcNeeded to false when qcWorkItemsUntouched is true and work item is read', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                workItem: {
+                  completedAt: '2020-04-29T15:51:29.168Z',
+                  isRead: true,
+                },
+              },
+            ],
+            docketNumber: '123-45',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        qcNeeded: false,
+      });
+    });
+  });
+
   it('should sort hearings by the addedToSessionAt field', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -3681,6 +3838,58 @@ describe('formattedCaseDetail', () => {
       addedToSessionAt: '2020-04-19T17:29:13.120Z',
       calendarNotes: 'THIRD',
       trialSessionId: '345',
+    });
+  });
+
+  describe('showBlockedTag', () => {
+    it('should be true when blocked is true', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            blocked: true,
+            blockedDate: '2019-04-19T17:29:13.120Z',
+            blockedReason: 'because',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be true when blocked is false, automaticBlocked is true, and case status is NOT calendared', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: STATUS_TYPES.new,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be false when blocked is false, automaticBlocked is true, and case status is calendared', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: STATUS_TYPES.calendared,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeFalsy();
     });
   });
 });

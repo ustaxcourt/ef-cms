@@ -24,7 +24,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       postalCode: '12345',
       state: 'CA',
     },
-    createdAt: new Date().toISOString(),
+    createdAt: applicationContext.getUtilities().createISODateString(),
     docketEntries: [
       {
         docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -86,8 +86,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     });
 
     await expect(
-      removePdfFromDocketEntryInteractor({
-        applicationContext,
+      removePdfFromDocketEntryInteractor(applicationContext, {
         docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -95,8 +94,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
   });
 
   it('should fetch the case by the provided docketNumber', async () => {
-    await removePdfFromDocketEntryInteractor({
-      applicationContext,
+    await removePdfFromDocketEntryInteractor(applicationContext, {
       docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -107,8 +105,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
   });
 
   it('should delete the pdf from s3 and update the case if the docketEntry has a file attached', async () => {
-    await removePdfFromDocketEntryInteractor({
-      applicationContext,
+    await removePdfFromDocketEntryInteractor(applicationContext, {
       docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416', // entry with isFileAttached: true
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -123,8 +120,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
   });
 
   it('should set the docketEntry isFileAttached flag to false', async () => {
-    await removePdfFromDocketEntryInteractor({
-      applicationContext,
+    await removePdfFromDocketEntryInteractor(applicationContext, {
       docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -139,8 +135,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
   });
 
   it('does not modify the docketEntry or case if the isFileAttachedFlag is false', async () => {
-    await removePdfFromDocketEntryInteractor({
-      applicationContext,
+    await removePdfFromDocketEntryInteractor(applicationContext, {
       docketEntryId: '1905d1ab-18d0-43ec-bafb-654e83405491', // entry with isFileAttached: false
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -155,8 +150,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
   });
 
   it('does not modify the docketEntry or case if the docketEntry can not be found on the case', async () => {
-    await removePdfFromDocketEntryInteractor({
-      applicationContext,
+    await removePdfFromDocketEntryInteractor(applicationContext, {
       docketEntryId: 'nope',
       docketNumber: MOCK_CASE.docketNumber,
     });

@@ -9,16 +9,21 @@ const {
 const { UNSERVABLE_EVENT_CODES } = require('../EntityConstants');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
+const courtIssuedDocumentDecorator = (obj, rawObj) => {
+  obj.attachments = rawObj.attachments || false;
+  obj.documentTitle = rawObj.documentTitle;
+  obj.documentType = rawObj.documentType;
+  obj.eventCode = rawObj.eventCode;
+  obj.filingDate = rawObj.filingDate;
+};
+
 /**
  * @param {object} rawProps the raw document data
  * @constructor
  */
 function CourtIssuedDocumentDefault() {}
 CourtIssuedDocumentDefault.prototype.init = function init(rawProps) {
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
-  this.eventCode = rawProps.eventCode;
-  this.filingDate = rawProps.filingDate;
+  courtIssuedDocumentDecorator(this, rawProps);
 };
 
 CourtIssuedDocumentDefault.prototype.getDocumentTitle = function () {
@@ -26,6 +31,7 @@ CourtIssuedDocumentDefault.prototype.getDocumentTitle = function () {
 };
 
 CourtIssuedDocumentDefault.schema = {
+  attachments: joi.boolean().required(),
   documentTitle: JoiValidationConstants.STRING.optional(),
   documentType: JoiValidationConstants.STRING.required(),
   eventCode: JoiValidationConstants.STRING.optional(),
@@ -47,4 +53,5 @@ joiValidationDecorator(
 
 module.exports = {
   CourtIssuedDocumentDefault: validEntityDecorator(CourtIssuedDocumentDefault),
+  courtIssuedDocumentDecorator,
 };

@@ -88,8 +88,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     });
 
     await expect(
-      deleteCounselFromCaseInteractor({
-        applicationContext,
+      deleteCounselFromCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
       }),
@@ -97,8 +96,7 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('deletes a practitioner with the given userId from the associated case', async () => {
-    await deleteCounselFromCaseInteractor({
-      applicationContext,
+    await deleteCounselFromCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       userId: '141d4c7c-4302-465d-89bd-3bc8ae16f07d',
     });
@@ -112,8 +110,7 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('deletes an irsPractitioner with the given userId from the associated case', async () => {
-    await deleteCounselFromCaseInteractor({
-      applicationContext,
+    await deleteCounselFromCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       userId: 'bfd97089-cda0-45e0-8454-dd879023d0af',
     });
@@ -128,11 +125,112 @@ describe('deleteCounselFromCaseInteractor', () => {
 
   it('throws an error if the userId is not a privatePractitioner or irsPractitioner role', async () => {
     await expect(
-      deleteCounselFromCaseInteractor({
-        applicationContext,
+      deleteCounselFromCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         userId: '835f072c-5ea1-493c-acb8-d67b05c96f85',
       }),
     ).rejects.toThrow('User is not a practitioner');
+  });
+
+  it('should set the contactPrimary.serviceIndicator to Electronic if the case was e-filed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          serviceIndicator: 'None',
+        },
+        privatePractitioners: [mockPrivatePractitioners[0]],
+      });
+
+    const updatedCase = await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+    );
+
+    expect(updatedCase.contactPrimary.serviceIndicator).toEqual('Electronic');
+  });
+
+  it('should set the contactPrimary.serviceIndicator to Paper if the case was paper', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          serviceIndicator: 'None',
+        },
+        isPaper: true,
+        mailingDate: '04/16/2019',
+        privatePractitioners: [mockPrivatePractitioners[0]],
+      });
+
+    const updatedCase = await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+    );
+
+    expect(updatedCase.contactPrimary.serviceIndicator).toEqual('Paper');
+  });
+
+  it('should set the contactSecondary.serviceIndicator to Paper if the case was paper', async () => {
+    const caseToReturn = {
+      ...MOCK_CASE,
+      associatedJudge: 'Buch',
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+        serviceIndicator: 'None',
+      },
+      contactSecondary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+        countryType: 'domestic',
+        email: 'petitioner@example.com',
+        name: 'Test Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        serviceIndicator: 'None',
+        state: 'TN',
+        title: 'Executor',
+      },
+      mailingDate: '04/16/2019',
+      partyType: 'Petitioner & spouse',
+      privatePractitioners: [
+        {
+          ...mockPrivatePractitioners[0],
+          representing: [
+            '3805d1ab-18d0-43ec-bafb-654e83405416',
+            '7805d1ab-18d0-43ec-bafb-654e83405416',
+          ],
+        },
+      ],
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(caseToReturn);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mockImplementation(
+        ({ caseToUpdate }) => caseToUpdate,
+      );
+
+    const updatedCase = await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+    );
+
+    expect(updatedCase.contactSecondary.serviceIndicator).toEqual('Paper');
   });
 });

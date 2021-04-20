@@ -1,6 +1,6 @@
 const {
   MAX_SEARCH_RESULTS,
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ROLES,
 } = require('../../business/entities/EntityConstants');
 const {
@@ -46,15 +46,12 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
 
     await expect(
-      opinionAdvancedSearchInteractor({
-        applicationContext,
-      }),
+      opinionAdvancedSearchInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('returns results with an authorized user role (petitionsclerk)', async () => {
-    const result = await opinionAdvancedSearchInteractor({
-      applicationContext,
+    const result = await opinionAdvancedSearchInteractor(applicationContext, {
       keyword: 'candy',
       startDate: '2001-01-01',
     });
@@ -95,8 +92,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
-    const results = await opinionAdvancedSearchInteractor({
-      applicationContext,
+    const results = await opinionAdvancedSearchInteractor(applicationContext, {
       keyword: 'keyword',
       petitionerName: 'test person',
     });
@@ -107,8 +103,7 @@ describe('opinionAdvancedSearchInteractor', () => {
   it('searches for documents that are of type opinions', async () => {
     const keyword = 'keyword';
 
-    await opinionAdvancedSearchInteractor({
-      applicationContext,
+    await opinionAdvancedSearchInteractor(applicationContext, {
       keyword,
       startDate: '2001-01-01',
     });
@@ -117,7 +112,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: OPINION_EVENT_CODES,
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     });
   });
 });

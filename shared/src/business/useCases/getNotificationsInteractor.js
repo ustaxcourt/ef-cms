@@ -3,15 +3,15 @@ const { CHIEF_JUDGE, ROLES } = require('../entities/EntityConstants');
 /**
  * getNotificationsInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.judgeUser optional judgeUser for additional filtering
  * @returns {object} inbox unread message counts for the individual and section inboxes
  */
-exports.getNotificationsInteractor = async ({
+exports.getNotificationsInteractor = async (
   applicationContext,
-  judgeUserId,
-}) => {
+  { judgeUserId },
+) => {
   const appContextUser = applicationContext.getCurrentUser();
   const currentUser = await applicationContext
     .getPersistenceGateway()

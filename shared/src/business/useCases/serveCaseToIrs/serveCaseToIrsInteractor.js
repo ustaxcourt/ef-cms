@@ -85,15 +85,15 @@ const addDocketEntries = ({ caseEntity }) => {
 /**
  * serveCaseToIrsInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-exports.serveCaseToIrsInteractor = async ({
+exports.serveCaseToIrsInteractor = async (
   applicationContext,
-  docketNumber,
-}) => {
+  { docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
@@ -184,7 +184,7 @@ exports.serveCaseToIrsInteractor = async ({
 
   initializeCaseWorkItem.setAsCompleted({
     message: 'Served to IRS',
-    user: user,
+    user,
   });
 
   await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
@@ -211,20 +211,16 @@ exports.serveCaseToIrsInteractor = async ({
 
   for (const doc of caseEntityToUpdate.docketEntries) {
     if (doc.isFileAttached) {
-      await applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        docketEntryId: doc.docketEntryId,
-        docketNumber: caseEntityToUpdate.docketNumber,
-        replaceCoversheet: !caseEntityToUpdate.isPaper,
-        useInitialData: !caseEntityToUpdate.isPaper,
-      });
-
-      doc.numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({
-          applicationContext,
+      const updatedDocketEntry = await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
           docketEntryId: doc.docketEntryId,
+          docketNumber: caseEntityToUpdate.docketNumber,
+          replaceCoversheet: !caseEntityToUpdate.isPaper,
+          useInitialData: !caseEntityToUpdate.isPaper,
         });
+
+      caseEntityToUpdate.updateDocketEntry(updatedDocketEntry);
     }
   }
 
@@ -323,7 +319,7 @@ exports.serveCaseToIrsInteractor = async ({
 
   const caseConfirmationPdfName = caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
 
-  await new Promise(resolve => {
+  await new Promise((resolve, reject) => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
     const s3Client = applicationContext.getStorageClient();
 
@@ -334,7 +330,17 @@ exports.serveCaseToIrsInteractor = async ({
       Key: caseConfirmationPdfName,
     };
 
-    s3Client.upload(params, resolve);
+    s3Client.upload(params, function (err) {
+      if (err) {
+        applicationContext.logger.error(
+          'An error occurred while attempting to upload to S3',
+          err,
+        );
+        reject(err);
+      }
+
+      resolve();
+    });
   });
 
   let urlToReturn;

@@ -296,4 +296,42 @@ describe('case information helper', () => {
       expect(result.showSealAddressLink).toEqual(false);
     });
   });
+
+  describe('showEmail', () => {
+    const mockEmail = 'error@example.com';
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+
+    it('should be true when the case contact primary has an email', () => {
+      const { showEmail } = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            contactPrimary: {
+              email: mockEmail,
+            },
+          },
+          form: {},
+        },
+      });
+      expect(showEmail).toBeTruthy();
+    });
+
+    it('should be false when the case contact primary does not have an email', () => {
+      const { showEmail } = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            contactPrimary: {
+              pendingEmail: mockEmail,
+            },
+          },
+          form: {},
+        },
+      });
+      expect(showEmail).toBeFalsy();
+    });
+  });
 });

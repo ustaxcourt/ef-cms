@@ -12,6 +12,7 @@ const { FORMATS } = require('../business/utilities/DateHandler');
 const STRING = joi.string().min(1);
 exports.JoiValidationConstants = deepFreeze({
   CASE_CAPTION: STRING.max(4700),
+  DATE: joi.date().iso().format([FORMATS.YYYYMMDD]),
   DOCKET_NUMBER: STRING.regex(DOCKET_NUMBER_MATCHER),
   DOCKET_RECORD: joi
     .array()
@@ -21,9 +22,7 @@ exports.JoiValidationConstants = deepFreeze({
     ),
   DOCUMENT_TITLE: STRING.max(3000),
   EMAIL: STRING.email({ tlds: false }).max(100),
-  // eslint-disable-next-line spellcheck/spell-checker
-  // TODO: remove FORMATS.YYYYMMDD from valid timestamp formats after devex task
-  ISO_DATE: joi.date().iso().format([FORMATS.ISO, FORMATS.YYYYMMDD]),
+  ISO_DATE: joi.date().iso().format([FORMATS.ISO]),
   MAX_FILE_SIZE_BYTES: joi.number().integer().min(1).max(MAX_FILE_SIZE_BYTES),
   STRING,
   TWENTYFOUR_HOUR_MINUTES: STRING.regex(

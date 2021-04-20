@@ -33,8 +33,8 @@ echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
 
 tf_version=$(terraform --version)
 
-if [[ ${tf_version} != *"0.12.28"* ]]; then
-  echo "Please set your terraform version to 0.12.28 before deploying."
+if [[ ${tf_version} != *"0.14.9"* ]]; then
+  echo "Please set your terraform version to 0.14.9 before deploying."
   exit 1
 fi
 
@@ -63,7 +63,7 @@ npm run build:assets
 set -eo pipefail
 # build the cognito authorizer, api, and api-public with parcel
 pushd ../template/lambdas
-npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-minify --no-source-maps
+npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-source-maps
 popd
 
 
@@ -100,7 +100,6 @@ export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
-export TF_VAR_honeybadger_key=$CIRCLE_HONEYBADGER_API_KEY
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_deploying_color=$DEPLOYING_COLOR
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
@@ -114,5 +113,5 @@ export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform plan
-terraform apply --auto-approve
+terraform plan -out execution-plan
+terraform apply --auto-approve execution-plan

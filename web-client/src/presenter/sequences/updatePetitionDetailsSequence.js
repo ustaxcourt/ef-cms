@@ -1,15 +1,14 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
-import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseDetailShowEditPetitionFalseAction } from '../actions/setCaseDetailShowEditPetitionFalseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { state } from 'cerebral';
 import { updatePetitionDetailsAction } from '../actions/updatePetitionDetailsAction';
 import { validatePetitionDetailsAction } from '../actions/validatePetitionDetailsAction';
 
@@ -24,7 +23,7 @@ export const updatePetitionDetailsSequence = [
       setCaseTypeAction,
       updatePetitionDetailsAction,
       setCaseAction,
-      set(state.currentViewMetadata.caseDetail.showEditPetition, false),
+      setCaseDetailShowEditPetitionFalseAction,
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
       setAlertErrorAction,

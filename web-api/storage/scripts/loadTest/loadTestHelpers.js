@@ -1,3 +1,4 @@
+/* eslint-disable @miovision/disallow-date/no-new-date */
 const faker = require('faker');
 const {
   CASE_TYPES_MAP,
@@ -44,18 +45,19 @@ const createTrialSession = async ({ applicationContext }) => {
 
   let trialLocation = faker.random.arrayElement(TRIAL_CITY_STRINGS);
 
-  return await applicationContext.getUseCases().createTrialSessionInteractor({
-    applicationContext,
-    trialSession: {
-      isCalendared: false,
-      maxCases: 100,
-      sessionType: 'Hybrid',
-      startDate: startDate.toISOString(),
-      term,
-      termYear: `${startDateObj.getFullYear()}`,
-      trialLocation,
-    },
-  });
+  return await applicationContext
+    .getUseCases()
+    .createTrialSessionInteractor(applicationContext, {
+      trialSession: {
+        isCalendared: false,
+        maxCases: 100,
+        sessionType: 'Hybrid',
+        startDate: startDate.toISOString(),
+        term,
+        termYear: `${startDateObj.getFullYear()}`,
+        trialLocation,
+      },
+    });
 };
 
 const createCase = async ({
@@ -102,8 +104,7 @@ const createCase = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .createCaseInteractor({
-      applicationContext,
+    .createCaseInteractor(applicationContext, {
       petitionFileId,
       petitionMetadata: {
         caseCaption: petitionerName,
@@ -130,11 +131,13 @@ const createCase = async ({
     });
 
   const addCoversheet = docketEntry => {
-    return applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: caseDetail.docketNumber,
-    });
+    return applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        applicationContext,
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumber: caseDetail.docketNumber,
+      });
   };
 
   for (const docketEntry of caseDetail.docketEntries) {
@@ -161,8 +164,7 @@ const addCaseToTrialSession = async ({
 }) => {
   return await applicationContext
     .getUseCases()
-    .addCaseToTrialSessionInteractor({
-      applicationContext,
+    .addCaseToTrialSessionInteractor(applicationContext, {
       docketNumber,
       trialSessionId,
     });

@@ -25,7 +25,6 @@ const { v4: uuidv4 } = require('uuid');
 describe('serveCourtIssuedDocumentInteractor', () => {
   let extendCase;
 
-  const mockPdfUrl = 'www.example.com';
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
 
   const mockUser = {
@@ -197,9 +196,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
-    applicationContext
-      .getPersistenceGateway()
       .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
     applicationContext
       .getUseCaseHelpers()
@@ -249,8 +245,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
-      serveCourtIssuedDocumentInteractor({
-        applicationContext,
+      serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
         docketNumber: '101-20',
       }),
@@ -263,8 +258,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
-      serveCourtIssuedDocumentInteractor({
-        applicationContext,
+      serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
         docketNumber: '000-00',
       }),
@@ -273,8 +267,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   it('should throw a Not Found error if the document can not be found', async () => {
     await expect(
-      serveCourtIssuedDocumentInteractor({
-        applicationContext,
+      serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
         docketNumber: '101-20',
       }),
@@ -282,8 +275,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       docketNumber: '101-20',
     });
@@ -309,8 +301,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the number of pages present in the document to be served', async () => {
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: '101-20',
     });
@@ -333,8 +324,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .saveDocumentFromLambda.mockImplementation(() => {});
 
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumber: '101-20',
     });
@@ -357,32 +347,31 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call sendBulkTemplatedEmail, sending an email to all electronically-served parties, and should not return paperServicePdfData', async () => {
-    const result = await serveCourtIssuedDocumentInteractor({
+  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: 'localhost:1234',
+      });
+
+    const result = await serveCourtIssuedDocumentInteractor(
       applicationContext,
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumber: '101-20',
-    });
+      {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        docketNumber: '101-20',
+      },
+    );
 
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
-    expect(result).toBeUndefined();
-  });
-
-  it('should return paperServicePdfData when there are paper service parties on the case', async () => {
-    const result = await serveCourtIssuedDocumentInteractor({
-      applicationContext,
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumber: '102-20',
+    expect(result).toEqual({
+      pdfUrl: 'localhost:1234',
     });
-
-    expect(result.pdfUrl).toBe(mockPdfUrl.url);
   });
 
   it('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       docketNumber: '102-20',
     });
@@ -438,14 +427,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
     extendCase.trialDate = '2019-11-27T05:00:00.000Z';
 
-    await serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
       docketNumber: '101-20',
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
@@ -454,8 +442,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
-      await serveCourtIssuedDocumentInteractor({
-        applicationContext,
+      await serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: docketEntry.docketEntryId,
         docketNumber: '101-20',
       });

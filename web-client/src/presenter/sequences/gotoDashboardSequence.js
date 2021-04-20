@@ -1,4 +1,5 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
+import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
@@ -11,7 +12,6 @@ import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { set } from 'cerebral/factories';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -20,8 +20,9 @@ import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsActio
 import { setMessagesAction } from '../actions/setMessagesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
-import { state } from 'cerebral';
+import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
+
 const { USER_ROLES } = getConstants();
 
 const proceedToMessages = [navigateToMessagesAction];
@@ -33,7 +34,7 @@ const goToDashboard = [
   closeMobileMenuAction,
   getUserAction,
   setUserAction,
-  set(state.selectedWorkItems, []),
+  clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   runPathForUserRoleAction,
   {
@@ -63,10 +64,21 @@ const goToDashboard = [
     general: [navigateToSectionDocumentQCAction],
     inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
     irsPractitioner: [
-      setDefaultCaseTypeToDisplayAction,
-      getOpenAndClosedCasesByUserAction,
-      setCasesAction,
-      setCurrentPageAction('DashboardRespondent'),
+      startWebSocketConnectionAction,
+      {
+        error: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesByUserAction,
+          setCasesAction,
+          setCurrentPageAction('DashboardRespondent'),
+        ],
+        success: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesByUserAction,
+          setCasesAction,
+          setCurrentPageAction('DashboardRespondent'),
+        ],
+      },
     ],
     irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
     judge: [
@@ -83,10 +95,21 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPetitioner'),
     ],
     privatePractitioner: [
-      setDefaultCaseTypeToDisplayAction,
-      getOpenAndClosedCasesByUserAction,
-      setCasesAction,
-      setCurrentPageAction('DashboardPractitioner'),
+      startWebSocketConnectionAction,
+      {
+        error: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesByUserAction,
+          setCasesAction,
+          setCurrentPageAction('DashboardPractitioner'),
+        ],
+        success: [
+          setDefaultCaseTypeToDisplayAction,
+          getOpenAndClosedCasesByUserAction,
+          setCasesAction,
+          setCurrentPageAction('DashboardPractitioner'),
+        ],
+      },
     ],
   },
 ];

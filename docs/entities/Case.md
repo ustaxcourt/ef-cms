@@ -65,7 +65,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "Date that this Document was filed."
               rules: 
@@ -161,7 +160,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
               whens: 
                 - 
                   ref: 
@@ -191,7 +189,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "When the Document was added to the system."
             date: 
@@ -199,7 +196,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "An optional date used when generating a fully concatenated document title."
               allow: 
@@ -1416,7 +1412,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "Date that this Document was filed."
               rules: 
@@ -2181,7 +2176,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
             qcByUserId: 
               type: "string"
@@ -2205,7 +2199,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
             relationship: 
               type: "string"
@@ -2253,14 +2246,6 @@
                 - "Type F"
                 - "Type G"
                 - "Type H"
-            secondaryDate: 
-              type: "date"
-              flags: 
-                format: 
-                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
-                description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
             secondaryDocument: 
               type: "object"
               flags: 
@@ -3035,14 +3020,12 @@
                     flags: 
                       format: 
                         - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                        - "YYYY-MM-DD"
                       presence: "required"
                   otherwise: 
                     type: "date"
                     flags: 
                       format: 
                         - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                        - "YYYY-MM-DD"
                       presence: "optional"
             servedParties: 
               type: "array"
@@ -3154,7 +3137,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "Used by certificate of service documents to construct the document title."
               rules: 
@@ -3441,7 +3423,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "Date that this Docket Record item was stricken."
               rules: 
@@ -3535,6 +3516,78 @@
         - 
           tags: 
             - "Restricted"
+    automaticBlocked: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+        description: "Temporarily blocked from trial due to a pending item or due date."
+    automaticBlockedDate: 
+      type: "date"
+      flags: 
+        format: 
+          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "automaticBlocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
+    automaticBlockedReason: 
+      type: "string"
+      flags: 
+        only: true
+        description: "The reason the case was automatically blocked from trial."
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "Due Date"
+        - "Pending Item"
+        - "Pending Item and Due Date"
+      whens: 
+        - 
+          ref: 
+            path: 
+              - "automaticBlocked"
+          is: 
+            type: "any"
+            flags: 
+              only: true
+              presence: "required"
+            allow: 
+              - 
+                override: true
+              - true
+          then: 
+            type: "any"
+            flags: 
+              presence: "required"
+          otherwise: 
+            type: "any"
+            flags: 
+              presence: "optional"
+            allow: 
+              - null
     caseCaption: 
       type: "string"
       flags: 
@@ -3653,7 +3706,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "Date that this Document was filed."
               rules: 
@@ -3681,7 +3733,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "required"
         description: "When the paper or electronic case was added to the system. This value cannot be edited."
     damages: 
@@ -3764,7 +3815,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
               whens: 
                 - 
                   ref: 
@@ -3794,7 +3844,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "When the Document was added to the system."
             date: 
@@ -3802,7 +3851,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "An optional date used when generating a fully concatenated document title."
               allow: 
@@ -5019,7 +5067,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "Date that this Document was filed."
               rules: 
@@ -5784,7 +5831,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
             qcByUserId: 
               type: "string"
@@ -5808,7 +5854,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
             relationship: 
               type: "string"
@@ -5856,14 +5901,6 @@
                 - "Type F"
                 - "Type G"
                 - "Type H"
-            secondaryDate: 
-              type: "date"
-              flags: 
-                format: 
-                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
-                description: "A secondary date associated with the document, typically related to time-restricted availability. Used to build the document title for TRAN documents."
             secondaryDocument: 
               type: "object"
               flags: 
@@ -6638,14 +6675,12 @@
                     flags: 
                       format: 
                         - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                        - "YYYY-MM-DD"
                       presence: "required"
                   otherwise: 
                     type: "date"
                     flags: 
                       format: 
                         - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                        - "YYYY-MM-DD"
                       presence: "optional"
             servedParties: 
               type: "array"
@@ -6757,7 +6792,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "Used by certificate of service documents to construct the document title."
               rules: 
@@ -7044,7 +7078,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "Date that this Docket Record item was stricken."
               rules: 
@@ -7294,7 +7327,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
         description: "Last date that the petitioner is allowed to file before."
       rules: 
@@ -7769,7 +7801,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
         description: "Reminder for clerks to review the notice of trial date."
     orderDesignatingPlaceOfTrial: 
@@ -70578,7 +70609,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         description: "When the petitioner paid the case fee."
       whens: 
         - 
@@ -70599,7 +70629,6 @@
             flags: 
               format: 
                 - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
             rules: 
               - 
@@ -70654,7 +70683,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         description: "When the case fee was waived."
       whens: 
         - 
@@ -70675,7 +70703,6 @@
             flags: 
               format: 
                 - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
             rules: 
               - 
@@ -71236,7 +71263,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "required"
         description: "When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited."
     sealedDate: 
@@ -71244,7 +71270,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
         description: "When the case was sealed from the public."
       allow: 
@@ -71416,7 +71441,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 description: "Last date of the statistics period."
               rules: 
                 - 
@@ -71514,101 +71538,6 @@
         - 
           tags: 
             - "Restricted"
-    automaticBlocked: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-        description: "Temporarily blocked from trial due to a pending item or due date."
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "status"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - "Calendared"
-          then: 
-            type: "any"
-            invalid: 
-              - true
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-    automaticBlockedDate: 
-      type: "date"
-      flags: 
-        format: 
-          - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "automaticBlocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
-    automaticBlockedReason: 
-      type: "string"
-      flags: 
-        only: true
-        description: "The reason the case was automatically blocked from trial."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-      allow: 
-        - "Due Date"
-        - "Pending Item"
-        - "Pending Item and Due Date"
-      whens: 
-        - 
-          ref: 
-            path: 
-              - "automaticBlocked"
-          is: 
-            type: "any"
-            flags: 
-              only: true
-              presence: "required"
-            allow: 
-              - 
-                override: true
-              - true
-          then: 
-            type: "any"
-            flags: 
-              presence: "required"
-          otherwise: 
-            type: "any"
-            flags: 
-              presence: "optional"
-            allow: 
-              - null
     blocked: 
       type: "boolean"
       flags: 
@@ -71645,7 +71574,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
       metas: 
         - 
           tags: 
@@ -71720,7 +71648,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
       whens: 
         - 
           ref: 
@@ -71765,14 +71692,12 @@
             flags: 
               format: 
                 - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "required"
           otherwise: 
             type: "date"
             flags: 
               format: 
                 - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                - "YYYY-MM-DD"
               presence: "optional"
             allow: 
               - null
@@ -71975,25 +71900,5 @@
       flags: 
         presence: "optional"
         description: "Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process)."
-    userId: 
-      type: "string"
-      flags: 
-        presence: "required"
-        description: "The unique ID of the User who added the case to the system."
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "guid"
-          args: 
-            options: 
-              version: 
-                - "uuidv4"
-      metas: 
-        - 
-          tags: 
-            - "Restricted"
 
  ```

@@ -47,6 +47,7 @@ resource "aws_iam_role_policy" "migration_policy" {
                 "dynamodb:GetShardIterator",
                 "dynamodb:ListShards",
                 "dynamodb:ListStreams",
+                "dynamodb:Query",
                 "dynamodb:PutItem",
                 "dynamodb:Scan"
             ],
@@ -60,7 +61,9 @@ resource "aws_iam_role_policy" "migration_policy" {
             "Action": [
                 "sqs:DeleteMessage",
                 "sqs:SendMessage",
-                "sqs:SendMessageBatch"
+                "sqs:SendMessageBatch",
+                "sqs:ReceiveMessage",
+                "sqs:GetQueueAttributes"
             ],
             "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
             "Effect": "Allow"
@@ -119,6 +122,7 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
                 "dynamodb:ListShards",
                 "dynamodb:ListStreams",
                 "dynamodb:PutItem",
+                "dynamodb:Query",
                 "dynamodb:Scan"
             ],
             "Resource": [
@@ -131,7 +135,9 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
             "Action": [
                 "sqs:DeleteMessage",
                 "sqs:SendMessage",
-                "sqs:SendMessageBatch"
+                "sqs:SendMessageBatch",
+                "sqs:ReceiveMessage",
+                "sqs:GetQueueAttributes"
             ],
             "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
             "Effect": "Allow"

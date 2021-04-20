@@ -11,18 +11,26 @@ const {
   ORDER_TYPES,
   PETITIONS_SECTION,
   ROLES,
+  SERVED_PARTIES_CODES,
   TRANSCRIPT_EVENT_CODE,
 } = require('./EntityConstants');
+const {
+  DocketEntry,
+  getServedPartiesCode,
+  isServed,
+} = require('./DocketEntry');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { DocketEntry, isServed } = require('./DocketEntry');
 const { omit } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
 describe('DocketEntry entity', () => {
   const A_VALID_DOCKET_ENTRY = {
+    createdAt: '2020-07-17T19:28:29.675Z',
+    docketEntryId: '0f5e035c-efa8-49e4-ba69-daf8a166a98f',
     documentType: 'Petition',
     eventCode: 'A',
     filedBy: 'Test Petitioner',
+    receivedAt: '2020-07-17T19:28:29.675Z',
     role: ROLES.petitioner,
     userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
   };
@@ -150,6 +158,48 @@ describe('DocketEntry entity', () => {
     });
   });
 
+  describe('getServedPartiesCode', () => {
+    it('returns an empty string if servedParties is undefined', () => {
+      const servedPartiesCode = getServedPartiesCode();
+      expect(servedPartiesCode).toEqual('');
+    });
+
+    it('returns an empty string if servedParties is an empty array', () => {
+      const servedPartiesCode = getServedPartiesCode([]);
+      expect(servedPartiesCode).toEqual('');
+    });
+
+    it('returns the servedParties code for respondent if the only party in the given servedParties array has the irsSuperUser role', () => {
+      const servedPartiesCode = getServedPartiesCode([
+        {
+          role: ROLES.irsSuperuser,
+        },
+      ]);
+      expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.RESPONDENT);
+    });
+
+    it('returns the servedParties code for both if the only party in the given servedParties array does not have the irsSuperUser role', () => {
+      const servedPartiesCode = getServedPartiesCode([
+        {
+          role: ROLES.petitioner,
+        },
+      ]);
+      expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
+    });
+
+    it('returns the servedParties code for both if the the given servedParties array contains multiple servedParties', () => {
+      const servedPartiesCode = getServedPartiesCode([
+        {
+          role: ROLES.irsSuperuser,
+        },
+        {
+          role: ROLES.petitioner,
+        },
+      ]);
+      expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
+    });
+  });
+
   describe('signedAt', () => {
     it('should implicitly set a signedAt for Notice event codes', () => {
       const myDoc = new DocketEntry(
@@ -251,7 +301,7 @@ describe('DocketEntry entity', () => {
           assigneeName: 'bob',
           caseStatus: CASE_STATUS_TYPES.NEW,
           caseTitle: 'Johnny Joe Jacobson',
-          docketEntry: {},
+          docketEntry: A_VALID_DOCKET_ENTRY,
           docketNumber: '101-18',
           section: PETITIONS_SECTION,
           sentBy: 'bob',
@@ -386,27 +436,12 @@ describe('DocketEntry entity', () => {
       expect(error).toBeUndefined();
     });
 
-    it('should correctly validate with a secondaryDate', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
-          eventCode: TRANSCRIPT_EVENT_CODE,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
-        },
-        { applicationContext },
-      );
-      expect(docketEntry.isValid()).toBeTruthy();
-      expect(docketEntry.secondaryDate).toBeDefined();
-    });
-
     describe('handling of sealed legacy documents', () => {
       it('should pass validation when "isLegacySealed", "isLegacy", and "isSealed" are undefined', () => {
         const docketEntry = new DocketEntry(
           {
             ...A_VALID_DOCKET_ENTRY,
             docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
-            secondaryDate: '2019-03-01T21:40:46.415Z',
           },
           { applicationContext },
         );
@@ -419,7 +454,6 @@ describe('DocketEntry entity', () => {
             ...A_VALID_DOCKET_ENTRY,
             docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
             isLegacySealed: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
           },
           { applicationContext },
         );
@@ -440,7 +474,6 @@ describe('DocketEntry entity', () => {
             isLegacy: true,
             isLegacySealed: true,
             isSealed: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: '2019-03-01T21:40:46.415Z',
             signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
             signedJudgeName: 'A Judge',
@@ -458,7 +491,6 @@ describe('DocketEntry entity', () => {
             documentType: ORDER_TYPES[0].documentType,
             eventCode: 'O',
             isLegacySealed: false,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: '2019-03-01T21:40:46.415Z',
             signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
             signedJudgeName: 'A Judge',
@@ -473,7 +505,6 @@ describe('DocketEntry entity', () => {
       let mockDocumentData = {
         ...A_VALID_DOCKET_ENTRY,
         docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
-        secondaryDate: '2019-03-01T21:40:46.415Z',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
         signedJudgeName: 'Dredd',
@@ -502,7 +533,6 @@ describe('DocketEntry entity', () => {
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: undefined,
                   isOrder: true,
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -519,7 +549,6 @@ describe('DocketEntry entity', () => {
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: 'Test Petitioner1',
                   isOrder: true,
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -542,7 +571,6 @@ describe('DocketEntry entity', () => {
                   eventCode: 'NCA',
                   isAutoGenerated: true,
                   isOrder: true,
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -562,7 +590,6 @@ describe('DocketEntry entity', () => {
                   docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -584,7 +611,6 @@ describe('DocketEntry entity', () => {
                   eventCode: 'NCA',
                   isAutoGenerated: false,
                   isOrder: true,
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -605,7 +631,6 @@ describe('DocketEntry entity', () => {
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: undefined,
                   isOrder: true,
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -622,7 +647,6 @@ describe('DocketEntry entity', () => {
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: 'Test Petitioner1',
                   isOrder: true,
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -645,7 +669,6 @@ describe('DocketEntry entity', () => {
                   eventCode: 'NCA',
                   isAutoGenerated: true,
                   isOrder: true,
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -665,7 +688,6 @@ describe('DocketEntry entity', () => {
                   docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -687,7 +709,6 @@ describe('DocketEntry entity', () => {
                   eventCode: 'NCA',
                   isAutoGenerated: false,
                   isOrder: true,
-                  secondaryDate: '2019-03-01T21:40:46.415Z',
                 },
                 { applicationContext },
               );
@@ -709,7 +730,6 @@ describe('DocketEntry entity', () => {
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: false,
             isOrder: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: undefined,
             signedJudgeName: undefined,
           },
@@ -728,7 +748,6 @@ describe('DocketEntry entity', () => {
             eventCode: 'A',
             isDraft: false,
             isOrder: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: undefined,
             signedJudgeName: undefined,
           },
@@ -746,7 +765,6 @@ describe('DocketEntry entity', () => {
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: false,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: undefined,
             signedJudgeName: undefined,
           },
@@ -764,7 +782,7 @@ describe('DocketEntry entity', () => {
             documentType: 'Answer',
             eventCode: 'A',
             isDraft: false,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
+
             signedAt: undefined,
             signedJudgeName: undefined,
           },
@@ -783,7 +801,6 @@ describe('DocketEntry entity', () => {
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: false,
             isOrder: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: '2019-03-01T21:40:46.415Z',
             signedByUserId: mockUserId,
             signedJudgeName: 'Dredd',
@@ -802,7 +819,6 @@ describe('DocketEntry entity', () => {
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isDraft: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: undefined,
             signedJudgeName: undefined,
           },
@@ -820,7 +836,6 @@ describe('DocketEntry entity', () => {
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
           },
           { applicationContext },
         );
@@ -836,7 +851,6 @@ describe('DocketEntry entity', () => {
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: '2019-03-01T21:40:46.415Z',
             signedByUserId: mockUserId,
             signedJudgeName: 'Dredd',
@@ -855,7 +869,6 @@ describe('DocketEntry entity', () => {
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: '2019-03-01T21:40:46.415Z',
             signedByUserId: mockUserId,
             signedJudgeName: 'Dredd',
@@ -873,7 +886,6 @@ describe('DocketEntry entity', () => {
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
           },
           { applicationContext },
         );
@@ -889,7 +901,6 @@ describe('DocketEntry entity', () => {
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
             isOrder: true,
-            secondaryDate: '2019-03-01T21:40:46.415Z',
             signedAt: '2019-03-01T21:40:46.415Z',
             signedByUserId: mockUserId,
             signedJudgeName: 'Dredd',
@@ -907,7 +918,6 @@ describe('DocketEntry entity', () => {
           docketEntryId: '777afd4b-1408-4211-a80e-3e897999861a',
           documentType: OPINION_DOCUMENT_TYPES[0].documentType,
           eventCode: 'MOP',
-          secondaryDate: '2019-03-01T21:40:46.415Z',
         },
         { applicationContext },
       );
@@ -923,7 +933,6 @@ describe('DocketEntry entity', () => {
           documentType: ORDER_TYPES[0].documentType,
           eventCode: TRANSCRIPT_EVENT_CODE,
           isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
           servedAt: '2019-03-01T21:40:46.415Z',
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
@@ -946,7 +955,6 @@ describe('DocketEntry entity', () => {
           documentType: ORDER_TYPES[0].documentType,
           eventCode: TRANSCRIPT_EVENT_CODE,
           isOrder: true,
-          secondaryDate: '2019-03-01T21:40:46.415Z',
           servedParties: 'Test Petitioner',
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
@@ -1876,7 +1884,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
-          servedAt: Date.now(),
+          servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: [
             {
               email: 'me@example.com',
@@ -1902,7 +1910,7 @@ describe('DocketEntry entity', () => {
         {
           ...A_VALID_DOCKET_ENTRY,
           docketEntryId: applicationContext.getUniqueId(),
-          servedAt: Date.now(),
+          servedAt: applicationContext.getUtilities().createISODateString(),
           servedParties: {
             email: 'me@example.com',
             extra: 'extra',
@@ -1945,7 +1953,7 @@ describe('DocketEntry entity', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
-          filingDate: new Date('9000-01-01').toISOString(),
+          filingDate: '9000-01-01T00:00:00.000Z',
           index: 1,
         },
         { applicationContext },
@@ -1962,7 +1970,7 @@ describe('DocketEntry entity', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
-          filingDate: new Date('9000-01-01').toISOString(),
+          filingDate: '9000-01-01T00:00:00.000Z',
           index: 1,
           isOnDocketRecord: true,
         },
@@ -1986,7 +1994,7 @@ describe('DocketEntry entity', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
-          filingDate: new Date('9000-01-01').toISOString(),
+          filingDate: '9000-01-01T00:00:00.000Z',
           index: 1,
           isOnDocketRecord: false,
         },
@@ -2049,6 +2057,44 @@ describe('DocketEntry entity', () => {
       );
       expect(docketEntry.judgeUserId).toBeUndefined();
       expect(docketEntry.isValid()).toBeTruthy();
+    });
+  });
+
+  describe('isPending', () => {
+    it('should return true if docketEntry is pending and is served', () => {
+      const isPending = DocketEntry.isPending({
+        pending: true,
+        servedAt: '9000-01-01T00:00:00.000Z',
+      });
+
+      expect(isPending).toBeTruthy();
+    });
+
+    it('should return false if docketEntry is NOT pending and is served', () => {
+      const isPending = DocketEntry.isPending({
+        pending: false,
+        servedAt: '9000-01-01T00:00:00.000Z',
+      });
+
+      expect(isPending).toBeFalsy();
+    });
+
+    it('should return true if docketEntry is pending and is a unservable document', () => {
+      const isPending = DocketEntry.isPending({
+        eventCode: 'HEAR',
+        pending: true,
+      });
+
+      expect(isPending).toBeTruthy();
+    });
+
+    it('should return false if docketEntry is pending and is NOT unservable document', () => {
+      const isPending = DocketEntry.isPending({
+        eventCode: 'MISC',
+        pending: true,
+      });
+
+      expect(isPending).toBeFalsy();
     });
   });
 });

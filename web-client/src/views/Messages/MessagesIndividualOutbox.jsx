@@ -8,7 +8,7 @@ export const MessagesIndividualOutbox = connect(
   function MessagesIndividualOutbox({ formattedMessages }) {
     return (
       <>
-        <table className="usa-table work-queue subsection">
+        <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
@@ -22,9 +22,9 @@ export const MessagesIndividualOutbox = connect(
               <th className="small">Section</th>
             </tr>
           </thead>
-          {formattedMessages.map((message, idx) => {
+          {formattedMessages.map(message => {
             return (
-              <tbody key={`message-${idx}`}>
+              <tbody key={`message-${message.messageId}`}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
@@ -40,7 +40,7 @@ export const MessagesIndividualOutbox = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={message.messageDetailLink}
                       >
                         {message.subject}
                       </Button>

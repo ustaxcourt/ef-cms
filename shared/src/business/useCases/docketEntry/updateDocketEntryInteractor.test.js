@@ -25,7 +25,7 @@ describe('updateDocketEntryInteractor', () => {
     docketNumber: '45678-18',
     section: DOCKET_SECTION,
     sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    updatedAt: new Date().toISOString(),
+    updatedAt: applicationContext.getUtilities().createISODateString(),
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
@@ -125,8 +125,7 @@ describe('updateDocketEntryInteractor', () => {
     mockCurrentUser = {};
 
     await expect(
-      updateDocketEntryInteractor({
-        applicationContext,
+      updateDocketEntryInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentType: 'Memorandum in Support',
@@ -139,8 +138,7 @@ describe('updateDocketEntryInteractor', () => {
 
   it('updates the workitem without updating the document if no file is attached', async () => {
     await expect(
-      updateDocketEntryInteractor({
-        applicationContext,
+      updateDocketEntryInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
@@ -168,8 +166,7 @@ describe('updateDocketEntryInteractor', () => {
 
   it('adds documents and workitems', async () => {
     await expect(
-      updateDocketEntryInteractor({
-        applicationContext,
+      updateDocketEntryInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
@@ -204,8 +201,7 @@ describe('updateDocketEntryInteractor', () => {
   it('adds documents and workitems but does not try to delete workitem because they all have files attached', async () => {
     workItem.docketEntry.isFileAttached = true;
     await expect(
-      updateDocketEntryInteractor({
-        applicationContext,
+      updateDocketEntryInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
@@ -233,8 +229,7 @@ describe('updateDocketEntryInteractor', () => {
 
   it('add documents but not workitems for paper filed documents', async () => {
     await expect(
-      updateDocketEntryInteractor({
-        applicationContext,
+      updateDocketEntryInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
@@ -258,8 +253,7 @@ describe('updateDocketEntryInteractor', () => {
   });
 
   it('should update only allowed editable fields on a docket entry document', async () => {
-    await updateDocketEntryInteractor({
-      applicationContext,
+    await updateDocketEntryInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'My Edited Document',
@@ -287,8 +281,7 @@ describe('updateDocketEntryInteractor', () => {
 
   it('updates document and workitem metadata with a file attached, but saving for later', async () => {
     await expect(
-      updateDocketEntryInteractor({
-        applicationContext,
+      updateDocketEntryInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',
@@ -317,8 +310,7 @@ describe('updateDocketEntryInteractor', () => {
 
   it('updates document and workitem metadata with no file attached', async () => {
     await expect(
-      updateDocketEntryInteractor({
-        applicationContext,
+      updateDocketEntryInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'My Document',

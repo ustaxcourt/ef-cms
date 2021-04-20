@@ -50,21 +50,18 @@ const addPetitionDocketEntryToCase = ({
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.ownershipDisclosureFileId the id of the ownership disclosure file
  * @param {string} providers.petitionFileId the id of the petition file
  * @param {object} providers.petitionMetadata the petition metadata
  * @param {string} providers.stinFileId the id of the stin file
  * @returns {object} the created case
  */
-exports.createCaseInteractor = async ({
+exports.createCaseInteractor = async (
   applicationContext,
-  ownershipDisclosureFileId,
-  petitionFileId,
-  petitionMetadata,
-  stinFileId,
-}) => {
+  { ownershipDisclosureFileId, petitionFileId, petitionMetadata, stinFileId },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
@@ -123,12 +120,15 @@ exports.createCaseInteractor = async ({
       orderForFilingFee: true,
       ...petitionEntity.toRawObject(),
       privatePractitioners,
-      userId: user.userId,
     },
     {
       applicationContext,
     },
   );
+
+  if (user.role === ROLES.petitioner) {
+    caseToAdd.contactPrimary.contactId = user.userId;
+  }
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
   caseToAdd.initialCaption = caseToAdd.caseCaption;
@@ -227,7 +227,7 @@ exports.createCaseInteractor = async ({
     caseToAdd.addDocketEntry(odsDocketEntryEntity);
   }
 
-  await applicationContext.getPersistenceGateway().createCase({
+  await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });

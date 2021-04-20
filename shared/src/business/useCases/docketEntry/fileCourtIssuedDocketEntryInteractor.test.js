@@ -116,8 +116,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      fileCourtIssuedDocketEntryInteractor({
-        applicationContext,
+      fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
@@ -135,8 +134,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     });
 
     await expect(
-      fileCourtIssuedDocketEntryInteractor({
-        applicationContext,
+      fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           docketNumber: caseRecord.docketNumber,
@@ -154,8 +152,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         docketNumber: caseRecord.docketNumber,
@@ -185,8 +182,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: caseRecord.docketNumber,
@@ -214,45 +210,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     });
   });
 
-  it('should set secondaryDate on the created document if the eventCode is TRAN', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
-      documentMeta: {
-        date: '2019-03-01T21:40:46.415Z',
-        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'Transcript',
-        eventCode: TRANSCRIPT_EVENT_CODE,
-        freeText: 'Dogs',
-        generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
-      },
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[5],
-    ).toMatchObject({
-      secondaryDate: '2019-03-01T21:40:46.415Z',
-    });
-  });
-
   it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
-    await fileCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
@@ -278,5 +237,30 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(newlyFiledDocument).toMatchObject({
       isDraft: false,
     });
+  });
+
+  it('should delete the draftOrderState from the docketEntry', async () => {
+    const docketEntryToUpdate = caseRecord.docketEntries[5];
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      documentMeta: {
+        docketEntryId: docketEntryToUpdate.docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: docketEntryToUpdate.documentTitle,
+        documentType: docketEntryToUpdate.documentType,
+        draftOrderState: {
+          documentContents: 'Some content',
+          richText: 'some content',
+        },
+        eventCode: docketEntryToUpdate.eventCode,
+      },
+    });
+
+    const updatedDocketEntry = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        d => d.docketEntryId === docketEntryToUpdate.docketEntryId,
+      );
+
+    expect(updatedDocketEntry).toMatchObject({ draftOrderState: null });
   });
 });

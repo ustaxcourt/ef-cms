@@ -1,4 +1,7 @@
-const joi = require('joi');
+const {
+  courtIssuedDocumentDecorator,
+  CourtIssuedDocumentDefault,
+} = require('./CourtIssuedDocumentDefault');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
@@ -6,7 +9,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { CourtIssuedDocumentDefault } = require('./CourtIssuedDocumentDefault');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
@@ -17,27 +19,26 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
  */
 function CourtIssuedDocumentTypeF() {}
 CourtIssuedDocumentTypeF.prototype.init = function init(rawProps) {
-  this.attachments = rawProps.attachments || false;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
-  this.eventCode = rawProps.eventCode;
-  this.filingDate = rawProps.filingDate;
+  courtIssuedDocumentDecorator(this, rawProps);
   this.judge = rawProps.judge;
   this.judgeWithTitle = rawProps.judgeWithTitle;
   this.trialLocation = rawProps.trialLocation;
+  this.freeText = rawProps.freeText;
 };
 
 CourtIssuedDocumentTypeF.prototype.getDocumentTitle = function () {
   const judge = this.judgeWithTitle || this.judge;
-  return replaceBracketed(this.documentTitle, judge, this.trialLocation);
+  return replaceBracketed(
+    this.documentTitle,
+    judge,
+    this.trialLocation,
+    this.freeText,
+  );
 };
 
 CourtIssuedDocumentTypeF.schema = {
-  attachments: joi.boolean().required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
-  eventCode: CourtIssuedDocumentDefault.schema.eventCode,
-  filingDate: CourtIssuedDocumentDefault.schema.filingDate,
+  ...CourtIssuedDocumentDefault.schema,
+  freeText: JoiValidationConstants.STRING.max(1000).optional(),
   judge: JoiValidationConstants.STRING.required(),
   judgeWithtitle: JoiValidationConstants.STRING.optional(),
   trialLocation: JoiValidationConstants.STRING.required(),

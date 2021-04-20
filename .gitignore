@@ -3,10 +3,12 @@
 .DS_Store
 .dynamodb/
 .elasticsearch/
+.idea/
 .nova/
 .scannerwork/
 .serverless/
 .terraform/
+.terraform.lock.hcl
 .vscode
 **/*_.js
 /policy.json

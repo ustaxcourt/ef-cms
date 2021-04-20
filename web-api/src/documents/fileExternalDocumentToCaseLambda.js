@@ -10,8 +10,8 @@ exports.fileExternalDocumentToCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .fileExternalDocumentInteractor({
-        ...JSON.parse(event.body),
+      .fileExternalDocumentInteractor(
         applicationContext,
-      });
+        JSON.parse(event.body),
+      );
   });

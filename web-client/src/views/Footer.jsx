@@ -54,6 +54,15 @@ export const Footer = connect(
                         <li className="usa-footer__primary-content">
                           <a
                             className="usa-footer__primary-link usa-link--external"
+                            href="https://www.ustaxcourt.gov/release_notes.html"
+                            target="_blank"
+                          >
+                            What’s New in DAWSON
+                          </a>
+                        </li>
+                        <li className="usa-footer__primary-content">
+                          <a
+                            className="usa-footer__primary-link usa-link--external"
                             href="https://ustaxcourt.gov/dawson.html"
                             target="_blank"
                           >
@@ -98,9 +107,9 @@ export const Footer = connect(
                         </div>
 
                         <div className="grid-col-9">
-                          <h3 className="usa-footer__logo-heading">
+                          <div className="usa-footer__logo-heading heading-3">
                             United States Tax Court
-                          </h3>
+                          </div>
                         </div>
                       </div>
                     </div>

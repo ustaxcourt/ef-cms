@@ -83,10 +83,17 @@ export const documentViewerHelper = (get, applicationContext) => {
     showStricken = entry.isStricken;
   }
 
+  const showCompleteQcButton =
+    permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
+
   return {
+    completeQcLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentToDisplay.docketEntryId}/edit`,
     description: formattedDocumentToDisplay.descriptionDisplay,
+    documentViewerLink: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
     filedLabel,
+    reviewAndServePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.docketEntryId}`,
     servedLabel,
+    showCompleteQcButton,
     showNotServed,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
     showServeCourtIssuedDocumentButton,
@@ -94,5 +101,6 @@ export const documentViewerHelper = (get, applicationContext) => {
     showServePetitionButton,
     showSignStipulatedDecisionButton,
     showStricken,
+    signStipulatedDecisionLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.docketEntryId}/sign`,
   };
 };

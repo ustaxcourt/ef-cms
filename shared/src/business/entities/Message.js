@@ -55,8 +55,6 @@ Message.prototype.init = function init(rawMessage, { applicationContext }) {
   this.toUserId = rawMessage.toUserId;
 };
 
-Message.validationName = 'Message';
-
 Message.VALIDATION_ERROR_MESSAGES = {
   message: [
     { contains: 'is required', message: 'Enter a message' },
@@ -200,7 +198,7 @@ Message.prototype.markAsCompleted = function ({ message, user }) {
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedBySection = user.section;
-  this.completedMessage = message;
+  this.completedMessage = message || null;
 
   return this;
 };

@@ -27,7 +27,7 @@ describe('updateCase', () => {
       postalCode: '12345',
       state: 'CA',
     },
-    createdAt: new Date().toISOString(),
+    createdAt: applicationContext.getUtilities().createISODateString(),
     docketEntries: [
       {
         docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -40,15 +40,7 @@ describe('updateCase', () => {
             createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            entityName: 'DocketEntry',
             eventCode: 'P',
-            filedBy: 'Lewis Dodgson',
-            filingDate: '2019-03-11T21:56:01.625Z',
-            isDraft: false,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            sentBy: 'petitioner',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           },
           docketNumber: '56789-18',
           isInitializeCase: true,
@@ -102,8 +94,7 @@ describe('updateCase', () => {
 
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
     await expect(
-      saveCaseDetailInternalEditInteractor({
-        applicationContext,
+      saveCaseDetailInternalEditInteractor(applicationContext, {
         caseToUpdate: omit(MOCK_CASE, 'caseCaption'),
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -112,8 +103,7 @@ describe('updateCase', () => {
 
   it('should throw an error if caseToUpdate is not passed in', async () => {
     await expect(
-      saveCaseDetailInternalEditInteractor({
-        applicationContext,
+      saveCaseDetailInternalEditInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('cannot process');
@@ -122,47 +112,49 @@ describe('updateCase', () => {
   it('should update the validated documents on a case', async () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
 
-    const updatedCase = await saveCaseDetailInternalEditInteractor({
+    const updatedCase = await saveCaseDetailInternalEditInteractor(
       applicationContext,
-      caseToUpdate: {
-        ...caseToUpdate,
-        caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
-        caseType: CASE_TYPES_MAP.innocentSpouse,
-        contactPrimary: {
-          address1: '193 South Hague Freeway',
-          address2: 'Sunt maiores vitae ',
-          address3: 'Culpa ex aliquip ven',
-          city: 'Aperiam minim sunt r',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'petitioner@example.com',
-          name: 'Iola Snow',
-          phone: '+1 (772) 246-3448',
-          postalCode: '26037',
-          state: 'IA',
+      {
+        caseToUpdate: {
+          ...caseToUpdate,
+          caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
+          caseType: CASE_TYPES_MAP.innocentSpouse,
+          contactPrimary: {
+            address1: '193 South Hague Freeway',
+            address2: 'Sunt maiores vitae ',
+            address3: 'Culpa ex aliquip ven',
+            city: 'Aperiam minim sunt r',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'petitioner@example.com',
+            name: 'Iola Snow',
+            phone: '+1 (772) 246-3448',
+            postalCode: '26037',
+            state: 'IA',
+          },
+          contactSecondary: {
+            address1: '86 West Rocky Cowley Extension',
+            address2: 'Aperiam aliquip volu',
+            address3: 'Eos consequuntur max',
+            city: 'Deleniti lorem sit ',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            name: 'Linda Singleton',
+            phone: '+1 (153) 683-1448',
+            postalCode: '89985',
+            state: 'FL',
+          },
+          createdAt: '2019-07-24T16:30:01.940Z',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          filingType: 'Myself and my spouse',
+          hasVerifiedIrsNotice: false,
+          isPaper: false,
+          partyType: PARTY_TYPES.petitionerSpouse,
+          preferredTrialCity: 'Mobile, Alabama',
+          privatePractitioners: [],
+          procedureType: 'Small',
         },
-        contactSecondary: {
-          address1: '86 West Rocky Cowley Extension',
-          address2: 'Aperiam aliquip volu',
-          address3: 'Eos consequuntur max',
-          city: 'Deleniti lorem sit ',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          name: 'Linda Singleton',
-          phone: '+1 (153) 683-1448',
-          postalCode: '89985',
-          state: 'FL',
-        },
-        createdAt: '2019-07-24T16:30:01.940Z',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-        filingType: 'Myself and my spouse',
-        hasVerifiedIrsNotice: false,
-        isPaper: false,
-        partyType: PARTY_TYPES.petitionerSpouse,
-        preferredTrialCity: 'Mobile, Alabama',
-        privatePractitioners: [],
-        procedureType: 'Small',
+        docketNumber: caseToUpdate.docketNumber,
       },
-      docketNumber: caseToUpdate.docketNumber,
-    });
+    );
 
     const returnedDocument = omit(updatedCase.docketEntries[0], 'createdAt');
     const documentToMatch = omit(MOCK_CASE.docketEntries[0], 'createdAt');
@@ -172,8 +164,7 @@ describe('updateCase', () => {
   it("should move the initialize case work item into the current user's in-progress box if the case is not paper", async () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
 
-    await saveCaseDetailInternalEditInteractor({
-      applicationContext,
+    await saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
@@ -200,8 +191,7 @@ describe('updateCase', () => {
     caseToUpdate.isPaper = true;
     caseToUpdate.mailingDate = 'yesterday';
 
-    await saveCaseDetailInternalEditInteractor({
-      applicationContext,
+    await saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
@@ -219,8 +209,7 @@ describe('updateCase', () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
 
     await expect(
-      saveCaseDetailInternalEditInteractor({
-        applicationContext,
+      saveCaseDetailInternalEditInteractor(applicationContext, {
         caseToUpdate: {
           ...caseToUpdate,
           contactPrimary: null,
@@ -238,8 +227,7 @@ describe('updateCase', () => {
     });
 
     await expect(
-      saveCaseDetailInternalEditInteractor({
-        applicationContext,
+      saveCaseDetailInternalEditInteractor(applicationContext, {
         caseToUpdate: MOCK_CASE,
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -253,8 +241,7 @@ describe('updateCase', () => {
     });
 
     await expect(
-      saveCaseDetailInternalEditInteractor({
-        applicationContext,
+      saveCaseDetailInternalEditInteractor(applicationContext, {
         caseToUpdate: MOCK_CASE,
         docketNumber: '123',
       }),
@@ -279,8 +266,7 @@ describe('updateCase', () => {
         isPaper: true,
       });
 
-    await saveCaseDetailInternalEditInteractor({
-      applicationContext,
+    await saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate: {
         ...MOCK_CASE,
         docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
@@ -306,13 +292,15 @@ describe('updateCase', () => {
     caseToUpdate.orderForRatification = true;
     caseToUpdate.orderToShowCause = true;
 
-    const result = await saveCaseDetailInternalEditInteractor({
+    const result = await saveCaseDetailInternalEditInteractor(
       applicationContext,
-      caseToUpdate: {
-        ...caseToUpdate,
+      {
+        caseToUpdate: {
+          ...caseToUpdate,
+        },
+        docketNumber: caseToUpdate.docketNumber,
       },
-      docketNumber: caseToUpdate.docketNumber,
-    });
+    );
 
     expect(result.orderDesignatingPlaceOfTrial).toBeTruthy();
     expect(result.orderForAmendedPetition).toBeTruthy();

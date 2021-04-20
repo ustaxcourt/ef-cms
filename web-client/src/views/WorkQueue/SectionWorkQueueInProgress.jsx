@@ -52,7 +52,7 @@ const SectionWorkQueueInProgressRow = React.memo(
           <td className="message-queue-row max-width-25">
             <div className="message-document-title">
               <a className="case-link" href={item.editLink}>
-                {item.docketEntry.documentTitle ||
+                {item.docketEntry.descriptionDisplay ||
                   item.docketEntry.documentType}
               </a>
             </div>
@@ -123,7 +123,7 @@ export const SectionWorkQueueInProgress = connect(
         )}
         <table
           aria-describedby="tab-work-queue"
-          className="usa-table work-queue subsection"
+          className="usa-table ustc-table subsection"
           id="section-work-queue"
         >
           <thead>

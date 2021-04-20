@@ -13,31 +13,27 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  saveFileAndGenerateUrl,
-} = require('../../useCaseHelper/saveFileAndGenerateUrl');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
-const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.documentMeta the document metadata
  * @returns {object} the url of the document that was served
  */
-exports.fileAndServeCourtIssuedDocumentInteractor = async ({
+exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
-  documentMeta,
-}) => {
+  { documentMeta },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =
@@ -75,11 +71,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let secondaryDate;
-  if (documentMeta.eventCode === TRANSCRIPT_EVENT_CODE) {
-    secondaryDate = documentMeta.date;
-  }
-
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
@@ -94,6 +85,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
       date: documentMeta.date,
       documentTitle: documentMeta.generatedDocumentTitle,
       documentType: documentMeta.documentType,
+      draftOrderState: null,
       editState: JSON.stringify(documentMeta),
       eventCode: documentMeta.eventCode,
       filedBy: undefined,
@@ -105,14 +97,13 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
       judge: documentMeta.judge,
       numberOfPages,
       scenario: documentMeta.scenario,
-      secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
       userId: user.userId,
     },
     { applicationContext },
   );
 
-  docketEntryEntity.setAsServed(servedParties.all);
+  docketEntryEntity.setAsServed(servedParties.all).validate();
 
   const servedDocketEntryWorkItem = new WorkItem(
     {
@@ -165,8 +156,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
   });
 
   // SERVE
-  const { PDFDocument } = await applicationContext.getPdfLib();
-
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -254,35 +243,11 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async ({
     caseToUpdate: caseEntity,
   });
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: docketEntryEntity.docketEntryId,
-    servedParties,
-  });
-
-  if (servedParties.paper.length > 0) {
-    const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
-
-    let newPdfDoc = await PDFDocument.create();
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: courtIssuedOrderDoc,
-        servedParties,
-      });
-
-    const paperServicePdfData = await newPdfDoc.save();
-    const { url } = await saveFileAndGenerateUrl({
+  return await applicationContext
+    .getUseCaseHelpers()
+    .serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      file: paperServicePdfData,
-      useTempBucket: true,
+      caseEntity,
+      docketEntryId: docketEntryEntity.docketEntryId,
     });
-
-    return { pdfUrl: url };
-  }
 };

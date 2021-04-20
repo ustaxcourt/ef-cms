@@ -12,8 +12,7 @@ exports.generatePrintablePendingReportLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .generatePrintablePendingReportInteractor({
-          applicationContext,
+        .generatePrintablePendingReportInteractor(applicationContext, {
           ...event.queryStringParameters,
         });
     },

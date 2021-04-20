@@ -11,17 +11,16 @@ const { Case } = require('../entities/cases/Case');
 /**
  * sealCaseContactAddressInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.contactId the id of the contact address to be sealed
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {object} the updated case data
  */
-exports.sealCaseContactAddressInteractor = async ({
+exports.sealCaseContactAddressInteractor = async (
   applicationContext,
-  contactId,
-  docketNumber,
-}) => {
+  { contactId, docketNumber },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {

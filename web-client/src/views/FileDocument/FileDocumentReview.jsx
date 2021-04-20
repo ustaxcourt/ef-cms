@@ -95,7 +95,7 @@ export const FileDocumentReview = connect(
       form.supportingDocuments.map((item, idx) => (
         <div
           className="grid-row grid-gap overline padding-top-105 margin-top-105"
-          key={`supporting-doc-${idx}`}
+          key={`supporting-doc-${item.documentTitle}`}
         >
           <div className="tablet:grid-col-6 margin-bottom-1">
             <div className="tablet:margin-bottom-0 margin-bottom-205">
@@ -143,7 +143,7 @@ export const FileDocumentReview = connect(
       form.secondarySupportingDocuments.map((item, idx) => (
         <div
           className="grid-row grid-gap overline padding-top-105 margin-top-105"
-          key={`secondary-supporting-doc-${idx}`}
+          key={`secondary-supporting-doc-${item.documentTitle}`}
         >
           <div className="tablet:grid-col-6 margin-bottom-1">
             <div className="tablet:margin-bottom-0 margin-bottom-205">

@@ -3,7 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   MAX_SEARCH_RESULTS,
-  OPINION_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } = require('../../entities/EntityConstants');
 const {
   opinionPublicSearchInteractor,
@@ -16,6 +16,7 @@ describe('opinionPublicSearchInteractor', () => {
       docketEntryId: '6945cdff-fd12-422b-bf2c-63b792b7f618',
       docketNumber: '103-20',
       documentTitle: 'Memorandum Opinion Judge Colvin',
+      entityName: 'PublicDocumentSearchResult',
       filingDate: '2020-05-12T18:42:10.471Z',
       isSealed: false,
       numberOfPages: 1,
@@ -32,15 +33,16 @@ describe('opinionPublicSearchInteractor', () => {
   });
 
   it('should only search for opinion document types, allowing opinions within sealed cases', async () => {
-    await opinionPublicSearchInteractor({
-      applicationContext,
+    await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
       startDate: '2001-01-01',
     });
 
     const searchArgs = applicationContext.getPersistenceGateway()
       .advancedDocumentSearch.mock.calls[0][0];
-    expect(searchArgs.documentEventCodes).toMatchObject(OPINION_EVENT_CODES);
+    expect(searchArgs.documentEventCodes).toMatchObject(
+      OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+    );
     expect(searchArgs.omitSealed).toBeUndefined();
   });
 
@@ -58,8 +60,7 @@ describe('opinionPublicSearchInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
-    const results = await opinionPublicSearchInteractor({
-      applicationContext,
+    const results = await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
       startDate: '2001-01-01',
     });
@@ -68,8 +69,7 @@ describe('opinionPublicSearchInteractor', () => {
   });
 
   it('should return search results based on the supplied opinion keyword', async () => {
-    const result = await opinionPublicSearchInteractor({
-      applicationContext,
+    const result = await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'memorandum',
       startDate: '2001-01-01',
     });
@@ -81,8 +81,7 @@ describe('opinionPublicSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
-    const results = await opinionPublicSearchInteractor({
-      applicationContext,
+    const results = await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
       startDate: '2001-01-01',
     });

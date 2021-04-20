@@ -15,12 +15,14 @@ describe('caseFilter', () => {
       docketNumber: '102-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       foo: 'bar',
+      isPaper: true,
       sealedDate: '2020-01-02T03:04:05.007Z',
     });
 
     expect(result).toEqual({
       docketNumber: '102-20',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      isPaper: true,
       sealedDate: '2020-01-02T03:04:05.007Z',
     });
   });
@@ -37,6 +39,7 @@ describe('caseFilter', () => {
         name: 'Joe Dirt',
         otherFilerType: 'Nail File',
         secondaryName: 'Cheeseburgers',
+        serviceIndicator: 'Electronic',
         title: 'Emperor',
         transmission: 'manual',
       });
@@ -64,6 +67,7 @@ describe('caseFilter', () => {
           'otherFilerType',
           'sealedAndUnavailable',
           'secondaryName',
+          'serviceIndicator',
           'title',
         ]);
       });

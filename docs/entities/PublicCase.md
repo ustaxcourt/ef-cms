@@ -122,77 +122,12 @@
         state: 
           type: "string"
           flags: 
-            only: true
             presence: "optional"
           rules: 
             - 
               name: "min"
               args: 
                 limit: 1
-          allow: 
-            - "AK"
-            - "AL"
-            - "AR"
-            - "AZ"
-            - "CA"
-            - "CO"
-            - "CT"
-            - "DC"
-            - "DE"
-            - "FL"
-            - "GA"
-            - "HI"
-            - "IA"
-            - "ID"
-            - "IL"
-            - "IN"
-            - "KS"
-            - "KY"
-            - "LA"
-            - "MA"
-            - "MD"
-            - "ME"
-            - "MI"
-            - "MN"
-            - "MO"
-            - "MS"
-            - "MT"
-            - "NC"
-            - "ND"
-            - "NE"
-            - "NH"
-            - "NJ"
-            - "NM"
-            - "NV"
-            - "NY"
-            - "OH"
-            - "OK"
-            - "OR"
-            - "PA"
-            - "RI"
-            - "SC"
-            - "SD"
-            - "TN"
-            - "TX"
-            - "UT"
-            - "VA"
-            - "VT"
-            - "WA"
-            - "WI"
-            - "WV"
-            - "WY"
-            - "AA"
-            - "AE"
-            - "AP"
-            - "AS"
-            - "FM"
-            - "GU"
-            - "MH"
-            - "MP"
-            - "PR"
-            - "PW"
-            - "VI"
-            - "N/A"
     contactSecondary: 
       type: "object"
       flags: 
@@ -216,83 +151,17 @@
         state: 
           type: "string"
           flags: 
-            only: true
             presence: "optional"
           rules: 
             - 
               name: "min"
               args: 
                 limit: 1
-          allow: 
-            - "AK"
-            - "AL"
-            - "AR"
-            - "AZ"
-            - "CA"
-            - "CO"
-            - "CT"
-            - "DC"
-            - "DE"
-            - "FL"
-            - "GA"
-            - "HI"
-            - "IA"
-            - "ID"
-            - "IL"
-            - "IN"
-            - "KS"
-            - "KY"
-            - "LA"
-            - "MA"
-            - "MD"
-            - "ME"
-            - "MI"
-            - "MN"
-            - "MO"
-            - "MS"
-            - "MT"
-            - "NC"
-            - "ND"
-            - "NE"
-            - "NH"
-            - "NJ"
-            - "NM"
-            - "NV"
-            - "NY"
-            - "OH"
-            - "OK"
-            - "OR"
-            - "PA"
-            - "RI"
-            - "SC"
-            - "SD"
-            - "TN"
-            - "TX"
-            - "UT"
-            - "VA"
-            - "VT"
-            - "WA"
-            - "WI"
-            - "WV"
-            - "WY"
-            - "AA"
-            - "AE"
-            - "AP"
-            - "AS"
-            - "FM"
-            - "GU"
-            - "MH"
-            - "MP"
-            - "PR"
-            - "PW"
-            - "VI"
-            - "N/A"
     createdAt: 
       type: "date"
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
     docketEntries: 
       type: "array"
@@ -342,7 +211,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
               whens: 
                 - 
                   ref: 
@@ -372,7 +240,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "When the Document was added to the system."
             docketEntryId: 
@@ -800,7 +667,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "Date that this Document was filed."
               rules: 
@@ -885,7 +751,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
               rules: 
                 - 
@@ -897,7 +762,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
               rules: 
                 - 
@@ -952,6 +816,10 @@
       type: "boolean"
       flags: 
         presence: "required"
+    isPaper: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     isSealed: 
       type: "boolean"
     partyType: 
@@ -989,7 +857,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
 
  ```

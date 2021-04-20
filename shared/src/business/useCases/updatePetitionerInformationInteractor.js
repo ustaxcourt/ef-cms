@@ -219,24 +219,22 @@ const createDocketEntryAndWorkItem = async ({
   }
   return changeDocs;
 };
+
 /**
  * updatePetitionerInformationInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.contactPrimary the primary contact information to update on the case
  * @param {object} providers.contactSecondary the secondary contact information to update on the case
  * @param {object} providers.partyType the party type to update on the case
  * @returns {object} the updated case data
  */
-exports.updatePetitionerInformationInteractor = async ({
+exports.updatePetitionerInformationInteractor = async (
   applicationContext,
-  contactPrimary,
-  contactSecondary,
-  docketNumber,
-  partyType,
-}) => {
+  { contactPrimary, contactSecondary, docketNumber, partyType },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)) {
@@ -311,7 +309,7 @@ exports.updatePetitionerInformationInteractor = async ({
         })
       : undefined;
 
-  const caseEntity = new Case(
+  let caseEntity = new Case(
     {
       ...oldCase,
       contactPrimary: {
@@ -385,6 +383,38 @@ exports.updatePetitionerInformationInteractor = async ({
         secondaryChangeDocs,
         servedParties,
       });
+    }
+  }
+
+  if (
+    contactPrimary.email &&
+    contactPrimary.email !== oldCase.contactPrimary.email
+  ) {
+    const isEmailAvailable = await applicationContext
+      .getPersistenceGateway()
+      .isEmailAvailable({
+        applicationContext,
+        email: contactPrimary.email,
+      });
+
+    if (isEmailAvailable) {
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .createUserForContactPrimary({
+          applicationContext,
+          caseEntity,
+          email: contactPrimary.email,
+          name: contactPrimary.name,
+        });
+    } else {
+      caseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .addExistingUserToCase({
+          applicationContext,
+          caseEntity,
+          email: contactPrimary.email,
+          name: contactPrimary.name,
+        });
     }
   }
 

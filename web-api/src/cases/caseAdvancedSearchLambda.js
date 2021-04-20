@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.caseAdvancedSearchLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().caseAdvancedSearchInteractor({
-      applicationContext,
-      ...event.queryStringParameters,
-    });
+    return await applicationContext
+      .getUseCases()
+      .caseAdvancedSearchInteractor(applicationContext, {
+        ...event.queryStringParameters,
+      });
   });

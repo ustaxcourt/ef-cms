@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object
  * @returns {Promise} promise which resolves if it successfully loads the pdf
  */
-export const loadPdfAction = ({ applicationContext, props, store }) => {
+export const loadPdfAction = ({ applicationContext, props, router, store }) => {
   const { file } = props;
   const isBase64Encoded = typeof file === 'string' && file.startsWith('data');
 
@@ -27,22 +27,21 @@ export const loadPdfAction = ({ applicationContext, props, store }) => {
       }
 
       try {
-        const { PDFDocument } = await applicationContext.getPdfLib();
-        const pdfDoc = await PDFDocument.load(binaryFile);
-
-        const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+        const pdfDataUri = router.createObjectURL(
+          new Blob([binaryFile], { type: 'application/pdf' }),
+        );
         store.set(state.pdfPreviewUrl, pdfDataUri);
         store.unset(state.modal.pdfPreviewModal.error);
         resolve();
       } catch (err) {
         store.set(state.modal.pdfPreviewModal.error, err);
-        reject();
+        reject(err);
       }
     };
 
     reader.onerror = function (err) {
       store.set(state.modal.pdfPreviewModal.error, err);
-      reject();
+      reject(err);
     };
 
     if (isBase64Encoded) {

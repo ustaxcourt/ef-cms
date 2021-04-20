@@ -17,6 +17,11 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'servedPartiesCode',
+      value: 'B',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'ordinalValue',
       value: 'First',
     });
@@ -99,6 +104,8 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
+
+    test.updatedDocketEntryId = pendingDocketEntry.docketEntryId;
 
     expect(
       caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,

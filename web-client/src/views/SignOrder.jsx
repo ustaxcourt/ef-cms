@@ -35,6 +35,8 @@ export const SignOrder = connect(
     signatureData,
     skipSigningOrderSequence,
   }) {
+    const yLimitToPreventServedStampOverlay = 705;
+
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 
@@ -52,7 +54,7 @@ export const SignOrder = connect(
 
           const renderContext = {
             canvasContext,
-            viewport: viewport,
+            viewport,
           };
           return page.render(renderContext);
         })
@@ -105,6 +107,8 @@ export const SignOrder = connect(
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
         const canvasBounds = canvasEl.getBoundingClientRect();
+        const sigBox = sigEl.getBoundingClientRect();
+
         const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
         const scrollYOffset = window.scrollY;
 
@@ -112,17 +116,29 @@ export const SignOrder = connect(
         y = pageY - canvasBounds.y - scrollYOffset;
 
         const uiPosX = pageX - sigParentBounds.x;
+        const uiPosY = y + (canvasBounds.y - sigParentBounds.y) - sigBox.height;
+
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          moveSig(sigEl, uiPosX, uiPosY);
+        }
+      };
+
+      canvasEl.onmousedown = e => {
+        const { pageY } = e;
+        const canvasBounds = canvasEl.getBoundingClientRect();
+        const scrollYOffset = window.scrollY;
+        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+        const sigBoxHeight = sigEl.getBoundingClientRect().height;
         const uiPosY =
           pageY -
           canvasBounds.y -
           scrollYOffset +
-          (canvasBounds.y - sigParentBounds.y);
+          (canvasBounds.y - sigParentBounds.y) -
+          sigBoxHeight;
 
-        moveSig(sigEl, uiPosX, uiPosY);
-      };
-
-      canvasEl.onmousedown = () => {
-        stopCanvasEvents(canvasEl, sigEl, x, y);
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          stopCanvasEvents(canvasEl, sigEl, x, y - sigBoxHeight);
+        }
       };
 
       // sometimes the cursor falls on top of the signature
@@ -216,6 +232,9 @@ export const SignOrder = connect(
                   id="sign-pdf-canvas"
                   ref={canvasRef}
                 ></canvas>
+                <span id="signature-warning">
+                  You cannot apply a signature here.
+                </span>
               </div>
             </div>
           </div>

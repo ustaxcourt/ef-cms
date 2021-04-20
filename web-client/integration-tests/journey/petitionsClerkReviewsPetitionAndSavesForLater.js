@@ -1,5 +1,9 @@
+import { refreshElasticsearchIndex } from '../helpers';
+
 export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
   return it('Petitions Clerk reviews petition and saves for later', async () => {
+    await refreshElasticsearchIndex();
+
     await test.runSequence('gotoWorkQueueSequence');
     expect(test.getState('currentPage')).toEqual('WorkQueue');
     await test.runSequence('chooseWorkQueueSequence', {

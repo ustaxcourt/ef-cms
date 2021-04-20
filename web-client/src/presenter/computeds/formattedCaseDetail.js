@@ -1,4 +1,4 @@
-import { isServed } from '../../../../shared/src/business/entities/DocketEntry';
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -27,8 +27,8 @@ const getUserIsAssignedToSession = ({ currentUser, get, trialSessionId }) => {
   const isJudgeUserAssigned = session?.judge?.userId === currentUser.userId;
   const isChambersUserAssigned =
     judge &&
-    session?.judge?.userId === judge?.userId &&
-    judge?.section === currentUser.section;
+    session?.judge?.userId === judge.userId &&
+    judge.section === currentUser.section;
   const isTrialClerkUserAssigned =
     session?.trialClerk?.userId === currentUser.userId;
 
@@ -84,6 +84,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
+    STATUS_TYPES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -123,6 +124,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.otherFilers = (result.otherFilers || []).map(otherFiler => ({
     ...otherFiler,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
   }));
 
@@ -150,7 +152,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
       entry && systemGeneratedEventCodes.includes(entry.eventCode);
     const hasCourtIssuedDocument = entry && entry.isCourtIssuedDocument;
     const hasServedCourtIssuedDocument =
-      hasCourtIssuedDocument && !!entry.servedAt;
+      hasCourtIssuedDocument &&
+      applicationContext.getUtilities().isServed(entry);
     const hasUnservableCourtIssuedDocument =
       entry && UNSERVABLE_EVENT_CODES.includes(entry.eventCode);
 
@@ -178,17 +181,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
     let showDocumentLinks = false;
 
     if (isExternalUser) {
-      formattedResult.isInProgress = false;
       formattedResult.hideIcons = true;
-      formattedResult.qcWorkItemsUntouched = false;
     } else {
-      formattedResult.isInProgress = entry.isInProgress;
-
-      formattedResult.qcWorkItemsUntouched =
-        !formattedResult.isInProgress &&
-        entry.qcWorkItemsUntouched &&
-        !entry.isCourtIssuedDocument;
-
       formattedResult.showLoadingIcon =
         !permissions.UPDATE_CASE &&
         entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
@@ -225,7 +219,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       ),
       isInitialDocument,
       isLegacySealed: entry.isLegacySealed,
-      isServed: isServed(entry),
+      isServed: applicationContext.getUtilities().isServed(entry),
       isStipDecision: entry.isStipDecision,
       isStricken: entry.isStricken,
       isUnservable: formattedResult.isUnservable,
@@ -254,6 +248,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
     formattedResult.showDocumentDescriptionWithoutLink =
       !showDocumentLinks && !formattedResult.showDocumentProcessing;
 
+    formattedResult.editDocketEntryMetaLink = `/case-detail/${docketNumber}/docket-entry/${formattedResult.index}/edit-meta`;
+
     return formattedResult;
   });
 
@@ -262,7 +258,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && isServed(d),
+    docketEntry => applicationContext.getUtilities().isPending(docketEntry),
   );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
@@ -346,7 +342,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
     trialSessionId: caseDetail.trialSessionId,
   });
 
-  result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;
+  result.showBlockedTag =
+    caseDetail.blocked ||
+    (caseDetail.automaticBlocked &&
+      caseDetail.status !== STATUS_TYPES.calendared);
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;

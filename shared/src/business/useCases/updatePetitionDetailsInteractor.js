@@ -14,17 +14,16 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * updatePetitionDetailsInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.petitionDetails the petition details to update on the case
  * @returns {object} the updated case data
  */
-exports.updatePetitionDetailsInteractor = async ({
+exports.updatePetitionDetailsInteractor = async (
   applicationContext,
-  docketNumber,
-  petitionDetails,
-}) => {
+  { docketNumber, petitionDetails },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITION_DETAILS)) {
@@ -109,7 +108,8 @@ exports.updatePetitionDetailsInteractor = async ({
       newCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
     newCase.preferredTrialCity &&
     !newCase.blocked &&
-    !newCase.automaticBlocked
+    (!newCase.automaticBlocked ||
+      (newCase.automaticBlocked && newCase.highPriority))
   ) {
     await applicationContext
       .getPersistenceGateway()

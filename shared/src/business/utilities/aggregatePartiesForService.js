@@ -20,7 +20,16 @@ const aggregatePartiesForService = caseEntity => {
     ...formattedCase.irsPractitioners,
   ];
 
-  const aggregated = { electronic: [], paper: [] };
+  const otherParties = [
+    ...(formattedCase.otherFilers || []),
+    ...(formattedCase.otherPetitioners || []),
+  ];
+
+  const aggregated = {
+    electronic: [],
+    paper: [...otherParties],
+  };
+
   parties.forEach(party => {
     if (
       party &&

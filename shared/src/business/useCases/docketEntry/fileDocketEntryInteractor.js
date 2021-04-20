@@ -18,19 +18,17 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
  * @param {string} providers.primaryDocumentFileId the id of the document file
  * @returns {object} the updated case after the documents are added
  */
-exports.fileDocketEntryInteractor = async ({
+exports.fileDocketEntryInteractor = async (
   applicationContext,
-  documentMetadata,
-  isSavingForLater,
-  primaryDocumentFileId,
-}) => {
+  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
@@ -188,7 +186,7 @@ exports.fileDocketEntryInteractor = async ({
     workItem,
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });

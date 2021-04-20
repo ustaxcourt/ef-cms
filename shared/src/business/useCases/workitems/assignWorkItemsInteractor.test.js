@@ -46,9 +46,7 @@ describe('assignWorkItemsInteractor', () => {
     });
     let error;
     try {
-      await assignWorkItemsInteractor({
-        applicationContext,
-      });
+      await assignWorkItemsInteractor(applicationContext);
     } catch (err) {
       error = err;
     }
@@ -66,8 +64,7 @@ describe('assignWorkItemsInteractor', () => {
     };
     let error;
     try {
-      await assignWorkItemsInteractor({
-        applicationContext,
+      await assignWorkItemsInteractor(applicationContext, {
         userId: 'docketclerk',
       });
     } catch (err) {

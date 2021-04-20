@@ -42,8 +42,7 @@ describe('updatePetitionDetailsInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updatePetitionDetailsInteractor({
-        applicationContext,
+      updatePetitionDetailsInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -51,8 +50,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
   it('should throw a validation error if attempting to update caseType to undefined', async () => {
     await expect(
-      updatePetitionDetailsInteractor({
-        applicationContext,
+      updatePetitionDetailsInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         petitionDetails: {
           caseType: undefined,
@@ -62,8 +60,7 @@ describe('updatePetitionDetailsInteractor', () => {
   });
 
   it('should call updateCase with the updated case payment information (when unpaid) and return the updated case', async () => {
-    const result = await updatePetitionDetailsInteractor({
-      applicationContext,
+    const result = await updatePetitionDetailsInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
@@ -81,8 +78,7 @@ describe('updatePetitionDetailsInteractor', () => {
   });
 
   it('should call updateCase with the updated case payment information (when paid) and return the updated case', async () => {
-    const result = await updatePetitionDetailsInteractor({
-      applicationContext,
+    const result = await updatePetitionDetailsInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
@@ -106,8 +102,7 @@ describe('updatePetitionDetailsInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(generalDocketReadyForTrialCase);
 
-    const result = await updatePetitionDetailsInteractor({
-      applicationContext,
+    const result = await updatePetitionDetailsInteractor(applicationContext, {
       docketNumber: generalDocketReadyForTrialCase.docketNumber,
       petitionDetails: {
         ...generalDocketReadyForTrialCase,
@@ -128,14 +123,16 @@ describe('updatePetitionDetailsInteractor', () => {
   it('should call updateCaseTrialSortMappingRecords if the updated case is high priority and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(generalDocketReadyForTrialCase);
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        highPriority: true,
+        highPriorityReason: 'roll out',
+      });
 
-    const result = await updatePetitionDetailsInteractor({
-      applicationContext,
+    const result = await updatePetitionDetailsInteractor(applicationContext, {
       docketNumber: generalDocketReadyForTrialCase.docketNumber,
       petitionDetails: {
         ...generalDocketReadyForTrialCase,
-        highPriority: true,
         preferredTrialCity: 'Cheyenne, Wyoming',
         status: CASE_STATUS_TYPES.rule155,
       },
@@ -152,8 +149,7 @@ describe('updatePetitionDetailsInteractor', () => {
   });
 
   it('should call updateCase with the updated case payment information (when waived) and return the updated case', async () => {
-    const result = await updatePetitionDetailsInteractor({
-      applicationContext,
+    const result = await updatePetitionDetailsInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
@@ -181,8 +177,7 @@ describe('updatePetitionDetailsInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       });
 
-    const result = await updatePetitionDetailsInteractor({
-      applicationContext,
+    const result = await updatePetitionDetailsInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
@@ -207,8 +202,7 @@ describe('updatePetitionDetailsInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       });
 
-    const result = await updatePetitionDetailsInteractor({
-      applicationContext,
+    const result = await updatePetitionDetailsInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       petitionDetails: {
         ...mockCase,
@@ -224,5 +218,33 @@ describe('updatePetitionDetailsInteractor', () => {
     );
 
     expect(wavedDocument).toBeTruthy();
+  });
+
+  it('should call updateCaseTrialSortMappingRecords if the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-11-30T09:10:11.000Z',
+        automaticBlockedReason: 'Pending Item',
+        highPriority: true,
+        highPriorityReason: 'roll out',
+      });
+
+    await updatePetitionDetailsInteractor(applicationContext, {
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+        highPriority: true,
+        preferredTrialCity: 'Cheyenne, Wyoming',
+        status: CASE_STATUS_TYPES.rule155,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
   });
 });

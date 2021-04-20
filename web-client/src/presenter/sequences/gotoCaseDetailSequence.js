@@ -11,7 +11,9 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
-import { parallel, set } from 'cerebral/factories';
+import { getUserPendingEmailAction } from '../actions/getUserPendingEmailAction';
+import { parallel } from 'cerebral/factories';
+import { resetHeaderAccordionsSequence } from './resetHeaderAccordionsSequence';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
@@ -20,19 +22,21 @@ import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
+import { setDefaultEditDocumentEntryPointAction } from '../actions/setDefaultEditDocumentEntryPointAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
+import { setUserPendingEmailAction } from '../actions/setUserPendingEmailAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
-import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
 
 const { USER_ROLES } = getConstants();
 
 const gotoCaseDetailInternal = [
+  resetHeaderAccordionsSequence,
   getTrialSessionsAction,
   setTrialSessionsAction,
   setTrialSessionJudgeAction,
@@ -42,6 +46,8 @@ const gotoCaseDetailInternal = [
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
   getMessagesForCaseAction,
+  getUserPendingEmailAction,
+  setUserPendingEmailAction,
   setCurrentPageAction('CaseDetailInternal'),
 ];
 
@@ -70,7 +76,7 @@ export const gotoCaseDetailSequence = [
   getConsolidatedCasesByCaseAction,
   setConsolidatedCasesForCaseAction,
   setDefaultDocketRecordSortAction,
-  set(state.editDocumentEntryPoint, 'CaseDetail'),
+  setDefaultEditDocumentEntryPointAction,
   runPathForUserRoleAction,
   {
     ...takePathForRoles(

@@ -22,10 +22,6 @@ const {
 } = require('../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { v4: uuidv4 } = require('uuid');
-jest.mock('../../useCaseHelper/saveFileAndGenerateUrl');
-const {
-  saveFileAndGenerateUrl,
-} = require('../../useCaseHelper/saveFileAndGenerateUrl');
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let caseRecord;
@@ -191,8 +187,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      fileAndServeCourtIssuedDocumentInteractor({
-        applicationContext,
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: caseRecord.docketNumber,
@@ -210,8 +205,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     await expect(
-      fileAndServeCourtIssuedDocumentInteractor({
-        applicationContext,
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           docketNumber: caseRecord.docketNumber,
@@ -222,8 +216,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -255,8 +248,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the number of pages present in the document to be served', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -289,8 +281,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .saveDocumentFromLambda.mockImplementation(() => {});
 
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: caseRecord.docketNumber,
@@ -350,8 +341,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -366,7 +356,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
@@ -374,8 +364,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should call updateCaseAutomaticBlock and deleteCaseTrialSortMappingRecords', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -398,25 +387,31 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toBeCalled();
   });
 
-  it('should return a pdfUrl when there are paper service parties on the case', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
     caseRecord.contactPrimary.serviceIndicator =
       SERVICE_INDICATOR_TYPES.SI_PAPER;
-    saveFileAndGenerateUrl.mockReturnValue({ url: mockPdfUrl });
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: mockPdfUrl,
+      });
 
-    const result = await fileAndServeCourtIssuedDocumentInteractor({
+    const result = await fileAndServeCourtIssuedDocumentInteractor(
       applicationContext,
-      documentMeta: {
-        date: '2019-03-01T21:40:46.415Z',
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order',
-        documentType: 'Order',
-        eventCode: 'OD',
-        freeText: 'Dogs',
-        pending: true,
-        serviceStamp: 'Served',
+      {
+        documentMeta: {
+          date: '2019-03-01T21:40:46.415Z',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order',
+          documentType: 'Order',
+          eventCode: 'OD',
+          freeText: 'Dogs',
+          pending: true,
+          serviceStamp: 'Served',
+        },
       },
-    });
+    );
 
     expect(result.pdfUrl).toBe(mockPdfUrl);
   });
@@ -429,8 +424,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: caseRecord.docketNumber,
@@ -456,45 +450,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
   });
 
-  it('should set secondaryDate on the created document if the eventCode is TRAN', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
-      documentMeta: {
-        date: '2019-03-01T21:40:46.415Z',
-        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'Transcript',
-        eventCode: TRANSCRIPT_EVENT_CODE,
-        freeText: 'Dogs',
-        generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
-      },
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[5],
-    ).toMatchObject({
-      secondaryDate: '2019-03-01T21:40:46.415Z',
-    });
-  });
-
   it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
@@ -523,8 +480,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it("should delete the work item from the user's inbox when a work item previously existed on the docket entry", async () => {
-    await fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
         docketNumber: caseRecord.docketNumber,
@@ -539,10 +495,33 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should delete the draftOrderState from the docketEntry', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      documentMeta: {
+        docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: mockDocketEntryWithWorkItem.documentTitle,
+        documentType: 'Transcript',
+        draftOrderState: {
+          documentContents: 'Some content',
+          richText: 'some content',
+        },
+        eventCode: 'TRAN',
+      },
+    });
+
+    const docketEntryToUpdate = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        d => d.docketEntryId === mockDocketEntryWithWorkItem.docketEntryId,
+      );
+
+    expect(docketEntryToUpdate).toMatchObject({ draftOrderState: null });
+  });
+
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
-      await fileAndServeCourtIssuedDocumentInteractor({
-        applicationContext,
+      await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         documentMeta: {
           date: '2019-03-01T21:40:46.415Z',
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
@@ -563,5 +542,35 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           .deleteCaseTrialSortMappingRecords,
       ).toHaveBeenCalled();
     });
+  });
+
+  it('should throw an error if there is no one on the case with electronic or paper service', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...caseRecord,
+        contactPrimary: {
+          ...caseRecord.contactPrimary,
+          serviceIndicator: 'None',
+        },
+      });
+
+    await expect(
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        documentMeta: {
+          date: '2019-03-01T21:40:46.415Z',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Order',
+          documentType: 'Order',
+          eventCode: 'O',
+          serviceStamp: 'Served',
+        },
+      }),
+    ).rejects.toThrow("servedPartiesCode' is not allowed to be empty");
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).not.toBeCalled();
   });
 });
