@@ -74,32 +74,6 @@ export const FilingPartiesForm = connect(
               </label>
             </div>
           )}
-          {filingPartiesFormHelper.otherPetitioners?.map(petitioner => {
-            return (
-              <div className="usa-checkbox" key={petitioner.contactId}>
-                <input
-                  checked={form.otherParties[petitioner.contactId] || false}
-                  className="usa-checkbox__input"
-                  id="party-primary"
-                  name={`otherParties.${petitioner.contactId}`}
-                  type="checkbox"
-                  onChange={e => {
-                    updateSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                    validateSequence();
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label inline-block"
-                  htmlFor="party-primary"
-                >
-                  {petitioner.name}
-                </label>
-              </div>
-            );
-          })}
           <div className="usa-checkbox">
             <input
               checked={form.partyIrsPractitioner || false}
