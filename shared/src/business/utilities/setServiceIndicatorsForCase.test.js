@@ -141,16 +141,20 @@ describe('setServiceIndicatorsForCases', () => {
   it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactPrimary) with no representing counsel and no email`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
-      contactPrimary: {
-        ...baseCaseDetail.contactPrimary,
-        email: null,
-      },
+      petitioners: [
+        {
+          contactId: PRIMARY_CONTACT_ID,
+          contactType: CONTACT_TYPES.primary,
+          email: null,
+          name: 'Test Petitioner',
+        },
+      ],
       privatePractitioners: [],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
