@@ -20,14 +20,6 @@ export const caseInformationHelper = (get, applicationContext) => {
     ? 'Hide'
     : 'View';
 
-  const otherPetitioners =
-    applicationContext.getUtilities().getOtherPetitioners(caseDetail) || [];
-
-  const showOtherPetitioners = !!otherPetitioners.length;
-  const formattedOtherPetitioners = showingAdditionalPetitioners
-    ? otherPetitioners
-    : otherPetitioners.slice(0, 4);
-
   const showSealAddressLink = permissions.SEAL_ADDRESS;
   const showHearingsTable = !!caseDetail.hearings?.length;
 
@@ -40,12 +32,18 @@ export const caseInformationHelper = (get, applicationContext) => {
   const showContactPrimaryEmail = contactPrimary?.email;
   const showContactSecondaryEmail = contactSecondary?.email;
 
+  const allPetitioners = caseDetail.petitioners;
+
+  const formattedPetitioners = showingAdditionalPetitioners
+    ? allPetitioners
+    : allPetitioners.slice(0, 4);
+
   const showAddPetitionerButton =
     permissions.ADD_PETITIONER_TO_CASE &&
     caseDetail.status !== STATUS_TYPES.new;
 
   return {
-    formattedOtherPetitioners,
+    formattedPetitioners,
     showAddCounsel,
     showAddPetitionerButton,
     showContactPrimaryEmail,
@@ -53,7 +51,6 @@ export const caseInformationHelper = (get, applicationContext) => {
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showHearingsTable,
-    showOtherPetitioners,
     showSealAddressLink,
     showSealCaseButton,
     toggleAdditionalPetitionersDisplay,
