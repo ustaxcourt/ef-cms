@@ -46,6 +46,56 @@ describe('Message', () => {
       expect(message.isValid()).toBeFalsy();
     });
 
+    it('creates an invalid Message with no subject', () => {
+      const message = new Message(
+        {
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+
+      expect(message.isValid()).toBeFalsy();
+      expect(message.getFormattedValidationErrors().subject).toEqual(
+        'Enter a subject line',
+      );
+    });
+
+    it('creates an invalid Message with an empty subject', () => {
+      const message = new Message(
+        {
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          subject: ' ',
+        },
+        { applicationContext },
+      );
+
+      expect(message.isValid()).toBeFalsy();
+      expect(message.getFormattedValidationErrors().subject).toEqual(
+        'Enter a subject line',
+      );
+    });
+
+    it('creates an invalid Message with a subject that is too long', () => {
+      const message = new Message(
+        {
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          subject:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec fringilla diam. Donec molestie metus eu purus posuere, eu porta ex aliquet. Sed metus justo, sodales sit amet vehicula a, elementum a dolor. Aliquam matis mi eget erat scelerisque ph.', // 250 chars
+        },
+        { applicationContext },
+      );
+      expect(message.isValid()).toBeFalsy();
+      expect(message.getFormattedValidationErrors().subject).toEqual(
+        'Limit is 250 characters. Enter 250 or fewer characters.',
+      );
+    });
+
     it('creates an invalid Message with isCompleted true and without completedBy fields', () => {
       const message = new Message(
         {
