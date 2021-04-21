@@ -29,7 +29,9 @@ describe('caseInformationHelper', () => {
     const result = runCompute(caseInformationHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: {
+          petitioners: [],
+        },
         form: {},
       },
     });
@@ -46,6 +48,7 @@ describe('caseInformationHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           hearings: [{ trialSessionId: 'trial-id-123' }],
+          petitioners: [],
         },
         form: {},
       },
@@ -63,6 +66,7 @@ describe('caseInformationHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           hearings: [],
+          petitioners: [],
         },
         form: {},
       },
@@ -78,7 +82,9 @@ describe('caseInformationHelper', () => {
     const result = runCompute(caseInformationHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: {
+          petitioners: [],
+        },
         form: {},
       },
     });
@@ -95,6 +101,7 @@ describe('caseInformationHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           irsPractitioners: [{ userId: '2' }],
+          petitioners: [],
           privatePractitioners: [{ userId: '1' }],
         },
         form: {},
@@ -112,7 +119,9 @@ describe('caseInformationHelper', () => {
     const result = runCompute(caseInformationHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: {
+          petitioners: [],
+        },
         form: {},
       },
     });
@@ -130,6 +139,7 @@ describe('caseInformationHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           irsPractitioners: [{ userId: '2' }],
+          petitioners: [],
           privatePractitioners: [{ userId: '1' }],
         },
         form: {},
@@ -147,7 +157,9 @@ describe('caseInformationHelper', () => {
     const result = runCompute(caseInformationHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: {
+          petitioners: [],
+        },
         form: {},
       },
     });
@@ -162,7 +174,9 @@ describe('caseInformationHelper', () => {
     const result = runCompute(caseInformationHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: {},
+        caseDetail: {
+          petitioners: [],
+        },
         form: {},
       },
     });
@@ -177,7 +191,7 @@ describe('caseInformationHelper', () => {
     const result = runCompute(caseInformationHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { isSealed: true },
+        caseDetail: { isSealed: true, petitioners: [] },
         form: {},
       },
     });
@@ -215,6 +229,9 @@ describe('caseInformationHelper', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...baseState,
+          caseDetail: {
+            petitioners: [],
+          },
           showingAdditionalPetitioners: false,
         },
       });
@@ -222,24 +239,14 @@ describe('caseInformationHelper', () => {
       expect(result.toggleAdditionalPetitionersDisplay).toEqual('View');
     });
 
-    it('does not paginate (or show) other petitioners if it is non-existent', () => {
-      const result = runCompute(caseInformationHelper, {
-        state: {
-          ...baseState,
-        },
-      });
-
-      expect(result.formattedOtherPetitioners).toEqual([]);
-      expect(result.showOtherPetitioners).toEqual(false);
-    });
-
-    it('paginates if showingAdditionalPetitioners is false', () => {
+    it('paginates and shows four petitioner if showingAdditionalPetitioners is false', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...baseState,
           caseDetail: {
             petitioners: [
-              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.primary },
+              { a: '1', contactType: CONTACT_TYPES.secondary },
               { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
               { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
               { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
@@ -250,8 +257,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(result.formattedOtherPetitioners.length).toEqual(4);
-      expect(result.showOtherPetitioners).toEqual(true);
+      expect(result.formattedPetitioners.length).toEqual(4);
     });
 
     it('does not paginate (shows all) if showingAdditionalPetitioners is true', () => {
@@ -260,6 +266,8 @@ describe('caseInformationHelper', () => {
           ...baseState,
           caseDetail: {
             petitioners: [
+              { a: '1', contactType: CONTACT_TYPES.primary },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
               { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
               { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
               { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
@@ -271,8 +279,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(result.formattedOtherPetitioners.length).toEqual(5);
-      expect(result.showOtherPetitioners).toEqual(true);
+      expect(result.formattedPetitioners.length).toEqual(7);
     });
   });
 
@@ -285,7 +292,9 @@ describe('caseInformationHelper', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
-          caseDetail: {},
+          caseDetail: {
+            petitioners: [],
+          },
           form: {},
         },
       });
@@ -300,7 +309,9 @@ describe('caseInformationHelper', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
-          caseDetail: {},
+          caseDetail: {
+            petitioners: [],
+          },
           form: {},
         },
       });
