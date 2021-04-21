@@ -1,9 +1,12 @@
-import {
+const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-} from '../entities/EntityConstants';
-import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
+} = require('../entities/EntityConstants');
+const {
+  generateDocketRecordPdfInteractor,
+} = require('./generateDocketRecordPdfInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
 const { MOCK_USERS } = require('../../test/mockUsers');
@@ -12,15 +15,6 @@ const mockId = '12345';
 const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
 const caseDetail = {
   caseCaption: 'Test Case Caption',
-  contactPrimary: {
-    address1: 'address 1',
-    city: 'City',
-    countryType: COUNTRY_TYPES.DOMESTIC,
-    name: 'Test Petitioner',
-    phone: '123-123-1234',
-    postalCode: '12345',
-    state: 'AL',
-  },
   docketEntries: [
     {
       docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
@@ -39,6 +33,18 @@ const caseDetail = {
   docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
+  petitioners: [
+    {
+      address1: 'address 1',
+      city: 'City',
+      contactType: CONTACT_TYPES.primary,
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      name: 'Test Petitioner',
+      phone: '123-123-1234',
+      postalCode: '12345',
+      state: 'AL',
+    },
+  ],
   privatePractitioners: [],
 };
 

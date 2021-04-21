@@ -1,8 +1,6 @@
-const {
-  getOtherPetitionerContact,
-} = require('../entities/contacts/OtherPetitionerContact');
 const { Case } = require('../entities/cases/Case');
 const { isEmpty } = require('lodash');
+const { Petitioner } = require('../entities/contacts/Petitioner');
 
 /**
  * validateAddPetitionerInteractor
@@ -13,11 +11,7 @@ const { isEmpty } = require('lodash');
  * @returns {object} errors (null if no errors)
  */
 exports.validateAddPetitionerInteractor = ({ applicationContext, contact }) => {
-  const OtherPetitionerContact = getOtherPetitionerContact({
-    countryType: contact.countryType,
-  });
-
-  const petitionerErrors = new OtherPetitionerContact(contact, {
+  const petitionerErrors = new Petitioner(contact, {
     applicationContext,
   }).getFormattedValidationErrors();
 

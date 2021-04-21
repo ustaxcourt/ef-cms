@@ -6,6 +6,7 @@ const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
@@ -79,16 +80,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'contact@example.com',
-        name: 'Contact Primary',
-        phone: '123123134',
-        postalCode: '12345',
-        state: 'TN',
-      },
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -116,6 +107,19 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '101-20',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'contact@example.com',
+          name: 'Contact Primary',
+          phone: '123123134',
+          postalCode: '12345',
+          state: 'TN',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -123,24 +127,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Primary',
-        phone: '123123134',
-        postalCode: '12345',
-        state: 'TN',
-      },
-      contactSecondary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Secondary',
-        phone: '123123134',
-        postalCode: '12345',
-        state: 'TN',
-      },
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -171,6 +157,28 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       isPaper: true,
       mailingDate: 'testing',
       partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Contact Primary',
+          phone: '123123134',
+          postalCode: '12345',
+          state: 'TN',
+        },
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Contact Secondary',
+          phone: '123123134',
+          postalCode: '12345',
+          state: 'TN',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',

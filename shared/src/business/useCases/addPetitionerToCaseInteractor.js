@@ -1,12 +1,10 @@
 const {
-  getOtherPetitionerContact,
-} = require('../entities/contacts/OtherPetitionerContact');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
+const { Petitioner } = require('../entities/contacts/Petitioner');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -45,11 +43,7 @@ exports.addPetitionerToCaseInteractor = async (
 
   caseEntity.caseCaption = caseCaption;
 
-  const OtherPetitionerContact = getOtherPetitionerContact({
-    countryType: contact.countryType,
-  });
-
-  const petitionerEntity = new OtherPetitionerContact(contact, {
+  const petitionerEntity = new Petitioner(contact, {
     applicationContext,
   });
 
