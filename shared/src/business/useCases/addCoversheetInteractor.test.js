@@ -7,6 +7,7 @@ const {
   testPdfDoc,
 } = require('../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
@@ -14,9 +15,6 @@ const {
 
 describe('addCoversheetInteractor', () => {
   const testingCaseData = {
-    contactPrimary: {
-      name: 'Daenerys Stormborn',
-    },
     createdAt: '2019-04-19T14:45:15.595Z',
     docketEntries: [
       {
@@ -34,16 +32,16 @@ describe('addCoversheetInteractor', () => {
     ],
     docketNumber: '101-19',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        contactType: CONTACT_TYPES.primary,
+        name: 'Daenerys Stormborn',
+      },
+    ],
   };
 
   const optionalTestingCaseData = {
     ...testingCaseData,
-    contactPrimary: {
-      name: 'Janie Petitioner',
-    },
-    contactSecondary: {
-      name: 'Janie Petitioner',
-    },
     docketEntries: [
       {
         ...testingCaseData.docketEntries[0],
@@ -63,6 +61,16 @@ describe('addCoversheetInteractor', () => {
     ],
     docketNumber: '102-19',
     partyType: PARTY_TYPES.petitionerSpouse,
+    petitioners: [
+      {
+        contactType: CONTACT_TYPES.primary,
+        name: 'Janie Petitioner',
+      },
+      {
+        contactType: CONTACT_TYPES.secondary,
+        name: 'Janie Petitioner',
+      },
+    ],
   };
 
   beforeAll(() => {
