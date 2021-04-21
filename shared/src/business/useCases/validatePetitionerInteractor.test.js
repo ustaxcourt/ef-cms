@@ -1,13 +1,9 @@
 const {
-  CONTACT_TYPES,
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} = require('../entities/EntityConstants');
-const {
   validatePetitionerInteractor,
 } = require('./validatePetitionerInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { COUNTRY_TYPES } = require('../entities/EntityConstants');
 const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 
 describe('validatePetitionerInteractor', () => {
@@ -26,20 +22,9 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: 'night@example.com',
     };
 
-    const partyType = PARTY_TYPES.petitioner;
-
-    const petitioners = [
-      {
-        ...contact,
-        contactType: CONTACT_TYPES.primary,
-      },
-    ];
-
     const errors = validatePetitionerInteractor({
       applicationContext,
       contactInfo: contact,
-      partyType,
-      petitioners,
     });
 
     expect(errors).toBeFalsy();
@@ -58,20 +43,9 @@ describe('validatePetitionerInteractor', () => {
       state: 'MN',
     };
 
-    const partyType = PARTY_TYPES.petitioner;
-
-    const petitioners = [
-      {
-        ...contact,
-        contactType: CONTACT_TYPES.primary,
-      },
-    ];
-
     const errors = validatePetitionerInteractor({
       applicationContext,
       contactInfo: contact,
-      partyType,
-      petitioners,
     });
 
     expect(errors).toBeFalsy();
@@ -91,20 +65,9 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: 'night@example.com',
     };
 
-    const partyType = PARTY_TYPES.petitioner;
-
-    const petitioners = [
-      {
-        ...contact,
-        contactType: CONTACT_TYPES.primary,
-      },
-    ];
-
     const errors = validatePetitionerInteractor({
       applicationContext,
       contactInfo: contact,
-      partyType,
-      petitioners,
     });
 
     expect(errors).toEqual({
@@ -129,23 +92,9 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: 'night@example.com',
     };
 
-    const partyType = PARTY_TYPES.petitionerSpouse;
-
-    const petitioners = [
-      {
-        contactType: CONTACT_TYPES.primary,
-      },
-      {
-        ...contact,
-        contactType: CONTACT_TYPES.secondary,
-      },
-    ];
-
     const errors = validatePetitionerInteractor({
       applicationContext,
       contactInfo: contact,
-      partyType,
-      petitioners,
     });
 
     expect(errors).toEqual({
@@ -170,23 +119,9 @@ describe('validatePetitionerInteractor', () => {
       state: 'MN',
     };
 
-    const partyType = PARTY_TYPES.petitionerSpouse;
-
-    const petitioners = [
-      {
-        contactType: CONTACT_TYPES.primary,
-      },
-      {
-        ...contact,
-        contactType: CONTACT_TYPES.secondary,
-      },
-    ];
-
     const errors = validatePetitionerInteractor({
       applicationContext,
       contactInfo: contact,
-      partyType,
-      petitioners,
     });
 
     expect(errors).toEqual({
