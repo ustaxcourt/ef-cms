@@ -139,6 +139,7 @@ export const CreateMessageModalDialog = connect(
           <input
             className="usa-input"
             id="subject"
+            maxLength="250"
             name="subject"
             type="text"
             value={form.subject || ''}

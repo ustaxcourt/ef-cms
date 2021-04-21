@@ -163,6 +163,7 @@ exports.updatePractitionerUserInteractor = async (
       applicationContext,
       bypassDocketEntry,
       contactInfo: validatedUserData.contact,
+      firmName: validatedUserData.firmName,
       requestUserId: requestUser.userId,
       updatedEmail: validatedUserData.email,
       updatedName: validatedUserData.name,

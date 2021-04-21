@@ -138,6 +138,27 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactPrimary) with no representing counsel and no email`, async () => {
+    const caseDetail = {
+      ...baseCaseDetail,
+      petitioners: [
+        {
+          contactId: PRIMARY_CONTACT_ID,
+          contactType: CONTACT_TYPES.primary,
+          email: null,
+          name: 'Test Petitioner',
+        },
+      ],
+      privatePractitioners: [],
+    };
+
+    const result = setServiceIndicatorsForCase(caseDetail);
+
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
+  });
+
   it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactSecondary) with a serviceIndicator already set as an override`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
