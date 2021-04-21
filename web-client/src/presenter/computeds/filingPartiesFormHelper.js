@@ -6,7 +6,6 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
   const form = get(state.form);
 
   const {
-    CONTACT_TYPES,
     INTERNAL_CATEGORY_MAP,
     PARTY_TYPES,
   } = applicationContext.getConstants();
@@ -26,12 +25,6 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
     'Application to Take Deposition',
   ];
 
-  const otherPetitioners = caseDetail.petitioners.filter(
-    petitioner => petitioner.contactType === CONTACT_TYPES.otherPetitioner,
-  );
-
-  console.log('~~~otherPetitioners', otherPetitioners);
-
   const amendmentEventCodes = ['AMAT', 'ADMT'];
 
   const showSecondaryParty =
@@ -43,7 +36,6 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
       objectionDocumentTypes.includes(form.documentType) ||
       (amendmentEventCodes.includes(form.eventCode) &&
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
-    otherPetitioners,
     partyValidationError,
     showSecondaryParty,
   };
