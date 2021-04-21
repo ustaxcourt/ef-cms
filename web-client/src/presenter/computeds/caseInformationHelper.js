@@ -38,8 +38,6 @@ export const caseInformationHelper = (get, applicationContext) => {
     ? allPetitioners
     : allPetitioners.slice(0, 4);
 
-  console.log('formattedPetitioners', formattedPetitioners);
-
   const showAddPetitionerButton =
     permissions.ADD_PETITIONER_TO_CASE &&
     caseDetail.status !== STATUS_TYPES.new;
