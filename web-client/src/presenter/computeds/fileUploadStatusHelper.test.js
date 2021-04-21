@@ -91,10 +91,9 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: true,
-
-          noThrottle: true, // eslint-disable-next-line prettier/prettier
-timeRemaining: 3600 * 4 + 60 * 21,
-
+          noThrottle: true,
+          // eslint-disable-next-line prettier/prettier
+          timeRemaining: 3600 * 4 + 60 * 21,
         },
       },
     });
