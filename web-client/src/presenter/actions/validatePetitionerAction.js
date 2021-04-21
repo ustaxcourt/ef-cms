@@ -24,15 +24,11 @@ export const validatePetitionerAction = ({
 
   const { contact } = get(state.form);
   const caseDetail = get(state.caseDetail);
-  const { partyType, petitioners, status } = caseDetail;
 
   let errors =
     applicationContext.getUseCases().validatePetitionerInteractor({
       applicationContext,
       contactInfo: contact,
-      partyType,
-      petitioners,
-      status,
     }) || {};
 
   const caseContact = applicationContext
