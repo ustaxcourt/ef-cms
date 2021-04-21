@@ -10,7 +10,7 @@ describe('setUserPendingEmailForPrimaryAndSecondaryAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('set state.screenMetadata.contactPrimaryPendingEmail from props.contactPrimaryPendingEmail', async () => {
+  it('should set state.screenMetadata.pendingEmails.primary from props.contactPrimaryPendingEmail', async () => {
     const { state } = await runAction(
       setUserPendingEmailForPrimaryAndSecondaryAction,
       {
@@ -20,10 +20,10 @@ describe('setUserPendingEmailForPrimaryAndSecondaryAction', () => {
       },
     );
 
-    expect(state.screenMetadata.contactPrimaryPendingEmail).toBe(mockEmail);
+    expect(state.screenMetadata.pendingEmails.primary).toBe(mockEmail);
   });
 
-  it('set state.screenMetadata.contactPrimaryPendingEmail to undefined when props.contactPrimaryPendingEmail is undefined', async () => {
+  it('should set state.screenMetadata.pendingEmails.primary to undefined when props.contactPrimaryPendingEmail is undefined', async () => {
     const { state } = await runAction(
       setUserPendingEmailForPrimaryAndSecondaryAction,
       {
@@ -33,10 +33,10 @@ describe('setUserPendingEmailForPrimaryAndSecondaryAction', () => {
       },
     );
 
-    expect(state.screenMetadata.contactPrimaryPendingEmail).toBeUndefined();
+    expect(state.screenMetadata.pendingEmails.primary).toBeUndefined();
   });
 
-  it('set state.screenMetadata.contactSecondaryPendingEmail from props.contactSecondaryPendingEmail', async () => {
+  it('set state.screenMetadata.pendingEmails.secondary from props.contactSecondaryPendingEmail', async () => {
     const { state } = await runAction(
       setUserPendingEmailForPrimaryAndSecondaryAction,
       {
@@ -46,10 +46,10 @@ describe('setUserPendingEmailForPrimaryAndSecondaryAction', () => {
       },
     );
 
-    expect(state.screenMetadata.contactSecondaryPendingEmail).toBe(mockEmail);
+    expect(state.screenMetadata.pendingEmails.secondary).toBe(mockEmail);
   });
 
-  it('set state.screenMetadata.contactSecondaryPendingEmail to undefined when props.contactSecondaryPendingEmail is undefined', async () => {
+  it('should set state.screenMetadata.pendingEmails.secondary to undefined when props.contactSecondaryPendingEmail is undefined', async () => {
     const { state } = await runAction(
       setUserPendingEmailForPrimaryAndSecondaryAction,
       {
@@ -59,6 +59,6 @@ describe('setUserPendingEmailForPrimaryAndSecondaryAction', () => {
       },
     );
 
-    expect(state.screenMetadata.contactSecondaryPendingEmail).toBeUndefined();
+    expect(state.screenMetadata.pendingEmails.secondary).toBeUndefined();
   });
 });
