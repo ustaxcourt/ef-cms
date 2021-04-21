@@ -105,7 +105,7 @@ exports.createCaseInteractor = async (
     }
 
     // remove the email from contactPrimary since the practitioners array should have a service email
-    delete petitionEntity.contactPrimary.email;
+    delete petitionEntity.getContactPrimary().email;
 
     privatePractitioners = [practitionerUser];
   }
