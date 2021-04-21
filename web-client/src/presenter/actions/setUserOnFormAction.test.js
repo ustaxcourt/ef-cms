@@ -14,6 +14,7 @@ describe('setUserOnFormAction', () => {
           contact: {
             address1: '123 Main St',
           },
+          firmName: 'testing',
           name: 'Test User',
           userId: '123',
         },
@@ -25,6 +26,7 @@ describe('setUserOnFormAction', () => {
       contact: {
         address1: '123 Main St',
       },
+      firmName: 'testing',
       name: 'Test User',
     });
   });
