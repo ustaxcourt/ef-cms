@@ -1,4 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
+import { Focus } from '../ustc-ui/Focus/Focus';
 import { ModalDialog } from './ModalDialog';
 import { ProgressBar } from '../ustc-ui/ProgressBar/ProgressBar';
 import { connect } from '@cerebral/react';
@@ -18,6 +19,12 @@ export const FileUploadStatusModal = connect(
   }) {
     return (
       <ModalDialog className="file-upload-status-modal">
+        <Focus>
+          <ProgressBar
+            aria-labelledby="progress-description"
+            value={percentComplete}
+          />
+        </Focus>
         <div>
           <div
             className="status-message"
@@ -26,10 +33,6 @@ export const FileUploadStatusModal = connect(
           >
             {helper.statusMessage}
           </div>
-          <ProgressBar
-            aria-labelledby="progress-description"
-            value={percentComplete}
-          />
           <div className="percent-complete">{percentComplete}%</div>
           <div aria-hidden="true" className="progress-bar">
             <div

@@ -17,7 +17,7 @@ export const Focus = ({ children, className }) => {
   };
 
   useEffect(() => {
-    focused || setFocus();
+    focused || setTimeout(setFocus, 50);
   }, []);
 
   const focusClassName = classNames('focus-component', className);
