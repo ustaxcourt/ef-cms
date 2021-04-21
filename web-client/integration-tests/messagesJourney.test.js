@@ -9,6 +9,7 @@ import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketCle
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
 import {
+  getTextByCount,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -32,7 +33,7 @@ import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsRe
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
 const test = setupTest();
-const { STATUS_TYPES } = applicationContext.getConstants();
+const { PETITIONS_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
 describe('messages journey', () => {
   beforeAll(() => {
@@ -110,4 +111,68 @@ describe('messages journey', () => {
   });
   petitionsClerkVerifiesCompletedMessageNotInInbox(test);
   petitionsClerkVerifiesCompletedMessageNotInSection(test);
+
+  loginAs(test, 'petitionsclerk@example.com');
+  it('attaches a document to a message with a very long title, which is truncated in the subject', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    await test.runSequence('openCreateMessageModalSequence');
+
+    await test.runSequence('updateSectionInCreateMessageModalSequence', {
+      key: 'toSection',
+      value: PETITIONS_SECTION,
+    });
+
+    await test.runSequence('updateModalFormValueSequence', {
+      key: 'toUserId',
+      value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
+    });
+
+    const currentDocketEntries = test.getState('caseDetail.docketEntries');
+    const longDocumentTitle = getTextByCount(255);
+
+    const docketEntryWithLongTitle = {
+      addToCoversheet: false,
+      createdAt: '2021-04-19T19:22:08.389Z',
+      docketEntryId: '999cd272-da92-4e31-bedc-28cdad2e08b0',
+      docketNumber: '304-21',
+      documentTitle: longDocumentTitle,
+      documentType: longDocumentTitle,
+      entityName: 'DocketEntry',
+      eventCode: 'STIN',
+      filedBy: 'Petr. Mona Schultz',
+      filingDate: '2021-04-19T19:22:08.385Z',
+      index: 0,
+      isDraft: false,
+      isFileAttached: true,
+      isMinuteEntry: false,
+      isOnDocketRecord: false,
+      isStricken: false,
+      partyPrimary: true,
+      partySecondary: false,
+      pending: false,
+      privatePractitioners: [],
+      processingStatus: 'pending',
+      receivedAt: '2021-04-19T04:00:00.000Z',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    };
+
+    test.setState('caseDetail.docketEntries', [
+      ...currentDocketEntries,
+      docketEntryWithLongTitle,
+    ]);
+
+    await test.runSequence('updateMessageModalAttachmentsSequence', {
+      documentId: docketEntryWithLongTitle.docketEntryId,
+    });
+
+    expect(test.getState('modal.form.subject').length).toEqual(250);
+    expect(test.getState('modal.form.subject')).toEqual(
+      longDocumentTitle.slice(0, 250),
+    );
+
+    await test.runSequence('clearModalFormSequence');
+  });
 });
