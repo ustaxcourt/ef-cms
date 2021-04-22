@@ -132,6 +132,7 @@ export const AddPetitionerToCase = connect(
             {petitionerAddresses && (
               <FormGroup className="margin-left-3">
                 <BindedSelect
+                  aria-label="existing address dropdown"
                   bind={`${bind}.${type}.existingAddressContactId`}
                   className="usa-input width-mobile"
                   id="existing-addresses"
