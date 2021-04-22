@@ -34,4 +34,72 @@ describe('getAndSetPetitionersAddressAction', () => {
       },
     });
   });
+
+  it('should set petitioner addresses 1, 2, and 3 from case on screenMetadata if they exist', async () => {
+    const result = await runAction(getAndSetPetitionersAddressAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          petitioners: [
+            {
+              address1: '3100 Street street',
+              address2: 'Suite 3',
+              address3: 'Room 7',
+              contactId: 'e8489600-9eca-11eb-a8b3-0242ac130003',
+            },
+            {
+              address1: '3100 Ave street',
+              address2: 'Suite 4',
+              address3: 'Room 8',
+              contactId: '5fd05a6a-3742-4de8-935d-b600b2fca9b7',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.state.screenMetadata).toEqual({
+      petitionerAddresses: {
+        '5fd05a6a-3742-4de8-935d-b600b2fca9b7':
+          '3100 Ave street, Suite 4, Room 8',
+        'e8489600-9eca-11eb-a8b3-0242ac130003':
+          '3100 Street street, Suite 3, Room 7',
+      },
+    });
+  });
+
+  it('should only set unique petitioner addresses from case on screenMetadata', async () => {
+    const result = await runAction(getAndSetPetitionersAddressAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          petitioners: [
+            {
+              address1: '3100 Street street',
+              address2: 'Suite 3',
+              address3: 'Room 7',
+              contactId: 'e8489600-9eca-11eb-a8b3-0242ac130003',
+            },
+            {
+              address1: '3100 Street street',
+              address2: 'Suite 3',
+              address3: 'Room 7',
+              contactId: '5fd05a6a-3742-4de8-935d-b600b2fca9b7',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.state.screenMetadata).toEqual({
+      petitionerAddresses: {
+        '5fd05a6a-3742-4de8-935d-b600b2fca9b7':
+          '3100 Ave street, Suite 3, Room 7',
+      },
+    });
+  });
 });
