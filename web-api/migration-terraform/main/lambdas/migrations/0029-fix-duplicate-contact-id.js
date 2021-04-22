@@ -29,8 +29,6 @@ const migrateItems = async items => {
 
       const newContactId = applicationContext.getUniqueId();
 
-      console.log('item.pk', item.pk);
-
       applicationContext.logger.info(
         'changing contactSecondary contactId to a new unused unique id',
         {
