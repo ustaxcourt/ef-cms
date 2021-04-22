@@ -61,7 +61,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   docketEntryId: JoiValidationConstants.UUID.required().description(
     'System-generated unique ID for the docket entry. If the docket entry is associated with a document in S3, this is also the S3 document key.',
   ),
-  docketNumber: JoiValidationConstants.DOCKET_NUMBER.optional().description(
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Docket Number of the associated Case in XXXXX-YY format.',
   ),
   docketNumbers: JoiValidationConstants.STRING.max(500)

@@ -79,6 +79,7 @@ describe('CaseInternal entity', () => {
         {
           archivedDocketEntries: [
             {
+              docketNumber: '101-21',
               documentType: 'Petition',
               eventCode: 'A',
               filedBy: 'Test Petitioner',
