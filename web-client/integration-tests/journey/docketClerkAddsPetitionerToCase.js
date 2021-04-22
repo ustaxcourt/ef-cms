@@ -30,9 +30,11 @@ export const docketClerkAddsPetitionerToCase = test => {
       contactId: contactPrimary.contactId,
     });
 
+    const mockUpdatedCaption = 'Something Else';
+
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.caseCaption',
-      value: 'Something Else',
+      value: mockUpdatedCaption,
     });
 
     await test.runSequence('submitAddPetitionerSequence');
@@ -42,5 +44,7 @@ export const docketClerkAddsPetitionerToCase = test => {
     expect(test.getState('caseDetail.petitioners').length).toEqual(
       petitionersBeforeAdding + 1,
     );
+
+    expect(test.getState('caseDetail.caseCaption')).toEqual(mockUpdatedCaption);
   });
 };
