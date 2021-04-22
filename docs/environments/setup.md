@@ -76,6 +76,7 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `DYNAMSOFT_S3_ZIP_PATH` | Dynamsoft Web TWAIN full S3 path ZIP configured above, e.g. `s3://bucketname/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz` |
   | `EFCMS_DOMAIN` | Domain name chosen above |
   | `COGNITO_SUFFIX` | Suffix of your choice for the Cognito URL |
+  | `USTC_ADMIN_USER` | Username of your choice used by the Cognito admin user |
   | `USTC_ADMIN_PASS` | Password of your choice used by the Cognito admin user |
   | `EMAIL_DMARC_POLICY` | DMARC policy in the format of `v=DMARC1; p=none; rua=mailto:postmaster@example.com;` |
   | `IRS_SUPERUSER_EMAIL_STG` | Email address used to serve all new petitions to the IRS for STG |
