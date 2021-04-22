@@ -110,13 +110,17 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 10. Update CircleCI to have all the new environment variables needed.
 11. Setting up Users
 
-    1. The new environment will require an admin account for creating users. Run the following command to create the admin account. NOTE: this script also deactivates this user.
+    1. The new environment will require an Admin account for creating users. Run the following command to create the admin account. NOTE: this script also deactivates this user.
 
         ```bash
         node shared/admin-tools/user/setup-admin.js
         ```
 
-    1. 
+    2. If the new environment is a test environment, we have a script to setup test users for the various roles throughout the application. It activates and then deactivates the Admin user.
+
+        ```bash
+        node shared/admin-tools/user/setup-test-users.js
+        ```
 
 Then, follow the instructions found in the [Blue-Green Migration documentation](../BLUE_GREEN_MIGRATION.md) for a first-time deployment.
 
