@@ -1669,7 +1669,7 @@ button.change-scanner-button {
       max-width: 1440px;
     }
 
-    h3.usa-footer__logo-heading {
+    .usa-footer__logo-heading {
       font-family: $font-serif;
       font-size: 18px;
       font-weight: 700;
@@ -1704,7 +1704,7 @@ button.change-scanner-button {
 
   @media only screen and (max-width: $large-screen - 1) {
     .usa-footer__secondary-section {
-      h3.usa-footer__logo-heading {
+      .usa-footer__logo-heading {
         font-size: 16px;
       }
     }
@@ -1722,7 +1722,7 @@ button.change-scanner-button {
         margin-bottom: 10px;
       }
 
-      h3.usa-footer__logo-heading {
+      .usa-footer__logo-heading {
         font-size: 18px;
       }
     }

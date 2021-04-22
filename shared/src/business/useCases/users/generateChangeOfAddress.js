@@ -38,6 +38,7 @@ exports.generateChangeOfAddress = async ({
   applicationContext,
   bypassDocketEntry = false,
   contactInfo,
+  firmName,
   requestUserId,
   updatedEmail,
   updatedName,
@@ -93,6 +94,7 @@ exports.generateChangeOfAddress = async ({
 
       // This updates the case by reference!
       practitionerObject.contact = contactInfo;
+      practitionerObject.firmName = firmName;
       practitionerObject.name = practitionerName;
 
       if (!oldData.email && updatedEmail) {
