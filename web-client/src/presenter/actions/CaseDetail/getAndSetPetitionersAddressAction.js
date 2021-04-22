@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+import { uniqBy } from 'lodash';
 
 /**
  * gets and sets state.screenMetadata.petitionerAddresses
@@ -12,8 +13,19 @@ export const getAndSetPetitionersAddressAction = ({ get, store }) => {
 
   const petitionerAddresses = {};
 
-  caseDetail.petitioners.forEach(petitioner => {
-    petitionerAddresses[petitioner.contactId] = petitioner.address1;
+  const uniquePetitionerAddresses = uniqBy(
+    caseDetail.petitioners,
+    contact => `${contact.address1} ${contact.address2} ${contact.address3}`,
+  );
+
+  uniquePetitionerAddresses.forEach(petitioner => {
+    petitionerAddresses[petitioner.contactId] = [
+      petitioner.address1,
+      petitioner.address2,
+      petitioner.address3,
+    ]
+      .filter(Boolean)
+      .join(', ');
   });
 
   store.set(state.screenMetadata.petitionerAddresses, petitionerAddresses);
