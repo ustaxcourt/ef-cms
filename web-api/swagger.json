@@ -6368,7 +6368,7 @@
         }
       }
     },
-    "/case-meta/:docketNumber/add-petitioner,": {
+    "/case-meta/{docketNumber}/add-petitioner,": {
       "parameters": [
         {
           "name": "docketNumber",
