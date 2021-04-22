@@ -42,7 +42,8 @@ const setServiceIndicatorsForCase = caseDetail => {
     if (hasPrimaryPractitioner) {
       contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
     } else {
-      contactPrimary.serviceIndicator = isPaper
+      const serviceIsPaper = isPaper || !contactPrimary.email;
+      contactPrimary.serviceIndicator = serviceIsPaper
         ? SERVICE_INDICATOR_TYPES.SI_PAPER
         : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     }
