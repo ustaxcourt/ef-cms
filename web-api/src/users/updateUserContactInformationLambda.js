@@ -8,10 +8,12 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.updateUserContactInformationLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
+    const { contactInfo, firmName } = JSON.parse(event.body);
     return await applicationContext
       .getUseCases()
       .updateUserContactInformationInteractor(applicationContext, {
-        contactInfo: JSON.parse(event.body),
+        contactInfo,
+        firmName,
         userId: (event.pathParameters || event.path).userId,
       });
   });

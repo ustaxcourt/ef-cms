@@ -1,5 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { ErrorNotification } from './ErrorNotification';
+import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { UserContactEditForm } from './UserContactEditForm';
 import { connect } from '@cerebral/react';
@@ -12,11 +13,15 @@ export const UserContactEdit = connect(
     navigateBackSequence: sequences.navigateBackSequence,
     submitUpdateUserContactInformationSequence:
       sequences.submitUpdateUserContactInformationSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    userContactEditHelper: state.userContactEditHelper,
   },
   function UserContactEdit({
     form,
     navigateBackSequence,
     submitUpdateUserContactInformationSequence,
+    updateFormValueSequence,
+    userContactEditHelper,
   }) {
     return (
       <>
@@ -46,6 +51,27 @@ export const UserContactEdit = connect(
                 {form.name} ({form.barNumber})
               </p>
             </div>
+            {userContactEditHelper.showFirmName && (
+              <FormGroup>
+                <label className="usa-label" htmlFor="firmName">
+                  Firm name <span className="usa-hint">(optional)</span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  id="firmName"
+                  name="firmName"
+                  type="text"
+                  value={form.firmName || ''}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </FormGroup>
+            )}
             <UserContactEditForm
               bind="form"
               changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"

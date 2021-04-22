@@ -48,6 +48,7 @@ describe('updateUserContactInformationInteractor', () => {
       birthYear: '1902',
       employer: EMPLOYER_OPTIONS[2],
       entityName: irsPractitionerEntityName,
+      firmName: 'broken',
       firstName: 'Roy',
       lastName: 'Rogers',
       originalBarState: 'OR',
@@ -90,6 +91,7 @@ describe('updateUserContactInformationInteractor', () => {
   it('should return without updating user or cases when the contact information has not changed', async () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo: {},
+      firmName: 'broken',
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
 
@@ -303,5 +305,38 @@ describe('updateUserContactInformationInteractor', () => {
     ).toMatchObject({
       isUpdatingInformation: false,
     });
+  });
+
+  it('should update the firmName if user is a practitioner and firmName is passed in', async () => {
+    await updateUserContactInformationInteractor(applicationContext, {
+      contactInfo,
+      firmName: 'testing',
+      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
+        .user,
+    ).toMatchObject({
+      firmName: 'testing',
+    });
+  });
+
+  it('should return early if the firmName and contact info was not changed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => ({
+        ...mockUser,
+        contact: contactInfo,
+      }));
+
+    await updateUserContactInformationInteractor(applicationContext, {
+      contactInfo,
+      firmName: mockUser.firmName,
+      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser,
+    ).not.toBeCalled();
   });
 });
