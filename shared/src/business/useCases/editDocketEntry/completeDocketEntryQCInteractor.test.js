@@ -31,6 +31,7 @@ describe('completeDocketEntryQCInteractor', () => {
     const workItem = {
       docketEntry: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '45678-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
@@ -66,6 +67,7 @@ describe('completeDocketEntryQCInteractor', () => {
           certificateOfService: true,
           certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
           docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: '45678-18',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -80,6 +82,7 @@ describe('completeDocketEntryQCInteractor', () => {
         },
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
+          docketNumber: '45678-18',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -89,6 +92,7 @@ describe('completeDocketEntryQCInteractor', () => {
         },
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: '45678-18',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -629,6 +633,7 @@ describe('completeDocketEntryQCInteractor', () => {
         certificateOfService: true,
         certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
         docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '45678-18',
         documentTitle: 'Answer',
         documentType: 'Answer',
         eventCode: 'A',
