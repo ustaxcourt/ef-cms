@@ -90,6 +90,12 @@ describe('getAndSetPetitionersAddressAction', () => {
               address3: 'Room 7',
               contactId: '5fd05a6a-3742-4de8-935d-b600b2fca9b7',
             },
+            {
+              address1: '3298 Street street',
+              address2: 'Suite 978',
+              address3: 'Room 000',
+              contactId: '6c7a15ac-5c18-43d1-b35d-5544bf1648da',
+            },
           ],
         },
       },
@@ -97,8 +103,10 @@ describe('getAndSetPetitionersAddressAction', () => {
 
     expect(result.state.screenMetadata).toEqual({
       petitionerAddresses: {
-        '5fd05a6a-3742-4de8-935d-b600b2fca9b7':
-          '3100 Ave street, Suite 3, Room 7',
+        '6c7a15ac-5c18-43d1-b35d-5544bf1648da':
+          '3298 Street street, Suite 978, Room 000',
+        'e8489600-9eca-11eb-a8b3-0242ac130003':
+          '3100 Street street, Suite 3, Room 7',
       },
     });
   });
