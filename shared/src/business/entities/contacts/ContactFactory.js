@@ -28,7 +28,7 @@ ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES = {
   postalCode: [
     {
       contains: 'match',
-      message: 'Enter ZIP code.',
+      message: 'Enter ZIP code',
     },
     'Enter ZIP code',
   ],
