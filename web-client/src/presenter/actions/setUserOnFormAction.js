@@ -13,6 +13,7 @@ export const setUserOnFormAction = async ({ props, store }) => {
   store.set(state.form, {
     barNumber: props.user.barNumber,
     contact: props.user.contact,
+    firmName: props.user.firmName,
     name: props.user.name,
   });
 };
