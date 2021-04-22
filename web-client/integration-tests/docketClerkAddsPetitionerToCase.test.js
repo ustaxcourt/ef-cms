@@ -25,9 +25,4 @@ describe('docket clerk adds petitioner to case', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsPetitionerToCase(test);
-
-  // go to the add petitioner form
-  // fill in the form fields
-  // submit the form
-  // verify that the petitioner was added to the case
 });
