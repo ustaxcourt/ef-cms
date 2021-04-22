@@ -16,11 +16,7 @@
 
 ENV=$1
 
-EXISTS=$(aws dynamodb list-tables --region us-east-1 | grep efcms-deploy-${ENV} | wc -l)
-if [ "${EXISTS}" -eq "1" ]; then
-  CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
-  [ -z "$CURRENT_COLOR" ] && CURRENT_COLOR="green"
-  echo $CURRENT_COLOR
-else
-  echo "blue"
-fi
+CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
+[ -z "$CURRENT_COLOR" ] && CURRENT_COLOR="green"
+
+echo $CURRENT_COLOR
