@@ -4,7 +4,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { resetAddDocketEntryAction } from '../actions/resetAddDocketEntryAction';
+import { resetAddPaperFilingAction } from '../actions/resetAddPaperFilingAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -19,7 +19,7 @@ export const gotoAddPaperFiling = [
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  resetAddDocketEntryAction,
+  resetAddPaperFilingAction,
   setCurrentPageAction('AddPaperFiling'),
 ];
 
