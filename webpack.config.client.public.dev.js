@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 config.plugins.push(
   new HtmlWebpackPlugin({
     minify: false,
-    template: './web-client/src/index.pug',
+    template: './web-client/src/index-public.pug',
   }),
 );
 
@@ -15,15 +15,15 @@ module.exports = {
     historyApiFallback: true,
     hot: false,
     https: false,
-    port: 1234,
+    port: 5678,
   },
   entry: {
-    main: './web-client/src/index.dev.js',
+    main: './web-client/src/index-public.dev.js',
   },
   mode: 'development',
   output: {
     clean: true,
     filename: `index.${Date.now()}.js`,
-    path: __dirname + '/dist',
+    path: __dirname + '/dist-public',
   },
 };
