@@ -40,7 +40,15 @@ const gotoCaseDetail = [
   navigateToCaseDetailAction,
 ];
 
-const caseDetailOrPrintPaperService = [
+const afterEntrySaved = [
+  setCaseAction,
+  closeFileUploadStatusModalAction,
+  setDocketEntryIdAction,
+  getIsSavingForLaterAction,
+  {
+    no: [completeDocketEntryQCAction],
+    yes: [],
+  },
   chooseNextStepAction,
   {
     isElectronic: gotoCaseDetail,
@@ -52,18 +60,6 @@ const caseDetailOrPrintPaperService = [
       },
     ],
   },
-];
-
-const afterEntrySaved = [
-  setCaseAction,
-  closeFileUploadStatusModalAction,
-  setDocketEntryIdAction,
-  getIsSavingForLaterAction,
-  {
-    no: [completeDocketEntryQCAction],
-    yes: [],
-  },
-  caseDetailOrPrintPaperService,
 ];
 
 export const fileDocketEntrySequence = [

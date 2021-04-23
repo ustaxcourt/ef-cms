@@ -24,7 +24,7 @@ export const docketClerkQCsDocketEntry = (test, data = {}) => {
       docketEntryId,
     } = caseDetailFormatted.formattedDocketEntriesOnDocketRecord[data.index];
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
       docketNumber: caseDetailFormatted.docketNumber,
     });
