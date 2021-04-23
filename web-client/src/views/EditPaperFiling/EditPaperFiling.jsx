@@ -21,7 +21,7 @@ export const EditPaperFiling = connect(
       sequences.openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper: state.paperDocketEntryHelper,
     showModal: state.modal.showModal,
-    submitAddPaperFilingSequence: sequences.submitAddPaperFilingSequence,
+    submitEditPaperFilingSequence: sequences.submitEditPaperFilingSequence,
   },
   function EditPaperFiling({
     form,
@@ -29,7 +29,7 @@ export const EditPaperFiling = connect(
     openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper,
     showModal,
-    submitAddPaperFilingSequence,
+    submitEditPaperFilingSequence,
   }) {
     return (
       <>
@@ -71,7 +71,7 @@ export const EditPaperFiling = connect(
                     secondary
                     id="save-for-later"
                     onClick={() => {
-                      submitAddPaperFilingSequence({
+                      submitEditPaperFilingSequence({
                         isSavingForLater: true,
                       });
                     }}
@@ -105,12 +105,12 @@ export const EditPaperFiling = connect(
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
           <FileUploadErrorModal
-            confirmSequence={submitAddPaperFilingSequence}
+            confirmSequence={submitEditPaperFilingSequence}
           />
         )}
         {showModal === 'ConfirmInitiateServiceModal' && (
           <ConfirmInitiateServiceModal
-            confirmSequence={submitAddPaperFilingSequence}
+            confirmSequence={submitEditPaperFilingSequence}
             documentTitle={form.documentTitle}
           />
         )}

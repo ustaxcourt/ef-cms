@@ -131,7 +131,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'scan',
     );
 
-    await test.runSequence('submitAddPaperFilingSequence');
+    await test.runSequence('submitEditPaperFilingSequence');
 
     expect(Object.keys(test.getState('validationErrors'))).toEqual([
       'primaryDocumentFile',
@@ -150,7 +150,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'preview',
     );
 
-    await test.runSequence('submitAddPaperFilingSequence');
+    await test.runSequence('submitEditPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');

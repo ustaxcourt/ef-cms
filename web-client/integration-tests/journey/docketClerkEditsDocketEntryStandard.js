@@ -51,7 +51,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       value: '2050',
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
+    await test.runSequence('submitEditPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -64,7 +64,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       value: '2018',
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
+    await test.runSequence('submitEditPaperFilingSequence', {
       isSavingForLater: true,
     });
 
