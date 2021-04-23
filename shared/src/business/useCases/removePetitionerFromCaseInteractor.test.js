@@ -91,7 +91,8 @@ describe('removePetitionerFromCaseInteractor', () => {
   });
 
   it('should remove the specified petitioner form the case petitioners array', async () => {
-    removePetitionerFromCaseInteractor(applicationContext, {
+    await removePetitionerFromCaseInteractor(applicationContext, {
+      caseCaption: MOCK_CASE.caseCaption,
       contactId: petitionerToRemove.contactId,
       docketNumber: MOCK_CASE.docketNumber,
     });
