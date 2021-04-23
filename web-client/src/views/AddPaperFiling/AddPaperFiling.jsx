@@ -13,7 +13,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const AddDocketEntry = connect(
+export const AddPaperFiling = connect(
   {
     fileDocketEntrySequence: sequences.fileDocketEntrySequence,
     form: state.form,
@@ -23,7 +23,7 @@ export const AddDocketEntry = connect(
     paperDocketEntryHelper: state.paperDocketEntryHelper,
     showModal: state.modal.showModal,
   },
-  function AddDocketEntry({
+  function AddPaperFiling({
     fileDocketEntrySequence,
     form,
     formCancelToggleCancelSequence,
