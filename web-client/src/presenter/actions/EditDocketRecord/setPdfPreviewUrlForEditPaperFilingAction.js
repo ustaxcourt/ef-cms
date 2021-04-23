@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the pdfPreviewUrl for the attached document on the complete docket entry view
+ * sets the pdfPreviewUrl for the attached document on the edit paper filing view
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @returns {void} sets state for docket entry edit
  */
-export const setPdfPreviewUrlForCompleteDocketEntryAction = async ({
+export const setPdfPreviewUrlForEditPaperFilingAction = async ({
   applicationContext,
   get,
   props,
