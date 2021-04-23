@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const editDocketEntryHelper = (get, applicationContext) => {
+export const docketEntryQcHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const { CONTACT_CHANGE_DOCUMENT_TYPES } = applicationContext.getConstants();
