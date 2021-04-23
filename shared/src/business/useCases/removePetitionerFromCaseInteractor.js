@@ -21,6 +21,7 @@ exports.removePetitionerFromCaseInteractor = async (
   applicationContext,
   { caseCaption, contactId, docketNumber },
 ) => {
+  const petitionerContactId = contactId;
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)) {
@@ -45,10 +46,29 @@ exports.removePetitionerFromCaseInteractor = async (
 
   if (caseEntity.petitioners.length <= 1) {
     throw new Error(
-      `Cannot remove petitioner ${contactId} from case with docketNumber ${caseToUpdate.docketNumber}`,
+      `Cannot remove petitioner ${petitionerContactId} from case with docketNumber ${caseToUpdate.docketNumber}`,
     );
   }
-  caseEntity.removePetitioner(contactId);
+
+  const practitioners = caseEntity.getPractitionersRepresenting(
+    petitionerContactId,
+  );
+  for (const practitioner of practitioners) {
+    if (
+      practitioner.isRepresenting(petitionerContactId) &&
+      practitioner.representing.length === 1
+    ) {
+      caseEntity.removePrivatePractitioner(practitioner);
+
+      await applicationContext.getPersistenceGateway().deleteUserFromCase({
+        applicationContext,
+        docketNumber,
+        userId: practitioner.userId,
+      });
+    }
+  }
+
+  caseEntity.removePetitioner(petitionerContactId);
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
