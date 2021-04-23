@@ -101,21 +101,6 @@ describe('removePetitionerFromCaseInteractor', () => {
     );
   });
 
-  it('should update the case caption', async () => {
-    const mockUpdatedCaption = 'An updated caption';
-
-    await removePetitionerFromCaseInteractor(applicationContext, {
-      caseCaption: mockUpdatedCaption,
-      contactId: SECONDARY_CONTACT_ID,
-      docketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.caseCaption,
-    ).toEqual(mockUpdatedCaption);
-  });
-
   it('should remove the specified petitioner form the case petitioners array', async () => {
     await removePetitionerFromCaseInteractor(applicationContext, {
       caseCaption: MOCK_CASE.caseCaption,
