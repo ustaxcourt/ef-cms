@@ -1,3 +1,4 @@
+import { addPaperFilingAction } from '../actions/DocketEntry/addPaperFilingAction';
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { chooseNextStepAction } from '../actions/DocketEntry/chooseNextStepAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
@@ -14,7 +15,6 @@ import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
-import { saveDocketEntryAction } from '../actions/DocketEntry/saveDocketEntryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -62,7 +62,7 @@ const afterEntrySaved = [
   },
 ];
 
-export const fileDocketEntrySequence = [
+export const submitAddPaperFilingSequence = [
   checkForActiveBatchesAction,
   {
     hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
@@ -90,7 +90,7 @@ export const fileDocketEntrySequence = [
           isFileAttachedAction,
           {
             no: showProgressSequenceDecorator([
-              saveDocketEntryAction,
+              addPaperFilingAction,
               afterEntrySaved,
             ]),
             yes: [
@@ -100,7 +100,7 @@ export const fileDocketEntrySequence = [
               {
                 error: [openFileUploadErrorModal],
                 success: showProgressSequenceDecorator([
-                  saveDocketEntryAction,
+                  addPaperFilingAction,
                   afterEntrySaved,
                 ]),
               },

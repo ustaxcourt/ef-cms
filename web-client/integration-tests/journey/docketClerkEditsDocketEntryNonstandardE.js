@@ -38,7 +38,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'M057',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitEditPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -51,7 +51,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'Boise, Idaho',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitEditPaperFilingSequence', {
       isSavingForLater: true,
     });
 
