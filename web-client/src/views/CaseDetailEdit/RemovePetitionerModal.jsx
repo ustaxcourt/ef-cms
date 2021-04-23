@@ -8,8 +8,9 @@ import React from 'react';
 export const RemovePetitionerModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.submitUpdateCaseModalSequence,
+    confirmSequence: sequences.removePetitionerFromCaseSequence,
     constants: state.constants,
+    form: state.form,
     modal: state.modal,
     newStatus: state.constants.STATUS_TYPES.new,
     updateCaseModalHelper: state.updateCaseModalHelper,
@@ -21,6 +22,7 @@ export const RemovePetitionerModal = connect(
     cancelSequence,
     confirmSequence,
     constants,
+    form,
     modal,
     updateModalValueSequence,
     validateUpdateCaseModalSequence,
@@ -38,7 +40,7 @@ export const RemovePetitionerModal = connect(
         <div className="margin-bottom-2">
           <WarningNotificationComponent
             alertWarning={{
-              title: `Are you sure you want to remove ${modal.petitionerName} from this case?`,
+              title: `Are you sure you want to remove ${form.contact.name} from this case?`,
             }}
             dismissable={false}
             scrollToTop={false}

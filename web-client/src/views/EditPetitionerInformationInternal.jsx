@@ -20,6 +20,8 @@ export const EditPetitionerInformationInternal = connect(
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    openRemovePetitionerModalSequence:
+      sequences.openRemovePetitionerModalSequence,
     showModal: state.modal.showModal,
     submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -31,6 +33,7 @@ export const EditPetitionerInformationInternal = connect(
     editPetitionerInformationHelper,
     form,
     formCancelToggleCancelSequence,
+    openRemovePetitionerModalSequence,
     showModal,
     submitEditPetitionerSequence,
     updateFormValueSequence,
@@ -275,7 +278,9 @@ export const EditPetitionerInformationInternal = connect(
                 link
                 className="red-warning no-wrap float-right"
                 icon="trash"
-                onClick={() => {}}
+                onClick={() => {
+                  openRemovePetitionerModalSequence();
+                }}
               >
                 Remove this petitioner
               </Button>
@@ -290,7 +295,7 @@ export const EditPetitionerInformationInternal = connect(
         {showModal === 'NoMatchingEmailFoundModal' && (
           <NoMatchingEmailFoundModal />
         )}
-        <RemovePetitionerModal />
+        {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
       </>
     );
   },
