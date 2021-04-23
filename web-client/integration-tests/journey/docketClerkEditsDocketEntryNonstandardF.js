@@ -30,7 +30,7 @@ export const docketClerkEditsDocketEntryNonstandardF = test => {
     const docketEntriesBefore =
       caseDetailFormatted.formattedDocketEntries.length;
 
-    await test.runSequence('gotoCompleteDocketEntrySequence', {
+    await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
       docketNumber: test.docketNumber,
     });

@@ -14,7 +14,7 @@ import { setupCompleteDocketEntryAction } from '../actions/setupCompleteDocketEn
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditDocketEntry = [
+export const gotoEditPaperFiling = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
@@ -28,13 +28,13 @@ export const gotoEditDocketEntry = [
   setDocketEntryIdAction,
   setupCompleteDocketEntryAction,
   setPdfPreviewUrlForCompleteDocketEntryAction,
-  setCurrentPageAction('AddPaperFiling'),
+  setCurrentPageAction('EditPaperFiling'),
 ];
 
-export const gotoCompleteDocketEntrySequence = [
+export const gotoEditPaperFilingSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoEditDocketEntry,
+    isLoggedIn: gotoEditPaperFiling,
     unauthorized: [redirectToCognitoAction],
   },
 ];

@@ -31,6 +31,7 @@ import { EditCorrespondenceDocument } from './Correspondence/EditCorrespondenceD
 import { EditDeficiencyStatistic } from './CaseDetail/EditDeficiencyStatistic';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
+import { EditPaperFiling } from './EditPaperFiling/EditPaperFiling';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
@@ -118,6 +119,7 @@ const pages = {
   EditDeficiencyStatistic,
   EditDocketEntryMeta,
   EditOtherStatistics,
+  EditPaperFiling,
   EditPetitionDetails,
   EditPetitionerInformation,
   EditPractitionerUser,
