@@ -639,6 +639,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     '/case-meta/:docketNumber/add-petitioner',
     lambdaWrapper(addPetitionerToCaseLambda),
   );
+  app.delete(
+    '/case-meta/:docketNumber/remove-petitioner/:contactId',
+    lambdaWrapper(addPetitionerToCaseLambda),
+  );
 }
 /**
  * case-notes
