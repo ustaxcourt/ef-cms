@@ -4,6 +4,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
+import { editPaperFilingAction } from '../actions/DocketEntry/editPaperFilingAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
@@ -14,7 +15,6 @@ import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
-import { saveDocketEntryAction } from '../actions/DocketEntry/saveDocketEntryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -90,7 +90,7 @@ export const submitEditPaperFilingSequence = [
           isFileAttachedAction,
           {
             no: showProgressSequenceDecorator([
-              saveDocketEntryAction,
+              editPaperFilingAction,
               afterEntrySaved,
             ]),
             yes: [
@@ -100,7 +100,7 @@ export const submitEditPaperFilingSequence = [
               {
                 error: [openFileUploadErrorModal],
                 success: showProgressSequenceDecorator([
-                  saveDocketEntryAction,
+                  editPaperFilingAction,
                   afterEntrySaved,
                 ]),
               },

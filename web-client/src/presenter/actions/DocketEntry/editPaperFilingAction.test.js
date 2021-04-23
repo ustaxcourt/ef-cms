@@ -1,11 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { editPaperFilingAction } from './editPaperFilingAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { saveDocketEntryAction } from './saveDocketEntryAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('saveDocketEntryAction', () => {
+describe('editPaperFilingAction', () => {
   let caseDetail;
 
   beforeAll(() => {
@@ -20,7 +20,7 @@ describe('saveDocketEntryAction', () => {
       .getUseCases()
       .fileDocketEntryInteractor.mockReturnValue(caseDetail);
 
-    const result = await runAction(saveDocketEntryAction, {
+    const result = await runAction(editPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -61,7 +61,7 @@ describe('saveDocketEntryAction', () => {
       .getUseCases()
       .fileDocketEntryInteractor.mockReturnValue(caseDetail);
 
-    const result = await runAction(saveDocketEntryAction, {
+    const result = await runAction(editPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -103,7 +103,7 @@ describe('saveDocketEntryAction', () => {
       .getUseCases()
       .fileDocketEntryInteractor.mockReturnValue(caseDetail);
 
-    const result = await runAction(saveDocketEntryAction, {
+    const result = await runAction(editPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -142,7 +142,7 @@ describe('saveDocketEntryAction', () => {
       .getUseCases()
       .updateDocketEntryInteractor.mockReturnValue(caseDetail);
 
-    const result = await runAction(saveDocketEntryAction, {
+    const result = await runAction(editPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -185,7 +185,7 @@ describe('saveDocketEntryAction', () => {
       .getUseCases()
       .updateDocketEntryInteractor.mockReturnValue(caseDetail);
 
-    const result = await runAction(saveDocketEntryAction, {
+    const result = await runAction(editPaperFilingAction, {
       modules: {
         presenter,
       },
@@ -231,7 +231,7 @@ describe('saveDocketEntryAction', () => {
       isFileAttached: true,
     });
 
-    const result = await runAction(saveDocketEntryAction, {
+    const result = await runAction(editPaperFilingAction, {
       modules: {
         presenter,
       },
