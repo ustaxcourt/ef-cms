@@ -168,12 +168,14 @@ describe('deleteCounselFromCaseInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
-        contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
-          serviceIndicator: 'None',
-        },
         isPaper: true,
         mailingDate: '04/16/2019',
+        petitioners: [
+          {
+            ...MOCK_CASE.petitioners[0],
+            serviceIndicator: 'None',
+          },
+        ],
         privatePractitioners: [mockPrivatePractitioners[0]],
       });
 

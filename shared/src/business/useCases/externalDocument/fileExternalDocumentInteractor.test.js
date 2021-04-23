@@ -5,6 +5,7 @@ const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -24,16 +25,6 @@ describe('fileExternalDocumentInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'fieri@example.com',
-        name: 'Guy Fieri',
-        phone: '1234567890',
-        postalCode: '12345',
-        state: 'CA',
-      },
       createdAt: '',
       docketEntries: [
         {
@@ -76,6 +67,19 @@ describe('fileExternalDocumentInteractor', () => {
       docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          state: 'CA',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
@@ -136,6 +140,26 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
     expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
+  });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await fileExternalDocumentInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: mockDocketEntryId,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: caseRecord.caseCaption,
+    });
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {

@@ -135,7 +135,7 @@
     phone: 
       type: "string"
       flags: 
-        presence: "optional"
+        presence: "required"
       rules: 
         - 
           name: "min"

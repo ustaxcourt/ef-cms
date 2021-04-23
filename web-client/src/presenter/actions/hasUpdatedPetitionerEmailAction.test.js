@@ -1,5 +1,4 @@
 import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { hasUpdatedPetitionerEmailAction } from './hasUpdatedPetitionerEmailAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -11,14 +10,13 @@ describe('hasUpdatedPetitionerEmailAction', () => {
   const UPDATED_EMAIL = 'updated@example.com';
 
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       no: pathNoStub,
       yes: pathYesStub,
     };
   });
 
-  it('returns the yes path when caseDetail.contactPrimary.email is different than form.contactPrimary.email', async () => {
+  it('returns the yes path when form.contact.updatedEmail is defined', async () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
@@ -27,14 +25,14 @@ describe('hasUpdatedPetitionerEmailAction', () => {
             { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
           ],
         },
-        form: { contactPrimary: { email: UPDATED_EMAIL } },
+        form: { contact: { updatedEmail: UPDATED_EMAIL } },
       },
     });
 
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the no path when caseDetail.contactPrimary.email is the same as form.contactPrimary.email', async () => {
+  it('returns the no path when orm.contact.updatedEmail is not defined', async () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
@@ -44,7 +42,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
           ],
         },
         form: {
-          contactPrimary: { email: INITIAL_EMAIL },
+          contact: { updatedEmail: undefined },
         },
       },
     });
