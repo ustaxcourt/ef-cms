@@ -1,3 +1,5 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { hasUpdatedPetitionerEmailAction } from './hasUpdatedPetitionerEmailAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -9,6 +11,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
   const UPDATED_EMAIL = 'updated@example.com';
 
   beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       no: pathNoStub,
       yes: pathYesStub,
@@ -19,7 +22,11 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
-        caseDetail: { contactPrimary: { email: INITIAL_EMAIL } },
+        caseDetail: {
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
+          ],
+        },
         form: { contactPrimary: { email: UPDATED_EMAIL } },
       },
     });
@@ -32,7 +39,9 @@ describe('hasUpdatedPetitionerEmailAction', () => {
       modules: { presenter },
       state: {
         caseDetail: {
-          contactPrimary: { email: INITIAL_EMAIL },
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
+          ],
         },
         form: {
           contactPrimary: { email: INITIAL_EMAIL },
