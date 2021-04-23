@@ -5276,4 +5276,39 @@ describe('Case entity', () => {
       expect(updatedCase.petitioners.length).toEqual(2);
     });
   });
+
+  describe('removePetitioner', () => {
+    it('should remove the petitioner from the petitioners array', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        petitioners: [getContactPrimary(MOCK_CASE), {}],
+      };
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+
+      const OtherPetitionerContact = getOtherPetitionerContact({});
+
+      const petitionerEntity = new OtherPetitionerContact(
+        {
+          address1: '123 Tomato Street',
+          city: 'Tomatotown',
+          contactType: CONTACT_TYPES.otherPetitioner,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Susie Tomato',
+          phone: '123456',
+          postalCode: '99999',
+          state: 'KS',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseEntity.petitioners.length).toEqual(1);
+
+      const updatedCase = caseEntity.addPetitioner(petitionerEntity);
+
+      expect(caseEntity.isValid()).toBeTruthy();
+      expect(updatedCase.petitioners.length).toEqual(2);
+    });
+  });
 });
