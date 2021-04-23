@@ -1,6 +1,7 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { createCaseAction } from './createCaseAction';
+import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
@@ -86,6 +87,9 @@ describe('createCaseAction', () => {
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
+          contactPrimary: {
+            ...getContactPrimary(MOCK_CASE),
+          },
         },
       },
     });
@@ -184,6 +188,9 @@ describe('createCaseAction', () => {
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
+          contactPrimary: {
+            ...getContactPrimary(MOCK_CASE),
+          },
         },
       },
     });
@@ -217,6 +224,9 @@ describe('createCaseAction', () => {
           stinFile: {},
           trialCities: [{ city: 'Birmingham', state: US_STATES.AL }],
           ...MOCK_CASE,
+          contactPrimary: {
+            ...getContactPrimary(MOCK_CASE),
+          },
         },
       },
     });

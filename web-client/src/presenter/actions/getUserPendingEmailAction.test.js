@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPendingEmailAction } from './getUserPendingEmailAction';
 import { presenter } from '../presenter-mock';
@@ -18,7 +19,9 @@ describe('getUserPendingEmailAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: { contactId: mockUserId },
+          petitioners: [
+            { contactId: mockUserId, contactType: CONTACT_TYPES.primary },
+          ],
         },
       },
     });
@@ -40,7 +43,9 @@ describe('getUserPendingEmailAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: { contactId: mockUserId },
+          petitioners: [
+            { contactId: mockUserId, contactType: CONTACT_TYPES.primary },
+          ],
         },
       },
     });
@@ -59,7 +64,9 @@ describe('getUserPendingEmailAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: { contactId: mockUserId },
+          petitioners: [
+            { contactId: mockUserId, contactType: CONTACT_TYPES.primary },
+          ],
         },
       },
     });

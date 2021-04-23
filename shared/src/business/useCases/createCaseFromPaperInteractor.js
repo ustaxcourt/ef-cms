@@ -1,8 +1,12 @@
 const {
+  Case,
+  getContactPrimary,
+  getContactSecondary,
+} = require('../entities/cases/Case');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
@@ -124,6 +128,8 @@ exports.createCaseFromPaperInteractor = async (
 
   const petitionDocketEntryEntity = new DocketEntry(
     {
+      contactPrimary: caseToAdd.getContactPrimary(),
+      contactSecondary: caseToAdd.getContactSecondary(),
       createdAt: caseToAdd.receivedAt,
       docketEntryId: petitionFileId,
       documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -138,10 +144,6 @@ exports.createCaseFromPaperInteractor = async (
       partySecondary,
       receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
-      ...caseToAdd.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     },
     { applicationContext },
   );
@@ -160,6 +162,8 @@ exports.createCaseFromPaperInteractor = async (
 
     const applicationForWaiverOfFilingFeeDocketEntryEntity = new DocketEntry(
       {
+        contactPrimary: caseToAdd.getContactPrimary(),
+        contactSecondary: caseToAdd.getContactSecondary(),
         createdAt: caseToAdd.receivedAt,
         docketEntryId: applicationForWaiverOfFilingFeeFileId,
         documentTitle,
@@ -175,10 +179,6 @@ exports.createCaseFromPaperInteractor = async (
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
-        ...caseToAdd.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
       },
       { applicationContext },
     );
@@ -197,6 +197,8 @@ exports.createCaseFromPaperInteractor = async (
 
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {
+        contactPrimary: caseToAdd.getContactPrimary(),
+        contactSecondary: caseToAdd.getContactSecondary(),
         createdAt: caseToAdd.receivedAt,
         docketEntryId: requestForPlaceOfTrialFileId,
         documentTitle,
@@ -211,10 +213,6 @@ exports.createCaseFromPaperInteractor = async (
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
-        ...caseToAdd.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
       },
       { applicationContext },
     );
@@ -225,6 +223,8 @@ exports.createCaseFromPaperInteractor = async (
   if (stinFileId) {
     const stinDocketEntryEntity = new DocketEntry(
       {
+        contactPrimary: getContactPrimary(caseToAdd),
+        contactSecondary: getContactSecondary(caseToAdd),
         createdAt: caseToAdd.receivedAt,
         docketEntryId: stinFileId,
         documentTitle: INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -239,10 +239,6 @@ exports.createCaseFromPaperInteractor = async (
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
-        ...caseToAdd.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
       },
       { applicationContext },
     );
@@ -253,6 +249,8 @@ exports.createCaseFromPaperInteractor = async (
   if (ownershipDisclosureFileId) {
     const odsDocketEntryEntity = new DocketEntry(
       {
+        contactPrimary: caseToAdd.getContactPrimary(),
+        contactSecondary: caseToAdd.getContactSecondary(),
         createdAt: caseToAdd.receivedAt,
         docketEntryId: ownershipDisclosureFileId,
         documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
@@ -266,10 +264,6 @@ exports.createCaseFromPaperInteractor = async (
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
-        ...caseToAdd.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
       },
       { applicationContext },
     );

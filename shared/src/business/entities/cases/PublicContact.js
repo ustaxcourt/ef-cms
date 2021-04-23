@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { CONTACT_TYPES } = require('../EntityConstants');
 
 /**
  * PublicContact
@@ -19,11 +20,15 @@ function PublicContact() {
 }
 
 PublicContact.prototype.init = function init(rawContact) {
+  this.contactType = rawContact.contactType;
   this.name = rawContact.name;
   this.state = rawContact.state;
 };
 
 PublicContact.VALIDATION_RULES = joi.object().keys({
+  contactType: JoiValidationConstants.STRING.valid(
+    ...Object.values(CONTACT_TYPES),
+  ).optional(),
   name: JoiValidationConstants.STRING.max(500).optional(),
   state: JoiValidationConstants.STRING.optional(),
 });
