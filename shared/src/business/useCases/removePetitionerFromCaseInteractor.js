@@ -43,10 +43,9 @@ exports.removePetitionerFromCaseInteractor = async (
 
   caseEntity.caseCaption = caseCaption;
 
-  //add test and fix
   if (caseEntity.petitioners.length <= 1) {
     throw new Error(
-      `Case with docketNumber ${caseToUpdate.docketNumber} has not been served`,
+      `Cannot remove petitioner ${contactId} from case with docketNumber ${caseToUpdate.docketNumber}`,
     );
   }
   caseEntity.removePetitioner(contactId);

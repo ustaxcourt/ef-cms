@@ -77,6 +77,26 @@ describe('removePetitionerFromCaseInteractor', () => {
     );
   });
 
+  it('should throw an error when there is only one petitioner left on the case', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      petitioners: [getContactPrimary(MOCK_CASE)],
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
+
+    await expect(
+      removePetitionerFromCaseInteractor(applicationContext, {
+        caseCaption: MOCK_CASE.caseCaption,
+        contactId: getContactPrimary(MOCK_CASE).contactId,
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(
+      `Cannot remove petitioner ${
+        getContactPrimary(MOCK_CASE).contactId
+      } from case with docketNumber ${MOCK_CASE.docketNumber}`,
+    );
+  });
+
   it('should update the case caption', async () => {
     const mockUpdatedCaption = 'An updated caption';
 
