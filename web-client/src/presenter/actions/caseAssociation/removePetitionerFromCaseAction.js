@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * remove a petitioner from the case
+ * updates case caption and remove a petitioner from the case
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context for getting constants
@@ -17,9 +17,14 @@ export const removePetitionerFromCaseAction = async ({
   const { contactId } = get(state.form.contact);
   const { caseCaption } = get(state.modal);
 
-  await applicationContext.getUseCases().removePetitionerFromCaseInteractor({
+  await applicationContext.getUseCases().updateCaseContextInteractor({
     applicationContext,
     caseCaption,
+    docketNumber,
+  });
+
+  await applicationContext.getUseCases().removePetitionerFromCaseInteractor({
+    applicationContext,
     contactId,
     docketNumber,
   });
