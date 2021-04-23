@@ -4,13 +4,13 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { resetAddDocketEntryAction } from '../actions/resetAddDocketEntryAction';
+import { resetAddPaperFilingAction } from '../actions/resetAddPaperFilingAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocketEntryIdAction } from '../actions/unsetDocketEntryIdAction';
 
-export const gotoAddDocketEntry = [
+export const gotoAddPaperFiling = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
@@ -19,14 +19,14 @@ export const gotoAddDocketEntry = [
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  resetAddDocketEntryAction,
-  setCurrentPageAction('AddDocketEntry'),
+  resetAddPaperFilingAction,
+  setCurrentPageAction('AddPaperFiling'),
 ];
 
-export const gotoAddDocketEntrySequence = [
+export const gotoAddPaperFilingSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoAddDocketEntry,
+    isLoggedIn: gotoAddPaperFiling,
     unauthorized: [redirectToCognitoAction],
   },
 ];

@@ -1,7 +1,7 @@
 import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDeficiencyStatistics } from './CaseDetail/AddDeficiencyStatistics';
-import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
+import { AddPaperFiling } from './AddPaperFiling/AddPaperFiling';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
@@ -89,8 +89,8 @@ import React, { useEffect } from 'react';
 const pages = {
   AccessibilityStatement,
   AddDeficiencyStatistics,
-  AddDocketEntry,
   AddOtherStatistics,
+  AddPaperFiling,
   AddTrialSession,
   AdvancedSearch,
   BeforeStartingCase,
