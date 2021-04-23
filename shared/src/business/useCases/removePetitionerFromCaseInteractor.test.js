@@ -76,13 +76,6 @@ describe('removePetitionerFromCaseInteractor', () => {
   });
 
   it('should update the case caption', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.generalDocket,
-      });
-
     const mockUpdatedCaption = 'An updated caption';
 
     await removePetitionerFromCaseInteractor(applicationContext, {
