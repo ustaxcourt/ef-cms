@@ -1,6 +1,6 @@
 export const docketClerkEditsPaperFiledDocketEntryFromQC = test => {
   return it('Docket clerk edits paper-filed docket entry from QC', async () => {
-    await test.runSequence('gotoCompleteDocketEntrySequence', {
+    await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId: test.docketEntryId,
       docketNumber: test.docketNumber,
     });

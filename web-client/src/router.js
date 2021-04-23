@@ -273,9 +273,9 @@ const router = {
       '/case-detail/*/documents/*/complete',
       ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
-        return app.getSequence('gotoCompleteDocketEntrySequence')({
+        return app.getSequence('gotoEditPaperFilingSequence')({
           docketEntryId,
           docketNumber,
         });

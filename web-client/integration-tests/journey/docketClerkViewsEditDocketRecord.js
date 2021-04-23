@@ -4,7 +4,7 @@ export const docketClerkViewsEditDocketRecord = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoCompleteDocketEntrySequence', {
+    await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId: test.docketRecordEntry.docketEntryId,
       docketNumber: test.docketNumber,
     });

@@ -113,7 +113,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
   });
 
   it('edit paper-filed docket entry, replacing PDF', async () => {
-    await test.runSequence('gotoCompleteDocketEntrySequence', {
+    await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId: test.docketEntryId,
       docketNumber: test.docketNumber,
     });
