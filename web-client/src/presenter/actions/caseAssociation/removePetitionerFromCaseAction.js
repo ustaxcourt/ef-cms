@@ -23,9 +23,20 @@ export const removePetitionerFromCaseAction = async ({
     docketNumber,
   });
 
-  await applicationContext.getUseCases().removePetitionerFromCaseInteractor({
-    applicationContext,
-    contactId,
+  const updatedCaseDetail = await applicationContext
+    .getUseCases()
+    .removePetitionerFromCaseInteractor({
+      applicationContext,
+      contactId,
+      docketNumber,
+    });
+
+  return {
+    alertSuccess: {
+      message: 'Petitioner removed.',
+    },
+    caseDetail: updatedCaseDetail,
     docketNumber,
-  });
+    tab: 'caseInfo',
+  };
 };
