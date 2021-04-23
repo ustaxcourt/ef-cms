@@ -23,11 +23,14 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
 
   const contactPrimaryHasEmail = !!contactPrimaryEmail;
 
+  const showRemovePetitionerButton = caseDetail.petitioners.length > 1;
+
   return {
     contactPrimaryHasEmail,
     partyTypes: PARTY_TYPES,
     showEditEmail,
     showPrimaryContact: showContacts.contactPrimary,
+    showRemovePetitionerButton,
     showSecondaryContact: showContacts.contactSecondary,
     userPendingEmail,
   };

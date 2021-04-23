@@ -269,14 +269,16 @@ export const EditPetitionerInformationInternal = connect(
               Cancel
             </Button>
 
-            <Button
-              link
-              className="red-warning no-wrap float-right"
-              icon="trash"
-              onClick={() => {}}
-            >
-              Remove this petitioner
-            </Button>
+            {editPetitionerInformationHelper.showRemovePetitionerButton && (
+              <Button
+                link
+                className="red-warning no-wrap float-right"
+                icon="trash"
+                onClick={() => {}}
+              >
+                Remove this petitioner
+              </Button>
+            )}
           </div>
         </section>
 
