@@ -1,3 +1,4 @@
+import { ProgressBar } from '../../ustc-ui/ProgressBar/ProgressBar';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -27,8 +28,12 @@ export const BatchDownloadProgress = connect(
         <div className="sticky-footer sticky-footer--space" />
         <div className="sticky-footer sticky-footer--container">
           <div className="usa-section grid-container padding-bottom-0 margin-top-1">
-            <div aria-live="polite" className="progress-batch-download">
-              <h3>Compressing Case Files</h3>
+            <div className="progress-batch-download">
+              <h3 id="progress-description">Compressing Case Files</h3>
+              <ProgressBar
+                aria-labelledby="progress-description"
+                value={batchDownloadHelper.percentComplete}
+              />
               <span className="progress-text">
                 {batchDownloadHelper.percentComplete}% Complete
               </span>
