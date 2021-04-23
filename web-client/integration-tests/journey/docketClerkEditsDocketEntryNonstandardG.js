@@ -38,7 +38,7 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
       value: 'REQA',
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
+    await test.runSequence('submitEditPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -51,7 +51,7 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
       value: 'First',
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
+    await test.runSequence('submitEditPaperFilingSequence', {
       isSavingForLater: true,
     });
 
