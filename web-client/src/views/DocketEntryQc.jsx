@@ -1,30 +1,30 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
-import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
-import { ErrorNotification } from '../ErrorNotification';
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
-import { FileUploadStatusModal } from '../FileUploadStatusModal';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { Hint } from '../../ustc-ui/Hint/Hint';
-import { PrimaryDocumentForm } from './PrimaryDocumentForm';
-import { SuccessNotification } from '../SuccessNotification';
+import { Button } from '../ustc-ui/Button/Button';
+import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
+import { CreateMessageModalDialog } from './Messages/CreateMessageModalDialog';
+import { DocumentDisplayIframe } from './DocumentDisplayIframe';
+import { ErrorNotification } from './ErrorNotification';
+import { FileUploadErrorModal } from './FileUploadErrorModal';
+import { FileUploadStatusModal } from './FileUploadStatusModal';
+import { FormCancelModalDialog } from './FormCancelModalDialog';
+import { Hint } from '../ustc-ui/Hint/Hint';
+import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
+import { SuccessNotification } from './SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const EditDocketEntry = connect(
+export const DocketEntryQc = connect(
   {
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
-    editDocketEntryHelper: state.editDocketEntryHelper,
+    docketEntryQcHelper: state.docketEntryQcHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openCompleteAndSendMessageModalSequence:
       sequences.openCompleteAndSendMessageModalSequence,
     showModal: state.modal.showModal,
   },
-  function EditDocketEntry({
+  function DocketEntryQc({
     completeDocketEntryQCSequence,
-    editDocketEntryHelper,
+    docketEntryQcHelper,
     formCancelToggleCancelSequence,
     openCompleteAndSendMessageModalSequence,
     showModal,
@@ -33,30 +33,30 @@ export const EditDocketEntry = connect(
       <>
         <CaseDetailHeader />
         <section className="usa-section grid-container">
-          {editDocketEntryHelper.showPaperServiceWarning && (
+          {docketEntryQcHelper.showPaperServiceWarning && (
             <Hint exclamation fullWidth>
               This document was automatically generated and requires paper
               service
             </Hint>
           )}
           <h2 className="heading-1">
-            {editDocketEntryHelper.formattedDocketEntry.documentTitle ||
-              editDocketEntryHelper.formattedDocketEntry.documentType}
+            {docketEntryQcHelper.formattedDocketEntry.documentTitle ||
+              docketEntryQcHelper.formattedDocketEntry.documentType}
           </h2>
           <div className="filed-by">
             <div className="padding-bottom-1">
               Filed{' '}
-              {editDocketEntryHelper.formattedDocketEntry.createdAtFormatted}
-              {editDocketEntryHelper.formattedDocketEntry.filedBy &&
-                ` by ${editDocketEntryHelper.formattedDocketEntry.filedBy}`}
+              {docketEntryQcHelper.formattedDocketEntry.createdAtFormatted}
+              {docketEntryQcHelper.formattedDocketEntry.filedBy &&
+                ` by ${docketEntryQcHelper.formattedDocketEntry.filedBy}`}
             </div>
-            {editDocketEntryHelper.formattedDocketEntry.showServedAt && (
+            {docketEntryQcHelper.formattedDocketEntry.showServedAt && (
               <div>
                 Served{' '}
-                {editDocketEntryHelper.formattedDocketEntry.servedAtFormatted}
+                {docketEntryQcHelper.formattedDocketEntry.servedAtFormatted}
               </div>
             )}
-            {editDocketEntryHelper.formattedDocketEntry.showLegacySealed && (
+            {docketEntryQcHelper.formattedDocketEntry.showLegacySealed && (
               <div>Sealed in Blackstone</div>
             )}
           </div>

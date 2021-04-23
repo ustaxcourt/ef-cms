@@ -1,10 +1,10 @@
 import { CerebralTest } from 'cerebral/test';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { gotoEditDocketEntrySequence } from './gotoEditDocketEntrySequence';
+import { gotoDocketEntryQcSequence } from './gotoDocketEntryQcSequence';
 import { presenter } from '../presenter-mock';
 
-describe('gotoEditDocketEntrySequence', () => {
+describe('gotoDocketEntryQcSequence', () => {
   const mockDocketEntryId = '4e544995-92a9-45e4-af0a-149dd9c24458';
   const mockDocketNumber = '999-99';
 
@@ -28,7 +28,7 @@ describe('gotoEditDocketEntrySequence', () => {
     presenter.providers.applicationContext = applicationContext;
 
     presenter.sequences = {
-      gotoEditDocketEntrySequence,
+      gotoDocketEntryQcSequence,
     };
     test = CerebralTest(presenter);
 
@@ -37,16 +37,10 @@ describe('gotoEditDocketEntrySequence', () => {
       docketEntries: [mockDocketEntry],
       docketNumber: mockDocketNumber,
     });
-
-    applicationContext
-      .getUseCases()
-      .generateCourtIssuedDocumentTitleInteractor.mockReturnValue(
-        'Order to do something',
-      );
   });
 
-  it('should set up state for editing court issued docket entry', async () => {
-    await test.runSequence('gotoEditDocketEntrySequence', {
+  it('should set up state for qcing docket entry', async () => {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: mockDocketEntryId,
       docketNumber: mockDocketNumber,
     });
