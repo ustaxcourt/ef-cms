@@ -15,21 +15,21 @@ import React from 'react';
 
 export const EditPaperFiling = connect(
   {
-    fileDocketEntrySequence: sequences.fileDocketEntrySequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openConfirmPaperServiceModalSequence:
       sequences.openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper: state.paperDocketEntryHelper,
     showModal: state.modal.showModal,
+    submitEditPaperFilingSequence: sequences.submitEditPaperFilingSequence,
   },
   function EditPaperFiling({
-    fileDocketEntrySequence,
     form,
     formCancelToggleCancelSequence,
     openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper,
     showModal,
+    submitEditPaperFilingSequence,
   }) {
     return (
       <>
@@ -71,7 +71,7 @@ export const EditPaperFiling = connect(
                     secondary
                     id="save-for-later"
                     onClick={() => {
-                      fileDocketEntrySequence({
+                      submitEditPaperFilingSequence({
                         isSavingForLater: true,
                       });
                     }}
@@ -104,11 +104,13 @@ export const EditPaperFiling = connect(
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={fileDocketEntrySequence} />
+          <FileUploadErrorModal
+            confirmSequence={submitEditPaperFilingSequence}
+          />
         )}
         {showModal === 'ConfirmInitiateServiceModal' && (
           <ConfirmInitiateServiceModal
-            confirmSequence={fileDocketEntrySequence}
+            confirmSequence={submitEditPaperFilingSequence}
             documentTitle={form.documentTitle}
           />
         )}

@@ -2,7 +2,7 @@ import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * creates a new, or updates an existing docket entry
+ * calls interactor to add a new paper filing to a case
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {Promise} async action
  */
-export const saveDocketEntryAction = async ({
+export const addPaperFilingAction = async ({
   applicationContext,
   get,
   props,
@@ -19,20 +19,16 @@ export const saveDocketEntryAction = async ({
   const { isSavingForLater, primaryDocumentFileId } = props;
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
-  const isUpdating = get(state.isEditingDocketEntry);
   const generateCoversheet = isFileAttached && !isSavingForLater;
 
   let docketEntryId;
 
-  if (isUpdating) {
-    docketEntryId = get(state.docketEntryId);
-  } else if (isFileAttached) {
+  if (isFileAttached) {
     docketEntryId = primaryDocumentFileId;
   } else {
     docketEntryId = applicationContext.getUniqueId();
   }
 
-  let caseDetail;
   let documentMetadata = omit(
     {
       ...get(state.form),
@@ -46,7 +42,6 @@ export const saveDocketEntryAction = async ({
     docketNumber,
     isFileAttached: !!isFileAttached,
     isPaper: true,
-    isUpdating,
     receivedAt: documentMetadata.dateReceived,
   };
 
@@ -62,25 +57,14 @@ export const saveDocketEntryAction = async ({
     });
   }
 
-  if (isUpdating) {
-    caseDetail = await applicationContext
-      .getUseCases()
-      .updateDocketEntryInteractor({
-        applicationContext,
-        documentMetadata,
-        isSavingForLater,
-        primaryDocumentFileId: docketEntryId,
-      });
-  } else {
-    caseDetail = await applicationContext
-      .getUseCases()
-      .fileDocketEntryInteractor({
-        applicationContext,
-        documentMetadata,
-        isSavingForLater,
-        primaryDocumentFileId: docketEntryId,
-      });
-  }
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .fileDocketEntryInteractor({
+      applicationContext,
+      documentMetadata,
+      isSavingForLater,
+      primaryDocumentFileId: docketEntryId,
+    });
 
   if (generateCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
