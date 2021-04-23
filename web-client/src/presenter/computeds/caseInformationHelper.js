@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const caseInformationHelper = get => {
+export const caseInformationHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
   const showEditPrivatePractitionersButton =
@@ -18,7 +18,10 @@ export const caseInformationHelper = get => {
   const toggleAdditionalPetitionersDisplay = showingAdditionalPetitioners
     ? 'Hide'
     : 'View';
-  const otherPetitioners = [...(caseDetail.otherPetitioners || [])];
+
+  const otherPetitioners =
+    applicationContext.getUtilities().getOtherPetitioners(caseDetail) || [];
+
   const showOtherPetitioners = !!otherPetitioners.length;
   const formattedOtherPetitioners = showingAdditionalPetitioners
     ? otherPetitioners
@@ -27,8 +30,10 @@ export const caseInformationHelper = get => {
   const showSealAddressLink = permissions.SEAL_ADDRESS;
   const showHearingsTable = !!caseDetail.hearings?.length;
 
-  const showEmail =
-    caseDetail.contactPrimary && caseDetail.contactPrimary.email;
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(caseDetail);
+  const showEmail = contactPrimary?.email;
 
   return {
     formattedOtherPetitioners,

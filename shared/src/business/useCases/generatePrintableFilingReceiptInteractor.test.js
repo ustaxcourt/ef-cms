@@ -2,6 +2,7 @@ const {
   generatePrintableFilingReceiptInteractor,
 } = require('./generatePrintableFilingReceiptInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getContactPrimary } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -65,7 +66,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       .getUtilities()
       .formatDateString(MOCK_CASE.docketEntries[0].filingDate, 'DATE_TIME_TZ');
 
-    expect(receiptMockCall.filedBy).toBe(MOCK_CASE.contactPrimary.name);
+    expect(receiptMockCall.filedBy).toBe(getContactPrimary(MOCK_CASE).name);
     expect(receiptMockCall.filedAt).toBe(expectedFilingDateForamtted);
   });
 

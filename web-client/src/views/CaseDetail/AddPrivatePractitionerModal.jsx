@@ -9,10 +9,10 @@ import classNames from 'classnames';
 export const AddPrivatePractitionerModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    caseDetail: state.formattedCaseDetail,
     caseDetailPractitionerSearchHelper:
       state.caseDetailPractitionerSearchHelper,
     confirmSequence: sequences.associatePrivatePractitionerWithCaseSequence,
+    formattedCaseDetail: state.formattedCaseDetail,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateSequence: sequences.validateAddPrivatePractitionerSequence,
@@ -20,9 +20,9 @@ export const AddPrivatePractitionerModal = connect(
   },
   function AddPrivatePractitionerModal({
     cancelSequence,
-    caseDetail,
     caseDetailPractitionerSearchHelper,
     confirmSequence,
+    formattedCaseDetail,
     modal,
     updateModalValueSequence,
     validateSequence,
@@ -147,34 +147,35 @@ export const AddPrivatePractitionerModal = connect(
                   className="usa-checkbox__label  inline-block"
                   htmlFor="party-primary"
                 >
-                  {caseDetail.contactPrimary.name}
+                  {formattedCaseDetail.contactPrimary.name}
                 </label>
               </div>
 
-              {caseDetail.contactSecondary && caseDetail.contactSecondary.name && (
-                <div className="usa-checkbox">
-                  <input
-                    aria-describedby="representing-legend"
-                    checked={modal.representingSecondary || false}
-                    className="usa-checkbox__input"
-                    id="party-secondary"
-                    name="representingSecondary"
-                    type="checkbox"
-                    onChange={e => {
-                      updateModalValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label inline-block"
-                    htmlFor="party-secondary"
-                  >
-                    {caseDetail.contactSecondary.name}
-                  </label>
-                </div>
-              )}
+              {formattedCaseDetail.contactSecondary &&
+                formattedCaseDetail.contactSecondary.name && (
+                  <div className="usa-checkbox">
+                    <input
+                      aria-describedby="representing-legend"
+                      checked={modal.representingSecondary || false}
+                      className="usa-checkbox__input"
+                      id="party-secondary"
+                      name="representingSecondary"
+                      type="checkbox"
+                      onChange={e => {
+                        updateModalValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label inline-block"
+                      htmlFor="party-secondary"
+                    >
+                      {formattedCaseDetail.contactSecondary.name}
+                    </label>
+                  </div>
+                )}
             </fieldset>
           </FormGroup>
 

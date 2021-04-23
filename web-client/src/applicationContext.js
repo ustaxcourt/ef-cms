@@ -3,6 +3,10 @@ import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
   caseHasServedDocketEntries,
+  getContactPrimary,
+  getContactSecondary,
+  getOtherFilers,
+  getOtherPetitioners,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -638,12 +642,16 @@ const applicationContext = {
       formattedTrialSessionDetails,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
+      getContactPrimary,
+      getContactSecondary,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
       getJudgeLastName,
       getMonthDayYearObj,
+      getOtherFilers,
+      getOtherPetitioners,
       getServedPartiesCode,
       getTrialSessionStatus,
       getWorkQueueFilters,
