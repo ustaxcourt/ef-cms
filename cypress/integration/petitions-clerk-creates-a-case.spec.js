@@ -19,12 +19,10 @@ describe('Create case and submit to IRS', function () {
 
     fillInCreateCaseFromPaperForm();
 
-    cy.server();
-    cy.route('POST', '**/paper').as('postPaperCase');
+    cy.intercept('POST', '**/paper').as('postPaperCase');
     cy.get('#submit-case').click();
-    cy.wait('@postPaperCase');
-    cy.get('@postPaperCase').should(xhr => {
-      expect(xhr.responseBody).to.have.property('docketNumber');
+    cy.wait('@postPaperCase').then(({ response }) => {
+      expect(response.body).to.have.property('docketNumber');
     });
   });
 

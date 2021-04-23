@@ -44,12 +44,10 @@ exports.goToWizardStep5 = () => {
 exports.submitPetition = testData => {
   cy.get('button#submit-case').scrollIntoView().click();
 
-  cy.server();
-  cy.route('POST', '**/cases').as('postCase');
-  cy.wait('@postCase');
-  cy.get('@postCase').should(xhr => {
-    expect(xhr.responseBody).to.have.property('docketNumber');
-    const { docketNumber } = xhr.responseBody;
+  cy.intercept('POST', '**/cases').as('postCase');
+  cy.wait('@postCase').then(({ response }) => {
+    expect(response.body).to.have.property('docketNumber');
+    const { docketNumber } = response.body;
     if (testData) {
       testData.createdDocketNumber = docketNumber;
       if (testData.docketNumbers) {
