@@ -7,6 +7,7 @@ const {
 } = require('../entities/EntityConstants');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
+const { cloneDeep } = require('lodash');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { isEmpty } = require('lodash');
@@ -52,13 +53,25 @@ exports.updateSecondaryContactInteractor = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseEntity = new Case(
-    {
-      ...caseToUpdate,
-      contactSecondary: { ...caseToUpdate.contactSecondary, ...editableFields },
-    },
-    { applicationContext },
-  );
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
+
+  const oldContactSecondary = cloneDeep(caseEntity.getContactSecondary());
+
+  const updatedSecondaryContact = {
+    ...oldContactSecondary,
+    ...editableFields,
+  };
+
+  try {
+    caseEntity.updatePetitioner(updatedSecondaryContact);
+  } catch (e) {
+    throw new NotFoundError(e);
+  }
+
+  const rawUpdatedCase = caseEntity.validate().toRawObject();
+  caseEntity = new Case(rawUpdatedCase, { applicationContext });
+
+  const contactSecondary = caseEntity.getContactSecondary();
 
   const userIsAssociated = caseEntity.isAssociatedUser({
     user,
@@ -72,11 +85,11 @@ exports.updateSecondaryContactInteractor = async (
     .getUtilities()
     .getDocumentTypeForAddressChange({
       newData: editableFields,
-      oldData: caseToUpdate.contactSecondary,
+      oldData: oldContactSecondary,
     });
 
   if (
-    !caseEntity.contactSecondary.isAddressSealed &&
+    !oldContactSecondary.isAddressSealed &&
     changeOfAddressDocumentTypeToGenerate
   ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
@@ -93,7 +106,7 @@ exports.updateSecondaryContactInteractor = async (
           documentTitle: changeOfAddressDocumentTypeToGenerate.title,
           name: contactInfo.name,
           newData: editableFields,
-          oldData: caseToUpdate.contactSecondary,
+          oldData: oldContactSecondary,
         },
       });
 
@@ -102,7 +115,8 @@ exports.updateSecondaryContactInteractor = async (
     const changeOfAddressDocketEntry = new DocketEntry(
       {
         addToCoversheet: true,
-        additionalInfo: `for ${caseToUpdate.contactSecondary.name}`,
+        additionalInfo: `for ${contactSecondary.name}`,
+        contactSecondary: caseEntity.getContactSecondary(),
         docketEntryId: newDocketEntryId,
         docketNumber: caseEntity.docketNumber,
         documentTitle: changeOfAddressDocumentTypeToGenerate.title,
@@ -114,9 +128,6 @@ exports.updateSecondaryContactInteractor = async (
         partySecondary: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
-        ...caseEntity.getCaseContacts({
-          contactSecondary: true,
-        }),
       },
       { applicationContext },
     );
@@ -201,7 +212,7 @@ exports.updateSecondaryContactInteractor = async (
 
   const contactDiff = applicationContext.getUtilities().getAddressPhoneDiff({
     newData: editableFields,
-    oldData: caseToUpdate.contactSecondary,
+    oldData: oldContactSecondary,
   });
 
   const shouldUpdateCase =

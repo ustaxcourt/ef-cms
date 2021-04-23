@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
 } from '../../../shared/src/business/entities/EntityConstants';
+import { contactPrimaryFromState } from '../helpers';
 
 export const petitionsClerkViewsCaseDetail = (
   test,
@@ -26,6 +27,6 @@ export const petitionsClerkViewsCaseDetail = (
 
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
-    expect(caseDetail.contactPrimary.contactId).toBeDefined();
+    expect(contactPrimaryFromState(test).contactId).toBeDefined();
   });
 };

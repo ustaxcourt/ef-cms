@@ -1,6 +1,7 @@
 const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   INITIAL_DOCUMENT_TYPES,
@@ -37,22 +38,25 @@ describe('createCase integration test', () => {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.innocentSpouse,
-        contactPrimary: {
-          address1: '19 First Freeway',
-          address2: 'Ad cumque quidem lau',
-          address3: 'Anim est dolor animi',
-          city: 'Rerum eaque cupidata',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'petitioner@example.com',
-          name: 'Rick Petitioner',
-          phone: '+1 (599) 681-5435',
-          postalCode: '89614',
-          state: 'AL',
-        },
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            address1: '19 First Freeway',
+            address2: 'Ad cumque quidem lau',
+            address3: 'Anim est dolor animi',
+            city: 'Rerum eaque cupidata',
+            contactType: CONTACT_TYPES.primary,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'petitioner@example.com',
+            name: 'Rick Petitioner',
+            phone: '+1 (599) 681-5435',
+            postalCode: '89614',
+            state: 'AL',
+          },
+        ],
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
@@ -65,9 +69,6 @@ describe('createCase integration test', () => {
 
     expect(createdCase).toMatchObject({
       caseCaption: 'Rick Petitioner, Petitioner',
-      contactPrimary: {
-        contactId: PETITIONER_USER_ID,
-      },
       docketEntries: [
         {
           documentType: 'Petition',
@@ -113,6 +114,12 @@ describe('createCase integration test', () => {
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
+      petitioners: [
+        {
+          contactId: PETITIONER_USER_ID,
+          contactType: CONTACT_TYPES.primary,
+        },
+      ],
       status: CASE_STATUS_TYPES.new,
     });
   });

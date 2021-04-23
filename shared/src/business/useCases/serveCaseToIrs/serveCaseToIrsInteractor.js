@@ -238,7 +238,7 @@ exports.serveCaseToIrsInteractor = async (
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
-        address: caseEntityToUpdate.contactPrimary,
+        address: caseEntityToUpdate.getContactPrimary(),
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
@@ -255,12 +255,13 @@ exports.serveCaseToIrsInteractor = async (
       },
     });
 
-  if (caseEntityToUpdate.contactSecondary) {
+  const contactSecondary = caseEntityToUpdate.getContactSecondary();
+  if (contactSecondary) {
     const contactInformationDiff = applicationContext
       .getUtilities()
       .getAddressPhoneDiff({
-        newData: caseEntityToUpdate.contactPrimary,
-        oldData: caseEntityToUpdate.contactSecondary,
+        newData: caseEntityToUpdate.getContactPrimary(),
+        oldData: contactSecondary,
       });
 
     const addressFields = [
@@ -286,7 +287,7 @@ exports.serveCaseToIrsInteractor = async (
         .noticeOfReceiptOfPetition({
           applicationContext,
           data: {
-            address: caseEntityToUpdate.contactSecondary,
+            address: contactSecondary,
             caseCaptionExtension,
             caseTitle,
             docketNumberWithSuffix,
