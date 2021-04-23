@@ -19,6 +19,7 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
       query: {
         bool: {
           must: [
+            { term: { 'entityName.S': 'Practitioner' } },
             {
               terms: {
                 'role.S': [
@@ -38,7 +39,6 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
           ],
         },
       },
-
       size: MAX_SEARCH_CLIENT_RESULTS,
     },
     index: 'efcms-user',
