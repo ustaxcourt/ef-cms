@@ -7,6 +7,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { Case } = require('../entities/cases/Case');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -31,13 +32,28 @@ exports.removePetitionerFromCaseInteractor = async (
     );
   }
 
-  const oldCase = await applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  if (oldCase.status === CASE_STATUS_TYPES.new) {
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
+
+  if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
     throw new Error(
-      `Case with docketNumber ${oldCase.docketNumber} has not been served`,
+      `Case with docketNumber ${caseToUpdate.docketNumber} has not been served`,
     );
   }
+
+  caseEntity.caseCaption = caseCaption;
+  console.log('caseEntity', caseEntity);
+  // caseEntity.removePetitioner(contactId);
+
+  const updatedCase = applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
+
+  return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
