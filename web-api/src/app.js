@@ -164,11 +164,6 @@ const {
   getDocumentDownloadUrlLambda: v2GetDocumentDownloadUrlLambda,
 } = require('./v2/getDocumentDownloadUrlLambda');
 const {
-  getReconciliationReportLambda: v2GetReconciliationReportLambda,
-} = require('./v2/getReconciliationReportLambda');
-const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
-
-const {
   getDocumentQCInboxForSectionLambda,
 } = require('./workitems/getDocumentQCInboxForSectionLambda');
 const {
@@ -213,6 +208,9 @@ const {
 const {
   getPrivatePractitionersBySearchKeyLambda,
 } = require('./users/getPrivatePractitionersBySearchKeyLambda');
+const {
+  getReconciliationReportLambda: v2GetReconciliationReportLambda,
+} = require('./v2/getReconciliationReportLambda');
 const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
@@ -361,6 +359,7 @@ const {
   verifyUserPendingEmailLambda,
 } = require('./users/verifyUserPendingEmailLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
+const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
