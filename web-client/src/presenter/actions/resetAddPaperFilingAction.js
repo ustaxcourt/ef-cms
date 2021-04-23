@@ -1,12 +1,12 @@
 import { state } from 'cerebral';
 
 /**
- * resets everything in the state for the add docket entry page
+ * resets everything in the state for the add paper filing page
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object
  */
-export const resetAddDocketEntryAction = ({ store }) => {
+export const resetAddPaperFilingAction = ({ store }) => {
   store.set(state.isEditingDocketEntry, false);
   store.set(state.form.lodged, false);
   store.set(state.form.practitioner, []);
