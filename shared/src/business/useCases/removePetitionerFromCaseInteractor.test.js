@@ -13,6 +13,7 @@ const {
 } = require('./removePetitionerFromCaseInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { UnauthorizedError } = require('../../errors/errors');
 
 describe('removePetitionerFromCaseInteractor', () => {
   let mockCase;
@@ -61,7 +62,7 @@ describe('removePetitionerFromCaseInteractor', () => {
         contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         docketNumber: MOCK_CASE.docketNumber,
       }),
-    ).rejects.toThrow('');
+    ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should throw an error if the case status is new', async () => {
