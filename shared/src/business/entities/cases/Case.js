@@ -1145,6 +1145,12 @@ Case.prototype.addPetitioner = function (petitioner) {
   return this;
 };
 
+Case.prototype.getPractitionersRepresenting = function (petitionerContactId) {
+  return this.privatePractitioners.filter(practitioner =>
+    practitioner.representing.includes(petitionerContactId),
+  );
+};
+
 /**
  * removes the petitioner from the petitioners array
  *

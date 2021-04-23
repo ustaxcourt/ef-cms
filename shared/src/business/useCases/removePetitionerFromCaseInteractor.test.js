@@ -44,6 +44,10 @@ describe('removePetitionerFromCaseInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
+
+    applicationContext
+      .getPersistenceGateway()
+      .deleteUserFromCase.mockImplementation(() => null);
   });
 
   it('should throw an unauthorized error when the current user does not have permission to edit petitioners', async () => {
