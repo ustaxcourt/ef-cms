@@ -24,7 +24,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitAddPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -77,7 +77,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       value: true,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitAddPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -131,7 +131,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'scan',
     );
 
-    await test.runSequence('fileDocketEntrySequence');
+    await test.runSequence('submitAddPaperFilingSequence');
 
     expect(Object.keys(test.getState('validationErrors'))).toEqual([
       'primaryDocumentFile',
@@ -150,7 +150,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'preview',
     );
 
-    await test.runSequence('fileDocketEntrySequence');
+    await test.runSequence('submitAddPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');

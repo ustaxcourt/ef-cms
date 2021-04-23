@@ -89,7 +89,6 @@ import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
-import { fileDocketEntrySequence } from './sequences/fileDocketEntrySequence';
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { forwardMessageSequence } from './sequences/forwardMessageSequence';
@@ -320,6 +319,7 @@ import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
 import { submitAddOtherStatisticsSequence } from './sequences/submitAddOtherStatisticsSequence';
+import { submitAddPaperFilingSequence } from './sequences/submitAddPaperFilingSequence';
 import { submitAddPractitionerSequence } from './sequences/submitAddPractitionerSequence';
 import { submitCaseAdvancedSearchSequence } from './sequences/submitCaseAdvancedSearchSequence';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
@@ -561,7 +561,6 @@ export const presenter = {
     editCorrespondenceDocumentSequence,
     editUploadCourtIssuedDocumentSequence,
     fetchUserNotificationsSequence,
-    fileDocketEntrySequence,
     filterCaseDeadlinesByJudgeSequence,
     formCancelToggleCancelSequence,
     forwardMessageSequence,
@@ -790,6 +789,7 @@ export const presenter = {
     submitAddConsolidatedCaseSequence,
     submitAddDeficiencyStatisticsSequence,
     submitAddOtherStatisticsSequence,
+    submitAddPaperFilingSequence,
     submitAddPractitionerSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseAssociationRequestSequence,

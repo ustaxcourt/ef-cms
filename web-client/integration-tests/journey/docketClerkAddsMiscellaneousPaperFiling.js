@@ -48,7 +48,7 @@ export const docketClerkAddsMiscellaneousPaperFiling = (test, fakeFile) => {
       value: 'A title',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
