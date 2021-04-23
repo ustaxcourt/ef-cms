@@ -784,7 +784,7 @@ const {
 } = require('../../shared/src/business/useCases/removePdfFromDocketEntryInteractor');
 const {
   removePetitionerFromCaseInteractor,
-} = require('../../shared/src/business/useCases/removeCasePendingItemInteractor');
+} = require('../../shared/src/business/useCases/removePetitionerFromCaseInteractor');
 const {
   removeSignatureFromDocumentInteractor,
 } = require('../../shared/src/business/useCases/removeSignatureFromDocumentInteractor');
@@ -1638,7 +1638,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
-        removePetitionerFromCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
         createMessageInteractor,
         createPetitionerAccountInteractor,
@@ -1733,6 +1732,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
         removePdfFromDocketEntryInteractor,
+        removePetitionerFromCaseInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,
