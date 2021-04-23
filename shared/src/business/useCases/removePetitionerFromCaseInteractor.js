@@ -21,7 +21,7 @@ const { UnauthorizedError } = require('../../errors/errors');
 
 exports.removePetitionerFromCaseInteractor = async (
   applicationContext,
-  { contactId, docketNumber },
+  { caseCaption, contactId, docketNumber },
 ) => {
   const user = applicationContext.getCurrentUser();
 

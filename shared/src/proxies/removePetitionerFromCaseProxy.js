@@ -11,11 +11,13 @@ const { remove } = require('./requests');
  */
 exports.removePetitionerFromCaseInteractor = ({
   applicationContext,
+  caseCaption,
   contactId,
   docketNumber,
 }) => {
   return remove({
     applicationContext,
+    body: { caseCaption },
     endpoint: `/case-meta/${docketNumber}/remove-petitioner/${contactId}`,
   });
 };
