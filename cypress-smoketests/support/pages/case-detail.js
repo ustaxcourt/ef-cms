@@ -105,9 +105,7 @@ exports.uploadCourtIssuedDocPdf = () => {
   cy.get('#menu-button-upload-pdf').click();
   cy.url().should('contain', '/upload-court-issued');
   cy.get('#upload-description').type('An Uploaded PDF');
-  cy.get('input#primary-document-file').attachFile(
-    '../../fixtures/w3-dummy.pdf',
-  );
+  cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
 };
 
 exports.clickSaveUploadedPdfButton = () => {
