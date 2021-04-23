@@ -8,6 +8,7 @@ import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
+import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -289,6 +290,7 @@ export const EditPetitionerInformationInternal = connect(
         {showModal === 'NoMatchingEmailFoundModal' && (
           <NoMatchingEmailFoundModal />
         )}
+        <RemovePetitionerModal />
       </>
     );
   },
