@@ -59,7 +59,7 @@ export const addPaperFilingAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .fileDocketEntryInteractor({
+    .addPaperFilingInteractor({
       applicationContext,
       documentMetadata,
       isSavingForLater,

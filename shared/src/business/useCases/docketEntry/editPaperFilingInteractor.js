@@ -21,7 +21,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
  * @returns {object} the updated case after the documents are added
  */
-exports.updateDocketEntryInteractor = async (
+exports.editPaperFilingInteractor = async (
   applicationContext,
   { documentMetadata, isSavingForLater, primaryDocumentFileId },
 ) => {

@@ -1,7 +1,7 @@
-const { post } = require('../requests');
+const { put } = require('../requests');
 
 /**
- * fileDocketEntryProxy
+ * editPaperFilingProxy
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -12,20 +12,20 @@ const { post } = require('../requests');
  * @param {string} providers.supportingDocumentFileId the id of the supporting document file (optional)
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileDocketEntryInteractor = ({
+exports.editPaperFilingInteractor = ({
   applicationContext,
   documentMetadata,
   isSavingForLater,
   primaryDocumentFileId,
 }) => {
   const { docketNumber } = documentMetadata;
-  return post({
+  return put({
     applicationContext,
     body: {
       documentMetadata,
       isSavingForLater,
       primaryDocumentFileId,
     },
-    endpoint: `/case-documents/${docketNumber}/docket-entry`,
+    endpoint: `/case-documents/${docketNumber}/paper-filing`,
   });
 };

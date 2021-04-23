@@ -54,7 +54,7 @@ export const editPaperFilingAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .updateDocketEntryInteractor({
+    .editPaperFilingInteractor({
       applicationContext,
       documentMetadata,
       isSavingForLater,

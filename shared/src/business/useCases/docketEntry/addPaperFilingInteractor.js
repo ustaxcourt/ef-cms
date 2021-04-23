@@ -25,7 +25,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.primaryDocumentFileId the id of the document file
  * @returns {object} the updated case after the documents are added
  */
-exports.fileDocketEntryInteractor = async (
+exports.addPaperFilingInteractor = async (
   applicationContext,
   { documentMetadata, isSavingForLater, primaryDocumentFileId },
 ) => {

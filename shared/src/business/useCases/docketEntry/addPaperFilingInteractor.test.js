@@ -9,9 +9,9 @@ const {
   PARTY_TYPES,
   ROLES,
 } = require('../../entities/EntityConstants');
-const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
+const { addPaperFilingInteractor } = require('./addPaperFilingInteractor');
 
-describe('fileDocketEntryInteractor', () => {
+describe('addPaperFilingInteractor', () => {
   const user = {
     name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
     role: ROLES.docketClerk,
@@ -90,7 +90,7 @@ describe('fileDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      fileDocketEntryInteractor(applicationContext, {
+      addPaperFilingInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'Memorandum in Support',
@@ -103,7 +103,7 @@ describe('fileDocketEntryInteractor', () => {
   });
 
   it('add documents but not workitems for paper filed documents', async () => {
-    await fileDocketEntryInteractor(applicationContext, {
+    await addPaperFilingInteractor(applicationContext, {
       documentMetadata: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: caseRecord.docketNumber,
@@ -132,7 +132,7 @@ describe('fileDocketEntryInteractor', () => {
   });
 
   it('add documents and workItem to inbox if saving for later if a document is attached', async () => {
-    await fileDocketEntryInteractor(applicationContext, {
+    await addPaperFilingInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
@@ -165,7 +165,7 @@ describe('fileDocketEntryInteractor', () => {
   });
 
   it('add documents and workItem to inbox when NOT saving for later if a document is attached', async () => {
-    await fileDocketEntryInteractor(applicationContext, {
+    await addPaperFilingInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
@@ -198,7 +198,7 @@ describe('fileDocketEntryInteractor', () => {
   });
 
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
-    await fileDocketEntryInteractor(applicationContext, {
+    await addPaperFilingInteractor(applicationContext, {
       documentMetadata: {
         category: 'Application',
         docketNumber: caseRecord.docketNumber,
@@ -234,7 +234,7 @@ describe('fileDocketEntryInteractor', () => {
         { deadline: 'something' },
       ]);
 
-    await fileDocketEntryInteractor(applicationContext, {
+    await addPaperFilingInteractor(applicationContext, {
       documentMetadata: {
         category: 'Application',
         docketNumber: caseRecord.docketNumber,
@@ -270,7 +270,7 @@ describe('fileDocketEntryInteractor', () => {
 
     let error;
     try {
-      await fileDocketEntryInteractor(applicationContext, {
+      await addPaperFilingInteractor(applicationContext, {
         documentMetadata: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: caseRecord.docketNumber,
