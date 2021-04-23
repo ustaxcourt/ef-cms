@@ -33,14 +33,14 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.error('about to run migration 0028');
+  applicationContext.logger.debug('about to run migration 0028');
   items = await migration0028(items, documentClient);
-  applicationContext.logger.error('about to run migration 0029');
+  applicationContext.logger.debug('about to run migration 0029');
   items = await migration0029(items, documentClient);
-  applicationContext.logger.error('about to run migration 0030');
+  applicationContext.logger.debug('about to run migration 0030');
   items = await migration0030(items, documentClient);
 
-  applicationContext.logger.error('about to run validation migration');
+  applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items, documentClient);
 
   return items;
