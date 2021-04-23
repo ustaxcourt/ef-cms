@@ -16,7 +16,7 @@ import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditDocketEntry = [
+export const gotoDocketEntryQc = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
@@ -30,7 +30,7 @@ export const gotoEditDocketEntry = [
   setDocketEntryIdAction,
   setQCWorkItemIdToMarkAsReadIfNeededAction,
   setTabAction('Document Info'),
-  setCurrentPageAction('EditDocketEntry'),
+  setCurrentPageAction('DocketEntryQc'),
   getShouldMarkReadAction,
   {
     markRead: [setWorkItemAsReadAction],
@@ -38,10 +38,10 @@ export const gotoEditDocketEntry = [
   },
 ];
 
-export const gotoEditDocketEntrySequence = [
+export const gotoDocketEntryQcSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoEditDocketEntry,
+    isLoggedIn: gotoDocketEntryQc,
     unauthorized: [redirectToCognitoAction],
   },
 ];
