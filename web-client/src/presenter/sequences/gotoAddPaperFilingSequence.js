@@ -10,7 +10,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocketEntryIdAction } from '../actions/unsetDocketEntryIdAction';
 
-export const gotoAddDocketEntry = [
+export const gotoAddPaperFiling = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
@@ -23,10 +23,10 @@ export const gotoAddDocketEntry = [
   setCurrentPageAction('AddPaperFiling'),
 ];
 
-export const gotoAddDocketEntrySequence = [
+export const gotoAddPaperFilingSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoAddDocketEntry,
+    isLoggedIn: gotoAddPaperFiling,
     unauthorized: [redirectToCognitoAction],
   },
 ];

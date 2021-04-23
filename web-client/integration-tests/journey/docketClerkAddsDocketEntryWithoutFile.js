@@ -10,7 +10,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 

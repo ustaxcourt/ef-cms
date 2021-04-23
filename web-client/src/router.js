@@ -628,7 +628,7 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Add paper filing`,
         );
-        return app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
+        return app.getSequence('gotoAddPaperFilingSequence')({ docketNumber });
       }),
     );
 
