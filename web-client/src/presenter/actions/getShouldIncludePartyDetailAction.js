@@ -14,10 +14,8 @@ export const getShouldIncludePartyDetailAction = async ({
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 
-  let shouldIncludePartyDetail = true;
-  if (user.role === USER_ROLES.irsPractitioner && !isAssociated) {
-    shouldIncludePartyDetail = false;
-  }
+  const shouldIncludePartyDetail =
+    user.role !== USER_ROLES.irsPractitioner || isAssociated;
 
   return { shouldIncludePartyDetail };
 };
