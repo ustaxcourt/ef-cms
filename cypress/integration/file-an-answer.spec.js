@@ -22,8 +22,7 @@ describe('Filing an Answer', function () {
       .scrollIntoView()
       .should('not.have.class', 'validated');
 
-    cy.upload_file('w3-dummy.pdf', '#primary-document');
-
+    cy.get('#primary-document').attachFile('../fixtures/w3-dummy.pdf');
     cy.get('label#primary-document-label').should('have.class', 'validated');
   });
 

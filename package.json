@@ -39,6 +39,7 @@
     "cors": "^2.8.5",
     "csv-parse": "^4.15.3",
     "cypress": "^7.1.0",
+    "cypress-file-upload": "^5.0.6",
     "deep-freeze": "0.0.1",
     "diff-arrays-of-objects": "^1.1.7",
     "dynamodb-admin": "^4.0.1",
