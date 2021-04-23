@@ -257,6 +257,9 @@ const {
   removePdfFromDocketEntryLambda,
 } = require('./documents/removePdfFromDocketEntryLambda');
 const {
+  removePetitionerFromCaseLambda,
+} = require('./cases/removePetitionerFromCaseLambda');
+const {
   removeSignatureFromDocumentLambda,
 } = require('./documents/removeSignatureFromDocumentLambda');
 const {
@@ -641,7 +644,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
   app.delete(
     '/case-meta/:docketNumber/remove-petitioner/:contactId',
-    lambdaWrapper(addPetitionerToCaseLambda),
+    lambdaWrapper(removePetitionerFromCaseLambda),
   );
 }
 /**
