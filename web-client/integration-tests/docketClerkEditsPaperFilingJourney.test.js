@@ -20,7 +20,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
   loginAs(test, 'docketclerk@example.com');
   it('create a paper-filed docket entry', async () => {
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -118,7 +118,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('AddDocketEntry');
+    expect(test.getState('currentPage')).toEqual('AddPaperFiling');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
       'preview',
@@ -143,7 +143,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       file: fakeFile,
     });
 
-    expect(test.getState('currentPage')).toEqual('AddDocketEntry');
+    expect(test.getState('currentPage')).toEqual('AddPaperFiling');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
     expect(test.getState('form.primaryDocumentFile')).toBeDefined();
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
