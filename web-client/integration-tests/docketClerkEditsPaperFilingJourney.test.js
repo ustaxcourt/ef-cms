@@ -20,7 +20,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
   loginAs(test, 'docketclerk@example.com');
   it('create a paper-filed docket entry', async () => {
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
