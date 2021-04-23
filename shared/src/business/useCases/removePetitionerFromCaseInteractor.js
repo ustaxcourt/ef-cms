@@ -1,13 +1,9 @@
 const {
-  CASE_STATUS_TYPES,
-  CONTACT_TYPES,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../entities/EntityConstants');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -45,10 +41,9 @@ exports.removePetitionerFromCaseInteractor = async (
   }
 
   caseEntity.caseCaption = caseCaption;
-  console.log('caseEntity', caseEntity);
-  // caseEntity.removePetitioner(contactId);
+  caseEntity.removePetitioner(contactId);
 
-  const updatedCase = applicationContext
+  const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,

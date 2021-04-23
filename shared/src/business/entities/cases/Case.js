@@ -1146,6 +1146,19 @@ Case.prototype.addPetitioner = function (petitioner) {
 };
 
 /**
+ * removes the petitioner from the petitioners array
+ *
+ * @params {object} petitioner the petitioner to remove from the case
+ * @returns {Case} the updated case
+ */
+Case.prototype.removePetitioner = function (contactId) {
+  this.petitioners = this.petitioners.filter(
+    petitioner => petitioner.contactId === contactId,
+  );
+  return this;
+};
+
+/**
  * gets the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object

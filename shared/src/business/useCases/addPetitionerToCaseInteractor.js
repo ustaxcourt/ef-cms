@@ -49,7 +49,7 @@ exports.addPetitionerToCaseInteractor = async (
 
   caseEntity.addPetitioner(petitionerEntity);
 
-  const updatedCase = applicationContext
+  const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
