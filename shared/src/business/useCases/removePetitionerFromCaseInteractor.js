@@ -11,7 +11,6 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.caseCaption the case caption to update
  * @param {object} providers.contactId the contactId of the person to remove from the case
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the case data
@@ -19,7 +18,7 @@ const { UnauthorizedError } = require('../../errors/errors');
 
 exports.removePetitionerFromCaseInteractor = async (
   applicationContext,
-  { caseCaption, contactId, docketNumber },
+  { contactId, docketNumber },
 ) => {
   const petitionerContactId = contactId;
   const user = applicationContext.getCurrentUser();
@@ -34,6 +33,7 @@ exports.removePetitionerFromCaseInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
+  console.log('caseToUpdate', caseToUpdate);
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
@@ -41,8 +41,6 @@ exports.removePetitionerFromCaseInteractor = async (
       `Case with docketNumber ${caseToUpdate.docketNumber} has not been served`,
     );
   }
-
-  caseEntity.caseCaption = caseCaption;
 
   if (caseEntity.petitioners.length <= 1) {
     throw new Error(
