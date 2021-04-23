@@ -1,15 +1,13 @@
 import { addPaperFilingAction } from '../actions/DocketEntry/addPaperFilingAction';
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
-import { chooseNextStepAction } from '../actions/DocketEntry/chooseNextStepAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
-import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
-import { getIsSavingForLaterAction } from '../actions/DocketEntry/getIsSavingForLaterAction';
+import { getShouldGoToPaperServiceAction } from '../actions/DocketEntry/getShouldGoToPaperServiceAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -33,34 +31,22 @@ import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/sugg
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-const gotoCaseDetail = [
-  getDocketEntryAlertSuccessAction,
-  setAlertSuccessAction,
-  setSaveAlertsForNavigationAction,
-  navigateToCaseDetailAction,
-];
-
-const afterEntrySaved = [
+const savePaperFiling = showProgressSequenceDecorator([
+  addPaperFilingAction,
   setCaseAction,
   closeFileUploadStatusModalAction,
   setDocketEntryIdAction,
-  getIsSavingForLaterAction,
+  getShouldGoToPaperServiceAction,
   {
-    no: [completeDocketEntryQCAction],
-    yes: [],
-  },
-  chooseNextStepAction,
-  {
-    isElectronic: gotoCaseDetail,
-    isPaper: [
-      getIsSavingForLaterAction,
-      {
-        no: [setPdfPreviewUrlAction, gotoPrintPaperServiceSequence],
-        yes: gotoCaseDetail,
-      },
+    no: [
+      getDocketEntryAlertSuccessAction,
+      setAlertSuccessAction,
+      setSaveAlertsForNavigationAction,
+      navigateToCaseDetailAction,
     ],
+    yes: [setPdfPreviewUrlAction, gotoPrintPaperServiceSequence],
   },
-];
+]);
 
 export const submitAddPaperFilingSequence = [
   checkForActiveBatchesAction,
@@ -89,20 +75,14 @@ export const submitAddPaperFilingSequence = [
           clearAlertsAction,
           isFileAttachedAction,
           {
-            no: showProgressSequenceDecorator([
-              addPaperFilingAction,
-              afterEntrySaved,
-            ]),
+            no: savePaperFiling,
             yes: [
               openFileUploadStatusModalAction,
               getDocumentIdAction,
               uploadDocketEntryFileAction,
               {
                 error: [openFileUploadErrorModal],
-                success: showProgressSequenceDecorator([
-                  addPaperFilingAction,
-                  afterEntrySaved,
-                ]),
+                success: savePaperFiling,
               },
             ],
           },

@@ -1,14 +1,14 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * lambda which is used for adding a docket entry to a case
+ * lambda used for adding a paper filing to a case
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.fileDocketEntryToCaseLambda = event =>
+exports.addPaperFilingLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .fileDocketEntryInteractor(applicationContext, JSON.parse(event.body));
+      .addPaperFilingInteractor(applicationContext, JSON.parse(event.body));
   });

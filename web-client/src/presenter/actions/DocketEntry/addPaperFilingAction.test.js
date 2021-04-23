@@ -18,7 +18,7 @@ describe('addPaperFilingAction', () => {
   it('file a new docket entry with an uploaded file', async () => {
     applicationContext
       .getUseCases()
-      .fileDocketEntryInteractor.mockReturnValue(caseDetail);
+      .addPaperFilingInteractor.mockReturnValue(caseDetail);
 
     const result = await runAction(addPaperFilingAction, {
       modules: {
@@ -40,7 +40,7 @@ describe('addPaperFilingAction', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().fileDocketEntryInteractor,
+      applicationContext.getUseCases().addPaperFilingInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
@@ -59,7 +59,7 @@ describe('addPaperFilingAction', () => {
   it('file a new docket entry with an uploaded file, but does not generate a coversheet when saved for later', async () => {
     applicationContext
       .getUseCases()
-      .fileDocketEntryInteractor.mockReturnValue(caseDetail);
+      .addPaperFilingInteractor.mockReturnValue(caseDetail);
 
     const result = await runAction(addPaperFilingAction, {
       modules: {
@@ -82,7 +82,7 @@ describe('addPaperFilingAction', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().fileDocketEntryInteractor,
+      applicationContext.getUseCases().addPaperFilingInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
@@ -101,7 +101,7 @@ describe('addPaperFilingAction', () => {
   it('file a new docket entry without an uploaded file', async () => {
     applicationContext
       .getUseCases()
-      .fileDocketEntryInteractor.mockReturnValue(caseDetail);
+      .addPaperFilingInteractor.mockReturnValue(caseDetail);
 
     const result = await runAction(addPaperFilingAction, {
       modules: {
@@ -121,7 +121,7 @@ describe('addPaperFilingAction', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().fileDocketEntryInteractor,
+      applicationContext.getUseCases().addPaperFilingInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePdfInteractor,

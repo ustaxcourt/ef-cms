@@ -110,9 +110,6 @@ const {
   fileCourtIssuedOrderToCaseLambda,
 } = require('./documents/fileCourtIssuedOrderToCaseLambda');
 const {
-  fileDocketEntryToCaseLambda,
-} = require('./documents/fileDocketEntryToCaseLambda');
-const {
   fileExternalDocumentToCaseLambda,
 } = require('./documents/fileExternalDocumentToCaseLambda');
 const {
@@ -169,6 +166,7 @@ const {
 const {
   getReconciliationReportLambda: v2GetReconciliationReportLambda,
 } = require('./v2/getReconciliationReportLambda');
+const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
 
 const {
   getDocumentQCInboxForSectionLambda,
@@ -321,9 +319,6 @@ const {
   updateDocketEntryMetaLambda,
 } = require('./documents/updateDocketEntryMetaLambda');
 const {
-  updateDocketEntryOnCaseLambda,
-} = require('./documents/updateDocketEntryOnCaseLambda');
-const {
   updateOtherStatisticsLambda,
 } = require('./cases/updateOtherStatisticsLambda');
 const {
@@ -372,6 +367,7 @@ const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
+const { editPaperFilingLambda } = require('./documents/editPaperFilingLambda');
 const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
 const { getBlockedCasesLambda } = require('./reports/getBlockedCasesLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
@@ -513,8 +509,8 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/docket-entry',
-    lambdaWrapper(fileDocketEntryToCaseLambda),
+    '/case-documents/:docketNumber/paper-filing',
+    lambdaWrapper(addPaperFilingLambda),
   );
   app.post(
     '/case-documents/:docketNumber/court-issued-docket-entry',
@@ -539,8 +535,8 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(updateCourtIssuedOrderToCaseLambda),
   );
   app.put(
-    '/case-documents/:docketNumber/docket-entry',
-    lambdaWrapper(updateDocketEntryOnCaseLambda),
+    '/case-documents/:docketNumber/paper-filing',
+    lambdaWrapper(editPaperFilingLambda),
   );
   app.put(
     '/case-documents/:docketNumber/docket-entry-meta',

@@ -1,14 +1,14 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * lambda which is used for updating a docket entry on a case
+ * lambda which is used for editing a paper filing on a case before it is served
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.updateDocketEntryOnCaseLambda = event =>
+exports.editPaperFilingProxy = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateDocketEntryInteractor(applicationContext, JSON.parse(event.body));
+      .editPaperFilingInteractor(applicationContext, JSON.parse(event.body));
   });
