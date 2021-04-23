@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -26,16 +27,21 @@ describe('setupPetitionerInformationFormAction', () => {
   it('should set contactPrimary, contactSecondary, and partyType on state.form from the result of setServiceIndicatorsForCase', async () => {
     const { PARTY_TYPES } = applicationContext.getConstants();
 
-    const mockContactPrimary = { name: 'Test Primary' };
-    const mockContactSecondary = { name: 'Test Secondary' };
+    const mockContactPrimary = {
+      contactType: CONTACT_TYPES.primary,
+      name: 'Test Primary',
+    };
+    const mockContactSecondary = {
+      contactType: CONTACT_TYPES.secondary,
+      name: 'Test Secondary',
+    };
     const mockPartyType = PARTY_TYPES.nextFriendForMinor;
 
     applicationContext
       .getUtilities()
       .setServiceIndicatorsForCase.mockReturnValue({
-        contactPrimary: mockContactPrimary,
-        contactSecondary: mockContactSecondary,
         partyType: mockPartyType,
+        petitioners: [mockContactPrimary, mockContactSecondary],
       });
 
     const { state } = await runAction(setupPetitionerInformationFormAction, {

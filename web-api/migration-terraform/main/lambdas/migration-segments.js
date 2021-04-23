@@ -1,11 +1,8 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const {
-  migrateItems: migration0028,
-} = require('./migrations/0028-contact-primary-email');
-const {
-  migrateItems: migration0029,
-} = require('./migrations/0029-fix-duplicate-contact-id');
+  migrateItems: migration0025,
+} = require('./migrations/0025-add-contacts-to-petitioners-array');
 const {
   migrateItems: migration0030,
 } = require('./migrations/0030-docket-entry-docket-number-required');
@@ -33,10 +30,8 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.debug('about to run migration 0028');
-  items = await migration0028(items, documentClient);
-  applicationContext.logger.debug('about to run migration 0029');
-  items = await migration0029(items, documentClient);
+  applicationContext.logger.info('about to run migration 0025');
+  items = await migration0025(items, documentClient);
   applicationContext.logger.debug('about to run migration 0030');
   items = await migration0030(items, documentClient);
 
