@@ -94,6 +94,8 @@ exports.editPaperFilingInteractor = async (
     { applicationContext },
   );
 
+  let paperServicePdfUrl;
+
   if (editableFields.isFileAttached) {
     const { workItem } = docketEntryEntity;
 
@@ -149,12 +151,17 @@ exports.editPaperFilingInteractor = async (
 
       caseEntity.updateDocketEntry(docketEntryEntity);
 
-      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-        applicationContext,
-        caseEntity,
-        docketEntryId: docketEntryEntity.docketEntryId,
-        servedParties,
-      });
+      const paperServiceResult = await applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntity,
+          docketEntryId: docketEntryEntity.docketEntryId,
+        });
+
+      if (servedParties.paper.length > 0) {
+        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+      }
     } else {
       docketEntryEntity.numberOfPages = await applicationContext
         .getUseCaseHelpers()
@@ -248,5 +255,10 @@ exports.editPaperFilingInteractor = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(result, { applicationContext }).validate().toRawObject();
+  return {
+    caseDetail: new Case(result, { applicationContext })
+      .validate()
+      .toRawObject(),
+    paperServicePdfUrl,
+  };
 };

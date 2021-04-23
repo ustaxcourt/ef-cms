@@ -2,101 +2,46 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  CASE_TYPES_MAP,
-  COUNTRY_TYPES,
   DOCKET_SECTION,
-  PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { editPaperFilingInteractor } = require('./editPaperFilingInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('editPaperFilingInteractor', () => {
   let mockCurrentUser;
 
+  const mockDocketEntryId = '08ecbf7e-b316-46bb-9ac6-b7474823d202';
+
   const workItem = {
     docketEntry: {
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      docketEntryId: mockDocketEntryId,
       documentType: 'Answer',
       eventCode: 'A',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      userId: mockDocketEntryId,
     },
     docketNumber: '45678-18',
     section: DOCKET_SECTION,
-    sentBy: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    sentBy: mockDocketEntryId,
     updatedAt: applicationContext.getUtilities().createISODateString(),
-    workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    workItemId: mockDocketEntryId,
   };
 
-  const docketEntries = [
-    {
-      docketEntryId: 'e24ba5a9-b37b-479d-9201-067ec6e335e2',
-      docketNumber: '45678-18',
-      documentType: 'Petition',
-      eventCode: 'P',
-      filedBy: 'Test Petitioner',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      workItems: [workItem],
-    },
-    {
-      docketEntryId: 'b44ba5a9-b37b-479d-9201-067ec6e335b4',
-      docketNumber: '45678-18',
-      documentType: 'Record on Appeal',
-      eventCode: 'ROA',
-      filedBy: 'Test Petitioner',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      workItems: [workItem],
-    },
-    {
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      docketNumber: '45678-18',
-      documentType: 'Answer',
-      eventCode: 'A',
-      filedBy: 'Test Petitioner',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      workItem,
-    },
-    {
-      docketEntryId: 'd34ba5a9-b37b-479d-9201-067ec6e335d3',
-      docketNumber: '45678-18',
-      documentType: 'Record on Appeal',
-      eventCode: 'ROA',
-      filedBy: 'Test Petitioner',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      workItems: [workItem],
-    },
-    {
-      docketEntryId: 'f14ba5a9-b37b-479d-9201-067ec6e335f1',
-      docketNumber: '45678-18',
-      documentType: 'Request for Place of Trial',
-      eventCode: 'RQT',
-      filedBy: 'Test Petitioner',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      workItems: [workItem],
-    },
-  ];
-
   const caseRecord = {
-    caseCaption: 'Caption',
-    caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
-    createdAt: '',
-    docketEntries,
-    docketNumber: '45678-18',
-    filingType: 'Myself',
-    partyType: PARTY_TYPES.petitioner,
-    preferredTrialCity: 'Fresno, California',
-    procedureType: 'Regular',
-    role: ROLES.petitioner,
-    userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    ...MOCK_CASE,
+    docketEntries: [
+      ...MOCK_CASE.docketEntries,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: '45678-18',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        userId: mockDocketEntryId,
+        workItem,
+      },
+    ],
   };
 
   beforeEach(() => {
@@ -104,7 +49,7 @@ describe('editPaperFilingInteractor', () => {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      userId: 'b266b7dc-e3b3-41a2-8c66-27e2680d58f0',
     };
 
     applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
@@ -112,7 +57,7 @@ describe('editPaperFilingInteractor', () => {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      userId: 'b266b7dc-e3b3-41a2-8c66-27e2680d58f0',
     });
     applicationContext
       .getPersistenceGateway()
@@ -129,25 +74,23 @@ describe('editPaperFilingInteractor', () => {
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
         },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        primaryDocumentFileId: mockDocketEntryId,
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('updates the workitem without updating the document if no file is attached', async () => {
-    await expect(
-      editPaperFilingInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'My Document',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          isFileAttached: false,
-          partyPrimary: true,
-        },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).resolves.not.toThrow();
+    await editPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        isFileAttached: false,
+        partyPrimary: true,
+      },
+      primaryDocumentFileId: mockDocketEntryId,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -163,19 +106,17 @@ describe('editPaperFilingInteractor', () => {
   });
 
   it('adds documents and workitems', async () => {
-    await expect(
-      editPaperFilingInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'My Document',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          isFileAttached: true,
-          partyPrimary: true,
-        },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).resolves.not.toThrow();
+    await editPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        isFileAttached: true,
+        partyPrimary: true,
+      },
+      primaryDocumentFileId: mockDocketEntryId,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -191,26 +132,51 @@ describe('editPaperFilingInteractor', () => {
       applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+  });
+
+  it('should return paper service pdf url if the case has paper service parties', async () => {
+    const mockPdfUrl = 'www.example.com';
+
+    caseRecord.petitioners[0].serviceIndicator =
+      SERVICE_INDICATOR_TYPES.SI_PAPER;
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: mockPdfUrl,
+      });
+
+    const result = await editPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        isFileAttached: true,
+        partyPrimary: true,
+      },
+      primaryDocumentFileId: mockDocketEntryId,
+    });
+
+    expect(result.paperServicePdfUrl).toEqual(mockPdfUrl);
   });
 
   it('adds documents and workitems but does not try to delete workitem because they all have files attached', async () => {
     workItem.docketEntry.isFileAttached = true;
-    await expect(
-      editPaperFilingInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'My Document',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          isFileAttached: true,
-          partyPrimary: true,
-        },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).resolves.not.toThrow();
+
+    await editPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        isFileAttached: true,
+        partyPrimary: true,
+      },
+      primaryDocumentFileId: mockDocketEntryId,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -221,31 +187,6 @@ describe('editPaperFilingInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).not.toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
-  });
-
-  it('add documents but not workitems for paper filed documents', async () => {
-    await expect(
-      editPaperFilingInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'My Document',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          isPaper: true,
-          partyPrimary: true,
-        },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).resolves.not.toThrow();
-
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
     ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
@@ -263,13 +204,16 @@ describe('editPaperFilingInteractor', () => {
         otherFilingParty: 'Bert Brooks',
         partyPrimary: true,
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      primaryDocumentFileId: mockDocketEntryId,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[2],
-    ).toMatchObject({
+    const updatedDocketEntry = applicationContext
+      .getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        d => d.docketEntryId === mockDocketEntryId,
+      );
+
+    expect(updatedDocketEntry).toMatchObject({
       documentTitle: 'My Edited Document',
       freeText: 'Some text about this document',
       hasOtherFilingParty: true,
@@ -278,20 +222,18 @@ describe('editPaperFilingInteractor', () => {
   });
 
   it('updates document and workitem metadata with a file attached, but saving for later', async () => {
-    await expect(
-      editPaperFilingInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'My Document',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          isFileAttached: true,
-          partyPrimary: true,
-        },
-        isSavingForLater: true,
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).resolves.not.toThrow();
+    await editPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        isFileAttached: true,
+        partyPrimary: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: mockDocketEntryId,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -307,20 +249,18 @@ describe('editPaperFilingInteractor', () => {
   });
 
   it('updates document and workitem metadata with no file attached', async () => {
-    await expect(
-      editPaperFilingInteractor(applicationContext, {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'My Document',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          isFileAttached: false,
-          partyPrimary: true,
-        },
-        isSavingForLater: true,
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).resolves.not.toThrow();
+    await editPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        isFileAttached: false,
+        partyPrimary: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: mockDocketEntryId,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
