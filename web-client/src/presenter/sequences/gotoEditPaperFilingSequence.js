@@ -9,8 +9,8 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
-import { setPdfPreviewUrlForCompleteDocketEntryAction } from '../actions/EditDocketRecord/setPdfPreviewUrlForCompleteDocketEntryAction';
-import { setupCompleteDocketEntryAction } from '../actions/setupCompleteDocketEntryAction';
+import { setPdfPreviewUrlForEditPaperFilingAction } from '../actions/EditDocketRecord/setPdfPreviewUrlForEditPaperFilingAction';
+import { setupEditPaperFilingAction } from '../actions/setupEditPaperFilingAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
@@ -26,8 +26,8 @@ export const gotoEditPaperFiling = [
   deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,
   setDocketEntryIdAction,
-  setupCompleteDocketEntryAction,
-  setPdfPreviewUrlForCompleteDocketEntryAction,
+  setupEditPaperFilingAction,
+  setPdfPreviewUrlForEditPaperFilingAction,
   setCurrentPageAction('EditPaperFiling'),
 ];
 
