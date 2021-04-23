@@ -35,6 +35,10 @@ exports.addPaperFilingInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  if (!documentMetadata) {
+    throw new Error('Did not receive meta data for docket entry');
+  }
+
   const { docketNumber, isFileAttached } = documentMetadata;
   const user = await applicationContext
     .getPersistenceGateway()
@@ -64,10 +68,6 @@ exports.addPaperFilingInteractor = async (
 
   if (!docketEntryId) {
     throw new Error('Did not receive a primaryDocumentFileId');
-  }
-
-  if (!metadata) {
-    throw new Error('Did not receive meta data for docket entry');
   }
 
   const servedParties = aggregatePartiesForService(caseEntity);
@@ -119,16 +119,14 @@ exports.addPaperFilingInteractor = async (
 
   docketEntryEntity.setWorkItem(workItem);
 
-  if (metadata.isPaper) {
-    workItem.assignToUser({
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    });
-  }
+  workItem.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
 
   if (readyForService) {
     docketEntryEntity.setAsServed(servedParties.all);
@@ -162,20 +160,25 @@ exports.addPaperFilingInteractor = async (
     workItem,
   });
 
-  if (readyForService) {
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
-      caseEntity,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      servedParties,
-    });
+  let paperServicePdfUrl;
 
-    if (workItem.isPaper) {
-      workItem.setAsCompleted({
-        message: 'completed',
-        user,
+  if (readyForService) {
+    const paperServiceResult = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntity,
+        docketEntryId: docketEntryEntity.docketEntryId,
       });
+
+    if (servedParties.paper.length > 0) {
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
     }
+
+    workItem.setAsCompleted({
+      message: 'completed',
+      user,
+    });
   }
 
   await saveWorkItem({
@@ -189,7 +192,7 @@ exports.addPaperFilingInteractor = async (
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  return caseEntity.toRawObject();
+  return { caseDetail: caseEntity.toRawObject(), paperServicePdfUrl };
 };
 
 /**
@@ -206,26 +209,19 @@ const saveWorkItem = async ({
   workItem,
 }) => {
   const workItemRaw = workItem.validate().toRawObject();
-  const { isFileAttached, isPaper } = workItem.docketEntry;
+  const { isFileAttached } = workItem.docketEntry;
 
-  if (isPaper && isFileAttached && !isSavingForLater) {
+  if (isFileAttached && !isSavingForLater) {
     await applicationContext
       .getPersistenceGateway()
       .saveWorkItemForDocketClerkFilingExternalDocument({
         applicationContext,
         workItem: workItemRaw,
       });
-  } else if (isPaper) {
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemForDocketEntryInProgress({
-        applicationContext,
-        workItem: workItemRaw,
-      });
   } else {
     await applicationContext
       .getPersistenceGateway()
-      .saveWorkItemAndAddToSectionInbox({
+      .saveWorkItemForDocketEntryInProgress({
         applicationContext,
         workItem: workItemRaw,
       });
