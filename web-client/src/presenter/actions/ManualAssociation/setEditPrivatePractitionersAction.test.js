@@ -1,9 +1,17 @@
+import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setEditPrivatePractitionersAction } from './setEditPrivatePractitionersAction';
 
 describe('setEditPrivatePractitionersAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should set the state.caseDetail.privatePractitioners on state.modal', async () => {
     const result = await runAction(setEditPrivatePractitionersAction, {
+      modules: {
+        presenter,
+      },
       state: {
         caseDetail: {
           privatePractitioners: [
@@ -36,9 +44,14 @@ describe('setEditPrivatePractitionersAction', () => {
     const CONTACT_ID = '998009a9-e5f0-4feb-8246-f88e35749b59';
 
     const result = await runAction(setEditPrivatePractitionersAction, {
+      modules: {
+        presenter,
+      },
       state: {
         caseDetail: {
-          contactPrimary: { contactId: CONTACT_ID },
+          petitioners: [
+            { contactId: CONTACT_ID, contactType: CONTACT_TYPES.primary },
+          ],
           privatePractitioners: [
             {
               name: 'Test Practitioner1',
@@ -61,10 +74,21 @@ describe('setEditPrivatePractitionersAction', () => {
     const SECONDARY_CONTACT_ID = '998009a9-e5f0-4feb-8246-f88e35749b59';
 
     const result = await runAction(setEditPrivatePractitionersAction, {
+      modules: {
+        presenter,
+      },
       state: {
         caseDetail: {
-          contactPrimary: { contactId: '6d51ca19-ae30-4647-ba84-3b98fe7f1df8' },
-          contactSecondary: { contactId: SECONDARY_CONTACT_ID },
+          petitioners: [
+            {
+              contactId: '6d51ca19-ae30-4647-ba84-3b98fe7f1df8',
+              contactType: CONTACT_TYPES.primary,
+            },
+            {
+              contactId: SECONDARY_CONTACT_ID,
+              contactType: CONTACT_TYPES.secondary,
+            },
+          ],
           privatePractitioners: [
             {
               name: 'Test Practitioner1',

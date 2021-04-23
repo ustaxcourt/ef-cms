@@ -9,5 +9,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setCaseOnFormAction = async ({ props, store }) => {
-  store.set(state.form, cloneDeep(props.caseDetail));
+  const caseDetail = cloneDeep(props.caseDetail);
+  store.set(state.form, caseDetail);
 };
