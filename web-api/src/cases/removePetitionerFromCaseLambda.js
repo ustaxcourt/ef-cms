@@ -12,5 +12,6 @@ exports.removePetitionerFromCaseLambda = event =>
       .getUseCases()
       .removePetitionerFromCaseInteractor(applicationContext, {
         ...event.pathParameters,
+        ...JSON.parse(event.body),
       });
   });

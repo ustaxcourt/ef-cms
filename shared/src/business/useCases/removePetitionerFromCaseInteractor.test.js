@@ -5,6 +5,10 @@ const {
   ROLES,
 } = require('../entities/EntityConstants');
 const {
+  getContactPrimary,
+  getPetitionerById,
+} = require('../entities/cases/Case');
+const {
   removePetitionerFromCaseInteractor,
 } = require('./removePetitionerFromCaseInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
@@ -12,23 +16,25 @@ const { MOCK_CASE } = require('../../test/mockCase');
 
 describe('removePetitionerFromCaseInteractor', () => {
   let mockCase;
-  // const PRIMARY_CONTACT_ID = '661beb76-f9f3-40db-af3e-60ab5c9287f6';
+  let petitionerToRemove;
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
   beforeEach(() => {
-    // mockContact = {
-    //   address1: '2729 Chicken St',
-    //   city: 'Eggyolk',
-    //   contactType: CONTACT_TYPES.otherPetitioner,
-    //   countryType: COUNTRY_TYPES.DOMESTIC,
-    //   name: 'Eggy Egg',
-    //   phone: '123456',
-    //   postalCode: '55555',
-    //   state: 'CO',
-    // };
+    petitionerToRemove = {
+      address1: '2729 Chicken St',
+      city: 'Eggyolk',
+      contactId: SECONDARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.secondary,
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      name: 'Eggy Egg',
+      phone: '123456',
+      postalCode: '55555',
+      state: 'CO',
+    };
+
     mockCase = {
       ...MOCK_CASE,
-      petitioners: [{}],
-      status: CASE_STATUS_TYPES.new,
+      petitioners: [getContactPrimary(MOCK_CASE), petitionerToRemove],
+      status: CASE_STATUS_TYPES.generalDocket,
     };
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
@@ -37,10 +43,7 @@ describe('removePetitionerFromCaseInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.generalDocket,
-      });
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('should throw an unauthorized error when the current user does not have permission to edit petitioners', async () => {
@@ -70,5 +73,42 @@ describe('removePetitionerFromCaseInteractor', () => {
     ).rejects.toThrow(
       `Case with docketNumber ${mockCase.docketNumber} has not been served`,
     );
+  });
+
+  it('should update the case caption', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.generalDocket,
+      });
+
+    const mockUpdatedCaption = 'An updated caption';
+
+    await removePetitionerFromCaseInteractor(applicationContext, {
+      caseCaption: mockUpdatedCaption,
+      contactId: SECONDARY_CONTACT_ID,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.caseCaption,
+    ).toEqual(mockUpdatedCaption);
+  });
+
+  it('should remove the specified petitioner form the case petitioners array', async () => {
+    removePetitionerFromCaseInteractor(applicationContext, {
+      contactId: petitionerToRemove.contactId,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    const {
+      caseToUpdate,
+    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(
+      getPetitionerById(caseToUpdate, petitionerToRemove.contactId),
+    ).toBeUndefined();
   });
 });
