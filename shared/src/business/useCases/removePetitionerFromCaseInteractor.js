@@ -74,6 +74,12 @@ exports.removePetitionerFromCaseInteractor = async (
 
   caseEntity.removePetitioner(petitionerContactId);
 
+  await applicationContext.getPersistenceGateway().deleteUserFromCase({
+    applicationContext,
+    docketNumber,
+    userId: petitionerContactId,
+  });
+
   if (isPetitionerToRemovePrimary) {
     caseEntity.petitioners[0].contactType = CONTACT_TYPES.primary;
   }
