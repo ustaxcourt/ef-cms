@@ -250,23 +250,34 @@ export const EditPetitionerInformationInternal = connect(
               )}
           </div>
 
-          <Button
-            id="submit-edit-petitioner-information"
-            onClick={() => {
-              submitEditPetitionerSequence();
-            }}
-          >
-            Save
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-              return false;
-            }}
-          >
-            Cancel
-          </Button>
+          <div>
+            <Button
+              id="submit-edit-petitioner-information"
+              onClick={() => {
+                submitEditPetitionerSequence();
+              }}
+            >
+              Save
+            </Button>
+            <Button
+              link
+              onClick={() => {
+                formCancelToggleCancelSequence();
+                return false;
+              }}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              link
+              className="red-warning no-wrap float-right"
+              icon="trash"
+              onClick={() => {}}
+            >
+              Remove this petitioner
+            </Button>
+          </div>
         </section>
 
         {showModal === 'FormCancelModalDialog' && (
