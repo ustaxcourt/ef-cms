@@ -20,7 +20,7 @@ export const gotoAddDocketEntry = [
   getCaseAction,
   setCaseAction,
   resetAddDocketEntryAction,
-  setCurrentPageAction('AddDocketEntry'),
+  setCurrentPageAction('AddPaperFiling'),
 ];
 
 export const gotoAddDocketEntrySequence = [

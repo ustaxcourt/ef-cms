@@ -28,7 +28,7 @@ export const gotoEditDocketEntry = [
   setDocketEntryIdAction,
   setupCompleteDocketEntryAction,
   setPdfPreviewUrlForCompleteDocketEntryAction,
-  setCurrentPageAction('AddDocketEntry'),
+  setCurrentPageAction('AddPaperFiling'),
 ];
 
 export const gotoCompleteDocketEntrySequence = [
