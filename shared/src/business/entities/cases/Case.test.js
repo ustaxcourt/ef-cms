@@ -5283,7 +5283,7 @@ describe('Case entity', () => {
       const numberOfPetitionersOnCase = caseEntity.petitioners.length;
       expect(caseEntity.petitioners.length).toEqual(numberOfPetitionersOnCase);
 
-      caseEntity.removePetitioner(getContactPrimary(MOCK_CASE));
+      caseEntity.removePetitioner(getContactPrimary(MOCK_CASE).contactId);
 
       expect(caseEntity.petitioners.length).toEqual(
         numberOfPetitionersOnCase - 1,

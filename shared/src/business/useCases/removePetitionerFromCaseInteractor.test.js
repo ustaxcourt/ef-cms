@@ -127,4 +127,30 @@ describe('removePetitionerFromCaseInteractor', () => {
       getPetitionerById(caseToUpdate, petitionerToRemove.contactId),
     ).toBeUndefined();
   });
+
+  it('should remove practitioner from case when they only represented the removed petitioner', async () => {
+    const mockPrivatePractitioner = {
+      barNumber: 'b1234',
+      name: 'Test Practitioner',
+      representing: [petitionerToRemove.contactId],
+      role: ROLES.privatePractitioner,
+      userId: '5b7e10a2-f9df-4ee8-bbb0-c01a698fdd32',
+    };
+    mockCase = {
+      ...mockCase,
+      privatePractitioners: [mockPrivatePractitioner],
+    };
+
+    await removePetitionerFromCaseInteractor(applicationContext, {
+      caseCaption: mockCase.caseCaption,
+      contactId: petitionerToRemove.contactId,
+      docketNumber: mockCase.docketNumber,
+    });
+
+    const {
+      caseToUpdate,
+    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(caseToUpdate.privatePractitioners.length).toEqual(0);
+  });
 });
