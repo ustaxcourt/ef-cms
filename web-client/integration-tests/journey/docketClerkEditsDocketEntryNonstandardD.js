@@ -43,7 +43,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       value: 'CS',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitAddPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -70,7 +70,7 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
       value: petitionDocument.docketEntryId,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitAddPaperFilingSequence', {
       isSavingForLater: true,
     });
 

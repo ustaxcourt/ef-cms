@@ -16,7 +16,7 @@ export const docketClerkAddsTrackedDocketEntry = (
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -65,7 +65,7 @@ export const docketClerkAddsTrackedDocketEntry = (
 
     expect(test.getState('form.documentType')).toEqual('Application');
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -78,7 +78,7 @@ export const docketClerkAddsTrackedDocketEntry = (
       value: 'Application for Flavortown',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 

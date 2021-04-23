@@ -62,7 +62,7 @@ const afterEntrySaved = [
   },
 ];
 
-export const fileDocketEntrySequence = [
+export const submitAddPaperFilingSequence = [
   checkForActiveBatchesAction,
   {
     hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
