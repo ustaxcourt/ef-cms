@@ -12,8 +12,8 @@ describe('Filing an Answer', function () {
   });
 
   it('can select a document type and go to the next step in the wizard', () => {
-    cy.get('#react-select-2-input').click();
-    cy.get('#react-select-2-option-6').click();
+    cy.get('#react-select-2-input').click({ force: true });
+    cy.get('#react-select-2-option-6').click({ force: true });
     cy.get('button#submit-document').click();
   });
 
