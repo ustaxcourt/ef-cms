@@ -38,7 +38,7 @@
     "core-js": "^3.9.1",
     "cors": "^2.8.5",
     "csv-parse": "^4.15.3",
-    "cypress": "^6.7.1",
+    "cypress": "^7.1.0",
     "deep-freeze": "0.0.1",
     "diff-arrays-of-objects": "^1.1.7",
     "dynamodb-admin": "^4.0.1",
