@@ -11,6 +11,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {object} providers.caseCaption the case caption to update
  * @param {object} providers.contactId the contactId of the person to remove from the case
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the case data
@@ -41,6 +42,13 @@ exports.removePetitionerFromCaseInteractor = async (
   }
 
   caseEntity.caseCaption = caseCaption;
+
+  //add test and fix
+  if (caseEntity.petitioners.length <= 1) {
+    throw new Error(
+      `Case with docketNumber ${caseToUpdate.docketNumber} has not been served`,
+    );
+  }
   caseEntity.removePetitioner(contactId);
 
   const updatedCase = await applicationContext

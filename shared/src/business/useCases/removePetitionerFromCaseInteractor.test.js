@@ -53,6 +53,7 @@ describe('removePetitionerFromCaseInteractor', () => {
     });
     await expect(
       removePetitionerFromCaseInteractor(applicationContext, {
+        caseCaption: MOCK_CASE.caseCaption,
         contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -67,6 +68,7 @@ describe('removePetitionerFromCaseInteractor', () => {
 
     await expect(
       removePetitionerFromCaseInteractor(applicationContext, {
+        caseCaption: MOCK_CASE.caseCaption,
         contactId: SECONDARY_CONTACT_ID,
         docketNumber: MOCK_CASE.docketNumber,
       }),
