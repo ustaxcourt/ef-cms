@@ -157,4 +157,18 @@ describe('removePetitionerFromCaseInteractor', () => {
 
     expect(caseToUpdate.privatePractitioners.length).toEqual(0);
   });
+
+  it('should reassign contactPrimary to another petitioner on the case when the petitioner to remove is the current contactPrimary', async () => {
+    await removePetitionerFromCaseInteractor(applicationContext, {
+      caseCaption: mockCase.caseCaption,
+      contactId: getContactPrimary(MOCK_CASE).contactId,
+      docketNumber: mockCase.docketNumber,
+    });
+
+    const {
+      caseToUpdate,
+    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(getContactPrimary(caseToUpdate)).toBeDefined();
+  });
 });

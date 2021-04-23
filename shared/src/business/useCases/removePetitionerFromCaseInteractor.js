@@ -1,9 +1,12 @@
 const {
+  CASE_STATUS_TYPES,
+  CONTACT_TYPES,
+} = require('../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -33,7 +36,6 @@ exports.removePetitionerFromCaseInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  console.log('caseToUpdate', caseToUpdate);
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
@@ -47,6 +49,10 @@ exports.removePetitionerFromCaseInteractor = async (
       `Cannot remove petitioner ${petitionerContactId} from case with docketNumber ${caseToUpdate.docketNumber}`,
     );
   }
+
+  const isPetitionerToRemovePrimary =
+    caseEntity.getPetitionerById(contactId).contactType ===
+    CONTACT_TYPES.primary;
 
   const practitioners = caseEntity.getPractitionersRepresenting(
     petitionerContactId,
@@ -67,6 +73,10 @@ exports.removePetitionerFromCaseInteractor = async (
   }
 
   caseEntity.removePetitioner(petitionerContactId);
+
+  if (isPetitionerToRemovePrimary) {
+    caseEntity.petitioners[0].contactType = CONTACT_TYPES.primary;
+  }
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
