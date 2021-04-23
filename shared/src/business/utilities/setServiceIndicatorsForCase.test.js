@@ -1,4 +1,9 @@
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '../entities/EntityConstants';
+import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
 import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
 let baseCaseDetail;
@@ -26,12 +31,15 @@ const baseRespondent = {
 describe('setServiceIndicatorsForCases', () => {
   beforeEach(() => {
     baseCaseDetail = {
-      contactPrimary: {
-        contactId: PRIMARY_CONTACT_ID,
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner',
-      },
       isPaper: false,
+      petitioners: [
+        {
+          contactId: PRIMARY_CONTACT_ID,
+          contactType: CONTACT_TYPES.primary,
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner',
+        },
+      ],
     };
   });
 
@@ -43,7 +51,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
@@ -53,7 +61,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
@@ -61,16 +69,19 @@ describe('setServiceIndicatorsForCases', () => {
   it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with ${SERVICE_INDICATOR_TYPES.SI_NONE} already set as an override`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
-      contactPrimary: {
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-      },
+      petitioners: [
+        {
+          contactType: CONTACT_TYPES.primary,
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+      ],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });
@@ -86,7 +97,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });
@@ -102,7 +113,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });
@@ -110,15 +121,19 @@ describe('setServiceIndicatorsForCases', () => {
   it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactSecondary) with no representing counsel`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
-      contactSecondary: {
-        name: 'Test Petitioner2',
-      },
+      petitioners: [
+        ...baseCaseDetail.petitioners,
+        {
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner2',
+        },
+      ],
       privatePractitioners: [{ ...basePractitioner }],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactSecondary.serviceIndicator).toEqual(
+    expect(getContactSecondary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
@@ -126,16 +141,20 @@ describe('setServiceIndicatorsForCases', () => {
   it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactPrimary) with no representing counsel and no email`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
-      contactPrimary: {
-        ...baseCaseDetail.contactPrimary,
-        email: null,
-      },
+      petitioners: [
+        {
+          contactId: PRIMARY_CONTACT_ID,
+          contactType: CONTACT_TYPES.primary,
+          email: null,
+          name: 'Test Petitioner',
+        },
+      ],
       privatePractitioners: [],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactPrimary.serviceIndicator).toEqual(
+    expect(getContactPrimary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
@@ -143,16 +162,20 @@ describe('setServiceIndicatorsForCases', () => {
   it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactSecondary) with a serviceIndicator already set as an override`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
-      contactSecondary: {
-        name: 'Test Petitioner2',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-      },
+      petitioners: [
+        ...baseCaseDetail.petitioners,
+        {
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner2',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+      ],
       privatePractitioners: [{ ...basePractitioner }],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactSecondary.serviceIndicator).toEqual(
+    expect(getContactSecondary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });
@@ -160,10 +183,14 @@ describe('setServiceIndicatorsForCases', () => {
   it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactSecondary) with representing counsel`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
-      contactSecondary: {
-        contactId: SECONDARY_CONTACT_ID,
-        name: 'Test Petitioner2',
-      },
+      petitioners: [
+        ...baseCaseDetail.petitioners,
+        {
+          contactId: SECONDARY_CONTACT_ID,
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner2',
+        },
+      ],
       privatePractitioners: [
         { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
       ],
@@ -171,7 +198,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.contactSecondary.serviceIndicator).toEqual(
+    expect(getContactSecondary(result).serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
   });
