@@ -1,6 +1,5 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 const webpack = require('webpack');
 
@@ -30,40 +29,31 @@ module.exports = {
       },
     ],
   },
-  output: {
-    filename: `index.${Date.now()}.js`,
-    path: __dirname + '/dist',
-  },
   plugins: [
     new FaviconsWebpackPlugin('./web-client/src/favicon-32x32.png'),
     new HtmlWebpackPugPlugin(),
-    new HtmlWebpackPlugin({
-      minify: false,
-      template: './web-client/src/index.pug',
-    }),
     new webpack.ProvidePlugin({
       process: 'process/browser',
     }),
-    new webpack.EnvironmentPlugin([
-      'API_URL',
-      'CI',
-      'CIRCLE_SHA1',
-      'COGNITO_CLIENT_ID',
-      'COGNITO_REDIRECT_URI',
-      'COGNITO_TOKEN_URL',
-      'COGNITO',
-      'FILE_UPLOAD_MODAL_TIMEOUT',
-      'NO_SCANNER',
-      'NODE_ENV',
-      'SCANNER_RESOURCE_URI',
-      'SESSION_MODAL_TIMEOUT',
-      'SESSION_TIMEOUT',
-      'SKIP_VIRUS_SCAN',
-      'STAGE',
-      'USTC_DEBUG',
-      'USTC_ENV',
-      'WS_URL',
-    ]),
+    new webpack.EnvironmentPlugin({
+      API_URL: null,
+      CI: null,
+      CIRCLE_SHA1: null,
+      COGNITO: null,
+      COGNITO_CLIENT_ID: null,
+      COGNITO_REDIRECT_URI: null,
+      COGNITO_TOKEN_URL: null,
+      FILE_UPLOAD_MODAL_TIMEOUT: null,
+      NO_SCANNER: null,
+      SCANNER_RESOURCE_URI: null,
+      SESSION_MODAL_TIMEOUT: null,
+      SESSION_TIMEOUT: null,
+      SKIP_VIRUS_SCAN: null,
+      STAGE: null,
+      USTC_DEBUG: null,
+      USTC_ENV: null,
+      WS_URL: null,
+    }),
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }),
