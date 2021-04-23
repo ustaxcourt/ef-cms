@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { removePetitionerFromCaseAction } from './removePetitionerFromCaseAction';
 import { runAction } from 'cerebral/test';
@@ -12,21 +12,44 @@ describe('removePetitionerFromCaseAction', () => {
     name: 'Selena Kyle',
   };
 
+  const form = {
+    contact: mockContact,
+  };
+  const mockDocketNumber = '123-20';
+
+  const caseCaptionToUpdate = 'A test caption';
+
   beforeAll(() => {
     successStub = jest.fn();
 
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       success: successStub,
     };
   });
 
   it('should set the success message of `Petitioner removed.`', async () => {
-    const form = {
-      contact: mockContact,
-    };
-
     const { output } = await runAction(removePetitionerFromCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
+        form,
+        modal: {
+          caseCaption: caseCaptionToUpdate,
+        },
+      },
+    });
+
+    expect(output.alertSuccess.message).toBe('Petitioner removed.');
+    expect(output.tab).toBe('caseInfo');
+  });
+
+  it('should update the case caption', async () => {
+    await runAction(removePetitionerFromCaseAction, {
       modules: {
         presenter,
       },
@@ -36,11 +59,39 @@ describe('removePetitionerFromCaseAction', () => {
         },
         form,
         modal: {
-          caseCaption: 'A test caption',
+          caseCaption: caseCaptionToUpdate,
         },
       },
     });
 
-    expect(output.alertSuccess.message).toBe('Petitioner removed.');
+    expect(
+      applicationContext.getUseCases().updateCaseContextInteractor.mock
+        .calls[0][0].caseCaption,
+    ).toBe(caseCaptionToUpdate);
+  });
+
+  it('should make a call to remove the petitioner from the case', async () => {
+    await runAction(removePetitionerFromCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
+        form,
+        modal: {
+          caseCaption: caseCaptionToUpdate,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().removePetitionerFromCaseInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
+      contactId: mockContact.contactId,
+      docketNumber: mockDocketNumber,
+    });
   });
 });
