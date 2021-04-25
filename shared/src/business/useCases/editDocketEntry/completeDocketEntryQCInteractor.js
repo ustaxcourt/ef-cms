@@ -132,14 +132,12 @@ exports.completeDocketEntryQCInteractor = async (
       ...currentDocketEntry,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
+      contactPrimary: caseEntity.getContactPrimary(),
+      contactSecondary: caseEntity.getContactSecondary(),
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     },
     { applicationContext },
   ).validate();

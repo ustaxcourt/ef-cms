@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -9,7 +10,7 @@ import { state } from 'cerebral';
  * @returns {object} caseDetail onto the props stream
  */
 export const setCaseOnFormUsingStateAction = async ({ get, store }) => {
-  const caseDetail = get(state.caseDetail);
+  const caseDetail = cloneDeep(get(state.caseDetail));
 
   store.set(state.form, caseDetail);
 
