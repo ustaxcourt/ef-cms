@@ -1,5 +1,10 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  contactPrimaryFromState,
+  loginAs,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 
 const test = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -41,9 +46,9 @@ describe('docket clerk edits the petitioner information', () => {
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(test.getState('caseDetail.contactPrimary.address1')).toEqual(
-      '734 Cowley Parkway',
-    );
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.address1).toEqual('734 Cowley Parkway');
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
@@ -114,12 +119,12 @@ describe('docket clerk edits the petitioner information', () => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(test.getState('caseDetail.contactPrimary.address1')).toEqual(
-      '123 Some Street',
-    );
+    const contactPrimary = contactPrimaryFromState(test);
 
-    expect(test.getState('caseDetail.contactPrimary.address2')).toBeUndefined();
-    expect(test.getState('caseDetail.contactPrimary.address3')).toBeUndefined();
+    expect(contactPrimary.address1).toEqual('123 Some Street');
+
+    expect(contactPrimary.address2).toBeUndefined();
+    expect(contactPrimary.address3).toBeUndefined();
 
     const noticeDocument = test
       .getState('caseDetail.docketEntries')

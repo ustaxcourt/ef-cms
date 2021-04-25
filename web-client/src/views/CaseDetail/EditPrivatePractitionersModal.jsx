@@ -8,7 +8,7 @@ import React from 'react';
 export const EditPrivatePractitionersModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    caseDetail: state.caseDetail,
+    caseDetailContactHelper: state.caseDetailContactHelper,
     confirmSequence: sequences.submitEditPrivatePractitionersModalSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
@@ -18,7 +18,7 @@ export const EditPrivatePractitionersModal = connect(
   },
   function EditPrivatePractitionersModal({
     cancelSequence,
-    caseDetail,
+    caseDetailContactHelper,
     confirmSequence,
     modal,
     updateModalValueSequence,
@@ -85,12 +85,12 @@ export const EditPrivatePractitionersModal = connect(
                         className="usa-checkbox__label inline-block"
                         htmlFor={`representing-primary-${idx}`}
                       >
-                        {caseDetail.contactPrimary.name}
+                        {caseDetailContactHelper.contactPrimary.name}
                       </label>
                     </div>
 
-                    {caseDetail.contactSecondary &&
-                      caseDetail.contactSecondary.name && (
+                    {caseDetailContactHelper.contactSecondary &&
+                      caseDetailContactHelper.contactSecondary.name && (
                         <div className="usa-checkbox">
                           <input
                             aria-describedby={`practitioner-representing-legend-${idx}`}
@@ -113,7 +113,7 @@ export const EditPrivatePractitionersModal = connect(
                             className="usa-checkbox__label inline-block"
                             htmlFor={`representing-secondary-${idx}`}
                           >
-                            {caseDetail.contactSecondary.name}
+                            {caseDetailContactHelper.contactSecondary.name}
                           </label>
                         </div>
                       )}

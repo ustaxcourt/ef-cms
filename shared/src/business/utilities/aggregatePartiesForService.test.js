@@ -1,5 +1,8 @@
+const {
+  CONTACT_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../entities/EntityConstants');
 const { aggregatePartiesForService } = require('./aggregatePartiesForService');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
 describe('aggregatePartiesForService', () => {
   let mockCase;
@@ -18,6 +21,7 @@ describe('aggregatePartiesForService', () => {
   beforeEach(() => {
     const contactPrimary = {
       contactId: PRIMARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.primary,
       email: 'contactprimary@example.com',
       name: 'Contact Primary',
     };
@@ -26,6 +30,7 @@ describe('aggregatePartiesForService', () => {
       address1: 'Test Address',
       city: 'Testville',
       contactId: SECONDARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.secondary,
       name: 'Contact Secondary',
       state: 'CA',
     };
@@ -103,6 +108,7 @@ describe('aggregatePartiesForService', () => {
         address1: '123 Main St',
         city: 'Somewhere',
         contactId: '9836050f-a423-47bb-943b-a5661fe08a6b',
+        contactType: CONTACT_TYPES.otherFiler,
         countryType: 'domestic',
         email: 'petitioner@example.com',
         inCareOf: 'Myself',
@@ -117,6 +123,7 @@ describe('aggregatePartiesForService', () => {
         address1: '123 Main St',
         city: 'Somewhere',
         contactId: '8746050f-a423-47bb-943b-a5661fe08a6b',
+        contactType: CONTACT_TYPES.otherFiler,
         countryType: 'domestic',
         email: 'petitioner@example.com',
         inCareOf: 'Myself',
@@ -134,6 +141,7 @@ describe('aggregatePartiesForService', () => {
         address1: '123 Main St',
         city: 'Somewhere',
         contactId: '6536050f-a423-47bb-943b-a5661fe08a6b',
+        contactType: CONTACT_TYPES.otherPetitioner,
         countryType: 'domestic',
         email: 'petitioner5@example.com',
         inCareOf: 'Myself',
@@ -148,6 +156,7 @@ describe('aggregatePartiesForService', () => {
         address1: '123 Main St',
         city: 'Somewhere',
         contactId: '5446050f-a423-47bb-943b-a5661fe08a6b',
+        contactType: CONTACT_TYPES.otherPetitioner,
         countryType: 'domestic',
         email: 'petitioner6@example.com',
         inCareOf: 'Myself',
@@ -161,9 +170,8 @@ describe('aggregatePartiesForService', () => {
     ];
 
     mockCase = {
-      contactPrimary,
-      contactSecondary,
       irsPractitioners,
+      petitioners: [contactPrimary, contactSecondary],
       privatePractitioners,
     };
   });
@@ -338,8 +346,11 @@ describe('aggregatePartiesForService', () => {
   it('should serve any otherFilers and otherPetitioners by paper if they exist', () => {
     const result = aggregatePartiesForService({
       ...mockCase,
-      otherFilers,
-      otherPetitioners,
+      petitioners: [
+        ...mockCase.petitioners,
+        ...otherFilers,
+        ...otherPetitioners,
+      ],
     });
 
     const otherFiler1 = result.paper.find(

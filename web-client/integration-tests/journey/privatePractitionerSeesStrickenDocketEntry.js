@@ -1,4 +1,5 @@
 import { applicationContext } from '../../src/applicationContext';
+import { contactPrimaryFromState } from '../helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -16,7 +17,9 @@ export const privatePractitionerSeesStrickenDocketEntry = (
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    expect(test.getState('caseDetail.contactPrimary.name')).toBeDefined();
+
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.name).toBeDefined();
 
     const { formattedDocketEntriesOnDocketRecord } = runCompute(
       formattedCaseDetail,
