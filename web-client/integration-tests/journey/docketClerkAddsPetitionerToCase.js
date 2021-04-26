@@ -1,6 +1,7 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
-export const docketClerkAddsPetitionerToCase = test => {
+export const docketClerkAddsPetitionerToCase = (test, overrides) => {
   return it('docket clerk adds new petitioner to case', async () => {
     const petitionersBeforeAdding = test.getState('caseDetail.petitioners')
       .length;
@@ -16,12 +17,17 @@ export const docketClerkAddsPetitionerToCase = test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.additionalName',
-      value: 'A Petitioner Additional Name',
+      value: overrides.name || 'A Petitioner Additional Name',
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.phone',
       value: '6126788888',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.serviceIndicator',
+      value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
     const contactPrimary = contactPrimaryFromState(test);
