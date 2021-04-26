@@ -6,7 +6,6 @@ const { marshallContact } = require('./marshallContact');
 const { marshallDocketEntry } = require('./marshallDocketEntry');
 const { marshallPractitioner } = require('./marshallPractitioner');
 
-
 /**
  * The returned object is specified by the v2 API and any changes to these properties
  * beyond additions must be accompanied by a version increase.
