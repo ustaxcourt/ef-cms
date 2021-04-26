@@ -25,6 +25,9 @@ const {
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
+  attachIrsPractitioner,
+} = require('./prototypes/Case.attachIrsPractitioner');
+const {
   calculateDifferenceInDays,
   createISODateString,
   formatDateString,
@@ -47,7 +50,6 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
-const { attachIrsPractitioner } = require('./prototypes/attachIrsPractitioner');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -848,8 +850,6 @@ Case.prototype.doesHavePendingItems = function () {
 Case.getCaseTitle = function (caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
 };
-
-Case.prototype.attachIrsPractitioner = attachIrsPractitioner.bind(this);
 
 /**
  * archives a docket entry and adds it to the archivedDocketEntries array on the case
