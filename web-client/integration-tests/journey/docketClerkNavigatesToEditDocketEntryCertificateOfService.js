@@ -14,7 +14,9 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
     expect(test.getState('screenMetadata.documentTitlePreview')).toEqual(
       'Certificate of Service of Petition 03-03-2003',
     );
-    expect(test.getState('form.serviceDate')).toEqual('2003-03-03');
+    expect(test.getState('form.serviceDate')).toEqual(
+      '2003-03-03T05:00:00.000Z',
+    );
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'serviceDateMonth',
@@ -32,7 +34,9 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
     expect(test.getState('screenMetadata.documentTitlePreview')).toEqual(
       'Certificate of Service of Petition 05-10-2005',
     );
-    expect(test.getState('form.serviceDate')).toEqual('2005-05-10');
+    expect(test.getState('form.serviceDate')).toEqual(
+      '2005-05-10T04:00:00.000Z',
+    );
 
     await test.runSequence('submitEditDocketEntryMetaSequence', {
       docketNumber: test.docketNumber,

@@ -1,5 +1,8 @@
 const createApplicationContext = require('../applicationContext');
 const {
+  getContactPrimary,
+} = require('../../../shared/src/business/entities/cases/Case');
+const {
   MOCK_CASE_WITH_TRIAL_SESSION,
 } = require('../../../shared/src/test/mockCase');
 const {
@@ -17,7 +20,12 @@ const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
   sk: 'case|23',
 });
 
-mockDynamoCaseRecord.contactPrimary.serviceIndicator = 'Electronic';
+mockDynamoCaseRecord.petitioners = [
+  {
+    ...getContactPrimary(mockDynamoCaseRecord),
+    serviceIndicator: 'Electronic',
+  },
+];
 
 const mockIrsPractitionerRecord = Object.assign(
   {},
@@ -183,6 +191,8 @@ describe('getCaseLambda', () => {
   });
 
   it('returns the case in v2 format', async () => {
+    // Careful! Changing this test would mean that the v2 format is changing;
+    // this would mean breaking changes for any user of the v1 API
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
 

@@ -5,6 +5,7 @@ import {
   useCerebralStateFactory,
 } from '../utils/useCerebralState';
 import { map } from '../utils/ElementChildren';
+import { pick, uniqueId } from 'lodash';
 import { props, sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
@@ -14,8 +15,8 @@ import classNames from 'classnames';
  */
 export function AccordionItem() {}
 
-const renderTabFactory = ({ activeKey, headingLevel, setTab }) =>
-  function Tab(child, index) {
+const renderAccordionFactory = ({ activeKey, headingLevel, setTab }) =>
+  function AccordionContent(child, index) {
     const {
       children,
       customClassName,
@@ -29,9 +30,11 @@ const renderTabFactory = ({ activeKey, headingLevel, setTab }) =>
     let { itemName } = child.props;
 
     itemName = itemName || `item-${index}`;
-    const itemButtonId = id || `ustc-ui-accordion-item-button-${index}`;
+    const itemButtonId =
+      id || uniqueId(`ustc-ui-accordion-item-button-${index}`);
     const itemContentId =
-      (id && `${id}-item-content`) || `ustc-ui-accordion-item-content-${index}`;
+      (id && `${id}-item-content`) ||
+      uniqueId(`ustc-ui-accordion-item-content-${index}`);
     const HeadingElement = `h${headingLevel || 2}`;
     const isActiveItem = itemName === activeKey;
     const expandedText = (isActiveItem && 'true') || 'false';
@@ -39,18 +42,19 @@ const renderTabFactory = ({ activeKey, headingLevel, setTab }) =>
     if (!title) {
       return null;
     }
+    const buttonProps = {
+      'aria-controls': itemContentId,
+      'aria-expanded': expandedText,
+      className: 'usa-accordion__button grid-container',
+      id: itemButtonId,
+      onClick: () => setTab(itemName),
+      type: 'button',
+    };
 
     return (
       <>
         <HeadingElement className={customClassName || 'usa-accordion__heading'}>
-          <button
-            aria-controls={itemContentId}
-            aria-expanded={expandedText}
-            className="usa-accordion__button grid-container"
-            id={itemButtonId}
-            type="button"
-            onClick={() => setTab(itemName)}
-          >
+          <button {...buttonProps}>
             <div className="grid-row">
               {displayIcon && (
                 <span className="grid-col-auto">
@@ -85,17 +89,20 @@ export const Accordion = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  function Accordion({
-    bind,
-    bordered,
-    children,
-    className,
-    headingLevel,
-    id,
-    onSelect,
-    simpleSetter,
-    value,
-  }) {
+  function Accordion(accordionProps) {
+    const {
+      bind,
+      bordered,
+      children,
+      className,
+      headingLevel,
+      id,
+      onSelect,
+      simpleSetter,
+      value,
+    } = accordionProps;
+    const passThroughProps = pick(accordionProps, ['role']);
+
     let activeKey, setTab;
 
     if (bind) {
@@ -117,7 +124,11 @@ export const Accordion = connect(
     setTab = toggleAlreadySelectedValueDecorator(setTab);
     setTab = decorateWithPostCallback(setTab, onSelect);
 
-    const Tab = renderTabFactory({ activeKey, headingLevel, setTab });
+    const AccordionContent = renderAccordionFactory({
+      activeKey,
+      headingLevel,
+      setTab,
+    });
     return (
       <div
         className={classNames(
@@ -126,8 +137,9 @@ export const Accordion = connect(
           bordered && 'usa-accordion--bordered',
         )}
         id={id}
+        {...passThroughProps}
       >
-        {map(children, Tab)}
+        {map(children, AccordionContent)}
       </div>
     );
   },

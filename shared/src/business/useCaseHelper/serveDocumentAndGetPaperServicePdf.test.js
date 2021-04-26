@@ -5,7 +5,7 @@ const {
 const {
   serveDocumentAndGetPaperServicePdf,
 } = require('./serveDocumentAndGetPaperServicePdf');
-const { Case } = require('../entities/cases/Case');
+const { Case, getContactPrimary } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
@@ -63,10 +63,12 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     caseEntity = new Case(
       {
         ...MOCK_CASE,
-        contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
       },
       { applicationContext },
     );

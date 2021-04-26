@@ -1,3 +1,9 @@
+const {
+  CONTACT_TYPES,
+} = require('../../../../shared/src/business/entities/EntityConstants');
+const {
+  getContactPrimary,
+} = require('../../../../shared/src/business/entities/cases/Case');
 const { marshallCase } = require('./marshallCase');
 const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
 
@@ -25,14 +31,17 @@ describe('marshallCase', () => {
   });
 
   it('marshalls from the current case format', () => {
+    const contactSecondary = { ...getContactPrimary(MOCK_CASE) };
+    contactSecondary.contactType = CONTACT_TYPES.secondary;
+
     const mock = Object.assign({}, MOCK_CASE, {
-      contactSecondary: Object.assign({}, MOCK_CASE.contactPrimary),
       docketEntries: [],
       docketNumber: '123-19L',
       docketNumberSuffix: 'L',
       irsPractitioners: [],
       leadDocketNumber: '122-19L',
       noticeOfTrialDate: '2019-12-08T00:00:00.000Z',
+      petitioners: [MOCK_CASE.petitioners[0], contactSecondary],
       privatePractitioners: [],
       sortableDocketNumber: 201900123,
       trialLocation: 'Woodstock, Connecticut',
@@ -50,9 +59,9 @@ describe('marshallCase', () => {
     expect(mock.sortableDocketNumber).toBeDefined();
     expect(mock.status).toBeDefined();
     expect(mock.trialLocation).toBeDefined();
-
-    expect(mock.contactPrimary).toBeDefined();
-    expect(mock.contactSecondary).toBeDefined();
+    expect(mock.contactPrimary).not.toBeDefined();
+    expect(mock.contactSecondary).not.toBeDefined();
+    expect(mock.petitioners).toBeDefined();
     expect(mock.docketEntries).toBeDefined();
     expect(mock.irsPractitioners).toBeDefined();
     expect(mock.privatePractitioners).toBeDefined();
