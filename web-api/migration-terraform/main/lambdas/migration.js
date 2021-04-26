@@ -47,5 +47,9 @@ exports.getFilteredGlobalEvents = getFilteredGlobalEvents;
 exports.processItems = processItems;
 exports.handler = async event => {
   const items = getFilteredGlobalEvents(event);
-  await processItems({ documentClient: docClient, items, migrations });
+  await processItems({
+    documentClient: docClient,
+    items,
+    migrateRecords: migrations,
+  });
 };
