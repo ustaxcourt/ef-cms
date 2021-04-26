@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const { get } = require('lodash');
-const { migrateRecords } = require('./migration-segments');
+const { migrateRecords: migrations } = require('./migration-segments');
 
 const dynamodb = new AWS.DynamoDB({
   maxRetries: 10,
@@ -13,7 +13,7 @@ const docClient = new AWS.DynamoDB.DocumentClient({
   service: dynamodb,
 });
 
-const processItems = async ({ documentClient, items }) => {
+const processItems = async ({ documentClient, items, migrateRecords }) => {
   const promises = [];
 
   items = await migrateRecords({ documentClient, items });
@@ -47,5 +47,5 @@ exports.getFilteredGlobalEvents = getFilteredGlobalEvents;
 exports.processItems = processItems;
 exports.handler = async event => {
   const items = getFilteredGlobalEvents(event);
-  await processItems({ documentClient: docClient, items });
+  await processItems({ documentClient: docClient, items, migrations });
 };
