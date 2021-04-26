@@ -63,7 +63,14 @@ Message.VALIDATION_ERROR_MESSAGES = {
       message: 'Limit is 700 characters. Enter 700 or fewer characters.',
     },
   ],
-  subject: 'Enter a subject line',
+  subject: [
+    { contains: 'is required', message: 'Enter a subject line' },
+    { contains: 'is not allowed to be empty', message: 'Enter a subject line' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 250 characters. Enter 250 or fewer characters.',
+    },
+  ],
   toSection: 'Select a section',
   toUserId: 'Select a recipient',
 };
@@ -198,7 +205,7 @@ Message.prototype.markAsCompleted = function ({ message, user }) {
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedBySection = user.section;
-  this.completedMessage = message;
+  this.completedMessage = message || null;
 
   return this;
 };

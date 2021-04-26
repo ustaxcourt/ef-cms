@@ -1,4 +1,10 @@
 const {
+  getContactPrimary,
+  getContactSecondary,
+  getOtherFilers,
+  getOtherPetitioners,
+} = require('../entities/cases/Case');
+const {
   setServiceIndicatorsForCase,
 } = require('./setServiceIndicatorsForCase');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
@@ -14,13 +20,22 @@ const aggregatePartiesForService = caseEntity => {
   const formattedCase = setServiceIndicatorsForCase(caseEntity);
 
   const parties = [
-    formattedCase.contactPrimary,
-    formattedCase.contactSecondary,
+    getContactPrimary(formattedCase),
+    getContactSecondary(formattedCase),
     ...formattedCase.privatePractitioners,
     ...formattedCase.irsPractitioners,
   ];
 
-  const aggregated = { electronic: [], paper: [] };
+  const otherParties = [
+    ...getOtherFilers(formattedCase),
+    ...getOtherPetitioners(formattedCase),
+  ];
+
+  const aggregated = {
+    electronic: [],
+    paper: [...otherParties],
+  };
+
   parties.forEach(party => {
     if (
       party &&
@@ -45,6 +60,7 @@ const aggregatePartiesForService = caseEntity => {
     aggregated.electronic,
     aggregated.paper,
   );
+
   return aggregated;
 };
 

@@ -1,6 +1,6 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { contactSecondaryFromState } from '../helpers';
 import { requestAccessHelper as requestAccessHelperComputed } from '../../src/presenter/computeds/requestAccessHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -12,9 +12,6 @@ const caseDetailHeaderHelper = withAppContextDecorator(
 );
 const requestAccessHelper = withAppContextDecorator(
   requestAccessHelperComputed,
-);
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
 );
 
 export const practitionerRequestsAccessToCase = (test, fakeFile) => {
@@ -39,13 +36,7 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
 
     expect(requestHelper.showSecondaryParty).toBeTruthy();
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(caseDetailFormatted.contactSecondary.name).toEqual(
-      'Jimothy Schultz',
-    );
+    expect(contactSecondaryFromState(test).name).toEqual('Jimothy Schultz');
 
     await test.runSequence('reviewRequestAccessInformationSequence');
 

@@ -1,6 +1,6 @@
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '../../src/presenter/computeds/caseDetailSubnavHelper';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { contactPrimaryFromState } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -8,10 +8,6 @@ const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 const caseDetailSubnavHelper = withAppContextDecorator(
   caseDetailSubnavHelperComputed,
-);
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
 );
 
 export const irsPractitionerViewsPetitionerInfoForUnassociatedCase = (
@@ -32,10 +28,6 @@ export const irsPractitionerViewsPetitionerInfoForUnassociatedCase = (
       state: testObj.getState(),
     });
 
-    const caseDetail = runCompute(formattedCaseDetail, {
-      state: testObj.getState(),
-    });
-
     const caseDetailHelperResult = runCompute(caseDetailHelper, {
       state: testObj.getState(),
     });
@@ -45,9 +37,11 @@ export const irsPractitionerViewsPetitionerInfoForUnassociatedCase = (
     if (isSealed) {
       expect(caseDetailHelperResult.userCanViewCase).toEqual(false);
     } else {
+      const contactPrimary = contactPrimaryFromState(testObj);
+
       expect(caseDetailHelperResult.userCanViewCase).toEqual(true);
       expect(helper.showCaseInformationTab).toBeTruthy();
-      expect(caseDetail.contactPrimary.serviceIndicator).toEqual('Electronic');
+      expect(contactPrimary.serviceIndicator).toEqual('Electronic');
     }
   });
 };
