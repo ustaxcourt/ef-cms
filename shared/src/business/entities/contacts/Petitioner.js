@@ -105,7 +105,7 @@ Petitioner.VALIDATION_RULES = {
   title: JoiValidationConstants.STRING.max(100).optional(),
 };
 
-const VALIDATION_ERROR_MESSAGES = {
+Petitioner.VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   country: 'Enter a country',
@@ -119,13 +119,14 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Enter ZIP code',
   ],
+  serviceIndicator: 'Select a service indicator',
   state: 'Enter state',
 };
 
 joiValidationDecorator(
   Petitioner,
   joi.object().keys(Petitioner.VALIDATION_RULES),
-  VALIDATION_ERROR_MESSAGES,
+  Petitioner.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = {
