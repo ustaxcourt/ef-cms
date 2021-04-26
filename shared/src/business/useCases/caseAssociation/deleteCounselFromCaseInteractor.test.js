@@ -207,7 +207,6 @@ describe('deleteCounselFromCaseInteractor', () => {
           contactId: '3805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: CONTACT_TYPES.secondary,
           countryType: 'domestic',
-          email: 'petitioner@example.com',
           name: 'Test Petitioner',
           phone: '1234567',
           postalCode: '12345',
