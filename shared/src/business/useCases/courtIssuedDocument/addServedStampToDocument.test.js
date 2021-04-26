@@ -12,7 +12,9 @@ describe('addServedStampToDocument', () => {
   let drawTextMock;
   let saveMock;
   let getTrimBoxMock;
+  let getCropBoxMock;
   let trimBoxReturnValue;
+  let cropBoxReturnValue;
 
   beforeAll(async () => {
     const pdfDoc = await PDFDocument.load(testPdfDoc);
@@ -26,10 +28,12 @@ describe('addServedStampToDocument', () => {
 
   beforeEach(() => {
     trimBoxReturnValue = { height: 200, width: 0, y: 0 };
+    cropBoxReturnValue = { height: 200, width: 0, y: 0 };
 
     drawTextMock = jest.fn();
     saveMock = jest.fn();
     getTrimBoxMock = jest.fn().mockImplementation(() => trimBoxReturnValue);
+    getCropBoxMock = jest.fn().mockImplementation(() => cropBoxReturnValue);
 
     applicationContext.getPdfLib.mockReturnValue({
       PDFDocument: {
@@ -52,6 +56,7 @@ describe('addServedStampToDocument', () => {
           {
             drawRectangle: jest.fn(),
             drawText: drawTextMock,
+            getCropBox: getCropBoxMock,
             getRotation() {
               return { angle: 270 };
             },

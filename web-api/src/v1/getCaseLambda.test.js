@@ -156,6 +156,8 @@ describe('getCaseLambda', () => {
   });
 
   it('returns the case in v1 format', async () => {
+    // Careful! Changing this test would mean that the v1 format is changing;
+    // this would mean breaking changes for any user of the v1 API
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
 

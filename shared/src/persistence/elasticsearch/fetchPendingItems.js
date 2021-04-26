@@ -1,6 +1,11 @@
 const { search } = require('./searchClient');
 
-exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
+exports.fetchPendingItems = async ({
+  applicationContext,
+  judge,
+  page,
+  unservableEventCodes,
+}) => {
   const caseSource = [
     'associatedJudge',
     'caseCaption',
@@ -44,6 +49,26 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
             { term: { 'entityName.S': 'DocketEntry' } },
             { term: { 'pending.BOOL': true } },
             hasParentParam,
+            {
+              bool: {
+                should: [
+                  {
+                    bool: {
+                      minimum_should_match: 1,
+                      should: [
+                        {
+                          exists: {
+                            field: 'servedAt',
+                          },
+                        },
+                        { term: { 'isLegacyServed.BOOL': true } },
+                      ],
+                    },
+                  },
+                  { terms: { 'eventCode.S': unservableEventCodes } },
+                ],
+              },
+            },
           ],
         },
       },
@@ -63,22 +88,6 @@ exports.fetchPendingItems = async ({ applicationContext, judge, page }) => {
       },
     };
   }
-
-  const matchingOnServedAtOrLegacyServed = {
-    bool: {
-      minimum_should_match: 1,
-      should: [
-        {
-          exists: {
-            field: 'servedAt',
-          },
-        },
-        { term: { 'isLegacyServed.BOOL': true } },
-      ],
-    },
-  };
-
-  searchParameters.body.query.bool.must.push(matchingOnServedAtOrLegacyServed);
 
   const { results, total } = await search({
     applicationContext,

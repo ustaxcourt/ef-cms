@@ -55,6 +55,7 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
  */
 const createISODateString = (dateString, inputFormat) => {
   let result;
+
   if (!dateString) {
     result = moment.tz(USTC_TZ);
   } else {
@@ -62,6 +63,12 @@ const createISODateString = (dateString, inputFormat) => {
   }
 
   return result && result.toISOString();
+};
+
+const createISODateAtStartOfDayEST = dateString => {
+  const startOfDay = moment.tz(dateString, undefined, USTC_TZ);
+  startOfDay.startOf('day'); // adjustment is according to USTC_TZ
+  return startOfDay.toISOString(); // will reflect UTC offset.
 };
 
 const createEndOfDayISO = ({ day, month, year }) => {
@@ -83,7 +90,7 @@ const createStartOfDayISO = ({ day, month, year }) => {
 const createISODateStringFromObject = options => {
   return createISODateString(
     `${options.year}-${options.month}-${options.day}`,
-    FORMATS.YYYYMMDD,
+    FORMATS.ISO,
   );
 };
 
@@ -92,7 +99,7 @@ const createISODateStringFromObject = options => {
  * @param {string} formatStr the desired formatting as specified by the moment library
  * @returns {string} a formatted date string
  */
-const formatDateString = (dateString, formatStr) => {
+const formatDateString = (dateString, formatStr = FORMATS.ISO) => {
   if (!dateString) return;
   let formatString = FORMATS[formatStr] || formatStr;
   return prepareDateFromString(dateString).format(formatString);
@@ -112,16 +119,15 @@ const formatNow = formatStr => {
  * @returns {number} difference between date a and date b
  */
 const dateStringsCompared = (a, b) => {
-  const simpleDatePattern = /^(\d{4}-\d{2}-\d{2})/;
   const simpleDateLength = 10; // e.g. YYYY-MM-DD
 
   if (a.length == simpleDateLength || b.length == simpleDateLength) {
-    // at least one date has a simple format, compare only year, month, and day
-    const [aSimple, bSimple] = [
-      a.match(simpleDatePattern)[0],
-      b.match(simpleDatePattern)[0],
-    ];
-    if (aSimple.localeCompare(bSimple) == 0) {
+    // at least one date has a simple format, compare only year, month, and day according to EST
+    const dayDifference = calculateDifferenceInDays(
+      createISODateString(a),
+      createISODateString(b),
+    );
+    if (Math.abs(dayDifference) === 0) {
       return 0;
     }
   }
@@ -285,11 +291,9 @@ const computeDate = ({ day, month, year }) => {
   const ddPadded = `${day}`.padStart(2, '0');
   const dateToParse = `${yyyyPadded}-${mmPadded}-${ddPadded}`;
   if (!PATTERNS.YYYYMMDD.test(dateToParse)) {
-    return dateToParse;
+    return undefined;
   }
-  const preparedDateISO = prepareDateFromString(dateToParse, FORMATS.YYYYMMDD);
-  const yyyymmdd = formatDateString(preparedDateISO, FORMATS.YYYYMMDD);
-  return yyyymmdd;
+  return prepareDateFromString(dateToParse, FORMATS.ISO).toISOString();
 };
 
 module.exports = {
@@ -301,6 +305,7 @@ module.exports = {
   checkDate,
   computeDate,
   createEndOfDayISO,
+  createISODateAtStartOfDayEST,
   createISODateString,
   createISODateStringFromObject,
   createStartOfDayISO,

@@ -21,8 +21,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
 
   const source = [
     'caseCaption',
-    'contactPrimary',
-    'contactSecondary',
+    'petitioners',
     'docketNumber',
     'docketNumberSuffix',
     'docketNumberWithSuffix',

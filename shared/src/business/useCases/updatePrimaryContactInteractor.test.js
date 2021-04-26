@@ -6,19 +6,21 @@ const {
   updatePrimaryContactInteractor,
 } = require('./updatePrimaryContactInteractor');
 const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
+const { getContactPrimary } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
 describe('update primary contact on a case', () => {
   let mockCase;
   let mockUser;
+  const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
 
   beforeEach(() => {
     mockCase = MOCK_CASE;
     mockUser = new User({
       name: 'bob',
       role: ROLES.petitioner,
-      userId: MOCK_CASE.contactPrimary.contactId,
+      userId: mockCaseContactPrimary.contactId,
     });
 
     applicationContext
@@ -83,12 +85,12 @@ describe('update primary contact on a case', () => {
     const changeOfAddressDocument = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
-    expect(updatedCase.contactPrimary).toMatchObject({
+    expect(getContactPrimary(updatedCase)).toMatchObject({
       address1: '453 Electric Ave',
       city: 'Philadelphia',
       countryType: COUNTRY_TYPES.DOMESTIC,
-      email: MOCK_CASE.contactPrimary.email,
-      name: MOCK_CASE.contactPrimary.name,
+      email: mockCaseContactPrimary.email,
+      name: mockCaseContactPrimary.name,
       phone: '1234567890',
       postalCode: '99999',
       state: 'PA',
@@ -142,7 +144,7 @@ describe('update primary contact on a case', () => {
           {
             barNumber: '1111',
             name: 'Bob Practitioner',
-            representing: [MOCK_CASE.contactPrimary.contactId],
+            representing: [mockCaseContactPrimary.contactId],
             role: ROLES.privatePractitioner,
             userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
           },
@@ -153,7 +155,7 @@ describe('update primary contact on a case', () => {
       contactInfo: {
         address1: '453 Electric Ave',
         city: 'Philadelphia',
-        contactId: MOCK_CASE.contactPrimary.contactId,
+        contactId: mockCaseContactPrimary.contactId,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'petitioner',
         name: 'Bill Burr',
@@ -251,21 +253,23 @@ describe('update primary contact on a case', () => {
       },
     );
 
-    expect(caseDetail.contactPrimary.name).not.toBe(
-      'Secondary Party Name Changed',
-    );
-    expect(caseDetail.contactPrimary.name).toBe('Test Petitioner');
-    expect(caseDetail.contactPrimary.email).not.toBe('hello123@example.com');
-    expect(caseDetail.contactPrimary.email).toBe('petitioner@example.com');
+    const contactPrimary = getContactPrimary(caseDetail);
+
+    expect(contactPrimary.name).not.toBe('Secondary Party Name Changed');
+    expect(contactPrimary.name).toBe('Test Petitioner');
+    expect(contactPrimary.email).not.toBe('hello123@example.com');
+    expect(contactPrimary.email).toBe('petitioner@example.com');
   });
 
   it('should update the contact on the case but not generate the change of address when contact primary address is sealed', async () => {
     const mockCaseWithSealedAddress = {
       ...mockCase,
-      contactPrimary: {
-        ...mockCase.contactPrimary,
-        isAddressSealed: true,
-      },
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          isAddressSealed: true,
+        },
+      ],
     };
 
     applicationContext

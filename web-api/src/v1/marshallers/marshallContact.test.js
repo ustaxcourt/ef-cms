@@ -1,6 +1,9 @@
+const {
+  getContactPrimary,
+} = require('../../../../shared/src/business/entities/cases/Case');
 const { marshallContact } = require('./marshallContact');
 const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
-const MOCK_CONTACT = MOCK_CASE.contactPrimary;
+const MOCK_CONTACT = getContactPrimary(MOCK_CASE);
 
 describe('marshallContact', () => {
   it('returns a contact object with the expected properties', () => {
@@ -9,6 +12,7 @@ describe('marshallContact', () => {
       'address2',
       'address3',
       'city',
+      'contactType',
       'email',
       'name',
       'phone',
@@ -28,6 +32,7 @@ describe('marshallContact', () => {
     expect(mock.address3).toBeDefined();
     expect(mock.city).toBeDefined();
     expect(mock.email).toBeDefined();
+    expect(mock.contactType).toBeDefined();
     expect(mock.name).toBeDefined();
     expect(mock.phone).toBeDefined();
     expect(mock.postalCode).toBeDefined();
@@ -40,6 +45,7 @@ describe('marshallContact', () => {
     expect(marshalled.address3).toEqual(mock.address3);
     expect(marshalled.city).toEqual(mock.city);
     expect(marshalled.email).toEqual(mock.email);
+    expect(marshalled.contactType).toEqual(mock.contactType);
     expect(marshalled.name).toEqual(mock.name);
     expect(marshalled.phone).toEqual(mock.phone);
     expect(marshalled.postalCode).toEqual(mock.postalCode);

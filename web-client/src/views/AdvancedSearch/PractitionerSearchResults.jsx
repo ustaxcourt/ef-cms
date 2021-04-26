@@ -30,7 +30,7 @@ export const PractitionerSearchResults = connect(
                 scrollToTop={false}
               />
             )}
-            <table className="usa-table search-results docket-record responsive-table row-border-only">
+            <table className="usa-table search-results ustc-table responsive-table">
               <thead>
                 <tr>
                   <th aria-label="bar number">Bar No.</th>
