@@ -13,6 +13,7 @@ describe('editPaperFilingInteractor', () => {
   let mockCurrentUser;
 
   const mockDocketEntryId = '08ecbf7e-b316-46bb-9ac6-b7474823d202';
+  const mockWorkItemId = 'a956aa05-19cb-4fc3-ba10-d97c1c567c12';
 
   const workItem = {
     docketEntry: {
@@ -25,7 +26,7 @@ describe('editPaperFilingInteractor', () => {
     section: DOCKET_SECTION,
     sentBy: mockDocketEntryId,
     updatedAt: applicationContext.getUtilities().createISODateString(),
-    workItemId: mockDocketEntryId,
+    workItemId: mockWorkItemId,
   };
 
   const caseRecord = {
@@ -129,8 +130,9 @@ describe('editPaperFilingInteractor', () => {
       applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).toBeCalled();
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox.mock
+        .calls[0][0].workItem,
+    ).toMatchObject({ workItemId: mockWorkItemId });
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toBeCalled();

@@ -1,12 +1,14 @@
 import { state } from 'cerebral';
 
 /**
- * used to direct the user to the correct next page - either the isElectronic or isPaper
+ * used to determine whether to redirect to the print paper service screen or not after
+ * serving a paper filing
  *
  * @param {object} providers the providers object
- * @param {Function} providers.get cerebral get function
- * @param {object} providers.path the next object in the path (this is defined in the sequence right after this action is invoked)
  * @param {object} providers.applicationContext the applicationContext
+ * @param {Function} providers.get cerebral get function
+ * @param {object} providers.path the next object in the path
+ * @param {object} providers.props the cerebral props
  * @returns {*} returns the next action in the sequence's path
  */
 export const getShouldGoToPaperServiceAction = ({
