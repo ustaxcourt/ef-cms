@@ -8,7 +8,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-// import { docketClerkAddsPetitionerToCase } from './journey/docketClerkAddsPetitionerToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 const test = setupTest();
@@ -140,7 +139,6 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     ).toBeUndefined();
     expect(test.getState('modal.practitionerMatches.length')).toEqual(1);
 
-    //default selected because there was only 1 match
     let practitionerMatch = test.getState('modal.practitionerMatches.0');
     expect(test.getState('modal.user.userId')).toEqual(
       practitionerMatch.userId,
