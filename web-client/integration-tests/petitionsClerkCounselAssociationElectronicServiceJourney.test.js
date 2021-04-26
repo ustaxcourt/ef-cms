@@ -1,9 +1,15 @@
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  contactSecondaryFromState,
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkRemovesPractitionerFromCase } from './journey/petitionsClerkRemovesPractitionerFromCase';
-import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 const test = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -28,7 +34,6 @@ describe('Petitions Clerk Counsel Association Journey', () => {
         name: 'Jimothy Schultz',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         state: 'AZ',
       },
       partyType: PARTY_TYPES.petitionerSpouse,
@@ -38,7 +43,63 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   });
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
+  petitionsClerkServesElectronicCaseToIrs(test);
+
+  loginAs(test, 'admissionsclerk@example.com');
+  it('admissions clerk adds secondary petitioner email with existing cognito account to case', async () => {
+    await refreshElasticsearchIndex();
+
+    let contactSecondary = contactSecondaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactSecondary.contactId,
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
+    expect(test.getState('form.updatedEmail')).toBeUndefined();
+    expect(test.getState('form.confirmEmail')).toBeUndefined();
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.updatedEmail',
+      value: 'petitioner2@example.com',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.confirmEmail',
+      value: 'petitioner2@example.com',
+    });
+
+    await test.runSequence('submitEditPetitionerSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
+
+    expect(test.getState('modal.showModal')).toBe('MatchingEmailFoundModal');
+    expect(test.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
+
+    await test.runSequence(
+      'submitUpdatePetitionerInformationFromModalSequence',
+    );
+
+    expect(test.getState('modal.showModal')).toBeUndefined();
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+
+    contactSecondary = contactSecondaryFromState(test);
+
+    expect(contactSecondary.email).toEqual('petitioner2@example.com');
+    expect(contactSecondary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+
+    await refreshElasticsearchIndex();
+  });
+
+  loginAs(test, 'petitionsclerk@example.com');
+
   petitionsClerkAddsPractitionersToCase(test);
   petitionsClerkRemovesPractitionerFromCase(test);
 });
