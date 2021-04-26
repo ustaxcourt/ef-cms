@@ -1,0 +1,71 @@
+const { getFilteredGlobalEvents, processItems } = require('./migration');
+const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
+
+describe('migration', () => {
+  describe('processItems', () => {
+    it('call put on all records that come through', async () => {
+      const mockDocumentClient = {
+        put: jest.fn().mockReturnValue({
+          promise: () => null,
+        }),
+      };
+      await processItems({
+        documentClient: mockDocumentClient,
+        items: [
+          {
+            ...MOCK_CASE,
+            pk: `case|${MOCK_CASE.docketNumber}`,
+            sk: `case|${MOCK_CASE.docketNumber}`,
+          },
+        ],
+      });
+      expect(mockDocumentClient.put).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getFilteredGlobalEvents', () => {
+    it('should not try to migrate global table dynamo events', async () => {
+      const items = await getFilteredGlobalEvents({
+        Records: [
+          {
+            dynamodb: {
+              NewImage: {
+                'aws:rep:updatetime': {
+                  N: 10,
+                },
+              },
+              OldImage: {
+                'aws:rep:updatetime': {
+                  N: 10,
+                },
+              },
+            },
+          },
+        ],
+      });
+      expect(items.length).toBe(0);
+    });
+
+    it('should return non global table dynamo events', async () => {
+      const items = await getFilteredGlobalEvents({
+        Records: [
+          {
+            dynamodb: {
+              NewImage: {
+                'aws:rep:updatetime': {
+                  N: 10,
+                },
+              },
+              OldImage: {
+                'aws:rep:updatetime': {
+                  N: 20,
+                },
+              },
+            },
+          },
+        ],
+      });
+      expect(items.length).toBe(1);
+    });
+  });
+});
