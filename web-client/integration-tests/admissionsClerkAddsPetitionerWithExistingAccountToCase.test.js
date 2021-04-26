@@ -26,7 +26,6 @@ describe('admissions clerk adds petitioner with existing cognito account to case
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile);
-
   petitionsClerkAddsPractitionersToCase(test, true);
 
   loginAs(test, 'admissionsclerk@example.com');
@@ -100,9 +99,17 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     expect(test.getState('screenMetadata.isAssociated')).toEqual(true);
   });
 
-  it('should up', async () => {
-    // add petitioner counsel
-    // give eaccess to petitioners by linking to existing cognito account
-    // verify that practitioners reprenting contactid is updated to the exsiting cognito contactid
+  it('should verify that practitioner representing contactId matches contactPrimary contactId after email is updated', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const contactPrimary = contactPrimaryFromState(test);
+
+    const practitionerRepresenting = test.getState(
+      'caseDetail.privatePractitioners.0.representing',
+    );
+
+    expect(practitionerRepresenting).toEqual([contactPrimary.contactId]);
   });
 });
