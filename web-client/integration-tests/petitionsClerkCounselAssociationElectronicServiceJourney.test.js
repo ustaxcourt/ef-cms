@@ -1,10 +1,8 @@
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
-import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
-import { petitionsClerkEditsPractitionerOnCase } from './journey/petitionsClerkEditsPractitionerOnCase';
 import { petitionsClerkRemovesPractitionerFromCase } from './journey/petitionsClerkRemovesPractitionerFromCase';
-import { petitionsClerkRemovesRespondentFromCase } from './journey/petitionsClerkRemovesRespondentFromCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
 const test = setupTest();
@@ -21,15 +19,16 @@ describe('Petitions Clerk Counsel Association Journey', () => {
 
   loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
-    // todo: make this a service type of electronic and do the same thing!!!!d as;ldkfjasl;kdjf
     const caseDetail = await uploadPetition(test, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
         countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner2@example.com',
         name: 'Jimothy Schultz',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         state: 'AZ',
       },
       partyType: PARTY_TYPES.petitionerSpouse,
@@ -41,8 +40,5 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test);
-  petitionsClerkAddsRespondentsToCase(test);
-  petitionsClerkEditsPractitionerOnCase(test);
   petitionsClerkRemovesPractitionerFromCase(test);
-  petitionsClerkRemovesRespondentFromCase(test);
 });
