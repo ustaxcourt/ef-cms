@@ -4,11 +4,13 @@ exports.navigateTo = username => {
 
 exports.fillInAndSubmitForm = () => {
   //wizard step 1
-  cy.upload_file('w3-dummy.pdf', 'input#stin-file');
+  cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
+
   cy.get('button#submit-case').click();
 
   //step 2
-  cy.upload_file('w3-dummy.pdf', '#petition-file');
+  cy.get('#petition-file').attachFile('../fixtures/w3-dummy.pdf');
+
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get('#irs-notice-radios label').first().click();
   cy.get('#case-type').scrollIntoView().select('Notice of Deficiency');
