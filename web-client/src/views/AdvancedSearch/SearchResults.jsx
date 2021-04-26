@@ -44,7 +44,7 @@ export const SearchResults = connect(
               </div>
             </div>
 
-            <table className="usa-table search-results docket-record responsive-table row-border-only">
+            <table className="usa-table search-results ustc-table responsive-table">
               <thead>
                 <tr>
                   <th aria-label="Number"></th>

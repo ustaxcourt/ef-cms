@@ -248,7 +248,7 @@ export const ReviewSavedPetition = connect(
                     {reviewSavedPetitionHelper.showStatistics && (
                       <>
                         <h4>Statistics</h4>
-                        <table className="usa-table docket-record responsive-table row-border-only">
+                        <table className="usa-table ustc-table responsive-table">
                           <thead>
                             <tr>
                               <th>Year/Period</th>

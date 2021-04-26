@@ -1,5 +1,8 @@
+const {
+  CONTACT_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../entities/EntityConstants');
 const { aggregatePartiesForService } = require('./aggregatePartiesForService');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
 describe('aggregatePartiesForService', () => {
   let mockCase;
@@ -9,12 +12,16 @@ describe('aggregatePartiesForService', () => {
   let irsPractitionerWithPaper;
   let privatePractitionerWithPaper;
 
+  let otherFilers;
+  let otherPetitioners;
+
   const PRIMARY_CONTACT_ID = 'c344c39f-6086-484b-998c-e93e9c7dcff5';
   const SECONDARY_CONTACT_ID = '09ecdf10-359c-4694-a5a8-d15d56796ce1';
 
   beforeEach(() => {
     const contactPrimary = {
       contactId: PRIMARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.primary,
       email: 'contactprimary@example.com',
       name: 'Contact Primary',
     };
@@ -23,6 +30,7 @@ describe('aggregatePartiesForService', () => {
       address1: 'Test Address',
       city: 'Testville',
       contactId: SECONDARY_CONTACT_ID,
+      contactType: CONTACT_TYPES.secondary,
       name: 'Contact Secondary',
       state: 'CA',
     };
@@ -95,10 +103,75 @@ describe('aggregatePartiesForService', () => {
       privatePractitionerWithPaper,
     ];
 
+    otherFilers = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '9836050f-a423-47bb-943b-a5661fe08a6b',
+        contactType: CONTACT_TYPES.otherFiler,
+        countryType: 'domestic',
+        email: 'petitioner@example.com',
+        inCareOf: 'Myself',
+        name: 'Test Petitioner3',
+        otherFilerType: 'Tax Matters Partner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Tax Matters Partner',
+      },
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '8746050f-a423-47bb-943b-a5661fe08a6b',
+        contactType: CONTACT_TYPES.otherFiler,
+        countryType: 'domestic',
+        email: 'petitioner@example.com',
+        inCareOf: 'Myself',
+        name: 'Test Petitioner4',
+        otherFilerType: 'Intervener',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Tax Matters Partner',
+      },
+    ];
+
+    otherPetitioners = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '6536050f-a423-47bb-943b-a5661fe08a6b',
+        contactType: CONTACT_TYPES.otherPetitioner,
+        countryType: 'domestic',
+        email: 'petitioner5@example.com',
+        inCareOf: 'Myself',
+        name: 'Test Petitioner5',
+        otherFilerType: 'Tax Matters Partner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Tax Matters Partner',
+      },
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '5446050f-a423-47bb-943b-a5661fe08a6b',
+        contactType: CONTACT_TYPES.otherPetitioner,
+        countryType: 'domestic',
+        email: 'petitioner6@example.com',
+        inCareOf: 'Myself',
+        name: 'Test Petitioner6',
+        otherFilerType: 'Tax Matters Partner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+        title: 'Tax Matters Partner',
+      },
+    ];
+
     mockCase = {
-      contactPrimary,
-      contactSecondary,
       irsPractitioners,
+      petitioners: [contactPrimary, contactSecondary],
       privatePractitioners,
     };
   });
@@ -268,5 +341,35 @@ describe('aggregatePartiesForService', () => {
     expect(result.paper.length).toEqual(3);
     expect(foundPrivatePractitionerWithPaper).toBeTruthy();
     expect(foundIrsPractitionerWithPaper).toBeTruthy();
+  });
+
+  it('should serve any otherFilers and otherPetitioners by paper if they exist', () => {
+    const result = aggregatePartiesForService({
+      ...mockCase,
+      petitioners: [
+        ...mockCase.petitioners,
+        ...otherFilers,
+        ...otherPetitioners,
+      ],
+    });
+
+    const otherFiler1 = result.paper.find(
+      p => p.contactId === otherFilers[0].contactId,
+    );
+    const otherFiler2 = result.paper.find(
+      p => p.contactId === otherFilers[1].contactId,
+    );
+
+    const otherPetitioner1 = result.paper.find(
+      p => p.contactId === otherPetitioners[0].contactId,
+    );
+    const otherPetitioner2 = result.paper.find(
+      p => p.contactId === otherPetitioners[1].contactId,
+    );
+
+    expect(otherFiler1).toBeTruthy();
+    expect(otherFiler2).toBeTruthy();
+    expect(otherPetitioner1).toBeTruthy();
+    expect(otherPetitioner2).toBeTruthy();
   });
 });
