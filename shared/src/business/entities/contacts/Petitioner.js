@@ -94,7 +94,7 @@ Petitioner.VALIDATION_RULES = {
   secondaryName: JoiValidationConstants.STRING.max(100).optional(),
   serviceIndicator: JoiValidationConstants.STRING.valid(
     ...Object.values(SERVICE_INDICATOR_TYPES),
-  ).optional(),
+  ).required(),
   state: JoiValidationConstants.STRING.when('countryType', {
     is: COUNTRY_TYPES.INTERNATIONAL,
     otherwise: joi
