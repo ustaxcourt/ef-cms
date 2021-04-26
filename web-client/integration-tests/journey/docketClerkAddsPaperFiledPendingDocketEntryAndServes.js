@@ -60,9 +60,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
       value: true,
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

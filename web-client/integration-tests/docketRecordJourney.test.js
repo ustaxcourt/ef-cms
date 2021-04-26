@@ -145,7 +145,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: true,
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -213,7 +213,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: true,
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -435,7 +435,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: true,
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
