@@ -42,6 +42,7 @@ const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { prepareDateFromString } = require('../../utilities/DateHandler');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
+const { SERVICE_INDICATOR_ERROR } = require('../EntityValidationConstants');
 const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
 
@@ -243,7 +244,7 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
     });
 
     it('should set additionalName as `secondaryName` when partyType is nextFriendForMinor', () => {
@@ -300,7 +301,26 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
+    });
+
+    it('should set additionalName as `secondaryName` when partyType is petitionerDeceasedSpouse', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              inCareOf: mockInCareOf,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
     });
 
     it('should NOT set additionalName when it has already been set', () => {
@@ -4974,7 +4994,18 @@ describe('Case entity', () => {
     });
 
     it('should return false if no contacts or practitioners have paper service indicator', () => {
-      const myCase = new Case(MOCK_CASE, { applicationContext });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+          ],
+        },
+        { applicationContext },
+      );
 
       const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
 

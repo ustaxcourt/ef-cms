@@ -49,6 +49,7 @@ describe('update petitioner contact information on a case', () => {
       name: 'Test Primary Petitioner',
       phone: '1234567',
       postalCode: '12345',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       state: 'TN',
       title: 'Executor',
     },
@@ -62,6 +63,7 @@ describe('update petitioner contact information on a case', () => {
       name: 'Test Secondary Petitioner',
       phone: '1234568',
       postalCode: '12345',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       state: 'TN',
       title: 'Executor',
     },
@@ -223,6 +225,7 @@ describe('update petitioner contact information on a case', () => {
         name: 'Test Primary Petitioner',
         phone: '1234568',
         postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         state: 'TN',
         title: 'Executor',
       },
@@ -400,6 +403,7 @@ describe('update petitioner contact information on a case', () => {
           name: 'Test Petitioner',
           phone: '1234567',
           postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'TN',
           title: 'Executor',
         },
@@ -418,6 +422,7 @@ describe('update petitioner contact information on a case', () => {
         name: 'Test Petitioner',
         phone: '1234567',
         postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         state: 'TN',
         title: 'Executor',
       },
@@ -554,7 +559,6 @@ describe('update petitioner contact information on a case', () => {
       const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
         d => d.eventCode === 'NCA',
       );
-
       expect(
         applicationContext.getPersistenceGateway()
           .saveWorkItemAndAddToSectionInbox,

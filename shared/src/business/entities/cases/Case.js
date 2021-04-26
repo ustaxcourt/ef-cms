@@ -1498,7 +1498,8 @@ Case.prototype.setAdditionalNameOnPetitioners = function () {
       }
       case PARTY_TYPES.estateWithoutExecutor:
       case PARTY_TYPES.corporation:
-        contactPrimary.additionalName = contactPrimary.inCareOf;
+      case PARTY_TYPES.petitionerDeceasedSpouse:
+        contactPrimary.additionalName = `c/o ${contactPrimary.inCareOf}`;
         delete contactPrimary.inCareOf;
         break;
       default:
