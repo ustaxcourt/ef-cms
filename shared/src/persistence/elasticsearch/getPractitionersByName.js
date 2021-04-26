@@ -19,7 +19,7 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
       query: {
         bool: {
           must: [
-            { term: { 'entityName.S': 'Practitioner' } },
+            { wildcard: { 'entityName.S': '*Practitioner' } },
             {
               terms: {
                 'role.S': [
