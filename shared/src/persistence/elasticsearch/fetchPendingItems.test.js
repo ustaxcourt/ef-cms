@@ -43,12 +43,14 @@ describe('fetchPendingItems', () => {
     await fetchPendingItems({
       applicationContext,
       judge: 'Dredd',
+      unservableEventCodes: [],
     });
 
     const searchQuery =
-      search.mock.calls[0][0].searchParameters.body.query.bool.must;
+      search.mock.calls[0][0].searchParameters.body.query.bool.must[3].bool
+        .should;
 
-    expect(searchQuery[3]).toMatchObject({
+    expect(searchQuery[0]).toMatchObject({
       bool: {
         minimum_should_match: 1,
         should: [
@@ -64,6 +66,10 @@ describe('fetchPendingItems', () => {
           },
         ],
       },
+    });
+
+    expect(searchQuery[1]).toMatchObject({
+      terms: { 'eventCode.S': expect.anything() },
     });
   });
 

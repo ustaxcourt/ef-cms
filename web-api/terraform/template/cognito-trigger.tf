@@ -48,7 +48,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
       EFCMS_DOMAIN                       = var.dns_domain
       CLAMAV_DEF_DIR                     = "/opt/var/lib/clamav"
       IRS_SUPERUSER_EMAIL                = var.irs_superuser_email
-      DYNAMODB_TABLE_NAME                = var.destination_table
+      DYNAMODB_TABLE_NAME                = var.cognito_table_name
     }
   }
 }

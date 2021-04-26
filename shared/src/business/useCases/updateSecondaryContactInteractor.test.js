@@ -3,10 +3,15 @@ const {
   fakeData,
 } = require('../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
 } = require('../entities/EntityConstants');
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../entities/cases/Case');
 const {
   updateSecondaryContactInteractor,
 } = require('./updateSecondaryContactInteractor');
@@ -18,6 +23,7 @@ describe('updateSecondaryContactInteractor', () => {
     address1: 'nothing',
     city: 'Somewhere',
     contactId: '988e7470-fb47-4014-bda6-bf3ed87a20b8',
+    contactType: CONTACT_TYPES.secondary,
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: 'secondary@example.com',
     name: 'Secondary Party',
@@ -28,8 +34,8 @@ describe('updateSecondaryContactInteractor', () => {
 
   let mockCase = {
     ...MOCK_CASE,
-    contactSecondary: mockContactSecondary,
     partyType: PARTY_TYPES.petitionerSpouse,
+    petitioners: [...MOCK_CASE.petitioners, mockContactSecondary],
   };
 
   let mockUser;
@@ -38,7 +44,7 @@ describe('updateSecondaryContactInteractor', () => {
     mockUser = new User({
       name: 'bob',
       role: ROLES.petitioner,
-      userId: MOCK_CASE.contactPrimary.contactId,
+      userId: getContactPrimary(MOCK_CASE).contactId,
     });
 
     applicationContext
@@ -99,7 +105,7 @@ describe('updateSecondaryContactInteractor', () => {
     const changeOfAddressDocument = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
-    expect(updatedCase.contactSecondary).toMatchObject({
+    expect(getContactSecondary(updatedCase)).toMatchObject({
       address1: '453 Electric Ave',
       city: 'Philadelphia',
       countryType: COUNTRY_TYPES.DOMESTIC,
@@ -155,7 +161,7 @@ describe('updateSecondaryContactInteractor', () => {
           {
             barNumber: '1111',
             name: 'Bob Practitioner',
-            representing: [mockCase.contactSecondary.contactId],
+            representing: [getContactSecondary(mockCase).contactId],
             role: ROLES.privatePractitioner,
             userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
           },
@@ -265,12 +271,11 @@ describe('updateSecondaryContactInteractor', () => {
       },
     );
 
-    expect(caseDetail.contactSecondary.name).not.toBe(
-      'Secondary Party Name Changed',
-    );
-    expect(caseDetail.contactSecondary.name).toBe(mockContactSecondary.name);
-    expect(caseDetail.contactSecondary.email).not.toBe('hello123@example.com');
-    expect(caseDetail.contactSecondary.email).toBe(mockContactSecondary.email);
+    const contactSecondary = getContactSecondary(caseDetail);
+    expect(contactSecondary.name).not.toBe('Secondary Party Name Changed');
+    expect(contactSecondary.name).toBe(mockContactSecondary.name);
+    expect(contactSecondary.email).not.toBe('hello123@example.com');
+    expect(contactSecondary.email).toBe(mockContactSecondary.email);
   });
 
   it('does not generate a change of address when inCareOf is updated', async () => {
@@ -307,10 +312,13 @@ describe('updateSecondaryContactInteractor', () => {
   it('should update the contact on the case but not generate a change of address when case is sealed', async () => {
     const mockCaseWithSealedAddress = {
       ...mockCase,
-      contactSecondary: {
-        ...mockCase.contactSecondary,
-        isAddressSealed: true,
-      },
+      petitioners: [
+        ...MOCK_CASE.petitioners,
+        {
+          ...mockCase.contactSecondary,
+          isAddressSealed: true,
+        },
+      ],
     };
 
     applicationContext

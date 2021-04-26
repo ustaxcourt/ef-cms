@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -93,30 +94,38 @@ describe('addNewInitialFilingToCase', () => {
     mockOriginalCase = new Case(
       {
         ...MOCK_CASE,
-        contactSecondary: {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          name: 'Test Petitioner',
-          postalCode: '12345',
-          state: 'TX',
-        },
         docketEntries: [mockPetition],
         partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: [
+          ...MOCK_CASE.petitioners,
+          {
+            address1: '123 Main St',
+            city: 'Somewhere',
+            contactType: CONTACT_TYPES.secondary,
+            name: 'Test Petitioner',
+            postalCode: '12345',
+            state: 'TX',
+          },
+        ],
       },
       { applicationContext },
     );
 
     mockCaseToUpdate = {
       ...MOCK_CASE,
-      contactSecondary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        name: 'Test Petitioner',
-        postalCode: '12345',
-        state: 'TX',
-      },
       docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
       partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        ...MOCK_CASE.petitioners,
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner',
+          postalCode: '12345',
+          state: 'TX',
+        },
+      ],
     };
 
     await updateInitialFilingDocuments({

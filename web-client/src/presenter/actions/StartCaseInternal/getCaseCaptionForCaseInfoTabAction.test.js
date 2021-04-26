@@ -1,15 +1,15 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseCaptionForCaseInfoTabAction } from './getCaseCaptionForCaseInfoTabAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-
-presenter.providers.applicationContext = applicationContextForClient;
 
 describe('getCaseCaptionForCaseInfoTabAction', () => {
   const {
     CASE_CAPTION_POSTFIX,
     PARTY_TYPES,
-  } = applicationContextForClient.getConstants();
+  } = applicationContext.getConstants();
+
+  presenter.providers.applicationContext = applicationContext;
 
   it('should return an empty string when the party type has not been selected', async () => {
     const result = await runAction(getCaseCaptionForCaseInfoTabAction, {
@@ -46,5 +46,36 @@ describe('getCaseCaptionForCaseInfoTabAction', () => {
     expect(
       result.output.caseCaption.includes(CASE_CAPTION_POSTFIX),
     ).toBeFalsy();
+  });
+
+  it('should call getCaseCaption with form.contactPrimary instead of the contactPrimary in form.petitioners', async () => {
+    await runAction(getCaseCaptionForCaseInfoTabAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          contactPrimary: {
+            name: 'Test Updated Name',
+          },
+          partyType: PARTY_TYPES.petitioner,
+          petitioners: [
+            {
+              isContactPrimary: true,
+              name: 'Not the right name',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().getCaseCaption.mock.calls[0][0],
+    ).toMatchObject({
+      contactPrimary: {
+        name: 'Test Updated Name',
+      },
+      petitioners: [],
+    });
   });
 });
