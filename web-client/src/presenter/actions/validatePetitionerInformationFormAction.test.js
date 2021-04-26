@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -38,7 +39,7 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
+          petitioners: [{ contactType: CONTACT_TYPES.primary }],
         },
         form: {
           contactPrimary: {},
@@ -63,7 +64,7 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
+          petitioners: [{ contactType: CONTACT_TYPES.primary }],
         },
         form: {
           contactPrimary: {},
@@ -84,12 +85,15 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
           contactSecondary: {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.primary,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            },
+          ],
         },
         form: {
           contactPrimary: {
@@ -126,10 +130,13 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {
-            email: 'testing@example.com',
-          },
           contactSecondary: {},
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.primary,
+              email: 'testing@example.com',
+            },
+          ],
         },
         form: {
           contactPrimary: {
@@ -166,8 +173,8 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
           contactSecondary: {},
+          petitioners: [{ contactType: CONTACT_TYPES.primary }],
         },
         form: {
           contactPrimary: {},
@@ -202,8 +209,8 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
           contactSecondary: {},
+          petitioners: [{ contactType: CONTACT_TYPES.primary }],
         },
         form: {
           contactPrimary: {
@@ -241,8 +248,8 @@ describe('validatePetitionerInformationFormAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {},
           contactSecondary: {},
+          petitioners: [{ contactType: CONTACT_TYPES.primary }],
         },
         form: {
           contactPrimary: {

@@ -102,13 +102,8 @@ describe('aggregateCommonQueryParams', () => {
           bool: {
             should: [
               {
-                term: {
-                  'contactPrimary.M.countryType.S': COUNTRY_TYPES.DOMESTIC,
-                },
-              },
-              {
-                term: {
-                  'contactSecondary.M.countryType.S': COUNTRY_TYPES.DOMESTIC,
+                match: {
+                  'petitioners.L.M.countryType.S': COUNTRY_TYPES.DOMESTIC,
                 },
               },
             ],
@@ -135,13 +130,8 @@ describe('aggregateCommonQueryParams', () => {
           bool: {
             should: [
               {
-                term: {
-                  'contactPrimary.M.state.S': US_STATES.AR,
-                },
-              },
-              {
-                term: {
-                  'contactSecondary.M.state.S': US_STATES.AR,
+                match: {
+                  'petitioners.L.M.state.S': US_STATES.AR,
                 },
               },
             ],

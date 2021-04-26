@@ -8,6 +8,10 @@ const {
   caseSealedFormatter,
 } = require('../utilities/caseFilter');
 const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../entities/cases/Case');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -38,12 +42,12 @@ const getSealedCase = async ({
   let isAuthorizedToViewSealedCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-    caseRecord.contactPrimary.contactId,
+    getContactPrimary(caseRecord).contactId,
   );
 
   // check secondary contact if existent
   isAuthorizedToViewSealedCase = isAuthorizedForContact({
-    contact: caseRecord.contactSecondary,
+    contact: getContactSecondary(caseRecord),
     currentUser,
     defaultValue: isAuthorizedToViewSealedCase,
     permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
@@ -108,12 +112,12 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
-    caseRecord.contactPrimary.contactId,
+    getContactPrimary(caseRecord).contactId,
   );
 
   // check secondary contact if existent
   isAuthorizedToGetCase = isAuthorizedForContact({
-    contact: caseRecord.contactSecondary,
+    contact: getContactSecondary(caseRecord),
     currentUser,
     defaultValue: isAuthorizedToGetCase,
     permission: ROLE_PERMISSIONS.GET_CASE,
