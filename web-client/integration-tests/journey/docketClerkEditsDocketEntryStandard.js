@@ -30,7 +30,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPaperFiling');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('docketEntryId')).toEqual(docketEntryId);
 
     await test.runSequence('updateDocketEntryFormValueSequence', {

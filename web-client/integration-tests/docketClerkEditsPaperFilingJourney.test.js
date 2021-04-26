@@ -118,7 +118,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPaperFiling');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
       'preview',
@@ -143,7 +143,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       file: fakeFile,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPaperFiling');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
     expect(test.getState('form.primaryDocumentFile')).toBeDefined();
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(

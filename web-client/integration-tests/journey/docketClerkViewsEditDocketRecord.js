@@ -9,6 +9,6 @@ export const docketClerkViewsEditDocketRecord = test => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPaperFiling');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
   });
 };
