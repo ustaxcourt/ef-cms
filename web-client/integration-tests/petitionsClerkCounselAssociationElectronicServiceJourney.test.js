@@ -42,6 +42,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
         name: 'Test Petitioner 2',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         state: 'AZ',
       },
       partyType: PARTY_TYPES.petitionerSpouse,
@@ -52,9 +53,6 @@ describe('Petitions Clerk Counsel Association Journey', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(test);
-
-  // loginAs(test, 'docketclerk@example.com');
-  // docketClerkAddsPetitionerToCase(test, { name: 'Test Petitioner 2' });
 
   loginAs(test, 'admissionsclerk@example.com');
   it('admissions clerk adds secondary petitioner email with existing cognito account to case', async () => {
