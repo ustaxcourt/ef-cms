@@ -16,13 +16,17 @@ export const resetContactsAction = ({ applicationContext, get, store }) => {
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
   store.set(state.form.contactPrimary, {
+    contactId: get(state.form.contactPrimary.contactId),
     countryType: COUNTRY_TYPES.DOMESTIC,
     email: get(state.form.contactPrimary.email),
   });
 
   if (showContacts.contactSecondary) {
     store.set(state.form.contactSecondary, {
+      contactId: get(state.form.contactSecondary.contactId),
       countryType: COUNTRY_TYPES.DOMESTIC,
     });
+  } else {
+    store.unset(state.form.contactSecondary);
   }
 };

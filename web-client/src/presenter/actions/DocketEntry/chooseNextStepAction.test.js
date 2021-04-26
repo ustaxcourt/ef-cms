@@ -1,11 +1,12 @@
+import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { chooseNextStepAction } from './chooseNextStepAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('chooseNextStepAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   let isPaperStub;
   let isElectronicStub;
 
@@ -26,11 +27,14 @@ describe('chooseNextStepAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {
-            serviceIndicator: 'Paper',
-          },
           irsPractitioners: [],
           isPaper: true,
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.primary,
+              serviceIndicator: 'Paper',
+            },
+          ],
           privatePractitioners: [],
         },
       },
@@ -46,10 +50,13 @@ describe('chooseNextStepAction', () => {
       },
       state: {
         caseDetail: {
-          contactPrimary: {
-            serviceIndicator: 'Electronic',
-          },
           irsPractitioners: [],
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.primary,
+              serviceIndicator: 'Electronic',
+            },
+          ],
           privatePractitioners: [],
         },
       },

@@ -1,4 +1,11 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { CONTACT_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import {
+  contactPrimaryFromState,
+  contactSecondaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -13,7 +20,9 @@ const publicFieldsVisible = () => {
 };
 
 const associatedFieldsVisible = () => {
-  expect(test.getState('caseDetail.contactPrimary')).toMatchObject({
+  const contactPrimary = contactPrimaryFromState(test);
+
+  expect(contactPrimary).toMatchObject({
     address1: expect.anything(),
     city: expect.anything(),
     name: expect.anything(),
@@ -23,14 +32,18 @@ const associatedFieldsVisible = () => {
 };
 
 const associatedFieldsBlocked = () => {
-  expect(test.getState('caseDetail.contactPrimary')).toEqual({
+  const contactPrimary = contactPrimaryFromState(test);
+  const contactSecondary = contactSecondaryFromState(test);
+
+  expect(contactPrimary).toEqual({
+    contactType: CONTACT_TYPES.primary,
     entityName: 'PublicContact',
     name: expect.anything(),
     state: expect.anything(),
   });
-  expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
-  expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
-  expect(test.getState('caseDetail.contactPrimary.contactId')).toBeUndefined();
+  expect(contactPrimary.address1).toBeUndefined();
+  expect(contactSecondary).toBeUndefined();
+  expect(contactPrimary.contactId).toBeUndefined();
 };
 
 const internalFieldsVisible = () => {

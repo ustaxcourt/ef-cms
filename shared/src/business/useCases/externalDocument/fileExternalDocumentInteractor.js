@@ -114,6 +114,8 @@ exports.fileExternalDocumentInteractor = async (
         {
           ...baseMetadata,
           ...metadata,
+          contactPrimary: caseEntity.getContactPrimary(),
+          contactSecondary: caseEntity.getContactSecondary(),
           docketEntryId,
           documentType: metadata.documentType,
           isOnDocketRecord: true,
@@ -124,10 +126,6 @@ exports.fileExternalDocumentInteractor = async (
             documentMetadata.representingSecondary,
           relationship,
           userId: user.userId,
-          ...caseEntity.getCaseContacts({
-            contactPrimary: true,
-            contactSecondary: true,
-          }),
         },
         { applicationContext },
       );
