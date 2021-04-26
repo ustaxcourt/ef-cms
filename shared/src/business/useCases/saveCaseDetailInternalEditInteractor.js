@@ -7,7 +7,7 @@ const {
   UnprocessableEntityError,
 } = require('../../errors/errors');
 const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { CONTACT_TYPES } = require('../entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -48,8 +48,6 @@ exports.saveCaseDetailInternalEditInteractor = async (
   const editableFields = {
     caseCaption: caseToUpdate.caseCaption,
     caseType: caseToUpdate.caseType,
-    contactPrimary: caseToUpdate.contactPrimary,
-    contactSecondary: caseToUpdate.contactSecondary,
     docketNumber: caseToUpdate.docketNumber,
     docketNumberSuffix: caseToUpdate.docketNumberSuffix,
     filingType: caseToUpdate.filingType,
@@ -79,27 +77,43 @@ exports.saveCaseDetailInternalEditInteractor = async (
   const caseWithFormEdits = {
     ...caseRecord,
     ...editableFields,
+    contactPrimary: caseToUpdate.contactPrimary,
+    contactSecondary: caseToUpdate.contactSecondary,
+    petitioners: undefined,
   };
 
-  const caseEntity = new Case(caseWithFormEdits, {
+  const caseEntityWithFormEdits = new Case(caseWithFormEdits, {
     applicationContext,
   });
 
-  if (!isEmpty(caseWithFormEdits.contactPrimary)) {
-    caseWithFormEdits.contactPrimary = ContactFactory.createContacts({
+  if (!isEmpty(caseToUpdate.contactPrimary)) {
+    const caseEntityFromCaseRecord = new Case(caseRecord, {
       applicationContext,
-      contactInfo: { primary: caseWithFormEdits.contactPrimary },
-      partyType: caseWithFormEdits.partyType,
-    }).primary.toRawObject();
+    });
+    const primaryContactId = caseEntityFromCaseRecord.getContactPrimary()
+      .contactId;
+
+    caseEntityWithFormEdits.updatePetitioner({
+      ...caseToUpdate.contactPrimary,
+      contactId: primaryContactId,
+      contactType: CONTACT_TYPES.primary,
+    });
   }
 
-  if (!isEmpty(caseWithFormEdits.contactSecondary)) {
-    caseWithFormEdits.contactSecondary = ContactFactory.createContacts({
-      applicationContext,
-      contactInfo: { secondary: caseWithFormEdits.contactSecondary },
-      partyType: caseWithFormEdits.partyType,
-    }).secondary.toRawObject();
+  if (!isEmpty(caseToUpdate.contactSecondary)) {
+    const secondaryContactId = caseEntityWithFormEdits.getContactSecondary()
+      ?.contactId;
+
+    caseEntityWithFormEdits.updatePetitioner({
+      ...caseToUpdate.contactSecondary,
+      contactId: secondaryContactId,
+      contactType: CONTACT_TYPES.secondary,
+    });
   }
+
+  const caseEntity = new Case(caseEntityWithFormEdits, {
+    applicationContext,
+  });
 
   if (caseEntity.isPaper) {
     await applicationContext.getUseCaseHelpers().updateInitialFilingDocuments({

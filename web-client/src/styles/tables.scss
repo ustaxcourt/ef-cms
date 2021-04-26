@@ -42,21 +42,107 @@ table,
   }
 }
 
-.ustc-table /* TODO - eliminate work-queue rule? */ {
+.ustc-table {
   th {
     border: 0;
+
+    .sortable-header-button {
+      color: color($theme-color-base-darkest);
+      font-weight: $font-semibold;
+      text-decoration: none;
+    }
+    .sortActive {
+      border-bottom: 3px solid color($theme-color-primary);
+    }
+    &.small {
+      max-width: $table-column-width-small;
+    }
   }
 
   td {
+    padding: 15px 16px;
     border: none;
     font-size: 17px;
+
+    &.message-select-control {
+      label {
+        left: 5px;
+      }
+    }
+
+    &.message-queue-row {
+      padding-top: 14px;
+    }
+
+    &.message-queue-case-title {
+      max-width: 15rem;
+    }
+
+    &.small {
+      width: $table-column-width-small;
+    }
+
+    &.max-width-7 {
+      max-width: 7rem;
+    }
+
+    &.max-width-25 {
+      max-width: 25rem;
+    }
+
+    &.message-subject {
+      a {
+        line-height: 18px;
+        text-align: left;
+      }
+    }
+    &.has-icon {
+      width: 44px;
+    }
+
+    .message-document-title {
+      max-width: 35rem;
+      padding: 4px;
+      margin: -4px;
+      text-align: left;
+    }
+
+    &.to {
+      min-width: 7rem;
+    }
+
+    .message-document-detail {
+      display: -webkit-box;
+      overflow: hidden;
+      height: 100%;
+      max-height: 57px; /* fallback */
+      -webkit-box-orient: vertical;
+      font-size: 15px;
+      -webkit-line-clamp: 3; /* number of lines to show */
+      line-height: 19px; /* fallback */
+      text-overflow: ellipsis;
+    }
+
     label {
       margin: 0;
     }
   }
 
+  th.message-unread-column,
+  td.message-unread-column {
+    width: 20px;
+    padding: 15px 0;
+    text-align: right;
+  }
+
   tr {
     border-top: 1px solid color($theme-color-base-lighter);
+
+    &.notes-row {
+      td {
+        padding-top: 0;
+      }
+    }
   }
 
   tbody {
@@ -69,10 +155,36 @@ table,
     }
 
     tr {
-      &:not(:first-child) {
-        border-top-width: 0;
-      }
+      td {
+        transition: all 0.1s ease-in-out;
 
+        &.focus-toggle {
+          position: relative;
+          overflow: hidden;
+          width: 5px;
+          padding: 0;
+          margin: 0;
+
+          .focus-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 5px;
+            padding: 50px;
+            margin: 0;
+            background-color: transparent;
+            border-radius: 0;
+
+            &:hover,
+            &:focus,
+            &:active {
+              background-color: color($theme-color-primary);
+            }
+          }
+        }
+      }
       &.queue-message {
         td {
           background-color: $color-primary-alt-lightest;
@@ -97,6 +209,91 @@ table,
   border-right: 1px solid color($theme-color-base-lighter);
   border-bottom: 1px solid color($theme-color-base-lighter);
   border-left: 1px solid color($theme-color-base-lighter);
+
+  /* big screens */
+  @media only screen and (min-width: $medium-screen) {
+    &.mobile-only-extra-table {
+      display: none;
+    }
+
+    .center-column {
+      text-align: center;
+    }
+
+    .filing-type-icon {
+      padding-right: 0;
+      text-align: right;
+
+      svg {
+        margin-top: 4px;
+        margin-right: 0;
+      }
+    }
+
+    .filing-type-icon-mobile {
+      display: none;
+    }
+
+    tr.in-progress {
+      td {
+        background: $color-yellow;
+      }
+      .fa-thumbtack {
+        color: color($theme-color-warning);
+      }
+    }
+
+    tr.qc-untouched {
+      td {
+        font-weight: $font-semibold;
+      }
+      .fa-star {
+        color: color($theme-color-secondary-dark);
+      }
+    }
+
+    tr.in-progress:hover {
+      td {
+        background: $color-primary-alt-lightest;
+      }
+    }
+
+    button.view-pdf-link {
+      padding: 0;
+    }
+  }
+
+  /* little screens */
+  @media only screen and (max-width: $medium-screen - 1px) {
+    line-height: 1.4em;
+
+    .hide-on-mobile {
+      display: none;
+    }
+
+    .filing-type-icon {
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    &.responsive-table tr {
+      display: table-row;
+    }
+
+    td {
+      display: table-cell;
+    }
+
+    .filings-and-proceedings {
+      display: block;
+    }
+
+    tbody tr {
+      border-top: none;
+      border-right: none;
+      border-left: none;
+    }
+  }
 }
 
 table.trial-sessions {
@@ -191,192 +388,6 @@ table.messages .message-document-title a.usa-button.ustc-button--unstyled {
   text-align: left;
 }
 
-table.work-queue {
-  th {
-    border: 0;
-    &.padding-left-0 {
-      padding-left: 0;
-    }
-    &.padding-right-0 {
-      padding-right: 0;
-    }
-    .sortable-header-button {
-      color: color($theme-color-base-darkest);
-      font-weight: $font-semibold;
-      text-decoration: none;
-    }
-    .sortActive {
-      border-bottom: 3px solid color($theme-color-primary);
-    }
-    &.small {
-      max-width: $table-column-width-small;
-    }
-  }
-
-  td {
-    padding: 15px 16px;
-    border: none;
-
-    &.padding-left-0 {
-      padding-left: 0;
-    }
-    &.padding-right-0 {
-      padding-right: 0;
-    }
-
-    &.message-select-control {
-      label {
-        left: 5px;
-      }
-    }
-
-    &.message-queue-row {
-      padding-top: 14px;
-    }
-
-    &.message-queue-case-title {
-      max-width: 15rem;
-    }
-
-    &.small {
-      width: $table-column-width-small;
-    }
-
-    &.max-width-7 {
-      max-width: 7rem;
-    }
-
-    &.max-width-25 {
-      max-width: 25rem;
-    }
-
-    &.message-subject {
-      a {
-        line-height: 18px;
-        text-align: left;
-      }
-    }
-
-    &.has-icon {
-      width: 44px;
-    }
-
-    .message-document-title {
-      max-width: 35rem;
-      padding: 4px;
-      margin: -4px;
-      text-align: left;
-    }
-
-    &.to {
-      min-width: 7rem;
-    }
-
-    .message-document-detail {
-      display: -webkit-box;
-      overflow: hidden;
-      height: 100%;
-      max-height: 57px; /* fallback */
-      -webkit-box-orient: vertical;
-      font-size: 15px;
-      -webkit-line-clamp: 3; /* number of lines to show */
-      line-height: 19px; /* fallback */
-      text-overflow: ellipsis;
-    }
-
-    label {
-      margin: 0;
-    }
-  }
-
-  th.message-unread-column,
-  td.message-unread-column {
-    width: 20px;
-    padding: 15px 0;
-    text-align: right;
-  }
-
-  tr {
-    border-top: 1px solid color($theme-color-base-lighter);
-
-    &.notes-row {
-      td {
-        padding-top: 0;
-      }
-    }
-  }
-
-  tbody {
-    &:hover {
-      td.focus-toggle {
-        button.focus-button {
-          background-color: color($theme-color-primary);
-        }
-      }
-    }
-
-    tr {
-      &:not(:first-child) {
-        border-top-width: 0;
-      }
-
-      td {
-        transition: all 0.1s ease-in-out;
-
-        &.focus-toggle {
-          position: relative;
-          overflow: hidden;
-          width: 5px;
-          padding: 0;
-          margin: 0;
-
-          .focus-button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            width: 5px;
-            padding: 50px;
-            margin: 0;
-            background-color: transparent;
-            border-radius: 0;
-
-            &:hover,
-            &:focus,
-            &:active {
-              background-color: color($theme-color-primary);
-            }
-          }
-        }
-      }
-
-      &.queue-message {
-        td {
-          background-color: $color-primary-alt-lightest;
-        }
-      }
-    }
-  }
-
-  thead {
-    th {
-      background-color: color($theme-color-base-lightest);
-      font-weight: $font-semibold;
-
-      .collapse-header {
-        padding: 0;
-      }
-    }
-  }
-
-  width: 100%;
-  border-top: none;
-  border-right: 1px solid color($theme-color-base-lighter);
-  border-bottom: 1px solid color($theme-color-base-lighter);
-  border-left: 1px solid color($theme-color-base-lighter);
-}
-
 @media only screen and (max-width: $medium-screen - 1px) {
   .scrollable-table-container-mobile {
     margin-top: 300px;
@@ -404,98 +415,6 @@ table.gray-header {
   thead th {
     background-color: color($theme-color-base-lightest);
     font-weight: $font-semibold;
-  }
-}
-
-table.docket-record {
-  thead th {
-    background-color: color($theme-color-base-lightest);
-    font-weight: $font-semibold;
-  }
-
-  /* big screens */
-  @media only screen and (min-width: $medium-screen) {
-    &.mobile-only-extra-table {
-      display: none;
-    }
-
-    .center-column {
-      text-align: center;
-    }
-
-    .filing-type-icon {
-      padding-right: 0;
-      text-align: right;
-
-      svg {
-        margin-top: 4px;
-        margin-right: 0;
-      }
-    }
-
-    .filing-type-icon-mobile {
-      display: none;
-    }
-
-    tr.in-progress {
-      td {
-        background: $color-yellow;
-      }
-      .fa-thumbtack {
-        color: color($theme-color-warning);
-      }
-    }
-
-    tr.qc-untouched {
-      td {
-        font-weight: $font-semibold;
-      }
-      .fa-star {
-        color: color($theme-color-secondary-dark);
-      }
-    }
-
-    tr.in-progress:hover {
-      td {
-        background: $color-primary-alt-lightest;
-      }
-    }
-
-    button.view-pdf-link {
-      padding: 0;
-    }
-  }
-
-  /* little screens */
-  @media only screen and (max-width: $medium-screen - 1px) {
-    line-height: 1.4em;
-
-    .hide-on-mobile {
-      display: none;
-    }
-
-    .filing-type-icon {
-      padding-right: 0;
-      padding-left: 0;
-    }
-
-    &.responsive-table tr {
-      display: table-row;
-    }
-
-    td {
-      display: table-cell;
-    }
-
-    .filings-and-proceedings {
-      display: block;
-    }
-
-    tbody tr {
-      border-top: none;
-      border-right: none;
-      border-left: none;
-    }
   }
 }
 

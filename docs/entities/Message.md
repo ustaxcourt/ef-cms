@@ -96,7 +96,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "required"
         description: "When the message was created."
     docketNumber: 
@@ -231,7 +230,6 @@
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         description: "When the message was marked as completed."
       whens: 
         - 

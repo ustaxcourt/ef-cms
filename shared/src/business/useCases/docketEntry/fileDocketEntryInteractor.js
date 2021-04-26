@@ -79,6 +79,8 @@ exports.fileDocketEntryInteractor = async (
     {
       ...baseMetadata,
       ...metadata,
+      contactPrimary: caseEntity.getContactPrimary(),
+      contactSecondary: caseEntity.getContactSecondary(),
       docketEntryId,
       documentTitle: metadata.documentTitle,
       documentType: metadata.documentType,
@@ -88,10 +90,6 @@ exports.fileDocketEntryInteractor = async (
       mailingDate: metadata.mailingDate,
       relationship,
       userId: user.userId,
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     },
     { applicationContext },
   );

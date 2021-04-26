@@ -23,9 +23,22 @@ describe('DateHandler', () => {
   });
 
   describe('prepareDateFromString', () => {
-    it("Creates a new moment object for 'now' when given no inputs'", () => {
+    it("Creates a new moment object for 'now' when given no inputs", () => {
       const myMoment = DateHandler.prepareDateFromString();
       expect(myMoment).toBeDefined();
+    });
+
+    it('Creates a new moment object for a given YYYY-MM-DD', () => {
+      const myMoment = DateHandler.prepareDateFromString('2021-03-21');
+      const isoString = myMoment.toISOString();
+      expect(isoString).toEqual('2021-03-21T04:00:00.000Z');
+    });
+
+    it('Creates a new moment object for a given strict ISO timestamp with unchanged timezone', () => {
+      const strictIsoStamp = '2021-03-21T01:00:00.000Z';
+      const myMoment = DateHandler.prepareDateFromString(strictIsoStamp);
+      const isoString = myMoment.toISOString();
+      expect(isoString).toEqual(strictIsoStamp);
     });
   });
 
@@ -116,30 +129,37 @@ describe('DateHandler', () => {
   describe('calculateISODate', () => {
     it('returns the dateString param exactly as provided when the `howMuch` param is omitted', () => {
       const result = DateHandler.calculateISODate({ dateString: '12/1/1901' });
+
       expect(result).toEqual('12/1/1901');
     });
+
     it('calculates dates with positive adjustment', () => {
       const result = DateHandler.calculateISODate({
         dateString: '2000-01-01T00:00:00.000Z',
         howMuch: 20,
         units: 'days',
       });
+
       expect(result).toEqual('2000-01-21T00:00:00.000Z');
     });
+
     it('calculates dates with an hour not at midnight', () => {
       const result = DateHandler.calculateISODate({
         dateString: '2000-01-01T20:01:23.212Z',
         howMuch: 20,
         units: 'days',
       });
+
       expect(result).toEqual('2000-01-21T20:01:23.212Z');
     });
+
     it('calculates dates with negative adjustment', () => {
       const result = DateHandler.calculateISODate({
         dateString: '2000-01-21T00:00:00.000Z',
         howMuch: -20,
         units: 'days',
       });
+
       expect(result).toEqual('2000-01-01T00:00:00.000Z');
     });
   });
@@ -177,6 +197,30 @@ describe('DateHandler', () => {
         FORMATS.DATE_TIME,
       );
       expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
+    });
+  });
+  describe('createISODateAtStartOfDayEST', () => {
+    it('creates a timestamp at start of day EST when provided YYYY-MM-DD', () => {
+      const myDate = DateHandler.createISODateAtStartOfDayEST('2020-03-15');
+      expect(myDate).toEqual('2020-03-15T04:00:00.000Z');
+    });
+
+    it('creates a timestamp at start of day EST when given no arguments', () => {
+      const myDate = DateHandler.createISODateAtStartOfDayEST();
+      expect(DateHandler.isStringISOFormatted(myDate)).toBeTruthy();
+    });
+
+    it('creates a timestamp at start of day EST when provided full ISO that is not already at the start of the day', () => {
+      const myDate = DateHandler.createISODateAtStartOfDayEST(
+        '2020-03-15T17:42:36.916Z',
+      );
+      expect(myDate).toEqual('2020-03-15T04:00:00.000Z');
+    });
+
+    it('returns the correct timestamp value if a start of day EST timestamp is input', () => {
+      const inputAndOutput = '2020-03-15T04:00:00.000Z';
+      const myDate = DateHandler.createISODateAtStartOfDayEST(inputAndOutput);
+      expect(myDate).toEqual(inputAndOutput);
     });
   });
 
@@ -221,6 +265,11 @@ describe('DateHandler', () => {
       const input = '2019-10-30T12:39:54.007Z';
       const result = DateHandler.deconstructDate(input);
       expect(result).toMatchObject({ day: '30', month: '10', year: '2019' });
+    });
+    it('returns month, day, and year when provided a valid ISO timestamp in the early morning UTC', () => {
+      const input = '2019-10-30T02:39:54.007Z';
+      const result = DateHandler.deconstructDate(input);
+      expect(result).toMatchObject({ day: '29', month: '10', year: '2019' });
     });
     it('returns undefined if given a value not representative of an ISO timestamp', () => {
       const input = '';
@@ -287,6 +336,16 @@ describe('DateHandler', () => {
       result = DateHandler.dateStringsCompared(date2, date1);
       expect(result).toEqual(86400000); // 1 day in milliseconds
     });
+
+    it('should return a non-zero if two calendar-dates appear to be the same but are different according to EST', () => {
+      let result;
+      const date1 = '2001-01-02'; // i.e. Jan 2, midnight EST
+      const date2 = '2001-01-02T02:40:55.007Z'; // Jan 1, 9:40m EST
+
+      result = DateHandler.dateStringsCompared(date1, date2);
+      expect(result).not.toEqual(0);
+    });
+
     it('should return zero if two calendar-dates are the same, even if formatted differently', () => {
       let result;
       const date1 = '2001-01-01';
@@ -368,27 +427,32 @@ describe('DateHandler', () => {
   });
 
   describe('computeDate', () => {
-    it('should return a zero-padded date formatted like YYYY-MM-DD if provided day, month, and year', () => {
+    it('should return a zero-padded date formatted like YYYY-MM-DDTHH:mm:ss.SSSZ when provided day, month, and year', () => {
       const result = DateHandler.computeDate({
         day: '9',
         month: '3',
         year: '1993',
       });
-      expect(result).toBe('1993-03-09');
+
+      expect(result).toBe('1993-03-09T05:00:00.000Z');
     });
-    it('should return "undefined-mm-dd" when year is not provided', () => {
+
+    it('should return undefined when year, month, or day is not provided', () => {
       const result = DateHandler.computeDate({
         day: '5',
         month: '11',
       });
-      expect(result).toBe('undefined-11-05');
+
+      expect(result).toBe(undefined);
     });
+
     it('should return null if not provided values for all of day, month, and year', () => {
       const result = DateHandler.computeDate({
         daynotprovided: true,
         not: 'date info',
         some: 'other thing',
       });
+
       expect(result).toBe(null);
     });
   });

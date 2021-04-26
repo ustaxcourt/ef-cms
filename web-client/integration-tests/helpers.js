@@ -87,6 +87,16 @@ export const getFormattedCaseDetailForTest = async test => {
   });
 };
 
+export const contactPrimaryFromState = test =>
+  applicationContext
+    .getUtilities()
+    .getContactPrimary(test.getState('caseDetail'));
+
+export const contactSecondaryFromState = test =>
+  applicationContext
+    .getUtilities()
+    .getContactSecondary(test.getState('caseDetail'));
+
 export const getCaseMessagesForCase = async test => {
   await test.runSequence('gotoCaseDetailSequence', {
     docketNumber: test.docketNumber,

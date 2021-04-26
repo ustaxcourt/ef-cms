@@ -32,6 +32,6 @@ describe('loadPDFForPreviewInteractor', () => {
       error = err;
     }
 
-    expect(error).toEqual(new Error('error loading PDF'));
+    expect(error).toEqual(new Error('error loading PDF for preview'));
   });
 });
