@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const { get } = require('lodash');
+const { migrateRecords } = require('./migration-segments');
 
 const dynamodb = new AWS.DynamoDB({
   maxRetries: 10,
@@ -14,8 +15,11 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
 const processItems = async items => {
   const promises = [];
+  await processItems();
+
+  items = migrateRecords({ documentClient, items });
+
   for (const item of items) {
-    // TODO: your migration code would go here
     const result = documentClient
       .put({
         Item: item,

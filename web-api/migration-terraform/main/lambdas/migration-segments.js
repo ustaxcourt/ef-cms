@@ -26,7 +26,7 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
-const migrateRecords = async ({ documentClient, items }) => {
+export const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.info('about to run migration 0025');
   items = await migration0025(items, documentClient);
 
