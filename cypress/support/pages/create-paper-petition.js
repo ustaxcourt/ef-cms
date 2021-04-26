@@ -35,13 +35,11 @@ exports.fillInCreateCaseFromPaperForm = testData => {
   cy.get('#upload-mode-upload').click();
   cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
 
-  cy.get('button[aria-controls="tabContent-stinFile"]').click();
+  cy.get('button#tabButton-stinFile').click();
   cy.get('#upload-mode-upload').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
 
-  cy.get(
-    'button[aria-controls="tabContent-requestForPlaceOfTrialFile"]',
-  ).click();
+  cy.get('button#tabButton-requestForPlaceOfTrialFile').click();
   cy.get('#upload-mode-upload').click();
   cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',

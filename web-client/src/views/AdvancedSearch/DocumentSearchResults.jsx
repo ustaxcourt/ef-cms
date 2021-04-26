@@ -36,11 +36,11 @@ export const DocumentSearchResults = connect(
               />
             )}
 
-            <table className="usa-table search-results docket-record responsive-table row-border-only">
+            <table className="usa-table search-results ustc-table responsive-table">
               <thead>
                 <tr>
-                  <th aria-hidden="true" className="small-column"></th>
-                  <th aria-hidden="true" className="small-column"></th>
+                  <td aria-hidden="true" className="small-column"></td>
+                  <td aria-hidden="true" className="small-column"></td>
                   <th aria-label="docket number">Docket No.</th>
                   <th>Case Title</th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>

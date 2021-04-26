@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:5678",
+  "browser": "chrome",
   "reporter": "spec",
   "reporterOptions": {
     "toConsole": true

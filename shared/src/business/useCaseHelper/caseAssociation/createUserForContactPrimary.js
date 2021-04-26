@@ -27,7 +27,7 @@ exports.createUserForContactPrimary = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { contactPrimary } = caseEntity;
+  const contactPrimary = caseEntity.getContactPrimary();
 
   const userEntity = new User(
     {

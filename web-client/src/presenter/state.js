@@ -9,6 +9,7 @@ import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
+import { caseDetailContactHelper } from './computeds/caseDetailContactHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
@@ -94,6 +95,7 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
+import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
@@ -113,6 +115,7 @@ const helpers = {
   batchDownloadHelper,
   blockedCasesReportHelper,
   caseDeadlineReportHelper,
+  caseDetailContactHelper,
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
   caseDetailHeaderHelper,
@@ -195,6 +198,7 @@ const helpers = {
   trialSessionsHelper,
   trialSessionsSummaryHelper,
   updateCaseModalHelper,
+  userContactEditHelper,
   userContactEditProgressHelper,
   viewAllDocumentsHelper,
   workQueueHelper,

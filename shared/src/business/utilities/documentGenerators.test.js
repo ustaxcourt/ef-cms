@@ -1,6 +1,7 @@
 jest.mock('./combineTwoPdfs');
 const fs = require('fs');
 const path = require('path');
+const sass = require('sass');
 const {
   addressLabelCoverSheet,
   caseInventoryReport,
@@ -35,7 +36,6 @@ const {
 } = require('../useCases/generatePdfFromHtmlInteractor');
 const { combineTwoPdfs } = require('./combineTwoPdfs');
 const { getChromiumBrowser } = require('./getChromiumBrowser');
-const { sass } = require('sass');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -402,18 +402,17 @@ describe('documentGenerators', () => {
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
-          caseTitle: 'Test Petitioner',
+          caseTitle:
+            'Milton Schwartz, Deceased, Neil Schwartz, Fiduciary and Ada Schwartz, Deceased, Neil Schwartz, Fiduciary, Petitioners',
           docketNumberWithSuffix: '123-45S',
           trialInfo: {
-            address1: '123 Some St.',
-            address2: 'Suite B',
-            city: 'Somecity',
-            courthouseName: 'Test Courthouse Name',
-            judge: 'Judge Dredd',
-            postalCode: '80008',
-            startDate: '02/02/2020',
-            startTime: '9:00 AM',
-            state: 'ZZ',
+            formattedJudge: 'Chief Special Trial Judge Carluzzo',
+            formattedStartDate: '01/01/2001',
+            formattedStartTime: '12:00 am',
+            joinPhoneNumber: '444-444-4444',
+            meetingId: 'sdsd',
+            password: '123',
+            trialLocation: 'Birmingham, Alabama',
           },
         },
       });
@@ -422,6 +421,9 @@ describe('documentGenerators', () => {
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Notice_Trial_Issued', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+        const { PDFDocument } = await applicationContext.getPdfLib();
+        const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
+        expect(pdfDoc.getPages().length).toEqual(1);
       }
 
       expect(

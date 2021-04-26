@@ -245,6 +245,8 @@ const SCENARIOS = [
 ];
 
 const TRANSCRIPT_EVENT_CODE = 'TRAN';
+const CORRECTED_TRANSCRIPT_EVENT_CODE = 'CTRA';
+const REVISED_TRANSCRIPT_EVENT_CODE = 'RTRA';
 
 const LODGED_EVENT_CODE = 'MISCL';
 
@@ -728,6 +730,13 @@ const OTHER_TYPES = {
   nextFriendForMinor: PARTY_TYPES.nextFriendForMinor,
 };
 
+const CONTACT_TYPES = {
+  primary: 'primary',
+  secondary: 'secondary',
+  otherFiler: 'otherFilers',
+  otherPetitioner: 'otherPetitioners',
+};
+
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
   { city: 'Mobile', state: 'Alabama' },
@@ -1176,6 +1185,7 @@ module.exports = deepFreeze({
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,
@@ -1259,6 +1269,8 @@ module.exports = deepFreeze({
   TODAYS_ORDERS_SORTS,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
+  CORRECTED_TRANSCRIPT_EVENT_CODE,
+  REVISED_TRANSCRIPT_EVENT_CODE,
   TRIAL_CITIES,
   TRIAL_CITY_STRINGS,
   TRIAL_SESSION_PROCEEDING_TYPES,

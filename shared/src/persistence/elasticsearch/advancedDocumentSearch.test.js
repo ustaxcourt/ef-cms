@@ -18,8 +18,7 @@ describe('advancedDocumentSearch', () => {
   const SOURCE = {
     includes: [
       'caseCaption',
-      'contactPrimary',
-      'contactSecondary',
+      'petitioners',
       'docketEntryId',
       'docketNumber',
       'docketNumberWithSuffix',
@@ -107,11 +106,7 @@ describe('advancedDocumentSearch', () => {
       query.bool.must = {
         simple_query_string: {
           default_operator: 'and',
-          fields: [
-            'caseCaption.S',
-            'contactPrimary.M.name.S',
-            'contactSecondary.M.name.S',
-          ],
+          fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
           query: caseTitleOrPetitioner,
         },
       };
