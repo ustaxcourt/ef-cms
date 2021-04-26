@@ -4,21 +4,26 @@ const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
 describe('migration', () => {
   describe('processItems', () => {
     it('call put on all records that come through', async () => {
+      const mockItems = [
+        {
+          ...MOCK_CASE,
+          pk: `case|${MOCK_CASE.docketNumber}`,
+          sk: `case|${MOCK_CASE.docketNumber}`,
+        },
+      ];
       const mockDocumentClient = {
         put: jest.fn().mockReturnValue({
           promise: () => null,
         }),
       };
+      const mockMigrateRecords = jest.fn().mockReturnValue(mockItems);
       await processItems({
         documentClient: mockDocumentClient,
-        items: [
-          {
-            ...MOCK_CASE,
-            pk: `case|${MOCK_CASE.docketNumber}`,
-            sk: `case|${MOCK_CASE.docketNumber}`,
-          },
-        ],
+        items: mockItems,
+        migrateRecords: mockMigrateRecords,
       });
+
+      expect(mockMigrateRecords).toHaveBeenCalledTimes(1);
       expect(mockDocumentClient.put).toHaveBeenCalledTimes(1);
     });
   });
