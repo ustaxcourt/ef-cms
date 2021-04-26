@@ -1,4 +1,7 @@
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  PARTY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { editPetitionerInformationHelper as editPetitionerInformationHelperComputed } from './editPetitionerInformationHelper';
 import { runCompute } from 'cerebral/test';
@@ -13,6 +16,7 @@ describe('editPetitionerInformationHelper', () => {
   it('returns showEditEmail true if the current user has the EDIT_PETITIONER_EMAIL permission and state.screenMetadata.userPendingEmail is undefined', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {},
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: true,
@@ -28,6 +32,7 @@ describe('editPetitionerInformationHelper', () => {
   it('returns showEditEmail false if the current user DOES NOT have the EDIT_PETITIONER_EMAIL permission', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {},
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: false,
@@ -40,6 +45,7 @@ describe('editPetitionerInformationHelper', () => {
   it('returns showEditEmail false if the current user DOES have the EDIT_PETITIONER_EMAIL permission but state.screenMetadata.userPendingEmail is defined', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {},
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: false,
@@ -56,9 +62,12 @@ describe('editPetitionerInformationHelper', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: {
-          contactPrimary: {
-            email: 'testpetitioner@example.com',
-          },
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.primary,
+              email: 'testpetitioner@example.com',
+            },
+          ],
         },
         form: {
           contactPrimary: {
@@ -79,7 +88,7 @@ describe('editPetitionerInformationHelper', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: {
-          contactPrimary: {},
+          petitioners: [],
         },
         form: {
           contactPrimary: {},
@@ -97,6 +106,7 @@ describe('editPetitionerInformationHelper', () => {
   it('returns userPendingEmail from state', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
+        caseDetail: {},
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: true,

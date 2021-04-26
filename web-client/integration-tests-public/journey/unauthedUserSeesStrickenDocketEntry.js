@@ -1,4 +1,5 @@
 import { applicationContextPublic } from '../../src/applicationContextPublic';
+import { contactPrimaryFromState } from '../../integration-tests/helpers';
 import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../src/presenter/computeds/public/publicCaseDetailHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -17,7 +18,8 @@ export const unauthedUserSeesStrickenDocketEntry = (
       docketNumber: test.docketNumber,
     });
     expect(test.currentRouteUrl.includes('/case-detail')).toBeTruthy();
-    expect(test.getState('caseDetail.contactPrimary.name')).toBeDefined();
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.name).toBeDefined();
 
     const { formattedDocketEntriesOnDocketRecord } = runCompute(
       publicCaseDetailHelper,

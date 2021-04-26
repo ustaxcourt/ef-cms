@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
@@ -213,13 +214,15 @@ describe('CaseExternalInformationFactory entity', () => {
       const caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
-          contactPrimary: {
-            name: 'Something',
-          },
           hasIrsNotice: true,
           partyType: PARTY_TYPES.petitioner,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
+          petitioners: [
+            {
+              name: 'Something',
+            },
+          ],
           stinFile: new File([], 'test.pdf'),
           stinFileSize: 1,
           wizardStep: '2',
@@ -424,15 +427,18 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        contactPrimary: {
-          address1: contactErrorMessages.address1,
-          city: contactErrorMessages.city,
-          countryType: contactErrorMessages.countryType,
-          name: contactErrorMessages.name,
-          phone: contactErrorMessages.phone,
-          postalCode: contactErrorMessages.postalCode[1],
-          state: contactErrorMessages.state,
-        },
+        petitioners: [
+          {
+            address1: contactErrorMessages.address1,
+            city: contactErrorMessages.city,
+            countryType: contactErrorMessages.countryType,
+            index: 0,
+            name: contactErrorMessages.name,
+            phone: contactErrorMessages.phone,
+            postalCode: contactErrorMessages.postalCode[1],
+            state: contactErrorMessages.state,
+          },
+        ],
       });
     });
 
@@ -454,10 +460,7 @@ describe('CaseExternalInformationFactory entity', () => {
         },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().contactPrimary,
-      ).toBeDefined();
-      expect(
-        caseExternal.getFormattedValidationErrors().contactSecondary,
+        caseExternal.getFormattedValidationErrors().petitioners,
       ).toBeDefined();
     });
 
@@ -566,25 +569,29 @@ describe('CaseExternalInformationFactory entity', () => {
       );
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         caseType: caseExternalErrorMessages.caseType,
-        contactPrimary: {
-          address1: contactErrorMessages.address1,
-          city: contactErrorMessages.city,
-          countryType: contactErrorMessages.countryType,
-          name: contactErrorMessages.name,
-          phone: contactErrorMessages.phone,
-          postalCode: contactErrorMessages.postalCode[1],
-          state: contactErrorMessages.state,
-        },
-        contactSecondary: {
-          address1: contactErrorMessages.address1,
-          city: contactErrorMessages.city,
-          countryType: contactErrorMessages.countryType,
-          name: contactErrorMessages.name,
-          phone: contactErrorMessages.phone,
-          postalCode: contactErrorMessages.postalCode[1],
-          state: contactErrorMessages.state,
-        },
         petitionFileSize: caseExternalErrorMessages.petitionFileSize[1],
+        petitioners: [
+          {
+            address1: contactErrorMessages.address1,
+            city: contactErrorMessages.city,
+            countryType: contactErrorMessages.countryType,
+            index: 0,
+            name: contactErrorMessages.name,
+            phone: contactErrorMessages.phone,
+            postalCode: contactErrorMessages.postalCode[1],
+            state: contactErrorMessages.state,
+          },
+          {
+            address1: contactErrorMessages.address1,
+            city: contactErrorMessages.city,
+            countryType: contactErrorMessages.countryType,
+            index: 1,
+            name: contactErrorMessages.name,
+            phone: contactErrorMessages.phone,
+            postalCode: contactErrorMessages.postalCode[1],
+            state: contactErrorMessages.state,
+          },
+        ],
         preferredTrialCity: caseExternalErrorMessages.preferredTrialCity,
         procedureType: caseExternalErrorMessages.procedureType,
         stinFileSize: caseExternalErrorMessages.stinFileSize[1],
@@ -595,15 +602,6 @@ describe('CaseExternalInformationFactory entity', () => {
       let caseExternal = new CaseExternalInformationFactory(
         {
           caseType: CASE_TYPES_MAP.deficiency,
-          contactPrimary: {
-            address1: '123 Main St',
-            city: 'Somewhere',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Test Primary',
-            phone: '1234567890',
-            postalCode: '12345',
-            state: 'CA',
-          },
           contactSecondary: {
             address1: '123 Main St',
             city: 'Somewhere',
@@ -618,6 +616,18 @@ describe('CaseExternalInformationFactory entity', () => {
           partyType: PARTY_TYPES.petitionerSpouse,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
+          petitioners: [
+            {
+              address1: '123 Main St',
+              city: 'Somewhere',
+              contactType: CONTACT_TYPES.primary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              name: 'Test Primary',
+              phone: '1234567890',
+              postalCode: '12345',
+              state: 'CA',
+            },
+          ],
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Regular',
           stinFile: new File([], 'test.pdf'),

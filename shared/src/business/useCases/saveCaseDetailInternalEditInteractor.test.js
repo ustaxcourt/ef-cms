@@ -1,12 +1,16 @@
 const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } = require('../entities/EntityConstants');
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../entities/cases/Case');
 const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
@@ -14,19 +18,11 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { omit } = require('lodash');
 
 describe('updateCase', () => {
-  const MOCK_CASE = {
+  const mockContactPrimaryId = '9565ed58-2a74-4dec-a34a-c87dde49f3c0';
+
+  const mockCase = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.other,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
     createdAt: applicationContext.getUtilities().createISODateString(),
     docketEntries: [
       {
@@ -67,7 +63,20 @@ describe('updateCase', () => {
     docketNumber: '56789-18',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
-    petitioners: [{ name: 'Test Petitioner' }],
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: mockContactPrimaryId,
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'fieri@example.com',
+        name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
+    ],
     preferredTrialCity: 'Washington, District of Columbia',
     procedureType: 'Regular',
     status: CASE_STATUS_TYPES.new,
@@ -89,85 +98,94 @@ describe('updateCase', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-  });
-
-  it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
-    await expect(
-      saveCaseDetailInternalEditInteractor(applicationContext, {
-        caseToUpdate: omit(MOCK_CASE, 'caseCaption'),
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
-    ).rejects.toThrow('The Case entity was invalid');
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should throw an error if caseToUpdate is not passed in', async () => {
     await expect(
       saveCaseDetailInternalEditInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
+        docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('cannot process');
   });
 
-  it('should update the validated documents on a case', async () => {
-    const caseToUpdate = Object.assign(MOCK_CASE);
+  it('should throw an error if the user is unauthorized to update a case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'nope',
+      userId: 'nope',
+    });
 
-    const updatedCase = await saveCaseDetailInternalEditInteractor(
+    await expect(
+      saveCaseDetailInternalEditInteractor(applicationContext, {
+        caseToUpdate: mockCase,
+        docketNumber: mockCase.docketNumber,
+      }),
+    ).rejects.toThrow('Unauthorized for update case');
+  });
+
+  it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'fee757df-666f-4ebe-94a0-7a342d438345',
+    });
+
+    await expect(
+      saveCaseDetailInternalEditInteractor(applicationContext, {
+        caseToUpdate: omit({ ...mockCase }, 'caseCaption'),
+        docketNumber: mockCase.docketNumber,
+      }),
+    ).rejects.toThrow('The Case entity was invalid');
+  });
+
+  it('should update contactSecondary', async () => {
+    const mockAddress = '1234 Something Lane';
+    const mockCaseWithContactSecondary = {
+      ...mockCase,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        ...mockCase.petitioners,
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactId: '41535712-c502-41a5-827c-26890e72733f',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          state: 'CA',
+        },
+      ],
+    };
+
+    const result = await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
         caseToUpdate: {
-          ...caseToUpdate,
+          ...mockCaseWithContactSecondary,
           caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
-          caseType: CASE_TYPES_MAP.innocentSpouse,
-          contactPrimary: {
-            address1: '193 South Hague Freeway',
-            address2: 'Sunt maiores vitae ',
-            address3: 'Culpa ex aliquip ven',
-            city: 'Aperiam minim sunt r',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'petitioner@example.com',
-            name: 'Iola Snow',
-            phone: '+1 (772) 246-3448',
-            postalCode: '26037',
-            state: 'IA',
-          },
+          contactPrimary: getContactPrimary(mockCase),
           contactSecondary: {
-            address1: '86 West Rocky Cowley Extension',
-            address2: 'Aperiam aliquip volu',
-            address3: 'Eos consequuntur max',
-            city: 'Deleniti lorem sit ',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Linda Singleton',
-            phone: '+1 (153) 683-1448',
-            postalCode: '89985',
-            state: 'FL',
+            ...getContactSecondary(mockCaseWithContactSecondary),
+            address1: mockAddress,
           },
-          createdAt: '2019-07-24T16:30:01.940Z',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          filingType: 'Myself and my spouse',
-          hasVerifiedIrsNotice: false,
-          isPaper: false,
-          partyType: PARTY_TYPES.petitionerSpouse,
-          preferredTrialCity: 'Mobile, Alabama',
-          privatePractitioners: [],
-          procedureType: 'Small',
         },
-        docketNumber: caseToUpdate.docketNumber,
+        docketNumber: mockCase.docketNumber,
       },
     );
 
-    const returnedDocument = omit(updatedCase.docketEntries[0], 'createdAt');
-    const documentToMatch = omit(MOCK_CASE.docketEntries[0], 'createdAt');
-    expect(returnedDocument).toMatchObject(documentToMatch);
+    expect(result.petitioners[1].address1).toEqual(mockAddress);
   });
 
   it("should move the initialize case work item into the current user's in-progress box if the case is not paper", async () => {
-    const caseToUpdate = Object.assign(MOCK_CASE);
+    const caseToUpdate = Object.assign(mockCase);
 
     await saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
+        contactPrimary: getContactPrimary(mockCase),
       },
       docketNumber: caseToUpdate.docketNumber,
     });
@@ -187,7 +205,7 @@ describe('updateCase', () => {
   });
 
   it('should not update work items if the case is paper', async () => {
-    const caseToUpdate = Object.assign(MOCK_CASE);
+    const caseToUpdate = Object.assign(mockCase);
     caseToUpdate.isPaper = true;
     caseToUpdate.mailingDate = 'yesterday';
 
@@ -195,6 +213,7 @@ describe('updateCase', () => {
       caseToUpdate: {
         ...caseToUpdate,
         caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
+        contactPrimary: getContactPrimary(mockCase),
       },
       docketNumber: caseToUpdate.docketNumber,
     });
@@ -206,7 +225,7 @@ describe('updateCase', () => {
   });
 
   it('should fail if the primary or secondary contact is empty', async () => {
-    const caseToUpdate = Object.assign(MOCK_CASE);
+    const caseToUpdate = Object.assign(mockCase);
 
     await expect(
       saveCaseDetailInternalEditInteractor(applicationContext, {
@@ -218,34 +237,6 @@ describe('updateCase', () => {
         docketNumber: caseToUpdate.docketNumber,
       }),
     ).rejects.toThrow('The Case entity was invalid');
-  });
-
-  it('should throw an error if the user is unauthorized to update a case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'nope',
-      userId: 'nope',
-    });
-
-    await expect(
-      saveCaseDetailInternalEditInteractor(applicationContext, {
-        caseToUpdate: MOCK_CASE,
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
-    ).rejects.toThrow('Unauthorized for update case');
-  });
-
-  it('should throw an error if the user is unauthorized to update a case part deux', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'nope',
-      userId: 'nope',
-    });
-
-    await expect(
-      saveCaseDetailInternalEditInteractor(applicationContext, {
-        caseToUpdate: MOCK_CASE,
-        docketNumber: '123',
-      }),
-    ).rejects.toThrow('Unauthorized for update case');
   });
 
   it('should remove a new initial filing document from the case', async () => {
@@ -261,19 +252,20 @@ describe('updateCase', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
+        ...mockCase,
+        docketEntries: [...mockCase.docketEntries, mockRQT],
         isPaper: true,
       });
 
     await saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate: {
-        ...MOCK_CASE,
-        docketEntries: [...MOCK_CASE.docketEntries, mockRQT],
+        ...mockCase,
+        contactPrimary: getContactPrimary(mockCase),
+        docketEntries: [...mockCase.docketEntries, mockRQT],
         isPaper: true,
         mailingDate: 'yesterday',
       },
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -282,7 +274,7 @@ describe('updateCase', () => {
   });
 
   it('should update which orders are needed', async () => {
-    const caseToUpdate = Object.assign(MOCK_CASE);
+    const caseToUpdate = Object.assign(mockCase);
     caseToUpdate.isPaper = true;
     caseToUpdate.orderDesignatingPlaceOfTrial = true;
     caseToUpdate.orderForAmendedPetition = true;
@@ -297,6 +289,7 @@ describe('updateCase', () => {
       {
         caseToUpdate: {
           ...caseToUpdate,
+          contactPrimary: getContactPrimary(mockCase),
         },
         docketNumber: caseToUpdate.docketNumber,
       },
@@ -309,5 +302,25 @@ describe('updateCase', () => {
     expect(result.orderForOds).toBeTruthy();
     expect(result.orderForRatification).toBeTruthy();
     expect(result.orderToShowCause).toBeTruthy();
+  });
+
+  it('should not change contact primary contactId when saving case', async () => {
+    const result = await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...mockCase,
+          contactPrimary: {
+            ...getContactPrimary(mockCase),
+          },
+          petitioners: undefined,
+        },
+        docketNumber: mockCase.docketNumber,
+      },
+    );
+
+    expect(result.petitioners[0].contactId).toEqual(
+      mockCase.petitioners[0].contactId,
+    );
   });
 });

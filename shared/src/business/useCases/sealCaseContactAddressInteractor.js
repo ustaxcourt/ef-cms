@@ -41,10 +41,10 @@ exports.sealCaseContactAddressInteractor = async (
   });
 
   const contactToSeal = [
-    caseEntity.contactPrimary,
-    caseEntity.contactSecondary,
-    ...(caseEntity.otherFilers || []),
-    ...(caseEntity.otherPetitioners || []),
+    caseEntity.getContactPrimary(),
+    caseEntity.getContactSecondary(),
+    ...(caseEntity.getOtherFilers() || []),
+    ...(caseEntity.getOtherPetitioners() || []),
   ].find(contact => contact && contact.contactId == contactId);
 
   if (!contactToSeal) {
