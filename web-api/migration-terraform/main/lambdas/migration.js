@@ -15,7 +15,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
 const processItems = async items => {
   const promises = [];
-  await processItems();
 
   items = migrateRecords({ documentClient, items });
 
