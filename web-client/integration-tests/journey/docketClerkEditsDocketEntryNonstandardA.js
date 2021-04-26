@@ -62,7 +62,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: '2050',
     });
 
-    await test.runSequence('submitEditPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -96,7 +96,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: true,
     });
 
-    await test.runSequence('submitEditPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -109,7 +109,7 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: 'Brianna Noble',
     });
 
-    await test.runSequence('submitEditPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 

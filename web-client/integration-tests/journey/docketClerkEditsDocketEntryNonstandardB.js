@@ -40,7 +40,7 @@ export const docketClerkEditsDocketEntryNonstandardB = test => {
       value: 'OBJ',
     });
 
-    await test.runSequence('submitEditPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -58,7 +58,7 @@ export const docketClerkEditsDocketEntryNonstandardB = test => {
       value: true,
     });
 
-    await test.runSequence('submitEditPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 

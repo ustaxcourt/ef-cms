@@ -14,8 +14,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
-      docketNumber: test.docketNumber,
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -65,8 +64,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
       value: true,
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
-      docketNumber: test.docketNumber,
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -79,8 +77,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
       value: 'Brianna Noble',
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
-      docketNumber: test.docketNumber,
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 

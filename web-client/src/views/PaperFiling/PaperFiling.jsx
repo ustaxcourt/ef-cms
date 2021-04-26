@@ -6,30 +6,32 @@ import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { PrimaryDocumentForm } from '../AddPaperFiling/PrimaryDocumentForm';
+import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { ScanBatchPreviewer } from '../ScanBatchPreviewer';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const EditPaperFiling = connect(
+export const PaperFiling = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    isEditingDocketEntry: state.isEditingDocketEntry,
     openConfirmPaperServiceModalSequence:
       sequences.openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper: state.paperDocketEntryHelper,
     showModal: state.modal.showModal,
-    submitEditPaperFilingSequence: sequences.submitEditPaperFilingSequence,
+    submitPaperFilingSequence: sequences.submitPaperFilingSequence,
   },
-  function EditPaperFiling({
+  function PaperFiling({
     form,
     formCancelToggleCancelSequence,
+    isEditingDocketEntry,
     openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper,
     showModal,
-    submitEditPaperFilingSequence,
+    submitPaperFilingSequence,
   }) {
     return (
       <>
@@ -38,10 +40,13 @@ export const EditPaperFiling = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
+
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <h1 className="margin-bottom-105">
-                <span>Edit Paper Filing</span>
+                <span>
+                  {isEditingDocketEntry ? 'Edit' : 'Add'} Paper Filing
+                </span>
               </h1>
             </div>
 
@@ -71,7 +76,7 @@ export const EditPaperFiling = connect(
                     secondary
                     id="save-for-later"
                     onClick={() => {
-                      submitEditPaperFilingSequence({
+                      submitPaperFilingSequence({
                         isSavingForLater: true,
                       });
                     }}
@@ -104,13 +109,11 @@ export const EditPaperFiling = connect(
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal
-            confirmSequence={submitEditPaperFilingSequence}
-          />
+          <FileUploadErrorModal confirmSequence={submitPaperFilingSequence} />
         )}
         {showModal === 'ConfirmInitiateServiceModal' && (
           <ConfirmInitiateServiceModal
-            confirmSequence={submitEditPaperFilingSequence}
+            confirmSequence={submitPaperFilingSequence}
             documentTitle={form.documentTitle}
           />
         )}

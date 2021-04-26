@@ -45,7 +45,7 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
       value: 'M115',
     });
 
-    await test.runSequence('submitEditPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -71,7 +71,7 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
       value: petitionDocument.docketEntryId,
     });
 
-    await test.runSequence('submitEditPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
