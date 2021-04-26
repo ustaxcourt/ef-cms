@@ -18,7 +18,7 @@ describe('editPaperFilingAction', () => {
   it('saves an existing docket entry with an uploaded file', async () => {
     applicationContext
       .getUseCases()
-      .updateDocketEntryInteractor.mockReturnValue(caseDetail);
+      .editPaperFilingInteractor.mockReturnValue({ caseDetail });
 
     const result = await runAction(editPaperFilingAction, {
       modules: {
@@ -41,7 +41,7 @@ describe('editPaperFilingAction', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().updateDocketEntryInteractor,
+      applicationContext.getUseCases().editPaperFilingInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
@@ -60,7 +60,7 @@ describe('editPaperFilingAction', () => {
   it('saves an existing docket entry without uploading a file', async () => {
     applicationContext
       .getUseCases()
-      .updateDocketEntryInteractor.mockReturnValue(caseDetail);
+      .editPaperFilingInteractor.mockReturnValue({ caseDetail });
 
     const result = await runAction(editPaperFilingAction, {
       modules: {
@@ -81,7 +81,7 @@ describe('editPaperFilingAction', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().updateDocketEntryInteractor,
+      applicationContext.getUseCases().editPaperFilingInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
@@ -100,7 +100,7 @@ describe('editPaperFilingAction', () => {
   it('saves and serves an existing docket entry without uploading a file, but adds a coversheet', async () => {
     applicationContext
       .getUseCases()
-      .updateDocketEntryInteractor.mockReturnValue(caseDetail);
+      .editPaperFilingInteractor.mockReturnValue({ caseDetail });
 
     caseDetail.docketEntries.push({
       docketEntryId: 'document-id-123',
@@ -128,7 +128,7 @@ describe('editPaperFilingAction', () => {
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().updateDocketEntryInteractor,
+      applicationContext.getUseCases().editPaperFilingInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
@@ -142,5 +142,29 @@ describe('editPaperFilingAction', () => {
       docketNumber: caseDetail.docketNumber,
       overridePaperServiceAddress: true,
     });
+  });
+
+  it('should save an existing docket entry with an uploaded file and return a paper service pdf url', async () => {
+    const mockPdfUrl = 'www.example.com';
+    applicationContext.getUseCases().editPaperFilingInteractor.mockReturnValue({
+      caseDetail,
+      paperServicePdfUrl: mockPdfUrl,
+    });
+
+    const result = await runAction(editPaperFilingAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail,
+        docketEntryId: 'document-id-123',
+        form: {
+          isFileAttached: true,
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(result.output.pdfUrl).toEqual(mockPdfUrl);
   });
 });
