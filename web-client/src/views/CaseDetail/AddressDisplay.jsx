@@ -75,7 +75,7 @@ export const AddressDisplay = connect(
           <br />
           {contact.firmName}
           <br />
-          {contact.additionalName && `c/o ${contact.additionalName}`}
+          {contact.additionalName}
           {[contact.secondaryName, contact.inCareOf].map(
             contactName =>
               contactName && (
