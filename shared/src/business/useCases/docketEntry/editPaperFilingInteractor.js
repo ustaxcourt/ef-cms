@@ -18,10 +18,11 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
+ * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
  * @returns {object} the updated case after the documents are added
  */
-exports.updateDocketEntryInteractor = async (
+exports.editPaperFilingInteractor = async (
   applicationContext,
   { documentMetadata, isSavingForLater, primaryDocumentFileId },
 ) => {
@@ -94,6 +95,8 @@ exports.updateDocketEntryInteractor = async (
     { applicationContext },
   );
 
+  let paperServicePdfUrl;
+
   if (editableFields.isFileAttached) {
     const { workItem } = docketEntryEntity;
 
@@ -107,7 +110,7 @@ exports.updateDocketEntryInteractor = async (
           .getPersistenceGateway()
           .deleteWorkItemFromInbox({
             applicationContext,
-            workItem: workItemToDelete,
+            workItem: currentDocketEntry.workItem,
           });
       }
 
@@ -149,12 +152,17 @@ exports.updateDocketEntryInteractor = async (
 
       caseEntity.updateDocketEntry(docketEntryEntity);
 
-      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-        applicationContext,
-        caseEntity,
-        docketEntryId: docketEntryEntity.docketEntryId,
-        servedParties,
-      });
+      const paperServiceResult = await applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntity,
+          docketEntryId: docketEntryEntity.docketEntryId,
+        });
+
+      if (servedParties.paper.length > 0) {
+        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+      }
     } else {
       docketEntryEntity.numberOfPages = await applicationContext
         .getUseCaseHelpers()
@@ -248,5 +256,10 @@ exports.updateDocketEntryInteractor = async (
       caseToUpdate: caseEntity,
     });
 
-  return new Case(result, { applicationContext }).validate().toRawObject();
+  return {
+    caseDetail: new Case(result, { applicationContext })
+      .validate()
+      .toRawObject(),
+    paperServicePdfUrl,
+  };
 };

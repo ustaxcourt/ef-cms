@@ -2287,7 +2287,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/docket-entry": {
+    "/case-documents/{docketNumber}/paper-filing": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2300,8 +2300,8 @@
         "tags": [
           "documents"
         ],
-        "summary": "file a new docket entry on a case",
-        "description": "Creates a new docket entry/document and attaches it to a case.\n",
+        "summary": "file a new paper docket entry on a case",
+        "description": "Creates a new paper docket entry/document and attaches it to a case.\n",
         "produces": [
           "application/json"
         ],
@@ -2323,8 +2323,8 @@
         "tags": [
           "documents"
         ],
-        "summary": "updates a current docket entry on a case",
-        "description": "Updates a docket entry/document and attaches it to a case.\n",
+        "summary": "updates a current paper docket entry on a case",
+        "description": "Updates a paper docket entry/document and attaches it to a case.\n",
         "produces": [
           "application/json"
         ],

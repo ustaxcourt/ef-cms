@@ -52,14 +52,15 @@ export const editPaperFilingAction = async ({
     });
   }
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .updateDocketEntryInteractor({
-      applicationContext,
-      documentMetadata,
-      isSavingForLater,
-      primaryDocumentFileId: docketEntryId,
-    });
+  const {
+    caseDetail,
+    paperServicePdfUrl,
+  } = await applicationContext.getUseCases().editPaperFilingInteractor({
+    applicationContext,
+    documentMetadata,
+    isSavingForLater,
+    primaryDocumentFileId: docketEntryId,
+  });
 
   if (generateCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
@@ -74,5 +75,6 @@ export const editPaperFilingAction = async ({
     docketEntryId,
     docketNumber,
     overridePaperServiceAddress: true,
+    pdfUrl: paperServicePdfUrl,
   };
 };
