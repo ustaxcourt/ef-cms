@@ -47,6 +47,7 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
+const { attachIrsPractitioner } = require('./prototypes/attachIrsPractitioner');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -139,7 +140,10 @@ Case.VALIDATION_ERROR_MESSAGES = {
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case() {}
+function Case() {
+  // bind prototype methods
+  this.attachIrsPractitioner = attachIrsPractitioner.bind(this);
+}
 
 Case.prototype.init = function init(
   rawCase,
@@ -845,14 +849,7 @@ Case.getCaseTitle = function (caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
 };
 
-/**
- * attaches an IRS practitioner to the case
- *
- * @param {string} practitioner the irsPractitioner to add to the case
- */
-Case.prototype.attachIrsPractitioner = function (practitioner) {
-  this.irsPractitioners.push(practitioner);
-};
+Case.prototype.attachIrsPractitioner = attachIrsPractitioner.bind(this);
 
 /**
  * archives a docket entry and adds it to the archivedDocketEntries array on the case
