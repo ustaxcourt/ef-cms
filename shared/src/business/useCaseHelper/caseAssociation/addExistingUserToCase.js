@@ -2,7 +2,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { replace } = require('lodash');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { UserCase } = require('../../entities/UserCase');
@@ -51,13 +50,12 @@ exports.addExistingUserToCase = async ({
 
   const contact = caseEntity.getPetitionerById(contactId);
 
-  // loop through all privatePractitioners to find below
-  // find practitioners with representing that match the contact.contactId
-  // reassign each of these to match the userToAdd.userId
   caseEntity.privatePractitioners.forEach(practitioner => {
-    if (practitioner.representing.includes(contact.contactId)) {
-      // representing: [ `1234fsdf-sv-dfksnldf', 'cxmclskjdf-1234fvds']
-      replace(practitioner.representing, contact.contactId, userToAdd.userId);
+    const representingArray = practitioner.representing;
+
+    if (representingArray.includes(contact.contactId)) {
+      const idx = representingArray.indexOf(contact.contactId);
+      representingArray[idx] = userToAdd.userId;
     }
   });
 
