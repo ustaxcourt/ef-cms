@@ -1,7 +1,6 @@
 import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDeficiencyStatistics } from './CaseDetail/AddDeficiencyStatistics';
 import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
-import { AddPaperFiling } from './AddPaperFiling/AddPaperFiling';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
@@ -31,7 +30,6 @@ import { EditCorrespondenceDocument } from './Correspondence/EditCorrespondenceD
 import { EditDeficiencyStatistic } from './CaseDetail/EditDeficiencyStatistic';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
-import { EditPaperFiling } from './EditPaperFiling/EditPaperFiling';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
@@ -51,6 +49,7 @@ import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
 import { MyAccount } from './MyAccount';
 import { OtherFilerInformation } from './CaseDetail/OtherFilerInformation';
+import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
@@ -91,7 +90,6 @@ const pages = {
   AccessibilityStatement,
   AddDeficiencyStatistics,
   AddOtherStatistics,
-  AddPaperFiling,
   AddTrialSession,
   AdvancedSearch,
   BeforeStartingCase,
@@ -119,7 +117,6 @@ const pages = {
   EditDeficiencyStatistic,
   EditDocketEntryMeta,
   EditOtherStatistics,
-  EditPaperFiling,
   EditPetitionDetails,
   EditPetitionerInformation,
   EditPractitionerUser,
@@ -136,6 +133,7 @@ const pages = {
   Messages,
   MyAccount,
   OtherFilerInformation,
+  PaperFiling,
   PendingReport,
   PetitionQc,
   PractitionerDetail,

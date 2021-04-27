@@ -1,4 +1,3 @@
-import { addPaperFilingAction } from '../actions/DocketEntry/addPaperFilingAction';
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
@@ -27,12 +26,13 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { submitPaperFilingAction } from '../actions/DocketEntry/submitPaperFilingAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 const savePaperFiling = showProgressSequenceDecorator([
-  addPaperFilingAction,
+  submitPaperFilingAction,
   setCaseAction,
   closeFileUploadStatusModalAction,
   setDocketEntryIdAction,
@@ -48,7 +48,7 @@ const savePaperFiling = showProgressSequenceDecorator([
   },
 ]);
 
-export const submitAddPaperFilingSequence = [
+export const submitPaperFilingSequence = [
   checkForActiveBatchesAction,
   {
     hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
