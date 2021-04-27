@@ -32,6 +32,9 @@ const {
   addDeficiencyStatisticLambda,
 } = require('./cases/addDeficiencyStatisticLambda');
 const {
+  addPetitionerToCaseLambda,
+} = require('./cases/addPetitionerToCaseLambda');
+const {
   archiveCorrespondenceDocumentLambda,
 } = require('./correspondence/archiveCorrespondenceDocumentLambda');
 const {
@@ -627,6 +630,10 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.post(
     '/case-meta/:docketNumber/statistics',
     lambdaWrapper(addDeficiencyStatisticLambda),
+  );
+  app.post(
+    '/case-meta/:docketNumber/add-petitioner',
+    lambdaWrapper(addPetitionerToCaseLambda),
   );
 }
 /**

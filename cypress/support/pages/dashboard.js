@@ -32,11 +32,9 @@ exports.getSectionUsersSelect = () => {
 };
 
 exports.selectAssignee = user => {
-  cy.server();
-  cy.route('PUT', '/work-items').as('assignWorkItem');
+  cy.intercept('PUT', '/work-items').as('assignWorkItem');
   exports.getSectionUsersSelect().select(user);
   cy.wait('@assignWorkItem');
-  cy.server({ enable: false });
 };
 
 exports.getWorkItemRow = docketNumber => {

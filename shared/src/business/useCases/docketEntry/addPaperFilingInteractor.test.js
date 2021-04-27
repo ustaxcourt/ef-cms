@@ -8,6 +8,7 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { addPaperFilingInteractor } = require('./addPaperFilingInteractor');
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('addPaperFilingInteractor', () => {
@@ -249,7 +250,7 @@ describe('addPaperFilingInteractor', () => {
   it('does not send the service email if an error occurs while updating the case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .updateCase.mockRejectedValue(new Error('bad!'));
+      .updateCase.mockRejectedValueOnce(new Error('bad!'));
 
     await expect(
       addPaperFilingInteractor(applicationContext, {
@@ -270,5 +271,28 @@ describe('addPaperFilingInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).not.toBeCalled();
+  });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await addPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketEntryInProgress.mock.calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: Case.getCaseTitle(mockCase.caseCaption),
+    });
   });
 });
