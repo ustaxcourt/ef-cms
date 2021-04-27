@@ -41,6 +41,7 @@ module.exports = {
       CIRCLE_SHA1: null,
       COGNITO: null,
       COGNITO_CLIENT_ID: null,
+      COGNITO_LOGIN_URL: null,
       COGNITO_REDIRECT_URI: null,
       COGNITO_TOKEN_URL: null,
       FILE_UPLOAD_MODAL_TIMEOUT: null,
