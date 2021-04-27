@@ -24,7 +24,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -77,7 +77,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       value: true,
     });
 
-    await test.runSequence('submitAddPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -118,7 +118,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPaperFiling');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
       'preview',
@@ -131,7 +131,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'scan',
     );
 
-    await test.runSequence('submitEditPaperFilingSequence');
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(Object.keys(test.getState('validationErrors'))).toEqual([
       'primaryDocumentFile',
@@ -143,14 +143,14 @@ describe('Docket Clerk edits a paper filing journey', () => {
       file: fakeFile,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPaperFiling');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
     expect(test.getState('form.primaryDocumentFile')).toBeDefined();
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
       'preview',
     );
 
-    await test.runSequence('submitEditPaperFilingSequence');
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');

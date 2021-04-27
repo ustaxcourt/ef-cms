@@ -28,7 +28,7 @@ export const gotoEditPaperFiling = [
   setDocketEntryIdAction,
   setupEditPaperFilingAction,
   setPdfPreviewUrlForEditPaperFilingAction,
-  setCurrentPageAction('EditPaperFiling'),
+  setCurrentPageAction('PaperFiling'),
 ];
 
 export const gotoEditPaperFilingSequence = [

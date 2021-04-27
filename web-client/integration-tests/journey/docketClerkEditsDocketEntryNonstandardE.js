@@ -30,7 +30,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPaperFiling');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('docketEntryId')).toEqual(docketEntryId);
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -38,7 +38,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'M057',
     });
 
-    await test.runSequence('submitEditPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -51,7 +51,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'Boise, Idaho',
     });
 
-    await test.runSequence('submitEditPaperFilingSequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
