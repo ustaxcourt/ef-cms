@@ -3,6 +3,7 @@ const {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
   getContactPrimary,
@@ -29,6 +30,7 @@ describe('removePetitionerFromCaseInteractor', () => {
       name: 'Eggy Egg',
       phone: '123456',
       postalCode: '55555',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       state: 'CO',
     };
 
