@@ -124,7 +124,7 @@ describe('editPetitionerInformationHelper', () => {
           petitioners: [{}, {}],
         },
         permissions: {
-          EDIT_PETITIONER_EMAIL: true,
+          REMOVE_PETITIONER: true,
         },
       },
     });

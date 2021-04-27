@@ -23,7 +23,8 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
 
   const contactPrimaryHasEmail = !!contactPrimaryEmail;
 
-  const showRemovePetitionerButton = caseDetail.petitioners.length > 1;
+  const showRemovePetitionerButton =
+    caseDetail.petitioners.length > 1 && permissions.REMOVE_PETITIONER;
 
   return {
     contactPrimaryHasEmail,

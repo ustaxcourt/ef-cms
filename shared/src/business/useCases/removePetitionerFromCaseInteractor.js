@@ -26,7 +26,7 @@ exports.removePetitionerFromCaseInteractor = async (
   const petitionerContactId = contactId;
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.REMOVE_PETITIONER)) {
     throw new UnauthorizedError(
       'Unauthorized for removing petitioner from case',
     );
