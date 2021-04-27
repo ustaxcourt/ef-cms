@@ -12,7 +12,7 @@ const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 const setServiceIndicatorsForCase = caseDetail => {
   const { isPaper, petitioners } = caseDetail;
 
-  petitioners.forEach(petitioner => {
+  petitioners?.forEach(petitioner => {
     if (!petitioner.serviceIndicator) {
       if (
         isUserIdRepresentedByPrivatePractitioner(
