@@ -1,5 +1,8 @@
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
+  aggregateCaseItems,
+} = require('../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems');
+const {
   Case,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const {
@@ -12,6 +15,7 @@ const migrateItems = async items => {
   const itemsAfter = [];
   for (const item of items) {
     if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
+      aggregateCaseItems(item);
       for (const petitioner of item.petitioners) {
         if (!petitioner.serviceIndicator) {
           // TODO - should we call setSerivceIndicatorsForCase?

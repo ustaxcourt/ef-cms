@@ -5240,42 +5240,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('isUserIdRepresentedByPrivatePractitioner', () => {
-    let caseEntity;
-
-    beforeAll(() => {
-      caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          privatePractitioners: [
-            {
-              barNumber: 'PP123',
-              representing: ['123'],
-            },
-            {
-              barNumber: 'PP234',
-              representing: ['234', '456'],
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-    });
-    it('returns true if there is a privatePractitioner representing the given userId', () => {
-      expect(
-        caseEntity.isUserIdRepresentedByPrivatePractitioner('456'),
-      ).toEqual(true);
-    });
-
-    it('returns false if there is NO privatePractitioner representing the given userId', () => {
-      expect(
-        caseEntity.isUserIdRepresentedByPrivatePractitioner('678'),
-      ).toEqual(false);
-    });
-  });
-
   describe('addPetitioner', () => {
     it('should add the petitioner to the petitioners array and return the updated case', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
