@@ -83,6 +83,7 @@ export const NoticeOfReceiptOfPetition = ({
 
       <div id="address-label-cover-sheet">
         <AddressLabel
+          additionalName={address.additionalName}
           address1={address.address1}
           address2={address.address2}
           address3={address.address3}

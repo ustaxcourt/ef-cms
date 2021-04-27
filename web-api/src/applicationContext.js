@@ -30,6 +30,9 @@ const {
   addPaperFilingInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/addPaperFilingInteractor');
 const {
+  addPetitionerToCaseInteractor,
+} = require('../../shared/src/business/useCases/addPetitionerToCaseInteractor');
+const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -213,8 +216,8 @@ const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
 const {
-  createUserForContactPrimary,
-} = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContactPrimary');
+  createUserForContact,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact');
 const {
   createUserInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
@@ -1587,7 +1590,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         countPagesInDocument,
         createCaseAndAssociations,
         createTrialSessionAndWorkingCopy,
-        createUserForContactPrimary,
+        createUserForContact,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
@@ -1615,6 +1618,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
         addPaperFilingInteractor,
+        addPetitionerToCaseInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,

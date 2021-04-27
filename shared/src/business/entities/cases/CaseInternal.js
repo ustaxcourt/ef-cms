@@ -103,6 +103,7 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
     },
     isPaper: true,
     partyType: rawCase.partyType,
+    status: rawCase.status,
   });
   this.petitioners = [contacts.primary];
   if (contacts.secondary) {

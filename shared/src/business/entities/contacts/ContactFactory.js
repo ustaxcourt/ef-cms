@@ -28,7 +28,7 @@ ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES = {
   postalCode: [
     {
       contains: 'match',
-      message: 'Enter ZIP code.',
+      message: 'Enter ZIP code',
     },
     'Enter ZIP code',
   ],
@@ -60,19 +60,9 @@ ContactFactory.getValidationRules = contactType => {
           .alternatives(
             contactConstructor({
               countryType: COUNTRY_TYPES.DOMESTIC,
-              isPaper: true,
             }).VALIDATION_RULES,
             contactConstructor({
               countryType: COUNTRY_TYPES.INTERNATIONAL,
-              isPaper: true,
-            }).VALIDATION_RULES,
-            contactConstructor({
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              isPaper: false,
-            }).VALIDATION_RULES,
-            contactConstructor({
-              countryType: COUNTRY_TYPES.INTERNATIONAL,
-              isPaper: false,
             }).VALIDATION_RULES,
           )
           .required(),
@@ -158,19 +148,10 @@ ContactFactory.internationalValidationObject = internationalValidationObject;
  */
 ContactFactory.getValidationObject = ({
   countryType = COUNTRY_TYPES.DOMESTIC,
-  isPaper = false,
 }) => {
-  const baseValidationObject =
-    countryType === COUNTRY_TYPES.DOMESTIC
-      ? cloneDeep(domesticValidationObject)
-      : cloneDeep(internationalValidationObject);
-
-  if (isPaper) {
-    baseValidationObject.phone = JoiValidationConstants.STRING.max(
-      100,
-    ).optional();
-  }
-  return baseValidationObject;
+  return countryType === COUNTRY_TYPES.DOMESTIC
+    ? cloneDeep(domesticValidationObject)
+    : cloneDeep(internationalValidationObject);
 };
 
 /**
@@ -192,8 +173,6 @@ ContactFactory.getErrorToMessageMap = ({
  * used for getting the contact constructors depending on the party type and contact type
  *
  * @param {object} options the options object
- * @param {string} options.countryType typically either 'domestic' or 'international'
- * @param {boolean} options.isPaper is paper case
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
  * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact, other petitioner contacts
  */
@@ -374,30 +353,28 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
  *
  * @param {object} options the options object
  * @param {object} options.contactInfo information on party contacts (primary, secondary, other)
- * @param {boolean} options.isPaper whether service is paper
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
  * @returns {object} contains the primary, secondary, and other contact instances
  */
 ContactFactory.createContacts = ({
   applicationContext,
   contactInfo,
-  isPaper,
   partyType,
 }) => {
-  const constructorMap = ContactFactory.getContactConstructors({ partyType });
+  const constructorMap = ContactFactory.getContactConstructors({
+    partyType,
+  });
 
   const constructors = {
     primary:
       constructorMap.primary &&
       constructorMap.primary({
         countryType: (contactInfo.primary || {}).countryType,
-        isPaper,
       }),
     secondary:
       constructorMap.secondary &&
       constructorMap.secondary({
         countryType: (contactInfo.secondary || {}).countryType,
-        isPaper,
       }),
   };
 
@@ -406,7 +383,6 @@ ContactFactory.createContacts = ({
     otherPetitioners = contactInfo.otherPetitioners.map(otherPetitioner => {
       const otherPetitionerConstructor = constructorMap.otherPetitioners({
         countryType: otherPetitioner.countryType,
-        isPaper,
       });
       return new otherPetitionerConstructor(
         { ...otherPetitioner, contactType: CONTACT_TYPES.otherPetitioner },
@@ -422,7 +398,6 @@ ContactFactory.createContacts = ({
     otherFilers = contactInfo.otherFilers.map(otherFiler => {
       const otherFilerConstructor = constructorMap.otherFilers({
         countryType: otherFiler.countryType,
-        isPaper,
       });
       return new otherFilerConstructor(
         { ...otherFiler, contactType: CONTACT_TYPES.otherFiler },
@@ -466,7 +441,7 @@ ContactFactory.createContactFactory = ({
   additionalValidation,
   contactName,
 }) => {
-  const ContactFactoryConstructor = ({ countryType, isPaper }) => {
+  const ContactFactoryConstructor = ({ countryType }) => {
     /**
      * creates a contact entity
      *
@@ -513,7 +488,7 @@ ContactFactory.createContactFactory = ({
     };
 
     GenericContactConstructor.VALIDATION_RULES = joi.object().keys({
-      ...ContactFactory.getValidationObject({ countryType, isPaper }),
+      ...ContactFactory.getValidationObject({ countryType }),
       ...additionalValidation,
     });
 
