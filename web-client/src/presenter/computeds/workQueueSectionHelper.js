@@ -23,8 +23,13 @@ export const workQueueSectionHelper = (get, applicationContext) => {
     return CHAMBERS_SECTIONS_LABELS[key];
   };
 
+  const chambersSections = applicationContext
+    .getPersistenceGateway()
+    .getChambersSections();
+
   return {
     chambersDisplay,
+    chambersSections,
     sectionDisplay,
   };
 };
