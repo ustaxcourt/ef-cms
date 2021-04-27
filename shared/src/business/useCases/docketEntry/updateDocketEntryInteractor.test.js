@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   PARTY_TYPES,
@@ -80,21 +81,24 @@ describe('updateDocketEntryInteractor', () => {
   const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
     createdAt: '',
     docketEntries,
     docketNumber: '45678-18',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'fieri@example.com',
+        name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
+    ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,

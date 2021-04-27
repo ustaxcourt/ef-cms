@@ -23,7 +23,7 @@ exports.serveCaseToIrs = () => {
 };
 
 exports.closeScannerSetupDialog = () => {
-  cy.intercept('webtwain.install.js').as('getDynamsoft');
+  cy.intercept('dynamsoft.webtwain.install.js?t=*').as('getDynamsoft');
   cy.wait('@getDynamsoft');
   // the dynamsoft popup doesn't show immediately after the last script has been downloaded
   cy.wait(2000); // eslint-disable-line cypress/no-unnecessary-waiting
