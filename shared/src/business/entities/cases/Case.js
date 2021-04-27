@@ -1953,7 +1953,7 @@ Case.prototype.removeConsolidation = function () {
  * @returns {boolean} if the userId has a privatePractitioner associated with them
  */
 const isUserIdRepresentedByPrivatePractitioner = function (rawCase, userId) {
-  return !!rawCase.privatePractitioners.find(practitioner =>
+  return !!rawCase.privatePractitioners?.find(practitioner =>
     practitioner.representing.find(id => id === userId),
   );
 };
