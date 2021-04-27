@@ -37,7 +37,7 @@ export const RemovePetitionerModal = connect(
         confirmSequence={confirmSequence}
         title="Remove Petitioner and Update Caption"
       >
-        <div className="margin-bottom-2">
+        <div className="margin-bottom-2" id="remove-petitioner-modal">
           <WarningNotificationComponent
             alertWarning={{
               title: `Are you sure you want to remove ${form.contact.name} from this case?`,
