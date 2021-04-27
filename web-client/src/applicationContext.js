@@ -142,6 +142,7 @@ import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/case
 import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
+import { getChambersSections } from '../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
 import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
@@ -589,6 +590,7 @@ const applicationContext = {
   },
   getPersistenceGateway: () => {
     return {
+      getChambersSections,
       getDocument,
       getItem,
       getPdfFromUrl,

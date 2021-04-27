@@ -154,10 +154,12 @@ const app = {
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
-    presenter.state.constants = applicationContext.getConstants();
-    presenter.state.constants.CHAMBERS_SECTIONS = applicationContext
-      .getPersistenceGateway()
-      .getChambersSection();
+    presenter.state.constants = {
+      ...applicationContext.getConstants(),
+      CHAMBERS_SECTIONS: applicationContext
+        .getPersistenceGateway()
+        .getChambersSections(),
+    };
 
     config.autoAddCss = false;
     library.add(
