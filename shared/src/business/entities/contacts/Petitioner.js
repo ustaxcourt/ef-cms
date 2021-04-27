@@ -45,7 +45,9 @@ Petitioner.prototype.init = function init(rawContact, { applicationContext }) {
   this.phone = rawContact.phone;
   this.postalCode = rawContact.postalCode;
   this.secondaryName = rawContact.secondaryName;
-  this.serviceIndicator = rawContact.serviceIndicator;
+  // TODO - what is this defaulted to for real?
+  this.serviceIndicator =
+    rawContact.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_PAPER;
   this.state = rawContact.state;
   this.title = rawContact.title;
   this.additionalName = rawContact.additionalName;
