@@ -7,6 +7,8 @@ import {
   getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
+  getPetitionDocketEntry,
+  getPetitionerById,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -52,6 +54,7 @@ import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialS
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
+import { addPetitionerToCaseInteractor } from '../../shared/src/proxies/addPetitionerToCaseProxy';
 import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
 import { archiveCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/archiveCorrespondenceDocumentProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
@@ -246,6 +249,7 @@ import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCase
 import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFromClient';
 import { validateAddDeficiencyStatisticsInteractor } from '../../shared/src/business/useCases/validateAddDeficiencyStatisticsInteractor';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
+import { validateAddPetitionerInteractor } from '../../shared/src/business/useCases/validateAddPetitionerInteractor';
 import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validateAddPractitionerInteractor';
 import { validateAddPrivatePractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPrivatePractitionerInteractor';
 import { validateCalendarNoteInteractor } from '../../shared/src/business/useCases/validateCalendarNoteInteractor';
@@ -268,6 +272,7 @@ import { validatePdfInteractor } from '../../shared/src/proxies/documents/valida
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
+import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
@@ -307,6 +312,7 @@ const allUseCases = {
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
+  addPetitionerToCaseInteractor,
   archiveCorrespondenceDocumentInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
@@ -465,6 +471,7 @@ const allUseCases = {
   uploadOrderDocumentInteractor,
   validateAddDeficiencyStatisticsInteractor,
   validateAddIrsPractitionerInteractor,
+  validateAddPetitionerInteractor,
   validateAddPractitionerInteractor,
   validateAddPrivatePractitionerInteractor,
   validateCalendarNoteInteractor,
@@ -488,6 +495,7 @@ const allUseCases = {
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
   validatePetitionerInformationFormInteractor,
+  validatePetitionerInteractor,
   validatePractitionerInteractor,
   validatePrimaryContactInteractor,
   validateSearchDeadlinesInteractor,
@@ -652,6 +660,8 @@ const applicationContext = {
       getMonthDayYearObj,
       getOtherFilers,
       getOtherPetitioners,
+      getPetitionDocketEntry,
+      getPetitionerById,
       getServedPartiesCode,
       getTrialSessionStatus,
       getWorkQueueFilters,

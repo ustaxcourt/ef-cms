@@ -1,5 +1,6 @@
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -12,15 +13,18 @@ const { Case } = require('../entities/cases/Case');
 const { MOCK_USERS } = require('../../test/mockUsers');
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
-const contactPrimary = {
-  address1: '123 Main St',
-  city: 'Somewhere',
-  countryType: COUNTRY_TYPES.DOMESTIC,
-  name: 'Test Petitioner',
-  phone: '1234567890',
-  postalCode: '12345',
-  state: 'TN',
-};
+const petitioners = [
+  {
+    address1: '123 Main St',
+    city: 'Somewhere',
+    contactType: CONTACT_TYPES.primary,
+    countryType: COUNTRY_TYPES.DOMESTIC,
+    name: 'Test Petitioner',
+    phone: '1234567890',
+    postalCode: '12345',
+    state: 'TN',
+  },
+];
 
 describe('validate case detail', () => {
   beforeAll(() => {
@@ -59,7 +63,6 @@ describe('validate case detail', () => {
       caseDetail: {
         caseCaption: 'Caption',
         caseType: CASE_TYPES_MAP.other,
-        contactPrimary,
         docketEntries: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -87,7 +90,7 @@ describe('validate case detail', () => {
         hasVerifiedIrsNotice: true,
         irsNoticeDate: applicationContext.getUtilities().createISODateString(),
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [{ name: 'user' }],
+        petitioners,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         signature: true,
@@ -115,7 +118,6 @@ describe('validate case detail', () => {
       caseDetail: {
         caseCaption: 'Caption',
         caseType: CASE_TYPES_MAP.other,
-        contactPrimary,
         docketEntries: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -143,7 +145,7 @@ describe('validate case detail', () => {
         hasVerifiedIrsNotice: true,
         irsNoticeDate: applicationContext.getUtilities().createISODateString(),
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [{ name: 'user' }],
+        petitioners,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         signature: true,
@@ -159,7 +161,6 @@ describe('validate case detail', () => {
       caseDetail: {
         caseCaption: 'Caption',
         caseType: CASE_TYPES_MAP.other,
-        contactPrimary,
         docketEntries: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -187,7 +188,7 @@ describe('validate case detail', () => {
         hasVerifiedIrsNotice: false,
         irsNoticeDate: null,
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [{ name: 'user' }],
+        petitioners,
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         signature: true,

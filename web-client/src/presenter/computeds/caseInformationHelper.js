@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
 export const caseInformationHelper = (get, applicationContext) => {
+  const { STATUS_TYPES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
   const showEditPrivatePractitionersButton =
@@ -19,30 +20,37 @@ export const caseInformationHelper = (get, applicationContext) => {
     ? 'Hide'
     : 'View';
 
-  const otherPetitioners =
-    applicationContext.getUtilities().getOtherPetitioners(caseDetail) || [];
-
-  const showOtherPetitioners = !!otherPetitioners.length;
-  const formattedOtherPetitioners = showingAdditionalPetitioners
-    ? otherPetitioners
-    : otherPetitioners.slice(0, 4);
-
   const showSealAddressLink = permissions.SEAL_ADDRESS;
   const showHearingsTable = !!caseDetail.hearings?.length;
 
   const contactPrimary = applicationContext
     .getUtilities()
     .getContactPrimary(caseDetail);
-  const showEmail = contactPrimary?.email;
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(caseDetail);
+  const showContactPrimaryEmail = contactPrimary?.email;
+  const showContactSecondaryEmail = contactSecondary?.email;
+
+  const allPetitioners = caseDetail.petitioners;
+
+  const formattedPetitioners = showingAdditionalPetitioners
+    ? allPetitioners
+    : allPetitioners.slice(0, 4);
+
+  const showAddPetitionerButton =
+    permissions.ADD_PETITIONER_TO_CASE &&
+    caseDetail.status !== STATUS_TYPES.new;
 
   return {
-    formattedOtherPetitioners,
+    formattedPetitioners,
     showAddCounsel,
+    showAddPetitionerButton,
+    showContactPrimaryEmail,
+    showContactSecondaryEmail,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
-    showEmail,
     showHearingsTable,
-    showOtherPetitioners,
     showSealAddressLink,
     showSealCaseButton,
     toggleAdditionalPetitionersDisplay,

@@ -6,13 +6,11 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const {
-  createUserForContactPrimary,
-} = require('./createUserForContactPrimary');
 const { Case, getContactPrimary } = require('../../entities/cases/Case');
+const { createUserForContact } = require('./createUserForContact');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-describe('createUserForContactPrimary', () => {
+describe('createUserForContact', () => {
   const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
 
   beforeEach(() => {
@@ -23,9 +21,10 @@ describe('createUserForContactPrimary', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      createUserForContactPrimary({
+      createUserForContact({
         applicationContext,
         caseEntity: new Case(MOCK_CASE, { applicationContext }),
+        contactId: USER_ID,
         email: 'testing@example.com',
         name: 'Bob Ross',
       }),
@@ -56,9 +55,10 @@ describe('createUserForContactPrimary', () => {
       { applicationContext },
     );
 
-    await createUserForContactPrimary({
+    await createUserForContact({
       applicationContext,
       caseEntity,
+      contactId: USER_ID,
       email: UPDATED_EMAIL,
       name: 'Bob Ross',
     });
@@ -98,9 +98,10 @@ describe('createUserForContactPrimary', () => {
       { applicationContext },
     );
 
-    const updatedCase = await createUserForContactPrimary({
+    const updatedCase = await createUserForContact({
       applicationContext,
       caseEntity,
+      contactId: USER_ID,
       email: UPDATED_EMAIL,
       name: 'Bob Ross',
     });
@@ -131,9 +132,10 @@ describe('createUserForContactPrimary', () => {
       { applicationContext },
     );
 
-    await createUserForContactPrimary({
+    await createUserForContact({
       applicationContext,
       caseEntity,
+      contactId: USER_ID,
       email: UPDATED_EMAIL,
       name: 'Bob Ross',
     });
