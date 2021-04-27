@@ -203,10 +203,6 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   });
 
   it('verifies the  service indicator for the second petitioner reverts to electronic', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     const formattedCase = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
