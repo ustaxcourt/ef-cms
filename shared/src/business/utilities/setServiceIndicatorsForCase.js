@@ -50,9 +50,14 @@ const setServiceIndicatorsForCase = caseDetail => {
   }
 
   if (!isEmpty(contactSecondary) && !contactSecondary.serviceIndicator) {
-    contactSecondary.serviceIndicator = hasSecondaryPractitioner
-      ? SERVICE_INDICATOR_TYPES.SI_NONE
-      : SERVICE_INDICATOR_TYPES.SI_PAPER;
+    if (hasSecondaryPractitioner) {
+      contactSecondary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+    } else {
+      const serviceIsPaper = isPaper || !contactSecondary.email;
+      contactSecondary.serviceIndicator = serviceIsPaper
+        ? SERVICE_INDICATOR_TYPES.SI_PAPER
+        : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    }
   }
 
   return caseDetail;

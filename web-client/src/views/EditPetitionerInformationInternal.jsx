@@ -8,6 +8,7 @@ import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
+import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -19,6 +20,8 @@ export const EditPetitionerInformationInternal = connect(
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    openRemovePetitionerModalSequence:
+      sequences.openRemovePetitionerModalSequence,
     showModal: state.modal.showModal,
     submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -30,6 +33,7 @@ export const EditPetitionerInformationInternal = connect(
     editPetitionerInformationHelper,
     form,
     formCancelToggleCancelSequence,
+    openRemovePetitionerModalSequence,
     showModal,
     submitEditPetitionerSequence,
     updateFormValueSequence,
@@ -250,23 +254,39 @@ export const EditPetitionerInformationInternal = connect(
               )}
           </div>
 
-          <Button
-            id="submit-edit-petitioner-information"
-            onClick={() => {
-              submitEditPetitionerSequence();
-            }}
-          >
-            Save
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-              return false;
-            }}
-          >
-            Cancel
-          </Button>
+          <div>
+            <Button
+              id="submit-edit-petitioner-information"
+              onClick={() => {
+                submitEditPetitionerSequence();
+              }}
+            >
+              Save
+            </Button>
+            <Button
+              link
+              onClick={() => {
+                formCancelToggleCancelSequence();
+                return false;
+              }}
+            >
+              Cancel
+            </Button>
+
+            {editPetitionerInformationHelper.showRemovePetitionerButton && (
+              <Button
+                link
+                className="red-warning no-wrap float-right"
+                icon="trash"
+                id="remove-petitioner-btn"
+                onClick={() => {
+                  openRemovePetitionerModalSequence();
+                }}
+              >
+                Remove this petitioner
+              </Button>
+            )}
+          </div>
         </section>
 
         {showModal === 'FormCancelModalDialog' && (
@@ -276,6 +296,7 @@ export const EditPetitionerInformationInternal = connect(
         {showModal === 'NoMatchingEmailFoundModal' && (
           <NoMatchingEmailFoundModal />
         )}
+        {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
       </>
     );
   },
