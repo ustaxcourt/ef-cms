@@ -17,12 +17,15 @@ import { withAppContextDecorator } from '../../withAppContext';
 const getDateISO = () =>
   applicationContext.getUtilities().createISODateString();
 
+const JUDGES_CHAMBERS = applicationContext
+  .getPersistenceGateway()
+  .getJudgesChambers();
+
 describe('formattedCaseDetail', () => {
   let globalUser;
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     DOCUMENT_RELATIONSHIPS,
-    JUDGES_CHAMBERS,
     OBJECTIONS_OPTIONS_MAP,
     STATUS_TYPES,
     TRIAL_CLERKS_SECTION,
