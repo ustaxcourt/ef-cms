@@ -29,7 +29,7 @@ exports.selectDocumentType = documentType => {
 };
 
 exports.uploadDocumentFile = () => {
-  cy.upload_file('w3-dummy.pdf', 'input#primary-document');
+  cy.get('#primary-document').attachFile('../fixtures/w3-dummy.pdf');
 };
 
 exports.submitDocument = () => {

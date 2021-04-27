@@ -8,35 +8,37 @@ const { User } = require('../../entities/User');
 const { UserCase } = require('../../entities/UserCase');
 
 /**
- * createUserForContactPrimary
+ * createUserForContact
  *
+ * @param {object} options.contactId the id of the contact to create user for
  * @param {object} options.caseEntity the case entity to modify and return
  * @param {string} options.email the email address for the user we are attaching to the case
  * @param {string} options.name the name of the user to update the case with
  * @returns {Case} the updated case entity
  */
-exports.createUserForContactPrimary = async ({
+exports.createUserForContact = async ({
   applicationContext,
   caseEntity,
+  contactId,
   email,
   name,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_PETITIONER_TO_CASE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_USER_TO_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const contactPrimary = caseEntity.getContactPrimary();
+  const contact = caseEntity.getPetitionerById(contactId);
 
   const userEntity = new User(
     {
-      contact: contactPrimary,
+      contact,
       hasEAccess: true,
       name,
       pendingEmail: email,
       role: ROLES.petitioner,
-      userId: contactPrimary.contactId,
+      userId: contactId,
     },
     { applicationContext },
   );

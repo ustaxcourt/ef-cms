@@ -23,7 +23,7 @@ export const TodaysOpinions = connect(
           <h1>{todaysOpinionsHelper.formattedCurrentDate}</h1>
 
           {todaysOpinionsHelper.formattedOpinions.length === 0 && (
-            <h3>
+            <h3 className="maxw-tablet">
               Opinions are generally published at 3:00 PM. If you are receiving
               this message after 3:00 PM, there are no opinions today.
             </h3>
