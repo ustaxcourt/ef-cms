@@ -385,7 +385,7 @@ export const uploadPetition = async (
       name: 'Mona Schultz',
       phone: '+1 (884) 358-9729',
       postalCode: '77546',
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.ELECTRONIC,
       state: 'CT',
     },
     contactSecondary: overrides.contactSecondary || {},
