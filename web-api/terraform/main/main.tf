@@ -47,4 +47,5 @@ module "ef-cms_apis" {
   alert_sns_topic_arn        = data.aws_sns_topic.system_health_alarms.arn
   bounced_email_recipient    = var.bounced_email_recipient
   scanner_resource_uri       = var.scanner_resource_uri
+  cognito_table_name         = var.cognito_table_name
 }

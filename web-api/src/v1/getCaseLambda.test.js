@@ -1,10 +1,4 @@
 const createApplicationContext = require('../applicationContext');
-const {
-  CONTACT_TYPES,
-} = require('../../../shared/src/business/entities/EntityConstants');
-const {
-  getContactPrimary,
-} = require('../../../shared/src/business/entities/cases/Case');
 const { getCaseLambda } = require('./getCaseLambda');
 const { MOCK_CASE } = require('../../../shared/src/test/mockCase');
 const { MOCK_USERS } = require('../../../shared/src/test/mockUsers');
@@ -102,12 +96,9 @@ describe('getCaseLambda', () => {
       expect.any(String),
     );
     expect(JSON.parse(response.body).assignedJudge).toBeUndefined();
-
-    const contactPrimary = getContactPrimary(JSON.parse(response.body));
-
-    expect(contactPrimary.address1).toBeUndefined();
-    expect(contactPrimary.name).toBeDefined();
-    expect(contactPrimary.state).toBeDefined();
+    expect(JSON.parse(response.body).contactPrimary.address1).toBeUndefined();
+    expect(JSON.parse(response.body).contactPrimary.name).toBeDefined();
+    expect(JSON.parse(response.body).contactPrimary.state).toBeDefined();
     expect(JSON.parse(response.body).noticeOfTrialDate).toBeUndefined();
     expect(JSON.parse(response.body).status).toBeUndefined();
     expect(JSON.parse(response.body).trialLocation).toBeUndefined();
@@ -165,6 +156,8 @@ describe('getCaseLambda', () => {
   });
 
   it('returns the case in v1 format', async () => {
+    // Careful! Changing this test would mean that the v1 format is changing;
+    // this would mean breaking changes for any user of the v1 API
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
 
@@ -187,24 +180,21 @@ describe('getCaseLambda', () => {
     expect(JSON.parse(response.body)).toMatchObject({
       caseCaption: 'Test Petitioner, Petitioner',
       caseType: 'Other',
+      contactPrimary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        email: 'petitioner@example.com',
+        name: 'Test Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        state: 'TN',
+      },
       docketEntries: [],
       docketNumber: '101-18',
       docketNumberSuffix: null,
       filingType: 'Myself',
       noticeOfTrialDate: '2020-10-20T01:38:43.489Z',
       partyType: 'Petitioner',
-      petitioners: [
-        {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          contactType: CONTACT_TYPES.primary,
-          email: 'petitioner@example.com',
-          name: 'Test Petitioner',
-          phone: '1234567',
-          postalCode: '12345',
-          state: 'TN',
-        },
-      ],
       practitioners: [],
       preferredTrialCity: 'Washington, District of Columbia',
       respondents: [],
