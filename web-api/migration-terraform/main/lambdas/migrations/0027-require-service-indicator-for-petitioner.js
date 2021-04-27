@@ -6,29 +6,36 @@ const {
   Case,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const {
-  SERVICE_INDICATOR_TYPES,
-} = require('../../../../../shared/src/business/entities/EntityConstants');
+  setServiceIndicatorsForCase,
+} = require('../../../../../shared/src/business/utilities/setServiceIndicatorsForCase');
 
 const applicationContext = createApplicationContext({});
 
-const migrateItems = async items => {
+const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
     if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
-      aggregateCaseItems(item);
-      for (const petitioner of item.petitioners) {
-        if (!petitioner.serviceIndicator) {
-          // TODO - should we call setSerivceIndicatorsForCase?
+      const fullCase = await documentClient
+        .query({
+          ExpressionAttributeNames: {
+            '#pk': 'pk',
+          },
+          ExpressionAttributeValues: {
+            ':pk': `case|${item.docketNumber}`,
+          },
+          KeyConditionExpression: '#pk = :pk',
+          TableName: process.env.SOURCE_TABLE,
+        })
+        .promise()
+        .then(res => {
+          return res.Items;
+        });
 
-          // Refactor setServiceIndicators for case: if contactId is in a practitioner's array, they are represented
+      const caseRecord = aggregateCaseItems(fullCase);
 
-          // if you are represented, SI is NONE
-          // if you have an email AND you are represented, SI is NONE
-          // if you have an email AND you are NOT represented, SI is ELECTRONIC
-          // if the case is paper, you are NOT represented, and you DONT have an email, SI is PAPER
-          petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-        }
-      }
+      const updatedCase = setServiceIndicatorsForCase(caseRecord);
+
+      item.petitioners = updatedCase.petitioners;
 
       new Case(item, { applicationContext }).validate();
 
