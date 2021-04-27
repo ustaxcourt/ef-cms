@@ -4,6 +4,9 @@ const {
   migrateItems: migration0025,
 } = require('./migrations/0025-add-contacts-to-petitioners-array');
 const {
+  migrateItems: migration0030,
+} = require('./migrations/0030-docket-entry-docket-number-required');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk, isEmpty } = require('lodash');
@@ -29,8 +32,10 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.info('about to run migration 0025');
   items = await migration0025(items, documentClient);
+  applicationContext.logger.debug('about to run migration 0030');
+  items = await migration0030(items, documentClient);
 
-  applicationContext.logger.info('about to run validation migration');
+  applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items, documentClient);
 
   return items;
