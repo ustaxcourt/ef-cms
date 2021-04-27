@@ -149,8 +149,7 @@ describe('Petitions Clerk', () => {
 
   describe('should be able to create two trial sessions', () => {
     beforeEach(() => {
-      cy.server();
-      cy.route({ method: 'POST', url: '/trial-sessions' }).as(
+      cy.intercept({ method: 'POST', url: '/trial-sessions' }).as(
         'postTrialSession',
       );
     });
