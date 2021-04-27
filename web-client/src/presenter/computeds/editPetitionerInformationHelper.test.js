@@ -138,7 +138,21 @@ describe('editPetitionerInformationHelper', () => {
           petitioners: [{}],
         },
         permissions: {
-          EDIT_PETITIONER_EMAIL: true,
+          REMOVE_PETITIONER: true,
+        },
+      },
+    });
+    expect(result.showRemovePetitionerButton).toBeFalsy();
+  });
+
+  it('returns showRemovePetitionerButton = false when >1 petitioner on the case but the user does not have permissions', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [{}, {}],
+        },
+        permissions: {
+          REMOVE_PETITIONER: false,
         },
       },
     });
