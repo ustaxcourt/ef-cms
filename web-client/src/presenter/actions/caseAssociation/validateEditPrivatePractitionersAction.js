@@ -15,17 +15,13 @@ export const validateEditPrivatePractitionersAction = ({
   get,
   path,
 }) => {
-  let SERVICE_INDICATOR_TYPES;
-
-  ({ SERVICE_INDICATOR_TYPES } = applicationContext.getConstants());
+  const {
+    SERVICE_INDICATOR_ERROR,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
 
   const { privatePractitioners } = get(state.modal);
   const { privatePractitioners: oldPractitioners } = get(state.caseDetail);
-
-  const serviceIndicatorError = {
-    serviceIndicator:
-      'You cannot change from paper to electronic service. Select a valid service preference.',
-  };
 
   const errors = [];
   privatePractitioners.forEach(practitioner => {
@@ -48,7 +44,7 @@ export const validateEditPrivatePractitionersAction = ({
     ) {
       error = {
         ...error,
-        ...serviceIndicatorError,
+        ...SERVICE_INDICATOR_ERROR,
       };
     }
 

@@ -2,6 +2,7 @@ import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDeficiencyStatistics } from './CaseDetail/AddDeficiencyStatistics';
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
+import { AddPetitionerToCase } from './AddPetitionerToCase/AddPetitionerToCase';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
@@ -32,7 +33,7 @@ import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
-import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
+import { EditPetitionerInformationInternal } from './EditPetitionerInformationInternal';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
@@ -91,6 +92,7 @@ const pages = {
   AddDeficiencyStatistics,
   AddDocketEntry,
   AddOtherStatistics,
+  AddPetitionerToCase,
   AddTrialSession,
   AdvancedSearch,
   BeforeStartingCase,
@@ -119,7 +121,7 @@ const pages = {
   EditDocketEntryMeta,
   EditOtherStatistics,
   EditPetitionDetails,
-  EditPetitionerInformation,
+  EditPetitionerInformationInternal,
   EditPractitionerUser,
   EditTrialSession,
   EditUploadCourtIssuedDocument,
