@@ -57,7 +57,6 @@
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "New York City, New York",
-    "docketEntries": [],
     "petitionPaymentDate": null,
     "irsPractitioners": [],
     "hasVerifiedIrsNotice": true,
@@ -265,7 +264,8 @@
     "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "pk": "case|105-20",
-    "servedAt": "2020-04-29T15:51:29.168Z"
+    "servedAt": "2020-04-29T15:51:29.168Z",
+    "docketNumber": "105-20"
   },
   {
     "servedParties": [
@@ -320,7 +320,8 @@
     "processingStatus": "complete",
     "partySecondary": false,
     "servedAt": "2020-04-29T15:51:29.168Z",
-    "pk": "case|105-20"
+    "pk": "case|105-20",
+    "docketNumber": "105-20"
   },
   {
     "servedParties": [
@@ -573,27 +574,28 @@
     "isStricken": false,
     "documentType": "Statement of Taxpayer Identification",
     "filingDate": "2020-01-02T16:05:45.980Z",
-    "practitioner": [],
     "isMinuteEntry": false,
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
     "receivedAt": "2020-01-02T16:05:45.980Z",
-    "isFileAttached": true,
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": false,
-    "eventCode": "STIN",
     "createdAt": "2020-01-02T16:05:45.980Z",
-    "processingStatus": "complete",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Bill Burr",
     "docketEntryId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "sk": "docket-entry|0048b9e5-15e8-4315-8b9c-8a2e181205e4",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "practitioner": [],
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "processingStatus": "complete",
     "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "pk": "case|101-20",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "docketNumber": "101-20"
   },
   {
     "isStricken": false,
@@ -603,7 +605,6 @@
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
-    "index": 1,
     "workItem": {
       "associatedJudge": "Chief Judge",
       "caseStatus": "New",
@@ -623,21 +624,23 @@
       "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "updatedAt": "2020-01-02T16:05:45.979Z"
     },
-    "isFileAttached": true,
     "receivedAt": "2020-01-02T16:05:45.979Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "P",
-    "processingStatus": "complete",
     "createdAt": "2020-01-02T16:05:45.979Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Bill Burr",
     "docketEntryId": "cb323daf-c541-4645-bb44-232255d03d40",
     "sk": "docket-entry|cb323daf-c541-4645-bb44-232255d03d40",
+    "documentTitle": "Petition",
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
     "partySecondary": false,
     "pk": "case|101-20",
-    "documentTitle": "Petition"
+    "docketNumber": "101-20"
   },
   {
     "servedParties": [
@@ -931,7 +934,8 @@
     "processingStatus": "complete",
     "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
-    "pk": "case|120-20"
+    "pk": "case|120-20",
+    "docketNumber": "120-20"
   },
   {
     "isSealed": true,
@@ -979,7 +983,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "partySecondary": false,
-    "pk": "case|120-20"
+    "pk": "case|120-20",
+    "docketNumber": "120-20"
   },
   {
     "sk": "work-item|d9edf05a-7b27-447c-aaf9-f12157823bc6",
@@ -1411,6 +1416,7 @@
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-20",
     "servedAt": "2020-04-14T19:59:46.673Z",
+    "docketNumber": "104-20",
     "status": "served"
   },
   {
@@ -1467,7 +1473,8 @@
     "processingStatus": "complete",
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.671Z",
-    "pk": "case|104-20"
+    "pk": "case|104-20",
+    "docketNumber": "104-20"
   },
   {
     "servedParties": [
@@ -1499,7 +1506,8 @@
     "processingStatus": "complete",
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.672Z",
-    "pk": "case|104-20"
+    "pk": "case|104-20",
+    "docketNumber": "104-20"
   },
   {
     "sk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
@@ -1817,7 +1825,8 @@
     "sk": "docket-entry|498ba6ff-6156-4e24-90f2-b7aa28bac366",
     "pk": "case|122-20",
     "servedAt": "2020-09-25T19:27:00.207Z",
-    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "docketNumber": "122-20"
   },
   {
     "isStricken": false,
@@ -1842,7 +1851,8 @@
     "partySecondary": false,
     "pk": "case|122-20",
     "documentTitle": "Statement of Taxpayer Identification",
-    "privatePractitioners": []
+    "privatePractitioners": [],
+    "docketNumber": "122-20"
   },
   {
     "isStricken": false,
@@ -1908,7 +1918,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "partySecondary": false,
-    "pk": "case|122-20"
+    "pk": "case|122-20",
+    "docketNumber": "122-20"
   },
   {
     "sk": "work-item|0fa2107f-84fa-4156-8b69-e96cb4330a5b",
@@ -2161,23 +2172,24 @@
     "isMinuteEntry": false,
     "pending": false,
     "isDraft": false,
-    "index": 3,
-    "isFileAttached": true,
     "receivedAt": "2020-01-23T21:45:14.136Z",
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "NTD",
-    "processingStatus": "complete",
     "createdAt": "2020-01-23T21:45:14.136Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Test Docketclerk",
     "docketEntryId": "4d736f72-6312-4f7f-886e-210a0074fdc3",
     "sk": "docket-entry|4d736f72-6312-4f7f-886e-210a0074fdc3",
+    "documentTitle": "Notice of Trial on 11/27/2020 at Houston, Texas",
+    "index": 3,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "NTD",
+    "processingStatus": "complete",
     "signedAt": "2020-09-25T19:27:21.905Z",
     "servedAt": "2020-01-23T21:45:14.148Z",
     "pk": "case|103-20",
-    "documentTitle": "Notice of Trial on 11/27/2020 at Houston, Texas"
+    "docketNumber": "103-20"
   },
   {
     "servedParties": [
@@ -2221,7 +2233,6 @@
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
-    "index": 1,
     "workItem": {
       "associatedJudge": "Chief Judge",
       "caseStatus": "New",
@@ -2241,47 +2252,50 @@
       "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "updatedAt": "2020-01-23T21:44:54.044Z"
     },
-    "isFileAttached": true,
     "receivedAt": "2020-01-23T21:44:54.043Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "P",
-    "processingStatus": "complete",
     "createdAt": "2020-01-23T21:44:54.043Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Reuben Blair",
     "docketEntryId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
     "sk": "docket-entry|ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
+    "documentTitle": "Petition",
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
     "partySecondary": false,
     "pk": "case|103-20",
-    "documentTitle": "Petition"
+    "docketNumber": "103-20"
   },
   {
     "isStricken": false,
     "documentType": "Statement of Taxpayer Identification",
     "filingDate": "2020-01-23T21:44:54.044Z",
-    "practitioner": [],
     "isMinuteEntry": false,
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
     "receivedAt": "2020-01-23T21:44:54.044Z",
-    "isFileAttached": true,
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": false,
-    "eventCode": "STIN",
     "createdAt": "2020-01-23T21:44:54.044Z",
-    "processingStatus": "complete",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Reuben Blair",
     "docketEntryId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "sk": "docket-entry|f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "practitioner": [],
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "processingStatus": "complete",
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|103-20",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "docketNumber": "103-20"
   },
   {
     "sk": "work-item|1c7acdf5-480d-404a-9e3a-5d5ccc8068c2",
@@ -2852,7 +2866,8 @@
     "partySecondary": false,
     "documentId": "3cf1f474-1dcd-47aa-8455-8f9a93d80183",
     "pk": "case|113-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "113-19"
   },
   {
     "isStricken": false,
@@ -2862,7 +2877,6 @@
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
-    "index": 1,
     "workItem": {
       "associatedJudge": "Chief Judge",
       "caseStatus": "New",
@@ -2882,21 +2896,23 @@
       "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "updatedAt": "2019-12-11T16:02:31.175Z"
     },
-    "isFileAttached": true,
     "receivedAt": "2019-12-11T16:02:31.174Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "P",
-    "processingStatus": "complete",
     "createdAt": "2019-12-11T16:02:31.174Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Letti Toretto",
     "docketEntryId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
     "sk": "docket-entry|6d83425c-8ef3-4c66-b776-6c7957c53f4d",
+    "documentTitle": "Petition",
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
     "partySecondary": false,
     "pk": "case|113-19",
-    "documentTitle": "Petition"
+    "docketNumber": "113-19"
   },
   {
     "servedParties": [
@@ -3664,6 +3680,7 @@
     "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
     "pk": "case|108-19",
     "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "108-19",
     "status": "served"
   },
   {
@@ -3679,7 +3696,6 @@
     "isMinuteEntry": false,
     "pending": false,
     "isDraft": false,
-    "index": 1,
     "workItem": {
       "associatedJudge": "Chief Judge",
       "completedAt": "2019-08-16T19:22:13.925Z",
@@ -3703,21 +3719,23 @@
       "completedBy": "Test Petitionsclerk",
       "updatedAt": "2019-08-16T19:21:46.147Z"
     },
-    "isFileAttached": true,
     "receivedAt": "2019-08-16T19:21:46.146Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "P",
-    "processingStatus": "complete",
     "createdAt": "2019-08-16T19:21:46.146Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
     "docketEntryId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
     "sk": "docket-entry|3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+    "documentTitle": "Petition",
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
     "servedAt": "2019-08-16T19:22:13.925Z",
     "pk": "case|108-19",
-    "documentTitle": "Petition"
+    "docketNumber": "108-19"
   },
   {
     "servedParties": [
@@ -4645,29 +4663,30 @@
         "email": "petitioner@example.com"
       }
     ],
-    "draftOrderState": null,
     "isStricken": false,
     "documentType": "Ownership Disclosure Statement",
     "filingDate": "2019-03-05T17:34:13.491Z",
     "isMinuteEntry": false,
     "pending": false,
     "isDraft": false,
-    "index": 3,
-    "isFileAttached": true,
     "receivedAt": "2020-03-06T20:04:07.111Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "DISC",
-    "processingStatus": "complete",
     "createdAt": "2019-03-05T17:34:13.491Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Test Petitioner",
     "docketEntryId": "add36745-8e77-450b-a8dd-6f34272fe1d5",
     "sk": "docket-entry|add36745-8e77-450b-a8dd-6f34272fe1d5",
+    "documentTitle": "Ownership Disclosure Statement",
+    "draftOrderState": null,
+    "index": 3,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "DISC",
+    "processingStatus": "complete",
     "pk": "case|104-19",
     "servedAt": "2019-03-05T17:34:13.491Z",
-    "documentTitle": "Ownership Disclosure Statement"
+    "docketNumber": "104-19"
   },
   {
     "isStricken": false,
@@ -4690,7 +4709,8 @@
     "sk": "docket-entry|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|104-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "104-19"
   },
   {
     "isStricken": false,
@@ -4731,7 +4751,8 @@
     "docketEntryId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
     "sk": "docket-entry|c63be3f2-2240-451e-b6bd-8206d52a070b",
     "pk": "case|104-19",
-    "documentTitle": "Petition"
+    "documentTitle": "Petition",
+    "docketNumber": "104-19"
   },
   {
     "attachments": [
@@ -5353,6 +5374,38 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|c5d064c5-fdc6-4733-933e-e4b064294cfe",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "c5d064c5-fdc6-4733-933e-e4b064294cfe",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2021-04-22T18:38:58.093Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|c5d064c5-fdc6-4733-933e-e4b064294cfe",
+    "docketNumberWithSuffix": "302-21W",
+    "docketEntry": {
+      "eventCode": "P",
+      "createdAt": "2021-04-22T18:38:58.092Z",
+      "documentType": "Petition",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "c7722517-b08a-489d-b272-d690b3bbdbeb",
+      "documentTitle": "Petition",
+      "isFileAttached": true,
+      "receivedAt": "2021-04-22T04:00:00.000Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section|petitions",
+    "docketNumber": "302-21",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2021-04-22T18:38:58.093Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "gsi1pk": "work-item|e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
@@ -5590,7 +5643,6 @@
     "preferredTrialCity": null,
     "initialCaption": "Test Petitioner, Petitioner",
     "hasPendingItems": false,
-    "docketEntries": [],
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|1338-20",
     "docketNumber": "1338-20",
@@ -5684,7 +5736,8 @@
     "docketEntryId": "35306555-83f2-4f61-9be6-438bd107e5eb",
     "sk": "docket-entry|35306555-83f2-4f61-9be6-438bd107e5eb",
     "pk": "case|105-19",
-    "documentTitle": "Petition"
+    "documentTitle": "Petition",
+    "docketNumber": "105-19"
   },
   {
     "servedParties": [
@@ -5741,7 +5794,8 @@
     "sk": "docket-entry|f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
     "pk": "case|105-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "105-19"
   },
   {
     "role": "privatePractitioner",
@@ -6025,7 +6079,8 @@
     "sk": "docket-entry|1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "pk": "case|109-19",
-    "documentTitle": "Petition"
+    "documentTitle": "Petition",
+    "docketNumber": "109-19"
   },
   {
     "isStricken": false,
@@ -6110,7 +6165,8 @@
     "sk": "docket-entry|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|109-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "109-19"
   },
   {
     "role": "trialclerk",
@@ -6553,7 +6609,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "partySecondary": false,
-    "pk": "case|126-20"
+    "pk": "case|126-20",
+    "docketNumber": "126-20"
   },
   {
     "isStricken": false,
@@ -6578,7 +6635,8 @@
     "partySecondary": false,
     "pk": "case|126-20",
     "documentTitle": "Statement of Taxpayer Identification",
-    "privatePractitioners": []
+    "privatePractitioners": [],
+    "docketNumber": "126-20"
   },
   {
     "isStricken": false,
@@ -6599,7 +6657,8 @@
     "docketEntryId": "d03e12eb-3fef-414c-8019-1f2b29a02bcb",
     "sk": "docket-entry|d03e12eb-3fef-414c-8019-1f2b29a02bcb",
     "pk": "case|126-20",
-    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "docketNumber": "126-20"
   },
   {
     "sk": "work-item|7150dc91-bdb6-472f-8f36-71138f80e478",
@@ -6614,6 +6673,38 @@
   {
     "sk": "user|27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f",
     "pk": "section|reportersOffice"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "New",
+    "gsi1pk": "work-item|c5d064c5-fdc6-4733-933e-e4b064294cfe",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "c5d064c5-fdc6-4733-933e-e4b064294cfe",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2021-04-22T18:38:58.093Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|c5d064c5-fdc6-4733-933e-e4b064294cfe",
+    "docketNumberWithSuffix": "302-21W",
+    "docketEntry": {
+      "eventCode": "P",
+      "createdAt": "2021-04-22T18:38:58.092Z",
+      "documentType": "Petition",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "c7722517-b08a-489d-b272-d690b3bbdbeb",
+      "documentTitle": "Petition",
+      "isFileAttached": true,
+      "receivedAt": "2021-04-22T04:00:00.000Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "work-item|c5d064c5-fdc6-4733-933e-e4b064294cfe",
+    "docketNumber": "302-21",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2021-04-22T18:38:58.093Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6749,7 +6840,8 @@
     "partySecondary": false,
     "documentId": "59ccf18f-5bac-48b0-a8e0-9c9e1d995b62",
     "pk": "case|111-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "111-19"
   },
   {
     "isStricken": false,
@@ -6759,7 +6851,6 @@
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
-    "index": 1,
     "workItem": {
       "associatedJudge": "Chief Judge",
       "caseStatus": "New",
@@ -6779,21 +6870,23 @@
       "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "updatedAt": "2019-12-11T15:25:09.286Z"
     },
-    "isFileAttached": true,
     "receivedAt": "2019-12-11T15:25:09.285Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "P",
-    "processingStatus": "complete",
     "createdAt": "2019-12-11T15:25:09.285Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Guy Fieri",
     "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
     "sk": "docket-entry|9de27a7d-7c6b-434b-803b-7655f82d5e07",
+    "documentTitle": "Petition",
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
     "partySecondary": false,
     "pk": "case|111-19",
-    "documentTitle": "Petition"
+    "docketNumber": "111-19"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -6908,7 +7001,8 @@
     "sk": "docket-entry|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|103-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "103-19"
   },
   {
     "isStricken": false,
@@ -6949,7 +7043,8 @@
     "docketEntryId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
     "sk": "docket-entry|c611ee2e-a270-4dcd-a7bd-b8b9062db630",
     "pk": "case|103-19",
-    "documentTitle": "Petition"
+    "documentTitle": "Petition",
+    "docketNumber": "103-19"
   },
   {
     "isPaper": true,
@@ -7057,7 +7152,8 @@
     "eventCode": "A",
     "processingStatus": "complete",
     "pk": "case|103-19",
-    "servedAt": "2019-03-01T22:54:05.993Z"
+    "servedAt": "2019-03-01T22:54:05.993Z",
+    "docketNumber": "103-19"
   },
   {
     "role": "irsPractitioner",
@@ -7190,29 +7286,30 @@
         "email": "irsPractitioner@example.com"
       }
     ],
-    "draftOrderState": null,
     "isStricken": false,
     "documentType": "Ownership Disclosure Statement",
     "filingDate": "2019-08-16T17:29:10.133Z",
     "isMinuteEntry": false,
     "pending": false,
     "isDraft": false,
-    "index": 3,
-    "isFileAttached": true,
     "receivedAt": "2019-08-16T17:29:10.133Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "DISC",
-    "processingStatus": "complete",
     "createdAt": "2019-08-16T17:29:10.133Z",
     "numberOfPages": 2,
     "entityName": "DocketEntry",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
     "docketEntryId": "35306555-83f2-4f61-9be6-438bd107e5eb",
     "sk": "docket-entry|35306555-83f2-4f61-9be6-438bd107e5eb",
+    "documentTitle": "Ownership Disclosure Statement",
+    "draftOrderState": null,
+    "index": 3,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "DISC",
+    "processingStatus": "complete",
     "pk": "case|107-19",
     "servedAt": "2019-08-16T17:29:10.133Z",
-    "documentTitle": "Ownership Disclosure Statement"
+    "docketNumber": "107-19"
   },
   {
     "servedParties": [
@@ -7227,7 +7324,6 @@
     "isMinuteEntry": false,
     "pending": false,
     "isDraft": false,
-    "index": 1,
     "workItem": {
       "associatedJudge": "Chief Judge",
       "completedAt": "2019-08-16T17:30:10.526Z",
@@ -7251,21 +7347,23 @@
       "completedBy": "Test Petitionsclerk",
       "updatedAt": "2019-08-16T17:29:10.133Z"
     },
-    "isFileAttached": true,
     "receivedAt": "2019-08-16T17:29:10.132Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "P",
-    "processingStatus": "complete",
     "createdAt": "2019-08-16T17:29:10.132Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
     "docketEntryId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "sk": "docket-entry|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
+    "documentTitle": "Petition",
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
     "servedAt": "2019-08-16T17:30:10.526Z",
     "pk": "case|107-19",
-    "documentTitle": "Petition"
+    "docketNumber": "107-19"
   },
   {
     "isStricken": false,
@@ -7289,6 +7387,7 @@
     "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
     "pk": "case|107-19",
     "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "107-19",
     "status": "served"
   },
   {
@@ -7523,7 +7622,7 @@
   },
   {
     "sk": "docketNumberCounter-2021",
-    "id": 201,
+    "id": 202,
     "pk": "docketNumberCounter-2021"
   },
   {
@@ -8057,6 +8156,17 @@
     "status": "New"
   },
   {
+    "createdAt": "2021-04-22T18:38:58.091Z",
+    "entityName": "UserCase",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "gsi1pk": "user-case|302-21",
+    "sk": "case|302-21",
+    "docketNumberWithSuffix": "302-21W",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "302-21",
+    "status": "New"
+  },
+  {
     "role": "petitioner",
     "address2": "Hanover, MI 49241",
     "phone": "517-563-1536",
@@ -8068,6 +8178,170 @@
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "petitioner@example.com"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "isPaper": false,
+    "qcCompleteForTrial": {},
+    "otherPetitioners": [],
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not Paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2021-04-22T18:38:58.091Z",
+    "caseType": "Whistleblower",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "isAddressSealed": false,
+      "address3": "Architecto assumenda",
+      "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "sealedAndUnavailable": false,
+      "countryType": "domestic",
+      "phone": "+1 (537) 235-6147",
+      "name": "Brett Osborne",
+      "state": "AK",
+      "email": "petitioner@example.com"
+    },
+    "createdAt": "2021-04-22T18:38:58.091Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "sk": "case|302-21",
+    "orderForOds": false,
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "302-21W",
+    "orderForRatification": false,
+    "initialDocketNumberSuffix": "W",
+    "docketNumberSuffix": "W",
+    "otherFilers": [],
+    "sortableDocketNumber": 21000302,
+    "noticeOfTrialDate": "2021-04-22T18:38:58.092Z",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "hasPendingItems": false,
+    "initialCaption": "Brett Osborne, Petitioner",
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|302-21",
+    "docketNumber": "302-21",
+    "status": "New",
+    "statistics": []
+  },
+  {
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2021-04-22T18:38:58.091Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2021-04-22T04:00:00.000Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "createdAt": "2021-04-22T18:38:58.094Z",
+    "processingStatus": "complete",
+    "entityName": "DocketEntry",
+    "docketEntryId": "0af797f5-f942-43ee-b469-a1a9d57be9c8",
+    "sk": "docket-entry|0af797f5-f942-43ee-b469-a1a9d57be9c8",
+    "pk": "case|302-21",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "docketNumber": "302-21",
+    "addToCoversheet": false
+  },
+  {
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2021-04-22T18:38:58.091Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2021-04-22T04:00:00.000Z",
+    "isOnDocketRecord": false,
+    "createdAt": "2021-04-22T18:38:58.094Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "0da138d9-b1c3-42a1-b430-d6cd483f062f",
+    "sk": "docket-entry|0da138d9-b1c3-42a1-b430-d6cd483f062f",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": [],
+    "addToCoversheet": false,
+    "index": 0,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "processingStatus": "complete",
+    "partySecondary": false,
+    "pk": "case|302-21",
+    "docketNumber": "302-21"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2021-04-22T18:38:58.091Z",
+    "isMinuteEntry": false,
+    "partyPrimary": true,
+    "pending": false,
+    "isDraft": false,
+    "workItem": {
+      "associatedJudge": "Chief Judge",
+      "caseStatus": "New",
+      "caseTitle": "Brett Osborne",
+      "section": "petitions",
+      "workItemId": "c5d064c5-fdc6-4733-933e-e4b064294cfe",
+      "isInitializeCase": true,
+      "assigneeId": null,
+      "sentBy": "Test Petitioner",
+      "createdAt": "2021-04-22T18:38:58.093Z",
+      "highPriority": false,
+      "assigneeName": null,
+      "entityName": "WorkItem",
+      "docketNumberWithSuffix": "302-21W",
+      "docketEntry": {
+        "eventCode": "P",
+        "createdAt": "2021-04-22T18:38:58.092Z",
+        "documentType": "Petition",
+        "filedBy": "Petr. Brett Osborne",
+        "docketEntryId": "c7722517-b08a-489d-b272-d690b3bbdbeb",
+        "documentTitle": "Petition",
+        "isFileAttached": true,
+        "receivedAt": "2021-04-22T04:00:00.000Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      "docketNumber": "302-21",
+      "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "updatedAt": "2021-04-22T18:38:58.093Z"
+    },
+    "receivedAt": "2021-04-22T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2021-04-22T18:38:58.092Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "c7722517-b08a-489d-b272-d690b3bbdbeb",
+    "sk": "docket-entry|c7722517-b08a-489d-b272-d690b3bbdbeb",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "addToCoversheet": false,
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "partySecondary": false,
+    "pk": "case|302-21",
+    "docketNumber": "302-21"
+  },
+  {
+    "sk": "work-item|c5d064c5-fdc6-4733-933e-e4b064294cfe",
+    "pk": "case|302-21"
   },
   {
     "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
@@ -8317,23 +8591,24 @@
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
-    "index": 0,
-    "isFileAttached": true,
     "receivedAt": "2020-11-30T21:58:13.410Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": false,
-    "eventCode": "STIN",
     "createdAt": "2020-11-30T21:58:13.410Z",
-    "processingStatus": "complete",
     "numberOfPages": 2,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "13178e81-a4bb-4183-b57a-d68fc75fdfaf",
     "sk": "docket-entry|13178e81-a4bb-4183-b57a-d68fc75fdfaf",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": [],
+    "index": 0,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "processingStatus": "complete",
     "partySecondary": false,
     "pk": "case|128-20",
-    "documentTitle": "Statement of Taxpayer Identification",
-    "privatePractitioners": []
+    "docketNumber": "128-20"
   },
   {
     "isStricken": false,
@@ -8354,7 +8629,8 @@
     "docketEntryId": "2bc8db97-08f9-40f4-8eec-1388efb3aab0",
     "sk": "docket-entry|2bc8db97-08f9-40f4-8eec-1388efb3aab0",
     "pk": "case|128-20",
-    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "docketNumber": "128-20"
   },
   {
     "isStricken": false,
@@ -8420,7 +8696,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "partySecondary": false,
-    "pk": "case|128-20"
+    "pk": "case|128-20",
+    "docketNumber": "128-20"
   },
   {
     "sk": "work-item|624ab651-c8df-4b8c-a332-fb11b9df7a9c",
@@ -8807,7 +9084,8 @@
     "sk": "docket-entry|1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "pk": "case|110-19",
-    "documentTitle": "Petition"
+    "documentTitle": "Petition",
+    "docketNumber": "110-19"
   },
   {
     "isStricken": false,
@@ -8892,7 +9170,8 @@
     "sk": "docket-entry|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|110-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "110-19"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8970,7 +9249,8 @@
     "docketEntryId": "45dee1f6-666e-4183-9e02-c824850b859b",
     "sk": "docket-entry|45dee1f6-666e-4183-9e02-c824850b859b",
     "pk": "case|127-20",
-    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "docketNumber": "127-20"
   },
   {
     "isStricken": false,
@@ -9036,7 +9316,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "partySecondary": false,
-    "pk": "case|127-20"
+    "pk": "case|127-20",
+    "docketNumber": "127-20"
   },
   {
     "isStricken": false,
@@ -9046,23 +9327,24 @@
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
-    "index": 0,
-    "isFileAttached": true,
     "receivedAt": "2020-11-18T19:32:11.466Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": false,
-    "eventCode": "STIN",
     "createdAt": "2020-11-18T19:32:11.466Z",
-    "processingStatus": "complete",
     "numberOfPages": 2,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "d1760696-630b-4472-9e74-3aa8f18975fa",
     "sk": "docket-entry|d1760696-630b-4472-9e74-3aa8f18975fa",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": [],
+    "index": 0,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "processingStatus": "complete",
     "partySecondary": false,
     "pk": "case|127-20",
-    "documentTitle": "Statement of Taxpayer Identification",
-    "privatePractitioners": []
+    "docketNumber": "127-20"
   },
   {
     "sk": "work-item|b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e",
@@ -9278,7 +9560,8 @@
     "eventCode": "P",
     "processingStatus": "pending",
     "partySecondary": false,
-    "pk": "case|121-20"
+    "pk": "case|121-20",
+    "docketNumber": "121-20"
   },
   {
     "servedParties": [
@@ -9321,7 +9604,8 @@
     "partySecondary": false,
     "documentId": "fb125bc1-27aa-4224-b52a-46346f6d167b",
     "pk": "case|121-20",
-    "servedAt": "2020-08-10T04:00:00.000Z"
+    "servedAt": "2020-08-10T04:00:00.000Z",
+    "docketNumber": "121-20"
   },
   {
     "servedParties": [
@@ -9364,7 +9648,8 @@
     "partySecondary": false,
     "documentId": "fd468817-a88e-4c13-b32b-abb7afc04ea4",
     "pk": "case|121-20",
-    "servedAt": "2020-08-10T04:00:00.000Z"
+    "servedAt": "2020-08-10T04:00:00.000Z",
+    "docketNumber": "121-20"
   },
   {
     "sk": "work-item|b99d6fab-d009-4f22-8bdf-e42157cecfe9",
@@ -9545,7 +9830,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "partySecondary": false,
-    "pk": "case|123-20"
+    "pk": "case|123-20",
+    "docketNumber": "123-20"
   },
   {
     "isStricken": false,
@@ -9566,7 +9852,8 @@
     "docketEntryId": "3e7be85d-5ec0-4a10-9b98-6f53df0ce1df",
     "sk": "docket-entry|3e7be85d-5ec0-4a10-9b98-6f53df0ce1df",
     "pk": "case|123-20",
-    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "docketNumber": "123-20"
   },
   {
     "isStricken": false,
@@ -9591,7 +9878,8 @@
     "partySecondary": false,
     "pk": "case|123-20",
     "documentTitle": "Statement of Taxpayer Identification",
-    "privatePractitioners": []
+    "privatePractitioners": [],
+    "docketNumber": "123-20"
   },
   {
     "sk": "work-item|e54995dd-bd20-4296-91da-81ae4d5d5f1a",
@@ -10093,7 +10381,8 @@
     "processingStatus": "complete",
     "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
-    "pk": "case|117-20"
+    "pk": "case|117-20",
+    "docketNumber": "117-20"
   },
   {
     "isStricken": false,
@@ -10138,7 +10427,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "partySecondary": false,
-    "pk": "case|117-20"
+    "pk": "case|117-20",
+    "docketNumber": "117-20"
   },
   {
     "servedParties": [
@@ -10235,334 +10525,6 @@
     "preferredTrialCity": "Indianapolis, Indiana",
     "initialCaption": "Stacy Russold, Natalya Chaouche, Tax Matters Partner, Petitioner",
     "hasPendingItems": false,
-    "docketEntries": [
-      {
-        "servedParties": [
-          {
-            "name": "IRS",
-            "role": "irsSuperuser"
-          }
-        ],
-        "isPaper": true,
-        "isStricken": false,
-        "documentType": "Request for Place of Trial",
-        "filingDate": "2020-09-02T04:00:00.000Z",
-        "isMinuteEntry": false,
-        "partyPrimary": true,
-        "pending": false,
-        "isDraft": false,
-        "receivedAt": "2020-09-02T04:00:00.000Z",
-        "isOnDocketRecord": true,
-        "createdAt": "2020-09-02T04:00:00.000Z",
-        "numberOfPages": 26,
-        "entityName": "DocketEntry",
-        "filedBy": "Petr. Stacy Russold",
-        "docketEntryId": "57682810-ca3f-47e9-80c8-5d3b3b67a914",
-        "documentTitle": "Request for Place of Trial at Indianapolis, Indiana",
-        "draftOrderState": null,
-        "index": 2,
-        "mailingDate": "03/03/2020",
-        "isFileAttached": true,
-        "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "RQT",
-        "processingStatus": "pending",
-        "partySecondary": false,
-        "servedAt": "2020-09-30T20:24:15.222Z"
-      },
-      {
-        "servedParties": [
-          {
-            "name": "IRS",
-            "role": "irsSuperuser"
-          }
-        ],
-        "isPaper": true,
-        "isStricken": false,
-        "documentType": "Petition",
-        "filingDate": "2020-09-02T04:00:00.000Z",
-        "isMinuteEntry": false,
-        "partyPrimary": true,
-        "pending": false,
-        "isDraft": false,
-        "workItem": {
-          "associatedJudge": "Fieri",
-          "completedAt": "2020-09-30T20:24:15.441Z",
-          "caseStatus": "New",
-          "completedMessage": "Served to IRS",
-          "caseIsInProgress": true,
-          "caseTitle": "Stacy Russold, Natalya Chaouche, Tax Matters Partner",
-          "section": "petitions",
-          "workItemId": "5ea16d24-7088-4cb9-b137-59900836a96e",
-          "isInitializeCase": true,
-          "assigneeId": "4805d1ab-18d0-43ec-bafb-654e83405416",
-          "completedByUserId": "4805d1ab-18d0-43ec-bafb-654e83405416",
-          "sentBy": "Test Petitionsclerk1",
-          "sentBySection": "petitions",
-          "createdAt": "2020-09-30T20:23:57.360Z",
-          "highPriority": false,
-          "assigneeName": "Test Petitionsclerk1",
-          "entityName": "WorkItem",
-          "docketNumberWithSuffix": "124-20",
-          "docketEntry": {
-            "isPaper": true,
-            "isStricken": false,
-            "documentType": "Petition",
-            "filingDate": "2020-09-02T04:00:00.000Z",
-            "isMinuteEntry": false,
-            "partyPrimary": true,
-            "pending": false,
-            "isDraft": false,
-            "mailingDate": "03/03/2020",
-            "isFileAttached": true,
-            "receivedAt": "2020-09-02T04:00:00.000Z",
-            "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
-            "isOnDocketRecord": true,
-            "eventCode": "P",
-            "processingStatus": "pending",
-            "createdAt": "2020-09-02T04:00:00.000Z",
-            "entityName": "DocketEntry",
-            "filedBy": "Petr. Stacy Russold",
-            "docketEntryId": "b0899914-f433-467a-a12c-6ffb5a36ccd2",
-            "partySecondary": false,
-            "servedAt": "2020-09-30T20:24:15.162Z",
-            "documentTitle": "Petition"
-          },
-          "docketNumber": "124-20",
-          "sentByUserId": "4805d1ab-18d0-43ec-bafb-654e83405416",
-          "completedBy": "Test Petitionsclerk1",
-          "updatedAt": "2020-09-30T20:23:57.361Z"
-        },
-        "receivedAt": "2020-09-02T04:00:00.000Z",
-        "isOnDocketRecord": true,
-        "createdAt": "2020-09-02T04:00:00.000Z",
-        "numberOfPages": 26,
-        "entityName": "DocketEntry",
-        "filedBy": "Petr. Stacy Russold",
-        "docketEntryId": "b0899914-f433-467a-a12c-6ffb5a36ccd2",
-        "documentTitle": "Petition",
-        "draftOrderState": null,
-        "index": 1,
-        "mailingDate": "03/03/2020",
-        "isFileAttached": true,
-        "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "P",
-        "processingStatus": "pending",
-        "partySecondary": false,
-        "servedAt": "2020-09-30T20:24:15.162Z"
-      },
-      {
-        "date": null,
-        "servedParties": [
-          {
-            "name": "Stacy Russold"
-          }
-        ],
-        "serviceStamp": "Served",
-        "attachments": false,
-        "isStricken": false,
-        "documentType": "Order",
-        "filingDate": "2020-09-30T20:25:33.209Z",
-        "isMinuteEntry": false,
-        "pending": false,
-        "isDraft": false,
-        "workItem": {
-          "associatedJudge": "Fieri",
-          "completedAt": "2020-09-30T20:25:32.962Z",
-          "caseStatus": "General Docket - Not at Issue",
-          "completedMessage": "completed",
-          "caseTitle": "Stacy Russold, Natalya Chaouche, Tax Matters Partner",
-          "section": "docket",
-          "workItemId": "4c7de46a-b371-4f76-80b0-c9e69d3d6215",
-          "assigneeId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "completedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "sentBy": "Test Docketclerk1",
-          "sentBySection": "docket",
-          "createdAt": "2020-09-30T20:25:32.384Z",
-          "highPriority": false,
-          "assigneeName": "Test Docketclerk1",
-          "entityName": "WorkItem",
-          "hideFromPendingMessages": true,
-          "docketNumberWithSuffix": "124-20",
-          "docketEntry": {
-            "date": null,
-            "servedParties": [
-              {
-                "isAddressSealed": false,
-                "serviceIndicator": "Paper",
-                "secondaryName": "Natalya Chaouche",
-                "contactId": "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f",
-                "city": "Berthoud",
-                "address1": "543 Ten Ballon Drive",
-                "postalCode": "80513",
-                "name": "Stacy Russold",
-                "sealedAndUnavailable": false,
-                "state": "CO",
-                "countryType": "domestic"
-              }
-            ],
-            "serviceStamp": "Served",
-            "attachments": false,
-            "isStricken": false,
-            "documentType": "Order",
-            "filingDate": "2020-09-30T20:25:22.035Z",
-            "isMinuteEntry": false,
-            "pending": false,
-            "isDraft": false,
-            "receivedAt": "2020-09-30T20:25:22.035Z",
-            "isOnDocketRecord": true,
-            "signedJudgeName": "Fieri",
-            "createdAt": "2020-09-30T20:25:25.087Z",
-            "numberOfPages": 1,
-            "scenario": "Type A",
-            "entityName": "DocketEntry",
-            "docketEntryId": "67a204c3-7111-48f3-8ddd-3c2e60f4d1af",
-            "documentIdBeforeSignature": "106e58ba-d431-457c-9ace-746f8f488b77",
-            "documentTitle": "This is a legacy judge's order",
-            "relationship": "primaryDocument",
-            "draftOrderState": null,
-            "isFileAttached": true,
-            "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-            "eventCode": "O",
-            "processingStatus": "complete",
-            "freeText": "This is a legacy judge's order",
-            "signedAt": "2020-09-30T20:25:25.088Z",
-            "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"This is a legacy judge's order\",\"date\":null,\"generatedDocumentTitle\":\"This is a legacy judge's order\",\"serviceStamp\":\"Served\",\"docketEntryId\":\"67a204c3-7111-48f3-8ddd-3c2e60f4d1af\",\"docketNumber\":\"124-20\"}",
-            "signedByUserId": "dadbad42-18d0-43ec-bafb-654e83405416",
-            "servedAt": "2020-09-30T20:25:32.869Z",
-            "docketNumber": "124-20"
-          },
-          "docketNumber": "124-20",
-          "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "completedBy": "Test Docketclerk1",
-          "updatedAt": "2020-09-30T20:25:32.385Z"
-        },
-        "receivedAt": "2020-09-30T20:25:22.035Z",
-        "isOnDocketRecord": true,
-        "signedJudgeName": "Fieri",
-        "createdAt": "2020-09-30T20:25:25.087Z",
-        "numberOfPages": 1,
-        "scenario": "Type A",
-        "entityName": "DocketEntry",
-        "docketEntryId": "67a204c3-7111-48f3-8ddd-3c2e60f4d1af",
-        "documentIdBeforeSignature": "106e58ba-d431-457c-9ace-746f8f488b77",
-        "documentTitle": "This is a legacy judge's order",
-        "relationship": "primaryDocument",
-        "draftOrderState": null,
-        "index": 3,
-        "isFileAttached": true,
-        "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "O",
-        "processingStatus": "complete",
-        "freeText": "This is a legacy judge's order",
-        "signedAt": "2020-09-30T20:25:25.088Z",
-        "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"This is a legacy judge's order\",\"date\":null,\"generatedDocumentTitle\":\"This is a legacy judge's order\",\"serviceStamp\":\"Served\",\"docketEntryId\":\"67a204c3-7111-48f3-8ddd-3c2e60f4d1af\",\"docketNumber\":\"124-20\"}",
-        "signedByUserId": "dadbad42-18d0-43ec-bafb-654e83405416",
-        "servedAt": "2020-09-30T20:25:32.869Z",
-        "docketNumber": "124-20"
-      },
-      {
-        "date": null,
-        "servedParties": [
-          {
-            "name": "Stacy Russold"
-          }
-        ],
-        "attachments": false,
-        "isStricken": false,
-        "documentType": "Summary Opinion",
-        "filingDate": "2020-09-30T20:26:09.212Z",
-        "isMinuteEntry": false,
-        "pending": false,
-        "isDraft": false,
-        "workItem": {
-          "associatedJudge": "Fieri",
-          "completedAt": "2020-09-30T20:26:08.983Z",
-          "caseStatus": "General Docket - Not at Issue",
-          "completedMessage": "completed",
-          "caseTitle": "Stacy Russold, Natalya Chaouche, Tax Matters Partner",
-          "section": "docket",
-          "workItemId": "5f075b42-470c-4ffd-864e-e8b873e96f30",
-          "assigneeId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "completedByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "sentBy": "Test Docketclerk1",
-          "sentBySection": "docket",
-          "createdAt": "2020-09-30T20:26:08.362Z",
-          "highPriority": false,
-          "assigneeName": "Test Docketclerk1",
-          "entityName": "WorkItem",
-          "hideFromPendingMessages": true,
-          "docketNumberWithSuffix": "124-20",
-          "docketEntry": {
-            "date": null,
-            "servedParties": [
-              {
-                "isAddressSealed": false,
-                "serviceIndicator": "Paper",
-                "secondaryName": "Natalya Chaouche",
-                "contactId": "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f",
-                "city": "Berthoud",
-                "address1": "543 Ten Ballon Drive",
-                "postalCode": "80513",
-                "name": "Stacy Russold",
-                "sealedAndUnavailable": false,
-                "state": "CO",
-                "countryType": "domestic"
-              }
-            ],
-            "attachments": false,
-            "isStricken": false,
-            "documentType": "Summary Opinion",
-            "filingDate": "2020-09-30T20:25:50.601Z",
-            "isMinuteEntry": false,
-            "pending": false,
-            "isDraft": false,
-            "receivedAt": "2020-09-30T20:25:50.601Z",
-            "isOnDocketRecord": true,
-            "createdAt": "2020-09-30T20:25:50.600Z",
-            "numberOfPages": 25,
-            "scenario": "Type B",
-            "entityName": "DocketEntry",
-            "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
-            "judge": "Fieri",
-            "documentTitle": "Summary Opinion Chief Judge Fieri",
-            "relationship": "primaryDocument",
-            "draftOrderState": null,
-            "isFileAttached": true,
-            "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-            "eventCode": "SOP",
-            "processingStatus": "complete",
-            "freeText": "This is a legacy judge's opinion",
-            "editState": "{\"eventCode\":\"SOP\",\"documentType\":\"Summary Opinion\",\"documentTitle\":\"Summary Opinion [judge]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Summary Opinion Chief Judge Fieri\",\"searchText\":\"opi\",\"freeText\":\"This is a legacy judge's opinion\",\"judge\":\"Legacy Judge Fieri\",\"docketEntryId\":\"659d001a-4d91-41f4-acd8-8417a1d2be49\",\"docketNumber\":\"124-20\"}",
-            "servedAt": "2020-09-30T20:26:08.914Z",
-            "docketNumber": "124-20"
-          },
-          "docketNumber": "124-20",
-          "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-          "completedBy": "Test Docketclerk1",
-          "updatedAt": "2020-09-30T20:26:08.363Z"
-        },
-        "receivedAt": "2020-09-30T20:25:50.601Z",
-        "isOnDocketRecord": true,
-        "createdAt": "2020-09-30T20:25:50.600Z",
-        "numberOfPages": 25,
-        "scenario": "Type B",
-        "entityName": "DocketEntry",
-        "docketEntryId": "659d001a-4d91-41f4-acd8-8417a1d2be49",
-        "judge": "Fieri",
-        "documentTitle": "Summary Opinion Chief Judge Fieri",
-        "relationship": "primaryDocument",
-        "draftOrderState": null,
-        "index": 4,
-        "isFileAttached": true,
-        "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
-        "eventCode": "SOP",
-        "processingStatus": "complete",
-        "freeText": "This is a legacy judge's opinion",
-        "editState": "{\"eventCode\":\"SOP\",\"documentType\":\"Summary Opinion\",\"documentTitle\":\"Summary Opinion [judge]\",\"scenario\":\"Type B\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Summary Opinion Chief Judge Fieri\",\"searchText\":\"opi\",\"freeText\":\"This is a legacy judge's opinion\",\"judge\":\"Legacy Judge Fieri\",\"docketEntryId\":\"659d001a-4d91-41f4-acd8-8417a1d2be49\",\"docketNumber\":\"124-20\"}",
-        "servedAt": "2020-09-30T20:26:08.914Z",
-        "docketNumber": "124-20"
-      }
-    ],
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|124-20",
     "docketNumber": "124-20",
@@ -10603,7 +10565,8 @@
     "processingStatus": "pending",
     "partySecondary": false,
     "pk": "case|124-20",
-    "servedAt": "2020-09-30T20:24:15.222Z"
+    "servedAt": "2020-09-30T20:24:15.222Z",
+    "docketNumber": "124-20"
   },
   {
     "date": null,
@@ -10902,7 +10865,8 @@
     "processingStatus": "pending",
     "partySecondary": false,
     "pk": "case|124-20",
-    "servedAt": "2020-09-30T20:24:15.162Z"
+    "servedAt": "2020-09-30T20:24:15.162Z",
+    "docketNumber": "124-20"
   },
   {
     "sk": "work-item|5ea16d24-7088-4cb9-b137-59900836a96e",
@@ -11267,27 +11231,28 @@
     "isStricken": false,
     "documentType": "Statement of Taxpayer Identification",
     "filingDate": "2020-01-21T16:41:39.483Z",
-    "practitioner": [],
     "isMinuteEntry": false,
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
     "receivedAt": "2020-01-21T16:41:39.483Z",
-    "isFileAttached": true,
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": false,
-    "eventCode": "STIN",
     "createdAt": "2020-01-21T16:41:39.482Z",
-    "processingStatus": "complete",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Eve Brewer",
     "docketEntryId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "sk": "docket-entry|3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "practitioner": [],
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "processingStatus": "complete",
     "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "pk": "case|102-20",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "docketNumber": "102-20"
   },
   {
     "isStricken": false,
@@ -11297,7 +11262,6 @@
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
-    "index": 1,
     "workItem": {
       "associatedJudge": "Chief Judge",
       "caseStatus": "New",
@@ -11317,21 +11281,23 @@
       "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "updatedAt": "2020-01-21T16:41:39.482Z"
     },
-    "isFileAttached": true,
     "receivedAt": "2020-01-21T16:41:39.481Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "P",
-    "processingStatus": "complete",
     "createdAt": "2020-01-21T16:41:39.481Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Eve Brewer",
     "docketEntryId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
     "sk": "docket-entry|d854a954-7332-4e92-93bd-dc28c9fea0a5",
+    "documentTitle": "Petition",
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
     "partySecondary": false,
     "pk": "case|102-20",
-    "documentTitle": "Petition"
+    "docketNumber": "102-20"
   },
   {
     "role": "irsPractitioner",
@@ -11525,7 +11491,8 @@
     "processingStatus": "pending",
     "partySecondary": false,
     "pk": "case|129-20",
-    "servedAt": "2020-11-30T22:58:08.130Z"
+    "servedAt": "2020-11-30T22:58:08.130Z",
+    "docketNumber": "129-20"
   },
   {
     "servedParties": [
@@ -11608,7 +11575,8 @@
     "processingStatus": "pending",
     "partySecondary": false,
     "pk": "case|129-20",
-    "servedAt": "2020-11-30T22:58:08.081Z"
+    "servedAt": "2020-11-30T22:58:08.081Z",
+    "docketNumber": "129-20"
   },
   {
     "sk": "work-item|aebe6b3d-71d8-4788-8991-6de482737bcc",
@@ -12407,7 +12375,8 @@
     "docketEntryId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "sk": "docket-entry|1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
     "pk": "case|101-19",
-    "documentTitle": "Petition"
+    "documentTitle": "Petition",
+    "docketNumber": "101-19"
   },
   {
     "isStricken": false,
@@ -12499,7 +12468,8 @@
     "sk": "docket-entry|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|101-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "101-19"
   },
   {
     "caseOrder": [],
@@ -12729,7 +12699,8 @@
     "partySecondary": false,
     "documentId": "1c56d0fc-b01b-4bc7-830f-0c25b4e6b803",
     "pk": "case|112-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "112-19"
   },
   {
     "isStricken": false,
@@ -12739,7 +12710,6 @@
     "partyPrimary": true,
     "pending": false,
     "isDraft": false,
-    "index": 1,
     "workItem": {
       "associatedJudge": "Chief Judge",
       "caseStatus": "New",
@@ -12759,21 +12729,23 @@
       "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "updatedAt": "2019-12-11T15:25:55.008Z"
     },
-    "isFileAttached": true,
     "receivedAt": "2019-12-11T15:25:55.007Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isOnDocketRecord": true,
-    "eventCode": "P",
-    "processingStatus": "complete",
     "createdAt": "2019-12-11T15:25:55.007Z",
     "numberOfPages": 1,
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brian Earl Spilner",
     "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
     "sk": "docket-entry|337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
+    "documentTitle": "Petition",
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
     "partySecondary": false,
     "pk": "case|112-19",
-    "documentTitle": "Petition"
+    "docketNumber": "112-19"
   },
   {
     "servedParties": [
@@ -12991,11 +12963,15 @@
     "associatedJudge": "Chief Judge",
     "procedureType": "Small",
     "irsNoticeDate": "1983-03-02T00:00:00.000Z",
+    "sortableDocketNumber": 19000102,
     "partyType": "Petitioner & spouse",
     "receivedAt": "2019-03-01T21:42:29.073Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "isSpouseDeceased": "No",
     "caseType": "Passport",
     "createdAt": "2019-03-01T21:42:29.073Z",
+    "preferredTrialCity": "Boise, Idaho",
+    "initialCaption": "Selma Horn & Cairo Harris, Petitioners",
     "entityName": "Case",
     "caseCaption": "Selma Horn & Cairo Harris, Petitioners",
     "sk": "case|102-19",
@@ -13089,7 +13065,8 @@
     "docketEntryId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
     "sk": "docket-entry|89c781f6-71ba-4ead-93d8-c681c2183a73",
     "pk": "case|102-19",
-    "documentTitle": "Petition"
+    "documentTitle": "Petition",
+    "docketNumber": "102-19"
   },
   {
     "servedParties": [
@@ -13160,7 +13137,8 @@
     "sk": "docket-entry|b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
     "pk": "case|102-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "102-19"
   },
   {
     "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
@@ -13287,7 +13265,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "partySecondary": false,
-    "pk": "case|125-20"
+    "pk": "case|125-20",
+    "docketNumber": "125-20"
   },
   {
     "isStricken": false,
@@ -13308,7 +13287,8 @@
     "docketEntryId": "907e9f21-fa58-474d-a2bf-22d06aa0b582",
     "sk": "docket-entry|907e9f21-fa58-474d-a2bf-22d06aa0b582",
     "pk": "case|125-20",
-    "documentTitle": "Request for Place of Trial at Birmingham, Alabama"
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "docketNumber": "125-20"
   },
   {
     "isStricken": false,
@@ -13333,7 +13313,8 @@
     "partySecondary": false,
     "pk": "case|125-20",
     "documentTitle": "Statement of Taxpayer Identification",
-    "privatePractitioners": []
+    "privatePractitioners": [],
+    "docketNumber": "125-20"
   },
   {
     "sk": "work-item|b7e11e69-a529-4a97-977f-e5fd286838f2",
@@ -13499,7 +13480,8 @@
     "sk": "docket-entry|2da6d239-555a-40e8-af81-1949c8270cd7",
     "documentId": "2da6d239-555a-40e8-af81-1949c8270cd7",
     "pk": "case|106-19",
-    "documentTitle": "Statement of Taxpayer Identification"
+    "documentTitle": "Statement of Taxpayer Identification",
+    "docketNumber": "106-19"
   },
   {
     "isStricken": false,
@@ -13540,7 +13522,8 @@
     "docketEntryId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "sk": "docket-entry|5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
     "pk": "case|106-19",
-    "documentTitle": "Petition"
+    "documentTitle": "Petition",
+    "docketNumber": "106-19"
   },
   {
     "servedParties": [

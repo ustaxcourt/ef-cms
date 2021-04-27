@@ -1,7 +1,7 @@
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
-  Correspondence,
-} = require('../../../../../shared/src/business/entities/Correspondence');
+  DocketEntry,
+} = require('../../../../../shared/src/business/entities/DocketEntry');
 const applicationContext = createApplicationContext({});
 
 const migrateItems = async items => {
@@ -9,14 +9,18 @@ const migrateItems = async items => {
   for (const item of items) {
     if (
       item.pk.startsWith('case|') &&
-      item.sk.startsWith('correspondence|') &&
-      !item.entityName
+      item.sk.startsWith('docket-entry|') &&
+      !item.docketNumber
     ) {
-      const updatedCorrespondence = new Correspondence(item, {
+      const docketNumber = item.pk.split('|')[1];
+
+      item.docketNumber = docketNumber;
+
+      new DocketEntry(item, {
         applicationContext,
       }).validate();
 
-      itemsAfter.push({ ...item, ...updatedCorrespondence });
+      itemsAfter.push(item);
     } else {
       itemsAfter.push(item);
     }
