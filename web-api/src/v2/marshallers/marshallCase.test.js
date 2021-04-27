@@ -84,7 +84,7 @@ describe('marshallCase', () => {
     expect(marshalled.trialDate).toEqual(mock.trialDate);
     expect(marshalled.trialLocation).toEqual(mock.trialLocation);
 
-    // Exact format asserted in other tests. 
+    // Exact format asserted in other tests.
     expect(marshalled.contactPrimary).toBeDefined();
     expect(marshalled.contactSecondary).toBeDefined();
     expect(marshalled.docketEntries).toBeDefined();
