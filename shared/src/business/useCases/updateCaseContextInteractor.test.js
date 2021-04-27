@@ -93,7 +93,7 @@ describe('updateCaseContextInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call updateCase and createCaseTrialSortMappingRecords if the case status is being updated to Ready for Trial', async () => {
+  it('should call updateCase and createCaseTrialSortMappingRecords if the case status is being updated to Ready for Trial and is not assigned to a trial session', async () => {
     const result = await updateCaseContextInteractor(applicationContext, {
       caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       docketNumber: MOCK_CASE.docketNumber,
@@ -103,6 +103,38 @@ describe('updateCaseContextInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
+  });
+
+  it('should call updateCase but not createCaseTrialSortMappingRecords if the case status is being updated to Ready for Trial and is already assigned to a trial session', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          trialDate: '2019-03-01T21:40:46.415Z',
+          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        }),
+      );
+
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations = jest
+      .fn()
+      .mockImplementation(({ caseToUpdate }) => {
+        return caseToUpdate;
+      });
+
+    const result = await updateCaseContextInteractor(applicationContext, {
+      caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
   });
 
