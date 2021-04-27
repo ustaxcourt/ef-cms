@@ -14,16 +14,16 @@ describe('AddressLabelCoverSheet', () => {
   it('renders the name and address', () => {
     const wrapper = mount(
       <AddressLabelCoverSheet
+        additionalName="Test Additional Name"
         address1="123 Some Street"
         city="Some City"
         countryName="USA"
         docketNumberWithSuffix="123-45S"
-        inCareOf="Care"
+        inCareOf="Test In Care Of"
         name="Test Person"
         postalCode="89890"
-        secondaryName="Secondary"
         state="ZZ"
-        title="The Title"
+        title="Test Title"
       />,
     );
 
@@ -33,8 +33,8 @@ describe('AddressLabelCoverSheet', () => {
     expect(wrapper.text()).toContain('Test Person');
     expect(wrapper.text()).toContain('89890');
     expect(wrapper.text()).toContain('ZZ');
-    expect(wrapper.text()).toContain('Secondary');
-    expect(wrapper.text()).toContain('The Title');
-    expect(wrapper.text()).toContain('Care');
+    expect(wrapper.text()).toContain('Test Additional Name');
+    expect(wrapper.text()).toContain('Test In Care Of');
+    expect(wrapper.text()).toContain('Test Title');
   });
 });
