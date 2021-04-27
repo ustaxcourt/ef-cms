@@ -369,4 +369,63 @@ describe('PrivatePractitioner', () => {
 
     expect(user.pendingEmailVerificationToken).toBeUndefined();
   });
+
+  describe('isRepresenting', () => {
+    const mockContactId = '2befbc59-3d02-4268-8c6e-d71a855fea92';
+    const mockOtherContactId = '205cdd73-9eed-44c0-9c73-5801865ffb4b';
+
+    it('returns true when the pracitioner represents the petitioner contactId provided', () => {
+      const user = new PrivatePractitioner(
+        {
+          barNumber: 'BN1234',
+          contact: {
+            address1: '234 Main St',
+            address2: 'Apartment 4',
+            address3: 'Under the stairs',
+            city: 'Chicago',
+            country: 'Brazil',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
+            phone: '+1 (555) 555-5555',
+            postalCode: '61234',
+            state: 'IL',
+          },
+          name: 'Saul Goodman',
+          pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
+          representing: [mockContactId],
+          role: ROLES.privatePractitioner,
+          userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+        },
+        { filtered: true },
+      );
+
+      expect(user.isRepresenting(mockContactId)).toBeTruthy();
+    });
+
+    it('returns false when the pracitioner does not represent the petitioner contactId provided', () => {
+      const user = new PrivatePractitioner(
+        {
+          barNumber: 'BN1234',
+          contact: {
+            address1: '234 Main St',
+            address2: 'Apartment 4',
+            address3: 'Under the stairs',
+            city: 'Chicago',
+            country: 'Brazil',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
+            phone: '+1 (555) 555-5555',
+            postalCode: '61234',
+            state: 'IL',
+          },
+          name: 'Saul Goodman',
+          pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
+          representing: [mockContactId],
+          role: ROLES.privatePractitioner,
+          userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+        },
+        { filtered: true },
+      );
+
+      expect(user.isRepresenting(mockOtherContactId)).toBeFalsy();
+    });
+  });
 });

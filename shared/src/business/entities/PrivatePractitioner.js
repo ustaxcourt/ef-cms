@@ -81,6 +81,12 @@ PrivatePractitioner.prototype.getRepresentingPrimary = function getRepresentingP
   );
 };
 
+PrivatePractitioner.prototype.isRepresenting = function isRepresenting(
+  petitionerContactId,
+) {
+  return this.representing.includes(petitionerContactId);
+};
+
 PrivatePractitioner.prototype.getRepresentingSecondary = function getRepresentingSecondary(
   caseEntity,
 ) {
