@@ -734,9 +734,6 @@ const {
   parseAndScrapePdfContents,
 } = require('../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents');
 const {
-  parseLegacyDocumentsInteractor,
-} = require('../../shared/src/business/useCases/migration/parseLegacyDocumentsInteractor');
-const {
   persistUser,
 } = require('../../shared/src/persistence/dynamo/users/persistUser');
 const {
@@ -1083,7 +1080,6 @@ const {
   EnvironmentCredentials,
   S3,
   SES,
-  SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -1522,15 +1518,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
       const pug = require('p' + 'ug');
       return pug;
     },
-    getQueueService: () => {
-      if (environment.stage === 'local') {
-        return {
-          sendMessage: () => ({ promise: () => {} }),
-        };
-      } else {
-        return new SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
-      }
-    },
     getScannerResourceUri: () => {
       return (
         process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
@@ -1718,7 +1705,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         opinionPublicSearchInteractor,
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
-        parseLegacyDocumentsInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,
