@@ -113,7 +113,7 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it('should throw an error when the user making the request does not have permission to edit petition details', async () => {
-    mockUser.role = ROLES.petitioner;
+    mockUser = { ...mockUser, role: ROLES.petitioner };
 
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
