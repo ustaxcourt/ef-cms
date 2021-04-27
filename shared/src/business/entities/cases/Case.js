@@ -1952,10 +1952,20 @@ Case.prototype.removeConsolidation = function () {
  * @param {String} userId the id of the user
  * @returns {boolean} if the userId has a privatePractitioner associated with them
  */
-Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
-  return !!this.privatePractitioners.find(practitioner =>
+const isUserIdRepresentedByPrivatePractitioner = function (rawCase, userId) {
+  return !!rawCase.privatePractitioners.find(practitioner =>
     practitioner.representing.find(id => id === userId),
   );
+};
+
+/**
+ * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
+ *
+ * @param {String} userId the id of the user
+ * @returns {boolean} if the userId has a privatePractitioner associated with them
+ */
+Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
+  return isUserIdRepresentedByPrivatePractitioner(this, userId);
 };
 
 /**
@@ -2172,5 +2182,6 @@ module.exports = {
   getPetitionerById,
   isAssociatedUser,
   isSealedCase,
+  isUserIdRepresentedByPrivatePractitioner,
   updatePetitioner,
 };
