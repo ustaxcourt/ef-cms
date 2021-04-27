@@ -472,14 +472,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     sendBulkTemplatedEmail: jest.fn(),
   };
 
-  const sendMessageMock = jest.fn().mockReturnValue({
-    promise: () => {},
-  });
-
-  const mockGetQueueService = () => ({
-    sendMessage: sendMessageMock,
-  });
-
   const mockDocumentClient = createMockDocumentClient();
 
   const mockCreateDocketNumberGenerator = {
@@ -569,7 +561,6 @@ const createTestApplicationContext = ({ user } = {}) => {
         return () => null;
       },
     })),
-    getQueueService: mockGetQueueService,
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
