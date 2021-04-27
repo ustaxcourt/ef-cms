@@ -21,10 +21,13 @@ export const validatePetitionerInformationFormAction = ({
 
   const { contactPrimary, contactSecondary, partyType } = get(state.form);
 
-  const {
-    contactPrimary: oldContactPrimary,
-    contactSecondary: oldContactSecondary,
-  } = get(state.caseDetail);
+  const caseDetail = get(state.caseDetail);
+
+  const oldContactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(caseDetail);
+
+  const { contactSecondary: oldContactSecondary } = caseDetail;
 
   const serviceIndicatorError = {
     serviceIndicator:

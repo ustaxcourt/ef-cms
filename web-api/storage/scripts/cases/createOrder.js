@@ -22,32 +22,32 @@ module.exports.createOrder = async ({ docketNumber }) => {
 
       documentMetadata.draftOrderState = { ...documentMetadata };
 
-      await applicationContext.getUseCases().fileCourtIssuedOrderInteractor({
-        applicationContext,
-        documentMetadata,
-        primaryDocumentFileId: docketEntryId,
-      });
-
-      await applicationContext.getUseCases().saveSignedDocumentInteractor({
-        applicationContext,
-        docketNumber,
-        //todo - do not hard code a judge
-        nameForSigning: 'Maurice B. Foley',
-        originalDocketEntryId: docketEntryId,
-        signedDocketEntryId: docketEntryId,
-      });
+      await applicationContext
+        .getUseCases()
+        .fileCourtIssuedOrderInteractor(applicationContext, {
+          documentMetadata,
+          primaryDocumentFileId: docketEntryId,
+        });
 
       await applicationContext
         .getUseCases()
-        .fileCourtIssuedDocketEntryInteractor({
-          applicationContext,
+        .saveSignedDocumentInteractor(applicationContext, {
+          docketNumber,
+          //todo - do not hard code a judge
+          nameForSigning: 'Maurice B. Foley',
+          originalDocketEntryId: docketEntryId,
+          signedDocketEntryId: docketEntryId,
+        });
+
+      await applicationContext
+        .getUseCases()
+        .fileCourtIssuedDocketEntryInteractor(applicationContext, {
           documentMeta: documentMetadata,
         });
 
       await applicationContext
         .getUseCases()
-        .serveCourtIssuedDocumentInteractor({
-          applicationContext,
+        .serveCourtIssuedDocumentInteractor(applicationContext, {
           docketEntryId,
           docketNumber,
         });
