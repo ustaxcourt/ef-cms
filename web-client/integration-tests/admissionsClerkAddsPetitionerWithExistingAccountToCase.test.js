@@ -6,6 +6,7 @@ import {
   refreshElasticsearchIndex,
   setupTest,
 } from './helpers';
+import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 const test = setupTest();
@@ -25,6 +26,7 @@ describe('admissions clerk adds petitioner with existing cognito account to case
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkAddsPractitionersToCase(test, true);
 
   loginAs(test, 'admissionsclerk@example.com');
   it('admissions clerk adds petitioner email with existing cognito account to case', async () => {
@@ -95,5 +97,19 @@ describe('admissions clerk adds petitioner with existing cognito account to case
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(test.getState('screenMetadata.isAssociated')).toEqual(true);
+  });
+
+  it('should verify that practitioner representing contactId matches contactPrimary contactId after email is updated', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const contactPrimary = contactPrimaryFromState(test);
+
+    const practitionerRepresenting = test.getState(
+      'caseDetail.privatePractitioners.0.representing',
+    );
+
+    expect(practitionerRepresenting).toEqual([contactPrimary.contactId]);
   });
 });
