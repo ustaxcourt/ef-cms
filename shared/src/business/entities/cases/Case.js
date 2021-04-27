@@ -25,9 +25,6 @@ const {
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
-  attachIrsPractitioner,
-} = require('./prototypes/Case.attachIrsPractitioner');
-const {
   calculateDifferenceInDays,
   createISODateString,
   formatDateString,
@@ -142,10 +139,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case() {
-  // bind prototype methods
-  this.attachIrsPractitioner = attachIrsPractitioner.bind(this);
-}
+function Case() {}
 
 Case.prototype.init = function init(
   rawCase,
@@ -849,6 +843,15 @@ Case.prototype.doesHavePendingItems = function () {
  */
 Case.getCaseTitle = function (caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
+};
+
+/**
+ * attaches an IRS practitioner to the case
+ *
+ * @param {string} practitioner the irsPractitioner to add to the case
+ */
+Case.prototype.attachIrsPractitioner = function (practitioner) {
+  this.irsPractitioners.push(practitioner);
 };
 
 /**
