@@ -278,6 +278,7 @@ export const EditPetitionerInformationInternal = connect(
                 link
                 className="red-warning no-wrap float-right"
                 icon="trash"
+                id="remove-petitioner-btn"
                 onClick={() => {
                   openRemovePetitionerModalSequence();
                 }}
