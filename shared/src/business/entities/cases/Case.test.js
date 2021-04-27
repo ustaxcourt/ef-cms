@@ -1631,6 +1631,19 @@ describe('Case entity', () => {
       expect(caseCaption).toEqual('Bob Smith, Petitioner');
     });
 
+    it('gets the primary contact from the petitioners array and trims spaces', () => {
+      const caseCaption = Case.getCaseCaption({
+        partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            contactType: CONTACT_TYPES.primary,
+            name: '    Bob Smith                 ',
+          },
+        ],
+      });
+      expect(caseCaption).toEqual('Bob Smith, Petitioner');
+    });
+
     it('gets the primary contact from contactPrimary property if petitioners array does not exist', () => {
       const caseCaption = Case.getCaseCaption({
         contactPrimary: {
