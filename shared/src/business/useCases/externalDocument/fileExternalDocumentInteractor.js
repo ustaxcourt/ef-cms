@@ -130,7 +130,7 @@ exports.fileExternalDocumentInteractor = async (
           }),
         },
         { applicationContext },
-      );
+      ).validate();
 
       const highPriorityWorkItem =
         caseEntity.status === CASE_STATUS_TYPES.calendared;
@@ -156,7 +156,7 @@ exports.fileExternalDocumentInteractor = async (
           trialDate: caseEntity.trialDate,
         },
         { applicationContext },
-      );
+      ).validate();
 
       docketEntryEntity.setWorkItem(workItem);
 
