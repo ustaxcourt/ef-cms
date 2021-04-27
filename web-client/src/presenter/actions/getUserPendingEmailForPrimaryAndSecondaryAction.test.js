@@ -14,6 +14,48 @@ describe('getUserPendingEmailForPrimaryAndSecondaryAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
+  it('should not call getUserPendingEmailInteractor if the primary contact id is undefined', async () => {
+    await runAction(getUserPendingEmailForPrimaryAndSecondaryAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          petitioners: [
+            { contactId: undefined, contactType: CONTACT_TYPES.primary },
+          ],
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getUserPendingEmailInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not call getUserPendingEmailInteractor a second time if the secondary contact id is undefined', async () => {
+    await runAction(getUserPendingEmailForPrimaryAndSecondaryAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          petitioners: [
+            { contactId: mockUserId, contactType: CONTACT_TYPES.primary },
+            {
+              contactId: undefined,
+              contactType: CONTACT_TYPES.secondary,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getUserPendingEmailInteractor,
+    ).toHaveBeenCalledTimes(1);
+  });
+
   it('should make a call to getUserPendingEmailInteractor with state.caseDetail.petitioners[0].contactId', async () => {
     await runAction(getUserPendingEmailForPrimaryAndSecondaryAction, {
       modules: {
