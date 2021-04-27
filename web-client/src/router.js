@@ -127,6 +127,16 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/add-petitioner-to-case',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoAddPetitionerToCaseSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*?openModal=*',
       ifHasAccess((docketNumber, openModal) => {
         setPageTitle(`Docket ${docketNumber}`);
@@ -203,12 +213,15 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/edit-petitioner-information',
-      ifHasAccess(docketNumber => {
-        setPageTitle(`Docket ${docketNumber}`);
-        return app.getSequence('gotoEditPetitionerInformationSequence')({
-          docketNumber,
-        });
+      '/case-detail/*/edit-petitioner-information/*',
+      ifHasAccess((docketNumber, contactId) => {
+        setPageTitle('Edit Petitioner Information');
+        return app.getSequence('gotoEditPetitionerInformationInternalSequence')(
+          {
+            contactId,
+            docketNumber,
+          },
+        );
       }),
     );
 
