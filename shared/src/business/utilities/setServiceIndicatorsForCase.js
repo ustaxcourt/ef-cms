@@ -19,6 +19,10 @@ const setServiceIndicatorsForCase = caseDetail => {
   let hasPrimaryPractitioner = false;
   let hasSecondaryPractitioner = false;
 
+  // for each petitioner on the case
+  // check if they are represented
+  // do 45-54 logic
+
   if (privatePractitioners && privatePractitioners.length) {
     privatePractitioners.forEach(practitioner => {
       const representingPrimary = practitioner.representing.find(
