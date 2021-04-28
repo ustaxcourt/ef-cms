@@ -384,7 +384,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -5799,7 +5801,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
+    "representing": [
+      "28cae029-bae2-4eef-ac54-878fbbab65e3"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -7451,7 +7455,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -11322,7 +11328,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -13697,5 +13705,60 @@
     "pk": "user|9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "email": "floater@example.com"
+  },
+  {
+    "admissionsDate": "1950-02-04",
+    "admissionsStatus": "Active",
+    "barNumber": "BR1335",
+    "birthYear": 1970,
+    "contact": {
+      "address1": "1234 Street Blvd",
+      "address2": null,
+      "address3": null,
+      "city": "Washington",
+      "countryType": "domestic",
+      "phone": "1234567890",
+      "postalCode": "20006-1806",
+      "state": "DC"
+    },
+    "employer": "Private",
+    "entityName": "Practitioner",
+    "firmName": "Firmly Grasped, LLP",
+    "firstName": "Ronald",
+    "lastName": "Buch",
+    "name": "Ronald Buch Jr.",
+    "originalBarState": "MI",
+    "pk": "user|af298b91-fb95-4b87-be16-8ad0fade5eb4",
+    "practitionerType": "Attorney",
+    "role": "privatePractitioner",
+    "section": "privatePractitioner",
+    "serviceIndicator": "Paper",
+    "sk": "user|af298b91-fb95-4b87-be16-8ad0fade5eb4",
+    "suffix": "Jr.",
+    "userId": "af298b91-fb95-4b87-be16-8ad0fade5eb4"
+  },
+  {
+    "barNumber": "BR1335",
+    "contact": {
+      "address1": "1234 Street Blvd",
+      "address2": null,
+      "address3": null,
+      "city": "Washington",
+      "countryType": "domestic",
+      "phone": "1234567890",
+      "postalCode": "20006-1806",
+      "state": "DC"
+    },
+    "entityName": "PrivatePractitioner",
+    "firmName": "Firmly Grasped, LLP",
+    "name": "Ronald Buch Jr.",
+    "pk": "case|110-19",
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
+    "role": "privatePractitioner",
+    "serviceIndicator": "Paper",
+    "sk": "privatePractitioner|af298b91-fb95-4b87-be16-8ad0fade5eb4",
+    "userId": "af298b91-fb95-4b87-be16-8ad0fade5eb4"
   }
 ]
