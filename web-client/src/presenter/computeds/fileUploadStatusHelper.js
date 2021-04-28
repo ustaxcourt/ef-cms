@@ -1,16 +1,9 @@
 import { state } from 'cerebral';
-import { throttle } from 'lodash';
-
-const throttledStatus = throttle(statusMessage => statusMessage, 3000, {
-  leading: true,
-});
 
 export const fileUploadStatusHelper = get => {
   const timeRemaining = get(state.fileUploadProgress.timeRemaining);
   const percentComplete = get(state.fileUploadProgress.percentComplete);
   const isUploading = get(state.fileUploadProgress.isUploading);
-  const shouldThrottle = !get(state.fileUploadProgress.noThrottle); // results WILL be throttled unless explicitly set to false
-
   const isCancelable = !!(
     Number.isFinite(timeRemaining) && percentComplete < 100
   );
@@ -36,8 +29,6 @@ export const fileUploadStatusHelper = get => {
 
   return {
     isCancelable,
-    statusMessage: shouldThrottle
-      ? throttledStatus(statusMessage)
-      : statusMessage,
+    statusMessage,
   };
 };

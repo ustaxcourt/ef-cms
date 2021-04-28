@@ -90,6 +90,7 @@ export const BaseModal = connect(
             onClick={blurDialog}
           >
             <div
+              aria-live="assertive"
               aria-modal="true"
               className={classNames(
                 'modal-dialog padding-205',

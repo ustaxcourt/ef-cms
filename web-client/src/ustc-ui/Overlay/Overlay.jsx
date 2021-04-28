@@ -80,7 +80,12 @@ const OverlayUnRef = connect(
             className={classNames('modal-screen', 'overlay-full', className)}
             ref={forwardedRef}
           >
-            <div aria-modal="true" className="modal-overlay" role="dialog">
+            <div
+              aria-live="assertive"
+              aria-modal="true"
+              className="modal-overlay"
+              role="dialog"
+            >
               {children}
             </div>
           </dialog>

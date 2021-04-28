@@ -1,4 +1,3 @@
-import { ProgressBar } from '../ustc-ui/ProgressBar/ProgressBar';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -13,14 +12,8 @@ export const UserContactEditProgress = connect(
         <div className="sticky-footer sticky-footer--space" />
         <div className="sticky-footer sticky-footer--container">
           <div className="usa-section grid-container padding-bottom-0 margin-top-1">
-            <div className="progress-user-contact-edit">
-              <h3 id="progress-description">
-                Updating contact info in all cases...
-              </h3>
-              <ProgressBar
-                aria-labelledby="progress-description"
-                value={userContactEditProgressHelper.percentComplete}
-              />
+            <div aria-live="polite" className="progress-user-contact-edit">
+              <h3>Updating contact info in all cases...</h3>
               <span className="progress-text">
                 {userContactEditProgressHelper.percentComplete}% Complete
               </span>

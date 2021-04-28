@@ -22,7 +22,7 @@ export const ErrorNotification = connect(
       <>
         {alertHelper.showErrorAlert && (
           <div
-            aria-live="polite"
+            aria-live="assertive"
             className="usa-alert usa-alert--error"
             ref={notificationRef}
             role="alert"
