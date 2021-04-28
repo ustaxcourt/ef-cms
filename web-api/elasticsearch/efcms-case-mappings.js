@@ -98,7 +98,7 @@ module.exports = {
       type: 'keyword',
     },
     'petitioners.L.M.countryType.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'petitioners.L.M.name.S': {
       type: 'text',
