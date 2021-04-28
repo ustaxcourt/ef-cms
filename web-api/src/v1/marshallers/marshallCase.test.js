@@ -12,6 +12,8 @@ describe('marshallCase', () => {
     expect(Object.keys(marshallCase(MOCK_CASE)).sort()).toEqual([
       'caseCaption',
       'caseType',
+      'contactPrimary',
+      'contactSecondary',
       'docketEntries',
       'docketNumber',
       'docketNumberSuffix',
@@ -19,7 +21,6 @@ describe('marshallCase', () => {
       'leadDocketNumber',
       'noticeOfTrialDate',
       'partyType',
-      'petitioners',
       'practitioners',
       'preferredTrialCity',
       'respondents',
@@ -58,7 +59,8 @@ describe('marshallCase', () => {
     expect(mock.sortableDocketNumber).toBeDefined();
     expect(mock.status).toBeDefined();
     expect(mock.trialLocation).toBeDefined();
-
+    expect(mock.contactPrimary).not.toBeDefined();
+    expect(mock.contactSecondary).not.toBeDefined();
     expect(mock.petitioners).toBeDefined();
     expect(mock.docketEntries).toBeDefined();
     expect(mock.irsPractitioners).toBeDefined();
@@ -80,8 +82,8 @@ describe('marshallCase', () => {
     expect(marshalled.trialLocation).toEqual(mock.trialLocation);
 
     // Exact format asserted in other tests.
-    expect(marshalled.petitioners).toBeDefined();
-    expect(marshalled.petitioners.length).toEqual(2);
+    expect(marshalled.contactPrimary).toBeDefined();
+    expect(marshalled.contactSecondary).toBeDefined();
     expect(marshalled.docketEntries).toBeDefined();
     expect(marshalled.practitioners).toBeDefined();
     expect(marshalled.respondents).toBeDefined();
