@@ -40,7 +40,8 @@ const migrateItems = async items => {
         ...(item.otherFilers || []),
         ...(item.otherPetitioners || []),
       ];
-
+      applicationContext.logger.info('pk of thing', item.pk);
+      applicationContext.logger.info('itemmmmmm', item);
       const updatedCaseRaw = new Case(item, { applicationContext })
         .validate()
         .toRawObject();
