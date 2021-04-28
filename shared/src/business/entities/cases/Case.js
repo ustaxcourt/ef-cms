@@ -765,16 +765,19 @@ Case.getCaseCaption = function (rawCase) {
   );
 
   // trim ALL white space from these non-validated strings
-  primaryContact.name = primaryContact.name.trim();
-  if (primaryContact.secondaryName) {
+  if (primaryContact?.name) {
+    primaryContact.name = primaryContact.name.trim();
+  }
+  if (primaryContact?.secondaryName) {
     primaryContact.secondaryName = primaryContact.secondaryName.trim();
   }
-  if (primaryContact.title) {
+  if (primaryContact?.title) {
     primaryContact.title = primaryContact.title.trim();
   }
   if (secondaryContact?.name) {
     secondaryContact.name = secondaryContact.name.trim();
   }
+
   return generateCaptionFromContacts({
     partyType: rawCase.partyType,
     primaryContact,
