@@ -20,6 +20,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       {
         createdAt: '2018-11-21T20:49:28.192Z',
         docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '123-19',
         documentTitle: 'Petition',
         documentType: 'Petition',
         eventCode: 'P',

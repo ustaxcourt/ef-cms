@@ -16,23 +16,23 @@ export const getUserPendingEmailForPrimaryAndSecondaryAction = async ({
     .getUtilities()
     .getContactPrimary(caseDetail)?.contactId;
 
-  const contactPrimaryPendingEmail = await applicationContext
-    .getUseCases()
-    .getUserPendingEmailInteractor({
+  const contactPrimaryPendingEmail =
+    primaryContactId &&
+    (await applicationContext.getUseCases().getUserPendingEmailInteractor({
       applicationContext,
       userId: primaryContactId,
-    });
+    }));
 
   const secondaryContactId = applicationContext
     .getUtilities()
     .getContactSecondary(caseDetail)?.contactId;
 
-  const contactSecondaryPendingEmail = await applicationContext
-    .getUseCases()
-    .getUserPendingEmailInteractor({
+  const contactSecondaryPendingEmail =
+    secondaryContactId &&
+    (await applicationContext.getUseCases().getUserPendingEmailInteractor({
       applicationContext,
       userId: secondaryContactId,
-    });
+    }));
 
   return { contactPrimaryPendingEmail, contactSecondaryPendingEmail };
 };
