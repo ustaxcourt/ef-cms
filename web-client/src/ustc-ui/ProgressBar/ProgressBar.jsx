@@ -10,7 +10,7 @@ export const ProgressBar = props => {
 
   return (
     <progress
-      className="usa-sr-only"
+      className="focusable usa-sr-only"
       max="100"
       tabIndex="-1"
       value={value}
