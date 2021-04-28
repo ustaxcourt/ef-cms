@@ -1,5 +1,5 @@
 output "dns_name" {
-  value = element(concat(aws_elb.dynamsoft_elb.*.dns_name, list("")), 0)
+  value = element(concat(aws_elb.dynamsoft_elb.*.dns_name, tolist([""])), 0)
 }
 
 output "cert_arn" {
