@@ -229,6 +229,7 @@ describe('serveCaseToIrsInteractor', () => {
           name: 'Test Petitioner Secondary',
           phone: '1234547',
           postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'TN',
           title: 'Executor',
         },
