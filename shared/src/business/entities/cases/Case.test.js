@@ -1639,6 +1639,19 @@ describe('Case entity', () => {
         'Estate of Test Petitioner 2, Deceased, Test Petitioner, Executor',
       );
     });
+
+    it('gets the primary contact from the petitioners array and trims spaces', () => {
+      const caseCaption = Case.getCaseCaption({
+        partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            contactType: CONTACT_TYPES.primary,
+            name: '    Bob Smith                 ',
+          },
+        ],
+      });
+      expect(caseCaption).toEqual('Bob Smith, Petitioner');
+    });
   });
 
   describe('generateNextDocketRecordIndex', () => {
