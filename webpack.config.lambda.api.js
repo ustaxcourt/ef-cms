@@ -17,6 +17,6 @@ module.exports = {
   },
   output: {
     clean: true,
-    path: __dirname + './web-api/terraform/template/lambdas/dist-lambda',
+    path: __dirname + '/web-api/terraform/template/lambdas/dist',
   },
 };

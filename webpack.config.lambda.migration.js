@@ -9,6 +9,6 @@ module.exports = {
   },
   output: {
     clean: true,
-    path: __dirname + './web-api/migration-terraform/main/lambdas/dist',
+    path: __dirname + '/web-api/migration-terraform/main/lambdas/dist',
   },
 };
