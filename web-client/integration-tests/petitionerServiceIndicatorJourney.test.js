@@ -254,7 +254,6 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
-  // remove private practitioner
   loginAs(test, 'docketclerk@example.com');
   it('Removes private practitioner from case and check service indicator is switched back to paper', async () => {
     await test.runSequence('gotoCaseDetailSequence', {

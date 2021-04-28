@@ -49,6 +49,16 @@ exports.addExistingUserToCase = async ({
     });
 
   const contact = caseEntity.getPetitionerById(contactId);
+
+  caseEntity.privatePractitioners.forEach(practitioner => {
+    const representingArray = practitioner.representing;
+
+    if (representingArray.includes(contact.contactId)) {
+      const idx = representingArray.indexOf(contact.contactId);
+      representingArray[idx] = userToAdd.userId;
+    }
+  });
+
   if (contact.name === name) {
     contact.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     contact.email = email;
