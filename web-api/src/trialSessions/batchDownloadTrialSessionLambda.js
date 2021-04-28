@@ -9,10 +9,12 @@ const { genericHandler } = require('../genericHandler');
 exports.batchDownloadTrialSessionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || event.path;
+    const { verifyFiles } = JSON.parse(event.body);
 
     return await applicationContext
       .getUseCases()
       .batchDownloadTrialSessionInteractor(applicationContext, {
         trialSessionId,
+        verifyFiles,
       });
   });

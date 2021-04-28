@@ -1,4 +1,3 @@
-import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { NonstandardForm } from './NonstandardForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
@@ -45,11 +44,9 @@ export const CompleteDocumentTypeSectionRemainder = connect(
         {completeDocumentTypeSectionHelper.secondary && (
           <>
             <div className="usa-label">
-              <Focus>
-                <h4 className="focusable usa-label" tabIndex="-1">
-                  Which Document Are You Requesting Leave to File For?
-                </h4>
-              </Focus>
+              <h4 className="usa-label">
+                Which Document Are You Requesting Leave to File For?
+              </h4>
             </div>
             <FormGroup
               errorText={
