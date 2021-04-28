@@ -1,4 +1,4 @@
-export const admissionsClerVerifiesPractitionerServiceIndicator = (
+export const admissionsClerkVerifiesPractitionerServiceIndicator = (
   test,
   expectedServiceIndicator,
 ) => {
