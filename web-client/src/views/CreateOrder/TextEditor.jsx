@@ -51,6 +51,7 @@ export const TextEditor = ({
     <>
       <Suspense fallback={<div>Loading...</div>}>
         <ReactQuill
+          className="no-wrap"
           defaultValue={editorDelta || defaultValue}
           formats={[
             'size',
@@ -77,7 +78,7 @@ export const TextEditor = ({
               ],
             ],
           }}
-          preserveWhitespace={true}
+          preserveWhitespace={!!editorDelta}
           tabIndex={0}
           onChange={(content, delta, source, editor) => {
             const fullDelta = editor.getContents();
