@@ -21,15 +21,10 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  Case,
-  getContactPrimary,
-  getPetitionDocketEntry,
-  isAssociatedUser,
-} = require('./Case');
-const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
+const { Case, getContactPrimary, getPetitionDocketEntry } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { IrsPractitioner } = require('../IrsPractitioner');
@@ -3966,24 +3961,6 @@ describe('Case entity', () => {
       });
     });
 
-    describe('setLeadCase', () => {
-      it('Should set the leadDocketNumber on the given case', async () => {
-        const leadDocketNumber = '101-20';
-        const caseEntity = new Case(
-          {
-            ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, Alabama',
-            procedureType: 'Regular',
-            status: CASE_STATUS_TYPES.submitted,
-          },
-          { applicationContext },
-        );
-        const result = caseEntity.setLeadCase(leadDocketNumber);
-
-        expect(result.leadDocketNumber).toEqual(leadDocketNumber);
-      });
-    });
-
     describe('removeConsolidation', () => {
       it('Should unset the leadDocketNumber on the given case', async () => {
         const caseEntity = new Case(
@@ -3999,100 +3976,6 @@ describe('Case entity', () => {
         const result = caseEntity.removeConsolidation();
 
         expect(result.leadDocketNumber).toBeUndefined();
-      });
-    });
-
-    describe('sortByDocketNumber', () => {
-      it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
-        const result = Case.sortByDocketNumber([
-          {
-            docketNumber: '110-19',
-          },
-          {
-            docketNumber: '100-19',
-          },
-          {
-            docketNumber: '120-19',
-          },
-        ]);
-
-        expect(result).toEqual([
-          {
-            docketNumber: '100-19',
-          },
-          {
-            docketNumber: '110-19',
-          },
-          {
-            docketNumber: '120-19',
-          },
-        ]);
-      });
-
-      it('Should return the cases as an array sorted by docket number for cases filed in different years', () => {
-        const result = Case.sortByDocketNumber([
-          {
-            docketNumber: '100-19',
-          },
-          {
-            docketNumber: '110-18',
-          },
-          {
-            docketNumber: '120-19',
-          },
-          {
-            docketNumber: '120-18',
-          },
-        ]);
-
-        expect(result).toEqual([
-          {
-            docketNumber: '110-18',
-          },
-          {
-            docketNumber: '120-18',
-          },
-          {
-            docketNumber: '100-19',
-          },
-          {
-            docketNumber: '120-19',
-          },
-        ]);
-      });
-    });
-
-    describe('findLeadCaseForCases', () => {
-      it('Should return the case with the lowest docket number for cases filed in the same year', () => {
-        const result = Case.findLeadCaseForCases([
-          {
-            docketNumber: '110-19',
-          },
-          {
-            docketNumber: '100-19',
-          },
-          {
-            docketNumber: '120-19',
-          },
-        ]);
-
-        expect(result.docketNumber).toEqual('100-19');
-      });
-
-      it('Should return the case with the lowest docket number for cases filed in different years', () => {
-        const result = Case.findLeadCaseForCases([
-          {
-            docketNumber: '100-19',
-          },
-          {
-            docketNumber: '110-18',
-          },
-          {
-            docketNumber: '120-19',
-          },
-        ]);
-
-        expect(result.docketNumber).toEqual('110-18');
       });
     });
   });
@@ -4144,81 +4027,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('setNoticeOfTrialDate', () => {
-    it('should set noticeOfTrialDate on the given case', () => {
-      const caseEntity = new Case(MOCK_CASE, { applicationContext });
-      const result = caseEntity.setNoticeOfTrialDate();
-
-      expect(result.isValid()).toBeTruthy();
-    });
-
-    it('should set noticeOfTrialDate when passed through Case constructor', () => {
-      const isoDateString = applicationContext
-        .getUtilities()
-        .createISODateString();
-
-      const caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          noticeOfTrialDate: isoDateString,
-        },
-        { applicationContext },
-      );
-
-      expect(caseEntity.isValid()).toBeTruthy();
-      expect(caseEntity.noticeOfTrialDate).toEqual(isoDateString);
-    });
-  });
-
-  describe('setQcCompleteForTrial', () => {
-    it('should set qcCompleteForTrial on the given case for the given trial session id', () => {
-      const caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: { 'd6fdd6e7-8dfa-463a-8a17-ed4512d1a68d': false },
-        },
-        { applicationContext },
-      );
-      const result = caseEntity.setQcCompleteForTrial({
-        qcCompleteForTrial: true,
-        trialSessionId: 'da61b7b3-5854-4434-a116-9e4135af60e0',
-      });
-
-      expect(result.isValid()).toBeTruthy();
-      expect(result.qcCompleteForTrial).toEqual({
-        'd6fdd6e7-8dfa-463a-8a17-ed4512d1a68d': false,
-        'da61b7b3-5854-4434-a116-9e4135af60e0': true,
-      });
-    });
-
-    it('should default qcCompleteForTrial to an empty object if not provided when entity is constructed', () => {
-      const caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-        },
-        { applicationContext },
-      );
-
-      expect(caseEntity.isValid()).toBeTruthy();
-      expect(caseEntity.qcCompleteForTrial).toEqual({});
-    });
-
-    it('should set qcCompleteForTrial to value provided when passed through Case constructor', () => {
-      const caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: { '80950eee-7efd-4374-a642-65a8262135ab': true },
-        },
-        { applicationContext },
-      );
-
-      expect(caseEntity.isValid()).toBeTruthy();
-      expect(caseEntity.qcCompleteForTrial).toEqual({
-        '80950eee-7efd-4374-a642-65a8262135ab': true,
-      });
-    });
-  });
-
   it('required messages display for non-defaulted fields when an empty case is validated', () => {
     const myCase = new Case(
       {},
@@ -4234,169 +4042,6 @@ describe('Case entity', () => {
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
-    });
-  });
-
-  describe('isAssociatedUser', () => {
-    let caseEntity;
-    const CONTACT_PRIMARY_ID = '3855b2dd-4094-4526-acc0-b48d7eed1f28';
-    const CONTACT_SECONDARY_ID = '90035070-d10f-49cc-b08c-bb9d09993f5b';
-    beforeEach(() => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      );
-      caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          contactSecondary: {
-            ...MOCK_CASE.contactPrimary,
-            contactId: CONTACT_SECONDARY_ID,
-          },
-          irsPractitioners: [
-            { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
-          ],
-          partyType: PARTY_TYPES.petitionerSpouse,
-          petitioners: [
-            {
-              ...getContactPrimary(MOCK_CASE),
-              contactId: CONTACT_PRIMARY_ID,
-            },
-          ],
-          privatePractitioners: [
-            { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-    });
-
-    it('returns true if the user is an irsPractitioner on the case', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' },
-      });
-
-      expect(isAssociated).toBeTruthy();
-    });
-
-    it('returns true if the user is a privatePractitioner on the case', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: '271e5918-6461-4e67-bc38-274bc0aa0248' },
-      });
-
-      expect(isAssociated).toBeTruthy();
-    });
-
-    it('returns false if the user is an irs superuser but the petition document is not served', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: {
-          role: ROLES.irsSuperuser,
-          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
-        },
-      });
-
-      expect(isAssociated).toBeFalsy();
-    });
-
-    it('returns true if the user is an irs superuser and the petition document is served', () => {
-      caseEntity.docketEntries = [
-        {
-          documentType: 'Petition',
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-      ];
-
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: {
-          role: ROLES.irsSuperuser,
-          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
-        },
-      });
-
-      expect(isAssociated).toBeTruthy();
-    });
-
-    it('returns false if the user is an irs superuser and the case does not have docketEntries', () => {
-      caseEntity.docketEntries = undefined;
-
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity,
-        user: {
-          role: ROLES.irsSuperuser,
-          userId: '098d5055-dd90-42af-aec9-056a9843a7e0',
-        },
-      });
-
-      expect(isAssociated).toBeFalsy();
-    });
-
-    it('returns false if the user is a not a privatePractitioner or irsPractitioner on the case and is not an irs superuser', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: '4b32e14b-f583-4631-ba44-1439a093d6d0' },
-      });
-
-      expect(isAssociated).toBeFalsy();
-    });
-
-    it('returns true if the user is the primary contact on the case', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: CONTACT_PRIMARY_ID },
-      });
-
-      expect(isAssociated).toBeTruthy();
-    });
-
-    it('returns true if the user is the secondary contact on the case', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: caseEntity.toRawObject(),
-        user: { userId: CONTACT_SECONDARY_ID },
-      });
-
-      expect(isAssociated).toBeTruthy();
-    });
-
-    it('should return true when the petition docket entry has been served in the legacy system and the current user is an irs superuser', () => {
-      const isAssociated = isAssociatedUser({
-        caseRaw: {
-          ...caseEntity.toRawObject(),
-          docketEntries: [
-            {
-              documentTitle: 'Petition',
-              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-              eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
-              isLegacyServed: true,
-              servedAt: undefined,
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-          ],
-        },
-        user: { role: ROLES.irsSuperuser },
-      });
-
-      expect(isAssociated).toBeTruthy();
-    });
-  });
-
-  describe('getCaseConfirmationGeneratedPdfFileName', () => {
-    it('generates the correct name for the case confirmation pdf', () => {
-      const caseToVerify = new Case(
-        {
-          docketNumber: '123-20',
-        },
-        {
-          applicationContext,
-        },
-      );
-      expect(caseToVerify.getCaseConfirmationGeneratedPdfFileName()).toEqual(
-        'case-123-20-confirmation.pdf',
-      );
     });
   });
 
@@ -4456,19 +4101,6 @@ describe('Case entity', () => {
       );
 
       expect(caseEntity.getFormattedValidationErrors()).toEqual(null);
-    });
-  });
-
-  describe('addCorrespondence', () => {
-    it('should successfully add correspondence', () => {
-      const caseEntity = new Case(MOCK_CASE, { applicationContext });
-
-      caseEntity.fileCorrespondence({
-        correspondenceId: 'yeehaw',
-        documentTitle: 'Correspondence document',
-      });
-
-      expect(caseEntity.correspondence.length).toEqual(1);
     });
   });
 
@@ -4683,44 +4315,6 @@ describe('Case entity', () => {
       caseEntity.deleteStatistic('16fc02bc-f00a-453c-a19c-e5597a8850ba');
 
       expect(caseEntity.statistics.length).toEqual(2);
-    });
-  });
-
-  describe('isSealed', () => {
-    it('marks case as sealed if it has at least one document with isSealed = true', () => {
-      const caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          docketEntries: [
-            ...MOCK_DOCUMENTS,
-            {
-              ...MOCK_DOCUMENTS[0],
-              isSealed: true,
-            },
-          ],
-        },
-        { applicationContext },
-      );
-
-      expect(caseEntity.isSealed).toBeTruthy();
-    });
-
-    it('marks case as sealed if it has at least one document with isLegacySealed = true', () => {
-      const caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          docketEntries: [
-            ...MOCK_DOCUMENTS,
-            {
-              ...MOCK_DOCUMENTS[0],
-              isLegacySealed: true,
-            },
-          ],
-        },
-        { applicationContext },
-      );
-
-      expect(caseEntity.isSealed).toBeTruthy();
     });
   });
 
