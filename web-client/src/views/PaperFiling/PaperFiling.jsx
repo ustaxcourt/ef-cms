@@ -13,24 +13,25 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const AddDocketEntry = connect(
+export const PaperFiling = connect(
   {
-    fileDocketEntrySequence: sequences.fileDocketEntrySequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    isEditingDocketEntry: state.isEditingDocketEntry,
     openConfirmPaperServiceModalSequence:
       sequences.openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper: state.paperDocketEntryHelper,
     showModal: state.modal.showModal,
+    submitPaperFilingSequence: sequences.submitPaperFilingSequence,
   },
-  function AddDocketEntry({
-    fileDocketEntrySequence,
+  function PaperFiling({
     form,
     formCancelToggleCancelSequence,
     isEditingDocketEntry,
     openConfirmPaperServiceModalSequence,
     paperDocketEntryHelper,
     showModal,
+    submitPaperFilingSequence,
   }) {
     return (
       <>
@@ -39,6 +40,7 @@ export const AddDocketEntry = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
+
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <h1 className="margin-bottom-105">
@@ -74,7 +76,7 @@ export const AddDocketEntry = connect(
                     secondary
                     id="save-for-later"
                     onClick={() => {
-                      fileDocketEntrySequence({
+                      submitPaperFilingSequence({
                         isSavingForLater: true,
                       });
                     }}
@@ -107,11 +109,11 @@ export const AddDocketEntry = connect(
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={fileDocketEntrySequence} />
+          <FileUploadErrorModal confirmSequence={submitPaperFilingSequence} />
         )}
         {showModal === 'ConfirmInitiateServiceModal' && (
           <ConfirmInitiateServiceModal
-            confirmSequence={fileDocketEntrySequence}
+            confirmSequence={submitPaperFilingSequence}
             documentTitle={form.documentTitle}
           />
         )}

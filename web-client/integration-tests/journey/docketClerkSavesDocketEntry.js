@@ -4,8 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkSavesDocketEntry = test => {
   return it('Docketclerk saves docket entry', async () => {
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 

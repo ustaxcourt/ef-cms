@@ -25,12 +25,12 @@ export const docketClerkEditsDocketEntryStandard = test => {
     const docketEntriesBefore =
       caseDetailFormatted.formattedDocketEntries.length;
 
-    await test.runSequence('gotoCompleteDocketEntrySequence', {
+    await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('AddDocketEntry');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('docketEntryId')).toEqual(docketEntryId);
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -51,7 +51,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       value: '2050',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -64,7 +64,7 @@ export const docketClerkEditsDocketEntryStandard = test => {
       value: '2018',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 

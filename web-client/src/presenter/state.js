@@ -29,11 +29,11 @@ import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
+import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { documentViewerHelper } from './computeds/documentViewerHelper';
 import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper';
-import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
@@ -135,11 +135,11 @@ const helpers = {
   createOrderHelper,
   createPractitionerUserHelper,
   dashboardExternalHelper,
+  docketEntryQcHelper,
   docketRecordHelper,
   documentSigningHelper,
   documentViewerHelper,
   draftDocumentViewerHelper,
-  editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   editStatisticFormHelper,

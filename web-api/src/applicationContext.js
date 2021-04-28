@@ -27,6 +27,9 @@ const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
+  addPaperFilingInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/addPaperFilingInteractor');
+const {
   addPetitionerToCaseInteractor,
 } = require('../../shared/src/business/useCases/addPetitionerToCaseInteractor');
 const {
@@ -291,6 +294,9 @@ const {
   documentUrlTranslator,
 } = require('../../shared/src/business/utilities/documentUrlTranslator');
 const {
+  editPaperFilingInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/editPaperFilingInteractor');
+const {
   fetchPendingItems,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
 const {
@@ -311,9 +317,6 @@ const {
 const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
-const {
-  fileDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/docketEntry/fileDocketEntryInteractor');
 const {
   fileExternalDocumentForConsolidatedInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentForConsolidatedInteractor');
@@ -960,9 +963,6 @@ const {
   updateDocketEntry,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntry');
 const {
-  updateDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
-const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
@@ -1607,6 +1607,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        addPaperFilingInteractor,
         addPetitionerToCaseInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
@@ -1637,12 +1638,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
         deleteDeficiencyStatisticInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
+        editPaperFilingInteractor,
         fetchPendingItemsInteractor,
         fileAndServeCourtIssuedDocumentInteractor,
         fileCorrespondenceDocumentInteractor,
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
-        fileDocketEntryInteractor,
         fileExternalDocumentForConsolidatedInteractor,
         fileExternalDocumentInteractor,
         forwardMessageInteractor,
@@ -1751,7 +1752,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateCourtIssuedDocketEntryInteractor,
         updateCourtIssuedOrderInteractor,
         updateDeficiencyStatisticInteractor,
-        updateDocketEntryInteractor,
         updateDocketEntryMetaInteractor,
         updateOtherStatisticsInteractor,
         updatePetitionDetailsInteractor,

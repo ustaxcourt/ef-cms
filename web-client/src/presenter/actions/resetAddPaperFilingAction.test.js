@@ -1,9 +1,9 @@
-import { resetAddDocketEntryAction } from './resetAddDocketEntryAction';
+import { resetAddPaperFilingAction } from './resetAddPaperFilingAction';
 import { runAction } from 'cerebral/test';
 
-describe('resetAddDocketEntryAction', () => {
+describe('resetAddPaperFilingAction', () => {
   it('sets default properties on state for the add docket entry form', async () => {
-    const result = await runAction(resetAddDocketEntryAction, {
+    const result = await runAction(resetAddPaperFilingAction, {
       state: {
         currentViewMetadata: {
           documentSelectedForScan: 'passport',
