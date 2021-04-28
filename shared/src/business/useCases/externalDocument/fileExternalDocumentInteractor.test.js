@@ -9,6 +9,7 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   fileExternalDocumentInteractor,
@@ -77,6 +78,7 @@ describe('fileExternalDocumentInteractor', () => {
           name: 'Guy Fieri',
           phone: '1234567890',
           postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           state: 'CA',
         },
       ],

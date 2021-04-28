@@ -243,7 +243,7 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
     });
 
     it('should set additionalName as `secondaryName` when partyType is nextFriendForMinor', () => {
@@ -300,7 +300,26 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
+    });
+
+    it('should set additionalName as `secondaryName` when partyType is petitionerDeceasedSpouse', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              inCareOf: mockInCareOf,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
     });
 
     it('should NOT set additionalName when it has already been set', () => {
@@ -4987,7 +5006,18 @@ describe('Case entity', () => {
     });
 
     it('should return false if no contacts or practitioners have paper service indicator', () => {
-      const myCase = new Case(MOCK_CASE, { applicationContext });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+          ],
+        },
+        { applicationContext },
+      );
 
       const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
 
@@ -5220,42 +5250,6 @@ describe('Case entity', () => {
       );
 
       expect(caseEntity.hasPrivatePractitioners()).toEqual(false);
-    });
-  });
-
-  describe('isUserIdRepresentedByPrivatePractitioner', () => {
-    let caseEntity;
-
-    beforeAll(() => {
-      caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          privatePractitioners: [
-            {
-              barNumber: 'PP123',
-              representing: ['123'],
-            },
-            {
-              barNumber: 'PP234',
-              representing: ['234', '456'],
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-    });
-    it('returns true if there is a privatePractitioner representing the given userId', () => {
-      expect(
-        caseEntity.isUserIdRepresentedByPrivatePractitioner('456'),
-      ).toEqual(true);
-    });
-
-    it('returns false if there is NO privatePractitioner representing the given userId', () => {
-      expect(
-        caseEntity.isUserIdRepresentedByPrivatePractitioner('678'),
-      ).toEqual(false);
     });
   });
 
