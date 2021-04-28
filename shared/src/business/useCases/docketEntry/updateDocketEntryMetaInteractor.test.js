@@ -20,6 +20,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     docketEntries = [
       {
         docketEntryId: '000ba5a9-b37b-479d-9201-067ec6e33000',
+        docketNumber: '101-20',
         documentTitle: 'Test Entry 0',
         documentType: 'Petition',
         eventCode: 'P',
@@ -35,6 +36,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       {
         docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+        docketNumber: '101-20',
         documentTitle: 'Test Entry 1',
         documentType: 'Order',
         eventCode: 'O',
@@ -50,6 +52,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       {
         docketEntryId: 'd5b97867-f25d-4e26-828c-f536419c96b7',
+        docketNumber: '101-20',
         documentTitle: 'Test Entry 2',
         documentType: 'Request for Place of Trial',
         eventCode: 'RQT',
@@ -63,6 +66,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       {
         docketEntryId: 'd1197867-f25d-4e26-828c-f536419c96b7',
+        docketNumber: '101-20',
         documentTitle: 'Some Order',
         documentType: 'Order',
         eventCode: 'O',
@@ -76,6 +80,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       {
         docketEntryId: 'd2297867-f25d-4e26-828c-f536419c96b7',
+        docketNumber: '101-20',
         documentTitle: 'Unservable Document with Filing Date',
         documentType: 'U.S.C.A',
         eventCode: 'USCA',
@@ -89,6 +94,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       {
         docketEntryId: 'd3397867-f25d-4e26-828c-f536419c96b7',
+        docketNumber: '101-20',
         documentTitle: 'Hearing before [Judge] at [Place]',
         documentType: 'Hearing before',
         eventCode: 'HEAR',
@@ -99,6 +105,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
       {
         docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        docketNumber: '101-20',
         documentTitle: 'Summary Opinion',
         documentType: 'Summary Opinion',
         eventCode: 'SOP',
@@ -134,6 +141,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       .addCoversheetInteractor.mockImplementation(() => ({
         createdAt: '2011-02-22T00:01:00.000Z',
         docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        docketNumber: '101-20',
         documentTitle: 'Summary Opinion',
         documentType: 'Summary Opinion',
         entityName: 'DocketEntry',

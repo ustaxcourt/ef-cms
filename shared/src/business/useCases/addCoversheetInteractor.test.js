@@ -21,6 +21,7 @@ describe('addCoversheetInteractor', () => {
         certificateOfService: false,
         createdAt: '2019-04-19T14:45:15.595Z',
         docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '101-19',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
@@ -50,6 +51,7 @@ describe('addCoversheetInteractor', () => {
         certificateOfService: true,
         certificateOfServiceDate: '2019-04-20T05:00:00.000Z',
         docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+        docketNumber: '102-19',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
         eventCode: 'M008',
