@@ -25,6 +25,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     docketEntries: [
       {
         docketEntryId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+        docketNumber: '123-45',
         documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
