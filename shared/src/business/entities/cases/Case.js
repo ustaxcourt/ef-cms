@@ -347,6 +347,8 @@ Case.prototype.assignContacts = function assignContacts({
       this.setAdditionalNameOnPetitioners();
     }
   }
+
+  console.log('---petitioners', this.petitioners);
 };
 
 Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
