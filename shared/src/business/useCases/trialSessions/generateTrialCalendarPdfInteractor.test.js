@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  formatCases,
   generateTrialCalendarPdfInteractor,
 } = require('./generateTrialCalendarPdfInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -9,28 +10,32 @@ const { US_STATES } = require('../../entities/EntityConstants');
 
 describe('generateTrialCalendarPdfInteractor', () => {
   const mockPdfUrl = { url: 'www.example.com' };
+  const mockCases = [
+    {
+      ...MOCK_CASE,
+      createdAt: '2013-03-01T21:40:46.415Z',
+      docketNumber: '101-18',
+      docketNumberWithSuffix: '101-18',
+    },
+    {
+      ...MOCK_CASE,
+      createdAt: '2011-01-01T21:40:46.415Z',
+      docketNumber: '102-19',
+      docketNumberWithSuffix: '102-19W',
+    },
+    {
+      ...MOCK_CASE,
+      createdAt: '2012-02-01T21:40:46.415Z',
+      docketNumber: '123-20',
+      docketNumberWithSuffix: '123-20W',
+      removedFromTrial: true,
+    },
+  ];
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          docketNumber: '101-18',
-          docketNumberWithSuffix: '101-18',
-        },
-        {
-          ...MOCK_CASE,
-          docketNumber: '102-19',
-          docketNumberWithSuffix: '102-19W',
-        },
-        {
-          ...MOCK_CASE,
-          docketNumber: '123-20',
-          docketNumberWithSuffix: '123-20W',
-          removedFromTrial: true,
-        },
-      ]);
+      .getCalendaredCasesForTrialSession.mockReturnValue(mockCases);
 
     applicationContext
       .getPersistenceGateway()
@@ -107,6 +112,25 @@ describe('generateTrialCalendarPdfInteractor', () => {
         }),
       }),
     );
+  });
+
+  describe('format cases', () => {
+    it('should filter out cases not removed from trial', () => {
+      const result = formatCases({
+        applicationContext,
+        calendaredCases: mockCases,
+      });
+      expect(mockCases.find(m => m.removedFromTrial)).toBeTruthy(); // there is a case in the mocks which is removed from trial
+      expect(result.find(m => m.docketNumber === '123-20')).toBeFalsy();
+    });
+    it('should sort cases by ascending date using createdAt', () => {
+      const result = formatCases({
+        applicationContext,
+        calendaredCases: mockCases,
+      });
+      expect(result[0].docketNumber).toBe('102-19');
+      expect(result[1].docketNumber).toBe('101-18');
+    });
   });
 
   it('should return the trial session calendar pdf url', async () => {
