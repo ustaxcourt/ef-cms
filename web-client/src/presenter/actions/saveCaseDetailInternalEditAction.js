@@ -83,8 +83,6 @@ export const saveCaseDetailInternalEditAction = async ({
     }
   }
 
-  console.log('---caseToUpdate', caseToUpdate);
-
   const caseDetail = await applicationContext
     .getUseCases()
     .saveCaseDetailInternalEditInteractor({
