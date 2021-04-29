@@ -1,8 +1,6 @@
 const {
-  getContactPrimary,
-  getContactSecondary,
+  isUserIdRepresentedByPrivatePractitioner,
 } = require('../entities/cases/Case');
-const { isEmpty } = require('lodash');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
 /**
@@ -12,53 +10,25 @@ const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
  * @returns {object} service indicators for petitioner, privatePractitioners, and irsPractitioners
  */
 const setServiceIndicatorsForCase = caseDetail => {
-  const { isPaper, privatePractitioners } = caseDetail;
-  const contactPrimary = getContactPrimary(caseDetail);
-  const contactSecondary = getContactSecondary(caseDetail);
+  const { isPaper, petitioners } = caseDetail;
 
-  let hasPrimaryPractitioner = false;
-  let hasSecondaryPractitioner = false;
-
-  if (privatePractitioners && privatePractitioners.length) {
-    privatePractitioners.forEach(practitioner => {
-      const representingPrimary = practitioner.representing.find(
-        r => r === contactPrimary.contactId,
-      );
-      const representingSecondary =
-        contactSecondary &&
-        practitioner.representing.find(r => r === contactSecondary.contactId);
-
-      if (representingPrimary) {
-        hasPrimaryPractitioner = true;
+  petitioners?.forEach(petitioner => {
+    if (!petitioner.serviceIndicator) {
+      if (
+        isUserIdRepresentedByPrivatePractitioner(
+          caseDetail,
+          petitioner.contactId,
+        )
+      ) {
+        petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+      } else {
+        const serviceIsPaper = isPaper || !petitioner.email;
+        petitioner.serviceIndicator = serviceIsPaper
+          ? SERVICE_INDICATOR_TYPES.SI_PAPER
+          : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
       }
-
-      if (representingSecondary) {
-        hasSecondaryPractitioner = true;
-      }
-    });
-  }
-
-  if (contactPrimary && !contactPrimary.serviceIndicator) {
-    if (hasPrimaryPractitioner) {
-      contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-    } else {
-      const serviceIsPaper = isPaper || !contactPrimary.email;
-      contactPrimary.serviceIndicator = serviceIsPaper
-        ? SERVICE_INDICATOR_TYPES.SI_PAPER
-        : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     }
-  }
-
-  if (!isEmpty(contactSecondary) && !contactSecondary.serviceIndicator) {
-    if (hasSecondaryPractitioner) {
-      contactSecondary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-    } else {
-      const serviceIsPaper = isPaper || !contactSecondary.email;
-      contactSecondary.serviceIndicator = serviceIsPaper
-        ? SERVICE_INDICATOR_TYPES.SI_PAPER
-        : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-    }
-  }
+  });
 
   return caseDetail;
 };

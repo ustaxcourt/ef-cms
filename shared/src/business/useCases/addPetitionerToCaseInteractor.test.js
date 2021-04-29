@@ -6,6 +6,7 @@ const {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
@@ -22,6 +23,7 @@ describe('addPetitionerToCaseInteractor', () => {
       name: 'Eggy Egg',
       phone: '123456',
       postalCode: '55555',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       state: 'CO',
     };
 

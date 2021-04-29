@@ -21,7 +21,6 @@ data "null_data_source" "locals" {
     COGNITO_SUFFIX                     = var.cognito_suffix
     DISABLE_EMAILS                     = var.disable_emails
     LOG_LEVEL                          = var.log_level
-    MIGRATE_LEGACY_DOCUMENTS_QUEUE_URL = aws_sqs_queue.migrate_legacy_documents_queue.id
     SCANNER_RESOURCE_URI               = var.scanner_resource_uri
   }
 }

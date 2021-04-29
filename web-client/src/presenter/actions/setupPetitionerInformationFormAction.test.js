@@ -15,7 +15,7 @@ describe('setupPetitionerInformationFormAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {},
+        caseDetail: { petitioners: [] },
       },
     });
 

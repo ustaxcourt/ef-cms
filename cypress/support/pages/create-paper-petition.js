@@ -34,13 +34,15 @@ exports.fillInCreateCaseFromPaperForm = testData => {
   cy.get('#has-irs-verified-notice-no').click();
 
   cy.get('#upload-mode-upload').click();
-  cy.upload_file('w3-dummy.pdf', 'input#petitionFile-file');
+  cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
 
   cy.get('button#tabButton-stinFile').click();
   cy.get('#upload-mode-upload').click();
-  cy.upload_file('w3-dummy.pdf', 'input#stinFile-file');
+  cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
 
   cy.get('button#tabButton-requestForPlaceOfTrialFile').click();
   cy.get('#upload-mode-upload').click();
-  cy.upload_file('w3-dummy.pdf', 'input#requestForPlaceOfTrialFile-file');
+  cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
+    '../fixtures/w3-dummy.pdf',
+  );
 };
