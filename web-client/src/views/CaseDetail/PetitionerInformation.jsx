@@ -99,45 +99,26 @@ const PetitionerInformation = connect(
                             </p>
                           </div>
                         )}
-                        {petitioner.contactType == 'primary' &&
-                          petitioner.email && (
-                            <>
-                              <div className="semi-bold margin-bottom-0 margin-top-3">
-                                Current email address
-                              </div>
-                              {formattedCaseDetail.contactPrimary.email}
-                              {formattedCaseDetail.contactPrimary
-                                .showEAccessFlag && (
-                                <FontAwesomeIcon
-                                  aria-label="has e-access"
-                                  className="margin-left-05 fa-icon-blue"
-                                  icon="flag"
-                                  size="1x"
-                                />
-                              )}
-                            </>
-                          )}
-                        {petitioner.contactType == 'secondary' &&
-                          caseInformationHelper.showContactSecondaryEmail && (
-                            <>
-                              <div className="semi-bold margin-bottom-0 margin-top-3">
-                                Current email address
-                              </div>
-                              {formattedCaseDetail.contactSecondary.email}
-                              {formattedCaseDetail.contactSecondary
-                                .showEAccessFlag && (
-                                <FontAwesomeIcon
-                                  aria-label="has e-access"
-                                  className="margin-left-05 fa-icon-blue"
-                                  icon="flag"
-                                  size="1x"
-                                />
-                              )}
-                            </>
-                          )}
+                        {petitioner.email && (
+                          <>
+                            <div className="semi-bold margin-bottom-0 margin-top-3">
+                              Current email address
+                            </div>
+                            {petitioner.email}
+                            {petitioner.showEAccessFlag && (
+                              <FontAwesomeIcon
+                                aria-label="has e-access"
+                                className="margin-left-05 fa-icon-blue"
+                                icon="flag"
+                                size="1x"
+                              />
+                            )}
+                          </>
+                        )}
+
                         {screenMetadata.pendingEmails &&
                           screenMetadata.pendingEmails[
-                            petitioner.contactType
+                            petitioner.contactId
                           ] && (
                             <>
                               <div className="semi-bold margin-top-3">
@@ -145,7 +126,7 @@ const PetitionerInformation = connect(
                               </div>
                               {
                                 screenMetadata.pendingEmails[
-                                  petitioner.contactType
+                                  petitioner.contactId
                                 ]
                               }
                             </>
