@@ -1,7 +1,9 @@
 const {
+  compareCasesByDocketNumber,
+} = require('../../utilities/getFormattedTrialSessionDetails');
+const {
   saveFileAndGenerateUrl,
 } = require('../../useCaseHelper/saveFileAndGenerateUrl');
-const { compareStrings } = require('../../utilities/sortFunctions');
 
 /**
  * generateTrialCalendarPdfInteractor
@@ -92,14 +94,10 @@ const getPractitionerName = practitioner => {
   return `${name}${barNumberFormatted}`;
 };
 
-const byCreatedAt = (a, b) => {
-  return compareStrings(a.createdAt, b.createdAt);
-};
-
 exports.formatCases = ({ applicationContext, calendaredCases }) => {
   const formattedOpenCases = calendaredCases
     .filter(calendaredCase => !calendaredCase.removedFromTrial)
-    .sort(byCreatedAt)
+    .sort(compareCasesByDocketNumber)
     .map(openCase => {
       return {
         caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
