@@ -599,6 +599,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       debug: jest.fn(),
       error: jest.fn(),
       info: jest.fn(),
+      warn: jest.fn(),
     },
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
