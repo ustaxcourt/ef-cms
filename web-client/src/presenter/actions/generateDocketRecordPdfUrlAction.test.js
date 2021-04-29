@@ -37,4 +37,62 @@ describe('generateDocketRecordPdfUrlAction', () => {
 
     expect(result.output.pdfUrl).toBe(mockPdfUrl.url);
   });
+
+  it('should call the interactor including party details if props.shouldIncludePartyDetail is true', async () => {
+    await runAction(generateDocketRecordPdfUrlAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        contentHtml:
+          '<!doctype html><html><head></head><body>Hello World</body></html>',
+        docketNumber: '123-45',
+        shouldIncludePartyDetail: true,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '123-45',
+        },
+        sessionMetadata: {
+          docketRecordSort: {
+            '123-45': 'byDate',
+          },
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().generateDocketRecordPdfInteractor.mock
+        .calls[0][0].includePartyDetail,
+    ).toEqual(true);
+  });
+
+  it('should call the interactor excluding party details if props.shouldIncludePartyDetail is false', async () => {
+    await runAction(generateDocketRecordPdfUrlAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        contentHtml:
+          '<!doctype html><html><head></head><body>Hello World</body></html>',
+        docketNumber: '123-45',
+        shouldIncludePartyDetail: false,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '123-45',
+        },
+        sessionMetadata: {
+          docketRecordSort: {
+            '123-45': 'byDate',
+          },
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().generateDocketRecordPdfInteractor.mock
+        .calls[0][0].includePartyDetail,
+    ).toEqual(false);
+  });
 });
