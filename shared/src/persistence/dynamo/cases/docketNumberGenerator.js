@@ -60,10 +60,11 @@ exports.createDocketNumber = async ({ applicationContext, receivedAt }) => {
     : formatNow(FORMATS.YEAR);
 
   let attempt = 0;
+  let nextDocketNumber;
 
   const docketNumber = await (async () => {
     while (attempt < exports.MAX_ATTEMPTS) {
-      const nextDocketNumber = await exports.getNextDocketNumber({
+      nextDocketNumber = await exports.getNextDocketNumber({
         applicationContext,
         year,
       });
@@ -85,8 +86,8 @@ exports.createDocketNumber = async ({ applicationContext, receivedAt }) => {
     return docketNumber;
   } else {
     // be sure case with this docket number doesn't already exist -- if it does, stop!
-    const message = 'docket number already exists!';
-    applicationContext.logger.error(message, docketNumber);
+    const message = `${nextDocketNumber}: docket number already exists!`;
+    applicationContext.logger.error(message, nextDocketNumber);
     throw new Error(message);
   }
 };
