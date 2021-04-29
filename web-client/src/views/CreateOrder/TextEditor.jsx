@@ -2,12 +2,12 @@
 import 'react-quill/dist/quill.snow.css';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 import React, { Suspense, useEffect, useRef } from 'react';
+import reactQuill from 'react-quill';
 
 const inlineStylesFontSizes = {};
 const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
 
 const ReactQuill = React.lazy(async () => {
-  const reactQuill = await import('react-quill');
   const Size = reactQuill.Quill.import('attributors/style/size');
   Size.whitelist = fontSizes;
   reactQuill.Quill.register(Size, true);
@@ -51,6 +51,7 @@ export const TextEditor = ({
     <>
       <Suspense fallback={<div>Loading...</div>}>
         <ReactQuill
+          className="no-wrap"
           defaultValue={editorDelta || defaultValue}
           formats={[
             'size',
@@ -77,7 +78,7 @@ export const TextEditor = ({
               ],
             ],
           }}
-          preserveWhitespace={true}
+          preserveWhitespace={!!editorDelta}
           tabIndex={0}
           onChange={(content, delta, source, editor) => {
             const fullDelta = editor.getContents();

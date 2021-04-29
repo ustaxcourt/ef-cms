@@ -12,13 +12,11 @@ export const docketClerkAddsTrackedDocketEntry = (
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toMatchObject({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
@@ -65,9 +63,7 @@ export const docketClerkAddsTrackedDocketEntry = (
 
     expect(test.getState('form.documentType')).toEqual('Application');
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
@@ -78,9 +74,7 @@ export const docketClerkAddsTrackedDocketEntry = (
       value: 'Application for Flavortown',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
