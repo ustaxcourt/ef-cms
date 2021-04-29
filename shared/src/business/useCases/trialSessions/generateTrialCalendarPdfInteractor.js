@@ -1,6 +1,7 @@
 const {
   saveFileAndGenerateUrl,
 } = require('../../useCaseHelper/saveFileAndGenerateUrl');
+const { compareStrings } = require('../../utilities/sortFunctions');
 
 /**
  * generateTrialCalendarPdfInteractor
@@ -35,27 +36,10 @@ exports.generateTrialCalendarPdfInteractor = async (
       trialSessionId,
     });
 
-  const getPractitionerName = practitioner => {
-    const { barNumber, name } = practitioner;
-    const barNumberFormatted = barNumber ? ` (${barNumber})` : '';
-    return `${name}${barNumberFormatted}`;
-  };
-
-  const formattedOpenCases = calendaredCases
-    .filter(calendaredCase => calendaredCase.removedFromTrial !== true)
-    .map(openCase => {
-      return {
-        caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
-        docketNumber: openCase.docketNumber,
-        docketNumberWithSuffix: openCase.docketNumberWithSuffix,
-        petitionerCounsel: (openCase.privatePractitioners || []).map(
-          getPractitionerName,
-        ),
-        respondentCounsel: (openCase.irsPractitioners || []).map(
-          getPractitionerName,
-        ),
-      };
-    });
+  const formattedOpenCases = exports.formatCases({
+    applicationContext,
+    calendaredCases,
+  });
 
   formattedTrialSession.caseOrder.forEach(aCase => {
     if (aCase.calendarNotes) {
@@ -100,4 +84,34 @@ exports.generateTrialCalendarPdfInteractor = async (
     file,
     useTempBucket: true,
   });
+};
+
+const getPractitionerName = practitioner => {
+  const { barNumber, name } = practitioner;
+  const barNumberFormatted = barNumber ? ` (${barNumber})` : '';
+  return `${name}${barNumberFormatted}`;
+};
+
+const byCreatedAt = (a, b) => {
+  return compareStrings(a.createdAt, b.createdAt);
+};
+
+exports.formatCases = ({ applicationContext, calendaredCases }) => {
+  const formattedOpenCases = calendaredCases
+    .filter(calendaredCase => !calendaredCase.removedFromTrial)
+    .sort(byCreatedAt)
+    .map(openCase => {
+      return {
+        caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
+        docketNumber: openCase.docketNumber,
+        docketNumberWithSuffix: openCase.docketNumberWithSuffix,
+        petitionerCounsel: (openCase.privatePractitioners || []).map(
+          getPractitionerName,
+        ),
+        respondentCounsel: (openCase.irsPractitioners || []).map(
+          getPractitionerName,
+        ),
+      };
+    });
+  return formattedOpenCases;
 };
