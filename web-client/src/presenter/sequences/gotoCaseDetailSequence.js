@@ -10,8 +10,8 @@ import { getConstants } from '../../getConstants';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
+import { getPendingEmailsForPetitionersOnCaseAction } from '../actions/getPendingEmailsForPetitionersOnCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
-import { getUserPendingEmailForPrimaryAndSecondaryAction } from '../actions/getUserPendingEmailForPrimaryAndSecondaryAction';
 import { parallel } from 'cerebral/factories';
 import { resetHeaderAccordionsSequence } from './resetHeaderAccordionsSequence';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
@@ -27,9 +27,9 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
+import { setPendingEmailsForPetitionersOnCaseAction } from '../actions/setPendingEmailsForPetitionersOnCaseAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
-import { setUserPendingEmailForPrimaryAndSecondaryAction } from '../actions/setUserPendingEmailForPrimaryAndSecondaryAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { takePathForRoles } from './takePathForRoles';
 
@@ -46,8 +46,8 @@ const gotoCaseDetailInternal = [
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
   getMessagesForCaseAction,
-  getUserPendingEmailForPrimaryAndSecondaryAction,
-  setUserPendingEmailForPrimaryAndSecondaryAction,
+  getPendingEmailsForPetitionersOnCaseAction,
+  setPendingEmailsForPetitionersOnCaseAction,
   setCurrentPageAction('CaseDetailInternal'),
 ];
 

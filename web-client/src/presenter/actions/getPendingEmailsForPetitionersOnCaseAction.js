@@ -7,25 +7,23 @@ import { state } from 'cerebral';
  * @param {function} providers.props the cerebral props
  * @returns {object} the list of petitioner pending emails with their associated contactId
  */
-export const getUserPendingEmailForPetitionerOnCaseAction = async ({
+export const getPendingEmailsForPetitionersOnCaseAction = async ({
   applicationContext,
   get,
 }) => {
-  let petitionerPendingEmails = [];
+  let pendingEmails = [];
 
   const { petitioners } = get(state.caseDetail);
 
   for (let petitioner of petitioners) {
-    if (petitioner.contactId) {
-      const pendingEmail = await applicationContext
-        .getUseCases()
-        .getUserPendingEmailInteractor({
-          applicationContext,
-          userId: petitioner.contactId,
-        });
-      petitionerPendingEmails.push({ [petitioner.contactId]: pendingEmail });
-    }
+    const pendingEmail = await applicationContext
+      .getUseCases()
+      .getUserPendingEmailInteractor({
+        applicationContext,
+        userId: petitioner.contactId,
+      });
+    pendingEmails.push({ [petitioner.contactId]: pendingEmail });
   }
 
-  return { petitionerPendingEmails };
+  return { pendingEmails };
 };

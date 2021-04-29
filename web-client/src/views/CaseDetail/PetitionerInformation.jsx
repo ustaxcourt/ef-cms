@@ -118,7 +118,7 @@ const PetitionerInformation = connect(
 
                         {screenMetadata.pendingEmails &&
                           screenMetadata.pendingEmails[
-                            petitioner.contactType
+                            petitioner.contactId
                           ] && (
                             <>
                               <div className="semi-bold margin-top-3">
@@ -126,7 +126,7 @@ const PetitionerInformation = connect(
                               </div>
                               {
                                 screenMetadata.pendingEmails[
-                                  petitioner.contactType
+                                  petitioner.contactId
                                 ]
                               }
                             </>
