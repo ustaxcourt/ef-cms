@@ -1,9 +1,7 @@
 const joi = require('joi');
 const {
-  CHAMBERS_SECTIONS_WITH_LEGACY,
   COUNTRY_TYPES,
   ROLES,
-  SECTIONS,
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
@@ -123,11 +121,7 @@ const userValidation = {
   pendingEmailVerificationToken: JoiValidationConstants.UUID.allow(
     null,
   ).optional(),
-  section: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS_WITH_LEGACY,
-    ...Object.values(ROLES),
-  ).optional(),
+  section: JoiValidationConstants.STRING.optional(),
   token: JoiValidationConstants.STRING.optional(),
   userId: JoiValidationConstants.UUID.required(),
 };
