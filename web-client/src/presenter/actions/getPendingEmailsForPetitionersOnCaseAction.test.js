@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getUserPendingEmailForPetitionerOnCaseAction } from './getUserPendingEmailForPetitionerOnCaseAction';
+import { getPendingEmailsForPetitionersOnCaseAction } from './getPendingEmailsForPetitionersOnCaseAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getUserPendingEmailForPetitionerOnCaseAction', () => {
+describe('getPendingEmailsForPetitionersOnCaseAction', () => {
   const mockUserId = 'e14762ee-fc2f-4a9e-ba2c-2160469d2d04';
   const mockSecondUserId = 'c5c4b6e0-a889-4a05-a4f6-0fc2611d8740';
   const mockEmail = 'test@example.com';
@@ -14,7 +14,7 @@ describe('getUserPendingEmailForPetitionerOnCaseAction', () => {
   });
 
   it('should make calls to getUserPendingEmailInteractor with the contactId of each petitioner on the case', async () => {
-    await runAction(getUserPendingEmailForPetitionerOnCaseAction, {
+    await runAction(getPendingEmailsForPetitionersOnCaseAction, {
       modules: {
         presenter,
       },
@@ -39,14 +39,14 @@ describe('getUserPendingEmailForPetitionerOnCaseAction', () => {
     ).toBe(mockSecondUserId);
   });
 
-  it('should return petitionerPendingEmails as props', async () => {
+  it('should return pendingEmails as props', async () => {
     applicationContext
       .getUseCases()
       .getUserPendingEmailInteractor.mockReturnValueOnce(mockEmail)
       .mockReturnValueOnce(mockSecondaryEmail);
 
     const { output } = await runAction(
-      getUserPendingEmailForPetitionerOnCaseAction,
+      getPendingEmailsForPetitionersOnCaseAction,
       {
         modules: {
           presenter,
@@ -62,7 +62,7 @@ describe('getUserPendingEmailForPetitionerOnCaseAction', () => {
       },
     );
 
-    expect(output.petitionerPendingEmails).toEqual([
+    expect(output.pendingEmails).toEqual([
       {
         [mockUserId]: mockEmail,
       },
