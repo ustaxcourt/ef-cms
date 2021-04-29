@@ -115,7 +115,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
   });
 
   describe('format cases', () => {
-    it('should filter out cases not removed from trial', () => {
+    it('should filter out cases that have been removed from trial', () => {
       const result = formatCases({
         applicationContext,
         calendaredCases: mockCases,
