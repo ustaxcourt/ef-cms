@@ -10,15 +10,14 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
 data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api.js.zip"
-  source_dir = "${path.module}/../template/lambdas/dist/"
-  excludes    = [ "${path.module}/../template/lambdas/dist/api-public.js",
-                  "${path.module}/../template/lambdas/dist/websockets.js",
-                  "${path.module}/../template/lambdas/dist/cron.js",
-                  "${path.module}/../template/lambdas/dist/legacy-documents-migration.js",
-                  "${path.module}/../template/lambdas/dist/streams.js",
-                  "${path.module}/../template/lambdas/dist/cognito-triggers.js",
-                  "${path.module}/../template/lambdas/dist/cognito-authorizer.js",
-                  "${path.module}/../template/lambdas/dist/report.html", ]
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = ["${path.module}/../template/lambdas/dist/api-public.js",
+    "${path.module}/../template/lambdas/dist/websockets.js",
+    "${path.module}/../template/lambdas/dist/cron.js",
+    "${path.module}/../template/lambdas/dist/streams.js",
+    "${path.module}/../template/lambdas/dist/cognito-triggers.js",
+    "${path.module}/../template/lambdas/dist/cognito-authorizer.js",
+  "${path.module}/../template/lambdas/dist/report.html", ]
 }
 
 resource "null_resource" "api_east_object" {

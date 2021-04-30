@@ -243,7 +243,7 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
     });
 
     it('should set additionalName as `secondaryName` when partyType is nextFriendForMinor', () => {
@@ -300,7 +300,26 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      expect(myCase.petitioners[0].additionalName).toBe(`${mockInCareOf}`);
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
+    });
+
+    it('should set additionalName as `secondaryName` when partyType is petitionerDeceasedSpouse', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              inCareOf: mockInCareOf,
+            },
+          ],
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(myCase.petitioners[0].additionalName).toBe(`c/o ${mockInCareOf}`);
     });
 
     it('should NOT set additionalName when it has already been set', () => {
@@ -1625,6 +1644,19 @@ describe('Case entity', () => {
           {
             contactType: CONTACT_TYPES.primary,
             name: 'Bob Smith',
+          },
+        ],
+      });
+      expect(caseCaption).toEqual('Bob Smith, Petitioner');
+    });
+
+    it('gets the primary contact from the petitioners array and trims spaces', () => {
+      const caseCaption = Case.getCaseCaption({
+        partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            contactType: CONTACT_TYPES.primary,
+            name: '    Bob Smith                 ',
           },
         ],
       });
@@ -4974,7 +5006,18 @@ describe('Case entity', () => {
     });
 
     it('should return false if no contacts or practitioners have paper service indicator', () => {
-      const myCase = new Case(MOCK_CASE, { applicationContext });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          petitioners: [
+            {
+              ...getContactPrimary(MOCK_CASE),
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+          ],
+        },
+        { applicationContext },
+      );
 
       const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
 
@@ -5210,42 +5253,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('isUserIdRepresentedByPrivatePractitioner', () => {
-    let caseEntity;
-
-    beforeAll(() => {
-      caseEntity = new Case(
-        {
-          ...MOCK_CASE,
-          privatePractitioners: [
-            {
-              barNumber: 'PP123',
-              representing: ['123'],
-            },
-            {
-              barNumber: 'PP234',
-              representing: ['234', '456'],
-            },
-          ],
-        },
-        {
-          applicationContext,
-        },
-      );
-    });
-    it('returns true if there is a privatePractitioner representing the given userId', () => {
-      expect(
-        caseEntity.isUserIdRepresentedByPrivatePractitioner('456'),
-      ).toEqual(true);
-    });
-
-    it('returns false if there is NO privatePractitioner representing the given userId', () => {
-      expect(
-        caseEntity.isUserIdRepresentedByPrivatePractitioner('678'),
-      ).toEqual(false);
-    });
-  });
-
   describe('addPetitioner', () => {
     it('should add the petitioner to the petitioners array and return the updated case', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
@@ -5274,6 +5281,55 @@ describe('Case entity', () => {
 
       expect(caseEntity.isValid()).toBeTruthy();
       expect(updatedCase.petitioners.length).toEqual(2);
+    });
+  });
+
+  describe('removePetitioner', () => {
+    it('should remove the petitioner by contactId from the petitioners array', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+      const numberOfPetitionersOnCase = caseEntity.petitioners.length;
+      expect(caseEntity.petitioners.length).toEqual(numberOfPetitionersOnCase);
+
+      caseEntity.removePetitioner(getContactPrimary(MOCK_CASE).contactId);
+
+      expect(caseEntity.petitioners.length).toEqual(
+        numberOfPetitionersOnCase - 1,
+      );
+    });
+  });
+
+  describe('getPractitionersRepresenting', () => {
+    it('should return the practitioner associated with the contactId provided', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          privatePractitioners: [{ representing: ['567'], userId: '567' }],
+        },
+        { applicationContext },
+      );
+
+      const practitioner = caseEntity.getPractitionersRepresenting('567');
+
+      expect(practitioner).toMatchObject([
+        {
+          representing: ['567'],
+          userId: '567',
+        },
+      ]);
+    });
+
+    it('should return an empty array if no practitioners are associated with the contactId provided', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          privatePractitioners: [{ representing: ['123'], userId: '567' }],
+        },
+        { applicationContext },
+      );
+
+      const practitioner = caseEntity.getPractitionersRepresenting('567');
+
+      expect(practitioner).toMatchObject([]);
     });
   });
 });

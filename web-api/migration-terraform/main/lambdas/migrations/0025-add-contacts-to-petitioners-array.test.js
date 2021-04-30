@@ -298,7 +298,7 @@ describe('migrateItems', () => {
     ];
     const results = await migrateItems(items);
 
-    expect(results[0].petitioners[0].additionalName).toEqual('Myself');
+    expect(results[0].petitioners[0].additionalName).toEqual('c/o Myself');
   });
 
   it('should not throw an error when attempting to set contactType for otherPetitioners it is undefined', async () => {

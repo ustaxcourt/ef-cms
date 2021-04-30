@@ -19,6 +19,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     docketEntries: [
       {
         docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        docketNumber: '56789-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
@@ -27,6 +28,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       },
       {
         docketEntryId: '1905d1ab-18d0-43ec-bafb-654e83405491',
+        docketNumber: '56789-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',

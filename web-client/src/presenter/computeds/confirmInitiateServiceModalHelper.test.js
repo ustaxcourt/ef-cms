@@ -58,19 +58,22 @@ describe('confirmInitiateServiceModalHelper', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
         caseDetail: {
-          contactPrimary: {
-            address1: '609 East Cowley Parkway',
-            address2: 'Ullamco quibusdam ea',
-            address3: 'Consectetur quos do',
-            city: 'asdf',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'petitioner@example.com',
-            name: 'Callie Bullock',
-            postalCode: '33333',
-            state: 'AK',
-          },
           irsPractitioners: [],
           isPaper: false,
+          petitioners: [
+            {
+              address1: '609 East Cowley Parkway',
+              address2: 'Ullamco quibusdam ea',
+              address3: 'Consectetur quos do',
+              city: 'asdf',
+              contactType: CONTACT_TYPES.primary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'petitioner@example.com',
+              name: 'Callie Bullock',
+              postalCode: '33333',
+              state: 'AK',
+            },
+          ],
           privatePractitioners: [],
         },
         form: {},

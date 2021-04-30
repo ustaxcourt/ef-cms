@@ -5,7 +5,9 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
-const { JUDGES_CHAMBERS } = applicationContext.getConstants();
+const JUDGES_CHAMBERS = applicationContext
+  .getPersistenceGateway()
+  .getJudgesChambers();
 
 export const userSendsMessageToJudge = (test, subject) => {
   const getHelper = () => {

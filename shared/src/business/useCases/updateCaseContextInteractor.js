@@ -83,7 +83,7 @@ exports.updateCaseContextInteractor = async (
         });
     }
 
-    if (newCase.isReadyForTrial()) {
+    if (newCase.isReadyForTrial() && !oldCase.trialSessionId) {
       await applicationContext
         .getPersistenceGateway()
         .createCaseTrialSortMappingRecords({

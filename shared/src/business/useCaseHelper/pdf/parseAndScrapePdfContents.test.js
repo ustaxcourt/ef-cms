@@ -4,7 +4,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const { parseAndScrapePdfContents } = require('./parseAndScrapePdfContents');
 
-describe('parseLegacyDocumentsInteractor', () => {
+describe('parseAndScrapePdfContents', () => {
   it('should parse pdf contents', async () => {
     await parseAndScrapePdfContents({
       applicationContext,

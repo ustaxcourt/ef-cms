@@ -56,6 +56,7 @@ describe('draftDocumentViewerHelper', () => {
               documentType: 'Order',
             },
           ],
+          petitioners: [],
         },
       },
     });
@@ -78,6 +79,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -101,6 +103,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -123,6 +126,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -144,6 +148,7 @@ describe('draftDocumentViewerHelper', () => {
               documentType: 'Order',
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: '123',
@@ -168,6 +173,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -193,6 +199,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -218,6 +225,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -243,6 +251,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -270,6 +279,7 @@ describe('draftDocumentViewerHelper', () => {
               signedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -296,6 +306,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -321,6 +332,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -348,6 +360,7 @@ describe('draftDocumentViewerHelper', () => {
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -374,6 +387,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -402,6 +416,7 @@ describe('draftDocumentViewerHelper', () => {
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -430,6 +445,7 @@ describe('draftDocumentViewerHelper', () => {
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -458,6 +474,7 @@ describe('draftDocumentViewerHelper', () => {
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -485,6 +502,7 @@ describe('draftDocumentViewerHelper', () => {
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -510,6 +528,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -535,6 +554,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -562,6 +582,7 @@ describe('draftDocumentViewerHelper', () => {
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -590,6 +611,7 @@ describe('draftDocumentViewerHelper', () => {
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -615,6 +637,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -640,6 +663,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -665,6 +689,7 @@ describe('draftDocumentViewerHelper', () => {
               isDraft: true,
             },
           ],
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: 'abc',
@@ -693,6 +718,7 @@ describe('draftDocumentViewerHelper', () => {
             },
           ],
           docketNumber: DOCKET_NUMBER,
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: DOCKET_ENTRY_ID,
@@ -723,6 +749,7 @@ describe('draftDocumentViewerHelper', () => {
             },
           ],
           docketNumber: DOCKET_NUMBER,
+          petitioners: [],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: DOCKET_ENTRY_ID,
