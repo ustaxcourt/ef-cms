@@ -2,19 +2,23 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  getOtherPetitionerContact,
-} = require('../contacts/OtherPetitionerContact');
+  CASE_STATUS_TYPES,
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../EntityConstants');
 const { Case } = require('./Case');
-const { CONTACT_TYPES, COUNTRY_TYPES } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { Petitioner } = require('../contacts/Petitioner');
 
 describe('addPetitioner', () => {
   it('should add the petitioner to the petitioners array and return the updated case', () => {
-    const caseEntity = new Case(MOCK_CASE, { applicationContext });
+    const caseEntity = new Case(
+      { ...MOCK_CASE, status: CASE_STATUS_TYPES.generalDocket },
+      { applicationContext },
+    );
 
-    const OtherPetitionerContact = getOtherPetitionerContact({});
-
-    const petitionerEntity = new OtherPetitionerContact(
+    const petitionerEntity = new Petitioner(
       {
         address1: '123 Tomato Street',
         city: 'Tomatotown',
@@ -23,6 +27,7 @@ describe('addPetitioner', () => {
         name: 'Susie Tomato',
         phone: '123456',
         postalCode: '99999',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         state: 'KS',
       },
       {
