@@ -7,8 +7,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 const PartiesInformation = connect(
-  { caseDetail: state.caseDetail },
-  function PartiesInformation({ caseDetail }) {
+  { formattedCaseDetail: state.formattedCaseDetail },
+  function PartiesInformation({ formattedCaseDetail }) {
     return (
       <>
         <div className="grid-row grid-gap-5">
@@ -126,27 +126,39 @@ const PartiesInformation = connect(
                     Edit
                   </Button>
                 </h3>
-
                 <div className="bg-primary text-white padding-2">
                   Petitioner
                 </div>
-
                 <AddressDisplay
-                  contact={caseDetail.petitioners[0]}
+                  contact={formattedCaseDetail.petitioners[0]}
                   showEmail={true}
                   // showSealAddressLink={caseInformationHelper.showSealAddressLink}
                 />
-
-                {caseDetail.petitioners[0].serviceIndicator && (
+                {formattedCaseDetail.petitioners[0].serviceIndicator && (
                   <div className="margin-top-4">
                     <p className="semi-bold margin-bottom-0">
                       Service preference
                     </p>
-                    {caseDetail.petitioners[0].serviceIndicator}
+                    {formattedCaseDetail.petitioners[0].serviceIndicator}
                   </div>
                 )}
-
                 <h3>Counsel</h3>
+                <div>
+                  {formattedCaseDetail.privatePractitioners[0].name}{' '}
+                  {`(${formattedCaseDetail.privatePractitioners[0].barNumber})`}{' '}
+                  <Button
+                    link
+                    className="margin-top-1 padding-0 float-right"
+                    href={'/case-detail/'}
+                    icon="edit"
+                  >
+                    Edit
+                  </Button>
+                </div>
+                <div>{formattedCaseDetail.privatePractitioners[0].email}</div>
+                <div>
+                  {formattedCaseDetail.privatePractitioners[0].contact.phone}
+                </div>
               </div>
             </div>
           </div>
