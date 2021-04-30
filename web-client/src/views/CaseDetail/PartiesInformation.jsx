@@ -59,7 +59,7 @@ const PartiesInformation = connect({}, function PartiesInformation() {
                 </span>
               </div>
             </div>
-            <div className="grid-col-5">
+            <div className="grid-col-4">
               <FormGroup
                 className="margin-bottom-0 margin-top-0"
                 // errorText={validationErrors.practitionerSearchError}
@@ -98,7 +98,7 @@ const PartiesInformation = connect({}, function PartiesInformation() {
                       }}
                     />
                     <button
-                      className="ustc-search-button usa-button"
+                      className="small-search-button usa-button"
                       id="search-for-practitioner"
                       type="submit"
                     >
@@ -108,7 +108,7 @@ const PartiesInformation = connect({}, function PartiesInformation() {
                 </form>
               </FormGroup>
             </div>
-            <div className="grid-col-1">Add Party</div>
+            <div className="grid-col-2"><Button link icon="plus-circle">Add Party</Button></div>
           </div>
         </div>
       </div>
