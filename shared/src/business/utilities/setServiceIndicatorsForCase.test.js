@@ -51,10 +51,11 @@ describe('setServiceIndicatorsForCases', () => {
     };
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactPrimary) with no representing counsel filing by paper`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner without an email (contactPrimary) with no representing counsel filing by paper`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
+      petitioners: [{ ...baseCaseDetail.petitioners[0], email: undefined }],
     };
 
     const result = setServiceIndicatorsForCase(caseDetail);
@@ -95,7 +96,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactSecondary) with an email and no representing counsel`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactSecondary) with an email and no representing counsel on a paper case`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
