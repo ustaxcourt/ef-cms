@@ -57,4 +57,19 @@ describe('deleteWorkItemFromInbox', () => {
       },
     });
   });
+
+  it('should NOT invoke the persistence layer with pk of docket|workItem and other expected params when deleteFromSection is false', async () => {
+    await deleteWorkItemFromInbox({
+      applicationContext,
+      deleteFromSection: false,
+      workItem: {
+        section: DOCKET_SECTION,
+        workItemId: '123',
+      },
+    });
+
+    expect(
+      applicationContext.getDocumentClient().delete,
+    ).not.toHaveBeenCalled();
+  });
 });

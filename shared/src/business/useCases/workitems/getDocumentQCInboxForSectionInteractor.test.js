@@ -4,7 +4,6 @@ const {
 const {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-  JUDGES_CHAMBERS,
   PETITIONS_SECTION,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -101,7 +100,8 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
 
     await getDocumentQCInboxForSectionInteractor(applicationContext, {
       judgeUserName: 'Ashford',
-      section: JUDGES_CHAMBERS.ASHFORDS_CHAMBERS_SECTION.section,
+      section: applicationContext.getPersistenceGateway().getJudgesChambers()
+        .ASHFORDS_CHAMBERS_SECTION.section,
     });
 
     expect(

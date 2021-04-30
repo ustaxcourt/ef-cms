@@ -95,6 +95,12 @@ const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
 const {
+  getChambersSections,
+  getChambersSectionsLabels,
+  getJudgesChambers,
+  getJudgesChambersWithLegacy,
+} = require('../../persistence/dynamo/chambers/getJudgesChambers');
+const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } = require('../utilities/getWorkQueueFilters');
@@ -422,6 +428,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
+    getChambersSections: jest.fn().mockImplementation(getChambersSections),
+    getChambersSectionsLabels: jest
+      .fn()
+      .mockImplementation(getChambersSectionsLabels),
     getDocumentQCInboxForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
@@ -437,6 +447,11 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFullCaseByDocketNumber),
     getItem: jest.fn().mockImplementation(getItem),
+
+    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
+    getJudgesChambersWithLegacy: jest
+      .fn()
+      .mockImplementation(getJudgesChambersWithLegacy),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
@@ -584,6 +599,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       debug: jest.fn(),
       error: jest.fn(),
       info: jest.fn(),
+      warn: jest.fn(),
     },
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
