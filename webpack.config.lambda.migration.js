@@ -9,6 +9,7 @@ module.exports = {
   },
   output: {
     clean: true,
+    libraryTarget: 'umd',
     path: __dirname + '/web-api/migration-terraform/main/lambdas/dist',
   },
 };
