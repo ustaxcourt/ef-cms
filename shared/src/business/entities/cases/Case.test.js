@@ -863,6 +863,7 @@ describe('Case entity', () => {
           name: 'Jimmy Dean',
           phone: '1234567890',
           postalCode: '05198',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'AK',
         },
         {
@@ -876,6 +877,7 @@ describe('Case entity', () => {
           name: 'Jimmy Dean',
           phone: '1234567890',
           postalCode: '05198',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'AK',
         },
       ];
@@ -884,6 +886,7 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           petitioners: [...MOCK_CASE.petitioners, ...mockOtherPetitioners],
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -908,6 +911,7 @@ describe('Case entity', () => {
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'AK',
         },
         {
@@ -921,6 +925,7 @@ describe('Case entity', () => {
           otherFilerType: OTHER_FILER_TYPES[1],
           phone: '1234567890',
           postalCode: '05198',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'AK',
         },
       ];
@@ -929,6 +934,7 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           petitioners: [getContactPrimary(MOCK_CASE), ...mockOtherFilers],
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -951,6 +957,7 @@ describe('Case entity', () => {
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'AK',
           title: UNIQUE_OTHER_FILER_TYPE,
         },
@@ -966,6 +973,7 @@ describe('Case entity', () => {
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'AK',
           title: OTHER_FILER_TYPES[2],
         },
@@ -975,6 +983,7 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           petitioners: [...MOCK_CASE.petitioners, ...mockOtherFilers],
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,
@@ -1001,6 +1010,7 @@ describe('Case entity', () => {
           otherFilerType: null,
           phone: '1234567890',
           postalCode: '05198',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'AK',
           title: UNIQUE_OTHER_FILER_TYPE,
         },
@@ -1015,6 +1025,7 @@ describe('Case entity', () => {
           otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'AK',
           title: UNIQUE_OTHER_FILER_TYPE,
         },
@@ -1024,6 +1035,7 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           petitioners: [...MOCK_CASE.petitioners, ...mockOtherFilers],
+          status: CASE_STATUS_TYPES.generalDocket,
         },
         {
           applicationContext,

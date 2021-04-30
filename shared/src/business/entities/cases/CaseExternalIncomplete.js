@@ -39,7 +39,6 @@ CaseExternalIncomplete.prototype.initContacts = function (
       secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
     partyType: rawCase.partyType,
-    status: rawCase.status,
   });
   this.petitioners = [];
   this.petitioners.push(contacts.primary);
