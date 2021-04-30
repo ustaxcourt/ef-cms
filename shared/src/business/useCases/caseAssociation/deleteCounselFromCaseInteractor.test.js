@@ -163,11 +163,11 @@ describe('deleteCounselFromCaseInteractor', () => {
     );
 
     expect(getContactPrimary(updatedCase).serviceIndicator).toEqual(
-      'Electronic',
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
 
-  it('should set the contactPrimary.serviceIndicator to Paper if the case was paper', async () => {
+  it('should set the contactPrimary.serviceIndicator to electronic when the contactPrimary has an email', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -191,7 +191,9 @@ describe('deleteCounselFromCaseInteractor', () => {
       },
     );
 
-    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual('Paper');
+    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
   });
 
   it('should set the contactSecondary.serviceIndicator to Paper if the case was paper and the contactSecondary has no email', async () => {
