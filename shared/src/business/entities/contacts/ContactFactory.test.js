@@ -8,10 +8,8 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../EntityConstants');
-const { Case, getContactPrimary } = require('../cases/Case');
 const { CaseExternal } = require('../cases/CaseExternal');
 const { ContactFactory } = require('./ContactFactory');
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 let caseExternal;
 
@@ -991,62 +989,6 @@ describe('ContactFactory', () => {
         { applicationContext },
       );
     }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
-  });
-
-  describe('Cases with otherPetitioners', () => {
-    const partyTypeKeys = Object.keys(PARTY_TYPES);
-    partyTypeKeys.forEach(partyType => {
-      it(`can validate valid contacts for a case with otherPetitioners for party type ${partyType}`, () => {
-        const caseWithOtherPetitioners = new Case(
-          {
-            ...MOCK_CASE,
-            otherPetitioners: [
-              {
-                additionalName: 'First Other Petitioner',
-                address1: '876 12th Ave',
-                city: 'Nashville',
-                country: 'USA',
-                countryType: COUNTRY_TYPES.DOMESTIC,
-                email: 'someone@example.com',
-                name: 'Jimmy Dean',
-                phone: '1234567890',
-                postalCode: '05198',
-                state: 'AK',
-              },
-              {
-                additionalName: 'Second Other Petitioner',
-                address1: '876 12th Ave',
-                city: 'Nashville',
-                country: 'USA',
-                countryType: COUNTRY_TYPES.DOMESTIC,
-                email: 'someone@example.com',
-                name: 'Jimmy Dean',
-                phone: '1234567890',
-                postalCode: '05198',
-                state: 'AK',
-              },
-            ],
-            partyType: PARTY_TYPES[partyType],
-            petitioners: [
-              {
-                ...getContactPrimary(MOCK_CASE),
-                secondaryName: 'Trustee Name',
-              },
-              {
-                ...getContactPrimary(MOCK_CASE),
-                contactType: CONTACT_TYPES.secondary,
-                inCareOf: 'Peter Parker',
-              },
-            ],
-          },
-          { applicationContext },
-        );
-
-        expect(caseWithOtherPetitioners.getFormattedValidationErrors()).toEqual(
-          null,
-        );
-      });
-    });
   });
 
   describe('getErrorToMessageMap', () => {
