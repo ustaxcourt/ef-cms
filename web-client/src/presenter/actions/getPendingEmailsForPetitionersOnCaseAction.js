@@ -11,7 +11,7 @@ export const getPendingEmailsForPetitionersOnCaseAction = async ({
   applicationContext,
   get,
 }) => {
-  let pendingEmails = [];
+  let pendingEmails = {};
 
   const { petitioners } = get(state.caseDetail);
 
@@ -22,7 +22,7 @@ export const getPendingEmailsForPetitionersOnCaseAction = async ({
         applicationContext,
         userId: petitioner.contactId,
       });
-    pendingEmails.push({ [petitioner.contactId]: pendingEmail });
+    pendingEmails[petitioner.contactId] = pendingEmail;
   }
 
   return { pendingEmails };
