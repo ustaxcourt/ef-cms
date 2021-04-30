@@ -179,6 +179,7 @@ describe('migrateItems', () => {
         otherPetitioners: undefined,
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -198,6 +199,7 @@ describe('migrateItems', () => {
         ],
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -235,6 +237,7 @@ describe('migrateItems', () => {
         otherPetitioners: [mockOtherPetitionerWithoutContactType],
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -279,6 +282,7 @@ describe('migrateItems', () => {
         ],
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
