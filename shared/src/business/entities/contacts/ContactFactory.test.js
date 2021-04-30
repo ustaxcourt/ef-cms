@@ -8,10 +8,8 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } = require('../EntityConstants');
-const { Case, getContactPrimary } = require('../cases/Case');
 const { CaseExternal } = require('../cases/CaseExternal');
 const { ContactFactory } = require('./ContactFactory');
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 let caseExternal;
 
