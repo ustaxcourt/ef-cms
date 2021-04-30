@@ -16,7 +16,7 @@ export const validatePrimaryContactAction = ({
   path,
   store,
 }) => {
-  const { contactPrimary, partyType, status } = get(state.form);
+  const { contactPrimary, partyType } = get(state.form);
 
   const errors = applicationContext
     .getUseCases()
@@ -24,7 +24,6 @@ export const validatePrimaryContactAction = ({
       applicationContext,
       contactInfo: contactPrimary,
       partyType,
-      status,
     });
 
   store.set(state.validationErrors.contactPrimary, errors || {});
