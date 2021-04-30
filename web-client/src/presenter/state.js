@@ -2,6 +2,7 @@ import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocke
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
+import { addressDisplayHelper } from './computeds/addressDisplayHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
@@ -22,18 +23,17 @@ import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
-import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
+import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { documentViewerHelper } from './computeds/documentViewerHelper';
 import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper';
-import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
@@ -108,6 +108,7 @@ const helpers = {
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addToTrialSessionModalHelper,
+  addressDisplayHelper,
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
@@ -128,18 +129,17 @@ const helpers = {
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
-  contactEditHelper,
   contactsHelper,
   correspondenceViewerHelper,
   createMessageModalHelper,
   createOrderHelper,
   createPractitionerUserHelper,
   dashboardExternalHelper,
+  docketEntryQcHelper,
   docketRecordHelper,
   documentSigningHelper,
   documentViewerHelper,
   draftDocumentViewerHelper,
-  editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   editStatisticFormHelper,

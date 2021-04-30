@@ -1,3 +1,7 @@
+import './index.scss';
+
+import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
+
 import { AppComponent } from './views/AppComponent';
 import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';

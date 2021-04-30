@@ -1,15 +1,27 @@
+import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
+
 export const docketClerkUpdatesSealedContactAddress = (test, contactType) => {
   return it('docket clerk updates sealed contact address', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    let contact;
+    if (contactType === 'contactPrimary') {
+      contact = contactPrimaryFromState(test);
+    } else if (contactType === 'contactSecondary') {
+      contact = contactSecondaryFromState(test);
+    }
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contact.contactId,
       docketNumber: test.docketNumber,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: `${contactType}.address1`,
+      key: 'contact.address1',
       value: 'somewhere over the rainbow',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(
       test.getState('currentViewMetadata.caseDetail.caseInformationTab'),

@@ -47,12 +47,13 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
-const { clone, includes, isEmpty } = require('lodash');
+const { clone, compact, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry, isServed } = require('../DocketEntry');
 const { IrsPractitioner } = require('../IrsPractitioner');
+const { Petitioner } = require('../contacts/Petitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
 const { TrialSession } = require('../trialSessions/TrialSession');
@@ -161,9 +162,9 @@ Case.prototype.init = function init(
 
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
   this.assignHearings({ applicationContext, rawCase });
-  this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
+  this.assignContacts({ applicationContext, filtered, rawCase });
 };
 
 Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
@@ -318,24 +319,29 @@ Case.prototype.assignContacts = function assignContacts({
   applicationContext,
   rawCase,
 }) {
-  const contacts = ContactFactory.createContacts({
-    applicationContext,
-    contactInfo: {
-      otherFilers: getOtherFilers(rawCase),
-      otherPetitioners: getOtherPetitioners(rawCase),
-      primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-      secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
-    },
-    isPaper: rawCase.isPaper,
-    partyType: rawCase.partyType,
-  });
+  if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
+    const contacts = ContactFactory.createContacts({
+      applicationContext,
+      contactInfo: {
+        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
+        secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
+      },
+      partyType: rawCase.partyType,
+    });
 
-  this.petitioners.push(contacts.primary);
-  if (contacts.secondary) {
-    this.petitioners.push(contacts.secondary);
+    this.petitioners.push(contacts.primary);
+    if (contacts.secondary) {
+      this.petitioners.push(contacts.secondary);
+    }
+  } else {
+    if (Array.isArray(rawCase.petitioners)) {
+      this.petitioners = rawCase.petitioners.map(
+        petitioner => new Petitioner(petitioner, { applicationContext }),
+      );
+
+      this.setAdditionalNameOnPetitioners();
+    }
   }
-  this.petitioners.push(...contacts.otherPetitioners);
-  this.petitioners.push(...contacts.otherFilers);
 };
 
 Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
@@ -1130,6 +1136,63 @@ Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
 };
 
 /**
+ * Retrieves the petitioner with id contactId on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Object} the contact object
+ */
+const getPetitionerById = function (rawCase, contactId) {
+  return rawCase.petitioners.find(
+    petitioner => petitioner.contactId === contactId,
+  );
+};
+
+/**
+ * gets the petitioner with id contactId from the petitioners array
+ *
+ * @params {object} params the params object
+ * @params {string} params.contactId the id of the petitioner to retrieve
+ * @returns {object} the retrieved petitioner
+ */
+Case.prototype.getPetitionerById = function (contactId) {
+  return getPetitionerById(this, contactId);
+};
+
+/**
+ * adds the petitioner to the petitioners array
+ *
+ * @params {object} petitioner the petitioner to add to the case
+ * @returns {Case} the updated case
+ */
+Case.prototype.addPetitioner = function (petitioner) {
+  this.petitioners.push(petitioner);
+  return this;
+};
+
+/**
+ * returns the practitioner representing a petitioner
+ *
+ * @params {string} petitionerContactId the id of the petitioner
+ * @returns {Object} the practitioner
+ */
+Case.prototype.getPractitionersRepresenting = function (petitionerContactId) {
+  return this.privatePractitioners.filter(practitioner =>
+    practitioner.representing.includes(petitionerContactId),
+  );
+};
+
+/**
+ * removes the petitioner from the petitioners array
+ *
+ * @params {object} contactId the contactId of the petitioner to remove from the case
+ */
+Case.prototype.removePetitioner = function (contactId) {
+  this.petitioners = this.petitioners.filter(
+    petitioner => petitioner.contactId !== contactId,
+  );
+};
+
+/**
  * gets the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
@@ -1203,7 +1266,11 @@ Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
 };
 
 Case.prototype.getPetitionDocketEntry = function () {
-  return this.docketEntries.find(
+  return getPetitionDocketEntry(this);
+};
+
+const getPetitionDocketEntry = function (rawCase) {
+  return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
@@ -1443,6 +1510,49 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     isSecondaryContact ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Computes and sets additionalName for contactPrimary depending on partyType
+ *
+ */
+Case.prototype.setAdditionalNameOnPetitioners = function () {
+  const contactPrimary = this.getContactPrimary(this);
+
+  if (contactPrimary && !contactPrimary.additionalName) {
+    switch (this.partyType) {
+      case PARTY_TYPES.conservator:
+      case PARTY_TYPES.custodian:
+      case PARTY_TYPES.guardian:
+      case PARTY_TYPES.nextFriendForIncompetentPerson:
+      case PARTY_TYPES.nextFriendForMinor:
+      case PARTY_TYPES.partnershipOtherThanTaxMatters:
+      case PARTY_TYPES.partnershipBBA:
+      case PARTY_TYPES.survivingSpouse:
+      case PARTY_TYPES.trust:
+        contactPrimary.additionalName = contactPrimary.secondaryName;
+        delete contactPrimary.secondaryName;
+        break;
+      case PARTY_TYPES.estate: {
+        const additionalNameFields = compact([
+          contactPrimary.secondaryName,
+          contactPrimary.title,
+        ]);
+        contactPrimary.additionalName = additionalNameFields.join(', ');
+        delete contactPrimary.secondaryName;
+        delete contactPrimary.title;
+        break;
+      }
+      case PARTY_TYPES.estateWithoutExecutor:
+      case PARTY_TYPES.corporation:
+      case PARTY_TYPES.petitionerDeceasedSpouse:
+        contactPrimary.additionalName = `c/o ${contactPrimary.inCareOf}`;
+        delete contactPrimary.inCareOf;
+        break;
+      default:
+        break;
+    }
+  }
 };
 
 /**
@@ -1866,10 +1976,20 @@ Case.prototype.removeConsolidation = function () {
  * @param {String} userId the id of the user
  * @returns {boolean} if the userId has a privatePractitioner associated with them
  */
-Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
-  return !!this.privatePractitioners.find(practitioner =>
+const isUserIdRepresentedByPrivatePractitioner = function (rawCase, userId) {
+  return !!rawCase.privatePractitioners?.find(practitioner =>
     practitioner.representing.find(id => id === userId),
   );
+};
+
+/**
+ * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
+ *
+ * @param {String} userId the id of the user
+ * @returns {boolean} if the userId has a privatePractitioner associated with them
+ */
+Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
+  return isUserIdRepresentedByPrivatePractitioner(this, userId);
 };
 
 /**
@@ -2082,7 +2202,10 @@ module.exports = {
   getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
+  getPetitionDocketEntry,
+  getPetitionerById,
   isAssociatedUser,
   isSealedCase,
+  isUserIdRepresentedByPrivatePractitioner,
   updatePetitioner,
 };

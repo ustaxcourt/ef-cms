@@ -21,9 +21,9 @@ export const MatchingEmailFoundModal = connect(
       >
         <div id="matching-email-modal">
           <p>
-            {form.contactPrimary.name}
+            {form.contact.name}
             <br />
-            {form.contactPrimary.email}
+            {form.contact.updatedEmail}
           </p>
 
           <p>This case will be added to the matching email account.</p>

@@ -10,9 +10,6 @@ const {
   getNextFriendForMinorContact,
 } = require('../business/entities/contacts/NextFriendForMinorContact');
 const {
-  getOtherFilerContact,
-} = require('../business/entities/contacts/OtherFilerContact');
-const {
   getPartnershipAsTaxMattersPartnerPrimaryContact,
 } = require('../business/entities/contacts/PartnershipAsTaxMattersPartnerContact');
 const {
@@ -98,12 +95,6 @@ for (const partyType in PARTY_TYPES) {
   contactMapping += `### ${partyType}\n\nPrimary contact: ${constructors.primary.contactName}\n\n`;
   if (constructors.secondary) {
     contactMapping += `Secondary contact: ${constructors.secondary.contactName}\n\n`;
-  }
-  if (constructors.otherFilers) {
-    contactMapping += `Other filers contact: ${constructors.otherFilers.contactName}\n\n`;
-  }
-  if (constructors.otherPetitioners) {
-    contactMapping += `Other petitioners contact: ${constructors.otherPetitioners.contactName}\n\n`;
   }
 }
 
@@ -356,21 +347,6 @@ generateMarkdownSchema(
     isPaper: true,
   }),
   'contacts/SurvivingSpouseContact(INTERNATIONAL)',
-);
-
-generateMarkdownSchema(
-  getOtherFilerContact({
-    countryType: COUNTRY_TYPES.DOMESTIC,
-    isPaper: true,
-  }),
-  'contacts/OtherFilerContact(DOMESTIC)',
-);
-generateMarkdownSchema(
-  getOtherFilerContact({
-    countryType: COUNTRY_TYPES.INTERNATIONAL,
-    isPaper: true,
-  }),
-  'contacts/OtherFilerContact(INTERNATIONAL)',
 );
 
 generateMarkdownSchema(Batch, 'Batch');

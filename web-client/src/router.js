@@ -127,6 +127,16 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/add-petitioner-to-case',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoAddPetitionerToCaseSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*?openModal=*',
       ifHasAccess((docketNumber, openModal) => {
         setPageTitle(`Docket ${docketNumber}`);
@@ -203,12 +213,15 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/edit-petitioner-information',
-      ifHasAccess(docketNumber => {
-        setPageTitle(`Docket ${docketNumber}`);
-        return app.getSequence('gotoEditPetitionerInformationSequence')({
-          docketNumber,
-        });
+      '/case-detail/*/edit-petitioner-information/*',
+      ifHasAccess((docketNumber, contactId) => {
+        setPageTitle('Edit Petitioner Information');
+        return app.getSequence('gotoEditPetitionerInformationInternalSequence')(
+          {
+            contactId,
+            docketNumber,
+          },
+        );
       }),
     );
 
@@ -273,9 +286,9 @@ const router = {
       '/case-detail/*/documents/*/complete',
       ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
-        return app.getSequence('gotoCompleteDocketEntrySequence')({
+        return app.getSequence('gotoEditPaperFilingSequence')({
           docketEntryId,
           docketNumber,
         });
@@ -286,9 +299,9 @@ const router = {
       '/case-detail/*/documents/*/edit',
       ifHasAccess((docketNumber, docketEntryId) => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
-        return app.getSequence('gotoEditDocketEntrySequence')({
+        return app.getSequence('gotoDocketEntryQcSequence')({
           docketEntryId,
           docketNumber,
         });
@@ -628,7 +641,7 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Add paper filing`,
         );
-        return app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
+        return app.getSequence('gotoAddPaperFilingSequence')({ docketNumber });
       }),
     );
 

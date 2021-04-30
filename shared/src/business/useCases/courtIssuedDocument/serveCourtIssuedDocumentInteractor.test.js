@@ -6,6 +6,7 @@ const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
@@ -51,6 +52,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
       dynamicallyGeneratedDocketEntries.push({
         docketEntryId,
+        docketNumber: '101-20',
         docketRecordId,
         documentTitle: `Docket Record ${index}`,
         eventCode: 'O',
@@ -64,6 +66,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
       return {
         docketEntryId,
+        docketNumber: '101-20',
         documentType: eventCodeMap.documentType,
         eventCode,
         signedAt: createISODateString(),
@@ -79,19 +82,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'contact@example.com',
-        name: 'Contact Primary',
-        phone: '123123134',
-        postalCode: '12345',
-        state: 'TN',
-      },
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketNumber: '101-20',
           documentType: 'Order',
           eventCode: 'O',
           serviceStamp: 'Served',
@@ -103,6 +97,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           docketEntryId: mockDocketEntryId,
+          docketNumber: '101-20',
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           signedAt: createISODateString(),
@@ -116,6 +111,19 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '101-20',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'contact@example.com',
+          name: 'Contact Primary',
+          phone: '123123134',
+          postalCode: '12345',
+          state: 'TN',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
@@ -123,27 +131,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Primary',
-        phone: '123123134',
-        postalCode: '12345',
-        state: 'TN',
-      },
-      contactSecondary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Secondary',
-        phone: '123123134',
-        postalCode: '12345',
-        state: 'TN',
-      },
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketNumber: '102-20',
           documentType: 'Order',
           eventCode: 'O',
           pending: true,
@@ -156,6 +147,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           docketEntryId: mockDocketEntryId,
+          docketNumber: '102-20',
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           signedAt: createISODateString(),
@@ -171,6 +163,28 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       isPaper: true,
       mailingDate: 'testing',
       partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Contact Primary',
+          phone: '123123134',
+          postalCode: '12345',
+          state: 'TN',
+        },
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Contact Secondary',
+          phone: '123123134',
+          postalCode: '12345',
+          state: 'TN',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',

@@ -27,6 +27,12 @@ const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
+  addPaperFilingInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/addPaperFilingInteractor');
+const {
+  addPetitionerToCaseInteractor,
+} = require('../../shared/src/business/useCases/addPetitionerToCaseInteractor');
+const {
   addressLabelCoverSheet,
   caseInventoryReport,
   changeOfAddress,
@@ -210,8 +216,8 @@ const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
 const {
-  createUserForContactPrimary,
-} = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContactPrimary');
+  createUserForContact,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact');
 const {
   createUserInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
@@ -288,6 +294,9 @@ const {
   documentUrlTranslator,
 } = require('../../shared/src/business/utilities/documentUrlTranslator');
 const {
+  editPaperFilingInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/editPaperFilingInteractor');
+const {
   fetchPendingItems,
 } = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
 const {
@@ -308,9 +317,6 @@ const {
 const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
-const {
-  fileDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/docketEntry/fileDocketEntryInteractor');
 const {
   fileExternalDocumentForConsolidatedInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentForConsolidatedInteractor');
@@ -734,9 +740,6 @@ const {
   parseAndScrapePdfContents,
 } = require('../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents');
 const {
-  parseLegacyDocumentsInteractor,
-} = require('../../shared/src/business/useCases/migration/parseLegacyDocumentsInteractor');
-const {
   persistUser,
 } = require('../../shared/src/persistence/dynamo/users/persistUser');
 const {
@@ -779,6 +782,9 @@ const {
 const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/removePdfFromDocketEntryInteractor');
+const {
+  removePetitionerFromCaseInteractor,
+} = require('../../shared/src/business/useCases/removePetitionerFromCaseInteractor');
 const {
   removeSignatureFromDocumentInteractor,
 } = require('../../shared/src/business/useCases/removeSignatureFromDocumentInteractor');
@@ -957,9 +963,6 @@ const {
   updateDocketEntry,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntry');
 const {
-  updateDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
-const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
@@ -1083,7 +1086,6 @@ const {
   EnvironmentCredentials,
   S3,
   SES,
-  SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -1522,15 +1524,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
       const pug = require('p' + 'ug');
       return pug;
     },
-    getQueueService: () => {
-      if (environment.stage === 'local') {
-        return {
-          sendMessage: () => ({ promise: () => {} }),
-        };
-      } else {
-        return new SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
-      }
-    },
     getScannerResourceUri: () => {
       return (
         process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
@@ -1587,7 +1580,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         countPagesInDocument,
         createCaseAndAssociations,
         createTrialSessionAndWorkingCopy,
-        createUserForContactPrimary,
+        createUserForContact,
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
@@ -1614,6 +1607,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        addPaperFilingInteractor,
+        addPetitionerToCaseInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
@@ -1643,12 +1638,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
         deleteDeficiencyStatisticInteractor,
         deleteTrialSessionInteractor,
         deleteUserCaseNoteInteractor,
+        editPaperFilingInteractor,
         fetchPendingItemsInteractor,
         fileAndServeCourtIssuedDocumentInteractor,
         fileCorrespondenceDocumentInteractor,
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
-        fileDocketEntryInteractor,
         fileExternalDocumentForConsolidatedInteractor,
         fileExternalDocumentInteractor,
         forwardMessageInteractor,
@@ -1718,13 +1713,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
         opinionPublicSearchInteractor,
         orderAdvancedSearchInteractor,
         orderPublicSearchInteractor,
-        parseLegacyDocumentsInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
         removePdfFromDocketEntryInteractor,
+        removePetitionerFromCaseInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,
@@ -1757,7 +1752,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateCourtIssuedDocketEntryInteractor,
         updateCourtIssuedOrderInteractor,
         updateDeficiencyStatisticInteractor,
-        updateDocketEntryInteractor,
         updateDocketEntryMetaInteractor,
         updateOtherStatisticsInteractor,
         updatePetitionDetailsInteractor,
