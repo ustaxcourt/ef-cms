@@ -90,12 +90,6 @@ const PartiesInformation = connect({}, function PartiesInformation() {
                       placeholder="Enter bar no. or name"
                       type="search"
                       // value={form.practitionerSearch || ''}
-                      onChange={e => {
-                        // updateFormValueSequence({
-                        //   key: e.target.name,
-                        //   value: e.target.value,
-                        // });
-                      }}
                     />
                     <button
                       className="small-search-button usa-button"
@@ -108,7 +102,11 @@ const PartiesInformation = connect({}, function PartiesInformation() {
                 </form>
               </FormGroup>
             </div>
-            <div className="grid-col-2"><Button link icon="plus-circle">Add Party</Button></div>
+            <div className="grid-col-2">
+              <Button link className="float-right" icon="plus-circle">
+                Add Party
+              </Button>
+            </div>
           </div>
         </div>
       </div>
