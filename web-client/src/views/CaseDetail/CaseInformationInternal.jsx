@@ -118,7 +118,7 @@ const DisplayHearings = ({
                       trialSessionId: hearing.trialSessionId,
                     });
                   },
-                  label: 'Add/Edit Calendar Note',
+                  label: 'Add/Edit Hearing Note',
                 },
                 {
                   click: () => {
