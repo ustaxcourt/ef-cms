@@ -323,12 +323,9 @@ Case.prototype.assignContacts = function assignContacts({
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {
-        otherFilers: getOtherFilers(rawCase),
-        otherPetitioners: getOtherPetitioners(rawCase),
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
         secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
       },
-      isPaper: rawCase.isPaper,
       partyType: rawCase.partyType,
     });
 
@@ -336,8 +333,6 @@ Case.prototype.assignContacts = function assignContacts({
     if (contacts.secondary) {
       this.petitioners.push(contacts.secondary);
     }
-    this.petitioners.push(...contacts.otherPetitioners);
-    this.petitioners.push(...contacts.otherFilers);
   } else {
     if (Array.isArray(rawCase.petitioners)) {
       this.petitioners = rawCase.petitioners.map(
