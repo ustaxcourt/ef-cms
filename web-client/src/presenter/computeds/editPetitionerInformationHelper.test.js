@@ -16,7 +16,7 @@ describe('editPetitionerInformationHelper', () => {
   it('returns showEditEmail true if the current user has the EDIT_PETITIONER_EMAIL permission and state.screenMetadata.userPendingEmail is undefined', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { petitioners: [{}, {}] },
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: true,
@@ -32,7 +32,7 @@ describe('editPetitionerInformationHelper', () => {
   it('returns showEditEmail false if the current user DOES NOT have the EDIT_PETITIONER_EMAIL permission', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { petitioners: [{}, {}] },
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: false,
@@ -45,7 +45,7 @@ describe('editPetitionerInformationHelper', () => {
   it('returns showEditEmail false if the current user DOES have the EDIT_PETITIONER_EMAIL permission but state.screenMetadata.userPendingEmail is defined', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { petitioners: [{}, {}] },
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: false,
@@ -106,7 +106,7 @@ describe('editPetitionerInformationHelper', () => {
   it('returns userPendingEmail from state', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { petitioners: [{}, {}] },
         form: { partyType: PARTY_TYPES.petitioner },
         permissions: {
           EDIT_PETITIONER_EMAIL: true,
@@ -115,5 +115,47 @@ describe('editPetitionerInformationHelper', () => {
       },
     });
     expect(result.userPendingEmail).toEqual('email@example.com');
+  });
+
+  it('returns showRemovePetitionerButton = true when there is more than one petitioner on the case', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [{}, {}],
+        },
+        permissions: {
+          REMOVE_PETITIONER: true,
+        },
+      },
+    });
+    expect(result.showRemovePetitionerButton).toBeTruthy();
+  });
+
+  it('returns showRemovePetitionerButton = false when there is only one petitioner on the case', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [{}],
+        },
+        permissions: {
+          REMOVE_PETITIONER: true,
+        },
+      },
+    });
+    expect(result.showRemovePetitionerButton).toBeFalsy();
+  });
+
+  it('returns showRemovePetitionerButton = false when >1 petitioner on the case but the user does not have permissions', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [{}, {}],
+        },
+        permissions: {
+          REMOVE_PETITIONER: false,
+        },
+      },
+    });
+    expect(result.showRemovePetitionerButton).toBeFalsy();
   });
 });

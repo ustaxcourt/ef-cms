@@ -200,7 +200,7 @@
             docketNumber: 
               type: "string"
               flags: 
-                presence: "optional"
+                presence: "required"
                 description: "Docket Number of the associated Case in XXXXX-YY format."
               rules: 
                 - 

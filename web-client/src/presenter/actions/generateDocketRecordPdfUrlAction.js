@@ -4,16 +4,20 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.props the cerebral props object
  * @returns {object} the pdfUrl
  */
 export const generateDocketRecordPdfUrlAction = async ({
   applicationContext,
   get,
+  props,
 }) => {
   const caseDetail = get(state.caseDetail);
   const docketRecordSort = get(
     state.sessionMetadata.docketRecordSort[caseDetail.docketNumber],
   );
+
+  const { shouldIncludePartyDetail } = props;
 
   const {
     url,
@@ -21,7 +25,7 @@ export const generateDocketRecordPdfUrlAction = async ({
     applicationContext,
     docketNumber: caseDetail.docketNumber,
     docketRecordSort,
-    includePartyDetail: true,
+    includePartyDetail: shouldIncludePartyDetail,
   });
 
   return { pdfUrl: url };
