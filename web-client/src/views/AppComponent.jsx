@@ -1,7 +1,7 @@
 import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDeficiencyStatistics } from './CaseDetail/AddDeficiencyStatistics';
-import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
+import { AddPetitionerToCase } from './AddPetitionerToCase/AddPetitionerToCase';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
@@ -26,13 +26,13 @@ import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
+import { DocketEntryQc } from './DocketEntryQc';
 import { EditCorrespondenceDocument } from './Correspondence/EditCorrespondenceDocument';
 import { EditDeficiencyStatistic } from './CaseDetail/EditDeficiencyStatistic';
-import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
-import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
+import { EditPetitionerInformationInternal } from './EditPetitionerInformationInternal';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
@@ -50,6 +50,7 @@ import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
 import { MyAccount } from './MyAccount';
 import { OtherFilerInformation } from './CaseDetail/OtherFilerInformation';
+import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
@@ -89,8 +90,8 @@ import React, { useEffect } from 'react';
 const pages = {
   AccessibilityStatement,
   AddDeficiencyStatistics,
-  AddDocketEntry,
   AddOtherStatistics,
+  AddPetitionerToCase,
   AddTrialSession,
   AdvancedSearch,
   BeforeStartingCase,
@@ -113,13 +114,13 @@ const pages = {
   DashboardPetitioner,
   DashboardPractitioner,
   DashboardRespondent,
+  DocketEntryQc,
   EditCorrespondenceDocument,
   EditDeficiencyStatistic,
-  EditDocketEntry,
   EditDocketEntryMeta,
   EditOtherStatistics,
   EditPetitionDetails,
-  EditPetitionerInformation,
+  EditPetitionerInformationInternal,
   EditPractitionerUser,
   EditTrialSession,
   EditUploadCourtIssuedDocument,
@@ -134,6 +135,7 @@ const pages = {
   Messages,
   MyAccount,
   OtherFilerInformation,
+  PaperFiling,
   PendingReport,
   PetitionQc,
   PractitionerDetail,

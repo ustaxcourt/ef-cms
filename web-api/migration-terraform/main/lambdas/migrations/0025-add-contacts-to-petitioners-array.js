@@ -18,8 +18,25 @@ const migrateItems = async items => {
         filer => (filer.contactType = CONTACT_TYPES.otherPetitioner),
       );
 
+      if (!Array.isArray(item.petitioners)) {
+        item.petitioners = [];
+      }
+
+      if (item.contactPrimary) {
+        item.petitioners.push({
+          ...item.contactPrimary,
+          contactType: CONTACT_TYPES.primary,
+        });
+      }
+      if (item.contactSecondary) {
+        item.petitioners.push({
+          ...item.contactSecondary,
+          contactType: CONTACT_TYPES.secondary,
+        });
+      }
+
       item.petitioners = [
-        ...(item.petitioners || []),
+        ...item.petitioners,
         ...(item.otherFilers || []),
         ...(item.otherPetitioners || []),
       ];

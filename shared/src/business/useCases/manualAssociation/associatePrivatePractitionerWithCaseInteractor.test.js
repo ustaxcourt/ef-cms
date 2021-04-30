@@ -6,6 +6,7 @@ const {
 } = require('./associatePrivatePractitionerWithCaseInteractor');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -15,20 +16,11 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
   let caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
     docketEntries: [
       {
         createdAt: '2018-11-21T20:49:28.192Z',
         docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '123-19',
         documentTitle: 'Petition',
         documentType: 'Petition',
         eventCode: 'P',
@@ -40,6 +32,19 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
     docketNumber: '123-19',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'fieri@example.com',
+        name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
+    ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',

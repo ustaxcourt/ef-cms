@@ -305,4 +305,27 @@ describe('update primary contact on a case', () => {
       applicationContext.getUseCases().generatePdfFromHtmlInteractor,
     ).not.toHaveBeenCalled();
   });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await updatePrimaryContactInteractor(applicationContext, {
+      contactInfo: {
+        address1: '453 Electric Ave',
+        city: 'Philadelphia',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner',
+        name: 'Bill Burr',
+        phone: '1234567890',
+        postalCode: '99999',
+        state: 'PA',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: 'Test Petitioner',
+    });
+  });
 });

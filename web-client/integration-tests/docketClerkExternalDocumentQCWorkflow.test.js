@@ -134,7 +134,7 @@ describe('Create a work item', () => {
   });
 
   it('docket clerk QCs a document, updates the document title, and generates a Notice of Docket Change', async () => {
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: decisionWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
@@ -202,12 +202,12 @@ describe('Create a work item', () => {
       },
     });
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: decisionWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditDocketEntry');
+    expect(test.getState('currentPage')).toEqual('DocketEntryQc');
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
@@ -310,12 +310,12 @@ describe('Create a work item', () => {
       },
     });
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: ratificationWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditDocketEntry');
+    expect(test.getState('currentPage')).toEqual('DocketEntryQc');
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'freeText',
@@ -409,12 +409,12 @@ describe('Create a work item', () => {
       },
     });
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: ratificationWorkItem.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditDocketEntry');
+    expect(test.getState('currentPage')).toEqual('DocketEntryQc');
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'freeText',

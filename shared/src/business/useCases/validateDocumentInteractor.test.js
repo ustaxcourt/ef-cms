@@ -15,6 +15,7 @@ describe('validateDocumentInteractor', () => {
     const result = validateDocumentInteractor({
       applicationContext,
       document: {
+        docketNumber: '101-21',
         documentTitle: 'Administrative Record',
         documentType: 'Administrative Record',
         eventCode: 'ADMR',

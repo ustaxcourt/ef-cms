@@ -71,7 +71,7 @@ describe('Case Advanced Search', () => {
     login(token);
   });
 
-  it('should be able to search for case by practitioner name', () => {
+  it('should be able to search for case by petitioner name', () => {
     gotoAdvancedSearch();
     searchByPetitionerName(testData.testPetitionerName);
   });

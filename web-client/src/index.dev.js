@@ -1,5 +1,3 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { User } from '../../shared/src/business/entities/User';
 import { app } from './app';

@@ -208,7 +208,17 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/reports/case-deadlines',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416',
+  {
+    actions: [
+      'wait for #remove-petitioner-btn to be visible',
+      'click element #remove-petitioner-btn',
+      'wait for #remove-petitioner-modal to be visible',
+    ],
+    notes: 'checks a11y of remove petitioner confirm modal',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416&info=remove-petitioner-modal',
+  },
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19?openModal=PaperServiceConfirmModal',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/111-19?openModal=UnconsolidateCasesModal',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/104-20/upload-court-issued',
@@ -216,4 +226,13 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-20/document-view?docketEntryId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/document-view?docketEntryId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
   'http://localhost:1234/mock-login?token=docketclerk&path=/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
+  {
+    actions: [
+      'wait for #use-same-address-above-label to be visible',
+      'click element #use-same-address-above-label',
+    ],
+    notes: 'checks the add petitioner to case page',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-20/add-petitioner-to-case',
+  },
 ];
