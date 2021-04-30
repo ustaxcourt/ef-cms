@@ -26,12 +26,12 @@ export const ConfirmModal = connect(
     noCancel,
     noCloseBtn,
     noConfirm,
-    noDelete,
     onCancel,
     onCancelSequence,
     onConfirm,
     onDelete,
     preventCancelOnBlur,
+    showDelete = false,
     showModal,
     showModalWhen,
     title,
@@ -114,7 +114,7 @@ export const ConfirmModal = connect(
           </div>
         </div>
         <div className="margin-bottom-2">{children}</div>
-        {(!noConfirm || !noCancel || !noDelete) && (
+        {(!noConfirm || !noCancel || showDelete) && (
           <div className="margin-top-5">
             {!noConfirm && (
               <Button id="confirm" onClick={runConfirmSequence}>
@@ -126,7 +126,7 @@ export const ConfirmModal = connect(
                 {cancelLabel}
               </Button>
             )}
-            {!noDelete && (
+            {showDelete && (
               <Button
                 link
                 className="red-warning float-right no-wrap"

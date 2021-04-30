@@ -115,6 +115,35 @@ describe('fileExternalDocumentInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
+    await expect(
+      fileExternalDocumentInteractor(applicationContext, {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'XYZ',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
+      }),
+    ).rejects.toThrow('The DocketEntry entity was invalid.');
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
     const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
