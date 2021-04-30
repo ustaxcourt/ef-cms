@@ -15,6 +15,7 @@ module.exports = {
   },
   output: {
     clean: true,
+    libraryTarget: 'umd',
     path: __dirname + '/web-api/terraform/template/lambdas/dist',
   },
 };
