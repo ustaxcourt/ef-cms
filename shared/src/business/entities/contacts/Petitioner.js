@@ -1,6 +1,8 @@
 const joi = require('joi');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
+  OTHER_FILER_TYPES,
   SERVICE_INDICATOR_TYPES,
   STATE_NOT_AVAILABLE,
   US_STATES,
@@ -84,6 +86,11 @@ Petitioner.VALIDATION_RULES = {
   inCareOf: JoiValidationConstants.STRING.max(100).optional(),
   isAddressSealed: joi.boolean().required(),
   name: JoiValidationConstants.STRING.max(100).required(),
+  otherFilerType: joi.when('contactType', {
+    is: CONTACT_TYPES.otherFiler,
+    otherwise: joi.optional(),
+    then: JoiValidationConstants.STRING.valid(...OTHER_FILER_TYPES).required(),
+  }),
   phone: JoiValidationConstants.STRING.max(100).required(),
   postalCode: joi.when('countryType', {
     is: COUNTRY_TYPES.INTERNATIONAL,
@@ -102,7 +109,11 @@ Petitioner.VALIDATION_RULES = {
       .required(),
     then: joi.optional().allow(null),
   }),
-  title: JoiValidationConstants.STRING.max(100).optional(),
+  title: joi.when('contactType', {
+    is: CONTACT_TYPES.otherFiler,
+    otherwise: JoiValidationConstants.STRING.max(100).optional(),
+    then: JoiValidationConstants.STRING.valid(...OTHER_FILER_TYPES).required(),
+  }),
 };
 
 Petitioner.VALIDATION_ERROR_MESSAGES = {
@@ -111,6 +122,7 @@ Petitioner.VALIDATION_ERROR_MESSAGES = {
   country: 'Enter a country',
   countryType: 'Enter country type',
   name: 'Enter name',
+  otherFilerType: 'Select a filer type',
   phone: 'Enter phone number',
   postalCode: [
     {
