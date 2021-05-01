@@ -47,8 +47,8 @@ exports.createTrialSession = testData => {
   cy.get('#submit-trial-session').click();
 
   // set up listener for POST call, get trialSessionId
-  cy.wait('@postTrialSession').then(xhr => {
-    const { trialSessionId } = xhr.response.body;
+  cy.wait('@postTrialSession').then(({ response }) => {
+    const { trialSessionId } = response.body;
     testData.trialSessionIds.push(trialSessionId);
     cy.get('#new-trial-sessions-tab').click();
     cy.get(`a[href="/trial-session-detail/${trialSessionId}"]`).should('exist');

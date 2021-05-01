@@ -9,6 +9,7 @@ const {
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   fileExternalDocumentInteractor,
@@ -77,6 +78,7 @@ describe('fileExternalDocumentInteractor', () => {
           name: 'Guy Fieri',
           phone: '1234567890',
           postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           state: 'CA',
         },
       ],
@@ -111,6 +113,35 @@ describe('fileExternalDocumentInteractor', () => {
         documentMetadata: {},
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
+    await expect(
+      fileExternalDocumentInteractor(applicationContext, {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'XYZ',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
+      }),
+    ).rejects.toThrow('The DocketEntry entity was invalid.');
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {

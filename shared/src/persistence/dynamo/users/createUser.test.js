@@ -2,11 +2,14 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
-  JUDGES_CHAMBERS_WITH_LEGACY,
   PETITIONS_SECTION,
   ROLES,
 } = require('../../../business/entities/EntityConstants');
 const { createUser, createUserRecords } = require('./createUser');
+
+const JUDGES_CHAMBERS_WITH_LEGACY = applicationContext
+  .getPersistenceGateway()
+  .getJudgesChambersWithLegacy();
 
 describe('createUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';

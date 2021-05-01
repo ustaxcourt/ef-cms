@@ -64,7 +64,7 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
       noticeOfChangeOfAddressQCItem.index
     ];
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
       docketNumber: caseDetailFormatted.docketNumber,
     });

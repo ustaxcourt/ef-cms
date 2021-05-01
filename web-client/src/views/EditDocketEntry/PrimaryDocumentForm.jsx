@@ -1,9 +1,9 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Inclusions } from '../AddDocketEntry/Inclusions';
+import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
-import { SecondaryDocumentForm } from '../AddDocketEntry/SecondaryDocumentForm';
+import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {

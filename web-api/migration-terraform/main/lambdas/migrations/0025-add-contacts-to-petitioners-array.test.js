@@ -179,6 +179,7 @@ describe('migrateItems', () => {
         otherPetitioners: undefined,
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -198,6 +199,7 @@ describe('migrateItems', () => {
         ],
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -235,6 +237,7 @@ describe('migrateItems', () => {
         otherPetitioners: [mockOtherPetitionerWithoutContactType],
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -279,6 +282,7 @@ describe('migrateItems', () => {
         ],
         petitioners: [getContactPrimary(MOCK_CASE)],
         sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+        status: CASE_STATUS_TYPES.generalDocket,
       },
     ];
 
@@ -298,7 +302,7 @@ describe('migrateItems', () => {
     ];
     const results = await migrateItems(items);
 
-    expect(results[0].petitioners[0].additionalName).toEqual('Myself');
+    expect(results[0].petitioners[0].additionalName).toEqual('c/o Myself');
   });
 
   it('should not throw an error when attempting to set contactType for otherPetitioners it is undefined', async () => {

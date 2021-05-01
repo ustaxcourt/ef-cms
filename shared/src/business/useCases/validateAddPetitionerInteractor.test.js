@@ -1,14 +1,20 @@
 const {
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../entities/EntityConstants');
+const {
   validateAddPetitionerInteractor,
 } = require('./validateAddPetitionerInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
-const { CONTACT_TYPES, COUNTRY_TYPES } = require('../entities/EntityConstants');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 describe('validateAddPetitionerInteractor', () => {
-  it('should not return validation errors when contact is valid and a case caption is present', async () => {
-    const contact = {
+  let mockContact;
+
+  beforeEach(() => {
+    mockContact = {
       address1: '100 Main St.',
       address2: 'Grand View Apartments',
       address3: 'Apt. #104',
@@ -19,34 +25,30 @@ describe('validateAddPetitionerInteractor', () => {
       name: 'Wilbur Rayou',
       phone: '1111111111',
       postalCode: '55352',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       state: 'MN',
     };
+  });
 
+  it('should not return validation errors when contact is valid and a case caption is present', async () => {
     const errors = validateAddPetitionerInteractor({
       applicationContext,
-      contact,
+      contact: mockContact,
     });
 
     expect(errors).toBeFalsy();
   });
 
   it('should return errors when the contact is invalid', async () => {
-    const contact = {
+    mockContact = {
+      ...mockContact,
       address1: undefined,
-      address2: 'Grand View Apartments',
-      address3: 'Apt. #104',
-      city: 'Jordan',
-      contactType: CONTACT_TYPES.otherPetitioner,
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Wilbur Rayou',
-      phone: '1111111111',
-      postalCode: '55352',
-      state: 'MN',
+      caseCaption: undefined,
     };
 
     const errors = validateAddPetitionerInteractor({
       applicationContext,
-      contact,
+      contact: mockContact,
     });
 
     expect(errors).toEqual({

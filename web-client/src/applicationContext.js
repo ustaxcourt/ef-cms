@@ -54,6 +54,7 @@ import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialS
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
+import { addPaperFilingInteractor } from '../../shared/src/proxies/documents/addPaperFilingProxy';
 import { addPetitionerToCaseInteractor } from '../../shared/src/proxies/addPetitionerToCaseProxy';
 import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
 import { archiveCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/archiveCorrespondenceDocumentProxy';
@@ -108,11 +109,11 @@ import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAs
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
+import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../../shared/src/proxies/documents/fileAndServeCourtIssuedDocumentProxy';
 import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/fileCorrespondenceDocumentProxy';
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/fileCourtIssuedDocketEntryProxy';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
-import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fileDocketEntryProxy';
 import { fileExternalDocumentForConsolidatedInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentForConsolidatedProxy';
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
@@ -142,6 +143,10 @@ import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/case
 import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
+import {
+  getChambersSections,
+  getChambersSectionsLabels,
+} from '../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
 import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
@@ -190,6 +195,7 @@ import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/remo
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { removePdfFromDocketEntryInteractor } from '../../shared/src/proxies/documents/removePdfFromDocketEntryProxy';
+import { removePetitionerFromCaseInteractor } from '../../shared/src/proxies/removePetitionerFromCaseProxy';
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/documents/removeSignatureFromDocumentProxy';
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
 import { replyToMessageInteractor } from '../../shared/src/proxies/messages/replyToMessageProxy';
@@ -226,7 +232,6 @@ import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAsso
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
 import { updateDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/updateDeficiencyStatisticProxy';
-import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updateOtherStatisticsInteractor } from '../../shared/src/proxies/caseStatistics/updateOtherStatisticsProxy';
 import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
@@ -312,6 +317,7 @@ const allUseCases = {
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
+  addPaperFilingInteractor,
   addPetitionerToCaseInteractor,
   archiveCorrespondenceDocumentInteractor,
   archiveDraftDocumentInteractor,
@@ -342,12 +348,12 @@ const allUseCases = {
   deleteDeficiencyStatisticInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
+  editPaperFilingInteractor,
   fetchPendingItemsInteractor,
   fileAndServeCourtIssuedDocumentInteractor,
   fileCorrespondenceDocumentInteractor,
   fileCourtIssuedDocketEntryInteractor,
   fileCourtIssuedOrderInteractor,
-  fileDocketEntryInteractor,
   fileExternalDocumentForConsolidatedInteractor,
   fileExternalDocumentInteractor,
   filePetitionFromPaperInteractor,
@@ -418,6 +424,7 @@ const allUseCases = {
   removeConsolidatedCasesInteractor,
   removeItemInteractor,
   removePdfFromDocketEntryInteractor,
+  removePetitionerFromCaseInteractor,
   removeSignatureFromDocumentInteractor,
   replyToMessageInteractor,
   runTrialSessionPlanningReportInteractor,
@@ -450,7 +457,6 @@ const allUseCases = {
   updateCourtIssuedDocketEntryInteractor,
   updateCourtIssuedOrderInteractor,
   updateDeficiencyStatisticInteractor,
-  updateDocketEntryInteractor,
   updateDocketEntryMetaInteractor,
   updateOtherStatisticsInteractor,
   updatePetitionDetailsInteractor,
@@ -589,6 +595,8 @@ const applicationContext = {
   },
   getPersistenceGateway: () => {
     return {
+      getChambersSections,
+      getChambersSectionsLabels,
       getDocument,
       getItem,
       getPdfFromUrl,

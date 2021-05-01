@@ -46,7 +46,6 @@ CaseExternal.prototype.initContacts = function (
       secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
     partyType: rawCase.partyType,
-    status: rawCase.status,
   });
   this.petitioners = [contacts.primary];
   if (contacts.secondary) {

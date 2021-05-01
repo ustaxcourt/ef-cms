@@ -4,7 +4,7 @@ export const docketClerkAddsMiscellaneousPaperFiling = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -48,9 +48,7 @@ export const docketClerkAddsMiscellaneousPaperFiling = (test, fakeFile) => {
       value: 'A title',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

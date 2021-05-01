@@ -15,6 +15,7 @@ describe('setupPetitionerContactInformationFormAction', () => {
   it('should call applicationContext.getUtilities().setServiceIndicatorsForCase with state.caseDetail', async () => {
     const mockCaseDetail = {
       petitioners: [{ name: 'A Test Petitioner' }],
+      privatePractitioners: [],
     };
     await runAction(setupPetitionerContactInformationFormAction, {
       modules: {

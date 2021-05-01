@@ -154,7 +154,6 @@
     fromSection: 
       type: "string"
       flags: 
-        only: true
         presence: "required"
         description: "The section of the user who sent the message."
       rules: 
@@ -162,48 +161,6 @@
           name: "min"
           args: 
             limit: 1
-      allow: 
-        - "adc"
-        - "admissions"
-        - "chambers"
-        - "clerkofcourt"
-        - "docket"
-        - "floater"
-        - "petitions"
-        - "reportersOffice"
-        - "trialClerks"
-        - "ashfordsChambers"
-        - "buchsChambers"
-        - "carluzzosChambers"
-        - "cohensChambers"
-        - "colvinsChambers"
-        - "copelandsChambers"
-        - "foleysChambers"
-        - "galesChambers"
-        - "goekesChambers"
-        - "greavesChambers"
-        - "gustafsonsChambers"
-        - "guysChambers"
-        - "halpernsChambers"
-        - "holmesChambers"
-        - "jonesChambers"
-        - "kerrigansChambers"
-        - "laubersChambers"
-        - "leydensChambers"
-        - "marshallsChambers"
-        - "marvelsChambers"
-        - "morrisonsChambers"
-        - "negasChambers"
-        - "panuthosChambers"
-        - "parisChambers"
-        - "pughsChambers"
-        - "ruwesChambers"
-        - "thorntonsChambers"
-        - "torosChambers"
-        - "urdasChambers"
-        - "vasquezsChambers"
-        - "weilersChambers"
-        - "wellsChambers"
     fromUserId: 
       type: "string"
       flags: 
@@ -295,55 +252,12 @@
     completedBySection: 
       type: "string"
       flags: 
-        only: true
         description: "The section of the user who completed the message thread"
       rules: 
         - 
           name: "min"
           args: 
             limit: 1
-      allow: 
-        - "adc"
-        - "admissions"
-        - "chambers"
-        - "clerkofcourt"
-        - "docket"
-        - "floater"
-        - "petitions"
-        - "reportersOffice"
-        - "trialClerks"
-        - "ashfordsChambers"
-        - "buchsChambers"
-        - "carluzzosChambers"
-        - "cohensChambers"
-        - "colvinsChambers"
-        - "copelandsChambers"
-        - "foleysChambers"
-        - "galesChambers"
-        - "goekesChambers"
-        - "greavesChambers"
-        - "gustafsonsChambers"
-        - "guysChambers"
-        - "halpernsChambers"
-        - "holmesChambers"
-        - "jonesChambers"
-        - "kerrigansChambers"
-        - "laubersChambers"
-        - "leydensChambers"
-        - "marshallsChambers"
-        - "marvelsChambers"
-        - "morrisonsChambers"
-        - "negasChambers"
-        - "panuthosChambers"
-        - "parisChambers"
-        - "pughsChambers"
-        - "ruwesChambers"
-        - "thorntonsChambers"
-        - "torosChambers"
-        - "urdasChambers"
-        - "vasquezsChambers"
-        - "weilersChambers"
-        - "wellsChambers"
       whens: 
         - 
           ref: 
@@ -495,7 +409,6 @@
     toSection: 
       type: "string"
       flags: 
-        only: true
         presence: "required"
         description: "The section of the user who is the recipient of the message."
       rules: 
@@ -503,48 +416,6 @@
           name: "min"
           args: 
             limit: 1
-      allow: 
-        - "adc"
-        - "admissions"
-        - "chambers"
-        - "clerkofcourt"
-        - "docket"
-        - "floater"
-        - "petitions"
-        - "reportersOffice"
-        - "trialClerks"
-        - "ashfordsChambers"
-        - "buchsChambers"
-        - "carluzzosChambers"
-        - "cohensChambers"
-        - "colvinsChambers"
-        - "copelandsChambers"
-        - "foleysChambers"
-        - "galesChambers"
-        - "goekesChambers"
-        - "greavesChambers"
-        - "gustafsonsChambers"
-        - "guysChambers"
-        - "halpernsChambers"
-        - "holmesChambers"
-        - "jonesChambers"
-        - "kerrigansChambers"
-        - "laubersChambers"
-        - "leydensChambers"
-        - "marshallsChambers"
-        - "marvelsChambers"
-        - "morrisonsChambers"
-        - "negasChambers"
-        - "panuthosChambers"
-        - "parisChambers"
-        - "pughsChambers"
-        - "ruwesChambers"
-        - "thorntonsChambers"
-        - "torosChambers"
-        - "urdasChambers"
-        - "vasquezsChambers"
-        - "weilersChambers"
-        - "wellsChambers"
     toUserId: 
       type: "string"
       flags: 

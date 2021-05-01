@@ -61,6 +61,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       docketEntries: [
         {
           docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f806',
+          docketNumber: DOCKET_NUMBER,
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -173,6 +174,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ...caseRecord.docketEntries,
       {
         docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+        docketNumber: DOCKET_NUMBER,
         documentType: 'Administrative Record',
         eventCode: 'ADMR',
         filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -181,6 +183,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+            docketNumber: DOCKET_NUMBER,
             documentType: 'Administrative Record',
             entityName: 'DocketEntry',
             eventCode: 'ADMR',
@@ -242,6 +245,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ...caseRecord.docketEntries,
       {
         docketEntryId: mockDocketEntryWithWorkItemId,
+        docketNumber: DOCKET_NUMBER,
         documentType: 'Administrative Record',
         eventCode: 'ADMR',
         filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -250,6 +254,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+            docketNumber: DOCKET_NUMBER,
             documentType: 'Administrative Record',
             entityName: 'DocketEntry',
             eventCode: 'ADMR',

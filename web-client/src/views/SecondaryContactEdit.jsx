@@ -68,7 +68,7 @@ export const SecondaryContactEdit = connect(
               <div className="usa-form-group">
                 <p className="usa-label margin-bottom-0">Additional name</p>
                 <p className="margin-top-0">
-                  c/o {form.contactSecondary.additionalName}
+                  {form.contactSecondary.additionalName}
                 </p>
               </div>
             )}

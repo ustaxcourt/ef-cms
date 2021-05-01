@@ -18,7 +18,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -60,8 +60,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
       value: true,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 

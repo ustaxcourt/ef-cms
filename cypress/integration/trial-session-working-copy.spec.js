@@ -101,8 +101,7 @@ let judgeUserId;
 describe.skip('Petitions Clerk', () => {
   describe('should create and set a trial session', () => {
     beforeEach(() => {
-      cy.server();
-      cy.route({ method: 'POST', url: '/trial-sessions' }).as(
+      cy.intercept({ method: 'POST', url: '/trial-sessions' }).as(
         'postTrialSession',
       );
     });

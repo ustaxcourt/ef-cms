@@ -5,6 +5,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  setServiceIndicatorsForCase,
+} = require('../utilities/setServiceIndicatorsForCase');
 const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
@@ -75,6 +78,12 @@ exports.createCaseInteractor = async (
   const petitionEntity = new CaseExternalIncomplete(petitionMetadata, {
     applicationContext,
   }).validate();
+
+  const updatedCaseWithServiceIndicators = setServiceIndicatorsForCase(
+    petitionEntity,
+  );
+
+  petitionEntity.petitioners = updatedCaseWithServiceIndicators.petitioners;
 
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
     {

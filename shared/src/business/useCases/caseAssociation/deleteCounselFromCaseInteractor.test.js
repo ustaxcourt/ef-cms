@@ -2,13 +2,17 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   deleteCounselFromCaseInteractor,
 } = require('./deleteCounselFromCaseInteractor');
 const {
   getContactPrimary,
   getContactSecondary,
 } = require('../../entities/cases/Case');
-const { CONTACT_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 
 describe('deleteCounselFromCaseInteractor', () => {
@@ -159,11 +163,11 @@ describe('deleteCounselFromCaseInteractor', () => {
     );
 
     expect(getContactPrimary(updatedCase).serviceIndicator).toEqual(
-      'Electronic',
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
 
-  it('should set the contactPrimary.serviceIndicator to Paper if the case was paper', async () => {
+  it('should set the contactPrimary.serviceIndicator to electronic when the contactPrimary has an email', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -187,10 +191,12 @@ describe('deleteCounselFromCaseInteractor', () => {
       },
     );
 
-    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual('Paper');
+    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
   });
 
-  it('should set the contactSecondary.serviceIndicator to Paper if the case was paper', async () => {
+  it('should set the contactSecondary.serviceIndicator to Paper if the case was paper and the contactSecondary has no email', async () => {
     const caseToReturn = {
       ...MOCK_CASE,
       associatedJudge: 'Buch',
@@ -207,7 +213,6 @@ describe('deleteCounselFromCaseInteractor', () => {
           contactId: '3805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: CONTACT_TYPES.secondary,
           countryType: 'domestic',
-          email: 'petitioner@example.com',
           name: 'Test Petitioner',
           phone: '1234567',
           postalCode: '12345',
@@ -243,6 +248,63 @@ describe('deleteCounselFromCaseInteractor', () => {
         userId: mockPrivatePractitioners[0].userId,
       },
     );
-    expect(getContactSecondary(updatedCase).serviceIndicator).toEqual('Paper');
+    expect(getContactSecondary(updatedCase).serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
+  });
+
+  it('should set the contactSecondary.serviceIndicator to Electronic when the contactSecondary has an email and is no longer being represented', async () => {
+    const caseToReturn = {
+      ...MOCK_CASE,
+      associatedJudge: 'Buch',
+      mailingDate: '04/16/2019',
+      partyType: 'Petitioner & spouse',
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: 'None',
+        },
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: 'domestic',
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          serviceIndicator: 'None',
+          state: 'TN',
+          title: 'Executor',
+        },
+      ],
+      privatePractitioners: [
+        {
+          ...mockPrivatePractitioners[0],
+          representing: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
+        },
+      ],
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(caseToReturn);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mockImplementation(
+        ({ caseToUpdate }) => caseToUpdate,
+      );
+
+    const updatedCase = await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+    );
+    expect(getContactSecondary(updatedCase).serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
   });
 });

@@ -32,6 +32,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -57,6 +58,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -85,6 +87,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -111,6 +114,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -137,6 +141,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -159,6 +164,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -184,6 +190,7 @@ describe('documentViewerHelper', () => {
               isOnDocketRecord: true,
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -206,6 +213,7 @@ describe('documentViewerHelper', () => {
               servedAt: '2018-11-21T20:49:28.192Z',
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -234,6 +242,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: false,
@@ -260,6 +269,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: false,
@@ -287,6 +297,7 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: false,
@@ -314,6 +325,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: false,
@@ -341,6 +353,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: false,
@@ -371,6 +384,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -397,6 +411,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -424,6 +439,7 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -451,6 +467,7 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: false,
@@ -478,6 +495,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -505,6 +523,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -535,6 +554,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -561,6 +581,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -588,6 +609,7 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -614,6 +636,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: false,
@@ -641,6 +664,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -668,6 +692,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_DOCUMENT: true,
@@ -698,6 +723,7 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_PETITION: true,
@@ -725,6 +751,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_PETITION: false,
@@ -752,6 +779,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {
             SERVE_PETITION: true,
@@ -782,6 +810,7 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-08-25T05:00:00.000Z',
               },
             ],
+            petitioners: [],
           },
           permissions: {},
           viewerDocumentToDisplay: {
@@ -808,6 +837,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {},
           viewerDocumentToDisplay: {
@@ -834,6 +864,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {},
           viewerDocumentToDisplay: {
@@ -867,6 +898,7 @@ describe('documentViewerHelper', () => {
                 eventCode: 'SDEC',
               },
             ],
+            petitioners: [],
           },
           permissions: {},
           viewerDocumentToDisplay: {
@@ -899,6 +931,7 @@ describe('documentViewerHelper', () => {
                 eventCode: 'SDEC',
               },
             ],
+            petitioners: [],
           },
           permissions: {},
           viewerDocumentToDisplay: {
@@ -924,6 +957,7 @@ describe('documentViewerHelper', () => {
                 isOnDocketRecord: true,
               },
             ],
+            petitioners: [],
           },
           permissions: {},
           viewerDocumentToDisplay: {
@@ -953,6 +987,7 @@ describe('documentViewerHelper', () => {
                 workItem: {},
               },
             ],
+            petitioners: [],
           },
           permissions: { EDIT_DOCKET_ENTRY: true },
           viewerDocumentToDisplay: {
@@ -980,6 +1015,7 @@ describe('documentViewerHelper', () => {
                 workItem: {},
               },
             ],
+            petitioners: [],
           },
           permissions: {},
           viewerDocumentToDisplay: {
@@ -1006,6 +1042,7 @@ describe('documentViewerHelper', () => {
                 servedAt: '2019-08-25T05:00:00.000Z',
               },
             ],
+            petitioners: [],
           },
           permissions: { EDIT_DOCKET_ENTRY: true },
           viewerDocumentToDisplay: {
@@ -1034,6 +1071,7 @@ describe('documentViewerHelper', () => {
                 workItem: {},
               },
             ],
+            petitioners: [],
           },
           permissions: { EDIT_DOCKET_ENTRY: true },
           viewerDocumentToDisplay: {
@@ -1060,6 +1098,7 @@ describe('documentViewerHelper', () => {
               isStricken: true,
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -1087,6 +1126,7 @@ describe('documentViewerHelper', () => {
               isStricken: true,
             },
           ],
+          petitioners: [],
         },
         permissions: {
           SERVE_DOCUMENT: false,
@@ -1115,6 +1155,7 @@ describe('documentViewerHelper', () => {
             },
           ],
           docketNumber: DOCKET_NUMBER,
+          petitioners: [],
         },
         permissions: {},
         viewerDocumentToDisplay: {
@@ -1142,6 +1183,7 @@ describe('documentViewerHelper', () => {
             },
           ],
           docketNumber: DOCKET_NUMBER,
+          petitioners: [],
         },
         permissions: {},
         viewerDocumentToDisplay: {
@@ -1169,6 +1211,7 @@ describe('documentViewerHelper', () => {
             },
           ],
           docketNumber: DOCKET_NUMBER,
+          petitioners: [],
         },
         permissions: {},
         viewerDocumentToDisplay: {
@@ -1196,6 +1239,7 @@ describe('documentViewerHelper', () => {
             },
           ],
           docketNumber: DOCKET_NUMBER,
+          petitioners: [],
         },
         permissions: {},
         viewerDocumentToDisplay: {

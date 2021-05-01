@@ -52,6 +52,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
       dynamicallyGeneratedDocketEntries.push({
         docketEntryId,
+        docketNumber: '101-20',
         docketRecordId,
         documentTitle: `Docket Record ${index}`,
         eventCode: 'O',
@@ -65,6 +66,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
       return {
         docketEntryId,
+        docketNumber: '101-20',
         documentType: eventCodeMap.documentType,
         eventCode,
         signedAt: createISODateString(),
@@ -83,6 +85,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketNumber: '101-20',
           documentType: 'Order',
           eventCode: 'O',
           serviceStamp: 'Served',
@@ -94,6 +97,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           docketEntryId: mockDocketEntryId,
+          docketNumber: '101-20',
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           signedAt: createISODateString(),
@@ -130,6 +134,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketNumber: '102-20',
           documentType: 'Order',
           eventCode: 'O',
           pending: true,
@@ -142,6 +147,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           docketEntryId: mockDocketEntryId,
+          docketNumber: '102-20',
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           signedAt: createISODateString(),

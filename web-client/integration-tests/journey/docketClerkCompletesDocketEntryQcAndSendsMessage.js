@@ -23,7 +23,7 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage = test => {
 
     expect(proposedStipulatedDecision.isRead).toBeFalsy();
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: proposedStipulatedDecision.docketEntry.docketEntryId,
       docketNumber: test.docketNumber,
     });

@@ -29,8 +29,9 @@ export const caseInformationHelper = (get, applicationContext) => {
   const contactSecondary = applicationContext
     .getUtilities()
     .getContactSecondary(caseDetail);
-  const showContactPrimaryEmail = contactPrimary?.email;
-  const showContactSecondaryEmail = contactSecondary?.email;
+  const contactPrimaryEmailFormatted = contactPrimary?.email ?? 'Not provided';
+  const contactSecondaryEmailFormatted =
+    contactSecondary?.email ?? 'Not provided';
 
   const allPetitioners = caseDetail.petitioners;
 
@@ -43,11 +44,11 @@ export const caseInformationHelper = (get, applicationContext) => {
     caseDetail.status !== STATUS_TYPES.new;
 
   return {
+    contactPrimaryEmailFormatted,
+    contactSecondaryEmailFormatted,
     formattedPetitioners,
     showAddCounsel,
     showAddPetitionerButton,
-    showContactPrimaryEmail,
-    showContactSecondaryEmail,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showHearingsTable,

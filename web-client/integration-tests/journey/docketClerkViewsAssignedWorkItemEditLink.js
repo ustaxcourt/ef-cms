@@ -31,7 +31,7 @@ export const docketClerkViewsAssignedWorkItemEditLink = test => {
 
     expect(inboxWorkItem.editLink).toContain('/edit');
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: test.docketEntryId,
       docketNumber: test.docketNumber,
     });

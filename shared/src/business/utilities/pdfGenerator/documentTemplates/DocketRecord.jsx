@@ -3,6 +3,10 @@ const React = require('react');
 const {
   CompressedDocketHeader,
 } = require('../components/CompressedDocketHeader.jsx');
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../../entities/cases/Case');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 const RenderAddress = ({ contact, countryTypes }) => {
@@ -13,7 +17,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
       {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
       {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
       {contact.title && <div>{contact.title}</div>}
-      {contact.additionalName && <div>c/o {contact.additionalName}</div>}
+      {contact.additionalName && <div>{contact.additionalName}</div>}
       {contact.address1 && <div>{contact.address1}</div>}
       {contact.address2 && <div>{contact.address2}</div>}
       {contact.address3 && <div>{contact.address3}</div>}
@@ -150,17 +154,16 @@ export const DocketRecord = ({
         <div className="party-info" id="petitioner-contacts">
           <div className="party-info-header">{caseDetail.partyType}</div>
           <div className="party-info-content">
-            <RenderContact
-              caseTitle={options.caseTitle}
-              contact={caseDetail.contactPrimary}
-              countryTypes={countryTypes}
-            />
-            {caseDetail.contactSecondary && (
-              <RenderContact
-                contact={caseDetail.contactSecondary}
-                countryTypes={countryTypes}
-              />
-            )}
+            {caseDetail.petitioners.map(p => {
+              return (
+                <RenderContact
+                  caseTitle={options.caseTitle}
+                  contact={p}
+                  countryTypes={countryTypes}
+                  key={p.contactId}
+                />
+              );
+            })}
           </div>
         </div>
       )}
@@ -173,8 +176,8 @@ export const DocketRecord = ({
             if (practitioner.formattedName) {
               return (
                 <RenderPractitioner
-                  contactPrimary={caseDetail.contactPrimary}
-                  contactSecondary={caseDetail.contactSecondary}
+                  contactPrimary={getContactPrimary(caseDetail)}
+                  contactSecondary={getContactSecondary(caseDetail)}
                   countryTypes={countryTypes}
                   key={practitioner.barNumber}
                   practitioner={practitioner}

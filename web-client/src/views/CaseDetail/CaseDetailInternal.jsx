@@ -14,6 +14,7 @@ import { MessagesCompleted } from './MessagesCompleted';
 import { MessagesInProgress } from './MessagesInProgress';
 import { OtherFilerInformation } from './OtherFilerInformation';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
+import { PartiesInformation } from './PartiesInformation';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SealAddressModal } from './SealAddressModal';
@@ -140,6 +141,9 @@ export const CaseDetailInternal = connect(
               </Tab>
               <Tab id="tab-statistics" tabName="statistics" title="Statistics">
                 <Statistics />
+              </Tab>
+              <Tab id="tab-parties" tabName="parties" title="Parties">
+                <PartiesInformation />
               </Tab>
               <Tab id="tab-petitioner" tabName="petitioner" title="Petitioner">
                 <PetitionerInformation />

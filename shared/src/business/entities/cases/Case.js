@@ -47,7 +47,7 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
-const { compact, includes, isEmpty } = require('lodash');
+const { clone, compact, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
@@ -323,12 +323,9 @@ Case.prototype.assignContacts = function assignContacts({
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {
-        otherFilers: getOtherFilers(rawCase),
-        otherPetitioners: getOtherPetitioners(rawCase),
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
         secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
       },
-      isPaper: rawCase.isPaper,
       partyType: rawCase.partyType,
     });
 
@@ -336,8 +333,6 @@ Case.prototype.assignContacts = function assignContacts({
     if (contacts.secondary) {
       this.petitioners.push(contacts.secondary);
     }
-    this.petitioners.push(...contacts.otherPetitioners);
-    this.petitioners.push(...contacts.otherFilers);
   } else {
     if (Array.isArray(rawCase.petitioners)) {
       this.petitioners = rawCase.petitioners.map(
@@ -768,12 +763,41 @@ joiValidationDecorator(
  * @returns {string} the generated case caption
  */
 Case.getCaseCaption = function (rawCase) {
-  let caseCaption;
-  const primaryContact = getContactPrimary(rawCase) || rawCase.contactPrimary;
-  const secondaryContact =
-    getContactSecondary(rawCase) || rawCase.contactSecondary;
+  const primaryContact = clone(
+    getContactPrimary(rawCase) || rawCase.contactPrimary,
+  );
+  const secondaryContact = clone(
+    getContactSecondary(rawCase) || rawCase.contactSecondary,
+  );
 
-  switch (rawCase.partyType) {
+  // trim ALL white space from these non-validated strings
+  if (primaryContact?.name) {
+    primaryContact.name = primaryContact.name.trim();
+  }
+  if (primaryContact?.secondaryName) {
+    primaryContact.secondaryName = primaryContact.secondaryName.trim();
+  }
+  if (primaryContact?.title) {
+    primaryContact.title = primaryContact.title.trim();
+  }
+  if (secondaryContact?.name) {
+    secondaryContact.name = secondaryContact.name.trim();
+  }
+
+  return generateCaptionFromContacts({
+    partyType: rawCase.partyType,
+    primaryContact,
+    secondaryContact,
+  });
+};
+
+const generateCaptionFromContacts = ({
+  partyType,
+  primaryContact,
+  secondaryContact,
+}) => {
+  let caseCaption;
+  switch (partyType) {
     case PARTY_TYPES.corporation:
     case PARTY_TYPES.petitioner:
       caseCaption = `${primaryContact.name}, Petitioner`;
@@ -1146,6 +1170,29 @@ Case.prototype.addPetitioner = function (petitioner) {
 };
 
 /**
+ * returns the practitioner representing a petitioner
+ *
+ * @params {string} petitionerContactId the id of the petitioner
+ * @returns {Object} the practitioner
+ */
+Case.prototype.getPractitionersRepresenting = function (petitionerContactId) {
+  return this.privatePractitioners.filter(practitioner =>
+    practitioner.representing.includes(petitionerContactId),
+  );
+};
+
+/**
+ * removes the petitioner from the petitioners array
+ *
+ * @params {object} contactId the contactId of the petitioner to remove from the case
+ */
+Case.prototype.removePetitioner = function (contactId) {
+  this.petitioners = this.petitioners.filter(
+    petitioner => petitioner.contactId !== contactId,
+  );
+};
+
+/**
  * gets the correspondence with id correspondenceId from the correspondence array
  *
  * @params {object} params the params object
@@ -1498,7 +1545,8 @@ Case.prototype.setAdditionalNameOnPetitioners = function () {
       }
       case PARTY_TYPES.estateWithoutExecutor:
       case PARTY_TYPES.corporation:
-        contactPrimary.additionalName = contactPrimary.inCareOf;
+      case PARTY_TYPES.petitionerDeceasedSpouse:
+        contactPrimary.additionalName = `c/o ${contactPrimary.inCareOf}`;
         delete contactPrimary.inCareOf;
         break;
       default:
@@ -1928,10 +1976,20 @@ Case.prototype.removeConsolidation = function () {
  * @param {String} userId the id of the user
  * @returns {boolean} if the userId has a privatePractitioner associated with them
  */
-Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
-  return !!this.privatePractitioners.find(practitioner =>
+const isUserIdRepresentedByPrivatePractitioner = function (rawCase, userId) {
+  return !!rawCase.privatePractitioners?.find(practitioner =>
     practitioner.representing.find(id => id === userId),
   );
+};
+
+/**
+ * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
+ *
+ * @param {String} userId the id of the user
+ * @returns {boolean} if the userId has a privatePractitioner associated with them
+ */
+Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
+  return isUserIdRepresentedByPrivatePractitioner(this, userId);
 };
 
 /**
@@ -2148,5 +2206,6 @@ module.exports = {
   getPetitionerById,
   isAssociatedUser,
   isSealedCase,
+  isUserIdRepresentedByPrivatePractitioner,
   updatePetitioner,
 };

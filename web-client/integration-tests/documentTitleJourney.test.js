@@ -101,7 +101,7 @@ describe('Document title journey', () => {
       .getState('caseDetail.docketEntries')
       .find(entry => entry.eventCode === 'EXH');
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: exhibitDocketEntry.docketEntryId,
       docketNumber: test.docketNumber,
     });

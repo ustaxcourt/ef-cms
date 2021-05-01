@@ -1,3 +1,4 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsPetitionerToCase = test => {
@@ -35,6 +36,11 @@ export const docketClerkAddsPetitionerToCase = test => {
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.caseCaption',
       value: mockUpdatedCaption,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.serviceIndicator',
+      value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
     await test.runSequence('submitAddPetitionerSequence');
