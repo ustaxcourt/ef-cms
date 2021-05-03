@@ -1,14 +1,30 @@
+import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 const PartiesInformation = connect(
-  { partiesInformationHelper: state.partiesInformationHelper },
-  function PartiesInformation({ partiesInformationHelper }) {
+  {
+    form: state.form,
+    openAddPrivatePractitionerModalSequence:
+      sequences.openAddPrivatePractitionerModalSequence,
+    partiesInformationHelper: state.partiesInformationHelper,
+    showModal: state.modal.showModal,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
+  },
+  function PartiesInformation({
+    form,
+    openAddPrivatePractitionerModalSequence,
+    partiesInformationHelper,
+    showModal,
+    updateFormValueSequence,
+    validationErrors,
+  }) {
     return (
       <>
         <div className="grid-row grid-gap">
@@ -66,13 +82,13 @@ const PartiesInformation = connect(
               <div className="grid-col-4">
                 <FormGroup
                   className="margin-bottom-0 margin-top-0"
-                  // errorText={validationErrors.practitionerSearchError}
+                  errorText={validationErrors.practitionerSearchError}
                 >
                   <form
                     className="usa-search"
                     onSubmit={e => {
                       e.preventDefault();
-                      // openAddPrivatePractitionerModalSequence();
+                      openAddPrivatePractitionerModalSequence();
                     }}
                   >
                     <div role="search">
@@ -86,14 +102,20 @@ const PartiesInformation = connect(
                         aria-describedby="practitioner-counsel-search-description"
                         className={classNames(
                           'usa-input margin-bottom-0',
-                          // validationErrors.practitionerSearchError &&
-                          //   'usa-input--error',
+                          validationErrors.practitionerSearchError &&
+                            'usa-input--error',
                         )}
                         id="practitioner-search-field"
                         name="practitionerSearch"
                         placeholder="Enter bar no. or name"
                         type="search"
-                        // value={form.practitionerSearch || ''}
+                        value={form.practitionerSearch || ''}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
                       />
                       <button
                         className="small-search-button usa-button"
@@ -185,6 +207,9 @@ const PartiesInformation = connect(
             </div>
           </div>
         </div>
+        {showModal === 'AddPrivatePractitionerModal' && (
+          <AddPrivatePractitionerModal />
+        )}
       </>
     );
   },
