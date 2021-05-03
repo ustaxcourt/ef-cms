@@ -114,7 +114,7 @@ const PartiesInformation = connect(
             </div>
 
             <div className="card height-full">
-              <div className="content-wrapper">
+              <div className="content-wrapper parties-card">
                 <h3>
                   A Name Of A Person{' '}
                   <Button
@@ -148,7 +148,7 @@ const PartiesInformation = connect(
                   {`(${formattedCaseDetail.privatePractitioners[0].barNumber})`}{' '}
                   <Button
                     link
-                    className="margin-top-1 padding-0 float-right"
+                    className="margin-top-1 padding-0 margin-left-1"
                     href={'/case-detail/'}
                     icon="edit"
                   >
