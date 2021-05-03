@@ -238,6 +238,7 @@ import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGai
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
+import { openRemovePetitionerCounselModalSequence } from './sequences/openRemovePetitionerCounselModalSequence';
 import { openRemovePetitionerModalSequence } from './sequences/openRemovePetitionerModalSequence';
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
@@ -257,6 +258,7 @@ import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
+import { removePetitionerCounselFromCaseSequence } from './sequences/removePetitionerCounselFromCaseSequence';
 import { removePetitionerFromCaseSequence } from './sequences/removePetitionerFromCaseSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
@@ -718,6 +720,7 @@ export const presenter = {
     openPdfPreviewModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
+    openRemovePetitionerCounselModalSequence,
     openRemovePetitionerModalSequence,
     openReplyToMessageModalSequence,
     openSealAddressModalSequence,
@@ -737,6 +740,7 @@ export const presenter = {
     removeCaseDetailPendingItemSequence,
     removeCaseFromTrialSequence,
     removePetitionForReplacementSequence,
+    removePetitionerCounselFromCaseSequence,
     removePetitionerFromCaseSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,
