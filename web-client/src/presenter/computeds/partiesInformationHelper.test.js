@@ -35,4 +35,32 @@ describe('partiesInformationHelper', () => {
       },
     ]);
   });
+
+  it('should set hasCounsel to false for a petitioner that is not represented', () => {
+    const mockPetitionerId = '8ee0833f-6b82-4a8a-9803-8dab8bb49b63';
+    const mockPetitioner = {
+      contactId: mockPetitionerId,
+    };
+    const mockPractitioner = {
+      name: 'Test Name',
+      representing: ['abc'],
+    };
+
+    const result = runCompute(partiesInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [mockPetitioner],
+          privatePractitioners: [mockPractitioner],
+        },
+      },
+    });
+
+    expect(result.formattedPetitioners).toMatchObject([
+      {
+        ...mockPetitioner,
+        hasCounsel: false,
+        representingPractitioners: [],
+      },
+    ]);
+  });
 });
