@@ -25,7 +25,8 @@ export const EditPetitionerCounsel = connect(
       sequences.openRemovePetitionerModalSequence,
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
-    submitEditPetitionerCounselSequence: sequences.submitEditPetitionerCounselSequence,
+    submitEditPetitionerCounselSequence:
+      sequences.submitEditPetitionerCounselSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
@@ -45,7 +46,6 @@ export const EditPetitionerCounsel = connect(
     return (
       <>
         <CaseDetailHeader />
-
         <section className="usa-section grid-container">
           <ErrorNotification />
 

@@ -14,17 +14,20 @@ export const submitEditPetitionerCounselAction = async ({
   get,
   path,
 }) => {
-  const form = get(state.modal);
+  const form = get(state.form);
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
+  // const { barNumber } = form;
 
   // TODO: send full petitioner counsel / private practitioner through the interactor
-  // const petitionerCounsel = caseDetail.privatePractitioners.find(practitioner => practitioner.barNumber === )
+  // const petitionerCounsel = caseDetail.privatePractitioners.find(
+  //   practitioner => practitioner.barNumber === barNumber,
+  // );
 
   // await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
   //   applicationContext,
   //   docketNumber,
-  //   userId: practitioner.userId,
+  //   userId: petitionerCounsel.userId,
   // });
   await applicationContext.getUseCases().updateCounselOnCaseInteractor({
     applicationContext,
