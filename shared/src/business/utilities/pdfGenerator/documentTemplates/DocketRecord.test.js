@@ -1,5 +1,6 @@
 const React = require('react');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   SERVED_PARTIES_CODES,
@@ -30,6 +31,8 @@ describe('DocketRecord', () => {
       address2: 'Address 2',
       address3: 'Address 3',
       city: 'City',
+      contactId: '1f033442-2962-42cd-8fd8-a393dc754ae1',
+      contactType: CONTACT_TYPES.primary,
       country: 'USA',
       name: 'Test Petitioner',
       phone: '123-124-1234',
@@ -43,6 +46,8 @@ describe('DocketRecord', () => {
       address2: 'Address 2',
       address3: 'Address 3',
       city: 'City',
+      contactId: '04b71da8-a63e-44c2-ad3d-018b584210ee',
+      contactType: CONTACT_TYPES.secondary,
       country: 'USA',
       name: 'Test Petitioner 2',
       phone: '123-124-5678',
@@ -82,9 +87,9 @@ describe('DocketRecord', () => {
     };
 
     caseDetail = {
-      contactPrimary,
       irsPractitioners: [],
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [contactPrimary],
       privatePractitioners: [],
     };
 
@@ -270,7 +275,7 @@ describe('DocketRecord', () => {
       privatePractitioner,
       privatePractitioner2,
     ];
-    caseDetail.contactSecondary = contactSecondary;
+    caseDetail.petitioners.push(contactSecondary);
 
     const wrapper = mount(
       <DocketRecord

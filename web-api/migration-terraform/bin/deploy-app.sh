@@ -13,8 +13,8 @@ REGION=us-east-1
 
 tf_version=$(terraform --version)
 
-if [[ ${tf_version} != *"0.14.9"* ]]; then
-  echo "Please set your terraform version to 0.14.9 before deploying."
+if [[ ${tf_version} != *"0.15.1"* ]]; then
+  echo "Please set your terraform version to 0.15.1 before deploying."
   exit 1
 fi
 
@@ -48,4 +48,4 @@ export TF_VAR_destination_table=$DESTINATION_TABLE
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan
-terraform apply -auto-approve
+terraform apply
