@@ -10,7 +10,12 @@ import { state } from 'cerebral';
  * @returns {object} props object
  */
 
-export const setPetitionerCounselFormAction = ({ get, props, store }) => {
+export const setPetitionerCounselFormAction = ({
+  applicationContext,
+  get,
+  props,
+  store,
+}) => {
   const caseDetail = get(state.caseDetail);
   const { barNumber } = props;
 
@@ -18,6 +23,22 @@ export const setPetitionerCounselFormAction = ({ get, props, store }) => {
   const privatePractitioner = privatePractitioners.find(
     practitioner => practitioner.barNumber === barNumber,
   );
+
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(caseDetail);
+
+  privatePractitioner.representingPrimary = !!privatePractitioner.representing.find(
+    r => r === contactPrimary.contactId,
+  );
+
+  const contactSecondary = applicationContext.getUtilities()
+    .getContactSecondary;
+  privatePractitioner.representingSecondary =
+    !!contactSecondary &&
+    !!privatePractitioner.representing.find(
+      r => r === contactSecondary.contactId,
+    );
 
   store.set(state.form, privatePractitioner);
 };
