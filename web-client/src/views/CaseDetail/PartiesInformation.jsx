@@ -19,6 +19,7 @@ const PartiesInformation = connect(
     openEditPrivatePractitionersModalSequence:
       sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
+    partyViewTabs: state.constants.PARTY_VIEW_TABS,
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
@@ -30,6 +31,7 @@ const PartiesInformation = connect(
     openAddPrivatePractitionerModalSequence,
     openEditPrivatePractitionersModalSequence,
     partiesInformationHelper,
+    partyViewTabs,
     showModal,
     updateFormValueSequence,
     validationErrors,
@@ -46,28 +48,33 @@ const PartiesInformation = connect(
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
+                    selectedTab === partyViewTabs.petitionersAndCounsel &&
+                      'active',
                   )}
                 >
                   <div className="grid-row margin-left-205">
-                    Petitioner(s) & Counsel
+                    {partyViewTabs.petitionersAndCounsel}
                   </div>
                 </Button>
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
+                    selectedTab === partyViewTabs.participantsAndCounsel &&
+                      'active',
                   )}
                 >
                   <div className="grid-row margin-left-205">
-                    Intervenor/Participants & Counsel
+                    {partyViewTabs.participantsAndCounsel}
                   </div>
                 </Button>
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
+                    selectedTab === partyViewTabs.respondentCounsel && 'active',
                   )}
                 >
                   <div className="grid-row margin-left-205">
-                    Respondent Counsel
+                    {partyViewTabs.respondentCounsel}
                   </div>
                 </Button>
               </div>
