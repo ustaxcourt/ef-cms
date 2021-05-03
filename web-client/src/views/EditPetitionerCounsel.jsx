@@ -79,7 +79,7 @@ export const EditPetitionerCounsel = connect(
               >
                 <fieldset className="usa-fieldset margin-bottom-0">
                   <legend
-                    className="usa-legend usa-legend--text-normal"
+                    className="usa-legend"
                     id={'practitioner-representing-legend'}
                   >
                     Representing
