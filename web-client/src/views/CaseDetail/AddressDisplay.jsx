@@ -73,13 +73,13 @@ export const AddressDisplay = connect(
             )}
           {contact.barNumber && (
             <>
-              `(${contact.barNumber})`
+              ({contact.barNumber})
               <br />
             </>
           )}
           {contact.firmName && (
             <>
-              contact.firmName
+              {contact.firmName}
               <br />
             </>
           )}
