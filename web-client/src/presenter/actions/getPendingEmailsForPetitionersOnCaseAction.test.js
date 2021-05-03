@@ -62,13 +62,9 @@ describe('getPendingEmailsForPetitionersOnCaseAction', () => {
       },
     );
 
-    expect(output.pendingEmails).toEqual([
-      {
-        [mockUserId]: mockEmail,
-      },
-      {
-        [mockSecondUserId]: mockSecondaryEmail,
-      },
-    ]);
+    expect(output.pendingEmails).toEqual({
+      [mockSecondUserId]: mockSecondaryEmail,
+      [mockUserId]: mockEmail,
+    });
   });
 });

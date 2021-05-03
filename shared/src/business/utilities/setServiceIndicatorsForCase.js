@@ -10,7 +10,7 @@ const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
  * @returns {object} service indicators for petitioner, privatePractitioners, and irsPractitioners
  */
 const setServiceIndicatorsForCase = caseDetail => {
-  const { isPaper, petitioners } = caseDetail;
+  const { petitioners } = caseDetail;
 
   petitioners?.forEach(petitioner => {
     if (!petitioner.serviceIndicator) {
@@ -22,7 +22,7 @@ const setServiceIndicatorsForCase = caseDetail => {
       ) {
         petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
       } else {
-        const serviceIsPaper = isPaper || !petitioner.email;
+        const serviceIsPaper = !petitioner.email;
         petitioner.serviceIndicator = serviceIsPaper
           ? SERVICE_INDICATOR_TYPES.SI_PAPER
           : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
