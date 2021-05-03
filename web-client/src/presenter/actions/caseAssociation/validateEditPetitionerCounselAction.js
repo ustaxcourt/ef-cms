@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateEditPrivatePractitionersAction = ({
+export const validateEditPetitionerCounselAction = ({
   applicationContext,
   get,
   path,
@@ -20,36 +20,35 @@ export const validateEditPrivatePractitionersAction = ({
     SERVICE_INDICATOR_TYPES,
   } = applicationContext.getConstants();
 
-  const { privatePractitioners } = get(state.modal);
+  const privatePractitioner = get(state.form);
   const { privatePractitioners: oldPractitioners } = get(state.caseDetail);
 
   const errors = [];
-  privatePractitioners.forEach(practitioner => {
-    let error = applicationContext
-      .getUseCases()
-      .validateEditPrivatePractitionerInteractor({
-        applicationContext,
-        practitioner,
-      });
+  let error = applicationContext
+    .getUseCases()
+    .validateEditPrivatePractitionerInteractor({
+      applicationContext,
+      practitioner: privatePractitioner,
+    });
 
-    const oldPractitioner = oldPractitioners.find(
-      foundPractitioner => foundPractitioner.userId === practitioner.userId,
-    );
-    if (
-      [
-        SERVICE_INDICATOR_TYPES.SI_PAPER,
-        SERVICE_INDICATOR_TYPES.SI_NONE,
-      ].includes(oldPractitioner.serviceIndicator) &&
-      practitioner.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
-    ) {
-      error = {
-        ...error,
-        ...SERVICE_INDICATOR_ERROR,
-      };
-    }
+  const oldPractitioner = oldPractitioners.find(
+    foundPractitioner =>
+      foundPractitioner.userId === privatePractitioner.userId,
+  );
 
-    errors.push(error);
-  });
+  if (
+    [
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    ].includes(oldPractitioner.serviceIndicator) &&
+    privatePractitioner.serviceIndicator ===
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
+  ) {
+    errors.push({
+      ...error,
+      ...SERVICE_INDICATOR_ERROR,
+    });
+  }
 
   if (errors.filter(item => !isEmpty(item)).length === 0) {
     return path.success();
