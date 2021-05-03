@@ -28,8 +28,8 @@ export const EditPetitionerCounsel = connect(
     submitEditPetitionerCounselSequence:
       sequences.submitEditPetitionerCounselSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateEditPrivatePractitionersSequence:
-      sequences.validateEditPrivatePractitionersSequence,
+    validateEditPetitionerCounselSequence:
+      sequences.validateEditPetitionerCounselSequence,
     validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
   },
@@ -41,7 +41,7 @@ export const EditPetitionerCounsel = connect(
     showModal,
     submitEditPetitionerCounselSequence,
     updateFormValueSequence,
-    validateEditPrivatePractitionersSequence,
+    validateEditPetitionerCounselSequence,
     // validatePetitionerSequence,
     validationErrors,
   }) {
@@ -96,7 +96,7 @@ export const EditPetitionerCounsel = connect(
                           key: e.target.name,
                           value: e.target.checked,
                         });
-                        validateEditPrivatePractitionersSequence();
+                        validateEditPetitionerCounselSequence();
                       }}
                     />
                     <label
@@ -122,7 +122,7 @@ export const EditPetitionerCounsel = connect(
                               key: e.target.name,
                               value: e.target.checked,
                             });
-                            validateEditPrivatePractitionersSequence();
+                            validateEditPetitionerCounselSequence();
                           }}
                         />
                         <label
@@ -140,7 +140,7 @@ export const EditPetitionerCounsel = connect(
                     getValidationError={() =>
                       validationErrors && validationErrors.serviceIndicator
                     }
-                    validateSequence={validateEditPrivatePractitionersSequence}
+                    validateSequence={validateEditPetitionerCounselSequence}
                   />
                 </div>
               </FormGroup>

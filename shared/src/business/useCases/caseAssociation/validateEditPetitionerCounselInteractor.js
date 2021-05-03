@@ -3,14 +3,14 @@ const {
 } = require('../../entities/caseAssociation/EditPrivatePractitionerFactory');
 
 /**
- * validateEditPrivatePractitionerInteractor
+ * validateEditPetitionerCounselInteractor
  *
  * @param {object} params params
  * @param {object} params.applicationContext the application context
  * @param {object} params.practitioner metadata
  * @returns {object} errors
  */
-exports.validateEditPrivatePractitionerInteractor = ({
+exports.validateEditPetitionerCounselInteractor = ({
   applicationContext,
   practitioner,
 }) => {

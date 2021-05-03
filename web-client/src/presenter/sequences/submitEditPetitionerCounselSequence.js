@@ -11,11 +11,11 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitEditPetitionerCounselAction } from '../actions/caseAssociation/submitEditPetitionerCounselAction';
-import { validateEditPrivatePractitionersAction } from '../actions/caseAssociation/validateEditPrivatePractitionersAction';
+import { validateEditPetitionerCounselAction } from '../actions/caseAssociation/validateEditPetitionerCounselAction';
 
 export const submitEditPetitionerCounselSequence = [
   startShowValidationAction,
-  validateEditPrivatePractitionersAction,
+  validateEditPetitionerCounselAction,
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([

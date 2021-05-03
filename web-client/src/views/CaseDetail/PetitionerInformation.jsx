@@ -1,7 +1,6 @@
 import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
-import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -384,9 +383,6 @@ const PetitionerInformation = connect(
         )}
         {showModal === 'AddPrivatePractitionerModal' && (
           <AddPrivatePractitionerModal />
-        )}
-        {showModal === 'EditPrivatePractitionersModal' && (
-          <EditPrivatePractitionersModal />
         )}
         {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
       </>
