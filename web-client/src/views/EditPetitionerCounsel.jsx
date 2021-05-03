@@ -11,6 +11,7 @@ import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModa
 import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
+import { openRemovePetitionerCounselModalSequence } from '../presenter/sequences/openRemovePetitionerCounselModalSequence';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -21,8 +22,8 @@ export const EditPetitionerCounsel = connect(
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    openRemovePetitionerModalSequence:
-      sequences.openRemovePetitionerModalSequence,
+    openRemovePetitionerCounselModalSequence:
+      sequences.openRemovePetitionerCounselModalSequence,
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     submitEditPetitionerCounselSequence:
@@ -35,10 +36,9 @@ export const EditPetitionerCounsel = connect(
   },
   function EditPetitionerCounsel({
     caseDetailContactHelper,
-    editPetitionerInformationHelper,
     form,
     formCancelToggleCancelSequence,
-    openRemovePetitionerModalSequence,
+    openRemovePetitionerCounselModalSequence,
     showModal,
     submitEditPetitionerCounselSequence,
     updateFormValueSequence,
@@ -166,19 +166,17 @@ export const EditPetitionerCounsel = connect(
               Cancel
             </Button>
 
-            {editPetitionerInformationHelper.showRemovePetitionerButton && (
-              <Button
-                link
-                className="red-warning no-wrap float-right"
-                icon="trash"
-                id="remove-petitioner-btn"
-                onClick={() => {
-                  openRemovePetitionerModalSequence();
-                }}
-              >
-                Remove this petitioner TODO-FIX
-              </Button>
-            )}
+            <Button
+              link
+              className="red-warning no-wrap float-right"
+              icon="trash"
+              id="remove-petitioner-btn"
+              onClick={() => {
+                openRemovePetitionerCounselModalSequence();
+              }}
+            >
+              Remove petitioner counsel
+            </Button>
           </div>
         </section>
 
