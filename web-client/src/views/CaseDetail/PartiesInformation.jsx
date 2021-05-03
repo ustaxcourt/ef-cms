@@ -116,7 +116,7 @@ const PartiesInformation = connect(
             <div className="card height-full">
               <div className="content-wrapper parties-card">
                 <h3>
-                  A Name Of A Person{' '}
+                  {formattedCaseDetail.petitioners[0].name}
                   <Button
                     link
                     className="margin-top-1 padding-0 float-right"
@@ -126,11 +126,14 @@ const PartiesInformation = connect(
                     Edit
                   </Button>
                 </h3>
-                <div className="bg-primary text-white padding-2">
+                <div className="bg-primary text-white padding-1">
                   Petitioner
                 </div>
                 <AddressDisplay
-                  contact={formattedCaseDetail.petitioners[0]}
+                  contact={{
+                    ...formattedCaseDetail.petitioners[0],
+                    name: undefined,
+                  }}
                   showEmail={true}
                   // showSealAddressLink={caseInformationHelper.showSealAddressLink}
                 />
@@ -142,7 +145,7 @@ const PartiesInformation = connect(
                     {formattedCaseDetail.petitioners[0].serviceIndicator}
                   </div>
                 )}
-                <h3>Counsel</h3>
+                <h3 className="margin-top-3">Counsel</h3>
                 <div>
                   {formattedCaseDetail.privatePractitioners[0].name}{' '}
                   {`(${formattedCaseDetail.privatePractitioners[0].barNumber})`}{' '}
