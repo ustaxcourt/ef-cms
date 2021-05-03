@@ -113,60 +113,73 @@ const PartiesInformation = connect(
               </div>
             </div>
 
-            <div className="card height-full">
-              <div className="content-wrapper parties-card">
-                <h3>
-                  {formattedCaseDetail.petitioners[0].name}
-                  <Button
-                    link
-                    className="margin-top-1 padding-0 float-right"
-                    href={'/case-detail/'}
-                    icon="edit"
-                  >
-                    Edit
-                  </Button>
-                </h3>
-                <div className="bg-primary text-white padding-1">
-                  Petitioner
-                </div>
-                <AddressDisplay
-                  contact={{
-                    ...formattedCaseDetail.petitioners[0],
-                    name: undefined,
-                  }}
-                  showEmail={true}
-                  // showSealAddressLink={caseInformationHelper.showSealAddressLink}
-                />
-                {formattedCaseDetail.petitioners[0].serviceIndicator && (
-                  <div className="margin-top-4">
-                    <p className="semi-bold margin-bottom-0">
-                      Service preference
-                    </p>
-                    {formattedCaseDetail.petitioners[0].serviceIndicator}
+            <div className="grid-row grid-gap">
+              {formattedCaseDetail.petitioners.map(petitioner => (
+                <div
+                  className="grid-col-4 margin-bottom-4"
+                  key={petitioner.contactId}
+                >
+                  <div className="card height-full">
+                    <div className="content-wrapper parties-card">
+                      <h3>
+                        {petitioner.name}
+                        <Button
+                          link
+                          className="margin-top-1 padding-0 float-right"
+                          href={'/case-detail/'}
+                          icon="edit"
+                        >
+                          Edit
+                        </Button>
+                      </h3>
+                      <div className="bg-primary text-white padding-1">
+                        Petitioner
+                      </div>
+                      <AddressDisplay
+                        contact={{
+                          ...petitioner,
+                          name: undefined,
+                        }}
+                        showEmail={true}
+                        // showSealAddressLink={caseInformationHelper.showSealAddressLink}
+                      />
+                      {petitioner.serviceIndicator && (
+                        <div className="margin-top-4">
+                          <p className="semi-bold margin-bottom-0">
+                            Service preference
+                          </p>
+                          {petitioner.serviceIndicator}
+                        </div>
+                      )}
+                      <h4 className="margin-top-3">Counsel</h4>
+                      {formattedCaseDetail.privatePractitioners.map(
+                        privatePractitioner => (
+                          <p key={privatePractitioner.userId}>
+                            <span className="address-line">
+                              {privatePractitioner.name}{' '}
+                              {`(${privatePractitioner.barNumber})`}{' '}
+                              <Button
+                                link
+                                className="margin-top-1 padding-0 margin-left-1"
+                                href={'/case-detail/'}
+                                icon="edit"
+                              >
+                                Edit
+                              </Button>
+                            </span>
+                            <span className="address-line">
+                              {privatePractitioner.email}
+                            </span>
+                            <span className="address-line">
+                              {privatePractitioner.contact.phone}
+                            </span>
+                          </p>
+                        ),
+                      )}
+                    </div>
                   </div>
-                )}
-                <h4 className="margin-top-3">Counsel</h4>
-                <p>
-                  <span className="address-line">
-                    {formattedCaseDetail.privatePractitioners[0].name}{' '}
-                    {`(${formattedCaseDetail.privatePractitioners[0].barNumber})`}{' '}
-                    <Button
-                      link
-                      className="margin-top-1 padding-0 margin-left-1"
-                      href={'/case-detail/'}
-                      icon="edit"
-                    >
-                      Edit
-                    </Button>
-                  </span>
-                  <span className="address-line">
-                    {formattedCaseDetail.privatePractitioners[0].email}
-                  </span>
-                  <span className="address-line">
-                    {formattedCaseDetail.privatePractitioners[0].contact.phone}
-                  </span>
-                </p>
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
