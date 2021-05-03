@@ -1,6 +1,6 @@
 const {
-  EditPrivatePractitionerFactory,
-} = require('../../entities/caseAssociation/EditPrivatePractitionerFactory');
+  EditPetitionerCounselFactory,
+} = require('../../entities/caseAssociation/EditPetitionerCounselFactory');
 
 /**
  * validateEditPetitionerCounselInteractor
@@ -14,7 +14,7 @@ exports.validateEditPetitionerCounselInteractor = ({
   applicationContext,
   practitioner,
 }) => {
-  const errors = EditPrivatePractitionerFactory.get(practitioner, {
+  const errors = EditPetitionerCounselFactory.get(practitioner, {
     applicationContext,
   }).getFormattedValidationErrors();
 

@@ -1,5 +1,3 @@
-/* eslint-disable complexity
- */
 import { AddressDisplay } from './CaseDetail/AddressDisplay';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
@@ -42,7 +40,6 @@ export const EditPetitionerCounsel = connect(
     submitEditPetitionerCounselSequence,
     updateFormValueSequence,
     validateEditPetitionerCounselSequence,
-    // validatePetitionerSequence,
     validationErrors,
   }) {
     return (

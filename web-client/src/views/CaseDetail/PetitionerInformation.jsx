@@ -19,8 +19,6 @@ const PetitionerInformation = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openAddPrivatePractitionerModalSequence:
       sequences.openAddPrivatePractitionerModalSequence,
-    openEditPrivatePractitionersModalSequence:
-      sequences.openEditPrivatePractitionersModalSequence,
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     toggleShowAdditionalPetitionersSequence:
@@ -35,7 +33,6 @@ const PetitionerInformation = connect(
     form,
     formattedCaseDetail,
     openAddPrivatePractitionerModalSequence,
-    openEditPrivatePractitionersModalSequence,
     screenMetadata,
     showModal,
     toggleShowAdditionalPetitionersSequence,
@@ -350,19 +347,6 @@ const PetitionerInformation = connect(
                     id="practitioner-label"
                   >
                     <h3>Petitioner Counsel</h3>
-                    {caseInformationHelper.showEditPrivatePractitioners && (
-                      <Button
-                        link
-                        className="margin-left-205 padding-0 height-3"
-                        id="edit-privatePractitioners-button"
-                        onClick={() =>
-                          openEditPrivatePractitionersModalSequence()
-                        }
-                      >
-                        <FontAwesomeIcon icon="edit" size="sm" />
-                        Edit
-                      </Button>
-                    )}
                   </div>
                   {caseInformationHelper.showAddCounsel && practitionerSearch()}
                 </div>

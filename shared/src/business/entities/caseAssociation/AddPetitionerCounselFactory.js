@@ -15,9 +15,9 @@ const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
  *
  * @constructor
  */
-function AddPrivatePractitionerFactory() {}
+function AddPetitionerCounselFactory() {}
 
-AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
+AddPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES = {
   representingPrimary: 'Select a represented party',
   representingSecondary: 'Select a represented party',
   serviceIndicator: [
@@ -36,7 +36,7 @@ AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
  * @param {object} metadata the metadata
  * @returns {object} the instance
  */
-AddPrivatePractitionerFactory.get = metadata => {
+AddPetitionerCounselFactory.get = metadata => {
   /**
    *
    */
@@ -91,10 +91,10 @@ AddPrivatePractitionerFactory.get = metadata => {
   joiValidationDecorator(
     entityConstructor,
     schema,
-    AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
+    AddPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES,
   );
 
   return new (validEntityDecorator(entityConstructor))(metadata);
 };
 
-module.exports = { AddPrivatePractitionerFactory };
+module.exports = { AddPetitionerCounselFactory };
