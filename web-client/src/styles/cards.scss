@@ -32,6 +32,10 @@
     &.gray {
       background-color: color($theme-color-base-lightest);
     }
+
+    &.parties-card {
+      padding: 0.5rem;
+    }
   }
 
   hr {
