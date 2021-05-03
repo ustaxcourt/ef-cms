@@ -226,6 +226,17 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/edit-petitioner-counsel/*',
+      ifHasAccess((docketNumber, barNumber) => {
+        setPageTitle('Edit Petitioner Counsel');
+        return app.getSequence('gotoEditPetitionerCounselSequence')({
+          barNumber,
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/edit-details',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
