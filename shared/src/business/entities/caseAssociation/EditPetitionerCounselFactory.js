@@ -1,7 +1,7 @@
 const joi = require('joi');
 const {
-  AddPrivatePractitionerFactory,
-} = require('./AddPrivatePractitionerFactory');
+  AddPetitionerCounselFactory,
+} = require('./AddPetitionerCounselFactory');
 const {
   joiValidationDecorator,
   validEntityDecorator,
@@ -14,10 +14,10 @@ const {
  *
  * @constructor
  */
-function EditPrivatePractitionerFactory() {}
+function EditPetitionerCounselFactory() {}
 
-EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
-  ...AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
+EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES = {
+  ...AddPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES,
 };
 
 /**
@@ -25,7 +25,7 @@ EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
  * @param {object} metadata the metadata
  * @returns {object} the instance
  */
-EditPrivatePractitionerFactory.get = metadata => {
+EditPetitionerCounselFactory.get = metadata => {
   /**
    *
    */
@@ -62,10 +62,10 @@ EditPrivatePractitionerFactory.get = metadata => {
   joiValidationDecorator(
     entityConstructor,
     schema,
-    EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
+    EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES,
   );
 
   return new (validEntityDecorator(entityConstructor))(metadata);
 };
 
-module.exports = { EditPrivatePractitionerFactory };
+module.exports = { EditPetitionerCounselFactory };
