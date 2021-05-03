@@ -12,9 +12,12 @@ import classNames from 'classnames';
 const PartiesInformation = connect(
   {
     caseDetail: state.caseDetail,
+    caseInformationHelper: state.caseInformationHelper,
     form: state.form,
     openAddPrivatePractitionerModalSequence:
       sequences.openAddPrivatePractitionerModalSequence,
+    openEditPrivatePractitionersModalSequence:
+      sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -22,8 +25,10 @@ const PartiesInformation = connect(
   },
   function PartiesInformation({
     caseDetail,
+    caseInformationHelper,
     form,
     openAddPrivatePractitionerModalSequence,
+    openEditPrivatePractitionersModalSequence,
     partiesInformationHelper,
     showModal,
     updateFormValueSequence,
@@ -157,7 +162,7 @@ const PartiesInformation = connect(
                         <Button
                           link
                           className="margin-top-1 padding-0 margin-right-0 float-right"
-                          href={'/case-detail/'}
+                          href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
                           icon="edit"
                         >
                           Edit
@@ -190,14 +195,19 @@ const PartiesInformation = connect(
                               <span className="address-line">
                                 {privatePractitioner.name}{' '}
                                 {`(${privatePractitioner.barNumber})`}{' '}
-                                <Button
-                                  link
-                                  className="margin-top-1 padding-0 margin-left-1"
-                                  href={'/case-detail/'}
-                                  icon="edit"
-                                >
-                                  Edit
-                                </Button>
+                                {caseInformationHelper.showEditPrivatePractitioners && (
+                                  <Button
+                                    link
+                                    className="margin-left-205 padding-0 height-3"
+                                    icon="edit"
+                                    id="edit-privatePractitioners-button"
+                                    onClick={() =>
+                                      openEditPrivatePractitionersModalSequence()
+                                    }
+                                  >
+                                    Edit
+                                  </Button>
+                                )}
                               </span>
                               <span className="address-line">
                                 {privatePractitioner.email}
