@@ -42,19 +42,10 @@ describe('validateEditPrivatePractitionersAction', () => {
             },
           ],
         },
-        modal: {
-          privatePractitioners: [
-            {
-              representingPrimary: true,
-              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
-              userId: '1',
-            },
-            {
-              representingPrimary: true,
-              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
-              userId: '2',
-            },
-          ],
+        form: {
+          representingPrimary: true,
+          serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
+          userId: '1',
         },
       },
     });
@@ -65,7 +56,9 @@ describe('validateEditPrivatePractitionersAction', () => {
   it('should call the error path when any errors are found', async () => {
     applicationContext
       .getUseCases()
-      .validateEditPrivatePractitionerInteractor.mockReturnValue('error');
+      .validateEditPrivatePractitionerInteractor.mockReturnValue({
+        something: 'error',
+      });
 
     await runAction(validateEditPrivatePractitionersAction, {
       modules: {
@@ -84,15 +77,8 @@ describe('validateEditPrivatePractitionersAction', () => {
             },
           ],
         },
-        modal: {
-          privatePractitioners: [
-            { userId: '1' },
-            {
-              representingPrimary: true,
-              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
-              userId: '2',
-            },
-          ],
+        form: {
+          userId: '1',
         },
       },
     });
@@ -103,7 +89,7 @@ describe('validateEditPrivatePractitionersAction', () => {
     ).toBeCalled();
     expect(errorStub).toBeCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
-      privatePractitioners: ['error', 'error'],
+      something: 'error',
     });
   });
 
@@ -130,15 +116,10 @@ describe('validateEditPrivatePractitionersAction', () => {
             },
           ],
         },
-        modal: {
-          privatePractitioners: [
-            { userId: '1' },
-            {
-              representingPrimary: true,
-              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
-              userId: '2',
-            },
-          ],
+        form: {
+          representingPrimary: true,
+          serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
+          userId: '2',
         },
       },
     });
@@ -149,10 +130,8 @@ describe('validateEditPrivatePractitionersAction', () => {
     ).toBeCalled();
     expect(errorStub).toBeCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
-      privatePractitioners: [
-        { something: 'error' },
-        { serviceIndicator: expect.anything(), something: 'error' },
-      ],
+      serviceIndicator: expect.anything(),
+      something: 'error',
     });
   });
 });

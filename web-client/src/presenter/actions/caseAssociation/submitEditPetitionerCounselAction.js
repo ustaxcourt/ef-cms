@@ -17,16 +17,7 @@ export const submitEditPetitionerCounselAction = async ({
   const form = get(state.form);
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
-  // TODO: send full petitioner counsel / private practitioner through the interactor
-  // const petitionerCounsel = caseDetail.privatePractitioners.find(
-  //   practitioner => practitioner.barNumber === barNumber,
-  // );
 
-  // await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
-  //   applicationContext,
-  //   docketNumber,
-  //   userId: petitionerCounsel.userId,
-  // });
   await applicationContext.getUseCases().updateCounselOnCaseInteractor({
     applicationContext,
     docketNumber,
