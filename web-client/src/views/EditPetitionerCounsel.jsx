@@ -1,5 +1,6 @@
 /* eslint-disable complexity
  */
+import { AddressDisplay } from './CaseDetail/AddressDisplay';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from './ErrorNotification';
@@ -9,7 +10,6 @@ import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
-import { caseDetailContactHelper } from '../presenter/computeds/caseDetailContactHelper';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -17,6 +17,7 @@ import React from 'react';
 export const EditPetitionerCounsel = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
+    caseDetailContactHelper: state.caseDetailContactHelper,
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -25,15 +26,20 @@ export const EditPetitionerCounsel = connect(
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
+    submitEditPrivatePractitionersModalSequence:
+      sequences.submitEditPrivatePractitionersModalSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
   },
-  function EditPetitionerInformationInternal({
+  function EditPetitionerCounsel({
+    caseDetailContactHelper,
     editPetitionerInformationHelper,
     form,
+    formCancelToggleCancelSequence,
     openRemovePetitionerModalSequence,
     showModal,
+    submitEditPrivatePractitionersModalSequence,
     // submitEditPetitionerSequence,
     // updateFormValueSequence,
     // validatePetitionerSequence,
@@ -50,6 +56,20 @@ export const EditPetitionerCounsel = connect(
 
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
+              <address aria-labelledby="practitioner-label">
+                {form.name && (
+                  <AddressDisplay
+                    boldName
+                    showEmail
+                    contact={{
+                      ...form,
+                      ...form.contact,
+                    }}
+                    nameOverride={form.name}
+                  />
+                )}
+              </address>
+
               <FormGroup
                 className="margin-bottom-0"
                 errorText={
@@ -126,6 +146,25 @@ export const EditPetitionerCounsel = connect(
                 </div>
               </FormGroup>
             </div>
+          </div>
+
+          <div>
+            <Button
+              id="submit-edit-petitioner-information"
+              onClick={() => {
+                submitEditPrivatePractitionersModalSequence();
+              }}
+            >
+              Save TODO-FIX
+            </Button>
+            <Button
+              link
+              onClick={() => {
+                formCancelToggleCancelSequence();
+              }}
+            >
+              Cancel
+            </Button>
 
             {editPetitionerInformationHelper.showRemovePetitionerButton && (
               <Button
@@ -137,7 +176,7 @@ export const EditPetitionerCounsel = connect(
                   openRemovePetitionerModalSequence();
                 }}
               >
-                Remove this petitioner
+                Remove this petitioner TODO-FIX
               </Button>
             )}
           </div>
