@@ -119,7 +119,7 @@ const PartiesInformation = connect(
                   className="grid-col-4 margin-bottom-4"
                   key={petitioner.contactId}
                 >
-                  <div className="card height-full">
+                  <div className="card height-full margin-bottom-0">
                     <div className="content-wrapper parties-card">
                       <h3>
                         {petitioner.name}
@@ -132,7 +132,7 @@ const PartiesInformation = connect(
                           Edit
                         </Button>
                       </h3>
-                      <div className="bg-primary text-white padding-1">
+                      <div className="bg-primary text-white padding-1 margin-bottom-2">
                         Petitioner
                       </div>
                       <AddressDisplay

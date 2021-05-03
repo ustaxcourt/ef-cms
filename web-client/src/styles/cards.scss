@@ -139,6 +139,10 @@
   }
 }
 
+.no-margin {
+  margin: 0;
+}
+
 .party-information {
   font-size: 17px;
 
@@ -147,10 +151,6 @@
 
     &.representing-label {
       margin-top: 20px;
-    }
-
-    &.no-margin {
-      margin: 0;
     }
   }
 
