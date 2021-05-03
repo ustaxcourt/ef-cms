@@ -1,7 +1,7 @@
 const joi = require('joi');
 const {
-  AddPetitionerCounselFactory,
-} = require('./AddPetitionerCounselFactory');
+  AddPrivatePractitionerFactory,
+} = require('./AddPrivatePractitionerFactory');
 const {
   joiValidationDecorator,
   validEntityDecorator,
@@ -17,7 +17,7 @@ const {
 function EditPetitionerCounselFactory() {}
 
 EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES = {
-  ...AddPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES,
+  ...AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
 };
 
 /**

@@ -2,13 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  validateAddPetitionerCounselInteractor,
-} = require('./validateAddPetitionerCounselInteractor');
+  validateAddPrivatePractitionerInteractor,
+} = require('./validateAddPrivatePractitionerInteractor');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
-describe('validateAddPetitionerCounselInteractor', () => {
+describe('validateAddPrivatePractitionerInteractor', () => {
   it('returns the expected errors object on an empty add practitioner', () => {
-    const errors = validateAddPetitionerCounselInteractor({
+    const errors = validateAddPrivatePractitionerInteractor({
       applicationContext,
       counsel: {},
     });
@@ -21,7 +21,7 @@ describe('validateAddPetitionerCounselInteractor', () => {
   });
 
   it('returns null when no errors occur', () => {
-    const errors = validateAddPetitionerCounselInteractor({
+    const errors = validateAddPrivatePractitionerInteractor({
       applicationContext,
       counsel: {
         representingPrimary: true,
