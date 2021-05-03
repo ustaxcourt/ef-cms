@@ -1,7 +1,9 @@
 import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
+import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -9,6 +11,7 @@ import classNames from 'classnames';
 
 const PartiesInformation = connect(
   {
+    caseDetail: state.caseDetail,
     form: state.form,
     openAddPrivatePractitionerModalSequence:
       sequences.openAddPrivatePractitionerModalSequence,
@@ -18,6 +21,7 @@ const PartiesInformation = connect(
     validationErrors: state.validationErrors,
   },
   function PartiesInformation({
+    caseDetail,
     form,
     openAddPrivatePractitionerModalSequence,
     partiesInformationHelper,
@@ -129,7 +133,12 @@ const PartiesInformation = connect(
                 </FormGroup>
               </div>
               <div className="grid-col-2">
-                <Button link className="float-right" icon="plus-circle">
+                <Button
+                  link
+                  className="float-right margin-right-0"
+                  href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
+                  icon="plus-circle"
+                >
                   Add Party
                 </Button>
               </div>
@@ -147,7 +156,7 @@ const PartiesInformation = connect(
                         {petitioner.name}
                         <Button
                           link
-                          className="margin-top-1 padding-0 float-right"
+                          className="margin-top-1 padding-0 margin-right-0 float-right"
                           href={'/case-detail/'}
                           icon="edit"
                         >
@@ -210,6 +219,10 @@ const PartiesInformation = connect(
         {showModal === 'AddPrivatePractitionerModal' && (
           <AddPrivatePractitionerModal />
         )}
+        {showModal === 'EditPrivatePractitionersModal' && (
+          <EditPrivatePractitionersModal />
+        )}
+        {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
       </>
     );
   },
