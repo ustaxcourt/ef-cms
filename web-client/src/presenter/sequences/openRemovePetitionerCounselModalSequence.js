@@ -7,5 +7,5 @@ export const openRemovePetitionerCounselModalSequence = [
   stopShowValidationAction,
   clearModalAction,
   defaultUpdateCaseModalValuesAction,
-  setShowModalFactoryAction('RemovePetitionerCounselConfirmModal'),
+  setShowModalFactoryAction('RemovePetitionerCounselModal'),
 ];

@@ -8,10 +8,9 @@ import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
-import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
+import { RemovePetitionerCounselModal } from './CaseDetail/RemovePetitionerCounselModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
-import { openRemovePetitionerCounselModalSequence } from '../presenter/sequences/openRemovePetitionerCounselModalSequence';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -187,7 +186,9 @@ export const EditPetitionerCounsel = connect(
         {showModal === 'NoMatchingEmailFoundModal' && (
           <NoMatchingEmailFoundModal />
         )}
-        {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
+        {showModal === 'RemovePetitionerCounselModal' && (
+          <RemovePetitionerCounselModal />
+        )}
       </>
     );
   },
