@@ -20,45 +20,41 @@ export const validateEditPrivatePractitionersAction = ({
     SERVICE_INDICATOR_TYPES,
   } = applicationContext.getConstants();
 
-  const { privatePractitioners } = get(state.modal);
+  const practitioner = get(state.form);
   const { privatePractitioners: oldPractitioners } = get(state.caseDetail);
 
-  const errors = [];
-  privatePractitioners.forEach(practitioner => {
-    let error = applicationContext
-      .getUseCases()
-      .validateEditPrivatePractitionerInteractor({
-        applicationContext,
-        practitioner,
-      });
+  let error = applicationContext
+    .getUseCases()
+    .validateEditPrivatePractitionerInteractor({
+      applicationContext,
+      practitioner,
+    });
 
-    const oldPractitioner = oldPractitioners.find(
-      foundPractitioner => foundPractitioner.userId === practitioner.userId,
-    );
-    if (
-      [
-        SERVICE_INDICATOR_TYPES.SI_PAPER,
-        SERVICE_INDICATOR_TYPES.SI_NONE,
-      ].includes(oldPractitioner.serviceIndicator) &&
-      practitioner.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
-    ) {
-      error = {
-        ...error,
-        ...SERVICE_INDICATOR_ERROR,
-      };
-    }
+  const oldPractitioner = oldPractitioners.find(
+    foundPractitioner => foundPractitioner.userId === practitioner.userId,
+  );
 
-    errors.push(error);
-  });
+  if (
+    [
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    ].includes(oldPractitioner.serviceIndicator) &&
+    practitioner.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
+  ) {
+    error = {
+      ...error,
+      ...SERVICE_INDICATOR_ERROR,
+    };
+  }
 
-  if (errors.filter(item => !isEmpty(item)).length === 0) {
+  if (isEmpty(error)) {
     return path.success();
   } else {
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors: { privatePractitioners: errors },
+      errors: error,
     });
   }
 };
