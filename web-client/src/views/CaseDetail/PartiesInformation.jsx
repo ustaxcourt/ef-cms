@@ -145,23 +145,27 @@ const PartiesInformation = connect(
                     {formattedCaseDetail.petitioners[0].serviceIndicator}
                   </div>
                 )}
-                <h3 className="margin-top-3">Counsel</h3>
-                <div>
-                  {formattedCaseDetail.privatePractitioners[0].name}{' '}
-                  {`(${formattedCaseDetail.privatePractitioners[0].barNumber})`}{' '}
-                  <Button
-                    link
-                    className="margin-top-1 padding-0 margin-left-1"
-                    href={'/case-detail/'}
-                    icon="edit"
-                  >
-                    Edit
-                  </Button>
-                </div>
-                <div>{formattedCaseDetail.privatePractitioners[0].email}</div>
-                <div>
-                  {formattedCaseDetail.privatePractitioners[0].contact.phone}
-                </div>
+                <h4 className="margin-top-3">Counsel</h4>
+                <p>
+                  <span className="address-line">
+                    {formattedCaseDetail.privatePractitioners[0].name}{' '}
+                    {`(${formattedCaseDetail.privatePractitioners[0].barNumber})`}{' '}
+                    <Button
+                      link
+                      className="margin-top-1 padding-0 margin-left-1"
+                      href={'/case-detail/'}
+                      icon="edit"
+                    >
+                      Edit
+                    </Button>
+                  </span>
+                  <span className="address-line">
+                    {formattedCaseDetail.privatePractitioners[0].email}
+                  </span>
+                  <span className="address-line">
+                    {formattedCaseDetail.privatePractitioners[0].contact.phone}
+                  </span>
+                </p>
               </div>
             </div>
           </div>
