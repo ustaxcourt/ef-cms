@@ -9,18 +9,18 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { submitEditPrivatePractitionersModalAction } from '../actions/caseAssociation/submitEditPrivatePractitionersModalAction';
-import { validateEditPrivatePractitionersAction } from '../actions/caseAssociation/validateEditPrivatePractitionersAction';
+import { submitEditPetitionerCounselAction } from '../actions/caseAssociation/submitEditPetitionerCounselAction';
+import { validateEditPetitionerCounselAction } from '../actions/caseAssociation/validateEditPetitionerCounselAction';
 
-export const submitEditPrivatePractitionersModalSequence = [
+export const submitEditPetitionerCounselSequence = [
   startShowValidationAction,
-  validateEditPrivatePractitionersAction,
+  validateEditPetitionerCounselAction,
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       clearAlertsAction,
       stopShowValidationAction,
-      submitEditPrivatePractitionersModalAction,
+      submitEditPetitionerCounselAction,
       {
         success: [
           setAlertSuccessAction,

@@ -25,9 +25,7 @@ export const EditPetitionerCounsel = connect(
       sequences.openRemovePetitionerModalSequence,
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
-    submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
-    submitEditPrivatePractitionersModalSequence:
-      sequences.submitEditPrivatePractitionersModalSequence,
+    submitEditPetitionerCounselSequence: sequences.submitEditPetitionerCounselSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
@@ -39,8 +37,7 @@ export const EditPetitionerCounsel = connect(
     formCancelToggleCancelSequence,
     openRemovePetitionerModalSequence,
     showModal,
-    submitEditPrivatePractitionersModalSequence,
-    // submitEditPetitionerSequence,
+    submitEditPetitionerCounselSequence,
     // updateFormValueSequence,
     // validatePetitionerSequence,
     validationErrors,
@@ -152,10 +149,10 @@ export const EditPetitionerCounsel = connect(
             <Button
               id="submit-edit-petitioner-information"
               onClick={() => {
-                submitEditPrivatePractitionersModalSequence();
+                submitEditPetitionerCounselSequence();
               }}
             >
-              Save TODO-FIX
+              Save
             </Button>
             <Button
               link
