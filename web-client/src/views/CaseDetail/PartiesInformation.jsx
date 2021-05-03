@@ -152,30 +152,32 @@ const PartiesInformation = connect(
                         </div>
                       )}
                       <h4 className="margin-top-3">Counsel</h4>
-                      {partiesInformationHelper.representingPractitioners.map(
-                        privatePractitioner => (
-                          <p key={privatePractitioner.userId}>
-                            <span className="address-line">
-                              {privatePractitioner.name}{' '}
-                              {`(${privatePractitioner.barNumber})`}{' '}
-                              <Button
-                                link
-                                className="margin-top-1 padding-0 margin-left-1"
-                                href={'/case-detail/'}
-                                icon="edit"
-                              >
-                                Edit
-                              </Button>
-                            </span>
-                            <span className="address-line">
-                              {privatePractitioner.email}
-                            </span>
-                            <span className="address-line">
-                              {privatePractitioner.contact.phone}
-                            </span>
-                          </p>
-                        ),
-                      )}
+                      {petitioner.hasCounsel &&
+                        petitioner.representingPractitioners.map(
+                          privatePractitioner => (
+                            <p key={privatePractitioner.userId}>
+                              <span className="address-line">
+                                {privatePractitioner.name}{' '}
+                                {`(${privatePractitioner.barNumber})`}{' '}
+                                <Button
+                                  link
+                                  className="margin-top-1 padding-0 margin-left-1"
+                                  href={'/case-detail/'}
+                                  icon="edit"
+                                >
+                                  Edit
+                                </Button>
+                              </span>
+                              <span className="address-line">
+                                {privatePractitioner.email}
+                              </span>
+                              <span className="address-line">
+                                {privatePractitioner.contact.phone}
+                              </span>
+                            </p>
+                          ),
+                        )}
+                      {!petitioner.hasCounsel && 'None'}
                     </div>
                   </div>
                 </div>
