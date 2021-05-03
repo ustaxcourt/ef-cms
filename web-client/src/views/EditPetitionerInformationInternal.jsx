@@ -1,5 +1,3 @@
-/* eslint-disable complexity
- */
 import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
@@ -58,88 +56,31 @@ export const EditPetitionerInformationInternal = connect(
 
           <h2>Edit Petitioner Information</h2>
 
+          <h3>Contact Information</h3>
+
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
-              <FormGroup
-                className="margin-bottom-0"
-                errorText={
-                  validationErrors &&
-                  validationErrors.privatePractitioners &&
-                  validationErrors.privatePractitioners[idx] &&
-                  validationErrors.privatePractitioners[idx].representingPrimary
-                }
-                id={`practitioner-representing-${idx}`}
-              >
-                <fieldset className="usa-fieldset margin-bottom-0">
-                  <legend
-                    className="usa-legend usa-legend--text-normal"
-                    id={`practitioner-representing-legend-${idx}`}
-                  >
-                    Representing
-                  </legend>
-                  <div className="usa-checkbox">
-                    <input
-                      aria-describedby={`practitioner-representing-legend-${idx}`}
-                      checked={practitioner.representingPrimary || false}
-                      className="usa-checkbox__input"
-                      id={`representing-primary-${idx}`}
-                      name={`privatePractitioners.${idx}.representingPrimary`}
-                      type="checkbox"
-                      onChange={e => {
-                        updateModalValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                        validateEditPrivatePractitionersSequence();
-                      }}
-                    />
-                    <label
-                      className="usa-checkbox__label inline-block"
-                      htmlFor={`representing-primary-${idx}`}
-                    >
-                      {caseDetailContactHelper.contactPrimary.name}
-                    </label>
-                  </div>
-
-                  {caseDetailContactHelper.contactSecondary &&
-                    caseDetailContactHelper.contactSecondary.name && (
-                      <div className="usa-checkbox">
-                        <input
-                          aria-describedby={`practitioner-representing-legend-${idx}`}
-                          checked={practitioner.representingSecondary || false}
-                          className="usa-checkbox__input"
-                          id={`representing-secondary-${idx}`}
-                          name={`privatePractitioners.${idx}.representingSecondary`}
-                          type="checkbox"
-                          onChange={e => {
-                            updateModalValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            });
-                            validateEditPrivatePractitionersSequence();
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label inline-block"
-                          htmlFor={`representing-secondary-${idx}`}
-                        >
-                          {caseDetailContactHelper.contactSecondary.name}
-                        </label>
-                      </div>
-                    )}
-                </fieldset>
-                <div className="margin-top-2">
-                  <ServiceIndicatorRadios
-                    bind={`modal.privatePractitioners.${idx}`}
-                    getValidationError={() =>
-                      validationErrors.privatePractitioners &&
-                      validationErrors.privatePractitioners[idx] &&
-                      validationErrors.privatePractitioners[idx]
-                        .serviceIndicator
-                    }
-                    validateSequence={validateEditPrivatePractitionersSequence}
-                  />
-                </div>
+              <FormGroup errorText={validationErrors.contact?.name}>
+                <label className="usa-label" htmlFor="name">
+                  <span>Name</span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  id="name"
+                  name="contact.name"
+                  type="text"
+                  value={form.contact.name || ''}
+                  onBlur={() => {
+                    validatePetitionerSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
               </FormGroup>
             </div>
 
