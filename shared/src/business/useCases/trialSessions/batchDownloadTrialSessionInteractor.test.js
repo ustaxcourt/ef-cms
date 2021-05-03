@@ -92,25 +92,25 @@ describe('batchDownloadTrialSessionInteractor', () => {
         index: '7',
       };
       const expectedName =
-        '2020-06-20_0007_Harrell slipped the cool bulk of the thought-helmet over his head and signalled to the scientist, who pulled the actuator switch. Harrell shuddered as psionic current surged through him; he stiffened, wriggled, and felt himself glide o.pdf';
+        '2020-06-20_0007_Harrell slipped the cool bulk of the thought-helmet over his head and signalled to the scientist, who pulled the actuator switch. Harrell shuddered as psionic current surged throug.pdf';
       const filename = generateValidDocketEntryFilename(docketEntry);
-      expect(filename.length).toBe(255);
+      expect(filename.length).toBe(200);
       expect(filename).toBe(expectedName);
     });
     it('generates a filename without any truncation when overall length is 255 characters or less', () => {
       const docketEntry = {
         documentTitle:
-          "Harrell met the downcrashing blow of the alien's broad-sword fully; the shock of impact sent numbing shivers up his arm as far as his shoulder but he held on and turned aside the blow. It wasn't fair; the Dimellian had a vaster reach!!",
+          "Harrell met the downcrashing blow of the alien's broad-sword fully; the shock of impact sent numbing shivers up his arm as far as his shoulder but he held on and turned aside the b",
         filingDate: '2020-06-20T15:43:12.000Z',
         index: '7',
       };
 
-      const maxTitleLength = 235; // when not accounting for length of date, docket entry number, and file extension components
+      const maxTitleLength = 180; // when not accounting for length of date, docket entry number, and file extension components
       expect(docketEntry.documentTitle.length).toBe(maxTitleLength); // asserting we are starting with a string exactly of max length
 
       const expectedName = `2020-06-20_0007_${docketEntry.documentTitle}.pdf`;
       const filename = generateValidDocketEntryFilename(docketEntry);
-      expect(filename.length).toBe(255);
+      expect(filename.length).toBe(200);
       expect(filename).toBe(expectedName);
     });
   });
