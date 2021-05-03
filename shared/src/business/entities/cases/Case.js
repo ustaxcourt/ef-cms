@@ -1175,10 +1175,20 @@ Case.prototype.addPetitioner = function (petitioner) {
  * @params {string} petitionerContactId the id of the petitioner
  * @returns {Object} the practitioner
  */
-Case.prototype.getPractitionersRepresenting = function (petitionerContactId) {
-  return this.privatePractitioners.filter(practitioner =>
+const getPractitionersRepresenting = function (rawCase, petitionerContactId) {
+  return rawCase.privatePractitioners.filter(practitioner =>
     practitioner.representing.includes(petitionerContactId),
   );
+};
+
+/**
+ * returns the practitioner representing a petitioner
+ *
+ * @params {string} petitionerContactId the id of the petitioner
+ * @returns {Object} the practitioner
+ */
+Case.prototype.getPractitionersRepresenting = function (petitionerContactId) {
+  return getPractitionersRepresenting(this, petitionerContactId);
 };
 
 /**
@@ -2204,6 +2214,7 @@ module.exports = {
   getOtherPetitioners,
   getPetitionDocketEntry,
   getPetitionerById,
+  getPractitionersRepresenting,
   isAssociatedUser,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
