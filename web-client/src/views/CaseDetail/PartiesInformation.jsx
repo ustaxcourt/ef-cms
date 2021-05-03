@@ -7,8 +7,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 const PartiesInformation = connect(
-  { formattedCaseDetail: state.formattedCaseDetail },
-  function PartiesInformation({ formattedCaseDetail }) {
+  { partiesInformationHelper: state.partiesInformationHelper },
+  function PartiesInformation({ partiesInformationHelper }) {
     return (
       <>
         <div className="grid-row grid-gap">
@@ -114,7 +114,7 @@ const PartiesInformation = connect(
             </div>
 
             <div className="grid-row grid-gap-2">
-              {formattedCaseDetail.petitioners.map(petitioner => (
+              {partiesInformationHelper.formattedPetitioners.map(petitioner => (
                 <div
                   className="grid-col-4 margin-bottom-4"
                   key={petitioner.contactId}
@@ -152,7 +152,7 @@ const PartiesInformation = connect(
                         </div>
                       )}
                       <h4 className="margin-top-3">Counsel</h4>
-                      {formattedCaseDetail.privatePractitioners.map(
+                      {partiesInformationHelper.representingPractitioners.map(
                         privatePractitioner => (
                           <p key={privatePractitioner.userId}>
                             <span className="address-line">
