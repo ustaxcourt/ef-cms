@@ -181,6 +181,15 @@ const PetitionerInformation = connect(
                   )}
                   key={practitioner.name}
                 >
+                  <a
+                    link
+                    className="margin-left-205 padding-0 height-3"
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-counsel/${practitioner.barNumber}`}
+                    id="edit-privatePractitioners-button"
+                  >
+                    <FontAwesomeIcon icon="edit" size="sm" />
+                    Edit
+                  </a>
                   <address aria-labelledby="practitioner-label">
                     {practitioner.name && (
                       <AddressDisplay
