@@ -11,7 +11,7 @@ const PartiesInformation = connect(
   function PartiesInformation({ formattedCaseDetail }) {
     return (
       <>
-        <div className="grid-row grid-gap-5">
+        <div className="grid-row grid-gap">
           <div className="grid-col-3">
             <div className="border border-base-lighter">
               <div className="grid-row padding-left-205 grid-header">
@@ -49,7 +49,7 @@ const PartiesInformation = connect(
             </div>
           </div>
           <div className="grid-col-9">
-            <div className="grid-row">
+            <div className="grid-row margin-bottom-2">
               <div className="grid-col-4">
                 <h3>Petitioner(s)</h3>
               </div>
@@ -113,7 +113,7 @@ const PartiesInformation = connect(
               </div>
             </div>
 
-            <div className="grid-row grid-gap">
+            <div className="grid-row grid-gap-2">
               {formattedCaseDetail.petitioners.map(petitioner => (
                 <div
                   className="grid-col-4 margin-bottom-4"
