@@ -28,7 +28,11 @@ describe('partiesInformationHelper', () => {
     });
 
     expect(result.formattedPetitioners).toMatchObject([
-      { ...mockPetitioner, representingPractitioners: mockPractitioner },
+      {
+        ...mockPetitioner,
+        hasCounsel: true,
+        representingPractitioners: [mockPractitioner],
+      },
     ]);
   });
 });
