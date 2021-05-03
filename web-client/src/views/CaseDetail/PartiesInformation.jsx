@@ -20,8 +20,10 @@ const PartiesInformation = connect(
       sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
     partyViewTabs: state.constants.PARTY_VIEW_TABS,
+    screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validationErrors: state.validationErrors,
   },
   function PartiesInformation({
@@ -32,8 +34,10 @@ const PartiesInformation = connect(
     openEditPrivatePractitionersModalSequence,
     partiesInformationHelper,
     partyViewTabs,
+    screenMetadata,
     showModal,
     updateFormValueSequence,
+    updateScreenMetadataSequence,
     validationErrors,
   }) {
     return (
@@ -48,9 +52,15 @@ const PartiesInformation = connect(
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
-                    selectedTab === partyViewTabs.petitionersAndCounsel &&
-                      'active',
+                    screenMetadata.partyViewTab ===
+                      partyViewTabs.petitionersAndCounsel && 'active',
                   )}
+                  onClick={() => {
+                    updateScreenMetadataSequence({
+                      key: 'partyViewTab',
+                      value: partyViewTabs.petitionersAndCounsel,
+                    });
+                  }}
                 >
                   <div className="grid-row margin-left-205">
                     {partyViewTabs.petitionersAndCounsel}
@@ -59,9 +69,15 @@ const PartiesInformation = connect(
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
-                    selectedTab === partyViewTabs.participantsAndCounsel &&
-                      'active',
+                    screenMetadata.partyViewTab ===
+                      partyViewTabs.participantsAndCounsel && 'active',
                   )}
+                  onClick={() => {
+                    updateScreenMetadataSequence({
+                      key: 'partyViewTab',
+                      value: partyViewTabs.participantsAndCounsel,
+                    });
+                  }}
                 >
                   <div className="grid-row margin-left-205">
                     {partyViewTabs.participantsAndCounsel}
@@ -70,8 +86,15 @@ const PartiesInformation = connect(
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
-                    selectedTab === partyViewTabs.respondentCounsel && 'active',
+                    screenMetadata.partyViewTab ===
+                      partyViewTabs.respondentCounsel && 'active',
                   )}
+                  onClick={() => {
+                    updateScreenMetadataSequence({
+                      key: 'partyViewTab',
+                      value: partyViewTabs.respondentCounsel,
+                    });
+                  }}
                 >
                   <div className="grid-row margin-left-205">
                     {partyViewTabs.respondentCounsel}
