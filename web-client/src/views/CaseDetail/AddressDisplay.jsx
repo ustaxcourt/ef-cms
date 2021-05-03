@@ -8,6 +8,7 @@ import classNames from 'classnames';
 export const AddressDisplay = connect(
   {
     addressDisplayHelper: state.addressDisplayHelper,
+    boldName: props.boldName,
     constants: state.constants,
     contact: props.contact,
     editLinkExternal: props.editLinkExternal || undefined,
@@ -21,6 +22,7 @@ export const AddressDisplay = connect(
   },
   function AddressDisplay({
     addressDisplayHelper,
+    boldName,
     constants,
     contact,
     editLinkExternal,
@@ -46,32 +48,34 @@ export const AddressDisplay = connect(
               />
             </span>
           )}
-          {nameOverride || contact.name}{' '}
-          {editLinkExternal &&
-            addressDisplayHelper[contact.contactType].showEditContact && (
-              <Button
-                link
-                aria-label="Edit petitioner contact information"
-                className="margin-left-2"
-                href={editLinkExternal}
-                icon="edit"
-                tabIndex="0"
-              >
-                Edit
-              </Button>
-            )}
-          {editLinkInternal &&
-            addressDisplayHelper.showEditPetitionerInformation && (
-              <Button
-                link
-                className="margin-left-2"
-                href={editLinkInternal}
-                icon="edit"
-              >
-                Edit
-              </Button>
-            )}
-          {contact.barNumber && `(${contact.barNumber})`}
+          <span className={boldName && 'text-bold'}>
+            {nameOverride || contact.name}{' '}
+            {editLinkExternal &&
+              addressDisplayHelper[contact.contactType].showEditContact && (
+                <Button
+                  link
+                  aria-label="Edit petitioner contact information"
+                  className="margin-left-2"
+                  href={editLinkExternal}
+                  icon="edit"
+                  tabIndex="0"
+                >
+                  Edit
+                </Button>
+              )}
+            {editLinkInternal &&
+              addressDisplayHelper.showEditPetitionerInformation && (
+                <Button
+                  link
+                  className="margin-left-2"
+                  href={editLinkInternal}
+                  icon="edit"
+                >
+                  Edit
+                </Button>
+              )}
+            {contact.barNumber && `(${contact.barNumber})`}
+          </span>
           <br />
           {contact.firmName}
           <br />
