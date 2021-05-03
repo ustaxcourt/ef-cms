@@ -1,14 +1,39 @@
+import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
+import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 const PartiesInformation = connect(
-  { partiesInformationHelper: state.partiesInformationHelper },
-  function PartiesInformation({ partiesInformationHelper }) {
+  {
+    caseDetail: state.caseDetail,
+    caseInformationHelper: state.caseInformationHelper,
+    form: state.form,
+    openAddPrivatePractitionerModalSequence:
+      sequences.openAddPrivatePractitionerModalSequence,
+    openEditPrivatePractitionersModalSequence:
+      sequences.openEditPrivatePractitionersModalSequence,
+    partiesInformationHelper: state.partiesInformationHelper,
+    showModal: state.modal.showModal,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
+  },
+  function PartiesInformation({
+    caseDetail,
+    caseInformationHelper,
+    form,
+    openAddPrivatePractitionerModalSequence,
+    openEditPrivatePractitionersModalSequence,
+    partiesInformationHelper,
+    showModal,
+    updateFormValueSequence,
+    validationErrors,
+  }) {
     return (
       <>
         <div className="grid-row grid-gap">
@@ -66,13 +91,13 @@ const PartiesInformation = connect(
               <div className="grid-col-4">
                 <FormGroup
                   className="margin-bottom-0 margin-top-0"
-                  // errorText={validationErrors.practitionerSearchError}
+                  errorText={validationErrors.practitionerSearchError}
                 >
                   <form
                     className="usa-search"
                     onSubmit={e => {
                       e.preventDefault();
-                      // openAddPrivatePractitionerModalSequence();
+                      openAddPrivatePractitionerModalSequence();
                     }}
                   >
                     <div role="search">
@@ -86,14 +111,20 @@ const PartiesInformation = connect(
                         aria-describedby="practitioner-counsel-search-description"
                         className={classNames(
                           'usa-input margin-bottom-0',
-                          // validationErrors.practitionerSearchError &&
-                          //   'usa-input--error',
+                          validationErrors.practitionerSearchError &&
+                            'usa-input--error',
                         )}
                         id="practitioner-search-field"
                         name="practitionerSearch"
                         placeholder="Enter bar no. or name"
                         type="search"
-                        // value={form.practitionerSearch || ''}
+                        value={form.practitionerSearch || ''}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
                       />
                       <button
                         className="small-search-button usa-button"
@@ -107,7 +138,12 @@ const PartiesInformation = connect(
                 </FormGroup>
               </div>
               <div className="grid-col-2">
-                <Button link className="float-right" icon="plus-circle">
+                <Button
+                  link
+                  className="float-right margin-right-0"
+                  href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
+                  icon="plus-circle"
+                >
                   Add Party
                 </Button>
               </div>
@@ -125,8 +161,8 @@ const PartiesInformation = connect(
                         {petitioner.name}
                         <Button
                           link
-                          className="margin-top-1 padding-0 float-right"
-                          href={'/case-detail/'}
+                          className="margin-top-1 padding-0 margin-right-0 float-right"
+                          href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
                           icon="edit"
                         >
                           Edit
@@ -159,14 +195,19 @@ const PartiesInformation = connect(
                               <span className="address-line">
                                 {privatePractitioner.name}{' '}
                                 {`(${privatePractitioner.barNumber})`}{' '}
-                                <Button
-                                  link
-                                  className="margin-top-1 padding-0 margin-left-1"
-                                  href={'/case-detail/'}
-                                  icon="edit"
-                                >
-                                  Edit
-                                </Button>
+                                {caseInformationHelper.showEditPrivatePractitioners && (
+                                  <Button
+                                    link
+                                    className="margin-left-205 padding-0 height-3"
+                                    icon="edit"
+                                    id="edit-privatePractitioners-button"
+                                    onClick={() =>
+                                      openEditPrivatePractitionersModalSequence()
+                                    }
+                                  >
+                                    Edit
+                                  </Button>
+                                )}
                               </span>
                               <span className="address-line">
                                 {privatePractitioner.email}
@@ -185,6 +226,13 @@ const PartiesInformation = connect(
             </div>
           </div>
         </div>
+        {showModal === 'AddPrivatePractitionerModal' && (
+          <AddPrivatePractitionerModal />
+        )}
+        {showModal === 'EditPrivatePractitionersModal' && (
+          <EditPrivatePractitionersModal />
+        )}
+        {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
       </>
     );
   },
