@@ -1,20 +1,20 @@
 const {
-  AddPetitionerCounselFactory,
-} = require('../../entities/caseAssociation/AddPetitionerCounselFactory');
+  AddPrivatePractitionerFactory,
+} = require('../../entities/caseAssociation/AddPrivatePractitionerFactory');
 
 /**
- * validateAddPetitionerCounselFactory
+ * validateAddPrivatePractitionerInteractor
  *
  * @param {object} params params
  * @param {object} params.applicationContext the application context
  * @param {object} params.counsel metadata
  * @returns {object} errors
  */
-exports.validateAddPetitionerCounselInteractor = ({
+exports.validateAddPrivatePractitionerInteractor = ({
   applicationContext,
   counsel,
 }) => {
-  const errors = AddPetitionerCounselFactory.get(counsel, {
+  const errors = AddPrivatePractitionerFactory.get(counsel, {
     applicationContext,
   }).getFormattedValidationErrors();
 
