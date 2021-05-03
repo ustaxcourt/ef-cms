@@ -28,6 +28,8 @@ export const EditPetitionerCounsel = connect(
     submitEditPetitionerCounselSequence:
       sequences.submitEditPetitionerCounselSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateEditPrivatePractitionersSequence:
+      sequences.validateEditPrivatePractitionersSequence,
     validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
   },
@@ -39,7 +41,8 @@ export const EditPetitionerCounsel = connect(
     openRemovePetitionerModalSequence,
     showModal,
     submitEditPetitionerCounselSequence,
-    // updateFormValueSequence,
+    updateFormValueSequence,
+    validateEditPrivatePractitionersSequence,
     // validatePetitionerSequence,
     validationErrors,
   }) {
@@ -89,13 +92,13 @@ export const EditPetitionerCounsel = connect(
                       id={'representing-primary'}
                       name={'representingPrimary'}
                       type="checkbox"
-                      // onChange={e => {
-                      //   updateModalValueSequence({
-                      //     key: e.target.name,
-                      //     value: e.target.checked,
-                      //   });
-                      //   validateEditPrivatePractitionersSequence();
-                      // }}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateEditPrivatePractitionersSequence();
+                      }}
                     />
                     <label
                       className="usa-checkbox__label inline-block"
@@ -115,13 +118,13 @@ export const EditPetitionerCounsel = connect(
                           id={'representing-secondary'}
                           name={'representingSecondary'}
                           type="checkbox"
-                          // onChange={e => {
-                          //   updateModalValueSequence({
-                          //     key: e.target.name,
-                          //     value: e.target.checked,
-                          //   });
-                          //   validateEditPrivatePractitionersSequence();
-                          // }}
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                            validateEditPrivatePractitionersSequence();
+                          }}
                         />
                         <label
                           className="usa-checkbox__label inline-block"
@@ -138,7 +141,7 @@ export const EditPetitionerCounsel = connect(
                     getValidationError={() =>
                       validationErrors && validationErrors.serviceIndicator
                     }
-                    // validateSequence={validateEditPrivatePractitionersSequence}
+                    validateSequence={validateEditPrivatePractitionersSequence}
                   />
                 </div>
               </FormGroup>
