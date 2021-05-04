@@ -13,8 +13,6 @@ const PetitionersAndCounsel = connect(
     form: state.form,
     openAddPrivatePractitionerModalSequence:
       sequences.openAddPrivatePractitionerModalSequence,
-    openEditPrivatePractitionersModalSequence:
-      sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
@@ -24,7 +22,6 @@ const PetitionersAndCounsel = connect(
     caseInformationHelper,
     form,
     openAddPrivatePractitionerModalSequence,
-    openEditPrivatePractitionersModalSequence,
     partiesInformationHelper,
     updateFormValueSequence,
     validationErrors,
@@ -155,11 +152,9 @@ const PetitionersAndCounsel = connect(
                               <Button
                                 link
                                 className="margin-left-205 padding-0 height-3"
+                                href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                 icon="edit"
                                 id="edit-privatePractitioners-button"
-                                onClick={() =>
-                                  openEditPrivatePractitionersModalSequence()
-                                }
                               >
                                 Edit
                               </Button>
