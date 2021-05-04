@@ -134,7 +134,6 @@ const PetitionersAndCounsel = connect(
                       name: undefined,
                     }}
                     showEmail={true}
-                    // showSealAddressLink={caseInformationHelper.showSealAddressLink}
                   />
                   {petitioner.serviceIndicator && (
                     <div className="margin-top-4">
