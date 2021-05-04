@@ -17,7 +17,7 @@ export const petitionsClerkEditsPractitionerOnCase = test => {
     });
 
     expect(test.getState('form.representingPrimary')).toBeFalsy();
-    expect(test.getState('form.representingSecondary')).toEqual(true);
+    expect(test.getState('form.representingSecondary')).toBeTruthy();
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
 

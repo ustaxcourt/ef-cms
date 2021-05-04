@@ -270,7 +270,6 @@ describe('Petitioner Service Indicator Journey', () => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
 
     await test.runSequence('openRemovePetitionerCounselModalSequence');
@@ -280,6 +279,8 @@ describe('Petitioner Service Indicator Journey', () => {
     );
 
     await test.runSequence('removePetitionerCounselFromCaseSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     const contactPrimary = contactPrimaryFromState(test);
     expect(contactPrimary.serviceIndicator).toEqual(
