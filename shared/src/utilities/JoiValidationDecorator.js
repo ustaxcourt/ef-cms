@@ -216,10 +216,7 @@ exports.joiValidationDecorator = function (
         });
         return transformed;
       };
-      applicationContext.logger.error(
-        '*** Entity with error: ***',
-        JSON.stringify(this, null, 2),
-      );
+      applicationContext.logger.error('*** Entity with error: ***', this);
       const validationErrors = this.getValidationErrors();
 
       throw new InvalidEntityError(
