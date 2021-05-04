@@ -63,12 +63,12 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
-      'wait for #tab-petitioner to be visible',
-      'click element #tab-petitioner',
+      'wait for #tab-parties to be visible',
+      'click element #tab-parties',
     ],
     notes: 'checks a11y of case information tab, petitioner secondary tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=case-information-tab-petitioner',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=case-information-tab-parties',
   },
   {
     actions: [
@@ -85,8 +85,8 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
-      'wait for #tab-petitioner to be visible',
-      'click element #tab-petitioner',
+      'wait for #tab-parties to be visible',
+      'click element #tab-parties',
       'wait for #practitioner-search-field to be visible',
       'set field #practitioner-search-field to GL1111',
       'check field #practitioner-search-field',
@@ -379,8 +379,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for element #tab-petitioner to be visible',
-      'click element #tab-petitioner',
+      'wait for element #tab-parties to be visible',
+      'click element #tab-parties',
       'wait for element .sealed-address to be visible',
     ],
     notes:
