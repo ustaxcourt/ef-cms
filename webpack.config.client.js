@@ -44,6 +44,7 @@ module.exports = {
       COGNITO_LOGIN_URL: null,
       COGNITO_REDIRECT_URI: null,
       COGNITO_TOKEN_URL: null,
+      ENV: null,
       FILE_UPLOAD_MODAL_TIMEOUT: null,
       NO_SCANNER: null,
       SCANNER_RESOURCE_URI: null,
@@ -72,6 +73,9 @@ module.exports = {
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
     },
+  },
+  stats: {
+    errorDetails: true,
   },
   target: 'web',
 };
