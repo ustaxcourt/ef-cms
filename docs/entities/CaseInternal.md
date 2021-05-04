@@ -2293,7 +2293,7 @@
                     - 
                       name: "max"
                       args: 
-                        limit: 500
+                        limit: 3000
                 documentType: 
                   type: "string"
                   flags: 
@@ -3543,16 +3543,6 @@
         - "Passport"
         - "Whistleblower"
         - "Worker Classification"
-    contactPrimary: 
-      type: "object"
-      flags: 
-        presence: "required"
-    contactSecondary: 
-      type: "object"
-      flags: 
-        presence: "optional"
-      allow: 
-        - null
     filingType: 
       type: "string"
       flags: 
@@ -3969,6 +3959,15 @@
               presence: "optional"
             allow: 
               - null
+    petitioners: 
+      type: "array"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "unique"
+          args: 
+            comparator: [object Function]
     preferredTrialCity: 
       type: "alternatives"
       matches: 

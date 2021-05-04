@@ -13,12 +13,14 @@ exports.generateDocketRecordPdfInteractor = ({
   applicationContext,
   docketNumber,
   docketRecordSort,
+  includePartyDetail,
 }) => {
   return post({
     applicationContext,
     body: {
       docketNumber,
       docketRecordSort,
+      includePartyDetail,
     },
     endpoint: '/api/docket-record-pdf',
   });

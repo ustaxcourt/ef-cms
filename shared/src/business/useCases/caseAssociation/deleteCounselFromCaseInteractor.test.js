@@ -4,8 +4,12 @@ const {
 const {
   deleteCounselFromCaseInteractor,
 } = require('./deleteCounselFromCaseInteractor');
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../entities/cases/Case');
+const { CONTACT_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('deleteCounselFromCaseInteractor', () => {
   const mockPrivatePractitioners = [
@@ -137,10 +141,12 @@ describe('deleteCounselFromCaseInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
-        contactPrimary: {
-          ...MOCK_CASE.contactPrimary,
-          serviceIndicator: 'None',
-        },
+        petitioners: [
+          {
+            ...MOCK_CASE.petitioners[0],
+            serviceIndicator: 'None',
+          },
+        ],
         privatePractitioners: [mockPrivatePractitioners[0]],
       });
 
@@ -152,7 +158,9 @@ describe('deleteCounselFromCaseInteractor', () => {
       },
     );
 
-    expect(updatedCase.contactPrimary.serviceIndicator).toEqual('Electronic');
+    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual(
+      'Electronic',
+    );
   });
 
   it('should set the contactPrimary.serviceIndicator to Paper if the case was paper', async () => {
@@ -177,32 +185,35 @@ describe('deleteCounselFromCaseInteractor', () => {
       },
     );
 
-    expect(updatedCase.contactPrimary.serviceIndicator).toEqual('Paper');
+    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual('Paper');
   });
 
   it('should set the contactSecondary.serviceIndicator to Paper if the case was paper', async () => {
     const caseToReturn = {
       ...MOCK_CASE,
       associatedJudge: 'Buch',
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        serviceIndicator: 'None',
-      },
-      contactSecondary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-        countryType: 'domestic',
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner',
-        phone: '1234567',
-        postalCode: '12345',
-        serviceIndicator: 'None',
-        state: 'TN',
-        title: 'Executor',
-      },
       mailingDate: '04/16/2019',
       partyType: 'Petitioner & spouse',
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: 'None',
+        },
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: 'domestic',
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          serviceIndicator: 'None',
+          state: 'TN',
+          title: 'Executor',
+        },
+      ],
       privatePractitioners: [
         {
           ...mockPrivatePractitioners[0],
@@ -230,7 +241,6 @@ describe('deleteCounselFromCaseInteractor', () => {
         userId: mockPrivatePractitioners[0].userId,
       },
     );
-
-    expect(updatedCase.contactSecondary.serviceIndicator).toEqual('Paper');
+    expect(getContactSecondary(updatedCase).serviceIndicator).toEqual('Paper');
   });
 });

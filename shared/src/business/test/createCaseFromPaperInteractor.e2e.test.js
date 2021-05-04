@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
@@ -15,6 +16,7 @@ const { ROLES } = require('../entities/EntityConstants');
 
 describe('createCaseFromPaperInteractor integration test', () => {
   const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
+  const mockUserId = 'a805d1ab-18d0-43ec-bafb-654e83405416';
 
   beforeAll(() => {
     window.Date.prototype.toISOString = jest
@@ -24,21 +26,11 @@ describe('createCaseFromPaperInteractor integration test', () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Alex Petitionsclerk',
       role: ROLES.petitionsClerk,
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: mockUserId,
     });
   });
 
   it('should persist the paper case into the database', async () => {
-    MOCK_CASE.contactPrimary = {
-      address1: '123 Abc Ln',
-      city: 'something',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Bob Jones',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    };
-
     const { docketNumber } = await createCaseFromPaperInteractor(
       applicationContext,
       {
@@ -51,6 +43,18 @@ describe('createCaseFromPaperInteractor integration test', () => {
           petitionFile: { name: 'something' },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '123 Abc Ln',
+              city: 'something',
+              contactType: CONTACT_TYPES.primary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              name: 'Bob Jones',
+              phone: '1234567890',
+              postalCode: '12345',
+              state: 'CA',
+            },
+          ],
           receivedAt: RECEIVED_DATE,
           requestForPlaceOfTrialFile: new File(
             [],
@@ -70,11 +74,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
 
     expect(createdCase).toMatchObject({
       caseCaption: 'Bob Jones2, Petitioner',
-      contactPrimary: {
-        contactId: expect.not.stringContaining(
-          'a805d1ab-18d0-43ec-bafb-654e83405416',
-        ), // should NOT be the petitionsclerk who is logged in
-      },
       createdAt: RECEIVED_DATE,
       docketEntries: [
         {
@@ -84,7 +83,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           filedBy: 'Petr. Bob Jones',
           receivedAt: RECEIVED_DATE,
           workItem: {
-            assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            assigneeId: mockUserId,
             assigneeName: 'Alex Petitionsclerk',
             caseStatus: CASE_STATUS_TYPES.new,
             createdAt: RECEIVED_DATE,
@@ -97,7 +96,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
             isInitializeCase: true,
             section: PETITIONS_SECTION,
             sentBy: 'Alex Petitionsclerk',
-            sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            sentByUserId: mockUserId,
           },
         },
         {
@@ -119,6 +118,11 @@ describe('createCaseFromPaperInteractor integration test', () => {
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
+      petitioners: [
+        {
+          contactId: expect.not.stringContaining(mockUserId), // should NOT be the petitionsclerk who is logged in
+        },
+      ],
       receivedAt: RECEIVED_DATE,
       status: CASE_STATUS_TYPES.new,
     });
