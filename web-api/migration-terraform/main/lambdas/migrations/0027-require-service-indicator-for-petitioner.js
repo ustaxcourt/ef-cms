@@ -37,7 +37,9 @@ const migrateItems = async (items, documentClient) => {
 
       item.petitioners = updatedCase.petitioners;
 
-      new Case(item, { applicationContext }).validate();
+      new Case(item, { applicationContext }).validateWithLogging(
+        applicationContext,
+      );
 
       applicationContext.logger.info(
         `Updating case ${item.docketNumber} to add serviceIndicator for any petitioners that don't already have one.`,

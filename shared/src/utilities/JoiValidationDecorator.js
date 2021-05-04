@@ -1,3 +1,4 @@
+const applicationContext = require('../../../web-api/src/applicationContext');
 const joi = require('joi');
 const { InvalidEntityError } = require('../errors/errors');
 const { isEmpty } = require('lodash');
@@ -197,6 +198,39 @@ exports.joiValidationDecorator = function (
       );
     }
     setIsValidated(this);
+    return this;
+  };
+
+  entityConstructor.prototype.validateWithLogging = function validateWithLogging(
+    applicationContext,
+  ) {
+    if (!this.isValid()) {
+      const stringifyTransform = obj => {
+        if (!obj) return obj;
+        const transformed = {};
+        Object.keys(obj).forEach(key => {
+          if (typeof obj[key] === 'string') {
+            transformed[key] = obj[key].replace(/"/g, "'");
+          } else {
+            transformed[key] = obj[key];
+          }
+        });
+        return transformed;
+      };
+      applicationContext.logger.error(
+        '*** Entity with error: ***',
+        JSON.stringify(this, null, 2),
+      );
+      const validationErrors = this.getValidationErrors();
+
+      throw new InvalidEntityError(
+        this.entityName,
+        JSON.stringify(stringifyTransform(validationErrors)),
+        validationErrors,
+      );
+    }
+    setIsValidated(this);
+
     return this;
   };
 
