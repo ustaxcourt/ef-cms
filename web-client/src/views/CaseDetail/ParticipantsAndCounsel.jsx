@@ -42,7 +42,7 @@ const ParticipantsAndCounsel = connect(
                     </Button>
                   </h3>
                   <div className="bg-primary text-white padding-1 margin-bottom-2">
-                    Petitioner
+                    {petitioner.formattedTitle}
                   </div>
                   <AddressDisplay
                     contact={{
