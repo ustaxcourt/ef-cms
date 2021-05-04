@@ -11,6 +11,7 @@ import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
 import { SealAddressModal } from './CaseDetail/SealAddressModal';
+import { SealAddressUpdateContactModal } from './CaseDetail/SealAddressUpdateContactModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@cerebral/react';
@@ -353,6 +354,9 @@ export const EditPetitionerInformationInternal = connect(
         )}
         {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
         {showModal === 'SealAddressModal' && <SealAddressModal />}
+        {showModal === 'SealAddressUpdateContactModal' && (
+          <SealAddressUpdateContactModal />
+        )}
       </>
     );
   },
