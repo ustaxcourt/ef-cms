@@ -5148,16 +5148,6 @@
         "name": "Mufutau Wade",
         "state": "HI",
         "email": "petitioner@example.com"
-      },
-      {
-        "role": "petitioner",
-        "serviceIndicator": "None",
-        "name": "Test Petitioner",
-        "custom:role": "petitioner",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "iat": 1551807217,
-        "email": "petitioner@example.com",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InBldGl0aW9uZXIiLCJlbWFpbCI6InRheHBheWVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwic2VjdGlvbiI6InBldGl0aW9uZXIiLCJ1c2VySWQiOiJ0YXhwYXllciIsImlhdCI6MTU1MTgwNzIxN30.BMAZc6z99e-w6lo_u3Qj9zPulispzrVeP3QKX0AWEaE"
       }
     ],
     "initialDocketNumberSuffix": "_",
@@ -6709,16 +6699,6 @@
         "state": "AL",
         "countryType": "domestic",
         "email": "petitioner@example.com"
-      },
-      {
-        "role": "petitioner",
-        "serviceIndicator": "None",
-        "name": "Test Petitioner",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "custom:role": "petitioner",
-        "iat": 1551476326,
-        "email": "petitioner@example.com",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
       }
     ],
     "docketNumberSuffix": "W",
@@ -10291,16 +10271,6 @@
         "state": "AL",
         "countryType": "domestic",
         "email": "petitioner@example.com"
-      },
-      {
-        "role": "petitioner",
-        "serviceIndicator": "None",
-        "name": "Test Petitioner",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "custom:role": "petitioner",
-        "iat": 1551476326,
-        "email": "petitioner@example.com",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
       }
     ],
     "docketNumber": "110-19",
@@ -13884,16 +13854,6 @@
         "name": "Brett Osborne",
         "state": "AL",
         "email": "petitioner@example.com"
-      },
-      {
-        "role": "petitioner",
-        "serviceIndicator": "None",
-        "name": "Test Petitioner",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "custom:role": "petitioner",
-        "iat": 1551476326,
-        "email": "petitioner@example.com",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
       }
     ],
     "docketNumber": "101-19",
@@ -14558,16 +14518,6 @@
         "name": "Selma Horn",
         "state": "DE",
         "email": "petitioner@example.com"
-      },
-      {
-        "role": "petitioner",
-        "serviceIndicator": "None",
-        "name": "Test Petitioner",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "custom:role": "petitioner",
-        "iat": 1551476326,
-        "email": "petitioner@example.com",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
       },
       {
         "isAddressSealed": true,

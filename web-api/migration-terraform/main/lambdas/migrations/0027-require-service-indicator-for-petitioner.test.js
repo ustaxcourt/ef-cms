@@ -1,9 +1,3 @@
-// const {
-//   applicationContext,
-// } = require('../../../../../shared/src/business/test/createTestApplicationContext');
-const applicationContext = jest.mock('../../../../src/applicationContext');
-const createApplicationContext = require('../../../../src/applicationContext');
-
 const {
   CASE_STATUS_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
@@ -21,7 +15,6 @@ describe('migrateItems', () => {
   let mockCaseRecords;
 
   beforeEach(() => {
-    createApplicationContext.logger.error = jest.fn();
     mockCaseItem = {
       ...MOCK_CASE,
       pk: 'case|999-99',
@@ -98,7 +91,7 @@ describe('migrateItems', () => {
     );
   });
 
-  it.only('should validate case records with invalid petitioner', async () => {
+  it('should validate case records with invalid petitioner', async () => {
     const items = [
       {
         pk: `case|${MOCK_CASE.docketNumber}`,
@@ -127,7 +120,5 @@ describe('migrateItems', () => {
     await expect(migrateItems(items, documentClient)).rejects.toThrow(
       'The Case entity was invalid. null',
     );
-
-    expect(applicationContext.logger.error).toHaveBeenCalled();
   });
 });

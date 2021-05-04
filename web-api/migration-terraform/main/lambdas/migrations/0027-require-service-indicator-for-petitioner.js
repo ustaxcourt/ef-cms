@@ -15,6 +15,14 @@ const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
     if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
+      applicationContext.logger.info(
+        `Updating case ${item.docketNumber} to add serviceIndicator for any petitioners that don't already have one.`,
+        {
+          pk: item.pk,
+          sk: item.sk,
+        },
+      );
+
       const fullCase = await documentClient
         .query({
           ExpressionAttributeNames: {
@@ -39,14 +47,6 @@ const migrateItems = async (items, documentClient) => {
 
       new Case(item, { applicationContext }).validateWithLogging(
         applicationContext,
-      );
-
-      applicationContext.logger.info(
-        `Updating case ${item.docketNumber} to add serviceIndicator for any petitioners that don't already have one.`,
-        {
-          pk: item.pk,
-          sk: item.sk,
-        },
       );
 
       itemsAfter.push(item);
