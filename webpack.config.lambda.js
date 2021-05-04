@@ -1,3 +1,5 @@
+const CopyPlugin = require('copy-webpack-plugin');
+
 module.exports = {
   externals: ['aws-sdk', 'chrome-aws-lambda'],
   mode: 'production',
@@ -17,7 +19,14 @@ module.exports = {
   optimization: {
     minimize: true,
   },
-  plugins: [],
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: 'node_modules/pdfjs-dist/es5/build', to: '.' },
+        { from: 'node_modules/pdf-lib/dist', to: '.' },
+      ],
+    }),
+  ],
   resolve: {
     extensions: ['.js', '.jsx'],
   },
