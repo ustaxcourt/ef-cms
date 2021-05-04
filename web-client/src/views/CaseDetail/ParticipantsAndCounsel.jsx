@@ -5,7 +5,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PetitionersAndCounsel = connect(
+const ParticipantsAndCounsel = connect(
   {
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
@@ -13,7 +13,7 @@ const PetitionersAndCounsel = connect(
       sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
   },
-  function PetitionersAndCounsel({
+  function ParticipantsAndCounsel({
     caseDetail,
     caseInformationHelper,
     openEditPrivatePractitionersModalSequence,
@@ -21,9 +21,9 @@ const PetitionersAndCounsel = connect(
   }) {
     return (
       <>
-        <PartiesInformationContentHeader title="Petitioner(s)" />
+        <PartiesInformationContentHeader title="Intervenor(s)" />
         <div className="grid-row grid-gap-2">
-          {partiesInformationHelper.formattedPetitioners.map(petitioner => (
+          {partiesInformationHelper.formattedParticipants.map(petitioner => (
             <div
               className="grid-col-4 margin-bottom-4"
               key={petitioner.contactId}
@@ -42,7 +42,7 @@ const PetitionersAndCounsel = connect(
                     </Button>
                   </h3>
                   <div className="bg-primary text-white padding-1 margin-bottom-2">
-                    Petitioner
+                    {petitioner.formattedTitle}
                   </div>
                   <AddressDisplay
                     contact={{
@@ -101,4 +101,4 @@ const PetitionersAndCounsel = connect(
   },
 );
 
-export { PetitionersAndCounsel };
+export { ParticipantsAndCounsel };
