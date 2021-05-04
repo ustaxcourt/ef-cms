@@ -186,30 +186,31 @@ export const EditPetitionerInformationInternal = connect(
                 }}
               />
             </FormGroup>
-
-            <FormGroup>
-              <div className="usa-checkbox">
-                <input
-                  checked={form.sealAddress || false}
-                  className="usa-checkbox__input"
-                  id="seal-address"
-                  name="sealAddress"
-                  type="checkbox"
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label inline-block"
-                  htmlFor="seal-address"
-                >
-                  Seal address
-                </label>
-              </div>
-            </FormGroup>
+            {editPetitionerInformationHelper.showSealAddress && (
+              <FormGroup>
+                <div className="usa-checkbox">
+                  <input
+                    checked={form.sealAddress || false}
+                    className="usa-checkbox__input"
+                    id="seal-address"
+                    name="sealAddress"
+                    type="checkbox"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label inline-block"
+                    htmlFor="seal-address"
+                  >
+                    Seal address
+                  </label>
+                </div>
+              </FormGroup>
+            )}
           </div>
 
           <h3>Login & Service Information</h3>

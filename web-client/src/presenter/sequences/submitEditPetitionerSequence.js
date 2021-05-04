@@ -24,6 +24,7 @@ export const submitEditPetitionerSequence = [
   {
     error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
+      // no users have permission to both SEAL_ADDRESS and EDIT_PETITIONER_EMAIL, so both modals will never appear together
       hasUpdatedPetitionerEmailAction,
       {
         no: [sealAddressModalCheck],
