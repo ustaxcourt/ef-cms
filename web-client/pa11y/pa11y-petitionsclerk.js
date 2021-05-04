@@ -98,18 +98,10 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=add-practitioner-modal',
   },
   {
-    actions: [
-      'wait for #tab-case-information to be visible',
-      'click element #tab-case-information',
-      'wait for #tab-petitioner to be visible',
-      'click element #tab-petitioner',
-      'wait for button#edit-privatePractitioners-button to be visible',
-      'click element button#edit-privatePractitioners-button',
-      'wait for #practitioner-representing-0 to be visible',
-    ],
-    notes: 'checks a11y of edit privatePractitioners modal',
+    actions: ['wait for #practitioner-representing to be visible'],
+    notes: 'checks a11y of edit petitioner counsel page',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=edit-privatePractitioners-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19/edit-petitioner-counsel/PT1234',
   },
   {
     actions: [

@@ -181,7 +181,7 @@ const PetitionerInformation = connect(
                     link
                     className="margin-left-205 padding-0 height-3"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-counsel/${practitioner.barNumber}`}
-                    id="edit-privatePractitioners-button"
+                    id="edit-petitionerCounsel-button"
                   >
                     <FontAwesomeIcon icon="edit" size="sm" />
                     Edit
