@@ -69,7 +69,7 @@ export const EditPetitionerInformationInternal = connect(
                 className="usa-select max-width-400"
                 id="petitionerType"
                 name="petitionerType"
-                value={form.petitionerType || ''}
+                value={form.petitionerType || 'petitioner'}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
