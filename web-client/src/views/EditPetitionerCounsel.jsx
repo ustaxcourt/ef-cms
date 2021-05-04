@@ -126,7 +126,7 @@ export const EditPetitionerCounsel = connect(
                           className="usa-checkbox__label inline-block"
                           htmlFor={'representing-secondary'}
                         >
-                          {form.representingSecondary}
+                          {caseDetailContactHelper.contactSecondary.name}
                         </label>
                       </div>
                     )}

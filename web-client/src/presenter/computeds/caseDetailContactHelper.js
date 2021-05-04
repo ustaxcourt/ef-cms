@@ -11,5 +11,7 @@ export const caseDetailContactHelper = (get, applicationContext) => {
     .getUtilities()
     .getContactSecondary(caseDetail);
 
+  console.log('contactSecondary', contactSecondary);
+
   return { contactPrimary, contactSecondary };
 };

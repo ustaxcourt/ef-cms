@@ -261,17 +261,25 @@ describe('Petitioner Service Indicator Journey', () => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('openEditPrivatePractitionersModalSequence');
+    const barNumber = test.getState(
+      'caseDetail.privatePractitioners.0.barNumber',
+    );
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.0.removeFromCase',
-      value: true,
+    await test.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber,
+      docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
-
     expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
+
+    await test.runSequence('openRemovePetitionerCounselModalSequence');
+
+    expect(test.getState('modal.showModal')).toEqual(
+      'RemovePetitionerCounselModal',
+    );
+
+    await test.runSequence('removePetitionerCounselFromCaseSequence');
 
     const contactPrimary = contactPrimaryFromState(test);
     expect(contactPrimary.serviceIndicator).toEqual(

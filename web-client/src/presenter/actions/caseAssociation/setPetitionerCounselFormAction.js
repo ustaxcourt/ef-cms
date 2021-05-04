@@ -32,8 +32,10 @@ export const setPetitionerCounselFormAction = ({
     r => r === contactPrimary.contactId,
   );
 
-  const contactSecondary = applicationContext.getUtilities()
-    .getContactSecondary;
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(caseDetail);
+
   privatePractitioner.representingSecondary =
     !!contactSecondary &&
     !!privatePractitioner.representing.find(
