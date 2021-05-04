@@ -35,6 +35,36 @@ describe('partiesInformationHelper', () => {
         representingPractitioners: [mockPractitioner],
       },
     ]);
+    expect(result.formattedParticipants).toEqual([]);
+  });
+
+  it('should return formatted participants with representing practitioners', () => {
+    const mockId = '8ee0833f-6b82-4a8a-9803-8dab8bb49b63';
+    const mockParticipant = {
+      contactId: mockId,
+      contactType: CONTACT_TYPES.otherFiler,
+    };
+    const mockPractitioner = {
+      name: 'Test Name',
+      representing: [mockId],
+    };
+    const result = runCompute(partiesInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [mockParticipant],
+          privatePractitioners: [mockPractitioner],
+        },
+      },
+    });
+
+    expect(result.formattedParticipants).toMatchObject([
+      {
+        ...mockParticipant,
+        hasCounsel: true,
+        representingPractitioners: [mockPractitioner],
+      },
+    ]);
+    expect(result.formattedPetitioners).toEqual([]);
   });
 
   it('should set hasCounsel to false for a petitioner that is not represented', () => {

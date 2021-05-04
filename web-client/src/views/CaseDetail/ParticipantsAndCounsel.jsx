@@ -13,7 +13,7 @@ const ParticipantsAndCounsel = connect(
       sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
   },
-  function PetitionersAndCounsel({
+  function ParticipantsAndCounsel({
     caseDetail,
     caseInformationHelper,
     openEditPrivatePractitionersModalSequence,
@@ -23,7 +23,7 @@ const ParticipantsAndCounsel = connect(
       <>
         <PartiesInformationContentHeader title="Intervenor(s)" />
         <div className="grid-row grid-gap-2">
-          {partiesInformationHelper.formattedPetitioners.map(petitioner => (
+          {partiesInformationHelper.formattedParticipants.map(petitioner => (
             <div
               className="grid-col-4 margin-bottom-4"
               key={petitioner.contactId}
