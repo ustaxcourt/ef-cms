@@ -1,4 +1,7 @@
 const {
+  applicationContext,
+} = require('../../../../../shared/src/business/test/createTestApplicationContext');
+const {
   CASE_STATUS_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 const {
@@ -117,6 +120,10 @@ describe('migrateItems', () => {
       }),
     };
 
-    await expect(migrateItems(items, documentClient)).rejects.toThrow('blah');
+    await expect(migrateItems(items, documentClient)).rejects.toThrow(
+      'The Case entity was invalid. null',
+    );
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
   });
 });
