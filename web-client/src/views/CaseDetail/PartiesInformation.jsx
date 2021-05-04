@@ -86,11 +86,7 @@ const PartiesInformation = connect(
           </div>
           <div className="grid-col-9">
             {screenMetadata.partyViewTab ===
-              partyViewTabs.petitionersAndCounsel && (
-              <>
-                <PetitionersAndCounsel />
-              </>
-            )}
+              partyViewTabs.petitionersAndCounsel && <PetitionersAndCounsel />}
           </div>
         </div>
         {showModal === 'AddPrivatePractitionerModal' && (
