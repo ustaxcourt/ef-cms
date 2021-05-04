@@ -7,7 +7,7 @@ const {
 const { marshallCase } = require('./marshallCase');
 const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
 
-describe('marshallCase', () => {
+describe('marshallCase (which fails if version increase is needed, DO NOT CHANGE TESTS)', () => {
   it('returns a case object with the expected properties', () => {
     expect(Object.keys(marshallCase(MOCK_CASE)).sort()).toEqual([
       'caseCaption',
