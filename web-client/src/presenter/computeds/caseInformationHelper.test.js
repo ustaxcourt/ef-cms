@@ -426,14 +426,14 @@ describe('caseInformationHelper', () => {
     });
   });
 
-  describe('showAddPetitionerButton', () => {
+  describe('showAddPartyButton', () => {
     it('should be true when case status is not new and user has ADD_PETITIONER_TO_CASE permission', () => {
       const user = {
         role: ROLES.docketClerk,
         userId: '789',
       };
 
-      const { showAddPetitionerButton } = runCompute(caseInformationHelper, {
+      const { showAddPartyButton } = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
           caseDetail: {
@@ -444,7 +444,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(showAddPetitionerButton).toBeTruthy();
+      expect(showAddPartyButton).toBeTruthy();
     });
 
     it('should be false when case status is new and user has ADD_PETITIONER_TO_CASE permission', () => {
@@ -453,7 +453,7 @@ describe('caseInformationHelper', () => {
         userId: '789',
       };
 
-      const { showAddPetitionerButton } = runCompute(caseInformationHelper, {
+      const { showAddPartyButton } = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
           caseDetail: {
@@ -464,7 +464,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(showAddPetitionerButton).toBeFalsy();
+      expect(showAddPartyButton).toBeFalsy();
     });
 
     it('should be false when case status is not new and user does not have ADD_PETITIONER_TO_CASE permission', () => {
@@ -473,7 +473,7 @@ describe('caseInformationHelper', () => {
         userId: '789',
       };
 
-      const { showAddPetitionerButton } = runCompute(caseInformationHelper, {
+      const { showAddPartyButton } = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(user),
           caseDetail: {
@@ -484,7 +484,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(showAddPetitionerButton).toBeFalsy();
+      expect(showAddPartyButton).toBeFalsy();
     });
   });
 });

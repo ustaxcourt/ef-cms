@@ -94,16 +94,18 @@ const PetitionersAndCounsel = connect(
               </form>
             </FormGroup>
           </div>
-          <div className="grid-col-2">
-            <Button
-              link
-              className="float-right margin-right-0"
-              href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
-              icon="plus-circle"
-            >
-              Add Party
-            </Button>
-          </div>
+          {caseInformationHelper.showAddPartyButton && (
+            <div className="grid-col-2">
+              <Button
+                link
+                className="float-right margin-right-0"
+                href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
+                icon="plus-circle"
+              >
+                Add Party
+              </Button>
+            </div>
+          )}
         </div>
 
         <div className="grid-row grid-gap-2">
