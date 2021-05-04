@@ -5,7 +5,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PetitionersAndCounsel = connect(
+const ParticipantsAndCounsel = connect(
   {
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
@@ -21,7 +21,7 @@ const PetitionersAndCounsel = connect(
   }) {
     return (
       <>
-        <PartiesInformationContentHeader title="Petitioners" />
+        <PartiesInformationContentHeader title="Intervenor(s)" />
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedPetitioners.map(petitioner => (
             <div
@@ -101,4 +101,4 @@ const PetitionersAndCounsel = connect(
   },
 );
 
-export { PetitionersAndCounsel };
+export { ParticipantsAndCounsel };

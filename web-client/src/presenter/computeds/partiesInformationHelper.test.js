@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { partiesInformationHelper as partiesInformationHelperComputed } from './partiesInformationHelper';
 import { runCompute } from 'cerebral/test';
@@ -62,5 +63,41 @@ describe('partiesInformationHelper', () => {
         representingPractitioners: [],
       },
     ]);
+  });
+
+  describe('showParticipantsTab', () => {
+    it('should be false when the case does not have any participants or intervenors', () => {
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+        },
+      });
+
+      expect(result.showParticipantsTab).toBeFalsy();
+    });
+
+    it('should be true when the case has at least one participant', () => {
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.otherFiler,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+        },
+      });
+
+      expect(result.showParticipantsTab).toBeTruthy();
+    });
   });
 });
