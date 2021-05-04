@@ -1,4 +1,5 @@
 module.exports = {
+  externals: ['aws-sdk', 'chrome-aws-lambda'],
   mode: 'production',
   module: {
     rules: [
