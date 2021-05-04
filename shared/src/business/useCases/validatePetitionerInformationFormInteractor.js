@@ -9,7 +9,6 @@ const { isEmpty } = require('lodash');
  * @param {object} providers.contactPrimary the contactPrimary to validate
  * @param {object} providers.contactSecondary the contactSecondary to validate
  * @param {object} providers.partyType the partyType to validate
- * @param {object} providers.status the case status to validate
  * @returns {object} errors (null if no errors)
  */
 exports.validatePetitionerInformationFormInteractor = ({
@@ -17,13 +16,11 @@ exports.validatePetitionerInformationFormInteractor = ({
   contactPrimary,
   contactSecondary,
   partyType,
-  status,
 }) => {
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: { primary: contactPrimary, secondary: contactSecondary },
     partyType,
-    status,
   });
 
   return {

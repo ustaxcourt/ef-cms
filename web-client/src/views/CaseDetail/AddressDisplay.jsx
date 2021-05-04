@@ -71,10 +71,18 @@ export const AddressDisplay = connect(
                 Edit
               </Button>
             )}
-          {contact.barNumber && `(${contact.barNumber})`}
-          <br />
-          {contact.firmName}
-          <br />
+          {contact.barNumber && (
+            <>
+              ({contact.barNumber})
+              <br />
+            </>
+          )}
+          {contact.firmName && (
+            <>
+              {contact.firmName}
+              <br />
+            </>
+          )}
           {contact.additionalName}
           {[contact.secondaryName, contact.inCareOf].map(
             contactName =>

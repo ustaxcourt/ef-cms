@@ -1,3 +1,4 @@
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
@@ -255,7 +256,7 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   loginAs(test, 'docketclerk@example.com');
-  it('Removes private practitioner from case and check service indicator is switched back to paper', async () => {
+  it('Removes private practitioner from case and check service indicator is electronic when contact has an email', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -273,11 +274,14 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const contactPrimary = contactPrimaryFromState(test);
-    expect(contactPrimary.serviceIndicator).toEqual('Paper');
+    expect(contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+    expect(contactPrimary.email).toBeDefined();
   });
 
   loginAs(test, 'irsPractitioner@example.com');
-  it('IRS Practitioner verifies service indicator for contact is paper, with sealed address', async () => {
+  it('IRS Practitioner verifies service indicator for contact is electronic, with sealed address', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -285,6 +289,8 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(test.getState('currentPage')).toEqual('CaseDetail');
 
     const contactPrimary = contactPrimaryFromState(test);
-    expect(contactPrimary.serviceIndicator).toEqual('Paper');
+    expect(contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
   });
 });
