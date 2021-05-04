@@ -16,7 +16,7 @@ const migrateItems = async items => {
         },
       );
 
-      item.petitioners.forEach(petitioner => {
+      item.petitioners?.forEach(petitioner => {
         if (!petitioner.phone) {
           petitioner.phone = 'N/A';
           new Petitioner(petitioner, {
