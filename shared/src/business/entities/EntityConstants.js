@@ -25,6 +25,12 @@ const TRIAL_SESSION_PROCEEDING_TYPES = {
   remote: 'Remote',
 };
 
+const PARTY_VIEW_TABS = {
+  participantsAndCounsel: 'Intervenor/Participants & Counsel',
+  petitionersAndCounsel: 'Petitioner(s) & Counsel',
+  respondentCounsel: 'Respondent Counsel',
+};
+
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
 
 const SERVICE_INDICATOR_TYPES = {
@@ -1078,6 +1084,7 @@ module.exports = deepFreeze({
   OTHER_TYPES,
   ORDER_JUDGE_FIELD,
   PARTY_TYPES,
+  PARTY_VIEW_TABS,
   PAYMENT_STATUS,
   PETITIONS_SECTION,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,

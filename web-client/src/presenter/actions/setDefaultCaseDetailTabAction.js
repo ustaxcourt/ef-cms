@@ -4,11 +4,18 @@ import { state } from 'cerebral';
  * sets the currentViewMetadata.caseDetail.informationTab to a default value if it is not already set.
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
  * @param {object} providers.store the cerebral store used for setting the state.cases
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.get the cerebral get function used for getting state from store
  */
-export const setDefaultCaseDetailTabAction = ({ get, props, store }) => {
+export const setDefaultCaseDetailTabAction = ({
+  applicationContext,
+  get,
+  props,
+  store,
+}) => {
+  const { PARTY_VIEW_TABS } = applicationContext.getConstants();
   const frozen = get(state.currentViewMetadata.caseDetail.frozen);
 
   if (!frozen) {
@@ -29,4 +36,9 @@ export const setDefaultCaseDetailTabAction = ({ get, props, store }) => {
       props.docketRecordTab || 'docketRecord',
     );
   }
+
+  store.set(
+    state.screenMetadata.partyViewTab,
+    PARTY_VIEW_TABS.petitionersAndCounsel,
+  );
 };
