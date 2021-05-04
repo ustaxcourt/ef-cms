@@ -1,7 +1,10 @@
 import { state } from 'cerebral';
 
 export const partiesInformationHelper = (get, applicationContext) => {
-  const { CONTACT_TYPES } = applicationContext.getConstants();
+  const {
+    CONTACT_TYPES,
+    UNIQUE_OTHER_FILER_TYPE,
+  } = applicationContext.getConstants();
 
   const caseDetail = get(state.caseDetail);
 
@@ -9,6 +12,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
     const representingPractitioners = applicationContext
       .getUtilities()
       .getPractitionersRepresenting(caseDetail, petitioner.contactId);
+
+    if (petitioner.contactType === CONTACT_TYPES.otherFiler) {
+      if (petitioner.otherFilerType !== UNIQUE_OTHER_FILER_TYPE) {
+        petitioner.formattedTitle = 'Participant';
+      } else {
+        petitioner.formattedTitle = petitioner.otherFilerType;
+      }
+    }
 
     return {
       ...petitioner,
