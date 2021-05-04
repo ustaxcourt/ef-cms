@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
@@ -56,33 +57,51 @@ export const EditPetitionerInformationInternal = connect(
 
           <h2>Edit Petitioner Information</h2>
 
-          <h3>Contact Information</h3>
-
           <div className="blue-container margin-bottom-5">
-            <div className="usa-form-group">
-              <FormGroup errorText={validationErrors.contact?.name}>
-                <label className="usa-label" htmlFor="name">
-                  <span>Name</span>
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input"
-                  id="name"
-                  name="contact.name"
-                  type="text"
-                  value={form.contact.name || ''}
-                  onBlur={() => {
-                    validatePetitionerSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </FormGroup>
-            </div>
+            <FormGroup>
+              <label className="usa-label" htmlFor="name">
+                <span>Petitioner Type</span>
+              </label>
+              <select
+                aria-describedby="petitioner-type"
+                className="usa-select"
+                id="petitionerType"
+                name="petitionerType"
+                value={form.petitionerType || ''}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              >
+                <option value="">- Select -</option>
+                <option value="petitioner">Petitioner</option>
+              </select>
+            </FormGroup>
+
+            <FormGroup errorText={validationErrors.contact?.name}>
+              <label className="usa-label" htmlFor="name">
+                <span>Name</span>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="name"
+                name="contact.name"
+                type="text"
+                value={form.contact.name || ''}
+                onBlur={() => {
+                  validatePetitionerSequence();
+                }}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
 
             <FormGroup errorText={validationErrors.contact?.additionalName}>
               <label className="usa-label" htmlFor="additionalName">
@@ -164,6 +183,32 @@ export const EditPetitionerInformationInternal = connect(
                   });
                 }}
               />
+            </FormGroup>
+
+            <FormGroup>
+              <div className="usa-checkbox">
+                {JSON.stringify(form, null, 2)}
+                <input
+                  checked={form.sealAddress || false}
+                  className="usa-checkbox__input"
+                  id="seal-address"
+                  name="sealAddress"
+                  type="checkbox"
+                  onChange={e => {
+                    console.log('e', e);
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor="seal-address"
+                >
+                  Seal address
+                </label>
+              </div>
             </FormGroup>
           </div>
 
