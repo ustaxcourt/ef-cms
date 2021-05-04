@@ -14,11 +14,10 @@ export const partiesInformationHelper = (get, applicationContext) => {
       .getPractitionersRepresenting(caseDetail, petitioner.contactId);
 
     if (petitioner.contactType === CONTACT_TYPES.otherFiler) {
-      if (petitioner.otherFilerType !== UNIQUE_OTHER_FILER_TYPE) {
-        petitioner.formattedTitle = 'Participant';
-      } else {
-        petitioner.formattedTitle = petitioner.otherFilerType;
-      }
+      petitioner.formattedTitle =
+        petitioner.otherFilerType === UNIQUE_OTHER_FILER_TYPE
+          ? petitioner.otherFilerType
+          : 'Participant';
     }
 
     return {
