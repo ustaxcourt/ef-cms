@@ -1,17 +1,21 @@
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
-  Case,
-} = require('../../../../../shared/src/business/entities/cases/Case');
+  Petitioner,
+} = require('../../../../../shared/src/business/entities/contacts/Petitioner');
 const applicationContext = createApplicationContext({});
 
 const migrateItems = async items => {
   const itemsAfter = [];
   for (const item of items) {
-    // loop through petitioners
-    // if no phone, add 'n/a'
-    // new petitioner entity and validate
     if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
-      itemsAfter.push({ ...item, ...updatedCaseRaw });
+      item.petitioners.forEach(petitioner => {
+        if (!petitioner.phone) {
+          petitioner.phone = 'N/A';
+          new Petitioner(petitioner, { applicationContext }).validate();
+        }
+      });
+
+      itemsAfter.push(item);
     } else {
       itemsAfter.push(item);
     }
