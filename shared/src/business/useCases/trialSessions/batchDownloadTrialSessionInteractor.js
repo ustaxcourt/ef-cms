@@ -104,15 +104,10 @@ const batchDownloadTrialSessionInteractor = async (
           }
         }
 
-        const docDate = formatDateString(
-          aDocketRecord.filingDate,
-          'YYYY-MM-DD',
+        const filename = exports.generateValidDocketEntryFilename(
+          aDocketRecord,
         );
-        const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
-        const fileName = sanitize(
-          `${docDate}_${docNum}_${aDocketRecord.documentTitle}.pdf`,
-        );
-        const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
+        const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
         s3Ids.push(myDoc.docketEntryId);
         fileNames.push(pdfTitle);
       }
@@ -249,6 +244,24 @@ const batchDownloadTrialSessionInteractor = async (
     },
     userId: user.userId,
   });
+};
+
+exports.generateValidDocketEntryFilename = ({
+  documentTitle,
+  filingDate,
+  index,
+}) => {
+  const MAX_OVERALL_FILE_LENGTH = 200;
+  const EXTENSION = '.pdf';
+  const VALID_FILE_NAME_MAX_LENGTH = MAX_OVERALL_FILE_LENGTH - EXTENSION.length;
+
+  const docDate = formatDateString(filingDate, 'YYYY-MM-DD');
+  const docNum = padStart(`${index}`, 4, '0');
+  let fileName = sanitize(`${docDate}_${docNum}_${documentTitle}`);
+  if (fileName.length > VALID_FILE_NAME_MAX_LENGTH) {
+    fileName = fileName.substring(0, VALID_FILE_NAME_MAX_LENGTH);
+  }
+  return `${fileName}${EXTENSION}`;
 };
 
 /**
