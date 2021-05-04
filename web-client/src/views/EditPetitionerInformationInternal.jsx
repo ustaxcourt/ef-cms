@@ -10,6 +10,7 @@ import { InternationalAddress } from './StartCase/InternationalAddress';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
+import { SealAddressModal } from './CaseDetail/SealAddressModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@cerebral/react';
@@ -97,7 +98,7 @@ export const EditPetitionerInformationInternal = connect(
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
-                    value: e.target.value,
+                    value: e.target.checked,
                   });
                 }}
               />
@@ -194,7 +195,6 @@ export const EditPetitionerInformationInternal = connect(
                   name="sealAddress"
                   type="checkbox"
                   onChange={e => {
-                    console.log('e', e);
                     updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
@@ -313,7 +313,7 @@ export const EditPetitionerInformationInternal = connect(
             <Button
               id="submit-edit-petitioner-information"
               onClick={() => {
-                submitEditPetitionerSequence();
+                submitEditPetitionerSequence({ contactToSeal: form.contact });
               }}
             >
               Save
@@ -352,6 +352,7 @@ export const EditPetitionerInformationInternal = connect(
           <NoMatchingEmailFoundModal />
         )}
         {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
+        {showModal === 'SealAddressModal' && <SealAddressModal />}
       </>
     );
   },
