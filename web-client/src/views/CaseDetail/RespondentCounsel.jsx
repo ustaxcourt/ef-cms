@@ -34,7 +34,7 @@ const RespondentCounsel = connect(
                   <hr className="respondent-card-header" />
                   <AddressDisplay
                     contact={{
-                      ...irsPractitioner,
+                      ...irsPractitioner.contact,
                       name: undefined,
                     }}
                     showEmail={true}
