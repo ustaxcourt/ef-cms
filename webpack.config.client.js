@@ -47,7 +47,6 @@ module.exports = {
       ENV: null,
       FILE_UPLOAD_MODAL_TIMEOUT: null,
       NO_SCANNER: null,
-      NODE_ENV: null,
       SCANNER_RESOURCE_URI: null,
       SESSION_MODAL_TIMEOUT: null,
       SESSION_TIMEOUT: null,
@@ -74,6 +73,9 @@ module.exports = {
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
     },
+  },
+  stats: {
+    errorDetails: true,
   },
   target: 'web',
 };
