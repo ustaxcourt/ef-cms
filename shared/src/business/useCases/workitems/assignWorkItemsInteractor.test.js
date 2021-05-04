@@ -72,4 +72,27 @@ describe('assignWorkItemsInteractor', () => {
     }
     expect(error).toBeDefined();
   });
+
+  it('should call deleteWorkItemFromInbox with the original work item to delete', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getWorkItemById.mockReturnValue(MOCK_WORK_ITEM);
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'bob',
+      role: ROLES.docketClerk,
+    });
+    applicationContext.user = {
+      name: 'bob',
+      role: ROLES.docketClerk,
+    };
+
+    await assignWorkItemsInteractor(applicationContext, {
+      userId: 'docketclerk',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+    ).toBeCalled();
+  });
 });
