@@ -99,7 +99,7 @@ export const EditPetitionerInformationInternal = connect(
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
-                    value: e.target.checked,
+                    value: e.target.value,
                   });
                 }}
               />
