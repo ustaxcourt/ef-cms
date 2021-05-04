@@ -10,12 +10,14 @@ import classNames from 'classnames';
 
 const PartiesInformation = connect(
   {
+    partiesInformationHelper: state.partiesInformationHelper,
     partyViewTabs: state.constants.PARTY_VIEW_TABS,
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function PartiesInformation({
+    partiesInformationHelper,
     partyViewTabs,
     screenMetadata,
     showModal,
@@ -47,23 +49,25 @@ const PartiesInformation = connect(
                     {partyViewTabs.petitionersAndCounsel}
                   </div>
                 </Button>
-                <Button
-                  className={classNames(
-                    'usa-button--unstyled attachment-viewer-button',
-                    screenMetadata.partyViewTab ===
-                      partyViewTabs.participantsAndCounsel && 'active',
-                  )}
-                  onClick={() => {
-                    updateScreenMetadataSequence({
-                      key: 'partyViewTab',
-                      value: partyViewTabs.participantsAndCounsel,
-                    });
-                  }}
-                >
-                  <div className="grid-row margin-left-205">
-                    {partyViewTabs.participantsAndCounsel}
-                  </div>
-                </Button>
+                {partiesInformationHelper.showParticipantsTab && (
+                  <Button
+                    className={classNames(
+                      'usa-button--unstyled attachment-viewer-button',
+                      screenMetadata.partyViewTab ===
+                        partyViewTabs.participantsAndCounsel && 'active',
+                    )}
+                    onClick={() => {
+                      updateScreenMetadataSequence({
+                        key: 'partyViewTab',
+                        value: partyViewTabs.participantsAndCounsel,
+                      });
+                    }}
+                  >
+                    <div className="grid-row margin-left-205">
+                      {partyViewTabs.participantsAndCounsel}
+                    </div>
+                  </Button>
+                )}
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',

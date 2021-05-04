@@ -1,6 +1,8 @@
 import { state } from 'cerebral';
 
 export const partiesInformationHelper = (get, applicationContext) => {
+  const { CONTACT_TYPES } = applicationContext.getConstants();
+
   const caseDetail = get(state.caseDetail);
 
   const formattedPetitioners = caseDetail.petitioners.map(petitioner => {
@@ -15,5 +17,9 @@ export const partiesInformationHelper = (get, applicationContext) => {
     };
   });
 
-  return { formattedPetitioners };
+  const showParticipantsTab = caseDetail.petitioners.some(
+    petitioner => petitioner.contactType === CONTACT_TYPES.otherFiler,
+  );
+
+  return { formattedPetitioners, showParticipantsTab };
 };
