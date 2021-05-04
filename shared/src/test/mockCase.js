@@ -200,7 +200,7 @@ exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
   ],
   preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
-  status: CASE_STATUS_TYPES.new,
+  status: CASE_STATUS_TYPES.generalDocket,
 };
 
 exports.MOCK_CASE_WITH_TRIAL_SESSION = {

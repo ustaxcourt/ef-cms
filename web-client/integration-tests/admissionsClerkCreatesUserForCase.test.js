@@ -12,6 +12,8 @@ const test = setupTest();
 const validEmail = `${faker.internet.userName()}_no_error@example.com`;
 
 describe('admissions clerk creates user for case', () => {
+  let petitionerContactId;
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -26,6 +28,7 @@ describe('admissions clerk creates user for case', () => {
   loginAs(test, 'admissionsclerk@example.com');
   it('admissions clerk verifies petitioner on case has no email', async () => {
     const contactPrimary = contactPrimaryFromState(test);
+    petitionerContactId = contactPrimary.contactId;
 
     await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
       contactId: contactPrimary.contactId,
@@ -91,8 +94,8 @@ describe('admissions clerk creates user for case', () => {
   it('admissions clerk checks pending email for petitioner on case with unverified email', async () => {
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(test.getState('screenMetadata.pendingEmails.primary')).toBe(
-      validEmail,
-    );
+    expect(test.getState('screenMetadata.pendingEmails')).toEqual({
+      [petitionerContactId]: validEmail,
+    });
   });
 });

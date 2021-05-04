@@ -37,7 +37,6 @@ export const validatePetitionerInformationFormAction = ({
       contactPrimary,
       contactSecondary,
       partyType,
-      status: caseDetail.status,
     });
 
   if (

@@ -323,12 +323,9 @@ Case.prototype.assignContacts = function assignContacts({
     const contacts = ContactFactory.createContacts({
       applicationContext,
       contactInfo: {
-        otherFilers: getOtherFilers(rawCase),
-        otherPetitioners: getOtherPetitioners(rawCase),
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
         secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
       },
-      isPaper: rawCase.isPaper,
       partyType: rawCase.partyType,
     });
 
@@ -336,8 +333,6 @@ Case.prototype.assignContacts = function assignContacts({
     if (contacts.secondary) {
       this.petitioners.push(contacts.secondary);
     }
-    this.petitioners.push(...contacts.otherPetitioners);
-    this.petitioners.push(...contacts.otherFilers);
   } else {
     if (Array.isArray(rawCase.petitioners)) {
       this.petitioners = rawCase.petitioners.map(
@@ -1180,10 +1175,20 @@ Case.prototype.addPetitioner = function (petitioner) {
  * @params {string} petitionerContactId the id of the petitioner
  * @returns {Object} the practitioner
  */
-Case.prototype.getPractitionersRepresenting = function (petitionerContactId) {
-  return this.privatePractitioners.filter(practitioner =>
+const getPractitionersRepresenting = function (rawCase, petitionerContactId) {
+  return rawCase.privatePractitioners.filter(practitioner =>
     practitioner.representing.includes(petitionerContactId),
   );
+};
+
+/**
+ * returns the practitioner representing a petitioner
+ *
+ * @params {string} petitionerContactId the id of the petitioner
+ * @returns {Object} the practitioner
+ */
+Case.prototype.getPractitionersRepresenting = function (petitionerContactId) {
+  return getPractitionersRepresenting(this, petitionerContactId);
 };
 
 /**
@@ -2209,6 +2214,7 @@ module.exports = {
   getOtherPetitioners,
   getPetitionDocketEntry,
   getPetitionerById,
+  getPractitionersRepresenting,
   isAssociatedUser,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
