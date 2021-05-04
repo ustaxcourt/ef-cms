@@ -98,93 +98,6 @@
         - "secondary"
         - "otherFilers"
         - "otherPetitioners"
-    inCareOf: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 100
-    isAddressSealed: 
-      type: "boolean"
-      flags: 
-        presence: "required"
-    sealedAndUnavailable: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-    name: 
-      type: "string"
-      flags: 
-        presence: "required"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 100
-    phone: 
-      type: "string"
-      flags: 
-        presence: "required"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 100
-    secondaryName: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 100
-    title: 
-      type: "string"
-      flags: 
-        presence: "optional"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "max"
-          args: 
-            limit: 100
-    serviceIndicator: 
-      type: "string"
-      flags: 
-        only: true
-        presence: "optional"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-      allow: 
-        - "Electronic"
-        - "None"
-        - "Paper"
     hasEAccess: 
       type: "boolean"
       flags: 
@@ -228,6 +141,106 @@
             type: "any"
             flags: 
               presence: "optional"
+    inCareOf: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+    isAddressSealed: 
+      type: "boolean"
+      flags: 
+        presence: "required"
+    name: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+    phone: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+    sealedAndUnavailable: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
+    secondaryName: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+    serviceIndicator: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "Electronic"
+        - "None"
+        - "Paper"
+    title: 
+      type: "string"
+      flags: 
+        presence: "optional"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "max"
+          args: 
+            limit: 100
+    postalCode: 
+      type: "string"
+      flags: 
+        presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+        - 
+          name: "pattern"
+          args: 
+            regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
     state: 
       type: "string"
       flags: 
@@ -302,18 +315,5 @@
         - "PW"
         - "VI"
         - "N/A"
-    postalCode: 
-      type: "string"
-      flags: 
-        presence: "required"
-      rules: 
-        - 
-          name: "min"
-          args: 
-            limit: 1
-        - 
-          name: "pattern"
-          args: 
-            regex: "/^(\\d{5}|\\d{5}-\\d{4})$/"
 
  ```
