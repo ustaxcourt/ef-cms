@@ -7,8 +7,6 @@ export const petitionsClerkEditsPractitionerOnCase = test => {
   return it('Petitions clerk edits a practitioner on a case', async () => {
     expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
 
-    console.log('docketNumber', test.docketNumber);
-
     const barNumber = test.getState(
       'caseDetail.privatePractitioners.1.barNumber',
     );
