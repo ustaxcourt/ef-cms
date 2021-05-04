@@ -1,6 +1,7 @@
 import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
+import { ParticipantsAndCounsel } from './ParticipantsAndCounsel';
 import { PetitionersAndCounsel } from './PetitionersAndCounsel';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { connect } from '@cerebral/react';
@@ -91,6 +92,10 @@ const PartiesInformation = connect(
           <div className="grid-col-9">
             {screenMetadata.partyViewTab ===
               partyViewTabs.petitionersAndCounsel && <PetitionersAndCounsel />}
+            {screenMetadata.partyViewTab ===
+              partyViewTabs.participantsAndCounsel && (
+              <ParticipantsAndCounsel />
+            )}
           </div>
         </div>
         {showModal === 'AddPrivatePractitionerModal' && (

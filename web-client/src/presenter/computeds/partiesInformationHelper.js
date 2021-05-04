@@ -5,7 +5,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
 
   const caseDetail = get(state.caseDetail);
 
-  const formattedPetitioners = caseDetail.petitioners.map(petitioner => {
+  const formattedParties = caseDetail.petitioners.map(petitioner => {
     const representingPractitioners = applicationContext
       .getUtilities()
       .getPractitionersRepresenting(caseDetail, petitioner.contactId);
@@ -17,9 +17,16 @@ export const partiesInformationHelper = (get, applicationContext) => {
     };
   });
 
-  const showParticipantsTab = caseDetail.petitioners.some(
+  const formattedPetitioners = formattedParties.filter(
+    petitioner => petitioner.contactType !== CONTACT_TYPES.otherFiler,
+  );
+  const formattedParticipants = formattedParties.filter(
     petitioner => petitioner.contactType === CONTACT_TYPES.otherFiler,
   );
 
-  return { formattedPetitioners, showParticipantsTab };
+  return {
+    formattedParticipants,
+    formattedPetitioners,
+    showParticipantsTab: formattedParticipants.length,
+  };
 };
