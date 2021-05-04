@@ -162,9 +162,6 @@ const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const {
-  updateWorkItemInCase,
-} = require('../../persistence/dynamo/cases/updateWorkItemInCase');
-const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
@@ -480,7 +477,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCaseTrialSortMappingRecords: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     updateWorkItem,
-    updateWorkItemInCase,
+    updateWorkItemInCase: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });

@@ -1,4 +1,7 @@
 const {
+  CASE_STATUS_TYPES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
+const {
   getContactPrimary,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const {
@@ -83,6 +86,39 @@ describe('migrateItems', () => {
       },
     ];
 
-    await expect(migrateItems(items, documentClient)).rejects.toThrow('');
+    await expect(migrateItems(items, documentClient)).rejects.toThrow(
+      'The Case entity was invalid. {"docketNumber":"\'docketNumber\' is required","sortableDocketNumber":"\'sortableDocketNumber\' is required"}',
+    );
+  });
+
+  it('should validate case records with invalid petitioner', async () => {
+    const items = [
+      {
+        pk: `case|${MOCK_CASE.docketNumber}`,
+        sk: `case|${MOCK_CASE.docketNumber}`,
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            contactType: undefined,
+            name: undefined,
+            serviceIndicator: undefined,
+          },
+        ],
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+    ];
+
+    documentClient = {
+      query: () => ({
+        promise: async () => ({
+          Items: items,
+        }),
+      }),
+    };
+
+    await expect(migrateItems(items, documentClient)).rejects.toThrow(
+      'The Case entity was invalid. null',
+    );
   });
 });
