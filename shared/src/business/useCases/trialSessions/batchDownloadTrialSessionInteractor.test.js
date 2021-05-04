@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   batchDownloadTrialSessionInteractor,
+  generateValidDocketEntryFilename,
 } = require('./batchDownloadTrialSessionInteractor');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -82,6 +83,37 @@ describe('batchDownloadTrialSessionInteractor', () => {
       .isFileExists.mockResolvedValue(true);
   });
 
+  describe('file name generation', () => {
+    it('truncates filenames if long document title causes them to exceed 255 characters', () => {
+      const docketEntry = {
+        documentTitle:
+          'Harrell slipped the cool bulk of the thought-helmet over his head and signalled to the scientist, who pulled the actuator switch. Harrell shuddered as psionic current surged through him; he stiffened, wriggled, and felt himself glide out of his body, hover incorporeally in the air between his now soulless shell and the alien bound opposite.',
+        filingDate: '2020-06-20T15:43:12.000Z',
+        index: '7',
+      };
+      const expectedName =
+        '2020-06-20_0007_Harrell slipped the cool bulk of the thought-helmet over his head and signalled to the scientist, who pulled the actuator switch. Harrell shuddered as psionic current surged throug.pdf';
+      const filename = generateValidDocketEntryFilename(docketEntry);
+      expect(filename.length).toBe(200);
+      expect(filename).toBe(expectedName);
+    });
+    it('generates a filename without any truncation when overall length is 255 characters or less', () => {
+      const docketEntry = {
+        documentTitle:
+          "Harrell met the downcrashing blow of the alien's broad-sword fully; the shock of impact sent numbing shivers up his arm as far as his shoulder but he held on and turned aside the b",
+        filingDate: '2020-06-20T15:43:12.000Z',
+        index: '7',
+      };
+
+      const maxTitleLength = 180; // when not accounting for length of date, docket entry number, and file extension components
+      expect(docketEntry.documentTitle.length).toBe(maxTitleLength); // asserting we are starting with a string exactly of max length
+
+      const expectedName = `2020-06-20_0007_${docketEntry.documentTitle}.pdf`;
+      const filename = generateValidDocketEntryFilename(docketEntry);
+      expect(filename.length).toBe(200);
+      expect(filename).toBe(expectedName);
+    });
+  });
   it('skips DocketEntry that are not in docketrecord or have documents in S3', async () => {
     await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
