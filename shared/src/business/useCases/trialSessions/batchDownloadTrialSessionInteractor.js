@@ -19,7 +19,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 const batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  { trialSessionId },
+  { trialSessionId, verifyFiles = false },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -89,17 +89,19 @@ const batchDownloadTrialSessionInteractor = async (
         (myDoc = documentMap[aDocketRecord.docketEntryId])
       ) {
         // check that all file exists before continuing
-        const isFileExists = await applicationContext
-          .getPersistenceGateway()
-          .isFileExists({
-            applicationContext,
-            key: aDocketRecord.docketEntryId,
-          });
+        if (verifyFiles) {
+          const isFileExists = await applicationContext
+            .getPersistenceGateway()
+            .isFileExists({
+              applicationContext,
+              key: aDocketRecord.docketEntryId,
+            });
 
-        if (!isFileExists) {
-          throw new Error(
-            `Batch Download Error: File ${aDocketRecord.docketEntryId} for case ${caseToBatch.docketNumber} does not exist!`,
-          );
+          if (!isFileExists) {
+            throw new Error(
+              `Batch Download Error: File ${aDocketRecord.docketEntryId} for case ${caseToBatch.docketNumber} does not exist!`,
+            );
+          }
         }
 
         const docDate = formatDateString(
@@ -181,6 +183,7 @@ const batchDownloadTrialSessionInteractor = async (
   };
 
   const onError = error => {
+    applicationContext.logger.error('Archive Error', { error });
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
@@ -258,18 +261,19 @@ const batchDownloadTrialSessionInteractor = async (
  */
 exports.batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  { trialSessionId },
+  { trialSessionId, verifyFiles = false },
 ) => {
   try {
     await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId,
+      verifyFiles,
     });
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
 
     applicationContext.logger.error(
       `Error when batch downloading trial session with id ${trialSessionId}`,
-      error,
+      { error },
     );
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
