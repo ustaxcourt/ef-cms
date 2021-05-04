@@ -1,9 +1,18 @@
+import { PARTY_VIEW_TABS } from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../applicationContext';
+import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDefaultCaseDetailTabAction } from './setDefaultCaseDetailTabAction';
 
 describe('setDefaultCaseDetailTabAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('should set the default values for caseDetail view tabs', async () => {
-    const { state } = await runAction(setDefaultCaseDetailTabAction);
+    const { state } = await runAction(setDefaultCaseDetailTabAction, {
+      modules: { presenter },
+    });
 
     expect(state.currentViewMetadata.caseDetail).toMatchObject({
       caseInformationTab: 'overview',
@@ -11,10 +20,14 @@ describe('setDefaultCaseDetailTabAction', () => {
       inProgressTab: 'draftDocuments',
       primaryTab: 'docketRecord',
     });
+    expect(state.screenMetadata.partyViewTab).toEqual(
+      PARTY_VIEW_TABS.petitionersAndCounsel,
+    );
   });
 
   it('should set the primaryTab to passed in prop value', async () => {
     const { state } = await runAction(setDefaultCaseDetailTabAction, {
+      modules: { presenter },
       props: {
         primaryTab: 'caseInformation',
       },
@@ -29,6 +42,7 @@ describe('setDefaultCaseDetailTabAction', () => {
 
   it('should set the docketRecordTab to passed in prop value', async () => {
     const { state } = await runAction(setDefaultCaseDetailTabAction, {
+      modules: { presenter },
       props: {
         docketRecordTab: 'documentView',
       },
@@ -44,6 +58,7 @@ describe('setDefaultCaseDetailTabAction', () => {
 
   it('should not set anything if currentViewMetadata.caseDetail.frozen is true', async () => {
     const { state } = await runAction(setDefaultCaseDetailTabAction, {
+      modules: { presenter },
       props: {
         docketRecordTab: 'documentView',
         primaryTab: 'caseInformation',
