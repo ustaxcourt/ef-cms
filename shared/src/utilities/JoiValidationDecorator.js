@@ -1,4 +1,3 @@
-const applicationContext = require('../../../web-api/src/applicationContext');
 const joi = require('joi');
 const { InvalidEntityError } = require('../errors/errors');
 const { isEmpty } = require('lodash');
