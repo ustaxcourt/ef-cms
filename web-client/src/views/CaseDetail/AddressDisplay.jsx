@@ -35,7 +35,7 @@ export const AddressDisplay = connect(
   }) {
     return (
       <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
-        <p className="no-margin position-relative">
+        <p className="margin-top-0 margin-bottom-2 position-relative">
           {contact.isAddressSealed && (
             <span
               aria-label="sealed address"
@@ -50,35 +50,43 @@ export const AddressDisplay = connect(
           )}
           <span className={boldName && 'text-bold'}>
             {nameOverride || contact.name}{' '}
-            {editLinkExternal &&
-              addressDisplayHelper[contact.contactType].showEditContact && (
-                <Button
-                  link
-                  aria-label="Edit petitioner contact information"
-                  className="margin-left-2"
-                  href={editLinkExternal}
-                  icon="edit"
-                  tabIndex="0"
-                >
-                  Edit
-                </Button>
-              )}
-            {editLinkInternal &&
-              addressDisplayHelper.showEditPetitionerInformation && (
-                <Button
-                  link
-                  className="margin-left-2"
-                  href={editLinkInternal}
-                  icon="edit"
-                >
-                  Edit
-                </Button>
-              )}
-            {contact.barNumber && `(${contact.barNumber})`}
           </span>
-          <br />
-          {contact.firmName}
-          <br />
+          {editLinkExternal &&
+            addressDisplayHelper[contact.contactType].showEditContact && (
+              <Button
+                link
+                aria-label="Edit petitioner contact information"
+                className="margin-left-2"
+                href={editLinkExternal}
+                icon="edit"
+                tabIndex="0"
+              >
+                Edit
+              </Button>
+            )}
+          {editLinkInternal &&
+            addressDisplayHelper.showEditPetitionerInformation && (
+              <Button
+                link
+                className="margin-left-2"
+                href={editLinkInternal}
+                icon="edit"
+              >
+                Edit
+              </Button>
+            )}
+          {contact.barNumber && (
+            <span className={boldName && 'text-bold'}>
+              ({contact.barNumber})
+              <br />
+            </span>
+          )}
+          {contact.firmName && (
+            <>
+              {contact.firmName}
+              <br />
+            </>
+          )}
           {contact.additionalName}
           {[contact.secondaryName, contact.inCareOf].map(
             contactName =>
