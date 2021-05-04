@@ -76,5 +76,8 @@ module.exports = {
       util: require.resolve('util/'),
     },
   },
+  stats: {
+    errorDetails: true,
+  },
   target: 'web',
 };

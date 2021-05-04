@@ -10,13 +10,17 @@ config.plugins.push(
 
 module.exports = {
   ...config,
+  devtool: 'source-map',
   entry: {
-    main: './web-client/src/index-public.prod.js',
+    index: './web-client/src/index-public.prod.js',
   },
   mode: 'production',
   output: {
     clean: true,
-    filename: `index.${Date.now()}.js`,
+    // eslint-disable-next-line @miovision/disallow-date/no-new-date
+    filename: `[name].[fullhash].${new Date()
+      .toISOString()
+      .replace(/:/g, '.')}.js`,
     path: __dirname + '/dist-public',
   },
 };

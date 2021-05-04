@@ -18,12 +18,15 @@ module.exports = {
     port: 5678,
   },
   entry: {
-    main: './web-client/src/index-public.dev.js',
+    index: './web-client/src/index-public.dev.js',
   },
   mode: 'development',
   output: {
     clean: true,
-    filename: `index.${Date.now()}.js`,
+    // eslint-disable-next-line @miovision/disallow-date/no-new-date
+    filename: `[name].[fullhash].${new Date()
+      .toISOString()
+      .replace(/:/g, '.')}.js`,
     path: __dirname + '/dist-public',
   },
 };
