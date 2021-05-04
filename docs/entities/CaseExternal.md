@@ -19,14 +19,6 @@
         - "Partnership (as a partnership representative under the BBA regime)"
         - "Partnership (as a partner other than Tax Matters Partner)"
         - null
-    contactPrimary: 
-      type: "object"
-      flags: 
-        presence: "optional"
-    contactSecondary: 
-      type: "object"
-      flags: 
-        presence: "optional"
     countryType: 
       type: "string"
       flags: 

@@ -123,7 +123,6 @@ exports.generateChangeOfAddress = async ({
           oldData,
           practitionerName,
           user,
-          userCase,
         });
       }
 
@@ -165,7 +164,6 @@ exports.generateChangeOfAddress = async ({
  * @param {object} providers.oldData the old practitioner contact information (for comparison)
  * @param {object} providers.practitionerName the name of the practitioner
  * @param {object} providers.user the user object that includes userId, barNumber etc.
- * @param {object} providers.userCase the application context
  * @returns {Promise<User[]>} the internal users
  */
 const generateAndServeDocketEntry = async ({
@@ -175,7 +173,6 @@ const generateAndServeDocketEntry = async ({
   oldData,
   practitionerName,
   user,
-  userCase,
 }) => {
   const rawCase = caseEntity.validate().toRawObject();
   const caseDetail = {
@@ -253,10 +250,10 @@ const generateAndServeDocketEntry = async ({
   });
 
   const paperServiceRequested =
-    userCase.contactPrimary.serviceIndicator ===
+    caseEntity.getContactPrimary().serviceIndicator ===
       SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (userCase.contactSecondary &&
-      userCase.contactSecondary.serviceIndicator ===
+    (caseEntity.getContactSecondary() &&
+      caseEntity.getContactSecondary().serviceIndicator ===
         SERVICE_INDICATOR_TYPES.SI_PAPER) ||
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
 

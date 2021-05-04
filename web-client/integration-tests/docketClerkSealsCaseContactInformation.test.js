@@ -1,7 +1,12 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  contactPrimaryFromState,
+  loginAs,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { docketClerkSealsContactInformation } from './journey/docketClerkSealsContactInformation';
 import { docketClerkUpdatesSealedContactAddress } from './journey/docketClerkUpdatesSealedContactAddress';
-import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkViewsCaseWithSealedContact } from './journey/petitionsClerkViewsCaseWithSealedContact';
 
 const test = setupTest();
@@ -35,7 +40,8 @@ describe('Docket Clerk seals a case contact information', () => {
     });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
-    test.contactId = caseDetail.contactPrimary.contactId;
+
+    test.contactId = contactPrimaryFromState(test).contactId;
   });
 
   loginAs(test, 'docketclerk@example.com');

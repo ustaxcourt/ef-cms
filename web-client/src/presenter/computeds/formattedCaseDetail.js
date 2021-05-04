@@ -122,28 +122,37 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort,
   );
 
-  result.otherFilers = (result.otherFilers || []).map(otherFiler => ({
+  result.otherFilers = (
+    applicationContext.getUtilities().getOtherFilers(result) || []
+  ).map(otherFiler => ({
     ...otherFiler,
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
   }));
 
-  result.otherPetitioners = (result.otherPetitioners || []).map(
-    otherPetitioner => ({
-      ...otherPetitioner,
-      showEAccessFlag: !isExternalUser && otherPetitioner.hasEAccess,
-    }),
-  );
+  result.otherPetitioners = (
+    applicationContext.getUtilities().getOtherPetitioners(result) || []
+  ).map(otherPetitioner => ({
+    ...otherPetitioner,
+    showEAccessFlag: !isExternalUser && otherPetitioner.hasEAccess,
+  }));
+
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(result);
 
   result.contactPrimary = {
-    ...result.contactPrimary,
-    showEAccessFlag: !isExternalUser && result.contactPrimary.hasEAccess,
+    ...contactPrimary,
+    showEAccessFlag: !isExternalUser && contactPrimary?.hasEAccess,
   };
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(result);
 
-  if (result.contactSecondary) {
+  if (contactSecondary) {
     result.contactSecondary = {
-      ...result.contactSecondary,
-      showEAccessFlag: !isExternalUser && result.contactSecondary.hasEAccess,
+      ...contactSecondary,
+      showEAccessFlag: !isExternalUser && contactSecondary.hasEAccess,
     };
   }
 

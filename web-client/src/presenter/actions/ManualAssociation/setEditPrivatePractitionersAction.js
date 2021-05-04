@@ -10,18 +10,28 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {Promise<*>} the promise of the completed action
  */
-export const setEditPrivatePractitionersAction = async ({ get, store }) => {
+export const setEditPrivatePractitionersAction = async ({
+  applicationContext,
+  get,
+  store,
+}) => {
   const caseDetail = get(state.caseDetail);
   const modalPrivatePractitioners = cloneDeep(caseDetail.privatePractitioners);
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(caseDetail);
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(caseDetail);
 
   modalPrivatePractitioners.forEach(privatePractitioner => {
     privatePractitioner.representingPrimary = !!privatePractitioner.representing.find(
-      r => r === caseDetail.contactPrimary.contactId,
+      r => r === contactPrimary.contactId,
     );
     privatePractitioner.representingSecondary =
-      !!caseDetail.contactSecondary &&
+      !!contactSecondary &&
       !!privatePractitioner.representing.find(
-        r => r === caseDetail.contactSecondary.contactId,
+        r => r === contactSecondary.contactId,
       );
   });
 

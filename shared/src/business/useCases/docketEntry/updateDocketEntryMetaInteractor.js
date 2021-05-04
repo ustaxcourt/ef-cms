@@ -151,11 +151,10 @@ exports.updateDocketEntryMetaInteractor = async (
     {
       ...originalDocketEntry,
       ...editableFields,
-      filedBy: undefined, // allow constructor to re-generate
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
+      // allow constructor to re-generate
+      contactPrimary: caseEntity.getContactPrimary(),
+      contactSecondary: caseEntity.getContactSecondary(),
+      filedBy: undefined,
     },
     { applicationContext },
   ).validate();

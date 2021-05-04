@@ -1,8 +1,8 @@
 import { addDocketEntryHelper as addDocketEntryHelperComputed } from '../../src/presenter/computeds/addDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactPrimaryFromState, refreshElasticsearchIndex } from '../helpers';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
-import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -20,9 +20,8 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
     });
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseWithPaperService = test.getState('caseDetail');
-
-    expect(caseWithPaperService.contactPrimary.serviceIndicator).toEqual(
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 

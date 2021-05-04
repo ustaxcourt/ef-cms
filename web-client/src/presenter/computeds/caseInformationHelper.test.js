@@ -1,9 +1,19 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { caseInformationHelper } from './caseInformationHelper';
+import {
+  CONTACT_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { caseInformationHelper as caseInformationHelperComputed } from './caseInformationHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-describe('case information helper', () => {
+describe('caseInformationHelper', () => {
+  const caseInformationHelper = withAppContextDecorator(
+    caseInformationHelperComputed,
+    applicationContext,
+  );
+
   const getBaseState = user => {
     return {
       permissions: getUserPermissions(user),
@@ -227,12 +237,12 @@ describe('case information helper', () => {
         state: {
           ...baseState,
           caseDetail: {
-            otherPetitioners: [
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
+            petitioners: [
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
             ],
           },
           showingAdditionalPetitioners: false,
@@ -248,12 +258,12 @@ describe('case information helper', () => {
         state: {
           ...baseState,
           caseDetail: {
-            otherPetitioners: [
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
-              { a: '1' },
+            petitioners: [
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
+              { a: '1', contactType: CONTACT_TYPES.otherPetitioner },
             ],
           },
           showingAdditionalPetitioners: true,
@@ -309,9 +319,12 @@ describe('case information helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            contactPrimary: {
-              email: mockEmail,
-            },
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.primary,
+                email: mockEmail,
+              },
+            ],
           },
           form: {},
         },
@@ -324,9 +337,12 @@ describe('case information helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            contactPrimary: {
-              pendingEmail: mockEmail,
-            },
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.primary,
+                pendingEmail: mockEmail,
+              },
+            ],
           },
           form: {},
         },

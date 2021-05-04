@@ -77,3 +77,7 @@ variable "bounced_email_recipient" {
 variable "scanner_resource_uri" {
   type = string
 }
+
+variable "cognito_table_name" {
+  type = string
+}

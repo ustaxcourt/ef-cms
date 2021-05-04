@@ -230,11 +230,11 @@ DocketEntry.prototype.setAsServed = function (servedParties = null) {
 
 /**
  * generates the filedBy string from parties selected for the document
-and contact info from the case detail
+and contact info from the raw docket entry
  *
- * @param {object} caseDetail the case detail
+ * @param {object} docketEntry the docket entry
  */
-DocketEntry.prototype.generateFiledBy = function (caseDetail) {
+DocketEntry.prototype.generateFiledBy = function (docketEntry) {
   const isNoticeOfContactChange = NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
     this.eventCode,
   );
@@ -255,23 +255,23 @@ DocketEntry.prototype.generateFiledBy = function (caseDetail) {
     if (
       this.partyPrimary &&
       !this.partySecondary &&
-      caseDetail.contactPrimary
+      docketEntry.contactPrimary
     ) {
-      partiesArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
+      partiesArray.push(`Petr. ${docketEntry.contactPrimary.name}`);
     } else if (
       this.partySecondary &&
       !this.partyPrimary &&
-      caseDetail.contactSecondary
+      docketEntry.contactSecondary
     ) {
-      partiesArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
+      partiesArray.push(`Petr. ${docketEntry.contactSecondary.name}`);
     } else if (
       this.partyPrimary &&
       this.partySecondary &&
-      caseDetail.contactPrimary &&
-      caseDetail.contactSecondary
+      docketEntry.contactPrimary &&
+      docketEntry.contactSecondary
     ) {
       partiesArray.push(
-        `Petrs. ${caseDetail.contactPrimary.name} & ${caseDetail.contactSecondary.name}`,
+        `Petrs. ${docketEntry.contactPrimary.name} & ${docketEntry.contactSecondary.name}`,
       );
     }
 

@@ -2,11 +2,23 @@ import { state } from 'cerebral';
 
 export const formatSearchResultRecord = (result, { applicationContext }) => {
   const { US_STATES } = applicationContext.getConstants();
-  result.contactPrimary = result.contactPrimary || {};
+
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(result);
+
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(result);
+
+  result.contactPrimary = contactPrimary || {};
+
+  result.contactSecondary = contactSecondary || {};
+
   result.contactPrimaryName =
     result.contactPrimary && result.contactPrimary.name;
-  result.contactSecondaryName =
-    result.contactSecondary && result.contactSecondary.name;
+
+  result.contactSecondaryName = contactSecondary && contactSecondary.name;
 
   result.formattedFiledDate = applicationContext
     .getUtilities()

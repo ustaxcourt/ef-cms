@@ -6,13 +6,13 @@ import classNames from 'classnames';
 
 export const FilingPartiesForm = connect(
   {
-    caseDetail: state.caseDetail,
+    caseDetailContactHelper: state.caseDetailContactHelper,
     filingPartiesFormHelper: state.filingPartiesFormHelper,
     form: state.form,
     validationErrors: state.validationErrors,
   },
   function FilingPartiesForm({
-    caseDetail,
+    caseDetailContactHelper,
     filingPartiesFormHelper,
     form,
     updateSequence,
@@ -47,7 +47,7 @@ export const FilingPartiesForm = connect(
               className="usa-checkbox__label inline-block"
               htmlFor="party-primary"
             >
-              {caseDetail.contactPrimary.name}
+              {caseDetailContactHelper.contactPrimary.name}
             </label>
           </div>
           {filingPartiesFormHelper.showSecondaryParty && (
@@ -70,7 +70,7 @@ export const FilingPartiesForm = connect(
                 className="usa-checkbox__label inline-block"
                 htmlFor="party-secondary"
               >
-                {caseDetail.contactSecondary.name}
+                {caseDetailContactHelper.contactSecondary.name}
               </label>
             </div>
           )}

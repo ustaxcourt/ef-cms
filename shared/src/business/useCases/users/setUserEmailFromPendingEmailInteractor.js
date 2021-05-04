@@ -35,16 +35,17 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
         applicationContext,
       });
 
-      if (caseEntity.contactPrimary.contactId !== user.userId) {
+      const contactPrimary = caseEntity.getContactPrimary();
+
+      if (contactPrimary.contactId !== user.userId) {
         applicationContext.logger.error(
           `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
         );
         return;
       }
       // This updates the case by reference!
-      caseEntity.contactPrimary.email = user.email;
-      caseEntity.contactPrimary.serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      contactPrimary.email = user.email;
+      contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
       // we do this again so that it will convert '' to null
       return new Case(caseEntity, { applicationContext }).validate();

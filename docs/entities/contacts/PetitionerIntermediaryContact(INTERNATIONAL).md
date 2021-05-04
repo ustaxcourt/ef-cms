@@ -96,6 +96,21 @@
             options: 
               version: 
                 - "uuidv4"
+    contactType: 
+      type: "string"
+      flags: 
+        only: true
+        presence: "required"
+      rules: 
+        - 
+          name: "min"
+          args: 
+            limit: 1
+      allow: 
+        - "primary"
+        - "secondary"
+        - "otherFilers"
+        - "otherPetitioners"
     inCareOf: 
       type: "string"
       flags: 

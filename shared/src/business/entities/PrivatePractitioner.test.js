@@ -1,9 +1,14 @@
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
+  PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
   US_STATES,
 } = require('./EntityConstants');
+const { applicationContext } = require('../test/createTestApplicationContext');
+const { Case, getContactPrimary } = require('./cases/Case');
+const { MOCK_CASE } = require('../../test/mockCase');
 const { PrivatePractitioner } = require('./PrivatePractitioner');
 
 describe('PrivatePractitioner', () => {
@@ -185,9 +190,20 @@ describe('PrivatePractitioner', () => {
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
       });
 
-      const representingPrimary = privatePractitioner.getRepresentingPrimary({
-        contactPrimary: { contactId: CONTACT_ID },
-      });
+      const representingPrimary = privatePractitioner.getRepresentingPrimary(
+        new Case(
+          {
+            ...MOCK_CASE,
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: CONTACT_ID,
+              },
+            ],
+          },
+          { applicationContext },
+        ),
+      );
 
       expect(representingPrimary).toBeTruthy();
     });
@@ -213,9 +229,20 @@ describe('PrivatePractitioner', () => {
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
       });
 
-      const representingPrimary = privatePractitioner.getRepresentingPrimary({
-        contactPrimary: { contactId: '0fa1a4ac-1b91-4fc0-85bf-c0a22be411ad' },
-      });
+      const representingPrimary = privatePractitioner.getRepresentingPrimary(
+        new Case(
+          {
+            ...MOCK_CASE,
+            petitioners: [
+              {
+                ...MOCK_CASE.petitioners[0],
+                contactId: '0fa1a4ac-1b91-4fc0-85bf-c0a22be411ad',
+              },
+            ],
+          },
+          { applicationContext },
+        ),
+      );
 
       expect(representingPrimary).toBeFalsy();
     });
@@ -246,10 +273,25 @@ describe('PrivatePractitioner', () => {
       });
 
       const representingSecondary = privatePractitioner.getRepresentingSecondary(
-        {
-          contactPrimary: { contactId: '152732ec-4d31-4b9b-925b-2b746d9fbf08' },
-          contactSecondary: { contactId: CONTACT_SECONDARY_ID },
-        },
+        new Case(
+          {
+            ...MOCK_CASE,
+            partyType: PARTY_TYPES.petitionerSpouse,
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: '152732ec-4d31-4b9b-925b-2b746d9fbf08',
+                contactType: CONTACT_TYPES.primary,
+              },
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: '53887a7a-9dab-4c75-bab8-8225fb5e30a3',
+                contactType: CONTACT_TYPES.secondary,
+              },
+            ],
+          },
+          { applicationContext },
+        ),
       );
 
       expect(representingSecondary).toBeTruthy();
@@ -277,12 +319,25 @@ describe('PrivatePractitioner', () => {
       });
 
       const representingSecondary = privatePractitioner.getRepresentingSecondary(
-        {
-          contactPrimary: { contactId: '0fa1a4ac-1b91-4fc0-85bf-c0a22be411ad' },
-          contactSecondary: {
-            contactId: '1add3e1d-d00d-4b37-83a9-ca5a6c9960a9',
+        new Case(
+          {
+            ...MOCK_CASE,
+            partyType: PARTY_TYPES.petitionerSpouse,
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: '152732ec-4d31-4b9b-925b-2b746d9fbf08',
+                contactType: CONTACT_TYPES.primary,
+              },
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: '1add3e1d-d00d-4b37-83a9-ca5a6c9960a9',
+                contactType: CONTACT_TYPES.secondary,
+              },
+            ],
           },
-        },
+          { applicationContext },
+        ),
       );
 
       expect(representingSecondary).toBeFalsy();

@@ -73,17 +73,20 @@ if [ "${MIGRATE_FLAG}" == 'false' ]; then
   GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
   BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
   GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
+  COGNITO_TRIGGER_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
     BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
     GREEN_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
     GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
   else
     GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
     BLUE_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
     GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
   fi
 fi
 
@@ -111,6 +114,7 @@ export TF_VAR_disable_emails=$DISABLE_EMAILS
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
+export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
