@@ -61,12 +61,12 @@ export const EditPetitionerInformationInternal = connect(
 
           <div className="blue-container margin-bottom-5">
             <FormGroup>
-              <label className="usa-label" htmlFor="name">
+              <label className="usa-label" htmlFor="petitionerType">
                 <span>Petitioner Type</span>
               </label>
               <select
                 aria-describedby="petitioner-type"
-                className="usa-select"
+                className="usa-select max-width-400"
                 id="petitionerType"
                 name="petitionerType"
                 value={form.petitionerType || ''}
