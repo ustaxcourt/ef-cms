@@ -181,6 +181,7 @@ const batchDownloadTrialSessionInteractor = async (
   };
 
   const onError = error => {
+    applicationContext.logger.error('Archive Error', { error });
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
