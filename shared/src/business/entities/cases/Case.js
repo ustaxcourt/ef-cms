@@ -47,11 +47,11 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
+const { clone, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry, isServed } = require('../DocketEntry');
-const { includes, isEmpty } = require('lodash');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
@@ -757,12 +757,41 @@ joiValidationDecorator(
  * @returns {string} the generated case caption
  */
 Case.getCaseCaption = function (rawCase) {
-  let caseCaption;
-  const primaryContact = getContactPrimary(rawCase) || rawCase.contactPrimary;
-  const secondaryContact =
-    getContactSecondary(rawCase) || rawCase.contactSecondary;
+  const primaryContact = clone(
+    getContactPrimary(rawCase) || rawCase.contactPrimary,
+  );
+  const secondaryContact = clone(
+    getContactSecondary(rawCase) || rawCase.contactSecondary,
+  );
 
-  switch (rawCase.partyType) {
+  // trim ALL white space from these non-validated strings
+  if (primaryContact?.name) {
+    primaryContact.name = primaryContact.name.trim();
+  }
+  if (primaryContact?.secondaryName) {
+    primaryContact.secondaryName = primaryContact.secondaryName.trim();
+  }
+  if (primaryContact?.title) {
+    primaryContact.title = primaryContact.title.trim();
+  }
+  if (secondaryContact?.name) {
+    secondaryContact.name = secondaryContact.name.trim();
+  }
+
+  return generateCaptionFromContacts({
+    partyType: rawCase.partyType,
+    primaryContact,
+    secondaryContact,
+  });
+};
+
+const generateCaptionFromContacts = ({
+  partyType,
+  primaryContact,
+  secondaryContact,
+}) => {
+  let caseCaption;
+  switch (partyType) {
     case PARTY_TYPES.corporation:
     case PARTY_TYPES.petitioner:
       caseCaption = `${primaryContact.name}, Petitioner`;

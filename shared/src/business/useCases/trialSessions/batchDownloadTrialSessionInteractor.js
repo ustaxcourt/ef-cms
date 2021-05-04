@@ -183,6 +183,7 @@ const batchDownloadTrialSessionInteractor = async (
   };
 
   const onError = error => {
+    applicationContext.logger.error('Archive Error', { error });
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
@@ -272,7 +273,7 @@ exports.batchDownloadTrialSessionInteractor = async (
 
     applicationContext.logger.error(
       `Error when batch downloading trial session with id ${trialSessionId}`,
-      error,
+      { error },
     );
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,

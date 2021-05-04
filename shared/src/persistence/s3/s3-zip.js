@@ -71,7 +71,7 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
   });
 
   archive.on('error', function (err) {
-    console.log('archive error', err);
+    thisArchive.debug && console.log('archive error', err);
     thisArchive.onError(err);
   });
 
