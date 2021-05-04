@@ -187,7 +187,6 @@ export const EditPetitionerInformationInternal = connect(
 
             <FormGroup>
               <div className="usa-checkbox">
-                {JSON.stringify(form, null, 2)}
                 <input
                   checked={form.sealAddress || false}
                   className="usa-checkbox__input"
@@ -198,7 +197,7 @@ export const EditPetitionerInformationInternal = connect(
                     console.log('e', e);
                     updateFormValueSequence({
                       key: e.target.name,
-                      value: e.target.value,
+                      value: e.target.checked,
                     });
                   }}
                 />
