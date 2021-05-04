@@ -57,7 +57,7 @@ export const EditPetitionerInformationInternal = connect(
         <section className="usa-section grid-container">
           <ErrorNotification />
 
-          <h2>Edit Petitioner Information</h2>
+          <h2>Edit Party Information</h2>
 
           <div className="blue-container margin-bottom-5">
             <FormGroup>
