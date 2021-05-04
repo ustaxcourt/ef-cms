@@ -50,7 +50,7 @@ const PetitionerInformation = connect(
             <div className="content-wrapper">
               <h3 className="underlined" id="primary-label">
                 Petitioner Contact Info{' '}
-                {caseInformationHelper.showAddPetitionerButton && (
+                {caseInformationHelper.showAddPartyButton && (
                   <Button
                     link
                     className="margin-top-1 padding-0 float-right"
