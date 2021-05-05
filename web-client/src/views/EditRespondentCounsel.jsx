@@ -25,7 +25,7 @@ export const EditRespondentCounsel = connect(
       sequences.validateEditRespondentCounselSequence,
     validationErrors: state.validationErrors,
   },
-  function EditPetitionerCounsel({
+  function EditRespondentCounsel({
     form,
     formCancelToggleCancelSequence,
     openRemoveRespondentCounselModalSequence,
