@@ -209,6 +209,36 @@ describe('partiesInformationHelper', () => {
     );
   });
 
+  it('should set formattedPendingEmail to undefined when the petitioner has no pending email', () => {
+    const mockPetitionerId = '8ee0833f-6b82-4a8a-9803-8dab8bb49b63';
+    const mockPetitioner = {
+      contactId: mockPetitionerId,
+      email: undefined,
+    };
+    const mockPractitioner = {
+      name: 'Test Name',
+      representing: ['abc'],
+    };
+
+    const result = runCompute(partiesInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [mockPetitioner],
+          privatePractitioners: [mockPractitioner],
+        },
+        screenMetadata: {
+          pendingEmails: {
+            [mockPetitionerId]: undefined,
+          },
+        },
+      },
+    });
+
+    expect(
+      result.formattedPetitioners[0].formattedPendingEmail,
+    ).toBeUndefined();
+  });
+
   describe('showParticipantsTab', () => {
     it('should be false when the case does not have any participants or intervenors', () => {
       const mockPetitioner = {
