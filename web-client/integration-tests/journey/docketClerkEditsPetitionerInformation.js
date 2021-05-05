@@ -38,6 +38,6 @@ export const docketClerkEditsPetitionerInformation = test => {
 
     expect(
       test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
-    ).toEqual('petitioner');
+    ).toEqual('parties');
   });
 };

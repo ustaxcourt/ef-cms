@@ -11,5 +11,5 @@ export const submitUpdatePetitionerInformationSequence = [
   setSaveAlertsForNavigationAction,
   setAlertSuccessAction,
   setCurrentPageAction('Interstitial'),
-  navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+  navigateToCaseDetailCaseInformationActionFactory('parties'),
 ];
