@@ -91,8 +91,9 @@ const PetitionersAndCounsel = connect(
                             )}
                           </span>
                           <span className="address-line">
-                            {privatePractitioner.email}
+                            {privatePractitioner.formattedEmail}
                           </span>
+                          {privatePractitioner.formattedPendingEmail}
                           <span className="address-line">
                             {privatePractitioner.contact.phone}
                           </span>
