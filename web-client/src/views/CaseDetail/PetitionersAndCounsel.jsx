@@ -10,11 +10,13 @@ const PetitionersAndCounsel = connect(
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
     partiesInformationHelper: state.partiesInformationHelper,
+    screenMetadata: state.screenMetadata,
   },
   function PetitionersAndCounsel({
     caseDetail,
     caseInformationHelper,
     partiesInformationHelper,
+    screenMetadata,
   }) {
     return (
       <>
@@ -48,6 +50,13 @@ const PetitionersAndCounsel = connect(
                     }}
                     showEmail={true}
                   />
+                  {screenMetadata.pendingEmails &&
+                    screenMetadata.pendingEmails[petitioner.contactId] && (
+                      <>
+                        {screenMetadata.pendingEmails[petitioner.contactId]}{' '}
+                        (Pending)
+                      </>
+                    )}
                   {petitioner.serviceIndicator && (
                     <div className="margin-top-4">
                       <p className="semi-bold margin-bottom-0">

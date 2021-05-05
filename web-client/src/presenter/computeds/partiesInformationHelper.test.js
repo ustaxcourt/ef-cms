@@ -128,7 +128,7 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.showParticipantsTab).toBeFalsy();
+      expect(result.showParticipantsTab).toEqual(false);
     });
 
     it('should be true when the case has at least one participant', () => {
@@ -145,7 +145,7 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.showParticipantsTab).toBeTruthy();
+      expect(result.showParticipantsTab).toEqual(true);
     });
   });
 });
