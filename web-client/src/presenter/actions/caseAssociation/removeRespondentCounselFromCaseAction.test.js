@@ -19,6 +19,7 @@ describe('removeRespondentCounselFromCaseAction', () => {
           irsPractitioners: [
             {
               barNumber: 'abc',
+              userId: 'user-id-123',
             },
           ],
         },
@@ -31,6 +32,14 @@ describe('removeRespondentCounselFromCaseAction', () => {
     expect(
       applicationContext.getUseCases().deleteCounselFromCaseInteractor,
     ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().deleteCounselFromCaseInteractor.mock
+        .calls[0][0],
+    ).toMatchObject({
+      applicationContext: expect.anything(),
+      docketNumber: '101-20',
+      userId: 'user-id-123',
+    });
     expect(output.alertSuccess.message).toBe('Respondent Counsel removed.');
     expect(output.docketNumber).toBe('101-20');
     expect(output.tab).toBe('caseInfo');

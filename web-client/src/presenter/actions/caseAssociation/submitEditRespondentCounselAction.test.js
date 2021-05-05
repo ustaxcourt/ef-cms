@@ -17,19 +17,10 @@ describe('submitEditRespondentCounselAction', () => {
 
   it('should call the delete use case for each respondent on the form with removeFromCase set to true and call the path.success when finished', async () => {
     const form = {
-      irsPractitioners: [
-        {
-          userId: '1',
-        },
-        {
-          removeFromCase: true,
-          userId: '2',
-        },
-        {
-          removeFromCase: false,
-          userId: '3',
-        },
-      ],
+      contact: {
+        name: 'Guy Fieri',
+      },
+      userId: '1',
     };
 
     await runAction(submitEditRespondentCounselAction, {
@@ -40,43 +31,21 @@ describe('submitEditRespondentCounselAction', () => {
         caseDetail: {
           docketNumber: '123-20',
         },
-        modal: form,
+        form,
       },
     });
 
     expect(
       applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
         .mock.calls.length,
-    ).toEqual(2);
-    expect(
-      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
-        .mock.calls[0],
-    ).toMatchObject(
-      [
-        {
-          docketNumber: '123-20',
-          userData: { userId: '1' },
-          userId: '1',
-        },
-      ],
-      [
-        {
-          docketNumber: '123-20',
-          userData: { userId: '3' },
-          userId: '3',
-        },
-      ],
-    );
-    expect(
-      applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
-        .mock.calls.length,
     ).toEqual(1);
     expect(
-      applicationContextForClient.getUseCases().deleteCounselFromCaseInteractor
+      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
         .mock.calls[0][0],
     ).toMatchObject({
       docketNumber: '123-20',
-      userId: '2',
+      userData: { userId: '1' },
+      userId: '1',
     });
     expect(successStub).toHaveBeenCalled();
   });
