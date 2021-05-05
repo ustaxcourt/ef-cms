@@ -231,7 +231,6 @@ import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCa
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openDeleteUserCaseNoteConfirmModalSequence } from './sequences/openDeleteUserCaseNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
-import { openEditIrsPractitionersModalSequence } from './sequences/openEditIrsPractitionersModalSequence';
 import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleModalSequence';
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
@@ -715,7 +714,6 @@ export const presenter = {
     openDeleteSessionNoteConfirmModalSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
-    openEditIrsPractitionersModalSequence,
     openEditOrderTitleModalSequence,
     openForwardMessageModalSequence,
     openGainElectronicAccessToCaseModalSequence,
