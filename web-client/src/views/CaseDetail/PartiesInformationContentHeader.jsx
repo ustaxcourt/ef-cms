@@ -31,7 +31,7 @@ const PartiesInformationContentHeader = connect(
       <>
         <div className="grid-row margin-bottom-2">
           <div className="grid-col-4">
-            <h3>{title}</h3>
+            <h2>{title}</h2>
           </div>
           <div className="grid-col-2">
             <div className="text-right">
