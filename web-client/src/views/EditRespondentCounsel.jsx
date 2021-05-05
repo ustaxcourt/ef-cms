@@ -3,7 +3,6 @@ import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
-import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemovePetitionerCounselModal } from './CaseDetail/RemovePetitionerCounselModal';
@@ -67,23 +66,15 @@ export const EditRespondentCounsel = connect(
                 )}
               </address>
 
-              <FormGroup
-                className="margin-bottom-0"
-                errorText={
-                  validationErrors && validationErrors.serviceIndicator
-                }
-                id={'practitioner-serviceIndicator'}
-              >
-                <div className="margin-top-2">
-                  <ServiceIndicatorRadios
-                    bind={'form'}
-                    getValidationError={() =>
-                      validationErrors && validationErrors.serviceIndicator
-                    }
-                    validateSequence={validateEditRespondentCounselSequence}
-                  />
-                </div>
-              </FormGroup>
+              <div className="margin-top-2">
+                <ServiceIndicatorRadios
+                  bind={'form'}
+                  getValidationError={() =>
+                    validationErrors && validationErrors.serviceIndicator
+                  }
+                  validateSequence={validateEditRespondentCounselSequence}
+                />
+              </div>
             </div>
           </div>
 

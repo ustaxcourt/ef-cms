@@ -1,9 +1,9 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { submitEditIrsPractitionersModalAction } from './submitEditIrsPractitionersModalAction';
+import { submitEditRespondentCounselAction } from './submitEditRespondentCounselAction';
 
-describe('submitEditIrsPractitionersModalAction', () => {
+describe('submitEditRespondentCounselAction', () => {
   let successStub;
 
   beforeAll(() => {
@@ -32,7 +32,7 @@ describe('submitEditIrsPractitionersModalAction', () => {
       ],
     };
 
-    await runAction(submitEditIrsPractitionersModalAction, {
+    await runAction(submitEditRespondentCounselAction, {
       modules: {
         presenter,
       },

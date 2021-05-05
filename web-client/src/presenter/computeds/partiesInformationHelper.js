@@ -37,6 +37,6 @@ export const partiesInformationHelper = (get, applicationContext) => {
   return {
     formattedParticipants,
     formattedPetitioners,
-    showParticipantsTab: formattedParticipants.length,
+    showParticipantsTab: formattedParticipants.length > 0,
   };
 };

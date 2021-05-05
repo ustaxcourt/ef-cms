@@ -127,9 +127,9 @@ import { gotoEditOtherStatisticsSequence } from './sequences/gotoEditOtherStatis
 import { gotoEditPaperFilingSequence } from './sequences/gotoEditPaperFilingSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
 import { gotoEditPetitionerCounselSequence } from './sequences/gotoEditPetitionerCounselSequence';
-import { gotoEditRespondentCounselSequence } from './sequences/gotoEditRespondentCounselSequence';
 import { gotoEditPetitionerInformationInternalSequence } from './sequences/gotoEditPetitionerInformationInternalSequence';
 import { gotoEditPractitionerUserSequence } from './sequences/gotoEditPractitionerUserSequence';
+import { gotoEditRespondentCounselSequence } from './sequences/gotoEditRespondentCounselSequence';
 import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSequence';
 import { gotoEditUploadCourtIssuedDocumentSequence } from './sequences/gotoEditUploadCourtIssuedDocumentSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
@@ -340,12 +340,12 @@ import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrd
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
-import { submitEditIrsPractitionersModalSequence } from './sequences/submitEditIrsPractitionersModalSequence';
 import { submitEditOrderTitleModalSequence } from './sequences/submitEditOrderTitleModalSequence';
 import { submitEditOtherStatisticsSequence } from './sequences/submitEditOtherStatisticsSequence';
 import { submitEditPetitionerCounselSequence } from './sequences/submitEditPetitionerCounselSequence';
 import { submitEditPetitionerSequence } from './sequences/submitEditPetitionerSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
+import { submitEditRespondentCounselSequence } from './sequences/submitEditRespondentCounselSequence';
 import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -441,8 +441,8 @@ import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCour
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
-import { validateEditIrsPractitionersSequence } from './sequences/caseAssociation/validateEditIrsPractitionersSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/caseAssociation/validateEditPetitionerCounselSequence';
+import { validateEditRespondentCounselSequence } from './sequences/caseAssociation/validateEditRespondentCounselSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
@@ -820,12 +820,12 @@ export const presenter = {
     submitCreateOrderModalSequence,
     submitEditDeficiencyStatisticSequence,
     submitEditDocketEntryMetaSequence,
-    submitEditIrsPractitionersModalSequence,
     submitEditOrderTitleModalSequence,
     submitEditOtherStatisticsSequence,
     submitEditPetitionerCounselSequence,
     submitEditPetitionerSequence,
     submitEditPrimaryContactSequence,
+    submitEditRespondentCounselSequence,
     submitEditSecondaryContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
@@ -921,8 +921,8 @@ export const presenter = {
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,
     validateDocumentSequence,
-    validateEditIrsPractitionersSequence,
     validateEditPetitionerCounselSequence,
+    validateEditRespondentCounselSequence,
     validateExternalDocumentInformationSequence,
     validateNoteSequence,
     validateOpinionSearchSequence,
