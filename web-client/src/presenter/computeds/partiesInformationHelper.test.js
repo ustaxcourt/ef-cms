@@ -113,6 +113,55 @@ describe('partiesInformationHelper', () => {
     ]);
   });
 
+  it.only('should set formattedEmail for a petitioner that has a verified email', () => {
+    const mockPetitionerId = '8ee0833f-6b82-4a8a-9803-8dab8bb49b63';
+    const mockEmail = 'iamverified@example.com';
+    const mockPetitioner = {
+      contactId: mockPetitionerId,
+      email: mockEmail,
+    };
+    const mockPractitioner = {
+      name: 'Test Name',
+      representing: ['abc'],
+    };
+
+    const result = runCompute(partiesInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [mockPetitioner],
+          privatePractitioners: [mockPractitioner],
+        },
+      },
+    });
+
+    expect(result.formattedPetitioners[0].formattedEmail).toBe(mockEmail);
+  });
+
+  it.only('should set formattedEmail to `Email not provided` for a petitioner that does not have a verified email', () => {
+    const mockPetitionerId = '8ee0833f-6b82-4a8a-9803-8dab8bb49b63';
+    const mockPetitioner = {
+      contactId: mockPetitionerId,
+      email: undefined,
+    };
+    const mockPractitioner = {
+      name: 'Test Name',
+      representing: ['abc'],
+    };
+
+    const result = runCompute(partiesInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [mockPetitioner],
+          privatePractitioners: [mockPractitioner],
+        },
+      },
+    });
+
+    expect(result.formattedPetitioners[0].formattedEmail).toBe(
+      'Email not provided',
+    );
+  });
+
   describe('showParticipantsTab', () => {
     it('should be false when the case does not have any participants or intervenors', () => {
       const mockPetitioner = {
