@@ -42,9 +42,19 @@ export const partiesInformationHelper = (get, applicationContext) => {
     petitioner => petitioner.contactType === CONTACT_TYPES.otherFiler,
   );
 
+  const formattedRespondents = caseDetail.irsPractitioners.map(respondent => {
+    respondent.formattedEmail = respondent.email || 'No email provided';
+    respondent.formattedPendingEmail = screenMetadata.pendingEmails[
+      respondent.contactId
+    ]
+      ? `${screenMetadata.pendingEmails[respondent.userId]} (Pending)` //fix
+      : undefined;
+  });
+
   return {
     formattedParticipants,
     formattedPetitioners,
+    formattedRespondents,
     showParticipantsTab: formattedParticipants.length > 0,
   };
 };

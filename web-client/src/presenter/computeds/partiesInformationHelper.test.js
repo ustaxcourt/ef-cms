@@ -239,6 +239,30 @@ describe('partiesInformationHelper', () => {
     ).toBeUndefined();
   });
 
+  describe('respondents', () => {
+    it('should get respondent email when it exists', () => {
+      const mockRespondentId = '8ee0833f-6b82-4a8a-9803-8dab8bb49b63';
+      const mockEmail = 'iamverified@example.com';
+      const mockRespondent = {
+        contactId: mockRespondentId,
+        email: mockEmail,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [mockRespondent],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedRespondents[0].formattedEmail).toBe(mockEmail);
+    });
+  });
+
   describe('showParticipantsTab', () => {
     it('should be false when the case does not have any participants or intervenors', () => {
       const mockPetitioner = {
