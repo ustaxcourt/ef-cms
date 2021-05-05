@@ -6,6 +6,9 @@ const {
   Case,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const {
+  Petitioner,
+} = require('../../../../../shared/src/business/entities/contacts/Petitioner');
+const {
   setServiceIndicatorsForCase,
 } = require('../../../../../shared/src/business/utilities/setServiceIndicatorsForCase');
 
@@ -44,6 +47,15 @@ const migrateItems = async (items, documentClient) => {
       const updatedCase = setServiceIndicatorsForCase(caseRecord);
 
       item.petitioners = updatedCase.petitioners;
+
+      item.petitioners?.forEach(petitioner => {
+        if (!petitioner.phone) {
+          petitioner.phone = 'N/A';
+          new Petitioner(petitioner, {
+            applicationContext,
+          }).validateWithLogging(applicationContext);
+        }
+      });
 
       new Case(item, { applicationContext }).validateWithLogging(
         applicationContext,
