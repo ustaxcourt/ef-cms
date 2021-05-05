@@ -1,12 +1,12 @@
 import { state } from 'cerebral';
 
 /**
- * removes the respondents counsel from the case
+ * removes the respondent counsel from the case
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context for getting constants
+ * @param {object} providers.applicationContext the application context for calling a use case
  * @param {Function} providers.get the cerebral get function used for getting state.modal
- * @returns {object} the next path based on if validation was successful or error
+ * @returns {object} alertSuccess, docketNumber, and tab
  */
 export const removeRespondentCounselFromCaseAction = async ({
   applicationContext,
