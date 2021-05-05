@@ -4,6 +4,7 @@ import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { ParticipantsAndCounsel } from './ParticipantsAndCounsel';
 import { PetitionersAndCounsel } from './PetitionersAndCounsel';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
+import { RespondentCounsel } from './RespondentCounsel';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -96,6 +97,8 @@ const PartiesInformation = connect(
               partyViewTabs.participantsAndCounsel && (
               <ParticipantsAndCounsel />
             )}
+            {screenMetadata.partyViewTab ===
+              partyViewTabs.respondentCounsel && <RespondentCounsel />}
           </div>
         </div>
         {showModal === 'AddPrivatePractitionerModal' && (
