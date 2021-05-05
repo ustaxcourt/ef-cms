@@ -192,6 +192,7 @@ export const EditPetitionerInformationInternal = connect(
                   <input
                     checked={form.isAddressSealed || false}
                     className="usa-checkbox__input"
+                    disabled={form.contact.isAddressSealed}
                     id="seal-address"
                     name="isAddressSealed"
                     type="checkbox"

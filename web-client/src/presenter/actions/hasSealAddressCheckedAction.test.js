@@ -17,7 +17,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     runAction(hasSealAddressCheckedAction, {
       modules: { presenter },
       state: {
-        form: { isAddressSealed: true },
+        form: { contact: {}, isAddressSealed: true },
       },
     });
 
@@ -28,7 +28,18 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     runAction(hasSealAddressCheckedAction, {
       modules: { presenter },
       state: {
-        form: { isAddressSealed: false },
+        form: { contact: {}, isAddressSealed: false },
+      },
+    });
+
+    expect(pathNoStub).toHaveBeenCalled();
+  });
+
+  it('returns the no path if the address was already sealed nad isAddressSealed is true', async () => {
+    runAction(hasSealAddressCheckedAction, {
+      modules: { presenter },
+      state: {
+        form: { contact: { isAddressSealed: true }, isAddressSealed: true },
       },
     });
 
