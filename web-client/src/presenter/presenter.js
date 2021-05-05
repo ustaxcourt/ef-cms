@@ -261,6 +261,7 @@ import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequ
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
 import { removePetitionerCounselFromCaseSequence } from './sequences/removePetitionerCounselFromCaseSequence';
 import { removePetitionerFromCaseSequence } from './sequences/removePetitionerFromCaseSequence';
+import { removeRespondentCounselFromCaseSequence } from './sequences/removeRespondentCounselFromCaseSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
 import { removeSignatureSequence } from './sequences/removeSignatureSequence';
@@ -744,6 +745,7 @@ export const presenter = {
     removePetitionForReplacementSequence,
     removePetitionerCounselFromCaseSequence,
     removePetitionerFromCaseSequence,
+    removeRespondentCounselFromCaseSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,
     removeSignatureSequence,
