@@ -30,7 +30,7 @@ export const submitEditPetitionerCounselSequence = [
           setCasePropFromStateAction,
           getCaseAction,
           setCaseAction,
-          navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+          navigateToCaseDetailCaseInformationActionFactory('parties'),
         ],
       },
     ]),
