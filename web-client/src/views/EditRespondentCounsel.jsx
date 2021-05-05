@@ -2,6 +2,7 @@ import { AddressDisplay } from './CaseDetail/AddressDisplay';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from './ErrorNotification';
+import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemoveRespondentCounselModal } from './CaseDetail/RemoveRespondentCounselModal';
@@ -101,6 +102,9 @@ export const EditRespondentCounsel = connect(
           </div>
         </section>
 
+        {showModal === 'FormCancelModalDialog' && (
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+        )}
         {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
         {showModal === 'NoMatchingEmailFoundModal' && (
           <NoMatchingEmailFoundModal />
