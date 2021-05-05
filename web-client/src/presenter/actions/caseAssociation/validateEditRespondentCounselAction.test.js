@@ -39,17 +39,9 @@ describe('validateEditRespondentCounselAction', () => {
             },
           ],
         },
-        modal: {
-          irsPractitioners: [
-            {
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-              userId: '1',
-            },
-            {
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-              userId: '2',
-            },
-          ],
+        form: {
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          userId: '1',
         },
       },
     });
@@ -69,27 +61,16 @@ describe('validateEditRespondentCounselAction', () => {
             { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, userId: '2' },
           ],
         },
-        modal: {
-          irsPractitioners: [
-            {
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-              userId: '1',
-            },
-            {
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-              userId: '2',
-            },
-          ],
+        form: {
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          userId: '1',
         },
       },
     });
 
     expect(errorStub).toBeCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
-      irsPractitioners: [
-        { serviceIndicator: expect.anything() },
-        { serviceIndicator: expect.anything() },
-      ],
+      serviceIndicator: expect.anything(),
     });
   });
 });
