@@ -21,7 +21,7 @@ const RespondentCounsel = connect(
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper parties-card">
                   <h3>
-                    {irsPractitioner.name}
+                    {irsPractitioner.name} {`(${irsPractitioner.barNumber})`}
                     <Button
                       link
                       className="margin-top-1 padding-0 margin-right-0 float-right"
