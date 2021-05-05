@@ -1,6 +1,5 @@
 import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { EditPrivatePractitionersModal } from './EditPrivatePractitionersModal';
 import { ParticipantsAndCounsel } from './ParticipantsAndCounsel';
 import { PetitionersAndCounsel } from './PetitionersAndCounsel';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
@@ -103,9 +102,6 @@ const PartiesInformation = connect(
         </div>
         {showModal === 'AddPrivatePractitionerModal' && (
           <AddPrivatePractitionerModal />
-        )}
-        {showModal === 'EditPrivatePractitionersModal' && (
-          <EditPrivatePractitionersModal />
         )}
         {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
       </>

@@ -2,21 +2,18 @@ import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { PartiesInformationContentHeader } from './PartiesInformationContentHeader';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 const PetitionersAndCounsel = connect(
   {
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
-    openEditPrivatePractitionersModalSequence:
-      sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
   },
   function PetitionersAndCounsel({
     caseDetail,
     caseInformationHelper,
-    openEditPrivatePractitionersModalSequence,
     partiesInformationHelper,
   }) {
     return (
@@ -25,7 +22,7 @@ const PetitionersAndCounsel = connect(
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedPetitioners.map(petitioner => (
             <div
-              className="grid-col-4 margin-bottom-4"
+              className="grid-col-4 margin-bottom-4 petitioner-card"
               key={petitioner.contactId}
             >
               <div className="card height-full margin-bottom-0">
@@ -71,11 +68,9 @@ const PetitionersAndCounsel = connect(
                               <Button
                                 link
                                 className="margin-left-205 padding-0 height-3"
+                                href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                 icon="edit"
                                 id="edit-privatePractitioners-button"
-                                onClick={() =>
-                                  openEditPrivatePractitionersModalSequence()
-                                }
                               >
                                 Edit
                               </Button>
