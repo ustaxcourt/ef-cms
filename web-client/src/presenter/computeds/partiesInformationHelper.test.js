@@ -338,6 +338,7 @@ describe('partiesInformationHelper', () => {
           caseDetail: {
             irsPractitioners: [mockRespondent],
             petitioners: [],
+            privatePractitioners: [],
           },
           screenMetadata: {
             pendingEmails: {},
@@ -359,6 +360,7 @@ describe('partiesInformationHelper', () => {
           caseDetail: {
             irsPractitioners: [mockRespondent],
             petitioners: [],
+            privatePractitioners: [],
           },
           screenMetadata: {
             pendingEmails: {},
