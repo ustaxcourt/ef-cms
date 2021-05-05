@@ -2,12 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  validateEditPrivatePractitionerInteractor,
-} = require('./validateEditPrivatePractitionerInteractor');
+  validateEditPetitionerCounselInteractor,
+} = require('./validateEditPetitionerCounselInteractor');
 
-describe('validateEditPrivatePractitionerInteractor', () => {
+describe('validateEditPetitionerCounselInteractor', () => {
   it('returns the expected errors object on an empty add practitioner', () => {
-    const errors = validateEditPrivatePractitionerInteractor({
+    const errors = validateEditPetitionerCounselInteractor({
       applicationContext,
       practitioner: {},
     });
@@ -16,7 +16,7 @@ describe('validateEditPrivatePractitionerInteractor', () => {
   });
 
   it('returns null when no errors occur', () => {
-    const errors = validateEditPrivatePractitionerInteractor({
+    const errors = validateEditPetitionerCounselInteractor({
       applicationContext,
       practitioner: { representingPrimary: true },
     });

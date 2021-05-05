@@ -1,26 +1,23 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { submitEditPrivatePractitionersModalAction } from '../actions/caseAssociation/submitEditPrivatePractitionersModalAction';
-import { validateEditPrivatePractitionersAction } from '../actions/caseAssociation/validateEditPrivatePractitionersAction';
+import { submitEditRespondentCounselAction } from '../actions/caseAssociation/submitEditRespondentCounselAction';
+import { validateEditRespondentCounselAction } from '../actions/caseAssociation/validateEditRespondentCounselAction';
 
-export const submitEditPrivatePractitionersModalSequence = [
+export const submitEditRespondentCounselSequence = [
   startShowValidationAction,
-  validateEditPrivatePractitionersAction,
+  validateEditRespondentCounselAction,
   {
-    error: [setValidationErrorsAction],
+    error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
-      clearAlertsAction,
-      stopShowValidationAction,
-      submitEditPrivatePractitionersModalAction,
+      submitEditRespondentCounselAction,
       {
         success: [
           setAlertSuccessAction,
@@ -29,6 +26,7 @@ export const submitEditPrivatePractitionersModalSequence = [
           setCasePropFromStateAction,
           getCaseAction,
           setCaseAction,
+          navigateToCaseDetailCaseInformationActionFactory('parties'),
         ],
       },
     ]),

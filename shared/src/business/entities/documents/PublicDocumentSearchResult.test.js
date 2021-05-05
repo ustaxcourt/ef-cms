@@ -3,6 +3,18 @@ const { PublicDocumentSearchResult } = require('./PublicDocumentSearchResult');
 const errorMessages = PublicDocumentSearchResult.VALIDATION_ERROR_MESSAGES;
 
 describe('Public Document Search Result entity', () => {
+  it('returns validation errors for required fields when no data is passed in', () => {
+    const searchResult = new PublicDocumentSearchResult();
+    const validationErrors = searchResult.getFormattedValidationErrors();
+
+    expect(Object.keys(validationErrors)).toEqual([
+      'caseCaption',
+      'docketEntryId',
+      'docketNumber',
+      'documentTitle',
+    ]);
+  });
+
   it('needs only a case caption, docketEntryId, docketNumber, and documentTitle to be valid', () => {
     const searchResult = new PublicDocumentSearchResult({
       caseCaption: 'This is a case caption',

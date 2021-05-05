@@ -6,6 +6,9 @@ const {
   Case,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const {
+  Petitioner,
+} = require('../../../../../shared/src/business/entities/contacts/Petitioner');
+const {
   setServiceIndicatorsForCase,
 } = require('../../../../../shared/src/business/utilities/setServiceIndicatorsForCase');
 
@@ -15,6 +18,14 @@ const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
     if (item.pk.startsWith('case|') && item.sk.startsWith('case|')) {
+      applicationContext.logger.info(
+        `Updating case ${item.docketNumber} to add serviceIndicator for any petitioners that don't already have one.`,
+        {
+          pk: item.pk,
+          sk: item.sk,
+        },
+      );
+
       const fullCase = await documentClient
         .query({
           ExpressionAttributeNames: {
@@ -37,14 +48,17 @@ const migrateItems = async (items, documentClient) => {
 
       item.petitioners = updatedCase.petitioners;
 
-      new Case(item, { applicationContext }).validate();
+      item.petitioners?.forEach(petitioner => {
+        if (!petitioner.phone) {
+          petitioner.phone = 'N/A';
+          new Petitioner(petitioner, {
+            applicationContext,
+          }).validateWithLogging(applicationContext);
+        }
+      });
 
-      applicationContext.logger.info(
-        `Updating case ${item.docketNumber} to add serviceIndicator for any petitioners that don't already have one.`,
-        {
-          pk: item.pk,
-          sk: item.sk,
-        },
+      new Case(item, { applicationContext }).validateWithLogging(
+        applicationContext,
       );
 
       itemsAfter.push(item);

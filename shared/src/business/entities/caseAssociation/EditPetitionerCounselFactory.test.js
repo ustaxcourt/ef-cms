@@ -1,31 +1,31 @@
 const {
-  EditPrivatePractitionerFactory,
-} = require('./EditPrivatePractitionerFactory');
+  EditPetitionerCounselFactory,
+} = require('./EditPetitionerCounselFactory');
 
-const errorMessages = EditPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES;
+const errorMessages = EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES;
 
-describe('EditPrivatePractitionerFactory', () => {
+describe('EditPetitionerCounselFactory', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const entity = EditPrivatePractitionerFactory.get({});
+      const entity = EditPetitionerCounselFactory.get({});
       expect(entity.getFormattedValidationErrors()).toEqual({
         representingPrimary: errorMessages.representingPrimary,
       });
     });
 
     it('should be valid if either representingPrimary or representingSecondary is present and true', () => {
-      let entity = EditPrivatePractitionerFactory.get({
+      let entity = EditPetitionerCounselFactory.get({
         representingPrimary: true,
       });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
-      entity = EditPrivatePractitionerFactory.get({
+      entity = EditPetitionerCounselFactory.get({
         representingSecondary: true,
       });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should not be valid if representingPrimary is false and representingSecondary is not present', () => {
-      const entity = EditPrivatePractitionerFactory.get({
+      const entity = EditPetitionerCounselFactory.get({
         representingPrimary: false,
       });
       expect(entity.getFormattedValidationErrors()).toEqual({

@@ -8,6 +8,7 @@ import classNames from 'classnames';
 export const AddressDisplay = connect(
   {
     addressDisplayHelper: state.addressDisplayHelper,
+    boldName: props.boldName,
     constants: state.constants,
     contact: props.contact,
     editLinkExternal: props.editLinkExternal || undefined,
@@ -21,6 +22,7 @@ export const AddressDisplay = connect(
   },
   function AddressDisplay({
     addressDisplayHelper,
+    boldName,
     constants,
     contact,
     editLinkExternal,
@@ -33,7 +35,7 @@ export const AddressDisplay = connect(
   }) {
     return (
       <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
-        <p className="no-margin position-relative">
+        <p className="margin-top-0 margin-bottom-2 position-relative">
           {contact.isAddressSealed && (
             <span
               aria-label="sealed address"
@@ -46,7 +48,9 @@ export const AddressDisplay = connect(
               />
             </span>
           )}
-          {nameOverride || contact.name}{' '}
+          <span className={boldName && 'text-bold'}>
+            {nameOverride || contact.name}{' '}
+          </span>
           {editLinkExternal &&
             addressDisplayHelper[contact.contactType].showEditContact && (
               <Button
@@ -72,10 +76,10 @@ export const AddressDisplay = connect(
               </Button>
             )}
           {contact.barNumber && (
-            <>
+            <span className={boldName && 'text-bold'}>
               ({contact.barNumber})
               <br />
-            </>
+            </span>
           )}
           {contact.firmName && (
             <>

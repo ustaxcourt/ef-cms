@@ -32,8 +32,10 @@ import { EditDeficiencyStatistic } from './CaseDetail/EditDeficiencyStatistic';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
+import { EditPetitionerCounsel } from './EditPetitionerCounsel';
 import { EditPetitionerInformationInternal } from './EditPetitionerInformationInternal';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
+import { EditRespondentCounsel } from './EditRespondentCounsel';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { ErrorView } from './Error';
@@ -120,8 +122,10 @@ const pages = {
   EditDocketEntryMeta,
   EditOtherStatistics,
   EditPetitionDetails,
+  EditPetitionerCounsel,
   EditPetitionerInformationInternal,
   EditPractitionerUser,
+  EditRespondentCounsel,
   EditTrialSession,
   EditUploadCourtIssuedDocument,
   ErrorView,
