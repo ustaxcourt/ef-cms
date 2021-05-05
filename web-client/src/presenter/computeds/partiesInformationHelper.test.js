@@ -11,19 +11,64 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('partiesInformationHelper', () => {
   const mockEmail = 'test@example.com';
   const mockUserId = '8ee0833f-6b82-4a8a-9803-8dab8bb49b63';
+  const mockPractitionerId = '8ee0822f-6b82-4a8a-9803-8dab8bb49b63';
 
   const partiesInformationHelper = withAppContextDecorator(
     partiesInformationHelperComputed,
     applicationContext,
   );
 
-  it('should return formatted petitioners with representing practitioners', () => {
+  it('should return formatted petitioners with representing practitioners and their pending emails', () => {
     const mockPetitioner = {
       contactId: mockUserId,
     };
     const mockPractitioner = {
       name: 'Test Name',
       representing: [mockUserId],
+      userId: mockPractitionerId,
+    };
+
+    const mockPendingPractitionerEmail = 'pendingPractitioner@example.com';
+
+    const result = runCompute(partiesInformationHelper, {
+      state: {
+        caseDetail: {
+          irsPractitioners: [],
+          petitioners: [mockPetitioner],
+          privatePractitioners: [mockPractitioner],
+        },
+        screenMetadata: {
+          pendingEmails: {
+            [mockPractitionerId]: mockPendingPractitionerEmail,
+          },
+        },
+      },
+    });
+
+    expect(result.formattedPetitioners).toMatchObject([
+      {
+        ...mockPetitioner,
+        hasCounsel: true,
+        representingPractitioners: [
+          {
+            ...mockPractitioner,
+            formattedPendingEmail: `${mockPendingPractitionerEmail} (Pending)`,
+          },
+        ],
+      },
+    ]);
+    expect(result.formattedParticipants).toEqual([]);
+  });
+
+  it('should return formatted petitioners with representing practitioners and their emails', () => {
+    const mockPetitioner = {
+      contactId: mockUserId,
+    };
+    const mockPractitioner = {
+      email: mockEmail,
+      name: 'Test Name',
+      representing: [mockUserId],
+      userId: mockPractitionerId,
     };
 
     const result = runCompute(partiesInformationHelper, {
@@ -43,10 +88,51 @@ describe('partiesInformationHelper', () => {
       {
         ...mockPetitioner,
         hasCounsel: true,
-        representingPractitioners: [mockPractitioner],
+        representingPractitioners: [
+          {
+            ...mockPractitioner,
+            formattedEmail: mockEmail,
+          },
+        ],
       },
     ]);
-    expect(result.formattedParticipants).toEqual([]);
+  });
+
+  it('should return formatted petitioners with representing practitioners and `No email provided` when they dont have an email', () => {
+    const mockPetitioner = {
+      contactId: mockUserId,
+      email: mockEmail,
+    };
+    const mockPractitioner = {
+      representing: [mockUserId],
+      userId: mockPractitionerId,
+    };
+
+    const result = runCompute(partiesInformationHelper, {
+      state: {
+        caseDetail: {
+          irsPractitioners: [],
+          petitioners: [mockPetitioner],
+          privatePractitioners: [mockPractitioner],
+        },
+        screenMetadata: {
+          pendingEmails: {},
+        },
+      },
+    });
+
+    expect(result.formattedPetitioners).toMatchObject([
+      {
+        ...mockPetitioner,
+        hasCounsel: true,
+        representingPractitioners: [
+          {
+            ...mockPractitioner,
+            formattedEmail: 'No email provided',
+          },
+        ],
+      },
+    ]);
   });
 
   it('should return formatted participants with representing practitioners and formattedTitle', () => {

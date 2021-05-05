@@ -18,26 +18,21 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
 
-  // const formattedPrivatePractitioners = caseDetail.privatePractitioners.map(
-  //   privatePractitioner => {
-  //     privatePractitioner.formattedEmail =
-  //       privatePractitioner.email || 'No email provided';
-  //     privatePractitioner.formattedPendingEmail = screenMetadata.pendingEmails[
-  //       privatePractitioner.userId
-  //     ]
-  //       ? `${
-  //           screenMetadata.pendingEmails[privatePractitioner.userId]
-  //         } (Pending)`
-  //       : undefined;
-
-  //     return privatePractitioner;
-  //   },
-  // );
+  const formattedPrivatePractitioners = caseDetail.privatePractitioners.map(
+    practitioner => formatCounsel({ counsel: practitioner, screenMetadata }),
+  );
 
   const formattedParties = caseDetail.petitioners.map(petitioner => {
+    const practitionersWithEmail = {
+      privatePractitioners: formattedPrivatePractitioners,
+    };
+
     const representingPractitioners = applicationContext
       .getUtilities()
-      .getPractitionersRepresenting(caseDetail, petitioner.contactId);
+      .getPractitionersRepresenting(
+        practitionersWithEmail,
+        petitioner.contactId,
+      );
 
     if (petitioner.contactType === CONTACT_TYPES.otherFiler) {
       petitioner.formattedTitle =

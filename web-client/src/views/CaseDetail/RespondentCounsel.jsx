@@ -1,6 +1,5 @@
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -43,14 +42,6 @@ const RespondentCounsel = connect(
                     />
                     <span className="address-line">
                       {irsPractitioner.formattedEmail}
-                      {irsPractitioner.showEAccessFlag && (
-                        <FontAwesomeIcon
-                          aria-label="has e-access"
-                          className="margin-left-05 fa-icon-blue"
-                          icon="flag"
-                          size="1x"
-                        />
-                      )}
                     </span>
                     {irsPractitioner.formattedPendingEmail}
                     {irsPractitioner.serviceIndicator && (
