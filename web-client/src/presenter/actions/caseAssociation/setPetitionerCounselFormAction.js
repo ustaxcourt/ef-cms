@@ -2,11 +2,13 @@ import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * sets petitioner counsel information
+ * takes the petitioner counsel using the barNumber in props and puts onto the form
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
+ * @param {object} providers.props the cerebral props
+ * @param {object} providers.applicationContext the applicationContext
  * @returns {object} props object
  */
 
