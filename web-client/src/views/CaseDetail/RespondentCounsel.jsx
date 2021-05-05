@@ -57,6 +57,8 @@ const RespondentCounsel = connect(
               </div>
             ),
           )}
+          {partiesInformationHelper.formattedRespondents.length < 1 &&
+            'There is no respondent counsel associated with this case.'}
         </div>
       </>
     );
