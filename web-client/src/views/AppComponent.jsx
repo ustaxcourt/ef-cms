@@ -35,6 +35,7 @@ import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerCounsel } from './EditPetitionerCounsel';
 import { EditPetitionerInformationInternal } from './EditPetitionerInformationInternal';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
+import { EditRespondentCounsel } from './EditRespondentCounsel';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { ErrorView } from './Error';
@@ -124,6 +125,7 @@ const pages = {
   EditPetitionerCounsel,
   EditPetitionerInformationInternal,
   EditPractitionerUser,
+  EditRespondentCounsel,
   EditTrialSession,
   EditUploadCourtIssuedDocument,
   ErrorView,
