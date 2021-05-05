@@ -190,10 +190,10 @@ export const EditPetitionerInformationInternal = connect(
               <FormGroup>
                 <div className="usa-checkbox">
                   <input
-                    checked={form.sealAddress || false}
+                    checked={form.isAddressSealed || false}
                     className="usa-checkbox__input"
                     id="seal-address"
-                    name="sealAddress"
+                    name="isAddressSealed"
                     type="checkbox"
                     onChange={e => {
                       updateFormValueSequence({

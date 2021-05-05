@@ -13,22 +13,22 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     };
   });
 
-  it('returns the yes path when form.sealAddress is true', async () => {
+  it('returns the yes path when form.isAddressSealed is true', async () => {
     runAction(hasSealAddressCheckedAction, {
       modules: { presenter },
       state: {
-        form: { sealAddress: true },
+        form: { isAddressSealed: true },
       },
     });
 
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the no path when form.sealAddress is false', async () => {
+  it('returns the no path when form.isAddressSealed is false', async () => {
     runAction(hasSealAddressCheckedAction, {
       modules: { presenter },
       state: {
-        form: { sealAddress: false },
+        form: { isAddressSealed: false },
       },
     });
 
