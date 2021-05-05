@@ -33,6 +33,7 @@ export const setupPetitionerContactInformationFormAction = ({
     state.form,
     cloneDeep({
       contact: { ...contactToSet, currentEmail: contactToSet.email },
+      isAddressSealed: contactToSet.isAddressSealed,
     }),
   );
 };

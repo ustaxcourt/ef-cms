@@ -13,5 +13,5 @@ export const submitUpdatePetitionerInformationAndSealAddressSequence = [
   setSaveAlertsForNavigationAction,
   setAlertSuccessAction,
   setCurrentPageAction('Interstitial'),
-  navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+  navigateToCaseDetailCaseInformationActionFactory('parties'),
 ];
