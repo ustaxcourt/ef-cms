@@ -10,7 +10,7 @@ import { getConstants } from '../../getConstants';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
-import { getPendingEmailsForPetitionersOnCaseAction } from '../actions/getPendingEmailsForPetitionersOnCaseAction';
+import { getPendingEmailsOnCaseAction } from '../actions/getPendingEmailsOnCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { parallel } from 'cerebral/factories';
 import { resetHeaderAccordionsSequence } from './resetHeaderAccordionsSequence';
@@ -46,7 +46,7 @@ const gotoCaseDetailInternal = [
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
   getMessagesForCaseAction,
-  getPendingEmailsForPetitionersOnCaseAction,
+  getPendingEmailsOnCaseAction,
   setPendingEmailsForPetitionersOnCaseAction,
   setCurrentPageAction('CaseDetailInternal'),
 ];
