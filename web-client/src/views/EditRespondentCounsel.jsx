@@ -2,21 +2,13 @@ import { AddressDisplay } from './CaseDetail/AddressDisplay';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from './ErrorNotification';
-import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
-import { RemovePetitionerCounselModal } from './CaseDetail/RemovePetitionerCounselModal';
+import { RemoveRespondentCounselModal } from './CaseDetail/RemoveRespondentCounselModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-/**
- * mob timer stop notes, jojo:
- * - rename/reuse submitEditIrsPractitionersSequence -> submitEditRespondentCounselSequence
- * - refactor validateEditRespondentCounselSequence and action to use one respondent
- * - note the possibility to rename to EditIrsPractitionersFactory entity as well
- */
 
 export const EditRespondentCounsel = connect(
   {
@@ -30,7 +22,6 @@ export const EditRespondentCounsel = connect(
       sequences.submitEditRespondentCounselSequence,
     validateEditRespondentCounselSequence:
       sequences.validateEditRespondentCounselSequence,
-    validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
   },
   function EditPetitionerCounsel({
@@ -100,25 +91,22 @@ export const EditRespondentCounsel = connect(
               link
               className="red-warning no-wrap float-right"
               icon="trash"
-              id="remove-respondence-btn"
+              id="remove-respondent-btn"
               onClick={() => {
                 openRemoveRespondentCounselModalSequence();
               }}
             >
-              Remove petitioner counsel
+              Remove respondent counsel
             </Button>
           </div>
         </section>
 
-        {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
-        )}
         {showModal === 'MatchingEmailFoundModal' && <MatchingEmailFoundModal />}
         {showModal === 'NoMatchingEmailFoundModal' && (
           <NoMatchingEmailFoundModal />
         )}
-        {showModal === 'RemovePetitionerCounselModal' && (
-          <RemovePetitionerCounselModal />
+        {showModal === 'RemoveRespondentCounselModal' && (
+          <RemoveRespondentCounselModal />
         )}
       </>
     );
