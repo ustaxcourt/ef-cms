@@ -1,5 +1,5 @@
 const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
-const { User } = require('./User');
+const { User, userDecorator } = require('./User');
 
 describe('User entity', () => {
   it('Creates a valid international petitioner user', () => {
@@ -243,5 +243,30 @@ describe('User entity', () => {
       { filtered: true },
     );
     expect(user.pendingEmailVerificationToken).toBeUndefined();
+  });
+
+  it('should NOT filter out pendingEmailVerificationToken by default when calling userDecorator', () => {
+    /**
+     * constructor - mock user entity to test userDecorator
+     */
+    function MockUser(rawUser) {
+      userDecorator(this, rawUser);
+    }
+
+    const user = new MockUser({
+      contact: {
+        address1: '234 Main St',
+        city: 'Chicago',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      name: 'Saul Goodman',
+      pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
+      role: ROLES.petitioner,
+      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+    });
+    expect(user.pendingEmailVerificationToken).toBeDefined();
   });
 });

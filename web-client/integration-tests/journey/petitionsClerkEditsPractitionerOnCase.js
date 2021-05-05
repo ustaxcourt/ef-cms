@@ -1,45 +1,47 @@
-import { EditPrivatePractitionerFactory } from '../../../shared/src/business/entities/caseAssociation/EditPrivatePractitionerFactory';
+import { EditPetitionerCounselFactory } from '../../../shared/src/business/entities/caseAssociation/EditPetitionerCounselFactory';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 
-const { VALIDATION_ERROR_MESSAGES } = EditPrivatePractitionerFactory;
+const { VALIDATION_ERROR_MESSAGES } = EditPetitionerCounselFactory;
 
 export const petitionsClerkEditsPractitionerOnCase = test => {
   return it('Petitions clerk edits a practitioner on a case', async () => {
     expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
 
-    await test.runSequence('openEditPrivatePractitionersModalSequence');
+    const barNumber = test.getState(
+      'caseDetail.privatePractitioners.1.barNumber',
+    );
 
-    expect(
-      test.getState('modal.privatePractitioners.1.representingPrimary'),
-    ).toBeFalsy();
-    expect(
-      test.getState('modal.privatePractitioners.1.representingSecondary'),
-    ).toEqual(true);
+    await test.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber,
+      docketNumber: test.docketNumber,
+    });
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.1.representingSecondary',
+    expect(test.getState('form.representingPrimary')).toBeFalsy();
+    expect(test.getState('form.representingSecondary')).toBeTruthy();
+    expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'representingSecondary',
       value: false,
     });
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
+    await test.runSequence('submitEditPetitionerCounselSequence');
 
-    expect(
-      test.getState('validationErrors.privatePractitioners.0'),
-    ).toBeFalsy();
-    expect(test.getState('validationErrors.privatePractitioners.1')).toEqual({
+    expect(test.getState('validationErrors')).toEqual({
       representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.1.representingPrimary',
+    await test.runSequence('updateFormValueSequence', {
+      key: 'representingPrimary',
       value: true,
     });
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.1.representingSecondary',
+    await test.runSequence('updateFormValueSequence', {
+      key: 'representingSecondary',
       value: true,
     });
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
+    await test.runSequence('submitEditPetitionerCounselSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

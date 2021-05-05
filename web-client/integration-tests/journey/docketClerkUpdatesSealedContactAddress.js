@@ -25,7 +25,7 @@ export const docketClerkUpdatesSealedContactAddress = (test, contactType) => {
 
     expect(
       test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
-    ).toEqual('petitioner');
+    ).toEqual('parties');
 
     const docketEntries = test.getState('caseDetail.docketEntries');
     const noticeOfContactChange = docketEntries.find(
