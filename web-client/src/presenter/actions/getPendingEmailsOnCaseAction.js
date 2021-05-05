@@ -13,7 +13,9 @@ export const getPendingEmailsOnCaseAction = async ({
 }) => {
   let pendingEmails = {};
 
-  const { irsPractitioners, petitioners } = get(state.caseDetail);
+  const { irsPractitioners, petitioners, privatePractitioners } = get(
+    state.caseDetail,
+  );
 
   for (let petitioner of petitioners) {
     const pendingEmail = await applicationContext
@@ -33,6 +35,16 @@ export const getPendingEmailsOnCaseAction = async ({
         userId: respondent.userId,
       });
     pendingEmails[respondent.userId] = pendingEmail;
+  }
+
+  for (let privatePractitioner of privatePractitioners) {
+    const pendingEmail = await applicationContext
+      .getUseCases()
+      .getUserPendingEmailInteractor({
+        applicationContext,
+        userId: privatePractitioner.userId,
+      });
+    pendingEmails[privatePractitioner.userId] = pendingEmail;
   }
 
   return { pendingEmails };

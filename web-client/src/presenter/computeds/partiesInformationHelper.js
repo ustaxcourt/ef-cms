@@ -1,5 +1,14 @@
 import { state } from 'cerebral';
 
+const formatCounsel = ({ counsel, screenMetadata }) => {
+  counsel.formattedEmail = counsel.email || 'No email provided';
+  counsel.formattedPendingEmail = screenMetadata.pendingEmails[counsel.userId]
+    ? `${screenMetadata.pendingEmails[counsel.userId]} (Pending)`
+    : undefined;
+
+  return counsel;
+};
+
 export const partiesInformationHelper = (get, applicationContext) => {
   const {
     CONTACT_TYPES,
@@ -8,6 +17,22 @@ export const partiesInformationHelper = (get, applicationContext) => {
 
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
+
+  // const formattedPrivatePractitioners = caseDetail.privatePractitioners.map(
+  //   privatePractitioner => {
+  //     privatePractitioner.formattedEmail =
+  //       privatePractitioner.email || 'No email provided';
+  //     privatePractitioner.formattedPendingEmail = screenMetadata.pendingEmails[
+  //       privatePractitioner.userId
+  //     ]
+  //       ? `${
+  //           screenMetadata.pendingEmails[privatePractitioner.userId]
+  //         } (Pending)`
+  //       : undefined;
+
+  //     return privatePractitioner;
+  //   },
+  // );
 
   const formattedParties = caseDetail.petitioners.map(petitioner => {
     const representingPractitioners = applicationContext
@@ -42,16 +67,9 @@ export const partiesInformationHelper = (get, applicationContext) => {
     petitioner => petitioner.contactType === CONTACT_TYPES.otherFiler,
   );
 
-  const formattedRespondents = caseDetail.irsPractitioners.map(respondent => {
-    respondent.formattedEmail = respondent.email || 'No email provided';
-    respondent.formattedPendingEmail = screenMetadata.pendingEmails[
-      respondent.userId
-    ]
-      ? `${screenMetadata.pendingEmails[respondent.userId]} (Pending)`
-      : undefined;
-
-    return respondent;
-  });
+  const formattedRespondents = caseDetail.irsPractitioners.map(respondent =>
+    formatCounsel({ counsel: respondent, screenMetadata }),
+  );
 
   return {
     formattedParticipants,
