@@ -6,14 +6,19 @@ export const docketClerkEditsServiceIndicatorForRespondent = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('openEditIrsPractitionersModalSequence');
+    const barNumber = test.getState('caseDetail.irsPractitioners.0.barNumber');
 
-    expect(test.getState('modal.irsPractitioners.0.serviceIndicator')).toEqual(
+    await test.runSequence('gotoEditRespondentCounselSequence', {
+      barNumber,
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('form.serviceIndicator')).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'irsPractitioners.0.serviceIndicator',
+    await test.runSequence('updateFormValueSequence', {
+      key: 'serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
@@ -21,7 +26,7 @@ export const docketClerkEditsServiceIndicatorForRespondent = test => {
       test.getState('caseDetail.irsPractitioners.0.serviceIndicator'),
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
 
-    await test.runSequence('submitEditIrsPractitionersModalSequence');
+    await test.runSequence('submitEditRespondentCounselSequence');
 
     expect(
       test.getState('caseDetail.irsPractitioners.0.serviceIndicator'),
