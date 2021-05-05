@@ -190,6 +190,8 @@ describe('Petitioner Service Indicator Journey', () => {
   it('Updates petitioner service indicator to paper', async () => {
     const contactToEdit = contactPrimaryFromState(test);
 
+    console.log(test.docketNumber);
+
     await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
       contactId: contactToEdit.contactId,
       docketNumber: test.docketNumber,

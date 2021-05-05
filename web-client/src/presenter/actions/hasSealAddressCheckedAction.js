@@ -12,7 +12,9 @@ import { state } from 'cerebral';
 export const hasSealAddressCheckedAction = async ({ get, path }) => {
   const form = get(state.form);
 
-  if (form.isAddressSealed) {
+  const isAlreadySealed = form.contact.isAddressSealed;
+
+  if (!isAlreadySealed && form.isAddressSealed) {
     return path.yes();
   }
 
