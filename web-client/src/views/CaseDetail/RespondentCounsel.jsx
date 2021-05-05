@@ -25,7 +25,7 @@ const RespondentCounsel = connect(
                     <Button
                       link
                       className="margin-top-1 padding-0 margin-right-05 float-right"
-                      // href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${irsPractitioner.contactId}`}
+                      href={`/case-detail/${caseDetail.docketNumber}/edit-respondent-counsel/${irsPractitioner.barNumber}`}
                       icon="edit"
                     >
                       Edit
