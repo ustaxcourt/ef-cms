@@ -14,6 +14,7 @@ export const validateEditRespondentCounselAction = ({
   applicationContext,
   get,
   path,
+  store,
 }) => {
   const {
     SERVICE_INDICATOR_ERROR,
@@ -39,6 +40,8 @@ export const validateEditRespondentCounselAction = ({
       ...SERVICE_INDICATOR_ERROR,
     };
   }
+
+  store.set(state.validationErrors, errors || {});
 
   if (isEmpty(errors)) {
     return path.success();

@@ -13,7 +13,6 @@ import React from 'react';
 
 export const EditPetitionerCounsel = connect(
   {
-    COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
     caseDetailContactHelper: state.caseDetailContactHelper,
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,

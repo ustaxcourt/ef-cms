@@ -14,6 +14,7 @@ export const validateEditPetitionerCounselAction = ({
   applicationContext,
   get,
   path,
+  store,
 }) => {
   const {
     SERVICE_INDICATOR_ERROR,
@@ -46,6 +47,8 @@ export const validateEditPetitionerCounselAction = ({
       ...SERVICE_INDICATOR_ERROR,
     };
   }
+
+  store.set(state.validationErrors, error || {});
 
   if (isEmpty(error)) {
     return path.success();
