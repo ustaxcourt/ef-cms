@@ -1,13 +1,13 @@
 import { state } from 'cerebral';
 
 /**
- * get the caseDetail petitioners pendingEmail attribute
+ * get the caseDetail pendingEmails attribute
  *
  * @param {object} providers.applicationContext the applicationContext
  * @param {function} providers.props the cerebral props
- * @returns {object} the list of petitioner pending emails with their associated contactId
+ * @returns {object} the list of pending emails with their associated contactId
  */
-export const getPendingEmailsForPetitionersOnCaseAction = async ({
+export const getPendingEmailsOnCaseAction = async ({
   applicationContext,
   get,
 }) => {
