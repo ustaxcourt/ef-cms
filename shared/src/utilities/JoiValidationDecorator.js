@@ -200,6 +200,36 @@ exports.joiValidationDecorator = function (
     return this;
   };
 
+  entityConstructor.prototype.validateWithLogging = function validateWithLogging(
+    applicationContext,
+  ) {
+    if (!this.isValid()) {
+      const stringifyTransform = obj => {
+        if (!obj) return obj;
+        const transformed = {};
+        Object.keys(obj).forEach(key => {
+          if (typeof obj[key] === 'string') {
+            transformed[key] = obj[key].replace(/"/g, "'");
+          } else {
+            transformed[key] = obj[key];
+          }
+        });
+        return transformed;
+      };
+      applicationContext.logger.error('*** Entity with error: ***', this);
+      const validationErrors = this.getValidationErrors();
+
+      throw new InvalidEntityError(
+        this.entityName,
+        JSON.stringify(stringifyTransform(validationErrors)),
+        validationErrors,
+      );
+    }
+    setIsValidated(this);
+
+    return this;
+  };
+
   entityConstructor.prototype.getFormattedValidationErrors = function () {
     return getFormattedValidationErrors(this);
   };
