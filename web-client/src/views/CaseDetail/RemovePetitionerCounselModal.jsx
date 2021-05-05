@@ -7,10 +7,13 @@ export const RemovePetitionerCounselModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.removePetitionerCounselFromCaseSequence,
-    constants: state.constants,
     form: state.form,
   },
-  function RemovePetitionerModal({ cancelSequence, confirmSequence, form }) {
+  function RemovePetitionerCounselModal({
+    cancelSequence,
+    confirmSequence,
+    form,
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"

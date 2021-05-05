@@ -15,7 +15,7 @@ describe('submitEditPetitionerCounselAction', () => {
     };
   });
 
-  it('should call the appropriate update and delete use cases for each practitioner on the form and call the path.success when finished', async () => {
+  it('should call the appropriate update use case the practitioner on the form and call the path.success when finished', async () => {
     const form = {
       representingPrimary: true,
       representingSecondary: false,
