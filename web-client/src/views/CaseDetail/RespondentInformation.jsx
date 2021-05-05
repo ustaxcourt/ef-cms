@@ -1,7 +1,6 @@
 import { AddIrsPractitionerModal } from './AddIrsPractitionerModal';
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
-import { EditIrsPractitionersModal } from './EditIrsPractitionersModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { RespondentExistsModal } from './RespondentExistsModal';
@@ -18,8 +17,6 @@ const RespondentInformation = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openAddIrsPractitionerModalSequence:
       sequences.openAddIrsPractitionerModalSequence,
-    openEditIrsPractitionersModalSequence:
-      sequences.openEditIrsPractitionersModalSequence,
     showModal: state.modal.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
@@ -30,7 +27,6 @@ const RespondentInformation = connect(
     form,
     formattedCaseDetail,
     openAddIrsPractitionerModalSequence,
-    openEditIrsPractitionersModalSequence,
     showModal,
     updateFormValueSequence,
     validationErrors,
@@ -146,7 +142,6 @@ const RespondentInformation = connect(
                       link
                       className="margin-left-205 padding-0 height-3"
                       id="edit-irsPractitioners-button"
-                      onClick={() => openEditIrsPractitionersModalSequence()}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
                       Edit
@@ -168,9 +163,6 @@ const RespondentInformation = connect(
         </div>
 
         {showModal === 'AddIrsPractitionerModal' && <AddIrsPractitionerModal />}
-        {showModal === 'EditIrsPractitionersModal' && (
-          <EditIrsPractitionersModal />
-        )}
         {showModal === 'RespondentExistsModal' && <RespondentExistsModal />}
       </>
     );

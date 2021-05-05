@@ -39,7 +39,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     ? allPetitioners
     : allPetitioners.slice(0, 4);
 
-  const showAddPetitionerButton =
+  const showAddPartyButton =
     permissions.ADD_PETITIONER_TO_CASE &&
     caseDetail.status !== STATUS_TYPES.new;
 
@@ -48,7 +48,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     contactSecondaryEmailFormatted,
     formattedPetitioners,
     showAddCounsel,
-    showAddPetitionerButton,
+    showAddPartyButton,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showHearingsTable,

@@ -1,115 +1,29 @@
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PartiesInformationContentHeader } from './PartiesInformationContentHeader';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 const PetitionersAndCounsel = connect(
   {
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
-    form: state.form,
-    openAddPrivatePractitionerModalSequence:
-      sequences.openAddPrivatePractitionerModalSequence,
-    openEditPrivatePractitionersModalSequence:
-      sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validationErrors: state.validationErrors,
   },
   function PetitionersAndCounsel({
     caseDetail,
     caseInformationHelper,
-    form,
-    openAddPrivatePractitionerModalSequence,
-    openEditPrivatePractitionersModalSequence,
     partiesInformationHelper,
-    updateFormValueSequence,
-    validationErrors,
   }) {
     return (
       <>
-        <div className="grid-row margin-bottom-2">
-          <div className="grid-col-4">
-            <h3>Petitioner(s)</h3>
-          </div>
-          <div className="grid-col-2">
-            <div className="text-right">
-              <span
-                className="label margin-right-4 margin-top-05"
-                id="practitioner-counsel-search-description"
-              >
-                Add counsel
-              </span>
-            </div>
-          </div>
-          <div className="grid-col-4">
-            <FormGroup
-              className="margin-bottom-0 margin-top-0"
-              errorText={validationErrors.practitionerSearchError}
-            >
-              <form
-                className="usa-search"
-                onSubmit={e => {
-                  e.preventDefault();
-                  openAddPrivatePractitionerModalSequence();
-                }}
-              >
-                <div role="search">
-                  <label
-                    className="usa-sr-only"
-                    htmlFor="practitioner-search-field"
-                  >
-                    Search
-                  </label>
-                  <input
-                    aria-describedby="practitioner-counsel-search-description"
-                    className={classNames(
-                      'usa-input margin-bottom-0',
-                      validationErrors.practitionerSearchError &&
-                        'usa-input--error',
-                    )}
-                    id="practitioner-search-field"
-                    name="practitionerSearch"
-                    placeholder="Enter bar no. or name"
-                    type="search"
-                    value={form.practitionerSearch || ''}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                  <button
-                    className="small-search-button usa-button"
-                    id="search-for-practitioner"
-                    type="submit"
-                  >
-                    <span className="usa-search__submit-text">Search</span>
-                  </button>
-                </div>
-              </form>
-            </FormGroup>
-          </div>
-          <div className="grid-col-2">
-            <Button
-              link
-              className="float-right margin-right-0"
-              href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
-              icon="plus-circle"
-            >
-              Add Party
-            </Button>
-          </div>
-        </div>
-
+        <PartiesInformationContentHeader title="Petitioner(s)" />
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedPetitioners.map(petitioner => (
             <div
-              className="grid-col-4 margin-bottom-4"
+              className="grid-col-4 margin-bottom-4 petitioner-card"
               key={petitioner.contactId}
             >
               <div className="card height-full margin-bottom-0">
@@ -133,8 +47,20 @@ const PetitionersAndCounsel = connect(
                       ...petitioner,
                       name: undefined,
                     }}
-                    showEmail={true}
+                    showEmail={false}
                   />
+                  <span className="address-line">
+                    {petitioner.formattedEmail}
+                    {petitioner.showEAccessFlag && (
+                      <FontAwesomeIcon
+                        aria-label="has e-access"
+                        className="margin-left-05 fa-icon-blue"
+                        icon="flag"
+                        size="1x"
+                      />
+                    )}
+                  </span>
+                  {petitioner.formattedPendingEmail}
                   {petitioner.serviceIndicator && (
                     <div className="margin-top-4">
                       <p className="semi-bold margin-bottom-0">
@@ -154,12 +80,11 @@ const PetitionersAndCounsel = connect(
                             {caseInformationHelper.showEditPrivatePractitioners && (
                               <Button
                                 link
-                                className="margin-left-205 padding-0 height-3"
+                                className="margin-left-1 padding-0 height-3"
+                                href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                 icon="edit"
                                 id="edit-privatePractitioners-button"
-                                onClick={() =>
-                                  openEditPrivatePractitionersModalSequence()
-                                }
+                                overrideMargin={true}
                               >
                                 Edit
                               </Button>

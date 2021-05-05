@@ -82,8 +82,10 @@ describe('ExternalDocumentInformationFactory', () => {
 
     describe('Motion Document', () => {
       beforeEach(() => {
-        baseDoc.category = 'Motion';
-        baseDoc.documentType = 'Motion for Continuance';
+        baseDoc = {
+          category: 'Motion',
+          documentType: 'Motion for Continuance',
+        };
       });
 
       it('should require objections radio be selected', () => {
@@ -95,10 +97,13 @@ describe('ExternalDocumentInformationFactory', () => {
       });
 
       it('should require objections for an Amended document with a Motion previousDocument', () => {
-        baseDoc.category = 'Miscellaneous';
-        baseDoc.eventCode = 'AMAT';
-        baseDoc.previousDocument = {
-          documentType: 'Motion for Continuance',
+        baseDoc = {
+          category: 'Miscellaneous',
+          documentType: 'Amended',
+          eventCode: 'AMAT',
+          previousDocument: {
+            documentType: 'Motion for Continuance',
+          },
         };
 
         expect(errors().objections).toEqual(
@@ -106,6 +111,19 @@ describe('ExternalDocumentInformationFactory', () => {
         );
         baseDoc.objections = OBJECTIONS_OPTIONS_MAP.NO;
         expect(errors().objections).toEqual(undefined);
+      });
+
+      it('should not require objections for an Amended document without a Motion previousDocument', () => {
+        baseDoc = {
+          category: 'Miscellaneous',
+          documentType: 'Amended',
+          eventCode: 'AMAT',
+          previousDocument: {
+            documentType: 'Answer',
+          },
+        };
+
+        expect(errors().objections).toBeUndefined();
       });
     });
 

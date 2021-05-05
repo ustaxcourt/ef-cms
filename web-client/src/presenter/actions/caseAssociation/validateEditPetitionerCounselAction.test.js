@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { validateEditPrivatePractitionersAction } from './validateEditPrivatePractitionersAction';
+import { validateEditPetitionerCounselAction } from './validateEditPetitionerCounselAction';
 
-describe('validateEditPrivatePractitionersAction', () => {
+describe('validateEditPetitionerCounselAction', () => {
   let successStub;
   let errorStub;
   let serviceIndicatorTypes;
@@ -24,8 +24,8 @@ describe('validateEditPrivatePractitionersAction', () => {
   it('should call the success path when no errors are found', async () => {
     applicationContext
       .getUseCases()
-      .validateEditPrivatePractitionerInteractor.mockReturnValue(null);
-    await runAction(validateEditPrivatePractitionersAction, {
+      .validateEditPetitionerCounselInteractor.mockReturnValue(null);
+    await runAction(validateEditPetitionerCounselAction, {
       modules: {
         presenter,
       },
@@ -42,19 +42,10 @@ describe('validateEditPrivatePractitionersAction', () => {
             },
           ],
         },
-        modal: {
-          privatePractitioners: [
-            {
-              representingPrimary: true,
-              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
-              userId: '1',
-            },
-            {
-              representingPrimary: true,
-              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
-              userId: '2',
-            },
-          ],
+        form: {
+          representingPrimary: true,
+          serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
+          userId: '1',
         },
       },
     });
@@ -65,9 +56,11 @@ describe('validateEditPrivatePractitionersAction', () => {
   it('should call the error path when any errors are found', async () => {
     applicationContext
       .getUseCases()
-      .validateEditPrivatePractitionerInteractor.mockReturnValue('error');
+      .validateEditPetitionerCounselInteractor.mockReturnValue({
+        something: 'error',
+      });
 
-    await runAction(validateEditPrivatePractitionersAction, {
+    await runAction(validateEditPetitionerCounselAction, {
       modules: {
         presenter,
       },
@@ -84,36 +77,28 @@ describe('validateEditPrivatePractitionersAction', () => {
             },
           ],
         },
-        modal: {
-          privatePractitioners: [
-            { userId: '1' },
-            {
-              representingPrimary: true,
-              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
-              userId: '2',
-            },
-          ],
+        form: {
+          userId: '1',
         },
       },
     });
 
     expect(
-      applicationContext.getUseCases()
-        .validateEditPrivatePractitionerInteractor,
+      applicationContext.getUseCases().validateEditPetitionerCounselInteractor,
     ).toBeCalled();
     expect(errorStub).toBeCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
-      privatePractitioners: ['error', 'error'],
+      something: 'error',
     });
   });
 
   it('should call the error path when attempting to change from paper to electronic service', async () => {
     applicationContext
       .getUseCases()
-      .validateEditPrivatePractitionerInteractor.mockReturnValue({
+      .validateEditPetitionerCounselInteractor.mockReturnValue({
         something: 'error',
       });
-    await runAction(validateEditPrivatePractitionersAction, {
+    await runAction(validateEditPetitionerCounselAction, {
       modules: {
         presenter,
       },
@@ -130,29 +115,21 @@ describe('validateEditPrivatePractitionersAction', () => {
             },
           ],
         },
-        modal: {
-          privatePractitioners: [
-            { userId: '1' },
-            {
-              representingPrimary: true,
-              serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
-              userId: '2',
-            },
-          ],
+        form: {
+          representingPrimary: true,
+          serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
+          userId: '2',
         },
       },
     });
 
     expect(
-      applicationContext.getUseCases()
-        .validateEditPrivatePractitionerInteractor,
+      applicationContext.getUseCases().validateEditPetitionerCounselInteractor,
     ).toBeCalled();
     expect(errorStub).toBeCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
-      privatePractitioners: [
-        { something: 'error' },
-        { serviceIndicator: expect.anything(), something: 'error' },
-      ],
+      serviceIndicator: expect.anything(),
+      something: 'error',
     });
   });
 });

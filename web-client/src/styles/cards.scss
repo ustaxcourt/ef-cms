@@ -147,8 +147,6 @@
   font-size: 17px;
 
   p {
-    margin-bottom: 10px;
-
     &.representing-label {
       margin-top: 20px;
     }
@@ -235,4 +233,9 @@
 }
 .case-info-card {
   border-bottom: 1px solid color($theme-color-base-lighter);
+}
+
+.card hr.respondent-card-header {
+  width: 100%;
+  margin-left: 0;
 }

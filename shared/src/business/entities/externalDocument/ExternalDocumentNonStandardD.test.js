@@ -115,5 +115,18 @@ describe('ExternalDocumentNonStandardD', () => {
         'Certificate of Service Stipulation Something 04-10-2012',
       );
     });
+
+    it('should generate title without previousDocument', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentTitle: 'Certificate of Service [Document Name] [Date]',
+        documentType: 'Certificate of Service',
+        scenario: 'Nonstandard D',
+        serviceDate,
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Certificate of Service  04-10-2012',
+      );
+    });
   });
 });
