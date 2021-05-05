@@ -15,7 +15,7 @@ const RespondentCounsel = connect(
         <div className="grid-row grid-gap-2">
           {caseDetail.irsPractitioners.map(irsPractitioner => (
             <div
-              className="grid-col-4 margin-bottom-4"
+              className="grid-col-5 margin-bottom-4"
               key={irsPractitioner.userId}
             >
               <div className="card height-full margin-bottom-0">
@@ -24,7 +24,7 @@ const RespondentCounsel = connect(
                     {irsPractitioner.name} {`(${irsPractitioner.barNumber})`}
                     <Button
                       link
-                      className="margin-top-1 padding-0 margin-right-0 float-right"
+                      className="margin-top-1 padding-0 margin-right-05 float-right"
                       // href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${irsPractitioner.contactId}`}
                       icon="edit"
                     >
