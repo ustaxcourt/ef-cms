@@ -7,6 +7,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
 
   const caseDetail = get(state.caseDetail);
+  const screenMetadata = get(state.screenMetadata);
 
   const formattedParties = caseDetail.petitioners.map(petitioner => {
     const representingPractitioners = applicationContext
@@ -19,6 +20,13 @@ export const partiesInformationHelper = (get, applicationContext) => {
           ? petitioner.otherFilerType
           : 'Participant';
     }
+
+    petitioner.formattedEmail = petitioner.email || 'No email provided';
+    petitioner.formattedPendingEmail = screenMetadata.pendingEmails[
+      petitioner.contactId
+    ]
+      ? `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`
+      : undefined;
 
     return {
       ...petitioner,
