@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
- * @param {object} providers.get the cerebral get function used for getting state.modal and state.caseDetail.docketNumber
+ * @param {object} providers.get the cerebral get function used for getting state.form and state.caseDetail.docketNumber
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success path
  */
