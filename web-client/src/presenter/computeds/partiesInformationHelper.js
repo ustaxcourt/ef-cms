@@ -45,10 +45,12 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const formattedRespondents = caseDetail.irsPractitioners.map(respondent => {
     respondent.formattedEmail = respondent.email || 'No email provided';
     respondent.formattedPendingEmail = screenMetadata.pendingEmails[
-      respondent.contactId
+      respondent.userId
     ]
-      ? `${screenMetadata.pendingEmails[respondent.userId]} (Pending)` //fix
+      ? `${screenMetadata.pendingEmails[respondent.userId]} (Pending)`
       : undefined;
+
+    return respondent;
   });
 
   return {
