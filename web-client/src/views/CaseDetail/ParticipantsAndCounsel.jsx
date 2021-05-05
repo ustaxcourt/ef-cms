@@ -2,27 +2,30 @@ import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { PartiesInformationContentHeader } from './PartiesInformationContentHeader';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PetitionersAndCounsel = connect(
+const ParticipantsAndCounsel = connect(
   {
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
+    openEditPrivatePractitionersModalSequence:
+      sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
   },
-  function PetitionersAndCounsel({
+  function ParticipantsAndCounsel({
     caseDetail,
     caseInformationHelper,
+    openEditPrivatePractitionersModalSequence,
     partiesInformationHelper,
   }) {
     return (
       <>
-        <PartiesInformationContentHeader title="Petitioner(s)" />
+        <PartiesInformationContentHeader title="Intervenor(s)" />
         <div className="grid-row grid-gap-2">
-          {partiesInformationHelper.formattedPetitioners.map(petitioner => (
+          {partiesInformationHelper.formattedParticipants.map(petitioner => (
             <div
-              className="grid-col-4 margin-bottom-4 petitioner-card"
+              className="grid-col-4 margin-bottom-4"
               key={petitioner.contactId}
             >
               <div className="card height-full margin-bottom-0">
@@ -39,7 +42,7 @@ const PetitionersAndCounsel = connect(
                     </Button>
                   </h3>
                   <div className="bg-primary text-white padding-1 margin-bottom-2">
-                    Petitioner
+                    {petitioner.formattedTitle}
                   </div>
                   <AddressDisplay
                     contact={{
@@ -68,9 +71,11 @@ const PetitionersAndCounsel = connect(
                               <Button
                                 link
                                 className="margin-left-205 padding-0 height-3"
-                                href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                 icon="edit"
                                 id="edit-privatePractitioners-button"
+                                onClick={() =>
+                                  openEditPrivatePractitionersModalSequence()
+                                }
                               >
                                 Edit
                               </Button>
@@ -96,4 +101,4 @@ const PetitionersAndCounsel = connect(
   },
 );
 
-export { PetitionersAndCounsel };
+export { ParticipantsAndCounsel };
