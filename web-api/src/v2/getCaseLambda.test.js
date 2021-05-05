@@ -247,6 +247,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
             state: 'IL',
           },
           email: 'ab@example.com',
+          firmName: 'GW Law Offices',
           name: 'Test Attorney',
           serviceIndicator: 'Paper',
         },
