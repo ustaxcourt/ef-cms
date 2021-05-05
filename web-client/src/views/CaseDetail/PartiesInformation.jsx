@@ -1,5 +1,6 @@
 import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { ParticipantsAndCounsel } from './ParticipantsAndCounsel';
 import { PetitionersAndCounsel } from './PetitionersAndCounsel';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { connect } from '@cerebral/react';
@@ -9,12 +10,14 @@ import classNames from 'classnames';
 
 const PartiesInformation = connect(
   {
+    partiesInformationHelper: state.partiesInformationHelper,
     partyViewTabs: state.constants.PARTY_VIEW_TABS,
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function PartiesInformation({
+    partiesInformationHelper,
     partyViewTabs,
     screenMetadata,
     showModal,
@@ -46,23 +49,25 @@ const PartiesInformation = connect(
                     {partyViewTabs.petitionersAndCounsel}
                   </div>
                 </Button>
-                <Button
-                  className={classNames(
-                    'usa-button--unstyled attachment-viewer-button',
-                    screenMetadata.partyViewTab ===
-                      partyViewTabs.participantsAndCounsel && 'active',
-                  )}
-                  onClick={() => {
-                    updateScreenMetadataSequence({
-                      key: 'partyViewTab',
-                      value: partyViewTabs.participantsAndCounsel,
-                    });
-                  }}
-                >
-                  <div className="grid-row margin-left-205">
-                    {partyViewTabs.participantsAndCounsel}
-                  </div>
-                </Button>
+                {partiesInformationHelper.showParticipantsTab && (
+                  <Button
+                    className={classNames(
+                      'usa-button--unstyled attachment-viewer-button',
+                      screenMetadata.partyViewTab ===
+                        partyViewTabs.participantsAndCounsel && 'active',
+                    )}
+                    onClick={() => {
+                      updateScreenMetadataSequence({
+                        key: 'partyViewTab',
+                        value: partyViewTabs.participantsAndCounsel,
+                      });
+                    }}
+                  >
+                    <div className="grid-row margin-left-205">
+                      {partyViewTabs.participantsAndCounsel}
+                    </div>
+                  </Button>
+                )}
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
@@ -86,6 +91,10 @@ const PartiesInformation = connect(
           <div className="grid-col-9">
             {screenMetadata.partyViewTab ===
               partyViewTabs.petitionersAndCounsel && <PetitionersAndCounsel />}
+            {screenMetadata.partyViewTab ===
+              partyViewTabs.participantsAndCounsel && (
+              <ParticipantsAndCounsel />
+            )}
           </div>
         </div>
         {showModal === 'AddPrivatePractitionerModal' && (
