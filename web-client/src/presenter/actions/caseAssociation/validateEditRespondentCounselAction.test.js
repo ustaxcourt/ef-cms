@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { validateEditIrsPractitionersAction } from './validateEditIrsPractitionersAction';
+import { validateEditRespondentCounselAction } from './validateEditRespondentCounselAction';
 
-describe('validateEditIrsPractitionersAction', () => {
+describe('validateEditRespondentCounselAction', () => {
   let successStub;
   let errorStub;
   let SERVICE_INDICATOR_TYPES;
@@ -22,7 +22,7 @@ describe('validateEditIrsPractitionersAction', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    await runAction(validateEditIrsPractitionersAction, {
+    await runAction(validateEditRespondentCounselAction, {
       modules: {
         presenter,
       },
@@ -58,7 +58,7 @@ describe('validateEditIrsPractitionersAction', () => {
   });
 
   it('should call the error path when attempting to change from paper to electronic service', async () => {
-    await runAction(validateEditIrsPractitionersAction, {
+    await runAction(validateEditRespondentCounselAction, {
       modules: {
         presenter,
       },
