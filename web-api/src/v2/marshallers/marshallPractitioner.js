@@ -14,7 +14,7 @@ exports.marshallPractitioner = practitionerObject => {
       ? marshallContact(practitionerObject.contact)
       : undefined,
     email: practitionerObject.email,
-    firmName: practitionerObject.firmName,
+    firmName: practitionerObject.firmName || '',
     name: practitionerObject.name,
     serviceIndicator: practitionerObject.serviceIndicator,
   };
