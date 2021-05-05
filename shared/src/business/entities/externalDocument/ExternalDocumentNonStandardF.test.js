@@ -76,5 +76,16 @@ describe('ExternalDocumentNonStandardF', () => {
         'First Amended Stipulation Something',
       );
     });
+
+    it('should generate title without previousDocument', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Miscellaneous',
+        documentTitle: '[First, Second, etc.] Amended [Document Name]',
+        documentType: 'Amended',
+        ordinalValue: 'First',
+        scenario: 'Nonstandard F',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual('First Amended');
+    });
   });
 });
