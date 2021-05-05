@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * updates case caption and removes a petitioner counsel from the case
+ * removes the petitioner counsel from the case
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context for getting constants
