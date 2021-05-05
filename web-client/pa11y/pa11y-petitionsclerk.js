@@ -120,18 +120,10 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=add-respondent-modal',
   },
   {
-    actions: [
-      'wait for #tab-case-information to be visible',
-      'click element #tab-case-information',
-      'wait for #tab-respondent to be visible',
-      'click element #tab-respondent',
-      'wait for button#edit-irsPractitioners-button to be visible',
-      'click element button#edit-irsPractitioners-button',
-      'wait for #respondent-0 to be visible',
-    ],
-    notes: 'checks a11y of edit irsPractitioners modal',
+    actions: ['wait for #submit-edit-respondent-information to be visible'],
+    notes: 'checks a11y of edit respondentCounsel page',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-irsPractitioners-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19/edit-respondent-counsel/RT6789',
   },
   {
     actions: [
@@ -143,7 +135,7 @@ module.exports = [
     ],
     notes: 'checks the confirm modal when editing a signed draft document',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=edit-signed-order-confirm-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=edit-signed-order-confirm-modal/',
   },
   {
     actions: [
