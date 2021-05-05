@@ -6,9 +6,10 @@ import React from 'react';
 
 const RespondentCounsel = connect(
   {
+    caseDetail: state.caseDetail,
     partiesInformationHelper: state.partiesInformationHelper,
   },
-  function RespondentCounsel({ partiesInformationHelper }) {
+  function RespondentCounsel({ caseDetail, partiesInformationHelper }) {
     return (
       <>
         <h2>Respondent Counsel</h2>
@@ -26,7 +27,7 @@ const RespondentCounsel = connect(
                       <Button
                         link
                         className="margin-top-1 padding-0 margin-right-05 float-right"
-                        // href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${irsPractitioner.contactId}`}
+                        href={`/case-detail/${caseDetail.docketNumber}/edit-respondent-counsel/${irsPractitioner.barNumber}`}
                         icon="edit"
                       >
                         Edit

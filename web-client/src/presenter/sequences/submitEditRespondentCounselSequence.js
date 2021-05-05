@@ -1,22 +1,23 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { submitEditIrsPractitionersModalAction } from '../actions/caseAssociation/submitEditIrsPractitionersModalAction';
-import { validateEditIrsPractitionersAction } from '../actions/caseAssociation/validateEditIrsPractitionersAction';
+import { submitEditRespondentCounselAction } from '../actions/caseAssociation/submitEditRespondentCounselAction';
+import { validateEditRespondentCounselAction } from '../actions/caseAssociation/validateEditRespondentCounselAction';
 
-export const submitEditIrsPractitionersModalSequence = [
+export const submitEditRespondentCounselSequence = [
   startShowValidationAction,
-  validateEditIrsPractitionersAction,
+  validateEditRespondentCounselAction,
   {
-    error: [setValidationErrorsAction],
+    error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
-      submitEditIrsPractitionersModalAction,
+      submitEditRespondentCounselAction,
       {
         success: [
           setAlertSuccessAction,
@@ -25,6 +26,7 @@ export const submitEditIrsPractitionersModalSequence = [
           setCasePropFromStateAction,
           getCaseAction,
           setCaseAction,
+          navigateToCaseDetailCaseInformationActionFactory('parties'),
         ],
       },
     ]),

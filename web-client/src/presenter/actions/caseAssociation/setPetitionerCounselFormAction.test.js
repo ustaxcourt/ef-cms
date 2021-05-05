@@ -8,7 +8,7 @@ describe('setPetitionerCounselFormAction', () => {
     presenter.providers.applicationContext = applicationContextForClient;
   });
 
-  it('should call the delete use case for each respondent on the form with removeFromCase set to true and call the path.success when finished', async () => {
+  it('should set the state.form to the associated petitioner counsel via its barNumber', async () => {
     const { state } = await runAction(setPetitionerCounselFormAction, {
       modules: {
         presenter,
