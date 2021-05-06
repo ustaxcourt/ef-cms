@@ -15,6 +15,7 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
   const userPendingEmail = get(state.screenMetadata.userPendingEmail);
   const showEditEmail = permissions.EDIT_PETITIONER_EMAIL && !userPendingEmail;
+  const showSealAddress = permissions.SEAL_ADDRESS;
 
   const caseDetail = get(state.caseDetail);
   const contactPrimaryEmail = applicationContext
@@ -32,6 +33,7 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
     showEditEmail,
     showPrimaryContact: showContacts.contactPrimary,
     showRemovePetitionerButton,
+    showSealAddress,
     showSecondaryContact: showContacts.contactSecondary,
     userPendingEmail,
   };
