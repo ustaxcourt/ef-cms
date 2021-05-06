@@ -45,38 +45,6 @@ ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES = {
   postalCode: 'Enter ZIP code',
 };
 
-ContactFactory.getValidationRules = contactType => {
-  let results = joi;
-
-  for (const partyType in PARTY_TYPES) {
-    const contactConstructor = ContactFactory.getContactConstructors({
-      partyType: PARTY_TYPES[partyType],
-    })[contactType];
-
-    if (contactConstructor) {
-      results = results.when('partyType', {
-        is: PARTY_TYPES[partyType],
-        then: joi
-          .alternatives(
-            contactConstructor({
-              countryType: COUNTRY_TYPES.DOMESTIC,
-            }).VALIDATION_RULES,
-            contactConstructor({
-              countryType: COUNTRY_TYPES.INTERNATIONAL,
-            }).VALIDATION_RULES,
-          )
-          .required(),
-      });
-    } else {
-      results = results.forbidden();
-    }
-  }
-
-  return results;
-};
-
-/* eslint-disable sort-keys-fix/sort-keys-fix */
-
 const commonValidationRequirements = {
   address1: JoiValidationConstants.STRING.max(100).required(),
   address2: JoiValidationConstants.STRING.max(100).optional(),
@@ -90,25 +58,25 @@ const commonValidationRequirements = {
   ).required(),
   email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
-    then: joi.required(),
     otherwise: joi.optional(),
+    then: joi.required(),
   }),
-  inCareOf: JoiValidationConstants.STRING.max(100).optional(),
-  isAddressSealed: joi.boolean().required(),
-  sealedAndUnavailable: joi.boolean().optional(),
-  name: JoiValidationConstants.STRING.max(100).required(),
-  phone: JoiValidationConstants.STRING.max(100).required(),
-  secondaryName: JoiValidationConstants.STRING.max(100).optional(),
-  title: JoiValidationConstants.STRING.max(100).optional(),
-  serviceIndicator: JoiValidationConstants.STRING.valid(
-    ...Object.values(SERVICE_INDICATOR_TYPES),
-  ).optional(),
   hasEAccess: joi
     .boolean()
     .optional()
     .description(
       'Flag that indicates if the contact has credentials to both the legacy and new system.',
     ),
+  inCareOf: JoiValidationConstants.STRING.max(100).optional(),
+  isAddressSealed: joi.boolean().required(),
+  name: JoiValidationConstants.STRING.max(100).required(),
+  phone: JoiValidationConstants.STRING.max(100).required(),
+  sealedAndUnavailable: joi.boolean().optional(),
+  secondaryName: JoiValidationConstants.STRING.max(100).optional(),
+  serviceIndicator: JoiValidationConstants.STRING.valid(
+    ...Object.values(SERVICE_INDICATOR_TYPES),
+  ).optional(),
+  title: JoiValidationConstants.STRING.max(100).optional(),
 };
 
 const domesticValidationObject = {
@@ -116,12 +84,12 @@ const domesticValidationObject = {
     COUNTRY_TYPES.DOMESTIC,
   ).required(),
   ...commonValidationRequirements,
+  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
   state: JoiValidationConstants.STRING.valid(
     ...Object.keys(US_STATES),
     ...US_STATES_OTHER,
     STATE_NOT_AVAILABLE,
   ).required(),
-  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
 };
 
 ContactFactory.domesticValidationObject = domesticValidationObject;
@@ -267,7 +235,6 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
           primary: getNextFriendForMinorContact,
           secondary: null,
         };
-
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
         return {
           primary: getPartnershipAsTaxMattersPartnerPrimaryContact,

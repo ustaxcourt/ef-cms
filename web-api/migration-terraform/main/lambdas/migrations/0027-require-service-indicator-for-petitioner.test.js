@@ -121,4 +121,73 @@ describe('migrateItems', () => {
       'The Case entity was invalid. null',
     );
   });
+
+  it('should return and not modify petitioners that already have a phone', async () => {
+    const unmodifiedItem = {
+      ...MOCK_CASE, // has petitioners array with phone number
+      pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+      sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+    };
+
+    const items = [unmodifiedItem];
+    documentClient = {
+      query: () => ({
+        promise: async () => ({
+          Items: items,
+        }),
+      }),
+    };
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].petitioners[0]).toMatchObject(MOCK_CASE.petitioners[0]);
+  });
+
+  it('should set N/A for the petitioners phone when it is not defined', async () => {
+    const itemsToModify = {
+      ...MOCK_CASE,
+      petitioners: [{ ...getContactPrimary(MOCK_CASE), phone: undefined }],
+      pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+      sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+    };
+
+    const items = [itemsToModify];
+    documentClient = {
+      query: () => ({
+        promise: async () => ({
+          Items: items,
+        }),
+      }),
+    };
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].petitioners[0].phone).toBe('N/A');
+  });
+
+  it('should throw an error for invalid petitioners', async () => {
+    const itemsToModify = {
+      ...MOCK_CASE,
+      petitioners: [
+        {
+          ...getContactPrimary(MOCK_CASE),
+          address1: undefined,
+          phone: undefined,
+        },
+      ],
+      pk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+      sk: 'case|6d74eadc-0181-4ff5-826c-305200e8733d',
+    };
+
+    const items = [itemsToModify];
+    documentClient = {
+      query: () => ({
+        promise: async () => ({
+          Items: items,
+        }),
+      }),
+    };
+    await expect(migrateItems(items, documentClient)).rejects.toThrow(
+      'The Petitioner entity was invalid.',
+    );
+  });
 });

@@ -9,17 +9,9 @@ describe('Petitions clerk views case detail', function () {
 
       cy.get('button#tab-case-information').click();
 
-      cy.get('button#tab-petitioner').click();
+      cy.get('button#tab-parties').click();
 
-      cy.get('div#petitioner-information').should('exist');
-
-      cy.get('button#view-additional-petitioners-button')
-        .scrollIntoView()
-        .click();
-
-      cy.get('div#petitioner-information')
-        .find('.petitioner-information-card')
-        .should('have.length', 8);
+      cy.get('.petitioner-card').should('have.length', 8);
     });
   });
 
