@@ -17,8 +17,17 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const caseHasRespondent = !!caseDetail.hasIrsPractitioner;
   const currentPage = get(state.currentPage);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
-
   const isCaseSealed = !!caseDetail.isSealed;
+
+  const caseHasRepresentedParty = caseDetail.petitioners.some(petitioner => {
+    return applicationContext
+      .getUtilities()
+      .isUserIdRepresentedByPrivatePractitioner(
+        caseDetail,
+        petitioner.contactId,
+      );
+  });
+  const showRepresented = isInternalUser && caseHasRepresentedParty;
 
   const isCurrentPageFilePetitionSuccess =
     get(state.currentPage) === 'FilePetitionSuccess';
@@ -82,6 +91,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showFileFirstDocumentButton,
     showNewTabLink,
     showPendingAccessToCaseButton,
+    showRepresented,
     showRequestAccessToCaseButton,
     showSealedCaseBanner: isCaseSealed,
     showUploadCourtIssuedDocumentButton: isInternalUser,
