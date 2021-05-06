@@ -78,8 +78,8 @@ module.exports = [
       'click element #tab-parties',
       'wait for #petitioners-and-counsel to be visible',
       'click element #petitioners-and-counsel',
-      'wait for #edit-petitioner-button to be visible',
-      'click element #edit-petitioner-button',
+      'wait for .edit-petitioner-button to be visible',
+      'click element .edit-petitioner-button',
     ],
     notes:
       'checks a11y of case information tab, parties secondary tab, parties and counsel tertiary tab',
@@ -144,8 +144,10 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
-      'wait for #tab-respondent to be visible',
-      'click element #tab-respondent',
+      'wait for #tab-parties to be visible',
+      'click element #tab-parties',
+      'wait for #respondent-counsel to be visible',
+      'click element #respondent-counsel',
       'wait for #respondent-search-field to be visible',
       'set field #respondent-search-field to WN7777',
       'check field #respondent-search-field',
@@ -362,18 +364,6 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
-      'wait for #tab-other-filer to be visible',
-      'click element #tab-other-filer',
-      'wait for #tabContent-otherFiler to be visible',
-    ],
-    notes: 'checks the case detail => case information => other tab',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20',
-  },
-  {
-    actions: [
-      'wait for #tab-case-information to be visible',
-      'click element #tab-case-information',
       'wait for #tab-statistics to be visible',
       'click element #tab-statistics',
       'wait for #tabContent-statistics to be visible',
@@ -414,6 +404,7 @@ module.exports = [
     ],
     notes:
       'checks a11y of sealed address display for primary and secondary contact',
+    only: true,
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/case-information&info=sealed-address-display',
   },
