@@ -1,5 +1,6 @@
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
+import { RespondentSearch } from './RespondentSearch';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -13,6 +14,7 @@ const RespondentCounsel = connect(
     return (
       <>
         <h2>Respondent Counsel</h2>
+        <RespondentSearch />
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedRespondents.map(
             irsPractitioner => (
