@@ -25,6 +25,7 @@ const {
   getOtherPetitioners,
   getPetitionDocketEntry,
   getPetitionerById,
+  isUserIdRepresentedByPrivatePractitioner,
 } = require('../entities/cases/Case');
 const {
   compareCasesByDocketNumber,
@@ -318,6 +319,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
+    isUserIdRepresentedByPrivatePractitioner: jest
+      .fn()
+      .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
     isValidDateString: jest
       .fn()
       .mockImplementation(DateHandler.isValidDateString),
