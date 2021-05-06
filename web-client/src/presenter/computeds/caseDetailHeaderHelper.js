@@ -19,14 +19,14 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
   const isCaseSealed = !!caseDetail.isSealed;
 
-  const caseHasRepresentedParty = caseDetail.petitioners.some(petitioner => {
-    return applicationContext
+  const caseHasRepresentedParty = caseDetail.petitioners.some(petitioner =>
+    applicationContext
       .getUtilities()
       .isUserIdRepresentedByPrivatePractitioner(
         caseDetail,
         petitioner.contactId,
-      );
-  });
+      ),
+  );
   const showRepresented = isInternalUser && caseHasRepresentedParty;
 
   const isCurrentPageFilePetitionSuccess =
