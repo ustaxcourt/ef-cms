@@ -24,17 +24,19 @@ const RespondentSearch = connect(
   }) {
     return (
       <>
-        <div className="grid-col-3 text-right">
-          <span
-            className="label margin-right-4 margin-top-05"
-            id="respondent-counsel-search-description"
-          >
-            Add counsel
-          </span>
+        <div className="grid-col-2">
+          <div className="text-right">
+            <span
+              className="label margin-right-4 margin-top-05"
+              id="respondent-counsel-search-description"
+            >
+              Add counsel
+            </span>
+          </div>
         </div>
-        <div className="grid-col-3 margin-top-neg-05">
+        <div className="grid-col-4">
           <FormGroup
-            className="margin-bottom-0"
+            className="margin-bottom-0 margin-top-0"
             errorText={validationErrors.respondentSearchError}
           >
             <form
