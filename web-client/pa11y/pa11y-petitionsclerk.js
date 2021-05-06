@@ -74,12 +74,49 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
-      'wait for #tab-respondent to be visible',
-      'click element #tab-respondent',
+      'wait for #tab-parties to be visible',
+      'click element #tab-parties',
+      'wait for #petitioners-and-counsel to be visible',
+      'click element #petitioners-and-counsel',
+      'wait for .edit-petitioner-button to be visible',
+      'click element .edit-petitioner-button',
     ],
-    notes: 'checks a11y of case information tab, respondent secondary tab',
+    notes:
+      'checks a11y of case information tab, parties secondary tab, parties and counsel tertiary tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/107-19&info=case-information-tab-respondent',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/999-15&info=case-information-tab-parties-petitioner-and-counsel',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-parties to be visible',
+      'click element #tab-parties',
+      'wait for #participants-and-counsel to be visible',
+      'click element #participants-and-counsel',
+      'wait for #edit-participant to be visible',
+      'click element #edit-participant',
+    ],
+    notes:
+      'checks a11y of case information tab, parties secondary tab, participants and counsel tertiary tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/999-15&info=case-information-tab-parties-participants-and-counsel',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-parties to be visible',
+      'click element #tab-parties',
+      'wait for #respondent-counsel to be visible',
+      'click element #respondent-counsel',
+      'wait for #edit-respondent-counsel to be visible',
+      'click element #edit-respondent-counsel',
+    ],
+    notes:
+      'checks a11y of case information tab, parties secondary tab, respondent counsel tertiary tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/999-15&info=case-information-tab-parties-repondent',
   },
   {
     actions: [
@@ -107,8 +144,10 @@ module.exports = [
     actions: [
       'wait for #tab-case-information to be visible',
       'click element #tab-case-information',
-      'wait for #tab-respondent to be visible',
-      'click element #tab-respondent',
+      'wait for #tab-parties to be visible',
+      'click element #tab-parties',
+      'wait for #respondent-counsel to be visible',
+      'click element #respondent-counsel',
       'wait for #respondent-search-field to be visible',
       'set field #respondent-search-field to WN7777',
       'check field #respondent-search-field',
@@ -320,18 +359,6 @@ module.exports = [
     notes: 'checks the add to trial session modal',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19&info=add-case-to-session-modal',
-  },
-  {
-    actions: [
-      'wait for #tab-case-information to be visible',
-      'click element #tab-case-information',
-      'wait for #tab-other-filer to be visible',
-      'click element #tab-other-filer',
-      'wait for #tabContent-otherFiler to be visible',
-    ],
-    notes: 'checks the case detail => case information => other tab',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-20',
   },
   {
     actions: [
