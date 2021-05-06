@@ -21,7 +21,7 @@ const { UnauthorizedError } = require('../../errors/errors');
 
 exports.removePetitionerFromCaseInteractor = async (
   applicationContext,
-  { contactId, docketNumber },
+  { caseCaption, contactId, docketNumber },
 ) => {
   const petitionerContactId = contactId;
   const user = applicationContext.getCurrentUser();
@@ -83,6 +83,8 @@ exports.removePetitionerFromCaseInteractor = async (
   if (isPetitionerToRemovePrimary) {
     caseEntity.petitioners[0].contactType = CONTACT_TYPES.primary;
   }
+
+  caseEntity.caseCaption = caseCaption;
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()

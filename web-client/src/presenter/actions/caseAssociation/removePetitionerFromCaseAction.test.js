@@ -48,28 +48,6 @@ describe('removePetitionerFromCaseAction', () => {
     expect(output.tab).toBe('caseInfo');
   });
 
-  it('should update the case caption', async () => {
-    await runAction(removePetitionerFromCaseAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: '123-20',
-        },
-        form,
-        modal: {
-          caseCaption: caseCaptionToUpdate,
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().updateCaseContextInteractor.mock
-        .calls[0][0].caseCaption,
-    ).toBe(caseCaptionToUpdate);
-  });
-
   it('should make a call to remove the petitioner from the case', async () => {
     await runAction(removePetitionerFromCaseAction, {
       modules: {
