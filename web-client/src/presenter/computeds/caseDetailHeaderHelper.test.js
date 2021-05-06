@@ -2,8 +2,10 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from './caseDetailHeaderHelper';
+import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -577,5 +579,36 @@ describe('caseDetailHeaderHelper', () => {
     });
 
     expect(result.showCreateMessageButton).toBe(true);
+  });
+
+  describe.only('showRepresented', () => {
+    it('is true when at least one party on the case is represented and the current user is an internal user', () => {
+      const user = {
+        role: ROLES.petitionsClerk,
+        userId: '08f9464a-6eb4-4d58-bf38-5276fe9a5911',
+      };
+
+      const representedUserId = '79c404b8-7ddc-4c48-974c-40b153c25f9e';
+
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                userId: representedUserId,
+              },
+            ],
+            privatePractitioners: [{ representing: [representedUserId] }],
+          },
+          currentPage: 'CaseDetailInternal',
+          form: {},
+        },
+      });
+
+      expect(result.showRepresented).toBe(true);
+    });
   });
 });

@@ -194,19 +194,18 @@ export const CaseDetailHeader = connect(
                     {formattedCaseDetail.caseCaption} {CASE_CAPTION_POSTFIX}
                   </span>
                 </p>
-                <p
-                  className="margin-y-0 text-accent-cool-light"
-                  id="case-title"
-                >
-                  <span>
-                    <FontAwesomeIcon
-                      className="margin-right-1"
-                      icon="user-friends"
-                      size="1x"
-                    />
-                    Represented
-                  </span>
-                </p>
+                {caseDetailHeaderHelper.showRepresented && (
+                  <p className="margin-y-0 represented-text " id="case-title">
+                    <span>
+                      <FontAwesomeIcon
+                        className="margin-right-1"
+                        icon="user-friends"
+                        size="1x"
+                      />
+                      Represented
+                    </span>
+                  </p>
+                )}
               </div>
 
               {!hideActionButtons &&
