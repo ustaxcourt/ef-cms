@@ -4,8 +4,8 @@ import { state } from 'cerebral';
  * get the caseDetail pendingEmails attribute
  *
  * @param {object} providers.applicationContext the applicationContext
- * @param {function} providers.props the cerebral props
- * @returns {object} the list of pending emails with their associated contactId
+ * @param {function} providers.get the cerebral get
+ * @returns {object} an object containing pending emails with their associated contactId
  */
 export const getPendingEmailsOnCaseAction = async ({
   applicationContext,
