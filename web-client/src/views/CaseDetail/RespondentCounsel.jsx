@@ -1,5 +1,7 @@
+import { AddIrsPractitionerModal } from './AddIrsPractitionerModal';
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
+import { RespondentExistsModal } from './RespondentExistsModal';
 import { RespondentSearch } from './RespondentSearch';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -10,11 +12,13 @@ const RespondentCounsel = connect(
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
     partiesInformationHelper: state.partiesInformationHelper,
+    showModal: state.modal.showModal,
   },
   function RespondentCounsel({
     caseDetail,
     caseInformationHelper,
     partiesInformationHelper,
+    showModal,
   }) {
     return (
       <>
@@ -74,6 +78,8 @@ const RespondentCounsel = connect(
           {partiesInformationHelper.formattedRespondents.length < 1 &&
             'There is no respondent counsel associated with this case.'}
         </div>
+        {showModal === 'AddIrsPractitionerModal' && <AddIrsPractitionerModal />}
+        {showModal === 'RespondentExistsModal' && <RespondentExistsModal />}
       </>
     );
   },

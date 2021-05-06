@@ -1,8 +1,6 @@
-import { AddIrsPractitionerModal } from './AddIrsPractitionerModal';
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RespondentExistsModal } from './RespondentExistsModal';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -13,13 +11,11 @@ const RespondentInformation = connect(
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    showModal: state.modal.showModal,
   },
   function RespondentInformation({
     caseDetailHelper,
     caseInformationHelper,
     formattedCaseDetail,
-    showModal,
   }) {
     const respondentPartyInformation = () => (
       <div className="grid-container padding-x-0">
@@ -88,9 +84,6 @@ const RespondentInformation = connect(
             </div>
           </div>
         </div>
-
-        {showModal === 'AddIrsPractitionerModal' && <AddIrsPractitionerModal />}
-        {showModal === 'RespondentExistsModal' && <RespondentExistsModal />}
       </>
     );
   },

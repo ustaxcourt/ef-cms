@@ -155,7 +155,6 @@ module.exports = [
       'wait for #counsel-matches-legend to be visible',
     ],
     notes: 'checks a11y of add respondent modal',
-    only: true,
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=add-respondent-modal',
   },
