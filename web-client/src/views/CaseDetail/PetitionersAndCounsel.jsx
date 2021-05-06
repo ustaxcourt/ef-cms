@@ -32,7 +32,7 @@ const PetitionersAndCounsel = connect(
                     {petitioner.name}
                     <Button
                       link
-                      className="margin-top-1 padding-0 margin-right-0 float-right"
+                      className="margin-top-1 padding-0 margin-right-0 float-right edit-petitioner-button"
                       href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
                       icon="edit"
                     >
