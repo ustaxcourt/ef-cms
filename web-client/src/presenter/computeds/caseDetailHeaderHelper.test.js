@@ -2,8 +2,10 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from './caseDetailHeaderHelper';
+import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -36,7 +38,11 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [], status: CASE_STATUS_TYPES.new },
+        caseDetail: {
+          docketEntries: [],
+          petitioners: [],
+          status: CASE_STATUS_TYPES.new,
+        },
       },
     });
     expect(result.showEditCaseButton).toEqual(true);
@@ -50,7 +56,11 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [], status: CASE_STATUS_TYPES.new },
+        caseDetail: {
+          docketEntries: [],
+          petitioners: [],
+          status: CASE_STATUS_TYPES.new,
+        },
       },
     });
     expect(result.showEditCaseButton).toEqual(false);
@@ -64,7 +74,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -85,6 +95,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [{ documentType: 'Petition' }],
+          petitioners: [],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -108,6 +119,7 @@ describe('caseDetailHeaderHelper', () => {
           docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
+          petitioners: [],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -129,6 +141,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
+          petitioners: [],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -151,6 +164,7 @@ describe('caseDetailHeaderHelper', () => {
         caseDetail: {
           docketEntries: [],
           irsPractitioners: [{ userId: '789' }],
+          petitioners: [],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -175,6 +189,7 @@ describe('caseDetailHeaderHelper', () => {
           docketEntries: [],
           hasIrsPractitioner: true,
           isSealed: true,
+          petitioners: [],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -198,6 +213,7 @@ describe('caseDetailHeaderHelper', () => {
         caseDetail: {
           docketEntries: [],
           hasIrsPractitioner: true,
+          petitioners: [],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -218,7 +234,11 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [], hasIrsPractitioner: false },
+        caseDetail: {
+          docketEntries: [],
+          hasIrsPractitioner: false,
+          petitioners: [],
+        },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -238,7 +258,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -258,7 +278,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -277,7 +297,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'FilePetitionSuccess',
         form: {},
         screenMetadata: {
@@ -296,7 +316,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [], isSealed: true },
+        caseDetail: { docketEntries: [], isSealed: true, petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -317,6 +337,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [],
+          petitioners: [],
           privatePractitioners: [{ userId: '123' }],
         },
         currentPage: 'CaseDetail',
@@ -337,7 +358,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -359,6 +380,7 @@ describe('caseDetailHeaderHelper', () => {
         caseDetail: {
           docketEntries: [],
           leadDocketNumber: '101-20',
+          petitioners: [],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -382,6 +404,7 @@ describe('caseDetailHeaderHelper', () => {
         caseDetail: {
           docketEntries: [],
           leadDocketNumber: '',
+          petitioners: [],
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -402,7 +425,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },
@@ -415,7 +438,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should show the Sealed Case banner if the case is sealed', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [], isSealed: true },
+        caseDetail: { docketEntries: [], isSealed: true, petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {},
@@ -427,7 +450,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -442,7 +465,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -457,7 +480,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -477,7 +500,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -498,7 +521,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -519,7 +542,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },
@@ -535,7 +558,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },
@@ -552,7 +575,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },
@@ -570,12 +593,101 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { docketEntries: [] },
+        caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
       },
     });
 
     expect(result.showCreateMessageButton).toBe(true);
+  });
+
+  describe('showRepresented', () => {
+    it('is true when at least one party on the case is represented and the current user is an internal user', () => {
+      const user = {
+        role: ROLES.petitionsClerk,
+        userId: '08f9464a-6eb4-4d58-bf38-5276fe9a5911',
+      };
+
+      const representedUserId = '79c404b8-7ddc-4c48-974c-40b153c25f9e';
+
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: representedUserId,
+              },
+            ],
+            privatePractitioners: [{ representing: [representedUserId] }],
+          },
+          currentPage: 'CaseDetailInternal',
+          form: {},
+        },
+      });
+
+      expect(result.showRepresented).toBe(true);
+    });
+
+    it('is false when no petitioner on the case is represented and the current user is an internal user', () => {
+      const user = {
+        role: ROLES.petitionsClerk,
+        userId: '08f9464a-6eb4-4d58-bf38-5276fe9a5911',
+      };
+
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: '4dcf51d8-c764-470d-a99c-6bf41a9f7b55',
+              },
+            ],
+            privatePractitioners: [
+              { representing: ['b02df1f5-f5ad-4bf2-9be1-105f818a2529'] },
+            ],
+          },
+          currentPage: 'CaseDetailInternal',
+          form: {},
+        },
+      });
+
+      expect(result.showRepresented).toBe(false);
+    });
+
+    it('is false when the logged in user is an external user', () => {
+      const user = {
+        role: ROLES.petitioner,
+        userId: 'b310a93a-ea84-4205-9f81-2ab40c00be95',
+      };
+
+      const representedUserId = '79c404b8-7ddc-4c48-974c-40b153c25f9e';
+
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: representedUserId,
+              },
+            ],
+            privatePractitioners: [{ representing: [representedUserId] }],
+          },
+          currentPage: 'CaseDetailInternal',
+          form: {},
+        },
+      });
+
+      expect(result.showRepresented).toBe(false);
+    });
   });
 });
