@@ -16,16 +16,11 @@ export const removePetitionerFromCaseAction = async ({
   const { contactId } = get(state.form.contact);
   const { caseCaption } = get(state.modal);
 
-  await applicationContext.getUseCases().updateCaseContextInteractor({
-    applicationContext,
-    caseCaption,
-    docketNumber,
-  });
-
   const updatedCaseDetail = await applicationContext
     .getUseCases()
     .removePetitionerFromCaseInteractor({
       applicationContext,
+      caseCaption,
       contactId,
       docketNumber,
     });

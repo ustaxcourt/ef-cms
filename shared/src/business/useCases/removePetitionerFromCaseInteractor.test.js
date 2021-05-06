@@ -172,4 +172,19 @@ describe('removePetitionerFromCaseInteractor', () => {
 
     expect(getContactPrimary(caseToUpdate)).toBeDefined();
   });
+
+  it('should update the case caption', async () => {
+    const mockUpdatedCaption = 'An updated caption';
+
+    await removePetitionerFromCaseInteractor(applicationContext, {
+      caseCaption: mockUpdatedCaption,
+      contactId: getContactPrimary(MOCK_CASE).contactId,
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.caseCaption,
+    ).toEqual(mockUpdatedCaption);
+  });
 });
