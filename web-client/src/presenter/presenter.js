@@ -242,7 +242,6 @@ import { openRemovePetitionerModalSequence } from './sequences/openRemovePetitio
 import { openRemoveRespondentCounselModalSequence } from './sequences/openRemoveRespondentCounselModalSequence';
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
-import { openSealAddressUpdateContactModalSequence } from './sequences/openSealAddressUpdateContactModalSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openSetForHearingModalSequence } from './sequences/openSetForHearingModalSequence';
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
@@ -727,7 +726,6 @@ export const presenter = {
     openRemoveRespondentCounselModalSequence,
     openReplyToMessageModalSequence,
     openSealAddressModalSequence,
-    openSealAddressUpdateContactModalSequence,
     openSetCalendarModalSequence,
     openSetForHearingModalSequence,
     openStrikeDocketEntryModalSequence,
