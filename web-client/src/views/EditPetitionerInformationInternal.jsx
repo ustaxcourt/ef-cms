@@ -26,6 +26,7 @@ export const EditPetitionerInformationInternal = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openRemovePetitionerModalSequence:
       sequences.openRemovePetitionerModalSequence,
+    openSealAddressModalSequence: sequences.openSealAddressModalSequence,
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
@@ -39,6 +40,7 @@ export const EditPetitionerInformationInternal = connect(
     form,
     formCancelToggleCancelSequence,
     openRemovePetitionerModalSequence,
+    openSealAddressModalSequence,
     screenMetadata,
     showModal,
     submitEditPetitionerSequence,
@@ -192,14 +194,13 @@ export const EditPetitionerInformationInternal = connect(
                   <input
                     checked={form.isAddressSealed || false}
                     className="usa-checkbox__input"
-                    disabled={form.contact.isAddressSealed}
+                    disabled={form.isAddressSealed}
                     id="seal-address"
                     name="isAddressSealed"
                     type="checkbox"
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
+                    onChange={() => {
+                      openSealAddressModalSequence({
+                        contactToSeal: form.contact,
                       });
                     }}
                   />
