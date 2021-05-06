@@ -2,8 +2,8 @@ const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 const {
-  migrateItems: migration0025,
-} = require('./migrations/0025-add-contacts-to-petitioners-array');
+  migrateItems: migration9999,
+} = require('./migrations/9999-fake-migration');
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
@@ -28,8 +28,8 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 export const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 0025');
-  items = await migration0025(items, documentClient);
+  applicationContext.logger.debug('about to run migration 9999');
+  items = await migration9999(items, documentClient);
 
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
@@ -41,7 +41,7 @@ const processItems = async ({ documentClient, items }) => {
   try {
     items = await migrateRecords({ documentClient, items });
   } catch (err) {
-    applicationContext.logger.error('Error migrating records', err);
+    applicationContext.logger.error('Error migrating records', { err });
     throw err;
   }
 
