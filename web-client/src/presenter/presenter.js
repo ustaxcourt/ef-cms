@@ -242,6 +242,7 @@ import { openRemovePetitionerModalSequence } from './sequences/openRemovePetitio
 import { openRemoveRespondentCounselModalSequence } from './sequences/openRemoveRespondentCounselModalSequence';
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
+import { openSealAddressUpdateContactModalSequence } from './sequences/openSealAddressUpdateContactModalSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openSetForHearingModalSequence } from './sequences/openSetForHearingModalSequence';
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
@@ -360,6 +361,7 @@ import { submitPractitionerNameSearchSequence } from './sequences/submitPractiti
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
+import { submitUpdatePetitionerInformationAndSealAddressSequence } from './sequences/submitUpdatePetitionerInformationAndSealAddressSequence';
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
 import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePractitionerUserSequence';
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
@@ -725,6 +727,7 @@ export const presenter = {
     openRemoveRespondentCounselModalSequence,
     openReplyToMessageModalSequence,
     openSealAddressModalSequence,
+    openSealAddressUpdateContactModalSequence,
     openSetCalendarModalSequence,
     openSetForHearingModalSequence,
     openStrikeDocketEntryModalSequence,
@@ -841,6 +844,7 @@ export const presenter = {
     submitRemoveConsolidatedCasesSequence,
     submitTrialSessionSequence,
     submitUpdateCaseModalSequence,
+    submitUpdatePetitionerInformationAndSealAddressSequence,
     submitUpdatePetitionerInformationFromModalSequence,
     submitUpdatePractitionerUserSequence,
     submitUpdateUserContactInformationSequence,

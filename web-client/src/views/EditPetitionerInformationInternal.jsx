@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
@@ -9,6 +10,8 @@ import { InternationalAddress } from './StartCase/InternationalAddress';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
+import { SealAddressModal } from './CaseDetail/SealAddressModal';
+import { SealAddressUpdateContactModal } from './CaseDetail/SealAddressUpdateContactModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@cerebral/react';
@@ -54,35 +57,53 @@ export const EditPetitionerInformationInternal = connect(
         <section className="usa-section grid-container">
           <ErrorNotification />
 
-          <h2>Edit Petitioner Information</h2>
-
-          <h3>Contact Information</h3>
+          <h2>Edit Party Information</h2>
 
           <div className="blue-container margin-bottom-5">
-            <div className="usa-form-group">
-              <FormGroup errorText={validationErrors.contact?.name}>
-                <label className="usa-label" htmlFor="name">
-                  <span>Name</span>
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input"
-                  id="name"
-                  name="contact.name"
-                  type="text"
-                  value={form.contact.name || ''}
-                  onBlur={() => {
-                    validatePetitionerSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </FormGroup>
-            </div>
+            <FormGroup>
+              <label className="usa-label" htmlFor="petitionerType">
+                <span>Petitioner Type</span>
+              </label>
+              <select
+                aria-describedby="petitioner-type"
+                className="usa-select max-width-400"
+                id="petitionerType"
+                name="petitionerType"
+                value={form.petitionerType || 'petitioner'}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              >
+                <option value="">- Select -</option>
+                <option value="petitioner">Petitioner</option>
+              </select>
+            </FormGroup>
+
+            <FormGroup errorText={validationErrors.contact?.name}>
+              <label className="usa-label" htmlFor="name">
+                <span>Name</span>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="name"
+                name="contact.name"
+                type="text"
+                value={form.contact.name || ''}
+                onBlur={() => {
+                  validatePetitionerSequence();
+                }}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
 
             <FormGroup errorText={validationErrors.contact?.additionalName}>
               <label className="usa-label" htmlFor="additionalName">
@@ -165,6 +186,32 @@ export const EditPetitionerInformationInternal = connect(
                 }}
               />
             </FormGroup>
+            {editPetitionerInformationHelper.showSealAddress && (
+              <FormGroup>
+                <div className="usa-checkbox">
+                  <input
+                    checked={form.isAddressSealed || false}
+                    className="usa-checkbox__input"
+                    disabled={form.contact.isAddressSealed}
+                    id="seal-address"
+                    name="isAddressSealed"
+                    type="checkbox"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label inline-block"
+                    htmlFor="seal-address"
+                  >
+                    Seal address
+                  </label>
+                </div>
+              </FormGroup>
+            )}
           </div>
 
           <h3>Login & Service Information</h3>
@@ -269,7 +316,7 @@ export const EditPetitionerInformationInternal = connect(
             <Button
               id="submit-edit-petitioner-information"
               onClick={() => {
-                submitEditPetitionerSequence();
+                submitEditPetitionerSequence({ contactToSeal: form.contact });
               }}
             >
               Save
@@ -308,6 +355,10 @@ export const EditPetitionerInformationInternal = connect(
           <NoMatchingEmailFoundModal />
         )}
         {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
+        {showModal === 'SealAddressModal' && <SealAddressModal />}
+        {showModal === 'SealAddressUpdateContactModal' && (
+          <SealAddressUpdateContactModal />
+        )}
       </>
     );
   },
