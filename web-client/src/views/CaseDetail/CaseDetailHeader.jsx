@@ -195,7 +195,10 @@ export const CaseDetailHeader = connect(
                   </span>
                 </p>
                 {caseDetailHeaderHelper.showRepresented && (
-                  <p className="margin-y-0 represented-text " id="case-title">
+                  <p
+                    className="margin-y-0 represented-text "
+                    id="represented-label"
+                  >
                     <span>
                       <FontAwesomeIcon
                         className="margin-right-1"
