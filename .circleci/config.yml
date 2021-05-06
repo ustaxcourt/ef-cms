@@ -804,7 +804,6 @@ build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
       ignore:
-        - develop # run the related develop workflow below
         - prod # run with context workflow below
         - migration # run without smoketests workflow
 
@@ -824,45 +823,6 @@ build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
 
 workflows:
   version: 2
-  hourly:
-    jobs:
-      - build-shared
-      - build-api
-      - build-client-unit
-      - build-client-integration
-      - e2e-pa11y
-      - e2e-pa11y-public
-      - e2e-cypress
-      - e2e-cypress-public
-      - build-client-coverage:
-          requires:
-            - build-shared
-            - build-api
-            - build-client-unit
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-cypress
-            - e2e-cypress-public
-      - deploy:
-          requires:
-            - build-client-coverage
-      - migrate:
-          requires:
-            - deploy
-      - smoketests:
-          requires:
-            - migrate
-      - switch-colors:
-          requires:
-            - smoketests
-    triggers:
-      - schedule:
-          cron: '0 13-22 * * 1-5'
-          filters:
-            branches:
-              only:
-                - develop
   build-and-deploy:
     jobs:
       - build-shared:
@@ -898,6 +858,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -913,6 +874,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -928,6 +890,7 @@ workflows:
               only:
                 - irs
                 - staging
+                - develop
                 - experimental1
                 - experimental2
                 - experimental3
@@ -939,6 +902,7 @@ workflows:
             branches:
               only:
                 - irs
+                - develop
                 - staging
                 - master
                 - experimental1
