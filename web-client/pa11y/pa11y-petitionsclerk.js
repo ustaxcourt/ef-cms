@@ -404,7 +404,6 @@ module.exports = [
     ],
     notes:
       'checks a11y of sealed address display for primary and secondary contact',
-    only: true,
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/case-information&info=sealed-address-display',
   },
