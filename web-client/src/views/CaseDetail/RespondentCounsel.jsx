@@ -8,13 +8,23 @@ import React from 'react';
 const RespondentCounsel = connect(
   {
     caseDetail: state.caseDetail,
+    caseInformationHelper: state.caseInformationHelper,
     partiesInformationHelper: state.partiesInformationHelper,
   },
-  function RespondentCounsel({ caseDetail, partiesInformationHelper }) {
+  function RespondentCounsel({
+    caseDetail,
+    caseInformationHelper,
+    partiesInformationHelper,
+  }) {
     return (
       <>
-        <h2>Respondent Counsel</h2>
-        <RespondentSearch />
+        <div className="grid-row ">
+          <div className="grid-col-4">
+            <h2>Respondent Counsel</h2>
+          </div>
+          {caseInformationHelper.showAddCounsel && <RespondentSearch />}
+        </div>
+
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedRespondents.map(
             irsPractitioner => (

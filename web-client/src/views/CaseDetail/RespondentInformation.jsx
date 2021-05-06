@@ -3,7 +3,6 @@ import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RespondentExistsModal } from './RespondentExistsModal';
-import { RespondentSearch } from './RespondentSearch';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -77,7 +76,6 @@ const RespondentInformation = connect(
                     </Button>
                   )}
                 </div>
-                {caseInformationHelper.showAddCounsel && <RespondentSearch />}
               </div>
               {caseDetailHelper.hasIrsPractitioners &&
                 respondentPartyInformation()}
