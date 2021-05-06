@@ -13,15 +13,10 @@
 
 ENV=$1
 
-EXISTS=$(aws dynamodb list-tables --region us-east-1 | grep efcms-deploy-${ENV} | wc -l)
+DESTINATION_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"}}' | jq -r ".Item.current.S")
 
-if [ "${EXISTS}" -eq "1" ]; then
-  DESTINATION_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"}}' | jq -r ".Item.current.S")
-  if [ -z "$DESTINATION_TABLE_VERSION" ]; then
-    echo "efcms-search-${ENV}-alpha"
-  else
-    echo "efcms-search-${ENV}-${DESTINATION_TABLE_VERSION}"
-  fi
+if [ -z "$DESTINATION_TABLE_VERSION" ]; then
+  echo "efcms-search-${ENV}"
 else
-  echo "efcms-search-${ENV}-alpha"
+  echo "efcms-search-${ENV}-${DESTINATION_TABLE_VERSION}"
 fi

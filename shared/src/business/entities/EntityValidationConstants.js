@@ -263,9 +263,9 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   secondaryDocument: joi // TODO: limit keys
     .object()
     .keys({
-      documentTitle: JoiValidationConstants.STRING.max(500)
-        .optional()
-        .description('The title of the secondary document.'),
+      documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
+        'The title of the secondary document.',
+      ),
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .required()
         .description('The type of the secondary document.'),

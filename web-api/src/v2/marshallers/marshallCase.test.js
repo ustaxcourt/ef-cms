@@ -7,7 +7,7 @@ const {
 const { marshallCase } = require('./marshallCase');
 const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
 
-describe('marshallCase', () => {
+describe('marshallCase (which fails if version increase is needed, DO NOT CHANGE TESTS)', () => {
   it('returns a case object with the expected properties', () => {
     expect(Object.keys(marshallCase(MOCK_CASE)).sort()).toEqual([
       'caseCaption',
@@ -84,7 +84,7 @@ describe('marshallCase', () => {
     expect(marshalled.trialDate).toEqual(mock.trialDate);
     expect(marshalled.trialLocation).toEqual(mock.trialLocation);
 
-    // Exact format asserted in other tests. 
+    // Exact format asserted in other tests.
     expect(marshalled.contactPrimary).toBeDefined();
     expect(marshalled.contactSecondary).toBeDefined();
     expect(marshalled.docketEntries).toBeDefined();
