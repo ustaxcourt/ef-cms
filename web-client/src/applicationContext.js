@@ -10,6 +10,7 @@ import {
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
+  isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -681,6 +682,7 @@ const applicationContext = {
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isServed,
       isStringISOFormatted,
+      isUserIdRepresentedByPrivatePractitioner,
       isValidDateString,
       prepareDateFromString,
       replaceBracketed,
