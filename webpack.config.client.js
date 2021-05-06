@@ -43,6 +43,7 @@ module.exports = {
       COGNITO_CLIENT_ID: null,
       COGNITO_LOGIN_URL: null,
       COGNITO_REDIRECT_URI: null,
+      COGNITO_SUFFIX: null,
       COGNITO_TOKEN_URL: null,
       ENV: null,
       FILE_UPLOAD_MODAL_TIMEOUT: null,
@@ -72,6 +73,7 @@ module.exports = {
     fallback: {
       crypto: require.resolve('crypto-browserify'),
       stream: require.resolve('stream-browserify'),
+      util: require.resolve('util/'),
     },
   },
   stats: {
