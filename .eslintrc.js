@@ -113,6 +113,7 @@ module.exports = {
         },
       },
     ],
+    'max-lines': ['error', { max: 3800, skipBlankLines: true }], // TODO - devex 864 - max 500 lines
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
     'no-restricted-globals': [
