@@ -10,7 +10,7 @@ const {
   getPetitionerById,
 } = require('../entities/cases/Case');
 const {
-  removePetitionerAndUpdateCaseCaptionInteractor: removePetitionerAndUpdateCaptionInteractor,
+  removePetitionerAndUpdateCaptionInteractor,
 } = require('./removePetitionerAndUpdateCaptionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
