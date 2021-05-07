@@ -4,11 +4,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  formattedCaseDetail as formattedCaseDetailComputed,
-  formattedClosedCases as formattedClosedCasesComputed,
-  getShowDocumentViewerLink,
-} from './formattedCaseDetail';
+import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -64,16 +60,6 @@ describe('formattedCaseDetail', () => {
 
   const formattedCaseDetail = withAppContextDecorator(
     formattedCaseDetailComputed,
-    {
-      ...applicationContext,
-      getCurrentUser: () => {
-        return globalUser;
-      },
-    },
-  );
-
-  const formattedClosedCases = withAppContextDecorator(
-    formattedClosedCasesComputed,
     {
       ...applicationContext,
       getCurrentUser: () => {
@@ -252,11 +238,8 @@ describe('formattedCaseDetail', () => {
 
   it('maps docket record dates', () => {
     const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      correspondence: [],
+      ...MOCK_CASE,
       docketEntries: simpleDocketEntries,
-      hasVerifiedIrsNotice: false,
-      petitioners: mockPetitioners,
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -273,11 +256,8 @@ describe('formattedCaseDetail', () => {
 
   it('maps docket record documents', () => {
     const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      correspondence: [],
+      ...MOCK_CASE,
       docketEntries: simpleDocketEntries,
-      hasVerifiedIrsNotice: false,
-      petitioners: mockPetitioners,
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -291,17 +271,8 @@ describe('formattedCaseDetail', () => {
 
   it('formats docket record document data strings and descriptions and docket entry fields correctly', () => {
     const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      contactSecondary: {
-        name: 'Bill',
-      },
-      correspondence: [],
+      ...MOCK_CASE,
       docketEntries: complexDocketEntries,
-      hasVerifiedIrsNotice: false,
-      otherFilers: [],
-      otherPetitioners: [],
-      petitioners: mockPetitioners,
-      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
 
     const result = runCompute(formattedCaseDetail, {
@@ -393,20 +364,9 @@ describe('formattedCaseDetail', () => {
   });
 
   it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
-    const DOCKET_NUMBER = '101-20';
     const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      contactSecondary: {
-        name: 'Bill',
-      },
-      correspondence: [],
+      ...MOCK_CASE,
       docketEntries: simpleDocketEntries,
-      docketNumber: DOCKET_NUMBER,
-      hasVerifiedIrsNotice: false,
-      otherFilers: [],
-      otherPetitioners: [],
-      petitioners: mockPetitioners,
-      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
 
     const result = runCompute(formattedCaseDetail, {
@@ -419,28 +379,12 @@ describe('formattedCaseDetail', () => {
 
     expect(result.formattedDocketEntries).toMatchObject([
       {
-        editDocketEntryMetaLink: `/case-detail/${DOCKET_NUMBER}/docket-entry/${simpleDocketEntries[0].index}/edit-meta`,
+        editDocketEntryMetaLink: `/case-detail/${MOCK_CASE.docketNumber}/docket-entry/${simpleDocketEntries[0].index}/edit-meta`,
       },
     ]);
   });
 
   describe('createdAtFormatted', () => {
-    const baseCaseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      contactSecondary: {
-        name: 'Bill',
-      },
-      correspondence: [],
-      hasVerifiedIrsNotice: false,
-      petitioners: [
-        {
-          contactType: CONTACT_TYPES.primary,
-          name: 'Bob',
-        },
-      ],
-      privatePractitioners: [],
-    };
-
     const baseDocument = {
       createdAt: '2019-04-19T17:29:13.120Z',
       docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
@@ -457,7 +401,7 @@ describe('formattedCaseDetail', () => {
 
     it('should be a formatted date string if the document is on the docket record and is served', () => {
       const caseDetail = {
-        ...baseCaseDetail,
+        ...MOCK_CASE,
         docketEntries: [baseDocument],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -476,7 +420,7 @@ describe('formattedCaseDetail', () => {
 
     it('should be a formatted date string if the document is on the docket record and is an unserved external document', () => {
       const caseDetail = {
-        ...baseCaseDetail,
+        ...MOCK_CASE,
         docketEntries: [
           {
             ...baseDocument,
@@ -500,7 +444,7 @@ describe('formattedCaseDetail', () => {
 
     it('should be undefined if the document is on the docket record and is an unserved court-issued document', () => {
       const caseDetail = {
-        ...baseCaseDetail,
+        ...MOCK_CASE,
         docketEntries: [
           {
             ...baseDocument,
@@ -528,8 +472,7 @@ describe('formattedCaseDetail', () => {
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
     const caseDetail = {
-      caseCaption: 'Brett Osborne, Petitioner',
-      correspondence: [],
+      ...MOCK_CASE,
       docketEntries: [
         {
           docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
@@ -548,10 +491,6 @@ describe('formattedCaseDetail', () => {
           lodged: false,
         },
       ],
-      otherFilers: [],
-      otherPetitioners: [],
-      petitioners: mockPetitioners,
-      privatePractitioners: [{ name: 'Test Practitioner', representing: [] }],
     };
 
     const result = runCompute(formattedCaseDetail, {
@@ -578,8 +517,7 @@ describe('formattedCaseDetail', () => {
 
     beforeAll(() => {
       sortedCaseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        correspondence: [],
+        ...MOCK_CASE,
         docketEntries: [
           {
             createdAt: '2019-02-28T21:14:39.488Z',
@@ -626,9 +564,6 @@ describe('formattedCaseDetail', () => {
             status: 'served',
           },
         ],
-        docketNumber: '123-45',
-        hasVerifiedIrsNotice: false,
-        petitioners: mockPetitioners,
       };
     });
 
@@ -737,9 +672,8 @@ describe('formattedCaseDetail', () => {
   describe('case name mapping', () => {
     it('should not error if caseCaption does not exist', () => {
       const caseDetail = {
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
+        ...MOCK_CASE,
+        caseCaption: undefined,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -753,10 +687,8 @@ describe('formattedCaseDetail', () => {
 
     it("should remove ', Petitioner' from caseCaption", () => {
       const caseDetail = {
+        ...MOCK_CASE,
         caseCaption: 'Sisqo, Petitioner',
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -770,10 +702,8 @@ describe('formattedCaseDetail', () => {
 
     it("should remove ', Petitioners' from caseCaption", () => {
       const caseDetail = {
+        ...MOCK_CASE,
         caseCaption: 'Sisqo and friends,  Petitioners ',
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -787,10 +717,8 @@ describe('formattedCaseDetail', () => {
 
     it("should remove ', Petitioner(s)' from caseCaption", () => {
       const caseDetail = {
+        ...MOCK_CASE,
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -806,12 +734,7 @@ describe('formattedCaseDetail', () => {
   describe('practitioner mapping', () => {
     it('should add barNumber into formatted name if available', () => {
       const caseDetail = {
-        caseCaption: 'Sisqo, Petitioner',
-        correspondence: [],
-        docketEntries: [],
-        otherFilers: [],
-        otherPetitioners: [],
-        petitioners: mockPetitioners,
+        ...MOCK_CASE,
         privatePractitioners: [
           { barNumber: '9999', name: 'Jackie Chan', representing: [] },
         ],
@@ -827,14 +750,10 @@ describe('formattedCaseDetail', () => {
         'Jackie Chan (9999)',
       );
     });
+
     it('should not add barNumber into formatted name if not available', () => {
       const caseDetail = {
-        caseCaption: 'Sisqo, Petitioner',
-        correspondence: [],
-        docketEntries: [],
-        otherFilers: [],
-        otherPetitioners: [],
-        petitioners: mockPetitioners,
+        ...MOCK_CASE,
         privatePractitioners: [{ name: 'Jackie Chan', representing: [] }],
       };
       const result = runCompute(formattedCaseDetail, {
@@ -853,10 +772,8 @@ describe('formattedCaseDetail', () => {
   describe('trial detail mapping mapping', () => {
     it('should format trial information if a trial session id exists', () => {
       const caseDetail = {
+        ...MOCK_CASE,
         associatedJudge: 'Judge Judy',
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -877,10 +794,8 @@ describe('formattedCaseDetail', () => {
 
     it('should not add time if no time stamp exists', () => {
       const caseDetail = {
+        ...MOCK_CASE,
         associatedJudge: 'Judge Judy',
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
         status: STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialLocation: 'England is my City',
@@ -901,11 +816,6 @@ describe('formattedCaseDetail', () => {
 
   describe('formats case deadlines', () => {
     it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
-      const caseDetail = {
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
-      };
       const caseDeadlines = [
         {
           deadlineDate: '2019-06-30T04:00:00.000Z',
@@ -922,7 +832,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDeadlines,
-          caseDetail,
+          caseDetail: MOCK_CASE,
           validationErrors: {},
         },
       });
@@ -946,11 +856,6 @@ describe('formattedCaseDetail', () => {
     });
 
     it('formats deadline dates and does not set overdue to true if the deadlineDate is today', () => {
-      const caseDetail = {
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
-      };
       const caseDeadlines = [
         {
           deadlineDate: applicationContext.getUtilities().createISODateString(),
@@ -961,7 +866,7 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDeadlines,
-          caseDetail,
+          caseDetail: MOCK_CASE,
           validationErrors: {},
         },
       });
@@ -970,16 +875,10 @@ describe('formattedCaseDetail', () => {
     });
 
     it('does not format empty caseDeadlines array', () => {
-      const caseDetail = {
-        caseDeadlines: [],
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
-      };
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: MOCK_CASE,
           validationErrors: {},
         },
       });
@@ -1028,11 +927,8 @@ describe('formattedCaseDetail', () => {
       ];
 
       caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        correspondence: [],
+        ...MOCK_CASE,
         docketEntries,
-        hasVerifiedIrsNotice: false,
-        petitioners: mockPetitioners,
       };
     });
 
@@ -1096,6 +992,7 @@ describe('formattedCaseDetail', () => {
   describe('consolidatedCases', () => {
     it('should format consolidated cases if they exist', () => {
       const caseDetail = {
+        ...MOCK_CASE,
         associatedJudge: 'Judge Judy',
         consolidatedCases: [
           {
@@ -1108,13 +1005,6 @@ describe('formattedCaseDetail', () => {
             trialSessionId: '123',
           },
         ],
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
-        status: STATUS_TYPES.calendared,
-        trialDate: '2018-12-11T05:00:00Z',
-        trialLocation: 'England is my City',
-        trialSessionId: '123',
       };
 
       const result = runCompute(formattedCaseDetail, {
@@ -1131,14 +1021,8 @@ describe('formattedCaseDetail', () => {
 
     it('should default consolidatedCases to an empty array if they do not exist', () => {
       const caseDetail = {
-        associatedJudge: 'Judge Judy',
-        correspondence: [],
-        docketEntries: [],
-        petitioners: mockPetitioners,
-        status: STATUS_TYPES.calendared,
-        trialDate: '2018-12-11T05:00:00Z',
-        trialLocation: 'England is my City',
-        trialSessionId: '123',
+        ...MOCK_CASE,
+        consolidatedCases: undefined,
       };
 
       const result = runCompute(formattedCaseDetail, {
@@ -1154,138 +1038,13 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  describe('getCalendarDetailsForTrialSession', () => {
-    it('adds the calendarNotes from the trialSession caseOrder if a trialSessionId is set on the case', () => {
-      const caseDetail = {
-        associatedJudge: 'Judge Judy',
-        correspondence: [],
-        docketEntries: [],
-        docketNumber: '123-45',
-        petitioners: mockPetitioners,
-        status: STATUS_TYPES.calendared,
-        trialDate: '2018-12-11T05:00:00Z',
-        trialLocation: 'England is my City',
-        trialSessionId: '123',
-      };
-
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          trialSessions: [
-            {
-              caseOrder: [
-                {
-                  calendarNotes: 'Test notes',
-                  docketNumber: '123-45',
-                },
-              ],
-              trialSessionId: '123',
-            },
-          ],
-          validationErrors: {},
-        },
-      });
-
-      expect(result.trialSessionNotes).toEqual('Test notes');
-    });
-
-    it('adds calendarNotes and addedToSessionAt fields from trialSessions to case hearings', () => {
-      const caseDetail = {
-        associatedJudge: 'Judge Judy',
-        correspondence: [],
-        docketEntries: [],
-        docketNumber: '123-45',
-        hearings: [
-          {
-            trialSessionId: '234',
-          },
-          {
-            trialSessionId: '345',
-          },
-        ],
-        petitioners: mockPetitioners,
-        status: STATUS_TYPES.calendared,
-        trialDate: '2018-12-11T05:00:00Z',
-        trialLocation: 'England is my City',
-        trialSessionId: '123',
-      };
-
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          trialSessions: [
-            {
-              caseOrder: [
-                {
-                  docketNumber: '123-45',
-                },
-              ],
-              trialSessionId: '123',
-            },
-            {
-              caseOrder: [
-                {
-                  addedToSessionAt: '2019-01-01T17:29:13.122Z',
-                  calendarNotes: 'Hearing notes one.',
-                  docketNumber: '123-45',
-                },
-              ],
-              trialSessionId: '234',
-            },
-            {
-              caseOrder: [
-                {
-                  addedToSessionAt: '2019-01-02T17:29:13.122Z',
-                  calendarNotes: 'Hearing notes two.',
-                  docketNumber: '123-45',
-                },
-              ],
-              trialSessionId: '345',
-            },
-          ],
-          validationErrors: {},
-        },
-      });
-
-      expect(result.hearings).toMatchObject([
-        {
-          addedToSessionAt: '2019-01-01T17:29:13.122Z',
-          calendarNotes: 'Hearing notes one.',
-          trialSessionId: '234',
-        },
-        {
-          addedToSessionAt: '2019-01-02T17:29:13.122Z',
-          calendarNotes: 'Hearing notes two.',
-          trialSessionId: '345',
-        },
-      ]);
-    });
-  });
-
   describe('showEditDocketRecordEntry', () => {
-    let caseDetail;
-
-    beforeAll(() => {
-      caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        correspondence: [],
-        petitioners: [
-          {
-            contactType: CONTACT_TYPES.primary,
-            name: 'Bob',
-          },
-        ],
-      };
-    });
-
     it('should not show the edit button if the docket entry document has not been QCed', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             docketEntries: [
               {
                 attachments: false,
@@ -1303,9 +1062,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
-          },
           validationErrors: {},
         },
       });
@@ -1318,9 +1074,9 @@ describe('formattedCaseDetail', () => {
     it('should show the edit button if the docket entry document has been QCed as part of the petition QC', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             docketEntries: [
               {
                 createdAt: '2020-10-21T13:46:55.621Z',
@@ -1349,9 +1105,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
-          },
           validationErrors: {},
         },
       });
@@ -1364,9 +1117,9 @@ describe('formattedCaseDetail', () => {
     it('should not show the edit button if the user does not have permission', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(petitionsClerkUser), // does not have EDIT_DOCKET_ENTRY permission
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             docketEntries: [
               {
                 attachments: false,
@@ -1383,9 +1136,6 @@ describe('formattedCaseDetail', () => {
                 workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
               },
             ],
-          },
-          permissions: {
-            EDIT_DOCKET_ENTRY: false,
           },
           validationErrors: {},
         },
@@ -1399,9 +1149,9 @@ describe('formattedCaseDetail', () => {
     it('should show the edit button if the docket entry document is QCed and the user has permission', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             docketEntries: [
               {
                 attachments: false,
@@ -1419,9 +1169,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
-          },
           validationErrors: {},
         },
       });
@@ -1434,9 +1181,9 @@ describe('formattedCaseDetail', () => {
     it('should show the edit button if the docket entry has no document and the user has permission', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             docketEntries: [
               {
                 description: 'Filing Fee Paid',
@@ -1448,9 +1195,6 @@ describe('formattedCaseDetail', () => {
                 isOnDocketRecord: true,
               },
             ],
-          },
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
           },
           validationErrors: {},
         },
@@ -1464,9 +1208,9 @@ describe('formattedCaseDetail', () => {
     it('should show the edit button if the docket entry has a system generated document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             docketEntries: [
               {
                 attachments: false,
@@ -1483,9 +1227,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
-          },
           validationErrors: {},
         },
       });
@@ -1498,9 +1239,9 @@ describe('formattedCaseDetail', () => {
     it('should NOT show the edit button if the docket entry has an unserved court issued document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             docketEntries: [
               {
                 attachments: false,
@@ -1518,9 +1259,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
-          },
           validationErrors: {},
         },
       });
@@ -1533,9 +1271,9 @@ describe('formattedCaseDetail', () => {
     it('should show the edit button if the docket entry has a served court issued document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             docketEntries: [
               {
                 attachments: false,
@@ -1555,9 +1293,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
-          },
           validationErrors: {},
         },
       });
@@ -1570,9 +1305,9 @@ describe('formattedCaseDetail', () => {
     it('should show the edit button if the document is an unservable court issued document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             docketEntries: [
               {
                 attachments: false,
@@ -1592,9 +1327,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
-          },
           validationErrors: {},
         },
       });
@@ -1610,8 +1342,7 @@ describe('formattedCaseDetail', () => {
 
     beforeAll(() => {
       caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        correspondence: [],
+        ...MOCK_CASE,
         docketEntries: [
           {
             attachments: false,
@@ -1683,23 +1414,14 @@ describe('formattedCaseDetail', () => {
             workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
           },
         ],
-        petitioners: [
-          {
-            contactType: CONTACT_TYPES.primary,
-            name: 'Bob',
-          },
-        ],
       };
     });
 
     it('should show number of pages from the document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail,
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
-          },
           validationErrors: {},
         },
       });
@@ -1710,11 +1432,8 @@ describe('formattedCaseDetail', () => {
     it('should show zero (0) number of pages with no document', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
-          ...getBaseState(petitionsClerkUser),
+          ...getBaseState(docketClerkUser),
           caseDetail,
-          permissions: {
-            EDIT_DOCKET_ENTRY: true,
-          },
           validationErrors: {},
         },
       });
@@ -1734,11 +1453,6 @@ describe('formattedCaseDetail', () => {
               processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
             },
           ],
-        },
-        permissions: {
-          CREATE_ORDER_DOCKET_ENTRY: false,
-          DOCKET_ENTRY: false,
-          UPDATE_CASE: false,
         },
         validationErrors: {},
       },
@@ -1764,11 +1478,6 @@ describe('formattedCaseDetail', () => {
             },
           ],
         },
-        permissions: {
-          CREATE_ORDER_DOCKET_ENTRY: false,
-          DOCKET_ENTRY: false,
-          UPDATE_CASE: false,
-        },
         screenMetadata: {
           isAssociated: false,
         },
@@ -1789,8 +1498,7 @@ describe('formattedCaseDetail', () => {
 
     beforeAll(() => {
       caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        correspondence: [],
+        ...MOCK_CASE,
         docketEntries: [
           {
             attachments: false,
@@ -1809,67 +1517,6 @@ describe('formattedCaseDetail', () => {
             numberOfPages: 24,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
-          {
-            description: 'Filing Fee Paid',
-            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffb1',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            isFileAttached: false,
-            isOnDocketRecord: true,
-          },
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'System Generated',
-            docketEntryId: '70094dbb-72bf-481e-a592-8d50dad7ffa9',
-            documentTitle: 'System Generated',
-            documentType: 'Notice of Trial',
-            eventCode: 'NTD',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            isFileAttached: true,
-            isOnDocketRecord: true,
-            numberOfPages: 2,
-          },
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'Court Issued - Not Served',
-            docketEntryId: '80094dbb-72bf-481e-a592-8d50dad7ffa0',
-            documentTitle: 'Court Issued - Not Served',
-            documentType: 'Order',
-            eventCode: 'O',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            isCourtIssuedDocument: true,
-            isFileAttached: true,
-            isOnDocketRecord: true,
-            numberOfPages: 7,
-            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-          },
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'Court Issued - Served',
-            docketEntryId: '90094dbb-72bf-481e-a592-8d50dad7ffa1',
-            documentTitle: 'Court Issued - Served',
-            documentType: 'Order',
-            eventCode: 'O',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            isCourtIssuedDocument: true,
-            isFileAttached: true,
-            isOnDocketRecord: true,
-            numberOfPages: 9,
-            servedAt: '2019-06-19T17:29:13.120Z',
-            status: 'served',
-            workItem: { completedAt: '2019-06-19T17:29:13.120Z' },
-          },
-        ],
-        petitioners: [
-          {
-            contactType: CONTACT_TYPES.primary,
-            name: 'Bob',
-          },
         ],
       };
     });
@@ -1879,11 +1526,6 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionerUser),
           caseDetail,
-          permissions: {
-            CREATE_ORDER_DOCKET_ENTRY: false,
-            DOCKET_ENTRY: false,
-            UPDATE_CASE: false,
-          },
           validationErrors: {},
         },
       });
@@ -1915,11 +1557,6 @@ describe('formattedCaseDetail', () => {
                 servedAt: '2020-01-23T21:44:54.034Z',
               },
             ],
-          },
-          permissions: {
-            CREATE_ORDER_DOCKET_ENTRY: false,
-            DOCKET_ENTRY: false,
-            UPDATE_CASE: false,
           },
           screenMetadata: {
             isAssociated: true,
@@ -1955,11 +1592,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {
-            CREATE_ORDER_DOCKET_ENTRY: false,
-            DOCKET_ENTRY: false,
-            UPDATE_CASE: false,
-          },
           screenMetadata: {
             isAssociated: true,
           },
@@ -1991,11 +1623,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {
-            CREATE_ORDER_DOCKET_ENTRY: false,
-            DOCKET_ENTRY: false,
-            UPDATE_CASE: false,
-          },
           screenMetadata: {
             isAssociated: true,
           },
@@ -2019,11 +1646,6 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail,
-          permissions: {
-            CREATE_ORDER_DOCKET_ENTRY: true,
-            DOCKET_ENTRY: true,
-            UPDATE_CASE: true,
-          },
           validationErrors: {},
         },
       });
@@ -2064,8 +1686,7 @@ describe('formattedCaseDetail', () => {
       otherFilers = [{ ...baseContact, contactType: CONTACT_TYPES.otherFiler }];
 
       caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        correspondence: [],
+        ...MOCK_CASE,
         docketEntries: [
           {
             attachments: false,
@@ -2082,7 +1703,6 @@ describe('formattedCaseDetail', () => {
             numberOfPages: 24,
           },
         ],
-        partyType: 'Petitioner',
         petitioners: [
           contactPrimary,
           contactSecondary,
@@ -2103,7 +1723,6 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail,
-          permissions: {},
           validationErrors: {},
         },
       });
@@ -2122,7 +1741,6 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail,
-          permissions: {},
           validationErrors: {},
         },
       });
@@ -2141,7 +1759,6 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(petitionerUser),
           caseDetail,
-          permissions: {},
           validationErrors: {},
         },
       });
@@ -2156,267 +1773,8 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  describe('getShowDocumentViewerLink', () => {
-    const tests = [
-      {
-        inputs: {
-          hasDocument: true,
-          isExternalUser: false,
-        },
-        output: true,
-      },
-      {
-        inputs: {
-          hasDocument: false,
-          isExternalUser: false,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isExternalUser: true,
-          isStricken: true,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: true,
-          isExternalUser: true,
-          isUnservable: true,
-        },
-        output: true,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: true,
-          isExternalUser: true,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: true,
-          isExternalUser: true,
-          isServed: true,
-        },
-        output: true,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isServed: true,
-          userHasAccessToCase: false,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isServed: false,
-          userHasAccessToCase: true,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isServed: true,
-          userHasAccessToCase: true,
-        },
-        output: true,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: true,
-          isExternalUser: true,
-          isServed: false,
-          isUnservable: true,
-          userHasAccessToCase: true,
-        },
-        output: true,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isServed: false,
-          userHasAccessToCase: true,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isServed: true,
-          userHasAccessToCase: true,
-        },
-        output: true,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isServed: true,
-          userHasAccessToCase: false,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: true,
-          isExternalUser: true,
-          isServed: false,
-          isUnservable: true,
-          userHasAccessToCase: true,
-        },
-        output: true,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isServed: false,
-          isUnservable: false,
-          userHasAccessToCase: false,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isServed: false,
-          isUnservable: true,
-          userHasAccessToCase: false,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isExternalUser: true,
-          userHasNoAccessToDocument: true,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isInitialDocument: true,
-          isServed: false,
-          isStricken: false,
-          isUnservable: false,
-          userHasAccessToCase: true,
-          userHasNoAccessToDocument: false,
-        },
-        output: true,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: false,
-          isExternalUser: true,
-          isInitialDocument: true,
-          isServed: false,
-          isStricken: false,
-          isUnservable: false,
-          userHasAccessToCase: false,
-          userHasNoAccessToDocument: false,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: true,
-          isExternalUser: true,
-          isInitialDocument: false,
-          isServed: true,
-          isStipDecision: true,
-          isStricken: false,
-          isUnservable: false,
-          userHasAccessToCase: false,
-          userHasNoAccessToDocument: false,
-        },
-        output: false,
-      },
-      {
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: true,
-          isExternalUser: true,
-          isInitialDocument: false,
-          isServed: true,
-          isStipDecision: true,
-          isStricken: false,
-          isUnservable: false,
-          userHasAccessToCase: true,
-          userHasNoAccessToDocument: false,
-        },
-        output: true,
-      },
-      {
-        // User is external, with no access to case, document link is not publicly visible
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: true,
-          isExternalUser: true,
-          isHiddenToPublic: true,
-          isUnservable: true,
-          userHasAccessToCase: false,
-        },
-        output: false,
-      },
-      {
-        // User is external, with access to case, document link is visible
-        inputs: {
-          hasDocument: true,
-          isCourtIssuedDocument: true,
-          isExternalUser: true,
-          isHiddenToPublic: true,
-          isUnservable: true,
-          userHasAccessToCase: true,
-        },
-        output: true,
-      },
-    ];
-
-    tests.forEach(({ inputs, output }) => {
-      it(`returns expected output of '${output}' for inputs ${JSON.stringify(
-        inputs,
-      )}`, () => {
-        const result = getShowDocumentViewerLink(inputs);
-        expect(result).toEqual(output);
-      });
-    });
-  });
-
   describe('showNotServed', () => {
     let baseContact;
-    let contactSecondary;
-    let otherPetitioners;
-    let otherFilers;
     let caseDetail;
 
     beforeEach(() => {
@@ -2424,14 +1782,8 @@ describe('formattedCaseDetail', () => {
         hasEAccess: true,
       };
 
-      contactSecondary = baseContact;
-      otherPetitioners = [baseContact];
-      otherFilers = [baseContact];
-
       caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        contactSecondary,
-        correspondence: [],
+        ...MOCK_CASE,
         docketEntries: [
           {
             attachments: false,
@@ -2449,9 +1801,6 @@ describe('formattedCaseDetail', () => {
             numberOfPages: 24,
           },
         ],
-        otherFilers,
-        otherPetitioners,
-        partyType: 'Petitioner',
         petitioners: [{ ...baseContact, contactType: CONTACT_TYPES.primary }],
       };
     });
@@ -2461,7 +1810,6 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail,
-          permissions: {},
           validationErrors: {},
         },
       });
@@ -2478,7 +1826,6 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail,
-          permissions: {},
           validationErrors: {},
         },
       });
@@ -2497,7 +1844,6 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail,
-          permissions: {},
           validationErrors: {},
         },
       });
@@ -2513,9 +1859,6 @@ describe('formattedCaseDetail', () => {
   describe('showServed', () => {
     let baseContact;
     let contactPrimary;
-    let contactSecondary;
-    let otherPetitioners;
-    let otherFilers;
     let caseDetail;
 
     const mockDocketEntry = {
@@ -2542,18 +1885,10 @@ describe('formattedCaseDetail', () => {
         hasEAccess: true,
       };
       contactPrimary = baseContact;
-      contactSecondary = baseContact;
-      otherPetitioners = [baseContact];
-      otherFilers = [baseContact];
 
       caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        contactSecondary,
-        correspondence: [],
+        ...MOCK_CASE,
         docketEntries: [mockDocketEntry],
-        otherFilers,
-        otherPetitioners,
-        partyType: 'Petitioner',
         petitioners: [
           { ...contactPrimary, contactType: CONTACT_TYPES.primary },
         ],
@@ -2565,7 +1900,6 @@ describe('formattedCaseDetail', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail,
-          permissions: {},
           validationErrors: {},
         },
       });
@@ -2587,7 +1921,6 @@ describe('formattedCaseDetail', () => {
               },
             ],
           },
-          permissions: {},
           validationErrors: {},
         },
       });
@@ -2596,361 +1929,106 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  describe('formattedClosedCases', () => {
-    it('should return formatted closed cases', () => {
-      const caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        correspondence: [],
-        createdAt: '2020-02-02T17:29:13.120Z',
-        docketEntries: simpleDocketEntries,
-        hasVerifiedIrsNotice: false,
-        petitioners: mockPetitioners,
-      };
-
-      const result = runCompute(formattedClosedCases, {
-        state: {
-          closedCases: [caseDetail],
-        },
-      });
-
-      expect(result).toMatchObject([{ createdAtFormatted: '02/02/20' }]);
-    });
-  });
-
   describe('formattedDocketEntriesOnDocketRecord and formattedPendingDocketEntriesOnDocketRecord', () => {
     it('should return formatted docket entries that are on the docket record, and in the pending list', () => {
+      const baseDocketEntry = {
+        createdAt: '2020-09-18T17:38:31.774Z',
+        entityName: 'DocketEntry',
+        filedBy: 'Petr. Mona Schultz',
+        filingDate: '2020-09-18T17:38:31.772Z',
+        isDraft: false,
+        numberOfPages: 11,
+        partyPrimary: true,
+        partySecondary: false,
+        processingStatus: 'complete',
+        receivedAt: '2020-09-18T17:38:31.775Z',
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      };
+
       const caseDetail = {
-        archivedCorrespondences: [],
-        archivedDocketEntries: [],
-        associatedJudge: 'Chief Judge',
-        automaticBlocked: true,
-        automaticBlockedDate: '2020-09-18T17:38:32.439Z',
-        automaticBlockedReason: 'Pending Item',
-        caseCaption: 'Mona Schultz, Petitioner',
-        caseType: 'CDP (Lien/Levy)',
-        correspondence: [],
-        createdAt: '2020-09-18T17:38:31.772Z',
+        ...MOCK_CASE,
         docketEntries: [
           {
-            createdAt: '2020-09-18T17:38:31.774Z',
+            ...baseDocketEntry,
             docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
             documentTitle: 'Petition',
             documentType: 'Petition',
-            entityName: 'DocketEntry',
             eventCode: 'P',
-            filedBy: 'Petr. Mona Schultz',
-            filingDate: '2020-09-18T17:38:31.772Z',
             index: 1,
-            isDraft: false,
             isFileAttached: true,
             isMinuteEntry: false,
             isOnDocketRecord: true,
-            isStricken: false,
-            numberOfPages: 11,
-            partyPrimary: true,
-            partySecondary: false,
             pending: false,
-            privatePractitioners: [],
-            processingStatus: 'complete',
-            receivedAt: '2020-09-18T17:38:31.775Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            workItem: {
-              assigneeId: null,
-              assigneeName: null,
-              associatedJudge: 'Chief Judge',
-              caseStatus: 'New',
-              caseTitle: 'Mona Schultz',
-              createdAt: '2020-09-18T17:38:31.775Z',
-              docketEntry: {
-                createdAt: '2020-09-18T17:38:31.774Z',
-                docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-                documentTitle: 'Petition',
-                documentType: 'Petition',
-                entityName: 'DocketEntry',
-                eventCode: 'P',
-                filedBy: 'Petr. Mona Schultz',
-                filingDate: '2020-09-18T17:38:31.772Z',
-                isDraft: false,
-                isFileAttached: true,
-                isMinuteEntry: false,
-                isOnDocketRecord: true,
-                isStricken: false,
-                partyPrimary: true,
-                partySecondary: false,
-                pending: false,
-                privatePractitioners: [],
-                processingStatus: 'pending',
-                receivedAt: '2020-09-18T17:38:31.775Z',
-                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-              },
-              docketNumber: '169-20',
-              docketNumberWithSuffix: '169-20L',
-              entityName: 'WorkItem',
-              isInitializeCase: true,
-              section: 'petitions',
-              sentBy: 'Test Petitioner',
-              sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-              updatedAt: '2020-09-18T17:38:31.775Z',
-              workItemId: 'e4c84638-0401-4061-8eff-c6cac530ae51',
-            },
           },
           {
-            createdAt: '2020-09-18T17:38:31.775Z',
+            ...baseDocketEntry,
             docketEntryId: '087eb3f6-b164-40f3-980f-835da7292097',
             documentTitle: 'Request for Place of Trial at Seattle, Washington',
             documentType: 'Request for Place of Trial',
-            entityName: 'DocketEntry',
             eventCode: 'RQT',
-            filingDate: '2020-09-18T17:38:31.772Z',
             index: 2,
-            isDraft: false,
             isFileAttached: false,
             isMinuteEntry: true,
             isOnDocketRecord: true,
             isStricken: false,
             pending: false,
-            processingStatus: 'complete',
-            receivedAt: '2020-09-18T17:38:31.776Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
-            createdAt: '2020-09-18T17:38:31.776Z',
+            ...baseDocketEntry,
             docketEntryId: '2efcd272-da92-4e31-bedc-28cdad2e08b0',
             documentTitle: 'Statement of Taxpayer Identification',
             documentType: 'Statement of Taxpayer Identification',
-            entityName: 'DocketEntry',
             eventCode: 'STIN',
-            filedBy: 'Petr. Mona Schultz',
-            filingDate: '2020-09-18T17:38:31.772Z',
-            isDraft: false,
             isFileAttached: true,
             isMinuteEntry: false,
             isOnDocketRecord: false,
             isStricken: false,
-            numberOfPages: 11,
-            partyPrimary: true,
-            partySecondary: false,
             pending: false,
-            privatePractitioners: [],
-            processingStatus: 'complete',
-            receivedAt: '2020-09-18T17:38:31.776Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
-            attachments: false,
-            certificateOfService: false,
-            certificateOfServiceDate: null,
-            createdAt: '2020-09-18T17:38:32.417Z',
+            ...baseDocketEntry,
             docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
-            docketNumber: '169-20',
             documentTitle: 'Proposed Stipulated Decision',
             documentType: 'Proposed Stipulated Decision',
-            draftOrderState: null,
-            entityName: 'DocketEntry',
             eventCode: 'PSDE',
-            filedBy: 'Resp.',
-            filingDate: '2020-09-18T17:38:32.418Z',
-            hasSupportingDocuments: false,
             index: 3,
-            isDraft: false,
             isFileAttached: true,
             isMinuteEntry: false,
             isOnDocketRecord: true,
             isStricken: false,
-            numberOfPages: 2,
-            partyIrsPractitioner: true,
             pending: true,
-            privatePractitioners: [],
-            processingStatus: 'complete',
-            receivedAt: '2020-09-18T17:38:32.418Z',
-            relationship: 'primaryDocument',
-            scenario: 'Standard',
             servedAt: '2020-09-18T17:38:32.418Z',
             servedParties: [
               { email: 'petitioner@example.com', name: 'Mona Schultz' },
             ],
-            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-            workItem: {
-              assigneeId: null,
-              assigneeName: null,
-              associatedJudge: 'Chief Judge',
-              caseStatus: 'New',
-              caseTitle: 'Mona Schultz',
-              createdAt: '2020-09-18T17:38:32.418Z',
-              docketEntry: {
-                attachments: false,
-                certificateOfService: false,
-                certificateOfServiceDate: null,
-                createdAt: '2020-09-18T17:38:32.417Z',
-                docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
-                docketNumber: '169-20',
-                documentTitle: 'Proposed Stipulated Decision',
-                documentType: 'Proposed Stipulated Decision',
-                entityName: 'DocketEntry',
-                eventCode: 'PSDE',
-                filedBy: 'Resp.',
-                filingDate: '2020-09-18T17:38:32.418Z',
-                hasSupportingDocuments: false,
-                isDraft: false,
-                isFileAttached: true,
-                isMinuteEntry: false,
-                isOnDocketRecord: true,
-                isStricken: false,
-                partyIrsPractitioner: true,
-                pending: true,
-                privatePractitioners: [],
-                processingStatus: 'pending',
-                receivedAt: '2020-09-18T17:38:32.418Z',
-                relationship: 'primaryDocument',
-                scenario: 'Standard',
-                userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-              },
-              docketNumber: '169-20',
-              docketNumberWithSuffix: '169-20L',
-              entityName: 'WorkItem',
-              highPriority: false,
-              section: 'docket',
-              sentBy: 'Test IRS Practitioner',
-              sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-              updatedAt: '2020-09-18T17:38:32.418Z',
-              workItemId: '5f4eb5ac-099d-4e14-8b26-dfbf1828f0d7',
-            },
           },
           {
-            attachments: false,
-            certificateOfService: false,
-            certificateOfServiceDate: null,
-            createdAt: '2020-09-18T17:38:32.417Z',
+            ...baseDocketEntry,
             docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
-            docketNumber: '169-20',
             documentTitle: 'Answer',
             documentType: 'Answer',
-            draftOrderState: null,
-            entityName: 'DocketEntry',
             eventCode: 'A',
-            filedBy: 'Resp.',
-            filingDate: '2020-09-18T17:38:32.418Z',
-            hasSupportingDocuments: false,
             index: 4,
-            isDraft: false,
             isFileAttached: true,
             isMinuteEntry: false,
             isOnDocketRecord: true,
             isStricken: false,
-            numberOfPages: 2,
-            partyIrsPractitioner: true,
             pending: true,
-            privatePractitioners: [],
-            processingStatus: 'complete',
-            receivedAt: '2020-09-18T17:38:32.418Z',
-            relationship: 'primaryDocument',
-            scenario: 'Standard',
-            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
-            attachments: false,
-            certificateOfService: false,
-            certificateOfServiceDate: null,
-            createdAt: '2020-09-18T17:38:32.417Z',
+            ...baseDocketEntry,
             docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
-            docketNumber: '169-20',
             documentTitle: 'Hearing',
             documentType: 'Hearing before',
-            draftOrderState: null,
-            entityName: 'DocketEntry',
             eventCode: 'HEAR',
-            filedBy: 'Resp.',
-            filingDate: '2020-09-18T17:38:32.418Z',
-            hasSupportingDocuments: false,
             index: 5,
-            isDraft: false,
             isFileAttached: true,
             isMinuteEntry: false,
             isOnDocketRecord: true,
             isStricken: false,
-            numberOfPages: 2,
-            partyIrsPractitioner: true,
             pending: true,
-            privatePractitioners: [],
-            processingStatus: 'complete',
-            receivedAt: '2020-09-18T17:38:32.418Z',
-            relationship: 'primaryDocument',
-            scenario: 'Standard',
-            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
-        docketNumber: '169-20',
-        docketNumberSuffix: 'L',
-        docketNumberWithSuffix: '169-20L',
-        entityName: 'Case',
-        filingType: 'Myself',
-        hasPendingItems: true,
-        initialCaption: 'Mona Schultz, Petitioner',
-        initialDocketNumberSuffix: 'L',
-        irsPractitioners: [
-          {
-            barNumber: 'RT6789',
-            contact: {
-              address1: '234 Main St',
-              address2: 'Apartment 4',
-              address3: 'Under the stairs',
-              city: 'Chicago',
-              countryType: 'domestic',
-              phone: '+1 (555) 555-5555',
-              postalCode: '61234',
-              state: 'IL',
-            },
-            email: 'irsPractitioner@example.com',
-            entityName: 'IrsPractitioner',
-            name: 'Test IRS Practitioner',
-            role: 'irsPractitioner',
-            serviceIndicator: 'Electronic',
-            userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
-        isPaper: false,
-        isSealed: false,
-        noticeOfAttachments: false,
-        noticeOfTrialDate: '2020-09-18T17:38:31.772Z',
-        orderDesignatingPlaceOfTrial: false,
-        orderForAmendedPetition: false,
-        orderForAmendedPetitionAndFilingFee: false,
-        orderForFilingFee: true,
-        orderForOds: false,
-        orderForRatification: false,
-        orderToShowCause: false,
-        otherFilers: [],
-        otherPetitioners: [],
-        partyType: 'Petitioner',
-        petitionPaymentStatus: 'Not Paid',
-        petitioners: [
-          {
-            address1: '734 Cowley Parkway',
-            address2: 'Cum aut velit volupt',
-            address3: 'Et sunt veritatis ei',
-            city: 'Et id aut est velit',
-            contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
-            contactType: CONTACT_TYPES.primary,
-            countryType: 'domestic',
-            email: 'petitioner@example.com',
-            isAddressSealed: false,
-            name: 'Mona Schultz',
-            phone: '+1 (884) 358-9729',
-            postalCode: '77546',
-            sealedAndUnavailable: false,
-            serviceIndicator: 'Electronic',
-            state: 'CT',
-          },
-        ],
-        preferredTrialCity: 'Seattle, Washington',
-        privatePractitioners: [],
-        procedureType: 'Regular',
-        qcCompleteForTrial: {},
-        receivedAt: '2020-09-18T17:38:31.772Z',
-        sortableDocketNumber: 20000169,
-        statistics: [],
-        status: 'New',
-        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       };
 
       const result = runCompute(formattedCaseDetail, {
@@ -3059,285 +2137,13 @@ describe('formattedCaseDetail', () => {
   });
 
   describe('userIsAssignedToSession', () => {
-    const caseDetail = {
-      archivedCorrespondences: [],
-      archivedDocketEntries: [],
-      associatedJudge: 'Chief Judge',
-      automaticBlocked: true,
-      automaticBlockedDate: '2020-09-18T17:38:32.439Z',
-      automaticBlockedReason: 'Pending Item',
-      caseCaption: 'Mona Schultz, Petitioner',
-      caseType: 'CDP (Lien/Levy)',
-      correspondence: [],
-      createdAt: '2020-09-18T17:38:31.772Z',
-      docketEntries: [
-        {
-          createdAt: '2020-09-18T17:38:31.774Z',
-          docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-          documentTitle: 'Petition',
-          documentType: 'Petition',
-          entityName: 'DocketEntry',
-          eventCode: 'P',
-          filedBy: 'Petr. Mona Schultz',
-          filingDate: '2020-09-18T17:38:31.772Z',
-          index: 1,
-          isDraft: false,
-          isFileAttached: true,
-          isMinuteEntry: false,
-          isOnDocketRecord: true,
-          isStricken: false,
-          numberOfPages: 11,
-          partyPrimary: true,
-          partySecondary: false,
-          pending: false,
-          privatePractitioners: [],
-          processingStatus: 'complete',
-          receivedAt: '2020-09-18T17:38:31.775Z',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          workItem: {
-            assigneeId: null,
-            assigneeName: null,
-            associatedJudge: 'Chief Judge',
-            caseStatus: 'New',
-            caseTitle: 'Mona Schultz',
-            createdAt: '2020-09-18T17:38:31.775Z',
-            docketEntry: {
-              createdAt: '2020-09-18T17:38:31.774Z',
-              docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-              documentTitle: 'Petition',
-              documentType: 'Petition',
-              entityName: 'DocketEntry',
-              eventCode: 'P',
-              filedBy: 'Petr. Mona Schultz',
-              filingDate: '2020-09-18T17:38:31.772Z',
-              isDraft: false,
-              isFileAttached: true,
-              isMinuteEntry: false,
-              isOnDocketRecord: true,
-              isStricken: false,
-              partyPrimary: true,
-              partySecondary: false,
-              pending: false,
-              privatePractitioners: [],
-              processingStatus: 'pending',
-              receivedAt: '2020-09-18T17:38:31.775Z',
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-            docketNumber: '169-20',
-            docketNumberWithSuffix: '169-20L',
-            entityName: 'WorkItem',
-            isInitializeCase: true,
-            section: 'petitions',
-            sentBy: 'Test Petitioner',
-            sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            updatedAt: '2020-09-18T17:38:31.775Z',
-            workItemId: 'e4c84638-0401-4061-8eff-c6cac530ae51',
-          },
-        },
-        {
-          createdAt: '2020-09-18T17:38:31.775Z',
-          docketEntryId: '087eb3f6-b164-40f3-980f-835da7292097',
-          documentTitle: 'Request for Place of Trial at Seattle, Washington',
-          documentType: 'Request for Place of Trial',
-          entityName: 'DocketEntry',
-          eventCode: 'RQT',
-          filingDate: '2020-09-18T17:38:31.772Z',
-          index: 2,
-          isDraft: false,
-          isFileAttached: false,
-          isMinuteEntry: true,
-          isOnDocketRecord: true,
-          isStricken: false,
-          pending: false,
-          processingStatus: 'complete',
-          receivedAt: '2020-09-18T17:38:31.776Z',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        {
-          createdAt: '2020-09-18T17:38:31.776Z',
-          docketEntryId: '2efcd272-da92-4e31-bedc-28cdad2e08b0',
-          documentTitle: 'Statement of Taxpayer Identification',
-          documentType: 'Statement of Taxpayer Identification',
-          entityName: 'DocketEntry',
-          eventCode: 'STIN',
-          filedBy: 'Petr. Mona Schultz',
-          filingDate: '2020-09-18T17:38:31.772Z',
-          isDraft: false,
-          isFileAttached: true,
-          isMinuteEntry: false,
-          isOnDocketRecord: false,
-          isStricken: false,
-          numberOfPages: 11,
-          partyPrimary: true,
-          partySecondary: false,
-          pending: false,
-          privatePractitioners: [],
-          processingStatus: 'complete',
-          receivedAt: '2020-09-18T17:38:31.776Z',
-          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        {
-          attachments: false,
-          certificateOfService: false,
-          certificateOfServiceDate: null,
-          createdAt: '2020-09-18T17:38:32.417Z',
-          docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
-          docketNumber: '169-20',
-          documentTitle: 'Proposed Stipulated Decision',
-          documentType: 'Proposed Stipulated Decision',
-          draftOrderState: null,
-          entityName: 'DocketEntry',
-          eventCode: 'PSDE',
-          filedBy: 'Resp.',
-          filingDate: '2020-09-18T17:38:32.418Z',
-          hasSupportingDocuments: false,
-          index: 3,
-          isDraft: false,
-          isFileAttached: true,
-          isMinuteEntry: false,
-          isOnDocketRecord: true,
-          isStricken: false,
-          numberOfPages: 2,
-          partyIrsPractitioner: true,
-          pending: true,
-          privatePractitioners: [],
-          processingStatus: 'complete',
-          receivedAt: '2020-09-18T17:38:32.418Z',
-          relationship: 'primaryDocument',
-          scenario: 'Standard',
-          servedAt: '2020-09-18T17:38:32.418Z',
-          servedParties: [
-            { email: 'petitioner@example.com', name: 'Mona Schultz' },
-          ],
-          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-          workItem: {
-            assigneeId: null,
-            assigneeName: null,
-            associatedJudge: 'Chief Judge',
-            caseStatus: 'New',
-            caseTitle: 'Mona Schultz',
-            createdAt: '2020-09-18T17:38:32.418Z',
-            docketEntry: {
-              attachments: false,
-              certificateOfService: false,
-              certificateOfServiceDate: null,
-              createdAt: '2020-09-18T17:38:32.417Z',
-              docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
-              docketNumber: '169-20',
-              documentTitle: 'Proposed Stipulated Decision',
-              documentType: 'Proposed Stipulated Decision',
-              entityName: 'DocketEntry',
-              eventCode: 'PSDE',
-              filedBy: 'Resp.',
-              filingDate: '2020-09-18T17:38:32.418Z',
-              hasSupportingDocuments: false,
-              isDraft: false,
-              isFileAttached: true,
-              isMinuteEntry: false,
-              isOnDocketRecord: true,
-              isStricken: false,
-              partyIrsPractitioner: true,
-              pending: true,
-              privatePractitioners: [],
-              processingStatus: 'pending',
-              receivedAt: '2020-09-18T17:38:32.418Z',
-              relationship: 'primaryDocument',
-              scenario: 'Standard',
-              userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-            docketNumber: '169-20',
-            docketNumberWithSuffix: '169-20L',
-            entityName: 'WorkItem',
-            highPriority: false,
-            section: 'docket',
-            sentBy: 'Test IRS Practitioner',
-            sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-            updatedAt: '2020-09-18T17:38:32.418Z',
-            workItemId: '5f4eb5ac-099d-4e14-8b26-dfbf1828f0d7',
-          },
-        },
-      ],
-      docketNumber: '169-20',
-      docketNumberSuffix: 'L',
-      docketNumberWithSuffix: '169-20L',
-      entityName: 'Case',
-      filingType: 'Myself',
-      hasPendingItems: true,
-      initialCaption: 'Mona Schultz, Petitioner',
-      initialDocketNumberSuffix: 'L',
-      irsPractitioners: [
-        {
-          barNumber: 'RT6789',
-          contact: {
-            address1: '234 Main St',
-            address2: 'Apartment 4',
-            address3: 'Under the stairs',
-            city: 'Chicago',
-            countryType: 'domestic',
-            phone: '+1 (555) 555-5555',
-            postalCode: '61234',
-            state: 'IL',
-          },
-          email: 'irsPractitioner@example.com',
-          entityName: 'IrsPractitioner',
-          name: 'Test IRS Practitioner',
-          role: 'irsPractitioner',
-          serviceIndicator: 'Electronic',
-          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      ],
-      isPaper: false,
-      isSealed: false,
-      noticeOfAttachments: false,
-      noticeOfTrialDate: '2020-09-18T17:38:31.772Z',
-      orderDesignatingPlaceOfTrial: false,
-      orderForAmendedPetition: false,
-      orderForAmendedPetitionAndFilingFee: false,
-      orderForFilingFee: true,
-      orderForOds: false,
-      orderForRatification: false,
-      orderToShowCause: false,
-      otherFilers: [],
-      otherPetitioners: [],
-      partyType: 'Petitioner',
-      petitionPaymentStatus: 'Not Paid',
-      petitioners: [
-        {
-          address1: '734 Cowley Parkway',
-          address2: 'Cum aut velit volupt',
-          address3: 'Et sunt veritatis ei',
-          city: 'Et id aut est velit',
-          contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
-          contactType: CONTACT_TYPES.primary,
-          countryType: 'domestic',
-          email: 'petitioner@example.com',
-          isAddressSealed: false,
-          name: 'Mona Schultz',
-          phone: '+1 (884) 358-9729',
-          postalCode: '77546',
-          sealedAndUnavailable: false,
-          serviceIndicator: 'Electronic',
-          state: 'CT',
-        },
-      ],
-      preferredTrialCity: 'Seattle, Washington',
-      privatePractitioners: [],
-      procedureType: 'Regular',
-      qcCompleteForTrial: {},
-      receivedAt: '2020-09-18T17:38:31.772Z',
-      sortableDocketNumber: 20000169,
-      statistics: [],
-      status: 'New',
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-    };
-
     it("should be true when the case's trial session judge is the currently logged in user", () => {
       const mockTrialSessionId = applicationContext.getUniqueId();
 
       const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             trialSessionId: mockTrialSessionId,
           },
           ...getBaseState(judgeUser),
@@ -3361,7 +2167,7 @@ describe('formattedCaseDetail', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             trialSessionId: mockTrialSessionId,
           },
           ...getBaseState(petitionsClerkUser),
@@ -3385,7 +2191,7 @@ describe('formattedCaseDetail', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             trialSessionId: mockTrialSessionId,
           },
           judgeUser: {
@@ -3413,7 +2219,7 @@ describe('formattedCaseDetail', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             trialSessionId: mockTrialSessionId,
           },
           judgeUser: {
@@ -3441,7 +2247,7 @@ describe('formattedCaseDetail', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             trialSessionId: mockTrialSessionId,
           },
           ...getBaseState(trialClerkUser),
@@ -3465,7 +2271,7 @@ describe('formattedCaseDetail', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail: {
-            ...caseDetail,
+            ...MOCK_CASE,
             trialSessionId: mockTrialSessionId,
           },
           ...getBaseState(trialClerkUser),
@@ -3488,7 +2294,7 @@ describe('formattedCaseDetail', () => {
         const result = runCompute(formattedCaseDetail, {
           state: {
             caseDetail: {
-              ...caseDetail,
+              ...MOCK_CASE,
               hearings: [
                 {
                   judge: {
@@ -3553,7 +2359,7 @@ describe('formattedCaseDetail', () => {
         const result = runCompute(formattedCaseDetail, {
           state: {
             caseDetail: {
-              ...caseDetail,
+              ...MOCK_CASE,
               hearings: [
                 {
                   judge: {
@@ -3621,7 +2427,7 @@ describe('formattedCaseDetail', () => {
         const result = runCompute(formattedCaseDetail, {
           state: {
             caseDetail: {
-              ...caseDetail,
+              ...MOCK_CASE,
               hearings: [
                 {
                   judge: {
@@ -3851,58 +2657,6 @@ describe('formattedCaseDetail', () => {
       addedToSessionAt: '2020-04-19T17:29:13.120Z',
       calendarNotes: 'THIRD',
       trialSessionId: '345',
-    });
-  });
-
-  describe('showBlockedTag', () => {
-    it('should be true when blocked is true', () => {
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail: {
-            ...MOCK_CASE,
-            blocked: true,
-            blockedDate: '2019-04-19T17:29:13.120Z',
-            blockedReason: 'because',
-          },
-          ...getBaseState(docketClerkUser),
-        },
-      });
-
-      expect(result.showBlockedTag).toBeTruthy();
-    });
-
-    it('should be true when blocked is false, automaticBlocked is true, and case status is NOT calendared', () => {
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail: {
-            ...MOCK_CASE,
-            automaticBlocked: true,
-            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
-            automaticBlockedReason: 'Pending Item',
-            status: STATUS_TYPES.new,
-          },
-          ...getBaseState(docketClerkUser),
-        },
-      });
-
-      expect(result.showBlockedTag).toBeTruthy();
-    });
-
-    it('should be false when blocked is false, automaticBlocked is true, and case status is calendared', () => {
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail: {
-            ...MOCK_CASE,
-            automaticBlocked: true,
-            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
-            automaticBlockedReason: 'Pending Item',
-            status: STATUS_TYPES.calendared,
-          },
-          ...getBaseState(docketClerkUser),
-        },
-      });
-
-      expect(result.showBlockedTag).toBeFalsy();
     });
   });
 });
