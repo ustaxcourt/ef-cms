@@ -19,7 +19,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @returns {object} the case data
  */
 
-exports.removePetitionerFromCaseInteractor = async (
+exports.removePetitionerAndUpdateCaptionInteractor = async (
   applicationContext,
   { caseCaption, contactId, docketNumber },
 ) => {

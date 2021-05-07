@@ -8,7 +8,7 @@ import React from 'react';
 export const RemovePetitionerModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.removePetitionerFromCaseSequence,
+    confirmSequence: sequences.removePetitionerAndUpdateCaptionSequence,
     constants: state.constants,
     form: state.form,
     modal: state.modal,
