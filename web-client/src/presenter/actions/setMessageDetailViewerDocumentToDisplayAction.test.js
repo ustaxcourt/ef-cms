@@ -13,7 +13,7 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets state.viewerDocumentToDisplay when props.viewerDocumentToDisplay is defined', async () => {
+  it('sets state.messageViewerDocumentToDisplay when props.messageViewerDocumentToDisplay is defined', async () => {
     const result = await runAction(
       setMessageDetailViewerDocumentToDisplayAction,
       {
@@ -21,8 +21,8 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
           presenter,
         },
         props: {
+          messageViewerDocumentToDisplay: { documentId: '999000999' },
           mostRecentMessage: { attachments: [{ documentId: '999000999' }] },
-          viewerDocumentToDisplay: { documentId: '999000999' },
         },
         state: {
           caseDetail: {
@@ -36,12 +36,12 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
       },
     );
 
-    expect(result.state.viewerDocumentToDisplay).toEqual({
+    expect(result.state.messageViewerDocumentToDisplay).toEqual({
       documentId: '999000999',
     });
   });
 
-  it('sets the viewerDocumentToDisplay from props on state and sets the iframeSrc url from the return from the use case', async () => {
+  it('sets the messageViewerDocumentToDisplay from props on state and sets the iframeSrc url from the return from the use case', async () => {
     const result = await runAction(
       setMessageDetailViewerDocumentToDisplayAction,
       {
@@ -49,8 +49,8 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
           presenter,
         },
         props: {
+          messageViewerDocumentToDisplay: { documentId: '1234' },
           mostRecentMessage: { attachments: [{ documentId: '1234' }] },
-          viewerDocumentToDisplay: { documentId: '1234' },
         },
         state: {
           caseDetail: {
@@ -60,18 +60,18 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
             docketEntries: [{ docketEntryId: '1234' }],
             docketNumber: '123-45',
           },
-          viewerDocumentToDisplay: null,
+          messageViewerDocumentToDisplay: null,
         },
       },
     );
 
-    expect(result.state.viewerDocumentToDisplay).toEqual({
+    expect(result.state.messageViewerDocumentToDisplay).toEqual({
       documentId: '1234',
     });
     expect(result.state.iframeSrc).toEqual('www.example.com');
   });
 
-  it('does not set iframeSrc if props.viewerDocumentToDisplay is null', async () => {
+  it('does not set iframeSrc if props.messageViewerDocumentToDisplay is null', async () => {
     const result = await runAction(
       setMessageDetailViewerDocumentToDisplayAction,
       {
@@ -79,8 +79,8 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
           presenter,
         },
         props: {
+          messageViewerDocumentToDisplay: null,
           mostRecentMessage: { attachments: [{ documentId: '1234' }] },
-          viewerDocumentToDisplay: null,
         },
         state: {
           caseDetail: {
@@ -90,7 +90,7 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
             docketEntries: [{ docketEntryId: '1234' }],
             docketNumber: '123-45',
           },
-          viewerDocumentToDisplay: null,
+          messageViewerDocumentToDisplay: null,
         },
       },
     );
@@ -106,8 +106,8 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
           presenter,
         },
         props: {
+          messageViewerDocumentToDisplay: { documentId: '1234' },
           mostRecentMessage: { attachments: [{ documentId: '1234' }] },
-          viewerDocumentToDisplay: { documentId: '1234' },
         },
         state: {
           caseDetail: {
@@ -117,7 +117,7 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
             docketEntries: [],
             docketNumber: '123-45',
           },
-          viewerDocumentToDisplay: null,
+          messageViewerDocumentToDisplay: null,
         },
       },
     );
@@ -133,8 +133,8 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
           presenter,
         },
         props: {
+          messageViewerDocumentToDisplay: { documentId: '1234' },
           mostRecentMessage: { attachments: [] },
-          viewerDocumentToDisplay: { documentId: '1234' },
         },
         state: {
           caseDetail: {
@@ -144,7 +144,7 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
             docketEntries: [],
             docketNumber: '123-45',
           },
-          viewerDocumentToDisplay: null,
+          messageViewerDocumentToDisplay: null,
         },
       },
     );

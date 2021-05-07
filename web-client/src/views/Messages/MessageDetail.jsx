@@ -69,28 +69,28 @@ export const MessageDetail = connect(
       sequences.cerebralBindSimpleSetStateSequence,
     formattedMessageDetail: state.formattedMessageDetail,
     isExpanded: state.isExpanded,
+    messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
     openCompleteMessageModalSequence:
       sequences.openCompleteMessageModalSequence,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence: sequences.openForwardMessageModalSequence,
     openReplyToMessageModalSequence: sequences.openReplyToMessageModalSequence,
-    setMessageDetailViewerDocumentToDisplaySequence:
-      sequences.setMessageDetailViewerDocumentToDisplaySequence,
+    setMessageDetailmessageViewerDocumentToDisplaySequence:
+      sequences.setMessageDetailmessageViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
-    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDetail({
     cerebralBindSimpleSetStateSequence,
     formattedMessageDetail,
     isExpanded,
+    messageViewerDocumentToDisplay,
     openCompleteMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
-    setMessageDetailViewerDocumentToDisplaySequence,
+    setMessageDetailmessageViewerDocumentToDisplaySequence,
     showModal,
-    viewerDocumentToDisplay,
   }) {
     return (
       <>
@@ -220,18 +220,20 @@ export const MessageDetail = connect(
                       <Button
                         className={classNames(
                           'usa-button--unstyled attachment-viewer-button',
-                          viewerDocumentToDisplay.documentId ===
+                          messageViewerDocumentToDisplay.documentId ===
                             attachment.documentId && 'active',
                         )}
                         isActive={
-                          viewerDocumentToDisplay.documentId ===
+                          messageViewerDocumentToDisplay.documentId ===
                           attachment.documentId
                         }
                         key={`attachment-button-${attachment.documentId}`}
                         onClick={() => {
-                          setMessageDetailViewerDocumentToDisplaySequence({
-                            viewerDocumentToDisplay: attachment,
-                          });
+                          setMessageDetailmessageViewerDocumentToDisplaySequence(
+                            {
+                              messageViewerDocumentToDisplay: attachment,
+                            },
+                          );
                         }}
                       >
                         <div className="grid-row margin-left-205 line-height-standard">
