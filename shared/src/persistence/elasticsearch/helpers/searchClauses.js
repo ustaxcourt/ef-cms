@@ -1,12 +1,12 @@
 const { ROLES } = require('../../../business/entities/EntityConstants');
 
 // because searching for entityName matches is not sufficient!
-export const IS_USER = [
+const IS_USER = [
   { prefix: { 'pk.S': 'user|' } },
   { prefix: { 'sk.S': 'user|' } },
 ];
 
-export const IS_PRACTITIONER = [
+const IS_PRACTITIONER = [
   ...IS_USER,
   {
     terms: {
@@ -27,3 +27,5 @@ export const IS_PRACTITIONER = [
     },
   },
 ];
+
+module.exports = { IS_PRACTITIONER, IS_USER };
