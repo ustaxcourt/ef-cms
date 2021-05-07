@@ -718,7 +718,7 @@ const router = {
         return sequence({
           docketEntryId,
           docketNumber,
-          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${docketEntryId}`,
         });
       }),
     );

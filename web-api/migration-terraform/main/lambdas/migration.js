@@ -1,35 +1,39 @@
 const AWS = require('aws-sdk');
 const { get } = require('lodash');
+const { migrateRecords: migrations } = require('./migration-segments');
 
 const dynamodb = new AWS.DynamoDB({
   maxRetries: 10,
   retryDelayOptions: { base: 300 },
 });
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
+const docClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
   region: 'us-east-1',
   service: dynamodb,
 });
 
-const processItems = async items => {
+const processItems = async ({ documentClient, items, migrateRecords }) => {
   const promises = [];
+
+  items = await migrateRecords({ documentClient, items });
+
   for (const item of items) {
-    // TODO: your migration code would go here
-    const result = documentClient
-      .put({
-        Item: item,
-        TableName: process.env.DESTINATION_TABLE,
-      })
-      .promise();
-    promises.push(result);
+    promises.push(
+      documentClient
+        .put({
+          Item: item,
+          TableName: process.env.DESTINATION_TABLE,
+        })
+        .promise(),
+    );
   }
   await Promise.all(promises);
 };
 
-exports.handler = async event => {
+const getFilteredGlobalEvents = event => {
   const { Records } = event;
-  const items = Records.filter(record => {
+  return Records.filter(record => {
     // to prevent global tables writing extra data
     const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
     const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
@@ -37,5 +41,15 @@ exports.handler = async event => {
     const oldTime = get(record, OLD_TIME_KEY);
     return newTime && newTime !== oldTime;
   }).map(item => AWS.DynamoDB.Converter.unmarshall(item.dynamodb.NewImage));
-  await processItems(items);
+};
+
+exports.getFilteredGlobalEvents = getFilteredGlobalEvents;
+exports.processItems = processItems;
+exports.handler = async event => {
+  const items = getFilteredGlobalEvents(event);
+  await processItems({
+    documentClient: docClient,
+    items,
+    migrateRecords: migrations,
+  });
 };
