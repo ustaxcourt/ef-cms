@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 config.plugins.push(
   new HtmlWebpackPlugin({
     minify: false,
+    publicPath: '/',
     template: './web-client/src/index.pug',
   }),
 );

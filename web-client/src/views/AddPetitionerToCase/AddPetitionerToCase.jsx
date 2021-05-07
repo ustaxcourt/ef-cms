@@ -54,9 +54,31 @@ export const AddPetitionerToCase = connect(
         <section className="usa-section grid-container">
           <ErrorNotification />
 
-          <h2>Add Petitioner</h2>
+          <h2>Add Party</h2>
 
           <div className="blue-container margin-bottom-5">
+            <FormGroup>
+              <label className="usa-label" htmlFor="petitionerType">
+                <span>Petitioner Type</span>
+              </label>
+              <select
+                aria-describedby="petitioner-type"
+                className="usa-select max-width-400"
+                id="petitionerType"
+                name="petitionerType"
+                value={form.petitionerType || ''}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              >
+                <option value="">- Select -</option>
+                <option value="petitioner">Petitioner</option>
+              </select>
+            </FormGroup>
+
             <FormGroup errorText={validationErrors.name}>
               <label className="usa-label" htmlFor="name">
                 <span>Name</span>

@@ -6,9 +6,10 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get method
+ * @param {object} providers.store the cerebral store method
  *  @returns {Promise} async action
  */
-export const sealAddressAction = async ({ applicationContext, get }) => {
+export const sealAddressAction = async ({ applicationContext, get, store }) => {
   const { contactId, name } = get(state.contactToSeal);
   const { docketNumber } = get(state.caseDetail);
 
@@ -19,6 +20,8 @@ export const sealAddressAction = async ({ applicationContext, get }) => {
       contactId,
       docketNumber,
     });
+
+  store.set(state.form.isAddressSealed, true);
 
   return {
     alertSuccess: {
