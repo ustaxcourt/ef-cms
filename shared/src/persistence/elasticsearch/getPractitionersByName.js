@@ -1,7 +1,7 @@
 const {
   MAX_SEARCH_CLIENT_RESULTS,
-  ROLES,
 } = require('../../business/entities/EntityConstants');
+const { IS_PRACTITIONER } = require('./helpers/searchClauses');
 const { search } = require('./searchClient');
 
 /**
@@ -19,15 +19,7 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
       query: {
         bool: {
           must: [
-            {
-              terms: {
-                'role.S': [
-                  ROLES.irsPractitioner,
-                  ROLES.privatePractitioner,
-                  ROLES.inactivePractitioner,
-                ],
-              },
-            },
+            ...IS_PRACTITIONER,
             {
               simple_query_string: {
                 default_operator: 'and',
