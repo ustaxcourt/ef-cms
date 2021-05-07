@@ -23,7 +23,6 @@ resource "aws_lambda_function" "api_lambda" {
 resource "aws_api_gateway_rest_api" "gateway_for_api" {
   name = "gateway_api_${var.environment}_${var.current_color}"
 
-  minimum_compression_size = "1"
   binary_media_types = ["*/*"]
 
   endpoint_configuration {
