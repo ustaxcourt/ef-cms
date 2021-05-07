@@ -43,6 +43,36 @@ describe('Case entity', () => {
     });
   });
 
+  it('sets the expected order booleans', () => {
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+        noticeOfAttachments: true,
+        orderDesignatingPlaceOfTrial: true,
+        orderForAmendedPetition: false,
+        orderForAmendedPetitionAndFilingFee: false,
+        orderForFilingFee: true,
+        orderForOds: false,
+        orderForRatification: false,
+        orderToShowCause: true,
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    expect(myCase).toMatchObject({
+      noticeOfAttachments: true,
+      orderDesignatingPlaceOfTrial: true,
+      orderForAmendedPetition: false,
+      orderForAmendedPetitionAndFilingFee: false,
+      orderForFilingFee: true,
+      orderForOds: false,
+      orderForRatification: false,
+      orderToShowCause: true,
+    });
+  });
+
   it('sorts correspondence array according to `filingDate`', () => {
     const myCase = new Case(
       {
@@ -204,132 +234,6 @@ describe('Case entity', () => {
       );
 
       expect(newCase.hearings).toEqual([]);
-    });
-  });
-
-  describe('adding and removing practitioners', () => {
-    let myCase;
-
-    beforeEach(() => {
-      myCase = new Case(
-        {
-          ...MOCK_CASE,
-          irsPractitioners: [{ name: 'Christopher Walken', userId: '123' }],
-          privatePractitioners: [{ name: 'Slim Shady', userId: '567' }],
-        },
-        { applicationContext },
-      );
-    });
-
-    describe('who are from IRS', () => {
-      it('updates a matching IRS practitioner found on the case', () => {
-        expect(myCase.irsPractitioners.length).toEqual(1);
-
-        myCase.updateIrsPractitioner({
-          name: 'Christopher Running',
-          userId: '123',
-        });
-
-        expect(myCase.irsPractitioners.length).toEqual(1);
-        expect(myCase.irsPractitioners[0]).toMatchObject({
-          name: 'Christopher Running',
-        });
-      });
-      it('updates nothing when provided object does not match', () => {
-        myCase.updateIrsPractitioner({
-          name: 'Slow Jog',
-          userId: '000-111-222',
-        });
-
-        expect(myCase.irsPractitioners.length).toEqual(1);
-        expect(myCase.irsPractitioners[0]).toMatchObject({
-          name: 'Christopher Walken',
-        });
-      });
-    });
-
-    describe('who are private', () => {
-      it('updates a matching private practitioner found on the case', () => {
-        expect(myCase.privatePractitioners.length).toEqual(1);
-
-        myCase.updatePrivatePractitioner({
-          name: 'Stout Sunny',
-          userId: '567',
-        });
-
-        expect(myCase.privatePractitioners.length).toEqual(1);
-        expect(myCase.privatePractitioners[0]).toMatchObject({
-          name: 'Stout Sunny',
-        });
-      });
-      it('updates nothing when provided object does not match', () => {
-        myCase.updatePrivatePractitioner({
-          name: 'Slow Jog',
-          userId: '000-111-222',
-        });
-
-        expect(myCase.privatePractitioners.length).toEqual(1);
-        expect(myCase.privatePractitioners[0]).toMatchObject({
-          name: 'Slim Shady',
-        });
-      });
-    });
-  });
-
-  it('sets the expected order booleans', () => {
-    const myCase = new Case(
-      {
-        ...MOCK_CASE,
-        noticeOfAttachments: true,
-        orderDesignatingPlaceOfTrial: true,
-        orderForAmendedPetition: false,
-        orderForAmendedPetitionAndFilingFee: false,
-        orderForFilingFee: true,
-        orderForOds: false,
-        orderForRatification: false,
-        orderToShowCause: true,
-      },
-      {
-        applicationContext,
-      },
-    );
-
-    expect(myCase).toMatchObject({
-      noticeOfAttachments: true,
-      orderDesignatingPlaceOfTrial: true,
-      orderForAmendedPetition: false,
-      orderForAmendedPetitionAndFilingFee: false,
-      orderForFilingFee: true,
-      orderForOds: false,
-      orderForRatification: false,
-      orderToShowCause: true,
-    });
-  });
-
-  describe('toRawObject', () => {
-    beforeEach(() => {
-      jest.spyOn(Case.prototype, 'doesHavePendingItems');
-    });
-
-    afterEach(() => {
-      Case.prototype.doesHavePendingItems.mockRestore();
-    });
-
-    it('calls own function to update values after decorated toRawObject', () => {
-      const myCase = new Case({}, { applicationContext });
-
-      const result = myCase.toRawObject();
-
-      expect(Case.prototype.doesHavePendingItems).toHaveBeenCalled();
-      expect(result.hasPendingItems).toBeFalsy();
-    });
-
-    it('does not call own function to update values if flag is set to false after decorated toRawObject', () => {
-      const myCase = new Case({}, { applicationContext });
-      const result = myCase.toRawObject(false);
-
-      expect(Case.prototype.doesHavePendingItems).not.toHaveBeenCalled();
-      expect(result.hasPendingItems).toBeFalsy();
     });
   });
 
@@ -517,101 +421,7 @@ describe('Case entity', () => {
     });
   });
 
-  describe('Other Petitioners', () => {
-    it('sets the value of otherPetitioners on the case', () => {
-      const mockOtherPetitioners = [
-        {
-          additionalName: 'First Other Petitioner',
-          address1: '876 12th Ave',
-          city: 'Nashville',
-          contactType: CONTACT_TYPES.otherPetitioner,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'someone@example.com',
-          name: 'Jimmy Dean',
-          phone: '1234567890',
-          postalCode: '05198',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          state: 'AK',
-        },
-        {
-          additionalName: 'First Other Petitioner',
-          address1: '876 12th Ave',
-          city: 'Nashville',
-          contactType: CONTACT_TYPES.otherPetitioner,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'someone@example.com',
-          name: 'Jimmy Dean',
-          phone: '1234567890',
-          postalCode: '05198',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          state: 'AK',
-        },
-      ];
-
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          petitioners: [...MOCK_CASE.petitioners, ...mockOtherPetitioners],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      expect(myCase.getOtherPetitioners()).toMatchObject(mockOtherPetitioners);
-    });
-  });
-
   describe('Other Filers', () => {
-    it('sets a valid value of otherFilers on the case', () => {
-      const mockOtherFilers = [
-        {
-          address1: '42 Lamb Sauce Blvd',
-          city: 'Nashville',
-          contactType: CONTACT_TYPES.otherFiler,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'gordon@example.com',
-          name: 'Gordon Ramsay',
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
-          phone: '1234567890',
-          postalCode: '05198',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          state: 'AK',
-        },
-        {
-          address1: '1337 12th Ave',
-          city: 'Flavortown',
-          contactType: CONTACT_TYPES.otherFiler,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'mayor@example.com',
-          name: 'Guy Fieri',
-          otherFilerType: OTHER_FILER_TYPES[1],
-          phone: '1234567890',
-          postalCode: '05198',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          state: 'AK',
-        },
-      ];
-
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          petitioners: [getContactPrimary(MOCK_CASE), ...mockOtherFilers],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      expect(myCase.getOtherFilers()).toMatchObject(mockOtherFilers);
-    });
-
     it('fails validation with more than one unique filer type', () => {
       const mockOtherFilers = [
         {
