@@ -254,8 +254,8 @@ const {
   removePdfFromDocketEntryLambda,
 } = require('./documents/removePdfFromDocketEntryLambda');
 const {
-  removePetitionerFromCaseLambda,
-} = require('./cases/removePetitionerFromCaseLambda');
+  removePetitionerAndUpdateCaptionLambda,
+} = require('./cases/removePetitionerAndUpdateCaptionLambda');
 const {
   removeSignatureFromDocumentLambda,
 } = require('./documents/removeSignatureFromDocumentLambda');
@@ -638,9 +638,9 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     '/case-meta/:docketNumber/add-petitioner',
     lambdaWrapper(addPetitionerToCaseLambda),
   );
-  app.delete(
+  app.put(
     '/case-meta/:docketNumber/remove-petitioner/:contactId',
-    lambdaWrapper(removePetitionerFromCaseLambda),
+    lambdaWrapper(removePetitionerAndUpdateCaptionLambda),
   );
 }
 /**

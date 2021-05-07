@@ -12,10 +12,8 @@ import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
 import { MessagesCompleted } from './MessagesCompleted';
 import { MessagesInProgress } from './MessagesInProgress';
-import { OtherFilerInformation } from './OtherFilerInformation';
 import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PartiesInformation } from './PartiesInformation';
-import { RespondentInformation } from './RespondentInformation';
 import { SealAddressModal } from './SealAddressModal';
 import { SealCaseModal } from './SealCaseModal';
 import { Statistics } from './Statistics';
@@ -143,12 +141,6 @@ export const CaseDetailInternal = connect(
               </Tab>
               <Tab id="tab-parties" tabName="parties" title="Parties">
                 <PartiesInformation />
-              </Tab>
-              <Tab id="tab-respondent" tabName="respondent" title="Respondent">
-                <RespondentInformation />
-              </Tab>
-              <Tab id="tab-other-filer" tabName="otherFiler" title="Other">
-                <OtherFilerInformation />
               </Tab>
             </Tabs>
           )}

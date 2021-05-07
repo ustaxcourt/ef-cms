@@ -11,6 +11,6 @@ export const removePetitionerCounselFromCaseSequence = showProgressSequenceDecor
     removePetitionerCounselFromCaseAction,
     setSaveAlertsForNavigationAction,
     setAlertSuccessAction,
-    navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+    navigateToCaseDetailCaseInformationActionFactory('parties'),
   ],
 );

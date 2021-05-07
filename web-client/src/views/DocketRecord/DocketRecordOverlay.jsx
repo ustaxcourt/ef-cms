@@ -87,7 +87,7 @@ export const DocketRecordOverlay = connect(
             className="modal-screen overlay mobile-document-details-overlay"
           >
             <div
-              aria-live="assertive"
+              aria-live="polite"
               aria-modal="true"
               className={'modal-overlay'}
               role="dialog"

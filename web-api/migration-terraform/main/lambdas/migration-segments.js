@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
+const promiseRetry = require('promise-retry');
 const {
   migrateItems: migration0027,
 } = require('./migrations/0027-require-service-indicator-for-petitioner');
@@ -9,7 +10,7 @@ const {
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
-const { chunk, isEmpty } = require('lodash');
+const { chunk } = require('lodash');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
 
@@ -42,21 +43,6 @@ const migrateRecords = async ({ documentClient, items }) => {
   return items;
 };
 
-const reprocessItems = async ({ documentClient, items }) => {
-  // items already been migrated. they simply could not be processed in the batchWrite. Try again recursively
-  const results = await documentClient
-    .batchWrite({
-      RequestItems: items,
-    })
-    .promise();
-  if (!isEmpty(results.UnprocessedItems)) {
-    await reprocessItems({
-      documentClient,
-      items: results.UnprocessedItems,
-    });
-  }
-};
-
 const processItems = async ({ documentClient, items }) => {
   try {
     items = await migrateRecords({ documentClient, items });
@@ -65,29 +51,33 @@ const processItems = async ({ documentClient, items }) => {
     throw err;
   }
 
-  // your migration code goes here
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
-  for (let c of chunks) {
-    const results = await documentClient
-      .batchWrite({
-        RequestItems: {
-          [process.env.DESTINATION_TABLE]: c.map(item => ({
-            PutRequest: {
-              Item: {
-                ...item,
-              },
-            },
-          })),
-        },
-      })
-      .promise();
-
-    if (!isEmpty(results.UnprocessedItems)) {
-      await reprocessItems({
-        documentClient,
-        items: results.UnprocessedItems,
-      });
+  for (let aChunk of chunks) {
+    const promises = [];
+    for (let item of aChunk) {
+      promises.push(
+        promiseRetry(retry => {
+          return documentClient
+            .put({
+              ConditionExpression: 'attribute_not_exists(pk)',
+              Item: item,
+              TableName: process.env.DESTINATION_TABLE,
+            })
+            .promise()
+            .catch(e => {
+              if (e.message.includes('The conditional request failed')) {
+                console.log(
+                  `The item of ${item.pk} ${item.sk} alread existed in the destination table, probably due to a live migration.  Skipping migration for this item.`,
+                );
+              } else {
+                throw e;
+              }
+            })
+            .catch(retry);
+        }),
+      );
     }
+    await Promise.all(promises);
   }
 };
 

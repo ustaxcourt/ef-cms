@@ -78,7 +78,7 @@ describe('navigateToCaseDetailCaseInformationActionFactory', () => {
 
   it('should call the router to navigate to the case detail page with caseInformationTab in query string when caseInformationTab is passed in', async () => {
     await runAction(
-      navigateToCaseDetailCaseInformationActionFactory('petitioner'),
+      navigateToCaseDetailCaseInformationActionFactory('parties'),
       {
         modules: {
           presenter,
@@ -90,7 +90,7 @@ describe('navigateToCaseDetailCaseInformationActionFactory', () => {
     );
 
     expect(routeMock).toHaveBeenCalledWith(
-      '/case-detail/123-45/case-information?caseInformationTab=petitioner',
+      '/case-detail/123-45/case-information?caseInformationTab=parties',
     );
   });
 });

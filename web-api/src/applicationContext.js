@@ -783,8 +783,8 @@ const {
   removePdfFromDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/removePdfFromDocketEntryInteractor');
 const {
-  removePetitionerFromCaseInteractor,
-} = require('../../shared/src/business/useCases/removePetitionerFromCaseInteractor');
+  removePetitionerAndUpdateCaptionInteractor,
+} = require('../../shared/src/business/useCases/removePetitionerAndUpdateCaptionInteractor');
 const {
   removeSignatureFromDocumentInteractor,
 } = require('../../shared/src/business/useCases/removeSignatureFromDocumentInteractor');
@@ -1517,7 +1517,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
       // which means including it globally causes the other lambdas to fail.
-      // This also needs to have the string split to cause parcel to NOT bundle this dependency,
+      // This also needs to have the string split to cause web pack to NOT bundle this dependency,
       // which is wanted as bundling would have the dependency to not be searched for
       // and found at the layer level and would cause issues.
       // eslint-disable-next-line security/detect-non-literal-require
@@ -1719,7 +1719,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
         removePdfFromDocketEntryInteractor,
-        removePetitionerFromCaseInteractor,
+        removePetitionerAndUpdateCaptionInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,

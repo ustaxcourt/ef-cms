@@ -46,7 +46,7 @@ let sent = 0;
   const segments = shuffle(
     new Array(totalSegments).fill(null).map((v, i) => ({
       segment: i,
-      totalSegments: totalSegments,
+      totalSegments,
     })),
   );
 

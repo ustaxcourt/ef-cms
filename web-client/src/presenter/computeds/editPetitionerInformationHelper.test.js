@@ -158,4 +158,28 @@ describe('editPetitionerInformationHelper', () => {
     });
     expect(result.showRemovePetitionerButton).toBeFalsy();
   });
+
+  it('returns showSealAddress true if the current user has the SEAL_ADDRESS permission', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        caseDetail: { petitioners: [{}, {}] },
+        permissions: {
+          SEAL_ADDRESS: true,
+        },
+      },
+    });
+    expect(result.showSealAddress).toEqual(true);
+  });
+
+  it('returns showSealAddress false if the current user DOES NOT have the SEAL_ADDRESS permission', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        caseDetail: { petitioners: [{}, {}] },
+        permissions: {
+          SEAL_ADDRESS: false,
+        },
+      },
+    });
+    expect(result.showSealAddress).toEqual(false);
+  });
 });

@@ -10,6 +10,7 @@ import {
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
+  isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -196,7 +197,7 @@ import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/remo
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { removePdfFromDocketEntryInteractor } from '../../shared/src/proxies/documents/removePdfFromDocketEntryProxy';
-import { removePetitionerFromCaseInteractor } from '../../shared/src/proxies/removePetitionerFromCaseProxy';
+import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/proxies/removePetitionerAndUpdateCaptionProxy';
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/documents/removeSignatureFromDocumentProxy';
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
 import { replyToMessageInteractor } from '../../shared/src/proxies/messages/replyToMessageProxy';
@@ -425,7 +426,7 @@ const allUseCases = {
   removeConsolidatedCasesInteractor,
   removeItemInteractor,
   removePdfFromDocketEntryInteractor,
-  removePetitionerFromCaseInteractor,
+  removePetitionerAndUpdateCaptionInteractor,
   removeSignatureFromDocumentInteractor,
   replyToMessageInteractor,
   runTrialSessionPlanningReportInteractor,
@@ -681,6 +682,7 @@ const applicationContext = {
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isServed,
       isStringISOFormatted,
+      isUserIdRepresentedByPrivatePractitioner,
       isValidDateString,
       prepareDateFromString,
       replaceBracketed,
