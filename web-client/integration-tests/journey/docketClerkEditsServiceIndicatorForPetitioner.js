@@ -30,9 +30,9 @@ export const docketClerkEditsServiceIndicatorForPetitioner = (
         },
       });
 
-      const contactPrimary = contactPrimaryFromState(test);
+      const contactPrimaryResult = contactPrimaryFromState(test);
 
-      expect(contactPrimary.serviceIndicator).toEqual(
+      expect(contactPrimaryResult.serviceIndicator).toEqual(
         SERVICE_INDICATOR_TYPES.SI_NONE,
       );
     }
