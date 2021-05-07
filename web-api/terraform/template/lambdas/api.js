@@ -1,6 +1,8 @@
 const awsServerlessExpress = require('@vendia/serverless-express');
 const { app } = require('../../../src/app');
-const server = awsServerlessExpress.createServer(app);
+const server = awsServerlessExpress.createServer(app, undefined, [
+  'application/json',
+]);
 
 exports.handler = (event, context) => {
   event.body =
