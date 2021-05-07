@@ -21,9 +21,9 @@ export const replyToMessageAction = async ({ applicationContext, get }) => {
     ...form,
   });
 
-  let viewerDocumentToDisplay;
+  let messageViewerDocumentToDisplay;
   if (form.attachments.length) {
-    viewerDocumentToDisplay = {
+    messageViewerDocumentToDisplay = {
       documentId: form.attachments[0].documentId,
     };
   }
@@ -32,7 +32,7 @@ export const replyToMessageAction = async ({ applicationContext, get }) => {
     alertSuccess: {
       message: 'Your message has been sent.',
     },
+    messageViewerDocumentToDisplay,
     parentMessageId,
-    viewerDocumentToDisplay,
   };
 };
