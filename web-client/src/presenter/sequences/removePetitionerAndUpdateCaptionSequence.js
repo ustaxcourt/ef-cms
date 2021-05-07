@@ -1,6 +1,6 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
-import { removePetitionerFromCaseAction } from '../actions/caseAssociation/removePetitionerFromCaseAction';
+import { removePetitionerAndUpdateCaptionAction } from '../actions/caseAssociation/removePetitionerAndUpdateCaptionAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -8,7 +8,7 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 export const removePetitionerAndUpdateCaptionSequence = showProgressSequenceDecorator(
   [
     clearModalAction,
-    removePetitionerFromCaseAction,
+    removePetitionerAndUpdateCaptionAction,
     setSaveAlertsForNavigationAction,
     setAlertSuccessAction,
     navigateToCaseDetailCaseInformationActionFactory('parties'),

@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting state.modal
  * @returns {object} the next path based on if validation was successful or error
  */
-export const removePetitionerFromCaseAction = async ({
+export const removePetitionerAndUpdateCaptionAction = async ({
   applicationContext,
   get,
 }) => {
