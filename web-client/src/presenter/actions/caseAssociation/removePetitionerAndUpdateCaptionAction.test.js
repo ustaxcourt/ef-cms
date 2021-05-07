@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
-import { removePetitionerFromCaseAction } from './removePetitionerFromCaseAction';
+import { removePetitionerAndUpdateCaptionAction } from './removePetitionerAndUpdateCaptionAction';
 import { runAction } from 'cerebral/test';
 
-describe('removePetitionerFromCaseAction', () => {
+describe('removePetitionerAndUpdateCaptionAction', () => {
   let successStub;
 
   const mockContact = {
@@ -29,7 +29,7 @@ describe('removePetitionerFromCaseAction', () => {
   });
 
   it('should set the success message of `Petitioner removed.`', async () => {
-    const { output } = await runAction(removePetitionerFromCaseAction, {
+    const { output } = await runAction(removePetitionerAndUpdateCaptionAction, {
       modules: {
         presenter,
       },
@@ -49,7 +49,7 @@ describe('removePetitionerFromCaseAction', () => {
   });
 
   it('should make a call to remove the petitioner from the case', async () => {
-    await runAction(removePetitionerFromCaseAction, {
+    await runAction(removePetitionerAndUpdateCaptionAction, {
       modules: {
         presenter,
       },
@@ -65,8 +65,8 @@ describe('removePetitionerFromCaseAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().removePetitionerFromCaseInteractor.mock
-        .calls[0][0],
+      applicationContext.getUseCases()
+        .removePetitionerAndUpdateCaptionInteractor.mock.calls[0][0],
     ).toMatchObject({
       contactId: mockContact.contactId,
       docketNumber: mockDocketNumber,
