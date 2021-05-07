@@ -66,7 +66,7 @@ const createSilentAppContext = user => {
   return applicationContext;
 };
 
-describe('getCaseLambda', () => {
+describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANGE TESTS)', () => {
   let CI;
   // disable logging by mimicking CI for this test
   beforeAll(() => {
