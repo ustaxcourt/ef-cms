@@ -23,7 +23,7 @@ resource "aws_lambda_function" "api_lambda" {
 resource "aws_api_gateway_rest_api" "gateway_for_api" {
   name = "gateway_api_${var.environment}_${var.current_color}"
 
-  minimum_compression_size = "1"
+  binary_media_types = ["*/*"]
 
   endpoint_configuration {
     types = ["REGIONAL"]
@@ -202,6 +202,12 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_authorizer.custom_authorizer
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_rest_api.gateway_for_api,
+    ]))
+  }
 
   lifecycle {
     create_before_destroy = true
