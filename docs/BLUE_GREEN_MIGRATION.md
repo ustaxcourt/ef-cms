@@ -1,5 +1,7 @@
 # Blue-Green Deploy and Migration Steps
 
+![Migration Terraform](https://user-images.githubusercontent.com/1868782/117465361-9f83e400-af1f-11eb-8844-b14fefa2c3d2.png)
+
 ## Manual Migration Steps
 
 For Production (`ENV` would be `prod`), this process is entirely manual. For the `test` and `mig` environments, steps 7 and 8 are manual. Additionally, for `stg`, `irs`, or `dev` steps 7 and 8 are manual if the deployment process does not complete the smoke tests step.
