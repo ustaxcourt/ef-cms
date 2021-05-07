@@ -1,7 +1,7 @@
-const { remove } = require('./requests');
+const { put } = require('./requests');
 
 /**
- * removePetitionerFromCaseInteractor
+ * removePetitionerAndUpdateCaptionInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,13 +9,15 @@ const { remove } = require('./requests');
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.removePetitionerFromCaseInteractor = ({
+exports.removePetitionerAndUpdateCaptionInteractor = ({
   applicationContext,
+  caseCaption,
   contactId,
   docketNumber,
 }) => {
-  return remove({
+  return put({
     applicationContext,
+    body: { caseCaption },
     endpoint: `/case-meta/${docketNumber}/remove-petitioner/${contactId}`,
   });
 };

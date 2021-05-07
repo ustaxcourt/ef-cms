@@ -18,7 +18,7 @@ export const removePetitionerFromCaseAction = async ({
 
   const updatedCaseDetail = await applicationContext
     .getUseCases()
-    .removePetitionerFromCaseInteractor({
+    .removePetitionerAndUpdateCaptionInteractor({
       applicationContext,
       caseCaption,
       contactId,

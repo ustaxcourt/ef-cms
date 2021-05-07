@@ -65,8 +65,8 @@ describe('removePetitionerFromCaseAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().removePetitionerFromCaseInteractor.mock
-        .calls[0][0],
+      applicationContext.getUseCases()
+        .removePetitionerAndUpdateCaptionInteractor.mock.calls[0][0],
     ).toMatchObject({
       contactId: mockContact.contactId,
       docketNumber: mockDocketNumber,
