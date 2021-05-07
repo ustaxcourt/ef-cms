@@ -176,7 +176,7 @@ export const CaseDetailHeader = connect(
                           {formattedCaseDetail.associatedJudge}
                         </span>
                       )}
-                      {formattedCaseDetail.showBlockedTag && (
+                      {caseDetailHeaderHelper.showBlockedTag && (
                         <span className="margin-left-1 usa-tag red-tag">
                           <FontAwesomeIcon
                             className="margin-right-1"
