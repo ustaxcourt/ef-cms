@@ -7,7 +7,6 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
   formattedClosedCases as formattedClosedCasesComputed,
-  formattedOpenCases as formattedOpenCasesComputed,
   getShowDocumentViewerLink,
 } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -20,6 +19,37 @@ const getDateISO = () =>
 const JUDGES_CHAMBERS = applicationContext
   .getPersistenceGateway()
   .getJudgesChambers();
+
+export const simpleDocketEntries = [
+  {
+    createdAt: getDateISO(),
+    docketEntryId: '123',
+    documentTitle: 'Petition',
+    filedBy: 'Jessica Frase Marine',
+    filingDate: '2019-02-28T21:14:39.488Z',
+    isOnDocketRecord: true,
+  },
+];
+
+export const mockPetitioners = [
+  {
+    address1: '734 Cowley Parkway',
+    address2: 'Cum aut velit volupt',
+    address3: 'Et sunt veritatis ei',
+    city: 'Et id aut est velit',
+    contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
+    contactType: CONTACT_TYPES.primary,
+    countryType: 'domestic',
+    email: 'petitioner@example.com',
+    isAddressSealed: false,
+    name: 'Mona Schultz',
+    phone: '+1 (884) 358-9729',
+    postalCode: '77546',
+    sealedAndUnavailable: false,
+    serviceIndicator: 'Electronic',
+    state: 'CT',
+  },
+];
 
 describe('formattedCaseDetail', () => {
   let globalUser;
@@ -34,16 +64,6 @@ describe('formattedCaseDetail', () => {
 
   const formattedCaseDetail = withAppContextDecorator(
     formattedCaseDetailComputed,
-    {
-      ...applicationContext,
-      getCurrentUser: () => {
-        return globalUser;
-      },
-    },
-  );
-
-  const formattedOpenCases = withAppContextDecorator(
-    formattedOpenCasesComputed,
     {
       ...applicationContext,
       getCurrentUser: () => {
@@ -95,37 +115,6 @@ describe('formattedCaseDetail', () => {
     section: TRIAL_CLERKS_SECTION,
     userId: '777',
   };
-
-  const mockPetitioners = [
-    {
-      address1: '734 Cowley Parkway',
-      address2: 'Cum aut velit volupt',
-      address3: 'Et sunt veritatis ei',
-      city: 'Et id aut est velit',
-      contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
-      contactType: CONTACT_TYPES.primary,
-      countryType: 'domestic',
-      email: 'petitioner@example.com',
-      isAddressSealed: false,
-      name: 'Mona Schultz',
-      phone: '+1 (884) 358-9729',
-      postalCode: '77546',
-      sealedAndUnavailable: false,
-      serviceIndicator: 'Electronic',
-      state: 'CT',
-    },
-  ];
-
-  const simpleDocketEntries = [
-    {
-      createdAt: getDateISO(),
-      docketEntryId: '123',
-      documentTitle: 'Petition',
-      filedBy: 'Jessica Frase Marine',
-      filingDate: '2019-02-28T21:14:39.488Z',
-      isOnDocketRecord: true,
-    },
-  ];
 
   const complexDocketEntries = [
     {
@@ -2604,27 +2593,6 @@ describe('formattedCaseDetail', () => {
       });
 
       expect(result.formattedDocketEntries[0].showServed).toEqual(false);
-    });
-  });
-
-  describe('formattedOpenCases', () => {
-    it('should return formatted open cases', () => {
-      const caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        correspondence: [],
-        createdAt: '2020-02-02T17:29:13.120Z',
-        docketEntries: simpleDocketEntries,
-        hasVerifiedIrsNotice: false,
-        petitioners: mockPetitioners,
-      };
-
-      const result = runCompute(formattedOpenCases, {
-        state: {
-          openCases: [caseDetail],
-        },
-      });
-
-      expect(result).toMatchObject([{ createdAtFormatted: '02/02/20' }]);
     });
   });
 
