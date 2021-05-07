@@ -46,7 +46,10 @@ const PartiesInformation = connect(
                     });
                   }}
                 >
-                  <div className="grid-row margin-left-205">
+                  <div
+                    className="grid-row margin-left-205"
+                    id="petitioners-and-counsel"
+                  >
                     {partyViewTabs.petitionersAndCounsel}
                   </div>
                 </Button>
@@ -64,7 +67,10 @@ const PartiesInformation = connect(
                       });
                     }}
                   >
-                    <div className="grid-row margin-left-205">
+                    <div
+                      className="grid-row margin-left-205"
+                      id="participants-and-counsel"
+                    >
                       {partyViewTabs.participantsAndCounsel}
                     </div>
                   </Button>
@@ -82,7 +88,10 @@ const PartiesInformation = connect(
                     });
                   }}
                 >
-                  <div className="grid-row margin-left-205">
+                  <div
+                    className="grid-row margin-left-205"
+                    id="respondent-counsel"
+                  >
                     {partyViewTabs.respondentCounsel}
                   </div>
                 </Button>

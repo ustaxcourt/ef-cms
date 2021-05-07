@@ -98,6 +98,7 @@ import { faThumbtack } from '@fortawesome/free-solid-svg-icons/faThumbtack';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
+import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
@@ -239,6 +240,7 @@ const app = {
       faTrash,
       faUser,
       faUserCheck,
+      faUserFriends,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
