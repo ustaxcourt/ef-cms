@@ -76,8 +76,8 @@ export const MessageDetail = connect(
       sequences.openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence: sequences.openForwardMessageModalSequence,
     openReplyToMessageModalSequence: sequences.openReplyToMessageModalSequence,
-    setMessageDetailmessageViewerDocumentToDisplaySequence:
-      sequences.setMessageDetailmessageViewerDocumentToDisplaySequence,
+    setMessageDetailViewerDocumentToDisplaySequence:
+      sequences.setMessageDetailViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
   },
   function MessageDetail({
@@ -89,7 +89,7 @@ export const MessageDetail = connect(
     openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
-    setMessageDetailmessageViewerDocumentToDisplaySequence,
+    setMessageDetailViewerDocumentToDisplaySequence,
     showModal,
   }) {
     return (
@@ -229,11 +229,9 @@ export const MessageDetail = connect(
                         }
                         key={`attachment-button-${attachment.documentId}`}
                         onClick={() => {
-                          setMessageDetailmessageViewerDocumentToDisplaySequence(
-                            {
-                              messageViewerDocumentToDisplay: attachment,
-                            },
-                          );
+                          setMessageDetailViewerDocumentToDisplaySequence({
+                            messageViewerDocumentToDisplay: attachment,
+                          });
                         }}
                       >
                         <div className="grid-row margin-left-205 line-height-standard">
