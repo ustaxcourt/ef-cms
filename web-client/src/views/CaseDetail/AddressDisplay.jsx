@@ -33,6 +33,69 @@ export const AddressDisplay = connect(
     showEmail,
     showSealAddressLink,
   }) {
+    const contactDetails = () => (
+      <p
+        className={classNames(
+          'no-margin',
+          contact.isAddressSealed && 'sealed-address',
+        )}
+      >
+        {[contact.address1, contact.address2, contact.address3].map(
+          addr =>
+            addr && (
+              <span className="address-line" key={addr}>
+                {addr}
+              </span>
+            ),
+        )}
+        <span className="address-line">
+          {contact.city && `${contact.city}, `}
+          {contact.state} {contact.postalCode}
+        </span>
+        {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
+          <span className="address-line">{contact.country}</span>
+        )}
+        {contact.phone && (
+          <span
+            className={classNames(
+              noMargin ? 'no-margin' : 'margin-top-1',
+              'address-line',
+            )}
+          >
+            {contact.phone}
+          </span>
+        )}
+        {contact.email && showEmail && (
+          <span className="address-line">
+            {contact.email}
+            {contact.showEAccessFlag && (
+              <FontAwesomeIcon
+                aria-label="has e-access"
+                className="margin-left-05 fa-icon-blue"
+                icon="flag"
+                size="1x"
+              />
+            )}
+          </span>
+        )}
+        {showSealAddressLink && !contact.isAddressSealed && (
+          <span className="sealed-address">
+            <Button
+              link
+              className="red-warning"
+              icon="lock"
+              iconColor="red"
+              onClick={() =>
+                openSealAddressModalSequence({ contactToSeal: contact })
+              }
+            >
+              Seal Address
+            </Button>
+          </span>
+        )}
+      </p>
+    );
+
     return (
       <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
         <p className="margin-top-0 margin-bottom-2 position-relative">
@@ -98,68 +161,7 @@ export const AddressDisplay = connect(
               ),
           )}
         </p>
-        {!contact.sealedAndUnavailable && (
-          <p
-            className={classNames(
-              'no-margin',
-              contact.isAddressSealed && 'sealed-address',
-            )}
-          >
-            {[contact.address1, contact.address2, contact.address3].map(
-              addr =>
-                addr && (
-                  <span className="address-line" key={addr}>
-                    {addr}
-                  </span>
-                ),
-            )}
-            <span className="address-line">
-              {contact.city && `${contact.city}, `}
-              {contact.state} {contact.postalCode}
-            </span>
-            {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-              <span className="address-line">{contact.country}</span>
-            )}
-            {contact.phone && (
-              <span
-                className={classNames(
-                  noMargin ? 'no-margin' : 'margin-top-1',
-                  'address-line',
-                )}
-              >
-                {contact.phone}
-              </span>
-            )}
-            {contact.email && showEmail && (
-              <span className="address-line">
-                {contact.email}
-                {contact.showEAccessFlag && (
-                  <FontAwesomeIcon
-                    aria-label="has e-access"
-                    className="margin-left-05 fa-icon-blue"
-                    icon="flag"
-                    size="1x"
-                  />
-                )}
-              </span>
-            )}
-            {showSealAddressLink && !contact.isAddressSealed && (
-              <span className="sealed-address">
-                <Button
-                  link
-                  className="red-warning"
-                  icon="lock"
-                  iconColor="red"
-                  onClick={() =>
-                    openSealAddressModalSequence({ contactToSeal: contact })
-                  }
-                >
-                  Seal Address
-                </Button>
-              </span>
-            )}
-          </p>
-        )}
+        {!contact.sealedAndUnavailable && contactDetails()}
         {contact.sealedAndUnavailable && (
           <div className="sealed-address">Address sealed</div>
         )}
