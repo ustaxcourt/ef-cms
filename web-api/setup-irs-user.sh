@@ -15,6 +15,7 @@
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 [ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
 [ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
+[ -z "${USTC_ADMIN_USER}" ] && echo "You must have USTC_ADMIN_USER set in your environment" && exit 1
 [ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
@@ -50,7 +51,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --client-id "${CLIENT_ID}" \
   --region "${REGION}" \
   --auth-flow ADMIN_NO_SRP_AUTH \
-  --auth-parameters USERNAME="ustcadmin@example.com"',PASSWORD'="${USTC_ADMIN_PASS}")
+  --auth-parameters USERNAME="${USTC_ADMIN_USER}"',PASSWORD'="${USTC_ADMIN_PASS}")
 adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
 curl --header "Content-Type: application/json" \
