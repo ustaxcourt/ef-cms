@@ -57,7 +57,7 @@ describe('messageDocumentHelper', () => {
     docketEntries: [],
   };
 
-  it('return empty object if viewerDocumentToDisplay is not set', () => {
+  it('return empty object if messageViewerDocumentToDisplay is not set', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -84,7 +84,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [baseDocketEntry],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -103,7 +103,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [baseDocketEntry],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -122,7 +122,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [baseDocketEntry],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -141,7 +141,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -160,7 +160,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -179,7 +179,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -198,7 +198,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [baseDocketEntry],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -222,7 +222,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -243,7 +243,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [baseDocketEntry],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -270,7 +270,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -295,7 +295,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -315,7 +315,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [baseDocketEntry],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -340,7 +340,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -360,7 +360,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -386,7 +386,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -414,7 +414,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: 'abc',
             eventCode: 'NOT',
           },
@@ -442,7 +442,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: 'abc',
             eventCode: 'NTD',
           },
@@ -467,7 +467,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -493,7 +493,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -518,7 +518,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -537,7 +537,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [baseDocketEntry],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -562,7 +562,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -581,7 +581,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [baseDocketEntry],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -600,7 +600,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -625,7 +625,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
             eventCode: 'NOT',
           },
@@ -653,7 +653,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -677,7 +677,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -696,7 +696,7 @@ describe('messageDocumentHelper', () => {
             ...baseCaseDetail,
             docketEntries: [baseDocketEntry],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -720,7 +720,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -743,7 +743,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -772,7 +772,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -809,7 +809,7 @@ describe('messageDocumentHelper', () => {
                 },
               ],
             },
-            viewerDocumentToDisplay: {
+            messageViewerDocumentToDisplay: {
               documentId: '123',
             },
           },
@@ -834,7 +834,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -858,7 +858,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -882,7 +882,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -906,7 +906,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -937,10 +937,10 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          permissions: { SERVE_DOCUMENT: false },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
+          permissions: { SERVE_DOCUMENT: false },
         },
       });
 
@@ -966,7 +966,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -990,7 +990,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1014,7 +1014,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1040,7 +1040,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1063,7 +1063,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '234',
           },
         },
@@ -1089,7 +1089,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1112,7 +1112,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1143,7 +1143,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1173,7 +1173,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1199,7 +1199,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1222,7 +1222,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1249,7 +1249,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '789',
           },
         },
@@ -1274,7 +1274,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '098',
           },
         },
@@ -1297,7 +1297,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '456',
           },
         },
@@ -1321,7 +1321,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '123',
           },
         },
@@ -1343,10 +1343,10 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
           },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
           },
+          parentMessageId: PARENT_MESSAGE_ID,
         },
       });
 
@@ -1362,10 +1362,10 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
           },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
           },
+          parentMessageId: PARENT_MESSAGE_ID,
         },
       });
 
@@ -1381,10 +1381,10 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
           },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
           },
+          parentMessageId: PARENT_MESSAGE_ID,
         },
       });
 
@@ -1400,10 +1400,10 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
           },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
           },
+          parentMessageId: PARENT_MESSAGE_ID,
         },
       });
 
@@ -1419,10 +1419,10 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
           },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
           },
+          parentMessageId: PARENT_MESSAGE_ID,
         },
       });
 
