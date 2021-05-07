@@ -1,14 +1,16 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
-import { removePetitionerFromCaseAction } from '../actions/caseAssociation/removePetitionerFromCaseAction';
+import { removePetitionerAndUpdateCaptionAction } from '../actions/caseAssociation/removePetitionerAndUpdateCaptionAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const removePetitionerFromCaseSequence = showProgressSequenceDecorator([
-  clearModalAction,
-  removePetitionerFromCaseAction,
-  setSaveAlertsForNavigationAction,
-  setAlertSuccessAction,
-  navigateToCaseDetailCaseInformationActionFactory('petitioner'),
-]);
+export const removePetitionerAndUpdateCaptionSequence = showProgressSequenceDecorator(
+  [
+    clearModalAction,
+    removePetitionerAndUpdateCaptionAction,
+    setSaveAlertsForNavigationAction,
+    setAlertSuccessAction,
+    navigateToCaseDetailCaseInformationActionFactory('parties'),
+  ],
+);

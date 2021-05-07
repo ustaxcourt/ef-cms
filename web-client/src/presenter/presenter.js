@@ -258,8 +258,8 @@ import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
+import { removePetitionerAndUpdateCaptionSequence } from './sequences/removePetitionerAndUpdateCaptionSequence';
 import { removePetitionerCounselFromCaseSequence } from './sequences/removePetitionerCounselFromCaseSequence';
-import { removePetitionerFromCaseSequence } from './sequences/removePetitionerFromCaseSequence';
 import { removeRespondentCounselFromCaseSequence } from './sequences/removeRespondentCounselFromCaseSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
@@ -742,8 +742,8 @@ export const presenter = {
     removeCaseDetailPendingItemSequence,
     removeCaseFromTrialSequence,
     removePetitionForReplacementSequence,
+    removePetitionerAndUpdateCaptionSequence,
     removePetitionerCounselFromCaseSequence,
-    removePetitionerFromCaseSequence,
     removeRespondentCounselFromCaseSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,
