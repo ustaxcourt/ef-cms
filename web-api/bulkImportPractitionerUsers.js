@@ -146,7 +146,7 @@ const formatRecord = record => {
     cognito,
     env: process.env.ENV,
     password: process.env.USTC_ADMIN_PASS,
-    username: 'ustcadmin@example.com',
+    username: process.env.USTC_ADMIN_USER,
   });
 
   const data = fs.readFileSync(files[0], 'utf8');

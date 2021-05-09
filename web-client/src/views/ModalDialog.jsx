@@ -7,7 +7,6 @@ import classNames from 'classnames';
 const modalRoot = window.document.getElementById('modal-root');
 
 export const ModalDialog = ({
-  ariaLiveMode,
   cancelLabel,
   cancelLink = false,
   cancelSequence,
@@ -99,10 +98,8 @@ export const ModalDialog = ({
           onClick={blurDialog}
         >
           <div
-            aria-live={ariaLiveMode || 'assertive'}
             aria-modal="true"
             className={classNames('modal-dialog padding-205', className)}
-            role="status"
             onClick={evt => evt.stopPropagation()}
           >
             <div className="modal-header grid-container padding-x-0">
