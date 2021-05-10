@@ -34,7 +34,7 @@ const PetitionersAndCounsel = connect(
             >
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper parties-card">
-                  <h3>
+                  <h3 className="text-wrap">
                     {petitioner.name}
                     {petitioner.canEditPetitioner && (
                       <Button
@@ -82,38 +82,41 @@ const PetitionersAndCounsel = connect(
                     petitioner.representingPractitioners.map(
                       privatePractitioner => (
                         <p key={privatePractitioner.userId}>
-                          <span className="address-line">
-                            {privatePractitioner.name}{' '}
-                            {`(${privatePractitioner.barNumber})`}{' '}
-                            {caseInformationHelper.showEditPrivatePractitioners && (
-                              <Button
-                                link
-                                className="margin-left-1 padding-0 height-3"
-                                href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
-                                icon="edit"
-                                id="edit-privatePractitioners-button"
-                                overrideMargin={true}
-                              >
-                                Edit
-                              </Button>
-                            )}
-                            {caseInformationHelper.showViewPrivatePractitioners && (
-                              <Button
-                                link
-                                className="width-auto margin-left-1 padding-0 height-3"
-                                icon={['fas', 'eye']}
-                                id="view-privatePractitioners-button"
-                                overrideMargin={true}
-                                onClick={() => {
-                                  showViewPetitionerCounselModalSequence({
-                                    privatePractitioner,
-                                  });
-                                }}
-                              >
-                                View
-                              </Button>
-                            )}
-                          </span>
+                          <div className="grid-row">
+                            <div className="grid-col-9">
+                              {privatePractitioner.name}{' '}
+                              {`(${privatePractitioner.barNumber})`}{' '}
+                            </div>
+                            <div className="grid-col-3">
+                              {caseInformationHelper.showEditPrivatePractitioners && (
+                                <Button
+                                  link
+                                  className="margin-left-1 padding-0 height-3"
+                                  href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
+                                  icon="edit"
+                                  overrideMargin={true}
+                                >
+                                  Edit
+                                </Button>
+                              )}
+                              {caseInformationHelper.showViewCounselButton && (
+                                <Button
+                                  link
+                                  className="width-auto margin-left-1 padding-0 height-3 view-privatePractitioners-button"
+                                  href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
+                                  icon="eye"
+                                  overrideMargin={true}
+                                  onClick={() => {
+                                    showViewPetitionerCounselModalSequence({
+                                      privatePractitioner,
+                                    });
+                                  }}
+                                >
+                                  View
+                                </Button>
+                              )}
+                            </div>
+                          </div>
                           <span className="address-line">
                             {privatePractitioner.formattedEmail}
                           </span>

@@ -30,7 +30,7 @@ const ParticipantsAndCounsel = connect(
             >
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper parties-card">
-                  <h3>
+                  <h3 className="text-wrap">
                     {petitioner.name}
                     {petitioner.canEditParticipant && (
                       <Button
@@ -68,23 +68,37 @@ const ParticipantsAndCounsel = connect(
                     petitioner.representingPractitioners.map(
                       privatePractitioner => (
                         <p key={privatePractitioner.userId}>
-                          <span className="address-line">
-                            {privatePractitioner.name}{' '}
-                            {`(${privatePractitioner.barNumber})`}{' '}
-                            {caseInformationHelper.showEditPrivatePractitioners && (
-                              <Button
-                                link
-                                className="margin-left-205 padding-0 height-3"
-                                icon="edit"
-                                id="edit-privatePractitioners-button"
-                                onClick={() =>
-                                  openEditPrivatePractitionersModalSequence()
-                                }
-                              >
-                                Edit
-                              </Button>
-                            )}
-                          </span>
+                          <div className="grid-row">
+                            <div className="grid-col-9">
+                              {privatePractitioner.name}{' '}
+                              {`(${privatePractitioner.barNumber})`}{' '}
+                            </div>
+                            <div className="grid-col-3">
+                              {caseInformationHelper.showEditPrivatePractitioners && (
+                                <Button
+                                  link
+                                  className="margin-left-205 padding-0 height-3"
+                                  icon="edit"
+                                  onClick={() =>
+                                    openEditPrivatePractitionersModalSequence()
+                                  }
+                                >
+                                  Edit
+                                </Button>
+                              )}
+                              {caseInformationHelper.showViewCounselButton && (
+                                <Button
+                                  link
+                                  className="margin-left-1 padding-0"
+                                  href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
+                                  icon="eye"
+                                  overrideMargin={true}
+                                >
+                                  View
+                                </Button>
+                              )}
+                            </div>
+                          </div>
                           <span className="address-line">
                             {privatePractitioner.email}
                           </span>

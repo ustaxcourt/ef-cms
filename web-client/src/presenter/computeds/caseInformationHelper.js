@@ -2,12 +2,21 @@ import { state } from 'cerebral';
 
 export const caseInformationHelper = (get, applicationContext) => {
   const { STATUS_TYPES } = applicationContext.getConstants();
+
+  const user = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
+  const isInternalUser = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
+
+  const canEditCounsel = permissions.EDIT_COUNSEL_ON_CASE;
+
   const showEditPrivatePractitionersButton =
-    permissions.ASSOCIATE_USER_WITH_CASE &&
-    caseDetail.privatePractitioners &&
-    !!caseDetail.privatePractitioners.length;
+    canEditCounsel && !!caseDetail.privatePractitioners?.length;
+
+  const showViewCounselButton = !canEditCounsel;
+
   const showEditIrsPractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
     caseDetail.irsPractitioners &&
@@ -43,12 +52,6 @@ export const caseInformationHelper = (get, applicationContext) => {
     permissions.ADD_PETITIONER_TO_CASE &&
     caseDetail.status !== STATUS_TYPES.new;
 
-  const user = applicationContext.getCurrentUser();
-
-  const isInternalUser = applicationContext
-    .getUtilities()
-    .isInternalUser(user.role);
-
   return {
     contactPrimaryEmailFormatted,
     contactSecondaryEmailFormatted,
@@ -61,7 +64,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     showHearingsTable,
     showSealAddressLink,
     showSealCaseButton,
-    showViewPrivatePractitioners: !showEditPrivatePractitionersButton,
+    showViewCounselButton,
     toggleAdditionalPetitionersDisplay,
   };
 };
