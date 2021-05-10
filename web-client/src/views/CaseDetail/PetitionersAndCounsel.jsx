@@ -80,7 +80,7 @@ const PetitionersAndCounsel = connect(
                             {caseInformationHelper.showEditPrivatePractitioners && (
                               <Button
                                 link
-                                className="margin-left-1 padding-0 height-3"
+                                className="margin-left-1 padding-0"
                                 href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                 icon="edit"
                                 id="edit-privatePractitioners-button"
