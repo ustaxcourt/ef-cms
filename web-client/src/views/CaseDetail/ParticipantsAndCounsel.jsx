@@ -77,7 +77,6 @@ const ParticipantsAndCounsel = connect(
                                   link
                                   className="margin-left-205 padding-0 height-3"
                                   icon="edit"
-                                  id="edit-privatePractitioners-button"
                                   onClick={() =>
                                     openEditPrivatePractitionersModalSequence()
                                   }
@@ -91,7 +90,6 @@ const ParticipantsAndCounsel = connect(
                                   className="margin-left-1 padding-0"
                                   href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                   icon="eye"
-                                  id="view-privatePractitioners-button"
                                   overrideMargin={true}
                                 >
                                   View
