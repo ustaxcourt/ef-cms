@@ -2,9 +2,15 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  Case,
+  getPetitionerById,
+  getPractitionersRepresenting,
+} = require('../entities/cases/Case');
+const {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  ROLES,
 } = require('../entities/EntityConstants');
 const {
   copyToNewPdf,
@@ -15,7 +21,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { Case, getPetitionerById } = require('../entities/cases/Case');
 const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -237,13 +242,26 @@ exports.updatePetitionerInformationInteractor = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)) {
-    throw new UnauthorizedError('Unauthorized for editing petition details');
-  }
-
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
+
+  if (user.role === ROLES.privatePractitioner) {
+    const practitioners = getPractitionersRepresenting(
+      oldCase,
+      updatedPetitionerData.contactId,
+    );
+
+    if (
+      !practitioners.find(practitioner => practitioner.userId === user.userId)
+    ) {
+      throw new UnauthorizedError('Unauthorized for editing petition details');
+    }
+  } else {
+    if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)) {
+      throw new UnauthorizedError('Unauthorized for editing petition details');
+    }
+  }
 
   if (oldCase.status === CASE_STATUS_TYPES.new) {
     throw new Error(
