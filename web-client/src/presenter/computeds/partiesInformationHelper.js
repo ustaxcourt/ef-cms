@@ -58,9 +58,19 @@ export const partiesInformationHelper = (get, applicationContext) => {
           practitioner.representing.includes(petitioner.contactId),
       );
 
+    const canEditRespondent = applicationContext
+      .getUtilities()
+      .isInternalUser(user.role);
+
+    const canEditParticipant = applicationContext
+      .getUtilities()
+      .isInternalUser(user.role);
+
     return {
       ...petitioner,
+      canEditParticipant,
       canEditPetitioner,
+      canEditRespondent,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
       showExternalHeader: applicationContext
