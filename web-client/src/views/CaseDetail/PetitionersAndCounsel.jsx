@@ -28,20 +28,16 @@ const PetitionersAndCounsel = connect(
             >
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper parties-card">
-                  <h3>
-                    <div className="grid-row">
-                      <div className="grid-col-9">{petitioner.name}</div>
-                      <div className="grid-col-3">
-                        <Button
-                          link
-                          className="margin-top-1 padding-0 margin-right-0 float-right edit-petitioner-button"
-                          href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
-                          icon="edit"
-                        >
-                          Edit
-                        </Button>
-                      </div>
-                    </div>
+                  <h3 className="text-wrap">
+                    {petitioner.name}
+                    <Button
+                      link
+                      className="margin-top-1 margin-left-1 padding-0 margin-right-0 float-right edit-petitioner-button"
+                      href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
+                      icon="edit"
+                    >
+                      Edit
+                    </Button>
                   </h3>
                   <div className="bg-primary text-white padding-1 margin-bottom-2">
                     Petitioner
