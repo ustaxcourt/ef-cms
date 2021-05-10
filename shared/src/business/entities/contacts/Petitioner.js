@@ -49,6 +49,7 @@ Petitioner.prototype.init = function init(rawContact, { applicationContext }) {
   this.phone = rawContact.phone;
   this.postalCode = rawContact.postalCode;
   this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
+  this.secondaryName = rawContact.secondaryName;
   this.serviceIndicator = rawContact.serviceIndicator;
   this.state = rawContact.state;
   this.title = rawContact.title;
