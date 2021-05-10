@@ -25,7 +25,7 @@ const ParticipantsAndCounsel = connect(
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedParticipants.map(petitioner => (
             <div
-              className="grid-col-4 margin-bottom-4"
+              className="grid-col-auto margin-bottom-4"
               key={petitioner.contactId}
             >
               <div className="card height-full margin-bottom-0">
