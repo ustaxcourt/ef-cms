@@ -40,15 +40,17 @@ const RespondentCounsel = connect(
                   <div className="content-wrapper parties-card">
                     <h3>
                       {irsPractitioner.name} {`(${irsPractitioner.barNumber})`}
-                      <Button
-                        link
-                        className="margin-top-1 padding-0 margin-right-05 float-right"
-                        href={`/case-detail/${caseDetail.docketNumber}/edit-respondent-counsel/${irsPractitioner.barNumber}`}
-                        icon="edit"
-                        id="edit-respondent-counsel"
-                      >
-                        Edit
-                      </Button>
+                      {irsPractitioner.canEditRespondent && (
+                        <Button
+                          link
+                          className="width-auto margin-top-1 padding-0 margin-right-05 float-right"
+                          href={`/case-detail/${caseDetail.docketNumber}/edit-respondent-counsel/${irsPractitioner.barNumber}`}
+                          icon="edit"
+                          id="edit-respondent-counsel"
+                        >
+                          Edit
+                        </Button>
+                      )}
                     </h3>
                     <hr className="respondent-card-header" />
                     <AddressDisplay

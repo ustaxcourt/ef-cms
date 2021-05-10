@@ -32,16 +32,18 @@ const ParticipantsAndCounsel = connect(
                 <div className="content-wrapper parties-card">
                   <h3>
                     {petitioner.name}
-                    <Button
-                      link
-                      className="margin-top-1 margin-left-1 padding-0 margin-right-0 float-right"
-                      href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
-                      icon="edit"
-                      id="edit-participant"
-                      overrideMargin={true}
-                    >
-                      Edit
-                    </Button>
+                    {petitioner.canEditParticipant && (
+                      <Button
+                        link
+                        className="width-auto margin-top-1 margin-left-1 padding-0 margin-right-0 float-right"
+                        href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
+                        icon="edit"
+                        id="edit-participant"
+                        overrideMargin={true}
+                      >
+                        Edit
+                      </Button>
+                    )}
                   </h3>
                   <div className="bg-primary text-white padding-1 margin-bottom-2">
                     {petitioner.formattedTitle}

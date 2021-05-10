@@ -39,7 +39,7 @@ const PetitionersAndCounsel = connect(
                     {petitioner.canEditPetitioner && (
                       <Button
                         link
-                        className="margin-top-1 padding-0 margin-right-0 float-right edit-petitioner-button"
+                        className="width-auto margin-top-1 padding-0 margin-right-0 float-right edit-petitioner-button"
                         href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
                         icon="edit"
                       >
@@ -100,7 +100,7 @@ const PetitionersAndCounsel = connect(
                             {caseInformationHelper.showViewPrivatePractitioners && (
                               <Button
                                 link
-                                className="margin-left-1 padding-0 height-3"
+                                className="width-auto margin-left-1 padding-0 height-3"
                                 icon={['fas', 'eye']}
                                 id="view-privatePractitioners-button"
                                 overrideMargin={true}
