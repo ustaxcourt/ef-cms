@@ -14,7 +14,7 @@ export const caseInformationHelper = (get, applicationContext) => {
 
   const showEditPrivatePractitionersButton =
     canEditCounsel && !!caseDetail.privatePractitioners?.length;
-  console.log('caneditcounsel', canEditCounsel);
+
   const showViewCounselButton = isInternalUser && !canEditCounsel;
 
   const showEditIrsPractitionersButton =

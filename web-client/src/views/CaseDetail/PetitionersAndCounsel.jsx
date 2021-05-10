@@ -89,6 +89,18 @@ const PetitionersAndCounsel = connect(
                                 Edit
                               </Button>
                             )}
+                            {caseInformationHelper.showViewCounselButton && (
+                              <Button
+                                link
+                                className="margin-left-1 padding-0"
+                                href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
+                                icon="view"
+                                id="view-privatePractitioners-button"
+                                overrideMargin={true}
+                              >
+                                View
+                              </Button>
+                            )}
                           </span>
                           <span className="address-line">
                             {privatePractitioner.formattedEmail}
