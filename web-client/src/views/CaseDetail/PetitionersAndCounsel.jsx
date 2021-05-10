@@ -23,7 +23,7 @@ const PetitionersAndCounsel = connect(
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedPetitioners.map(petitioner => (
             <div
-              className="grid-col-4 margin-bottom-4 petitioner-card"
+              className="grid-col-auto margin-bottom-4 petitioner-card"
               key={petitioner.contactId}
             >
               <div className="card height-full margin-bottom-0">
@@ -32,7 +32,7 @@ const PetitionersAndCounsel = connect(
                     {petitioner.name}
                     <Button
                       link
-                      className="margin-top-1 padding-0 margin-right-0 float-right edit-petitioner-button"
+                      className="margin-top-1 margin-left-1 padding-0 margin-right-0 float-right edit-petitioner-button"
                       href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
                       icon="edit"
                     >
