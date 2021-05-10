@@ -23,12 +23,12 @@ const PetitionersAndCounsel = connect(
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedPetitioners.map(petitioner => (
             <div
-              className="grid-col-auto margin-bottom-4 petitioner-card"
+              className="grid-col-4 margin-bottom-4 petitioner-card"
               key={petitioner.contactId}
             >
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper parties-card">
-                  <h3>
+                  <h3 className="text-wrap">
                     {petitioner.name}
                     <Button
                       link
