@@ -1,3 +1,4 @@
+import { AddressDisplay } from './AddressDisplay';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -6,9 +7,14 @@ import React from 'react';
 export const ViewPetitionerCounselModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    // viewCounselHelper: state.viewCounselHelper,
+    contact: state.modal.contact,
+    viewCounselHelper: state.viewCounselHelper,
   },
-  function ViewPetitionerCounselModal({ cancelSequence }) {
+  function ViewPetitionerCounselModal({
+    cancelSequence,
+    contact,
+    viewCounselHelper,
+  }) {
     return (
       <ModalDialog
         cancelSequence={cancelSequence}
@@ -16,10 +22,23 @@ export const ViewPetitionerCounselModal = connect(
         confirmSequence={cancelSequence}
         title="Petitioner Counsel"
       >
-        <div
-          className="margin-bottom-4"
-          id="view-petitioner-counsel-modal"
-        ></div>
+        <div className="margin-bottom-4" id="view-petitioner-counsel-modal">
+          <AddressDisplay
+            showEmail
+            contact={{
+              ...contact,
+              ...contact.contact,
+            }}
+            nameOverride={contact.name}
+          />
+          <strong>Representing</strong>
+          {viewCounselHelper.representingNames.map(name => (
+            <p key={name}>{name}</p>
+          ))}
+
+          <strong>Service preference</strong>
+          <p>{contact.serviceIndicator}</p>
+        </div>
       </ModalDialog>
     );
   },
