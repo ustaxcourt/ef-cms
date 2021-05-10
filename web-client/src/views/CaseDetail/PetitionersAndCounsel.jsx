@@ -80,12 +80,12 @@ const PetitionersAndCounsel = connect(
                     petitioner.representingPractitioners.map(
                       privatePractitioner => (
                         <p key={privatePractitioner.userId}>
-                          <div className="grid-row">
-                            <div className="grid-col-9">
+                          <span className="grid-row">
+                            <span className="grid-col-9">
                               {privatePractitioner.name}{' '}
                               {`(${privatePractitioner.barNumber})`}{' '}
-                            </div>
-                            <div className="grid-col-3">
+                            </span>
+                            <span className="grid-col-3">
                               {caseInformationHelper.showEditPrivatePractitioners && (
                                 <Button
                                   link
@@ -112,8 +112,8 @@ const PetitionersAndCounsel = connect(
                                   View
                                 </Button>
                               )}
-                            </div>
-                          </div>
+                            </span>
+                          </span>
                           <span className="address-line">
                             {privatePractitioner.formattedEmail}
                           </span>
