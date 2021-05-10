@@ -1,13 +1,18 @@
 import { state } from 'cerebral';
 
 export const caseInformationHelper = (get, applicationContext) => {
-  const { STATUS_TYPES } = applicationContext.getConstants();
+  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+
+  const user = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
+
   const showEditPrivatePractitionersButton =
-    permissions.ASSOCIATE_USER_WITH_CASE &&
-    caseDetail.privatePractitioners &&
-    !!caseDetail.privatePractitioners.length;
+    (user.role === USER_ROLES.docketClerk ||
+      user.role === USER_ROLES.petitionsClerk ||
+      user.role === USER_ROLES.admissionsClerk) &&
+    !!caseDetail.privatePractitioners?.length;
+
   const showEditIrsPractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
     caseDetail.irsPractitioners &&
