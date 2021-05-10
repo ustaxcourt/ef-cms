@@ -9,6 +9,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 
 export const gotoAdvancedSearchSequence = [
+  setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   closeMobileMenuAction,
   defaultAdvancedSearchFormAction,
