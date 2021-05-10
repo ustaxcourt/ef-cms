@@ -2,6 +2,7 @@ import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartiesInformationContentHeader } from './PartiesInformationContentHeader';
+import { ViewPetitionerCounselModal } from './ViewPetitionerCounselModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -11,6 +12,7 @@ const PetitionersAndCounsel = connect(
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
     partiesInformationHelper: state.partiesInformationHelper,
+    showModal: state.modal.showModal,
     showViewPetitionerCounselModalSequence:
       sequences.showViewPetitionerCounselModalSequence,
   },
@@ -18,6 +20,7 @@ const PetitionersAndCounsel = connect(
     caseDetail,
     caseInformationHelper,
     partiesInformationHelper,
+    showModal,
     showViewPetitionerCounselModalSequence,
   }) {
     return (
@@ -102,7 +105,9 @@ const PetitionersAndCounsel = connect(
                                 id="view-privatePractitioners-button"
                                 overrideMargin={true}
                                 onClick={() => {
-                                  showViewPetitionerCounselModalSequence();
+                                  showViewPetitionerCounselModalSequence({
+                                    privatePractitioner,
+                                  });
                                 }}
                               >
                                 View
@@ -125,6 +130,10 @@ const PetitionersAndCounsel = connect(
             </div>
           ))}
         </div>
+
+        {showModal === 'ViewPetitionerCounselModal' && (
+          <ViewPetitionerCounselModal />
+        )}
       </>
     );
   },
