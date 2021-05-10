@@ -103,7 +103,6 @@ const PetitionersAndCounsel = connect(
                                 <Button
                                   link
                                   className="width-auto margin-left-1 padding-0 height-3 view-privatePractitioners-button"
-                                  href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                   icon="eye"
                                   overrideMargin={true}
                                   onClick={() => {
