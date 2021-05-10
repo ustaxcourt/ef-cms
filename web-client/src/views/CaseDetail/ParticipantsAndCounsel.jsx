@@ -31,17 +31,21 @@ const ParticipantsAndCounsel = connect(
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper parties-card">
                   <h3>
-                    {petitioner.name}
-                    <Button
-                      link
-                      className="margin-top-1 margin-left-1 padding-0 margin-right-0 float-right"
-                      href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
-                      icon="edit"
-                      id="edit-participant"
-                      overrideMargin={true}
-                    >
-                      Edit
-                    </Button>
+                    <div className="grid-row">
+                      <div className="grid-col-9">{petitioner.name}</div>
+                      <div className="grid-col-3">
+                        <Button
+                          link
+                          className="margin-top-1 margin-left-1 padding-0 margin-right-0 float-right"
+                          href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
+                          icon="edit"
+                          id="edit-participant"
+                          overrideMargin={true}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                    </div>
                   </h3>
                   <div className="bg-primary text-white padding-1 margin-bottom-2">
                     {petitioner.formattedTitle}
@@ -66,23 +70,27 @@ const ParticipantsAndCounsel = connect(
                     petitioner.representingPractitioners.map(
                       privatePractitioner => (
                         <p key={privatePractitioner.userId}>
-                          <span className="address-line">
-                            {privatePractitioner.name}{' '}
-                            {`(${privatePractitioner.barNumber})`}{' '}
-                            {caseInformationHelper.showEditPrivatePractitioners && (
-                              <Button
-                                link
-                                className="margin-left-205 padding-0 height-3"
-                                icon="edit"
-                                id="edit-privatePractitioners-button"
-                                onClick={() =>
-                                  openEditPrivatePractitionersModalSequence()
-                                }
-                              >
-                                Edit
-                              </Button>
-                            )}
-                          </span>
+                          <div className="grid-row">
+                            <div className="grid-col-9">
+                              {privatePractitioner.name}{' '}
+                              {`(${privatePractitioner.barNumber})`}{' '}
+                            </div>
+                            <div className="grid-col-3">
+                              {caseInformationHelper.showEditPrivatePractitioners && (
+                                <Button
+                                  link
+                                  className="margin-left-205 padding-0 height-3"
+                                  icon="edit"
+                                  id="edit-privatePractitioners-button"
+                                  onClick={() =>
+                                    openEditPrivatePractitionersModalSequence()
+                                  }
+                                >
+                                  Edit
+                                </Button>
+                              )}
+                            </div>
+                          </div>
                           <span className="address-line">
                             {privatePractitioner.email}
                           </span>
