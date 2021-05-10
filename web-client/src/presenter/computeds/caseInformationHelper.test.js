@@ -32,6 +32,10 @@ describe('caseInformationHelper', () => {
     role: ROLES.adc,
     userId: '11e15c96-6705-4083-8e10-1c20664ac1ae',
   };
+  const mockJudge = {
+    role: ROLES.judge,
+    userId: '12e15c96-6705-4083-8e10-1c20664ac1ae',
+  };
 
   const caseInformationHelper = withAppContextDecorator(
     caseInformationHelperComputed,
@@ -329,11 +333,26 @@ describe('caseInformationHelper', () => {
     });
   });
 
-  describe('showViewCounselButton', () => {
-    // true when internal who's not docket, petitions, admissions
-    it(
-      'should be true when the user is internal but not docket, petitions, or admissions',
-    );
+  describe.only('showViewCounselButton', () => {
+    it('should be true when the user is an internal user who cannot edit counsel on a case', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockJudge),
+          caseDetail: {
+            irsPractitioners: [{ userId: '2' }],
+            petitioners: [],
+            privatePractitioners: [{ userId: '1' }],
+          },
+          form: {},
+        },
+      });
+
+      expect(result.showViewCounselButton).toBeTruthy();
+    });
+
+    it('should be false when the user is an internal user who can edit counsel on a case', () => {});
+
+    it('should be false when the user is an external user', () => {});
   });
 
   describe('showEditPrivatePractitionersButton', () => {
