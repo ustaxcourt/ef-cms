@@ -121,7 +121,10 @@ Petitioner.VALIDATION_ERROR_MESSAGES = {
   city: 'Enter city',
   country: 'Enter a country',
   countryType: 'Enter country type',
-  name: 'Enter name',
+  name: [
+    { contains: 'must be less than or equal to', message: 'Name is too long' },
+    'Enter name',
+  ],
   otherFilerType: 'Select a filer type',
   phone: 'Enter phone number',
   postalCode: [

@@ -1,5 +1,6 @@
 const {
   applicationContext,
+  over1000Characters,
 } = require('../../test/createTestApplicationContext');
 const {
   COUNTRY_TYPES,
@@ -46,6 +47,27 @@ describe('Petitioner', () => {
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
         serviceIndicator: Petitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator,
+      });
+    });
+
+    it('should be false when name field is too long', () => {
+      const entity = new Petitioner(
+        {
+          address1: '1234 Some Street',
+          city: 'Someplace',
+          country: 'Uruguay',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          name: over1000Characters,
+          phone: 'n/a',
+          postalCode: '98123',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        { applicationContext },
+      );
+
+      expect(entity.isValid()).toBe(false);
+      expect(entity.getFormattedValidationErrors()).toEqual({
+        name: Petitioner.VALIDATION_ERROR_MESSAGES.name[0].message,
       });
     });
 
