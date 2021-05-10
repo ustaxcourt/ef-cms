@@ -1506,6 +1506,13 @@ button.change-scanner-button {
   min-width: 15rem;
 }
 
+.white-edit-link {
+  a,
+  a:visited {
+    color: $color-white;
+  }
+}
+
 .advanced-search {
   /* big screens */
   @media only screen and (min-width: $medium-screen) {
