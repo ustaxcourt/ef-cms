@@ -1507,8 +1507,7 @@ button.change-scanner-button {
 }
 
 .white-edit-link {
-  a,
-  a:visited {
+  &.usa-button--unstyled {
     color: $color-white;
   }
 }
