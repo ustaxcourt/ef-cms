@@ -1,17 +1,21 @@
 import { state } from 'cerebral';
 
 export const caseInformationHelper = (get, applicationContext) => {
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const { STATUS_TYPES } = applicationContext.getConstants();
 
   const user = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
+  const isInternalUser = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
+
+  const canEditCounsel = permissions.EDIT_COUNSEL_ON_CASE;
 
   const showEditPrivatePractitionersButton =
-    (user.role === USER_ROLES.docketClerk ||
-      user.role === USER_ROLES.petitionsClerk ||
-      user.role === USER_ROLES.admissionsClerk) &&
-    !!caseDetail.privatePractitioners?.length;
+    canEditCounsel && !!caseDetail.privatePractitioners?.length;
+  console.log('caneditcounsel', canEditCounsel);
+  const showViewCounselButton = isInternalUser && !canEditCounsel;
 
   const showEditIrsPractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
@@ -59,6 +63,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     showHearingsTable,
     showSealAddressLink,
     showSealCaseButton,
+    showViewCounselButton,
     toggleAdditionalPetitionersDisplay,
   };
 };
