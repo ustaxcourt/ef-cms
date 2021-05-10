@@ -5,6 +5,7 @@ import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { ErrorNotification } from '../ErrorNotification';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { OtherFilerInformation } from './OtherFilerInformation';
+import { PartiesInformation } from './PartiesInformation';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
@@ -105,6 +106,11 @@ export const CaseDetail = connect(
                         >
                           <CaseInformationExternal />
                         </Tab>
+
+                        <Tab id="tab-parties" tabName="parties" title="Parties">
+                          <PartiesInformation />
+                        </Tab>
+
                         <Tab
                           id="tab-petitioner"
                           tabName="petitioner"
@@ -142,6 +148,9 @@ export const CaseDetail = connect(
                             <CaseInformationExternal />
                           </Tab>
                         )}
+                        <Tab id="tab-parties" tabName="parties" title="Parties">
+                          <PartiesInformation />
+                        </Tab>
                         {caseInformationTab === 'petitioner' && (
                           <Tab
                             id="tab-petitioner"

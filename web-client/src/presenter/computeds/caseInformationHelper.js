@@ -43,10 +43,17 @@ export const caseInformationHelper = (get, applicationContext) => {
     permissions.ADD_PETITIONER_TO_CASE &&
     caseDetail.status !== STATUS_TYPES.new;
 
+  const user = applicationContext.getCurrentUser();
+
+  const isInternalUser = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
+
   return {
     contactPrimaryEmailFormatted,
     contactSecondaryEmailFormatted,
     formattedPetitioners,
+    isInternalUser,
     showAddCounsel,
     showAddPartyButton,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
