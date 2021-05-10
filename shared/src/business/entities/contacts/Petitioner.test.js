@@ -71,6 +71,29 @@ describe('Petitioner', () => {
       });
     });
 
+    it('should be false when additionalName field is too long', () => {
+      const entity = new Petitioner(
+        {
+          additionalName: over1000Characters,
+          address1: '1234 Some Street',
+          city: 'Someplace',
+          country: 'Uruguay',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          name: 'Somebody Somewhere',
+          phone: 'n/a',
+          postalCode: '98123',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        { applicationContext },
+      );
+
+      expect(entity.isValid()).toBe(false);
+      expect(entity.getFormattedValidationErrors()).toEqual({
+        additionalName:
+          Petitioner.VALIDATION_ERROR_MESSAGES.additionalName[0].message,
+      });
+    });
+
     it('should be true when all required fields have been provided', () => {
       const entity = new Petitioner(
         {
