@@ -86,7 +86,6 @@ const PetitionersAndCounsel = connect(
                                   className="margin-left-1 padding-0"
                                   href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                   icon="edit"
-                                  id="edit-privatePractitioners-button"
                                   overrideMargin={true}
                                 >
                                   Edit
@@ -98,7 +97,6 @@ const PetitionersAndCounsel = connect(
                                   className="margin-left-1 padding-0"
                                   href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                   icon="eye"
-                                  id="view-privatePractitioners-button"
                                   overrideMargin={true}
                                 >
                                   View
