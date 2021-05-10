@@ -29,7 +29,7 @@ const PetitionersAndCounsel = connect(
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedPetitioners.map(petitioner => (
             <div
-              className="grid-col-4 margin-bottom-4 petitioner-card"
+              className="tablet:grid-col-9 mobile:grid-col-9 desktop:grid-col-4 margin-bottom-4 petitioner-card"
               key={petitioner.contactId}
             >
               <div className="card height-full margin-bottom-0">

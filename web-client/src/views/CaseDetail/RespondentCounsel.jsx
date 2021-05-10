@@ -33,7 +33,7 @@ const RespondentCounsel = connect(
           {partiesInformationHelper.formattedRespondents.map(
             irsPractitioner => (
               <div
-                className="grid-col-5 margin-bottom-4"
+                className="tablet:grid-col-9 mobile:grid-col-9 desktop:grid-col-5 margin-bottom-4"
                 key={irsPractitioner.userId}
               >
                 <div className="card height-full margin-bottom-0">

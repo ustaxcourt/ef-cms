@@ -31,10 +31,12 @@ export const ViewPetitionerCounselModal = connect(
             }}
             nameOverride={contact.name}
           />
-          <strong>Representing</strong>
-          {viewCounselHelper.representingNames.map(name => (
-            <p key={name}>{name}</p>
-          ))}
+          <div className="margin-top-2">
+            <strong>Representing</strong>
+            {viewCounselHelper.representingNames.map(name => (
+              <p key={name}>{name}</p>
+            ))}
+          </div>
 
           <strong>Service preference</strong>
           <p>{contact.serviceIndicator}</p>
