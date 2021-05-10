@@ -28,6 +28,10 @@ describe('caseInformationHelper', () => {
     role: ROLES.privatePractitioner,
     userId: '39f7c7ee-ab75-492a-a4ee-63755a24e845',
   };
+  const mockAdc = {
+    role: ROLES.adc,
+    userId: '11e15c96-6705-4083-8e10-1c20664ac1ae',
+  };
 
   const caseInformationHelper = withAppContextDecorator(
     caseInformationHelperComputed,
@@ -40,53 +44,11 @@ describe('caseInformationHelper', () => {
     };
   };
 
-  it('should show edit privatePractitioners and irsPractitioners buttons if user is an internal user and there are privatePractitioners and irsPractitioners on the case', () => {
-    const result = runCompute(caseInformationHelper, {
-      state: {
-        ...getBaseState(mockDocketClerk),
-        caseDetail: {
-          irsPractitioners: [{ userId: '2' }],
-          petitioners: [],
-          privatePractitioners: [{ userId: '1' }],
-        },
-        form: {},
-      },
-    });
+  let mockUser;
 
-    expect(result.showEditPrivatePractitioners).toBeTruthy();
-    expect(result.showEditIrsPractitioners).toBeTruthy();
-  });
-
-  it('should not show edit privatePractitioners or irsPractitioners buttons if user is an internal user and there are not privatePractitioners and irsPractitioners on the case', () => {
-    const result = runCompute(caseInformationHelper, {
-      state: {
-        ...getBaseState(mockDocketClerk),
-        caseDetail: {
-          petitioners: [],
-        },
-        form: {},
-      },
-    });
-
-    expect(result.showEditPrivatePractitioners).toBeFalsy();
-    expect(result.showEditIrsPractitioners).toBeFalsy();
-  });
-
-  it('should not show edit privatePractitioners or irsPractitioners buttons if user is not an internal user', () => {
-    const result = runCompute(caseInformationHelper, {
-      state: {
-        ...getBaseState(mockPetitioner),
-        caseDetail: {
-          irsPractitioners: [{ userId: '2' }],
-          petitioners: [],
-          privatePractitioners: [{ userId: '1' }],
-        },
-        form: {},
-      },
-    });
-
-    expect(result.showEditPrivatePractitioners).toBeFalsy();
-    expect(result.showEditIrsPractitioners).toBeFalsy();
+  beforeEach(() => {
+    mockUser = {};
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
   });
 
   describe('contactPrimaryEmailFormatted', () => {
@@ -319,6 +281,114 @@ describe('caseInformationHelper', () => {
     });
   });
 
+  describe('showEditIrsPractitionersButton', () => {
+    it('should be true when the user is an internal user and there are irsPractitioners on the case', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            irsPractitioners: [{ userId: '2' }],
+            petitioners: [],
+            privatePractitioners: [{ userId: '1' }],
+          },
+          form: {},
+        },
+      });
+
+      expect(result.showEditIrsPractitioners).toEqual(true);
+    });
+
+    it('should be false when the user is an internal user and there are no irsPractitioners on the case', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            petitioners: [],
+          },
+          form: {},
+        },
+      });
+
+      expect(result.showEditIrsPractitioners).toEqual(false);
+    });
+
+    it('should be false when the user is not an internal user', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockPetitioner),
+          caseDetail: {
+            irsPractitioners: [{ userId: '2' }],
+            petitioners: [],
+            privatePractitioners: [{ userId: '1' }],
+          },
+          form: {},
+        },
+      });
+
+      expect(result.showEditIrsPractitioners).toBeFalsy();
+    });
+  });
+
+  describe('showEditPrivatePractitionersButton', () => {
+    [ROLES.docketClerk, ROLES.petitionsClerk, ROLES.admissionsClerk].forEach(
+      role => {
+        it('should be true when the user has permission to edit petitioner counsel and there are privatePractitioners on the case', () => {
+          mockUser = { ...mockDocketClerk, role };
+
+          const result = runCompute(caseInformationHelper, {
+            state: {
+              ...getBaseState(mockUser),
+              caseDetail: {
+                irsPractitioners: [{ userId: '2' }],
+                petitioners: [],
+                privatePractitioners: [{ userId: '1' }],
+              },
+              form: {},
+            },
+          });
+
+          expect(result.showEditPrivatePractitioners).toEqual(true);
+        });
+      },
+    );
+
+    it('should be false when the user is an internal user that does NOT have permission to edit petitioner counsel', () => {
+      mockUser = { ...mockAdc };
+
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockUser),
+          caseDetail: {
+            irsPractitioners: [{ userId: '2' }],
+            petitioners: [],
+            privatePractitioners: [{ userId: '1' }],
+          },
+          form: {},
+        },
+      });
+
+      expect(result.showEditPrivatePractitioners).toEqual(false);
+    });
+
+    it('should be false when there are no privatePractitioners on the case', () => {
+      mockUser = { ...mockDocketClerk };
+
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockUser),
+          caseDetail: {
+            irsPractitioners: [{ userId: '2' }],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          form: {},
+        },
+      });
+
+      expect(result.showEditPrivatePractitioners).toEqual(false);
+    });
+  });
+
   describe('showHearingsTable', () => {
     it('should be false when there are no hearings on the case', () => {
       const result = runCompute(caseInformationHelper, {
@@ -391,7 +461,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(result.showSealCaseButton).toBe(false);
+      expect(result.showSealCaseButton).toEqual(false);
     });
 
     it('should be true when the user has SEAL_CASE permission and case is not already sealed', () => {
@@ -405,7 +475,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(result.showSealCaseButton).toBe(true);
+      expect(result.showSealCaseButton).toEqual(true);
     });
 
     it('should be false when the user does not have SEAL_CASE permission', () => {
@@ -419,7 +489,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(result.showSealCaseButton).toBe(false);
+      expect(result.showSealCaseButton).toEqual(false);
     });
   });
 
