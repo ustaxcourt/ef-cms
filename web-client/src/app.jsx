@@ -23,6 +23,7 @@ import { faClock } from '@fortawesome/free-regular-svg-icons/faClock';
 import { faClone } from '@fortawesome/free-regular-svg-icons/faClone';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import { faEdit } from '@fortawesome/free-regular-svg-icons/faEdit';
+import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faEyeSlash } from '@fortawesome/free-regular-svg-icons/faEyeSlash';
 import { faFileAlt } from '@fortawesome/free-regular-svg-icons/faFileAlt';
 import { faFilePdf as faFilePdfRegular } from '@fortawesome/free-regular-svg-icons/faFilePdf';
@@ -233,6 +234,7 @@ const app = {
       faStepForward,
       faStickyNote,
       faStrikethrough,
+      faEye,
       faSync,
       faThumbtack,
       faTimesCircle,
