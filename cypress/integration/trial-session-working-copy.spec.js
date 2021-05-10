@@ -29,7 +29,7 @@ const {
   manuallyAddCaseToNewTrialSession,
 } = require('../../cypress-smoketests/support/pages/case-detail');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 const testData = {
   docketNumbers: [],
