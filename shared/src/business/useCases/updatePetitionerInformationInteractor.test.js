@@ -104,6 +104,7 @@ describe('updatePetitionerInformationInteractor', () => {
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
+      privatePractitioners: [],
       status: CASE_STATUS_TYPES.generalDocket,
     };
 
@@ -118,6 +119,24 @@ describe('updatePetitionerInformationInteractor', () => {
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow('Unauthorized for editing petition details');
+  });
+
+  it('should throw an error when the user is a privatePractitioner not associated with the case', async () => {
+    mockUser = {
+      ...mockUser,
+      role: ROLES.privatePractitioner,
+      userId: 'a003e912-7b2f-4d2f-bf00-b99ec0d29de1',
+    };
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          contactId: SECONDARY_CONTACT_ID,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+        },
       }),
     ).rejects.toThrow('Unauthorized for editing petition details');
   });
