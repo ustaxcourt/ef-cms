@@ -43,6 +43,7 @@ describe('caseInformationHelper', () => {
   );
 
   const getBaseState = user => {
+    mockUser = { ...user };
     return {
       permissions: getUserPermissions(user),
     };
@@ -313,7 +314,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(result.showEditIrsPractitioners).toEqual(false);
+      expect(result.showEditIrsPractitioners).toBeFalsy();
     });
 
     it('should be false when the user is not an internal user', () => {
@@ -333,7 +334,7 @@ describe('caseInformationHelper', () => {
     });
   });
 
-  describe.only('showViewCounselButton', () => {
+  describe('showViewCounselButton', () => {
     it('should be true when the user is an internal user who cannot edit counsel on a case', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
@@ -350,9 +351,36 @@ describe('caseInformationHelper', () => {
       expect(result.showViewCounselButton).toBeTruthy();
     });
 
-    it('should be false when the user is an internal user who can edit counsel on a case', () => {});
+    it('should be false when the user is an internal user who can edit counsel on a case', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockPetitionsClerk),
+          caseDetail: {
+            irsPractitioners: [{ userId: '2' }],
+            petitioners: [],
+            privatePractitioners: [{ userId: '1' }],
+          },
+          form: {},
+        },
+      });
 
-    it('should be false when the user is an external user', () => {});
+      expect(result.showViewCounselButton).toBeFalsy();
+    });
+
+    it('should be false when the user is an external user', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockPetitioner),
+          caseDetail: {
+            irsPractitioners: [{ userId: '2' }],
+            petitioners: [],
+            privatePractitioners: [{ userId: '1' }],
+          },
+          form: {},
+        },
+      });
+      expect(result.showViewCounselButton).toBeFalsy();
+    });
   });
 
   describe('showEditPrivatePractitionersButton', () => {
