@@ -30,14 +30,31 @@ const getBaseState = user => {
 };
 
 describe('caseDetailHeaderHelper', () => {
+  const petitionsClerkUser = {
+    role: ROLES.petitionsClerk,
+    userId: '08f9464a-6eb4-4d58-bf38-5276fe9a5911',
+  };
+  const docketClerkUser = {
+    role: ROLES.docketClerk,
+    userId: '45803a2f-390c-463e-89ad-4bda2caecb8a',
+  };
+  const privatePractitionerUser = {
+    role: ROLES.privatePractitioner,
+    userId: '697c5513-825f-4b3f-8c34-4bd8e17fe510',
+  };
+  const irsPractitionerUser = {
+    role: ROLES.irsPractitioner,
+    userId: '3fa001b7-3e4c-4361-9ffa-42a9a3342ee8',
+  };
+  const petitionerUser = {
+    role: ROLES.petitioner,
+    userId: '62eef575-1779-415c-8b66-dae3a1f0d5e4',
+  };
+
   it('should set showEditCaseButton to true if the user has UPDATE_CASE_CONTENT permission', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: 'docketClerk',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(docketClerkUser),
         caseDetail: {
           docketEntries: [],
           petitioners: [],
@@ -49,13 +66,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showEditCaseButton to false if the user does not have UPDATE_CASE_CONTENT permission', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(privatePractitionerUser),
         caseDetail: {
           docketEntries: [],
           petitioners: [],
@@ -67,13 +80,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showExternalButtons false if user is an internal user', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionsClerkUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
@@ -86,13 +95,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showExternalButtons false if user is an external user and the case does not have any served docket entries', () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionerUser),
         caseDetail: {
           docketEntries: [{ documentType: 'Petition' }],
           petitioners: [],
@@ -108,13 +113,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showExternalButtons true if user is an external user and the case has served docket entries', () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionerUser),
         caseDetail: {
           docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
@@ -132,13 +133,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showExternalButtons true if user is an external user and the case has isLegacyServed docket entries', () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionerUser),
         caseDetail: {
           docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
           petitioners: [],
@@ -154,13 +151,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showFileFirstDocumentButton and showRequestAccessToCaseButton to false if user role is respondent and the respondent is associated with the case', () => {
-    const user = {
-      role: ROLES.irsPractitioner,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(irsPractitionerUser),
         caseDetail: {
           docketEntries: [],
           irsPractitioners: [{ userId: '789' }],
@@ -178,13 +171,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showFileFirstDocumentButton and showRequestAccessToCaseButton to false if user role is respondent and the respondent is not associated with the case but the case is sealed', () => {
-    const user = {
-      role: ROLES.irsPractitioner,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(irsPractitionerUser),
         caseDetail: {
           docketEntries: [],
           hasIrsPractitioner: true,
@@ -203,13 +192,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showRequestAccessToCaseButton to true if user role is respondent and the respondent is not associated with the case', () => {
-    const user = {
-      role: ROLES.irsPractitioner,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(irsPractitionerUser),
         caseDetail: {
           docketEntries: [],
           hasIrsPractitioner: true,
@@ -227,13 +212,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showFileFirstDocumentButton to true if user role is respondent and there is no respondent associated with the case', () => {
-    const user = {
-      role: ROLES.irsPractitioner,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(irsPractitionerUser),
         caseDetail: {
           docketEntries: [],
           hasIrsPractitioner: false,
@@ -251,13 +232,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showPendingAccessToCaseButton to true if user role is practitioner and case is not owned by user but has pending request', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(privatePractitionerUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
@@ -271,13 +248,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showRequestAccessToCaseButton to true if user role is practitioner and case is not owned by user', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(privatePractitionerUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
@@ -290,13 +263,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showRequestAccessToCaseButton to false when the current page is FilePetitionSuccess', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(privatePractitionerUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'FilePetitionSuccess',
         form: {},
@@ -309,13 +278,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is not owned by user and the case is sealed', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(privatePractitionerUser),
         caseDetail: { docketEntries: [], isSealed: true, petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
@@ -328,13 +293,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is owned by user', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(privatePractitionerUser),
         caseDetail: {
           docketEntries: [],
           petitioners: [],
@@ -351,13 +312,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showRequestAccessToCaseButton to false if user role is petitioner and user is not associated with the case', () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionerUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
@@ -370,13 +327,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should show the consolidated case icon if the case is associated with a lead case', async () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(docketClerkUser),
         caseDetail: {
           docketEntries: [],
           leadDocketNumber: '101-20',
@@ -394,13 +347,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should NOT show the consolidated case icon if the case is NOT associated with a lead case', async () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(docketClerkUser),
         caseDetail: {
           docketEntries: [],
           leadDocketNumber: '',
@@ -418,13 +367,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should show the case detail header menu and add docket entry and create order buttons if current page is CaseDetailInternal and user role is docketclerk', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(docketClerkUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
@@ -493,13 +438,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should show the Upload PDF button in the action menu if the user is a court user', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(docketClerkUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
@@ -514,13 +455,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should NOT show the Upload PDF button in the action menu if the user is not a court user', () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '123',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionerUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
@@ -535,13 +472,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showNewTabLink to true if user is an internal user', () => {
-    const user = {
-      role: ROLES.docketClerk,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(docketClerkUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
@@ -551,13 +484,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showNewTabLink to false if user is an external user', () => {
-    const user = {
-      role: ROLES.petitioner,
-      userId: '789',
-    };
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionerUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
@@ -585,14 +514,9 @@ describe('caseDetailHeaderHelper', () => {
   });
 
   it('should set showCreateMessageButton to true when the user role is NOT General', () => {
-    const user = {
-      role: ROLES.petitionsClerk,
-      userId: '08f9464a-6eb4-4d58-bf38-5276fe9a5911',
-    };
-
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
+        ...getBaseState(petitionsClerkUser),
         caseDetail: { docketEntries: [], petitioners: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
@@ -604,16 +528,11 @@ describe('caseDetailHeaderHelper', () => {
 
   describe('showRepresented', () => {
     it('is true when at least one party on the case is represented and the current user is an internal user', () => {
-      const user = {
-        role: ROLES.petitionsClerk,
-        userId: '08f9464a-6eb4-4d58-bf38-5276fe9a5911',
-      };
-
       const representedUserId = '79c404b8-7ddc-4c48-974c-40b153c25f9e';
 
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
-          ...getBaseState(user),
+          ...getBaseState(petitionsClerkUser),
           caseDetail: {
             docketEntries: [],
             petitioners: [
@@ -633,14 +552,9 @@ describe('caseDetailHeaderHelper', () => {
     });
 
     it('is false when no petitioner on the case is represented and the current user is an internal user', () => {
-      const user = {
-        role: ROLES.petitionsClerk,
-        userId: '08f9464a-6eb4-4d58-bf38-5276fe9a5911',
-      };
-
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
-          ...getBaseState(user),
+          ...getBaseState(petitionsClerkUser),
           caseDetail: {
             docketEntries: [],
             petitioners: [
@@ -662,16 +576,11 @@ describe('caseDetailHeaderHelper', () => {
     });
 
     it('is false when the logged in user is an external user', () => {
-      const user = {
-        role: ROLES.petitioner,
-        userId: 'b310a93a-ea84-4205-9f81-2ab40c00be95',
-      };
-
       const representedUserId = '79c404b8-7ddc-4c48-974c-40b153c25f9e';
 
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
-          ...getBaseState(user),
+          ...getBaseState(petitionerUser),
           caseDetail: {
             docketEntries: [],
             petitioners: [
@@ -688,6 +597,58 @@ describe('caseDetailHeaderHelper', () => {
       });
 
       expect(result.showRepresented).toBe(false);
+    });
+  });
+
+  describe('showBlockedTag', () => {
+    it('should be true when blocked is true', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            blocked: true,
+            blockedDate: '2019-04-19T17:29:13.120Z',
+            blockedReason: 'because',
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be true when blocked is false, automaticBlocked is true, and case status is NOT calendared', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: CASE_STATUS_TYPES.new,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeTruthy();
+    });
+
+    it('should be false when blocked is false, automaticBlocked is true, and case status is calendared', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            status: CASE_STATUS_TYPES.calendared,
+          },
+          ...getBaseState(docketClerkUser),
+        },
+      });
+
+      expect(result.showBlockedTag).toBeFalsy();
     });
   });
 });
