@@ -1,6 +1,6 @@
 const faker = require('faker');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 exports.gotoAdvancedSearch = () => {
   cy.get('a.advanced').click();
