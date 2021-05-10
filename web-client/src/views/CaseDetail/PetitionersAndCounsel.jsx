@@ -28,11 +28,11 @@ const PetitionersAndCounsel = connect(
             >
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper parties-card">
-                  <h3>
+                  <h3 className="text-wrap">
                     {petitioner.name}
                     <Button
                       link
-                      className="margin-top-1 padding-0 margin-right-0 float-right edit-petitioner-button"
+                      className="margin-top-1 margin-left-1 padding-0 margin-right-0 float-right edit-petitioner-button"
                       href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
                       icon="edit"
                     >
