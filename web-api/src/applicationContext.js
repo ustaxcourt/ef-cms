@@ -773,6 +773,9 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
+  removeCoversheetInteractor,
+} = require('../../shared/src/business/useCases/removeCoversheetInteractor');
+const {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } = require('../../shared/src/persistence/dynamo/cases/removePractitionerOnCase');
@@ -1724,6 +1727,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
+        removeCoversheetInteractor,
         removePdfFromDocketEntryInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
