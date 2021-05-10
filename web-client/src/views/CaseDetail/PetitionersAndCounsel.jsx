@@ -94,7 +94,7 @@ const PetitionersAndCounsel = connect(
                                 link
                                 className="margin-left-1 padding-0"
                                 href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
-                                icon="view"
+                                icon="eye"
                                 id="view-privatePractitioners-button"
                                 overrideMargin={true}
                               >
