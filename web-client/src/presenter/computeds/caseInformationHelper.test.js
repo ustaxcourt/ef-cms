@@ -329,6 +329,13 @@ describe('caseInformationHelper', () => {
     });
   });
 
+  describe('showViewCounselButton', () => {
+    // true when internal who's not docket, petitions, admissions
+    it(
+      'should be true when the user is internal but not docket, petitions, or admissions',
+    );
+  });
+
   describe('showEditPrivatePractitionersButton', () => {
     [ROLES.docketClerk, ROLES.petitionsClerk, ROLES.admissionsClerk].forEach(
       role => {
