@@ -30,7 +30,7 @@ const ParticipantsAndCounsel = connect(
             >
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper parties-card">
-                  <h3>
+                  <h3 className="text-wrap">
                     {petitioner.name}
                     <Button
                       link
