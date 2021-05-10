@@ -61,6 +61,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     showHearingsTable,
     showSealAddressLink,
     showSealCaseButton,
+    showViewPrivatePractitioners: !showEditPrivatePractitionersButton,
     toggleAdditionalPetitionersDisplay,
   };
 };

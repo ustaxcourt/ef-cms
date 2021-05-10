@@ -3,7 +3,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartiesInformationContentHeader } from './PartiesInformationContentHeader';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const PetitionersAndCounsel = connect(
@@ -11,11 +11,14 @@ const PetitionersAndCounsel = connect(
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
     partiesInformationHelper: state.partiesInformationHelper,
+    showViewPetitionerCounselModalSequence:
+      sequences.showViewPetitionerCounselModalSequence,
   },
   function PetitionersAndCounsel({
     caseDetail,
     caseInformationHelper,
     partiesInformationHelper,
+    showViewPetitionerCounselModalSequence,
   }) {
     return (
       <>
@@ -89,6 +92,20 @@ const PetitionersAndCounsel = connect(
                                 overrideMargin={true}
                               >
                                 Edit
+                              </Button>
+                            )}
+                            {caseInformationHelper.showViewPrivatePractitioners && (
+                              <Button
+                                link
+                                className="margin-left-1 padding-0 height-3"
+                                icon={['fas', 'eye']}
+                                id="view-privatePractitioners-button"
+                                overrideMargin={true}
+                                onClick={() => {
+                                  showViewPetitionerCounselModalSequence();
+                                }}
+                              >
+                                View
                               </Button>
                             )}
                           </span>
