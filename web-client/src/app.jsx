@@ -23,13 +23,13 @@ import { faClock } from '@fortawesome/free-regular-svg-icons/faClock';
 import { faClone } from '@fortawesome/free-regular-svg-icons/faClone';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
 import { faEdit } from '@fortawesome/free-regular-svg-icons/faEdit';
-import { faEye } from '@fortawesome/free-regular-svg-icons/faEye';
 import { faEyeSlash } from '@fortawesome/free-regular-svg-icons/faEyeSlash';
 import { faFileAlt } from '@fortawesome/free-regular-svg-icons/faFileAlt';
 import { faFilePdf as faFilePdfRegular } from '@fortawesome/free-regular-svg-icons/faFilePdf';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
+//if you see a console error saying could not get icon, make sure the prefix mathes the import (eg fas should be imported from free-solid-svg-icons)
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -55,6 +55,7 @@ import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
@@ -192,6 +193,7 @@ const app = {
       faExclamation,
       faExclamationCircle,
       faExclamationTriangle,
+      faEye,
       faEyeSlash,
       faFile,
       faFileAlt,
@@ -234,7 +236,6 @@ const app = {
       faStepForward,
       faStickyNote,
       faStrikethrough,
-      faEye,
       faSync,
       faThumbtack,
       faTimesCircle,
