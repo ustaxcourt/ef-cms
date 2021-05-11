@@ -52,11 +52,12 @@ export const partiesInformationHelper = (get, applicationContext) => {
 
     const canEditPetitioner =
       applicationContext.getUtilities().isInternalUser(user.role) ||
-      formattedPrivatePractitioners.find(
+      !!formattedPrivatePractitioners.find(
         practitioner =>
           user.barNumber === practitioner.barNumber &&
           practitioner.representing.includes(petitioner.contactId),
-      );
+      ) ||
+      petitioner.contactId === user.userId;
 
     const canEditRespondent = applicationContext
       .getUtilities()

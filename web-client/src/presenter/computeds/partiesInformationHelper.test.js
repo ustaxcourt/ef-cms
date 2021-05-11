@@ -1,6 +1,7 @@
 import {
   CONTACT_TYPES,
   OTHER_FILER_TYPES,
+  ROLES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
@@ -13,9 +14,12 @@ describe('partiesInformationHelper', () => {
   const mockUserId = '8ee0833f-6b82-4a8a-9803-8dab8bb49b63';
   const mockPractitionerId = '8ee0822f-6b82-4a8a-9803-8dab8bb49b63';
 
-  const partiesInformationHelper = withAppContextDecorator(
+  let partiesInformationHelper = withAppContextDecorator(
     partiesInformationHelperComputed,
-    applicationContext,
+    {
+      ...applicationContext,
+      getCurrentUser: () => ({ role: ROLES.docketClerk }),
+    },
   );
 
   describe('formattedParticipants', () => {
@@ -471,6 +475,233 @@ describe('partiesInformationHelper', () => {
       });
 
       expect(result.showParticipantsTab).toEqual(true);
+    });
+  });
+
+  describe('canEditPetitioner', () => {
+    it('canEditPetitioner = true, if the user is an internal user', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.docketClerk }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(true);
+    });
+
+    it('canEditPetitioner = true, if the user is the corresponding petitioner', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({
+            role: ROLES.petitioner,
+            userId: 'petitioner-123',
+          }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactId: 'petitioner-123',
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(true);
+    });
+
+    it('canEditPetitioner = true for an represented petitioner for a privatePractitioner', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({
+            role: ROLES.privatePractitioner,
+            userId: 'privatePractitioner-123',
+          }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactId: 'petitioner-123',
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const mockPrivatePractitioner = {
+        contactId: 'privatePractitioner-123',
+        name: 'Guy Fieri',
+        representing: ['petitioner-321'],
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [
+              mockPetitioner,
+              { ...mockPetitioner, contactId: 'petitioner-321' },
+            ],
+            privatePractitioners: [mockPrivatePractitioner],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(false);
+      expect(result.formattedPetitioners[1].canEditPetitioner).toBe(true);
+    });
+  });
+
+  describe('canEditRespondent', () => {
+    it('canEditRespondent = true, if the user is an internal user', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.docketClerk }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditRespondent).toBe(true);
+    });
+
+    it('canEditRespondent = false, otherwise', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.petitioner }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditRespondent).toBe(false);
+    });
+  });
+
+  describe('canEditParticipant', () => {
+    it('canEditParticipant = true, if the user is an internal user', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.docketClerk }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditParticipant).toBe(true);
+    });
+
+    it('canEditParticipant = false, otherwise', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.petitioner }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditParticipant).toBe(false);
     });
   });
 });
