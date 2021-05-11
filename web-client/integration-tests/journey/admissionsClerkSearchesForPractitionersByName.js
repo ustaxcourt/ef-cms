@@ -6,6 +6,18 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const admissionsClerkSearchesForPractitionersByName = test => {
+  const practitionerResultsContainDuplicates = searchResults => {
+    const barNumberOccurrences = {};
+    searchResults.forEach(practitioner => {
+      barNumberOccurrences[practitioner.barNumber] =
+        1 + (barNumberOccurrences[practitioner.barNumber] || 0);
+    });
+    const resultsContainDuplicateBarNumbers = Object.values(
+      barNumberOccurrences,
+    ).some(count => count > 1);
+    return resultsContainDuplicateBarNumbers;
+  };
+
   return it('admissions clerk searches for practitioners by name', async () => {
     await test.runSequence('gotoAdvancedSearchSequence');
 
@@ -34,6 +46,11 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
 
     await test.runSequence('submitPractitionerNameSearchSequence');
     expect(test.getState('validationErrors.practitionerName')).toBeUndefined();
+
+    const searchResults = test.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
+    );
+    expect(practitionerResultsContainDuplicates(searchResults)).toBeFalsy();
 
     expect(
       test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`)
