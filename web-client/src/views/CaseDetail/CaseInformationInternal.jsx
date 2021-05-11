@@ -628,19 +628,19 @@ export const CaseInformationInternal = connect(
                   </h3>
                   <AddConsolidatedCaseModal />
                   <UnconsolidateCasesModal />
-                  {formattedCaseDetail.canConsolidate &&
-                    formattedCaseDetail.consolidatedCases.length > 0 && (
-                      <ConsolidatedCases
-                        caseDetail={formattedCaseDetail}
-                        caseDetailHelper={caseDetailHelper}
-                      />
-                    )}
-                  {formattedCaseDetail.canConsolidate &&
-                    formattedCaseDetail.consolidatedCases.length === 0 && (
-                      <p>Not consolidated</p>
-                    )}
-                  {!formattedCaseDetail.canConsolidate && (
-                    <p>This case is not eligible for consolidation.</p>
+                  {formattedCaseDetail.consolidatedCases.length > 0 ? (
+                    <ConsolidatedCases
+                      caseDetail={formattedCaseDetail}
+                      caseDetailHelper={caseDetailHelper}
+                    />
+                  ) : (
+                    <>
+                      {formattedCaseDetail.canConsolidate ? (
+                        <p>Not consolidated</p>
+                      ) : (
+                        <p>This case is not eligible for consolidation.</p>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

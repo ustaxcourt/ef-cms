@@ -1,4 +1,4 @@
-const { compact, isEmpty, isEqual } = require('lodash');
+const { compact, isEmpty, isEqual, partition } = require('lodash');
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.docketNumberWithSuffix = `${caseItem.docketNumber}${
@@ -73,10 +73,8 @@ exports.formattedTrialSessionDetails = ({
     .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
     .sort(exports.compareCasesByDocketNumber);
 
-  trialSession.openCases = trialSession.allCases.filter(
-    item => item.removedFromTrial !== true,
-  );
-  trialSession.inactiveCases = trialSession.allCases.filter(
+  [trialSession.inactiveCases, trialSession.openCases] = partition(
+    trialSession.allCases,
     item => item.removedFromTrial === true,
   );
 
