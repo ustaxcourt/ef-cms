@@ -751,6 +751,17 @@ jobs:
                --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
+          name: Disable Destination Table Stream
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "ENV=${ENV}" \
+               --rm efcms /bin/sh -c "cd web-api && node configure-dynamo-stream.js ${DESTINATION_TABLE} false"
+            fi
+      - run:
           name: Run Migration
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
@@ -769,6 +780,7 @@ jobs:
           name: Wait for SQS Queue to Empty
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
+              no_output_timeout: 5h
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
@@ -776,6 +788,17 @@ jobs:
                -e "ENV=${ENV}" \
                --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
             fi
+      - run:
+          name: Enable Destination Table Stream
+            command: |
+              if [ "$MIGRATE_FLAG" == "true" ]; then
+                docker run \
+                  -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                  -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+                  -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+                  -e "ENV=${ENV}" \
+                  --rm efcms /bin/sh -c "cd web-api && node configure-dynamo-streamjs ${DESTINATION_TABLE} true"
+              fi
 
   smoketests:
     docker:
