@@ -1,11 +1,11 @@
 const {
   applicationContext,
   testPdfDoc,
-} = require('../test/createTestApplicationContext');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
-const { removeCoversheetInteractor } = require('./removeCoversheetInteractor');
+} = require('../../test/createTestApplicationContext');
+const { PARTY_TYPES } = require('../../entities/EntityConstants');
+const { removeCoversheet } = require('./removeCoversheet');
 
-describe('removeCoversheetInteractor', () => {
+describe('removeCoversheet', () => {
   const testingCaseData = {
     contactPrimary: {
       name: 'Daenerys Stormborn',
@@ -48,7 +48,7 @@ describe('removeCoversheetInteractor', () => {
       docketNumber: '101-19',
     };
 
-    const updatedDocketEntry = await removeCoversheetInteractor(
+    const updatedDocketEntry = await removeCoversheet(
       applicationContext,
       params,
     );
@@ -77,9 +77,7 @@ describe('removeCoversheetInteractor', () => {
       docketNumber: '101-19',
     };
 
-    await expect(
-      removeCoversheetInteractor(applicationContext, params),
-    ).rejects.toThrow(
+    await expect(removeCoversheet(applicationContext, params)).rejects.toThrow(
       'oh no docket entry id is 55551f4d-1e47-423a-8caf-6d2fdc3d3859',
     );
   });
