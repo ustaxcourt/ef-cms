@@ -3,7 +3,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { getFormattedDocketEntry } from './formattedCaseDetail';
 import { simpleDocketEntries } from './formattedCaseDetail.test';
 
-describe('formattedCaseDetail', () => {
+describe('getFormattedDocketEntry', () => {
   const {
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
   } = applicationContext.getConstants();
