@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -23,6 +24,12 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
     const caseDetail = test.getState('caseDetail');
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
+    );
+    const docketEntriesFormatted = runCompute(
+      withAppContextDecorator(formattedDocketEntries),
       {
         state: test.getState(),
       },
@@ -66,14 +73,14 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       ]),
     );
 
-    const statement = caseDetailFormatted.formattedDocketEntries.find(
+    const statement = docketEntriesFormatted.formattedDocketEntriesOnDocketRecord.find(
       entry => entry.documentType === 'Statement',
     );
 
     expect(statement.showLinkToDocument).toBeTruthy();
 
     expect(
-      caseDetailFormatted.formattedDocketEntriesOnDocketRecord[1].eventCode,
+      docketEntriesFormatted.formattedDocketEntriesOnDocketRecord[1].eventCode,
     ).toEqual('RQT');
   });
 };
