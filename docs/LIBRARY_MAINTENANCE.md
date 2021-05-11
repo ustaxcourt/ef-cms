@@ -16,3 +16,4 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 `Docker`: Update docker base image version if applicable.
 
 ### After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
+  * If terraform needs to be updated, deploy locally to an exp environment first. 
