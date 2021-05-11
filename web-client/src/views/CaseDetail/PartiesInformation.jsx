@@ -89,10 +89,7 @@ const PartiesInformation = connect(
                     });
                   }}
                 >
-                  <div
-                    className="grid-row margin-left-205"
-                    id="respondent-counsel"
-                  >
+                  <div className="grid-row margin-left-205">
                     {partyViewTabs.respondentCounsel}
                   </div>
                 </Button>

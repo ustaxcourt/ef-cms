@@ -357,6 +357,66 @@ describe('partiesInformationHelper', () => {
       expect(result.formattedRespondents[0].formattedEmail).toBe(mockEmail);
     });
 
+    it('should set canEditRespondent to true for internal users', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.docketClerk }),
+        },
+      );
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [
+              {
+                contactId: mockUserId,
+                email: undefined,
+              },
+            ],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedRespondents[0].canEditRespondent).toBeTruthy();
+    });
+
+    it('should set canEditRespondent to false for external users', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.petitioner }),
+        },
+      );
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [
+              {
+                contactId: mockUserId,
+                email: undefined,
+              },
+            ],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedRespondents[0].canEditRespondent).toBeFalsy();
+    });
+
     it('should set formattedEmail to `No email provided` when the respondent does not have an email set', () => {
       const mockRespondent = {
         contactId: mockUserId,
@@ -582,66 +642,6 @@ describe('partiesInformationHelper', () => {
 
       expect(result.formattedPetitioners[0].canEditPetitioner).toBe(false);
       expect(result.formattedPetitioners[1].canEditPetitioner).toBe(true);
-    });
-  });
-
-  describe('canEditRespondent', () => {
-    it('canEditRespondent = true, if the user is an internal user', () => {
-      partiesInformationHelper = withAppContextDecorator(
-        partiesInformationHelperComputed,
-        {
-          ...applicationContext,
-          getCurrentUser: () => ({ role: ROLES.docketClerk }),
-        },
-      );
-
-      const mockPetitioner = {
-        contactType: CONTACT_TYPES.primary,
-      };
-
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          caseDetail: {
-            irsPractitioners: [],
-            petitioners: [mockPetitioner],
-            privatePractitioners: [],
-          },
-          screenMetadata: {
-            pendingEmails: {},
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditRespondent).toBe(true);
-    });
-
-    it('canEditRespondent = false, otherwise', () => {
-      partiesInformationHelper = withAppContextDecorator(
-        partiesInformationHelperComputed,
-        {
-          ...applicationContext,
-          getCurrentUser: () => ({ role: ROLES.petitioner }),
-        },
-      );
-
-      const mockPetitioner = {
-        contactType: CONTACT_TYPES.primary,
-      };
-
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          caseDetail: {
-            irsPractitioners: [],
-            petitioners: [mockPetitioner],
-            privatePractitioners: [],
-          },
-          screenMetadata: {
-            pendingEmails: {},
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditRespondent).toBe(false);
     });
   });
 

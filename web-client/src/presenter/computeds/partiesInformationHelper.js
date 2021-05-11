@@ -59,10 +59,6 @@ export const partiesInformationHelper = (get, applicationContext) => {
       ) ||
       petitioner.contactId === user.userId;
 
-    const canEditRespondent = applicationContext
-      .getUtilities()
-      .isInternalUser(user.role);
-
     const canEditParticipant = applicationContext
       .getUtilities()
       .isInternalUser(user.role);
@@ -71,7 +67,6 @@ export const partiesInformationHelper = (get, applicationContext) => {
       ...petitioner,
       canEditParticipant,
       canEditPetitioner,
-      canEditRespondent,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
       showExternalHeader: applicationContext
@@ -87,9 +82,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
     petitioner => petitioner.contactType === CONTACT_TYPES.otherFiler,
   );
 
-  const formattedRespondents = caseDetail.irsPractitioners.map(respondent =>
-    formatCounsel({ counsel: respondent, screenMetadata }),
-  );
+  const canEditRespondent = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
+
+  const formattedRespondents = caseDetail.irsPractitioners.map(respondent => ({
+    ...formatCounsel({ counsel: respondent, screenMetadata }),
+    canEditRespondent,
+  }));
 
   return {
     formattedParticipants,
