@@ -17,7 +17,6 @@ const {
 const {
   documentMeetsAgeRequirements,
   formatCase,
-  formatCaseDeadlines,
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
@@ -293,51 +292,121 @@ describe('getFormattedCaseDetail', () => {
       expect(result).toHaveProperty('formattedDocketEntries');
     });
 
-    it('should format docket entries and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
-      const docketEntries = [
-        {
-          createdAt: getDateISO(),
-          docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          documentType: 'Petition',
-          filingDate: getDateISO(),
-          index: '1',
-          isOnDocketRecord: true,
-        },
-      ];
+    describe('createdAtFormatted', () => {
+      const baseDocument = {
+        createdAt: '2019-04-19T17:29:13.120Z',
+        docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+        documentTitle: 'Amended Petition',
+        documentType: 'Amended Petition',
+        eventCode: 'PAP',
+        filingDate: '2019-04-19T17:29:13.120Z',
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        partyPrimary: true,
+        scenario: 'Standard',
+        servedAt: '2019-06-19T17:29:13.120Z',
+      };
 
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        docketEntries,
+      it('should format docket entries and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
+        const docketEntries = [
+          {
+            createdAt: getDateISO(),
+            docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+            documentType: 'Petition',
+            filingDate: getDateISO(),
+            index: '1',
+            isOnDocketRecord: true,
+          },
+        ];
+
+        const result = formatCase(applicationContext, {
+          ...mockCaseDetail,
+          docketEntries,
+        });
+
+        expect(result).toHaveProperty('formattedDocketEntries');
+        expect(
+          result.formattedDocketEntries[0].createdAtFormatted,
+        ).toBeDefined();
       });
 
-      expect(result).toHaveProperty('formattedDocketEntries');
-      expect(result.formattedDocketEntries[0].createdAtFormatted).toBeDefined();
-    });
+      it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
+        const docketEntries = [
+          {
+            createdAt: getDateISO(),
+            docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+            documentTitle: 'Order [Judge Name] [Anything]',
+            documentType: 'Order that case is assigned',
+            eventCode: 'OAJ',
+            filingDate: getDateISO(),
+            index: 1,
+            isOnDocketRecord: true,
+            scenario: 'Type B',
+          },
+        ];
 
-    it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
-      const docketEntries = [
-        {
-          createdAt: getDateISO(),
-          docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-          documentTitle: 'Order [Judge Name] [Anything]',
-          documentType: 'Order that case is assigned',
-          eventCode: 'OAJ',
-          filingDate: getDateISO(),
-          index: 1,
-          isOnDocketRecord: true,
-          scenario: 'Type B',
-        },
-      ];
+        const result = formatCase(applicationContext, {
+          ...mockCaseDetail,
+          docketEntries,
+        });
 
-      const result = formatCase(applicationContext, {
-        ...mockCaseDetail,
-        docketEntries,
+        expect(result).toHaveProperty('formattedDocketEntries');
+        expect(
+          result.formattedDocketEntries[0].createdAtFormatted,
+        ).toBeUndefined();
       });
 
-      expect(result).toHaveProperty('formattedDocketEntries');
-      expect(
-        result.formattedDocketEntries[0].createdAtFormatted,
-      ).toBeUndefined();
+      it('should be a formatted date string if the document is on the docket record and is served', () => {
+        const docketEntries = [baseDocument];
+        const result = formatCase(applicationContext, {
+          ...mockCaseDetail,
+          docketEntries,
+        });
+        expect(result.formattedDocketEntries).toMatchObject([
+          {
+            createdAtFormatted: '04/19/19',
+          },
+        ]);
+      });
+
+      it('should be a formatted date string if the document is on the docket record and is an unserved external document', () => {
+        const docketEntries = [
+          {
+            ...baseDocument,
+            servedAt: undefined,
+          },
+        ];
+        const result = formatCase(applicationContext, {
+          ...mockCaseDetail,
+          docketEntries,
+        });
+        expect(result.formattedDocketEntries).toMatchObject([
+          {
+            createdAtFormatted: '04/19/19',
+          },
+        ]);
+      });
+
+      it('should be undefined if the document is on the docket record and is an unserved court-issued document', () => {
+        const docketEntries = [
+          {
+            ...baseDocument,
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'O',
+            servedAt: undefined,
+          },
+        ];
+        const result = formatCase(applicationContext, {
+          ...mockCaseDetail,
+          docketEntries,
+        });
+        expect(result.formattedDocketEntries).toMatchObject([
+          {
+            createdAtFormatted: undefined,
+          },
+        ]);
+      });
     });
 
     it('should return docket entries with pending and served documents for pendingItemsDocketEntries', () => {
@@ -857,39 +926,6 @@ describe('getFormattedCaseDetail', () => {
         });
         expect(result.formattedDocketEntries[0].qcNeeded).toBeFalsy();
       });
-    });
-  });
-
-  describe('formatCaseDeadlines', () => {
-    it('should return empty array if there are no deadlines', () => {
-      const result = formatCaseDeadlines(applicationContext);
-      expect(result).toMatchObject([]);
-    });
-
-    it('should call formatCaseDeadline on the given array', () => {
-      const result = formatCaseDeadlines(applicationContext, [
-        {
-          deadlineDate: getDateISO(),
-        },
-        {
-          deadlineDate: getDateISO(),
-        },
-      ]);
-      expect(Array.isArray(result)).toBeTruthy();
-      expect(result[0]).toHaveProperty('deadlineDateFormatted');
-    });
-
-    it('should set the caseDeadline to overdue if the deadlineDate is before today', () => {
-      const result = formatCaseDeadlines(applicationContext, [
-        {
-          deadlineDate: '2017-01-01T00:01:02Z',
-        },
-        {
-          deadlineDate: getDateISO(),
-        },
-      ]);
-      expect(result[0]).toHaveProperty('overdue');
-      expect(result[0]).toBeTruthy();
     });
   });
 
