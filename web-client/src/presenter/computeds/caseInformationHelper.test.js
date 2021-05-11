@@ -367,7 +367,7 @@ describe('caseInformationHelper', () => {
       expect(result.showViewCounselButton).toBeFalsy();
     });
 
-    it('should be false when the user is an external user', () => {
+    it('should be true when the user is an external user', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(mockPetitioner),
@@ -379,7 +379,8 @@ describe('caseInformationHelper', () => {
           form: {},
         },
       });
-      expect(result.showViewCounselButton).toBeFalsy();
+
+      expect(result.showViewCounselButton).toBeTruthy();
     });
   });
 
