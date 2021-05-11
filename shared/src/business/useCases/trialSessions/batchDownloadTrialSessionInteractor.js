@@ -178,7 +178,7 @@ const batchDownloadTrialSessionInteractor = async (
   };
 
   const onError = error => {
-    applicationContext.logger.error('Archive Error', error);
+    applicationContext.logger.error('Archive Error', { error });
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
@@ -251,8 +251,9 @@ exports.generateValidDocketEntryFilename = ({
   filingDate,
   index,
 }) => {
+  const MAX_OVERALL_FILE_LENGTH = 200;
   const EXTENSION = '.pdf';
-  const VALID_FILE_NAME_MAX_LENGTH = 255 - EXTENSION.length;
+  const VALID_FILE_NAME_MAX_LENGTH = MAX_OVERALL_FILE_LENGTH - EXTENSION.length;
 
   const docDate = formatDateString(filingDate, 'YYYY-MM-DD');
   const docNum = padStart(`${index}`, 4, '0');
@@ -285,7 +286,7 @@ exports.batchDownloadTrialSessionInteractor = async (
 
     applicationContext.logger.error(
       `Error when batch downloading trial session with id ${trialSessionId}`,
-      error,
+      { error },
     );
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
