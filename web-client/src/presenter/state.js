@@ -49,6 +49,7 @@ import {
 } from './computeds/formattedCaseDetail';
 import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedDocketEntries } from './computeds/formattedDocketEntries';
 import { formattedDocument } from './computeds/formattedDocument';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
@@ -154,6 +155,7 @@ const helpers = {
   formattedCaseMessages,
   formattedClosedCases,
   formattedDashboardTrialSessions,
+  formattedDocketEntries,
   formattedDocument,
   formattedMessageDetail,
   formattedMessages,

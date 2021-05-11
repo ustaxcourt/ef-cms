@@ -1,9 +1,9 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries as formattedDocketEntriesComputed } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const formattedDocketEntries = withAppContextDecorator(
+  formattedDocketEntriesComputed,
 );
 
 export const practitionerViewsCaseDetailWithPublicOrder = test => {
@@ -15,11 +15,11 @@ export const practitionerViewsCaseDetailWithPublicOrder = test => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
 
-    const formattedCase = runCompute(formattedCaseDetail, {
+    const helper = runCompute(formattedDocketEntries, {
       state: test.getState(),
     });
 
-    const publicallyAvailableOrderDocketEntry = formattedCase.formattedDocketEntries.find(
+    const publicallyAvailableOrderDocketEntry = helper.formattedDocketEntriesOnDocketRecord.find(
       d => d.eventCode === 'O',
     );
 
