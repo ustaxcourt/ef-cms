@@ -9,23 +9,26 @@ import { loadDefaultViewerCorrespondenceSequence } from './loadDefaultViewerCorr
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const deleteCorrespondenceDocumentSequence = [
-  archiveCorrespondenceDocumentAction,
-  {
-    error: [
-      getDeleteCorrespondenceDocumentAlertErrorAction,
-      setAlertErrorAction,
-    ],
-    success: [
-      getDeleteCorrespondenceDocumentAlertSuccessAction,
-      setAlertSuccessAction,
-      getCaseAction,
-      setCaseAction,
-      getMessagesForCaseAction,
-      ...loadDefaultViewerCorrespondenceSequence,
-    ],
-  },
-  clearModalAction,
-  clearModalStateAction,
-];
+export const deleteCorrespondenceDocumentSequence = showProgressSequenceDecorator(
+  [
+    archiveCorrespondenceDocumentAction,
+    {
+      error: [
+        getDeleteCorrespondenceDocumentAlertErrorAction,
+        setAlertErrorAction,
+      ],
+      success: [
+        getDeleteCorrespondenceDocumentAlertSuccessAction,
+        setAlertSuccessAction,
+        getCaseAction,
+        setCaseAction,
+        getMessagesForCaseAction,
+        ...loadDefaultViewerCorrespondenceSequence,
+      ],
+    },
+    clearModalAction,
+    clearModalStateAction,
+  ],
+);
