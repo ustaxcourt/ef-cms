@@ -33,22 +33,24 @@ const RespondentCounsel = connect(
           {partiesInformationHelper.formattedRespondents.map(
             irsPractitioner => (
               <div
-                className="grid-col-5 margin-bottom-4"
+                className="tablet:grid-col-9 mobile:grid-col-9 desktop:grid-col-5 margin-bottom-4"
                 key={irsPractitioner.userId}
               >
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper parties-card">
                     <h3>
                       {irsPractitioner.name} {`(${irsPractitioner.barNumber})`}
-                      <Button
-                        link
-                        className="margin-top-1 padding-0 margin-right-05 float-right"
-                        href={`/case-detail/${caseDetail.docketNumber}/edit-respondent-counsel/${irsPractitioner.barNumber}`}
-                        icon="edit"
-                        id="edit-respondent-counsel"
-                      >
-                        Edit
-                      </Button>
+                      {irsPractitioner.canEditRespondent && (
+                        <Button
+                          link
+                          className="width-auto margin-top-1 padding-0 margin-right-05 float-right"
+                          href={`/case-detail/${caseDetail.docketNumber}/edit-respondent-counsel/${irsPractitioner.barNumber}`}
+                          icon="edit"
+                          id="edit-respondent-counsel"
+                        >
+                          Edit
+                        </Button>
+                      )}
                     </h3>
                     <hr className="respondent-card-header" />
                     <AddressDisplay

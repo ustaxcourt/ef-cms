@@ -55,7 +55,7 @@ import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
-import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faEye as faEyeSolid } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
@@ -193,8 +193,8 @@ const app = {
       faExclamation,
       faExclamationCircle,
       faExclamationTriangle,
-      faEye,
       faEyeSlash,
+      faEyeSolid,
       faFile,
       faFileAlt,
       faFileAltSolid,

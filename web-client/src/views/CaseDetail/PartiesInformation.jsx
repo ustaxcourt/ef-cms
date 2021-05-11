@@ -81,6 +81,7 @@ const PartiesInformation = connect(
                     screenMetadata.partyViewTab ===
                       partyViewTabs.respondentCounsel && 'active',
                   )}
+                  id="respondent-counsel"
                   onClick={() => {
                     updateScreenMetadataSequence({
                       key: 'partyViewTab',
@@ -88,10 +89,7 @@ const PartiesInformation = connect(
                     });
                   }}
                 >
-                  <div
-                    className="grid-row margin-left-205"
-                    id="respondent-counsel"
-                  >
+                  <div className="grid-row margin-left-205">
                     {partyViewTabs.respondentCounsel}
                   </div>
                 </Button>
