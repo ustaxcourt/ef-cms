@@ -7,20 +7,23 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setUserPendingEmailAction } from '../actions/setUserPendingEmailAction';
 import { setupPetitionerContactInformationFormAction } from '../actions/setupPetitionerContactInformationFormAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoEditPetitionerInformationInternalSequence = [
-  clearAlertsAction,
-  clearErrorAlertsAction,
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  getCaseAction,
-  setCaseAction,
-  setupPetitionerContactInformationFormAction,
-  isInternalUserAction,
-  {
-    no: [],
-    yes: [getUserPendingEmailAction, setUserPendingEmailAction],
-  },
-  setCurrentPageAction('EditPetitionerInformationInternal'),
-];
+export const gotoEditPetitionerInformationInternalSequence = showProgressSequenceDecorator(
+  [
+    clearAlertsAction,
+    clearErrorAlertsAction,
+    setCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    getCaseAction,
+    setCaseAction,
+    setupPetitionerContactInformationFormAction,
+    isInternalUserAction,
+    {
+      no: [],
+      yes: [getUserPendingEmailAction, setUserPendingEmailAction],
+    },
+    setCurrentPageAction('EditPetitionerInformationInternal'),
+  ],
+);
