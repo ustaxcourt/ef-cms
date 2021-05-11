@@ -246,21 +246,24 @@ exports.updatePetitionerInformationInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
+  let isRepresentingCounsel = false;
   if (user.role === ROLES.privatePractitioner) {
     const practitioners = getPractitionersRepresenting(
       oldCase,
       updatedPetitionerData.contactId,
     );
 
-    if (
-      !practitioners.find(practitioner => practitioner.userId === user.userId)
-    ) {
-      throw new UnauthorizedError('Unauthorized for editing petition details');
-    }
-  } else {
-    if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)) {
-      throw new UnauthorizedError('Unauthorized for editing petition details');
-    }
+    isRepresentingCounsel = practitioners.find(
+      practitioner => practitioner.userId === user.userId,
+    );
+  }
+
+  const hasAuthorization =
+    isRepresentingCounsel ||
+    isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO);
+
+  if (!hasAuthorization) {
+    throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
   if (oldCase.status === CASE_STATUS_TYPES.new) {
