@@ -81,6 +81,7 @@ const PartiesInformation = connect(
                     screenMetadata.partyViewTab ===
                       partyViewTabs.respondentCounsel && 'active',
                   )}
+                  id="respondent-counsel"
                   onClick={() => {
                     updateScreenMetadataSequence({
                       key: 'partyViewTab',

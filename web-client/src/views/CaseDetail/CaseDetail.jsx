@@ -4,13 +4,10 @@ import { CaseInformationExternal } from './CaseInformationExternal';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { ErrorNotification } from '../ErrorNotification';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { OtherFilerInformation } from './OtherFilerInformation';
 import { ParticipantsAndCounsel } from './ParticipantsAndCounsel';
 import { PartiesInformation } from './PartiesInformation';
-import { PetitionerInformation } from './PetitionerInformation';
 import { PetitionersAndCounsel } from './PetitionersAndCounsel';
 import { RespondentCounsel } from './RespondentCounsel';
-import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -121,28 +118,6 @@ export const CaseDetail = connect(
                         <Tab id="tab-parties" tabName="parties" title="Parties">
                           <PartiesInformation />
                         </Tab>
-
-                        <Tab
-                          id="tab-petitioner"
-                          tabName="petitioner"
-                          title="Petitioner"
-                        >
-                          <PetitionerInformation />
-                        </Tab>
-                        <Tab
-                          id="tab-respondent"
-                          tabName="respondent"
-                          title="Respondent"
-                        >
-                          <RespondentInformation />
-                        </Tab>
-                        <Tab
-                          id="tab-other-filer"
-                          tabName="otherFiler"
-                          title="Other"
-                        >
-                          <OtherFilerInformation />
-                        </Tab>
                       </Tabs>
                     </NonMobile>
                     <Mobile>
@@ -157,24 +132,6 @@ export const CaseDetail = connect(
                             title="Overview"
                           >
                             <CaseInformationExternal />
-                          </Tab>
-                        )}
-                        {caseInformationTab === 'petitioner' && (
-                          <Tab
-                            id="tab-petitioner"
-                            tabName="petitioner"
-                            title="Petitioner"
-                          >
-                            <PetitionerInformation />
-                          </Tab>
-                        )}
-                        {caseInformationTab === 'respondent' && (
-                          <Tab
-                            id="tab-respondent"
-                            tabName="respondent"
-                            title="Respondent"
-                          >
-                            <RespondentInformation />
                           </Tab>
                         )}
                         {caseInformationTab === 'petitioners' && (
