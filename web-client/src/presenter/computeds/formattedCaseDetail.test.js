@@ -111,7 +111,6 @@ describe('formattedCaseDetail', () => {
       },
     });
     expect(result).toMatchObject({
-      caseDeadlines: [],
       formattedDocketEntries: [],
     });
   });
@@ -170,92 +169,6 @@ describe('formattedCaseDetail', () => {
     ]);
   });
 
-  describe('createdAtFormatted', () => {
-    const baseDocument = {
-      createdAt: '2019-04-19T17:29:13.120Z',
-      docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-      documentTitle: 'Amended Petition',
-      documentType: 'Amended Petition',
-      eventCode: 'PAP',
-      filingDate: '2019-04-19T17:29:13.120Z',
-      isFileAttached: true,
-      isOnDocketRecord: true,
-      partyPrimary: true,
-      scenario: 'Standard',
-      servedAt: '2019-06-19T17:29:13.120Z',
-    };
-
-    it('should be a formatted date string if the document is on the docket record and is served', () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        docketEntries: [baseDocument],
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.formattedDocketEntries).toMatchObject([
-        {
-          createdAtFormatted: '04/19/19',
-        },
-      ]);
-    });
-
-    it('should be a formatted date string if the document is on the docket record and is an unserved external document', () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...baseDocument,
-            servedAt: undefined,
-          },
-        ],
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.formattedDocketEntries).toMatchObject([
-        {
-          createdAtFormatted: '04/19/19',
-        },
-      ]);
-    });
-
-    it('should be undefined if the document is on the docket record and is an unserved court-issued document', () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...baseDocument,
-            documentTitle: 'Order',
-            documentType: 'Order',
-            eventCode: 'O',
-            servedAt: undefined,
-          },
-        ],
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.formattedDocketEntries).toMatchObject([
-        {
-          createdAtFormatted: undefined,
-        },
-      ]);
-    });
-  });
-
   it('should format only lodged documents with overridden eventCode MISCL', () => {
     const caseDetail = {
       ...MOCK_CASE,
@@ -310,17 +223,13 @@ describe('formattedCaseDetail', () => {
             docketEntryId: 'Petition',
             documentTitle: 'Petition',
             documentType: 'Petition',
-            filedBy: 'Jessica Frase Marine',
             filingDate: '2019-01-28T21:10:55.488Z',
             index: 1,
             isOnDocketRecord: true,
-            showValidationInput: '2019-02-28T21:14:39.488Z',
-            status: 'served',
           },
           {
             docketEntryId: 'Request for Place of Trial',
             documentTitle: 'Request for Place of Trial',
-            filedBy: 'Jessica Frase Marine',
             filingDate: '2019-01-28T21:10:33.488Z',
             index: 2,
             isOnDocketRecord: true,
@@ -330,24 +239,18 @@ describe('formattedCaseDetail', () => {
             docketEntryId: 'Ownership Disclosure Statement',
             documentTitle: 'Ownership Disclosure Statement',
             documentType: 'Ownership Disclosure Statement',
-            filedBy: 'Jessica Frase Marine',
             filingDate: '2019-03-28T21:14:39.488Z',
             index: 4,
             isOnDocketRecord: true,
-            showValidationInput: '2019-03-28T21:14:39.488Z',
-            status: 'served',
           },
           {
             createdAt: '2019-01-01T21:14:39.488Z',
             docketEntryId: 'Other',
             documentTitle: 'Other',
             documentType: 'Other',
-            filedBy: 'Jessica Frase Marine',
             filingDate: '2019-01-28',
             index: 3,
             isOnDocketRecord: true,
-            showValidationInput: '2019-01-01T21:14:39.488Z',
-            status: 'served',
           },
         ],
       };
@@ -597,78 +500,6 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedTrialCity).toEqual('England is my City');
       expect(result.formattedTrialDate).toEqual('12/11/18');
       expect(result.formattedAssociatedJudge).toEqual('Judge Judy');
-    });
-  });
-
-  describe('formats case deadlines', () => {
-    it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
-      const caseDeadlines = [
-        {
-          deadlineDate: '2019-06-30T04:00:00.000Z',
-        },
-        {
-          deadlineDate: '2019-01-30T05:00:00.000Z',
-        },
-        {
-          deadlineDate: '2025-07-30T04:00:00.000Z',
-        },
-      ];
-
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDeadlines,
-          caseDetail: MOCK_CASE,
-          validationErrors: {},
-        },
-      });
-      expect(result.caseDeadlines.length).toEqual(3);
-      expect(result.caseDeadlines).toEqual([
-        {
-          deadlineDate: '2019-01-30T05:00:00.000Z',
-          deadlineDateFormatted: '01/30/19',
-          overdue: true,
-        },
-        {
-          deadlineDate: '2019-06-30T04:00:00.000Z',
-          deadlineDateFormatted: '06/30/19',
-          overdue: true,
-        },
-        {
-          deadlineDate: '2025-07-30T04:00:00.000Z',
-          deadlineDateFormatted: '07/30/25',
-        },
-      ]);
-    });
-
-    it('formats deadline dates and does not set overdue to true if the deadlineDate is today', () => {
-      const caseDeadlines = [
-        {
-          deadlineDate: applicationContext.getUtilities().createISODateString(),
-        },
-      ];
-
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDeadlines,
-          caseDetail: MOCK_CASE,
-          validationErrors: {},
-        },
-      });
-      expect(result.caseDeadlines.length).toEqual(1);
-      expect(result.caseDeadlines[0].overdue).toBeUndefined();
-    });
-
-    it('does not format empty caseDeadlines array', () => {
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: MOCK_CASE,
-          validationErrors: {},
-        },
-      });
-      expect(result.caseDeadlines.length).toEqual(0);
     });
   });
 

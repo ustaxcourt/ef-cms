@@ -47,26 +47,6 @@ const documentMeetsAgeRequirements = doc => {
   return meetsTranscriptAgeRequirements;
 };
 
-const formatCaseDeadline = (applicationContext, caseDeadline) => {
-  const result = cloneDeep(caseDeadline);
-  result.deadlineDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.deadlineDate, 'MMDDYY');
-
-  // use the app context utility function so the time zones match when comparing dates
-  const deadlineDateMomented = applicationContext
-    .getUtilities()
-    .prepareDateFromString(result.deadlineDate);
-
-  const today = applicationContext.getUtilities().prepareDateFromString();
-
-  if (deadlineDateMomented.isBefore(today, 'day')) {
-    result.overdue = true;
-  }
-
-  return result;
-};
-
 const computeIsInProgress = ({ formattedEntry }) => {
   return (
     (!formattedEntry.isCourtIssuedDocument &&
@@ -225,16 +205,6 @@ const getFilingsAndProceedings = formattedDocketEntry => {
   ];
 
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
-};
-
-const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
-  caseDeadlines = caseDeadlines.map(d =>
-    formatCaseDeadline(applicationContext, d),
-  );
-
-  return caseDeadlines.sort((a, b) =>
-    String.prototype.localeCompare.call(a.deadlineDate, b.deadlineDate),
-  );
 };
 
 /**
@@ -571,7 +541,6 @@ const sortDocketEntries = (docketEntries = [], sortByString = '') => {
 
 const getFormattedCaseDetail = ({
   applicationContext,
-  caseDeadlines = [],
   caseDetail,
   docketRecordSort,
 }) => {
@@ -586,7 +555,6 @@ const getFormattedCaseDetail = ({
     docketRecordSort,
   );
   result.docketRecordSort = docketRecordSort;
-  result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
 
   result.contactPrimary = getContactPrimary(caseDetail);
   result.contactSecondary = getContactSecondary(caseDetail);
@@ -598,7 +566,6 @@ module.exports = {
   TRANSCRIPT_AGE_DAYS_MIN,
   documentMeetsAgeRequirements,
   formatCase,
-  formatCaseDeadlines,
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
