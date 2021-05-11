@@ -773,8 +773,8 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
-  removeCoversheetInteractor,
-} = require('../../shared/src/business/useCases/removeCoversheetInteractor');
+  removeCoversheet,
+} = require('../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet');
 const {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
@@ -1600,6 +1600,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUnassociatedLeadCase,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
+        removeCoversheet,
         saveFileAndGenerateUrl,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
@@ -1727,7 +1728,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
-        removeCoversheetInteractor,
         removePdfFromDocketEntryInteractor,
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,

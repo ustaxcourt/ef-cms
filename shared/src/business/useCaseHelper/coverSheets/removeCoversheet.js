@@ -1,4 +1,4 @@
-const { Case } = require('../entities/cases/Case');
+const { Case } = require('../../entities/cases/Case');
 
 /**
  * a helper function which removes a coversheet from a pdf and returns the new pdf data
@@ -24,7 +24,7 @@ exports.removeCoverFromPdf = async ({ applicationContext, pdfData }) => {
 };
 
 /**
- * removeCoversheetInteractor
+ * removeCoversheet
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -32,7 +32,7 @@ exports.removeCoverFromPdf = async ({ applicationContext, pdfData }) => {
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise<*>} updated docket entry entity
  */
-exports.removeCoversheetInteractor = async (
+exports.removeCoversheet = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
@@ -64,13 +64,11 @@ exports.removeCoversheetInteractor = async (
     throw err;
   }
 
-  const {
-    numberOfPages,
-    pdfData: newPdfData,
-  } = await exports.removeCoverFromPdf({
-    applicationContext,
-    pdfData,
-  });
+  const { numberOfPages, pdfData: newPdfData } =
+    await exports.removeCoverFromPdf({
+      applicationContext,
+      pdfData,
+    });
 
   docketEntryEntity.setAsProcessingStatusAsCompleted();
   docketEntryEntity.setNumberOfPages(numberOfPages);

@@ -361,8 +361,8 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   it('should remove a coversheet for the document if the previous document version requires a coversheet but the new document type does not', async () => {
     applicationContext
-      .getUseCases()
-      .removeCoversheetInteractor.mockReturnValueOnce({
+      .getUseCaseHelpers()
+      .removeCoversheet.mockReturnValueOnce({
         ...MOCK_CASE,
         docketEntries,
         docketNumber: '101-20',
@@ -379,7 +379,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().removeCoversheetInteractor,
+      applicationContext.getUseCaseHelpers().removeCoversheet,
     ).toHaveBeenCalled();
   });
 
