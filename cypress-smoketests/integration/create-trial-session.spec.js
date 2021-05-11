@@ -42,7 +42,7 @@ const {
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 let docketClerkToken = null;
 let petitionsClerkToken = null;
