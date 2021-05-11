@@ -99,6 +99,7 @@ import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
+import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
@@ -203,6 +204,7 @@ const helpers = {
   userContactEditHelper,
   userContactEditProgressHelper,
   viewAllDocumentsHelper,
+  viewCounselHelper,
   workQueueHelper,
   workQueueSectionHelper,
 };
