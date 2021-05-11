@@ -20,8 +20,10 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const screenMetadata = get(state.screenMetadata);
   const user = applicationContext.getCurrentUser();
 
-  const formattedPrivatePractitioners = caseDetail.privatePractitioners.map(
-    practitioner => formatCounsel({ counsel: practitioner, screenMetadata }),
+  const formattedPrivatePractitioners = (
+    caseDetail.privatePractitioners || []
+  ).map(practitioner =>
+    formatCounsel({ counsel: practitioner, screenMetadata }),
   );
 
   const formattedParties = caseDetail.petitioners.map(petitioner => {
@@ -86,10 +88,12 @@ export const partiesInformationHelper = (get, applicationContext) => {
     .getUtilities()
     .isInternalUser(user.role);
 
-  const formattedRespondents = caseDetail.irsPractitioners.map(respondent => ({
-    ...formatCounsel({ counsel: respondent, screenMetadata }),
-    canEditRespondent,
-  }));
+  const formattedRespondents = (caseDetail.irsPractitioners || []).map(
+    respondent => ({
+      ...formatCounsel({ counsel: respondent, screenMetadata }),
+      canEditRespondent,
+    }),
+  );
 
   return {
     formattedParticipants,
