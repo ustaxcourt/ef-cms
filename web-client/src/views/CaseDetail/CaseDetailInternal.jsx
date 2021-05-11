@@ -136,11 +136,11 @@ export const CaseDetailInternal = connect(
               <Tab id="tab-overview" tabName="overview" title="Overview">
                 <CaseInformationInternal />
               </Tab>
-              <Tab id="tab-statistics" tabName="statistics" title="Statistics">
-                <Statistics />
-              </Tab>
               <Tab id="tab-parties" tabName="parties" title="Parties">
                 <PartiesInformation />
+              </Tab>
+              <Tab id="tab-statistics" tabName="statistics" title="Statistics">
+                <Statistics />
               </Tab>
             </Tabs>
           )}
