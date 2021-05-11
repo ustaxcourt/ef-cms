@@ -644,4 +644,64 @@ describe('partiesInformationHelper', () => {
       expect(result.formattedPetitioners[0].canEditRespondent).toBe(false);
     });
   });
+
+  describe('canEditParticipant', () => {
+    it('canEditParticipant = true, if the user is an internal user', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.docketClerk }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditParticipant).toBe(true);
+    });
+
+    it('canEditParticipant = false, otherwise', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.petitioner }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditParticipant).toBe(false);
+    });
+  });
 });
