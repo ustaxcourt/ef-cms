@@ -26,7 +26,6 @@ Parties tab has three subsections:
 * Petitioners Counsel information listed
 * Add counsel functionality /  Edit functionality available to docket clerks
 * Searching for petitioner counsel here must be an exact match
-* Checking "Exempt from eFiling" displays flag on Petitioner Counsel contact info for internal users only
 
 **Intervenor/Participant & Counsel**
 * The Court has two specific instances where it allows a 3rd parties to join a case -- intervenors and participants. They are treated as parties, but are NOT a petitioner or respondent.
