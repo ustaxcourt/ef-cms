@@ -20,8 +20,10 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const screenMetadata = get(state.screenMetadata);
   const user = applicationContext.getCurrentUser();
 
-  const formattedPrivatePractitioners = caseDetail.privatePractitioners.map(
-    practitioner => formatCounsel({ counsel: practitioner, screenMetadata }),
+  const formattedPrivatePractitioners = (
+    caseDetail.privatePractitioners || []
+  ).map(practitioner =>
+    formatCounsel({ counsel: practitioner, screenMetadata }),
   );
 
   const formattedParties = caseDetail.petitioners.map(petitioner => {
@@ -59,10 +61,6 @@ export const partiesInformationHelper = (get, applicationContext) => {
       ) ||
       petitioner.contactId === user.userId;
 
-    const canEditRespondent = applicationContext
-      .getUtilities()
-      .isInternalUser(user.role);
-
     const canEditParticipant = applicationContext
       .getUtilities()
       .isInternalUser(user.role);
@@ -71,7 +69,6 @@ export const partiesInformationHelper = (get, applicationContext) => {
       ...petitioner,
       canEditParticipant,
       canEditPetitioner,
-      canEditRespondent,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
       showExternalHeader: applicationContext
@@ -87,8 +84,15 @@ export const partiesInformationHelper = (get, applicationContext) => {
     petitioner => petitioner.contactType === CONTACT_TYPES.otherFiler,
   );
 
-  const formattedRespondents = caseDetail.irsPractitioners.map(respondent =>
-    formatCounsel({ counsel: respondent, screenMetadata }),
+  const canEditRespondent = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
+
+  const formattedRespondents = (caseDetail.irsPractitioners || []).map(
+    respondent => ({
+      ...formatCounsel({ counsel: respondent, screenMetadata }),
+      canEditRespondent,
+    }),
   );
 
   return {
