@@ -258,8 +258,14 @@ exports.updatePetitionerInformationInteractor = async (
     );
   }
 
+  let isCurrentPetitioner = false;
+  if (user.role === ROLES.petitioner) {
+    isCurrentPetitioner = updatedPetitionerData?.contactId === user.userId;
+  }
+
   const hasAuthorization =
     isRepresentingCounsel ||
+    isCurrentPetitioner ||
     isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO);
 
   if (!hasAuthorization) {
