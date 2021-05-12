@@ -201,9 +201,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    const {
-      caseToUpdate,
-    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
     const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
       d => d.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     );
@@ -233,10 +232,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length - 1;
 
-    const newlyFiledDocument = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries[
-      lastDocumentIndex
-    ];
+    const newlyFiledDocument =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[lastDocumentIndex];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: false,

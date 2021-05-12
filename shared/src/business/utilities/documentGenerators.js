@@ -482,12 +482,8 @@ const standingPretrialOrderForSmallCase = async ({
   applicationContext,
   data,
 }) => {
-  const {
-    caseCaptionExtension,
-    caseTitle,
-    docketNumberWithSuffix,
-    trialInfo,
-  } = data;
+  const { caseCaptionExtension, caseTitle, docketNumberWithSuffix, trialInfo } =
+    data;
 
   const reactStandingPretrialOrderForSmallCaseTemplate = reactTemplateGenerator(
     {
@@ -565,12 +561,8 @@ const standingPretrialOrderForSmallCase = async ({
 };
 
 const standingPretrialOrder = async ({ applicationContext, data }) => {
-  const {
-    caseCaptionExtension,
-    caseTitle,
-    docketNumberWithSuffix,
-    trialInfo,
-  } = data;
+  const { caseCaptionExtension, caseTitle, docketNumberWithSuffix, trialInfo } =
+    data;
 
   const reactStandingPretrialOrderTemplate = reactTemplateGenerator({
     componentName: 'StandingPretrialOrder',
@@ -646,12 +638,8 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 };
 
 const caseInventoryReport = async ({ applicationContext, data }) => {
-  const {
-    formattedCases,
-    reportTitle,
-    showJudgeColumn,
-    showStatusColumn,
-  } = data;
+  const { formattedCases, reportTitle, showJudgeColumn, showStatusColumn } =
+    data;
 
   const caseInventoryReportTemplate = reactTemplateGenerator({
     componentName: 'CaseInventoryReport',

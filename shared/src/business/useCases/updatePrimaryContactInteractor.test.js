@@ -80,8 +80,9 @@ describe('update primary contact on a case', () => {
       },
     );
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const changeOfAddressDocument = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );

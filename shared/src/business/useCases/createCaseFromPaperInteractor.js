@@ -95,12 +95,11 @@ exports.createCaseFromPaperInteractor = async (
   ).validate();
 
   // invoke the createCase interactor
-  const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
-    {
+  const docketNumber =
+    await applicationContext.docketNumberGenerator.createDocketNumber({
       applicationContext,
       receivedAt: petitionMetadata.receivedAt,
-    },
-  );
+    });
 
   const caseToAdd = new Case(
     {
@@ -156,9 +155,8 @@ exports.createCaseFromPaperInteractor = async (
   });
 
   if (applicationForWaiverOfFilingFeeFileId) {
-    let {
-      documentTitle,
-    } = INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
+    let { documentTitle } =
+      INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
 
     const applicationForWaiverOfFilingFeeDocketEntryEntity = new DocketEntry(
       {

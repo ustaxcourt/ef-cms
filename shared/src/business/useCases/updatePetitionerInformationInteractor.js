@@ -184,13 +184,13 @@ const generatePaperServicePdf = async ({
     useTempBucket: true,
   });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key: paperServicePdfId,
-    useTempBucket: true,
-  });
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: paperServicePdfId,
+      useTempBucket: true,
+    });
   return url;
 };
 
@@ -368,15 +368,15 @@ exports.updatePetitionerInformationInteractor = async (
     if (petitionerInfoChange) {
       let privatePractitionersRepresentingContact;
       if (updatedCaseContact.contactType === CONTACT_TYPES.primary) {
-        privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
-          privatePractitioner =>
+        privatePractitionersRepresentingContact =
+          caseEntity.privatePractitioners.some(privatePractitioner =>
             privatePractitioner.getRepresentingPrimary(caseEntity),
-        );
+          );
       } else if (updatedCaseContact.contactType === CONTACT_TYPES.secondary) {
-        privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
-          privatePractitioner =>
+        privatePractitionersRepresentingContact =
+          caseEntity.privatePractitioners.some(privatePractitioner =>
             privatePractitioner.getRepresentingSecondary(caseEntity),
-        );
+          );
       }
 
       petitionerChangeDocs = await createDocketEntryAndWorkItem({

@@ -224,14 +224,10 @@ exports.serveCaseToIrsInteractor = async (
     }
   }
 
-  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(
-    caseEntityToUpdate,
-  );
-  const {
-    docketNumberWithSuffix,
-    preferredTrialCity,
-    receivedAt,
-  } = caseEntityToUpdate;
+  const { caseCaptionExtension, caseTitle } =
+    getCaseCaptionMeta(caseEntityToUpdate);
+  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } =
+    caseEntityToUpdate;
 
   let pdfData = await applicationContext
     .getDocumentGenerators()
@@ -318,7 +314,8 @@ exports.serveCaseToIrsInteractor = async (
     }
   }
 
-  const caseConfirmationPdfName = caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
+  const caseConfirmationPdfName =
+    caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
 
   await new Promise((resolve, reject) => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
@@ -347,13 +344,13 @@ exports.serveCaseToIrsInteractor = async (
   let urlToReturn;
 
   if (caseEntityToUpdate.isPaper) {
-    ({
-      url: urlToReturn,
-    } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-      applicationContext,
-      key: caseConfirmationPdfName,
-      useTempBucket: false,
-    }));
+    ({ url: urlToReturn } = await applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl({
+        applicationContext,
+        key: caseConfirmationPdfName,
+        useTempBucket: false,
+      }));
   }
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

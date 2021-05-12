@@ -102,13 +102,13 @@ exports.generatePrintablePendingReportInteractor = async (
     });
   });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key,
-    useTempBucket: true,
-  });
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key,
+      useTempBucket: true,
+    });
 
   return url;
 };

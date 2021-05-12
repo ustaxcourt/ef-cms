@@ -127,7 +127,8 @@ export const addDocketEntryHelper = (get, applicationContext) => {
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
-    showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
+    showSecondarySupportingDocumentValid:
+      !!form.secondarySupportingDocumentFile,
     showSupportingDocumentFreeText: supportingDocumentFreeTextTypes.includes(
       form.documentType,
     ),

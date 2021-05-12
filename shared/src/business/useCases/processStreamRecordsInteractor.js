@@ -128,12 +128,12 @@ const processCaseEntries = async ({
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
 
-  const {
-    failedRecords,
-  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
-    applicationContext,
-    records: flattenDeep(indexRecords),
-  });
+  const { failedRecords } = await applicationContext
+    .getPersistenceGateway()
+    .bulkIndexRecords({
+      applicationContext,
+      records: flattenDeep(indexRecords),
+    });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
@@ -214,12 +214,12 @@ const processDocketEntries = async ({
     }),
   );
 
-  const {
-    failedRecords,
-  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
-    applicationContext,
-    records: newDocketEntryRecords,
-  });
+  const { failedRecords } = await applicationContext
+    .getPersistenceGateway()
+    .bulkIndexRecords({
+      applicationContext,
+      records: newDocketEntryRecords,
+    });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
@@ -240,12 +240,12 @@ const processWorkItemEntries = async ({
     `going to index ${workItemRecords.length} workItem records`,
   );
 
-  const {
-    failedRecords,
-  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
-    applicationContext,
-    records: workItemRecords,
-  });
+  const { failedRecords } = await applicationContext
+    .getPersistenceGateway()
+    .bulkIndexRecords({
+      applicationContext,
+      records: workItemRecords,
+    });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
@@ -263,12 +263,12 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
     `going to index ${otherRecords.length} otherRecords`,
   );
 
-  const {
-    failedRecords,
-  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
-    applicationContext,
-    records: otherRecords,
-  });
+  const { failedRecords } = await applicationContext
+    .getPersistenceGateway()
+    .bulkIndexRecords({
+      applicationContext,
+      records: otherRecords,
+    });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
@@ -286,12 +286,12 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
     `going to index ${removeRecords.length} removeRecords`,
   );
 
-  const {
-    failedRecords,
-  } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
-    applicationContext,
-    records: removeRecords,
-  });
+  const { failedRecords } = await applicationContext
+    .getPersistenceGateway()
+    .bulkDeleteRecords({
+      applicationContext,
+      records: removeRecords,
+    });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(

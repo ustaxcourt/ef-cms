@@ -1,17 +1,13 @@
 import { state } from 'cerebral';
 
 export const messageModalHelper = (get, applicationContext) => {
-  const {
-    CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
-  } = applicationContext.getConstants();
+  const { CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT } =
+    applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
-  const {
-    correspondence,
-    draftDocuments,
-    formattedDocketEntries,
-  } = applicationContext
-    .getUtilities()
-    .getFormattedCaseDetail({ applicationContext, caseDetail });
+  const { correspondence, draftDocuments, formattedDocketEntries } =
+    applicationContext
+      .getUtilities()
+      .getFormattedCaseDetail({ applicationContext, caseDetail });
 
   const form = get(state.modal.form);
   const screenMetadata = get(state.screenMetadata);

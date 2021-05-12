@@ -58,11 +58,10 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
     noticeOfChangeOfAddressQCItem.index =
       noticeOfChangeOfAddressQCItem.index || lastIndex;
 
-    const {
-      docketEntryId,
-    } = caseDetailFormatted.formattedDocketEntriesOnDocketRecord[
-      noticeOfChangeOfAddressQCItem.index
-    ];
+    const { docketEntryId } =
+      caseDetailFormatted.formattedDocketEntriesOnDocketRecord[
+        noticeOfChangeOfAddressQCItem.index
+      ];
 
     await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
@@ -90,9 +89,10 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
       },
     );
 
-    const selectedDocument = caseDetailFormatted.formattedDocketEntriesOnDocketRecord.find(
-      document => document.docketEntryId === docketEntryId,
-    );
+    const selectedDocument =
+      caseDetailFormatted.formattedDocketEntriesOnDocketRecord.find(
+        document => document.docketEntryId === docketEntryId,
+      );
 
     expect(selectedDocument.qcWorkItemsCompleted).toEqual(true);
   });

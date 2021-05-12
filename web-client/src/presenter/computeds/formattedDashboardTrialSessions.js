@@ -10,10 +10,8 @@ export const formatSession = (session, applicationContext) => {
 
 export const formattedDashboardTrialSessions = (get, applicationContext) => {
   const { role, userId } = applicationContext.getCurrentUser();
-  const {
-    SESSION_STATUS_GROUPS,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { SESSION_STATUS_GROUPS, USER_ROLES } =
+    applicationContext.getConstants();
   const chambersJudgeUser = get(state.judgeUser);
   const isChambersUser = role === USER_ROLES.chambers;
   const judgeUserId =

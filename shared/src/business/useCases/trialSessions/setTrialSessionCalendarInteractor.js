@@ -79,15 +79,13 @@ exports.setTrialSessionCalendarInteractor = async (
     });
 
   // these cases are already on the caseOrder, so if they have not been QCed we have to remove them
-  const [
-    manuallyAddedQcCompleteCases,
-    manuallyAddedQcIncompleteCases,
-  ] = partition(
-    manuallyAddedCases,
-    manualCase =>
-      manualCase.qcCompleteForTrial &&
-      manualCase.qcCompleteForTrial[trialSessionId] === true,
-  );
+  const [manuallyAddedQcCompleteCases, manuallyAddedQcIncompleteCases] =
+    partition(
+      manuallyAddedCases,
+      manualCase =>
+        manualCase.qcCompleteForTrial &&
+        manualCase.qcCompleteForTrial[trialSessionId] === true,
+    );
 
   let eligibleCasesLimit =
     trialSessionEntity.maxCases + TRIAL_SESSION_ELIGIBLE_CASES_BUFFER;
