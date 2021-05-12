@@ -1493,6 +1493,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
         httpOptions: {
           timeout: 900000, // 15 minutes
         },
+        options: {
+          maxRetries: 3,
+          retryDelayOptions: {
+            base: 100,
+          },
+        },
       });
     },
     getNotificationGateway: () => ({
