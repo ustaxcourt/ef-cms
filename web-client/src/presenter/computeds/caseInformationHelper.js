@@ -15,7 +15,7 @@ export const caseInformationHelper = (get, applicationContext) => {
   const showEditPrivatePractitionersButton =
     canEditCounsel && !!caseDetail.privatePractitioners?.length;
 
-  const showViewCounselButton = isInternalUser && !canEditCounsel;
+  const showViewCounselButton = !canEditCounsel;
 
   const showEditIrsPractitionersButton =
     permissions.ASSOCIATE_USER_WITH_CASE &&
@@ -56,6 +56,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     contactPrimaryEmailFormatted,
     contactSecondaryEmailFormatted,
     formattedPetitioners,
+    isInternalUser,
     showAddCounsel,
     showAddPartyButton,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
