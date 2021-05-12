@@ -22,7 +22,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     caseDetail.irsPractitioners &&
     !!caseDetail.irsPractitioners.length;
 
-  const showAddCounsel = permissions.ASSOCIATE_USER_WITH_CASE;
+  const showAddCounsel = canEditCounsel;
   const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.isSealed;
   const showingAdditionalPetitioners =
     get(state.showingAdditionalPetitioners) || false;
