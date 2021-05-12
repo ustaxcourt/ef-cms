@@ -1,5 +1,6 @@
 import {
   CONTACT_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   OTHER_FILER_TYPES,
   ROLES,
   UNIQUE_OTHER_FILER_TYPE,
@@ -46,6 +47,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockIntervenor, mockParticipant],
             privatePractitioners: [mockPractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {},
           },
@@ -90,6 +92,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {
               [mockPractitionerId]: mockPendingPractitionerEmail,
@@ -131,6 +134,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {},
           },
@@ -168,6 +172,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {},
           },
@@ -204,6 +209,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {},
           },
@@ -236,6 +242,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {},
           },
@@ -262,6 +269,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {},
           },
@@ -290,6 +298,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {
               [mockUserId]: mockEmail,
@@ -320,6 +329,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {
               [mockUserId]: undefined,
@@ -539,7 +549,7 @@ describe('partiesInformationHelper', () => {
   });
 
   describe('canEditPetitioner', () => {
-    it('canEditPetitioner = true, if the user is an internal user', () => {
+    it('is false when the petition has not been served', () => {
       partiesInformationHelper = withAppContextDecorator(
         partiesInformationHelperComputed,
         {
@@ -555,10 +565,53 @@ describe('partiesInformationHelper', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
           caseDetail: {
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: undefined,
+              },
+            ],
             irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [],
           },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(false);
+    });
+
+    it('is true when the user is an internal user with permission to edit petitioner info and the petition has been served', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.docketClerk }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2020-08-01',
+              },
+            ],
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
           screenMetadata: {
             pendingEmails: {},
           },
@@ -568,7 +621,43 @@ describe('partiesInformationHelper', () => {
       expect(result.formattedPetitioners[0].canEditPetitioner).toBe(true);
     });
 
-    it('canEditPetitioner = true, if the user is the corresponding petitioner', () => {
+    it('is false when the user is an internal user without permission to edit petitioner info', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({ role: ROLES.petitionsClerk }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2020-08-01',
+              },
+            ],
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: false },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(false);
+    });
+
+    it('is true when the user is the corresponding petitioner and the petition has been served', () => {
       partiesInformationHelper = withAppContextDecorator(
         partiesInformationHelperComputed,
         {
@@ -588,6 +677,12 @@ describe('partiesInformationHelper', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
           caseDetail: {
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2020-08-01',
+              },
+            ],
             irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [],
@@ -601,14 +696,14 @@ describe('partiesInformationHelper', () => {
       expect(result.formattedPetitioners[0].canEditPetitioner).toBe(true);
     });
 
-    it('canEditPetitioner = true for an represented petitioner for a privatePractitioner', () => {
+    it('is false when the user is not the corresponding petitioner and the petition has been served', () => {
       partiesInformationHelper = withAppContextDecorator(
         partiesInformationHelperComputed,
         {
           ...applicationContext,
           getCurrentUser: () => ({
-            role: ROLES.privatePractitioner,
-            userId: 'privatePractitioner-123',
+            role: ROLES.petitioner,
+            userId: 'petitioner-456',
           }),
         },
       );
@@ -618,7 +713,48 @@ describe('partiesInformationHelper', () => {
         contactType: CONTACT_TYPES.primary,
       };
 
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2020-08-01',
+              },
+            ],
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBeFalsy();
+    });
+
+    it('is true when the current user is a private practitioner associated with the case and the petition has been served', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({
+            barNumber: 'PT8888',
+            role: ROLES.privatePractitioner,
+            userId: 'privatePractitioner-123',
+          }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactId: 'petitioner-321',
+        contactType: CONTACT_TYPES.primary,
+      };
+
       const mockPrivatePractitioner = {
+        barNumber: 'PT8888',
         contactId: 'privatePractitioner-123',
         name: 'Guy Fieri',
         representing: ['petitioner-321'],
@@ -627,21 +763,64 @@ describe('partiesInformationHelper', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
           caseDetail: {
-            irsPractitioners: [],
-            petitioners: [
-              mockPetitioner,
-              { ...mockPetitioner, contactId: 'petitioner-321' },
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2020-08-01',
+              },
             ],
+            irsPractitioners: [],
+            petitioners: [{ ...mockPetitioner, contactId: 'petitioner-321' }],
             privatePractitioners: [mockPrivatePractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {},
           },
         },
       });
 
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(false);
-      expect(result.formattedPetitioners[1].canEditPetitioner).toBe(true);
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBeTruthy();
+    });
+
+    it('is false when the current user is a private practitioner not associated with the case and the petition has been served', () => {
+      partiesInformationHelper = withAppContextDecorator(
+        partiesInformationHelperComputed,
+        {
+          ...applicationContext,
+          getCurrentUser: () => ({
+            role: ROLES.privatePractitioner,
+            userId: 'privatePractitioner-456',
+          }),
+        },
+      );
+
+      const mockPetitioner = {
+        contactId: 'petitioner-123',
+        contactType: CONTACT_TYPES.primary,
+      };
+
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2020-08-01',
+              },
+            ],
+            irsPractitioners: [],
+            petitioners: [{ ...mockPetitioner, contactId: 'petitioner-321' }],
+            privatePractitioners: [],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBeFalsy();
     });
   });
 
@@ -666,6 +845,7 @@ describe('partiesInformationHelper', () => {
             petitioners: [mockPetitioner],
             privatePractitioners: [],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {},
           },

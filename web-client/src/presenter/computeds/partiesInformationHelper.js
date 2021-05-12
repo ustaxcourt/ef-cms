@@ -11,12 +11,16 @@ const formatCounsel = ({ counsel, screenMetadata }) => {
 };
 
 export const partiesInformationHelper = (get, applicationContext) => {
-  const { CONTACT_TYPES, UNIQUE_OTHER_FILER_TYPE } =
-    applicationContext.getConstants();
+  const {
+    CONTACT_TYPES,
+    UNIQUE_OTHER_FILER_TYPE,
+    USER_ROLES,
+  } = applicationContext.getConstants();
 
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
   const user = applicationContext.getCurrentUser();
+  const permissions = get(state.permissions);
 
   const formattedPrivatePractitioners = (
     caseDetail.privatePractitioners || []
@@ -50,14 +54,26 @@ export const partiesInformationHelper = (get, applicationContext) => {
         ? `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`
         : undefined;
 
-    const canEditPetitioner =
-      applicationContext.getUtilities().isInternalUser(user.role) ||
-      !!formattedPrivatePractitioners.find(
-        practitioner =>
-          user.barNumber === practitioner.barNumber &&
-          practitioner.representing.includes(petitioner.contactId),
-      ) ||
-      petitioner.contactId === user.userId;
+    const userAssociatedWithCase = !!formattedPrivatePractitioners.find(
+      practitioner =>
+        user.barNumber === practitioner.barNumber &&
+        practitioner.representing.includes(petitioner.contactId),
+    );
+
+    const petitionIsServed = !!applicationContext
+      .getUtilities()
+      .getPetitionDocketEntry(caseDetail)?.servedAt;
+
+    let canEditPetitioner = false;
+    if (user.role === USER_ROLES.petitioner) {
+      canEditPetitioner = petitioner.contactId === user.userId;
+    } else if (user.role === USER_ROLES.privatePractitioner) {
+      console.log(userAssociatedWithCase, 'userAssociatedWithCase');
+      canEditPetitioner = userAssociatedWithCase;
+    } else if (permissions.EDIT_PETITIONER_INFO) {
+      canEditPetitioner = true;
+    }
+    canEditPetitioner = petitionIsServed && canEditPetitioner;
 
     const canEditParticipant = applicationContext
       .getUtilities()
