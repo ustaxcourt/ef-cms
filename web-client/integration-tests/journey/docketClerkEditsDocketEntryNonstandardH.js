@@ -1,6 +1,6 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { getPetitionDocumentForCase } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -10,19 +10,15 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard H scenario', async () => {
-    let caseDetailFormatted;
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    let helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
-    const { docketEntryId } = caseDetailFormatted.formattedDocketEntries[0];
+    const { docketEntryId } = helper.formattedDocketEntriesOnDocketRecord[0];
     const petitionDocument = getPetitionDocumentForCase(
       test.getState('caseDetail'),
     );
@@ -30,7 +26,7 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
     expect(petitionDocument.docketEntryId).toBeDefined();
 
     const docketEntriesBefore =
-      caseDetailFormatted.formattedDocketEntries.length;
+      helper.formattedDocketEntriesOnDocketRecord.length;
 
     await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
@@ -77,25 +73,22 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
     const docketEntriesAfter =
-      caseDetailFormatted.formattedDocketEntries.length;
+      helper.formattedDocketEntriesOnDocketRecord.length;
 
     expect(docketEntriesBefore).toEqual(docketEntriesAfter);
 
-    const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
+    const updatedDocketEntry = helper.formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
       descriptionDisplay:
         'Motion for Leave to File First Amended Petition some additional info',
     });
 
-    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const updatedDocument = helper.formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({

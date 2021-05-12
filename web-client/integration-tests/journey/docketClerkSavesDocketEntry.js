@@ -1,4 +1,4 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -10,14 +10,14 @@ export const docketClerkSavesDocketEntry = test => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDetailFormatted = await runCompute(
-      withAppContextDecorator(formattedCaseDetail),
+    const helper = await runCompute(
+      withAppContextDecorator(formattedDocketEntries),
       {
         state: test.getState(),
       },
     );
 
-    test.docketRecordEntry = caseDetailFormatted.formattedDocketEntries.find(
+    test.docketRecordEntry = helper.formattedDocketEntriesOnDocketRecord.find(
       entry => entry.documentTitle === 'Administrative Record',
     );
 

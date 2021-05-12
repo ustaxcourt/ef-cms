@@ -1,9 +1,9 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries as formattedDocketEntriesComputed } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const formattedDocketEntries = withAppContextDecorator(
+  formattedDocketEntriesComputed,
 );
 
 export const irsSuperuserSearchForUnservedCase = test => {
@@ -12,13 +12,14 @@ export const irsSuperuserSearchForUnservedCase = test => {
     test.setState('header.searchTerm', test.docketNumber);
     await test.runSequence('submitCaseSearchSequence');
 
-    const formattedCase = runCompute(formattedCaseDetail, {
+    const helper = runCompute(formattedDocketEntries, {
       state: test.getState(),
     });
 
-    const petitionDocketEntry = formattedCase.formattedDocketEntries.find(
-      entry => entry.documentTitle === 'Petition',
-    );
+    const petitionDocketEntry =
+      helper.formattedDocketEntriesOnDocketRecord.find(
+        entry => entry.documentTitle === 'Petition',
+      );
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     // irsSuperuser should NOT see a link to a petition
     // document that has not been served
