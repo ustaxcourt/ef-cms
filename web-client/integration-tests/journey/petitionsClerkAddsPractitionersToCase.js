@@ -75,6 +75,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
     );
 
+    test.privatePractitioners = formatted.privatePractitioners[0];
+
     //add a second practitioner
     if (!skipSecondary) {
       await test.runSequence('updateFormValueSequence', {

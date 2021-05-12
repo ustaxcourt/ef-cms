@@ -2,9 +2,10 @@ import { state } from 'cerebral';
 
 const formatCounsel = ({ counsel, screenMetadata }) => {
   counsel.formattedEmail = counsel.email || 'No email provided';
-  counsel.formattedPendingEmail = screenMetadata.pendingEmails[counsel.userId]
-    ? `${screenMetadata.pendingEmails[counsel.userId]} (Pending)`
-    : undefined;
+  counsel.formattedPendingEmail =
+    screenMetadata.pendingEmails && screenMetadata.pendingEmails[counsel.userId]
+      ? `${screenMetadata.pendingEmails[counsel.userId]} (Pending)`
+      : undefined;
 
   return counsel;
 };
@@ -15,9 +16,12 @@ export const partiesInformationHelper = (get, applicationContext) => {
 
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
+  const user = applicationContext.getCurrentUser();
 
-  const formattedPrivatePractitioners = caseDetail.privatePractitioners.map(
-    practitioner => formatCounsel({ counsel: practitioner, screenMetadata }),
+  const formattedPrivatePractitioners = (
+    caseDetail.privatePractitioners || []
+  ).map(practitioner =>
+    formatCounsel({ counsel: practitioner, screenMetadata }),
   );
 
   const formattedParties = caseDetail.petitioners.map(petitioner => {
@@ -40,16 +44,34 @@ export const partiesInformationHelper = (get, applicationContext) => {
     }
 
     petitioner.formattedEmail = petitioner.email || 'No email provided';
-    petitioner.formattedPendingEmail = screenMetadata.pendingEmails[
-      petitioner.contactId
-    ]
-      ? `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`
-      : undefined;
+    petitioner.formattedPendingEmail =
+      screenMetadata.pendingEmails &&
+      screenMetadata.pendingEmails[petitioner.contactId]
+        ? `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`
+        : undefined;
+
+    const canEditPetitioner =
+      applicationContext.getUtilities().isInternalUser(user.role) ||
+      !!formattedPrivatePractitioners.find(
+        practitioner =>
+          user.barNumber === practitioner.barNumber &&
+          practitioner.representing.includes(petitioner.contactId),
+      ) ||
+      petitioner.contactId === user.userId;
+
+    const canEditParticipant = applicationContext
+      .getUtilities()
+      .isInternalUser(user.role);
 
     return {
       ...petitioner,
+      canEditParticipant,
+      canEditPetitioner,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
+      showExternalHeader: applicationContext
+        .getUtilities()
+        .isExternalUser(user.role),
     };
   });
 
@@ -60,8 +82,15 @@ export const partiesInformationHelper = (get, applicationContext) => {
     petitioner => petitioner.contactType === CONTACT_TYPES.otherFiler,
   );
 
-  const formattedRespondents = caseDetail.irsPractitioners.map(respondent =>
-    formatCounsel({ counsel: respondent, screenMetadata }),
+  const canEditRespondent = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
+
+  const formattedRespondents = (caseDetail.irsPractitioners || []).map(
+    respondent => ({
+      ...formatCounsel({ counsel: respondent, screenMetadata }),
+      canEditRespondent,
+    }),
   );
 
   return {
