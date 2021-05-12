@@ -124,7 +124,6 @@ import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEm
 import { formatAttachments } from '../../shared/src/business/utilities/formatAttachments';
 import {
   formatCase,
-  formatCaseDeadlines,
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
@@ -650,7 +649,6 @@ const applicationContext = {
       filterEmptyStrings,
       formatAttachments,
       formatCase,
-      formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
       formatDocketEntry,
