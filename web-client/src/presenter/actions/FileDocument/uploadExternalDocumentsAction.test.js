@@ -5,9 +5,8 @@ import { runAction } from 'cerebral/test';
 import { uploadExternalDocumentsAction } from './uploadExternalDocumentsAction';
 
 describe('uploadExternalDocumentsAction', () => {
-  const {
-    uploadExternalDocumentsInteractor,
-  } = applicationContext.getUseCases();
+  const { uploadExternalDocumentsInteractor } =
+    applicationContext.getUseCases();
   const { addCoversheetInteractor } = applicationContext.getUseCases();
 
   presenter.providers.applicationContext = applicationContext;
