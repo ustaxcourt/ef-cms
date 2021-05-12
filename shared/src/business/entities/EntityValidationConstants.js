@@ -239,9 +239,10 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       docketEntryId: JoiValidationConstants.UUID.optional().description(
         'The ID of the previous document.',
       ),
-      documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
-        'The title of the previous document.',
-      ),
+      documentTitle:
+        JoiValidationConstants.DOCUMENT_TITLE.optional().description(
+          'The title of the previous document.',
+        ),
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .optional()
         .description('The type of the previous document.'),
@@ -265,9 +266,10 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   secondaryDocument: joi // TODO: limit keys
     .object()
     .keys({
-      documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
-        'The title of the secondary document.',
-      ),
+      documentTitle:
+        JoiValidationConstants.DOCUMENT_TITLE.optional().description(
+          'The title of the secondary document.',
+        ),
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .required()
         .description('The type of the secondary document.'),

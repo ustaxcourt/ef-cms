@@ -7,12 +7,8 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const reviewSavedPetitionHelper = withAppContextDecorator(
   reviewSavedPetitionHelperComputed,
 );
-const {
-  COUNTRY_TYPES,
-  DEFAULT_PROCEDURE_TYPE,
-  PARTY_TYPES,
-  PAYMENT_STATUS,
-} = applicationContext.getConstants();
+const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
+  applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   test,

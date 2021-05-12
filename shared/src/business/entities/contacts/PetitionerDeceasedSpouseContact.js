@@ -6,8 +6,8 @@ const { ContactFactory } = require('./ContactFactory');
 /**
  * returns the constructor used for creating the PetitionerDeceasedSpouseContact entity
  */
-exports.getPetitionerDeceasedSpouseContact = ContactFactory.createContactFactory(
-  {
+exports.getPetitionerDeceasedSpouseContact =
+  ContactFactory.createContactFactory({
     additionalErrorMappings: {
       inCareOf: 'Enter name for in care of',
     },
@@ -16,5 +16,4 @@ exports.getPetitionerDeceasedSpouseContact = ContactFactory.createContactFactory
       phone: JoiValidationConstants.STRING.max(100).optional().allow(null),
     },
     contactName: 'PetitionerDeceasedSpouseContact',
-  },
-);
+  });
