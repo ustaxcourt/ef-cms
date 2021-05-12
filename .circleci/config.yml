@@ -733,9 +733,9 @@ jobs:
             fi
       - run:
           name: Wait for SQS Queue to Empty
+          no_output_timeout: 5h
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              no_output_timeout: 5h
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
