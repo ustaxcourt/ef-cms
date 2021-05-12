@@ -68,7 +68,6 @@ export const partiesInformationHelper = (get, applicationContext) => {
     if (user.role === USER_ROLES.petitioner) {
       canEditPetitioner = petitioner.contactId === user.userId;
     } else if (user.role === USER_ROLES.privatePractitioner) {
-      console.log(userAssociatedWithCase, 'userAssociatedWithCase');
       canEditPetitioner = userAssociatedWithCase;
     } else if (permissions.EDIT_PETITIONER_INFO) {
       canEditPetitioner = true;
