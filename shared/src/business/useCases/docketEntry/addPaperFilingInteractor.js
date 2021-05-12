@@ -54,8 +54,7 @@ exports.addPaperFilingInteractor = async (
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const baseMetadata = pick(documentMetadata, [
-    'partyPrimary',
-    'partySecondary',
+    'filers',
     'partyIrsPractitioner',
     'practitioner',
   ]);
@@ -79,7 +78,9 @@ exports.addPaperFilingInteractor = async (
     {
       ...baseMetadata,
       ...metadata,
+      // this seems hacky to send things to docket entry that are not actually on the entity
       contactPrimary: caseEntity.getContactPrimary(),
+      // this seems hacky to send things to docket entry that are not actually on the entity
       contactSecondary: caseEntity.getContactSecondary(),
       docketEntryId,
       documentTitle: metadata.documentTitle,
@@ -88,6 +89,8 @@ exports.addPaperFilingInteractor = async (
       filingDate: metadata.receivedAt,
       isOnDocketRecord: true,
       mailingDate: metadata.mailingDate,
+      // this seems hacky to send things to docket entry that are not actually on the entity
+      petitioners: caseEntity.petitioners,
       relationship,
       userId: user.userId,
     },
