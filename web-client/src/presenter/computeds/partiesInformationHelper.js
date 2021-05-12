@@ -47,12 +47,21 @@ export const partiesInformationHelper = (get, applicationContext) => {
           : 'Participant';
     }
 
-    petitioner.formattedEmail = petitioner.email || 'No email provided';
     petitioner.formattedPendingEmail =
       screenMetadata.pendingEmails &&
       screenMetadata.pendingEmails[petitioner.contactId]
         ? `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`
         : undefined;
+
+    if (petitioner.formattedPendingEmail) {
+      if (!petitioner.email) {
+        petitioner.formattedEmail = undefined;
+      } //fixme
+    } else {
+      if (!petitioner.email) {
+        petitioner.formattedEmail = 'No email provided';
+      }
+    }
 
     const userAssociatedWithCase = !!formattedPrivatePractitioners.find(
       practitioner =>
