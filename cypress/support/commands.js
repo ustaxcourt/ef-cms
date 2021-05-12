@@ -25,19 +25,6 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import 'cypress-file-upload';
-import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command';
-
-addMatchImageSnapshotCommand({
-  // threshold for each pixel
-  capture: 'viewport',
-
-  // percent of image or number of pixels
-  customDiffConfig: { threshold: 0.1 },
-
-  failureThreshold: 0.03,
-  // threshold for entire image
-  failureThresholdType: 'percent', // capture viewport in screenshot
-});
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
   if (shows) {

@@ -1,22 +1,14 @@
 const {
-  getActionMenuButton,
-  getActionMenuSubMenuButton,
+  createOrder,
   getApplySignatureButton,
-  getButton,
-  getCaseDetailTab,
   hoverOverSignatureWarning,
   navigateTo: navigateToCaseDetail,
-  selectOrderTypeOption,
 } = require('../support/pages/case-detail');
 
 describe('Sign order', function () {
   before(() => {
     navigateToCaseDetail('docketclerk', '101-19');
-    getActionMenuButton().click();
-    getActionMenuSubMenuButton('create-order').click();
-    selectOrderTypeOption(1);
-    getButton('Continue').click();
-    getCaseDetailTab('drafts').click();
+    createOrder('101-19');
     getApplySignatureButton().click();
   });
 
