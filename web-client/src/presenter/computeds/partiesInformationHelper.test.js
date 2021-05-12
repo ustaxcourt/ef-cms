@@ -81,7 +81,15 @@ describe('partiesInformationHelper', () => {
           caseDetail: {
             irsPractitioners: [],
             petitioners: [mockIntervenor, mockParticipant],
-            privatePractitioners: [mockPrivatePractitioner],
+            privatePractitioners: [
+              {
+                ...mockPrivatePractitioner,
+                representing: [
+                  mockIntervenor.contactId,
+                  mockParticipant.contactId,
+                ],
+              },
+            ],
           },
           permissions: {},
           screenMetadata: {
@@ -95,13 +103,29 @@ describe('partiesInformationHelper', () => {
           ...mockIntervenor,
           formattedTitle: UNIQUE_OTHER_FILER_TYPE,
           hasCounsel: true,
-          representingPractitioners: [mockPrivatePractitioner],
+          representingPractitioners: [
+            {
+              ...mockPrivatePractitioner,
+              representing: [
+                mockIntervenor.contactId,
+                mockParticipant.contactId,
+              ],
+            },
+          ],
         },
         {
           ...mockParticipant,
           formattedTitle: 'Participant',
           hasCounsel: true,
-          representingPractitioners: [mockPrivatePractitioner],
+          representingPractitioners: [
+            {
+              ...mockPrivatePractitioner,
+              representing: [
+                mockIntervenor.contactId,
+                mockParticipant.contactId,
+              ],
+            },
+          ],
         },
       ]);
       expect(result.formattedPetitioners).toEqual([]);
@@ -211,6 +235,7 @@ describe('partiesInformationHelper', () => {
           representingPractitioners: [
             {
               ...mockPrivatePractitioner,
+              email: undefined,
               formattedEmail: 'No email provided',
             },
           ],
@@ -225,7 +250,9 @@ describe('partiesInformationHelper', () => {
           caseDetail: {
             irsPractitioners: [],
             petitioners: [mockPetitioner],
-            privatePractitioners: [mockPrivatePractitioner],
+            privatePractitioners: [
+              { ...mockPrivatePractitioner, representing: [] },
+            ],
           },
           permissions: {},
           screenMetadata: {
@@ -249,7 +276,7 @@ describe('partiesInformationHelper', () => {
           ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [],
-            petitioners: [mockPetitioner],
+            petitioners: [{ ...mockPetitioner, email: mockEmail }],
             privatePractitioners: [mockPrivatePractitioner],
           },
           permissions: {},
@@ -485,7 +512,7 @@ describe('partiesInformationHelper', () => {
           ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [],
-            petitioners: [mockPetitioner],
+            petitioners: [mockPetitioner, mockParticipant],
             privatePractitioners: [],
           },
           screenMetadata: {
