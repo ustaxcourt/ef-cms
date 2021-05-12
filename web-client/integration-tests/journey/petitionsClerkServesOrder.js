@@ -10,7 +10,7 @@ export const petitionsClerkServesOrder = test => {
 
     const { docketEntryId } = test;
 
-    const orderDocument = helper.formattedDraftDocuments.find(
+    const orderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
