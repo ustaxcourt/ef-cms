@@ -3,9 +3,6 @@ const { DynamoDB } = require('aws-sdk');
 const tableName = process.argv[2];
 const enabled = process.argv[3] == 'true';
 
-console.log('table name', tableName);
-console.log('enabled', enabled);
-
 const dynamodb = new DynamoDB({ region: 'us-east-1' });
 const params = {
   StreamSpecification: {
