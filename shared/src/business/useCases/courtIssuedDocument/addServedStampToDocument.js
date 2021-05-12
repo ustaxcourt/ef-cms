@@ -24,11 +24,7 @@ const computeCoordinates = ({
     coordsFromBottomLeft.x = pageWidth / 2 - boxWidth / 2;
   }
 
-  if (pageRotation === 90 || pageRotation === 270) {
-    coordsFromBottomLeft.y = posY + boxHeight;
-  } else {
-    coordsFromBottomLeft.y = posY + boxHeight;
-  }
+  coordsFromBottomLeft.y = posY + boxHeight;
 
   let rectangleX, rectangleY;
 
