@@ -114,6 +114,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
     ),
+  filers: joi.array().optional(),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description('Date that this Document was filed.'),
@@ -219,14 +220,14 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
     ),
   partyIrsPractitioner: joi.boolean().optional(),
-  partyPrimary: joi
-    .boolean()
-    .optional()
-    .description('Use the primary contact to compose the filedBy text.'),
-  partySecondary: joi
-    .boolean()
-    .optional()
-    .description('Use the secondary contact to compose the filedBy text.'),
+  // partyPrimary: joi
+  //   .boolean()
+  //   .optional()
+  //   .description('Use the primary contact to compose the filedBy text.'),
+  // partySecondary: joi
+  //   .boolean()
+  //   .optional()
+  //   .description('Use the secondary contact to compose the filedBy text.'),
   pending: joi
     .boolean()
     .optional()
@@ -239,10 +240,9 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       docketEntryId: JoiValidationConstants.UUID.optional().description(
         'The ID of the previous document.',
       ),
-      documentTitle:
-        JoiValidationConstants.DOCUMENT_TITLE.optional().description(
-          'The title of the previous document.',
-        ),
+      documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
+        'The title of the previous document.',
+      ),
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .optional()
         .description('The type of the previous document.'),
@@ -266,10 +266,9 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   secondaryDocument: joi // TODO: limit keys
     .object()
     .keys({
-      documentTitle:
-        JoiValidationConstants.DOCUMENT_TITLE.optional().description(
-          'The title of the secondary document.',
-        ),
+      documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().description(
+        'The title of the secondary document.',
+      ),
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .required()
         .description('The type of the secondary document.'),

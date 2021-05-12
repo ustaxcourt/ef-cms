@@ -5,14 +5,14 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);
 
-  const { INTERNAL_CATEGORY_MAP, PARTY_TYPES } =
-    applicationContext.getConstants();
+  const {
+    INTERNAL_CATEGORY_MAP,
+    PARTY_TYPES,
+  } = applicationContext.getConstants();
 
   const partyValidationError =
     validationErrors &&
-    (validationErrors.partyPrimary ||
-      validationErrors.partySecondary ||
-      validationErrors.partyIrsPractitioner);
+    (validationErrors.filers || validationErrors.partyIrsPractitioner);
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
