@@ -241,7 +241,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   const {
     formatCase,
-    formatCaseDeadlines,
     setServiceIndicatorsForCase,
     sortDocketEntries,
   } = applicationContext.getUtilities();
@@ -249,7 +248,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
   let docketRecordSort;
   const caseDetail = get(state.caseDetail);
 
-  const caseDeadlines = get(state.caseDeadlines);
   const docketNumber = get(state.caseDetail.docketNumber);
   if (docketNumber) {
     docketRecordSort = get(
@@ -374,6 +372,5 @@ export const formattedCaseDetail = (get, applicationContext) => {
   });
 
   result.docketRecordSort = docketRecordSort;
-  result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;
 };
