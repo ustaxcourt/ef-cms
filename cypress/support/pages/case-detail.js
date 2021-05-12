@@ -14,15 +14,44 @@ exports.getCaptionTextArea = () => {
   return cy.get('textarea.caption');
 };
 
-exports.getSaveButton = () => {
-  return cy.contains('button', 'Save');
+exports.getButton = buttonText => {
+  return cy.contains('button', buttonText);
 };
 
 exports.getCaseTitleContaining = text => {
   return cy.contains('p#case-title', text);
 };
 
+exports.getSignatureWarningContaining = text => {
+  return cy.contains('span#signature-warning', text);
+};
+
 exports.getCaseDetailTab = tabName => {
   // tabName can be: docket-record, tracked-items, drafts, correspondence, case-information, case-messages, notes
   return cy.get(`button#tab-${tabName}`);
+};
+
+exports.getActionMenuSubMenuButton = buttonName => {
+  return cy.get(`li#menu-button-${buttonName}`);
+};
+
+exports.selectOrderTypeOption = index => {
+  const eventCodeSelect = 'select[name=eventCode]';
+
+  return cy
+    .get(`${eventCodeSelect} > option`)
+    .eq(index)
+    .then(option => cy.get(`${eventCodeSelect}`).select(option.val()));
+};
+
+exports.getApplySignatureButton = () => {
+  return cy.contains('a', 'Apply Signature');
+};
+
+exports.moveSignatureToBottomOfPdf = () => {
+  return cy.get('#signature').trigger('mousemove', 'bottom');
+};
+
+exports.getSnapshot = area => {
+  cy.get(area).matchImageSnapshot(area);
 };
