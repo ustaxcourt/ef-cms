@@ -22,6 +22,7 @@ describe('Sign order', function () {
     getApplySignatureButton().click();
     // FIXME: attempt to sign at the bottom
     moveSignatureToBottomOfPdf();
+    cy.wait(2000);
     getSnapshot('.sign-pdf-interface');
   });
 
