@@ -1,5 +1,5 @@
 import { contactSecondaryFromState } from '../helpers';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -30,14 +30,11 @@ export const petitionerEditsCaseSecondaryContactAddress = test => {
     expect(contactSecondary.address2).toEqual('Grand View Apartments');
     expect(contactSecondary.address3).toEqual('Apt. 104');
 
-    const caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    const helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
-    const noticeDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const noticeDocument = helper.formattedDocketEntriesOnDocketRecord.find(
       entry =>
         entry.descriptionDisplay ===
         'Notice of Change of Address for Mona Schultz',

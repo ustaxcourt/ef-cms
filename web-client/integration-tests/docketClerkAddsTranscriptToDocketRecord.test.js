@@ -2,13 +2,13 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const formattedDocketEntries = withAppContextDecorator(
+  formattedDocketEntriesComputed,
 );
 
 const test = setupTest();
@@ -65,12 +65,13 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    const formattedCase = runCompute(formattedCaseDetail, {
+    const helper = runCompute(formattedDocketEntries, {
       state: test.getState(),
     });
-    const transcriptDocuments = formattedCase.formattedDocketEntries.filter(
-      document => document.eventCode === TRANSCRIPT_EVENT_CODE,
-    );
+    const transcriptDocuments =
+      helper.formattedDocketEntriesOnDocketRecord.filter(
+        document => document.eventCode === TRANSCRIPT_EVENT_CODE,
+      );
     // first transcript should be available to the user
     expect(transcriptDocuments[0].showLinkToDocument).toEqual(true);
     expect(transcriptDocuments[0].isUnservable).toEqual(true);
@@ -97,7 +98,7 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
       }),
     ).rejects.toThrow('Unauthorized to view document at this time.');
 
-    const transDocketRecord = formattedCase.docketEntries.find(
+    const transDocketRecord = helper.formattedDocketEntriesOnDocketRecord.find(
       record => record.eventCode === TRANSCRIPT_EVENT_CODE,
     );
     expect(transDocketRecord.index).toBeTruthy();

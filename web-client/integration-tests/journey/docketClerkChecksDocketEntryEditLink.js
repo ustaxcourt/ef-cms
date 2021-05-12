@@ -1,4 +1,4 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -8,20 +8,16 @@ export const docketClerkChecksDocketEntryEditLink = (test, data = {}) => {
       docketNumber: test.docketNumber,
     });
 
-    const caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    const helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
-    const lastIndex =
-      caseDetailFormatted.formattedDocketEntriesOnDocketRecord.length - 1;
+    const lastIndex = helper.formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
     data.value = !!data.value;
 
     expect(
-      caseDetailFormatted.formattedDocketEntriesOnDocketRecord[data.index]
+      helper.formattedDocketEntriesOnDocketRecord[data.index]
         .showEditDocketRecordEntry,
     ).toEqual(data.value);
   });

@@ -1,8 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import {
-  formattedCaseDetail,
-  formattedDocketEntries,
-} from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -45,9 +43,10 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
       expect.arrayContaining([expect.objectContaining({ eventCode: 'P' })]),
     );
 
-    const rqtDocument = docketEntriesFormatted.formattedDocketEntriesOnDocketRecord.find(
-      entry => entry.eventCode === 'RQT',
-    );
+    const rqtDocument =
+      docketEntriesFormatted.formattedDocketEntriesOnDocketRecord.find(
+        entry => entry.eventCode === 'RQT',
+      );
     expect(rqtDocument).toBeTruthy();
 
     expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');

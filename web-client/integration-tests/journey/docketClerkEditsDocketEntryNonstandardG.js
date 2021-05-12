@@ -1,5 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -7,23 +7,19 @@ const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryNonstandardG = test => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard G scenario', async () => {
-    let caseDetailFormatted;
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    let helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
-    const { docketEntryId } = caseDetailFormatted.formattedDocketEntries[0];
+    const { docketEntryId } = helper.formattedDocketEntriesOnDocketRecord[0];
     expect(docketEntryId).toBeDefined();
 
     const docketEntriesBefore =
-      caseDetailFormatted.formattedDocketEntries.length;
+      helper.formattedDocketEntriesOnDocketRecord.length;
 
     await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
@@ -57,24 +53,21 @@ export const docketClerkEditsDocketEntryNonstandardG = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
     const docketEntriesAfter =
-      caseDetailFormatted.formattedDocketEntries.length;
+      helper.formattedDocketEntriesOnDocketRecord.length;
 
     expect(docketEntriesBefore).toEqual(docketEntriesAfter);
 
-    const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
+    const updatedDocketEntry = helper.formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
       descriptionDisplay: 'First Request for Admissions some additional info',
     });
 
-    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const updatedDocument = helper.formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({

@@ -1,22 +1,17 @@
 import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
   return it('Docket Clerk serves the order on 3 parties with paper service', async () => {
-    let caseDetailFormatted;
-
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    const helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const orderDocument = helper.formattedDraftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -31,16 +26,16 @@ export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
 
     await test.runSequence('openConfirmInitiateServiceModalSequence');
 
-    const helper = runCompute(
+    const modalHelper = runCompute(
       withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
         state: test.getState(),
       },
     );
 
-    expect(helper.showPaperAlert).toEqual(true);
+    expect(modalHelper.showPaperAlert).toEqual(true);
 
-    expect(helper.contactsNeedingPaperService.length).toEqual(2);
+    expect(modalHelper.contactsNeedingPaperService.length).toEqual(2);
 
     await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
   });

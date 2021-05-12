@@ -1,6 +1,6 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -11,18 +11,13 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
   const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
 
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type H`, async () => {
-    let caseDetailFormatted;
-
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    let helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const orderDocument = helper.formattedDraftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -105,17 +100,13 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
-    const updatedOrderDocument =
-      caseDetailFormatted.formattedDocketEntries.find(
-        doc => doc.docketEntryId === docketEntryId,
-      );
+    const updatedOrderDocument = helper.formattedDraftDocuments.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
 
     expect(updatedOrderDocument).toMatchObject({
       date: '2018-01-01T05:00:00.000Z',
