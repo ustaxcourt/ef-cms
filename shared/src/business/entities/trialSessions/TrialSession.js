@@ -225,9 +225,10 @@ joiValidationDecorator(
             then: joi.required(),
           },
         ),
-        docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
-          'Docket number of the case.',
-        ),
+        docketNumber:
+          JoiValidationConstants.DOCKET_NUMBER.required().description(
+            'Docket number of the case.',
+          ),
         isManuallyAdded: joi.boolean().optional(),
         removedFromTrial: joi.boolean().optional(),
         removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(

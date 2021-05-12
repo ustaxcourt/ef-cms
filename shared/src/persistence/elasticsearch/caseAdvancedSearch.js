@@ -13,11 +13,8 @@ const { search } = require('./searchClient');
  * @returns {object} the case data
  */
 exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
-  const {
-    commonQuery,
-    exactMatchesQuery,
-    nonExactMatchesQuery,
-  } = aggregateCommonQueryParams({ applicationContext, ...searchTerms });
+  const { commonQuery, exactMatchesQuery, nonExactMatchesQuery } =
+    aggregateCommonQueryParams({ applicationContext, ...searchTerms });
 
   const source = [
     'caseCaption',

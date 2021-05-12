@@ -6,8 +6,8 @@ const { ContactFactory } = require('./ContactFactory');
 /**
  * returns the constructor used for creating the PartnershipAsTaxMattersPartnerPrimaryContact entity
  */
-exports.getPartnershipAsTaxMattersPartnerPrimaryContact = ContactFactory.createContactFactory(
-  {
+exports.getPartnershipAsTaxMattersPartnerPrimaryContact =
+  ContactFactory.createContactFactory({
     additionalErrorMappings: {
       secondaryName: 'Enter Tax Matters Partner name',
     },
@@ -15,5 +15,4 @@ exports.getPartnershipAsTaxMattersPartnerPrimaryContact = ContactFactory.createC
       secondaryName: JoiValidationConstants.STRING.max(500).required(),
     },
     contactName: 'PartnershipAsTaxMattersPartnerPrimaryContact',
-  },
-);
+  });

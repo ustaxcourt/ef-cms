@@ -18,10 +18,8 @@ describe('createCaseAction', () => {
 
   const { US_STATES } = applicationContext.getConstants();
 
-  const {
-    addCoversheetInteractor,
-    filePetitionInteractor,
-  } = applicationContext.getUseCases();
+  const { addCoversheetInteractor, filePetitionInteractor } =
+    applicationContext.getUseCases();
 
   applicationContext.getCurrentUser.mockReturnValue({
     email: 'petitioner1@example.com',

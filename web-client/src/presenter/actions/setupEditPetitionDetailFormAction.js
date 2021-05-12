@@ -36,14 +36,11 @@ export const setupEditPetitionDetailFormAction = ({
     store.set(state.form.paymentDateWaivedMonth, paymentDateWaivedMonth);
     store.set(state.form.paymentDateWaivedDay, paymentDateWaivedDay);
   } else if (caseDetail.petitionPaymentStatus === paymentStatus.PAID) {
-    const [
-      paymentDateYear,
-      paymentDateMonth,
-      paymentDateDay,
-    ] = applicationContext
-      .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentDate, 'YYYY-MM-DD')
-      .split('-');
+    const [paymentDateYear, paymentDateMonth, paymentDateDay] =
+      applicationContext
+        .getUtilities()
+        .formatDateString(caseDetail.petitionPaymentDate, 'YYYY-MM-DD')
+        .split('-');
 
     store.set(state.form.paymentDateYear, paymentDateYear);
     store.set(state.form.paymentDateMonth, paymentDateMonth);
@@ -56,11 +53,7 @@ export const setupEditPetitionDetailFormAction = ({
   }
 
   if (caseDetail.irsNoticeDate) {
-    const [
-      irsYear,
-      irsMonth,
-      irsDay,
-    ] = applicationContext
+    const [irsYear, irsMonth, irsDay] = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.irsNoticeDate, 'YYYY-MM-DD')
       .split('-');
