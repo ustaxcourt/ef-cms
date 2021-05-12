@@ -42,10 +42,8 @@ export const mockPetitioners = [
 
 describe('formattedDocketEntries', () => {
   let globalUser;
-  const {
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { DOCUMENT_PROCESSING_STATUS_OPTIONS, USER_ROLES } =
+    applicationContext.getConstants();
 
   const formattedDocketEntries = withAppContextDecorator(
     formattedDocketEntriesComputed,
@@ -105,9 +103,9 @@ describe('formattedDocketEntries', () => {
       },
     });
 
-    expect(result.formattedDocketEntries[0].createdAtFormatted).toEqual(
-      '02/28/19',
-    );
+    expect(
+      result.formattedDocketEntriesOnDocketRecord[0].createdAtFormatted,
+    ).toEqual('02/28/19');
   });
 
   it('maps docket record documents', () => {
@@ -122,7 +120,9 @@ describe('formattedDocketEntries', () => {
         validationErrors: {},
       },
     });
-    expect(result.formattedDocketEntries[0].docketEntryId).toEqual('123');
+    expect(
+      result.formattedDocketEntriesOnDocketRecord[0].docketEntryId,
+    ).toEqual('123');
   });
 
   it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
@@ -139,7 +139,7 @@ describe('formattedDocketEntries', () => {
       },
     });
 
-    expect(result.formattedDocketEntries).toMatchObject([
+    expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         editDocketEntryMetaLink: `/case-detail/${MOCK_CASE.docketNumber}/docket-entry/${simpleDocketEntries[0].index}/edit-meta`,
       },
@@ -156,6 +156,7 @@ describe('formattedDocketEntries', () => {
           documentType: 'Motion for Leave to File Administrative Record',
           eventCode: 'M115',
           filingDate: '2020-07-08T16:33:41.180Z',
+          isOnDocketRecord: true,
           lodged: true,
         },
         {
@@ -164,6 +165,7 @@ describe('formattedDocketEntries', () => {
           documentType: 'Motion for Leave to File Administrative Record',
           eventCode: 'M115',
           filingDate: '2020-07-08T16:33:41.180Z',
+          isOnDocketRecord: true,
           lodged: false,
         },
       ],
@@ -177,10 +179,10 @@ describe('formattedDocketEntries', () => {
       },
     });
 
-    const lodgedDocument = result.formattedDocketEntries.find(
+    const lodgedDocument = result.formattedDocketEntriesOnDocketRecord.find(
       d => d.docketEntryId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
     );
-    const unlodgedDocument = result.formattedDocketEntries.find(
+    const unlodgedDocument = result.formattedDocketEntriesOnDocketRecord.find(
       d => d.docketEntryId === '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
     );
 
@@ -242,16 +244,16 @@ describe('formattedDocketEntries', () => {
           validationErrors: {},
         },
       });
-      expect(result.formattedDocketEntries[0]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         documentType: 'Petition',
       });
-      expect(result.formattedDocketEntries[1]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[1]).toMatchObject({
         documentTitle: 'Request for Place of Trial',
       });
-      expect(result.formattedDocketEntries[2]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[2]).toMatchObject({
         documentType: 'Other',
       });
-      expect(result.formattedDocketEntries[3]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[3]).toMatchObject({
         documentType: 'Ownership Disclosure Statement',
       });
     });
@@ -268,16 +270,16 @@ describe('formattedDocketEntries', () => {
           validationErrors: {},
         },
       });
-      expect(result.formattedDocketEntries[3]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[3]).toMatchObject({
         documentTitle: 'Petition',
       });
-      expect(result.formattedDocketEntries[2]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[2]).toMatchObject({
         documentTitle: 'Request for Place of Trial',
       });
-      expect(result.formattedDocketEntries[1]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[1]).toMatchObject({
         documentTitle: 'Other',
       });
-      expect(result.formattedDocketEntries[0]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         documentTitle: 'Ownership Disclosure Statement',
       });
     });
@@ -294,16 +296,16 @@ describe('formattedDocketEntries', () => {
           validationErrors: {},
         },
       });
-      expect(result.formattedDocketEntries[0]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         documentTitle: 'Petition',
       });
-      expect(result.formattedDocketEntries[1]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[1]).toMatchObject({
         documentTitle: 'Request for Place of Trial',
       });
-      expect(result.formattedDocketEntries[3]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[3]).toMatchObject({
         documentTitle: 'Ownership Disclosure Statement',
       });
-      expect(result.formattedDocketEntries[2]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[2]).toMatchObject({
         documentTitle: 'Other',
       });
     });
@@ -320,16 +322,16 @@ describe('formattedDocketEntries', () => {
           validationErrors: {},
         },
       });
-      expect(result.formattedDocketEntries[0]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         documentTitle: 'Ownership Disclosure Statement',
       });
-      expect(result.formattedDocketEntries[1]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[1]).toMatchObject({
         documentTitle: 'Other',
       });
-      expect(result.formattedDocketEntries[2]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[2]).toMatchObject({
         documentTitle: 'Request for Place of Trial',
       });
-      expect(result.formattedDocketEntries[3]).toMatchObject({
+      expect(result.formattedDocketEntriesOnDocketRecord[3]).toMatchObject({
         documentTitle: 'Petition',
       });
     });
@@ -475,16 +477,19 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(result.formattedDocketEntries[0].isStricken).toEqual(true);
+      expect(result.formattedDocketEntriesOnDocketRecord[0].isStricken).toEqual(
+        true,
+      );
       expect(
-        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+        result.formattedDocketEntriesOnDocketRecord[0]
+          .showDocumentDescriptionWithoutLink,
       ).toEqual(true);
-      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
-        false,
-      );
-      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
-        false,
-      );
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toEqual(false);
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
+      ).toEqual(false);
     });
 
     it('should not show the link to an associated external user when the document has isLegacySealed true', () => {
@@ -510,16 +515,19 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(result.formattedDocketEntries[0].isLegacySealed).toBeTruthy();
       expect(
-        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+        result.formattedDocketEntriesOnDocketRecord[0].isLegacySealed,
+      ).toBeTruthy();
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0]
+          .showDocumentDescriptionWithoutLink,
       ).toEqual(true);
-      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
-        false,
-      );
-      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
-        false,
-      );
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toEqual(false);
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
+      ).toEqual(false);
     });
 
     it('should show the link to an associated external user when the document has isLegacyServed true and servedAt undefined', () => {
@@ -544,14 +552,19 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(result.formattedDocketEntries[0].isLegacyServed).toBeTruthy();
       expect(
-        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+        result.formattedDocketEntriesOnDocketRecord[0].isLegacyServed,
+      ).toBeTruthy();
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0]
+          .showDocumentDescriptionWithoutLink,
       ).toEqual(false);
-      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(true);
-      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
-        false,
-      );
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toEqual(true);
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
+      ).toEqual(false);
     });
 
     it('should NOT show the link to an associated external user when the document has isLegacyServed undefined and servedAt undefined', () => {
@@ -576,14 +589,15 @@ describe('formattedDocketEntries', () => {
       });
 
       expect(
-        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
+        result.formattedDocketEntriesOnDocketRecord[0]
+          .showDocumentDescriptionWithoutLink,
       ).toEqual(true);
-      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
-        false,
-      );
-      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
-        false,
-      );
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toEqual(false);
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
+      ).toEqual(false);
     });
 
     it('should show the link to an internal user for a document with a stricken docket record', () => {
@@ -595,16 +609,19 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(result.formattedDocketEntries[0].isStricken).toEqual(true);
-      expect(
-        result.formattedDocketEntries[0].showDocumentDescriptionWithoutLink,
-      ).toEqual(false);
-      expect(result.formattedDocketEntries[0].showLinkToDocument).toEqual(
-        false,
-      );
-      expect(result.formattedDocketEntries[0].showDocumentViewerLink).toEqual(
+      expect(result.formattedDocketEntriesOnDocketRecord[0].isStricken).toEqual(
         true,
       );
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0]
+          .showDocumentDescriptionWithoutLink,
+      ).toEqual(false);
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toEqual(false);
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
+      ).toEqual(true);
     });
   });
 
@@ -821,10 +838,12 @@ describe('formattedDocketEntries', () => {
       docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-18',
       documentTitle: 'Petition',
-      documentType: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
-        .petition.documentType,
-      eventCode: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
-        .petition.eventCode,
+      documentType:
+        applicationContext.getConstants().INITIAL_DOCUMENT_TYPES.petition
+          .documentType,
+      eventCode:
+        applicationContext.getConstants().INITIAL_DOCUMENT_TYPES.petition
+          .eventCode,
       filedBy: 'Test Petitioner',
       filingDate: '2018-03-01T00:01:00.000Z',
       index: 1,
