@@ -139,9 +139,8 @@ function DocketEntryFactory(rawProps) {
   });
 
   let schemaOptionalItems = {
-    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
-      'now',
-    ).required(),
+    certificateOfServiceDate:
+      JoiValidationConstants.ISO_DATE.max('now').required(),
     objections: JoiValidationConstants.STRING.required(),
     partyIrsPractitioner: joi.boolean().required(),
     partyPrimary: joi.boolean().invalid(false).required(),

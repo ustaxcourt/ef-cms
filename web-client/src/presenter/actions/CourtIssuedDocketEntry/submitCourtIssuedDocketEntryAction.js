@@ -16,9 +16,8 @@ export const submitCourtIssuedDocketEntryAction = async ({
   const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
-  const {
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-  } = applicationContext.getConstants();
+  const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =
+    applicationContext.getConstants();
 
   const documentMeta = {
     ...form,

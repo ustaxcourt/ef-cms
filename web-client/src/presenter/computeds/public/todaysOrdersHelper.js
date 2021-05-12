@@ -1,10 +1,8 @@
 import { state } from 'cerebral';
 
 export const todaysOrdersHelper = (get, applicationContext) => {
-  const {
-    TODAYS_ORDERS_SORT_DEFAULT,
-    TODAYS_ORDERS_SORTS,
-  } = applicationContext.getConstants();
+  const { TODAYS_ORDERS_SORT_DEFAULT, TODAYS_ORDERS_SORTS } =
+    applicationContext.getConstants();
 
   const sortOptions = [
     { label: 'newest', value: TODAYS_ORDERS_SORTS.FILING_DATE_DESC }, // equal to TODAYS_ORDERS_SORT_DEFAULT
