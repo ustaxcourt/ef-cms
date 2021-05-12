@@ -90,8 +90,8 @@ exports.saveCaseDetailInternalEditInteractor = async (
     const caseEntityFromCaseRecord = new Case(caseRecord, {
       applicationContext,
     });
-    const primaryContactId = caseEntityFromCaseRecord.getContactPrimary()
-      .contactId;
+    const primaryContactId =
+      caseEntityFromCaseRecord.getContactPrimary().contactId;
 
     caseEntityWithFormEdits.updatePetitioner({
       ...caseToUpdate.contactPrimary,
@@ -101,8 +101,8 @@ exports.saveCaseDetailInternalEditInteractor = async (
   }
 
   if (!isEmpty(caseToUpdate.contactSecondary)) {
-    const secondaryContactId = caseEntityWithFormEdits.getContactSecondary()
-      ?.contactId;
+    const secondaryContactId =
+      caseEntityWithFormEdits.getContactSecondary()?.contactId;
 
     caseEntityWithFormEdits.updatePetitioner({
       ...caseToUpdate.contactSecondary,

@@ -4,10 +4,8 @@ import { formattedDocketEntries } from '../../src/presenter/computeds/formattedD
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const {
-  DOCKET_NUMBER_SUFFIXES,
-  INITIAL_DOCUMENT_TYPES,
-} = applicationContext.getConstants();
+const { DOCKET_NUMBER_SUFFIXES, INITIAL_DOCUMENT_TYPES } =
+  applicationContext.getConstants();
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
   test,
@@ -73,9 +71,10 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       ]),
     );
 
-    const statement = docketEntriesFormatted.formattedDocketEntriesOnDocketRecord.find(
-      entry => entry.documentType === 'Statement',
-    );
+    const statement =
+      docketEntriesFormatted.formattedDocketEntriesOnDocketRecord.find(
+        entry => entry.documentType === 'Statement',
+      );
 
     expect(statement.showLinkToDocument).toBeTruthy();
 

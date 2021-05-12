@@ -56,16 +56,16 @@ export const completeDocumentSigningAction = async ({
         onUploadProgress: () => {},
       });
 
-    ({
-      signedDocketEntryId: docketEntryId,
-    } = await applicationContext.getUseCases().saveSignedDocumentInteractor({
-      applicationContext,
-      docketNumber,
-      nameForSigning,
-      originalDocketEntryId,
-      parentMessageId,
-      signedDocketEntryId: signedDocumentFromUploadId,
-    }));
+    ({ signedDocketEntryId: docketEntryId } = await applicationContext
+      .getUseCases()
+      .saveSignedDocumentInteractor({
+        applicationContext,
+        docketNumber,
+        nameForSigning,
+        originalDocketEntryId,
+        parentMessageId,
+        signedDocketEntryId: signedDocumentFromUploadId,
+      }));
   }
 
   let redirectUrl;

@@ -2,7 +2,6 @@ import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocke
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
-import { addressDisplayHelper } from './computeds/addressDisplayHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
@@ -101,6 +100,7 @@ import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
+import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
@@ -111,7 +111,6 @@ const helpers = {
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addToTrialSessionModalHelper,
-  addressDisplayHelper,
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
@@ -207,6 +206,7 @@ const helpers = {
   userContactEditHelper,
   userContactEditProgressHelper,
   viewAllDocumentsHelper,
+  viewCounselHelper,
   workQueueHelper,
   workQueueSectionHelper,
 };

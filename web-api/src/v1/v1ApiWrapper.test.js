@@ -1,11 +1,13 @@
 const { v1ApiWrapper } = require('./v1ApiWrapper');
 
 describe('v1ApiWrapper', () => {
-  const throwWithStatus = (statusCode, message = 'Test error') => () => {
-    const err = new Error(message);
-    err.statusCode = statusCode;
-    throw err;
-  };
+  const throwWithStatus =
+    (statusCode, message = 'Test error') =>
+    () => {
+      const err = new Error(message);
+      err.statusCode = statusCode;
+      throw err;
+    };
 
   test('errors thrown during execution are 500s and serialized as the expected v1 error object', async () => {
     try {

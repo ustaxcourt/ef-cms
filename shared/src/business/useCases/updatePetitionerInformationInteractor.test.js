@@ -104,6 +104,7 @@ describe('updatePetitionerInformationInteractor', () => {
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
+      privatePractitioners: [],
       status: CASE_STATUS_TYPES.generalDocket,
     };
 
@@ -120,6 +121,60 @@ describe('updatePetitionerInformationInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for editing petition details');
+  });
+
+  it('should throw an error when the user is a privatePractitioner not associated with the case', async () => {
+    mockUser = {
+      ...mockUser,
+      role: ROLES.privatePractitioner,
+      userId: 'a003e912-7b2f-4d2f-bf00-b99ec0d29de1',
+    };
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          contactId: SECONDARY_CONTACT_ID,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+        },
+      }),
+    ).rejects.toThrow('Unauthorized for editing petition details');
+  });
+
+  it('should throw an error when the user is a petitioner attempting to modify another petitioner', async () => {
+    mockUser = {
+      ...mockUser,
+      role: ROLES.petitioner,
+      userId: 'a003e912-7b2f-4d2f-bf00-b99ec0d29de1',
+    };
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          contactId: SECONDARY_CONTACT_ID,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+        },
+      }),
+    ).rejects.toThrow('Unauthorized for editing petition details');
+  });
+
+  it('should NOT throw an error when the user is a petitioner its own contact information', async () => {
+    mockUser = {
+      ...mockUser,
+      role: ROLES.petitioner,
+      userId: SECONDARY_CONTACT_ID,
+    };
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          contactId: SECONDARY_CONTACT_ID,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+        },
+      }),
+    ).rejects.not.toThrow('Unauthorized for editing petition details');
   });
 
   it('should throw an error when the petitioner to update can not be found on the case', async () => {
@@ -245,9 +300,8 @@ describe('updatePetitionerInformationInteractor', () => {
       },
     });
 
-    const {
-      caseToUpdate,
-    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
     expect(getContactPrimary(caseToUpdate).address2).toBeUndefined();
   });
 
@@ -270,9 +324,8 @@ describe('updatePetitionerInformationInteractor', () => {
       },
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-      d => d.eventCode === 'NCA',
-    );
+    const noticeOfChangeDocketEntryWithWorkItem =
+      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
     expect(noticeOfChangeDocketEntryWithWorkItem.filedBy).toBeUndefined();
   });
@@ -364,8 +417,9 @@ describe('updatePetitionerInformationInteractor', () => {
       },
     });
 
-    const updatedPetitioners = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.petitioners;
+    const updatedPetitioners =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.petitioners;
 
     const updatedContactSecondary = updatedPetitioners.find(
       p => p.contactType === CONTACT_TYPES.secondary,
@@ -520,9 +574,8 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -558,9 +611,8 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -593,9 +645,8 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
       expect(
         applicationContext.getPersistenceGateway()
           .saveWorkItemAndAddToSectionInbox,
@@ -627,9 +678,8 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -663,9 +713,8 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -699,9 +748,8 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -738,9 +786,8 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -786,9 +833,8 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway()

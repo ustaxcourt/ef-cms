@@ -12,7 +12,9 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 ## Infrastructure as Code Libraries
 
 `Terraform`: check for updates on the Terraform site. The Terraform version can be changed with a global find/replace.
+  * If there is a new version of Terraform, update all version references in the project and then deploy from your machine to an experimental environment to verify everything is working. Once verification is complete, you will need to rebuild the docker images that use Terraform and push them to ECS.
 
 `Docker`: Update docker base image version if applicable.
 
 ### After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
+  * If terraform needs to be updated, deploy locally to an exp environment first. 

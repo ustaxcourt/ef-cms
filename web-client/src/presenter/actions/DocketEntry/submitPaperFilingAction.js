@@ -63,25 +63,23 @@ export const submitPaperFilingAction = async ({
   let caseDetail, paperServicePdfUrl;
 
   if (isEditingDocketEntry) {
-    ({
-      caseDetail,
-      paperServicePdfUrl,
-    } = await applicationContext.getUseCases().editPaperFilingInteractor({
-      applicationContext,
-      documentMetadata,
-      isSavingForLater,
-      primaryDocumentFileId: docketEntryId,
-    }));
+    ({ caseDetail, paperServicePdfUrl } = await applicationContext
+      .getUseCases()
+      .editPaperFilingInteractor({
+        applicationContext,
+        documentMetadata,
+        isSavingForLater,
+        primaryDocumentFileId: docketEntryId,
+      }));
   } else {
-    ({
-      caseDetail,
-      paperServicePdfUrl,
-    } = await applicationContext.getUseCases().addPaperFilingInteractor({
-      applicationContext,
-      documentMetadata,
-      isSavingForLater,
-      primaryDocumentFileId: docketEntryId,
-    }));
+    ({ caseDetail, paperServicePdfUrl } = await applicationContext
+      .getUseCases()
+      .addPaperFilingInteractor({
+        applicationContext,
+        documentMetadata,
+        isSavingForLater,
+        primaryDocumentFileId: docketEntryId,
+      }));
   }
 
   if (generateCoversheet) {

@@ -1115,11 +1115,6 @@ describe('getFormattedCaseDetail', () => {
     it('should call formatCase and add additional details on the given case', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
-        caseDeadlines: [
-          {
-            deadlineDate: getDateISO(),
-          },
-        ],
         caseDetail: { ...mockCaseDetailBase },
         docketRecordSort: 'byDate',
       });
@@ -1127,7 +1122,6 @@ describe('getFormattedCaseDetail', () => {
       expect(result).toHaveProperty('createdAtFormatted');
       expect(result).toHaveProperty('formattedDocketEntries');
       expect(result).toHaveProperty('docketRecordSort');
-      expect(result).toHaveProperty('caseDeadlines');
     });
 
     it('should format draft documents', () => {

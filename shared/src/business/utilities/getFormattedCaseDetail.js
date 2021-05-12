@@ -157,13 +157,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
       .formatDateString(formattedEntry.createdAt, 'MMDDYY');
   }
 
-  formattedEntry.isAvailableToUser = documentMeetsAgeRequirements(
-    formattedEntry,
-  );
+  formattedEntry.isAvailableToUser =
+    documentMeetsAgeRequirements(formattedEntry);
 
-  formattedEntry.filingsAndProceedings = getFilingsAndProceedings(
-    formattedEntry,
-  );
+  formattedEntry.filingsAndProceedings =
+    getFilingsAndProceedings(formattedEntry);
 
   if (!formattedEntry.descriptionDisplay) {
     formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
@@ -420,9 +418,8 @@ const formatCase = (applicationContext, caseDetail) => {
   }
 
   if (result.privatePractitioners) {
-    result.privatePractitioners = result.privatePractitioners.map(
-      formatCounsel,
-    );
+    result.privatePractitioners =
+      result.privatePractitioners.map(formatCounsel);
   }
 
   result.createdAtFormatted = applicationContext

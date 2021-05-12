@@ -104,9 +104,8 @@ const batchDownloadTrialSessionInteractor = async (
           }
         }
 
-        const filename = exports.generateValidDocketEntryFilename(
-          aDocketRecord,
-        );
+        const filename =
+          exports.generateValidDocketEntryFilename(aDocketRecord);
         const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
         s3Ids.push(myDoc.docketEntryId);
         fileNames.push(pdfTitle);
@@ -228,13 +227,13 @@ const batchDownloadTrialSessionInteractor = async (
     zipName,
   });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key: zipName,
-    useTempBucket: true,
-  });
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: zipName,
+      useTempBucket: true,
+    });
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
