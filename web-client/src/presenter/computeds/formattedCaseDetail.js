@@ -237,11 +237,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
 
-  const {
-    formatCase,
-    setServiceIndicatorsForCase,
-    sortDocketEntries,
-  } = applicationContext.getUtilities();
+  const { formatCase, setServiceIndicatorsForCase, sortDocketEntries } =
+    applicationContext.getUtilities();
 
   let docketRecordSort;
   const caseDetail = get(state.caseDetail);
