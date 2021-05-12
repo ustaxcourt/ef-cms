@@ -224,7 +224,7 @@ describe('caseInformationHelper', () => {
       expect(result.showAddCounsel).toEqual(false);
     });
 
-    it('should be true when the user is an internal user', () => {
+    it('should be true when the user is an internal user with permissions to edit counsel', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(mockDocketClerk),
@@ -236,6 +236,20 @@ describe('caseInformationHelper', () => {
       });
 
       expect(result.showAddCounsel).toEqual(true);
+    });
+
+    it('should be true when the user is an internal user without permissions to edit counsel', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockAdc),
+          caseDetail: {
+            petitioners: [],
+          },
+          form: {},
+        },
+      });
+
+      expect(result.showAddCounsel).toEqual(false);
     });
   });
 
@@ -306,7 +320,7 @@ describe('caseInformationHelper', () => {
     it('should be false when the user is an internal user without permission to edit counsel and there are irsPractitioners on the case', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
-          ...getBaseState(mockDocketClerk),
+          ...getBaseState(mockAdc),
           caseDetail: {
             irsPractitioners: [{ userId: '2' }],
             petitioners: [],
@@ -316,7 +330,7 @@ describe('caseInformationHelper', () => {
         },
       });
 
-      expect(result.showEditIrsPractitioners).toEqual(true);
+      expect(result.showEditIrsPractitioners).toEqual(false);
     });
 
     it('should be false when the user is an internal user and there are no irsPractitioners on the case', () => {
