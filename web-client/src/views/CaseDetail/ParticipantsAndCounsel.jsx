@@ -35,10 +35,9 @@ const ParticipantsAndCounsel = connect(
                     {petitioner.canEditPetitioner && (
                       <Button
                         link
-                        className="width-auto margin-top-1 margin-left-1 padding-0 margin-right-0 float-right"
+                        className="edit-participant width-auto margin-top-1 margin-left-1 padding-0 margin-right-0 float-right"
                         href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
                         icon="edit"
-                        id="edit-participant"
                         overrideMargin={true}
                       >
                         Edit
