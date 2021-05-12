@@ -22,26 +22,9 @@ exports.getCaseTitleContaining = text => {
   return cy.contains('p#case-title', text);
 };
 
-exports.getSignatureWarningContaining = text => {
-  return cy.contains('span#signature-warning', text);
-};
-
 exports.getCaseDetailTab = tabName => {
   // tabName can be: docket-record, tracked-items, drafts, correspondence, case-information, case-messages, notes
   return cy.get(`button#tab-${tabName}`);
-};
-
-exports.getActionMenuSubMenuButton = buttonName => {
-  return cy.get(`li#menu-button-${buttonName}`);
-};
-
-exports.selectOrderTypeOption = index => {
-  const eventCodeSelect = 'select[name=eventCode]';
-
-  return cy
-    .get(`${eventCodeSelect} > option`)
-    .eq(index)
-    .then(option => cy.get(`${eventCodeSelect}`).select(option.val()));
 };
 
 exports.getApplySignatureButton = () => {
@@ -52,6 +35,12 @@ exports.hoverOverSignatureWarning = () => {
   return cy.get('#signature-warning').realHover();
 };
 
-exports.getSnapshot = area => {
-  cy.get(area).matchImageSnapshot(area);
+exports.createOrder = docketNumber => {
+  cy.goToRoute(
+    `/case-detail/${docketNumber}/create-order?documentTitle=Order to Show Cause&documentType=Order to Show Cause&eventCode=OSC`,
+  );
+  cy.url().should('contain', '/create-order');
+  cy.get('.ql-editor').type('A created order!');
+  cy.get('#save-order-button').click();
+  cy.url().should('contain', '/sign');
 };
