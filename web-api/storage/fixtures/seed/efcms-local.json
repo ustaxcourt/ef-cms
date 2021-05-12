@@ -3011,7 +3011,6 @@
     "statistics": []
   },
   {
-    //this is the docket entry
     "isStricken": false,
     "isLegacy": true,
     "documentType": "Petition",
@@ -3031,7 +3030,7 @@
     "processingStatus": "complete",
     "entityName": "DocketEntry",
     "filedBy": "Test Petitioner",
-    "docketEntryId": "c6b81f4d-1e47-423a-8caf-6d2ccfdc3d3859",
+    "docketEntryId": "c6b81f4d-1e47-423a-8caf-6d2fdc3d3859",
     "sk": "docket-entry|c6b81f4d-1e47-423a-8caf-6d2fdc3d3859",
     "pk": "case|999-15",
     "isLegacyServed": true,
