@@ -31,7 +31,10 @@ export const socketProvider = ({ socketRouter }) => {
       try {
         socket = createWebSocketClient(token);
         socket.onmessage = socketRouter(app);
-        socket.onerror = reject;
+        socket.onerror = error => {
+          applicationContext.logger.error('Websocket error detected', error);
+          return reject(error);
+        };
 
         socket.onopen = () => {
           // the socket needs to be open for a short period or it could miss the first message

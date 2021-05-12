@@ -69,6 +69,8 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
+      default:
+        console.info('unroutable socket action', action);
     }
 
     (onMessageCallbackFn || noop)(message);
