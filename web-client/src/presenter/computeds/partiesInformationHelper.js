@@ -11,11 +11,8 @@ const formatCounsel = ({ counsel, screenMetadata }) => {
 };
 
 export const partiesInformationHelper = (get, applicationContext) => {
-  const {
-    CONTACT_TYPES,
-    UNIQUE_OTHER_FILER_TYPE,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { CONTACT_TYPES, UNIQUE_OTHER_FILER_TYPE, USER_ROLES } =
+    applicationContext.getConstants();
 
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
