@@ -104,11 +104,12 @@ module.exports = [
       'click element #tab-parties',
       'wait for #participants-and-counsel to be visible',
       'click element #participants-and-counsel',
-      'wait for #edit-participant to be visible',
-      'click element #edit-participant',
+      'wait for .edit-participant to be visible',
+      'click element .edit-participant',
     ],
     notes:
       'checks a11y of case information tab, parties secondary tab, participants and counsel tertiary tab',
+    only: true,
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/999-15&info=case-information-tab-parties-participants-and-counsel',
   },
