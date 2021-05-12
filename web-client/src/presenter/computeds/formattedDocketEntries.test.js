@@ -1,4 +1,3 @@
-import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from './formattedDocketEntries';
@@ -9,36 +8,14 @@ import { withAppContextDecorator } from '../../withAppContext';
 const getDateISO = () =>
   applicationContext.getUtilities().createISODateString();
 
-export const simpleDocketEntries = [
-  {
-    createdAt: getDateISO(),
-    docketEntryId: '123',
-    documentTitle: 'Petition',
-    filedBy: 'Jessica Frase Marine',
-    filingDate: '2019-02-28T21:14:39.488Z',
-    isOnDocketRecord: true,
-  },
-];
-
-export const mockPetitioners = [
-  {
-    address1: '734 Cowley Parkway',
-    address2: 'Cum aut velit volupt',
-    address3: 'Et sunt veritatis ei',
-    city: 'Et id aut est velit',
-    contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
-    contactType: CONTACT_TYPES.primary,
-    countryType: 'domestic',
-    email: 'petitioner@example.com',
-    isAddressSealed: false,
-    name: 'Mona Schultz',
-    phone: '+1 (884) 358-9729',
-    postalCode: '77546',
-    sealedAndUnavailable: false,
-    serviceIndicator: 'Electronic',
-    state: 'CT',
-  },
-];
+export const mockDocketEntry = {
+  createdAt: getDateISO(),
+  docketEntryId: '123',
+  documentTitle: 'Petition',
+  filedBy: 'Jessica Frase Marine',
+  filingDate: '2019-02-28T21:14:39.488Z',
+  isOnDocketRecord: true,
+};
 
 describe('formattedDocketEntries', () => {
   let globalUser;
@@ -81,7 +58,6 @@ describe('formattedDocketEntries', () => {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
           docketEntries: [],
-          petitioners: mockPetitioners,
         },
       },
     });
@@ -91,15 +67,10 @@ describe('formattedDocketEntries', () => {
   });
 
   it('maps docket record dates', () => {
-    const caseDetail = {
-      ...MOCK_CASE,
-      docketEntries: simpleDocketEntries,
-    };
     const result = runCompute(formattedDocketEntries, {
       state: {
         ...getBaseState(petitionsClerkUser),
-        caseDetail,
-        validationErrors: {},
+        caseDetail: { ...MOCK_CASE, docketEntries: [mockDocketEntry] },
       },
     });
 
@@ -109,15 +80,10 @@ describe('formattedDocketEntries', () => {
   });
 
   it('maps docket record documents', () => {
-    const caseDetail = {
-      ...MOCK_CASE,
-      docketEntries: simpleDocketEntries,
-    };
     const result = runCompute(formattedDocketEntries, {
       state: {
         ...getBaseState(petitionsClerkUser),
-        caseDetail,
-        validationErrors: {},
+        caseDetail: { ...MOCK_CASE, docketEntries: [mockDocketEntry] },
       },
     });
     expect(
@@ -126,56 +92,47 @@ describe('formattedDocketEntries', () => {
   });
 
   it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
-    const caseDetail = {
-      ...MOCK_CASE,
-      docketEntries: simpleDocketEntries,
-    };
-
     const result = runCompute(formattedDocketEntries, {
       state: {
         ...getBaseState(petitionsClerkUser),
-        caseDetail,
-        validationErrors: {},
+        caseDetail: { ...MOCK_CASE, docketEntries: [mockDocketEntry] },
       },
     });
 
     expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
-        editDocketEntryMetaLink: `/case-detail/${MOCK_CASE.docketNumber}/docket-entry/${simpleDocketEntries[0].index}/edit-meta`,
+        editDocketEntryMetaLink: `/case-detail/${MOCK_CASE.docketNumber}/docket-entry/${mockDocketEntry.index}/edit-meta`,
       },
     ]);
   });
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
-    const caseDetail = {
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
-          documentTitle: 'Motion for Leave to File Administrative Record',
-          documentType: 'Motion for Leave to File Administrative Record',
-          eventCode: 'M115',
-          filingDate: '2020-07-08T16:33:41.180Z',
-          isOnDocketRecord: true,
-          lodged: true,
-        },
-        {
-          docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
-          documentTitle: 'Motion for Leave to File Administrative Record',
-          documentType: 'Motion for Leave to File Administrative Record',
-          eventCode: 'M115',
-          filingDate: '2020-07-08T16:33:41.180Z',
-          isOnDocketRecord: true,
-          lodged: false,
-        },
-      ],
-    };
-
     const result = runCompute(formattedDocketEntries, {
       state: {
         ...getBaseState(petitionsClerkUser),
-        caseDetail,
-        validationErrors: {},
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
+              documentTitle: 'Motion for Leave to File Administrative Record',
+              documentType: 'Motion for Leave to File Administrative Record',
+              eventCode: 'M115',
+              filingDate: '2020-07-08T16:33:41.180Z',
+              isOnDocketRecord: true,
+              lodged: true,
+            },
+            {
+              docketEntryId: '6ca934be-aa01-476d-a437-9d50cc5c9e98',
+              documentTitle: 'Motion for Leave to File Administrative Record',
+              documentType: 'Motion for Leave to File Administrative Record',
+              eventCode: 'M115',
+              filingDate: '2020-07-08T16:33:41.180Z',
+              isOnDocketRecord: true,
+              lodged: false,
+            },
+          ],
+        },
       },
     });
 
@@ -183,7 +140,7 @@ describe('formattedDocketEntries', () => {
       d => d.docketEntryId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
     );
     const unlodgedDocument = result.formattedDocketEntriesOnDocketRecord.find(
-      d => d.docketEntryId === '5d96bdfd-dc10-40db-b640-ef10c2591b6b',
+      d => d.docketEntryId === '6ca934be-aa01-476d-a437-9d50cc5c9e98',
     );
 
     expect(lodgedDocument.eventCode).toEqual('MISCL');
@@ -236,12 +193,10 @@ describe('formattedDocketEntries', () => {
     });
 
     it('sorts the docket record in the expected default order (ascending date)', () => {
-      const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
+          caseDetail: sortedCaseDetail,
         },
       });
       expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
@@ -259,15 +214,13 @@ describe('formattedDocketEntries', () => {
     });
 
     it('sorts the docket record by descending date', () => {
-      const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: sortedCaseDetail,
           sessionMetadata: {
-            docketRecordSort: { [caseDetail.docketNumber]: 'byDateDesc' },
+            docketRecordSort: { [sortedCaseDetail.docketNumber]: 'byDateDesc' },
           },
-          validationErrors: {},
         },
       });
       expect(result.formattedDocketEntriesOnDocketRecord[3]).toMatchObject({
@@ -285,15 +238,13 @@ describe('formattedDocketEntries', () => {
     });
 
     it('sorts the docket record by ascending index', () => {
-      const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: sortedCaseDetail,
           sessionMetadata: {
-            docketRecordSort: { [caseDetail.docketNumber]: 'byIndex' },
+            docketRecordSort: { [sortedCaseDetail.docketNumber]: 'byIndex' },
           },
-          validationErrors: {},
         },
       });
       expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
@@ -311,15 +262,15 @@ describe('formattedDocketEntries', () => {
     });
 
     it('sorts the docket record by descending index', () => {
-      const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
+          caseDetail: sortedCaseDetail,
           sessionMetadata: {
-            docketRecordSort: { [caseDetail.docketNumber]: 'byIndexDesc' },
+            docketRecordSort: {
+              [sortedCaseDetail.docketNumber]: 'byIndexDesc',
+            },
           },
-          validationErrors: {},
         },
       });
       expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
@@ -338,57 +289,50 @@ describe('formattedDocketEntries', () => {
   });
 
   describe('draft documents', () => {
-    let caseDetail;
-
-    beforeAll(() => {
-      const docketEntries = [
-        {
-          createdAt: '2019-02-28T21:14:39.488Z',
-          description: 'Petition',
-          docketEntryId: 'Petition',
-          documentType: 'Petition',
-          eventCode: 'P',
-          filedBy: 'Jessica Frase Marine',
-          filingDate: '2019-02-28T21:14:39.488Z',
-          index: 1,
-          isOnDocketRecord: true,
-          showValidationInput: '2019-02-28T21:14:39.488Z',
-          status: 'served',
-        },
-        {
-          archived: false,
-          createdAt: '2019-02-28T21:14:39.488Z',
-          docketEntryId: 'd-1-2-3',
-          documentTitle: 'Order to do something',
-          documentType: 'Order',
-          eventCode: 'O',
-          isDraft: true,
-          isOnDocketRecord: false,
-        },
-        {
-          archived: false,
-          createdAt: '2019-02-28T21:14:39.488Z',
-          docketEntryId: 'd-2-3-4',
-          documentTitle: 'Stipulated Decision',
-          documentType: 'Stipulated Decision',
-          eventCode: 'SDEC',
-          isDraft: true,
-          isOnDocketRecord: false,
-        },
-      ];
-
-      caseDetail = {
-        ...MOCK_CASE,
-        docketEntries,
-      };
-    });
+    const docketEntries = [
+      {
+        createdAt: '2019-02-28T21:14:39.488Z',
+        description: 'Petition',
+        docketEntryId: 'Petition',
+        documentType: 'Petition',
+        eventCode: 'P',
+        filedBy: 'Jessica Frase Marine',
+        filingDate: '2019-02-28T21:14:39.488Z',
+        index: 1,
+        isOnDocketRecord: true,
+        showValidationInput: '2019-02-28T21:14:39.488Z',
+        status: 'served',
+      },
+      {
+        archived: false,
+        createdAt: '2019-02-28T21:14:39.488Z',
+        docketEntryId: 'd-1-2-3',
+        documentTitle: 'Order to do something',
+        documentType: 'Order',
+        eventCode: 'O',
+        isDraft: true,
+        isOnDocketRecord: false,
+      },
+      {
+        archived: false,
+        createdAt: '2019-02-28T21:14:39.488Z',
+        docketEntryId: 'd-2-3-4',
+        documentTitle: 'Stipulated Decision',
+        documentType: 'Stipulated Decision',
+        eventCode: 'SDEC',
+        isDraft: true,
+        isOnDocketRecord: false,
+      },
+    ];
 
     it('formats draft documents', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries,
+          },
         },
       });
 
@@ -429,10 +373,9 @@ describe('formattedDocketEntries', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            ...caseDetail,
-            docketEntries: [caseDetail.docketEntries[0]],
+            ...MOCK_CASE,
+            docketEntries: [docketEntries[0]],
           },
-          validationErrors: {},
         },
       });
 
@@ -441,39 +384,34 @@ describe('formattedDocketEntries', () => {
   });
 
   describe('stricken docket record', () => {
-    let caseDetail;
-
-    beforeAll(() => {
-      caseDetail = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'Motion to Dismiss for Lack of Jurisdiction',
-            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-            eventCode: 'M073',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            isFileAttached: true,
-            isLegacy: true,
-            isOnDocketRecord: true,
-            isStricken: true,
-            numberOfPages: 24,
-            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-          },
-        ],
-      };
-    });
+    const docketEntries = [
+      {
+        attachments: false,
+        certificateOfService: false,
+        createdAt: '2019-06-19T17:29:13.120Z',
+        description: 'Motion to Dismiss for Lack of Jurisdiction',
+        docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+        documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+        documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+        eventCode: 'M073',
+        filingDate: '2019-06-19T17:29:13.120Z',
+        isFileAttached: true,
+        isLegacy: true,
+        isOnDocketRecord: true,
+        isStricken: true,
+        numberOfPages: 24,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      },
+    ];
 
     it('should not show the link to an external user for a document with a stricken docket record', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionerUser),
-          caseDetail,
-          validationErrors: {},
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries,
+          },
         },
       });
 
@@ -499,7 +437,7 @@ describe('formattedDocketEntries', () => {
           caseDetail: {
             docketEntries: [
               {
-                ...caseDetail.docketEntries[0],
+                ...docketEntries[0],
                 isLegacySealed: true,
                 isMinuteEntry: false,
                 isOnDocketRecord: true,
@@ -511,7 +449,6 @@ describe('formattedDocketEntries', () => {
           screenMetadata: {
             isAssociated: true,
           },
-          validationErrors: {},
         },
       });
 
@@ -537,7 +474,7 @@ describe('formattedDocketEntries', () => {
           caseDetail: {
             docketEntries: [
               {
-                ...caseDetail.docketEntries[0],
+                ...docketEntries[0],
                 isLegacyServed: true,
                 isMinuteEntry: false,
                 isOnDocketRecord: true,
@@ -548,7 +485,6 @@ describe('formattedDocketEntries', () => {
           screenMetadata: {
             isAssociated: true,
           },
-          validationErrors: {},
         },
       });
 
@@ -574,7 +510,7 @@ describe('formattedDocketEntries', () => {
           caseDetail: {
             docketEntries: [
               {
-                ...caseDetail.docketEntries[0],
+                ...docketEntries[0],
                 isMinuteEntry: false,
                 isOnDocketRecord: true,
                 isStricken: false,
@@ -584,7 +520,6 @@ describe('formattedDocketEntries', () => {
           screenMetadata: {
             isAssociated: true,
           },
-          validationErrors: {},
         },
       });
 
@@ -604,8 +539,7 @@ describe('formattedDocketEntries', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(docketClerkUser),
-          caseDetail,
-          validationErrors: {},
+          caseDetail: { ...MOCK_CASE, docketEntries },
         },
       });
 
@@ -627,25 +561,11 @@ describe('formattedDocketEntries', () => {
 
   describe('formattedDocketEntriesOnDocketRecord and formattedPendingDocketEntriesOnDocketRecord', () => {
     it('should return formatted docket entries that are on the docket record, and in the pending list', () => {
-      const baseDocketEntry = {
-        createdAt: '2020-09-18T17:38:31.774Z',
-        entityName: 'DocketEntry',
-        filedBy: 'Petr. Mona Schultz',
-        filingDate: '2020-09-18T17:38:31.772Z',
-        isDraft: false,
-        numberOfPages: 11,
-        partyPrimary: true,
-        partySecondary: false,
-        processingStatus: 'complete',
-        receivedAt: '2020-09-18T17:38:31.775Z',
-        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      };
-
       const caseDetail = {
         ...MOCK_CASE,
         docketEntries: [
           {
-            ...baseDocketEntry,
+            ...mockDocketEntry,
             docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
             documentTitle: 'Petition',
             documentType: 'Petition',
@@ -657,7 +577,7 @@ describe('formattedDocketEntries', () => {
             pending: false,
           },
           {
-            ...baseDocketEntry,
+            ...mockDocketEntry,
             docketEntryId: '087eb3f6-b164-40f3-980f-835da7292097',
             documentTitle: 'Request for Place of Trial at Seattle, Washington',
             documentType: 'Request for Place of Trial',
@@ -670,7 +590,7 @@ describe('formattedDocketEntries', () => {
             pending: false,
           },
           {
-            ...baseDocketEntry,
+            ...mockDocketEntry,
             docketEntryId: '2efcd272-da92-4e31-bedc-28cdad2e08b0',
             documentTitle: 'Statement of Taxpayer Identification',
             documentType: 'Statement of Taxpayer Identification',
@@ -682,7 +602,7 @@ describe('formattedDocketEntries', () => {
             pending: false,
           },
           {
-            ...baseDocketEntry,
+            ...mockDocketEntry,
             docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
             documentTitle: 'Proposed Stipulated Decision',
             documentType: 'Proposed Stipulated Decision',
@@ -699,7 +619,7 @@ describe('formattedDocketEntries', () => {
             ],
           },
           {
-            ...baseDocketEntry,
+            ...mockDocketEntry,
             docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
             documentTitle: 'Answer',
             documentType: 'Answer',
@@ -712,7 +632,7 @@ describe('formattedDocketEntries', () => {
             pending: true,
           },
           {
-            ...baseDocketEntry,
+            ...mockDocketEntry,
             docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
             documentTitle: 'Hearing',
             documentType: 'Hearing before',
@@ -770,24 +690,23 @@ describe('formattedDocketEntries', () => {
     });
 
     it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending', async () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_CASE.docketEntries[2],
-            docketEntryId: '999999',
-            isLegacyServed: true,
-            isOnDocketRecord: true,
-            pending: true,
-            servedAt: undefined,
-            servedParties: undefined,
-          },
-        ],
-      };
       const result = runCompute(formattedDocketEntries, {
         state: {
-          caseDetail,
           ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [
+              {
+                ...MOCK_CASE.docketEntries[2],
+                docketEntryId: '999999',
+                isLegacyServed: true,
+                isOnDocketRecord: true,
+                pending: true,
+                servedAt: undefined,
+                servedParties: undefined,
+              },
+            ],
+          },
         },
       });
 
@@ -797,32 +716,31 @@ describe('formattedDocketEntries', () => {
     });
 
     it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', async () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_CASE.docketEntries[2],
-            docketEntryId: '999999',
-            isLegacyServed: false,
-            isOnDocketRecord: true,
-            pending: true,
-            servedAt: '2019-08-25T05:00:00.000Z',
-            servedParties: [
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: [
               {
-                name: 'Bernard Lowe',
-              },
-              {
-                name: 'IRS',
-                role: 'irsSuperuser',
+                ...MOCK_CASE.docketEntries[2],
+                docketEntryId: '999999',
+                isLegacyServed: false,
+                isOnDocketRecord: true,
+                pending: true,
+                servedAt: '2019-08-25T05:00:00.000Z',
+                servedParties: [
+                  {
+                    name: 'Bernard Lowe',
+                  },
+                  {
+                    name: 'IRS',
+                    role: 'irsSuperuser',
+                  },
+                ],
               },
             ],
           },
-        ],
-      };
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          caseDetail,
-          ...getBaseState(petitionsClerkUser),
         },
       });
 
@@ -833,39 +751,20 @@ describe('formattedDocketEntries', () => {
   });
 
   describe('qcNeeded', () => {
-    const mockDocketEntry = {
-      createdAt: '2018-11-21T20:49:28.192Z',
-      docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      docketNumber: '101-18',
-      documentTitle: 'Petition',
-      documentType:
-        applicationContext.getConstants().INITIAL_DOCUMENT_TYPES.petition
-          .documentType,
-      eventCode:
-        applicationContext.getConstants().INITIAL_DOCUMENT_TYPES.petition
-          .eventCode,
-      filedBy: 'Test Petitioner',
-      filingDate: '2018-03-01T00:01:00.000Z',
-      index: 1,
-      isFileAttached: true,
-      isOnDocketRecord: true,
-      processingStatus: 'complete',
-      receivedAt: '2018-03-01T00:01:00.000Z',
-      servedAt: '2020-04-29T15:51:29.168Z',
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      workItem: {
-        completedAt: undefined,
-        isRead: false,
-      },
-    };
-
     it('should set qcNeeded to true when work item is not read', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           caseDetail: {
             ...MOCK_CASE,
-            docketEntries: [mockDocketEntry],
-            docketNumber: '123-45',
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                workItem: {
+                  completedAt: undefined,
+                  isRead: false,
+                },
+              },
+            ],
           },
           ...getBaseState(docketClerkUser),
         },
@@ -879,6 +778,7 @@ describe('formattedDocketEntries', () => {
     it('should set qcNeeded to false when qcWorkItemsUntouched is true and work item is read', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
+          ...getBaseState(docketClerkUser),
           caseDetail: {
             ...MOCK_CASE,
             docketEntries: [
@@ -890,9 +790,7 @@ describe('formattedDocketEntries', () => {
                 },
               },
             ],
-            docketNumber: '123-45',
           },
-          ...getBaseState(docketClerkUser),
         },
       });
 
