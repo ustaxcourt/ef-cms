@@ -109,7 +109,6 @@ module.exports = [
     ],
     notes:
       'checks a11y of case information tab, parties secondary tab, participants and counsel tertiary tab',
-    only: true,
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/999-15&info=case-information-tab-parties-participants-and-counsel',
   },
