@@ -13,13 +13,13 @@ export const forwardMessageAction = async ({ applicationContext, get }) => {
 
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const {
-    parentMessageId,
-  } = await applicationContext.getUseCases().forwardMessageInteractor({
-    applicationContext,
-    docketNumber,
-    ...form,
-  });
+  const { parentMessageId } = await applicationContext
+    .getUseCases()
+    .forwardMessageInteractor({
+      applicationContext,
+      docketNumber,
+      ...form,
+    });
 
   let messageViewerDocumentToDisplay;
   if (form.attachments.length) {

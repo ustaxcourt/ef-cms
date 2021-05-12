@@ -17,10 +17,8 @@ export const validatePetitionerAction = ({
   path,
   store,
 }) => {
-  const {
-    SERVICE_INDICATOR_ERROR,
-    SERVICE_INDICATOR_TYPES,
-  } = applicationContext.getConstants();
+  const { SERVICE_INDICATOR_ERROR, SERVICE_INDICATOR_TYPES } =
+    applicationContext.getConstants();
 
   const { contact } = get(state.form);
   const caseDetail = get(state.caseDetail);

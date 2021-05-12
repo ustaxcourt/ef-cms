@@ -6,7 +6,8 @@ import { state } from 'cerebral';
  * @param {string} page the name of the page to set
  * @returns {Promise} async action
  */
-export const setCurrentPageAction = page =>
+export const setCurrentPageAction =
+  page =>
   /**
    * sets the state.currentPage based on the scoped page
    *
