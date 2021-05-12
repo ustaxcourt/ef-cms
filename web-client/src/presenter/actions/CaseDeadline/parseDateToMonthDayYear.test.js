@@ -10,7 +10,7 @@ describe('parseDateToMonthDayYear', () => {
       .getUtilities()
       .prepareDateFromString.mockReturnValue(undefined);
 
-    const result = await parseDateToMonthDayYear({
+    const result = parseDateToMonthDayYear({
       applicationContext,
       dateString: 'adad;als',
     });

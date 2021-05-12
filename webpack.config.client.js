@@ -1,5 +1,4 @@
 const CopyPlugin = require('copy-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 const webpack = require('webpack');
 
@@ -30,7 +29,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new FaviconsWebpackPlugin('./web-client/src/favicon-32x32.png'),
     new HtmlWebpackPugPlugin(),
     new webpack.ProvidePlugin({
       process: 'process/browser',
@@ -65,6 +63,7 @@ module.exports = {
         { from: 'node_modules/pdfjs-dist/es5/build', to: '.' },
         { from: 'node_modules/react-quill/dist', to: '.' },
         { from: 'node_modules/pdf-lib/dist', to: '.' },
+        { from: 'web-client/src/favicons', to: '.' },
       ],
     }),
   ],

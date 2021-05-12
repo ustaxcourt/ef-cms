@@ -40,6 +40,7 @@ import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCases
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
+import { formattedCaseDeadlines } from './computeds/formattedCaseDeadlines';
 import {
   formattedCaseDetail,
   formattedClosedCases,
@@ -147,6 +148,7 @@ const helpers = {
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingPartiesFormHelper,
+  formattedCaseDeadlines,
   formattedCaseDetail,
   formattedCaseMessages,
   formattedClosedCases,
