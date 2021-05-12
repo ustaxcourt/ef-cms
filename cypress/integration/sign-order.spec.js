@@ -4,9 +4,7 @@ const {
   getApplySignatureButton,
   getButton,
   getCaseDetailTab,
-  // getSignatureWarningContaining,
-  getSnapshot,
-  moveSignatureToBottomOfPdf,
+  hoverOverSignatureWarning,
   navigateTo: navigateToCaseDetail,
   selectOrderTypeOption,
 } = require('../support/pages/case-detail');
@@ -20,13 +18,9 @@ describe('Sign order', function () {
     getButton('Continue').click();
     getCaseDetailTab('drafts').click();
     getApplySignatureButton().click();
-    // FIXME: attempt to sign at the bottom
-    moveSignatureToBottomOfPdf();
-    cy.wait(2000);
-    getSnapshot('.sign-pdf-interface');
   });
 
-  it('should display the signature warning banner', () => {
-    // getSignatureWarningContaining('signature-warning').should('exist');
+  it('should display the signature warning banner on hover', () => {
+    hoverOverSignatureWarning().should('have.css', 'color', 'rgb(0, 0, 0)');
   });
 });
