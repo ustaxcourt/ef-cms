@@ -48,11 +48,8 @@ exports.getApplySignatureButton = () => {
   return cy.contains('a', 'Apply Signature');
 };
 
-exports.moveSignatureToBottomOfPdf = () => {
-  return cy
-    .get('#signature-warning')
-    .realHover()
-    .should('have.css', 'color', 'rgb(255, 0, 0)');
+exports.hoverOverSignatureWarning = () => {
+  return cy.get('#signature-warning').realHover();
 };
 
 exports.getSnapshot = area => {
