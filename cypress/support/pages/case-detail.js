@@ -27,10 +27,6 @@ exports.getCaseDetailTab = tabName => {
   return cy.get(`button#tab-${tabName}`);
 };
 
-exports.getApplySignatureButton = () => {
-  return cy.contains('a', 'Apply Signature');
-};
-
 exports.hoverOverSignatureWarning = () => {
   return cy.get('#signature-warning').realHover();
 };
