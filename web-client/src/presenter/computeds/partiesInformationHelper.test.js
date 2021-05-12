@@ -289,6 +289,44 @@ describe('partiesInformationHelper', () => {
       expect(result.formattedPetitioners[0].formattedEmail).toBe(mockEmail);
     });
 
+    it('should set formattedEmail to the current email for a petitioner that has a verified email AND a pending email', () => {
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [{ ...mockPetitioner, email: mockEmail }],
+            privatePractitioners: [mockPrivatePractitioner],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: { [mockPetitioner.contactId]: 'blah@example.com' },
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].formattedEmail).toEqual(mockEmail);
+    });
+
+    it('should set formattedEmail to undefined for a petitioner that does not have a verified email and has a pending email', () => {
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [{ ...mockPetitioner, email: undefined }],
+            privatePractitioners: [mockPrivatePractitioner],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: { [mockPetitioner.contactId]: mockEmail },
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].formattedEmail).toBeUndefined();
+    });
+
     it('should set formattedEmail to `No email provided` for a petitioner that does not have a verified email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
