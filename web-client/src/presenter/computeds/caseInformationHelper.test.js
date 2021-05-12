@@ -287,7 +287,23 @@ describe('caseInformationHelper', () => {
   });
 
   describe('showEditIrsPractitionersButton', () => {
-    it('should be true when the user is an internal user and there are irsPractitioners on the case', () => {
+    it('should be true when the user is an internal user with permission to edit counsel and there are irsPractitioners on the case', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            irsPractitioners: [{ userId: '2' }],
+            petitioners: [],
+            privatePractitioners: [{ userId: '1' }],
+          },
+          form: {},
+        },
+      });
+
+      expect(result.showEditIrsPractitioners).toEqual(true);
+    });
+
+    it('should be false when the user is an internal user without permission to edit counsel and there are irsPractitioners on the case', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(mockDocketClerk),
