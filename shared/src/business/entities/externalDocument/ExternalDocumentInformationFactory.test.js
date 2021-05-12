@@ -172,7 +172,8 @@ describe('ExternalDocumentInformationFactory', () => {
         expect(
           errors().supportingDocuments[0].certificateOfServiceDate,
         ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
-        baseDoc.supportingDocuments[0].certificateOfServiceDate = createISODateString();
+        baseDoc.supportingDocuments[0].certificateOfServiceDate =
+          createISODateString();
         expect(errors().supportingDocuments).toEqual(undefined);
       });
 
@@ -345,7 +346,8 @@ describe('ExternalDocumentInformationFactory', () => {
             expect(
               errors().secondarySupportingDocuments[0].certificateOfServiceDate,
             ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
-            baseDoc.secondarySupportingDocuments[0].certificateOfServiceDate = createISODateString();
+            baseDoc.secondarySupportingDocuments[0].certificateOfServiceDate =
+              createISODateString();
             expect(errors().secondarySupportingDocuments).toEqual(undefined);
           });
 
@@ -364,7 +366,8 @@ describe('ExternalDocumentInformationFactory', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
-              baseDoc.secondarySupportingDocuments[0].supportingDocumentFile = {};
+              baseDoc.secondarySupportingDocuments[0].supportingDocumentFile =
+                {};
               expect(errors().secondarySupportingDocuments).toEqual(undefined);
             });
           });
@@ -384,7 +387,8 @@ describe('ExternalDocumentInformationFactory', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(VALIDATION_ERROR_MESSAGES.supportingDocumentFile);
-              baseDoc.secondarySupportingDocuments[0].supportingDocumentFile = {};
+              baseDoc.secondarySupportingDocuments[0].supportingDocumentFile =
+                {};
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(undefined);

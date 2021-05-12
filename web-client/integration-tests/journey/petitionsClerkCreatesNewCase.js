@@ -3,12 +3,8 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
-const {
-  CASE_TYPES_MAP,
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-  PAYMENT_STATUS,
-} = applicationContext.getConstants();
+const { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES, PAYMENT_STATUS } =
+  applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCase = (
   test,

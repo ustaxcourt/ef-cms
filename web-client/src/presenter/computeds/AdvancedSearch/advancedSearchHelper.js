@@ -46,10 +46,8 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
   );
-  const {
-    CASE_SEARCH_PAGE_SIZE,
-    COUNTRY_TYPES,
-  } = applicationContext.getConstants();
+  const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } =
+    applicationContext.getConstants();
   const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
@@ -66,10 +64,10 @@ export const advancedSearchHelper = (get, applicationContext) => {
     );
 
     if (advancedSearchTab === 'case') {
-      paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
-        searchResult =>
+      paginatedResults.formattedSearchResults =
+        paginatedResults.searchResults.map(searchResult =>
           formatSearchResultRecord(searchResult, { applicationContext }),
-      );
+        );
     } else {
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }

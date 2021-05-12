@@ -56,11 +56,8 @@ const callCognitoTriggerForPendingEmail = async userId => {
 };
 
 describe('admissions clerk adds secondary petitioner without existing cognito account to case', () => {
-  const {
-    COUNTRY_TYPES,
-    PARTY_TYPES,
-    SERVICE_INDICATOR_TYPES,
-  } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
+    applicationContext.getConstants();
 
   const EMAIL_TO_ADD = `new${Math.random()}@example.com`;
 

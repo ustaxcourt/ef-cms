@@ -14,10 +14,9 @@ describe('sendEmailVerificationLink', () => {
       pendingEmailVerificationToken: mockEmailVerificationToken,
     });
 
-    const {
-      email,
-      templateData,
-    } = applicationContext.getDispatchers().sendBulkTemplatedEmail.mock.calls[0][0].destinations[0];
+    const { email, templateData } =
+      applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
+        .calls[0][0].destinations[0];
 
     expect(email).toEqual(mockPendingEmail);
     expect(templateData.emailContent).toContain(mockEmailVerificationToken);

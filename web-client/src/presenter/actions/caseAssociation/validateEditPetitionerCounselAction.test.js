@@ -9,8 +9,8 @@ describe('validateEditPetitionerCounselAction', () => {
   let serviceIndicatorTypes;
 
   beforeAll(() => {
-    serviceIndicatorTypes = applicationContext.getConstants()
-      .SERVICE_INDICATOR_TYPES;
+    serviceIndicatorTypes =
+      applicationContext.getConstants().SERVICE_INDICATOR_TYPES;
     successStub = jest.fn();
     errorStub = jest.fn();
 
