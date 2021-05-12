@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
+/* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker, max-lines */
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
