@@ -32,7 +32,7 @@ const ParticipantsAndCounsel = connect(
                 <div className="content-wrapper parties-card">
                   <h3 className="text-wrap">
                     {petitioner.name}
-                    {petitioner.canEditParticipant && (
+                    {petitioner.canEditPetitioner && (
                       <Button
                         link
                         className="width-auto margin-top-1 margin-left-1 padding-0 margin-right-0 float-right"
