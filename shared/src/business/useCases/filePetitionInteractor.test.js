@@ -80,7 +80,7 @@ describe('filePetitionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().createCaseInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
     ).toMatchObject({
       ownershipDisclosureFileId: undefined,
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -97,7 +97,7 @@ describe('filePetitionInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().createCaseInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
     ).toMatchObject({
       ownershipDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
