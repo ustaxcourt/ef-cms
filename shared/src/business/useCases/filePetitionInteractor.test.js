@@ -15,9 +15,7 @@ describe('filePetitionInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(null);
 
     await expect(
-      filePetitionInteractor({
-        applicationContext,
-      }),
+      filePetitionInteractor(applicationContext, {}),
     ).rejects.toThrow();
   });
 
@@ -28,8 +26,7 @@ describe('filePetitionInteractor', () => {
     });
 
     await expect(
-      filePetitionInteractor({
-        applicationContext,
+      filePetitionInteractor(applicationContext, {
         petitionFile: null,
         petitionMetadata: null,
       }),

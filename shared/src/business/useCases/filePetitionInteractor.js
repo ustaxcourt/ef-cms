@@ -80,8 +80,7 @@ exports.filePetitionInteractor = async (
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .createCaseInteractor({
-      applicationContext,
+    .createCaseInteractor(applicationContext, {
       ownershipDisclosureFileId,
       petitionFileId,
       petitionMetadata,

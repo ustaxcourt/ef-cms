@@ -36,10 +36,11 @@ export const submitCourtIssuedDocketEntryAction = async ({
       documentMeta.eventCode,
     )
   ) {
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber,
+      });
   }
 };
