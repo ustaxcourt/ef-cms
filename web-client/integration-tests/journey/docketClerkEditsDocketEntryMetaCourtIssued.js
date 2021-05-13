@@ -1,11 +1,5 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { formattedDocketEntries as formattedDocketEntriesComputed } from '../../src/presenter/computeds/formattedDocketEntries';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedDocketEntries = withAppContextDecorator(
-  formattedDocketEntriesComputed,
-);
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryMetaCourtIssued = (
   test,
@@ -92,11 +86,11 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
 
     expect(pendingDocketEntry.pending).toEqual(true);
 
-    const helper = runCompute(formattedDocketEntries, {
-      state: test.getState(),
-    });
+    const {
+      formattedPendingDocketEntriesOnDocketRecord,
+    } = getFormattedDocketEntriesForTest(test);
 
-    expect(helper.formattedPendingDocketEntriesOnDocketRecord).toEqual(
+    expect(formattedPendingDocketEntriesOnDocketRecord).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: pendingDocketEntry.docketEntryId,
