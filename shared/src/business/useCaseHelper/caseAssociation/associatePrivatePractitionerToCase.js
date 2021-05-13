@@ -53,7 +53,7 @@ exports.associatePrivatePractitionerToCase = async ({
 
     const { petitioners } = caseEntity;
 
-    let representing;
+    let representing = [];
     petitioners.map(petitioner => {
       if (filers.includes(petitioner.name)) {
         petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;

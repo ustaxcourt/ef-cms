@@ -21,6 +21,8 @@ const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { omit } = require('lodash');
 
+const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
+const mockContactIdSecond = '39a359e9-dde3-409e-b40e-77a4959b6f2c';
 describe('PublicCase', () => {
   describe('validation', () => {
     it('should validate when all information is provided and case is not sealed', () => {
@@ -33,7 +35,12 @@ describe('PublicCase', () => {
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           irsPractitioners: [{ name: 'Bob' }],
           partyType: PARTY_TYPES.petitioner,
-          petitioners: [{ contactType: CONTACT_TYPES.primary }],
+          petitioners: [
+            {
+              contactId: mockContactId,
+              contactType: CONTACT_TYPES.primary,
+            },
+          ],
           receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
@@ -82,8 +89,14 @@ describe('PublicCase', () => {
         otherFilers: [],
         partyType: PARTY_TYPES.petitioner,
         petitioners: [
-          { contactType: CONTACT_TYPES.primary },
-          { contactType: CONTACT_TYPES.secondary },
+          {
+            contactId: mockContactId,
+            contactType: CONTACT_TYPES.primary,
+          },
+          {
+            contactId: mockContactIdSecond,
+            contactType: CONTACT_TYPES.secondary,
+          },
         ],
         privatePractitioners: [],
         receivedAt: 'testing',
@@ -103,8 +116,13 @@ describe('PublicCase', () => {
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
-        { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
         {
+          contactId: mockContactId,
+          contactType: CONTACT_TYPES.primary,
+          entityName: 'PublicContact',
+        },
+        {
+          contactId: mockContactIdSecond,
           contactType: CONTACT_TYPES.secondary,
           entityName: 'PublicContact',
           name: undefined,
@@ -126,7 +144,12 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'testing',
         irsPractitioners: [],
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [{ contactType: CONTACT_TYPES.primary }],
+        petitioners: [
+          {
+            contactId: mockContactId,
+            contactType: CONTACT_TYPES.primary,
+          },
+        ],
         receivedAt: 'testing',
       },
       { applicationContext },
@@ -143,7 +166,11 @@ describe('PublicCase', () => {
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
-        { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
+        {
+          contactId: mockContactId,
+          contactType: CONTACT_TYPES.primary,
+          entityName: 'PublicContact',
+        },
       ],
       receivedAt: 'testing',
     });
@@ -169,7 +196,12 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'testing',
         irsPractitioners: [],
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [{ contactType: CONTACT_TYPES.primary }],
+        petitioners: [
+          {
+            contactId: mockContactId,
+            contactType: CONTACT_TYPES.primary,
+          },
+        ],
         receivedAt: 'testing',
       },
       { applicationContext },
@@ -204,7 +236,11 @@ describe('PublicCase', () => {
       isSealed: false,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
-        { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
+        {
+          contactId: mockContactId,
+          contactType: CONTACT_TYPES.primary,
+          entityName: 'PublicContact',
+        },
       ],
       receivedAt: 'testing',
     });
@@ -496,7 +532,9 @@ describe('PublicCase', () => {
       expect(entity.irsPractitioners).toBeTruthy();
     });
 
-    it('anyone other than an irsPractitioner does not see otherPetitioners or otherFilers', () => {
+    // is this relevant anymore now that we are looping through all petitioners when
+    // creating new PublicContact?
+    it.skip('anyone other than an irsPractitioner does not see otherPetitioners or otherFilers', () => {
       applicationContext.getCurrentUser.mockReturnValue(
         MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
       );
@@ -512,7 +550,10 @@ describe('PublicCase', () => {
           docketNumberSuffix: null,
           docketNumberWithSuffix: null,
           petitioners: [
-            { contactType: CONTACT_TYPES.primary },
+            {
+              contactId: mockContactId,
+              contactType: CONTACT_TYPES.primary,
+            },
             {
               address1: '42 Lamb Sauce Blvd',
               city: 'Nashville',
@@ -533,6 +574,7 @@ describe('PublicCase', () => {
               additionalName: 'Guy Fieri',
               address1: '453 Electric Ave',
               city: 'Philadelphia',
+              contactId: mockContactIdSecond,
               contactType: CONTACT_TYPES.otherPetitioner,
               countryType: 'domestic',
               email: 'mayorofflavortown@example.com',

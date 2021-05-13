@@ -33,12 +33,12 @@ export const PartiesRepresenting = connect(
               </legend>
               <span className="usa-hint">Check all that apply</span>
               {formattedCaseDetail.petitioners.map(petitioner => (
-                <div className="usa-checkbox" key={petitioner.name}>
+                <div className="usa-checkbox" key={petitioner.contactId}>
                   <input
-                    checked={form.filersMap[petitioner.name] || false}
+                    checked={form.filersMap[petitioner.contactId] || false}
                     className="usa-checkbox__input"
-                    id={`filing-${petitioner.name}`}
-                    name={`filersMap.${petitioner.name}`}
+                    id={`filing-${petitioner.contactId}`}
+                    name={`filersMap.${petitioner.contactId}`}
                     type="checkbox"
                     onChange={e => {
                       updateCaseAssociationFormValueSequence({
@@ -50,7 +50,7 @@ export const PartiesRepresenting = connect(
                   />
                   <label
                     className="usa-checkbox__label inline-block"
-                    htmlFor={`filing-${petitioner.name}`}
+                    htmlFor={`filing-${petitioner.contactId}`}
                   >
                     {petitioner.name}
                   </label>

@@ -107,26 +107,8 @@ exports.fileExternalDocumentInteractor = async (
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const isGuid = value => {
-    let regex = /[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i;
-    let match = regex.exec(value);
-    return match != null;
-  };
-
   for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
     if (docketEntryId && metadata) {
-      let filersArray = [];
-
-      if (metadata.filers.length && !isGuid(metadata.filers[0])) {
-        caseEntity.petitioners.map(petitioner => {
-          if (metadata.filers.includes(petitioner.name)) {
-            filersArray.push(petitioner.contactId);
-          }
-        });
-      }
-
-      metadata.filers = filersArray;
-
       const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
