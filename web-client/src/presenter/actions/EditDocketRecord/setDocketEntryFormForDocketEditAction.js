@@ -45,6 +45,7 @@ export const setDocketEntryFormForDocketEditAction = ({
     };
   }
 
+  // TODO: maybe in separate action?
   docketEntryFormData.filersMap = {};
   docketEntryFormData.filers.forEach(
     filer => (docketEntryFormData.filersMap[filer] = true),

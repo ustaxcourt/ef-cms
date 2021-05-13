@@ -44,6 +44,11 @@ export const setDocketEntryMetaFormForEditAction = ({
   store.set(state.docketRecordIndex, docketRecordIndex);
 
   if (documentDetail) {
+    documentDetail.filersMap = {};
+    documentDetail.filers.forEach(
+      filer => (documentDetail.filersMap[filer] = true),
+    );
+
     documentDetail.servedPartiesCode =
       documentDetail.servedPartiesCode ||
       applicationContext
@@ -67,6 +72,7 @@ export const setDocketEntryMetaFormForEditAction = ({
       value: documentDetail.eventCode,
     };
   } else {
+    // TODO: is this a dead path?
     store.set(state.form, {
       ...documentDetail,
       ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
