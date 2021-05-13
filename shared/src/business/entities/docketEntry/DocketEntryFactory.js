@@ -193,7 +193,6 @@ function DocketEntryFactory(rawProps) {
 
   if (
     rawProps.filers.length === 0 &&
-    rawProps.partySecondary !== true &&
     rawProps.partyIrsPractitioner !== true &&
     rawProps.partyPrivatePractitioner !== true &&
     rawProps.hasOtherFilingParty !== true &&
