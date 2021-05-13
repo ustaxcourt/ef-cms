@@ -85,8 +85,8 @@ function CaseAssociationRequestFactory(rawProps) {
     if (rawProps.partyIrsPractitioner) {
       petitionerNames = 'Respondent';
     } else {
-      const petitionerNamesArray = [];
-      petitionerNamesArray.push.apply(this.filers);
+      const petitionerNamesArray = [...this.filers];
+      console.log(this.filers);
 
       if (petitionerNamesArray.length > 1) {
         petitionerNames = 'Petrs. ';
