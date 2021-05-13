@@ -1,5 +1,5 @@
 import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
-import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -8,13 +8,12 @@ export const docketClerkServesOrderWithPaperService = (
   draftOrderIndex,
 ) => {
   return it('Docket Clerk serves the order after the docket entry has been created (with parties with paper service)', async () => {
-    const helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
-
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    const orderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
