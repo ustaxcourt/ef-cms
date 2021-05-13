@@ -1520,12 +1520,10 @@ describe('formattedCaseDetail', () => {
       docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-18',
       documentTitle: 'Petition',
-      documentType:
-        applicationContext.getConstants().INITIAL_DOCUMENT_TYPES.petition
-          .documentType,
-      eventCode:
-        applicationContext.getConstants().INITIAL_DOCUMENT_TYPES.petition
-          .eventCode,
+      documentType: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.documentType,
+      eventCode: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.eventCode,
       filedBy: 'Test Petitioner',
       filingDate: '2018-03-01T00:01:00.000Z',
       index: 1,
