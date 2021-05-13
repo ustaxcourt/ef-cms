@@ -16,8 +16,10 @@ export const validateEditRespondentCounselAction = ({
   path,
   store,
 }) => {
-  const { SERVICE_INDICATOR_ERROR, SERVICE_INDICATOR_TYPES } =
-    applicationContext.getConstants();
+  const {
+    SERVICE_INDICATOR_ERROR,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
 
   const respondentCounsel = get(state.form);
   const { irsPractitioners: oldRespondentCounsels } = get(state.caseDetail);

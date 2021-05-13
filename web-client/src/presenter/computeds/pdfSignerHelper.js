@@ -1,8 +1,9 @@
 import { state } from 'cerebral';
 
 export const pdfSignerHelper = (get, applicationContext) => {
-  const { PROPOSED_STIPULATED_DECISION_EVENT_CODE } =
-    applicationContext.getConstants();
+  const {
+    PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+  } = applicationContext.getConstants();
   const form = get(state.form);
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);

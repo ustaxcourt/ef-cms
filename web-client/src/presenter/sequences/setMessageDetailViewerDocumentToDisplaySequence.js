@@ -2,8 +2,9 @@ import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMess
 import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const setMessageDetailViewerDocumentToDisplaySequence =
-  showProgressSequenceDecorator([
+export const setMessageDetailViewerDocumentToDisplaySequence = showProgressSequenceDecorator(
+  [
     getMostRecentMessageInThreadAction,
     setMessageDetailViewerDocumentToDisplayAction,
-  ]);
+  ],
+);
