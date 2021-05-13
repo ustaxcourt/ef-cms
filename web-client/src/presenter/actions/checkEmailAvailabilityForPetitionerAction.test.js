@@ -33,7 +33,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
 
     expect(
       applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({ email: mockEmail });
   });
 
@@ -49,7 +49,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
 
     expect(
       applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({ email: mockEmail });
   });
 
@@ -65,7 +65,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
 
     expect(
       applicationContext.getUseCases().checkEmailAvailabilityInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({ email: mockEmail });
   });
 

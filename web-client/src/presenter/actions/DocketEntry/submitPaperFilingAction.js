@@ -85,11 +85,12 @@ export const submitPaperFilingAction = async ({
   }
 
   if (generateCoversheet) {
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseDetail.docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseDetail.docketNumber,
+      });
   }
 
   return {
