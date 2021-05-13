@@ -7,7 +7,6 @@
  */
 export const isInternalUserAction = ({ applicationContext, path }) => {
   const user = applicationContext.getCurrentUser();
-  console.log('user', user);
   return applicationContext.getUtilities().isInternalUser(user.role)
     ? path.yes()
     : path.no();
