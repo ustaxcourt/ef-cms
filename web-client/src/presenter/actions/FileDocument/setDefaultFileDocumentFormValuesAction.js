@@ -24,4 +24,5 @@ export const setDefaultFileDocumentFormValuesAction = ({
   store.set(state.form.hasSupportingDocuments, false);
   store.set(state.form.hasSecondarySupportingDocuments, false);
   store.set(state.form.practitioner, []);
+  store.set(state.form.filersMap, {});
 };
