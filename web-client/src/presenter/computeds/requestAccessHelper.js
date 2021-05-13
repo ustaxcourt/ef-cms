@@ -102,6 +102,13 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const showPartiesRepresenting = user.role === USER_ROLES.privatePractitioner;
 
+  const representingPartiesNames = Object.keys(form.filersMap).map(
+    filerContactId =>
+      caseDetail.petitioners.find(
+        petitioner => petitioner.contactId === filerContactId,
+      ).name,
+  );
+
   let exported = {
     certificateOfServiceDateFormatted,
     documentWithAttachments,
@@ -110,6 +117,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     documents,
     documentsForSelect,
     partyValidationError,
+    representingPartiesNames,
     showFilingIncludes,
     showFilingNotIncludes,
     showPartiesRepresenting,
