@@ -14,8 +14,17 @@ export const validateExternalDocumentInformationAction = ({
   applicationContext,
   get,
   path,
+  store,
 }) => {
   const documentMetadata = get(state.form);
+
+  const filers = Object.keys(documentMetadata.filersMap)
+    .map(contactId =>
+      documentMetadata.filersMap[contactId] ? contactId : null,
+    )
+    .filter(Boolean);
+
+  store.set(state.form.filers, filers);
 
   const errors = applicationContext
     .getUseCases()
@@ -42,8 +51,7 @@ export const validateExternalDocumentInformationAction = ({
       'secondaryDocument',
       'hasSecondarySupportingDocuments',
       'secondarySupportingDocuments',
-      'partyPrimary',
-      'partySecondary',
+      'filers',
       'partyIrsPractitioner',
     ];
 
