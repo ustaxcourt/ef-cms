@@ -157,7 +157,10 @@ function CaseAssociationRequestFactory(rawProps) {
     makeRequired('hasSupportingDocuments');
   }
 
-  if (rawProps.filers?.length === 0 && rawProps.partyIrsPractitioner !== true) {
+  if (
+    (!rawProps.filers || rawProps.filers.length === 0) &&
+    rawProps.partyIrsPractitioner !== true
+  ) {
     makeRequired('filers');
   }
 
