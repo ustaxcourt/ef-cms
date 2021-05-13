@@ -8,10 +8,6 @@ const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryNonstandardF = test => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard F scenario', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     let {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);

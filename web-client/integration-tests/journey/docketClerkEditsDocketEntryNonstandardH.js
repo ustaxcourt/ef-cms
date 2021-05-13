@@ -10,10 +10,6 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard H scenario', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     let {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);
