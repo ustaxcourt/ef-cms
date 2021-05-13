@@ -84,6 +84,7 @@ exports.updateDocketEntryMetaInteractor = async (
     documentTitle: docketEntryMeta.documentTitle,
     documentType: docketEntryMeta.documentType,
     eventCode: docketEntryMeta.eventCode,
+    filers: docketEntryMeta.filers,
     filingDate: docketEntryMeta.filingDate,
     freeText: docketEntryMeta.freeText,
     freeText2: docketEntryMeta.freeText2,
@@ -94,8 +95,6 @@ exports.updateDocketEntryMetaInteractor = async (
     ordinalValue: docketEntryMeta.ordinalValue,
     otherFilingParty: docketEntryMeta.otherFilingParty,
     partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
-    partyPrimary: docketEntryMeta.partyPrimary,
-    partySecondary: docketEntryMeta.partySecondary,
     pending: docketEntryMeta.pending,
     previousDocument: docketEntryMeta.previousDocument,
     scenario: docketEntryMeta.scenario,
@@ -154,12 +153,9 @@ exports.updateDocketEntryMetaInteractor = async (
     {
       ...originalDocketEntry,
       ...editableFields,
-      // allow constructor to re-generate
-      contactPrimary: caseEntity.getContactPrimary(),
-      contactSecondary: caseEntity.getContactSecondary(),
       filedBy: undefined,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseEntity.petitioners },
   ).validate();
 
   caseEntity.updateDocketEntry(docketEntryEntity);
