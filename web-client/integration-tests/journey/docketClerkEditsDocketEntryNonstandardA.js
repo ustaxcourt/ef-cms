@@ -1,30 +1,25 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
-import { getPetitionDocumentForCase } from '../helpers';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import {
+  getFormattedDocketEntriesForTest,
+  getPetitionDocumentForCase,
+} from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryNonstandardA = test => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard A scenario', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    let {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    let helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
-
-    const { docketEntryId } = helper.formattedDocketEntriesOnDocketRecord[0];
+    const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     const petitionDocument = getPetitionDocumentForCase(
       test.getState('caseDetail'),
     );
     expect(docketEntryId).toBeDefined();
     expect(petitionDocument.docketEntryId).toBeDefined();
 
-    const docketEntriesBefore =
-      helper.formattedDocketEntriesOnDocketRecord.length;
+    const docketEntriesBefore = formattedDocketEntriesOnDocketRecord.length;
 
     await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
@@ -111,21 +106,20 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
+    ({
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test));
 
-    const docketEntriesAfter =
-      helper.formattedDocketEntriesOnDocketRecord.length;
+    const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 
     expect(docketEntriesBefore).toEqual(docketEntriesAfter);
 
-    const updatedDocketEntry = helper.formattedDocketEntriesOnDocketRecord[0];
+    const updatedDocketEntry = formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
       descriptionDisplay: 'Notice of No Objection to Petition',
     });
 
-    const updatedDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+    const updatedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({
