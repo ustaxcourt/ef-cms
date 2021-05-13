@@ -63,8 +63,9 @@ export const trialSessionsModalHelper = ({
     );
 
     if (trialSessionsFilter) {
-      trialSessionsFormatted =
-        trialSessionsFormatted.filter(trialSessionsFilter);
+      trialSessionsFormatted = trialSessionsFormatted.filter(
+        trialSessionsFilter,
+      );
     }
 
     if (excludedTrialSessionIds) {
@@ -77,8 +78,9 @@ export const trialSessionsModalHelper = ({
     if (showAllLocations) {
       trialSessionsFormatted.forEach(
         trialSession =>
-          (trialSession.trialLocationState =
-            trialSession.trialLocation.split(', ')[1]),
+          (trialSession.trialLocationState = trialSession.trialLocation.split(
+            ', ',
+          )[1]),
       );
 
       trialSessionsFormattedByState = {};
@@ -97,10 +99,12 @@ export const trialSessionsModalHelper = ({
       ).sort();
 
       trialSessionStatesSorted.forEach(stateName => {
-        trialSessionsFormattedByState[stateName] = sortBy(
-          trialSessionsFormattedByState[stateName],
-          ['trialLocation', 'startDate'],
-        );
+        trialSessionsFormattedByState[
+          stateName
+        ] = sortBy(trialSessionsFormattedByState[stateName], [
+          'trialLocation',
+          'startDate',
+        ]);
       });
       trialSessionsFormatted = null;
     } else {

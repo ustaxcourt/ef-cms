@@ -73,8 +73,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
     .getUtilities()
     .isExternalUser(user.role);
 
-  const { formatCase, setServiceIndicatorsForCase } =
-    applicationContext.getUtilities();
+  const {
+    formatCase,
+    setServiceIndicatorsForCase,
+  } = applicationContext.getUtilities();
 
   const caseDetail = get(state.caseDetail);
 

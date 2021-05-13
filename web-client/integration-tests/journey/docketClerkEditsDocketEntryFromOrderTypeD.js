@@ -81,10 +81,9 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
       state: test.getState(),
     });
 
-    const updatedOrderDocument =
-      helper.formattedDocketEntriesOnDocketRecord.find(
-        doc => doc.docketEntryId === docketEntryId,
-      );
+    const updatedOrderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
 
     expect(updatedOrderDocument).toMatchObject({
       date: '2050-01-01T05:00:00.000Z',

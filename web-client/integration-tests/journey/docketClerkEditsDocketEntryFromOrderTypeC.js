@@ -63,10 +63,9 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
       state: test.getState(),
     });
 
-    const updatedOrderDocument =
-      helper.formattedDocketEntriesOnDocketRecord.find(
-        doc => doc.docketEntryId === docketEntryId,
-      );
+    const updatedOrderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
 
     expect(updatedOrderDocument).toMatchObject({
       docketNumbers: '123-45',
