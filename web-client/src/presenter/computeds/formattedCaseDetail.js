@@ -106,8 +106,10 @@ export const getShowEditDocketRecordEntry = ({
   entry,
   userPermissions,
 }) => {
-  const { SYSTEM_GENERATED_DOCUMENT_TYPES, UNSERVABLE_EVENT_CODES } =
-    applicationContext.getConstants();
+  const {
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
+    UNSERVABLE_EVENT_CODES,
+  } = applicationContext.getConstants();
   const systemGeneratedEventCodes = Object.keys(
     SYSTEM_GENERATED_DOCUMENT_TYPES,
   ).map(key => {
@@ -237,8 +239,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
 
-  const { formatCase, setServiceIndicatorsForCase, sortDocketEntries } =
-    applicationContext.getUtilities();
+  const {
+    formatCase,
+    setServiceIndicatorsForCase,
+    sortDocketEntries,
+  } = applicationContext.getUtilities();
 
   let docketRecordSort;
   const caseDetail = get(state.caseDetail);
@@ -305,13 +310,13 @@ export const formattedCaseDetail = (get, applicationContext) => {
     }),
   );
 
-  result.formattedDocketEntriesOnDocketRecord =
-    result.formattedDocketEntries.filter(d => d.isOnDocketRecord);
+  result.formattedDocketEntriesOnDocketRecord = result.formattedDocketEntries.filter(
+    d => d.isOnDocketRecord,
+  );
 
-  result.formattedPendingDocketEntriesOnDocketRecord =
-    result.formattedDocketEntriesOnDocketRecord.filter(docketEntry =>
-      applicationContext.getUtilities().isPending(docketEntry),
-    );
+  result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
+    docketEntry => applicationContext.getUtilities().isPending(docketEntry),
+  );
 
   result.formattedDraftDocuments = (result.draftDocuments || []).map(
     draftDocument => {

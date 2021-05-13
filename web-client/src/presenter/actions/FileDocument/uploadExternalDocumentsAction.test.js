@@ -5,8 +5,9 @@ import { runAction } from 'cerebral/test';
 import { uploadExternalDocumentsAction } from './uploadExternalDocumentsAction';
 
 describe('uploadExternalDocumentsAction', () => {
-  const { uploadExternalDocumentsInteractor } =
-    applicationContext.getUseCases();
+  const {
+    uploadExternalDocumentsInteractor,
+  } = applicationContext.getUseCases();
   const { addCoversheetInteractor } = applicationContext.getUseCases();
 
   presenter.providers.applicationContext = applicationContext;
@@ -61,7 +62,7 @@ describe('uploadExternalDocumentsAction', () => {
       },
     });
     expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
-    expect(addCoversheetInteractor.mock.calls[0][0]).toMatchObject({
+    expect(addCoversheetInteractor.mock.calls[0][1]).toMatchObject({
       docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -120,7 +121,7 @@ describe('uploadExternalDocumentsAction', () => {
       },
     });
     expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
-    expect(addCoversheetInteractor.mock.calls[0][0]).toMatchObject({
+    expect(addCoversheetInteractor.mock.calls[0][1]).toMatchObject({
       docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: MOCK_CASE.docketNumber,
     });

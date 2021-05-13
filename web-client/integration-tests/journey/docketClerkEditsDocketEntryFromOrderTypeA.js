@@ -63,10 +63,9 @@ export const docketClerkEditsDocketEntryFromOrderTypeA = (
       },
     );
 
-    const updatedOrderDocument =
-      caseDetailFormatted.formattedDocketEntries.find(
-        doc => doc.docketEntryId === docketEntryId,
-      );
+    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
 
     expect(updatedOrderDocument).toMatchObject({
       documentTitle: 'Writ of Habeas Corpus Ad Testificandum Some free text',
