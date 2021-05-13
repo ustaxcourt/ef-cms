@@ -13,17 +13,8 @@ export const validateDocketEntryAction = ({
   applicationContext,
   get,
   path,
-  store,
 }) => {
   const entryMetadata = get(state.form);
-
-  // TODO: refactor into action?
-  store.set(
-    state.form.filers,
-    Object.keys(entryMetadata.filersMap)
-      .map(contactId => (entryMetadata.filersMap[contactId] ? contactId : null))
-      .filter(Boolean),
-  );
 
   const errors = applicationContext
     .getUseCases()
