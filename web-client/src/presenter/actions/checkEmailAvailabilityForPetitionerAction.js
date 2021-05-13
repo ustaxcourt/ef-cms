@@ -18,8 +18,7 @@ export const checkEmailAvailabilityForPetitionerAction = async ({
 
   const isEmailAvailable = await applicationContext
     .getUseCases()
-    .checkEmailAvailabilityInteractor({
-      applicationContext,
+    .checkEmailAvailabilityInteractor(applicationContext, {
       email: updatedEmail,
     });
 

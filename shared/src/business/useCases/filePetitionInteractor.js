@@ -4,16 +4,18 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
-exports.filePetitionInteractor = async ({
+exports.filePetitionInteractor = async (
   applicationContext,
-  ownershipDisclosureFile,
-  ownershipDisclosureUploadProgress,
-  petitionFile,
-  petitionMetadata,
-  petitionUploadProgress,
-  stinFile,
-  stinUploadProgress,
-}) => {
+  {
+    ownershipDisclosureFile,
+    ownershipDisclosureUploadProgress,
+    petitionFile,
+    petitionMetadata,
+    petitionUploadProgress,
+    stinFile,
+    stinUploadProgress,
+  },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
