@@ -16,13 +16,21 @@ const requestAccessHelper = withAppContextDecorator(
   applicationContext,
 );
 
+const filersMap = {
+  '4e53fade-4966-4efe-8b01-0cb5f587eb47': false,
+  '68a1e378-6e96-4e61-b06e-2cb4e6c22f48': true,
+  '68a1e378-6e96-4e61-b06g-2cb4e6c22f47': true,
+};
+
 applicationContext.getCurrentUser = () => ({
   role: ROLES.privatePractitioner,
 });
 
 describe('requestAccessHelper', () => {
   beforeEach(() => {
-    state.form = {};
+    state.form = {
+      filersMap,
+    };
   });
 
   it('returns correct values when documentType is undefined', () => {
@@ -41,6 +49,7 @@ describe('requestAccessHelper', () => {
   it('indicates file uploads are valid', () => {
     state.form = {
       documentType: 'Entry of Appearance',
+      filersMap,
       primaryDocumentFile: { some: 'file' },
     };
 
@@ -84,7 +93,7 @@ describe('requestAccessHelper', () => {
   });
 
   it('shows filing includes if certificate of service or attachments is true', () => {
-    state.form = { certificateOfService: true };
+    state.form = { certificateOfService: true, filersMap };
     let result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(true);
 
@@ -92,6 +101,7 @@ describe('requestAccessHelper', () => {
       attachments: true,
       certificateOfService: false,
       documentType: 'Notice of Intervention',
+      filersMap,
     };
     result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(true);
@@ -102,19 +112,21 @@ describe('requestAccessHelper', () => {
       attachments: false,
       certificateOfService: false,
       documentType: 'Notice of Intervention',
+      filersMap,
     };
     const result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(false);
   });
 
   it('shows filing not includes if certificate of service, attachments, or supporting documents is false', () => {
-    state.form = { certificateOfService: false };
+    state.form = { certificateOfService: false, filersMap };
     let result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
 
     state.form = {
       certificateOfService: true,
       documentType: 'Notice of Intervention',
+      filersMap,
     };
     result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
@@ -123,6 +135,7 @@ describe('requestAccessHelper', () => {
       attachments: false,
       certificateOfService: true,
       documentType: 'Notice of Intervention',
+      filersMap,
     };
     result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
@@ -131,6 +144,7 @@ describe('requestAccessHelper', () => {
       attachments: true,
       certificateOfService: true,
       documentType: 'Motion to Substitute Parties and Change Caption',
+      filersMap,
       hasSupportingDocuments: false,
     };
     result = runCompute(requestAccessHelper, { state });
@@ -142,6 +156,7 @@ describe('requestAccessHelper', () => {
       attachments: true,
       certificateOfService: true,
       documentType: 'Motion to Substitute Parties and Change Caption',
+      filersMap,
       hasSupportingDocuments: true,
     };
     const result = runCompute(requestAccessHelper, { state });
