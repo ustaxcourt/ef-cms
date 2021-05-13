@@ -90,9 +90,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     'Motion to Substitute Parties and Change Caption',
   ].includes(documentType);
 
-  const partyValidationError =
-    validationErrors.representingPrimary ||
-    validationErrors.representingSecondary;
+  const partyValidationError = validationErrors.filers;
 
   const showFilingIncludes =
     form.certificateOfService || (documentWithAttachments && form.attachments);
