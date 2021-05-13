@@ -20,9 +20,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     getSupportingDocumentTypeList(CATEGORY_MAP);
 
   const partyValidationError =
-    validationErrors.partyPrimary ||
-    validationErrors.partySecondary ||
-    validationErrors.partyIrsPractitioner;
+    validationErrors.filers || validationErrors.partyIrsPractitioner;
 
   let { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;

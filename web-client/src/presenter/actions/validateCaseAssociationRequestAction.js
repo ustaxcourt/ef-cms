@@ -13,17 +13,29 @@ export const validateCaseAssociationRequestAction = ({
   applicationContext,
   get,
   path,
+  store,
 }) => {
   const caseAssociationRequest = {
     ...get(state.form),
   };
 
+  // TODO: refactor into action?
+  store.set(
+    state.form.filers,
+    Object.keys(caseAssociationRequest.filersMap)
+      .map(name => (caseAssociationRequest.filersMap[name] ? name : null))
+      .filter(Boolean),
+  );
+
+  // TODO: FIX ERRORS
   const errors = applicationContext
     .getUseCases()
     .validateCaseAssociationRequestInteractor({
       applicationContext,
       caseAssociationRequest,
     });
+
+  console.log('errors', errors);
 
   if (!errors) {
     return path.success();
@@ -40,8 +52,7 @@ export const validateCaseAssociationRequestAction = ({
       'objections',
       'hasSupportingDocuments',
       'supportingDocuments',
-      'representingPrimary',
-      'representingSecondary',
+      'filers',
     ];
 
     const errorDisplayMap = {
