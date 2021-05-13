@@ -15,8 +15,9 @@ export const docketClerkQCsDocketEntry = (test, data = {}) => {
     const lastIndex = helper.formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
 
-    const { docketEntryId } =
-      helper.formattedDocketEntriesOnDocketRecord[data.index];
+    const { docketEntryId } = helper.formattedDocketEntriesOnDocketRecord[
+      data.index
+    ];
 
     await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,

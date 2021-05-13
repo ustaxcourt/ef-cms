@@ -55,10 +55,9 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
     const helper = runCompute(formattedDocketEntries, {
       state: test.getState(),
     });
-    const stipulatedDecisionDocument =
-      helper.formattedDocketEntriesOnDocketRecord.find(
-        document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
-      );
+    const stipulatedDecisionDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+      document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
+    );
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
   });
 
@@ -70,10 +69,9 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
     const helper = runCompute(formattedDocketEntries, {
       state: test.getState(),
     });
-    const stipulatedDecisionDocument =
-      helper.formattedDocketEntriesOnDocketRecord.find(
-        document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
-      );
+    const stipulatedDecisionDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+      document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
+    );
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(false);
   });
 });

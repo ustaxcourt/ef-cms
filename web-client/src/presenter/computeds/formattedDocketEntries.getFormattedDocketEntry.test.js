@@ -4,8 +4,9 @@ import { getFormattedDocketEntry } from './formattedDocketEntries';
 import { simpleDocketEntries } from './formattedCaseDetail.test';
 
 describe('getFormattedDocketEntry', () => {
-  const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
-    applicationContext.getConstants();
+  const {
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  } = applicationContext.getConstants();
 
   const simpleDocketEntry = simpleDocketEntries[0];
 

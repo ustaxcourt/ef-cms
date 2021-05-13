@@ -53,10 +53,9 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
     noticeOfChangeOfAddressQCItem.index =
       noticeOfChangeOfAddressQCItem.index || lastIndex;
 
-    const { docketEntryId } =
-      helper.formattedDocketEntriesOnDocketRecord[
-        noticeOfChangeOfAddressQCItem.index
-      ];
+    const { docketEntryId } = helper.formattedDocketEntriesOnDocketRecord[
+      noticeOfChangeOfAddressQCItem.index
+    ];
 
     await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,

@@ -20,8 +20,10 @@ describe('validatePetitionerInformationFormAction', () => {
       success: successStub,
     };
 
-    ({ PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
-      applicationContext.getConstants());
+    ({
+      PARTY_TYPES,
+      SERVICE_INDICATOR_TYPES,
+    } = applicationContext.getConstants());
   });
 
   it('runs validation on the petitioner information form with a successful result', async () => {

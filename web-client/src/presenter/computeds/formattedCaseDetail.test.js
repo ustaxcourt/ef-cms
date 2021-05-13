@@ -49,8 +49,11 @@ export const mockPetitioners = [
 
 describe('formattedCaseDetail', () => {
   let globalUser;
-  const { STATUS_TYPES, TRIAL_CLERKS_SECTION, USER_ROLES } =
-    applicationContext.getConstants();
+  const {
+    STATUS_TYPES,
+    TRIAL_CLERKS_SECTION,
+    USER_ROLES,
+  } = applicationContext.getConstants();
 
   const formattedCaseDetail = withAppContextDecorator(
     formattedCaseDetailComputed,

@@ -67,10 +67,9 @@ export const docketClerkConvertsAnOrderToAnOpinion = (
       state: test.getState(),
     });
 
-    const updatedOrderDocument =
-      helper.formattedDocketEntriesOnDocketRecord.find(
-        doc => doc.docketEntryId === docketEntryId,
-      );
+    const updatedOrderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
 
     expect(updatedOrderDocument).toMatchObject({
       documentTitle: 'T.C. Opinion Judge Pugh freeeeee text',
