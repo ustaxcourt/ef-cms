@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getFormattedDocketEntry } from './formattedCaseDetail';
+import { getFormattedDocketEntry } from './formattedDocketEntries';
 import { simpleDocketEntries } from './formattedCaseDetail.test';
 
 describe('getFormattedDocketEntry', () => {

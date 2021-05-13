@@ -1,21 +1,18 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionsClerkAddsDocketEntryFromOrder = test => {
   return it('Petitions Clerk adds a docket entry from the given order', async () => {
-    let caseDetailFormatted;
+    let helper;
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
     const { docketEntryId } = test;
 
-    const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
+    const draftOrderDocument = helper.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -55,14 +52,11 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
       docketNumber: test.docketNumber,
     });
 
-    caseDetailFormatted = await runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    helper = await runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
-    const newDocketEntry = caseDetailFormatted.formattedDocketEntries.find(
+    const newDocketEntry = helper.formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,
     );
 

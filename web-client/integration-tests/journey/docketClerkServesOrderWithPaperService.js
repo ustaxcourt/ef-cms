@@ -1,5 +1,5 @@
 import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -8,18 +8,13 @@ export const docketClerkServesOrderWithPaperService = (
   draftOrderIndex,
 ) => {
   return it('Docket Clerk serves the order after the docket entry has been created (with parties with paper service)', async () => {
-    let caseDetailFormatted;
-
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    const helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
+      state: test.getState(),
+    });
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const orderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -34,15 +29,15 @@ export const docketClerkServesOrderWithPaperService = (
 
     await test.runSequence('openConfirmInitiateServiceModalSequence');
 
-    const helper = runCompute(
+    const modalHelper = runCompute(
       withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
         state: test.getState(),
       },
     );
 
-    expect(helper.showPaperAlert).toEqual(true);
-    expect(helper.contactsNeedingPaperService).toEqual([
+    expect(modalHelper.showPaperAlert).toEqual(true);
+    expect(modalHelper.contactsNeedingPaperService).toEqual([
       {
         name: 'Daenerys Stormborn, Petitioner',
       },
