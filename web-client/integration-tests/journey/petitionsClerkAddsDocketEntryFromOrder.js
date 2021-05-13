@@ -1,4 +1,5 @@
 import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -48,15 +49,11 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
       'Your entry has been added to docket record.',
     );
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    helper = await runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
-
-    const newDocketEntry = helper.formattedDocketEntriesOnDocketRecord.find(
+    const newDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,
     );
 

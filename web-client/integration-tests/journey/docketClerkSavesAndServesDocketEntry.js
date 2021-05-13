@@ -1,6 +1,4 @@
-import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkSavesAndServesDocketEntry = test => {
   return it('Docketclerk saves and serves a docket entry', async () => {
@@ -8,14 +6,11 @@ export const docketClerkSavesAndServesDocketEntry = test => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const helper = await runCompute(
-      withAppContextDecorator(formattedDocketEntries),
-      {
-        state: test.getState(),
-      },
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    test.docketRecordEntry = helper.formattedDocketEntriesOnDocketRecord.find(
+    test.docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.eventCode === 'ADMR',
     );
 
