@@ -102,6 +102,7 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const showPartiesRepresenting = user.role === USER_ROLES.privatePractitioner;
 
+  //gotta test THIS!!!
   const representingPartiesNames = Object.keys(form.filersMap).map(
     filerContactId =>
       caseDetail.petitioners.find(
