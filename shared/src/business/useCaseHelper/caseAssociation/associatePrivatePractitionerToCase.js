@@ -53,18 +53,16 @@ exports.associatePrivatePractitionerToCase = async ({
 
     const { petitioners } = caseEntity;
 
-    let representing = [];
     petitioners.map(petitioner => {
-      if (filers.includes(petitioner.name)) {
+      if (filers.includes(petitioner.contactId)) {
         petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-        representing.push(petitioner.contactId);
       }
     });
 
     caseEntity.attachPrivatePractitioner(
       new PrivatePractitioner({
         ...user,
-        representing,
+        representing: filers,
         serviceIndicator,
       }),
     );
