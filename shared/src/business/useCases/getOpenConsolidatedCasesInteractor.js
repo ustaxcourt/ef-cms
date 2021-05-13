@@ -42,16 +42,20 @@ exports.getOpenConsolidatedCasesInteractor = async applicationContext => {
       });
 
     if (!casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber]) {
-      casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber] =
-        applicationContext.getUseCaseHelpers().getUnassociatedLeadCase({
-          casesAssociatedWithUserOrLeadCaseMap,
-          consolidatedCases,
-          leadDocketNumber,
-        });
+      casesAssociatedWithUserOrLeadCaseMap[
+        leadDocketNumber
+      ] = applicationContext.getUseCaseHelpers().getUnassociatedLeadCase({
+        casesAssociatedWithUserOrLeadCaseMap,
+        consolidatedCases,
+        leadDocketNumber,
+      });
     }
 
-    casesAssociatedWithUserOrLeadCaseMap[leadDocketNumber].consolidatedCases =
-      applicationContext.getUseCaseHelpers().formatAndSortConsolidatedCases({
+    casesAssociatedWithUserOrLeadCaseMap[
+      leadDocketNumber
+    ].consolidatedCases = applicationContext
+      .getUseCaseHelpers()
+      .formatAndSortConsolidatedCases({
         consolidatedCases,
         leadDocketNumber,
         userAssociatedDocketNumbersMap,

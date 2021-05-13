@@ -330,9 +330,6 @@ module.exports = [
       'click #primaryDocument-certificateOfService-label',
       'wait for element .primaryDocument-service-date to be visible',
       'wait for element #secondary-document to be visible',
-      'wait for element #secondaryDocument-certificateOfService-label to be visible',
-      'click #secondaryDocument-certificateOfService-label',
-      'wait for element .secondaryDocument-service-date to be visible',
     ],
     notes: ['File a document, step 2'],
     url:

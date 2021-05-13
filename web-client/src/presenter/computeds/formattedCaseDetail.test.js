@@ -1518,12 +1518,10 @@ describe('formattedCaseDetail', () => {
     const mockDocketEntry = {
       ...simpleDocketEntries[0],
       documentTitle: 'Petition',
-      documentType:
-        applicationContext.getConstants().INITIAL_DOCUMENT_TYPES.petition
-          .documentType,
-      eventCode:
-        applicationContext.getConstants().INITIAL_DOCUMENT_TYPES.petition
-          .eventCode,
+      documentType: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.documentType,
+      eventCode: applicationContext.getConstants().INITIAL_DOCUMENT_TYPES
+        .petition.eventCode,
       index: 1,
       isFileAttached: true,
       isOnDocketRecord: true,

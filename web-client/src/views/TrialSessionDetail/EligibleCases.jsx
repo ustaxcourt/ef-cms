@@ -91,8 +91,9 @@ export const EligibleCases = connect(
                         onChange={() => {
                           updateQcCompleteForTrialSequence({
                             docketNumber: item.docketNumber,
-                            qcCompleteForTrial:
-                              !item.qcCompleteForTrial[trialSessionId],
+                            qcCompleteForTrial: !item.qcCompleteForTrial[
+                              trialSessionId
+                            ],
                           });
                         }}
                       />

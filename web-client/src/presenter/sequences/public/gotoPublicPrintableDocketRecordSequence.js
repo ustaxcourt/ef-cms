@@ -7,8 +7,8 @@ import { setPdfPreviewUrlSequence } from '../setPdfPreviewUrlSequence';
 import { setShowModalFactoryAction } from '../../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
 
-export const gotoPublicPrintableDocketRecordSequence =
-  showProgressSequenceDecorator([
+export const gotoPublicPrintableDocketRecordSequence = showProgressSequenceDecorator(
+  [
     clearModalStateAction,
     getPublicCaseAction,
     setCaseAction,
@@ -16,4 +16,5 @@ export const gotoPublicPrintableDocketRecordSequence =
     setPdfPreviewUrlSequence,
     setShowModalFactoryAction('OpenPrintableDocketRecordModal'),
     setCurrentPageAction('PublicCaseDetail'),
-  ]);
+  ],
+);

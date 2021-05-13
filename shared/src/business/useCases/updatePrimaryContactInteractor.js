@@ -138,8 +138,9 @@ exports.updatePrimaryContactInteractor = async (
 
     let privatePractitionersRepresentingPrimaryContact = false;
     for (const privatePractitioner of caseEntity.privatePractitioners) {
-      const practitionerRepresentingPrimary =
-        privatePractitioner.getRepresentingPrimary(caseEntity);
+      const practitionerRepresentingPrimary = privatePractitioner.getRepresentingPrimary(
+        caseEntity,
+      );
       if (practitionerRepresentingPrimary) {
         privatePractitionersRepresentingPrimaryContact = true;
         break;

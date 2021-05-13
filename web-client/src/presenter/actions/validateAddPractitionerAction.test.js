@@ -7,8 +7,11 @@ describe('validateAddPractitionerAction', () => {
   let successMock;
   let errorMock;
 
-  const { COUNTRY_TYPES, US_STATES, USER_ROLES } =
-    applicationContext.getConstants();
+  const {
+    COUNTRY_TYPES,
+    US_STATES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
 
   beforeAll(() => {
     successMock = jest.fn();
