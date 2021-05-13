@@ -16,10 +16,9 @@ export const irsSuperuserSearchForUnservedCase = test => {
       state: test.getState(),
     });
 
-    const petitionDocketEntry =
-      helper.formattedDocketEntriesOnDocketRecord.find(
-        entry => entry.documentTitle === 'Petition',
-      );
+    const petitionDocketEntry = helper.formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.documentTitle === 'Petition',
+    );
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     // irsSuperuser should NOT see a link to a petition
     // document that has not been served

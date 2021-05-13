@@ -68,10 +68,9 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
     const helper = runCompute(formattedDocketEntries, {
       state: test.getState(),
     });
-    const transcriptDocuments =
-      helper.formattedDocketEntriesOnDocketRecord.filter(
-        document => document.eventCode === TRANSCRIPT_EVENT_CODE,
-      );
+    const transcriptDocuments = helper.formattedDocketEntriesOnDocketRecord.filter(
+      document => document.eventCode === TRANSCRIPT_EVENT_CODE,
+    );
     // first transcript should be available to the user
     expect(transcriptDocuments[0].showLinkToDocument).toEqual(true);
     expect(transcriptDocuments[0].isUnservable).toEqual(true);
