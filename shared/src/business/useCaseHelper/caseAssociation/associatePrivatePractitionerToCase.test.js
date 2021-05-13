@@ -55,7 +55,7 @@ describe('associatePrivatePractitionerToCase', () => {
           contactId: '007d0ea1-e7ce-4f13-a6bf-3e6d9167d6fd',
           contactType: CONTACT_TYPES.primary,
           countryType: COUNTRY_TYPES.DOMESTIC,
-          // email: 'petitioner@example.com',
+          email: 'petitioner@example.com',
           name: 'Test Petitioner',
           phone: '1234567',
           postalCode: '12345',
@@ -156,9 +156,8 @@ describe('associatePrivatePractitionerToCase', () => {
       user: practitionerUser,
     });
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = applicationContext.getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
@@ -172,7 +171,7 @@ describe('associatePrivatePractitionerToCase', () => {
     });
   });
 
-  it('should only set contactSecondary to receive no service if the practitioner is only representing contactSecondary', async () => {
+  it('should only set a petitioner to receive no service if the practitioner is only representing that petitioner', async () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
@@ -180,13 +179,12 @@ describe('associatePrivatePractitionerToCase', () => {
     await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      filers: [caseRecord.petitioners[0].contactId],
+      filers: [caseRecord.petitioners[1].contactId],
       user: practitionerUser,
     });
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = applicationContext.getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
