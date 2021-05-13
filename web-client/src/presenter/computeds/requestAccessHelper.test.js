@@ -31,10 +31,29 @@ describe('requestAccessHelper', () => {
     state.form = {
       filersMap,
     };
+    state.caseDetail = {
+      petitioners: [
+        {
+          contactId: '4e53fade-4966-4efe-8b01-0cb5f587eb47',
+          name: 'bob',
+        },
+        {
+          contactId: '68a1e378-6e96-4e61-b06e-2cb4e6c22f48',
+          name: 'sally',
+        },
+        {
+          contactId: '68a1e378-6e96-4e61-b06g-2cb4e6c22f47',
+          name: 'rick',
+        },
+      ],
+    };
   });
 
   it('returns correct values when documentType is undefined', () => {
-    let testState = { ...state, form: { documentType: undefined } };
+    let testState = {
+      ...state,
+      form: { documentType: undefined, filersMap: {} },
+    };
 
     const expected = {
       showPrimaryDocumentValid: false,
@@ -74,7 +93,7 @@ describe('requestAccessHelper', () => {
   });
 
   it('shows party validation error if any one of the party validation errors exists', () => {
-    state.validationErrors = { representingPrimary: 'You did something bad.' };
+    state.validationErrors = { filers: 'You did something bad.' };
     const result = runCompute(requestAccessHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
