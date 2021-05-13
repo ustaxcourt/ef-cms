@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getShowEditDocketRecordEntry } from './formattedCaseDetail';
+import { getShowEditDocketRecordEntry } from './formattedDocketEntries';
 
 describe('getShowEditDocketRecordEntry', () => {
   it('should not show the edit button if the docket entry document has not been QCed', () => {

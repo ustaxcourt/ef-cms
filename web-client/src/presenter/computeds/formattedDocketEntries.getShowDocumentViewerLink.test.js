@@ -1,4 +1,4 @@
-import { getShowDocumentViewerLink } from './formattedCaseDetail';
+import { getShowDocumentViewerLink } from './formattedDocketEntries';
 
 describe('getShowDocumentViewerLink', () => {
   const tests = [

@@ -1,10 +1,10 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries as formattedDocketEntriesComputed } from '../../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessageDetail as formattedMessageDetailComputed } from '../../src/presenter/computeds/formattedMessageDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const formattedDocketEntries = withAppContextDecorator(
+  formattedDocketEntriesComputed,
 );
 
 const formattedMessageDetail = withAppContextDecorator(
@@ -32,10 +32,10 @@ export const docketClerkRemovesSignatureFromMessage = test => {
 
     expect(test.getState('currentPage')).toEqual('MessageDetail');
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
+    const helper = runCompute(formattedDocketEntries, {
       state: test.getState(),
     });
-    const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const caseOrderDocument = helper.formattedDraftDocuments.find(
       d => d.docketEntryId === orderDocument.documentId,
     );
     expect(caseOrderDocument.signedAt).toEqual(null);

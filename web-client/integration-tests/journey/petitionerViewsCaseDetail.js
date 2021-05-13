@@ -1,5 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
+
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -21,6 +23,12 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
         state: test.getState(),
       },
     );
+    const docketEntriesFormatted = runCompute(
+      withAppContextDecorator(formattedDocketEntries),
+      {
+        state: test.getState(),
+      },
+    );
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(caseDetail.docketNumber).toEqual(test.docketNumber);
@@ -31,11 +39,11 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     expect(caseDetail.docketEntries.length).toEqual(documentCount);
 
     //verify that event codes were added to initial documents/docket entries
-    expect(caseDetailFormatted.formattedDocketEntries).toEqual(
+    expect(docketEntriesFormatted.formattedDocketEntriesOnDocketRecord).toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'P' })]),
     );
 
-    const rqtDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const rqtDocument = docketEntriesFormatted.formattedDocketEntriesOnDocketRecord.find(
       entry => entry.eventCode === 'RQT',
     );
     expect(rqtDocument).toBeTruthy();

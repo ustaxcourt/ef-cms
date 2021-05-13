@@ -1,10 +1,10 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries as formattedDocketEntriesComputed } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const formattedDocketEntries = withAppContextDecorator(
+  formattedDocketEntriesComputed,
 );
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
@@ -75,12 +75,10 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('form')).toEqual({});
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
+    const helper = runCompute(formattedDocketEntries, {
       state: test.getState(),
     });
 
-    expect(
-      caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
-    ).toEqual([]);
+    expect(helper.formattedPendingDocketEntriesOnDocketRecord).toEqual([]);
   });
 };
