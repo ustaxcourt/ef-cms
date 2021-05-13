@@ -1,13 +1,7 @@
-import { applicationContext } from '../../src/applicationContext';
-import { contactPrimaryFromState } from '../helpers';
-import { formattedDocketEntries as formattedDocketEntriesComputed } from '../../src/presenter/computeds/formattedDocketEntries';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedDocketEntries = withAppContextDecorator(
-  formattedDocketEntriesComputed,
-  applicationContext,
-);
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
 export const privatePractitionerSeesStrickenDocketEntry = (
   test,
@@ -21,12 +15,9 @@ export const privatePractitionerSeesStrickenDocketEntry = (
     const contactPrimary = contactPrimaryFromState(test);
     expect(contactPrimary.name).toBeDefined();
 
-    const { formattedDocketEntriesOnDocketRecord } = runCompute(
-      formattedDocketEntries,
-      {
-        state: test.getState(),
-      },
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
     const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.index === docketRecordIndex,
