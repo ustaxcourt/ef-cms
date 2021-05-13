@@ -13,7 +13,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeA = (
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = helper.formattedDraftDocuments.find(
+    const orderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -55,9 +55,10 @@ export const docketClerkEditsDocketEntryFromOrderTypeA = (
       state: test.getState(),
     });
 
-    const updatedOrderDocument = helper.formattedDraftDocuments.find(
-      doc => doc.docketEntryId === docketEntryId,
-    );
+    const updatedOrderDocument =
+      helper.formattedDocketEntriesOnDocketRecord.find(
+        doc => doc.docketEntryId === docketEntryId,
+      );
 
     expect(updatedOrderDocument).toMatchObject({
       documentTitle: 'Writ of Habeas Corpus Ad Testificandum Some free text',

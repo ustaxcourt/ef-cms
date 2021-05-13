@@ -13,7 +13,7 @@ export const docketClerkViewsSavedCourtIssuedDocketEntryInProgress = (
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = helper.formattedDraftDocuments.find(
+    const orderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,
     );
 

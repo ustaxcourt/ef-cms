@@ -10,7 +10,7 @@ export const petitionsClerkViewsDocketEntry = (test, draftOrderIndex) => {
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const docketRecordEntry = helper.formattedDraftDocuments.find(
+    const docketRecordEntry = helper.formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,
     );
 
